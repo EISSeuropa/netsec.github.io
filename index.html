@@ -240,6 +240,21 @@ section{padding:80px 0;position:relative}
 .event-card h3,.output-card h3,.news-card h3{font-size:1.1rem;margin:0}
 .event-card p,.output-card p,.news-card p{font-size:.92rem;color:var(--muted);margin:0;flex-grow:1}
 .event-loc{font-size:.85rem;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+.event-meta{display:flex;flex-direction:column;gap:8px;margin-top:6px;padding-top:14px;border-top:1px solid var(--line)}
+.event-meta-row{display:flex;align-items:flex-start;gap:10px;font-size:.86rem;color:var(--ink-2)}
+.event-meta-row svg{flex-shrink:0;margin-top:2px;color:var(--accent);width:15px;height:15px}
+.event-meta-row strong{color:var(--ink);font-weight:600}
+.event-link{
+  display:inline-flex;align-items:center;gap:6px;margin-top:4px;
+  font-size:.88rem;font-weight:600;color:var(--accent-2);
+}
+.event-link svg{width:14px;height:14px;transition:transform .2s var(--ease)}
+.event-link:hover svg{transform:translateX(3px)}
+.event-card.featured{
+  background:linear-gradient(135deg,rgba(10,132,255,.06),rgba(0,51,153,.04)),var(--glass-bg-strong);
+  border-color:rgba(10,132,255,.25);
+}
+.event-card.featured .event-date{background:var(--accent);color:#fff}
 
 .output-list,.news-list{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 .output-kind{font-size:.75rem;font-weight:700;color:var(--accent-2);text-transform:uppercase;letter-spacing:.1em}
@@ -415,12 +430,12 @@ form .btn{justify-self:start;margin-top:6px}
       <span></span><span></span><span></span>
     </button>
     <nav class="nav-links" aria-label="Primary">
+      <a href="#news">News</a>
       <a href="#about">About</a>
       <a href="#working-groups">Working Groups</a>
       <a href="#committee">Committee</a>
       <a href="#events">Events</a>
       <a href="#outputs">Outputs</a>
-      <a href="#news">News</a>
       <a href="#contact" class="nav-cta">Contact</a>
     </nav>
   </div>
@@ -459,6 +474,37 @@ form .btn{justify-self:start;margin-top:6px}
       <div class="item"><div class="label">MoU</div><div class="value">063/25</div></div>
       <div class="item"><div class="label">CSO Approval</div><div class="value">19 May 2025</div></div>
       <div class="item"><div class="label">Duration</div><div class="value">10 Oct 2025 – 09 Oct 2029</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- News -->
+<section id="news">
+  <div class="container reveal">
+    <div class="section-head">
+      <span class="eyebrow">Updates</span>
+      <h2>Latest News</h2>
+      <p>Announcements, calls, and milestones from the NetSec community.</p>
+    </div>
+    <div class="news-list">
+      <article class="news-card glass">
+        <span class="news-date">Open now · deadline 1 March 2026</span>
+        <h3>Call for applications: NetSec Summer School</h3>
+        <p>Applications are open for the 2026 NetSec Early-Career Scholars Summer School in Stockholm (9–11 June 2026). PhD candidates, post-docs, and SWAMOS / Euro-SWAMOS alumni are eligible; travel and hotel are reimbursed for 15 PhD students.</p>
+        <a href="https://eiss-europa.com/NetSecSchool.html" target="_blank" rel="noopener">View the call →</a>
+      </article>
+      <article class="news-card glass">
+        <span class="news-date">11–12 June 2026</span>
+        <h3>European Security Conference in Stockholm</h3>
+        <p>NetSec's flagship annual conference takes place at Stockholm University, chaired by Dr Julia Carver and Dr Sanne Verschuren. Programme and registration are live on Indico.</p>
+        <a href="https://indico.eiss-europa.com/event/22/" target="_blank" rel="noopener">See the programme →</a>
+      </article>
+      <article class="news-card glass">
+        <span class="news-date">10 October 2025</span>
+        <h3>NetSec officially launched</h3>
+        <p>COST Action CA24154 (MoU 063/25) is live, with leadership and Working Group structure now in place across 30 participating countries. The inaugural Management Committee plenary will be announced shortly.</p>
+        <a href="#committee">Meet the team →</a>
+      </article>
     </div>
   </div>
 </section>
@@ -801,27 +847,73 @@ form .btn{justify-self:start;margin-top:6px}
       <p>Annual conferences, policy workshops, training schools, and short-term scientific missions across the network.</p>
     </div>
     <div class="event-list">
-      <article class="event-card glass">
-        <span class="event-date">Upcoming</span>
-        <span class="event-type">Kick-off Meeting</span>
-        <h3>NetSec Inaugural Meeting</h3>
-        <p>The first plenary meeting of the Action, gathering Management Committee members and Working Group leads to align on workstreams.</p>
-        <span class="event-loc">Location &amp; date — to be announced</span>
-      </article>
-      <article class="event-card glass">
-        <span class="event-date">Planned</span>
-        <span class="event-type">Annual Conference</span>
-        <h3>Annual NetSec Conference</h3>
-        <p>Flagship interdisciplinary conference on European security studies, open to academics, policy-makers, and practitioners.</p>
-        <span class="event-loc">Details — to be announced</span>
-      </article>
-      <article class="event-card glass">
-        <span class="event-date">Planned</span>
+
+      <!-- Summer School -->
+      <article class="event-card glass featured">
+        <span class="event-date">9–11 June 2026</span>
         <span class="event-type">Training School</span>
-        <h3>Summer School</h3>
-        <p>A residential summer school on methods and tools for early-career security researchers.</p>
-        <span class="event-loc">Details — to be announced</span>
+        <h3>NetSec Early-Career Scholars Summer School</h3>
+        <p>Three days of training and mentoring for early-career researchers in European security — research presentations, individualised feedback from senior scholars, and structured mentorship. Open to PhD candidates and post-docs (within one year of defence) in strategic studies and international security, as well as SWAMOS / Euro-SWAMOS alumni. Travel and hotel reimbursement is available for 15 PhD students, and selected participants receive free access to the European Security Conference that follows.</p>
+        <div class="event-meta">
+          <div class="event-meta-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span><strong>Stockholm University</strong> · Frescativägen 114 18, Sweden</span>
+          </div>
+          <div class="event-meta-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-3-3.87M4 21v-2a4 4 0 013-3.87M16 3.13a4 4 0 010 7.75M8 3.13a4 4 0 000 7.75"/></svg>
+            <span><strong>Scientific Coordinators:</strong> Dr Silvia D'Amato · Prof Chiara Ruffa</span>
+          </div>
+          <div class="event-meta-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            <span><strong>Application deadline:</strong> 1 March 2026 · Apply via <a href="mailto:ecs.netsec@eiss-europa.com">ecs.netsec@eiss-europa.com</a></span>
+          </div>
+        </div>
+        <a class="event-link" href="https://eiss-europa.com/NetSecSchool.html" target="_blank" rel="noopener">
+          Full details &amp; how to apply
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
       </article>
+
+      <!-- Annual Conference -->
+      <article class="event-card glass featured">
+        <span class="event-date">11–12 June 2026</span>
+        <span class="event-type">Annual Conference</span>
+        <h3>European Security Conference</h3>
+        <p>The flagship annual gathering of the NetSec community: an interdisciplinary conference on European defence and security open to academics, policy-makers, and practitioners. Held back-to-back with the Summer School so early-career scholars can join the wider conversation.</p>
+        <div class="event-meta">
+          <div class="event-meta-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <span><strong>11 Jun 08:00 — 12 Jun 20:00</strong> (Europe/Stockholm)</span>
+          </div>
+          <div class="event-meta-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span><strong>Stockholm University</strong> · Frescativägen, 114 19 Stockholm, Sweden</span>
+          </div>
+          <div class="event-meta-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-3-3.87M4 21v-2a4 4 0 013-3.87M16 3.13a4 4 0 010 7.75M8 3.13a4 4 0 000 7.75"/></svg>
+            <span><strong>Chairpersons:</strong> Dr Julia Carver · Dr Sanne Verschuren</span>
+          </div>
+        </div>
+        <a class="event-link" href="https://indico.eiss-europa.com/event/22/" target="_blank" rel="noopener">
+          Programme &amp; registration on Indico
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <!-- Inaugural MC Meeting -->
+      <article class="event-card glass">
+        <span class="event-date">To be announced</span>
+        <span class="event-type">Kick-off Meeting</span>
+        <h3>Inaugural Management Committee Plenary</h3>
+        <p>The Action's first plenary meeting, bringing together Management Committee members and Working Group leads to align on workstreams and elect remaining roles. The Action officially started on 10 October 2025.</p>
+        <div class="event-meta">
+          <div class="event-meta-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            <span>Date and venue to be announced</span>
+          </div>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
@@ -849,37 +941,6 @@ form .btn{justify-self:start;margin-top:6px}
         <span class="output-kind">Training Material</span>
         <h3>Forthcoming</h3>
         <p>Open educational resources developed by WG3 for the next generation of security scholars.</p>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- News -->
-<section id="news">
-  <div class="container reveal">
-    <div class="section-head">
-      <span class="eyebrow">Updates</span>
-      <h2>News</h2>
-      <p>Announcements, calls, and milestones from the NetSec community.</p>
-    </div>
-    <div class="news-list">
-      <article class="news-card glass">
-        <span class="news-date">Coming soon</span>
-        <h3>NetSec is launching</h3>
-        <p>The COST Action is preparing its first call for Working Group participation and short-term scientific missions.</p>
-        <a href="#contact">Get in touch →</a>
-      </article>
-      <article class="news-card glass">
-        <span class="news-date">Coming soon</span>
-        <h3>Open Calls</h3>
-        <p>Calls for STSMs, conference grants, and Working Group expressions of interest will be published here.</p>
-        <a href="#contact">Subscribe for updates →</a>
-      </article>
-      <article class="news-card glass">
-        <span class="news-date">Coming soon</span>
-        <h3>Network Partners</h3>
-        <p>Confirmed COST Member countries and partner institutions will be listed here as the Action ramps up.</p>
-        <a href="#about">Learn more →</a>
       </article>
     </div>
   </div>
