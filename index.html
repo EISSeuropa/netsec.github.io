@@ -9,6 +9,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&display=swap">
+<!-- Apply theme BEFORE the body paints (avoids a flash of light → dark).
+     Reads localStorage; falls back to the OS prefers-color-scheme. -->
+<script>
+  (function() {
+    try {
+      var saved = localStorage.getItem('netsec-theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    } catch (e) { /* localStorage / matchMedia may be unavailable */ }
+  })();
+</script>
 <style>
 /* -------------------------------------------------------------
    NetSec — modern glassmorphism, Apple-inspired
@@ -137,6 +150,7 @@ img{max-width:100%;display:block}
   background:var(--ink);color:#fff !important;padding:9px 16px !important;border-radius:10px;font-weight:600;
 }
 .nav-cta:hover{background:var(--accent);opacity:1 !important}
+.nav-actions{display:flex;align-items:center;gap:2px}
 .menu-toggle{display:none;background:none;border:0;padding:8px;cursor:pointer}
 .menu-toggle span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;border-radius:2px;transition:.3s var(--ease)}
 
@@ -180,6 +194,28 @@ section{padding:80px 0;position:relative}
   transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .35s var(--ease);
 }
 .glass:hover{transform:translateY(-4px);box-shadow:0 18px 50px rgba(20,35,80,.14);background:var(--glass-bg-strong)}
+
+/* Performance: the Management Committee and Countries grids can render
+   45+ cards simultaneously on screen. iOS Safari has been observed to
+   give up compositing when there are too many `backdrop-filter` layers
+   at once, blanking out the affected elements. For these specific
+   card types we skip the live backdrop blur and use a slightly more
+   opaque solid translucent background — visually almost identical
+   when each card sits on the aurora background, but reliable. */
+.mc-card.glass,
+.country-card.glass{
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  background:rgba(255,255,255,.72);
+}
+
+/* Belt-and-braces fallback for any browser missing backdrop-filter
+   entirely — make all glass surfaces opaque enough to read. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .glass{background:rgba(255,255,255,.85)}
+  .glass:hover{background:rgba(255,255,255,.92)}
+  .nav,.toast{background:rgba(255,255,255,.92)}
+}
 
 /* -------- About -------- */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
@@ -398,8 +434,11 @@ form button:disabled{opacity:.65;cursor:wait}
 .footer-bottom .socials a:hover{background:var(--ink);color:#fff;opacity:1}
 
 /* -------- Reveal on scroll -------- */
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
-.reveal.in{opacity:1;transform:none}
+/* Reveal-on-scroll: default to VISIBLE. The fade-in only engages once
+   JS has run successfully and added the `js-reveal` class to <html>.
+   If JS fails for any reason, content stays visible — never invisible. */
+.reveal{opacity:1;transform:none;transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.js-reveal .reveal:not(.in){opacity:0;transform:translateY(20px)}
 
 /* -------- CA badge in hero -------- */
 .ca-badge{
@@ -597,57 +636,77 @@ form button:disabled{opacity:.65;cursor:wait}
 }
 
 /* -------- Dark mode --------
-   Honoured automatically when the user's OS / browser prefers dark.
-   Every colour is a CSS custom property, so the override is small.
-   The COST and EU emblems live in white containers per the VIG and
-   stay light-on-white in both modes, as required. */
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg-0:#0b1220;
-    --bg-1:#101a30;
-    --ink:#eef2f8;
-    --ink-2:#c4cde0;
-    --muted:#8b97b3;
-    --line:rgba(255,255,255,.10);
-    --glass-bg:rgba(22,32,55,.55);
-    --glass-bg-strong:rgba(22,32,55,.78);
-    --glass-border:rgba(255,255,255,.10);
-    --glass-shadow:0 10px 40px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.30);
-    --accent:#6ea1ff;          /* lifted from #003399 for contrast on dark */
-    --accent-2:#82b7ff;
-    --accent-glow:rgba(110,161,255,.30);
-  }
-  .ambience{background:linear-gradient(180deg,#0c1428 0%,#0b1220 45%,#161024 100%)}
-  .blob{opacity:.32}
-  .blob.b1{background:#3b5bdb}
-  .blob.b2{background:#b35a2a}
-  .blob.b3{background:#6b3aa6}
-  /* Hero gradient text stays readable */
-  .hero h1{background:linear-gradient(180deg,#f4f8ff 0%,#aeb7d6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .btn-primary{background:#f4f6fb;color:#0b1220}
-  .btn-primary:hover{background:#fff;color:#0b1220}
-  .nav-cta{background:#f4f6fb;color:#0b1220 !important}
-  .nav-cta:hover{background:#fff;color:#0b1220 !important}
-  input,textarea{background:rgba(255,255,255,.06);color:var(--ink);border-color:rgba(255,255,255,.12)}
-  input:focus,textarea:focus{background:rgba(255,255,255,.10);border-color:var(--accent-2)}
-  .eyebrow{background:rgba(110,161,255,.14);color:#a9c2ff}
-  .objective,.country-card ul{background:rgba(255,255,255,.03)}
-  .footer{background:linear-gradient(180deg,transparent 0%,rgba(20,30,55,.65) 30%)}
-  /* COST & EU emblem containers stay white for VIG compliance */
-  .cost-mark,.eu-mark{background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.4)}
-  .eu-mark .eu-text{color:#003399}
-  /* Gantt: chip stays vivid, year band slightly stronger on dark */
-  .g-q{background:rgba(255,255,255,.03)}
-  .g-year{background:linear-gradient(180deg,rgba(110,161,255,.10),rgba(110,161,255,.04))}
-  .g-row-d > .g-cell:nth-child(n+6):nth-child(-n+9),
-  .g-row-d > .g-cell:nth-child(n+14):nth-child(-n+17),
-  .g-row-q > .g-q:nth-child(n+6):nth-child(-n+9),
-  .g-row-q > .g-q:nth-child(n+14):nth-child(-n+17){background-color:rgba(110,161,255,.06)}
-  .milestone{background:linear-gradient(135deg,#3b6fe0,#82b7ff);color:#0b1220;box-shadow:0 4px 12px rgba(60,110,230,.45)}
-  .ca-badge .dot{background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.25)}
-  .toast{box-shadow:0 18px 50px rgba(0,0,0,.45),0 4px 12px rgba(0,0,0,.30)}
-  .toast .toast-close:hover{background:rgba(255,255,255,.06)}
+   Activated by adding the `.dark` class to <html>. A tiny inline
+   <head> script (in <head>, see top of body) sets the class on page
+   load based on:
+     • localStorage.netsec-theme === 'dark', OR
+     • no localStorage entry AND OS prefers-color-scheme: dark
+   The theme toggle in the nav writes to localStorage and toggles the
+   class. The COST logo and EU emblem live in white containers per
+   the VIG and stay light-on-white in both modes, as required. */
+.dark{
+  --bg-0:#0b1220;
+  --bg-1:#101a30;
+  --ink:#eef2f8;
+  --ink-2:#c4cde0;
+  --muted:#8b97b3;
+  --line:rgba(255,255,255,.10);
+  --glass-bg:rgba(22,32,55,.55);
+  --glass-bg-strong:rgba(22,32,55,.78);
+  --glass-border:rgba(255,255,255,.10);
+  --glass-shadow:0 10px 40px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.30);
+  --accent:#6ea1ff;
+  --accent-2:#82b7ff;
+  --accent-glow:rgba(110,161,255,.30);
+  color-scheme:dark;
 }
+.dark .ambience{background:linear-gradient(180deg,#0c1428 0%,#0b1220 45%,#161024 100%)}
+.dark .blob{opacity:.32}
+.dark .blob.b1{background:#3b5bdb}
+.dark .blob.b2{background:#b35a2a}
+.dark .blob.b3{background:#6b3aa6}
+.dark .hero h1{background:linear-gradient(180deg,#f4f8ff 0%,#aeb7d6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dark .btn-primary{background:#f4f6fb;color:#0b1220}
+.dark .btn-primary:hover{background:#fff;color:#0b1220}
+.dark .nav-cta{background:#f4f6fb;color:#0b1220 !important}
+.dark .nav-cta:hover{background:#fff;color:#0b1220 !important}
+.dark input,.dark textarea{background:rgba(255,255,255,.06);color:var(--ink);border-color:rgba(255,255,255,.12)}
+.dark input:focus,.dark textarea:focus{background:rgba(255,255,255,.10);border-color:var(--accent-2)}
+.dark .eyebrow{background:rgba(110,161,255,.14);color:#a9c2ff}
+.dark .objective,.dark .country-card ul{background:rgba(255,255,255,.03)}
+.dark .footer{background:linear-gradient(180deg,transparent 0%,rgba(20,30,55,.65) 30%)}
+.dark .cost-mark,.dark .eu-mark{background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.dark .eu-mark .eu-text{color:#003399}
+.dark .g-q{background:rgba(255,255,255,.03)}
+.dark .g-year{background:linear-gradient(180deg,rgba(110,161,255,.10),rgba(110,161,255,.04))}
+.dark .g-row-d > .g-cell:nth-child(n+6):nth-child(-n+9),
+.dark .g-row-d > .g-cell:nth-child(n+14):nth-child(-n+17),
+.dark .g-row-q > .g-q:nth-child(n+6):nth-child(-n+9),
+.dark .g-row-q > .g-q:nth-child(n+14):nth-child(-n+17){background-color:rgba(110,161,255,.06)}
+.dark .milestone{background:linear-gradient(135deg,#3b6fe0,#82b7ff);color:#0b1220;box-shadow:0 4px 12px rgba(60,110,230,.45)}
+.dark .ca-badge .dot{background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.25)}
+.dark .toast{box-shadow:0 18px 50px rgba(0,0,0,.45),0 4px 12px rgba(0,0,0,.30)}
+.dark .toast .toast-close:hover{background:rgba(255,255,255,.06)}
+/* MC and country cards use a solid translucent bg in both modes (see
+   performance override above); switch their colour for dark too. */
+.dark .mc-card.glass,
+.dark .country-card.glass{background:rgba(22,32,55,.78)}
+
+/* -------- Theme toggle button -------- */
+.theme-toggle{
+  display:grid;place-items:center;
+  width:36px;height:36px;margin-right:6px;
+  background:transparent;border:0;cursor:pointer;border-radius:10px;
+  color:var(--ink-2);
+  transition:background .2s var(--ease),color .2s var(--ease);
+}
+.theme-toggle:hover{background:rgba(11,18,32,.06);color:var(--ink);opacity:1}
+.theme-toggle svg{width:18px;height:18px}
+.theme-toggle .icon-sun{display:none}
+.theme-toggle .icon-moon{display:block}
+.dark .theme-toggle:hover{background:rgba(255,255,255,.08)}
+.dark .theme-toggle .icon-sun{display:block}
+.dark .theme-toggle .icon-moon{display:none}
 </style>
 </head>
 <body>
@@ -667,9 +726,15 @@ form button:disabled{opacity:.65;cursor:wait}
       <span class="brand-mark">NS</span>
       <span>NetSec</span>
     </a>
-    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
     <nav class="nav-links" aria-label="Primary">
       <a href="#news">News</a>
       <a href="#about">About</a>
@@ -1527,6 +1592,21 @@ form button:disabled{opacity:.65;cursor:wait}
   const onScroll = () => nav.style.boxShadow = window.scrollY > 12 ? '0 14px 40px rgba(20,35,80,.14)' : 'var(--glass-shadow)';
   window.addEventListener('scroll', onScroll, {passive:true});
 
+  // Theme toggle — flips .dark on <html>, persists choice in localStorage.
+  // The initial state was set by the inline <head> script to avoid FOUC.
+  const themeBtn = document.querySelector('.theme-toggle');
+  const setThemeLabel = () => {
+    themeBtn.setAttribute('aria-label',
+      document.documentElement.classList.contains('dark')
+        ? 'Switch to light mode' : 'Switch to dark mode');
+  };
+  setThemeLabel();
+  themeBtn.addEventListener('click', () => {
+    const nowDark = document.documentElement.classList.toggle('dark');
+    try { localStorage.setItem('netsec-theme', nowDark ? 'dark' : 'light'); } catch (e) {}
+    setThemeLabel();
+  });
+
   // Mobile menu
   const toggle = document.querySelector('.menu-toggle');
   const links = document.querySelector('.nav-links');
@@ -1536,11 +1616,29 @@ form button:disabled{opacity:.65;cursor:wait}
   });
   links.addEventListener('click', e => { if (e.target.tagName === 'A') links.classList.remove('open'); });
 
-  // Reveal on scroll
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }});
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  /* Reveal on scroll.
+     - threshold:0 — fire as soon as ANY pixel enters the trigger zone.
+       (Using a higher threshold breaks for sections that are taller
+       than the viewport: max intersection ratio is viewport/target,
+       which can be <0.12 on a phone for our long Management
+       Committee section.)
+     - rootMargin shrinks the bottom of the viewport so the fade
+       starts a bit before the section reaches the very edge. */
+  try {
+    document.documentElement.classList.add('js-reveal');
+    const targets = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }});
+    }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
+    targets.forEach(el => io.observe(el));
+    // Safety net: if anything misbehaves, force every reveal visible after 3s
+    // so the page can never end up with content stuck at opacity:0.
+    setTimeout(() => targets.forEach(el => el.classList.add('in')), 3000);
+  } catch (err) {
+    // IO unavailable (very old browser) — just show everything.
+    document.documentElement.classList.remove('js-reveal');
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
 
   // Year
   document.getElementById('year').textContent = new Date().getFullYear();
