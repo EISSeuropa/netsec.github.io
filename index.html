@@ -369,6 +369,119 @@ form .btn{justify-self:start;margin-top:6px}
   font-size:1.05rem;letter-spacing:-.01em;
 }
 
+/* -------- Roadmap Gantt -------- */
+.gantt-intro{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;
+  margin:0 auto 22px;font-size:.82rem;color:var(--muted);
+}
+.gantt-key{
+  display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;
+  background:var(--glass-bg);border:1px solid var(--glass-border);
+}
+.gantt-key .swatch{
+  width:14px;height:14px;border-radius:4px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  box-shadow:0 2px 6px rgba(0,51,153,.30);
+}
+.scroll-hint{
+  display:none;text-align:center;font-size:.78rem;color:var(--muted);
+  margin:0 0 10px;letter-spacing:.04em;
+}
+.gantt-wrap{
+  overflow-x:auto;
+  border-radius:var(--radius);
+  background:var(--glass-bg);
+  backdrop-filter:saturate(160%) blur(18px);
+  -webkit-backdrop-filter:saturate(160%) blur(18px);
+  border:1px solid var(--glass-border);
+  box-shadow:var(--glass-shadow);
+  /* iOS rubber-band */
+  -webkit-overflow-scrolling:touch;
+}
+.gantt{min-width:920px}
+.g-row{display:grid;align-items:stretch}
+.g-row-y{grid-template-columns:240px 1fr 1fr 1fr 1fr}
+.g-row-q,.g-row-d{grid-template-columns:240px repeat(16,1fr)}
+
+.g-label{
+  padding:14px 16px;
+  font-size:.86rem;
+  color:var(--ink-2);
+  position:sticky;left:0;z-index:2;
+  background:var(--glass-bg-strong);
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  display:flex;flex-direction:column;gap:2px;justify-content:center;
+}
+.g-label .d-id{font-size:.7rem;letter-spacing:.1em;color:var(--accent);font-weight:700}
+.g-label .d-name{font-size:.86rem;color:var(--ink);font-weight:500;line-height:1.3}
+.g-label-head{
+  background:var(--glass-bg-strong);
+  font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);
+  flex-direction:row;align-items:center;
+}
+
+.g-year{
+  text-align:center;
+  font-weight:700;font-size:.86rem;color:var(--ink);
+  padding:12px 8px;
+  background:linear-gradient(180deg,rgba(0,51,153,.06),rgba(0,51,153,.02));
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  letter-spacing:-.01em;
+}
+.g-year .y-sub{display:block;font-weight:500;font-size:.72rem;color:var(--muted);margin-top:2px;letter-spacing:0}
+.g-year:last-child{border-right:0}
+
+.g-q{
+  text-align:center;font-size:.72rem;color:var(--muted);font-weight:600;
+  padding:10px 4px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.35);
+}
+.g-q:last-child{border-right:0}
+
+.g-cell{
+  display:flex;align-items:center;justify-content:center;
+  padding:10px 4px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  min-height:50px;
+}
+.g-cell:last-child{border-right:0}
+.g-row-d:last-child .g-cell,.g-row-d:last-child .g-label{border-bottom:0}
+
+/* Year tint: Y2 and Y4 columns get a subtle wash so the eye groups them */
+.g-row-d > .g-cell:nth-child(n+6):nth-child(-n+9),
+.g-row-d > .g-cell:nth-child(n+14):nth-child(-n+17),
+.g-row-q > .g-q:nth-child(n+6):nth-child(-n+9),
+.g-row-q > .g-q:nth-child(n+14):nth-child(-n+17){
+  background-color:rgba(0,51,153,.025);
+}
+/* Bolder vertical between years */
+.g-row-d > .g-cell:nth-child(5),
+.g-row-d > .g-cell:nth-child(9),
+.g-row-d > .g-cell:nth-child(13),
+.g-row-q > .g-q:nth-child(5),
+.g-row-q > .g-q:nth-child(9),
+.g-row-q > .g-q:nth-child(13){
+  border-right:2px solid rgba(11,18,32,.10);
+}
+
+.milestone{
+  font-family:'Inter',sans-serif;
+  font-size:.7rem;font-weight:700;letter-spacing:.02em;
+  color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  padding:5px 9px;border-radius:7px;
+  box-shadow:0 4px 10px rgba(0,51,153,.28);
+  white-space:nowrap;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease);
+}
+.milestone:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(0,51,153,.40)}
+
 /* -------- Country grid (MC composition) -------- */
 .country-grid{
   display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;
@@ -404,6 +517,16 @@ form .btn{justify-self:start;margin-top:6px}
   .details-grid{grid-template-columns:repeat(2,1fr);gap:8px}
   .details-grid .item{border-right:0;border-bottom:1px solid var(--line);padding:14px}
   .details-grid .item:nth-child(2n),.details-grid .item:last-child{border-bottom:0}
+  /* Gantt mobile tweaks */
+  .scroll-hint{display:block}
+  .g-row-y{grid-template-columns:180px 1fr 1fr 1fr 1fr}
+  .g-row-q,.g-row-d{grid-template-columns:180px repeat(16,minmax(46px,1fr))}
+  .g-label{padding:10px 12px}
+  .g-label .d-name{font-size:.78rem}
+  .g-year{font-size:.78rem;padding:10px 4px}
+  .g-year .y-sub{display:none}
+  .gantt{min-width:780px}
+  .milestone{font-size:.62rem;padding:4px 6px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
@@ -435,6 +558,7 @@ form .btn{justify-self:start;margin-top:6px}
       <a href="#working-groups">Working Groups</a>
       <a href="#committee">Committee</a>
       <a href="#events">Events</a>
+      <a href="#roadmap">Roadmap</a>
       <a href="#outputs">Outputs</a>
       <a href="#contact" class="nav-cta">Contact</a>
     </nav>
@@ -488,10 +612,10 @@ form .btn{justify-self:start;margin-top:6px}
     </div>
     <div class="news-list">
       <article class="news-card glass">
-        <span class="news-date">Open now · deadline 1 March 2026</span>
-        <h3>Call for applications: NetSec Summer School</h3>
-        <p>Applications are open for the 2026 NetSec Early-Career Scholars Summer School in Stockholm (9–11 June 2026). PhD candidates, post-docs, and SWAMOS / Euro-SWAMOS alumni are eligible; travel and hotel are reimbursed for 15 PhD students.</p>
-        <a href="https://eiss-europa.com/NetSecSchool.html" target="_blank" rel="noopener">View the call →</a>
+        <span class="news-date">Applications closed</span>
+        <h3>NetSec Summer School: applications closed</h3>
+        <p>The call for the 2026 NetSec Early-Career Scholars Summer School in Stockholm (9–11 June 2026) closed on 1 March 2026. Selected participants will be contacted by the scientific coordinators in due course. A new call for the next training school will be announced when the 2027 cohort opens.</p>
+        <a href="https://eiss-europa.com/NetSecSchool.html" target="_blank" rel="noopener">View the school →</a>
       </article>
       <article class="news-card glass">
         <span class="news-date">11–12 June 2026</span>
@@ -914,6 +1038,155 @@ form .btn{justify-self:start;margin-top:6px}
         </div>
       </article>
 
+    </div>
+  </div>
+</section>
+
+<!-- Roadmap (Gantt) -->
+<section id="roadmap">
+  <div class="container reveal">
+    <div class="section-head">
+      <span class="eyebrow">Roadmap</span>
+      <h2>Deliverables Timeline</h2>
+      <p>Twelve deliverables across four years, with milestones at the month each is due. "M" is months from the Action's start (October 2025) — so M6 is April 2026, M48 is September 2029.</p>
+    </div>
+
+    <div class="gantt-intro">
+      <span class="gantt-key"><span class="swatch"></span> Milestone (M = month from start)</span>
+    </div>
+
+    <p class="scroll-hint">↔ Scroll horizontally to see the full timeline</p>
+
+    <div class="gantt-wrap">
+      <div class="gantt" role="table" aria-label="NetSec deliverables Gantt chart">
+
+        <!-- Year header -->
+        <div class="g-row g-row-y" role="row">
+          <div class="g-label g-label-head" role="columnheader">Deliverable</div>
+          <div class="g-year" role="columnheader">Year 1<span class="y-sub">2025 – 2026</span></div>
+          <div class="g-year" role="columnheader">Year 2<span class="y-sub">2026 – 2027</span></div>
+          <div class="g-year" role="columnheader">Year 3<span class="y-sub">2027 – 2028</span></div>
+          <div class="g-year" role="columnheader">Year 4<span class="y-sub">2028 – 2029</span></div>
+        </div>
+
+        <!-- Quarter header -->
+        <div class="g-row g-row-q" role="row">
+          <div class="g-label g-label-head" role="columnheader">Quarter</div>
+          <div class="g-q">Q1</div><div class="g-q">Q2</div><div class="g-q">Q3</div><div class="g-q">Q4</div>
+          <div class="g-q">Q1</div><div class="g-q">Q2</div><div class="g-q">Q3</div><div class="g-q">Q4</div>
+          <div class="g-q">Q1</div><div class="g-q">Q2</div><div class="g-q">Q3</div><div class="g-q">Q4</div>
+          <div class="g-q">Q1</div><div class="g-q">Q2</div><div class="g-q">Q3</div><div class="g-q">Q4</div>
+        </div>
+
+        <!-- D1 — M12 (Y1 Q4) -->
+        <div class="g-row g-row-d" role="row">
+          <div class="g-label"><span class="d-id">D1</span><span class="d-name">First version of NetSec directory (updated regularly)</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"><span class="milestone">M12</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+        </div>
+
+        <!-- D2 — M15 (Y2 Q1) -->
+        <div class="g-row g-row-d" role="row">
+          <div class="g-label"><span class="d-id">D2</span><span class="d-name">First draft of manifesto</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"><span class="milestone">M15</span></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+        </div>
+
+        <!-- D3 — M45 (Y4 Q3) -->
+        <div class="g-row g-row-d" role="row">
+          <div class="g-label"><span class="d-id">D3</span><span class="d-name">Evaluation report on NetSec directory usage</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"><span class="milestone">M45</span></div><div class="g-cell"></div>
+        </div>
+
+        <!-- D4 — M36 (Y3 Q4) -->
+        <div class="g-row g-row-d" role="row">
+          <div class="g-label"><span class="d-id">D4</span><span class="d-name">Final version of manifesto</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"><span class="milestone">M36</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+        </div>
+
+        <!-- D5 — M45 (Y4 Q3) -->
+        <div class="g-row g-row-d" role="row">
+          <div class="g-label"><span class="d-id">D5</span><span class="d-name">Summary report on annual conferences</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"><span class="milestone">M45</span></div><div class="g-cell"></div>
+        </div>
+
+        <!-- D6 — M12, M24, M36, M45 (recurring policy briefs) -->
+        <div class="g-row g-row-d" role="row">
+          <div class="g-label"><span class="d-id">D6</span><span class="d-name">Draft and publication of policy briefs</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"><span class="milestone">M12</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"><span class="milestone">M24</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"><span class="milestone">M36</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"><span class="milestone">M45</span></div><div class="g-cell"></div>
+        </div>
+
+        <!-- D7 — M18, M30, M42 -->
+        <div class="g-row g-row-d" role="row">
+          <div class="g-label"><span class="d-id">D7</span><span class="d-name">Evaluation reports &amp; adjusting mentoring initiative</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"><span class="milestone">M18</span></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"><span class="milestone">M30</span></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"><span class="milestone">M42</span></div><div class="g-cell"></div><div class="g-cell"></div>
+        </div>
+
+        <!-- D8 — M9 (Y1 Q3) -->
+        <div class="g-row g-row-d" role="row">
+          <div class="g-label"><span class="d-id">D8</span><span class="d-name">Planning Guidelines of Short-Term Scientific Missions &amp; grant system</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"><span class="milestone">M9</span></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+        </div>
+
+        <!-- D9 — M6 (Y1 Q2) -->
+        <div class="g-row g-row-d" role="row">
+          <div class="g-label"><span class="d-id">D9</span><span class="d-name">Strategy for a working structure</span></div>
+          <div class="g-cell"></div><div class="g-cell"><span class="milestone">M6</span></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+        </div>
+
+        <!-- D10 — M10 (Y1 Q4) -->
+        <div class="g-row g-row-d" role="row">
+          <div class="g-label"><span class="d-id">D10</span><span class="d-name">First draft risk management strategy (updated as needed)</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"><span class="milestone">M10</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+        </div>
+
+        <!-- D11 — M15 (Y2 Q1) -->
+        <div class="g-row g-row-d" role="row">
+          <div class="g-label"><span class="d-id">D11</span><span class="d-name">Publication of Inclusion and Diversity Declaration on the NetSec website</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"><span class="milestone">M15</span></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+        </div>
+
+        <!-- D12 — M12 (Y1 Q4) -->
+        <div class="g-row g-row-d" role="row">
+          <div class="g-label"><span class="d-id">D12</span><span class="d-name">Environmental sustainability guidelines for all project activities</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"><span class="milestone">M12</span></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>
