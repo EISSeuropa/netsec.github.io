@@ -310,6 +310,45 @@ input:focus,textarea:focus{
 }
 textarea{min-height:140px;resize:vertical}
 form .btn{justify-self:start;margin-top:6px}
+form button:disabled{opacity:.65;cursor:wait}
+
+/* -------- Toast notification -------- */
+.toast{
+  position:fixed;z-index:200;
+  left:50%;bottom:24px;transform:translate(-50%,40px);
+  display:flex;align-items:center;gap:12px;
+  max-width:min(440px,calc(100% - 32px));
+  padding:14px 16px 14px 14px;border-radius:14px;
+  background:var(--glass-bg-strong);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border:1px solid var(--glass-border);
+  box-shadow:0 18px 50px rgba(20,35,80,.20),0 4px 12px rgba(20,35,80,.10);
+  opacity:0;pointer-events:none;
+  transition:opacity .3s var(--ease),transform .3s var(--ease);
+  color:var(--ink);
+}
+.toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast .toast-icon{
+  flex-shrink:0;width:32px;height:32px;border-radius:10px;
+  display:grid;place-items:center;color:#fff;
+}
+.toast .toast-icon svg{width:18px;height:18px}
+.toast[data-type=success] .toast-icon{background:linear-gradient(135deg,#16a34a,#22c55e)}
+.toast[data-type=error]   .toast-icon{background:linear-gradient(135deg,#dc2626,#f87171)}
+.toast .toast-msg{font-size:.92rem;font-weight:500;line-height:1.4;color:var(--ink)}
+.toast .toast-close{
+  margin-left:auto;flex-shrink:0;
+  width:28px;height:28px;border-radius:8px;border:0;cursor:pointer;
+  background:transparent;color:var(--muted);
+  display:grid;place-items:center;
+  transition:background .2s var(--ease),color .2s var(--ease);
+}
+.toast .toast-close:hover{background:rgba(11,18,32,.06);color:var(--ink)}
+@media (max-width:540px){
+  .toast{left:16px;right:16px;transform:translate(0,40px);max-width:none}
+  .toast.show{transform:translate(0,0)}
+}
 
 /* -------- Footer (COST + EU obligations) -------- */
 .footer{
@@ -606,6 +645,8 @@ form .btn{justify-self:start;margin-top:6px}
   .g-row-q > .g-q:nth-child(n+14):nth-child(-n+17){background-color:rgba(110,161,255,.06)}
   .milestone{background:linear-gradient(135deg,#3b6fe0,#82b7ff);color:#0b1220;box-shadow:0 4px 12px rgba(60,110,230,.45)}
   .ca-badge .dot{background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.25)}
+  .toast{box-shadow:0 18px 50px rgba(0,0,0,.45),0 4px 12px rgba(0,0,0,.30)}
+  .toast .toast-close:hover{background:rgba(255,255,255,.06)}
 }
 </style>
 </head>
@@ -1350,24 +1391,42 @@ form .btn{justify-self:start;margin-top:6px}
         </div>
       </div>
 
-      <form class="glass" onsubmit="event.preventDefault();this.querySelector('button').textContent='Thank you — we\\'ll be in touch';">
+      <!--
+        Contact form — submission backend
+        ────────────────────────────────────
+        To enable real e-mail delivery, sign up for a free Formspree
+        account (https://formspree.io), create a form, and paste its
+        endpoint URL into the `data-endpoint` attribute below. Example:
+
+            data-endpoint="https://formspree.io/f/xqkwabcd"
+
+        With an endpoint set, submissions POST as JSON to Formspree
+        and you receive the message by e-mail at the address you
+        configured there.
+
+        With the endpoint left empty (current state), the form runs in
+        "stub" mode: nothing is sent, but the confirmation banner still
+        pops so you can preview the UX. Validation is enforced either
+        way by the browser.
+      -->
+      <form id="contact-form" class="glass" data-endpoint="" novalidate>
         <div class="form-row">
           <div>
             <label for="f-name">Name</label>
-            <input id="f-name" type="text" required autocomplete="name">
+            <input id="f-name" name="name" type="text" required autocomplete="name">
           </div>
           <div>
             <label for="f-email">Email</label>
-            <input id="f-email" type="email" required autocomplete="email">
+            <input id="f-email" name="email" type="email" required autocomplete="email">
           </div>
         </div>
         <div>
           <label for="f-org">Institution / Organisation</label>
-          <input id="f-org" type="text" autocomplete="organization">
+          <input id="f-org" name="organisation" type="text" autocomplete="organization">
         </div>
         <div>
           <label for="f-msg">Message</label>
-          <textarea id="f-msg" required placeholder="Tell us about your interest in NetSec…"></textarea>
+          <textarea id="f-msg" name="message" required placeholder="Tell us about your interest in NetSec…"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Send message</button>
       </form>
@@ -1453,6 +1512,15 @@ form .btn{justify-self:start;margin-top:6px}
   </div>
 </footer>
 
+<!-- Toast notification (form confirmation, etc.) -->
+<div id="toast" class="toast" role="status" aria-live="polite" data-type="success" hidden>
+  <span class="toast-icon" aria-hidden="true"></span>
+  <span class="toast-msg"></span>
+  <button class="toast-close" type="button" aria-label="Dismiss notification">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+</div>
+
 <script>
   // Nav: shadow on scroll
   const nav = document.querySelector('.nav');
@@ -1476,6 +1544,73 @@ form .btn{justify-self:start;margin-top:6px}
 
   // Year
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ─── Toast notifications ────────────────────────────────────
+     showToast(message, type) — type is 'success' or 'error'.
+     The toast is aria-live=polite so screen readers announce it. */
+  const toast = document.getElementById('toast');
+  const toastIcon = toast.querySelector('.toast-icon');
+  const toastMsg = toast.querySelector('.toast-msg');
+  let toastTimer;
+  function showToast(message, type){
+    type = type || 'success';
+    clearTimeout(toastTimer);
+    toast.dataset.type = type;
+    toastMsg.textContent = message;
+    toastIcon.innerHTML = type === 'success'
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    toast.hidden = false;
+    // Double rAF — first frame paints with the off-screen start state,
+    // second frame applies .show so the transition actually runs.
+    requestAnimationFrame(() => requestAnimationFrame(() => toast.classList.add('show')));
+    toastTimer = setTimeout(hideToast, 5500);
+  }
+  function hideToast(){
+    toast.classList.remove('show');
+    setTimeout(() => { toast.hidden = true; }, 350);
+  }
+  toast.querySelector('.toast-close').addEventListener('click', hideToast);
+
+  /* ─── Contact form ───────────────────────────────────────────
+     If data-endpoint is set on the <form>, submissions are POSTed
+     to that URL as JSON (works with Formspree, Web3Forms, etc).
+     Otherwise we run in stub mode: validate, show the toast, reset. */
+  const form = document.getElementById('contact-form');
+  const submitBtn = form.querySelector('button[type=submit]');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+
+    const endpoint = form.dataset.endpoint && form.dataset.endpoint.trim();
+    const data = Object.fromEntries(new FormData(form).entries());
+    submitBtn.disabled = true;
+    const originalLabel = submitBtn.textContent;
+    submitBtn.textContent = 'Sending…';
+
+    try {
+      if (endpoint) {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+      } else {
+        // Stub mode: simulate latency so the "Sending…" state is visible.
+        await new Promise(r => setTimeout(r, 600));
+        console.info('[contact-form] stub submission (no data-endpoint set):', data);
+      }
+      showToast("Thanks — we've received your message and will be in touch.", 'success');
+      form.reset();
+    } catch (err) {
+      showToast("Sorry, something went wrong. Please email contact@netsec-cost.eu instead.", 'error');
+      console.error('Contact form error:', err);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalLabel;
+    }
+  });
 </script>
 
 </body>
