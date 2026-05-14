@@ -14,7 +14,7 @@ What it does:
 
 Run from the repo root. Requires: requests, beautifulsoup4.
 """
-import json, re, sys, unicodedata, difflib
+import json, re, sys, unicodedata
 from pathlib import Path
 
 try:
