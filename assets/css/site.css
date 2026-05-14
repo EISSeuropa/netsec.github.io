@@ -1,0 +1,776 @@
+/* -------------------------------------------------------------
+   NetSec — modern glassmorphism, Apple-inspired
+   ------------------------------------------------------------- */
+:root{
+  --bg-0:#f6f8fc;
+  --bg-1:#eef2fb;
+  --ink:#0b1220;
+  --ink-2:#2b3850;
+  --muted:#5a6679;
+  --line:rgba(11,18,32,.08);
+  --glass-bg:rgba(255,255,255,.55);
+  --glass-bg-strong:rgba(255,255,255,.72);
+  --glass-border:rgba(255,255,255,.6);
+  --glass-shadow:0 10px 40px rgba(20,35,80,.10), 0 1px 2px rgba(20,35,80,.06);
+  --accent:#003399;          /* EU/COST blue */
+  --accent-2:#0a84ff;        /* Apple blue */
+  --accent-glow:rgba(10,132,255,.35);
+  --gold:#ffcc00;            /* EU stars */
+  --radius:22px;
+  --radius-sm:14px;
+  --maxw:1180px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;color-scheme:light dark;scroll-padding-top:90px}
+
+/* Skip-to-content link — visible only when keyboard-focused */
+.skip-link{
+  position:absolute;left:50%;top:-60px;transform:translateX(-50%);
+  background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;
+  font-weight:600;font-size:.9rem;z-index:1000;
+  transition:top .25s var(--ease);
+}
+.skip-link:focus{top:14px;outline:0;box-shadow:0 0 0 4px rgba(10,132,255,.45);opacity:1}
+
+/* Global focus-visible — keyboard-only, never on mouse-click */
+:focus{outline:0}
+:focus-visible{
+  outline:0;
+  box-shadow:0 0 0 3px rgba(10,132,255,.45);
+  border-radius:8px;
+}
+.btn:focus-visible,.nav-cta:focus-visible,.ca-badge:focus-visible,
+.cost-mark:focus-visible,.event-link:focus-visible{
+  box-shadow:0 0 0 3px rgba(10,132,255,.55);
+}
+.glass:focus-visible{box-shadow:0 0 0 3px rgba(10,132,255,.45),var(--glass-shadow)}
+body{
+  margin:0;
+  font-family:'Inter','SF Pro Text','-apple-system','BlinkMacSystemFont',sans-serif;
+  color:var(--ink);
+  background:var(--bg-0);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  line-height:1.55;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:'Lexend','Inter',sans-serif;font-weight:600;letter-spacing:-.02em;line-height:1.15;color:var(--ink)}
+h1{font-size:clamp(2.4rem,5.2vw,4.4rem);font-weight:700;letter-spacing:-.035em}
+h2{font-size:clamp(1.8rem,3.2vw,2.6rem);margin:0 0 .8rem}
+h3{font-size:1.25rem;margin:0 0 .5rem}
+p{margin:0 0 1rem;color:var(--ink-2)}
+a{color:var(--accent-2);text-decoration:none;transition:opacity .25s var(--ease)}
+a:hover{opacity:.7}
+img{max-width:100%;display:block}
+.container{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.eyebrow{
+  display:inline-block;
+  font-size:.78rem;
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:.9rem;
+  padding:.35rem .75rem;
+  background:rgba(0,51,153,.08);
+  border-radius:999px;
+}
+
+/* -------- Background ambience -------- */
+.ambience{
+  position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;
+  background:linear-gradient(180deg,#eef3fc 0%,#f6f8fc 40%,#fcfaf5 100%);
+}
+.blob{
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:.55;
+  animation:drift 22s var(--ease) infinite alternate;
+}
+.blob.b1{width:520px;height:520px;background:#9bb8ff;top:-160px;left:-120px}
+.blob.b2{width:460px;height:460px;background:#ffd8a8;top:30%;right:-140px;animation-duration:28s}
+.blob.b3{width:380px;height:380px;background:#c9b6ff;bottom:-160px;left:30%;animation-duration:34s}
+@keyframes drift{
+  0%{transform:translate(0,0) scale(1)}
+  100%{transform:translate(40px,-30px) scale(1.08)}
+}
+
+/* -------- Navigation -------- */
+.nav{
+  position:fixed;top:14px;left:50%;transform:translateX(-50%);
+  width:calc(100% - 24px);max-width:1100px;z-index:100;
+  background:var(--glass-bg-strong);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border:1px solid var(--glass-border);
+  border-radius:18px;
+  box-shadow:var(--glass-shadow);
+  transition:box-shadow .3s var(--ease),transform .3s var(--ease);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:10px 18px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink);font-size:1.02rem;letter-spacing:-.01em}
+.brand-mark{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  display:grid;place-items:center;color:#fff;font-weight:800;font-size:.78rem;letter-spacing:.04em;
+  box-shadow:0 6px 16px var(--accent-glow);
+}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{
+  color:var(--ink-2);font-size:.92rem;font-weight:500;padding:8px 12px;border-radius:10px;
+  transition:background .2s var(--ease),color .2s var(--ease);
+}
+.nav-links a:hover{background:rgba(11,18,32,.05);color:var(--ink);opacity:1}
+.nav-cta{
+  background:var(--ink);color:#fff !important;padding:9px 16px !important;border-radius:10px;font-weight:600;
+}
+.nav-cta:hover{background:var(--accent);opacity:1 !important}
+.nav-actions{display:flex;align-items:center;gap:2px}
+.menu-toggle{display:none;background:none;border:0;padding:8px;cursor:pointer}
+.menu-toggle span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;border-radius:2px;transition:.3s var(--ease)}
+
+/* -------- Hero -------- */
+.hero{padding:140px 0 80px;text-align:center;position:relative}
+.hero .container{display:flex;flex-direction:column;align-items:center}
+.hero h1{margin:0 auto 1.2rem;max-width:14ch;background:linear-gradient(180deg,#0b1220 0%,#3a4a6b 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{max-width:62ch;font-size:clamp(1.05rem,1.4vw,1.2rem);color:var(--ink-2)}
+.hero-keywords{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:1.4rem}
+.chip{
+  font-size:.82rem;font-weight:500;color:var(--ink-2);
+  background:var(--glass-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--glass-border);border-radius:999px;padding:.4rem .9rem;
+}
+.hero-cta{display:flex;gap:12px;margin-top:2rem;flex-wrap:wrap;justify-content:center}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:13px;
+  font-weight:600;font-size:.95rem;cursor:pointer;border:0;transition:transform .2s var(--ease),box-shadow .2s var(--ease);
+}
+.btn-primary{background:var(--ink);color:#fff}
+.btn-primary:hover{background:var(--accent);opacity:1;transform:translateY(-1px);box-shadow:0 10px 24px var(--accent-glow)}
+.btn-ghost{
+  background:var(--glass-bg);color:var(--ink);border:1px solid var(--glass-border);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.btn-ghost:hover{opacity:1;transform:translateY(-1px);background:var(--glass-bg-strong)}
+
+/* -------- Sections -------- */
+section{padding:80px 0;position:relative}
+.section-head{text-align:center;margin-bottom:48px}
+.section-head p{max-width:60ch;margin:0 auto;color:var(--muted)}
+
+/* -------- Glass cards -------- */
+.glass{
+  background:var(--glass-bg);
+  backdrop-filter:saturate(160%) blur(18px);
+  -webkit-backdrop-filter:saturate(160%) blur(18px);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  box-shadow:var(--glass-shadow);
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .35s var(--ease);
+}
+.glass:hover{transform:translateY(-4px);box-shadow:0 18px 50px rgba(20,35,80,.14);background:var(--glass-bg-strong)}
+
+/* Performance: the Management Committee and Countries grids can render
+   45+ cards simultaneously on screen. iOS Safari has been observed to
+   give up compositing when there are too many `backdrop-filter` layers
+   at once, blanking out the affected elements. For these specific
+   card types we skip the live backdrop blur and use a slightly more
+   opaque solid translucent background — visually almost identical
+   when each card sits on the aurora background, but reliable. */
+.mc-card.glass,
+.country-card.glass{
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  background:rgba(255,255,255,.72);
+}
+
+/* Belt-and-braces fallback for any browser missing backdrop-filter
+   entirely — make all glass surfaces opaque enough to read. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .glass{background:rgba(255,255,255,.85)}
+  .glass:hover{background:rgba(255,255,255,.92)}
+  .nav,.toast{background:rgba(255,255,255,.92)}
+}
+
+/* -------- About -------- */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+.about-card{padding:36px}
+.about-card p{font-size:1.02rem}
+.objectives{display:grid;gap:14px;margin-top:8px}
+.objective{
+  display:flex;gap:14px;padding:18px;border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.45);border:1px solid var(--glass-border);
+}
+.objective-num{
+  flex-shrink:0;width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;
+  display:grid;place-items:center;font-weight:700;font-size:.95rem;
+}
+.objective h4{margin:0 0 4px;font-size:1rem;font-weight:600}
+.objective p{margin:0;font-size:.92rem;color:var(--muted)}
+
+/* -------- Working groups -------- */
+.wg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:22px}
+.wg-card{padding:28px}
+.wg-icon{
+  width:52px;height:52px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(135deg,rgba(0,51,153,.10),rgba(10,132,255,.10));
+  color:var(--accent);margin-bottom:18px;
+}
+.wg-card h3{font-size:1.1rem}
+.wg-card p{font-size:.93rem;margin:0;color:var(--muted)}
+.wg-tag{font-size:.75rem;font-weight:600;letter-spacing:.1em;color:var(--accent);text-transform:uppercase;margin-bottom:8px;display:block}
+.wg-leadership{
+  margin-top:16px !important;padding-top:14px;border-top:1px solid var(--line);
+  font-size:.86rem !important;color:var(--ink-2) !important;line-height:1.7;
+}
+.wg-leadership span{
+  display:inline-block;min-width:62px;font-size:.7rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);
+}
+
+/* -------- Management Committee -------- */
+.mc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:20px}
+.mc-card{padding:24px;text-align:center}
+.mc-avatar{
+  width:84px;height:84px;border-radius:50%;margin:0 auto 14px;
+  background:linear-gradient(135deg,#cfd9ee,#e8d8c2);
+  display:grid;place-items:center;color:var(--accent);font-weight:700;font-size:1.4rem;
+  border:2px solid rgba(255,255,255,.8);
+  overflow:hidden;
+}
+.mc-avatar img{
+  width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;
+}
+.mc-card h3{font-size:1rem;margin:0 0 4px}
+.mc-card .role{font-size:.82rem;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.mc-card .org{font-size:.85rem;color:var(--muted);margin:0 0 10px}
+.mc-card a.mc-mail{
+  display:inline-block;margin-top:6px;font-size:.82rem;color:var(--accent-2);
+  word-break:break-all;
+}
+
+/* -------- Working-group membership chips --------
+   Injected by JS based on a name → WG map sourced from cost.eu. */
+.wg-chips{display:inline-flex;flex-wrap:wrap;gap:4px}
+.mc-card .wg-chips{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  margin-top:10px;padding-top:10px;border-top:1px solid var(--line);
+}
+.wg-chip{
+  font-family:'Inter',sans-serif;
+  font-size:.66rem;font-weight:700;letter-spacing:.04em;
+  padding:3px 7px;border-radius:6px;color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  box-shadow:0 1px 3px rgba(0,0,0,.12);
+  white-space:nowrap;
+}
+/* Per-WG colour for at-a-glance distinction */
+.wg-chip.wg-1{background:linear-gradient(135deg,#0a84ff,#5b8def)}
+.wg-chip.wg-2{background:linear-gradient(135deg,#10b981,#34d399)}
+.wg-chip.wg-3{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
+.wg-chip.wg-4{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#3b2a00}
+
+/* Country-grid chips: always stack BELOW the name, indented to match.
+   (Earlier attempt with flex + margin-left:auto produced inconsistent
+   rendering — chips sometimes inline, sometimes wrapping right-aligned
+   on a second line, depending on string widths. Stacking below the
+   name keeps every entry visually identical.) */
+.country-card .wg-chips{
+  display:flex;flex-wrap:wrap;gap:4px;
+  margin-top:4px;margin-left:0;
+}
+.country-card .wg-chip{
+  font-size:.6rem;padding:2px 6px;letter-spacing:.04em;
+}
+.mc-subhead{
+  font-family:'Lexend','Inter',sans-serif;font-weight:600;font-size:.78rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);text-align:center;
+  margin:48px 0 22px;position:relative;
+}
+.mc-subhead:first-of-type{margin-top:8px}
+.mc-subhead::before,.mc-subhead::after{
+  content:'';display:inline-block;width:48px;height:1px;background:var(--line);
+  vertical-align:middle;margin:0 14px;
+}
+
+/* -------- Events / Outputs / News timeline + cards -------- */
+.event-list,.output-list,.news-list{display:grid;gap:20px}
+.event-list{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.event-card,.output-card,.news-card{padding:28px;display:flex;flex-direction:column;gap:10px}
+.event-date{
+  display:inline-flex;align-items:baseline;gap:6px;
+  font-size:.85rem;color:var(--accent);font-weight:600;
+  background:rgba(0,51,153,.08);padding:5px 12px;border-radius:8px;align-self:flex-start;
+}
+.event-type{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.event-card h3,.output-card h3,.news-card h3{font-size:1.1rem;margin:0}
+.event-card p,.output-card p,.news-card p{font-size:.92rem;color:var(--muted);margin:0;flex-grow:1}
+.event-loc{font-size:.85rem;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+.event-meta{display:flex;flex-direction:column;gap:8px;margin-top:6px;padding-top:14px;border-top:1px solid var(--line)}
+.event-meta-row{display:flex;align-items:flex-start;gap:10px;font-size:.86rem;color:var(--ink-2)}
+.event-meta-row svg{flex-shrink:0;margin-top:2px;color:var(--accent);width:15px;height:15px}
+.event-meta-row strong{color:var(--ink);font-weight:600}
+.event-link{
+  display:inline-flex;align-items:center;gap:6px;margin-top:4px;
+  font-size:.88rem;font-weight:600;color:var(--accent-2);
+}
+.event-link svg{width:14px;height:14px;transition:transform .2s var(--ease)}
+.event-link:hover svg{transform:translateX(3px)}
+.event-card.featured{
+  background:linear-gradient(135deg,rgba(10,132,255,.06),rgba(0,51,153,.04)),var(--glass-bg-strong);
+  border-color:rgba(10,132,255,.25);
+}
+.event-card.featured .event-date{background:var(--accent);color:#fff}
+
+.output-list,.news-list{grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
+.output-kind{font-size:.75rem;font-weight:700;color:var(--accent-2);text-transform:uppercase;letter-spacing:.1em}
+.news-date{font-size:.82rem;color:var(--muted)}
+.news-card a{font-size:.9rem;font-weight:600;margin-top:auto}
+
+/* -------- Contact -------- */
+.contact-wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:32px;align-items:start}
+.contact-info{padding:36px}
+.contact-info h3{font-size:1.5rem;margin-bottom:1rem}
+.contact-info .item{display:flex;gap:14px;align-items:flex-start;margin:18px 0}
+.contact-info .item-icon{
+  width:38px;height:38px;border-radius:10px;flex-shrink:0;
+  background:rgba(0,51,153,.08);color:var(--accent);
+  display:grid;place-items:center;
+}
+.contact-info .item strong{display:block;font-size:.95rem;color:var(--ink);margin-bottom:2px}
+.contact-info .item span{font-size:.9rem;color:var(--muted)}
+.contact-info .item a{word-break:break-word;overflow-wrap:anywhere}
+form{padding:36px;display:grid;gap:14px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{font-size:.85rem;font-weight:500;color:var(--ink-2);display:block;margin-bottom:6px}
+input,textarea{
+  width:100%;padding:12px 14px;font:inherit;font-size:.95rem;color:var(--ink);
+  background:rgba(255,255,255,.6);border:1px solid var(--glass-border);
+  border-radius:12px;transition:border-color .2s var(--ease),background .2s var(--ease),box-shadow .2s var(--ease);
+}
+input:focus,textarea:focus{
+  outline:0;border-color:var(--accent-2);background:#fff;
+  box-shadow:0 0 0 4px rgba(10,132,255,.15);
+}
+textarea{min-height:140px;resize:vertical}
+form .btn{justify-self:start;margin-top:6px}
+form button:disabled{opacity:.65;cursor:wait}
+
+/* -------- Toast notification -------- */
+.toast{
+  position:fixed;z-index:200;
+  left:50%;bottom:24px;transform:translate(-50%,40px);
+  display:flex;align-items:center;gap:12px;
+  max-width:min(440px,calc(100% - 32px));
+  padding:14px 16px 14px 14px;border-radius:14px;
+  background:var(--glass-bg-strong);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border:1px solid var(--glass-border);
+  box-shadow:0 18px 50px rgba(20,35,80,.20),0 4px 12px rgba(20,35,80,.10);
+  opacity:0;pointer-events:none;
+  transition:opacity .3s var(--ease),transform .3s var(--ease);
+  color:var(--ink);
+}
+.toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast .toast-icon{
+  flex-shrink:0;width:32px;height:32px;border-radius:10px;
+  display:grid;place-items:center;color:#fff;
+}
+.toast .toast-icon svg{width:18px;height:18px}
+.toast[data-type=success] .toast-icon{background:linear-gradient(135deg,#16a34a,#22c55e)}
+.toast[data-type=error]   .toast-icon{background:linear-gradient(135deg,#dc2626,#f87171)}
+.toast .toast-msg{font-size:.92rem;font-weight:500;line-height:1.4;color:var(--ink)}
+.toast .toast-close{
+  margin-left:auto;flex-shrink:0;
+  width:28px;height:28px;border-radius:8px;border:0;cursor:pointer;
+  background:transparent;color:var(--muted);
+  display:grid;place-items:center;
+  transition:background .2s var(--ease),color .2s var(--ease);
+}
+.toast .toast-close:hover{background:rgba(11,18,32,.06);color:var(--ink)}
+@media (max-width:540px){
+  .toast{left:16px;right:16px;transform:translate(0,40px);max-width:none}
+  .toast.show{transform:translate(0,0)}
+}
+
+/* -------- Footer (COST + EU obligations) -------- */
+.footer{
+  margin-top:60px;padding:60px 0 36px;
+  background:linear-gradient(180deg,transparent 0%,rgba(255,255,255,.65) 30%);
+  border-top:1px solid var(--line);
+}
+.footer-cobranding{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+  gap:48px;padding:36px 28px;margin-bottom:32px;
+}
+/* COST logo: VIG requires clearspace (x2 the cap-height around) and minimum size.
+   We reserve generous clearspace via padding/gap above, and enforce a minimum width below.
+   Min size ~120px width preserves legibility (well above the 30 mm A5 print minimum). */
+.cost-mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:14px 18px;border-radius:14px;background:#fff;
+  box-shadow:0 4px 14px rgba(20,35,80,.06);
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease);
+}
+.cost-mark:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(20,35,80,.10);opacity:1}
+.cost-mark img{height:54px;width:auto;min-width:120px}     /* min-width = VIG minimum size */
+.eu-mark{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 18px;border-radius:14px;background:#fff;
+  box-shadow:0 4px 14px rgba(20,35,80,.06);
+}
+.eu-flag{width:78px;height:52px;flex-shrink:0;display:block}
+.eu-mark .eu-text{
+  font-family:'Inter',sans-serif;font-weight:700;color:#003399;font-size:1.05rem;line-height:1.15;letter-spacing:-.01em;
+}
+.footer-text{
+  max-width:780px;margin:0 auto;text-align:center;font-size:.9rem;color:var(--muted);
+}
+.footer-text p{margin:0 0 .8rem;color:var(--muted)}
+.footer-text strong{color:var(--ink-2)}
+.footer-bottom{
+  margin-top:36px;padding-top:24px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+  font-size:.82rem;color:var(--muted);
+}
+.footer-bottom .socials{display:flex;gap:8px}
+.footer-bottom .socials a{
+  width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--ink-2);
+}
+.footer-bottom .socials a:hover{background:var(--ink);color:#fff;opacity:1}
+
+/* -------- Reveal on scroll -------- */
+/* Reveal-on-scroll: default to VISIBLE. The fade-in only engages once
+   JS has run successfully and added the `js-reveal` class to <html>.
+   If JS fails for any reason, content stays visible — never invisible. */
+.reveal{opacity:1;transform:none;transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.js-reveal .reveal:not(.in){opacity:0;transform:translateY(20px)}
+
+/* -------- CA badge in hero -------- */
+.ca-badge{
+  display:inline-flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;
+  margin-top:18px;padding:8px 14px;border-radius:18px;max-width:100%;
+  font-size:.82rem;font-weight:600;letter-spacing:.04em;color:var(--ink-2);
+  text-align:center;
+  background:var(--glass-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--glass-border);
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease);
+}
+.ca-badge:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(20,35,80,.10);opacity:1}
+.ca-badge .dot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.18)}
+.ca-badge strong{color:var(--accent);font-weight:700}
+
+/* -------- Action details strip -------- */
+.details-strip{padding:24px 0 0}
+.details-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  padding:20px 8px;border-radius:var(--radius);
+}
+.details-grid .item{padding:8px 24px;text-align:center;border-right:1px solid var(--line)}
+.details-grid .item:last-child{border-right:0}
+.details-grid .label{
+  font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:4px;
+}
+.details-grid .value{
+  font-family:'Lexend','Inter',sans-serif;font-weight:600;color:var(--ink);
+  font-size:1.05rem;letter-spacing:-.01em;
+}
+
+/* -------- Roadmap Gantt -------- */
+.gantt-intro{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;
+  margin:0 auto 22px;font-size:.82rem;color:var(--muted);
+}
+.gantt-key{
+  display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;
+  background:var(--glass-bg);border:1px solid var(--glass-border);
+}
+.gantt-key .swatch{
+  width:14px;height:14px;border-radius:4px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  box-shadow:0 2px 6px rgba(0,51,153,.30);
+}
+.scroll-hint{
+  display:none;text-align:center;font-size:.78rem;color:var(--muted);
+  margin:0 0 10px;letter-spacing:.04em;
+}
+.gantt-wrap{
+  overflow-x:auto;
+  border-radius:var(--radius);
+  background:var(--glass-bg);
+  backdrop-filter:saturate(160%) blur(18px);
+  -webkit-backdrop-filter:saturate(160%) blur(18px);
+  border:1px solid var(--glass-border);
+  box-shadow:var(--glass-shadow);
+  /* iOS rubber-band */
+  -webkit-overflow-scrolling:touch;
+}
+.gantt{min-width:920px}
+.g-row{display:grid;align-items:stretch}
+.g-row-y{grid-template-columns:240px 1fr 1fr 1fr 1fr}
+.g-row-q,.g-row-d{grid-template-columns:240px repeat(16,1fr)}
+
+.g-label{
+  padding:14px 16px;
+  font-size:.86rem;
+  color:var(--ink-2);
+  position:sticky;left:0;z-index:2;
+  background:var(--glass-bg-strong);
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  display:flex;flex-direction:column;gap:2px;justify-content:center;
+}
+.g-label .d-id{font-size:.7rem;letter-spacing:.1em;color:var(--accent);font-weight:700}
+.g-label .d-name{font-size:.86rem;color:var(--ink);font-weight:500;line-height:1.3}
+.g-label-head{
+  background:var(--glass-bg-strong);
+  font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);
+  flex-direction:row;align-items:center;
+}
+
+.g-year{
+  text-align:center;
+  font-weight:700;font-size:.86rem;color:var(--ink);
+  padding:12px 8px;
+  background:linear-gradient(180deg,rgba(0,51,153,.06),rgba(0,51,153,.02));
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  letter-spacing:-.01em;
+}
+.g-year .y-sub{display:block;font-weight:500;font-size:.72rem;color:var(--muted);margin-top:2px;letter-spacing:0}
+.g-year:last-child{border-right:0}
+
+.g-q{
+  text-align:center;font-size:.72rem;color:var(--muted);font-weight:600;
+  padding:10px 4px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.35);
+}
+.g-q:last-child{border-right:0}
+
+.g-cell{
+  display:flex;align-items:center;justify-content:center;
+  padding:10px 4px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  min-height:50px;
+}
+.g-cell:last-child{border-right:0}
+.g-row-d:last-child .g-cell,.g-row-d:last-child .g-label{border-bottom:0}
+
+/* Year tint: Y2 and Y4 columns get a subtle wash so the eye groups them */
+.g-row-d > .g-cell:nth-child(n+6):nth-child(-n+9),
+.g-row-d > .g-cell:nth-child(n+14):nth-child(-n+17),
+.g-row-q > .g-q:nth-child(n+6):nth-child(-n+9),
+.g-row-q > .g-q:nth-child(n+14):nth-child(-n+17){
+  background-color:rgba(0,51,153,.025);
+}
+/* Bolder vertical between years */
+.g-row-d > .g-cell:nth-child(5),
+.g-row-d > .g-cell:nth-child(9),
+.g-row-d > .g-cell:nth-child(13),
+.g-row-q > .g-q:nth-child(5),
+.g-row-q > .g-q:nth-child(9),
+.g-row-q > .g-q:nth-child(13){
+  border-right:2px solid rgba(11,18,32,.10);
+}
+
+.milestone{
+  font-family:'Inter',sans-serif;
+  font-size:.7rem;font-weight:700;letter-spacing:.02em;
+  color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  padding:5px 9px;border-radius:7px;
+  box-shadow:0 4px 10px rgba(0,51,153,.28);
+  white-space:nowrap;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease);
+}
+.milestone:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(0,51,153,.40)}
+
+/* -------- Country grid (MC composition) -------- */
+.country-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:14px;
+  margin-top:8px;
+}
+.country-card{padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px}
+.country-card .country-head{display:flex;align-items:center;gap:10px}
+.country-card .flag{
+  width:28px;height:auto;border-radius:3px;flex-shrink:0;
+  box-shadow:0 1px 3px rgba(0,0,0,.18);
+  background:#e5e9f1;
+}
+.country-card .country-name{
+  font-weight:600;font-size:.98rem;color:var(--ink);letter-spacing:-.01em;
+}
+.country-card ul{
+  list-style:none;padding:0;margin:0;
+  display:flex;flex-direction:column;gap:8px;
+  border-top:1px solid var(--line);padding-top:10px;
+}
+.country-card li{
+  font-size:.86rem;color:var(--ink-2);
+  position:relative;
+  padding-left:14px;          /* room for the bullet */
+}
+.country-card li::before{
+  content:"·";color:var(--accent);font-weight:700;
+  position:absolute;left:2px;top:0;line-height:inherit;
+}
+
+/* -------- MC by Country: collapsible <details> -------- */
+.mc-collapse{margin-top:8px}
+.mc-collapse > summary{
+  list-style:none;          /* hide default disclosure triangle */
+  cursor:pointer;
+  display:block;
+  text-align:center;
+  padding:6px 0;
+  margin-bottom:18px;
+}
+.mc-collapse > summary::-webkit-details-marker{display:none}
+.mc-collapse > summary::marker{content:""}
+.mc-collapse > summary:focus-visible{
+  outline:0;
+  box-shadow:0 0 0 3px rgba(10,132,255,.45);
+  border-radius:14px;
+}
+.mc-collapse > summary .mc-subhead{margin:0 0 10px}
+/* Hint pill below the heading */
+.mc-collapse-hint{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;
+  font-size:.82rem;font-weight:500;color:var(--muted);
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  border-radius:999px;
+  transition:color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease);
+}
+.mc-collapse > summary:hover .mc-collapse-hint{
+  color:var(--ink);
+  background:var(--glass-bg-strong);
+  transform:translateY(-1px);
+}
+.mc-collapse-chevron{
+  width:14px;height:14px;
+  transition:transform .25s var(--ease);
+}
+.mc-collapse[open] .mc-collapse-chevron{transform:rotate(180deg)}
+/* Toggle the two hint labels based on open state */
+.mc-collapse-when-open{display:none}
+.mc-collapse[open] .mc-collapse-when-closed{display:none}
+.mc-collapse[open] .mc-collapse-when-open{display:inline}
+
+/* When printing, force the section open so the directory makes it onto paper */
+@media print{
+  .mc-collapse > summary{display:none}
+  .mc-collapse[open] > summary,
+  .mc-collapse:not([open]) > *{display:block !important}
+}
+
+/* -------- Responsive -------- */
+@media (max-width:880px){
+  .nav-links{display:none;position:absolute;top:60px;left:0;right:0;flex-direction:column;align-items:stretch;background:var(--glass-bg-strong);backdrop-filter:blur(20px);border-radius:14px;padding:10px;margin:0 8px;border:1px solid var(--glass-border)}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:12px 14px}
+  .menu-toggle{display:block}
+  .about-grid,.contact-wrap{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .hero{padding:120px 0 60px}
+  section{padding:60px 0}
+  .details-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .details-grid .item{border-right:0;border-bottom:1px solid var(--line);padding:14px}
+  .details-grid .item:nth-child(2n),.details-grid .item:last-child{border-bottom:0}
+  /* Gantt mobile tweaks */
+  .scroll-hint{display:block}
+  .g-row-y{grid-template-columns:180px 1fr 1fr 1fr 1fr}
+  .g-row-q,.g-row-d{grid-template-columns:180px repeat(16,minmax(46px,1fr))}
+  .g-label{padding:10px 12px}
+  .g-label .d-name{font-size:.78rem}
+  .g-year{font-size:.78rem;padding:10px 4px}
+  .g-year .y-sub{display:none}
+  .gantt{min-width:780px}
+  .milestone{font-size:.62rem;padding:4px 6px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  .blob{animation:none}
+}
+
+/* -------- Dark mode --------
+   Activated by adding the `.dark` class to <html>. A tiny inline
+   <head> script (in <head>, see top of body) sets the class on page
+   load based on:
+     • localStorage.netsec-theme === 'dark', OR
+     • no localStorage entry AND OS prefers-color-scheme: dark
+   The theme toggle in the nav writes to localStorage and toggles the
+   class. The COST logo and EU emblem live in white containers per
+   the VIG and stay light-on-white in both modes, as required. */
+.dark{
+  --bg-0:#0b1220;
+  --bg-1:#101a30;
+  --ink:#eef2f8;
+  --ink-2:#c4cde0;
+  --muted:#8b97b3;
+  --line:rgba(255,255,255,.10);
+  --glass-bg:rgba(22,32,55,.55);
+  --glass-bg-strong:rgba(22,32,55,.78);
+  --glass-border:rgba(255,255,255,.10);
+  --glass-shadow:0 10px 40px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.30);
+  --accent:#6ea1ff;
+  --accent-2:#82b7ff;
+  --accent-glow:rgba(110,161,255,.30);
+  color-scheme:dark;
+}
+.dark .ambience{background:linear-gradient(180deg,#0c1428 0%,#0b1220 45%,#161024 100%)}
+.dark .blob{opacity:.32}
+.dark .blob.b1{background:#3b5bdb}
+.dark .blob.b2{background:#b35a2a}
+.dark .blob.b3{background:#6b3aa6}
+.dark .hero h1{background:linear-gradient(180deg,#f4f8ff 0%,#aeb7d6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dark .btn-primary{background:#f4f6fb;color:#0b1220}
+.dark .btn-primary:hover{background:#fff;color:#0b1220}
+.dark .nav-cta{background:#f4f6fb;color:#0b1220 !important}
+.dark .nav-cta:hover{background:#fff;color:#0b1220 !important}
+.dark input,.dark textarea{background:rgba(255,255,255,.06);color:var(--ink);border-color:rgba(255,255,255,.12)}
+.dark input:focus,.dark textarea:focus{background:rgba(255,255,255,.10);border-color:var(--accent-2)}
+.dark .eyebrow{background:rgba(110,161,255,.14);color:#a9c2ff}
+.dark .objective,.dark .country-card ul{background:rgba(255,255,255,.03)}
+.dark .footer{background:linear-gradient(180deg,transparent 0%,rgba(20,30,55,.65) 30%)}
+.dark .cost-mark,.dark .eu-mark{background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.dark .eu-mark .eu-text{color:#003399}
+.dark .g-q{background:rgba(255,255,255,.03)}
+.dark .g-year{background:linear-gradient(180deg,rgba(110,161,255,.10),rgba(110,161,255,.04))}
+.dark .g-row-d > .g-cell:nth-child(n+6):nth-child(-n+9),
+.dark .g-row-d > .g-cell:nth-child(n+14):nth-child(-n+17),
+.dark .g-row-q > .g-q:nth-child(n+6):nth-child(-n+9),
+.dark .g-row-q > .g-q:nth-child(n+14):nth-child(-n+17){background-color:rgba(110,161,255,.06)}
+.dark .milestone{background:linear-gradient(135deg,#3b6fe0,#82b7ff);color:#0b1220;box-shadow:0 4px 12px rgba(60,110,230,.45)}
+.dark .ca-badge .dot{background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.25)}
+.dark .toast{box-shadow:0 18px 50px rgba(0,0,0,.45),0 4px 12px rgba(0,0,0,.30)}
+.dark .toast .toast-close:hover{background:rgba(255,255,255,.06)}
+/* MC and country cards use a solid translucent bg in both modes (see
+   performance override above); switch their colour for dark too. */
+.dark .mc-card.glass,
+.dark .country-card.glass{background:rgba(22,32,55,.78)}
+
+/* -------- Theme toggle button -------- */
+.theme-toggle{
+  display:grid;place-items:center;
+  width:36px;height:36px;margin-right:6px;
+  background:transparent;border:0;cursor:pointer;border-radius:10px;
+  color:var(--ink-2);
+  transition:background .2s var(--ease),color .2s var(--ease);
+}
+.theme-toggle:hover{background:rgba(11,18,32,.06);color:var(--ink);opacity:1}
+.theme-toggle svg{width:18px;height:18px}
+.theme-toggle .icon-sun{display:none}
+.theme-toggle .icon-moon{display:block}
+.dark .theme-toggle:hover{background:rgba(255,255,255,.08)}
+.dark .theme-toggle .icon-sun{display:block}
+.dark .theme-toggle .icon-moon{display:none}
