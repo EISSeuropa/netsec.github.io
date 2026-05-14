@@ -624,40 +624,51 @@ form button:disabled{opacity:.65;cursor:wait}
 }
 
 /* -------- MC by Country: collapsible <details> -------- */
-.mc-collapse{margin-top:8px}
+.mc-collapse{
+  /* Match the breathing room between every other MC subsection so
+     the country block reads as its own subsection rather than as a
+     footnote to COST Staff. */
+  margin-top:48px;
+}
 .mc-collapse > summary{
   list-style:none;          /* hide default disclosure triangle */
   cursor:pointer;
   display:block;
   text-align:center;
   padding:6px 0;
-  margin-bottom:18px;
+  margin-bottom:22px;
 }
 .mc-collapse > summary::-webkit-details-marker{display:none}
 .mc-collapse > summary::marker{content:""}
 .mc-collapse > summary:focus-visible{
   outline:0;
   box-shadow:0 0 0 3px rgba(10,132,255,.45);
-  border-radius:14px;
+  border-radius:18px;
 }
-.mc-collapse > summary .mc-subhead{margin:0 0 10px}
-/* Hint pill below the heading */
+.mc-collapse > summary .mc-subhead{margin:0 0 14px}
+/* Hint pill: sized as a proper call-to-action, not a footnote chip. */
 .mc-collapse-hint{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:6px 14px;
-  font-size:.82rem;font-weight:500;color:var(--muted);
-  background:var(--glass-bg);
+  display:inline-flex;align-items:center;gap:10px;
+  padding:11px 22px;
+  font-size:.95rem;font-weight:600;letter-spacing:-.005em;
+  color:var(--ink-2);
+  background:var(--glass-bg-strong);
   border:1px solid var(--glass-border);
   border-radius:999px;
-  transition:color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease);
+  box-shadow:0 4px 14px rgba(20,35,80,.06);
+  transition:color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease),box-shadow .2s var(--ease);
 }
 .mc-collapse > summary:hover .mc-collapse-hint{
   color:var(--ink);
-  background:var(--glass-bg-strong);
-  transform:translateY(-1px);
+  background:#fff;
+  transform:translateY(-2px);
+  box-shadow:0 8px 22px rgba(20,35,80,.12);
+}
+.dark .mc-collapse > summary:hover .mc-collapse-hint{
+  background:rgba(255,255,255,.10);
 }
 .mc-collapse-chevron{
-  width:14px;height:14px;
+  width:16px;height:16px;
   transition:transform .25s var(--ease);
 }
 .mc-collapse[open] .mc-collapse-chevron{transform:rotate(180deg)}
