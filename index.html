@@ -648,6 +648,56 @@ form button:disabled{opacity:.65;cursor:wait}
   position:absolute;left:2px;top:0;line-height:inherit;
 }
 
+/* -------- MC by Country: collapsible <details> -------- */
+.mc-collapse{margin-top:8px}
+.mc-collapse > summary{
+  list-style:none;          /* hide default disclosure triangle */
+  cursor:pointer;
+  display:block;
+  text-align:center;
+  padding:6px 0;
+  margin-bottom:18px;
+}
+.mc-collapse > summary::-webkit-details-marker{display:none}
+.mc-collapse > summary::marker{content:""}
+.mc-collapse > summary:focus-visible{
+  outline:0;
+  box-shadow:0 0 0 3px rgba(10,132,255,.45);
+  border-radius:14px;
+}
+.mc-collapse > summary .mc-subhead{margin:0 0 10px}
+/* Hint pill below the heading */
+.mc-collapse-hint{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;
+  font-size:.82rem;font-weight:500;color:var(--muted);
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  border-radius:999px;
+  transition:color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease);
+}
+.mc-collapse > summary:hover .mc-collapse-hint{
+  color:var(--ink);
+  background:var(--glass-bg-strong);
+  transform:translateY(-1px);
+}
+.mc-collapse-chevron{
+  width:14px;height:14px;
+  transition:transform .25s var(--ease);
+}
+.mc-collapse[open] .mc-collapse-chevron{transform:rotate(180deg)}
+/* Toggle the two hint labels based on open state */
+.mc-collapse-when-open{display:none}
+.mc-collapse[open] .mc-collapse-when-closed{display:none}
+.mc-collapse[open] .mc-collapse-when-open{display:inline}
+
+/* When printing, force the section open so the directory makes it onto paper */
+@media print{
+  .mc-collapse > summary{display:none}
+  .mc-collapse[open] > summary,
+  .mc-collapse:not([open]) > *{display:block !important}
+}
+
 /* -------- Responsive -------- */
 @media (max-width:880px){
   .nav-links{display:none;position:absolute;top:60px;left:0;right:0;flex-direction:column;align-items:stretch;background:var(--glass-bg-strong);backdrop-filter:blur(20px);border-radius:14px;padding:10px;margin:0 8px;border:1px solid var(--glass-border)}
@@ -1057,10 +1107,22 @@ form button:disabled{opacity:.65;cursor:wait}
       </article>
     </div>
 
-    <!-- ===== MC composition by country ===== -->
-    <h3 class="mc-subhead">Management Committee by Country</h3>
-    <p style="text-align:center;color:var(--muted);font-size:.92rem;max-width:60ch;margin:0 auto 28px">Representatives from each participating COST Member country. Country reps shape the Action's direction together with the Working Group leadership.</p>
-    <div class="country-grid">
+    <!-- ===== MC composition by country (collapsible) =====
+         This block is the long tail of the people section (30 country
+         cards). Wrapped in <details> so it stays out of the way by
+         default but is one click — or a deep-link to any country —
+         away. State persists in localStorage; printing forces open. -->
+    <details class="mc-collapse" id="mc-countries">
+      <summary>
+        <h3 class="mc-subhead">Management Committee by Country</h3>
+        <span class="mc-collapse-hint">
+          <span class="mc-collapse-when-closed">Show all 30 countries · 49 representatives</span>
+          <span class="mc-collapse-when-open">Hide list</span>
+          <svg class="mc-collapse-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </summary>
+      <p style="text-align:center;color:var(--muted);font-size:.92rem;max-width:60ch;margin:0 auto 28px">Representatives from each participating COST Member country. Country reps shape the Action's direction together with the Working Group leadership.</p>
+      <div class="country-grid">
 
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/al.png" alt="Albania flag" loading="lazy"><span class="country-name">Albania</span></div>
@@ -1183,7 +1245,8 @@ form button:disabled{opacity:.65;cursor:wait}
         <ul><li data-person="Dr John Helferich">Dr John Helferich</li><li data-person="Dr Marco Wyss">Dr Marco Wyss</li></ul>
       </article>
 
-    </div>
+      </div>
+    </details>
   </div>
 </section>
 
@@ -1639,6 +1702,26 @@ form button:disabled{opacity:.65;cursor:wait}
     try { localStorage.setItem('netsec-theme', nowDark ? 'dark' : 'light'); } catch (e) {}
     setThemeLabel();
   });
+
+  // MC-by-country collapse: persist open/closed state in localStorage,
+  // and auto-open if a deep-link targets a country card inside it.
+  const mcDetails = document.getElementById('mc-countries');
+  if (mcDetails) {
+    try {
+      if (localStorage.getItem('netsec-mc-countries-open') === '1') mcDetails.open = true;
+    } catch (e) {}
+    // Deep-link: if the URL hash matches anything inside the collapsed
+    // block, force it open so the user lands on the right card.
+    try {
+      if (location.hash && location.hash.length > 1) {
+        const target = document.querySelector(location.hash);
+        if (target && mcDetails.contains(target)) mcDetails.open = true;
+      }
+    } catch (e) {}
+    mcDetails.addEventListener('toggle', () => {
+      try { localStorage.setItem('netsec-mc-countries-open', mcDetails.open ? '1' : '0'); } catch (e) {}
+    });
+  }
 
   // Mobile menu
   const toggle = document.querySelector('.menu-toggle');
