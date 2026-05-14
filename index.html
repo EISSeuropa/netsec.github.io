@@ -274,6 +274,32 @@ section{padding:80px 0;position:relative}
   display:inline-block;margin-top:6px;font-size:.82rem;color:var(--accent-2);
   word-break:break-all;
 }
+
+/* -------- Working-group membership chips --------
+   Injected by JS based on a name → WG map sourced from cost.eu. */
+.wg-chips{display:inline-flex;flex-wrap:wrap;gap:4px}
+.mc-card .wg-chips{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  margin-top:10px;padding-top:10px;border-top:1px solid var(--line);
+}
+.wg-chip{
+  font-family:'Inter',sans-serif;
+  font-size:.66rem;font-weight:700;letter-spacing:.04em;
+  padding:3px 7px;border-radius:6px;color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  box-shadow:0 1px 3px rgba(0,0,0,.12);
+  white-space:nowrap;
+}
+/* Per-WG colour for at-a-glance distinction */
+.wg-chip.wg-1{background:linear-gradient(135deg,#0a84ff,#5b8def)}
+.wg-chip.wg-2{background:linear-gradient(135deg,#10b981,#34d399)}
+.wg-chip.wg-3{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
+.wg-chip.wg-4{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#3b2a00}
+
+/* In country grid, chips sit inline next to the name */
+.country-card li{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.country-card .wg-chips{margin-left:auto}
+.country-card .wg-chip{font-size:.6rem;padding:2px 5px}
 .mc-subhead{
   font-family:'Lexend','Inter',sans-serif;font-weight:600;font-size:.78rem;letter-spacing:.18em;
   text-transform:uppercase;color:var(--muted);text-align:center;
@@ -907,27 +933,27 @@ form button:disabled{opacity:.65;cursor:wait}
 
     <h3 class="mc-subhead">Action Leadership</h3>
     <div class="mc-grid">
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Dr Moritz Weiss">
         <div class="mc-avatar"><img src="assets/images/people/moritz-weiss.jpg" alt="Dr Moritz Weiss" loading="lazy"></div>
         <div class="role">Action Chair</div>
         <h4>Dr Moritz Weiss</h4>
         <p class="org">WG1 Leader</p>
         <a class="mc-mail" href="mailto:moritz.weiss@gsi.lmu.de">moritz.weiss@gsi.lmu.de</a>
       </article>
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Dr Marie Robin">
         <div class="mc-avatar"><img src="assets/images/people/marie-robin.png" alt="Dr Marie Robin" loading="lazy"></div>
         <div class="role">Action Vice-Chair</div>
         <h4>Dr Marie Robin</h4>
         <p class="org">Grant Holder Scientific Representative</p>
         <a class="mc-mail" href="mailto:m.p.c.e.robin@fgga.leidenuniv.nl">m.p.c.e.robin@fgga.leidenuniv.nl</a>
       </article>
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Mr Eugenio Sánchez">
         <div class="mc-avatar"><img src="assets/images/people/eugenio-sanchez.jpeg" alt="Mr Eugenio Sánchez" loading="lazy"></div>
         <div class="role">Science Communication Coordinator</div>
         <h4>Mr Eugenio Sánchez</h4>
         <p class="org">Outreach &amp; dissemination</p>
       </article>
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Dr Eliza Gheorghe">
         <div class="mc-avatar"><img src="assets/images/people/eliza-gheorghe.jpg" alt="Dr Eliza Gheorghe" loading="lazy"></div>
         <div class="role">Grant Awarding Coordinator</div>
         <h4>Dr Eliza Gheorghe</h4>
@@ -937,25 +963,25 @@ form button:disabled{opacity:.65;cursor:wait}
 
     <h3 class="mc-subhead">Working Group Leadership</h3>
     <div class="mc-grid">
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Dr Moritz Weiss">
         <div class="mc-avatar"><img src="assets/images/people/moritz-weiss.jpg" alt="Dr Moritz Weiss" loading="lazy"></div>
         <div class="role">WG1 · Management &amp; Coordination</div>
         <h4>Dr Moritz Weiss</h4>
         <p class="org">Co-lead: Prof Filip Ejdus</p>
       </article>
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Dr John Helferich">
         <div class="mc-avatar"><img src="assets/images/people/john-helferich.jpeg" alt="Dr John Helferich" loading="lazy"></div>
         <div class="role">WG2 · Framework Development</div>
         <h4>Dr John Helferich</h4>
         <p class="org">Co-lead: Ms Alisa Kerschbaum</p>
       </article>
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Dr Chiara Ruffa">
         <div class="mc-avatar"><img src="assets/images/people/chiara-ruffa.jpg" alt="Dr Chiara Ruffa" loading="lazy"></div>
         <div class="role">WG3 · Tools &amp; Training</div>
         <h4>Dr Chiara Ruffa</h4>
         <p class="org">Co-lead: Dr Silvia D'Amato</p>
       </article>
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Dr Revecca Pedi">
         <div class="mc-avatar"><img src="assets/images/people/revecca-pedi.jpg" alt="Dr Revecca Pedi" loading="lazy"></div>
         <div class="role">WG4 · Inclusion &amp; Dissemination</div>
         <h4>Dr Revecca Pedi</h4>
@@ -965,31 +991,31 @@ form button:disabled{opacity:.65;cursor:wait}
 
     <h3 class="mc-subhead">Working Group Co-Leaders</h3>
     <div class="mc-grid">
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Prof Filip Ejdus">
         <div class="mc-avatar"><img src="assets/images/people/filip-ejdus.jpg" alt="Prof Filip Ejdus" loading="lazy"></div>
         <div class="role">WG1 Co-Leader</div>
         <h4>Prof Filip Ejdus</h4>
         <p class="org">University of Belgrade</p>
       </article>
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Ms Alisa Kerschbaum">
         <div class="mc-avatar"><img src="assets/images/people/alisa-kerschbaum.jpeg" alt="Ms Alisa Kerschbaum" loading="lazy"></div>
         <div class="role">WG2 Co-Leader</div>
         <h4>Ms Alisa Kerschbaum</h4>
         <p class="org">University of Amsterdam</p>
       </article>
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Dr Silvia D'Amato">
         <div class="mc-avatar"><img src="assets/images/people/silvia-damato.jpeg" alt="Dr Silvia D'Amato" loading="lazy"></div>
         <div class="role">WG3 Co-Leader</div>
         <h4>Dr Silvia D'Amato</h4>
         <p class="org">James Madison University</p>
       </article>
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Dr Šárka Kolmašová">
         <div class="mc-avatar"><img src="assets/images/people/sarka-kolmasova.jpeg" alt="Dr Šárka Kolmašová" loading="lazy"></div>
         <div class="role">WG4 Co-Leader</div>
         <h4>Dr Šárka Kolmašová</h4>
         <p class="org">Metropolitan University Prague</p>
       </article>
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Dr Chiara Libiseller">
         <div class="mc-avatar"><img src="assets/images/people/chiara-libiseller.webp" alt="Dr Chiara Libiseller" loading="lazy"></div>
         <div class="role">Grant Awarding Co-Lead</div>
         <h4>Dr Chiara Libiseller</h4>
@@ -999,14 +1025,14 @@ form button:disabled{opacity:.65;cursor:wait}
 
     <h3 class="mc-subhead">COST Staff</h3>
     <div class="mc-grid">
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Dr Sara Silvestre">
         <div class="mc-avatar" aria-hidden="true">SS</div>
         <div class="role">Science Officer</div>
         <h4>Dr Sara Silvestre</h4>
         <p class="org">COST Association</p>
         <a class="mc-mail" href="mailto:Sara.Silvestre@cost.eu">Sara.Silvestre@cost.eu</a>
       </article>
-      <article class="mc-card glass">
+      <article class="mc-card glass" data-person="Ms Aldona Gembalik">
         <div class="mc-avatar" aria-hidden="true">AG</div>
         <div class="role">Administrative Officer</div>
         <h4>Ms Aldona Gembalik</h4>
@@ -1022,123 +1048,123 @@ form button:disabled{opacity:.65;cursor:wait}
 
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/al.png" alt="Albania flag" loading="lazy"><span class="country-name">Albania</span></div>
-        <ul><li>Dr Noela Mahmutaj</li><li>Dr Edlira Titini</li></ul>
+        <ul><li data-person="Dr Noela Mahmutaj">Dr Noela Mahmutaj</li><li data-person="Dr Edlira Titini">Dr Edlira Titini</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/ba.png" alt="Bosnia and Herzegovina flag" loading="lazy"><span class="country-name">Bosnia and Herzegovina</span></div>
-        <ul><li>Dr Jasmin Ahić</li><li>Dr Kenan Hodžić</li></ul>
+        <ul><li data-person="Dr Jasmin Ahić">Dr Jasmin Ahić</li><li data-person="Dr Kenan Hodžić">Dr Kenan Hodžić</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/bg.png" alt="Bulgaria flag" loading="lazy"><span class="country-name">Bulgaria</span></div>
-        <ul><li>Prof Anna Krasteva</li></ul>
+        <ul><li data-person="Prof Anna Krasteva">Prof Anna Krasteva</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/hr.png" alt="Croatia flag" loading="lazy"><span class="country-name">Croatia</span></div>
-        <ul><li>Dr Sandra Cvikić</li><li>Dr Senada Šelo Šabić</li></ul>
+        <ul><li data-person="Dr Sandra Cvikić">Dr Sandra Cvikić</li><li data-person="Dr Senada Šelo Šabić">Dr Senada Šelo Šabić</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/cy.png" alt="Cyprus flag" loading="lazy"><span class="country-name">Cyprus</span></div>
-        <ul><li>Dr Constantinos Adamides</li><li>Dr Eleni Christodoulou</li></ul>
+        <ul><li data-person="Dr Constantinos Adamides">Dr Constantinos Adamides</li><li data-person="Dr Eleni Christodoulou">Dr Eleni Christodoulou</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/dk.png" alt="Denmark flag" loading="lazy"><span class="country-name">Denmark</span></div>
-        <ul><li>Prof Olivier Schmitt</li></ul>
+        <ul><li data-person="Prof Olivier Schmitt">Prof Olivier Schmitt</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/fi.png" alt="Finland flag" loading="lazy"><span class="country-name">Finland</span></div>
-        <ul><li>Dr Aija Lulle</li></ul>
+        <ul><li data-person="Dr Aija Lulle">Dr Aija Lulle</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/fr.png" alt="France flag" loading="lazy"><span class="country-name">France</span></div>
-        <ul><li>Dr Hugo Meijer</li><li>Dr Chiara Ruffa</li></ul>
+        <ul><li data-person="Dr Hugo Meijer">Dr Hugo Meijer</li><li data-person="Dr Chiara Ruffa">Dr Chiara Ruffa</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/ge.png" alt="Georgia flag" loading="lazy"><span class="country-name">Georgia</span></div>
-        <ul><li>Dr David Matsaberidze</li></ul>
+        <ul><li data-person="Dr David Matsaberidze">Dr David Matsaberidze</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/de.png" alt="Germany flag" loading="lazy"><span class="country-name">Germany</span></div>
-        <ul><li>Prof Marina Henke</li></ul>
+        <ul><li data-person="Prof Marina Henke">Prof Marina Henke</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/gr.png" alt="Greece flag" loading="lazy"><span class="country-name">Greece</span></div>
-        <ul><li>Prof Pavlos Ioannis Koktsidis</li><li>Dr Revecca Pedi</li></ul>
+        <ul><li data-person="Prof Pavlos Ioannis Koktsidis">Prof Pavlos Ioannis Koktsidis</li><li data-person="Dr Revecca Pedi">Dr Revecca Pedi</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/is.png" alt="Iceland flag" loading="lazy"><span class="country-name">Iceland</span></div>
-        <ul><li>Mr Brynjolfur Stefansson</li></ul>
+        <ul><li data-person="Mr Brynjolfur Stefansson">Mr Brynjolfur Stefansson</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/ie.png" alt="Ireland flag" loading="lazy"><span class="country-name">Ireland</span></div>
-        <ul><li>Dr Daniel O'Toole</li><li>Dr Liliana Pasquale</li></ul>
+        <ul><li data-person="Dr Daniel O'Toole">Dr Daniel O'Toole</li><li data-person="Dr Liliana Pasquale">Dr Liliana Pasquale</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/lt.png" alt="Lithuania flag" loading="lazy"><span class="country-name">Lithuania</span></div>
-        <ul><li>Dr Anželika Banevičienė</li><li>Dr Margarita Šešelgytė</li></ul>
+        <ul><li data-person="Dr Anželika Banevičienė">Dr Anželika Banevičienė</li><li data-person="Dr Margarita Šešelgytė">Dr Margarita Šešelgytė</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/md.png" alt="Moldova flag" loading="lazy"><span class="country-name">Moldova</span></div>
-        <ul><li>Prof Serghei Sprincean</li><li>Dr Vladimir Sterpu</li></ul>
+        <ul><li data-person="Prof Serghei Sprincean">Prof Serghei Sprincean</li><li data-person="Dr Vladimir Sterpu">Dr Vladimir Sterpu</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/me.png" alt="Montenegro flag" loading="lazy"><span class="country-name">Montenegro</span></div>
-        <ul><li>Mr Danilo Kalezić</li></ul>
+        <ul><li data-person="Mr Danilo Kalezić">Mr Danilo Kalezić</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/nl.png" alt="Netherlands flag" loading="lazy"><span class="country-name">Netherlands</span></div>
-        <ul><li>Ms Alisa Kerschbaum</li><li>Dr Marie Robin</li></ul>
+        <ul><li data-person="Ms Alisa Kerschbaum">Ms Alisa Kerschbaum</li><li data-person="Dr Marie Robin">Dr Marie Robin</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/mk.png" alt="North Macedonia flag" loading="lazy"><span class="country-name">North Macedonia</span></div>
-        <ul><li>Dr Kire Babanoski</li><li>Prof Daniela Mechkaroska</li></ul>
+        <ul><li data-person="Dr Kire Babanoski">Dr Kire Babanoski</li><li data-person="Prof Daniela Mechkaroska">Prof Daniela Mechkaroska</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/no.png" alt="Norway flag" loading="lazy"><span class="country-name">Norway</span></div>
-        <ul><li>Prof Monika Gabriela Bartoszewicz</li></ul>
+        <ul><li data-person="Prof Monika Gabriela Bartoszewicz">Prof Monika Gabriela Bartoszewicz</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/pl.png" alt="Poland flag" loading="lazy"><span class="country-name">Poland</span></div>
-        <ul><li>Dr Kalina Lubas</li><li>Prof Paulina Polko</li></ul>
+        <ul><li data-person="Dr Kalina Lubas">Dr Kalina Lubas</li><li data-person="Prof Paulina Polko">Prof Paulina Polko</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/pt.png" alt="Portugal flag" loading="lazy"><span class="country-name">Portugal</span></div>
-        <ul><li>Dr Laura Íñigo Álvarez</li></ul>
+        <ul><li data-person="Dr Laura Íñigo Álvarez">Dr Laura Íñigo Álvarez</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/ro.png" alt="Romania flag" loading="lazy"><span class="country-name">Romania</span></div>
-        <ul><li>Dr Aura Marcela Preda</li><li>Mr Laurentiu Soneriu</li></ul>
+        <ul><li data-person="Dr Aura Marcela Preda">Dr Aura Marcela Preda</li><li data-person="Mr Laurentiu Soneriu">Mr Laurentiu Soneriu</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/rs.png" alt="Serbia flag" loading="lazy"><span class="country-name">Serbia</span></div>
-        <ul><li>Prof Filip Ejdus</li><li>Dr Vesna Nikolić</li></ul>
+        <ul><li data-person="Prof Filip Ejdus">Prof Filip Ejdus</li><li data-person="Dr Vesna Nikolić">Dr Vesna Nikolić</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/sk.png" alt="Slovakia flag" loading="lazy"><span class="country-name">Slovakia</span></div>
-        <ul><li>Prof Jaroslav Usiak</li></ul>
+        <ul><li data-person="Prof Jaroslav Usiak">Prof Jaroslav Usiak</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/si.png" alt="Slovenia flag" loading="lazy"><span class="country-name">Slovenia</span></div>
-        <ul><li>Mr Miha Dvojmoč</li><li>Dr Tanja Pavleska</li></ul>
+        <ul><li data-person="Mr Miha Dvojmoč">Mr Miha Dvojmoč</li><li data-person="Dr Tanja Pavleska">Dr Tanja Pavleska</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/es.png" alt="Spain flag" loading="lazy"><span class="country-name">Spain</span></div>
-        <ul><li>Prof Carmen Márquez Carrasco</li></ul>
+        <ul><li data-person="Prof Carmen Márquez Carrasco">Prof Carmen Márquez Carrasco</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/se.png" alt="Sweden flag" loading="lazy"><span class="country-name">Sweden</span></div>
-        <ul><li>Dr Anna Danielsson</li><li>Mr Henrique Garbino</li></ul>
+        <ul><li data-person="Dr Anna Danielsson">Dr Anna Danielsson</li><li data-person="Mr Henrique Garbino">Mr Henrique Garbino</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/ch.png" alt="Switzerland flag" loading="lazy"><span class="country-name">Switzerland</span></div>
-        <ul><li>Dr Gürkan Gür</li><li>Dr Arthur Laudrain</li></ul>
+        <ul><li data-person="Dr Gürkan Gür">Dr Gürkan Gür</li><li data-person="Dr Arthur Laudrain">Dr Arthur Laudrain</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/tr.png" alt="Türkiye flag" loading="lazy"><span class="country-name">Türkiye</span></div>
-        <ul><li>Prof Pinar Bilgin</li><li>Dr Eliza Gheorghe</li></ul>
+        <ul><li data-person="Prof Pinar Bilgin">Prof Pinar Bilgin</li><li data-person="Dr Eliza Gheorghe">Dr Eliza Gheorghe</li></ul>
       </article>
       <article class="country-card glass">
         <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/gb.png" alt="United Kingdom flag" loading="lazy"><span class="country-name">United Kingdom</span></div>
-        <ul><li>Dr John Helferich</li><li>Dr Marco Wyss</li></ul>
+        <ul><li data-person="Dr John Helferich">Dr John Helferich</li><li data-person="Dr Marco Wyss">Dr Marco Wyss</li></ul>
       </article>
 
     </div>
@@ -1709,6 +1735,29 @@ form button:disabled{opacity:.65;cursor:wait}
       submitBtn.textContent = originalLabel;
     }
   });
+
+  /* ─── Working-group membership chips ─────────────────────────
+     Map sourced from https://www.cost.eu/actions/CA24154/.
+     Names are stored normalized (no salutation, no diacritics,
+     lower-case) so the match is robust to formatting differences.
+     To refresh, see scripts/sync-cost.py (committed alongside). */
+  const WG_MAP = {"aleksandar ivanov": [1, 2], "alena lochmannova": [4], "alessandro indelicato": [3, 4], "alin barbantan": [1, 3], "ana santos pinto": [2, 3], "andreea dragomir": [1, 3], "antonio calcara": [3], "anzelika baneviciene": [2, 3], "arthur laudrain": [2, 3], "benoit josset": [4], "bora iyiat": [1, 2, 4], "brynjolfur stefansson": [2], "carmen marquez carrasco": [2, 3], "catherine menon": [1, 2], "chiara libiseller": [3], "cigdem ustun": [1, 3], "constantinos adamides": [1, 2], "daniel o'toole": [1], "daniela mechkaroska": [2, 3], "david matsaberidze": [1, 3], "dimitar atanasov": [2], "edlira titini": [2, 3, 4], "ekrem ok": [3], "eleni christodoulou": [1], "eleri lillemae": [1], "elisabetta ginevra iida": [3], "erdem ozluk": [3], "esra merve boztosun caliskan": [1, 3], "fatiha djebbar": [1, 3], "felipe pathe duarte": [1, 2, 3], "filip ejdus": [1, 2, 3, 4], "gayane harutyunyan": [2, 3], "grigor vardanyan": [1, 2, 3, 4], "gurkan gur": [1], "halil kanadikirik": [1, 4], "hugo meijer": [1], "i. aytac kadioglu": [1, 3, 4], "ilke gocmen": [1], "ilyas ferhat demirbas": [3], "islam jusufi": [1, 2, 3], "john helferich": [1], "julia carver": [1, 2, 4], "kalina lubas": [2], "kenan hodzic": [3, 4], "kire babanoski": [1, 3, 4], "kujtim zeka": [3, 4], "laura inigo alvarez": [3, 4], "liliana pasquale": [1], "lindita licaj": [3, 4], "magnus petersson": [1], "marco wyss": [1, 3], "marie robin": [2, 3], "marina bartolome valenzuela": [2], "marko kovacevic": [1, 2, 3, 4], "martin chovancik": [1, 2, 3], "mehmet gokay ozerim": [1, 4], "mehmet recai uygur": [2, 3], "mentor beqa": [1, 2, 3], "milan varda": [1, 3], "mile obrenovic": [3], "mirela imsirovic": [1, 3], "monika gabriela bartoszewicz": [1, 2, 3], "moritz weiss": [1, 3], "muhammet ozcan": [1, 3, 4], "nemanja dzuverovic": [1, 4], "nicolas lemay-hebert": [3], "nikolaos tzifakis": [1], "noela mahmutaj": [1, 2, 3], "paulina polko": [2], "pavlosioannis koktsidis": [1, 2, 3], "pieter zhao": [3], "pinar akgul": [1, 2], "revecca pedi": [1, 4], "samuel zilincik": [1, 2, 3], "sandra cvikic": [2], "sarka kolmasova": [1, 2, 3, 4], "serghei sprincean": [2], "sergiu gabriel berindea": [3], "simge pelit": [3], "tamer kasikci": [1, 3, 4], "tanja pavleska": [1, 3, 4], "tijana karic": [1, 2], "tijana recevic": [2, 3, 4], "valderi leithardt": [4], "vanessa newby": [3], "vasil pavlov": [1, 3], "vedat coskun": [2], "veronika nagy": [1, 4], "vesna nikolic": [2, 4], "vladimir sterpu": [1, 2, 3], "walid blila": [1, 2], "yasemin necmiye tutar": [3], "yigit cem eskicioglu": [3, 4]};
+  const normPerson = s => s.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/^(Dr|Prof|Mr|Ms|Mrs)\.?\s+/i, '').trim().toLowerCase();
+  document.querySelectorAll('[data-person]').forEach(el => {
+    const wgs = WG_MAP[normPerson(el.dataset.person)];
+    if (!wgs || !wgs.length) return;
+    const wrap = document.createElement('span');
+    wrap.className = 'wg-chips';
+    wrap.setAttribute('aria-label', 'Working-group membership: ' + wgs.map(w => 'WG' + w).join(', '));
+    wgs.forEach(w => {
+      const c = document.createElement('span');
+      c.className = 'wg-chip wg-' + w;
+      c.textContent = 'WG' + w;
+      wrap.appendChild(c);
+    });
+    el.appendChild(wrap);
+  });
+
 </script>
 
 </body>
