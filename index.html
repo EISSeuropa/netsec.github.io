@@ -1499,24 +1499,15 @@ form button:disabled{opacity:.65;cursor:wait}
       </div>
 
       <!--
-        Contact form — submission backend
-        ────────────────────────────────────
-        To enable real e-mail delivery, sign up for a free Formspree
-        account (https://formspree.io), create a form, and paste its
-        endpoint URL into the `data-endpoint` attribute below. Example:
-
-            data-endpoint="https://formspree.io/f/xqkwabcd"
-
-        With an endpoint set, submissions POST as JSON to Formspree
-        and you receive the message by e-mail at the address you
-        configured there.
-
-        With the endpoint left empty (current state), the form runs in
-        "stub" mode: nothing is sent, but the confirmation banner still
-        pops so you can preview the UX. Validation is enforced either
-        way by the browser.
+        Contact form — wired to Formspree (form id meenwyrb).
+        Submissions POST as JSON to the endpoint below; Formspree
+        delivers them by e-mail to the inbox configured in the
+        Formspree dashboard. If the endpoint is ever cleared, the
+        form falls back to stub mode (validates + shows the
+        confirmation toast but doesn't send), useful for previewing.
       -->
-      <form id="contact-form" class="glass" data-endpoint="" novalidate>
+      <form id="contact-form" class="glass"
+            data-endpoint="https://formspree.io/f/meenwyrb" novalidate>
         <div class="form-row">
           <div>
             <label for="f-name">Name</label>
@@ -1735,7 +1726,18 @@ form button:disabled{opacity:.65;cursor:wait}
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (!res.ok) {
+          // Formspree returns a JSON body with structured errors on 4xx.
+          // Surface the most useful one in the toast where possible.
+          let detail = '';
+          try {
+            const payload = await res.json();
+            if (Array.isArray(payload.errors) && payload.errors.length) {
+              detail = payload.errors.map(e => e.message || e.code).join(' · ');
+            }
+          } catch (_) { /* non-JSON error body */ }
+          throw new Error(detail || ('HTTP ' + res.status));
+        }
       } else {
         // Stub mode: simulate latency so the "Sending…" state is visible.
         await new Promise(r => setTimeout(r, 600));
@@ -1744,7 +1746,12 @@ form button:disabled{opacity:.65;cursor:wait}
       showToast("Thanks — we've received your message and will be in touch.", 'success');
       form.reset();
     } catch (err) {
-      showToast("Sorry, something went wrong. Please email contact@netsec-cost.eu instead.", 'error');
+      // Show the structured error from Formspree if we have one, otherwise
+      // a generic fallback that points the user at a working alternative.
+      const msg = err && err.message && !err.message.startsWith('HTTP ')
+        ? err.message
+        : "Sorry, something went wrong sending your message. Please email moritz.weiss@gsi.lmu.de instead.";
+      showToast(msg, 'error');
       console.error('Contact form error:', err);
     } finally {
       submitBtn.disabled = false;
