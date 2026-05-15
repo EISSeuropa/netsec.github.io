@@ -785,3 +785,63 @@ form button:disabled{opacity:.65;cursor:wait}
 .dark .theme-toggle:hover{background:rgba(255,255,255,.08)}
 .dark .theme-toggle .icon-sun{display:block}
 .dark .theme-toggle .icon-moon{display:none}
+
+/* -------- Prose pages (Accessibility Statement, Privacy Notice) --------
+   Shared layout for content-heavy informational pages. */
+.prose-page{padding:140px 0 80px}
+.prose-page .container{max-width:820px}
+.prose-page h1{font-size:clamp(2.2rem,4.4vw,3.2rem);margin:0 0 1rem}
+.prose-page h2{font-size:1.35rem;margin:2.6rem 0 .8rem;letter-spacing:-.01em}
+.prose-page h3{font-size:1.05rem;margin:1.4rem 0 .5rem;font-weight:600;letter-spacing:-.005em;color:var(--ink)}
+.prose-page p,.prose-page li{font-size:1rem;line-height:1.65;color:var(--ink-2)}
+.prose-page p{margin:0 0 1rem}
+.prose-page .lede{font-size:1.1rem;color:var(--ink-2);max-width:65ch;margin-bottom:2rem}
+.prose-page ul{padding-left:1.4rem;margin:0 0 1rem}
+.prose-page li{margin-bottom:.45rem}
+.prose-page code{
+  font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.88rem;
+  padding:1px 6px;border-radius:5px;
+  background:rgba(11,18,32,.06);color:var(--ink);
+}
+.dark .prose-page code{background:rgba(255,255,255,.08)}
+.prose-page a{color:var(--accent-2);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+.prose-page a:hover{opacity:.7}
+
+/* Meta strip with status / controller / dates */
+.prose-meta{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));
+  gap:14px;padding:22px 24px;margin:8px 0 36px;
+}
+.prose-meta-item .label{
+  display:block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;margin-bottom:6px;
+}
+.prose-meta-item .value{font-family:'Lexend','Inter',sans-serif;font-weight:600;color:var(--ink);font-size:1rem;letter-spacing:-.01em}
+
+/* Status chip (amber for "partially compliant", green for compliant, etc.) */
+.prose-status{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:5px 12px;border-radius:999px;
+  font-size:.85rem;font-weight:600;
+  background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(245,158,11,.06));
+  color:#b45309;
+  border:1px solid rgba(245,158,11,.30);
+}
+.prose-status .dot{width:8px;height:8px;border-radius:50%;background:#f59e0b}
+.dark .prose-status{color:#fbbf24}
+
+/* Audit summary card (Accessibility Statement only, but harmless elsewhere) */
+.audit-card{padding:20px 24px;margin:0 0 1.2rem}
+.audit-card .grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;
+}
+.audit-card .stat{text-align:center}
+.audit-card .stat .num{font-family:'Lexend','Inter',sans-serif;font-weight:700;font-size:2rem;letter-spacing:-.02em;display:block;line-height:1}
+.audit-card .stat .lbl{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:4px;display:block}
+.audit-card .stat.ok .num{color:#16a34a}
+.audit-card .stat.warn .num{color:#d97706}
+.audit-card .stat.neutral .num{color:var(--accent)}
+@media (max-width:540px){
+  .audit-card .grid{grid-template-columns:1fr;gap:12px}
+  .prose-page{padding:120px 0 60px}
+}
