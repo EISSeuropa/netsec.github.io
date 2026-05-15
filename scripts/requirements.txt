@@ -1,0 +1,5 @@
+# Python dependencies for the cost.eu sync script (scripts/sync-cost.py)
+# Pinned by major version so security patches still apply automatically
+# and the GitHub Actions cache key stays stable.
+requests>=2.31,<3
+beautifulsoup4>=4.12,<5

@@ -22,63 +22,6 @@
   })();
 </script>
 <link rel="stylesheet" href="assets/css/site.css">
-<style>
-  /* Accessibility-statement-specific styles (prose layout) */
-  .a11y-page{padding:140px 0 80px}
-  .a11y-page .container{max-width:820px}
-  .a11y-page h1{font-size:clamp(2.2rem,4.4vw,3.2rem);margin:0 0 1rem}
-  .a11y-page h2{font-size:1.35rem;margin:2.6rem 0 .8rem;letter-spacing:-.01em}
-  .a11y-page p,.a11y-page li{font-size:1rem;line-height:1.65;color:var(--ink-2)}
-  .a11y-page p{margin:0 0 1rem}
-  .a11y-page .lede{font-size:1.1rem;color:var(--ink-2);max-width:65ch;margin-bottom:2rem}
-  .a11y-page ul{padding-left:1.4rem;margin:0 0 1rem}
-  .a11y-page li{margin-bottom:.45rem}
-  .a11y-page code{
-    font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.88rem;
-    padding:1px 6px;border-radius:5px;
-    background:rgba(11,18,32,.06);color:var(--ink);
-  }
-  .dark .a11y-page code{background:rgba(255,255,255,.08)}
-  .a11y-page a{color:var(--accent-2);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
-  .a11y-page a:hover{opacity:.7}
-
-  /* Meta strip with status / target / last-assessed */
-  .a11y-meta{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));
-    gap:14px;padding:22px 24px;margin:8px 0 36px;
-  }
-  .a11y-meta-item .label{
-    display:block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--muted);font-weight:600;margin-bottom:6px;
-  }
-  .a11y-meta-item .value{font-family:'Lexend','Inter',sans-serif;font-weight:600;color:var(--ink);font-size:1rem;letter-spacing:-.01em}
-  .a11y-status{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:5px 12px;border-radius:999px;
-    font-size:.85rem;font-weight:600;
-    background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(245,158,11,.06));
-    color:#b45309;
-    border:1px solid rgba(245,158,11,.30);
-  }
-  .a11y-status .dot{width:8px;height:8px;border-radius:50%;background:#f59e0b}
-  .dark .a11y-status{color:#fbbf24}
-
-  /* Audit summary card */
-  .audit-card{padding:20px 24px;margin:0 0 1.2rem}
-  .audit-card .grid{
-    display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;
-  }
-  .audit-card .stat{text-align:center}
-  .audit-card .stat .num{font-family:'Lexend','Inter',sans-serif;font-weight:700;font-size:2rem;letter-spacing:-.02em;display:block;line-height:1}
-  .audit-card .stat .lbl{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:4px;display:block}
-  .audit-card .stat.ok .num{color:#16a34a}
-  .audit-card .stat.warn .num{color:#d97706}
-  .audit-card .stat.neutral .num{color:var(--accent)}
-  @media (max-width:540px){
-    .audit-card .grid{grid-template-columns:1fr;gap:12px}
-    .a11y-page{padding:120px 0 60px}
-  }
-</style>
 </head>
 <body>
 
@@ -120,22 +63,22 @@
 </header>
 
 <main id="main">
-<section class="a11y-page">
+<section class="prose-page">
   <div class="container reveal">
     <span class="eyebrow">Accessibility</span>
     <h1>Accessibility Statement</h1>
     <p class="lede">The NetSec website strives to make its content usable for everyone, including visitors who rely on assistive technology. This page documents our current conformance status, known limitations, and how to report any barriers you encounter.</p>
 
-    <div class="glass a11y-meta">
-      <div class="a11y-meta-item">
+    <div class="glass prose-meta">
+      <div class="prose-meta-item">
         <span class="label">Conformance status</span>
-        <span class="a11y-status"><span class="dot"></span> Partially compliant</span>
+        <span class="prose-status"><span class="dot"></span> Partially compliant</span>
       </div>
-      <div class="a11y-meta-item">
+      <div class="prose-meta-item">
         <span class="label">Target standard</span>
         <span class="value">WCAG 2.1 Level AA<br><span style="font-weight:500;font-size:.85rem;color:var(--muted)">aligned with EN 301 549</span></span>
       </div>
-      <div class="a11y-meta-item">
+      <div class="prose-meta-item">
         <span class="label">Last assessed</span>
         <span class="value">14 May 2026</span>
       </div>
@@ -244,7 +187,7 @@
     </div>
 
     <div class="footer-bottom">
-      <span>&copy; <span id="year"></span> COST Action NetSec. The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union. · <a href="accessibility.html">Accessibility</a></span>
+      <span>&copy; <span id="year"></span> COST Action NetSec. The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union. · <a href="accessibility.html">Accessibility</a> · <a href="privacy.html">Privacy</a></span>
       <nav class="socials" aria-label="Social links">
         <a href="#" aria-label="LinkedIn" rel="noopener">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.339 18.339v-7.143H6.018v7.143h2.32zM7.179 10.179a1.339 1.339 0 100-2.679 1.339 1.339 0 000 2.679zm10.821 8.16v-3.928c0-2.071-1.107-3.036-2.585-3.036-1.193 0-1.728.661-2.027 1.125v-.964h-2.245c.03.643 0 7.143 0 7.143h2.245v-3.99c0-.2.014-.4.073-.543.16-.4.524-.815 1.135-.815.8 0 1.122.61 1.122 1.506v3.842H18z"/></svg>
