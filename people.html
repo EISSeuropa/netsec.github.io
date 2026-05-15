@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The full NetSec member directory — COST Action CA24154. Bios, affiliations, and Working Group memberships for the Action's leadership and country representatives.">
+<title>Members · NetSec — COST Action CA24154</title>
+<link rel="icon" href="assets/images/logo.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&display=swap">
+<script>
+  (function() {
+    try {
+      var saved = localStorage.getItem('netsec-theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="ambience" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<header class="nav" role="banner">
+  <div class="nav-inner">
+    <a href="index.html" class="brand" aria-label="NetSec home">
+      <span class="brand-mark">NS</span>
+      <span>NetSec</span>
+    </a>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="index.html#news">News</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#working-groups">Working Groups</a>
+      <a href="people.html" aria-current="page">Members</a>
+      <a href="index.html#events">Events</a>
+      <a href="index.html#roadmap">Roadmap</a>
+      <a href="index.html#contact" class="nav-cta">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="people-page">
+  <div class="container reveal">
+    <div class="section-head">
+      <span class="eyebrow">Network</span>
+      <h1>Members</h1>
+      <p class="lede">The people who make NetSec — Action leadership, Working Group coordinators, and country representatives from across 30 participating COST Member countries.</p>
+    </div>
+
+    <div class="members-toolbar glass">
+      <label class="members-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input id="member-search" type="search" placeholder="Search by name, affiliation, or country…" aria-label="Search members">
+      </label>
+      <div class="members-filter" role="group" aria-label="Filter by Working Group">
+        <button class="members-filter-chip" data-wg="all" aria-pressed="true">All</button>
+        <button class="members-filter-chip" data-wg="1" aria-pressed="false">WG1</button>
+        <button class="members-filter-chip" data-wg="2" aria-pressed="false">WG2</button>
+        <button class="members-filter-chip" data-wg="3" aria-pressed="false">WG3</button>
+        <button class="members-filter-chip" data-wg="4" aria-pressed="false">WG4</button>
+      </div>
+    </div>
+
+    <p class="members-count" id="members-count" aria-live="polite"></p>
+
+    <div id="members-empty" hidden class="members-empty glass">
+      <h3>No members yet</h3>
+      <p>Bios will appear here once members submit the form. Until then, this directory shows leadership and Working Group coordinators.</p>
+    </div>
+
+    <div id="members-grid" class="members-grid" aria-label="Member directory"></div>
+
+  </div>
+</section>
+</main>
+
+<!-- Member card template -->
+<template id="member-card-template">
+  <article class="member-card glass">
+    <div class="member-photo">
+      <img alt="" loading="lazy">
+      <span class="member-photo-fallback" aria-hidden="true"></span>
+    </div>
+    <div class="member-body">
+      <h2 class="member-name"></h2>
+      <p class="member-role"></p>
+      <p class="member-affiliation"></p>
+      <div class="member-wgs" role="group" aria-label="Working-group membership"></div>
+      <p class="member-bio"></p>
+      <div class="member-contact" aria-label="Contact"></div>
+    </div>
+  </article>
+</template>
+
+<!-- Footer -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-cobranding">
+      <a class="cost-mark" href="https://www.cost.eu/actions/CA24154/" target="_blank" rel="noopener" aria-label="View COST Action CA24154 NetSec on cost.eu">
+        <img src="assets/images/cost-logo.jpg" alt="COST — European Cooperation in Science and Technology">
+      </a>
+      <div class="eu-mark" role="img" aria-label="Funded by the European Union">
+        <svg class="eu-flag" viewBox="0 0 810 540" role="img" aria-hidden="true">
+          <rect width="810" height="540" fill="#003399"/>
+          <defs>
+            <polygon id="eu-star" fill="#FFCC00"
+              points="0,-30 8.817,-12.135 28.532,-9.27 14.266,4.635 17.634,24.27 0,15 -17.634,24.27 -14.266,4.635 -28.532,-9.27 -8.817,-12.135"/>
+          </defs>
+          <use href="#eu-star" x="405" y="90"/>
+          <use href="#eu-star" x="495" y="114.115"/>
+          <use href="#eu-star" x="560.885" y="180"/>
+          <use href="#eu-star" x="585" y="270"/>
+          <use href="#eu-star" x="560.885" y="360"/>
+          <use href="#eu-star" x="495" y="425.885"/>
+          <use href="#eu-star" x="405" y="450"/>
+          <use href="#eu-star" x="315" y="425.885"/>
+          <use href="#eu-star" x="249.115" y="360"/>
+          <use href="#eu-star" x="225" y="270"/>
+          <use href="#eu-star" x="249.115" y="180"/>
+          <use href="#eu-star" x="315" y="114.115"/>
+        </svg>
+        <span class="eu-text">Funded by<br>the European Union</span>
+      </div>
+    </div>
+
+    <div class="footer-text">
+      <p><strong>This website is based upon work from COST Action NetSec — Networking European Security Knowledge, supported by COST (European Cooperation in Science and Technology).</strong></p>
+      <p>COST (European Cooperation in Science and Technology) is a funding agency for research and innovation networks. Our Actions help connect research initiatives across Europe and enable scientists to grow their ideas by sharing them with their peers. This boosts their research, career and innovation.</p>
+      <p><a href="https://www.cost.eu" target="_blank" rel="noopener">www.cost.eu</a></p>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> COST Action NetSec. The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union. · <a href="accessibility.html">Accessibility</a> · <a href="privacy.html">Privacy</a></span>
+      <nav class="socials" aria-label="Social links">
+        <a href="#" aria-label="LinkedIn" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.339 18.339v-7.143H6.018v7.143h2.32zM7.179 10.179a1.339 1.339 0 100-2.679 1.339 1.339 0 000 2.679zm10.821 8.16v-3.928c0-2.071-1.107-3.036-2.585-3.036-1.193 0-1.728.661-2.027 1.125v-.964h-2.245c.03.643 0 7.143 0 7.143h2.245v-3.99c0-.2.014-.4.073-.543.16-.4.524-.815 1.135-.815.8 0 1.122.61 1.122 1.506v3.842H18z"/></svg>
+        </a>
+        <a href="#" aria-label="X / Twitter" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2H21.5l-7.5 8.572L23 22h-6.844l-5.354-7.003L4.6 22H1.34l8.02-9.171L1 2h6.99l4.84 6.404L18.244 2zm-1.2 18h1.84L7.04 4h-1.96l11.964 16z"/></svg>
+        </a>
+        <a href="https://github.com/EISSeuropa/netsec.github.io" aria-label="GitHub repository" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.16c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.39.97.11-.75.41-1.27.74-1.56-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.79 0c2.21-1.5 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.68.42.36.79 1.08.79 2.18v3.23c0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+        </a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+
+<!-- Page-specific: load and render member directory from data/bios.json -->
+<script>
+(async function () {
+  'use strict';
+  const grid = document.getElementById('members-grid');
+  const empty = document.getElementById('members-empty');
+  const countEl = document.getElementById('members-count');
+  const search = document.getElementById('member-search');
+  const filterChips = document.querySelectorAll('.members-filter-chip');
+  const tpl = document.getElementById('member-card-template');
+
+  let MEMBERS = [];
+  let activeWG = 'all';
+
+  function initials(name) {
+    return (name || '').replace(/^(Dr|Prof|Mr|Ms|Mrs)\.?\s+/i, '')
+      .split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('');
+  }
+
+  function leadershipOrder(m) {
+    // Sort key: leadership first, then country reps alphabetical
+    const r = (m.roles || []).join(' ');
+    if (/Action Chair$/.test(r)) return '01';
+    if (/Vice-Chair/.test(r)) return '02';
+    if (/Grant Holder/.test(r)) return '03';
+    if (/Science Communication/.test(r)) return '04';
+    if (/Grant Awarding Coord/.test(r)) return '05';
+    if (/Grant Awarding Co-/.test(r)) return '06';
+    if (/WG1 Leader/.test(r)) return '07';
+    if (/WG2 Leader/.test(r)) return '08';
+    if (/WG3 Leader/.test(r)) return '09';
+    if (/WG4 Leader/.test(r)) return '10';
+    if (/WG1 Co-Leader/.test(r)) return '11';
+    if (/WG2 Co-Leader/.test(r)) return '12';
+    if (/WG3 Co-Leader/.test(r)) return '13';
+    if (/WG4 Co-Leader/.test(r)) return '14';
+    return '99' + (m.name || '').toLowerCase();
+  }
+
+  function render() {
+    grid.replaceChildren();
+    const q = (search.value || '').trim().toLowerCase();
+    const filtered = MEMBERS.filter(m => {
+      if (activeWG !== 'all') {
+        const wgs = (m.wgs || []).concat((m.wg_leadership && (m.wg_leadership.lead || [])) || [], (m.wg_leadership && (m.wg_leadership.co_lead || [])) || []);
+        if (!wgs.includes(Number(activeWG))) return false;
+      }
+      if (q) {
+        const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' ')].join(' ').toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+
+    filtered.sort((a, b) => leadershipOrder(a).localeCompare(leadershipOrder(b)) || (a.name||'').localeCompare(b.name||''));
+
+    filtered.forEach(m => {
+      const node = tpl.content.firstElementChild.cloneNode(true);
+      const img = node.querySelector('img');
+      const fallback = node.querySelector('.member-photo-fallback');
+      if (m.photo) {
+        img.src = m.photo;
+        img.alt = m.name || '';
+        fallback.style.display = 'none';
+      } else {
+        img.remove();
+        fallback.textContent = initials(m.name);
+      }
+      node.querySelector('.member-name').textContent = m.name || '';
+      const role = (m.roles || []).join(' · ');
+      node.querySelector('.member-role').textContent = role;
+      const aff = node.querySelector('.member-affiliation');
+      if (m.affiliation || m.country) {
+        const flag = m.country_code ? `<img class="member-flag" src="https://flagcdn.com/h20/${m.country_code}.png" alt="" loading="lazy"> ` : '';
+        aff.innerHTML = flag + [m.affiliation, m.country].filter(Boolean).join(' · ');
+      } else {
+        aff.remove();
+      }
+      // WG chips
+      const wgsAll = Array.from(new Set([].concat(m.wgs || [], (m.wg_leadership && m.wg_leadership.lead) || [], (m.wg_leadership && m.wg_leadership.co_lead) || []))).sort();
+      const wgWrap = node.querySelector('.member-wgs');
+      if (wgsAll.length) {
+        wgsAll.forEach(w => {
+          const c = document.createElement('span');
+          c.className = 'wg-chip wg-' + w;
+          c.textContent = 'WG' + w;
+          wgWrap.appendChild(c);
+        });
+      } else {
+        wgWrap.remove();
+      }
+      // Bio (or pending notice)
+      const bio = node.querySelector('.member-bio');
+      if (m.bio) {
+        bio.textContent = m.bio;
+      } else {
+        bio.classList.add('is-pending');
+        bio.textContent = 'Bio coming soon.';
+      }
+      // Contact links
+      const contact = node.querySelector('.member-contact');
+      const icons = [
+        m.email     && {href: 'mailto:' + m.email, label: 'Email ' + m.name, svg: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/>'},
+        m.website   && {href: m.website, label: 'Website', svg: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/>'},
+        m.orcid     && {href: 'https://orcid.org/' + m.orcid, label: 'ORCID', svg: '<circle cx="12" cy="12" r="10"/><path d="M12 8v8M9 9h.01M15 9h.01"/>'},
+        m.linkedin  && {href: m.linkedin, label: 'LinkedIn', svg: '<rect x="2" y="2" width="20" height="20" rx="2"/><path d="M6 9v8M6 5.01V5M10 17V9m4 8v-5c0-1.7 1-2.5 2.5-2.5S19 10.3 19 12v5"/>'},
+        m.twitter   && {href: m.twitter, label: 'X', svg: '<path d="M18 2H22l-7.5 8.5L23 22h-6.8l-5.4-7L4.5 22H1L9 13 0.5 2H7.5L12.4 8.5 18 2z"/>'},
+        m.bluesky   && {href: m.bluesky, label: 'Bluesky', svg: '<path d="M6 4c4 2 6 6 6 8 0-2 2-6 6-8 4 0 4 4 0 8-2 2-6 4-6 4s-4-2-6-4c-4-4-4-8 0-8z"/>'},
+        m.mastodon  && {href: m.mastodon, label: 'Mastodon', svg: '<path d="M12 2C7 2 3 4 3 9v6c0 5 4 7 9 7 2 0 4-.5 5-1l-.3-2c-1 .5-3 1-4.7 1-4 0-7-1.5-7-5h7m0 0v-3c0-2 1-3 2.5-3S20 7 20 9v6"/>'}
+      ].filter(Boolean);
+      icons.forEach(i => {
+        const a = document.createElement('a');
+        a.href = i.href;
+        a.setAttribute('aria-label', i.label);
+        if (i.href.startsWith('http')) { a.target = '_blank'; a.rel = 'noopener'; }
+        a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + i.svg + '</svg>';
+        contact.appendChild(a);
+      });
+      if (!icons.length) contact.remove();
+      // Deep-link anchor
+      node.id = m.id;
+      grid.appendChild(node);
+    });
+
+    countEl.textContent = filtered.length + (filtered.length === 1 ? ' member' : ' members');
+    empty.hidden = filtered.length > 0;
+  }
+
+  // Filter handlers
+  filterChips.forEach(b => {
+    b.addEventListener('click', () => {
+      activeWG = b.dataset.wg;
+      filterChips.forEach(o => o.setAttribute('aria-pressed', o === b));
+      render();
+    });
+  });
+  let searchTimeout;
+  search.addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(render, 120);
+  });
+
+  // Load data
+  try {
+    const res = await fetch('data/bios.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    MEMBERS = data.members || [];
+    render();
+    // Deep-link: scroll to #<id> if present
+    if (location.hash && location.hash.length > 1) {
+      const target = document.querySelector(location.hash);
+      if (target) target.scrollIntoView({behavior: 'instant', block: 'start'});
+    }
+  } catch (err) {
+    grid.innerHTML = '<p style="text-align:center;color:var(--muted);padding:32px">Unable to load member directory. Please refresh, or use the <a href="index.html#contact">contact page</a>.</p>';
+    console.error('bios.json load failed:', err);
+  }
+})();
+</script>
+
+</body>
+</html>
