@@ -12,9 +12,19 @@
       "country": "Germany",
       "country_code": "de",
       "affiliation": "Ludwig-Maximilians-Universität München",
-      "roles": ["Action Chair"],
-      "wgs": [1, 3],
-      "wg_leadership": {"lead": [1]},
+      "position": "",
+      "roles": [
+        "Action Chair"
+      ],
+      "wgs": [
+        1,
+        3
+      ],
+      "wg_leadership": {
+        "lead": [
+          1
+        ]
+      },
       "bio": "",
       "keywords": [],
       "email": "moritz.weiss@gsi.lmu.de",
@@ -33,8 +43,15 @@
       "country": "Netherlands",
       "country_code": "nl",
       "affiliation": "Leiden University",
-      "roles": ["Action Vice-Chair", "Grant Holder Scientific Representative"],
-      "wgs": [2, 3],
+      "position": "",
+      "roles": [
+        "Action Vice-Chair",
+        "Grant Holder Scientific Representative"
+      ],
+      "wgs": [
+        2,
+        3
+      ],
       "wg_leadership": {},
       "bio": "",
       "keywords": [],
@@ -54,7 +71,10 @@
       "country": "",
       "country_code": "",
       "affiliation": "",
-      "roles": ["Science Communication Coordinator"],
+      "position": "",
+      "roles": [
+        "Science Communication Coordinator"
+      ],
       "wgs": [],
       "wg_leadership": {},
       "bio": "",
@@ -75,7 +95,10 @@
       "country": "Türkiye",
       "country_code": "tr",
       "affiliation": "Bilkent University",
-      "roles": ["Grant Awarding Coordinator"],
+      "position": "",
+      "roles": [
+        "Grant Awarding Coordinator"
+      ],
       "wgs": [],
       "wg_leadership": {},
       "bio": "",
@@ -96,8 +119,13 @@
       "country": "United Kingdom",
       "country_code": "gb",
       "affiliation": "King's College London",
-      "roles": ["Grant Awarding Co-Lead"],
-      "wgs": [3],
+      "position": "",
+      "roles": [
+        "Grant Awarding Co-Lead"
+      ],
+      "wgs": [
+        3
+      ],
       "wg_leadership": {},
       "bio": "",
       "keywords": [],
@@ -117,9 +145,18 @@
       "country": "United Kingdom",
       "country_code": "gb",
       "affiliation": "",
-      "roles": ["WG2 Leader"],
-      "wgs": [1],
-      "wg_leadership": {"lead": [2]},
+      "position": "",
+      "roles": [
+        "WG2 Leader"
+      ],
+      "wgs": [
+        1
+      ],
+      "wg_leadership": {
+        "lead": [
+          2
+        ]
+      },
       "bio": "",
       "keywords": [],
       "email": "",
@@ -138,9 +175,16 @@
       "country": "France",
       "country_code": "fr",
       "affiliation": "Sciences Po, Center for International Studies (CERI)",
-      "roles": ["WG3 Leader"],
+      "position": "",
+      "roles": [
+        "WG3 Leader"
+      ],
       "wgs": [],
-      "wg_leadership": {"lead": [3]},
+      "wg_leadership": {
+        "lead": [
+          3
+        ]
+      },
       "bio": "",
       "keywords": [],
       "email": "",
@@ -159,9 +203,19 @@
       "country": "Greece",
       "country_code": "gr",
       "affiliation": "University of Macedonia",
-      "roles": ["WG4 Leader"],
-      "wgs": [1, 4],
-      "wg_leadership": {"lead": [4]},
+      "position": "",
+      "roles": [
+        "WG4 Leader"
+      ],
+      "wgs": [
+        1,
+        4
+      ],
+      "wg_leadership": {
+        "lead": [
+          4
+        ]
+      },
       "bio": "",
       "keywords": [],
       "email": "",
@@ -180,9 +234,21 @@
       "country": "Serbia",
       "country_code": "rs",
       "affiliation": "University of Belgrade",
-      "roles": ["WG1 Co-Leader"],
-      "wgs": [1, 2, 3, 4],
-      "wg_leadership": {"co_lead": [1]},
+      "position": "",
+      "roles": [
+        "WG1 Co-Leader"
+      ],
+      "wgs": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "wg_leadership": {
+        "co_lead": [
+          1
+        ]
+      },
       "bio": "",
       "keywords": [],
       "email": "",
@@ -201,9 +267,16 @@
       "country": "Netherlands",
       "country_code": "nl",
       "affiliation": "University of Amsterdam",
-      "roles": ["WG2 Co-Leader"],
+      "position": "",
+      "roles": [
+        "WG2 Co-Leader"
+      ],
       "wgs": [],
-      "wg_leadership": {"co_lead": [2]},
+      "wg_leadership": {
+        "co_lead": [
+          2
+        ]
+      },
       "bio": "",
       "keywords": [],
       "email": "",
@@ -222,9 +295,16 @@
       "country": "",
       "country_code": "",
       "affiliation": "James Madison University",
-      "roles": ["WG3 Co-Leader"],
+      "position": "",
+      "roles": [
+        "WG3 Co-Leader"
+      ],
       "wgs": [],
-      "wg_leadership": {"co_lead": [3]},
+      "wg_leadership": {
+        "co_lead": [
+          3
+        ]
+      },
       "bio": "",
       "keywords": [],
       "email": "",
@@ -243,9 +323,21 @@
       "country": "Czechia",
       "country_code": "cz",
       "affiliation": "Metropolitan University Prague",
-      "roles": ["WG4 Co-Leader"],
-      "wgs": [1, 2, 3, 4],
-      "wg_leadership": {"co_lead": [4]},
+      "position": "",
+      "roles": [
+        "WG4 Co-Leader"
+      ],
+      "wgs": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "wg_leadership": {
+        "co_lead": [
+          4
+        ]
+      },
       "bio": "",
       "keywords": [],
       "email": "",

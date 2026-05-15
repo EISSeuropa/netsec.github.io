@@ -960,3 +960,36 @@ form button:disabled{opacity:.65;cursor:wait}
   .members-grid{grid-template-columns:1fr}
   .member-card{padding:20px}
 }
+
+/* Network-directory: soft "Network member" pill for cards without a
+   formal role, and the "Join the network" CTA card. */
+.member-card .member-role.is-soft{
+  color:var(--muted);
+  font-weight:600;
+  letter-spacing:.05em;
+}
+.join-card{
+  margin:48px auto 0;
+  max-width:680px;
+  padding:36px 32px;
+  text-align:center;
+  scroll-margin-top:100px;
+}
+.join-card h2{
+  font-size:clamp(1.4rem,2.5vw,1.8rem);
+  margin:0 0 .6rem;
+  letter-spacing:-.02em;
+}
+.join-card p{
+  margin:0 auto 1.2rem;
+  max-width:54ch;
+  color:var(--ink-2);
+  font-size:1rem;
+  line-height:1.55;
+}
+.join-card-cta{margin-top:6px}
+.join-card-fineprint{
+  margin-top:1.2rem !important;
+  font-size:.85rem;
+  color:var(--muted) !important;
+}
