@@ -1,0 +1,25 @@
+{
+  "_documentation": "Configuration for scripts/sync-bios.py. See docs/bios-setup.md for the step-by-step on creating the Google Form and Sheet and filling in the URL below. While `csv_url` is empty, the workflow runs but no-ops.",
+  "sheet": {
+    "csv_url": ""
+  },
+  "columns": {
+    "timestamp": "Timestamp",
+    "email": "Email Address",
+    "name": "Full name (with title — Dr / Prof / Mr / Ms)",
+    "country": "Country",
+    "affiliation": "Institution or organisation",
+    "public_email": "Public email (optional, will be shown on the site)",
+    "bio": "Short bio (max 300 words)",
+    "keywords": "Research keywords (comma-separated, 3–5 suggested)",
+    "website": "Personal or institutional website (optional)",
+    "orcid": "ORCID iD (optional)",
+    "linkedin": "LinkedIn URL (optional)",
+    "twitter": "X / Twitter URL (optional)",
+    "bluesky": "Bluesky URL (optional)",
+    "mastodon": "Mastodon URL (optional)",
+    "photo": "Headshot photo (optional)",
+    "wgs": "Working Group membership",
+    "consent": "I consent to publication of my bio on netsec-cost.eu"
+  }
+}
