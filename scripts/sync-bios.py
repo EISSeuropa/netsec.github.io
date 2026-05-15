@@ -172,6 +172,7 @@ def row_to_member(row: dict, cols: dict) -> dict | None:
         "country": (row.get(cols.get("country", ""), "") or "").strip(),
         "country_code": "",  # filled by post-processing
         "affiliation": (row.get(cols.get("affiliation", ""), "") or "").strip(),
+        "position": (row.get(cols.get("position", ""), "") or "").strip(),
         "roles": [],
         "wgs": parse_wgs(row.get(cols.get("wgs", ""), "")),
         "wg_leadership": {},
@@ -244,7 +245,7 @@ def merge(seeds: list[dict], form_entries: list[dict]) -> list[dict]:
         if target_id:
             seed = by_slug[target_id]
             # Form data wins for content; preserve roles + wg_leadership unless form overrode
-            for k in ("name", "country", "country_code", "affiliation", "bio",
+            for k in ("name", "country", "country_code", "affiliation", "position", "bio",
                        "keywords", "email", "website", "orcid",
                        "linkedin", "twitter", "bluesky", "mastodon"):
                 if entry.get(k):
@@ -342,6 +343,7 @@ def main() -> None:
     bios_data["source"] = {
         "type": "google_sheet",
         "csv_url": csv_url,
+        "form_url": (config.get("form_url") or "").strip(),
         "last_synced": bios_data["generated_at"],
     }
     BIOS.write_text(json.dumps(bios_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
