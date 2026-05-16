@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-05-16T09:16:35+00:00",
+  "generated_at": "2026-05-16T09:37:58+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-05-16T09:16:35+00:00"
+    "last_synced": "2026-05-16T09:37:58+00:00"
   },
   "members": [
     {
@@ -351,6 +351,28 @@
       "mastodon": "",
       "photo": "assets/images/people/sarka-kolmasova.jpeg",
       "source": "seed"
+    },
+    {
+      "id": "arthur-laudrain",
+      "name": "Dr Arthur Laudrain",
+      "country": "Switzerland",
+      "country_code": "ch",
+      "affiliation": "Center for Security Studies - ETH Zurich",
+      "position": "Team Lead & Senior Researcher, Cyber Security",
+      "roles": [],
+      "wgs": [],
+      "wg_leadership": {},
+      "bio": "This is a test",
+      "keywords": [],
+      "email": "arthur.laudrain@sipo.gess.ethz.ch",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/apb-ldn/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/arthur-laudrain.jpg",
+      "source": "form"
     }
   ]
 }
