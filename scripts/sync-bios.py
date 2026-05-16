@@ -86,9 +86,23 @@ def slugify(name: str) -> str:
 
 
 def parse_wgs(raw: str) -> list[int]:
+    """Extract the set of {1,2,3,4} WG numbers from a Google-Forms
+    checkbox cell. The cell value is a comma-separated list of the
+    ticked checkbox labels — for this form those look like
+    "WG1 · Building the Network". Prefer matching the digit after
+    "WG"; if nothing matches that pattern (e.g. someone shortened the
+    option labels to bare numerals), fall back to standalone digits.
+
+    The previous regex `\\b([1-4])\\b` did not match because the
+    digit in `WG1` sits between two word characters ("G" and end /
+    " "), so the `\\b` word boundary never fires."""
     if not raw:
         return []
-    return sorted({int(d) for d in re.findall(r"\b([1-4])\b", str(raw))})
+    s = str(raw)
+    matches = re.findall(r"WG\s*([1-4])", s, re.IGNORECASE)
+    if not matches:
+        matches = re.findall(r"(?<![A-Za-z0-9])([1-4])(?![A-Za-z0-9])", s)
+    return sorted({int(d) for d in matches})
 
 
 def parse_keywords(raw: str) -> list[str]:
@@ -459,6 +473,51 @@ def fill_country_code(member: dict) -> None:
         member["country_code"] = COUNTRY_TO_CODE.get(member["country"], "")
 
 
+# ─── Management Committee lookup ──────────────────────────────────
+# data/mc-members.json is the canonical list of MC representatives per
+# country, extracted from the index.html country grid (hand-entered
+# from cost.eu). When a form submission's slugified name matches an
+# entry here, we auto-assign a "MC member · <Country>" role and fill
+# country / country_code if the form didn't.
+MC_FILE = ROOT / "data" / "mc-members.json"
+
+
+def load_mc_lookup() -> dict[str, dict]:
+    """Return a dict: slugified-name → {name, country, country_code}."""
+    if not MC_FILE.exists():
+        return {}
+    data = json.loads(MC_FILE.read_text(encoding="utf-8"))
+    out: dict[str, dict] = {}
+    for m in data.get("members", []):
+        if m.get("name"):
+            out[slugify(m["name"])] = m
+    return out
+
+
+def apply_mc_role(member: dict, mc_lookup: dict[str, dict]) -> None:
+    """If this member matches an MC list entry, ensure their country
+    fields are correct, and — *only if they don't already have a more
+    specific role* — set the role to "MC member · <Country>".
+
+    Reasoning: leaders such as the Action Chair or a WG Co-Leader are
+    typically also their country's MC representative, but their
+    formal title is more informative than the generic MC label. We
+    surface the formal title in the role pill; the country flag
+    already signals their country. For everyone else who matches the
+    MC list (and so isn't already covered by a seed entry), the MC
+    label IS the most useful summary."""
+    hit = mc_lookup.get(member.get("id", ""))
+    if not hit:
+        return
+    if not member.get("country"):
+        member["country"] = hit["country"]
+    if not member.get("country_code"):
+        member["country_code"] = hit.get("country_code", "")
+    if member.get("roles"):
+        return  # leadership role already present — keep it
+    member["roles"] = [f"MC member · {hit['country']}"]
+
+
 def merge(seeds: list[dict], form_entries: list[dict]) -> list[dict]:
     """Merge seed list with form list.
     - Seeds keyed by id (slug).
@@ -513,13 +572,15 @@ def merge(seeds: list[dict], form_entries: list[dict]) -> list[dict]:
     result = list(by_slug.values())
     result.sort(key=lambda m: (seed_order.get(m["id"], 10_000), m.get("name", "").lower()))
 
-    # Drop internal fields, fill country_code
+    # Drop internal fields, fill country_code, attach MC role if applicable
+    mc_lookup = load_mc_lookup()
     out = []
     for m in result:
         for k in list(m.keys()):
             if k.startswith("_"):
                 del m[k]
         fill_country_code(m)
+        apply_mc_role(m, mc_lookup)
         out.append(m)
     return out
 
