@@ -70,10 +70,17 @@ def norm_email(s: str) -> str:
 
 
 def slugify(name: str) -> str:
+    """Stable slug from a person's name. Strips diacritics, titles, and
+    apostrophes BEFORE collapsing non-alphanumerics to hyphens, so that
+    e.g. "Dr Silvia D'Amato" → "silvia-damato" (matches the existing
+    seed id) rather than "silvia-d-amato"."""
     s = unicodedata.normalize("NFKD", name or "")
     s = "".join(c for c in s if not unicodedata.combining(c))
     s = re.sub(r"^(Dr|Prof|Mr|Ms|Mrs)\.?\s+", "", s)
     s = s.lower()
+    # Drop apostrophes / curly quotes / similar marks first — they
+    # shouldn't introduce a hyphen between adjacent letters.
+    s = re.sub(r"[‘’ʼ'`]", "", s)
     s = re.sub(r"[^a-z0-9]+", "-", s).strip("-")
     return s or "member"
 
