@@ -933,10 +933,38 @@ form button:disabled{opacity:.65;cursor:wait}
   display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:0 0 14px;
 }
 .member-card .member-bio{
-  font-size:.92rem;line-height:1.55;color:var(--ink-2);margin:0 0 14px;
+  font-size:.92rem;line-height:1.55;color:var(--ink-2);margin:0 0 6px;
   flex:1;text-align:left;
+  /* Clamp to four lines by default; JS detects overflow and adds a
+     "Show more" toggle that flips `.is-expanded`. */
+  display:-webkit-box;
+  -webkit-line-clamp:4;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
 }
-.member-card .member-bio.is-pending{color:var(--muted);font-style:italic;text-align:center}
+.member-card .member-bio.is-expanded{
+  -webkit-line-clamp:unset;
+  display:block;
+  overflow:visible;
+}
+.member-card .member-bio.is-pending{
+  color:var(--muted);font-style:italic;text-align:center;
+  /* No clamping needed — pending placeholder is always short. */
+  display:block;-webkit-line-clamp:unset;overflow:visible;
+}
+.member-bio-toggle{
+  display:inline-flex;align-items:center;gap:4px;
+  margin:0 0 12px;padding:2px 0;
+  font:inherit;font-size:.82rem;font-weight:600;letter-spacing:-.005em;
+  color:var(--accent-2);background:transparent;border:0;cursor:pointer;
+  align-self:flex-start;
+}
+.member-bio-toggle:hover{opacity:.7}
+.member-bio-toggle svg{
+  width:12px;height:12px;
+  transition:transform .2s var(--ease);
+}
+.member-bio-toggle.is-expanded svg{transform:rotate(180deg)}
 .member-card .member-contact{
   display:flex;gap:6px;justify-content:center;flex-wrap:wrap;
   margin-top:auto;padding-top:12px;border-top:1px solid var(--line);
@@ -953,6 +981,12 @@ form button:disabled{opacity:.65;cursor:wait}
 .dark .member-card .member-contact a{background:rgba(255,255,255,.06)}
 .dark .member-card .member-contact a:hover{background:var(--accent)}
 .member-card .member-contact a svg{width:16px;height:16px}
+/* ORCID brand mark is always green — the inner glyph is white. The
+   surrounding pill bg still tints on hover. */
+.member-card .member-contact a.contact-orcid{color:#a6ce39}
+.member-card .member-contact a.contact-orcid:hover{background:#a6ce39;color:#fff}
+.dark .member-card .member-contact a.contact-orcid{color:#a6ce39}
+.dark .member-card .member-contact a.contact-orcid:hover{background:#a6ce39}
 
 @media (max-width:540px){
   .people-page{padding:120px 0 60px}
