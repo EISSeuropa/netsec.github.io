@@ -1,19 +1,20 @@
 {
   "_documentation": "Configuration for scripts/sync-bios.py. See docs/bios-setup.md for the step-by-step on creating the Google Form, linking it to a Sheet, and filling in the URLs below. While `csv_url` is empty, the workflow runs but no-ops.",
   "sheet": {
-    "csv_url": ""
+    "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv"
   },
-  "form_url": "",
+  "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
+  "_columns_doc": "Header names exactly as Google Sheets writes them for this form. Timestamp + email columns are localised to the form owner's account language (here: French → Horodateur / Adresse e-mail). If you ever change a question's text in the form, mirror the change here so the sync script keeps matching.",
   "columns": {
-    "timestamp": "Timestamp",
-    "email": "Email Address",
+    "timestamp": "Horodateur",
+    "email": "Adresse e-mail",
     "name": "Full name (with title — Dr / Prof / Mr / Ms)",
     "position": "Position or current role (e.g. PhD candidate, Associate Professor, Policy analyst)",
     "affiliation": "Institution or organisation",
     "country": "Country",
-    "public_email": "Public email (optional, will be shown on the site)",
-    "bio": "Short bio (max 300 words)",
-    "keywords": "Research keywords (comma-separated, 3–5 suggested)",
+    "public_email": "Public email (optional)",
+    "bio": "Short bio (max. 300 words)",
+    "keywords": "Research keywords (comma-separated, 3 to 5 suggested)",
     "wgs": "Working Group involvement (tick all that apply)",
     "website": "Personal or institutional website (optional)",
     "orcid": "ORCID iD (optional)",
