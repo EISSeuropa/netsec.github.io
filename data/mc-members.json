@@ -1,0 +1,250 @@
+{
+  "_documentation": "Canonical list of Management Committee representatives per country. Used by scripts/sync-bios.py to auto-assign an 'MC member · <Country>' role when a form submission's name matches. Extracted from the country-grid block in index.html (hand-entered from cost.eu/actions/CA24154/). A future sync-cost.py extension could regenerate this from cost.eu directly.",
+  "members": [
+    {
+      "name": "Dr Noela Mahmutaj",
+      "country": "Albania",
+      "country_code": "al"
+    },
+    {
+      "name": "Dr Edlira Titini",
+      "country": "Albania",
+      "country_code": "al"
+    },
+    {
+      "name": "Dr Jasmin Ahić",
+      "country": "Bosnia and Herzegovina",
+      "country_code": "ba"
+    },
+    {
+      "name": "Dr Kenan Hodžić",
+      "country": "Bosnia and Herzegovina",
+      "country_code": "ba"
+    },
+    {
+      "name": "Prof Anna Krasteva",
+      "country": "Bulgaria",
+      "country_code": "bg"
+    },
+    {
+      "name": "Dr Sandra Cvikić",
+      "country": "Croatia",
+      "country_code": "hr"
+    },
+    {
+      "name": "Dr Senada Šelo Šabić",
+      "country": "Croatia",
+      "country_code": "hr"
+    },
+    {
+      "name": "Dr Constantinos Adamides",
+      "country": "Cyprus",
+      "country_code": "cy"
+    },
+    {
+      "name": "Dr Eleni Christodoulou",
+      "country": "Cyprus",
+      "country_code": "cy"
+    },
+    {
+      "name": "Prof Olivier Schmitt",
+      "country": "Denmark",
+      "country_code": "dk"
+    },
+    {
+      "name": "Dr Aija Lulle",
+      "country": "Finland",
+      "country_code": "fi"
+    },
+    {
+      "name": "Dr Hugo Meijer",
+      "country": "France",
+      "country_code": "fr"
+    },
+    {
+      "name": "Dr Chiara Ruffa",
+      "country": "France",
+      "country_code": "fr"
+    },
+    {
+      "name": "Dr David Matsaberidze",
+      "country": "Georgia",
+      "country_code": "ge"
+    },
+    {
+      "name": "Prof Marina Henke",
+      "country": "Germany",
+      "country_code": "de"
+    },
+    {
+      "name": "Prof Pavlos Ioannis Koktsidis",
+      "country": "Greece",
+      "country_code": "gr"
+    },
+    {
+      "name": "Dr Revecca Pedi",
+      "country": "Greece",
+      "country_code": "gr"
+    },
+    {
+      "name": "Mr Brynjolfur Stefansson",
+      "country": "Iceland",
+      "country_code": "is"
+    },
+    {
+      "name": "Dr Daniel O'Toole",
+      "country": "Ireland",
+      "country_code": "ie"
+    },
+    {
+      "name": "Dr Liliana Pasquale",
+      "country": "Ireland",
+      "country_code": "ie"
+    },
+    {
+      "name": "Dr Anželika Banevičienė",
+      "country": "Lithuania",
+      "country_code": "lt"
+    },
+    {
+      "name": "Dr Margarita Šešelgytė",
+      "country": "Lithuania",
+      "country_code": "lt"
+    },
+    {
+      "name": "Prof Serghei Sprincean",
+      "country": "Moldova",
+      "country_code": "md"
+    },
+    {
+      "name": "Dr Vladimir Sterpu",
+      "country": "Moldova",
+      "country_code": "md"
+    },
+    {
+      "name": "Mr Danilo Kalezić",
+      "country": "Montenegro",
+      "country_code": "me"
+    },
+    {
+      "name": "Ms Alisa Kerschbaum",
+      "country": "Netherlands",
+      "country_code": "nl"
+    },
+    {
+      "name": "Dr Marie Robin",
+      "country": "Netherlands",
+      "country_code": "nl"
+    },
+    {
+      "name": "Dr Kire Babanoski",
+      "country": "North Macedonia",
+      "country_code": "mk"
+    },
+    {
+      "name": "Prof Daniela Mechkaroska",
+      "country": "North Macedonia",
+      "country_code": "mk"
+    },
+    {
+      "name": "Prof Monika Gabriela Bartoszewicz",
+      "country": "Norway",
+      "country_code": "no"
+    },
+    {
+      "name": "Dr Kalina Lubas",
+      "country": "Poland",
+      "country_code": "pl"
+    },
+    {
+      "name": "Prof Paulina Polko",
+      "country": "Poland",
+      "country_code": "pl"
+    },
+    {
+      "name": "Dr Laura Íñigo Álvarez",
+      "country": "Portugal",
+      "country_code": "pt"
+    },
+    {
+      "name": "Dr Aura Marcela Preda",
+      "country": "Romania",
+      "country_code": "ro"
+    },
+    {
+      "name": "Mr Laurentiu Soneriu",
+      "country": "Romania",
+      "country_code": "ro"
+    },
+    {
+      "name": "Prof Filip Ejdus",
+      "country": "Serbia",
+      "country_code": "rs"
+    },
+    {
+      "name": "Dr Vesna Nikolić",
+      "country": "Serbia",
+      "country_code": "rs"
+    },
+    {
+      "name": "Prof Jaroslav Usiak",
+      "country": "Slovakia",
+      "country_code": "sk"
+    },
+    {
+      "name": "Mr Miha Dvojmoč",
+      "country": "Slovenia",
+      "country_code": "si"
+    },
+    {
+      "name": "Dr Tanja Pavleska",
+      "country": "Slovenia",
+      "country_code": "si"
+    },
+    {
+      "name": "Prof Carmen Márquez Carrasco",
+      "country": "Spain",
+      "country_code": "es"
+    },
+    {
+      "name": "Dr Anna Danielsson",
+      "country": "Sweden",
+      "country_code": "se"
+    },
+    {
+      "name": "Mr Henrique Garbino",
+      "country": "Sweden",
+      "country_code": "se"
+    },
+    {
+      "name": "Dr Gürkan Gür",
+      "country": "Switzerland",
+      "country_code": "ch"
+    },
+    {
+      "name": "Dr Arthur Laudrain",
+      "country": "Switzerland",
+      "country_code": "ch"
+    },
+    {
+      "name": "Prof Pinar Bilgin",
+      "country": "Türkiye",
+      "country_code": "tr"
+    },
+    {
+      "name": "Dr Eliza Gheorghe",
+      "country": "Türkiye",
+      "country_code": "tr"
+    },
+    {
+      "name": "Dr John Helferich",
+      "country": "United Kingdom",
+      "country_code": "gb"
+    },
+    {
+      "name": "Dr Marco Wyss",
+      "country": "United Kingdom",
+      "country_code": "gb"
+    }
+  ]
+}
