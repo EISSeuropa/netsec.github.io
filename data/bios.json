@@ -1,9 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-05-15T00:00:00Z",
+  "generated_at": "2026-05-16T09:16:35+00:00",
   "source": {
-    "type": "seed",
-    "note": "Seed entries: leadership and WG officers we already had photos for. Form submissions will MERGE into this list by email match — manual seed entries persist until overwritten by a form response."
+    "type": "google_sheet",
+    "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
+    "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
+    "last_synced": "2026-05-16T09:16:35+00:00"
   },
   "members": [
     {
