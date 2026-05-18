@@ -137,12 +137,14 @@ thead th{
 thead th:first-child{border-top-left-radius:6pt}
 thead th:last-child{border-top-right-radius:6pt}
 tbody td{
-  padding:6pt 9pt;
+  padding:7pt 9pt;
   border-bottom:1px solid var(--line);
   vertical-align:top;
   color:var(--ink-2);
+  background:#fff;
 }
-tbody tr:nth-child(even) td{background:var(--tint-2)}
+/* No alternating row tint — clean white rows separated by hairline
+   rules read more cleanly in print than the earlier grey-blue stripe. */
 tbody tr:last-child td{border-bottom:0}
 
 /* ── Code & file paths ──────────────────────────────────────── */
@@ -168,15 +170,27 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
 
 /* ── Mermaid diagrams ───────────────────────────────────────── */
 .diagram{
-  background:var(--tint-2);
+  /* Plain-white surround removes the grey-ish look the tinted bg
+     gave the previous draft. The border + soft shadow alone is
+     enough to read as "this is a figure". */
+  background:#fff;
   border:1px solid var(--line);
   border-radius:10pt;
-  padding:14pt;
-  margin:.6rem 0 1rem;
+  padding:14pt 10pt;
+  margin:.8rem 0 1.1rem;
   text-align:center;
   break-inside:avoid-page;
+  box-shadow:0 1pt 3pt rgba(20,35,80,.05);
 }
-.diagram .mermaid{display:inline-block;max-width:100%;color:var(--ink)}
+.diagram .mermaid{display:block;color:var(--ink)}
+.diagram .mermaid svg{
+  /* Force the rendered SVG to fill the figure width so flowcharts
+     and sequence diagrams don't shrink to ~40% of the page width. */
+  width:100% !important;
+  max-width:100% !important;
+  height:auto !important;
+}
+.diagram.wide{margin-left:-10pt;margin-right:-10pt}
 .diagram-caption{
   font-size:8.5pt;color:var(--muted);
   margin-top:6pt;text-align:center;
@@ -376,7 +390,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
   <div class="cover-title">
     <span class="eyebrow">Deliverable D1 · Documentation Pack</span>
     <h1>Website &amp; <br>Open Directory</h1>
-    <h2>Architecture, design system, and admin handover<br>for the COST Action NetSec website.</h2>
+    <h2>Architecture, design system, and admin&nbsp;handover<br>for the COST Action NetSec website.</h2>
 
     <div class="cover-meta">
       <div class="item">
@@ -398,9 +412,13 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div class="cofunding">
       <div class="eu-flag">
         <svg class="eu-stars" viewBox="0 0 100 100" aria-hidden="true">
+          <!-- Twelve five-pointed stars on a circle of radius 32 centred at (50,50).
+               The master <polygon> lives in <defs> so it doesn't render at the
+               SVG origin in addition to the twelve placements. -->
+          <defs>
+            <polygon id="star" points="0,-6 1.76,-2.42 5.71,-1.85 2.85,.92 3.53,4.85 0,3 -3.53,4.85 -2.85,.92 -5.71,-1.85 -1.76,-2.42"/>
+          </defs>
           <g fill="#FFCC00">
-            <!-- Twelve five-pointed stars on a circle of radius 32 centred at (50,50). -->
-            <g id="star"><polygon points="0,-6 1.76,-2.42 5.71,-1.85 2.85,.92 3.53,4.85 0,3 -3.53,4.85 -2.85,.92 -5.71,-1.85 -1.76,-2.42"/></g>
             <use href="#star" x="50" y="18"/>
             <use href="#star" x="66" y="22.3"/>
             <use href="#star" x="78" y="34"/>
@@ -463,7 +481,13 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </li>
       <li>
         <div>
-          <span class="title">Appendix · Security &amp; licensing</span>
+          <span class="title">Appendix A · Accessibility standard &amp; assessment</span>
+          <span class="desc">WCAG 2.1 AA target, EN&nbsp;301&nbsp;549 alignment, latest self-assessment results, known limitations, reporting route.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="title">Appendix B · Security &amp; licensing</span>
           <span class="desc">Coordinated-disclosure policy in brief, and the dual MIT + CC&nbsp;BY&nbsp;4.0 licensing model.</span>
         </div>
       </li>
@@ -1075,11 +1099,119 @@ sequenceDiagram
 
 
 <!-- ════════════════════════════════════════════════════════════
-     APPENDIX — SECURITY & LICENSING
+     APPENDIX A — ACCESSIBILITY STANDARD & ASSESSMENT
      ════════════════════════════════════════════════════════════ -->
 <section class="page">
   <div class="section-banner">
     <div class="num">A</div>
+    <div class="head">
+      <h1>Appendix · Accessibility standard &amp; assessment</h1>
+      <div class="sub">What we target, how we test, what we found, and how to flag a barrier.</div>
+    </div>
+  </div>
+
+  <p>The full statement lives at <a href="https://netsec-cost.eu/accessibility.html">netsec-cost.eu/accessibility.html</a> and is the authoritative version. This appendix summarises it for evaluators reading offline.</p>
+
+  <h2>Standards and legal framing</h2>
+  <table>
+    <thead><tr><th>Aspect</th><th>Position</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Target conformance</td>
+        <td><strong>WCAG 2.1 Level AA</strong> — Web Content Accessibility Guidelines, Level AA success criteria.</td>
+      </tr>
+      <tr>
+        <td>European harmonisation</td>
+        <td>Aligned with <strong>EN&nbsp;301&nbsp;549</strong>, the European accessibility standard for ICT products and services.</td>
+      </tr>
+      <tr>
+        <td>Legal framework</td>
+        <td><a href="https://eur-lex.europa.eu/eli/dir/2016/2102/oj">Web Accessibility Directive 2016/2102</a> (EU). Each EU Member State designates its own enforcement body.</td>
+      </tr>
+      <tr>
+        <td>Current status</td>
+        <td><em>Partially compliant.</em> The majority of WCAG 2.1 AA success criteria are met; the limitations listed below are tracked for a future iteration.</td>
+      </tr>
+      <tr>
+        <td>Statement version</td>
+        <td>v1.0 · prepared 14 May 2026 · next scheduled review 14 May 2027.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Latest self-assessment</h2>
+  <p>An automated audit was performed on <strong>14 May 2026</strong> with <a href="https://github.com/dequelabs/axe-core">axe-core 4.10.2</a> running against every section of the home page (with all collapsible regions expanded). Results:</p>
+
+  <div class="card tint" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18pt;text-align:center">
+    <div>
+      <div style="font-family:'Lexend',sans-serif;font-size:24pt;font-weight:700;color:#1a8754;letter-spacing:-.02em">0</div>
+      <div class="small muted">Violations</div>
+    </div>
+    <div>
+      <div style="font-family:'Lexend',sans-serif;font-size:24pt;font-weight:700;color:#003399;letter-spacing:-.02em">50</div>
+      <div class="small muted">Passes</div>
+    </div>
+    <div>
+      <div style="font-family:'Lexend',sans-serif;font-size:24pt;font-weight:700;color:#b07700;letter-spacing:-.02em">1</div>
+      <div class="small muted">Needs manual review</div>
+    </div>
+  </div>
+  <p>The single item flagged for manual review is colour contrast on text rendered over <code>backdrop-filter</code> glass surfaces — axe-core cannot evaluate this automatically because the perceived contrast depends on what's behind the surface. Manual spot-checks confirm these surfaces meet WCAG 2.1 AA contrast in both light and dark mode.</p>
+
+  <h2>Test methodology</h2>
+  <p>The statement was prepared by self-assessment using three complementary methods:</p>
+  <ul>
+    <li><strong>Manual review</strong> of semantic HTML, keyboard navigation, focus management, and tab order — every page walked through with the keyboard alone.</li>
+    <li><strong>Automated scans</strong> with <a href="https://github.com/dequelabs/axe-core">axe-core 4.10.2</a> against the home page with all collapsible regions expanded.</li>
+    <li><strong>Manual contrast spot-checks</strong> on glass surfaces in both light and dark mode (the one case axe-core cannot evaluate).</li>
+  </ul>
+  <p>We re-assess after material changes to the design system or content structure, and at a minimum once per year.</p>
+
+  <h2>Features in place</h2>
+  <p>A non-exhaustive list of the accessibility affordances the site already ships:</p>
+  <ul>
+    <li>Semantic landmarks (<code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>) and a clean heading hierarchy without level jumps.</li>
+    <li>Skip-to-content link, visible on keyboard focus.</li>
+    <li>Visible <code>:focus-visible</code> ring on every interactive control.</li>
+    <li><code>alt</code> text on every image; explicit <code>&lt;label for&gt;</code> association on every form input.</li>
+    <li>Light and dark themes with a manual toggle; OS-level <code>prefers-color-scheme</code> as the default.</li>
+    <li><code>prefers-reduced-motion</code> disables decorative animations.</li>
+    <li>The <em>Management Committee by Country</em> directory uses a native <code>&lt;details&gt;</code> accordion — fully keyboard- and screen-reader-accessible without bespoke ARIA wiring. Deep-links to specific country cards auto-expand the section.</li>
+    <li>The roadmap Gantt grid uses ARIA grid roles (<code>role="table"</code>, <code>role="row"</code>, <code>role="columnheader"</code>, <code>role="cell"</code>) so assistive technology parses it as tabular data.</li>
+    <li>Working-group chips are grouped with <code>role="group"</code> and an <code>aria-label</code> so screen readers announce them as a group rather than as loose tokens.</li>
+    <li>Contact form: inline validation, accessible error reporting, and a confirmation toast announced via <code>role="status" aria-live="polite"</code>.</li>
+  </ul>
+
+  <h2>Known limitations</h2>
+  <p>The following parts of the site do not yet fully meet WCAG 2.1 AA, or have constraints worth flagging:</p>
+  <ul>
+    <li><strong>Roadmap Gantt chart.</strong> A dense data visualisation. On narrow viewports the chart requires horizontal scrolling; the scroll region is keyboard-focusable so users can pan with arrow keys (WCAG 2.1.1), but a text-only alternative summary is not yet provided.</li>
+    <li><strong>Decorative animations.</strong> Aurora background blobs and reveal-on-scroll fades are automatically disabled when the OS or browser signals <code>prefers-reduced-motion</code>. We do not currently expose a separate per-site override.</li>
+    <li><strong>Third-party assets.</strong> Country flag thumbnails are served from <code>flagcdn.com</code> and member headshots from the GitHub Pages CDN. Long-term availability is outside the Action's direct control; if any image becomes unavailable, the surrounding text content remains intact and informative.</li>
+    <li><strong>EU emblem SVG.</strong> The <em>Funded by the European Union</em> emblem carries an <code>aria-label</code> and <code>role="img"</code> but no long description; it is described by the surrounding boilerplate text.</li>
+  </ul>
+
+  <h2>Reporting a barrier</h2>
+  <p>If you encounter an accessibility barrier on this website, or need any of its content in an alternative format, please get in touch:</p>
+  <ul>
+    <li>Email the Action Chair, Dr Moritz Weiss — <a href="mailto:moritz.weiss@gsi.lmu.de">moritz.weiss@gsi.lmu.de</a></li>
+    <li>Or use the <a href="https://netsec-cost.eu/index.html#contact">contact form</a> and mention <em>"accessibility"</em> in your message.</li>
+  </ul>
+  <p>We aim to respond within <strong>10 working days</strong>.</p>
+
+  <div class="card callout">
+    <h4>Enforcement procedure</h4>
+    <p style="margin:0">If you are not satisfied with our response, you may contact the equality body or accessibility-compliance body in your country. Within the European Union, each Member State designates its own enforcement body under the <a href="https://eur-lex.europa.eu/eli/dir/2016/2102/oj">Web Accessibility Directive 2016/2102</a>.</p>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     APPENDIX B — SECURITY & LICENSING
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="section-banner">
+    <div class="num">B</div>
     <div class="head">
       <h1>Appendix · Security &amp; licensing</h1>
       <div class="sub">Coordinated-disclosure policy in brief; the dual MIT + CC&nbsp;BY&nbsp;4.0 model.</div>
@@ -1145,32 +1277,64 @@ sequenceDiagram
 
 
 <script>
-  // Configure Mermaid to render with the site's colour palette.
+  // Mermaid rendering, themed against the site's colour tokens.
+  //
+  // Sizing rationale: the previous draft rendered diagrams at
+  // Mermaid's defaults (small for an A4 figure). Here we bump font
+  // sizes, actor margins, and the sequence-diagram "width" so the
+  // resulting SVG has a natural size that fills the print figure
+  // width comfortably. Unstyled nodes get pure white fills with a
+  // blue border (was light-blue, which read as grey on paper).
   mermaid.initialize({
     startOnLoad: true,
     theme: 'base',
     themeVariables: {
       fontFamily: "'Lexend','Inter',sans-serif",
-      primaryColor: '#eef2fb',
+      fontSize: '16px',
+      primaryColor: '#ffffff',
       primaryTextColor: '#0b1220',
       primaryBorderColor: '#0a84ff',
-      lineColor: '#5a6679',
-      secondaryColor: '#f6f8fc',
+      lineColor: '#2b3850',
+      secondaryColor: '#ffffff',
       tertiaryColor: '#ffffff',
+      // Sequence diagrams
       actorBkg: '#003399',
       actorTextColor: '#ffffff',
       actorBorder: '#003399',
-      signalColor: '#2b3850',
+      actorLineColor: '#0a84ff',
+      signalColor: '#0b1220',
       signalTextColor: '#0b1220',
-      labelBoxBkgColor: '#eef2fb',
+      labelBoxBkgColor: '#ffffff',
       labelBoxBorderColor: '#0a84ff',
       labelTextColor: '#0b1220',
+      loopTextColor: '#0b1220',
       noteBkgColor: '#fff8d6',
       noteTextColor: '#0b1220',
       noteBorderColor: '#d8c269',
     },
-    flowchart: { htmlLabels: true, curve: 'basis' },
-    sequence: { showSequenceNumbers: false, mirrorActors: false, wrap: true },
+    flowchart: {
+      htmlLabels: true,
+      curve: 'basis',
+      useMaxWidth: true,
+      nodeSpacing: 55,
+      rankSpacing: 70,
+      padding: 18,
+    },
+    sequence: {
+      useMaxWidth: true,
+      showSequenceNumbers: false,
+      mirrorActors: false,
+      wrap: true,
+      actorFontSize: 15,
+      actorFontWeight: 600,
+      messageFontSize: 14,
+      noteFontSize: 13,
+      actorMargin: 80,
+      messageMargin: 38,
+      boxMargin: 12,
+      width: 200,
+      height: 50,
+    },
   });
 </script>
 
