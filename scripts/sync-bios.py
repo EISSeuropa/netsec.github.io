@@ -85,6 +85,32 @@ def slugify(name: str) -> str:
     return s or "member"
 
 
+def parse_timestamp(raw: str) -> float:
+    """Parse a Google-Forms timestamp string to epoch seconds. The
+    format depends on the form-owner's account locale at sheet creation:
+    French gives "16/05/2026 11:35:42", US gives "5/16/2026 11:35:42",
+    ISO accounts give "2026-05-16 11:35:42", etc. Comparing the raw
+    strings would silently mis-sort across month boundaries for the
+    non-ISO formats. Returns 0.0 for an empty / unparseable value, so
+    older entries lose to newer ones in any dedup comparison."""
+    if not raw:
+        return 0.0
+    raw = raw.strip()
+    for fmt in (
+        "%Y-%m-%d %H:%M:%S",       # ISO-ish (form owner in en/de/many)
+        "%Y-%m-%dT%H:%M:%S",       # ISO with "T"
+        "%d/%m/%Y %H:%M:%S",       # French / UK / EU
+        "%m/%d/%Y %H:%M:%S",       # US
+        "%d.%m.%Y %H:%M:%S",       # German with dots
+        "%Y/%m/%d %H:%M:%S",       # Japanese
+    ):
+        try:
+            return datetime.strptime(raw, fmt).timestamp()
+        except ValueError:
+            continue
+    return 0.0
+
+
 def parse_wgs(raw: str) -> list[int]:
     """Extract the set of {1,2,3,4} WG numbers from a Google-Forms
     checkbox cell. The cell value is a comma-separated list of the
@@ -532,14 +558,40 @@ def merge(seeds: list[dict], form_entries: list[dict]) -> list[dict]:
         for s in seeds if s.get("email")
     }
 
-    # Deduplicate form entries: keep the newest by timestamp per email/slug
-    dedup: dict[str, dict] = {}
+    # Two-pass dedup so a returning submitter never lands twice on the
+    # directory. Pass 1 keys by the form-collected Google-account email,
+    # which is the most reliable signal for "this is the same person".
+    # Pass 2 keys by slug, which catches the corner case where someone
+    # submits a second time from a different Google account but with
+    # the same displayed name. In both passes "newest by parsed
+    # timestamp wins" — see parse_timestamp() for why we don't compare
+    # the raw strings.
+    def newer(a: dict, b: dict) -> bool:
+        """True if `a` is newer than (or as new as) `b`."""
+        return parse_timestamp(a.get("_timestamp", "")) >= parse_timestamp(b.get("_timestamp", ""))
+
+    # Pass 1: collapse by email when present; entries with empty email
+    # column flow through untouched for now.
+    email_dedup: dict[str, dict] = {}
+    no_email: list[dict] = []
     for entry in form_entries:
-        key = entry.get("_email_key") or entry["id"]
-        if key in dedup and dedup[key].get("_timestamp", "") > entry.get("_timestamp", ""):
+        e = entry.get("_email_key")
+        if not e:
+            no_email.append(entry)
             continue
-        dedup[key] = entry
-    form_entries = list(dedup.values())
+        if e in email_dedup and newer(email_dedup[e], entry):
+            continue
+        email_dedup[e] = entry
+
+    # Pass 2: collapse by slug across everything that survived pass 1.
+    slug_dedup: dict[str, dict] = {}
+    for entry in list(email_dedup.values()) + no_email:
+        s = entry["id"]
+        if s in slug_dedup and newer(slug_dedup[s], entry):
+            continue
+        slug_dedup[s] = entry
+
+    form_entries = list(slug_dedup.values())
 
     for entry in form_entries:
         # Find matching seed
