@@ -101,19 +101,32 @@ hr{
 }
 
 /* ── Glass-equivalent card for print ────────────────────────── */
+/* All cards share a single neutral surface: pure white, hairline
+   border, no fill tint. Differentiation comes from the left-edge
+   accent strip (for callouts) or a top-edge accent strip (for the
+   highlighted "audience" cards), so the eye gets a colour cue
+   without the body of the card going grey-blue. */
 .card{
-  background:var(--paper);
+  background:#ffffff;
   border:1px solid var(--line);
   border-radius:10pt;
   padding:14pt 16pt;
   margin:.6rem 0 1rem;
-  box-shadow:0 1pt 3pt rgba(20,35,80,.06);
+  box-shadow:0 1pt 3pt rgba(20,35,80,.05);
   break-inside:avoid-page;
 }
-.card.tint{background:linear-gradient(135deg,rgba(0,51,153,.04),rgba(10,132,255,.03));}
+.card.tint{
+  /* No fill tint any more — instead, a 3pt accent strip across
+     the top of the card. Visually marks the card as "highlighted"
+     while keeping the body white. */
+  background:#ffffff;
+  border-top:3pt solid var(--accent-2);
+  padding-top:11pt;
+}
 .card.callout{
+  background:#ffffff;
   border-left:3pt solid var(--accent);
-  background:var(--tint-2);
+  padding-left:14pt;
 }
 .card.callout h4{margin-top:0;color:var(--accent)}
 
@@ -277,8 +290,13 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
   letter-spacing:-.03em;
 }
 .cover-title h2{
-  font-size:20pt;font-weight:400;color:rgba(255,255,255,.85);
-  margin:0;letter-spacing:-.01em;
+  /* Sized so that the full "Architecture, design system, and admin
+     handover" fits on one line at the cover's content width, with
+     "for the COST Action NetSec website." dropping cleanly to a
+     second line via the inline <br>. */
+  font-size:17pt;font-weight:400;color:rgba(255,255,255,.85);
+  margin:0;letter-spacing:-.01em;line-height:1.35;
+  max-width:none;
 }
 .cover-meta{
   display:grid;grid-template-columns:repeat(3,1fr);gap:16pt;
@@ -403,7 +421,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Author</div>
-        <div class="value">Dr Arthur Laudrain<br><span style="font-weight:400;color:rgba(255,255,255,.7)">MC member (CH) · ETH Zurich CSS</span></div>
+        <div class="value">Dr Arthur Laudrain<br><span style="font-weight:400;color:rgba(255,255,255,.7)">MC member&nbsp;<svg class="ch-flag" viewBox="0 0 32 32" role="img" aria-label="Switzerland" style="width:10pt;height:10pt;border-radius:1.5pt;vertical-align:-1.5pt;box-shadow:0 0 0 .5pt rgba(255,255,255,.45)"><rect width="32" height="32" fill="#DA291C"/><rect x="13" y="6" width="6" height="20" fill="#fff"/><rect x="6" y="13" width="20" height="6" fill="#fff"/></svg> · ETH Zurich CSS</span></div>
       </div>
     </div>
   </div>
@@ -598,33 +616,39 @@ flowchart LR
 
   <h2>Site structure</h2>
 
+  <p>Six public pages in total. The home page is the hub — it hosts most of the static content as anchored sections; three full-page applications and two statutory pages branch off it.</p>
+
   <div class="diagram">
     <div class="mermaid">
-flowchart TD
-    H["index.html<br/><i>Home</i>"]
-    P["people.html<br/><i>The Network</i>"]
-    G["grants.html<br/><i>Grants &amp; Calls</i>"]
-    S["sitemap.html<br/><i>Site map</i>"]
-    A["accessibility.html"]
-    R["privacy.html"]
+flowchart TB
+    H["<b>index.html · Home</b><br/><span style='font-size:11px;color:#5a6679'>anchored sections:</span><br/><span style='font-size:11px'>news · about · working-groups · committee</span><br/><span style='font-size:11px'>events · roadmap · outputs · contact</span>"]
 
-    H -- "anchors: news / about /<br/>working-groups / committee /<br/>events / roadmap / outputs /<br/>contact" --> H
-    H --> P
-    H --> G
-    H --> S
-    P --> G
-    G --> P
-    S --> H
-    S --> P
-    S --> G
-    S --> A
-    S --> R
+    P["<b>people.html</b><br/>The Network"]
+    G["<b>grants.html</b><br/>Grants &amp; Calls"]
+    S["<b>sitemap.html</b><br/>Site map"]
+    A["<b>accessibility.html</b>"]
+    R["<b>privacy.html</b>"]
+
+    H ==> |"top nav"| P
+    H ==> G
+    H ==> S
+    H -.-> |"footer only"| A
+    H -.-> R
+
+    P -.-> |"cross-link"| G
+    G -.-> P
 
     style H fill:#0a84ff,stroke:#0a84ff,color:#fff
-    style P fill:#eef2fb,stroke:#0a84ff
-    style G fill:#eef2fb,stroke:#0a84ff
+    style P fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style G fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style S fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style A fill:#ffffff,stroke:#5a6679,color:#0b1220
+    style R fill:#ffffff,stroke:#5a6679,color:#0b1220
+    linkStyle 0,1,2 stroke:#003399,stroke-width:2.2px
+    linkStyle 3,4 stroke:#5a6679,stroke-dasharray:3 3,stroke-width:1.4px
+    linkStyle 5,6 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.4px
     </div>
-    <div class="diagram-caption">Figure 3 · Page graph. The home page hosts most of the static content as anchored sections; the Network and Grants pages are full-page applications backed by <code>data/bios.json</code>.</div>
+    <div class="diagram-caption">Figure 3 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav bar links to these from every page). <strong>Dashed grey arrows</strong> are footer-only links (Accessibility and Privacy live in the footer of every page, not the top nav). <strong>Dashed blue arrows</strong> are in-page cross-links between the Network and Grants pages.</div>
   </div>
 
   <h3>Page inventory</h3>
