@@ -1,0 +1,9 @@
+# NetSec — robots.txt
+# All search-engine crawlers welcome. No paywall, no auth.
+# The site's XML sitemap (with hreflang annotations for FR/DE
+# language variants) is below.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://netsec-cost.eu/sitemap.xml

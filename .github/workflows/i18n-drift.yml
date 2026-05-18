@@ -1,0 +1,43 @@
+# Translation drift check.
+#
+# Runs scripts/check-i18n-drift.py on every PR that touches any HTML
+# file at the repo root or the i18n manifest. If the script exits
+# non-zero (any registered translation's English source has changed
+# since the translation was stamped), this check fails and the PR
+# can't be merged until either the translations are refreshed or the
+# manifest is explicitly bumped via:
+#
+#     python3 scripts/check-i18n-drift.py --mark-fresh <source> <lang>
+#
+# That keeps drift from slipping in unnoticed when someone edits an
+# English page without remembering its FR/DE siblings.
+#
+# Zero cost: no third-party services, no API keys.
+name: i18n drift check
+
+on:
+  pull_request:
+    paths:
+      - '*.html'
+      - 'data/i18n-state.json'
+      - 'scripts/check-i18n-drift.py'
+  workflow_dispatch:       # Allow manual runs from the Actions tab
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    name: Check translation drift
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run drift checker
+        run: python3 scripts/check-i18n-drift.py
