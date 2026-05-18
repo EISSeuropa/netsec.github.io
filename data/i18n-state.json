@@ -1,6 +1,6 @@
 {
-  "_documentation": "Tracks which non-English variants of each page exist, and the SHA-1 of the English source at the moment each translation was last refreshed. scripts/check-i18n-drift.py reads this file and reports translations whose English source has changed since translation. The authoritative language is always English; FR and DE are beta until reviewed by a native speaker.",
-  "version": 1,
+  "_documentation": "Tracks which non-English variants of each page exist, and the SHA-1 of the English source at the moment each translation was last refreshed. scripts/check-i18n-drift.py reads this file and reports translations whose English source has changed since translation. The authoritative language is always English; FR and DE are beta until reviewed by a native speaker. Phase 2 has added FR/DE for sitemap and privacy; index, people and grants still pending.",
+  "version": 2,
   "authoritative": "en",
   "languages": {
     "en": { "label": "English",  "native": "English",  "authoritative": true  },
@@ -19,6 +19,38 @@
       "de": {
         "file": "accessibility.de.html",
         "source_sha1": "5f4751f96f5ea8d5c0e3159939ca16317b3e6669",
+        "translated_on": "2026-05-18",
+        "status": "beta",
+        "reviewed_by": null
+      }
+    },
+    "sitemap.html": {
+      "fr": {
+        "file": "sitemap.fr.html",
+        "source_sha1": "a10490b9fc39c6b6fdebaa6e51c9bea2284f61d2",
+        "translated_on": "2026-05-18",
+        "status": "beta",
+        "reviewed_by": null
+      },
+      "de": {
+        "file": "sitemap.de.html",
+        "source_sha1": "a10490b9fc39c6b6fdebaa6e51c9bea2284f61d2",
+        "translated_on": "2026-05-18",
+        "status": "beta",
+        "reviewed_by": null
+      }
+    },
+    "privacy.html": {
+      "fr": {
+        "file": "privacy.fr.html",
+        "source_sha1": "984f01200b19a78eb77e59238320d4ef493aaa73",
+        "translated_on": "2026-05-18",
+        "status": "beta",
+        "reviewed_by": null
+      },
+      "de": {
+        "file": "privacy.de.html",
+        "source_sha1": "984f01200b19a78eb77e59238320d4ef493aaa73",
         "translated_on": "2026-05-18",
         "status": "beta",
         "reviewed_by": null
