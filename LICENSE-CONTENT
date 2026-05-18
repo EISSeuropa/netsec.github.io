@@ -1,0 +1,58 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 Arthur PB Laudrain and contributors to COST Action
+CA24154 — Networking European Security Knowledge (NetSec).
+
+The site content covered by this licence — the prose, page copy, and
+documentation published at https://netsec-cost.eu — is licensed under
+the Creative Commons Attribution 4.0 International License (CC BY 4.0).
+
+You are free to:
+  • Share — copy and redistribute the material in any medium or format
+  • Adapt — remix, transform, and build upon the material for any
+    purpose, even commercially
+
+Under the following terms:
+  • Attribution — You must give appropriate credit, provide a link to
+    the licence, and indicate if changes were made. You may do so in
+    any reasonable manner, but not in any way that suggests the
+    licensor endorses you or your use.
+
+No additional restrictions — You may not apply legal terms or
+technological measures that legally restrict others from doing
+anything the licence permits.
+
+Full legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+Human-readable summary: https://creativecommons.org/licenses/by/4.0/
+
+─── Scope and exclusions ───────────────────────────────────────────
+
+This licence applies ONLY to the original site content authored for
+this project. It does NOT cover:
+
+  1. Source code — licensed separately under the MIT License (see
+     LICENSE).
+
+  2. Member bios and photographs (data/bios.json, assets/images/people/)
+     — © the individual contributors, displayed on this site with
+     their consent. Reuse beyond this site requires the contributor's
+     permission. Contributors may request changes or removal at any
+     time.
+
+  3. Third-party assets retain their own licences, including:
+       • Simple Icons brand marks — CC0 1.0
+       • Lucide-style stroke glyphs — ISC
+       • Inter typeface — SIL Open Font License 1.1
+       • FlagCDN country flags — flags themselves public domain
+       • COST logo — © COST Association, used per COST visual
+         identity guidance for funded Actions
+       • EU emblem — used per the European Union visual identity
+         manual for Funded-by-the-EU communication
+
+  4. Funding and institutional logotypes are trademarks of their
+     respective holders and are NOT covered by this licence.
+
+Suggested attribution:
+
+  "Based on content from COST Action NetSec (CA24154),
+   https://netsec-cost.eu, CC BY 4.0."
