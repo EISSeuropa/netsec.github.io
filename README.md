@@ -27,6 +27,11 @@ directory) and is maintained by [Dr Arthur Laudrain](https://netsec-cost.eu/peop
 - [Licensing](#licensing)
 - [Acknowledgements](#acknowledgements)
 
+> 📚 **For maintainers**: see [`docs/`](./docs/) for deep
+> documentation — site architecture and data-flow diagrams, the
+> design system, the admin guide (accounts, logins, common tasks),
+> and the Google Form set-up walkthrough.
+
 ---
 
 ## Overview
@@ -76,7 +81,11 @@ Design principles:
 │   ├── sync-cost.yml       # Weekly cron: scripts/sync-cost.py → PR
 │   └── sync-bios.yml       # Weekly cron: scripts/sync-bios.py → PR
 ├── docs/
-│   └── bios-setup.md       # Set-up guide for the Google Form pipeline
+│   ├── README.md           # Index of internal documentation
+│   ├── architecture.md     # Purpose, structure, features, data-flow diagrams
+│   ├── design-system.md    # Colour tokens, typography, components, accessibility
+│   ├── admin-guide.md      # Accounts, logins, routine tasks, handover checklist
+│   └── bios-setup.md       # One-time Google Form set-up guide
 ├── LICENSE                 # MIT (covers source code)
 ├── LICENSE-CONTENT         # CC BY 4.0 (covers prose, with carve-outs)
 ├── SECURITY.md             # Security policy and disclosure process
