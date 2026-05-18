@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr" data-i18n-status="beta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Déclaration d'accessibilité du site NetSec — Action COST CA24154. Statut de conformité, limitations connues et procédure de signalement.">
+<title>Accessibilité · NetSec — Action COST CA24154</title>
+<!-- Variantes linguistiques. L'anglais est la version faisant foi
+     (x-default) ; cette version française est une traduction
+     automatique en bêta, signalée par data-i18n-status="beta". -->
+<link rel="alternate" hreflang="en" href="https://netsec-cost.eu/accessibility.html">
+<link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/accessibility.fr.html">
+<link rel="alternate" hreflang="de" href="https://netsec-cost.eu/accessibility.de.html">
+<link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/accessibility.html">
+<link rel="icon" href="assets/images/logo.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&display=swap">
+<!-- Application du thème AVANT le rendu (évite le flash clair → sombre). -->
+<script>
+  (function() {
+    try {
+      var saved = localStorage.getItem('netsec-theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<!-- Bandeau bêta — visible uniquement quand <html data-i18n-status="beta">. -->
+<div class="i18n-beta-ribbon" role="status">
+  <span class="i18n-beta-ribbon-badge">Bêta</span>
+  <span>Traduction automatique — la version anglaise fait foi. <a href="accessibility.html" hreflang="en">Voir en anglais →</a></span>
+</div>
+
+<a class="skip-link" href="#main">Aller au contenu principal</a>
+
+<div class="ambience" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<!-- Navigation : renvoie vers les ancres de la page d'accueil -->
+<header class="nav" role="banner">
+  <div class="nav-inner">
+    <a href="index.html" class="brand" aria-label="Accueil NetSec">
+      <span class="brand-mark">NS</span>
+      <span>NetSec</span>
+    </a>
+    <div class="nav-actions">
+      <!-- Sélecteur de langue. Phase 1 : la traduction n'existe que
+           pour cette page ; les autres puces basculent l'utilisateur
+           vers la version anglaise. -->
+      <div class="lang-switch" role="group" aria-label="Langue">
+        <a href="accessibility.html" hreflang="en" title="English">EN</a>
+        <a href="accessibility.fr.html" hreflang="fr" aria-current="true">FR</a>
+        <a href="accessibility.de.html" hreflang="de" title="Deutsch (Beta)">DE</a>
+      </div>
+      <button class="theme-toggle" type="button" aria-label="Basculer le mode sombre" title="Basculer le mode sombre">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="menu-toggle" aria-label="Afficher/masquer le menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="nav-links" aria-label="Principale">
+      <a href="index.html#news">Actualités</a>
+      <a href="index.html#about">À propos</a>
+      <a href="index.html#working-groups">Groupes de travail</a>
+      <a href="index.html#committee">Comité</a>
+      <a href="people.html">Réseau</a>
+      <a href="index.html#events">Événements</a>
+      <a href="grants.html">Subventions</a>
+      <a href="index.html#roadmap">Feuille de route</a>
+      <a href="index.html#outputs">Productions</a>
+      <a href="index.html#contact" class="nav-cta">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="prose-page">
+  <div class="container reveal">
+    <span class="eyebrow">Accessibilité</span>
+    <h1>Déclaration d'accessibilité</h1>
+    <p class="lede">Le site NetSec s'efforce de rendre son contenu utilisable par toutes et tous, y compris les visiteurs qui dépendent de technologies d'assistance. Cette page documente notre statut de conformité actuel, les limitations connues et la procédure pour signaler les obstacles que vous rencontreriez.</p>
+
+    <div class="glass prose-meta">
+      <div class="prose-meta-item">
+        <span class="label">Statut de conformité</span>
+        <span class="prose-status"><span class="dot"></span> Partiellement conforme</span>
+      </div>
+      <div class="prose-meta-item">
+        <span class="label">Norme cible</span>
+        <span class="value">WCAG 2.1 niveau AA<br><span style="font-weight:500;font-size:.85rem;color:var(--muted)">aligné sur la norme EN 301 549</span></span>
+      </div>
+      <div class="prose-meta-item">
+        <span class="label">Dernière évaluation</span>
+        <span class="value">14 mai 2026</span>
+      </div>
+    </div>
+
+    <h2>Statut de conformité</h2>
+    <p>Le site NetSec (<a href="https://netsec-cost.eu">netsec-cost.eu</a>) est conçu pour répondre aux exigences des <strong>Règles pour l'accessibilité des contenus web (WCAG) 2.1 au niveau AA</strong>, en cohérence avec la norme européenne <strong>EN 301 549</strong>. Sur la base de notre évaluation interne la plus récente, le site est <em>partiellement conforme</em> — la majorité des critères de succès WCAG 2.1 AA sont satisfaits, avec les limitations énumérées ci-dessous.</p>
+
+    <h2>Audit interne le plus récent</h2>
+    <p>Notre dernier audit automatisé, réalisé le 14 mai 2026 avec <a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener">axe-core 4.10.2</a> sur toutes les sections de la page d'accueil (toutes les régions repliables développées), a renvoyé les résultats suivants :</p>
+
+    <div class="audit-card glass">
+      <div class="grid">
+        <div class="stat ok"><span class="num">0</span><span class="lbl">Violations</span></div>
+        <div class="stat neutral"><span class="num">50</span><span class="lbl">Réussites</span></div>
+        <div class="stat warn"><span class="num">1</span><span class="lbl">Examen manuel requis</span></div>
+      </div>
+    </div>
+    <p>Le seul élément signalé pour examen manuel concerne le contraste des couleurs du texte rendu sur des surfaces en verre avec <code>backdrop-filter</code>, qu'axe-core ne peut pas évaluer automatiquement car le contraste perçu dépend de ce qui se trouve derrière la surface. Nous avons vérifié que ces surfaces respectent le contraste WCAG 2.1 AA dans les modes clair et sombre.</p>
+
+    <h2>Contenu non accessible ou limité</h2>
+    <p>Les parties suivantes du site ne respectent pas encore pleinement la norme WCAG 2.1 AA, ou présentent des contraintes à signaler :</p>
+    <ul>
+      <li><strong>Diagramme de Gantt de la feuille de route.</strong> Visualisation de données dense. Sur les écrans étroits, le diagramme nécessite un défilement horizontal ; la zone de défilement peut être focalisée au clavier pour permettre la navigation avec les touches fléchées (WCAG 2.1.1), mais un résumé textuel alternatif n'est pas encore fourni.</li>
+      <li><strong>Animations décoratives.</strong> Les blobs « aurore » d'arrière-plan et les fondus d'apparition au défilement sont <em>automatiquement</em> désactivés lorsque le système d'exploitation ou le navigateur signale <code>prefers-reduced-motion</code>. Aucune surcharge dédiée au site n'est exposée pour l'instant.</li>
+      <li><strong>Ressources tierces.</strong> Les vignettes de drapeaux sont servies par <code>flagcdn.com</code> et les portraits par <code>eiss-europa.com</code>. Leur disponibilité à long terme échappe au contrôle direct de l'Action ; si une image devient indisponible, le texte environnant reste intact et informatif.</li>
+      <li><strong>Emblème UE en SVG.</strong> L'emblème <em>« Financé par l'Union européenne »</em> porte un <code>aria-label</code> et <code>role="img"</code>, mais pas de description longue ; il est décrit par le texte standard qui l'entoure.</li>
+    </ul>
+    <p>Nous prévoyons de traiter ces limitations dans les versions à venir.</p>
+
+    <h2>Fonctionnalités d'accessibilité en place</h2>
+    <ul>
+      <li>Points de repère sémantiques (<code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>) et hiérarchie de titres propre, sans sauts de niveau.</li>
+      <li>Lien d'évitement vers le contenu, visible au focus clavier.</li>
+      <li>Anneau <code>:focus-visible</code> visible sur tout élément interactif.</li>
+      <li>Texte <code>alt</code> sur chaque image ; association explicite <code>&lt;label for&gt;</code> sur chaque champ de formulaire.</li>
+      <li>Thèmes clair et sombre avec commutateur manuel dans la navigation ; <code>prefers-color-scheme</code> du système d'exploitation comme valeur par défaut.</li>
+      <li><code>prefers-reduced-motion</code> désactive les animations décoratives.</li>
+      <li>Le répertoire « Comité de gestion par pays » utilise un accordéon natif <code>&lt;details&gt;</code> — pleinement accessible au clavier et aux lecteurs d'écran sans câblage ARIA personnalisé. Les liens profonds vers une carte pays développent automatiquement la section.</li>
+      <li>La grille Gantt utilise les rôles ARIA tabulaires (<code>role="table"</code>, <code>role="row"</code>, <code>role="columnheader"</code>, <code>role="cell"</code>) pour que les technologies d'assistance la parsent comme un tableau ; la zone défilante elle-même peut recevoir le focus clavier.</li>
+      <li>Les puces d'appartenance aux groupes de travail sur chaque membre sont regroupées avec <code>role="group"</code> et un <code>aria-label</code> pour que les lecteurs d'écran les annoncent comme un groupe (par ex. <em>« Appartenance aux groupes de travail : WG1, WG3 »</em>) plutôt que comme des jetons isolés.</li>
+      <li>Formulaire de contact : validation en ligne, signalement d'erreurs accessible et toast de confirmation annoncé via <code>role="status" aria-live="polite"</code>.</li>
+      <li>Les conteneurs du logotype COST et de l'emblème UE respectent le Guide d'identité visuelle COST (conteneur blanc, zone de respect, taille minimale).</li>
+    </ul>
+
+    <h2>Préparation de cette déclaration</h2>
+    <p>Cette déclaration a été préparée par auto-évaluation le <strong>14 mai 2026</strong>. Le site a été examiné au regard de WCAG 2.1 AA en s'appuyant sur :</p>
+    <ul>
+      <li>Examen manuel du HTML sémantique, de la navigation au clavier, de la gestion du focus et de l'ordre de tabulation.</li>
+      <li>Analyses automatisées avec <a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener">axe-core 4.10.2</a> sur la page d'accueil, toutes les régions repliables développées.</li>
+      <li>Vérifications manuelles ponctuelles de contraste sur les surfaces en verre, en modes clair et sombre.</li>
+    </ul>
+    <p>Nous réévaluons après toute modification significative du système de design ou de la structure du contenu, et au minimum une fois par an.</p>
+
+    <h2>Retour d'information et contact</h2>
+    <p>Si vous rencontrez un obstacle d'accessibilité sur ce site, ou si vous avez besoin de l'un de ses contenus dans un format alternatif, contactez-nous :</p>
+    <ul>
+      <li>Écrivez au président de l'Action, le Dr Moritz Weiss, à <a href="mailto:moritz.weiss@gsi.lmu.de">moritz.weiss@gsi.lmu.de</a></li>
+      <li>Ou utilisez le <a href="index.html#contact">formulaire de contact</a> sur la page d'accueil en mentionnant <em>« accessibilité »</em> dans votre message.</li>
+    </ul>
+    <p>Nous nous efforçons de répondre dans un délai de 10 jours ouvrables.</p>
+
+    <h2>Procédure d'exécution</h2>
+    <p>Si vous n'êtes pas satisfait·e de notre réponse, vous pouvez contacter l'organisme de promotion de l'égalité ou l'organisme de mise en conformité d'accessibilité de votre pays. Au sein de l'Union européenne, chaque État membre désigne son propre organisme d'exécution en vertu de la <a href="https://eur-lex.europa.eu/eli/dir/2016/2102/oj" target="_blank" rel="noopener">Directive sur l'accessibilité des sites internet 2016/2102</a>.</p>
+
+    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Déclaration d'accessibilité v1.0 · préparée le 14 mai 2026 · prochaine révision prévue le 14 mai 2027.</p>
+  </div>
+</section>
+</main>
+
+<!-- Pied de page : co-marque identique à la page principale -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-cobranding">
+      <a class="cost-mark" href="https://www.cost.eu/actions/CA24154/" target="_blank" rel="noopener" aria-label="Consulter l'Action COST CA24154 NetSec sur cost.eu">
+        <img src="assets/images/cost-logo.jpg" alt="COST — European Cooperation in Science and Technology">
+      </a>
+      <div class="eu-mark" role="img" aria-label="Financé par l'Union européenne">
+        <svg class="eu-flag" viewBox="0 0 810 540" role="img" aria-hidden="true">
+          <rect width="810" height="540" fill="#003399"/>
+          <defs>
+            <polygon id="eu-star" fill="#FFCC00"
+              points="0,-30 8.817,-12.135 28.532,-9.27 14.266,4.635 17.634,24.27 0,15 -17.634,24.27 -14.266,4.635 -28.532,-9.27 -8.817,-12.135"/>
+          </defs>
+          <use href="#eu-star" x="405" y="90"/>
+          <use href="#eu-star" x="495" y="114.115"/>
+          <use href="#eu-star" x="560.885" y="180"/>
+          <use href="#eu-star" x="585" y="270"/>
+          <use href="#eu-star" x="560.885" y="360"/>
+          <use href="#eu-star" x="495" y="425.885"/>
+          <use href="#eu-star" x="405" y="450"/>
+          <use href="#eu-star" x="315" y="425.885"/>
+          <use href="#eu-star" x="249.115" y="360"/>
+          <use href="#eu-star" x="225" y="270"/>
+          <use href="#eu-star" x="249.115" y="180"/>
+          <use href="#eu-star" x="315" y="114.115"/>
+        </svg>
+        <span class="eu-text">Financé par<br>l'Union européenne</span>
+      </div>
+    </div>
+
+    <div class="footer-text">
+      <p><strong>Ce site est issu des travaux de l'Action COST NetSec — Networking European Security Knowledge, soutenue par COST (European Cooperation in Science and Technology).</strong></p>
+      <p>COST (European Cooperation in Science and Technology) est une agence de financement pour les réseaux de recherche et d'innovation. Nos Actions aident à relier les initiatives de recherche à travers l'Europe et permettent aux scientifiques de développer leurs idées en les partageant avec leurs pairs. Cela renforce leurs travaux, leur carrière et l'innovation.</p>
+      <p><a href="https://www.cost.eu" target="_blank" rel="noopener">www.cost.eu</a></p>
+    </div>
+
+    <p class="footer-credit">Site web et répertoire NetSec créés par <a href="people.html#arthur-laudrain">Dr Arthur Laudrain</a> (membre du CG, CH) dans le cadre du Livrable D1.</p>
+
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Action COST NetSec. Les vues exprimées sont celles de l'Action et ne reflètent pas nécessairement celles de COST ou de l'Union européenne. · <a href="accessibility.fr.html">Accessibilité</a> · <a href="privacy.html" hreflang="en" title="En anglais">Confidentialité</a> · <a href="privacy.html#main" hreflang="en" title="En anglais">Licence</a> · <a href="sitemap.html" hreflang="en" title="En anglais">Plan du site</a></span>
+      <nav class="socials" aria-label="Réseaux sociaux">
+        <a href="#" aria-label="LinkedIn" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.339 18.339v-7.143H6.018v7.143h2.32zM7.179 10.179a1.339 1.339 0 100-2.679 1.339 1.339 0 000 2.679zm10.821 8.16v-3.928c0-2.071-1.107-3.036-2.585-3.036-1.193 0-1.728.661-2.027 1.125v-.964h-2.245c.03.643 0 7.143 0 7.143h2.245v-3.99c0-.2.014-.4.073-.543.16-.4.524-.815 1.135-.815.8 0 1.122.61 1.122 1.506v3.842H18z"/></svg>
+        </a>
+        <a href="#" aria-label="X / Twitter" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2H21.5l-7.5 8.572L23 22h-6.844l-5.354-7.003L4.6 22H1.34l8.02-9.171L1 2h6.99l4.84 6.404L18.244 2zm-1.2 18h1.84L7.04 4h-1.96l11.964 16z"/></svg>
+        </a>
+        <a href="https://github.com/EISSeuropa/netsec.github.io" aria-label="Dépôt GitHub" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.16c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.39.97.11-.75.41-1.27.74-1.56-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.79 0c2.21-1.5 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.68.42.36.79 1.08.79 2.18v3.23c0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+        </a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+
+</body>
+</html>
