@@ -52,6 +52,21 @@
     });
   }
 
+  /* Language switcher
+     Remembers the user's choice in localStorage so future visits can
+     act on it. For Phase 1 we only persist the preference; we do not
+     yet auto-redirect or rewrite in-page nav links. A future phase
+     can read `netsec-lang` and steer the visitor to the matching
+     locale variant when one exists. */
+  document.querySelectorAll('.lang-switch a').forEach(a => {
+    a.addEventListener('click', () => {
+      try {
+        const lang = a.getAttribute('hreflang') || a.dataset.lang;
+        if (lang) localStorage.setItem('netsec-lang', lang);
+      } catch (e) { /* localStorage may be unavailable */ }
+    });
+  });
+
   /* Mobile menu */
   const menuBtn = document.querySelector('.menu-toggle');
   const navLinks = document.querySelector('.nav-links');

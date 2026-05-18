@@ -1,0 +1,28 @@
+{
+  "_documentation": "Tracks which non-English variants of each page exist, and the SHA-1 of the English source at the moment each translation was last refreshed. scripts/check-i18n-drift.py reads this file and reports translations whose English source has changed since translation. The authoritative language is always English; FR and DE are beta until reviewed by a native speaker.",
+  "version": 1,
+  "authoritative": "en",
+  "languages": {
+    "en": { "label": "English",  "native": "English",  "authoritative": true  },
+    "fr": { "label": "French",   "native": "Français", "authoritative": false },
+    "de": { "label": "German",   "native": "Deutsch",  "authoritative": false }
+  },
+  "translations": {
+    "accessibility.html": {
+      "fr": {
+        "file": "accessibility.fr.html",
+        "source_sha1": "5f4751f96f5ea8d5c0e3159939ca16317b3e6669",
+        "translated_on": "2026-05-18",
+        "status": "beta",
+        "reviewed_by": null
+      },
+      "de": {
+        "file": "accessibility.de.html",
+        "source_sha1": "5f4751f96f5ea8d5c0e3159939ca16317b3e6669",
+        "translated_on": "2026-05-18",
+        "status": "beta",
+        "reviewed_by": null
+      }
+    }
+  }
+}

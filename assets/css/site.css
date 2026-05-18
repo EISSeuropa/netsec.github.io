@@ -825,6 +825,71 @@ form button:disabled{opacity:.65;cursor:wait}
 .dark .theme-toggle .icon-sun{display:block}
 .dark .theme-toggle .icon-moon{display:none}
 
+/* -------- Language switcher (EN · FR · DE) --------
+   A small segmented pill in the nav. Lives next to the theme
+   toggle. Each chip is a link to the same page in that language;
+   the active chip is marked with aria-current="true" so screen
+   readers announce it and the CSS visually elevates it. */
+.lang-switch{
+  display:inline-flex;align-items:center;gap:2px;
+  margin-right:6px;padding:2px;
+  background:rgba(11,18,32,.04);
+  border-radius:999px;
+}
+.dark .lang-switch{background:rgba(255,255,255,.06)}
+.lang-switch a{
+  display:inline-block;
+  font-size:.7rem;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;
+  color:var(--muted);
+  padding:4px 9px;border-radius:999px;
+  transition:background .2s var(--ease),color .2s var(--ease);
+}
+.lang-switch a:hover{color:var(--ink);opacity:1}
+.lang-switch a[aria-current="true"]{
+  background:#fff;color:var(--ink);
+  box-shadow:0 1px 3px rgba(11,18,32,.10);
+}
+.dark .lang-switch a[aria-current="true"]{
+  background:rgba(255,255,255,.14);color:#fff;
+}
+.lang-switch a[aria-disabled="true"]{
+  /* Visual cue for languages without a translation of this page yet —
+     the chip still appears so users can switch their preference, but
+     the click lands on the English version. */
+  color:var(--muted);opacity:.55;
+}
+
+/* -------- Beta-translation ribbon --------
+   Shown only when the page declares itself a non-authoritative
+   translation via <html data-i18n-status="beta">. A thin strip
+   above the nav explains the status and links to the English. */
+.i18n-beta-ribbon{display:none}
+[data-i18n-status="beta"] .i18n-beta-ribbon{
+  display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+  padding:7px 18px;
+  background:linear-gradient(135deg,rgba(0,51,153,.07),rgba(10,132,255,.05));
+  border-bottom:1px solid var(--glass-border);
+  font-size:.82rem;color:var(--ink-2);
+  position:fixed;top:0;left:0;right:0;z-index:101;
+  text-align:center;line-height:1.4;
+}
+.dark [data-i18n-status="beta"] .i18n-beta-ribbon{
+  background:linear-gradient(135deg,rgba(10,132,255,.15),rgba(0,51,153,.10));
+  color:var(--ink);
+}
+.i18n-beta-ribbon-badge{
+  display:inline-block;
+  background:var(--accent);color:#fff;
+  font-size:.62rem;font-weight:700;letter-spacing:.12em;
+  padding:2px 8px;border-radius:6px;text-transform:uppercase;
+}
+.i18n-beta-ribbon a{color:var(--accent-2);text-decoration:underline}
+/* When the ribbon is present, push the nav and the top of the page
+   down so nothing sits underneath. */
+[data-i18n-status="beta"] body{padding-top:38px}
+[data-i18n-status="beta"] .nav{top:52px}
+
 /* -------- Prose pages (Accessibility Statement, Privacy Notice) --------
    Shared layout for content-heavy informational pages. */
 .prose-page{padding:140px 0 80px}
