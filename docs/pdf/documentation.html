@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NetSec — Website & Directory · Documentation Pack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<style>
+/* ───────────────────────────────────────────────────────────────
+   NetSec — Documentation Pack (PDF source stylesheet)
+   ───────────────────────────────────────────────────────────────
+   Built to be rendered by Chrome headless --print-to-pdf.
+   Uses the same colour tokens and type pairing as the live site
+   (see assets/css/site.css), translated for paper:
+     - Glass cards become solid white cards with a tinted border.
+     - Backdrop-filter is dropped.
+     - Body type bumps to 10pt with 1.55 line-height for print.
+     - Each top-level section forces a page break.
+*/
+
+:root{
+  --ink:#0b1220;
+  --ink-2:#2b3850;
+  --muted:#5a6679;
+  --line:rgba(11,18,32,.12);
+  --line-strong:rgba(11,18,32,.20);
+  --accent:#003399;     /* EU blue */
+  --accent-2:#0a84ff;   /* Apple blue */
+  --tint:#eef2fb;
+  --tint-2:#f6f8fc;
+  --paper:#ffffff;
+}
+
+@page {
+  size: A4;
+  margin: 18mm 16mm 22mm 16mm;
+  /* Running footer with title + page number. Chrome renders this
+     via @page margin boxes when --print-to-pdf-no-header is OFF. */
+}
+@page :first { margin: 0; }
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink)}
+body{
+  font-family:'Inter',sans-serif;
+  font-size:10pt;
+  line-height:1.55;
+  -webkit-print-color-adjust:exact;
+  print-color-adjust:exact;
+}
+
+/* ── Headings ───────────────────────────────────────────────── */
+h1,h2,h3,h4,h5{
+  font-family:'Lexend','Inter',sans-serif;
+  font-weight:600;
+  letter-spacing:-.015em;
+  line-height:1.2;
+  color:var(--ink);
+  margin:0 0 .6rem;
+  break-after:avoid-page;
+}
+h1{font-size:28pt;font-weight:700;letter-spacing:-.025em;margin:0 0 1rem}
+h2{font-size:18pt;margin:1.4rem 0 .8rem;color:var(--accent)}
+h3{font-size:13pt;margin:1.1rem 0 .4rem}
+h4{font-size:11pt;margin:.9rem 0 .3rem;color:var(--ink-2)}
+
+p{margin:0 0 .7rem;color:var(--ink-2)}
+strong{color:var(--ink)}
+em{font-style:italic}
+a{color:var(--accent-2);text-decoration:none}
+
+/* ── Layout primitives ──────────────────────────────────────── */
+.page{
+  /* Each top-level section becomes a "page" container. We use a
+     manual break-before so sections never start mid-page. */
+  break-before:page;
+  padding-top:6mm;
+}
+.page:first-of-type{break-before:auto;padding-top:0}
+
+.eyebrow{
+  display:inline-block;
+  font-size:7.5pt;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--accent);
+  padding:3px 10px;
+  background:var(--tint);
+  border-radius:999px;
+  margin:0 0 .6rem;
+}
+
+ul,ol{margin:.4rem 0 1rem;padding-left:20px;color:var(--ink-2)}
+li{margin-bottom:.25rem}
+li::marker{color:var(--accent)}
+
+hr{
+  border:0;border-top:1px solid var(--line);
+  margin:1.4rem 0;
+}
+
+/* ── Glass-equivalent card for print ────────────────────────── */
+.card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:10pt;
+  padding:14pt 16pt;
+  margin:.6rem 0 1rem;
+  box-shadow:0 1pt 3pt rgba(20,35,80,.06);
+  break-inside:avoid-page;
+}
+.card.tint{background:linear-gradient(135deg,rgba(0,51,153,.04),rgba(10,132,255,.03));}
+.card.callout{
+  border-left:3pt solid var(--accent);
+  background:var(--tint-2);
+}
+.card.callout h4{margin-top:0;color:var(--accent)}
+
+/* ── Tables ─────────────────────────────────────────────────── */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:.6rem 0 1rem;
+  font-size:9pt;
+  break-inside:avoid-page;
+}
+thead th{
+  text-align:left;
+  font-family:'Lexend','Inter',sans-serif;
+  font-weight:600;font-size:8.5pt;letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--paper);
+  background:var(--accent);
+  padding:7pt 9pt;
+}
+thead th:first-child{border-top-left-radius:6pt}
+thead th:last-child{border-top-right-radius:6pt}
+tbody td{
+  padding:7pt 9pt;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+  color:var(--ink-2);
+  background:#fff;
+}
+/* No alternating row tint — clean white rows separated by hairline
+   rules read more cleanly in print than the earlier grey-blue stripe. */
+tbody tr:last-child td{border-bottom:0}
+
+/* ── Code & file paths ──────────────────────────────────────── */
+code{
+  font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  font-size:8.7pt;
+  background:var(--tint);
+  color:var(--accent);
+  padding:1px 5px;
+  border-radius:3px;
+}
+pre{
+  font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  font-size:8.4pt;line-height:1.5;
+  background:#0b1220;color:#dde6f5;
+  padding:12pt 14pt;
+  border-radius:8pt;
+  overflow:hidden;
+  break-inside:avoid-page;
+  margin:.6rem 0 1rem;
+}
+pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
+
+/* ── Mermaid diagrams ───────────────────────────────────────── */
+.diagram{
+  /* Plain-white surround removes the grey-ish look the tinted bg
+     gave the previous draft. The border + soft shadow alone is
+     enough to read as "this is a figure". */
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:10pt;
+  padding:14pt 10pt;
+  margin:.8rem 0 1.1rem;
+  text-align:center;
+  break-inside:avoid-page;
+  box-shadow:0 1pt 3pt rgba(20,35,80,.05);
+}
+.diagram .mermaid{display:block;color:var(--ink)}
+.diagram .mermaid svg{
+  /* Force the rendered SVG to fill the figure width so flowcharts
+     and sequence diagrams don't shrink to ~40% of the page width. */
+  width:100% !important;
+  max-width:100% !important;
+  height:auto !important;
+}
+.diagram.wide{margin-left:-10pt;margin-right:-10pt}
+.diagram-caption{
+  font-size:8.5pt;color:var(--muted);
+  margin-top:6pt;text-align:center;
+  font-style:italic;
+}
+
+/* ── Snapshots (site screenshots) ───────────────────────────── */
+.snapshot{
+  margin:.6rem 0 1rem;
+  break-inside:avoid-page;
+}
+.snapshot img{
+  width:100%;
+  border-radius:8pt;
+  border:1px solid var(--line-strong);
+  box-shadow:0 2pt 8pt rgba(20,35,80,.10);
+  display:block;
+}
+.snapshot .caption{
+  font-size:8.5pt;color:var(--muted);
+  margin-top:6pt;text-align:center;
+  font-style:italic;
+}
+
+/* ── Two-up grid for principles/cards ───────────────────────── */
+.grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12pt;
+  margin:.5rem 0 1rem;
+}
+
+/* ── Chip / pill ────────────────────────────────────────────── */
+.chip{
+  display:inline-block;
+  font-size:8pt;font-weight:600;letter-spacing:-.005em;
+  color:var(--accent);
+  background:var(--tint);
+  padding:3pt 9pt;
+  border-radius:999px;
+  margin:0 4pt 4pt 0;
+}
+
+/* ── Cover page ─────────────────────────────────────────────── */
+.cover{
+  position:relative;
+  width:100%;height:297mm;
+  /* Cover is full-bleed: kill page margins via the @page :first
+     rule above, then add our own inset. */
+  padding:38mm 22mm 22mm;
+  display:flex;flex-direction:column;justify-content:space-between;
+  color:#fff;
+  background:
+    radial-gradient(900px 700px at 20% -10%, rgba(255,255,255,.18), transparent 60%),
+    radial-gradient(700px 600px at 100% 110%, rgba(10,132,255,.55), transparent 60%),
+    linear-gradient(160deg, #001f5c 0%, #003399 45%, #0a84ff 100%);
+  break-after:page;
+}
+.cover-mark{
+  display:flex;align-items:center;gap:14pt;
+  font-family:'Lexend','Inter',sans-serif;font-weight:700;
+}
+.cover-mark .ns{
+  width:36pt;height:36pt;border-radius:9pt;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.4);
+  color:#fff;font-size:14pt;letter-spacing:-.02em;
+  backdrop-filter:blur(8pt);
+}
+.cover-mark .wordmark{font-size:18pt;letter-spacing:-.01em;color:#fff}
+.cover-title{
+  font-family:'Lexend','Inter',sans-serif;
+}
+.cover-title .eyebrow{
+  background:rgba(255,255,255,.16);
+  color:#fff;font-size:8pt;
+  border:1px solid rgba(255,255,255,.35);
+  padding:4pt 12pt;
+}
+.cover-title h1{
+  font-size:46pt;line-height:1.05;
+  color:#fff;margin:14pt 0 8pt;
+  letter-spacing:-.03em;
+}
+.cover-title h2{
+  font-size:20pt;font-weight:400;color:rgba(255,255,255,.85);
+  margin:0;letter-spacing:-.01em;
+}
+.cover-meta{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16pt;
+  margin-top:24pt;font-size:9pt;
+}
+.cover-meta .item .label{
+  font-size:7.5pt;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.65);font-weight:600;
+}
+.cover-meta .item .value{
+  margin-top:3pt;color:#fff;font-weight:500;font-size:10pt;
+}
+.cover-foot{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  gap:24pt;
+}
+.cover-foot .cofunding{
+  display:flex;align-items:center;gap:14pt;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.32);
+  border-radius:10pt;
+  padding:10pt 14pt;
+  backdrop-filter:blur(6pt);
+}
+.cover-foot .eu-flag{
+  width:54pt;height:36pt;border-radius:3pt;
+  background:#003399;display:grid;place-items:center;
+  border:1pt solid rgba(255,255,255,.35);
+}
+.cover-foot .eu-stars{
+  /* Twelve five-pointed stars on a circle, simplified as a single
+     SVG cluster. */
+  width:32pt;height:32pt;
+}
+.cover-foot .cofunding-text{
+  font-size:8.5pt;color:#fff;line-height:1.35;
+}
+.cover-foot .cofunding-text strong{display:block;font-size:9.5pt;letter-spacing:-.005em}
+.cover-foot .url{
+  font-family:'JetBrains Mono',monospace;font-size:9pt;
+  color:rgba(255,255,255,.85);letter-spacing:-.005em;
+  background:rgba(255,255,255,.10);
+  padding:6pt 10pt;border-radius:6pt;
+  border:1px solid rgba(255,255,255,.18);
+}
+
+/* ── TOC ────────────────────────────────────────────────────── */
+.toc{margin-top:1rem}
+.toc ol{list-style:none;padding:0;margin:0;counter-reset:tocnum}
+.toc ol > li{
+  counter-increment:tocnum;
+  display:grid;grid-template-columns:24pt 1fr;
+  gap:8pt;
+  padding:10pt 0;
+  border-bottom:1px dashed var(--line);
+  font-size:11pt;
+}
+.toc ol > li::before{
+  content:counter(tocnum,decimal-leading-zero);
+  font-family:'Lexend','Inter',sans-serif;font-weight:600;
+  color:var(--accent);font-size:11pt;letter-spacing:-.01em;
+}
+.toc ol > li .title{font-weight:600;color:var(--ink)}
+.toc ol > li .desc{display:block;color:var(--muted);font-size:9pt;font-weight:400;margin-top:1pt}
+
+/* ── Misc utility ───────────────────────────────────────────── */
+.muted{color:var(--muted)}
+.center{text-align:center}
+.small{font-size:8.5pt}
+.kbd{
+  font-family:'JetBrains Mono',monospace;font-size:8.4pt;
+  background:#fff;border:1px solid var(--line-strong);
+  border-bottom-width:2px;border-radius:4px;
+  padding:1px 5px;color:var(--ink);
+}
+
+/* ── Section header banner ──────────────────────────────────── */
+.section-banner{
+  display:flex;align-items:baseline;gap:16pt;
+  padding:0 0 16pt;
+  border-bottom:2pt solid var(--accent);
+  margin-bottom:18pt;
+}
+.section-banner .num{
+  font-family:'Lexend','Inter',sans-serif;font-weight:700;
+  font-size:36pt;line-height:1;color:var(--accent);letter-spacing:-.03em;
+}
+.section-banner .head h1{
+  font-size:24pt;color:var(--ink);margin:0;letter-spacing:-.02em;
+}
+.section-banner .head .sub{
+  font-size:10pt;color:var(--muted);margin-top:3pt;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════
+     COVER
+     ════════════════════════════════════════════════════════════ -->
+<section class="cover">
+
+  <header class="cover-mark">
+    <span class="ns">NS</span>
+    <span class="wordmark">NetSec · CA24154</span>
+  </header>
+
+  <div class="cover-title">
+    <span class="eyebrow">Deliverable D1 · Documentation Pack</span>
+    <h1>Website &amp; <br>Open Directory</h1>
+    <h2>Architecture, design system, and admin&nbsp;handover<br>for the COST Action NetSec website.</h2>
+
+    <div class="cover-meta">
+      <div class="item">
+        <div class="label">COST Action</div>
+        <div class="value">CA24154 · Networking European Security Knowledge</div>
+      </div>
+      <div class="item">
+        <div class="label">Version &amp; Date</div>
+        <div class="value">v1.0 · May 2026</div>
+      </div>
+      <div class="item">
+        <div class="label">Author</div>
+        <div class="value">Dr Arthur Laudrain<br><span style="font-weight:400;color:rgba(255,255,255,.7)">MC member (CH) · ETH Zurich CSS</span></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="cover-foot">
+    <div class="cofunding">
+      <div class="eu-flag">
+        <svg class="eu-stars" viewBox="0 0 100 100" aria-hidden="true">
+          <!-- Twelve five-pointed stars on a circle of radius 32 centred at (50,50).
+               The master <polygon> lives in <defs> so it doesn't render at the
+               SVG origin in addition to the twelve placements. -->
+          <defs>
+            <polygon id="star" points="0,-6 1.76,-2.42 5.71,-1.85 2.85,.92 3.53,4.85 0,3 -3.53,4.85 -2.85,.92 -5.71,-1.85 -1.76,-2.42"/>
+          </defs>
+          <g fill="#FFCC00">
+            <use href="#star" x="50" y="18"/>
+            <use href="#star" x="66" y="22.3"/>
+            <use href="#star" x="78" y="34"/>
+            <use href="#star" x="82" y="50"/>
+            <use href="#star" x="78" y="66"/>
+            <use href="#star" x="66" y="77.7"/>
+            <use href="#star" x="50" y="82"/>
+            <use href="#star" x="34" y="77.7"/>
+            <use href="#star" x="22" y="66"/>
+            <use href="#star" x="18" y="50"/>
+            <use href="#star" x="22" y="34"/>
+            <use href="#star" x="34" y="22.3"/>
+          </g>
+        </svg>
+      </div>
+      <div class="cofunding-text">
+        <strong>Funded by the European Union</strong>
+        through COST — European Cooperation<br>in Science and Technology.
+      </div>
+    </div>
+    <span class="url">netsec-cost.eu</span>
+  </footer>
+
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     TABLE OF CONTENTS
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <span class="eyebrow">Contents</span>
+  <h1 style="font-size:24pt;color:var(--ink)">What's in this document</h1>
+  <p class="muted">A self-contained reference for everyone who builds on, hands over, evaluates, or simply uses the NetSec website. Each chapter stands alone; read end-to-end for a tour, or jump in by section.</p>
+
+  <nav class="toc">
+    <ol>
+      <li>
+        <div>
+          <span class="title">Overview &amp; purpose</span>
+          <span class="desc">What the site is, who it serves, and the principles behind every design choice.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="title">Architecture</span>
+          <span class="desc">Tech stack, page-by-page inventory, data-flow diagrams for the weekly sync workflows, repository layout.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="title">Design system</span>
+          <span class="desc">Colour tokens, typography, components, motion budget, iconography, accessibility checklist.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="title">Admin guide</span>
+          <span class="desc">Every account, login, and asset the site depends on; routine tasks; escalation; handover checklist.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="title">Appendix A · Accessibility standard &amp; assessment</span>
+          <span class="desc">WCAG 2.1 AA target, EN&nbsp;301&nbsp;549 alignment, latest self-assessment results, known limitations, reporting route.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="title">Appendix B · Security &amp; licensing</span>
+          <span class="desc">Coordinated-disclosure policy in brief, and the dual MIT + CC&nbsp;BY&nbsp;4.0 licensing model.</span>
+        </div>
+      </li>
+    </ol>
+  </nav>
+
+  <div class="card callout" style="margin-top:18pt">
+    <h4>How to read the diagrams</h4>
+    <p style="margin:0">Diagrams in this document are the same Mermaid sources that live in the <code>docs/</code> folder of the GitHub repository. They render natively on github.com so anyone with read access can navigate the live versions there. The PDF embeds them as a frozen snapshot.</p>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 1 — OVERVIEW
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="section-banner">
+    <div class="num">01</div>
+    <div class="head">
+      <h1>Overview &amp; purpose</h1>
+      <div class="sub">What the site is, who it serves, and the principles behind every choice.</div>
+    </div>
+  </div>
+
+  <h2>What this site is</h2>
+  <p>The NetSec website is the official front door of <strong>COST Action CA24154 — Networking European Security Knowledge</strong>, served at <a href="https://netsec-cost.eu">netsec-cost.eu</a>. It is a static GitHub Pages deployment with two scheduled data-sync workflows and one third-party form processor. There is no database, no CMS, and no build step.</p>
+
+  <p>It doubles as <strong>Deliverable D1</strong> of the Action's Memorandum of Understanding — the open community directory that the Action committed to publishing.</p>
+
+  <h2>Three audiences, one deliverable</h2>
+  <p>Every decision in the site's design weighs three audiences against each other. A change that helps one without hurting the others is good. A change that needs to "pick a side" probably isn't ready.</p>
+
+  <div class="grid-2">
+    <div class="card tint">
+      <h4>The wider research community</h4>
+      <p style="margin:0">Anyone working in or alongside European security studies. The site explains what NetSec is, who's involved, what's on the calendar, and how to engage.</p>
+    </div>
+    <div class="card tint">
+      <h4>Members &amp; grant applicants</h4>
+      <p style="margin:0">Practical resources: grant calls, the e-COST workflow, deliverables, the roadmap. The Network directory and Grants page are written for them.</p>
+    </div>
+  </div>
+  <div class="card tint">
+    <h4>External evaluators &amp; funders</h4>
+    <p style="margin:0">COST and the European Commission, for whom the site stands as visible evidence that Deliverable D1 has been met. Privacy compliance, accessibility statement, and licensing terms are written with them in mind.</p>
+  </div>
+
+  <h2>Design principles</h2>
+  <ol>
+    <li><strong>Restraint over decoration.</strong> White space, generous line-height, and one strong colour beat busy gradients.</li>
+    <li><strong>Glass cards as the unit of UI.</strong> Almost every distinct piece of information sits on a glassmorphic card; they define hierarchy.</li>
+    <li><strong>Stroke icons for generic glyphs, brand icons for brands.</strong> Same concept, same icon — every conference grant gets the same microphone; every contact item gets the same envelope.</li>
+    <li><strong>Motion is a hint, not a feature.</strong> Hover transforms ≤ 4 px, transitions ≤ 300 ms, no parallax or scroll-jacking.</li>
+    <li><strong>British English</strong> in all user-facing copy.</li>
+    <li><strong>Accessibility first.</strong> Every interactive element is keyboard reachable; every colour pair meets WCAG 2.1 AA; skip-links land on <code>#main</code>.</li>
+  </ol>
+
+  <div class="snapshot">
+    <img src="snap-home.png" alt="Home page of netsec-cost.eu showing the hero with title, key chips, CTAs and the Action badge.">
+    <div class="caption">Figure 1 · Home page hero, light theme. Glass nav bar, gradient title, two CTAs, "Join the network" links straight to the open Google Form.</div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 2 — ARCHITECTURE
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="section-banner">
+    <div class="num">02</div>
+    <div class="head">
+      <h1>Architecture</h1>
+      <div class="sub">Tech stack, pages, data flow, and repository layout.</div>
+    </div>
+  </div>
+
+  <h2>Tech stack at a glance</h2>
+  <p>The site is deliberately small. No framework, no transpiler, no bundler — just hand-authored HTML, one shared stylesheet, one shared script file, and two scheduled Python jobs that keep the data files in step with their upstream sources.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+    A["Visitor's browser"] -->|HTTPS| B["GitHub Pages<br/>static hosting"]
+    B --> C["netsec.github.io repo"]
+    C -.->|read at runtime| D["data/bios.json"]
+    F["cost.eu/actions/CA24154"] -.->|weekly cron| G["sync-cost.yml"]
+    G -->|PR| C
+    H["Google Form"] -->|writes| I["Google Sheet"]
+    I -.->|weekly cron| J["sync-bios.yml"]
+    J -->|PR| C
+    K["Contact form"] -->|POST| L["Formspree<br/>meenwyrb"]
+    L -->|email| M["Action mailbox"]
+
+    style B fill:#003399,stroke:#003399,color:#fff
+    style C fill:#0a84ff,stroke:#0a84ff,color:#fff
+    style D fill:#eef2fb,stroke:#0a84ff
+    </div>
+    <div class="diagram-caption">Figure 2 · End-to-end stack. Solid lines are HTTP requests at user time; dashed lines are scheduled batch jobs.</div>
+  </div>
+
+  <p>Three points to take from the diagram:</p>
+  <ul>
+    <li><strong>No back-end of our own.</strong> Everything that looks dynamic (the directory, the grant-manager cards) is hydrated from <code>data/bios.json</code> in the visitor's browser.</li>
+    <li><strong>Two sources of truth feed that file.</strong> Member-submitted bios via a Google Form, and Action structure (WGs, leadership) via the COST website.</li>
+    <li><strong>Workflow changes open a PR, never a silent push.</strong> Every change to the directory passes through a human's review.</li>
+  </ul>
+
+  <h2>Site structure</h2>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+    H["index.html<br/><i>Home</i>"]
+    P["people.html<br/><i>The Network</i>"]
+    G["grants.html<br/><i>Grants &amp; Calls</i>"]
+    S["sitemap.html<br/><i>Site map</i>"]
+    A["accessibility.html"]
+    R["privacy.html"]
+
+    H -- "anchors: news / about /<br/>working-groups / committee /<br/>events / roadmap / outputs /<br/>contact" --> H
+    H --> P
+    H --> G
+    H --> S
+    P --> G
+    G --> P
+    S --> H
+    S --> P
+    S --> G
+    S --> A
+    S --> R
+
+    style H fill:#0a84ff,stroke:#0a84ff,color:#fff
+    style P fill:#eef2fb,stroke:#0a84ff
+    style G fill:#eef2fb,stroke:#0a84ff
+    </div>
+    <div class="diagram-caption">Figure 3 · Page graph. The home page hosts most of the static content as anchored sections; the Network and Grants pages are full-page applications backed by <code>data/bios.json</code>.</div>
+  </div>
+
+  <h3>Page inventory</h3>
+  <table>
+    <thead><tr><th>Page</th><th>Purpose</th><th>Reads at runtime</th></tr></thead>
+    <tbody>
+      <tr><td><code>index.html</code></td><td>Overview, news, WGs, Management Committee, events, roadmap, outputs, contact.</td><td>—</td></tr>
+      <tr><td><code>people.html</code></td><td>Open community directory with WG / MC / country filters; Join-the-network CTA.</td><td><code>data/bios.json</code> (all)</td></tr>
+      <tr><td><code>grants.html</code></td><td>Five grant schemes, the e-COST timeline, resources, grant-manager contact cards.</td><td><code>data/bios.json</code> (Grant Awarding Coordinator only)</td></tr>
+      <tr><td><code>sitemap.html</code></td><td>User-friendly site map linking every page and every in-page anchor.</td><td>—</td></tr>
+      <tr><td><code>accessibility.html</code></td><td>WCAG 2.1 conformance statement.</td><td>—</td></tr>
+      <tr><td><code>privacy.html</code></td><td>GDPR-compliant privacy notice. §10 is the licensing section.</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Feature inventory</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h4>User-facing</h4>
+      <ul>
+        <li>Light / dark theme with manual toggle and OS-pref default.</li>
+        <li>Reveal-on-scroll powered by <code>IntersectionObserver</code>.</li>
+        <li>Glass cards with <code>backdrop-filter</code>; graceful fallback.</li>
+        <li>Country flags via FlagCDN for every ISO code (~200).</li>
+        <li>Network directory: search × WG / MC chip × country, all AND-combined.</li>
+        <li>Bio collapse: bios over 4 lines auto-add a "Show more" toggle.</li>
+        <li>Awarding-process timeline with Before / During / After pills.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Operator-facing</h4>
+      <ul>
+        <li>Two weekly sync workflows that open PRs rather than push.</li>
+        <li><code>data-bios-roles</code> attribute pattern — any element with it gets hydrated from <code>bios.json</code> at load.</li>
+        <li>MC-member auto-tagging via <code>mc-members.json</code>.</li>
+        <li>Brand-accurate social icons (Simple Icons SVGs).</li>
+        <li>Stable slug-based member IDs for deep-linking.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Data flow — how a bio gets onto the site</h2>
+  <p>The end-to-end path for a new member submission, from filling in the form to the live directory.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+    participant M as Member
+    participant F as Google Form
+    participant S as Google Sheet
+    participant W as sync-bios.yml<br/>(Mondays 05:15 UTC)
+    participant P as sync-bios.py
+    participant R as Repo<br/>(bios-sync/auto)
+    participant A as Admin
+
+    M->>F: Submit bio
+    F->>S: Append row<br/>(required consent ticked)
+    W->>P: Run sync-bios.py
+    P->>S: GET published CSV
+    P->>P: Parse, dedupe by email→slug,<br/>auto-tag MC role
+    P->>P: Download + resize photos
+    P->>R: git diff bios.json + photos
+    alt Diff non-empty
+        P->>R: Open PR
+        A->>R: Review + merge
+        R-->>F: Live on /people.html
+    else No diff
+        P-->>P: Exit 0
+    end
+    </div>
+    <div class="diagram-caption">Figure 4 · Bios pipeline. Required consent on the form is what gates what reaches the Sheet. Photos are downscaled with Pillow before commit.</div>
+  </div>
+
+  <h2>Data flow — how a cost.eu change propagates</h2>
+
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+    participant C as cost.eu/actions/CA24154
+    participant W as sync-cost.yml<br/>(Mondays 05:00 UTC)
+    participant P as sync-cost.py
+    participant R as Repo<br/>(cost-sync/auto)
+    participant A as Admin
+
+    W->>P: Run sync-cost.py
+    P->>C: GET HTML
+    P->>P: Parse Membership table → WG_MAP
+    P->>P: Regex over malformed<br/>Leadership table → roles
+    P->>P: Reconcile into bios.json seed entries
+    P->>R: git diff index.html + bios.json
+    alt Diff non-empty
+        P->>R: Open PR
+        A->>R: Review + merge
+    else No diff
+        P-->>P: Exit 0
+    end
+    </div>
+    <div class="diagram-caption">Figure 5 · cost.eu pipeline. The Leadership table on cost.eu has a malformed closing tag that breaks BeautifulSoup, so the script falls back to regex over the raw HTML.</div>
+  </div>
+
+  <h2>Data flow — contact form</h2>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+    A["Visitor on<br/>/index.html#contact"] -->|HTML form POST| B["Formspree<br/>project meenwyrb"]
+    B -->|email| C["Action mailbox"]
+    B -->|JSON 200| A
+    A -->|toast confirmation| A
+    style B fill:#003399,stroke:#003399,color:#fff
+    </div>
+    <div class="diagram-caption">Figure 6 · Contact submissions never touch our repo. Formspree is the only third party that sees them, acting as data processor under Standard Contractual Clauses.</div>
+  </div>
+
+  <h2>The Network directory in practice</h2>
+  <div class="snapshot">
+    <img src="snap-network.png" alt="The Network directory page with the search bar, WG chips, MC chip and country dropdown.">
+    <div class="caption">Figure 7 · The Network directory. Three filter axes — free-text search, WG/MC chip, country — AND together so they can be stacked (e.g. <em>"MC members from France"</em>).</div>
+  </div>
+
+  <h2>Repository layout</h2>
+<pre><code>.
+├── index.html                       # Home
+├── people.html                      # The Network
+├── grants.html                      # Grants &amp; Calls
+├── accessibility.html               # WCAG statement
+├── privacy.html                     # GDPR notice
+├── sitemap.html                     # User-friendly site map
+│
+├── assets/
+│   ├── css/site.css                 # Single shared stylesheet
+│   ├── js/site.js                   # Nav, theme, reveal, accordions
+│   └── images/people/*.{jpg,png}    # Member headshots
+│
+├── data/
+│   ├── bios.json                    # The directory
+│   └── mc-members.json              # MC roster per country
+│
+├── scripts/
+│   ├── sync-cost.py                 # cost.eu → WG_MAP + roles
+│   ├── sync-bios.py                 # Google Form → bios.json
+│   ├── bios-source.json             # Pipeline config
+│   └── requirements.txt
+│
+├── .github/workflows/
+│   ├── sync-cost.yml                # Weekly cron
+│   └── sync-bios.yml                # Weekly cron
+│
+├── docs/                            # Internal documentation
+├── LICENSE          # MIT (code)
+├── LICENSE-CONTENT  # CC BY 4.0 (prose)
+├── README.md
+└── SECURITY.md
+</code></pre>
+
+  <h2>Conventions worth knowing</h2>
+  <ul>
+    <li><strong>British English</strong> in user-facing copy.</li>
+    <li><strong>Slugs</strong> are produced by an identical <code>slugify()</code> in both Python scripts (strip salutation, drop diacritics, drop apostrophes, lowercase, hyphenate). Both scripts must agree or member IDs drift.</li>
+    <li><strong>Member IDs</strong> are the slug of the cleaned name — stable across re-submissions, used as <code>id</code> on member cards so <code>/people.html#arthur-laudrain</code> resolves.</li>
+    <li><strong>Comments in CSS / JS / Python</strong> are full sentences explaining <em>why</em> the code is there, not paraphrasing <em>what</em> it does.</li>
+    <li><strong>No JS framework, no transpiler, no bundler.</strong> Anything more than that needs an issue first.</li>
+  </ul>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 3 — DESIGN SYSTEM
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="section-banner">
+    <div class="num">03</div>
+    <div class="head">
+      <h1>Design system</h1>
+      <div class="sub">Tokens, components, motion, and the accessibility floor.</div>
+    </div>
+  </div>
+
+  <p>The site follows an <strong>Apple-inspired glassmorphism</strong> language layered onto EU and COST brand colours. It should feel modern, trustworthy, and Brussels-adjacent without ever feeling corporate.</p>
+
+  <h2>Colour tokens</h2>
+  <p>Defined in <code>assets/css/site.css</code> on <code>:root</code> (light) and <code>:root.dark</code> (dark). Always reference the token, never the raw hex.</p>
+
+  <table>
+    <thead><tr><th>Token</th><th>Light value</th><th>Used for</th></tr></thead>
+    <tbody>
+      <tr><td><code>--bg-0</code></td><td><code>#f6f8fc</code></td><td>Page background</td></tr>
+      <tr><td><code>--bg-1</code></td><td><code>#eef2fb</code></td><td>Slight elevation backdrop</td></tr>
+      <tr><td><code>--ink</code></td><td><code>#0b1220</code></td><td>Headings, primary copy</td></tr>
+      <tr><td><code>--ink-2</code></td><td><code>#2b3850</code></td><td>Body copy, sub-headings</td></tr>
+      <tr><td><code>--muted</code></td><td><code>#5a6679</code></td><td>Captions, meta, fineprint</td></tr>
+      <tr><td><code>--line</code></td><td><code>rgba(11,18,32,.08)</code></td><td>Dividers, low-emphasis borders</td></tr>
+      <tr><td><code>--glass-bg</code></td><td><code>rgba(255,255,255,.55)</code></td><td>Default glass card fill</td></tr>
+      <tr><td><code>--glass-bg-strong</code></td><td><code>rgba(255,255,255,.72)</code></td><td>Sticky nav, opaque cards</td></tr>
+      <tr><td><code>--accent</code></td><td><strong><code>#003399</code></strong> EU blue</td><td>Primary buttons, focus rings, accents</td></tr>
+      <tr><td><code>--accent-2</code></td><td><strong><code>#0a84ff</code></strong> Apple blue</td><td>Hyperlinks, secondary accent</td></tr>
+      <tr><td><code>--accent-glow</code></td><td><code>rgba(10,132,255,.35)</code></td><td>Soft glow under hovered buttons</td></tr>
+      <tr><td><code>--ease</code></td><td><code>cubic-bezier(.22,.61,.36,1)</code></td><td>Default transition curve</td></tr>
+    </tbody>
+  </table>
+
+  <p>Dark theme inverts <code>--bg-*</code>, <code>--ink*</code>, <code>--line</code>, and <code>--glass-*</code> but keeps <code>--accent</code> and <code>--accent-2</code> identical so brand colour is constant across modes.</p>
+
+  <h2>Typography</h2>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+    A["Lexend<br/>display + headings<br/>weights 300–700"] -- "h1, h2, h3, h4" --> B["letter-spacing -.02em<br/>line-height 1.15"]
+    C["Inter<br/>body + UI<br/>weights 300–800"] -- "p, ui labels" --> D["letter-spacing -.005em<br/>line-height 1.55"]
+    style A fill:#003399,stroke:#003399,color:#fff
+    style C fill:#0a84ff,stroke:#0a84ff,color:#fff
+    </div>
+    <div class="diagram-caption">Figure 8 · Type pairing. Lexend's high x-height makes for friendly, fast-reading headlines; Inter is the most-tested body face for UI at small sizes.</div>
+  </div>
+
+  <p>Both faces load once from Google Fonts via a <code>&lt;link rel="preconnect"&gt;</code> + stylesheet pair in every page's <code>&lt;head&gt;</code>. Heading hierarchy across the site:</p>
+
+  <table>
+    <thead><tr><th>Level</th><th>Count</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>h1</code></td><td>1 per page</td><td>"The Network", "Grants &amp; Calls"</td></tr>
+      <tr><td><code>h2</code></td><td>6–9</td><td>Major sections</td></tr>
+      <tr><td><code>h3</code></td><td>~20</td><td>Sub-sections, member names</td></tr>
+      <tr><td><code>h4</code></td><td>~18</td><td>Card titles, country names</td></tr>
+    </tbody>
+  </table>
+  <p>Never skip a level (no <code>h2</code> → <code>h4</code>).</p>
+
+  <h2>Component kit</h2>
+  <p>Every distinct visual element belongs to a small, named set of CSS classes. Reuse the existing ones; don't introduce parallels.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h4><code>.glass</code></h4>
+      <p style="margin:0">The workhorse card — semi-transparent fill, blurred backdrop, soft shadow, hover lift. Used for news cards, member cards, country cards, grant cards, the search toolbar, and more.</p>
+    </div>
+    <div class="card">
+      <h4><code>.btn</code> / <code>.btn-primary</code> / <code>.btn-ghost</code></h4>
+      <p style="margin:0">Primary fills with <code>--ink</code>, hover shifts to <code>--accent</code>. Ghost is transparent with a border and a slight hover lift.</p>
+    </div>
+    <div class="card">
+      <h4><code>.chip</code> / <code>.wg-chip</code></h4>
+      <p style="margin:0">Pill-shaped labels. Working-Group chips are colour-coded 1–4 so a viewer can scan a member card and place them by colour alone.</p>
+    </div>
+    <div class="card">
+      <h4><code>.timeline</code></h4>
+      <p style="margin:0">Vertical timeline on the Grants page — gradient rail with numbered nodes, Before / During / After phase pills, dashed-circle divider at the activity boundary.</p>
+    </div>
+    <div class="card">
+      <h4><code>.mc-stats</code></h4>
+      <p style="margin:0">Three-up snapshot on the home page (49 reps, 30 countries, ~51 % women). Stacks to one column on phones.</p>
+    </div>
+    <div class="card">
+      <h4><code>.members-toolbar</code></h4>
+      <p style="margin:0">Toolbar at the top of the Network page. Free-text search + WG / MC chip + country dropdown — all AND-combined by the directory's render loop.</p>
+    </div>
+  </div>
+
+  <h2>Iconography</h2>
+  <p>Two SVG styles coexist by design:</p>
+
+  <table>
+    <thead><tr><th>Style</th><th>When to use</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Stroke</strong></td>
+        <td>Generic glyphs (envelope, globe, briefcase, microphone)</td>
+        <td>Lucide-style: <code>stroke="currentColor"</code>, <code>stroke-width="1.9"</code>, <code>fill="none"</code></td>
+      </tr>
+      <tr>
+        <td><strong>Filled brand</strong></td>
+        <td>Recognisable brand marks (ORCID, LinkedIn, X, Bluesky, Mastodon)</td>
+        <td>Simple Icons SVG paths; <code>fill="currentColor"</code> (ORCID in brand green via <code>.contact-orcid</code>)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Same-concept-same-icon rule:</strong> every conference grant uses the same microphone icon; every contact-item uses the same envelope. Consistency lets users build muscle memory for what an icon means.</p>
+
+  <h2>Motion</h2>
+  <ul>
+    <li><strong><code>.reveal</code></strong> — fades in + slides up 12 px when intersecting the viewport. Default state is <em>visible</em>; the fade only engages once JS has confirmed the observer fires. If JS fails for any reason, content stays visible — never invisible.</li>
+    <li><strong><code>.blob</code></strong> — three large translucent radial blobs in <code>.ambience</code>, drifting on a 22–34 s loop. Pure decoration; <code>aria-hidden="true"</code>.</li>
+    <li><strong>Glass-card hovers</strong> — 250 ms <code>translateY(-4px)</code> + shadow swap.</li>
+    <li><strong>Theme toggle</strong> — instant; the FOUC-prevention script runs before paint.</li>
+  </ul>
+
+  <h2>Accessibility checklist for new work</h2>
+  <div class="card callout">
+    <ul style="margin:0">
+      <li>All interactive controls reachable with keyboard alone.</li>
+      <li>Visible focus ring (use the existing <code>:focus-visible</code> style).</li>
+      <li><code>aria-label</code> on icon-only buttons; <code>title</code> for hover hints.</li>
+      <li>Heading levels follow the hierarchy table above — no skipping.</li>
+      <li>Colour contrast meets WCAG 2.1 AA in <strong>both</strong> themes.</li>
+      <li>No content hidden behind <code>:hover</code> alone.</li>
+      <li>Animations respect <code>prefers-reduced-motion</code>.</li>
+      <li>Skip-link still focuses <code>#top</code> (home) or <code>#main</code> (other pages).</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 4 — ADMIN GUIDE
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="section-banner">
+    <div class="num">04</div>
+    <div class="head">
+      <h1>Admin guide</h1>
+      <div class="sub">Accounts, routine tasks, escalation, and handover.</div>
+    </div>
+  </div>
+
+  <p>This section answers: <em>"It's six months later, the maintainer is on parental leave, something needs editing — where do I start?"</em></p>
+
+  <h2>Accounts &amp; assets — domain and hosting</h2>
+  <table>
+    <thead><tr><th>Asset</th><th>Location</th><th>Owner / login</th></tr></thead>
+    <tbody>
+      <tr><td><code>netsec-cost.eu</code></td><td>DNS registrar</td><td><em>TBC — confirm with Action Chair</em></td></tr>
+      <tr><td>GitHub Pages routing</td><td>Repo Settings → Pages</td><td>GitHub org <code>EISSeuropa</code></td></tr>
+      <tr><td>TLS certificate</td><td>Auto-managed by GitHub Pages</td><td>n/a (Let's Encrypt)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Accounts &amp; assets — code and pipelines</h2>
+  <table>
+    <thead><tr><th>Asset</th><th>Login</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>GitHub repository<br><code>EISSeuropa/netsec.github.io</code></td>
+        <td>GitHub account in the <code>EISSeuropa</code> org</td>
+        <td>Action Chair, Vice-Chair, maintainer.</td>
+      </tr>
+      <tr>
+        <td>Google Form "Join the NetSec network"</td>
+        <td>Google account that owns the form</td>
+        <td>URL stored in <code>scripts/bios-source.json</code> → <code>form_url</code>.</td>
+      </tr>
+      <tr>
+        <td>Linked Google Sheet</td>
+        <td>Same Google account</td>
+        <td>Publish-to-web enabled (CSV). Required-consent step on the form gates what reaches it.</td>
+      </tr>
+      <tr>
+        <td>Published CSV URL</td>
+        <td>n/a (public capability)</td>
+        <td>Stored in <code>scripts/bios-source.json</code> → <code>csv_url</code>. Anyone with the URL can read the Sheet — the form's required-consent step is what gates the content.</td>
+      </tr>
+      <tr>
+        <td>Formspree project (id <code>meenwyrb</code>)</td>
+        <td>Formspree account</td>
+        <td>Free tier; submission destination is the Action mailbox.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card callout">
+    <h4>Bus-factor reminder</h4>
+    <p style="margin:0">Every admin task below assumes <strong>at least two people</strong> hold <code>EISSeuropa</code> org membership with <em>Maintain</em> permission on the repository. If that drops to one, escalate.</p>
+  </div>
+
+  <h2>Accounts &amp; assets — branding</h2>
+  <table>
+    <thead><tr><th>Asset</th><th>Location</th><th>Licence</th></tr></thead>
+    <tbody>
+      <tr><td>COST logo</td><td><code>assets/images/cost-logo.jpg</code></td><td>© COST Association — used per COST visual-identity guidance.</td></tr>
+      <tr><td>EU emblem</td><td>Inlined SVG in every footer</td><td>Used per the EU visual-identity manual for <em>Funded by the EU</em> communication.</td></tr>
+      <tr><td>NetSec wordmark</td><td>Pure CSS letter-mark — no asset</td><td>© COST Action NetSec.</td></tr>
+      <tr><td>Member headshots</td><td><code>assets/images/people/&lt;slug&gt;.*</code></td><td>© the individual, displayed with consent.</td></tr>
+      <tr><td>Country flags</td><td>FlagCDN (loaded at runtime)</td><td>Flags themselves public domain; CDN MIT.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Reviewing a weekly sync PR</h2>
+  <p>Both sync workflows open a pull request against <code>main</code> on a dedicated automation branch. Either may be empty most weeks — that's a feature, not a bug.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor A as Admin
+    participant G as GitHub
+    participant W as Workflow
+    participant R as main branch
+
+    W->>G: Open PR on bios-sync/auto<br/>(or cost-sync/auto)
+    G->>A: Notify
+    A->>G: Read PR body — human-readable diff
+    alt Looks right
+        A->>G: Approve + merge
+        G->>R: Squash-merge
+    else Something off
+        A->>G: Comment / close
+        A->>A: Fix at source (Sheet)<br/>then re-run the workflow
+    end
+    </div>
+    <div class="diagram-caption">Figure 9 · Soft-review policy. No auto-merge — every new bio passes through a human's eyes.</div>
+  </div>
+
+  <p>The reviewer's job is <strong>not</strong> to fact-check research claims; it's to catch:</p>
+  <ul>
+    <li>Obvious typos (ALL-CAPS surnames, missing capitals).</li>
+    <li>Broken or mis-targeted links (ORCID under the LinkedIn field).</li>
+    <li>Photos that aren't headshots.</li>
+    <li>Anyone who didn't tick consent (sync drops these automatically — but worth a glance).</li>
+  </ul>
+
+  <h2>Other routine tasks</h2>
+
+  <h3>Manually triggering a sync</h3>
+  <ol>
+    <li>Go to <em>Actions</em> in the GitHub repo.</li>
+    <li>Pick <em>Sync member bios from Google Form</em> or <em>Sync WG membership from cost.eu</em>.</li>
+    <li>Click <strong>Run workflow</strong> → <strong>main</strong> → <strong>Run</strong>.</li>
+    <li>Watch the run; if it opens a PR, review and merge.</li>
+  </ol>
+
+  <h3>Removing a member at their request</h3>
+  <ol>
+    <li>Delete the relevant <code>members[]</code> entry from <code>data/bios.json</code>.</li>
+    <li>Delete the headshot at <code>assets/images/people/&lt;slug&gt;.jpg</code> if present.</li>
+    <li>Open the Google Sheet and either delete the row, or clear the consent column (next sync drops them anyway).</li>
+    <li>Commit with message <code>bios: remove &lt;slug&gt; on request</code>.</li>
+  </ol>
+
+  <h3>Editing static page copy</h3>
+  <ol>
+    <li><code>git checkout -b copy/&lt;short-description&gt;</code></li>
+    <li>Edit the relevant <code>*.html</code> file.</li>
+    <li>Preview locally: <span class="kbd">python3 -m http.server 8000</span> → open <code>http://localhost:8000</code>.</li>
+    <li>Open a PR. Merge once reviewed.</li>
+  </ol>
+  <p>GitHub Pages rebuilds in ~30 seconds after merge.</p>
+
+  <h2>The Grants page in practice</h2>
+  <div class="snapshot">
+    <img src="snap-grants.png" alt="The Grants & Calls page showing the apply-via-e-COST strip and the first grant card.">
+    <div class="caption">Figure 10 · Grants &amp; Calls. All five NetSec grant schemes, with per-grant e-COST deep links and a vertical awarding-process timeline further down the page.</div>
+  </div>
+
+  <h2>Escalation</h2>
+  <table>
+    <thead><tr><th>Symptom</th><th>First port of call</th></tr></thead>
+    <tbody>
+      <tr><td>Site returns 404 / 500</td><td><a href="https://www.githubstatus.com">githubstatus.com</a></td></tr>
+      <tr><td>Sync workflow fails</td><td>Actions tab → click the failed run → scroll to the red step</td></tr>
+      <tr><td>Form submissions stop arriving</td><td>Formspree dashboard</td></tr>
+      <tr><td>New bio doesn't appear after Monday's sync</td><td>Check Google Sheet (row present? consent ticked?) → manually trigger <em>Sync member bios</em></td></tr>
+      <tr><td>Suspected security issue</td><td>Follow <code>SECURITY.md</code> — <strong>do not open a public issue</strong></td></tr>
+      <tr><td>DNS / domain issue</td><td>Registrar admin; GitHub Pages settings as sanity check</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Handover checklist</h2>
+  <div class="card callout">
+    <p style="margin:0 0 .6rem">When admin responsibility moves to a new person:</p>
+    <ul style="margin:0">
+      <li>Add them to the <code>EISSeuropa</code> org with <em>Maintain</em> role.</li>
+      <li>Grant them ownership of the Google Form + linked Sheet.</li>
+      <li>Grant them access to the Formspree project.</li>
+      <li>Make sure they have edit rights to the DNS registrar entry.</li>
+      <li>Walk them through this document.</li>
+      <li>Remove the previous admin's access (defence-in-depth).</li>
+      <li>Update the <em>Owner / login</em> column above with the new owner.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     APPENDIX A — ACCESSIBILITY STANDARD & ASSESSMENT
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="section-banner">
+    <div class="num">A</div>
+    <div class="head">
+      <h1>Appendix · Accessibility standard &amp; assessment</h1>
+      <div class="sub">What we target, how we test, what we found, and how to flag a barrier.</div>
+    </div>
+  </div>
+
+  <p>The full statement lives at <a href="https://netsec-cost.eu/accessibility.html">netsec-cost.eu/accessibility.html</a> and is the authoritative version. This appendix summarises it for evaluators reading offline.</p>
+
+  <h2>Standards and legal framing</h2>
+  <table>
+    <thead><tr><th>Aspect</th><th>Position</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Target conformance</td>
+        <td><strong>WCAG 2.1 Level AA</strong> — Web Content Accessibility Guidelines, Level AA success criteria.</td>
+      </tr>
+      <tr>
+        <td>European harmonisation</td>
+        <td>Aligned with <strong>EN&nbsp;301&nbsp;549</strong>, the European accessibility standard for ICT products and services.</td>
+      </tr>
+      <tr>
+        <td>Legal framework</td>
+        <td><a href="https://eur-lex.europa.eu/eli/dir/2016/2102/oj">Web Accessibility Directive 2016/2102</a> (EU). Each EU Member State designates its own enforcement body.</td>
+      </tr>
+      <tr>
+        <td>Current status</td>
+        <td><em>Partially compliant.</em> The majority of WCAG 2.1 AA success criteria are met; the limitations listed below are tracked for a future iteration.</td>
+      </tr>
+      <tr>
+        <td>Statement version</td>
+        <td>v1.0 · prepared 14 May 2026 · next scheduled review 14 May 2027.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Latest self-assessment</h2>
+  <p>An automated audit was performed on <strong>14 May 2026</strong> with <a href="https://github.com/dequelabs/axe-core">axe-core 4.10.2</a> running against every section of the home page (with all collapsible regions expanded). Results:</p>
+
+  <div class="card tint" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18pt;text-align:center">
+    <div>
+      <div style="font-family:'Lexend',sans-serif;font-size:24pt;font-weight:700;color:#1a8754;letter-spacing:-.02em">0</div>
+      <div class="small muted">Violations</div>
+    </div>
+    <div>
+      <div style="font-family:'Lexend',sans-serif;font-size:24pt;font-weight:700;color:#003399;letter-spacing:-.02em">50</div>
+      <div class="small muted">Passes</div>
+    </div>
+    <div>
+      <div style="font-family:'Lexend',sans-serif;font-size:24pt;font-weight:700;color:#b07700;letter-spacing:-.02em">1</div>
+      <div class="small muted">Needs manual review</div>
+    </div>
+  </div>
+  <p>The single item flagged for manual review is colour contrast on text rendered over <code>backdrop-filter</code> glass surfaces — axe-core cannot evaluate this automatically because the perceived contrast depends on what's behind the surface. Manual spot-checks confirm these surfaces meet WCAG 2.1 AA contrast in both light and dark mode.</p>
+
+  <h2>Test methodology</h2>
+  <p>The statement was prepared by self-assessment using three complementary methods:</p>
+  <ul>
+    <li><strong>Manual review</strong> of semantic HTML, keyboard navigation, focus management, and tab order — every page walked through with the keyboard alone.</li>
+    <li><strong>Automated scans</strong> with <a href="https://github.com/dequelabs/axe-core">axe-core 4.10.2</a> against the home page with all collapsible regions expanded.</li>
+    <li><strong>Manual contrast spot-checks</strong> on glass surfaces in both light and dark mode (the one case axe-core cannot evaluate).</li>
+  </ul>
+  <p>We re-assess after material changes to the design system or content structure, and at a minimum once per year.</p>
+
+  <h2>Features in place</h2>
+  <p>A non-exhaustive list of the accessibility affordances the site already ships:</p>
+  <ul>
+    <li>Semantic landmarks (<code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>) and a clean heading hierarchy without level jumps.</li>
+    <li>Skip-to-content link, visible on keyboard focus.</li>
+    <li>Visible <code>:focus-visible</code> ring on every interactive control.</li>
+    <li><code>alt</code> text on every image; explicit <code>&lt;label for&gt;</code> association on every form input.</li>
+    <li>Light and dark themes with a manual toggle; OS-level <code>prefers-color-scheme</code> as the default.</li>
+    <li><code>prefers-reduced-motion</code> disables decorative animations.</li>
+    <li>The <em>Management Committee by Country</em> directory uses a native <code>&lt;details&gt;</code> accordion — fully keyboard- and screen-reader-accessible without bespoke ARIA wiring. Deep-links to specific country cards auto-expand the section.</li>
+    <li>The roadmap Gantt grid uses ARIA grid roles (<code>role="table"</code>, <code>role="row"</code>, <code>role="columnheader"</code>, <code>role="cell"</code>) so assistive technology parses it as tabular data.</li>
+    <li>Working-group chips are grouped with <code>role="group"</code> and an <code>aria-label</code> so screen readers announce them as a group rather than as loose tokens.</li>
+    <li>Contact form: inline validation, accessible error reporting, and a confirmation toast announced via <code>role="status" aria-live="polite"</code>.</li>
+  </ul>
+
+  <h2>Known limitations</h2>
+  <p>The following parts of the site do not yet fully meet WCAG 2.1 AA, or have constraints worth flagging:</p>
+  <ul>
+    <li><strong>Roadmap Gantt chart.</strong> A dense data visualisation. On narrow viewports the chart requires horizontal scrolling; the scroll region is keyboard-focusable so users can pan with arrow keys (WCAG 2.1.1), but a text-only alternative summary is not yet provided.</li>
+    <li><strong>Decorative animations.</strong> Aurora background blobs and reveal-on-scroll fades are automatically disabled when the OS or browser signals <code>prefers-reduced-motion</code>. We do not currently expose a separate per-site override.</li>
+    <li><strong>Third-party assets.</strong> Country flag thumbnails are served from <code>flagcdn.com</code> and member headshots from the GitHub Pages CDN. Long-term availability is outside the Action's direct control; if any image becomes unavailable, the surrounding text content remains intact and informative.</li>
+    <li><strong>EU emblem SVG.</strong> The <em>Funded by the European Union</em> emblem carries an <code>aria-label</code> and <code>role="img"</code> but no long description; it is described by the surrounding boilerplate text.</li>
+  </ul>
+
+  <h2>Reporting a barrier</h2>
+  <p>If you encounter an accessibility barrier on this website, or need any of its content in an alternative format, please get in touch:</p>
+  <ul>
+    <li>Email the Action Chair, Dr Moritz Weiss — <a href="mailto:moritz.weiss@gsi.lmu.de">moritz.weiss@gsi.lmu.de</a></li>
+    <li>Or use the <a href="https://netsec-cost.eu/index.html#contact">contact form</a> and mention <em>"accessibility"</em> in your message.</li>
+  </ul>
+  <p>We aim to respond within <strong>10 working days</strong>.</p>
+
+  <div class="card callout">
+    <h4>Enforcement procedure</h4>
+    <p style="margin:0">If you are not satisfied with our response, you may contact the equality body or accessibility-compliance body in your country. Within the European Union, each Member State designates its own enforcement body under the <a href="https://eur-lex.europa.eu/eli/dir/2016/2102/oj">Web Accessibility Directive 2016/2102</a>.</p>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     APPENDIX B — SECURITY & LICENSING
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="section-banner">
+    <div class="num">B</div>
+    <div class="head">
+      <h1>Appendix · Security &amp; licensing</h1>
+      <div class="sub">Coordinated-disclosure policy in brief; the dual MIT + CC&nbsp;BY&nbsp;4.0 model.</div>
+    </div>
+  </div>
+
+  <h2>Security policy in brief</h2>
+  <p>Full text in <code>SECURITY.md</code> at the repo root. The shape of it:</p>
+
+  <h3>Scope</h3>
+  <p><strong>In scope:</strong> the current <code>main</code> branch, the deployed site at <code>netsec-cost.eu</code>, the two GitHub Actions, the Python sync scripts, and any personal data we hold.</p>
+  <p><strong>Out of scope:</strong> older branches, tags, or forks; reports about COST or EU branding; volumetric DoS against third parties (GitHub, Formspree, Google). Those go to the relevant vendor.</p>
+
+  <h3>How to report</h3>
+  <p>Two private channels — <strong>not</strong> public GitHub issues:</p>
+  <ol>
+    <li><strong>GitHub Security Advisories</strong> (preferred): <code>github.com/EISSeuropa/netsec.github.io/security/advisories/new</code>.</li>
+    <li><strong>Email</strong> the maintainer; for data-protection matters specifically, contact the Data Controller (Universiteit Leiden) per the addresses listed in <a href="https://netsec-cost.eu/privacy.html">privacy.html</a>.</li>
+  </ol>
+
+  <h3>What to expect</h3>
+  <table>
+    <thead><tr><th>Stage</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr><td>Acknowledgement</td><td>Within 5 working days.</td></tr>
+      <tr><td>Initial assessment</td><td>Within 14 working days.</td></tr>
+      <tr><td>Resolution — Critical</td><td>Patch in days; hotfix to <code>main</code>.</td></tr>
+      <tr><td>Resolution — High / Medium</td><td>Next sprint, typically 2–4 weeks.</td></tr>
+      <tr><td>Resolution — Low</td><td>Routine maintenance.</td></tr>
+      <tr><td>Disclosure</td><td>Coordinated; credit on request.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Safe harbour</h3>
+  <p>If you make a good-faith effort to comply with this policy when researching and reporting an issue, we will not pursue or support any legal action against you. Good-faith means: only acting against your own data and the public site, avoiding privacy violations and service disruption, not retaining personal data of others, and giving us reasonable time to fix the issue before public disclosure.</p>
+
+  <h2>Licensing model</h2>
+  <p>The repository uses <strong>dual licensing</strong>, matching EU and COST open-access norms:</p>
+
+  <table>
+    <thead><tr><th>What</th><th>Licence</th></tr></thead>
+    <tbody>
+      <tr><td>Source code (HTML / CSS / JS, Python, GitHub Actions)</td><td>MIT</td></tr>
+      <tr><td>Site content (prose, page copy, documentation)</td><td>CC BY 4.0</td></tr>
+      <tr><td>Member bios and photographs</td><td>© contributors, used with consent</td></tr>
+      <tr><td>Third-party assets (icons, fonts, flags, COST / EU)</td><td>Their own licences — see <code>LICENSE-CONTENT</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>Suggested attribution when reusing site content:</p>
+  <div class="card tint">
+    <p style="margin:0;font-style:italic">"Based on content from COST Action NetSec (CA24154), <a href="https://netsec-cost.eu">https://netsec-cost.eu</a>, CC BY 4.0."</p>
+  </div>
+
+  <hr style="margin-top:36pt">
+
+  <p class="small muted center" style="margin-top:24pt">
+    NetSec — Networking European Security Knowledge · COST Action CA24154 · MoU 063/25 · Running 10 Oct 2025 – 09 Oct 2029.<br>
+    Documentation v1.0 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich CSS) as part of Deliverable D1.<br>
+    The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union.
+  </p>
+</section>
+
+
+<script>
+  // Mermaid rendering, themed against the site's colour tokens.
+  //
+  // Sizing rationale: the previous draft rendered diagrams at
+  // Mermaid's defaults (small for an A4 figure). Here we bump font
+  // sizes, actor margins, and the sequence-diagram "width" so the
+  // resulting SVG has a natural size that fills the print figure
+  // width comfortably. Unstyled nodes get pure white fills with a
+  // blue border (was light-blue, which read as grey on paper).
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: "'Lexend','Inter',sans-serif",
+      fontSize: '16px',
+      primaryColor: '#ffffff',
+      primaryTextColor: '#0b1220',
+      primaryBorderColor: '#0a84ff',
+      lineColor: '#2b3850',
+      secondaryColor: '#ffffff',
+      tertiaryColor: '#ffffff',
+      // Sequence diagrams
+      actorBkg: '#003399',
+      actorTextColor: '#ffffff',
+      actorBorder: '#003399',
+      actorLineColor: '#0a84ff',
+      signalColor: '#0b1220',
+      signalTextColor: '#0b1220',
+      labelBoxBkgColor: '#ffffff',
+      labelBoxBorderColor: '#0a84ff',
+      labelTextColor: '#0b1220',
+      loopTextColor: '#0b1220',
+      noteBkgColor: '#fff8d6',
+      noteTextColor: '#0b1220',
+      noteBorderColor: '#d8c269',
+    },
+    flowchart: {
+      htmlLabels: true,
+      curve: 'basis',
+      useMaxWidth: true,
+      nodeSpacing: 55,
+      rankSpacing: 70,
+      padding: 18,
+    },
+    sequence: {
+      useMaxWidth: true,
+      showSequenceNumbers: false,
+      mirrorActors: false,
+      wrap: true,
+      actorFontSize: 15,
+      actorFontWeight: 600,
+      messageFontSize: 14,
+      noteFontSize: 13,
+      actorMargin: 80,
+      messageMargin: 38,
+      boxMargin: 12,
+      width: 200,
+      height: 50,
+    },
+  });
+</script>
+
+</body>
+</html>
