@@ -513,7 +513,14 @@
     <section class="reveal" aria-label="Grant managers">
       <h2 style="text-align:center;margin-bottom:8px">Grant Managers</h2>
       <p class="section-sub" style="text-align:center;color:var(--muted);max-width:60ch;margin:0 auto 24px">For questions about eligibility, application timing, or how to interpret a specific call, get in touch with the Grant Awarding Coordinators before submitting.</p>
-      <div class="grant-managers">
+      <!-- The cards below are a SERVER-SIDE FALLBACK rendered as static
+           HTML so they show up immediately on first paint and survive
+           a fetch failure. After load, an inline script at the foot of
+           the page reads `data/bios.json` and replaces them with whatever
+           the canonical bios pipeline currently says — so when Eliza,
+           Chiara, or a future GAC updates their bio via the form, the
+           change propagates here automatically. -->
+      <div class="grant-managers" id="grant-managers" data-bios-roles="Grant Awarding Coordinator|Grant Awarding Co-Lead">
         <article class="grant-manager glass">
           <div class="gm-avatar"><img src="assets/images/people/eliza-gheorghe.jpg" alt="Dr Eliza Gheorghe"></div>
           <div class="role">Grant Awarding Coordinator</div>
@@ -650,6 +657,66 @@
 </footer>
 
 <script src="assets/js/site.js" defer></script>
+
+<!-- Refresh the Grant Managers section from data/bios.json so that
+     a single change in the canonical bios pipeline propagates here
+     instead of needing a hand-edit of grants.html. Silently falls back
+     to the static HTML above if the fetch fails or no matching role
+     is found yet. -->
+<script>
+(async function () {
+  const container = document.getElementById('grant-managers');
+  if (!container) return;
+
+  const wantRoles = (container.dataset.biosRoles || '').split('|').filter(Boolean);
+  if (!wantRoles.length) return;
+
+  let data;
+  try {
+    const res = await fetch('data/bios.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    data = await res.json();
+  } catch (err) {
+    console.warn('Grant Managers refresh skipped:', err);
+    return;  // keep the static fallback
+  }
+
+  // For each wanted role, find the first member whose roles[] mentions it.
+  // Roles use ` · ` separators internally so we substring-match case-insensitively.
+  const matches = [];
+  for (const want of wantRoles) {
+    const norm = want.toLowerCase();
+    const hit = (data.members || []).find(m =>
+      (m.roles || []).some(r => (r || '').toLowerCase().includes(norm))
+    );
+    if (hit) matches.push({ member: hit, displayRole: want });
+  }
+  if (!matches.length) return;  // keep the static fallback
+
+  const initials = name => (name || '')
+    .replace(/^(Dr|Prof|Mr|Ms|Mrs)\.?\s+/i, '')
+    .split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('');
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+
+  container.replaceChildren();
+  for (const { member, displayRole } of matches) {
+    const article = document.createElement('article');
+    article.className = 'grant-manager glass';
+    const photoHtml = member.photo
+      ? `<img src="${esc(member.photo)}" alt="${esc(member.name)}" loading="lazy">`
+      : `<span style="display:grid;place-items:center;height:100%;color:var(--accent);font-weight:700;font-size:1.2rem">${esc(initials(member.name))}</span>`;
+    const affLine = [member.affiliation, member.country].filter(Boolean).map(esc).join(', ');
+    article.innerHTML =
+      '<div class="gm-avatar">' + photoHtml + '</div>' +
+      '<div class="role">' + esc(displayRole) + '</div>' +
+      '<h3>' + esc(member.name) + '</h3>' +
+      '<p>' + (affLine || '&nbsp;') + '</p>';
+    container.appendChild(article);
+  }
+})();
+</script>
 
 </body>
 </html>
