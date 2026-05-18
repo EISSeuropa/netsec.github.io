@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-05-16T09:16:35+00:00",
+  "generated_at": "2026-05-18T08:54:00+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-05-16T09:16:35+00:00"
+    "last_synced": "2026-05-18T08:54:00+00:00"
   },
   "members": [
     {
@@ -352,6 +352,37 @@
       "mastodon": "",
       "photo": "assets/images/people/sarka-kolmasova.jpeg",
       "source": "seed"
+    },
+    {
+      "id": "arthur-laudrain",
+      "name": "Dr Arthur Laudrain",
+      "country": "Switzerland",
+      "country_code": "ch",
+      "affiliation": "Center for Security Studies - ETH Zurich",
+      "position": "Team Lead & Senior Researcher, Cyber Security",
+      "roles": [
+        "MC member · Switzerland"
+      ],
+      "wgs": [
+        2,
+        3
+      ],
+      "wg_leadership": {},
+      "bio": "Arthur specialises in election interference, disinformation, subversion, and military cyber operations. Previously, he was the Richard Lounsbery US-France Security Fellow at Stanford CISAC, and a Research Associate in Cyber Diplomacy at the Department of War Studies at King's College London. He is a member of the Management Committee of NetSec (Networking European Security Knowledge), a European Cooperation in Science and Technology project. He also maintains affiliations with Stanford CISAC and King's College London. Arthur has a wide profesionnal experience spanning think-tanks (CSS 2017; IISS 2019; HCSS 2022), consulting (Oxford Analytica, ISTARI), and government projects.\n\nHe obtained his DPhil from the University of Oxford (Wolfson College), and holds an MA (London) and LLM (Leiden). He is an Associate of King's College (AKC) and Fellow of the Higher Education Academy (FHEA).",
+      "keywords": [
+        "election interference",
+        "disinformation",
+        "subversion"
+      ],
+      "email": "arthur.laudrain@sipo.gess.ethz.ch",
+      "website": "https://gess.ethz.ch/en/the-department/people/person-detail.apb-laudrain.html",
+      "orcid": "https://orcid.org/0000-0002-8642-2671",
+      "linkedin": "https://www.linkedin.com/in/apb-ldn/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/arthur-laudrain.jpg",
+      "source": "form"
     }
   ]
 }
