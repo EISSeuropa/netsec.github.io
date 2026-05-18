@@ -890,6 +890,27 @@ form button:disabled{opacity:.65;cursor:wait}
 [data-i18n-status="beta"] body{padding-top:38px}
 [data-i18n-status="beta"] .nav{top:52px}
 
+/* -------- Licensing table (licensing page §1) --------
+   A simple 3-column responsive table. Reuses prose-page typography
+   for harmony with the surrounding text. */
+.licence-table{
+  width:100%;border-collapse:collapse;margin:1rem 0 1.4rem;
+  font-size:.92rem;
+}
+.licence-table thead th{
+  text-align:left;padding:10px 14px;
+  font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;background:var(--accent);font-weight:600;
+}
+.licence-table thead th:first-child{border-top-left-radius:8px}
+.licence-table thead th:last-child{border-top-right-radius:8px}
+.licence-table tbody td{
+  padding:10px 14px;border-bottom:1px solid var(--line);
+  vertical-align:top;color:var(--ink-2);background:#fff;
+}
+.dark .licence-table tbody td{background:rgba(22,32,55,.55);color:var(--ink-2)}
+.licence-table tbody tr:last-child td{border-bottom:0}
+
 /* -------- Prose pages (Accessibility Statement, Privacy Notice) --------
    Shared layout for content-heavy informational pages. */
 .prose-page{padding:140px 0 80px}

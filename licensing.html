@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Licensing and reuse terms for the NetSec website — COST Action CA24154. MIT for code, CC BY 4.0 for content, member bios © contributors.">
+<title>Licensing &amp; reuse · NetSec — COST Action CA24154</title>
+<link rel="alternate" hreflang="en" href="https://netsec-cost.eu/licensing.html">
+<link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/licensing.fr.html">
+<link rel="alternate" hreflang="de" href="https://netsec-cost.eu/licensing.de.html">
+<link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/licensing.html">
+<link rel="icon" href="assets/images/logo.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&display=swap">
+<script>
+  (function() {
+    try {
+      var saved = localStorage.getItem('netsec-theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="ambience" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<header class="nav" role="banner">
+  <div class="nav-inner">
+    <a href="index.html" class="brand" aria-label="NetSec home">
+      <span class="brand-mark">NS</span>
+      <span>NetSec</span>
+    </a>
+    <div class="nav-actions">
+      <!-- Language switcher. Chip hrefs are rewritten by site.js to
+           point at the same page in each language. -->
+      <div class="lang-switch" role="group" aria-label="Language">
+        <a href="#" hreflang="en">EN</a>
+        <a href="#" hreflang="fr" title="Français (bêta)">FR</a>
+        <a href="#" hreflang="de" title="Deutsch (Beta)">DE</a>
+      </div>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="index.html#news">News</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#working-groups">Working Groups</a>
+      <a href="index.html#committee">Committee</a>
+      <a href="people.html">Network</a>
+      <a href="index.html#events">Events</a>
+      <a href="grants.html">Grants</a>
+      <a href="index.html#roadmap">Roadmap</a>
+      <a href="index.html#outputs">Outputs</a>
+      <a href="index.html#contact" class="nav-cta">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="prose-page">
+  <div class="container reveal">
+    <span class="eyebrow">Licensing</span>
+    <h1>Licensing &amp; reuse</h1>
+    <p class="lede">The NetSec website is published under a dual-licence model that lets you reuse the work freely, with one piece of mandatory attention: <strong>some parts are not ours to relicense</strong>. This page explains what's covered by what, and how to attribute reuse.</p>
+
+    <div class="glass prose-meta">
+      <div class="prose-meta-item">
+        <span class="label">Source code</span>
+        <span class="value">MIT<br><span style="font-weight:500;font-size:.85rem;color:var(--muted)">very permissive</span></span>
+      </div>
+      <div class="prose-meta-item">
+        <span class="label">Site content</span>
+        <span class="value">CC BY 4.0<br><span style="font-weight:500;font-size:.85rem;color:var(--muted)">attribution required</span></span>
+      </div>
+      <div class="prose-meta-item">
+        <span class="label">Last updated</span>
+        <span class="value">18 May 2026</span>
+      </div>
+    </div>
+
+    <h2>1. The dual-licence model at a glance</h2>
+    <table class="licence-table">
+      <thead>
+        <tr><th>What</th><th>Licence</th><th>You may…</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Source code (HTML / CSS / JS, Python sync scripts, GitHub Actions)</td>
+          <td><a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/LICENSE" target="_blank" rel="noopener">MIT</a></td>
+          <td>Copy, modify, redistribute — commercially or not — provided the licence text travels with the copy.</td>
+        </tr>
+        <tr>
+          <td>Site content (prose, page copy, documentation under <code>docs/</code>)</td>
+          <td><a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a></td>
+          <td>Share and adapt — including commercially — provided you give appropriate credit and indicate any changes.</td>
+        </tr>
+        <tr>
+          <td>Member bios and photographs</td>
+          <td>© the individual contributors</td>
+          <td>Display them in the context of this site, with the contributor's consent. <strong>Not</strong> covered by the CC BY licence above. Contributors may request changes or removal at any time.</td>
+        </tr>
+        <tr>
+          <td>COST logo, EU emblem, NetSec wordmark</td>
+          <td>Trademarks of their respective holders</td>
+          <td>Use only in accordance with the COST Visual Identity Guide and the EU visual identity manual.</td>
+        </tr>
+        <tr>
+          <td>Third-party assets bundled with the site</td>
+          <td>Their own licences (see §3)</td>
+          <td>Use under the terms each upstream sets.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>2. Suggested attribution</h2>
+    <p>If you reuse the prose content under CC BY 4.0, the briefest acceptable attribution is:</p>
+    <div class="glass" style="padding:18px 22px;font-style:italic;color:var(--ink)">
+      "Based on content from COST Action NetSec (CA24154), <a href="https://netsec-cost.eu">https://netsec-cost.eu</a>, CC&nbsp;BY&nbsp;4.0."
+    </div>
+    <p>If you also modified the content, please indicate that you did so. There is no canonical wording for this — anything that makes clear the work is derivative is fine (<em>"adapted from…"</em>, <em>"based on the original…"</em>, etc.).</p>
+
+    <h2>3. Third-party assets bundled with the site</h2>
+    <p>Each retains its own licence. We list them here so anyone reusing the source code knows what travels with it:</p>
+    <ul>
+      <li><strong><a href="https://simpleicons.org/" target="_blank" rel="noopener">Simple Icons</a></strong> — brand marks for ORCID, LinkedIn, X, Bluesky, Mastodon. Licensed <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">CC0 1.0</a>. Brand-name trademarks are not relicensable.</li>
+      <li><strong><a href="https://lucide.dev/" target="_blank" rel="noopener">Lucide</a>-style stroke glyphs</strong> — generic UI icons (envelope, briefcase, microphone, etc.). Licensed <a href="https://github.com/lucide-icons/lucide/blob/main/LICENSE" target="_blank" rel="noopener">ISC</a>.</li>
+      <li><strong><a href="https://rsms.me/inter/" target="_blank" rel="noopener">Inter</a></strong> and <strong><a href="https://fonts.google.com/specimen/Lexend" target="_blank" rel="noopener">Lexend</a></strong> typefaces — loaded from Google Fonts. Both licensed under the <a href="https://openfontlicense.org" target="_blank" rel="noopener">SIL Open Font License 1.1</a>.</li>
+      <li><strong><a href="https://flagcdn.com/" target="_blank" rel="noopener">FlagCDN</a></strong> — country flag thumbnails in the Management Committee by Country grid and on member cards. The flags themselves are public-domain national symbols; the CDN project is MIT-licensed.</li>
+      <li><strong>COST logo</strong> — © COST Association. Used per COST visual-identity guidance for funded Actions.</li>
+      <li><strong>EU emblem</strong> ("Funded by the European Union") — used per the European Union <a href="https://commission.europa.eu/communication/visual-identity-and-branding_en" target="_blank" rel="noopener">visual-identity manual</a> for funding-statement communication.</li>
+    </ul>
+
+    <h2>4. Frequently asked</h2>
+
+    <h3>Can I republish a page from this site on my own blog?</h3>
+    <p>Yes — under CC BY 4.0, with the attribution from §2. If the page contains member bios or photographs, you'll need the contributor's permission for those parts; the rest of the page can be reused freely.</p>
+
+    <h3>Can I fork the source code and host my own COST Action site on it?</h3>
+    <p>Yes — that's exactly what the MIT licence allows. Please replace the COST and EU branding with your own Action's, and update the privacy notice and accessibility statement to reflect your hosting and processing arrangements.</p>
+
+    <h3>Can I translate the content into another language and publish it?</h3>
+    <p>Yes, under the CC BY licence. Treat the translation as an adaptation and credit the original; the same attribution from §2 applies. We'd also welcome a courtesy heads-up via the <a href="index.html#contact">contact form</a>, especially if your translation might be useful to the Action itself.</p>
+
+    <h3>Can I use NetSec member photographs in academic or press contexts?</h3>
+    <p>Not without each pictured member's permission. The photographs are not under CC BY. Contact the member directly, or ask us to forward your request.</p>
+
+    <h3>What about the underlying research, publications, and dataset outputs?</h3>
+    <p>Those are not covered by this notice. Research outputs produced as part of NetSec are open-access under COST policy, but each individual publication carries its own copyright. See the <a href="index.html#outputs">Outputs</a> section on the home page or the linked publishers' websites for the specific terms.</p>
+
+    <h2>5. Where the licence text lives</h2>
+    <p>The authoritative licence files in the repository:</p>
+    <ul>
+      <li><a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/LICENSE" target="_blank" rel="noopener"><code>LICENSE</code></a> — the MIT licence text covering source code.</li>
+      <li><a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/LICENSE-CONTENT" target="_blank" rel="noopener"><code>LICENSE-CONTENT</code></a> — the CC BY 4.0 notice with the full scope statement (third-party assets, contributor carve-out, trademarks).</li>
+    </ul>
+    <p>If the page above and the licence files in the repository disagree on anything, the licence files in the repository are authoritative.</p>
+
+    <h2>6. Contact for licensing questions</h2>
+    <p>For permission requests beyond what the licences allow, ask via the <a href="index.html#contact">contact form</a> on the home page, mentioning "licensing" in your message.</p>
+
+    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Licensing notice v1.0 · prepared 18 May 2026 · separated from <a href="privacy.html">privacy.html</a> on 18 May 2026.</p>
+  </div>
+</section>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-cobranding">
+      <a class="cost-mark" href="https://www.cost.eu/actions/CA24154/" target="_blank" rel="noopener" aria-label="View COST Action CA24154 NetSec on cost.eu">
+        <img src="assets/images/cost-logo.jpg" alt="COST — European Cooperation in Science and Technology">
+      </a>
+      <div class="eu-mark" role="img" aria-label="Funded by the European Union">
+        <svg class="eu-flag" viewBox="0 0 810 540" role="img" aria-hidden="true">
+          <rect width="810" height="540" fill="#003399"/>
+          <defs>
+            <polygon id="eu-star" fill="#FFCC00" points="0,-30 8.817,-12.135 28.532,-9.27 14.266,4.635 17.634,24.27 0,15 -17.634,24.27 -14.266,4.635 -28.532,-9.27 -8.817,-12.135"/>
+          </defs>
+          <use href="#eu-star" x="405" y="90"/><use href="#eu-star" x="495" y="114.115"/><use href="#eu-star" x="560.885" y="180"/><use href="#eu-star" x="585" y="270"/><use href="#eu-star" x="560.885" y="360"/><use href="#eu-star" x="495" y="425.885"/><use href="#eu-star" x="405" y="450"/><use href="#eu-star" x="315" y="425.885"/><use href="#eu-star" x="249.115" y="360"/><use href="#eu-star" x="225" y="270"/><use href="#eu-star" x="249.115" y="180"/><use href="#eu-star" x="315" y="114.115"/>
+        </svg>
+        <span class="eu-text">Funded by<br>the European Union</span>
+      </div>
+    </div>
+
+    <div class="footer-text">
+      <p><strong>This website is based upon work from COST Action NetSec — Networking European Security Knowledge, supported by COST (European Cooperation in Science and Technology).</strong></p>
+      <p>COST (European Cooperation in Science and Technology) is a funding agency for research and innovation networks. Our Actions help connect research initiatives across Europe and enable scientists to grow their ideas by sharing them with their peers. This boosts their research, career and innovation.</p>
+      <p><a href="https://www.cost.eu" target="_blank" rel="noopener">www.cost.eu</a></p>
+    </div>
+
+    <p class="footer-credit">Website and NetSec Directory created by <a href="people.html#arthur-laudrain">Dr Arthur Laudrain</a> (MC member, CH) as part of Deliverable D1.</p>
+
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> COST Action NetSec. The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union. · <a href="accessibility.html">Accessibility</a> · <a href="privacy.html">Privacy</a> · <a href="licensing.html">Licensing</a> · <a href="sitemap.html">Site map</a></span>
+      <nav class="socials" aria-label="Social links">
+        <a href="#" aria-label="LinkedIn" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.339 18.339v-7.143H6.018v7.143h2.32zM7.179 10.179a1.339 1.339 0 100-2.679 1.339 1.339 0 000 2.679zm10.821 8.16v-3.928c0-2.071-1.107-3.036-2.585-3.036-1.193 0-1.728.661-2.027 1.125v-.964h-2.245c.03.643 0 7.143 0 7.143h2.245v-3.99c0-.2.014-.4.073-.543.16-.4.524-.815 1.135-.815.8 0 1.122.61 1.122 1.506v3.842H18z"/></svg></a>
+        <a href="#" aria-label="X / Twitter" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2H21.5l-7.5 8.572L23 22h-6.844l-5.354-7.003L4.6 22H1.34l8.02-9.171L1 2h6.99l4.84 6.404L18.244 2zm-1.2 18h1.84L7.04 4h-1.96l11.964 16z"/></svg></a>
+        <a href="https://github.com/EISSeuropa/netsec.github.io" aria-label="GitHub repository" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.16c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.39.97.11-.75.41-1.27.74-1.56-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.79 0c2.21-1.5 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.68.42.36.79 1.08.79 2.18v3.23c0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg></a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+
+</body>
+</html>
