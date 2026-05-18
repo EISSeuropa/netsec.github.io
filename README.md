@@ -1,25 +1,173 @@
-# netsec
+# NetSec — COST Action CA24154 website
 
-GitHub Pages site for **COST Action CA24154 — Networking European
-Security Knowledge (NetSec)**, served at
-[netsec-cost.eu](https://netsec-cost.eu).
+> Official website and open community directory of **COST Action
+> CA24154 — Networking European Security Knowledge (NetSec)**.
 
-The site doubles as Deliverable D1 (open community directory) and is
-maintained by Dr Arthur Laudrain (MC member, Centre for Security
-Studies, ETH Zurich).
+🌐 **Live site:** <https://netsec-cost.eu>
+🏛️ **COST page:** <https://www.cost.eu/actions/CA24154/>
+🗓️ **Action running:** 10 Oct 2025 – 09 Oct 2029
+📜 **Code licence:** [MIT](LICENSE) · **Content licence:** [CC BY 4.0](LICENSE-CONTENT)
 
-## Pipelines
+This site doubles as the Action's **Deliverable D1** (open community
+directory) and is maintained by [Dr Arthur Laudrain](https://netsec-cost.eu/people.html#arthur-laudrain)
+(MC member, CH).
 
-- **`scripts/sync-cost.py`** — weekly sync from
-  [cost.eu/actions/CA24154/](https://www.cost.eu/actions/CA24154/).
-  Refreshes the working-group membership map in `index.html` and
-  reconciles leadership roles into `data/bios.json`.
-- **`scripts/sync-bios.py`** — pulls form submissions from the
-  published Google Sheet CSV into `data/bios.json`, downloads and
-  resizes member photos, and auto-assigns the `MC member · <Country>`
-  role from `data/mc-members.json`.
-- Both run weekly via GitHub Actions and open a PR if anything
-  changed.
+---
+
+## Contents
+
+- [Overview](#overview)
+- [Repository layout](#repository-layout)
+- [Local development](#local-development)
+- [Automated pipelines](#automated-pipelines)
+- [Editing content](#editing-content)
+- [Contributing](#contributing)
+- [Security](#security)
+- [Privacy & GDPR](#privacy--gdpr)
+- [Licensing](#licensing)
+- [Acknowledgements](#acknowledgements)
+
+---
+
+## Overview
+
+The site is a small, dependency-light **static** GitHub Pages
+deployment. There is **no build step** — every page is hand-authored
+HTML that loads a shared CSS stylesheet, a shared JS file, and (for
+the directory and grants pages) reads `data/bios.json` at runtime.
+
+Design principles:
+
+- **Apple-style glassmorphism** with a manual light/dark theme toggle
+  (default follows `prefers-color-scheme`, override stored in
+  `localStorage`).
+- **British English** throughout the site copy.
+- **Accessible by default**: skip links, ARIA landmarks, no
+  content hidden behind hover, all interactive controls keyboard
+  reachable. See [accessibility.html](https://netsec-cost.eu/accessibility.html).
+- **Single source of truth**: `data/bios.json` drives the live
+  directory (`people.html`) and the grant-manager cards (`grants.html`).
+  Two scheduled GitHub Actions keep it in step with cost.eu and a
+  public Google Form.
+
+## Repository layout
+
+```
+.
+├── index.html              # Home page (news, about, WGs, MC, events, roadmap, outputs, contact)
+├── people.html             # The Network — open directory, fetched from data/bios.json
+├── grants.html             # Grants & Calls — five NetSec grant schemes + e-COST workflow timeline
+├── accessibility.html      # WCAG 2.1 conformance statement
+├── privacy.html            # GDPR-compliant privacy notice (includes §10 Licensing)
+├── sitemap.html            # User-friendly site map (linked from every footer)
+├── assets/
+│   ├── css/site.css        # Shared stylesheet (theme tokens, glass, components, responsive)
+│   ├── js/site.js          # Shared scripts (nav, theme toggle, reveal-on-scroll, MC accordion)
+│   └── images/people/      # Member headshots downloaded by sync-bios.py
+├── data/
+│   ├── bios.json           # The directory (members, roles, WGs, contacts, photos)
+│   └── mc-members.json     # MC roster per country — used to auto-tag "MC member · <Country>"
+├── scripts/
+│   ├── sync-cost.py        # Pulls WG_MAP + leadership roles from cost.eu
+│   ├── sync-bios.py        # Pulls form submissions + headshots from Google Sheets
+│   ├── bios-source.json    # CSV URL + form URL + column mapping for sync-bios.py
+│   └── requirements.txt    # Python deps (requests, beautifulsoup4, Pillow)
+├── .github/workflows/
+│   ├── sync-cost.yml       # Weekly cron: scripts/sync-cost.py → PR
+│   └── sync-bios.yml       # Weekly cron: scripts/sync-bios.py → PR
+├── docs/
+│   └── bios-setup.md       # Set-up guide for the Google Form pipeline
+├── LICENSE                 # MIT (covers source code)
+├── LICENSE-CONTENT         # CC BY 4.0 (covers prose, with carve-outs)
+├── SECURITY.md             # Security policy and disclosure process
+└── README.md               # You are here
+```
+
+## Local development
+
+No toolchain to install — just open the file in a browser. For
+hot-reload while you're editing, any zero-config static server will
+do:
+
+```bash
+# Python (already on most macOS / Linux)
+python3 -m http.server 8000
+
+# Or, with Node.js available
+npx serve .
+```
+
+Then visit <http://localhost:8000>.
+
+To exercise the sync scripts locally:
+
+```bash
+pip install -r scripts/requirements.txt
+python3 scripts/sync-cost.py      # rewrites index.html WG_MAP + data/bios.json roles
+python3 scripts/sync-bios.py      # pulls Google Form submissions into data/bios.json
+```
+
+> ⚠️ The sync scripts write to tracked files. Always run them on a
+> branch and review the diff before committing. CI does this for you
+> automatically — see below.
+
+## Automated pipelines
+
+Two scheduled workflows keep the site in step with upstream data
+sources. Both run **every Monday at 05:00–05:15 UTC**, both can be
+triggered manually from the Actions tab, and both **open a pull
+request** when (and only when) the data has changed — never a silent
+push to `main`.
+
+| Workflow             | Source                                  | Updates                                                                 | Cron        |
+| -------------------- | --------------------------------------- | ----------------------------------------------------------------------- | ----------- |
+| `sync-cost.yml`      | <https://www.cost.eu/actions/CA24154/> | `WG_MAP` in `index.html` + leadership roles in `data/bios.json`         | `0 5 * * 1` |
+| `sync-bios.yml`      | Google Form → published Sheet CSV       | Every field on each member in `data/bios.json` + headshots in `assets/` | `15 5 * * 1` |
+
+The Google-Form pipeline is documented in detail in
+[`docs/bios-setup.md`](docs/bios-setup.md).
+
+## Editing content
+
+There are three classes of content with three different workflows:
+
+1. **Page copy** (everything *not* in the directory or grants list) —
+   edit the relevant `*.html` file directly and open a PR. CSS lives
+   in `assets/css/site.css`; JS in `assets/js/site.js`.
+2. **Member bios and photos** — submit or update via the Google Form
+   linked from `people.html#join`. The next weekly sync (or a manual
+   dispatch of `sync-bios.yml`) opens a PR with the diff.
+3. **MC / leadership roster** — managed on cost.eu. The next weekly
+   sync (or a manual dispatch of `sync-cost.yml`) opens a PR.
+
+## Contributing
+
+External contributions are welcome but small. We're a static site,
+not a framework — keep changes minimal, well-commented, and
+British-English. Conventions:
+
+- One PR per logical change. Reference any related issue.
+- Run the page in light **and** dark mode before submitting visual
+  changes.
+- Don't add a build step or a JS framework without discussion.
+- Don't add tracking pixels, analytics, or third-party scripts.
+- The MIT/CC-BY dual licence applies to every accepted contribution.
+
+## Security
+
+We follow a public, time-bound coordinated-disclosure process —
+please see [`SECURITY.md`](SECURITY.md). Do **not** open a public
+GitHub issue for a suspected vulnerability; use the [private security
+advisory form](https://github.com/EISSeuropa/netsec.github.io/security/advisories/new)
+instead.
+
+## Privacy & GDPR
+
+Personal data (member bios, photographs, contact-form submissions)
+is processed per the [Privacy Notice](https://netsec-cost.eu/privacy.html).
+The Data Controller is **Universiteit Leiden**, the Grant Holder
+Institution for CA24154. Submitters can request changes or removal
+at any time.
 
 ## Licensing
 
@@ -32,10 +180,21 @@ This repository uses **dual licensing**:
 | Member bios and photos                              | © contributors, used with permission       |
 | Third-party assets (icons, fonts, flags, COST/EU)   | their own licences — see `LICENSE-CONTENT` |
 
-See [`LICENSE-CONTENT`](LICENSE-CONTENT) for the full scope notice and
-list of third-party assets.
-
 If you reuse the site content under CC BY, please attribute it as:
 
-> Based on content from COST Action NetSec (CA24154),
-> https://netsec-cost.eu, CC BY 4.0.
+> *Based on content from COST Action NetSec (CA24154),
+> https://netsec-cost.eu, CC BY 4.0.*
+
+## Acknowledgements
+
+This website and the NetSec Directory were created by **Dr Arthur
+Laudrain** (MC member, CH; Centre for Security Studies, ETH Zurich)
+as part of Deliverable D1.
+
+NetSec is supported by **COST (European Cooperation in Science and
+Technology)** and the **European Union**.
+[www.cost.eu](https://www.cost.eu)
+
+<p align="center">
+  <em>The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union.</em>
+</p>
