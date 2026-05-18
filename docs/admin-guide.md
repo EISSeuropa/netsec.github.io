@@ -39,7 +39,7 @@ Keep this current as roles change.
 | ---------------------------------- | --------------------------- | ---------------------------------------------------------------------------------------------- |
 | Google Form "Join the NetSec network" | Google account that owns the form | URL: see `scripts/bios-source.json` → `form_url`. Set up per [`bios-setup.md`](./bios-setup.md). |
 | Linked Google Sheet                | Same Google account         | The form's *Responses → Link to Sheets* destination. Publish-to-web is enabled (CSV).          |
-| Published CSV URL                  | n/a (public)                | Stored in `scripts/bios-source.json` → `csv_url`. **This is the only secret-shaped string**, but it's a public unguessable URL, not a credential. |
+| Published CSV URL                  | n/a (public)                | Stored in `scripts/bios-source.json` → `csv_url`. It's a public capability URL (anyone with it can read the Sheet as CSV), not a credential — the form's required-consent step is what gates what reaches it. |
 | Country dropdown source            | Apps Script bound to the form | One-off script that bulk-loaded ~200 countries into question #4. See `bios-setup.md`.         |
 
 ### Contact form (Formspree)
