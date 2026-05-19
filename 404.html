@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Page not found — NetSec website. The link may be outdated or the page may have moved.">
+<title>Page not found · NetSec — COST Action CA24154</title>
+<!-- 404 pages are intentionally NOT in the sitemap and carry a
+     noindex robots directive — we don't want them in search results,
+     just useful when a user lands here. -->
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#003399">
+<link rel="icon" href="assets/images/logo.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lexend:wght@500;700&display=swap">
+<script>
+  (function() {
+    try {
+      var saved = localStorage.getItem('netsec-theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+  .err-page{
+    min-height:100vh;
+    display:grid;place-items:center;
+    padding:60px 24px;text-align:center;
+    color:var(--ink);
+  }
+  .err-page .glass{padding:48px 36px;max-width:560px;width:100%}
+  .err-code{
+    font-family:'Lexend','Inter',sans-serif;font-weight:700;
+    font-size:clamp(4rem,12vw,7rem);line-height:1;letter-spacing:-.05em;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    margin:0 0 6px;
+  }
+  .err-page h1{
+    font-family:'Lexend','Inter',sans-serif;
+    font-size:1.6rem;margin:0 0 14px;letter-spacing:-.01em;
+  }
+  .err-page p{color:var(--ink-2);font-size:1rem;margin:0 0 24px;line-height:1.55}
+  .err-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .err-lang{margin-top:18px;font-size:.85rem;color:var(--muted)}
+  .err-lang a{color:var(--accent-2);text-decoration:underline;margin:0 6px}
+</style>
+</head>
+<body>
+
+<div class="ambience" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<main id="main" class="err-page">
+  <div class="glass">
+    <p class="err-code" aria-hidden="true">404</p>
+    <h1 data-i18n="title">Page not found</h1>
+    <p data-i18n="body">
+      The page you're looking for may have moved, or the link may be outdated.
+      Use one of the routes below to get back into the site.
+    </p>
+    <div class="err-actions">
+      <a class="btn btn-primary" href="/" data-i18n="home">Back to home</a>
+      <a class="btn btn-ghost" href="/sitemap.html" data-i18n="sitemap">Open the site map</a>
+    </div>
+    <p class="err-lang">
+      <span data-i18n="langnote">Also available in</span>
+      <a href="/" data-i18n-target="en" hreflang="en">English</a> ·
+      <a href="/index.fr.html" hreflang="fr">Français</a> ·
+      <a href="/index.de.html" hreflang="de">Deutsch</a>
+    </p>
+  </div>
+</main>
+
+<!-- Tiny inline i18n for the 404 — translates the visible copy based
+     on either the saved netsec-lang preference or the browser
+     Accept-Language header. Falls back to English. -->
+<script>
+(function(){
+  var STRINGS = {
+    en: {
+      title: 'Page not found',
+      body: "The page you're looking for may have moved, or the link may be outdated. Use one of the routes below to get back into the site.",
+      home: 'Back to home',
+      sitemap: 'Open the site map',
+      langnote: 'Also available in'
+    },
+    fr: {
+      title: 'Page introuvable',
+      body: "La page que vous cherchez a peut-être été déplacée, ou le lien est obsolète. Utilisez l'une des options ci-dessous pour revenir sur le site.",
+      home: "Retour à l'accueil",
+      sitemap: 'Voir le plan du site',
+      langnote: 'Disponible aussi en'
+    },
+    de: {
+      title: 'Seite nicht gefunden',
+      body: 'Die gesuchte Seite wurde möglicherweise verschoben oder der Link ist veraltet. Nutzen Sie einen der untenstehenden Wege, um zurück auf die Website zu kommen.',
+      home: 'Zurück zur Startseite',
+      sitemap: 'Sitemap öffnen',
+      langnote: 'Auch verfügbar auf'
+    }
+  };
+
+  // 1. Saved preference wins; otherwise pick from navigator.languages.
+  function pickLang() {
+    try {
+      var saved = localStorage.getItem('netsec-lang');
+      if (saved && STRINGS[saved]) return saved;
+    } catch (e) {}
+    var langs = (navigator.languages && navigator.languages.length)
+      ? navigator.languages
+      : [navigator.language || 'en'];
+    for (var i = 0; i < langs.length; i++) {
+      var two = (langs[i] || '').toLowerCase().slice(0, 2);
+      if (STRINGS[two]) return two;
+    }
+    return 'en';
+  }
+
+  var lang = pickLang();
+  if (lang === 'en') return;  // English is the default; nothing to swap.
+
+  document.documentElement.lang = lang;
+  var t = STRINGS[lang];
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+
+  // Point the home button at the localised index.
+  var home = document.querySelector('a[data-i18n="home"]');
+  if (home) home.href = lang === 'en' ? '/' : '/index.' + lang + '.html';
+  // Sitemap link too.
+  var sm = document.querySelector('a[data-i18n="sitemap"]');
+  if (sm) sm.href = lang === 'en' ? '/sitemap.html' : '/sitemap.' + lang + '.html';
+})();
+</script>
+
+</body>
+</html>

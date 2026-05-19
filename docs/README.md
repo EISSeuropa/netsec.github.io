@@ -14,6 +14,7 @@ reference for maintainers, MC representatives, and admins.
 | [`admin-guide.md`](./admin-guide.md)           | Operate the site: accounts you need, where credentials live, common admin tasks, escalation. |
 | [`bios-setup.md`](./bios-setup.md)             | One-time set-up guide for the Google Form → bios.json pipeline.                              |
 | [`i18n.md`](./i18n.md)                         | How translations work (FR + DE in beta), what's in scope, how to refresh when English drifts.|
+| [`seo.md`](./seo.md)                           | SEO posture — Open Graph, Twitter Card, JSON-LD, canonical URLs, hreflang, sitemap, 404. |
 | [`pdf/NetSec-website-documentation.pdf`](./pdf/NetSec-website-documentation.pdf) | All of the above combined into a stakeholder-ready PDF deliverable. Cover, table of contents, every diagram, and three site screenshots. Rebuild via `docs/pdf/build.sh`. |
 
 ## Conventions across all docs
