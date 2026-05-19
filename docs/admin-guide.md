@@ -16,7 +16,7 @@ Keep this current as roles change.
 
 | Asset                | Location                                                | Owner / login                              | Notes                                                                                |
 | -------------------- | ------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------ |
-| `netsec-cost.eu`     | DNS registrar                                           | *TBC — confirm with Action Chair*          | `CNAME` file at repo root points GitHub Pages here. Renewal alarm should be on file. |
+| `netsec-cost.eu`     | **Namecheap**                                           | Registered under **Dr Moritz Weiss** (Action Chair); admin contact **Dr Arthur Laudrain** | `CNAME` file at repo root points GitHub Pages here. Renewal alarm should be on file. |
 | GitHub Pages routing | `Settings → Pages` in the repo                          | GitHub org `EISSeuropa`                    | Source: `main` branch, root. Custom domain enforced (HTTPS).                          |
 | TLS certificate      | Auto-managed by GitHub Pages (Let's Encrypt)            | n/a                                        | No action required unless DNS changes.                                                |
 
