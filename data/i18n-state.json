@@ -71,6 +71,22 @@
         "status": "beta",
         "reviewed_by": null
       }
+    },
+    "people.html": {
+      "fr": {
+        "file": "people.fr.html",
+        "source_sha1": "5d51d84f61cd19307edf07e1a1be80eb42fbec7c",
+        "translated_on": "2026-05-18",
+        "status": "beta",
+        "reviewed_by": null
+      },
+      "de": {
+        "file": "people.de.html",
+        "source_sha1": "5d51d84f61cd19307edf07e1a1be80eb42fbec7c",
+        "translated_on": "2026-05-18",
+        "status": "beta",
+        "reviewed_by": null
+      }
     }
   }
 }

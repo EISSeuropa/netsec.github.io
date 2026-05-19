@@ -6,6 +6,89 @@
 (function () {
   'use strict';
 
+  /* String catalog + window.netsecT() helper — defined first so that
+     every later block (theme toggle, mobile menu, member directory)
+     can call it without ordering pitfalls. The catalog lives here as
+     a single source of truth; page-specific scripts read from it via
+     the global helper exposed at the bottom of this block. */
+  const I18N = {
+    en: {},
+    fr: {
+      'Action Chair': "Président·e de l'Action",
+      'Action Vice-Chair': "Vice-président·e de l'Action",
+      'Grant Holder Scientific Representative': 'Représentant·e scientifique du porteur de subvention',
+      'Science Communication Coordinator': 'Coordinateur·rice communication scientifique',
+      'Grant Awarding Coordinator': "Coordinateur·rice d'attribution des subventions",
+      'Grant Awarding Coordinator Co-lead': "Coordinateur·rice adjoint·e d'attribution",
+      'WG1 Leader': 'Responsable WG1',
+      'WG2 Leader': 'Responsable WG2',
+      'WG3 Leader': 'Responsable WG3',
+      'WG4 Leader': 'Responsable WG4',
+      'WG1 Co-Leader': 'Co-responsable WG1',
+      'WG2 Co-Leader': 'Co-responsable WG2',
+      'WG3 Co-Leader': 'Co-responsable WG3',
+      'WG4 Co-Leader': 'Co-responsable WG4',
+      'MC member': 'Membre du CG',
+      'Network member': 'Membre du réseau',
+      'Working Group participant': 'Participant·e au groupe de travail',
+      'Bio coming soon.': 'Biographie à venir.',
+      'Show more': 'Voir plus',
+      'Show less': 'Voir moins',
+      'member': 'membre',
+      'members': 'membres',
+      'Switch to dark mode': 'Basculer le mode sombre',
+      'Switch to light mode': 'Basculer le mode clair',
+      'Unable to load network directory.': "Impossible de charger l'annuaire du réseau.",
+      'Please refresh, or use the {0}.': 'Veuillez recharger ou utiliser le {0}.',
+      'contact page': 'formulaire de contact',
+    },
+    de: {
+      'Action Chair': 'Aktionsvorsitz',
+      'Action Vice-Chair': 'Stellv. Aktionsvorsitz',
+      'Grant Holder Scientific Representative': 'Wissenschaftliche Vertretung des Förderträgers',
+      'Science Communication Coordinator': 'Koordination Wissenschaftskommunikation',
+      'Grant Awarding Coordinator': 'Koordination Fördervergabe',
+      'Grant Awarding Coordinator Co-lead': 'Stellv. Koordination Fördervergabe',
+      'WG1 Leader': 'Leitung WG1',
+      'WG2 Leader': 'Leitung WG2',
+      'WG3 Leader': 'Leitung WG3',
+      'WG4 Leader': 'Leitung WG4',
+      'WG1 Co-Leader': 'Co-Leitung WG1',
+      'WG2 Co-Leader': 'Co-Leitung WG2',
+      'WG3 Co-Leader': 'Co-Leitung WG3',
+      'WG4 Co-Leader': 'Co-Leitung WG4',
+      'MC member': 'MC-Mitglied',
+      'Network member': 'Netzwerkmitglied',
+      'Working Group participant': 'Arbeitsgruppen-Mitglied',
+      'Bio coming soon.': 'Biografie folgt.',
+      'Show more': 'Mehr anzeigen',
+      'Show less': 'Weniger anzeigen',
+      'member': 'Mitglied',
+      'members': 'Mitglieder',
+      'Switch to dark mode': 'Dunkelmodus umschalten',
+      'Switch to light mode': 'Hellmodus umschalten',
+      'Unable to load network directory.': 'Netzwerkverzeichnis konnte nicht geladen werden.',
+      'Please refresh, or use the {0}.': 'Bitte aktualisieren Sie die Seite oder nutzen Sie das {0}.',
+      'contact page': 'Kontaktformular',
+    },
+  };
+  /** Translate a known string for the current page's language.
+   *  Falls back to the original if no translation is registered.
+   *  Strings of the form "MC member · Switzerland" translate only
+   *  the prefix before " · " so the country name stays intact. */
+  window.netsecT = function (s) {
+    if (typeof s !== 'string') return s;
+    const lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
+    const dict = I18N[lang];
+    if (!dict) return s;
+    const sep = ' · ';
+    if (s.includes(sep)) {
+      const [head, ...rest] = s.split(sep);
+      return (dict[head] || head) + sep + rest.join(sep);
+    }
+    return dict[s] || s;
+  };
+
   /* Nav: stronger shadow once scrolled past the top. */
   const nav = document.querySelector('.nav');
   if (nav) {
@@ -21,10 +104,15 @@
      Initial state is set by the inline <head> script to avoid FOUC. */
   const themeBtn = document.querySelector('.theme-toggle');
   if (themeBtn) {
+    // aria-label and title are kept in step with the current theme.
+    // The strings flow through window.netsecT() so the FR/DE pages
+    // get translated labels for screen-reader users.
     const setLabel = () => {
-      themeBtn.setAttribute('aria-label',
-        document.documentElement.classList.contains('dark')
-          ? 'Switch to light mode' : 'Switch to dark mode');
+      const dark = document.documentElement.classList.contains('dark');
+      const key = dark ? 'Switch to light mode' : 'Switch to dark mode';
+      const t = (window.netsecT && window.netsecT(key)) || key;
+      themeBtn.setAttribute('aria-label', t);
+      themeBtn.setAttribute('title', t);
     };
     setLabel();
     themeBtn.addEventListener('click', () => {
@@ -116,79 +204,6 @@
       location.replace(alt.href + (location.hash || ''));
     } catch (e) { /* localStorage / DOM API may be unavailable */ }
   })();
-
-  /* Role-label catalog for JS-rendered content
-     ────────────────────────────────────────────────────────────────
-     The directory page and the grants page hydrate role strings from
-     data/bios.json at runtime. The JSON itself stays in English (the
-     single source of truth); this lookup translates the strings as
-     they're inserted into the DOM. Anything missing falls back to
-     the English original — never a blank label. Exposed on window so
-     page-specific scripts (people.html, grants.html) can use it. */
-  const I18N = {
-    en: {},
-    fr: {
-      'Action Chair': "Président·e de l'Action",
-      'Action Vice-Chair': "Vice-président·e de l'Action",
-      'Grant Holder Scientific Representative': 'Représentant·e scientifique du porteur de subvention',
-      'Science Communication Coordinator': 'Coordinateur·rice communication scientifique',
-      'Grant Awarding Coordinator': "Coordinateur·rice d'attribution des subventions",
-      'Grant Awarding Coordinator Co-lead': "Coordinateur·rice adjoint·e d'attribution",
-      'WG1 Leader': 'Responsable WG1',
-      'WG2 Leader': 'Responsable WG2',
-      'WG3 Leader': 'Responsable WG3',
-      'WG4 Leader': 'Responsable WG4',
-      'WG1 Co-Leader': 'Co-responsable WG1',
-      'WG2 Co-Leader': 'Co-responsable WG2',
-      'WG3 Co-Leader': 'Co-responsable WG3',
-      'WG4 Co-Leader': 'Co-responsable WG4',
-      'MC member': 'Membre du CG',
-      'Network member': 'Membre du réseau',
-      'Working Group participant': 'Participant·e au groupe de travail',
-      'Bio coming soon.': 'Biographie à venir.',
-      'Show more': 'Voir plus',
-      'Show less': 'Voir moins',
-    },
-    de: {
-      'Action Chair': 'Aktionsvorsitz',
-      'Action Vice-Chair': 'Stellv. Aktionsvorsitz',
-      'Grant Holder Scientific Representative': 'Wissenschaftliche Vertretung des Förderträgers',
-      'Science Communication Coordinator': 'Koordination Wissenschaftskommunikation',
-      'Grant Awarding Coordinator': 'Koordination Fördervergabe',
-      'Grant Awarding Coordinator Co-lead': 'Stellv. Koordination Fördervergabe',
-      'WG1 Leader': 'Leitung WG1',
-      'WG2 Leader': 'Leitung WG2',
-      'WG3 Leader': 'Leitung WG3',
-      'WG4 Leader': 'Leitung WG4',
-      'WG1 Co-Leader': 'Co-Leitung WG1',
-      'WG2 Co-Leader': 'Co-Leitung WG2',
-      'WG3 Co-Leader': 'Co-Leitung WG3',
-      'WG4 Co-Leader': 'Co-Leitung WG4',
-      'MC member': 'MC-Mitglied',
-      'Network member': 'Netzwerkmitglied',
-      'Working Group participant': 'Arbeitsgruppen-Mitglied',
-      'Bio coming soon.': 'Biografie folgt.',
-      'Show more': 'Mehr anzeigen',
-      'Show less': 'Weniger anzeigen',
-    },
-  };
-  /** Translate a known string for the current page's language. Returns
-   *  the original if no translation is registered. Safe to call with
-   *  anything — non-strings pass through unchanged. */
-  window.netsecT = function (s) {
-    if (typeof s !== 'string') return s;
-    const lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
-    const dict = I18N[lang];
-    if (!dict) return s;
-    // For role strings like "MC member · Switzerland" — translate only
-    // the prefix before " · " so the country name is left intact.
-    const sep = ' · ';
-    if (s.includes(sep)) {
-      const [head, ...rest] = s.split(sep);
-      return (dict[head] || head) + sep + rest.join(sep);
-    }
-    return dict[s] || s;
-  };
 
   /* Mobile menu */
   const menuBtn = document.querySelector('.menu-toggle');
