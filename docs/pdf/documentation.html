@@ -40,6 +40,7 @@
      via @page margin boxes when --print-to-pdf-no-header is OFF. */
 }
 @page :first { margin: 0; }
+@page poster   { margin: 0; }
 
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--paper);color:var(--ink)}
@@ -343,6 +344,124 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
   border:1px solid rgba(255,255,255,.18);
 }
 
+/* ── Poster page (key numbers & features) ───────────────────── */
+.poster{
+  page:poster;
+  break-before:page;
+  break-after:page;
+  position:relative;
+  width:100%;height:297mm;
+  padding:22mm 18mm 18mm;
+  color:#fff;
+  background:
+    radial-gradient(700px 600px at 90% -10%, rgba(255,255,255,.16), transparent 60%),
+    radial-gradient(900px 700px at -10% 110%, rgba(10,132,255,.55), transparent 60%),
+    linear-gradient(160deg, #001f5c 0%, #003399 45%, #0a84ff 100%);
+  display:flex;flex-direction:column;
+}
+.poster .poster-eyebrow{
+  display:inline-block;
+  font-size:7.5pt;font-weight:700;letter-spacing:.20em;
+  text-transform:uppercase;
+  color:#fff;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.35);
+  padding:4pt 12pt;
+  border-radius:999px;
+}
+.poster h1{
+  font-family:'Lexend','Inter',sans-serif;
+  font-size:32pt;line-height:1.05;letter-spacing:-.025em;
+  color:#fff;margin:10pt 0 4pt;
+}
+.poster .poster-sub{
+  font-size:11pt;color:rgba(255,255,255,.82);
+  max-width:540pt;margin:0 0 14pt;line-height:1.4;
+}
+.poster-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10pt;
+  margin:0 0 12pt;
+}
+.poster-stats .stat{
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:12pt;
+  padding:14pt 14pt 12pt;
+  backdrop-filter:blur(6pt);
+}
+.poster-stats .stat .num{
+  font-family:'Lexend','Inter',sans-serif;
+  font-weight:700;font-size:36pt;line-height:1;letter-spacing:-.03em;
+  color:#fff;
+  background:linear-gradient(135deg, #ffffff 0%, #cfe1ff 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.poster-stats .stat .lbl{
+  font-size:8.5pt;color:rgba(255,255,255,.85);
+  margin-top:6pt;line-height:1.3;
+}
+.poster-strip{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:8pt;
+  margin:0 0 14pt;
+}
+.poster-strip .cell{
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.20);
+  border-radius:8pt;
+  padding:9pt 10pt;
+  text-align:center;
+}
+.poster-strip .cell .v{
+  font-family:'Lexend','Inter',sans-serif;font-weight:600;
+  font-size:13pt;color:#fff;letter-spacing:-.015em;
+}
+.poster-strip .cell .l{
+  font-size:7.4pt;color:rgba(255,255,255,.75);
+  margin-top:2pt;letter-spacing:.04em;text-transform:uppercase;
+}
+.poster-features{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10pt;
+  margin:0 0 12pt;
+}
+.poster-features .feat{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:10pt;
+  padding:11pt 12pt;
+  min-height:88pt;
+}
+.poster-features .feat .icon{
+  width:22pt;height:22pt;
+  display:inline-grid;place-items:center;
+  border-radius:6pt;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.32);
+  color:#fff;margin-bottom:8pt;
+}
+.poster-features .feat .icon svg{width:13pt;height:13pt;stroke:#fff;fill:none;stroke-width:1.9}
+.poster-features .feat .t{
+  font-family:'Lexend','Inter',sans-serif;font-weight:600;
+  font-size:9.5pt;color:#fff;letter-spacing:-.005em;margin-bottom:3pt;
+}
+.poster-features .feat .d{
+  font-size:8pt;color:rgba(255,255,255,.78);line-height:1.4;
+}
+.poster-foot{
+  margin-top:auto;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:16pt;
+  border-top:1px solid rgba(255,255,255,.22);
+  padding-top:12pt;
+  font-size:8.5pt;color:rgba(255,255,255,.80);
+}
+.poster-foot .url{
+  font-family:'JetBrains Mono',monospace;
+  background:rgba(255,255,255,.10);
+  padding:5pt 9pt;border-radius:6pt;
+  border:1px solid rgba(255,255,255,.18);
+  color:#fff;letter-spacing:-.005em;
+}
+
 /* ── TOC ────────────────────────────────────────────────────── */
 .toc{margin-top:1rem}
 .toc ol{list-style:none;padding:0;margin:0;counter-reset:tocnum}
@@ -417,7 +536,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.0 · May 2026</div>
+        <div class="value">v1.1 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -464,6 +583,155 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
 
 
 <!-- ════════════════════════════════════════════════════════════
+     POSTER · KEY NUMBERS & FEATURES
+     A full-bleed A4 visual summary intended as a hand-out / one-pager
+     for stakeholders who want the headline shape of the site at a
+     glance. Keep this in sync with the live site if numbers change.
+     ════════════════════════════════════════════════════════════ -->
+<section class="poster">
+
+  <header>
+    <span class="poster-eyebrow">NetSec · at a glance</span>
+    <h1>The website &amp; directory<br>in numbers and features</h1>
+    <p class="poster-sub">A snapshot of what <strong>netsec-cost.eu</strong> ships today — the people it covers, the funding it points to, the technology that holds it together, and the standards it meets.</p>
+  </header>
+
+  <!-- Headline stats: four big numbers tied to the Action's footprint. -->
+  <div class="poster-stats">
+    <div class="stat">
+      <div class="num">30</div>
+      <div class="lbl">Participating countries — every EU/COST state with a national representative.</div>
+    </div>
+    <div class="stat">
+      <div class="num">49</div>
+      <div class="lbl">Management-Committee members listed in the open directory.</div>
+    </div>
+    <div class="stat">
+      <div class="num">4</div>
+      <div class="lbl">Working Groups, each with a chair, vice-chair, and dedicated roadmap.</div>
+    </div>
+    <div class="stat">
+      <div class="num">5</div>
+      <div class="lbl">Grant schemes documented: STSMs, Conference, Dissemination, Training, ITC.</div>
+    </div>
+  </div>
+
+  <!-- Secondary strip: smaller facts that still earn a slot. -->
+  <div class="poster-strip">
+    <div class="cell"><div class="v">4&nbsp;yrs</div><div class="l">Action duration</div></div>
+    <div class="cell"><div class="v">3</div><div class="l">UI languages</div></div>
+    <div class="cell"><div class="v">~51&nbsp;%</div><div class="l">Women on MC</div></div>
+    <div class="cell"><div class="v">€2&nbsp;100</div><div class="l">Max grant</div></div>
+    <div class="cell"><div class="v">4</div><div class="l">ITC grants</div></div>
+    <div class="cell"><div class="v">€0</div><div class="l">Monthly hosting</div></div>
+  </div>
+
+  <!-- Eight feature cards. Each has a stroke SVG + short copy. -->
+  <div class="poster-features">
+
+    <div class="feat">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2"/>
+          <path d="M3 9h18"/>
+        </svg>
+      </span>
+      <div class="t">Apple-style glass UI</div>
+      <div class="d">Glassmorphic cards on a dynamic aurora background, light + dark themes.</div>
+    </div>
+
+    <div class="feat">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M9 12l2.2 2.2L15 10"/>
+        </svg>
+      </span>
+      <div class="t">WCAG 2.1 AA</div>
+      <div class="d">EN&nbsp;301&nbsp;549-aligned; zero axe-core violations on the home page.</div>
+    </div>
+
+    <div class="feat">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="6" y="3" width="12" height="18" rx="2"/>
+          <path d="M11 18h2"/>
+        </svg>
+      </span>
+      <div class="t">Mobile-responsive</div>
+      <div class="d">Every page reflows cleanly from 4K down to a 320 px phone.</div>
+    </div>
+
+    <div class="feat">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M3 12h18"/>
+          <path d="M12 3a14 14 0 0 1 0 18"/>
+          <path d="M12 3a14 14 0 0 0 0 18"/>
+        </svg>
+      </span>
+      <div class="t">Multilingual</div>
+      <div class="d">English authoritative; French and German variants in beta with hreflang.</div>
+    </div>
+
+    <div class="feat">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12a9 9 0 1 1-3-6.7"/>
+          <path d="M21 4v5h-5"/>
+        </svg>
+      </span>
+      <div class="t">Auto-sync</div>
+      <div class="d">Weekly GitHub Actions pull bios from a Google Form and MC roster from cost.eu.</div>
+    </div>
+
+    <div class="feat">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="6"/>
+          <path d="M21 21l-5-5"/>
+        </svg>
+      </span>
+      <div class="t">SEO-ready</div>
+      <div class="d">Open Graph + Twitter Card + JSON-LD + sitemap + canonical URLs on every page.</div>
+    </div>
+
+    <div class="feat">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/>
+        </svg>
+      </span>
+      <div class="t">GDPR-compliant</div>
+      <div class="d">No analytics or tracking pixels; consent-gated form pipeline; full privacy notice.</div>
+    </div>
+
+    <div class="feat">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 6h16v12H4z"/>
+          <path d="M8 10h8"/>
+          <path d="M8 14h5"/>
+        </svg>
+      </span>
+      <div class="t">Dual-licensed</div>
+      <div class="d">Code under MIT; site copy and assets under CC&nbsp;BY&nbsp;4.0. Reuse-friendly.</div>
+    </div>
+
+  </div>
+
+  <footer class="poster-foot">
+    <div>
+      <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
+    </div>
+    <span class="url">v1.1 · May 2026</span>
+  </footer>
+
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
      TABLE OF CONTENTS
      ════════════════════════════════════════════════════════════ -->
 <section class="page">
@@ -489,6 +757,18 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
         <div>
           <span class="title">Design system</span>
           <span class="desc">Colour tokens, typography, components, motion budget, iconography, accessibility checklist.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="title">Translation &amp; multilingual posture</span>
+          <span class="desc">How the FR/DE beta variants work, the drift-checker workflow, what falls in/out of scope.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="title">SEO &amp; discoverability</span>
+          <span class="desc">Open Graph, Twitter Card, JSON-LD, canonical URLs, hreflang, sitemap, 404 strategy.</span>
         </div>
       </li>
       <li>
@@ -954,11 +1234,186 @@ flowchart LR
 
 
 <!-- ════════════════════════════════════════════════════════════
-     SECTION 4 — ADMIN GUIDE
+     SECTION 4 — TRANSLATION & MULTILINGUAL POSTURE
      ════════════════════════════════════════════════════════════ -->
 <section class="page">
   <div class="section-banner">
     <div class="num">04</div>
+    <div class="head">
+      <h1>Translation &amp; multilingual posture</h1>
+      <div class="sub">How the FR/DE beta works; how it stays in step with the English source.</div>
+    </div>
+  </div>
+
+  <p>The NetSec site ships in three languages: <strong>English</strong> (authoritative), <strong>French</strong> (beta), and <strong>German</strong> (beta). Every public page has a sibling at <code>page.fr.html</code> and <code>page.de.html</code>, surfaced through a language switcher in the header.</p>
+
+  <div class="card callout">
+    <h4>Budget posture</h4>
+    <p style="margin:0">The Action has <strong>no recurring translation budget</strong> and no plan for a paid translation API. Translations are authored by hand, once, and refreshed only when English drifts meaningfully. The site never makes a translation API call at build or runtime.</p>
+  </div>
+
+  <h2>How a language switch happens</h2>
+  <p>The switcher in the header is implemented as three sibling <code>&lt;a&gt;</code> links — <em>not</em> a JS routing trick. Clicking <em>FR</em> on <code>/people.html</code> navigates to <code>/people.fr.html</code>. The page that gets served is the page the visitor lands on; there is no rewrite layer.</p>
+
+  <p>Three pieces of state cooperate:</p>
+  <ol>
+    <li><code>&lt;html lang="…"&gt;</code> on every variant — drives <code>:lang()</code> selectors and assistive-tech voice.</li>
+    <li><code>localStorage.netsec-lang</code> — the visitor's saved preference. On any home-page hit (<code>/</code>, <code>/index.fr.html</code>, <code>/index.de.html</code>), <code>assets/js/site.js</code> reads this and silently redirects to the saved variant if it differs from the URL.</li>
+    <li><code>&lt;link rel="alternate" hreflang="…"&gt;</code> blocks in every page's <code>&lt;head&gt;</code> — tell search engines which URLs are language variants of each other (and which is <code>x-default</code>).</li>
+  </ol>
+
+  <h2>What's translated, what isn't</h2>
+  <table>
+    <thead><tr><th>Content type</th><th>Translated?</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Page chrome — nav, footers, headings, form labels, captions</td><td><strong>Yes</strong></td><td>Hand-authored in each <code>.fr.html</code> / <code>.de.html</code> file.</td></tr>
+      <tr><td>JS-rendered strings (search placeholder, "No results", toast confirmations)</td><td><strong>Yes</strong></td><td>Loaded via <code>window.netsecT()</code> from a per-locale catalog in <code>assets/js/site.js</code>.</td></tr>
+      <tr><td>Member-submitted bios in <code>data/bios.json</code></td><td><strong>No</strong></td><td>Members write their own bio in whichever language they choose; we don't paraphrase someone else's self-description.</td></tr>
+      <tr><td>Calls of grants, dates, place names</td><td><strong>No</strong> (kept in source language)</td><td>Calls are authoritative documents; translating them risks introducing error.</td></tr>
+      <tr><td>COST / EU boilerplate (funding statement, emblem alt-text)</td><td><strong>Yes</strong></td><td>Translations exist in COST's official toolkit; we reuse those.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Keeping translations in step — the drift checker</h2>
+  <p>Hand-translated sibling files drift out of sync whenever English changes and the translator forgets to update FR/DE. To make that visible, we maintain a small manifest at <code>data/i18n-state.json</code> that stamps a SHA-1 of each English source page at the moment its translations were last refreshed.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+    A["EN source<br/>(eg. people.html)"] -->|"sha1"| B["data/i18n-state.json<br/>{ page: { en_sha: …, fr: …, de: … } }"]
+    A2["FR variant<br/>(people.fr.html)"] -.->|"references<br/>en_sha"| B
+    A3["DE variant<br/>(people.de.html)"] -.->|"references<br/>en_sha"| B
+    B --> C{"check-i18n-drift.py<br/>run on CI + locally"}
+    C -- "EN sha changed since stamp" --> D["Flag: FR/DE need a refresh"]
+    C -- "all stamps current" --> E["✓ in step"]
+    style A fill:#003399,stroke:#003399,color:#fff
+    style C fill:#0a84ff,stroke:#0a84ff,color:#fff
+    </div>
+    <div class="diagram-caption">Figure · Drift-detection workflow. The CI job is informational only — never blocking — so an unfinished translation doesn't hold up an EN-only fix.</div>
+  </div>
+
+  <p>Run locally:</p>
+  <pre><code>python3 scripts/check-i18n-drift.py            # report which pages have drifted
+python3 scripts/check-i18n-drift.py --stamp en # refresh EN sha after editing English
+python3 scripts/check-i18n-drift.py --stamp fr # mark FR refreshed for changed pages</code></pre>
+
+  <h2>Refreshing a translation</h2>
+  <ol>
+    <li>Edit the English source (e.g. <code>people.html</code>).</li>
+    <li>Run the drift checker — note which pages it flags.</li>
+    <li>Translate the same change into <code>people.fr.html</code> and <code>people.de.html</code> by hand. Keep tag names, IDs, class names, and href targets identical; only translate text content and certain visible attributes (<code>title</code>, <code>aria-label</code>, <code>alt</code>).</li>
+    <li>Re-run the drift checker with <code>--stamp en --stamp fr --stamp de</code> to refresh all three.</li>
+    <li>Commit alongside the English change so the manifest stays meaningful.</li>
+  </ol>
+
+  <div class="card callout">
+    <h4>What we deliberately don't do</h4>
+    <ul style="margin:.2rem 0 0">
+      <li><strong>No machine translation at build or runtime.</strong> Quality is too uneven for an official COST deliverable, and we have no budget for an API.</li>
+      <li><strong>No URL-based locale negotiation</strong> (e.g. <code>/fr/people</code>). The static sibling-files approach keeps GitHub Pages routing simple, lets us version each translation independently, and removes any need for server-side logic.</li>
+      <li><strong>No language gateway page.</strong> The visitor lands on whichever URL they typed; client-side JS may redirect them to a saved preference, but only on the home page.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 5 — SEO & DISCOVERABILITY
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="section-banner">
+    <div class="num">05</div>
+    <div class="head">
+      <h1>SEO &amp; discoverability</h1>
+      <div class="sub">Crawl directives, social-share cards, and how it all stays in sync.</div>
+    </div>
+  </div>
+
+  <p>The site implements the industry-standard SEO checklist for a multilingual static site: machine-readable sitemap, canonical URLs, hreflang annotations, Open Graph + Twitter Card metadata, JSON-LD structured data, and a designed 404 page. None of it is hand-typed twice — a single Python script regenerates the per-page metadata block from a small source-of-truth.</p>
+
+  <h2>What's in place</h2>
+  <table>
+    <thead><tr><th>Layer</th><th>Where</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td>Crawl directives</td><td><code>robots.txt</code> at site root</td><td><code>Allow: /</code>; points crawlers at <code>sitemap.xml</code>. No private paths to disallow.</td></tr>
+      <tr><td>Discovery</td><td><code>sitemap.xml</code> at site root</td><td>Every public page with <code>&lt;lastmod&gt;</code>, <code>&lt;changefreq&gt;</code>, <code>&lt;priority&gt;</code>, and <code>xhtml:link</code> hreflang annotations for FR/DE/x-default.</td></tr>
+      <tr><td>Canonical URLs</td><td><code>&lt;link rel="canonical"&gt;</code> on every page</td><td>Points at the page's own URL — keeps the <code>.fr.html</code> / <code>.de.html</code> variants from looking like duplicates.</td></tr>
+      <tr><td>Language alternates</td><td><code>&lt;link rel="alternate" hreflang&gt;</code> blocks</td><td>Matches the sitemap; explicitly declares <code>x-default</code> → English.</td></tr>
+      <tr><td>Open Graph</td><td><code>og:title</code> / <code>og:description</code> / <code>og:url</code> / <code>og:type</code> / <code>og:image</code> / <code>og:site_name</code> / <code>og:locale</code></td><td>One block per page, locale-aware.</td></tr>
+      <tr><td>Twitter Card</td><td><code>summary_large_image</code></td><td>Title / description / image mirror the OG values.</td></tr>
+      <tr><td>JSON-LD</td><td><code>&lt;script type="application/ld+json"&gt;</code> per page</td><td><code>Organization</code> schema on every page; <code>WebSite</code> on <code>/</code>; per-page <code>WebPage</code>.</td></tr>
+      <tr><td>Social-share image</td><td><code>assets/images/og-image.png</code></td><td>1200 × 630 branded card used by Facebook, Twitter/X, LinkedIn, WhatsApp, Slack, Discord, iMessage.</td></tr>
+      <tr><td>Theme colour</td><td><code>&lt;meta name="theme-color" content="#003399"&gt;</code></td><td>Mobile browser chrome adopts the EU blue.</td></tr>
+      <tr><td>404 page</td><td><code>404.html</code> at site root</td><td>Served by GitHub Pages on any unknown URL. Auto-detects browser language and points the visitor back at the right localised home. Carries <code>noindex</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>How it stays in sync — <code>inject-seo.py</code></h2>
+  <p>The OG / Twitter / canonical / JSON-LD blocks are <strong>generated</strong>, not hand-typed. The generator lives at <code>scripts/inject-seo.py</code> and is idempotent: it looks for sentinel comments (<code>&lt;!-- seo:auto BEGIN --&gt;</code> and <code>&lt;!-- seo:jsonld BEGIN --&gt;</code>) and rewrites the block in place, or inserts a fresh one between the hreflang block and <code>&lt;link rel="icon"&gt;</code>.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+    A["&lt;title&gt;<br/>&lt;meta description&gt;<br/>(hand-authored per page)"] --> B["scripts/inject-seo.py"]
+    M["PAGES list<br/>+ canonical URL<br/>+ locale"] --> B
+    B --> C["&lt;!-- seo:auto BEGIN --&gt;<br/>OG / Twitter / canonical<br/>&lt;!-- seo:auto END --&gt;"]
+    B --> D["&lt;!-- seo:jsonld BEGIN --&gt;<br/>JSON-LD<br/>&lt;!-- seo:jsonld END --&gt;"]
+    C --> P["Page &lt;head&gt;"]
+    D --> P
+    style B fill:#0a84ff,stroke:#0a84ff,color:#fff
+    style P fill:#003399,stroke:#003399,color:#fff
+    </div>
+    <div class="diagram-caption">Figure · The injector reads the hand-authored title + description, combines them with per-page metadata from a <code>PAGES</code> table, and writes two sentinel-bracketed blocks into each page's <code>&lt;head&gt;</code>.</div>
+  </div>
+
+  <p>Use:</p>
+  <pre><code>python3 scripts/inject-seo.py            # rewrites the SEO block in every HTML file
+python3 scripts/inject-seo.py --check    # report-only mode (non-zero exit on drift)</code></pre>
+
+  <h2>Adding a new page</h2>
+  <ol>
+    <li>Hand-author a unique <code>&lt;title&gt;</code> (≤ 60 chars) and <code>&lt;meta name="description"&gt;</code> (≤ 160 chars).</li>
+    <li>Add the <code>&lt;link rel="alternate" hreflang&gt;</code> block in <code>&lt;head&gt;</code> for EN/FR/DE/x-default.</li>
+    <li>Set <code>&lt;html lang="…"&gt;</code> correctly.</li>
+    <li>Add the page to the <code>PAGES</code> list at the top of <code>scripts/inject-seo.py</code>, then run the script.</li>
+    <li>Add a <code>&lt;url&gt;</code> entry to <code>sitemap.xml</code>.</li>
+    <li>Add the page to <code>data/i18n-state.json</code> and stamp the EN SHA.</li>
+    <li>Run the drift checker to confirm everything is fresh.</li>
+  </ol>
+
+  <h2>What's deliberately <em>not</em> implemented</h2>
+  <table>
+    <thead><tr><th>Thing</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Google Analytics / Tag Manager</td><td>Privacy posture — no third-party trackers (see <code>privacy.html</code>).</td></tr>
+      <tr><td><code>&lt;meta name="keywords"&gt;</code></td><td>Ignored by all major search engines for ~15 years.</td></tr>
+      <tr><td>AMP / amp-html</td><td>Performance budget is already very low; AMP would add complexity without measurable gain.</td></tr>
+      <tr><td><code>rel="prev"</code> / <code>rel="next"</code> pagination</td><td>No paginated content on the site.</td></tr>
+      <tr><td>hreflang on sub-page anchors</td><td>hreflang applies to URLs, not anchors. Deep-links into a translated page inherit the page's lang.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Verifying on the live site</h2>
+  <ul>
+    <li><strong>Open Graph debugger:</strong> paste any URL into <a href="https://www.opengraph.xyz/">opengraph.xyz</a> or LinkedIn's Post Inspector.</li>
+    <li><strong>JSON-LD validator:</strong> paste the URL into <a href="https://search.google.com/test/rich-results">Google's Rich Results test</a>. The Organization / WebSite / WebPage nodes should all validate.</li>
+    <li><strong>Lighthouse SEO audit:</strong> any Chromium DevTools → Lighthouse. Target score ≥ 95.</li>
+  </ul>
+
+  <h2>Known limits — what GitHub Pages can't do</h2>
+  <ul>
+    <li><strong>No HTTP response headers.</strong> So <code>Content-Language</code>, <code>Vary: Accept-Language</code>, and similar headers are unavailable. The <code>&lt;html lang&gt;</code> attribute is the next-best signal and is in place.</li>
+    <li><strong>No server-side content negotiation.</strong> Auto-redirect based on <code>Accept-Language</code> only works after the page loads. We do the redirect client-side via the saved <code>netsec-lang</code> preference, so the very first hit always lands on whatever URL the visitor typed.</li>
+  </ul>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION 6 — ADMIN GUIDE
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="section-banner">
+    <div class="num">06</div>
     <div class="head">
       <h1>Admin guide</h1>
       <div class="sub">Accounts, routine tasks, escalation, and handover.</div>
@@ -971,7 +1426,7 @@ flowchart LR
   <table>
     <thead><tr><th>Asset</th><th>Location</th><th>Owner / login</th></tr></thead>
     <tbody>
-      <tr><td><code>netsec-cost.eu</code></td><td>DNS registrar</td><td><em>TBC — confirm with Action Chair</em></td></tr>
+      <tr><td><code>netsec-cost.eu</code></td><td><strong>Namecheap</strong></td><td>Registered under <strong>Dr Moritz Weiss</strong> (Action Chair); admin contact <strong>Dr Arthur Laudrain</strong></td></tr>
       <tr><td>GitHub Pages routing</td><td>Repo Settings → Pages</td><td>GitHub org <code>EISSeuropa</code></td></tr>
       <tr><td>TLS certificate</td><td>Auto-managed by GitHub Pages</td><td>n/a (Let's Encrypt)</td></tr>
     </tbody>
