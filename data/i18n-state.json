@@ -115,6 +115,22 @@
         "status": "beta",
         "reviewed_by": null
       }
+    },
+    "index.html": {
+      "fr": {
+        "file": "index.fr.html",
+        "source_sha1": "f68ad7c7c57c0dccdb413cedbc960a5c3619de99",
+        "translated_on": "2026-05-19",
+        "status": "beta",
+        "reviewed_by": null
+      },
+      "de": {
+        "file": "index.de.html",
+        "source_sha1": "f68ad7c7c57c0dccdb413cedbc960a5c3619de99",
+        "translated_on": "2026-05-19",
+        "status": "beta",
+        "reviewed_by": null
+      }
     }
   }
 }
