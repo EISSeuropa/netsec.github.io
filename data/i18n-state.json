@@ -3,9 +3,21 @@
   "version": 3,
   "authoritative": "en",
   "languages": {
-    "en": { "label": "English",  "native": "English",  "authoritative": true  },
-    "fr": { "label": "French",   "native": "Français", "authoritative": false },
-    "de": { "label": "German",   "native": "Deutsch",  "authoritative": false }
+    "en": {
+      "label": "English",
+      "native": "English",
+      "authoritative": true
+    },
+    "fr": {
+      "label": "French",
+      "native": "Français",
+      "authoritative": false
+    },
+    "de": {
+      "label": "German",
+      "native": "Deutsch",
+      "authoritative": false
+    }
   },
   "translations": {
     "accessibility.html": {
@@ -84,6 +96,22 @@
         "file": "people.de.html",
         "source_sha1": "5d51d84f61cd19307edf07e1a1be80eb42fbec7c",
         "translated_on": "2026-05-18",
+        "status": "beta",
+        "reviewed_by": null
+      }
+    },
+    "grants.html": {
+      "fr": {
+        "file": "grants.fr.html",
+        "source_sha1": "587bce08ea2929732c950cfb27224080b93c100f",
+        "translated_on": "2026-05-19",
+        "status": "beta",
+        "reviewed_by": null
+      },
+      "de": {
+        "file": "grants.de.html",
+        "source_sha1": "587bce08ea2929732c950cfb27224080b93c100f",
+        "translated_on": "2026-05-19",
         "status": "beta",
         "reviewed_by": null
       }
