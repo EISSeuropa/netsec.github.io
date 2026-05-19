@@ -69,6 +69,36 @@
       "source": "seed"
     },
     {
+      "id": "eugenio-sanchez",
+      "name": "Mr Eugenio Sánchez",
+      "country": "France",
+      "country_code": "fr",
+      "affiliation": "Sciences Po Paris",
+      "position": "PhD Researcher",
+      "roles": [
+        "Science Communication Coordinator"
+      ],
+      "wgs": [
+        3
+      ],
+      "wg_leadership": {},
+      "bio": "Eugenio Sánchez is a PhD Researcher at the Center for International Studies (CERI), Sciences Po Paris, where he is also co-founder and co-coordinator of the Research Group on International Political Economy. His two main areas of academic research focus on (1) how countries in Europe's periphery manage their dependency on foreign capital in key sectors, and (2) how state-business relations shape modern great power competition. In his policy work, Eugenio has primarily dealt with the analysis of Foreign Direct Investment screening in strategic sectors. He has teaching experience in Political Science and International Relations at the BA and MA levels.",
+      "keywords": [
+        "industrial policy",
+        "economic statecraft",
+        "economic security"
+      ],
+      "email": "eugenio.sanchez@sciencespo.fr",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/eugenio-sánchez-ko-zk/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/eugenio-sanchez.jpg",
+      "source": "form"
+    },
+    {
       "id": "eliza-gheorghe",
       "name": "Dr Eliza Gheorghe",
       "country": "Türkiye",
@@ -358,34 +388,6 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/arthur-laudrain.jpg",
-      "source": "form"
-    },
-    {
-      "id": "eugenio-sanchez",
-      "name": "Mr Eugenio Sánchez",
-      "country": "France",
-      "country_code": "fr",
-      "affiliation": "Sciences Po Paris",
-      "position": "PhD Researcher",
-      "roles": [],
-      "wgs": [
-        3
-      ],
-      "wg_leadership": {},
-      "bio": "Eugenio Sánchez is a PhD Researcher at the Center for International Studies (CERI), Sciences Po Paris, where he is also co-founder and co-coordinator of the Research Group on International Political Economy. His two main areas of academic research focus on (1) how countries in Europe's periphery manage their dependency on foreign capital in key sectors, and (2) how state-business relations shape modern great power competition. In his policy work, Eugenio has primarily dealt with the analysis of Foreign Direct Investment screening in strategic sectors. He has teaching experience in Political Science and International Relations at the BA and MA levels.",
-      "keywords": [
-        "industrial policy",
-        "economic statecraft",
-        "economic security"
-      ],
-      "email": "eugenio.sanchez@sciencespo.fr",
-      "website": "",
-      "orcid": "",
-      "linkedin": "https://www.linkedin.com/in/eugenio-sánchez-ko-zk/",
-      "twitter": "",
-      "bluesky": "",
-      "mastodon": "",
-      "photo": "assets/images/people/eugenio-sanchez.jpg",
       "source": "form"
     }
   ]

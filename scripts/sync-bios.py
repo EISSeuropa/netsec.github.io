@@ -20,8 +20,12 @@ What it does:
          downloads it, resizes to max 600 px, saves to
          assets/images/people/<slug>.<ext>.
   4. Merges with the existing data/bios.json:
-       - Seed entries (source == "seed") are preserved unless overwritten
-         by a form submission whose normalised email or slug matches.
+       - The full prior state of the directory (seed + previously-synced
+         form entries) is preserved unless overwritten by a fresh form
+         submission whose normalised email or slug matches. This means
+         a leadership role (e.g. "Science Communication Coordinator")
+         survives the submitter's own form fill, and the entry's
+         position in the leadership-first ordering is preserved.
        - Form entries are keyed by email when available, otherwise slug.
        - Duplicate form submissions: latest by timestamp wins.
   5. Writes data/bios.json with deterministic ordering.
@@ -544,18 +548,28 @@ def apply_mc_role(member: dict, mc_lookup: dict[str, dict]) -> None:
     member["roles"] = [f"MC member · {hit['country']}"]
 
 
-def merge(seeds: list[dict], form_entries: list[dict]) -> list[dict]:
-    """Merge seed list with form list.
-    - Seeds keyed by id (slug).
-    - Form entries keyed by email if available, otherwise slug.
-    - When a form entry matches a seed (by slug OR by email), the form
-      data wins for content fields, but the seed's role data
-      (roles, wg_leadership) is preserved unless the form provided one.
+def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
+    """Merge the prior directory state with the latest form submissions.
+
+    - `prior` is the full member list from the existing data/bios.json,
+      in its current display order (leadership first, then alphabetical).
+      It is NOT filtered to source == "seed": a leadership entry whose
+      `source` was previously flipped to "form" by an earlier sync would
+      otherwise be re-imported as a new alphabetical-only entry, losing
+      its role and position. See the regression around eugenio-sanchez
+      (PR #51 / fix PR).
+    - Prior entries are keyed by id (slug).
+    - Form entries are keyed by email if available, otherwise slug.
+    - When a form entry matches a prior entry (by slug OR by email),
+      the form data wins for content fields, but role data
+      (`roles`, `wg_leadership`) is preserved unconditionally — the
+      form has no roles column, so it can only ever overwrite a real
+      role with an empty list, which is never what we want.
     """
-    by_slug: dict[str, dict] = {s["id"]: dict(s) for s in seeds}
+    by_slug: dict[str, dict] = {s["id"]: dict(s) for s in prior}
     by_email: dict[str, str] = {
         (s.get("email") or "").lower(): s["id"]
-        for s in seeds if s.get("email")
+        for s in prior if s.get("email")
     }
 
     # Two-pass dedup so a returning submitter never lands twice on the
@@ -594,7 +608,7 @@ def merge(seeds: list[dict], form_entries: list[dict]) -> list[dict]:
     form_entries = list(slug_dedup.values())
 
     for entry in form_entries:
-        # Find matching seed
+        # Find matching prior entry by email first, then slug.
         target_id = None
         if entry["_email_key"] and entry["_email_key"] in by_email:
             target_id = by_email[entry["_email_key"]]
@@ -602,27 +616,34 @@ def merge(seeds: list[dict], form_entries: list[dict]) -> list[dict]:
             target_id = entry["id"]
 
         if target_id:
-            seed = by_slug[target_id]
-            # Form data wins for content; preserve roles + wg_leadership unless form overrode
+            existing = by_slug[target_id]
+            # Form data wins for content fields. Note that "roles" and
+            # "wg_leadership" are deliberately NOT in this overwrite
+            # list — they come from the seed/leadership directory and
+            # the form has no way to set them, so an empty form value
+            # would only ever wipe a real role.
             for k in ("name", "country", "country_code", "affiliation", "position", "bio",
                        "keywords", "email", "website", "orcid",
                        "linkedin", "twitter", "bluesky", "mastodon"):
                 if entry.get(k):
-                    seed[k] = entry[k]
+                    existing[k] = entry[k]
             if entry.get("photo"):
-                seed["photo"] = entry["photo"]
+                existing["photo"] = entry["photo"]
             if entry.get("wgs"):
-                # Union of seed and form WGs
-                seed["wgs"] = sorted(set(seed.get("wgs", []) + entry["wgs"]))
-            seed["source"] = "form"
+                # Union of prior and form WGs — submitters can add WG
+                # membership but cannot remove an existing assignment.
+                existing["wgs"] = sorted(set(existing.get("wgs", []) + entry["wgs"]))
+            existing["source"] = "form"
         else:
-            # New entry from form, no seed match
+            # New entry from form with no prior match.
             by_slug[entry["id"]] = {k: v for k, v in entry.items() if not k.startswith("_")}
 
-    # Final ordering: leadership first (preserve seed order), then alphabetical
-    seed_order = {s["id"]: i for i, s in enumerate(seeds)}
+    # Final ordering: prior entries keep their position (leadership
+    # first, as encoded in the prior bios.json), new entries fall
+    # through to the alphabetical tail.
+    prior_order = {s["id"]: i for i, s in enumerate(prior)}
     result = list(by_slug.values())
-    result.sort(key=lambda m: (seed_order.get(m["id"], 10_000), m.get("name", "").lower()))
+    result.sort(key=lambda m: (prior_order.get(m["id"], 10_000), m.get("name", "").lower()))
 
     # Drop internal fields, fill country_code, attach MC role if applicable
     mc_lookup = load_mc_lookup()
@@ -678,7 +699,11 @@ def main() -> None:
     cols = config.get("columns", {})
     bios_data = json.loads(BIOS.read_text())
     old_members = bios_data.get("members", [])
-    seeds = [m for m in old_members if m.get("source") == "seed"]
+    # We pass the full prior member list to merge(), not just
+    # source == "seed". The seed/form distinction is informational
+    # only — for merge purposes, "the prior state of the directory"
+    # is what we want to preserve roles, position, and email-match
+    # identity against.
 
     # Fetch the sheet CSV
     print(f"Fetching {csv_url}")
@@ -696,7 +721,7 @@ def main() -> None:
         if entry:
             form_entries.append(entry)
 
-    merged = merge(seeds, form_entries)
+    merged = merge(old_members, form_entries)
     print(diff_summary(old_members, merged))
 
     bios_data["members"] = merged
