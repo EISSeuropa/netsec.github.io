@@ -107,7 +107,21 @@ img{max-width:100%;display:block}
   box-shadow:var(--glass-shadow);
   transition:box-shadow .3s var(--ease),transform .3s var(--ease);
 }
-.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:10px 18px}
+/* Nav layout: brand on the left; everything else (nav-links and
+   utility chips like the language switcher and theme toggle) on
+   the right. We achieve this without changing the HTML source
+   order by:
+     - giving `.brand` `margin-right: auto` (pushes it as far left
+       as possible),
+     - using `order` so `.nav-actions` always renders to the right
+       of `.nav-links`, regardless of source order.
+   The previous layout used `justify-content: space-between`, which
+   put the utility chips in the middle of the nav — counter to the
+   convention of "brand left, utilities top-right". */
+.nav-inner{display:flex;align-items:center;gap:14px;padding:10px 18px}
+.nav-inner .brand{margin-right:auto;order:0}
+.nav-inner .nav-links{order:1}
+.nav-inner .nav-actions{order:2}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink);font-size:1.02rem;letter-spacing:-.01em}
 .brand-mark{
   width:34px;height:34px;border-radius:10px;
@@ -115,9 +129,10 @@ img{max-width:100%;display:block}
   display:grid;place-items:center;color:#fff;font-weight:800;font-size:.78rem;letter-spacing:.04em;
   box-shadow:0 6px 16px var(--accent-glow);
 }
-.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links{display:flex;gap:4px;align-items:center}
 .nav-links a{
   color:var(--ink-2);font-size:.92rem;font-weight:500;padding:8px 12px;border-radius:10px;
+  white-space:nowrap;            /* don't let a label split mid-word */
   transition:background .2s var(--ease),color .2s var(--ease);
 }
 .nav-links a:hover{background:rgba(11,18,32,.05);color:var(--ink);opacity:1}
@@ -128,6 +143,18 @@ img{max-width:100%;display:block}
 .nav-actions{display:flex;align-items:center;gap:2px}
 .menu-toggle{display:none;background:none;border:0;padding:8px;cursor:pointer}
 .menu-toggle span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;border-radius:2px;transition:.3s var(--ease)}
+
+/* Tighter nav typography on FR/DE pages — the same labels are
+   roughly 30–50 % longer than in English (e.g. "Working Groups"
+   → "Groupes de travail"), and without this the chips wrap or
+   crowd the utility cluster on standard laptop widths. */
+:lang(fr) .nav-links a,
+:lang(de) .nav-links a{
+  font-size:.84rem;
+  padding:7px 9px;
+}
+:lang(fr) .nav-links,
+:lang(de) .nav-links{gap:2px}
 
 /* -------- Hero -------- */
 .hero{padding:140px 0 80px;text-align:center;position:relative}
@@ -723,11 +750,18 @@ form button:disabled{opacity:.65;cursor:wait}
   .mc-collapse:not([open]) > *{display:block !important}
 }
 
-/* -------- Responsive -------- */
-@media (max-width:880px){
+/* -------- Responsive --------
+   Mobile-menu breakpoint widened from 880px → 980px to make room
+   for the longer FR/DE nav labels. On English-only sites 880 was
+   fine; with translations the inline nav stops fitting at ~960px,
+   so we let the hamburger drawer take over a touch sooner. */
+@media (max-width:980px){
   .nav-links{display:none;position:absolute;top:60px;left:0;right:0;flex-direction:column;align-items:stretch;background:var(--glass-bg-strong);backdrop-filter:blur(20px);border-radius:14px;padding:10px;margin:0 8px;border:1px solid var(--glass-border)}
   .nav-links.open{display:flex}
-  .nav-links a{padding:12px 14px}
+  .nav-links a{padding:12px 14px;font-size:.95rem}
+  /* Override the FR/DE compact rule inside the mobile drawer: the
+     drawer has plenty of room, so use the full label size there. */
+  :lang(fr) .nav-links a, :lang(de) .nav-links a{font-size:.95rem;padding:12px 14px}
   .menu-toggle{display:block}
   .about-grid,.contact-wrap{grid-template-columns:1fr}
   .form-row{grid-template-columns:1fr}
