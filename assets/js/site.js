@@ -242,4 +242,69 @@
   /* Year stamp in the footer */
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  /* ─────────────────────────────────────────────────────────────
+     Live-refresh leadership cards from data/bios.json.
+     ─────────────────────────────────────────────────────────────
+     The home page leadership cards (Action Leadership, WG Leadership,
+     WG Co-Leaders) are hand-authored HTML — they need to render even
+     before any JS runs, since they sit above the fold and appear in
+     view-source. But once a leader submits a refreshed photo or
+     affiliation via the public Google Form, the new data lives in
+     data/bios.json while the hand-authored HTML still points at the
+     old photo file. This block reconciles the two on page load.
+
+     Contract:
+       - Card opts in by carrying data-slug="…" matching its bios.json id.
+       - Photo + heading are always refreshed when the slug resolves.
+       - The .org line is only refreshed when the card carries
+         data-org-from-bio="affiliation" (currently the five Co-Leader
+         cards). Other cards keep their hand-authored .org text because
+         it is not an affiliation — it is "WG1 Leader", "Outreach &
+         dissemination", "Co-lead: <Name>", etc.
+       - On any error (no JS, fetch fails, slug absent), the static
+         HTML stays exactly as written. Nothing is hidden, nothing is
+         blanked. */
+  const leaderCards = document.querySelectorAll('.mc-card[data-slug]');
+  if (leaderCards.length) {
+    (async () => {
+      try {
+        const res = await fetch('data/bios.json', { cache: 'no-cache' });
+        if (!res.ok) return;
+        const data = await res.json();
+        const bySlug = Object.create(null);
+        (data.members || []).forEach(m => { if (m.id) bySlug[m.id] = m; });
+
+        leaderCards.forEach(card => {
+          const slug = card.getAttribute('data-slug');
+          const m = bySlug[slug];
+          if (!m) return;
+
+          // Photo
+          if (m.photo) {
+            const img = card.querySelector('.mc-avatar img');
+            if (img && img.getAttribute('src') !== m.photo) {
+              img.setAttribute('src', m.photo);
+              if (m.name) img.setAttribute('alt', m.name);
+            }
+          }
+          // Display name (honorifics sometimes change between
+          // initial seed and a refreshed form submission)
+          if (m.name) {
+            const h = card.querySelector('h4');
+            if (h && h.textContent.trim() !== m.name) h.textContent = m.name;
+          }
+          // Affiliation line, opt-in
+          if (card.getAttribute('data-org-from-bio') === 'affiliation') {
+            const org = card.querySelector('.org');
+            if (org && m.affiliation && org.textContent.trim() !== m.affiliation) {
+              org.textContent = m.affiliation;
+            }
+          }
+        });
+      } catch (err) {
+        // Silent: the static HTML is already a correct fallback.
+      }
+    })();
+  }
 })();
