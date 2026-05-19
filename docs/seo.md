@@ -1,0 +1,95 @@
+# SEO
+
+> *Audience: anyone changing page metadata, adding a new page, or
+> debugging why a page renders oddly on social-media share cards.*
+
+The NetSec site implements the industry-standard SEO checklist for
+a multilingual static site. This doc is the map.
+
+## What's in place
+
+| Layer | Where | What |
+| --- | --- | --- |
+| **Crawl directives** | `robots.txt` at site root | `Allow: /`, points crawlers at `sitemap.xml`. No private paths to disallow. |
+| **Discovery** | `sitemap.xml` at site root | Every public page with `<lastmod>`, `<changefreq>`, `<priority>`, and `xhtml:link rel="alternate" hreflang="…"` annotations for FR/DE/x-default. |
+| **Canonical URLs** | `<link rel="canonical">` on every page | Points at the page's own URL — important because the `.fr.html` / `.de.html` variants would otherwise look like duplicate content. |
+| **Language alternates** | `<link rel="alternate" hreflang="…">` on every page | Matches the sitemap; explicitly declares `x-default` → English. |
+| **`<html lang>`** | Set per locale (`en`, `fr`, `de`) | Drives `:lang()` selectors in CSS and the i18n catalog in JS. |
+| **Open Graph** | `og:title`, `og:description`, `og:url`, `og:type`, `og:image`, `og:site_name`, `og:locale`, `og:locale:alternate` | One block per page, locale-aware. |
+| **Twitter Card** | `summary_large_image` | Title / description / image mirror the OG values. |
+| **JSON-LD structured data** | `<script type="application/ld+json">` per page | `Organization` schema on every page; `WebSite` schema also on `/`; per-page `WebPage` node. |
+| **Social-share image** | `assets/images/og-image.png` | 1200 × 630, branded card (gradient + NS mark + title). Used for OG / Twitter / WhatsApp / LinkedIn previews. |
+| **Theme colour** | `<meta name="theme-color" content="#003399">` | Mobile browser chrome adopts the EU blue. |
+| **404 page** | `404.html` at site root | GitHub Pages serves this on any unknown URL. Auto-detects browser language (or stored `netsec-lang` preference) and points the user back at the right localised home. Carries `noindex`. |
+
+## How it's maintained
+
+The Open Graph / Twitter / canonical / JSON-LD blocks are **generated**,
+not hand-written. The generator lives at
+[`scripts/inject-seo.py`](../scripts/inject-seo.py).
+
+When you change a page's `<title>` or `<meta name="description">`,
+or when you add a new page, run:
+
+```bash
+python3 scripts/inject-seo.py            # rewrites the SEO block in every HTML file
+python3 scripts/inject-seo.py --check    # report-only mode (non-zero exit if anything drifts)
+```
+
+The script is **idempotent** — it looks for sentinel comments
+(`<!-- seo:auto BEGIN -->` and `<!-- seo:jsonld BEGIN -->`) and
+rewrites the block in place if present, or inserts a new one
+between the hreflang block and `<link rel="icon">`.
+
+You **do not** need to hand-write the OG/Twitter block on a new page.
+You just need to:
+
+1. Set a meaningful `<title>` and `<meta name="description">`.
+2. Add the page to the `PAGES` list at the top of `scripts/inject-seo.py`.
+3. Run the script.
+4. Add the page to `sitemap.xml` (manual — there are too few pages
+   to be worth automating, and the `priority` / `changefreq` are
+   judgement calls).
+
+## What's deliberately *not* implemented
+
+| Thing | Why |
+| --- | --- |
+| **Google Analytics / Tag Manager** | Privacy posture — no third-party trackers (see `privacy.html`). |
+| **`meta keywords`** | Ignored by all major search engines for ~15 years. |
+| **AMP / amp-html** | Single-author static site; performance budget is already very low. |
+| **rel=prev/next pagination** | No paginated content. |
+| **`hreflang` for sub-page anchors** | hreflang applies to URLs, not anchors. Anchors are deep-links within a translated page; they don't have separate hreflang. |
+
+## SEO checklist for a new page
+
+When you add a page:
+
+- [ ] Hand-author a unique `<title>` (≤ 60 chars) and `<meta name="description">` (≤ 160 chars). These are also what shows up in OG / Twitter / JSON-LD via the injector.
+- [ ] Add `<link rel="alternate" hreflang="…">` block in `<head>` for EN/FR/DE/x-default.
+- [ ] Set `<html lang="…">` correctly.
+- [ ] Add the page to `PAGES` in `scripts/inject-seo.py`. Run it.
+- [ ] Add a `<url>` entry in `sitemap.xml`.
+- [ ] Add the page to `data/i18n-state.json` and stamp the EN SHA.
+- [ ] Run the drift checker to confirm everything is fresh.
+
+## Verifying on the live site
+
+For any page on `netsec-cost.eu`:
+
+- **Open Graph debugger**: paste the URL into
+  <https://www.opengraph.xyz/> or <https://www.linkedin.com/post-inspector/>.
+- **Twitter / X validator**: previously at `cards-dev.twitter.com`;
+  the platform no longer hosts a public validator, but the
+  `summary_large_image` card renders predictably wherever it's
+  consumed.
+- **JSON-LD**: paste the URL into
+  <https://search.google.com/test/rich-results>. It validates the
+  Organization / WebPage / WebSite nodes.
+- **Lighthouse SEO audit**: any Chromium DevTools → Lighthouse.
+  Target score ≥ 95.
+
+## Limitations to know
+
+- **GitHub Pages can't set HTTP response headers**, so `Content-Language`, `Vary: Accept-Language`, etc. aren't available. The `<html lang>` attribute is the next-best signal and is in place.
+- **Auto-redirect based on `Accept-Language`** only works after the page loads, because GitHub Pages doesn't do server-side content negotiation. We do client-side in `assets/js/site.js` via the saved `netsec-lang` preference, but the very first hit always lands on whatever URL the visitor typed.
