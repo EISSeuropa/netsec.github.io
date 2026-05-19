@@ -98,7 +98,12 @@ img{max-width:100%;display:block}
 /* -------- Navigation -------- */
 .nav{
   position:fixed;top:14px;left:50%;transform:translateX(-50%);
-  width:calc(100% - 24px);max-width:1100px;z-index:100;
+  /* max-width bumped from 1100 → 1200 so the 11-item Grants nav fits
+     in FR/DE without the theme-toggle spilling out of the bubble on
+     wide-desktop viewports. Page content keeps its 1100 max-width;
+     the nav is slightly wider, which reads as "header overhang"
+     rather than as misalignment. */
+  width:calc(100% - 24px);max-width:1200px;z-index:100;
   background:var(--glass-bg-strong);
   backdrop-filter:saturate(180%) blur(20px);
   -webkit-backdrop-filter:saturate(180%) blur(20px);
@@ -148,29 +153,19 @@ img{max-width:100%;display:block}
    ─────────────────────────────────────────────────────────────
    FR/DE labels are 30–50 % longer than English ("Working Groups"
    → "Groupes de travail" / "Arbeitsgruppen"; "Roadmap" → "Feuille
-   de route"). Three tiers of compactness — base for wide desktop,
-   one tier tighter at standard-laptop widths, and one more at the
-   small-laptop band right before the hamburger drawer kicks in
-   at 980 px. The English nav is left alone. */
+   de route"). Apply the compact size at ALL desktop widths — the
+   nav max-width is 1200 px, the brand+utility cluster needs ~250
+   px of fixed width, and an 11-item Grants nav must fit in the
+   remaining ~950 px even on a 4K monitor. Earlier versions only
+   applied this below 1280 and overflowed on wider screens. */
 :lang(fr) .nav-links a,
 :lang(de) .nav-links a{
-  font-size:.82rem;
-  padding:6px 8px;
+  font-size:.78rem;
+  padding:5px 7px;
+  letter-spacing:-.01em;
 }
 :lang(fr) .nav-links,
 :lang(de) .nav-links{gap:0}
-
-/* Standard-laptop band (1100–1280 px). Items are still inline but
-   the FR/DE chips need slightly more shrinking to avoid touching
-   the utility cluster. */
-@media (max-width:1280px){
-  :lang(fr) .nav-links a,
-  :lang(de) .nav-links a{
-    font-size:.78rem;
-    padding:5px 7px;
-    letter-spacing:-.01em;
-  }
-}
 
 /* Small-laptop band (980–1100 px) — last stop before the
    hamburger drawer. Drop a non-essential item (Outputs /
