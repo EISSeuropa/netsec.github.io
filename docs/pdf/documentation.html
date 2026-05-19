@@ -536,7 +536,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.1 · May 2026</div>
+        <div class="value">v1.2 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -725,7 +725,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.1 · May 2026</span>
+    <span class="url">v1.2 · May 2026</span>
   </footer>
 
 </section>
@@ -779,14 +779,26 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </li>
       <li>
         <div>
+          <span class="title">Security &amp; DevSecOps</span>
+          <span class="desc">Threat model, coordinated-disclosure policy, GitHub-native security automation, supply-chain and operational hardening.</span>
+        </div>
+      </li>
+      <li>
+        <div>
           <span class="title">Appendix A · Accessibility standard &amp; assessment</span>
           <span class="desc">WCAG 2.1 AA target, EN&nbsp;301&nbsp;549 alignment, latest self-assessment results, known limitations, reporting route.</span>
         </div>
       </li>
       <li>
         <div>
-          <span class="title">Appendix B · Security &amp; licensing</span>
-          <span class="desc">Coordinated-disclosure policy in brief, and the dual MIT + CC&nbsp;BY&nbsp;4.0 licensing model.</span>
+          <span class="title">Appendix B · Licensing</span>
+          <span class="desc">The dual MIT + CC&nbsp;BY&nbsp;4.0 model and suggested attribution.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="title">Appendix C · Changelog</span>
+          <span class="desc">Per-version summary of what this documentation pack records.</span>
         </div>
       </li>
     </ol>
@@ -1578,6 +1590,126 @@ sequenceDiagram
 
 
 <!-- ════════════════════════════════════════════════════════════
+     SECTION 7 — SECURITY & DEVSECOPS
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="section-banner">
+    <div class="num">07</div>
+    <div class="head">
+      <h1>Security &amp; DevSecOps</h1>
+      <div class="sub">Threat model, disclosure policy, GitHub-native automation, supply-chain and operational hardening.</div>
+    </div>
+  </div>
+
+  <p>Security is treated as a continuous practice rather than a one-time review. The full coordinated-disclosure policy lives in <code>SECURITY.md</code> at the repository root; this chapter summarises what is in place, what is automated, and what is the responsibility of the human admins.</p>
+
+  <h2>Threat model in one paragraph</h2>
+  <p>The site is a <strong>static HTML deployment</strong> with no server-side code, no database, and no authenticated user surface. The classical injection bug-classes (SQL, RCE, deserialisation, SSRF) do not apply because nothing on the server interprets user input. The realistic risk surface narrows to four areas: <strong>(1)</strong>&nbsp;the contributor pipeline — a compromised GitHub account with push access, <strong>(2)</strong>&nbsp;the two sync workflows pulling data from external sources, <strong>(3)</strong>&nbsp;the third-party processors we depend on (Formspree, Google, GitHub Pages itself), and <strong>(4)</strong>&nbsp;personal data we hold in <code>data/bios.json</code>. The controls below are sized for that surface.</p>
+
+  <h2>Coordinated-disclosure policy in brief</h2>
+  <p>The shape of <code>SECURITY.md</code>:</p>
+
+  <h3>Scope</h3>
+  <p><strong>In scope:</strong> the current <code>main</code> branch, the deployed site at <code>netsec-cost.eu</code>, the two GitHub Actions, the Python sync scripts, and any personal data we hold.</p>
+  <p><strong>Out of scope:</strong> older branches, tags, or forks; reports about COST or EU branding; volumetric DoS against third parties (GitHub, Formspree, Google). Those go to the relevant vendor.</p>
+
+  <h3>How to report</h3>
+  <p>Two private channels, never a public GitHub issue:</p>
+  <ol>
+    <li><strong>GitHub Security Advisories</strong> (preferred): <code>github.com/EISSeuropa/netsec.github.io/security/advisories/new</code>.</li>
+    <li><strong>Email</strong> the maintainer; for data-protection matters specifically, contact the Data Controller (Universiteit Leiden) per the addresses listed in <a href="https://netsec-cost.eu/privacy.html">privacy.html</a>.</li>
+  </ol>
+
+  <h3>What to expect</h3>
+  <table>
+    <thead><tr><th>Stage</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr><td>Acknowledgement</td><td>Within 5 working days.</td></tr>
+      <tr><td>Initial assessment</td><td>Within 14 working days.</td></tr>
+      <tr><td>Resolution — Critical</td><td>Patch in days; hotfix to <code>main</code>.</td></tr>
+      <tr><td>Resolution — High / Medium</td><td>Next sprint, typically 2–4 weeks.</td></tr>
+      <tr><td>Resolution — Low</td><td>Routine maintenance.</td></tr>
+      <tr><td>Disclosure</td><td>Coordinated; credit on request.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Safe harbour</h3>
+  <p>Good-faith research is welcomed: act only against your own data and the public site, avoid privacy violations and service disruption, do not retain personal data of others, and give us reasonable time to fix before public disclosure.</p>
+
+  <h2>GitHub-native security automation</h2>
+  <p>The repository is enrolled in five GitHub Advanced Security features. They run continuously, with results visible under the <em>Security</em> tab.</p>
+
+  <table>
+    <thead><tr><th>Feature</th><th>Trigger</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Private vulnerability reporting</strong></td>
+        <td>Researcher submission</td>
+        <td>Offers external reporters a confidential channel inside GitHub, with end-to-end encryption and the option to collaborate on a fix in a private fork before public disclosure. Replaces the older "find an email address" route.</td>
+      </tr>
+      <tr>
+        <td><strong>Security advisories</strong></td>
+        <td>Maintainer-initiated, post-triage</td>
+        <td>Records every confirmed vulnerability as a draft advisory, links it to the fix commit, and publishes a CVE when warranted. Provides a single audit trail for evaluators.</td>
+      </tr>
+      <tr>
+        <td><strong>Dependabot alerts</strong></td>
+        <td>Continuous</td>
+        <td>Scans the dependency graph (Python <code>requirements.txt</code>, GitHub Actions versions) against the GitHub Advisory Database. Opens an issue per advisory with an upgrade path.</td>
+      </tr>
+      <tr>
+        <td><strong>Code scanning — CodeQL</strong></td>
+        <td><code>push</code> + <code>pull_request</code> against <code>main</code>, plus a weekly cron</td>
+        <td>Runs the <strong>security-and-quality</strong> and <strong>security-extended</strong> CodeQL query suites at the <em>high-precision</em> setting, across HTML, JavaScript, Python, and GitHub Actions YAML. Findings appear as PR review comments and on the Security tab.</td>
+      </tr>
+      <tr>
+        <td><strong>Secret scanning + push protection</strong></td>
+        <td>Every push and historical sweep</td>
+        <td>Detects exposed tokens, API keys, and high-entropy strings matching known provider patterns. Push protection blocks the commit at <code>git push</code> time before the secret enters history.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card callout">
+    <h4>Why this combination, on a static site</h4>
+    <p style="margin:0">The site itself has almost no executable code, but the <em>sync</em> workflows execute trusted Python with broad repo-write capabilities. Treating the build pipeline as a first-class security target, rather than just the deployed pages, is what these five tools collectively achieve.</p>
+  </div>
+
+  <h2>Supply-chain and CI hardening</h2>
+  <ul>
+    <li><strong>Pinned third-party Actions.</strong> All <code>uses:</code> references in <code>.github/workflows/</code> are pinned to a major version tag (and where practical, to a commit SHA), so an upstream tag retag cannot inject new code without our review.</li>
+    <li><strong>Least-privilege <code>GITHUB_TOKEN</code>.</strong> Each workflow declares the narrowest <code>permissions:</code> block it needs (<code>contents: write</code> for the sync jobs, <code>contents: read</code> elsewhere). The default token is read-only at the repository level.</li>
+    <li><strong>Two-person review on <code>main</code>.</strong> Sync workflows do not auto-merge; they open a pull request and wait for a human reviewer. New bios are explicitly reviewed before going public.</li>
+    <li><strong>No long-lived deploy keys.</strong> Deployment is handled by GitHub Pages itself, using the repository's own short-lived OIDC token, so there is no external secret to rotate.</li>
+    <li><strong>Source-of-truth visibility.</strong> Both data files (<code>data/bios.json</code>, <code>data/mc-members.json</code>) are version-controlled. Any malicious or accidental change is one <code>git revert</code> away.</li>
+  </ul>
+
+  <h2>Web-platform hardening</h2>
+  <ul>
+    <li><strong>HTTPS everywhere.</strong> GitHub Pages enforces HTTPS with an auto-renewed Let's Encrypt certificate. Plain-HTTP requests are redirected.</li>
+    <li><strong>Strict-Transport-Security.</strong> GitHub Pages sends a long-lived <code>Strict-Transport-Security</code> header on every response.</li>
+    <li><strong>No inline secrets, no privileged scripts.</strong> The only JavaScript on the site is the locally-hosted <code>assets/js/site.js</code>; no third-party tag managers, analytics, or chat widgets are loaded.</li>
+    <li><strong>Minimal third-party calls.</strong> At runtime the page contacts Google Fonts (CSS only), FlagCDN (PNG only), and Formspree (only on form submit). All declared in <code>privacy.html</code>.</li>
+    <li><strong>SafeHTML form handling.</strong> The contact form posts via HTTPS to Formspree; we never echo submitted content back into a page, so there is no XSS surface from the form.</li>
+  </ul>
+
+  <h2>Account and access hygiene</h2>
+  <ul>
+    <li><strong>Two-factor authentication</strong> is required on every account with push access via GitHub's org-level 2FA enforcement.</li>
+    <li><strong>Maintain role, not Admin,</strong> for routine collaborators. The <em>Admin</em> role is held only by accounts that genuinely need branch-protection or settings access.</li>
+    <li><strong>Defence-in-depth on handover.</strong> The admin handover checklist (Section 06) ends with revoking the previous admin's access; nobody keeps access "just in case".</li>
+    <li><strong>Branch-protection on <code>main</code></strong> (recommended): require pull-request review, require status checks (<code>pages build and deployment</code>, <code>i18n drift check</code>, <code>CodeQL</code>) to pass, disallow force-push.</li>
+  </ul>
+
+  <h2>Personal-data minimisation</h2>
+  <p>The site holds minimal personal data: name, institution, country, working group(s), a short bio, optionally a photo and links. There is no email address in <code>data/bios.json</code>; the contact form is the only mechanism for reaching a member, and it is mediated by Formspree under a Data Processing Agreement. All processing terms are spelt out in <code>privacy.html</code>; the lawful basis is consent, captured at form submission time and revocable by request.</p>
+
+  <h2>Audit trail</h2>
+  <p>Every meaningful change to the site is a commit on <code>main</code>. Every commit links to a pull request, every pull request to the GitHub Actions run that built and deployed it, and every Security-tab event (alert, advisory, scan) timestamps an attributable user. The repository's <em>Insights</em> tab gives a single view of contributors, dependency health, and traffic.</p>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
      APPENDIX A — ACCESSIBILITY STANDARD & ASSESSMENT
      ════════════════════════════════════════════════════════════ -->
 <section class="page">
@@ -1686,49 +1818,18 @@ sequenceDiagram
 
 
 <!-- ════════════════════════════════════════════════════════════
-     APPENDIX B — SECURITY & LICENSING
+     APPENDIX B — LICENSING
      ════════════════════════════════════════════════════════════ -->
 <section class="page">
   <div class="section-banner">
     <div class="num">B</div>
     <div class="head">
-      <h1>Appendix · Security &amp; licensing</h1>
-      <div class="sub">Coordinated-disclosure policy in brief; the dual MIT + CC&nbsp;BY&nbsp;4.0 model.</div>
+      <h1>Appendix · Licensing</h1>
+      <div class="sub">The dual MIT + CC&nbsp;BY&nbsp;4.0 model and suggested attribution.</div>
     </div>
   </div>
 
-  <h2>Security policy in brief</h2>
-  <p>Full text in <code>SECURITY.md</code> at the repo root. The shape of it:</p>
-
-  <h3>Scope</h3>
-  <p><strong>In scope:</strong> the current <code>main</code> branch, the deployed site at <code>netsec-cost.eu</code>, the two GitHub Actions, the Python sync scripts, and any personal data we hold.</p>
-  <p><strong>Out of scope:</strong> older branches, tags, or forks; reports about COST or EU branding; volumetric DoS against third parties (GitHub, Formspree, Google). Those go to the relevant vendor.</p>
-
-  <h3>How to report</h3>
-  <p>Two private channels — <strong>not</strong> public GitHub issues:</p>
-  <ol>
-    <li><strong>GitHub Security Advisories</strong> (preferred): <code>github.com/EISSeuropa/netsec.github.io/security/advisories/new</code>.</li>
-    <li><strong>Email</strong> the maintainer; for data-protection matters specifically, contact the Data Controller (Universiteit Leiden) per the addresses listed in <a href="https://netsec-cost.eu/privacy.html">privacy.html</a>.</li>
-  </ol>
-
-  <h3>What to expect</h3>
-  <table>
-    <thead><tr><th>Stage</th><th>Target</th></tr></thead>
-    <tbody>
-      <tr><td>Acknowledgement</td><td>Within 5 working days.</td></tr>
-      <tr><td>Initial assessment</td><td>Within 14 working days.</td></tr>
-      <tr><td>Resolution — Critical</td><td>Patch in days; hotfix to <code>main</code>.</td></tr>
-      <tr><td>Resolution — High / Medium</td><td>Next sprint, typically 2–4 weeks.</td></tr>
-      <tr><td>Resolution — Low</td><td>Routine maintenance.</td></tr>
-      <tr><td>Disclosure</td><td>Coordinated; credit on request.</td></tr>
-    </tbody>
-  </table>
-
-  <h3>Safe harbour</h3>
-  <p>If you make a good-faith effort to comply with this policy when researching and reporting an issue, we will not pursue or support any legal action against you. Good-faith means: only acting against your own data and the public site, avoiding privacy violations and service disruption, not retaining personal data of others, and giving us reasonable time to fix the issue before public disclosure.</p>
-
-  <h2>Licensing model</h2>
-  <p>The repository uses <strong>dual licensing</strong>, matching EU and COST open-access norms:</p>
+  <p>The repository uses <strong>dual licensing</strong>, matching EU and COST open-access norms: code is permissively licensed for any reuse, content is openly licensed with an attribution requirement.</p>
 
   <table>
     <thead><tr><th>What</th><th>Licence</th></tr></thead>
@@ -1745,11 +1846,59 @@ sequenceDiagram
     <p style="margin:0;font-style:italic">"Based on content from COST Action NetSec (CA24154), <a href="https://netsec-cost.eu">https://netsec-cost.eu</a>, CC BY 4.0."</p>
   </div>
 
+  <p>Where reusing the source code, an MIT-style attribution in your own <code>LICENSE</code> or <code>NOTICE</code> file is sufficient.</p>
+
+  <h2>Why two licences</h2>
+  <p>Source code and prose travel through different reuse channels. A permissive code licence (MIT) lets anyone fork the project and adapt the templates without an attribution wall in their UI; a content licence (CC&nbsp;BY&nbsp;4.0) gives written work the standard open-access treatment expected by COST and the European Commission. Keeping them separate avoids accidentally over-licensing either side.</p>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     APPENDIX C — CHANGELOG
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="section-banner">
+    <div class="num">C</div>
+    <div class="head">
+      <h1>Appendix · Changelog</h1>
+      <div class="sub">What each revision of this documentation pack records.</div>
+    </div>
+  </div>
+
+  <p>This changelog tracks the documentation pack itself, not the website. Website history is in <code>git log</code> on <code>main</code>; releases of the documentation are tagged informally by the cover version.</p>
+
+  <h2>v1.2 · May 2026</h2>
+  <p class="small muted" style="margin-top:-6pt">Current revision.</p>
+  <ul>
+    <li><strong>New Section 07 — Security &amp; DevSecOps.</strong> Threat model in a paragraph; coordinated-disclosure policy moved up from the appendix; full inventory of GitHub-native automation now in place (private vulnerability reporting, security advisories, Dependabot alerts, CodeQL code scanning with the security-and-quality and security-extended suites at high precision on push, pull-request, and a weekly cron, secret scanning with push protection); supply-chain hardening (pinned Actions, least-privilege <code>GITHUB_TOKEN</code>, two-person review on <code>main</code>); web-platform hardening (HTTPS-only, HSTS, no third-party trackers); account hygiene (org-level 2FA, branch protection); personal-data minimisation; audit-trail posture.</li>
+    <li><strong>Appendix B split.</strong> Security content promoted to Section 07; Appendix B now covers Licensing only, with the rationale for keeping the code and content licences separate.</li>
+    <li><strong>New Appendix C — Changelog</strong> (this page).</li>
+    <li><strong>Footer version corrected</strong> to match the cover.</li>
+  </ul>
+
+  <h2>v1.1 · May 2026</h2>
+  <ul>
+    <li><strong>New full-bleed poster page</strong> after the cover, summarising the website in numbers (30 countries, 49 MC members, 4 Working Groups, 5 grant schemes) and eight headline features.</li>
+    <li><strong>New Section 04 — Translation &amp; multilingual posture.</strong> Sibling-file approach for FR/DE beta, what is and is not translated, the SHA-1 drift-checker workflow with diagram, refresh procedure, and the explicit "no machine-translation, no recurring API cost" stance.</li>
+    <li><strong>New Section 05 — SEO &amp; discoverability.</strong> Open Graph, Twitter Card, JSON-LD, canonical URLs, hreflang, sitemap, 404 strategy; the <code>inject-seo.py</code> idempotent generator with diagram; new-page SEO checklist; GitHub Pages header limits.</li>
+    <li><strong>DNS row clarified</strong> — Namecheap, registered under Dr Moritz Weiss (Action Chair), with Dr Arthur Laudrain as admin contact.</li>
+    <li><strong>Screenshots refreshed</strong> against the current site (post FR/DE nav-fit fix, post-ITC-grants edit).</li>
+    <li>Admin guide renumbered from Section 04 to Section 06; cover bumped to v1.1.</li>
+  </ul>
+
+  <h2>v1.0 · May 2026</h2>
+  <ul>
+    <li><strong>Initial release</strong> of the documentation pack as part of Deliverable D1.</li>
+    <li>Cover, table of contents, and six core chapters: Overview &amp; purpose, Architecture (with data-flow diagrams for the weekly sync workflows), Design system (tokens, components, motion, accessibility floor), Admin guide (accounts, routine tasks, escalation, handover), Appendix A Accessibility (WCAG 2.1 AA target, axe-core results), Appendix B Security &amp; Licensing (single combined appendix in this revision).</li>
+    <li>Three site screenshots, Mermaid diagrams inlined and rendered client-side at build time.</li>
+    <li>Build pipeline (<code>docs/pdf/build.sh</code>) using a local HTTP server plus Chrome headless <code>--print-to-pdf</code>, no external services.</li>
+  </ul>
+
   <hr style="margin-top:36pt">
 
   <p class="small muted center" style="margin-top:24pt">
     NetSec — Networking European Security Knowledge · COST Action CA24154 · MoU 063/25 · Running 10 Oct 2025 – 09 Oct 2029.<br>
-    Documentation v1.0 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich CSS) as part of Deliverable D1.<br>
+    Documentation v1.2 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich CSS) as part of Deliverable D1.<br>
     The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union.
   </p>
 </section>
