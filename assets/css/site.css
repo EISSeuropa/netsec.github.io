@@ -144,17 +144,43 @@ img{max-width:100%;display:block}
 .menu-toggle{display:none;background:none;border:0;padding:8px;cursor:pointer}
 .menu-toggle span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;border-radius:2px;transition:.3s var(--ease)}
 
-/* Tighter nav typography on FR/DE pages — the same labels are
-   roughly 30–50 % longer than in English (e.g. "Working Groups"
-   → "Groupes de travail"), and without this the chips wrap or
-   crowd the utility cluster on standard laptop widths. */
+/* Tighter nav typography on FR/DE pages.
+   ─────────────────────────────────────────────────────────────
+   FR/DE labels are 30–50 % longer than English ("Working Groups"
+   → "Groupes de travail" / "Arbeitsgruppen"; "Roadmap" → "Feuille
+   de route"). Three tiers of compactness — base for wide desktop,
+   one tier tighter at standard-laptop widths, and one more at the
+   small-laptop band right before the hamburger drawer kicks in
+   at 980 px. The English nav is left alone. */
 :lang(fr) .nav-links a,
 :lang(de) .nav-links a{
-  font-size:.84rem;
-  padding:7px 9px;
+  font-size:.82rem;
+  padding:6px 8px;
 }
 :lang(fr) .nav-links,
-:lang(de) .nav-links{gap:2px}
+:lang(de) .nav-links{gap:0}
+
+/* Standard-laptop band (1100–1280 px). Items are still inline but
+   the FR/DE chips need slightly more shrinking to avoid touching
+   the utility cluster. */
+@media (max-width:1280px){
+  :lang(fr) .nav-links a,
+  :lang(de) .nav-links a{
+    font-size:.78rem;
+    padding:5px 7px;
+    letter-spacing:-.01em;
+  }
+}
+
+/* Small-laptop band (980–1100 px) — last stop before the
+   hamburger drawer. Drop a non-essential item (Outputs /
+   Productions / Ergebnisse) to free the last bit of width.
+   The same item is reachable via the footer site map and via
+   the home page anchor list. */
+@media (max-width:1100px){
+  :lang(fr) .nav-links a[href*="outputs"],
+  :lang(de) .nav-links a[href*="outputs"]{display:none}
+}
 
 /* -------- Hero -------- */
 .hero{padding:140px 0 80px;text-align:center;position:relative}
