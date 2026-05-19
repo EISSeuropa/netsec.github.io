@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="de" data-i18n-status="beta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Förderungen und Ausschreibungen — COST-Aktion CA24154 (NetSec). Kurzfristige wissenschaftliche Missionen, virtuelle Mobilität, Konferenzförderungen — alle über e-COST verwaltet.">
+<title>Förderungen &amp; Ausschreibungen · NetSec — COST-Aktion CA24154</title>
+<link rel="alternate" hreflang="en" href="https://netsec-cost.eu/grants.html">
+<link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/grants.fr.html">
+<link rel="alternate" hreflang="de" href="https://netsec-cost.eu/grants.de.html">
+<link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/grants.html">
+<link rel="icon" href="assets/images/logo.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&display=swap">
+<script>
+  (function() {
+    try {
+      var saved = localStorage.getItem('netsec-theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+  /* Seitenspezifische Stile — identisch zur englischen Version. */
+  .grants-page{padding:140px 0 80px}
+  .grants-page .container{max-width:1100px}
+  .grants-page h1{font-size:clamp(2.4rem,5vw,3.6rem);margin:0 0 1rem;text-align:center;background:linear-gradient(180deg,var(--ink) 0%,#3a4a6b 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .dark .grants-page h1{background:linear-gradient(180deg,#f4f8ff 0%,#aeb7d6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .grants-page .lede{max-width:64ch;margin:0 auto 1.2rem;font-size:1.05rem;text-align:center;color:var(--ink-2)}
+  .grants-portal-note{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:18px 22px;margin:24px auto 40px;max-width:760px;border-radius:14px;background:linear-gradient(135deg,rgba(0,51,153,.06),rgba(10,132,255,.04));border:1px solid rgba(10,132,255,.20)}
+  .grants-portal-note .icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
+  .grants-portal-note p{margin:0;font-size:.92rem;color:var(--ink-2);flex:1 1 200px}
+  .grants-portal-note strong{color:var(--ink)}
+  .grants-list{display:flex;flex-direction:column;gap:18px;margin:0 0 60px}
+  .grant-card{padding:28px 32px}
+  .grant-card .grant-head{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+  .grant-icon{width:48px;height:48px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;background:linear-gradient(135deg,rgba(0,51,153,.10),rgba(10,132,255,.10));color:var(--accent)}
+  .grant-icon svg{width:24px;height:24px}
+  .grant-title{flex:1;min-width:240px}
+  .grant-title h2{font-size:1.35rem;margin:0 0 4px;letter-spacing:-.01em}
+  .grant-title .grant-tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:rgba(0,51,153,.08);padding:3px 9px;border-radius:6px}
+  .grant-card .grant-summary{color:var(--ink-2);margin:0 0 16px;font-size:.97rem;line-height:1.55}
+  .grant-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0 0 18px}
+  .grant-fact{background:rgba(255,255,255,.55);padding:12px 16px}
+  .dark .grant-fact{background:rgba(22,32,55,.55)}
+  .grant-fact .label{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 4px;display:block}
+  .grant-fact .value{font-family:'Lexend','Inter',sans-serif;font-weight:600;color:var(--ink);font-size:.95rem;letter-spacing:-.005em}
+  .grant-fact .value small{font-weight:500;color:var(--muted);font-size:.85rem;display:block;margin-top:2px}
+  .grant-eligibility{margin:0 0 18px}
+  .grant-eligibility h3{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 6px}
+  .grant-eligibility ul{padding-left:20px;margin:0;color:var(--ink-2);font-size:.92rem;line-height:1.55}
+  .grant-eligibility li{margin-bottom:3px}
+  .grant-cta{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:11px;background:var(--ink);color:#fff;font-weight:600;font-size:.92rem;letter-spacing:-.005em;transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .2s var(--ease)}
+  .grant-cta:hover{transform:translateY(-1px);background:var(--accent);box-shadow:0 10px 24px var(--accent-glow);opacity:1}
+  .dark .grant-cta{background:#f4f6fb;color:#0b1220}
+  .dark .grant-cta:hover{background:#fff;color:#0b1220}
+  .grant-cta svg{width:14px;height:14px;transition:transform .2s var(--ease)}
+  .grant-cta:hover svg{transform:translateX(3px)}
+  .process-section{margin:48px 0 60px}
+  .process-section h2{text-align:center;margin-bottom:12px}
+  .process-section .section-sub{text-align:center;color:var(--muted);font-size:.95rem;max-width:60ch;margin:0 auto 36px}
+  .timeline{counter-reset:step;position:relative;max-width:760px;margin:0 auto;padding:8px 0;list-style:none}
+  .timeline > li{margin:0}
+  .timeline::before{content:"";position:absolute;top:6px;bottom:6px;left:22px;width:2px;background:linear-gradient(180deg,var(--accent) 0%,var(--accent-2) 50%,var(--accent) 100%);opacity:.4;border-radius:2px}
+  .timeline-item{position:relative;padding:0 0 22px 64px}
+  .timeline-item:last-child{padding-bottom:0}
+  .timeline-item::before{counter-increment:step;content:counter(step);position:absolute;left:6px;top:0;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:'Lexend','Inter',sans-serif;font-weight:700;font-size:.92rem;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 4px var(--bg),0 4px 12px var(--accent-glow);z-index:1}
+  .timeline-item::after{content:"";position:absolute;left:40px;top:16px;width:24px;height:2px;background:linear-gradient(90deg,rgba(10,132,255,.55),rgba(10,132,255,0))}
+  .timeline-card{padding:18px 22px;border-radius:14px}
+  .timeline-card h3{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:1.02rem;margin:0 0 6px;letter-spacing:-.005em}
+  .timeline-when{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;background:rgba(0,51,153,.08);padding:3px 9px;border-radius:6px}
+  .dark .timeline-when{background:rgba(10,132,255,.18)}
+  .timeline-card p{font-size:.9rem;color:var(--ink-2);margin:0;line-height:1.55}
+  .timeline-phase{position:relative;padding:6px 0 22px 64px;min-height:36px}
+  .timeline-phase::before{content:"";position:absolute;left:14px;top:8px;width:18px;height:18px;border-radius:50%;background:var(--bg);border:2px dashed var(--accent);opacity:.65}
+  .timeline-phase-label{display:inline-block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:6px 14px;border-radius:999px;background:var(--glass-bg);border:1px solid var(--line)}
+  @media (max-width:600px){.timeline-item{padding-left:54px}.timeline-item::before{width:30px;height:30px;font-size:.85rem;left:7px}.timeline-item::after{left:36px;width:18px}.timeline-card{padding:14px 16px}.timeline-phase{padding-left:54px}}
+  .grant-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:14px;margin:24px 0 60px}
+  .grant-note{padding:18px 20px}
+  .grant-note h3{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 6px}
+  .grant-note p{font-size:.9rem;color:var(--ink-2);margin:0;line-height:1.5}
+  .grants-resources{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:14px;margin:24px 0 60px}
+  .resource-card{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;text-decoration:none;color:inherit;transition:transform .2s var(--ease)}
+  .resource-card:hover{transform:translateY(-2px);opacity:1}
+  .resource-icon{width:38px;height:38px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;background:rgba(0,51,153,.08);color:var(--accent)}
+  .resource-icon svg{width:18px;height:18px}
+  .resource-card h3{font-size:.98rem;margin:0 0 4px;color:var(--ink)}
+  .resource-card p{font-size:.85rem;color:var(--muted);margin:0;line-height:1.4}
+  .grant-managers{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px;margin:24px 0 60px}
+  .grant-manager{padding:22px 24px;text-align:center}
+  .grant-manager .gm-avatar{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;overflow:hidden;background:linear-gradient(135deg,#cfd9ee,#e8d8c2);border:2px solid rgba(255,255,255,.8)}
+  .grant-manager .gm-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .grant-manager h3{font-size:1.05rem;margin:0 0 4px}
+  .grant-manager .role{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 8px}
+  .grant-manager p{font-size:.88rem;color:var(--ink-2);margin:0;line-height:1.5}
+  .grant-manager a{display:inline-block;margin-top:6px;font-size:.88rem;color:var(--accent-2);word-break:break-word}
+  @media (max-width:540px){.grants-page{padding:120px 0 60px}.grant-card{padding:22px}.grant-card .grant-head{gap:12px}.grant-icon{width:40px;height:40px}.grant-title h2{font-size:1.15rem}}
+</style>
+</head>
+<body>
+
+<div class="i18n-beta-ribbon" role="status">
+  <span class="i18n-beta-ribbon-badge">Beta</span>
+  <span>Maschinell übersetzt — die englische Fassung ist verbindlich. <a href="grants.html" hreflang="en">Auf Englisch ansehen →</a></span>
+</div>
+
+<a class="skip-link" href="#main">Zum Hauptinhalt springen</a>
+
+<div class="ambience" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<header class="nav" role="banner">
+  <div class="nav-inner">
+    <a href="index.de.html" class="brand" aria-label="NetSec-Startseite">
+      <span class="brand-mark">NS</span>
+      <span>NetSec</span>
+    </a>
+    <div class="nav-actions">
+      <div class="lang-switch" role="group" aria-label="Sprache">
+        <a href="#" hreflang="en">EN</a>
+        <a href="#" hreflang="fr" title="Français (bêta)">FR</a>
+        <a href="#" hreflang="de">DE</a>
+      </div>
+      <button class="theme-toggle" type="button" aria-label="Dunkelmodus umschalten" title="Dunkelmodus umschalten">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="menu-toggle" aria-label="Menü ein-/ausblenden" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="nav-links" aria-label="Hauptnavigation">
+      <a href="index.de.html#news">Aktuelles</a>
+      <a href="index.de.html#about">Über</a>
+      <a href="index.de.html#working-groups">Arbeitsgruppen</a>
+      <a href="index.de.html#committee">Ausschuss</a>
+      <a href="people.de.html">Netzwerk</a>
+      <a href="index.de.html#events">Veranstaltungen</a>
+      <a href="grants.de.html" aria-current="page">Förderungen</a>
+      <a href="index.de.html#roadmap">Roadmap</a>
+      <a href="index.de.html#outputs">Ergebnisse</a>
+      <a href="index.de.html#contact" class="nav-cta">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="grants-page">
+  <div class="container reveal">
+    <div class="section-head">
+      <span class="eyebrow">Förderung &amp; Unterstützung</span>
+      <h1>Förderungen &amp; Ausschreibungen</h1>
+      <p class="lede">NetSec finanziert fünf Arten von Netzwerkförderungen, um Mobilität, Konferenzteilnahme und virtuelle Zusammenarbeit in der europäischen Sicherheitsforschung zu unterstützen. Ausschreibungen stehen der gesamten Forschungs-Community offen, nicht nur Aktionsteilnehmer·innen — siehe die Förderfähigkeit jeder Förderung für Details.</p>
+    </div>
+
+    <div class="grants-portal-note">
+      <span class="icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </span>
+      <p>
+        <strong>Alle Anträge werden über e-COST gestellt</strong>, das offizielle Portal der COST Association — nicht auf dieser Seite. Jede Förderkarte unten verweist auf die richtige Stelle auf <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-services.cost.eu</a>. Melden Sie sich mit Ihrem e-COST-Konto an (kostenlos zu erstellen) und wählen Sie COST-Aktion CA24154 (NetSec).
+      </p>
+    </div>
+
+    <h2 class="visually-hidden" style="position:absolute;left:-9999px">Förderarten</h2>
+    <div class="grants-list">
+
+      <article id="stsm" class="grant-card glass">
+        <div class="grant-head">
+          <span class="grant-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          </span>
+          <div class="grant-title">
+            <span class="grant-tag">Mobilität</span>
+            <h2>Kurzfristige wissenschaftliche Mission (STSM)</h2>
+          </div>
+        </div>
+        <p class="grant-summary">Fördert einen Arbeitsbesuch bei einer Gastinstitution in einem anderen Land für gezielte Forschung über einen festgelegten Zeitraum — Zusammenarbeit, Nutzung von Einrichtungen, Aufbau neuer Partnerschaften. Die Gastinstitution muss in einem anderen Land als die Heimateinrichtung der antragstellenden Person liegen.</p>
+        <div class="grant-facts">
+          <div class="grant-fact"><span class="label">Betrag</span><span class="value">€ 2 100</span></div>
+          <div class="grant-fact"><span class="label">Aktivität</span><span class="value">Präsenzbesuch<small>bei einer Gastinstitution im Ausland</small></span></div>
+          <div class="grant-fact"><span class="label">Ort</span><span class="value">Überall<small>weltweit</small></span></div>
+        </div>
+        <div class="grant-eligibility">
+          <h3>Förderfähigkeit</h3>
+          <ul>
+            <li>Offen für alle, die einer <strong>COST-Mitgliedseinrichtung oder NNC</strong> angegliedert sind — unabhängig vom Karrierestadium.</li>
+            <li>Die <strong>Gastinstitution muss in einem anderen Land</strong> liegen als die Heimateinrichtung der antragstellenden Person.</li>
+            <li>Der Besuch dient den Zielen der Aktion <em>und</em> der Karriereentwicklung der antragstellenden Person.</li>
+            <li>Bis zu <strong>50 % Vorauszahlung</strong> können nach der Bewilligung freigegeben werden (nur STSM — andere Förderarten zahlen erst nach der Aktivität voll aus).</li>
+            <li>Teilen sich zwei oder mehr STSM-Geförderte dieselbe Gastinstitution, müssen sie <strong>eigenständige</strong> (nicht identische) wissenschaftliche Berichte vorlegen.</li>
+          </ul>
+        </div>
+        <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=STSM" target="_blank" rel="noopener">
+          Auf e-COST beantragen
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <article id="virtual-mobility" class="grant-card glass">
+        <div class="grant-head">
+          <span class="grant-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M9 22h6M12 18v4"/></svg>
+          </span>
+          <div class="grant-title">
+            <span class="grant-tag">Mobilität</span>
+            <h2>Virtuelle Mobilitätsförderung (VM)</h2>
+          </div>
+        </div>
+        <p class="grant-summary">Das virtuelle Gegenstück zur STSM — strukturierte Zusammenarbeit mit einer Gastinstitution in einem anderen Land, online durchgeführt. Gleiche Ziele (Forschungspartnerschaft, Karriereentwicklung, Erreichung der Aktionsziele), keine Reise.</p>
+        <div class="grant-facts">
+          <div class="grant-fact"><span class="label">Betrag</span><span class="value">€ 1 300</span></div>
+          <div class="grant-fact"><span class="label">Aktivität</span><span class="value">Virtuelle Zusammenarbeit<small>mit Gastinstitution im Ausland</small></span></div>
+          <div class="grant-fact"><span class="label">Ort</span><span class="value">Weltweit<small>online, ohne Reise</small></span></div>
+        </div>
+        <div class="grant-eligibility">
+          <h3>Förderfähigkeit</h3>
+          <ul>
+            <li>Offen für alle, die einer <strong>COST-Mitgliedseinrichtung oder NNC</strong> angegliedert sind.</li>
+            <li>Zusammenarbeit mit einer Gastinstitution in einem <strong>anderen Land</strong> als die der antragstellenden Person.</li>
+            <li>Das Ergebnis nutzt sowohl der geförderten Person als auch der Aktion.</li>
+          </ul>
+        </div>
+        <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=VM" target="_blank" rel="noopener">
+          Auf e-COST beantragen
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <article id="yri-conference-grant" class="grant-card glass">
+        <div class="grant-head">
+          <span class="grant-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+          </span>
+          <div class="grant-title">
+            <span class="grant-tag">Konferenzförderung</span>
+            <h2>Konferenzförderung für Nachwuchsforschende und Innovator·innen</h2>
+          </div>
+        </div>
+        <p class="grant-summary">Für <strong>Nachwuchsforschende und Innovator·innen</strong> (unter 40 zum Zeitpunkt der Antragstellung), die eigene Forschung präsentieren — als Vortrag oder Poster — auf einer Konferenz im Themenfeld der Aktion. Stärkt die Sichtbarkeit der nächsten Generation europäischer Sicherheitsforschender.</p>
+        <div class="grant-facts">
+          <div class="grant-fact"><span class="label">Betrag</span><span class="value">€ 1 200</span></div>
+          <div class="grant-fact"><span class="label">Aktivität</span><span class="value">Vortrag oder Poster<small>eigene Arbeit</small></span></div>
+          <div class="grant-fact"><span class="label">Ort</span><span class="value">Überall<small>vor Ort oder virtuell</small></span></div>
+        </div>
+        <div class="grant-eligibility">
+          <h3>Förderfähigkeit</h3>
+          <ul>
+            <li>Aktionsteilnehmer·innen, zum Zeitpunkt der Antragstellung <strong>unter 40 Jahre alt</strong>.</li>
+            <li>Angenommen, eigene Arbeit (Vortrag oder Poster) im Rahmen der Aktion zu präsentieren.</li>
+            <li>An ein teilnehmendes Land angegliedert.</li>
+            <li>Keine Überschneidung mit einer anderen COST-Förderung oder Sitzung für dieselbe Aktivität.</li>
+          </ul>
+        </div>
+        <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=YRIG" target="_blank" rel="noopener">
+          Auf e-COST beantragen
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <article id="itc-conference-grant" class="grant-card glass">
+        <div class="grant-head">
+          <span class="grant-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+          </span>
+          <div class="grant-title">
+            <span class="grant-tag">Konferenzförderung</span>
+            <h2>Konferenzförderung für Inclusiveness Target Countries</h2>
+          </div>
+        </div>
+        <p class="grant-summary">Unterstützt Forschende in <strong>Inclusiveness Target Countries</strong> (ITCs), <em>eigene</em> Arbeiten — im Rahmen der Aktion — auf einer externen Konferenz zu präsentieren. Ziel ist es, die geografische Beteiligung zu verbreitern und einzelne Karrieren zu unterstützen.</p>
+        <div class="grant-facts">
+          <div class="grant-fact"><span class="label">Betrag</span><span class="value">€ 1 200</span></div>
+          <div class="grant-fact"><span class="label">Aktivität</span><span class="value">Vortrag<small>der eigenen Forschung</small></span></div>
+          <div class="grant-fact"><span class="label">Ort</span><span class="value">Überall<small>vor Ort oder virtuell</small></span></div>
+        </div>
+        <div class="grant-eligibility">
+          <h3>Förderfähigkeit</h3>
+          <ul>
+            <li>Aktionsteilnehmer·innen <strong>mit Anbindung an ITCs oder Near Neighbour Countries</strong>.</li>
+            <li>Angenommen, einen <strong>Vortrag über die eigene Arbeit</strong> im Rahmen der Aktion zu halten.</li>
+            <li>Keine Überschneidung mit einer anderen COST-Förderung oder Sitzung für dieselbe Aktivität.</li>
+          </ul>
+        </div>
+        <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=ITCCG" target="_blank" rel="noopener">
+          Auf e-COST beantragen
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <article id="dissemination-conference-grant" class="grant-card glass">
+        <div class="grant-head">
+          <span class="grant-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+          </span>
+          <div class="grant-title">
+            <span class="grant-tag">Konferenzförderung</span>
+            <h2>Konferenzförderung für Verbreitung</h2>
+          </div>
+        </div>
+        <p class="grant-summary">Unterstützt eine·n Aktionsteilnehmende·n bei der Präsentation der <strong>Aktionsergebnisse</strong> (ihrer Arbeit, Aktivitäten oder kollektiven Erkenntnisse) auf einer externen Konferenz — um NetSecs Sichtbarkeit zu steigern, neue Teilnehmer·innen zu gewinnen und Ergebnisse einer breiteren Fachöffentlichkeit zugänglich zu machen.</p>
+        <div class="grant-facts">
+          <div class="grant-fact"><span class="label">Betrag</span><span class="value">€ 1 250</span></div>
+          <div class="grant-fact"><span class="label">Aktivität</span><span class="value">Vortrag<small>der Aktionsarbeit</small></span></div>
+          <div class="grant-fact"><span class="label">Ort</span><span class="value">Überall<small>vor Ort oder virtuell</small></span></div>
+        </div>
+        <div class="grant-eligibility">
+          <h3>Förderfähigkeit</h3>
+          <ul>
+            <li>Aktionsteilnehmer·innen <strong>mit Anbindung an COST-Mitgliedsländer oder Near Neighbour Countries (NNCs)</strong>.</li>
+            <li>Angenommen, einen <strong>Vortrag</strong> über die Arbeit, Ergebnisse oder Aktivitäten der Aktion zu halten (ein Poster oder eigene unzusammenhängende Forschung qualifizieren nicht — siehe ITC- / YRI-Förderungen unten).</li>
+            <li>Keine Überschneidung mit einer anderen COST-Förderung oder Sitzung für dieselbe Aktivität (keine Doppelförderung).</li>
+          </ul>
+        </div>
+        <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=DCG" target="_blank" rel="noopener">
+          Auf e-COST beantragen
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+    </div>
+
+    <section id="process" class="process-section reveal">
+      <h2>Wie eine Förderung vergeben wird</h2>
+      <p class="section-sub">Jede Förderung folgt demselben e-COST-Ablauf, von der Antragstellung bis zur Auszahlung. Schritte 1–4 finden <strong>vor</strong> der Aktivität statt; Schritt 5 ist die Aktivität selbst; Schritte 6–7 finden <strong>danach</strong> statt.</p>
+
+      <ol class="timeline" aria-label="Förderungs-Vergabeprozess">
+        <li class="timeline-item">
+          <div class="timeline-card glass">
+            <h3>Antragstellung <span class="timeline-when">Vorher</span></h3>
+            <p>Sie reichen Ihren Antrag über <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-COST</a> ein, <strong>bevor</strong> die geplante Aktivität beginnt. Verspätete Starts sind nicht förderfähig.</p>
+          </div>
+        </li>
+        <li class="timeline-item">
+          <div class="timeline-card glass">
+            <h3>Bewertung <span class="timeline-when">Vorher</span></h3>
+            <p>Die Koordination Fördervergabe und der Bewertungsausschuss prüfen die Anträge anhand der vom Management-Ausschuss festgelegten Kriterien.</p>
+          </div>
+        </li>
+        <li class="timeline-item">
+          <div class="timeline-card glass">
+            <h3>Genehmigung <span class="timeline-when">Vorher</span></h3>
+            <p>Die GAC genehmigt oder lehnt die Förderung in e-COST ab. Abgelehnte Anträge gehen in den Entwurfsstatus zurück — Sie können sie bearbeiten und erneut einreichen.</p>
+          </div>
+        </li>
+        <li class="timeline-item">
+          <div class="timeline-card glass">
+            <h3>Bewilligungsschreiben <span class="timeline-when">Vorher</span></h3>
+            <p>Die Förderträger-Leitung stellt das Bewilligungsschreiben aus. Sie können nun Buchungen vornehmen (und, nur bei STSM, bis zu 50 % Vorauszahlung anfordern).</p>
+          </div>
+        </li>
+        <li class="timeline-phase" aria-hidden="true">
+          <span class="timeline-phase-label">— Aktivitätsfenster —</span>
+        </li>
+        <li class="timeline-item">
+          <div class="timeline-card glass">
+            <h3>Aktivität <span class="timeline-when">Während</span></h3>
+            <p>Sie führen den Besuch, die Präsentation, die virtuelle Zusammenarbeit usw. durch — innerhalb der genehmigten Termine und des genehmigten Rahmens.</p>
+          </div>
+        </li>
+        <li class="timeline-item">
+          <div class="timeline-card glass">
+            <h3>Bericht <span class="timeline-when">Nachher</span></h3>
+            <p>Spätestens <strong>30 Tage nach Abschluss</strong> reichen Sie über e-COST einen wissenschaftlichen Bericht (und etwaige Belege) ein.</p>
+          </div>
+        </li>
+        <li class="timeline-item">
+          <div class="timeline-card glass">
+            <h3>Auszahlung <span class="timeline-when">Nachher</span></h3>
+            <p>Die GAC genehmigt den Bericht; die Förderträger-Leitung gibt die (Rest-)Zahlung frei.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="reveal" aria-label="Wichtige Hinweise">
+      <h2 style="text-align:center;margin-bottom:8px">Wichtig zu wissen</h2>
+      <p class="section-sub" style="text-align:center;color:var(--muted);max-width:60ch;margin:0 auto 24px">Drei Regeln, die Antragstellende am häufigsten überraschen.</p>
+      <div class="grant-notes">
+        <div class="grant-note glass">
+          <h3>Open Access</h3>
+          <p>Publikationen und andere Forschungsergebnisse aus einer NetSec-Förderung müssen gemäß COST-Politik im <strong>Open Access</strong> verfügbar sein. Nennen Sie die COST-Aktion <strong>CA24154</strong> und verwenden Sie die COST + EU-Förderkennung gemäß Visual Identity Guide.</p>
+        </div>
+        <div class="grant-note glass">
+          <h3>Keine Doppelförderung</h3>
+          <p>Sie können eine NetSec-Förderung nicht mit einer anderen COST-Förderung oder Sitzungsabrechnung für dieselbe Aktivität kombinieren. e-COST warnt Sie bei der Einreichung vor Überschneidungen.</p>
+        </div>
+        <div class="grant-note glass">
+          <h3>Interessenkonflikte vermeiden</h3>
+          <p>Eine Förderung <em>kann</em> an jede·n Aktionsteilnehmer·in vergeben werden (einschließlich Aktionsvorsitz oder Koordination Fördervergabe) — aber die geförderte Person darf <strong>nicht</strong> an der Entscheidung über ihren eigenen Antrag mitwirken.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal" aria-label="Förderungs-Verantwortliche">
+      <h2 style="text-align:center;margin-bottom:8px">Förderungs-Verantwortliche</h2>
+      <p class="section-sub" style="text-align:center;color:var(--muted);max-width:60ch;margin:0 auto 24px">Bei Fragen zur Förderfähigkeit, zum Antragszeitpunkt oder zur Interpretation einer bestimmten Ausschreibung wenden Sie sich vor der Einreichung an die Koordination Fördervergabe.</p>
+      <!-- data-bios-roles stays in English so the JS matcher finds the
+           right roles in data/bios.json (the single source of truth).
+           The visible role label is translated at render time via
+           window.netsecT(). -->
+      <div class="grant-managers" id="grant-managers" data-bios-roles="Grant Awarding Coordinator|Grant Awarding Coordinator Co-lead">
+        <article class="grant-manager glass">
+          <div class="gm-avatar"><img src="assets/images/people/eliza-gheorghe.jpg" alt="Dr Eliza Gheorghe"></div>
+          <div class="role">Koordination Fördervergabe</div>
+          <h3>Dr Eliza Gheorghe</h3>
+          <p>Bilkent University, Türkiye</p>
+        </article>
+        <article class="grant-manager glass">
+          <div class="gm-avatar"><img src="assets/images/people/chiara-libiseller.webp" alt="Dr Chiara Libiseller"></div>
+          <div class="role">Stellv. Koordination Fördervergabe</div>
+          <h3>Dr Chiara Libiseller</h3>
+          <p>King's College London, Vereinigtes Königreich</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="resources" class="reveal" aria-label="Ressourcen und Dokumente">
+      <h2 style="text-align:center;margin-bottom:8px">Ressourcen &amp; Referenzdokumente</h2>
+      <p class="section-sub" style="text-align:center;color:var(--muted);max-width:60ch;margin:0 auto 24px">Alle maßgeblichen Dokumente werden von der COST Association gehostet.</p>
+      <div class="grants-resources">
+        <a class="resource-card glass" href="https://www.cost.eu/actions/CA24154/" target="_blank" rel="noopener">
+          <span class="resource-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a14 14 0 010 20M12 2a14 14 0 000 20"/></svg>
+          </span>
+          <div>
+            <h3>Aktionsseite auf cost.eu</h3>
+            <p>Die maßgebliche CA24154-Seite — Leitung, MC-Liste, MoU-Download und Einstieg in e-COST.</p>
+          </div>
+        </a>
+        <a class="resource-card glass" href="https://www.cost.eu/actions/CA24154/" target="_blank" rel="noopener">
+          <span class="resource-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+          </span>
+          <div>
+            <h3>Memorandum of Understanding (MoU)</h3>
+            <p>Das Gründungsdokument der Aktion — wissenschaftliche Ziele, Arbeitsplan, Liefergegenstände. Auf der Aktionsseite herunterladbar.</p>
+          </div>
+        </a>
+        <a class="resource-card glass" href="https://www.cost.eu/funding/documents-guidelines/" target="_blank" rel="noopener">
+          <span class="resource-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </span>
+          <div>
+            <h3>Annotierte Regeln für COST-Aktionen</h3>
+            <p>Das vollständige Umsetzungs-Regelwerk. Anhang 2 (Seiten 96–104) behandelt speziell die Förderungen.</p>
+          </div>
+        </a>
+        <a class="resource-card glass" href="https://www.cost.eu/grants_userguide" target="_blank" rel="noopener">
+          <span class="resource-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+          </span>
+          <div>
+            <h3>Benutzerhandbuch zur Fördervergabe</h3>
+            <p>Schritt-für-Schritt-Anleitung zur Förderverwaltung in e-COST — für Antragstellende und GACs.</p>
+          </div>
+        </a>
+        <a class="resource-card glass" href="https://www.cost.eu/about/visual-identity/" target="_blank" rel="noopener">
+          <span class="resource-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.06 11.9l8.07-8.06a2.85 2.85 0 114.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 00-3-3.02z"/></svg>
+          </span>
+          <div>
+            <h3>COST Visual Identity Guide</h3>
+            <p>Erforderliche Kennzeichnung und Branding bei der Veröffentlichung von Förder-Ergebnissen.</p>
+          </div>
+        </a>
+        <a class="resource-card glass" href="https://e-services.cost.eu/" target="_blank" rel="noopener">
+          <span class="resource-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M8 4v4"/></svg>
+          </span>
+          <div>
+            <h3>e-COST-Portal</h3>
+            <p>Hier werden Anträge tatsächlich eingereicht. Kostenloses Konto erstellen, CA24154 finden, beantragen.</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-cobranding">
+      <a class="cost-mark" href="https://www.cost.eu/actions/CA24154/" target="_blank" rel="noopener" aria-label="COST-Aktion CA24154 NetSec auf cost.eu ansehen">
+        <img src="assets/images/cost-logo.jpg" alt="COST — European Cooperation in Science and Technology">
+      </a>
+      <div class="eu-mark" role="img" aria-label="Gefördert von der Europäischen Union">
+        <svg class="eu-flag" viewBox="0 0 810 540" role="img" aria-hidden="true">
+          <rect width="810" height="540" fill="#003399"/>
+          <defs>
+            <polygon id="eu-star" fill="#FFCC00" points="0,-30 8.817,-12.135 28.532,-9.27 14.266,4.635 17.634,24.27 0,15 -17.634,24.27 -14.266,4.635 -28.532,-9.27 -8.817,-12.135"/>
+          </defs>
+          <use href="#eu-star" x="405" y="90"/><use href="#eu-star" x="495" y="114.115"/><use href="#eu-star" x="560.885" y="180"/><use href="#eu-star" x="585" y="270"/><use href="#eu-star" x="560.885" y="360"/><use href="#eu-star" x="495" y="425.885"/><use href="#eu-star" x="405" y="450"/><use href="#eu-star" x="315" y="425.885"/><use href="#eu-star" x="249.115" y="360"/><use href="#eu-star" x="225" y="270"/><use href="#eu-star" x="249.115" y="180"/><use href="#eu-star" x="315" y="114.115"/>
+        </svg>
+        <span class="eu-text">Gefördert von<br>der Europäischen Union</span>
+      </div>
+    </div>
+
+    <div class="footer-text">
+      <p><strong>Diese Website beruht auf Arbeiten der COST-Aktion NetSec — Networking European Security Knowledge, gefördert durch COST (European Cooperation in Science and Technology).</strong></p>
+      <p>COST (European Cooperation in Science and Technology) ist eine Förderagentur für Forschungs- und Innovationsnetzwerke. Unsere Aktionen vernetzen Forschungsinitiativen in ganz Europa und ermöglichen Wissenschaftler·innen, ihre Ideen mit Kolleg·innen zu teilen. Dies stärkt Forschung, Karriere und Innovation.</p>
+      <p><a href="https://www.cost.eu" target="_blank" rel="noopener">www.cost.eu</a></p>
+    </div>
+
+    <p class="footer-credit">Website und NetSec-Verzeichnis erstellt von <a href="people.de.html#arthur-laudrain">Dr. Arthur Laudrain</a> (MC-Mitglied, CH) im Rahmen des Liefergegenstands D1.</p>
+
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> COST-Aktion NetSec. Die geäußerten Ansichten sind die der Aktion und spiegeln nicht notwendigerweise die von COST oder der Europäischen Union wider. · <a href="accessibility.de.html">Barrierefreiheit</a> · <a href="privacy.de.html">Datenschutz</a> · <a href="licensing.de.html">Lizenz</a> · <a href="sitemap.de.html">Sitemap</a></span>
+      <nav class="socials" aria-label="Soziale Netzwerke">
+        <a href="#" aria-label="LinkedIn" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.339 18.339v-7.143H6.018v7.143h2.32zM7.179 10.179a1.339 1.339 0 100-2.679 1.339 1.339 0 000 2.679zm10.821 8.16v-3.928c0-2.071-1.107-3.036-2.585-3.036-1.193 0-1.728.661-2.027 1.125v-.964h-2.245c.03.643 0 7.143 0 7.143h2.245v-3.99c0-.2.014-.4.073-.543.16-.4.524-.815 1.135-.815.8 0 1.122.61 1.122 1.506v3.842H18z"/></svg></a>
+        <a href="#" aria-label="X / Twitter" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2H21.5l-7.5 8.572L23 22h-6.844l-5.354-7.003L4.6 22H1.34l8.02-9.171L1 2h6.99l4.84 6.404L18.244 2zm-1.2 18h1.84L7.04 4h-1.96l11.964 16z"/></svg></a>
+        <a href="https://github.com/EISSeuropa/netsec.github.io" aria-label="GitHub-Repository" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.16c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.39.97.11-.75.41-1.27.74-1.56-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.79 0c2.21-1.5 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.68.42.36.79 1.08.79 2.18v3.23c0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg></a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+
+<!-- Refresh the Grant Managers section from data/bios.json so that
+     a single change in the canonical bios pipeline propagates here.
+     The visible role label is translated at render time via
+     window.netsecT(); the data-bios-roles matcher stays English. -->
+<script>
+(async function () {
+  const container = document.getElementById('grant-managers');
+  if (!container) return;
+  const wantRoles = (container.dataset.biosRoles || '').split('|').filter(Boolean);
+  if (!wantRoles.length) return;
+  let data;
+  try {
+    const res = await fetch('data/bios.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    data = await res.json();
+  } catch (err) {
+    console.warn('Grant Managers refresh skipped:', err);
+    return;
+  }
+  const matches = [];
+  for (const want of wantRoles) {
+    const norm = want.toLowerCase();
+    const hit = (data.members || []).find(m =>
+      (m.roles || []).some(r => (r || '').toLowerCase().includes(norm))
+    );
+    if (hit) matches.push({ member: hit, displayRole: want });
+  }
+  if (!matches.length) return;
+  const initials = name => (name || '')
+    .replace(/^(Dr|Prof|Mr|Ms|Mrs)\.?\s+/i, '')
+    .split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('');
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+  container.replaceChildren();
+  for (const { member, displayRole } of matches) {
+    const article = document.createElement('article');
+    article.className = 'grant-manager glass';
+    const photoHtml = member.photo
+      ? `<img src="${esc(member.photo)}" alt="${esc(member.name)}" loading="lazy">`
+      : `<span style="display:grid;place-items:center;height:100%;color:var(--accent);font-weight:700;font-size:1.2rem">${esc(initials(member.name))}</span>`;
+    const affLine = [member.affiliation, member.country].filter(Boolean).map(esc).join(', ');
+    const localisedRole = (window.netsecT && window.netsecT(displayRole)) || displayRole;
+    article.innerHTML =
+      '<div class="gm-avatar">' + photoHtml + '</div>' +
+      '<div class="role">' + esc(localisedRole) + '</div>' +
+      '<h3>' + esc(member.name) + '</h3>' +
+      '<p>' + (affLine || '&nbsp;') + '</p>';
+    container.appendChild(article);
+  }
+})();
+</script>
+
+</body>
+</html>

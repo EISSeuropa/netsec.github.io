@@ -781,9 +781,14 @@
       ? `<img src="${esc(member.photo)}" alt="${esc(member.name)}" loading="lazy">`
       : `<span style="display:grid;place-items:center;height:100%;color:var(--accent);font-weight:700;font-size:1.2rem">${esc(initials(member.name))}</span>`;
     const affLine = [member.affiliation, member.country].filter(Boolean).map(esc).join(', ');
+    // Role label flows through window.netsecT() so the FR/DE pages
+     // show a translated label (e.g. "Coordinateur·rice d'attribution
+     // des subventions" / "Koordination Fördervergabe") while the
+     // bios.json itself stays English — the single source of truth.
+    const localisedRole = (window.netsecT && window.netsecT(displayRole)) || displayRole;
     article.innerHTML =
       '<div class="gm-avatar">' + photoHtml + '</div>' +
-      '<div class="role">' + esc(displayRole) + '</div>' +
+      '<div class="role">' + esc(localisedRole) + '</div>' +
       '<h3>' + esc(member.name) + '</h3>' +
       '<p>' + (affLine || '&nbsp;') + '</p>';
     container.appendChild(article);
