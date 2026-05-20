@@ -1,5 +1,11 @@
 # NetSec — COST Action CA24154 website
 
+<p align="center">
+  <a href="https://netsec-cost.eu/press-kit.html">
+    <img src="docs/promo/poster-promo-card.png" alt="NetSec promotional poster — Networking European security knowledge. CC BY 4.0 · COST Action CA24154. Click for the press kit." width="360">
+  </a>
+</p>
+
 > Official website and open community directory of **COST Action
 > CA24154 — Networking European Security Knowledge (NetSec)**.
 
