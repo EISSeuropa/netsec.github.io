@@ -28,10 +28,33 @@ Keep this current as roles change.
 | GitHub Actions (sync workflows)                              | Inherited from repo permissions                         | Same                                        |
 | GitHub Pages deployment                                      | Inherited from repo permissions                         | Same                                        |
 | Dependabot security alerts                                   | Repo `Insights → Dependency graph`                      | Same                                        |
+| Branch & tag protection rulesets                             | Repo `Settings → Rules → Rulesets`                      | Read by all; edited by repo admin           |
+| Automation PAT (for `release.sh` and any `gh api` work)      | <https://github.com/settings/personal-access-tokens>    | The maintainer; do not share                |
+
+#### Branch & tag protection in place
+
+Two repository rulesets enforce the boundary between routine and
+catastrophic operations:
+
+- **`protect-main`** — targets the default branch. Restricts
+  deletions and force-pushes, requires linear history, requires a
+  pull request with all four CodeQL checks green before merging,
+  restricts merge methods to squash. **Bypass: Repository Admin**
+  (so `scripts/release.sh` can push the changelog-promotion commit
+  directly).
+- **`protect-release-tags`** — targets tags matching `v*`. Restricts
+  deletions, updates, and force-updates. **No bypass for anyone**,
+  including admins. Release tags are immutable once published.
+
+Both visible at
+<https://github.com/EISSeuropa/netsec.github.io/settings/rules>.
+For the rationale, see the PDF documentation pack, Section 07
+("Branch and tag protection").
 
 > **Bus-factor reminder.** Every admin task below assumes at least
 > two people hold `EISSeuropa` org membership with `Maintain`
-> permission on this repo. If that drops to one, escalate.
+> permission on this repo, and at least one with the **Admin** role
+> (required for cutting releases). If either drops to one, escalate.
 
 ### Bios pipeline (Google Form → Sheet → repo)
 
@@ -177,15 +200,56 @@ If something breaks:
 
 ## Handover checklist
 
-When admin responsibility moves to a new person:
+When admin responsibility moves to a new person, walk through the
+checklist in order. The branch-protection ruleset's bypass is keyed
+to the repo `Admin` role, so the role transfer specifically needs
+care — get this wrong and `release.sh` will start failing for
+everyone.
 
-- [ ] Add them to the `EISSeuropa` org with `Maintain` role on this repo.
+### Access grants (new admin)
+
+- [ ] Add them to the `EISSeuropa` org with **`Admin`** role on this
+      repo (not `Maintain` or `Write`). This is what permits the
+      `release.sh` bypass against the `protect-main` ruleset; without
+      it they can still merge PRs but cannot cut releases.
+- [ ] If a second person will stay on as a non-release-cutting
+      maintainer, give them `Maintain` separately — the `Admin` role
+      is for the release-cutter.
 - [ ] Grant them ownership of the Google Form + linked Sheet.
 - [ ] Grant them access to the Formspree project (or migrate the
       project to their account).
 - [ ] Make sure they have edit rights to the DNS registrar entry
       for `netsec-cost.eu`.
-- [ ] Walk them through this document and the
+
+### Automation handover
+
+- [ ] If automation tooling (`release.sh`, `gh api` scripts) is to
+      keep running, provision a fresh PAT in the new admin's name
+      with **at minimum** these Repository permissions on this repo:
+      `Contents: read+write`, `Pull requests: read+write`,
+      `Issues: read+write`, `Workflows: read+write`,
+      `Administration: read+write` (the last one is what lets them
+      manage rulesets). Verify by listing rulesets:
+      `gh api /repos/EISSeuropa/netsec.github.io/rulesets`.
+- [ ] Revoke the previous admin's PAT immediately after the new one
+      is verified.
+
+### Verification
+
+- [ ] Walk the new admin through this document and the
       [architecture overview](./architecture.md).
-- [ ] Remove the previous admin's access (defence-in-depth).
+- [ ] Have them run `scripts/release.sh 0.0.0 --dry-run` from a
+      synced `main`. Pre-flight should report
+      *"✓ On main, clean, in sync with origin, v0.0.0 is fresh"*
+      and stop there. (Nothing is changed by a dry-run.)
+- [ ] Have them visit
+      <https://github.com/EISSeuropa/netsec.github.io/settings/rules>
+      and confirm both rulesets are listed as **Active**.
+
+### Revocation (previous admin)
+
+- [ ] Remove the previous admin's repo access. Their bypass capability
+      against `protect-main` disappears the moment their `Admin` role
+      is removed — verified by GitHub on every push.
+- [ ] Remove or downgrade their org membership per policy.
 - [ ] Update the **Owner / login** column above with the new owner.
