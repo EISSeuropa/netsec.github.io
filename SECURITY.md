@@ -35,7 +35,7 @@ private channels are available:
    This is encrypted, lets us collaborate on a fix in a private fork,
    and gives you a CVE if appropriate.
 2. **Email** — Dr Arthur Laudrain (site maintainer, MC member CH):
-   ETH Zurich CSS, see <https://css.ethz.ch>. For data-protection
+   ETH Zurich, see <https://css.ethz.ch>. For data-protection
    matters specifically, contact the Data Controller (Universiteit
    Leiden) via the addresses listed in §1 of our
    [Privacy Notice](https://netsec-cost.eu/privacy.html).
