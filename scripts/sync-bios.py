@@ -28,8 +28,14 @@ What it does:
          position in the leadership-first ordering is preserved.
        - Form entries are keyed by email when available, otherwise slug.
        - Duplicate form submissions: latest by timestamp wins.
-  5. Writes data/bios.json with deterministic ordering.
-  6. Prints a human-readable diff (added / updated / removed).
+  5. Writes data/bios.json with deterministic ordering — but only
+     when the member data or the configured source URLs have actually
+     changed. The `generated_at` and `source.last_synced` timestamps
+     advance only on substantive writes, so the working tree stays
+     clean across idempotent re-runs and the workflow's auto-PR step
+     stays quiet.
+  6. Prints a human-readable diff (added / updated / removed), or
+     a "no substantive changes" note when the sync was a no-op.
 
 Requires: requests. Pillow is optional — used to optimise photos if
 available; if not, photos are saved as-is.
@@ -172,6 +178,16 @@ def download_photo(url: str, dest_no_ext: Path) -> str | None:
         print(f"  ! photo download failed for {url}: {e}", file=sys.stderr)
         return None
 
+    # Build the bytes we *would* write, then only touch disk if they
+    # differ from what's already there. Without this, every weekly
+    # sync re-encodes every headshot and emits subtly different JPEG
+    # bytes (libjpeg quantisation is not bit-stable across PIL runs),
+    # which dirties the working tree even when no submitter has
+    # actually changed their photo — and triggers an otherwise-empty
+    # auto-PR.
+    dest = dest_no_ext.with_suffix(".jpg")
+    out_bytes: bytes | None = None
+
     if HAS_PIL:
         try:
             img = Image.open(io.BytesIO(data))
@@ -183,15 +199,17 @@ def download_photo(url: str, dest_no_ext: Path) -> str | None:
                     (MAX_PHOTO_WIDTH, int(img.height * ratio)),
                     Image.LANCZOS,
                 )
-            dest = dest_no_ext.with_suffix(".jpg")
-            img.save(dest, format="JPEG", quality=82, optimize=True)
+            buf = io.BytesIO()
+            img.save(buf, format="JPEG", quality=82, optimize=True)
+            out_bytes = buf.getvalue()
         except Exception as e:
             print(f"  ! photo decode failed: {e}", file=sys.stderr)
-            dest = dest_no_ext.with_suffix(".jpg")
-            dest.write_bytes(data)
+            out_bytes = data
     else:
-        dest = dest_no_ext.with_suffix(".jpg")
-        dest.write_bytes(data)
+        out_bytes = data
+
+    if not (dest.exists() and dest.read_bytes() == out_bytes):
+        dest.write_bytes(out_bytes)
 
     return str(dest.relative_to(ROOT)).replace(os.sep, "/")
 
@@ -724,14 +742,38 @@ def main() -> None:
     merged = merge(old_members, form_entries)
     print(diff_summary(old_members, merged))
 
-    bios_data["members"] = merged
-    bios_data["generated_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    bios_data["source"] = {
+    # Substance check: did anything actually change?
+    #
+    # `generated_at` and `source.last_synced` advance to "now" on every
+    # run, so if we wrote them unconditionally git would always see a
+    # diff and the workflow's create-pull-request step would open an
+    # otherwise-empty auto-PR every week. We only want a PR when the
+    # member data or the configured source URLs have genuinely moved.
+    new_source = {
         "type": "google_sheet",
         "csv_url": csv_url,
         "form_url": (config.get("form_url") or "").strip(),
-        "last_synced": bios_data["generated_at"],
     }
+    existing_source = bios_data.get("source") or {}
+    existing_source_meta = {
+        k: existing_source.get(k) for k in ("type", "csv_url", "form_url")
+    }
+
+    members_changed = merged != old_members
+    source_meta_changed = new_source != existing_source_meta
+
+    if not members_changed and not source_meta_changed:
+        print()
+        print("No substantive changes — leaving data/bios.json untouched.")
+        print(f"(Last sync recorded in file: "
+              f"{existing_source.get('last_synced', 'unknown')}.)")
+        return
+
+    # Substance changed: stamp timestamps and write.
+    now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    bios_data["members"] = merged
+    bios_data["generated_at"] = now
+    bios_data["source"] = {**new_source, "last_synced": now}
     BIOS.write_text(json.dumps(bios_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
