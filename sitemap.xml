@@ -94,4 +94,15 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/licensing.html"/>
   </url>
 
+  <url>
+    <loc>https://netsec-cost.eu/press-kit.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://netsec-cost.eu/press-kit.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/press-kit.fr.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://netsec-cost.eu/press-kit.de.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/press-kit.html"/>
+  </url>
+
 </urlset>

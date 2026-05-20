@@ -15,6 +15,40 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ### Added
 
+- **Public press-kit page at `/press-kit.html`** (plus FR + DE
+  beta variants). One canonical URL for outreach — the poster
+  with print and card-size downloads, the NetSec / COST / EU
+  emblems with pairing rules, the colour palette and typography
+  reference, the funding-statement boilerplate in three forms
+  (full, short, one-line credit), the suggested CC BY 4.0
+  attribution wording, and explicit do / don't rules. Linked from
+  every page's footer between *Licensing* and *Site map*, and from
+  the home-page About section eyebrow. Added to `sitemap.xml`, the
+  i18n drift manifest, and the `scripts/inject-seo.py` `PAGES`
+  list so the SEO block stays in sync.
+- **`docs/promo/poster-promo-card.png`** — an 800 × 1131 px
+  card-size rendering of the poster (544 KB), suitable for inline
+  use in README, Wiki, email, and Slack-style chat without
+  shipping the full 1.8 MB print version.
+- **README banner** at the top of the repo's `README.md` showing
+  the card-size poster and linking to the public press kit.
+- **Members' Wiki "Templates & press kit" page** at
+  <https://github.com/EISSeuropa/netsec.github.io/wiki/Templates>
+  — member-facing companion to `/press-kit.html`, with the
+  funding-statement boilerplate and attribution wording in fast
+  copy-paste form. The Wiki sidebar "Templates" entry now resolves
+  to this page (was a "to come" placeholder); the Wiki Home page
+  gains the same poster banner as the README.
+
+### Fixed
+
+- **Accessibility FR / DE footers** previously linked at the
+  English versions of Privacy and Licensing (and the
+  Lizenz/Licence label pointed at `privacy.html#main` rather than
+  `licensing.{fr,de}.html`). Replaced with the correctly
+  localised footer that already exists on the other FR / DE
+  pages, plus the new Press kit link.
+
 - **Promotional poster** for the Action, sized A3 portrait and
   ready for outreach print runs. Source HTML version-controlled at
   [`docs/promo/poster-promo.html`](docs/promo/poster-promo.html);
