@@ -49,6 +49,23 @@ appendix; see Appendix C of that PDF for documentation-pack history.
   localised footer that already exists on the other FR / DE
   pages, plus the new Press kit link.
 
+### Changed (pre-release polish)
+
+- **Press kit page now names the maintainer.** A short attribution
+  paragraph appears at the foot of section 9 ("Contact for media
+  enquiries"), and the meta footer-line now reads *"prepared … by
+  Dr Arthur Laudrain"*. Applied identically across EN / FR / DE.
+- **PDF `<title>` now carries the documentation-pack version**,
+  rendering as *"NetSec — Website & Directory · Documentation Pack
+  v1.5.1"* — visible in the PDF's metadata and the browser tab
+  without having to open the cover.
+- **Maintainer affiliation simplified** from *"ETH Zurich CSS"* to
+  *"ETH Zurich"* on the PDF cover, on the PDF last-page footer,
+  and in `SECURITY.md`. The Action's contact URL
+  (<https://css.ethz.ch>) is preserved where it appears.
+- **PDF bumped to v1.5.1** (PATCH) with an entry recording the
+  above in Appendix C. v1.5.0 entry retained intact below it.
+
 - **Promotional poster** for the Action, sized A3 portrait and
   ready for outreach print runs. Source HTML version-controlled at
   [`docs/promo/poster-promo.html`](docs/promo/poster-promo.html);
