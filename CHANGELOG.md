@@ -13,6 +13,31 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
+### Added
+
+- **Promotional poster** for the Action, sized A3 portrait and
+  ready for outreach print runs. Source HTML version-controlled at
+  [`docs/promo/poster-promo.html`](docs/promo/poster-promo.html);
+  rendered raster at `docs/pdf/poster-promo.png` (2480 × 3508 px,
+  ~192 dpi). The poster carries the Action's name and MoU, the
+  eight headline features, the directory's running numbers, a mock
+  of the Network search UI, a scannable QR code to
+  <https://netsec-cost.eu>, and the COST / EU funding-statement
+  strip.
+- **PDF Appendix D — Promotional poster** added to
+  `docs/pdf/NetSec-website-documentation.pdf` (now **v1.5.0**),
+  giving the pack a built-in outreach artefact and documenting
+  intended uses (conference print runs, departmental noticeboards,
+  the members' Wiki press kit, email outreach, COST annual
+  reporting) and intentional non-uses (do not crop the
+  funding-statement strip; do not use as the OG share image).
+
+### Changed
+
+- **PDF doc-footer relocated** from the end of Appendix C to the
+  end of the new Appendix D text page, so it sits on the last
+  textual page of the pack as intended.
+
 ### Security
 
 - **Branch & tag protection rulesets** added to the repository.
