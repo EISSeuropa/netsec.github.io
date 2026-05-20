@@ -211,6 +211,30 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
   font-style:italic;
 }
 
+/* ── Full-page promo poster (Appendix D) ────────────────────── */
+.poster-plate{
+  /* Sits inside the standard .page container so the A4 margins
+     still apply. The image stretches to the content width; height
+     follows the source aspect (A3 portrait ≈ 1 : 1.41). For 178mm
+     content width this gives ~252mm height, just under the ~257mm
+     content height — fits cleanly on a single A4 page. */
+  margin:6pt 0 0;
+  break-inside:avoid-page;
+  text-align:center;
+}
+.poster-plate img{
+  display:block;
+  width:100%;height:auto;
+  border:1px solid var(--line);
+  border-radius:6pt;
+  box-shadow:0 4pt 14pt rgba(20,35,80,.12);
+  margin:0 auto;
+}
+.poster-plate .cap{
+  font-size:8.4pt;color:var(--muted);
+  margin-top:8pt;text-align:center;font-style:italic;
+}
+
 /* ── Snapshots (site screenshots) ───────────────────────────── */
 .snapshot{
   margin:.6rem 0 1rem;
@@ -536,7 +560,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.4.1 · May 2026</div>
+        <div class="value">v1.5.0 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -725,7 +749,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.4.1 · May 2026</span>
+    <span class="url">v1.5.0 · May 2026</span>
   </footer>
 
 </section>
@@ -799,6 +823,12 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
         <div>
           <span class="title">Appendix C · Changelog</span>
           <span class="desc">Per-version summary of what this documentation pack records.</span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="title">Appendix D · Promotional poster</span>
+          <span class="desc">An outward-facing A3 poster of the Action, ready for conferences, training schools, and noticeboards.</span>
         </div>
       </li>
     </ol>
@@ -1953,8 +1983,15 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <p>This changelog tracks the documentation pack itself, not the website. Website history is in <code>git log</code> on <code>main</code> and in <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/CHANGELOG.md">the repository's own <code>CHANGELOG.md</code></a>; documentation-pack versions are stamped on the cover and follow <strong>Semantic Versioning 2.0.0</strong> from v1.0.0 onwards. Earlier entries (v1.0 / v1.1 / v1.2 on previous covers) are re-numbered to their SemVer equivalents below for consistency; the content of those revisions is unchanged.</p>
 
-  <h2>v1.4.1 · May 2026</h2>
+  <h2>v1.5.0 · May 2026</h2>
   <p class="small muted" style="margin-top:-6pt">Current revision.</p>
+  <ul>
+    <li><strong>New Appendix D — Promotional poster.</strong> An outward-facing A3 portrait poster of the Action, embedded as the final two pages of this pack. Source HTML at <code>docs/promo/poster-promo.html</code>; rendered raster at <code>docs/pdf/poster-promo.png</code> (2480 × 3508 px). The appendix's text page documents what the poster is, how to re-render it, and where to use it (conference print runs, departmental noticeboards, the members' Wiki press kit, email outreach, COST annual reporting); the image page is full-bleed within the standard A4 margins.</li>
+    <li><strong>Global doc footer relocated</strong> from the end of Appendix C (Changelog) to the end of the new Appendix D text page, so it sits on the last <em>textual</em> page of the pack rather than orphaned mid-document.</li>
+    <li>Cover, poster footer, and last-page footer all stamped <strong>v1.5.0</strong>.</li>
+  </ul>
+
+  <h2>v1.4.1 · May 2026</h2>
   <ul>
     <li><strong>Clarification on PAT permissions for the automation account.</strong> The handover checklist in Section 06 (and in <code>docs/admin-guide.md</code>) previously called for <code>Administration: read+write</code> as the steady-state automation-PAT permission. That overstated what the script actually needs: the ruleset bypass against <code>protect-main</code> is keyed to the user's <em>repository role</em> (<code>Admin</code>), not to the PAT's <code>Administration</code> permission. Steady-state automation can therefore run with <code>Administration: Read</code> (sufficient to <code>gh api .../rulesets</code> for verification) or even no <code>Administration</code> access at all, and only re-grant <code>read+write</code> temporarily when a ruleset adjustment is needed. The checklist now has a two-step pattern: grant <code>read+write</code> at handover to verify, then downgrade to <code>Read</code> as the resting position.</li>
     <li><code>scripts/release.sh</code> header docstring corrected to remove the previous (incorrect) attribution of the bypass to the PAT's <code>Administration</code> permission.</li>
@@ -2003,13 +2040,73 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
     <li>Build pipeline (<code>docs/pdf/build.sh</code>) using a local HTTP server plus Chrome headless <code>--print-to-pdf</code>, no external services.</li>
   </ul>
 
+  </section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     APPENDIX D — PROMOTIONAL POSTER
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="section-banner">
+    <div class="num">D</div>
+    <div class="head">
+      <h1>Appendix · Promotional poster</h1>
+      <div class="sub">An outward-facing A3 summary of the Action, ready for print and reuse.</div>
+    </div>
+  </div>
+
+  <p>The poster on the following page is the Action's <strong>outreach-ready summary</strong>. Where the internal poster after the cover (Section "NetSec at a glance") is sized for stakeholder reading inside this pack, this one is sized for <strong>A3 portrait print</strong> and designed for display: conference poster sessions, training-school noticeboards, departmental corkboards, and similar venues where someone will glance at it for ten seconds and want to leave with a URL.</p>
+
+  <p>Its content tracks <code>netsec-cost.eu</code> at <strong>v1.1.0</strong>: the eight headline features, the directory's running numbers (30 countries, 49 MC members, four Working Groups, five grant schemes), a mock of the searchable Network directory, and a scannable QR code resolving to the home page. The funding-statement strip at the foot carries the COST and EU emblems together with the standard <em>Funded by the European Union</em> attribution.</p>
+
+  <h2>Source &amp; reproduction</h2>
+  <p>The source HTML is version-controlled at <code>docs/promo/poster-promo.html</code>; the rendered raster used in this appendix lives at <code>docs/pdf/poster-promo.png</code> (2480 × 3508 px, A3 portrait at ~192 dpi). To re-render after editing the HTML — e.g. when the running numbers change — run a headless Chrome capture from the repository root:</p>
+
+  <pre><code>/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+  --headless --disable-gpu --hide-scrollbars \
+  --virtual-time-budget=12000 \
+  --window-size=1240,1754 \
+  --force-device-scale-factor=2 \
+  --screenshot=docs/pdf/poster-promo.png \
+  "file://$(pwd)/docs/promo/poster-promo.html"</code></pre>
+
+  <p>Then re-run <span class="kbd">./docs/pdf/build.sh</span> to refresh this PDF.</p>
+
+  <h2>Where it is used</h2>
+  <ul>
+    <li><strong>This documentation pack</strong> — embedded on the next page as Appendix D, so the pack itself doubles as a delivery vehicle for the poster.</li>
+    <li><strong>Conference and training-school print runs</strong> — A3 portrait prints distributed at events where NetSec members present or recruit.</li>
+    <li><strong>Departmental noticeboards</strong> — at participating institutions, especially those of MC members in early stages of building local working groups.</li>
+    <li><strong>The members' Wiki press kit</strong> — see <a href="https://github.com/EISSeuropa/netsec.github.io/wiki">the Wiki</a>; the rendered PNG is suitable for use as an attachment, a slide-deck cover, or a banner image.</li>
+    <li><strong>Email outreach</strong> — as an attachment to open-call communications and welcome emails to nominated MC representatives.</li>
+    <li><strong>Annual reporting to COST</strong> — as visual evidence of the Action's communication outputs.</li>
+  </ul>
+
+  <h2>What <em>not</em> to do with it</h2>
+  <ul>
+    <li>Do not crop the funding-statement strip out — the COST and EU acknowledgement is a contractual requirement on derived communications.</li>
+    <li>Do not edit the SPDX or licensing text in place. The licensing posture lives in <code>LICENSE</code> and <code>LICENSE-CONTENT</code> at the repository root; the poster carries no licence chip of its own by design.</li>
+    <li>Do not use the poster as the Open Graph / social-share image for the website. OG images need a 1200 × 630 landscape format; the poster is A3 portrait. The OG image at <code>assets/images/og-image.png</code> remains the canonical share card.</li>
+  </ul>
+
   <hr style="margin-top:36pt">
 
   <p class="small muted center" style="margin-top:24pt">
     NetSec — Networking European Security Knowledge · COST Action CA24154 · MoU 063/25 · Running 10 Oct 2025 – 09 Oct 2029.<br>
-    Documentation v1.4.1 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich CSS) as part of Deliverable D1.<br>
+    Documentation v1.5.0 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich CSS) as part of Deliverable D1.<br>
     The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union.
   </p>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     APPENDIX D — PROMOTIONAL POSTER (image plate)
+     ════════════════════════════════════════════════════════════ -->
+<section class="page">
+  <div class="poster-plate">
+    <img src="poster-promo.png" alt="NetSec promotional A3 poster — Networking European security knowledge. Eight headline features (frosted-glass UI, multilingual, WCAG 2.1 AA, mobile-responsive, auto-sync, SEO-ready, GDPR-compliant, dual-licensed), six headline stats (30 countries, 49 MC members, 4 working groups, 5 grant schemes, ~51% women on MC, 3 UI languages), a mock of the Network directory, a QR code resolving to netsec-cost.eu, and the COST / EU funding statement.">
+    <div class="cap">Figure · The NetSec outreach poster, A3 portrait, rendered from <code>docs/promo/poster-promo.html</code>.</div>
+  </div>
 </section>
 
 
