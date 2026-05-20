@@ -13,7 +13,29 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+
+- **`scripts/release.sh`** — one-command release helper. Validates the
+  semver string, performs a pre-flight check (must be on `main`, clean
+  tree, in sync with origin, tag not yet used), promotes
+  `[Unreleased]` → `[<version>]` in this file, resets a fresh
+  `[Unreleased]`, updates the compare-link block, commits, pushes,
+  creates an annotated `v<version>` tag on the new commit, pushes the
+  tag, and publishes a GitHub Release whose body is the changelog
+  section for the new version. Supports `--dry-run`. Documented in
+  `docs/pdf/` Section 06 "Admin guide → Cutting a release".
+
+### Changed
+
+- **Documentation PDF re-versioned to SemVer** (`docs/pdf/NetSec-website-documentation.pdf`).
+  Previous cover stamps v1.0 / v1.1 / v1.2 are re-numbered to their
+  SemVer equivalents v1.0.0 / v1.1.0 / v1.2.0; their content is
+  unchanged. New PDF cover stamp is **v1.3.0**.
+- **PDF Section 06 (Admin guide)** gains a new "Cutting a release"
+  subsection walking through the `release.sh` workflow.
+- **Site screenshots refreshed** in the PDF (`snap-home.png`,
+  `snap-network.png`, `snap-grants.png`) against the current state
+  of <https://netsec-cost.eu>.
 
 ## [1.0.0] · 2026-05-20
 

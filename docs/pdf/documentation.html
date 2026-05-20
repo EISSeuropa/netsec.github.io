@@ -536,7 +536,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.2 · May 2026</div>
+        <div class="value">v1.3.0 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -725,7 +725,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.2 · May 2026</span>
+    <span class="url">v1.3.0 · May 2026</span>
   </footer>
 
 </section>
@@ -1554,6 +1554,27 @@ sequenceDiagram
   </ol>
   <p>GitHub Pages rebuilds in ~30 seconds after merge.</p>
 
+  <h3>Cutting a release</h3>
+  <p>The repository follows <strong>Semantic Versioning 2.0.0</strong> from <code>v1.0.0</code> onwards. The full convention (what MAJOR / MINOR / PATCH mean for a website + directory + docs deliverable) is in <code>README.md</code> → "Versioning"; the running history is in <code>CHANGELOG.md</code> at the repository root.</p>
+  <p>A release is cut whenever a milestone is worth marking — typically at the close of a sprint of substantive work, or after a noteworthy fix. The mechanics are wrapped in <code>scripts/release.sh</code> so the whole sequence is a single command:</p>
+  <ol>
+    <li>While the work is being merged, accumulate notes in the <code>[Unreleased]</code> section of <code>CHANGELOG.md</code> via each PR. Keep the format consistent (subheadings such as <em>Added</em>, <em>Changed</em>, <em>Fixed</em>, <em>Security</em>).</li>
+    <li>When ready to release, ensure local <code>main</code> is in sync with <code>origin/main</code>, then run:
+      <pre><code>scripts/release.sh 1.1.0           # the version number you're cutting
+scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
+    </li>
+    <li>The script performs a pre-flight check (must be on <code>main</code>, clean tree, in sync with origin, tag not yet used), promotes <code>[Unreleased]</code> to <code>[1.1.0] · YYYY-MM-DD</code>, resets a fresh <code>[Unreleased]</code>, updates the compare-link block, commits, pushes, creates an annotated <code>v1.1.0</code> tag on the new commit, pushes the tag, and finally calls <code>gh release create</code> with the changelog body as the release notes.</li>
+  </ol>
+  <div class="card callout">
+    <h4>Pre-conditions</h4>
+    <ul style="margin:0">
+      <li><code>gh</code> CLI installed and authenticated against <code>EISSeuropa/netsec.github.io</code>.</li>
+      <li>You can push to <code>main</code> (no branch-protection rule blocking direct push for release commits).</li>
+      <li>The work that is <em>in</em> the release is already merged to <code>main</code>.</li>
+    </ul>
+  </div>
+  <p>For changes that warrant a documentation-pack refresh, also bump the version stamp on the cover and run <span class="kbd">./docs/pdf/build.sh</span> before tagging. The PDF carries its own version stamp on the cover and its own changelog in Appendix C — the two version axes are independent for historical reasons (see the v1.3.0 changelog entry).</p>
+
   <h2>The Grants page in practice</h2>
   <div class="snapshot">
     <img src="snap-grants.png" alt="The Grants & Calls page showing the apply-via-e-COST strip and the first grant card.">
@@ -1865,10 +1886,19 @@ sequenceDiagram
     </div>
   </div>
 
-  <p>This changelog tracks the documentation pack itself, not the website. Website history is in <code>git log</code> on <code>main</code>; releases of the documentation are tagged informally by the cover version.</p>
+  <p>This changelog tracks the documentation pack itself, not the website. Website history is in <code>git log</code> on <code>main</code> and in <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/CHANGELOG.md">the repository's own <code>CHANGELOG.md</code></a>; documentation-pack versions are stamped on the cover and follow <strong>Semantic Versioning 2.0.0</strong> from v1.0.0 onwards. Earlier entries (v1.0 / v1.1 / v1.2 on previous covers) are re-numbered to their SemVer equivalents below for consistency; the content of those revisions is unchanged.</p>
 
-  <h2>v1.2 · May 2026</h2>
+  <h2>v1.3.0 · May 2026</h2>
   <p class="small muted" style="margin-top:-6pt">Current revision.</p>
+  <ul>
+    <li><strong>Semantic Versioning adopted</strong> for this documentation pack from v1.0.0 onwards, matching the repository's wider release convention (see <code>README.md</code> → "Versioning" and the root <code>CHANGELOG.md</code>). Earlier covers' v1.0 / v1.1 / v1.2 are re-stamped as v1.0.0 / v1.1.0 / v1.2.0 in the entries below; no content change to those revisions.</li>
+    <li><strong>Admin guide gains a "Cutting a release" subsection</strong> in Section 06, walking through the <code>scripts/release.sh</code> helper that promotes <code>[Unreleased]</code> in the root changelog, tags <code>main</code>, and publishes a GitHub Release in one command.</li>
+    <li><strong>Repository tagged <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.0.0">v1.0.0</a></strong> on 20 May 2026, marking Deliverable D1 ready for review.</li>
+    <li><strong>Site screenshots refreshed</strong> against the current state of <code>netsec-cost.eu</code>.</li>
+    <li>Cover, poster footer, and last-page footer all stamped v1.3.0 for consistency.</li>
+  </ul>
+
+  <h2>v1.2.0 · May 2026 <span class="small muted">(was: v1.2)</span></h2>
   <ul>
     <li><strong>New Section 07 — Security &amp; DevSecOps.</strong> Threat model in a paragraph; coordinated-disclosure policy moved up from the appendix; full inventory of GitHub-native automation now in place (private vulnerability reporting, security advisories, Dependabot alerts, CodeQL code scanning with the security-and-quality and security-extended suites at high precision on push, pull-request, and a weekly cron, secret scanning with push protection); supply-chain hardening (pinned Actions, least-privilege <code>GITHUB_TOKEN</code>, two-person review on <code>main</code>); web-platform hardening (HTTPS-only, HSTS, no third-party trackers); account hygiene (org-level 2FA, branch protection); personal-data minimisation; audit-trail posture.</li>
     <li><strong>Appendix B split.</strong> Security content promoted to Section 07; Appendix B now covers Licensing only, with the rationale for keeping the code and content licences separate.</li>
@@ -1876,7 +1906,7 @@ sequenceDiagram
     <li><strong>Footer version corrected</strong> to match the cover.</li>
   </ul>
 
-  <h2>v1.1 · May 2026</h2>
+  <h2>v1.1.0 · May 2026 <span class="small muted">(was: v1.1)</span></h2>
   <ul>
     <li><strong>New full-bleed poster page</strong> after the cover, summarising the website in numbers (30 countries, 49 MC members, 4 Working Groups, 5 grant schemes) and eight headline features.</li>
     <li><strong>New Section 04 — Translation &amp; multilingual posture.</strong> Sibling-file approach for FR/DE beta, what is and is not translated, the SHA-1 drift-checker workflow with diagram, refresh procedure, and the explicit "no machine-translation, no recurring API cost" stance.</li>
@@ -1886,7 +1916,7 @@ sequenceDiagram
     <li>Admin guide renumbered from Section 04 to Section 06; cover bumped to v1.1.</li>
   </ul>
 
-  <h2>v1.0 · May 2026</h2>
+  <h2>v1.0.0 · May 2026 <span class="small muted">(was: v1.0)</span></h2>
   <ul>
     <li><strong>Initial release</strong> of the documentation pack as part of Deliverable D1.</li>
     <li>Cover, table of contents, and six core chapters: Overview &amp; purpose, Architecture (with data-flow diagrams for the weekly sync workflows), Design system (tokens, components, motion, accessibility floor), Admin guide (accounts, routine tasks, escalation, handover), Appendix A Accessibility (WCAG 2.1 AA target, axe-core results), Appendix B Security &amp; Licensing (single combined appendix in this revision).</li>
@@ -1898,7 +1928,7 @@ sequenceDiagram
 
   <p class="small muted center" style="margin-top:24pt">
     NetSec — Networking European Security Knowledge · COST Action CA24154 · MoU 063/25 · Running 10 Oct 2025 – 09 Oct 2029.<br>
-    Documentation v1.2 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich CSS) as part of Deliverable D1.<br>
+    Documentation v1.3.0 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich CSS) as part of Deliverable D1.<br>
     The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union.
   </p>
 </section>
