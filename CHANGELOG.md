@@ -46,6 +46,19 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ### Fixed
 
+- **`LICENSE-CONTENT` now contains the canonical CC BY 4.0 legal
+  code text**, fronted by a short NetSec-specific preamble that
+  states scope and attribution. The previous file held only the
+  human-readable summary ("Share / Adapt / Attribution …" deed),
+  which is explicitly not the legal instrument; GitHub's licence
+  detector (licensee) accordingly listed the file as *Unknown* in
+  the "Licenses found" panel. With the canonical legal code in
+  place — sourced from
+  <https://creativecommons.org/licenses/by/4.0/legalcode.txt> — the
+  file matches licensee's `CC-BY-4.0` template well above the 95 %
+  similarity threshold, and the panel now correctly identifies it
+  as **CC-BY-4.0**.
+
 - **Clarification on PAT permissions for automation.** The earlier
   handover guidance overstated what the steady-state PAT needs by
   recommending `Administration: read+write` indefinitely. The
