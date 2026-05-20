@@ -536,7 +536,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.4.0 · May 2026</div>
+        <div class="value">v1.4.1 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -725,7 +725,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.4.0 · May 2026</span>
+    <span class="url">v1.4.1 · May 2026</span>
   </footer>
 
 </section>
@@ -1611,8 +1611,9 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
   <div class="card callout">
     <h4>Automation handover</h4>
     <ul style="margin:0">
-      <li>Provision a fresh fine-grained PAT in the new admin's name with the following repository permissions on this repo: <code>Contents: read+write</code>, <code>Pull requests: read+write</code>, <code>Issues: read+write</code>, <code>Workflows: read+write</code>, and crucially <code>Administration: read+write</code> (the last is what permits ruleset management).</li>
+      <li>Provision a fresh fine-grained PAT in the new admin's name with these repository permissions: <code>Contents: read+write</code>, <code>Pull requests: read+write</code>, <code>Issues: read+write</code>, <code>Workflows: read+write</code>, <code>Administration: read+write</code>.</li>
       <li>Verify the new PAT works by listing rulesets: <code>gh api /repos/EISSeuropa/netsec.github.io/rulesets</code>.</li>
+      <li><strong>Downgrade <code>Administration</code> to <code>Read</code>.</strong> Steady-state automation does not need write. The ruleset bypass that lets <code>release.sh</code> push the changelog-promotion commit through <code>protect-main</code> is keyed to the user's <em>repository role</em> (<code>Admin</code>), not to the PAT's <code>Administration</code> permission — so the release pipeline continues to work unchanged. Read-only access still allows <code>gh api .../rulesets</code> for future verification. Re-grant <code>read+write</code> temporarily only when a ruleset adjustment is needed (and prefer the GitHub UI for one-off tweaks).</li>
       <li>Revoke the previous admin's PAT immediately after the new one is verified.</li>
     </ul>
   </div>
@@ -1952,11 +1953,17 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <p>This changelog tracks the documentation pack itself, not the website. Website history is in <code>git log</code> on <code>main</code> and in <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/CHANGELOG.md">the repository's own <code>CHANGELOG.md</code></a>; documentation-pack versions are stamped on the cover and follow <strong>Semantic Versioning 2.0.0</strong> from v1.0.0 onwards. Earlier entries (v1.0 / v1.1 / v1.2 on previous covers) are re-numbered to their SemVer equivalents below for consistency; the content of those revisions is unchanged.</p>
 
-  <h2>v1.4.0 · May 2026</h2>
+  <h2>v1.4.1 · May 2026</h2>
   <p class="small muted" style="margin-top:-6pt">Current revision.</p>
   <ul>
+    <li><strong>Clarification on PAT permissions for the automation account.</strong> The handover checklist in Section 06 (and in <code>docs/admin-guide.md</code>) previously called for <code>Administration: read+write</code> as the steady-state automation-PAT permission. That overstated what the script actually needs: the ruleset bypass against <code>protect-main</code> is keyed to the user's <em>repository role</em> (<code>Admin</code>), not to the PAT's <code>Administration</code> permission. Steady-state automation can therefore run with <code>Administration: Read</code> (sufficient to <code>gh api .../rulesets</code> for verification) or even no <code>Administration</code> access at all, and only re-grant <code>read+write</code> temporarily when a ruleset adjustment is needed. The checklist now has a two-step pattern: grant <code>read+write</code> at handover to verify, then downgrade to <code>Read</code> as the resting position.</li>
+    <li><code>scripts/release.sh</code> header docstring corrected to remove the previous (incorrect) attribution of the bypass to the PAT's <code>Administration</code> permission.</li>
+  </ul>
+
+  <h2>v1.4.0 · May 2026</h2>
+  <ul>
     <li><strong>New Section 07 subsection — Branch and tag protection.</strong> Documents the two GitHub rulesets now enforcing on the repo (<code>protect-main</code> and <code>protect-release-tags</code>), what each one blocks, where the bypass sits, and why the tag ruleset has no bypass for anyone. Also tightens the "Account and access hygiene" bullet that previously called branch protection <em>recommended</em>; it is now in place.</li>
-    <li><strong>Admin guide handover checklist rewritten</strong> in Section 06 around the consequence that the release-cutter needs the repo <code>Admin</code> role (not <code>Maintain</code>), and that any automation PAT needs <code>Administration: read+write</code>. Four sub-checklists: Access grants, Automation handover, Verification, Revocation.</li>
+    <li><strong>Admin guide handover checklist rewritten</strong> in Section 06 around the consequence that the release-cutter needs the repo <code>Admin</code> role (not <code>Maintain</code>). Four sub-checklists: Access grants, Automation handover, Verification, Revocation.</li>
     <li><strong>Accounts &amp; assets table</strong> in Section 06 gains rows for the branch &amp; tag protection rulesets and the automation PAT.</li>
     <li>Cover, poster footer, and last-page footer stamped <strong>v1.4.0</strong>.</li>
   </ul>
@@ -2000,7 +2007,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <p class="small muted center" style="margin-top:24pt">
     NetSec — Networking European Security Knowledge · COST Action CA24154 · MoU 063/25 · Running 10 Oct 2025 – 09 Oct 2029.<br>
-    Documentation v1.4.0 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich CSS) as part of Deliverable D1.<br>
+    Documentation v1.4.1 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich CSS) as part of Deliverable D1.<br>
     The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union.
   </p>
 </section>

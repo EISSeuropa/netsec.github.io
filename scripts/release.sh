@@ -29,9 +29,16 @@
 #     one operation that legitimately needs that bypass. Maintain /
 #     Write roles will see step 4 fail with a ruleset violation.
 #   - If you run this through a fine-grained PAT (recommended), the
-#     token needs `Contents: read+write` and `Administration:
-#     read+write` on the repo. The latter is what carries the ruleset
-#     bypass through API operations.
+#     token needs `Contents: read+write` on the repo. That's it for
+#     this script's own operations. `Administration: read` is also
+#     handy (lets you `gh api .../rulesets` for verification), but
+#     not required to cut a release.
+#
+#     The ruleset bypass is keyed to the user's *repository role*
+#     (Admin), NOT to the PAT's Administration permission. So a
+#     token with no Administration access at all will still bypass
+#     `protect-main` as long as the authenticated user is a
+#     Repository Admin.
 #   - The work that is *in* this release is already merged to main.
 #
 # The convention for what counts as MAJOR / MINOR / PATCH is in
