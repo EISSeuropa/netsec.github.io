@@ -162,6 +162,35 @@ British-English. Conventions:
 - Don't add tracking pixels, analytics, or third-party scripts.
 - The MIT/CC-BY dual licence applies to every accepted contribution.
 
+## Versioning
+
+This repository follows **[Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html)**
+from `v1.0.0` onwards. Tagged releases are visible under
+[*Releases*](https://github.com/EISSeuropa/netsec.github.io/releases)
+on GitHub; every release entry mirrors the relevant section of
+[`CHANGELOG.md`](CHANGELOG.md).
+
+Because the deliverable here is a website, a directory, and a
+documentation pack rather than a software library, the three semver
+components translate as follows:
+
+| Bump | When | Examples |
+| --- | --- | --- |
+| **MAJOR** (`x.0.0`) | A foundational reset of scope, identity, or platform. Rare. | A full site redesign, switching off GitHub Pages, a new MoU replacing CA24154. |
+| **MINOR** (`1.x.0`) | A **big new project** in the repo — a new top-level page, a new automated pipeline, a new locale, a new top-level feature. The default for substantive work. | Adding a new language; adding a fifth public page; introducing a new sync workflow; a redesign of a major section. |
+| **PATCH** (`1.0.x`) | Bug fixes, copy edits, content refreshes, dependency bumps, small UX tweaks. | Fixing a typo, refreshing a member bio, tightening a CSS rule, restoring a wiped role. |
+
+A release is cut whenever a milestone is worth marking — typically
+at the close of a sprint of work, or after a noteworthy fix. We do
+not tag every commit; we tag when the cumulative change reads as a
+release.
+
+The documentation pack at `docs/pdf/NetSec-website-documentation.pdf`
+carries its own version stamp on its cover (currently v1.2) and its
+own changelog appendix. The two version axes are independent for
+historical reasons; we may consolidate them at a future MAJOR
+release.
+
 ## Security
 
 We follow a public, time-bound coordinated-disclosure process —
