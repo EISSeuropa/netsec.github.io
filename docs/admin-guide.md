@@ -225,14 +225,30 @@ everyone.
 
 - [ ] If automation tooling (`release.sh`, `gh api` scripts) is to
       keep running, provision a fresh PAT in the new admin's name
-      with **at minimum** these Repository permissions on this repo:
+      with these Repository permissions on this repo:
       `Contents: read+write`, `Pull requests: read+write`,
       `Issues: read+write`, `Workflows: read+write`,
-      `Administration: read+write` (the last one is what lets them
-      manage rulesets). Verify by listing rulesets:
+      `Administration: read+write`. Verify by listing rulesets:
       `gh api /repos/EISSeuropa/netsec.github.io/rulesets`.
+- [ ] Once the new admin has verified the rulesets are visible and
+      correct via the API listing above, **downgrade
+      `Administration` to `Read` only**. This is the least-privilege
+      steady-state: the token can still inspect rulesets (useful for
+      future verification) but cannot create, modify, or delete
+      them. Re-grant `Administration: read+write` temporarily only
+      when a ruleset adjustment is actually needed (and prefer the
+      Settings → Rules UI for one-off tweaks).
 - [ ] Revoke the previous admin's PAT immediately after the new one
       is verified.
+
+> **Why two-step on `Administration`.** The bypass that lets
+> `release.sh` push the changelog-promotion commit through the
+> `protect-main` ruleset is keyed to the user's *repository role*
+> (`Admin`), not to the PAT's `Administration` permission. So
+> downgrading the PAT to `Administration: Read` leaves the release
+> pipeline working unchanged, while shrinking the blast radius of a
+> leaked token: a compromised read-only token can no longer silently
+> disable the rulesets that guard against catastrophic action.
 
 ### Verification
 

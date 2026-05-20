@@ -44,6 +44,24 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 - **`scripts/release.sh`** docstring now records the Admin-role and
   PAT-permission requirements that the rulesets imply.
 
+### Fixed
+
+- **Clarification on PAT permissions for automation.** The earlier
+  handover guidance overstated what the steady-state PAT needs by
+  recommending `Administration: read+write` indefinitely. The
+  ruleset bypass that lets `release.sh` push directly to `main` is
+  keyed to the user's *repository role* (`Admin`), not to the PAT's
+  `Administration` permission, so steady-state can run with
+  `Administration: Read` (sufficient for `gh api .../rulesets`
+  verification) or no `Administration` access at all. The handover
+  checklist now grants `read+write` only at takeover time for
+  verification, then downgrades to `Read` as the resting position.
+  Re-grant `read+write` temporarily when a ruleset adjustment is
+  actually needed. Also corrected a misleading comment in
+  `scripts/release.sh` that had attributed the bypass to the PAT
+  permission rather than the user's role. Documented in
+  `docs/admin-guide.md` and PDF v1.4.1.
+
 ## [1.1.0] · 2026-05-20
 
 ### Added
