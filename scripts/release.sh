@@ -23,7 +23,15 @@
 #
 # Pre-conditions:
 #   - `gh` CLI installed and authenticated against EISSeuropa/netsec.github.io.
-#   - You can push to main (no branch protection blocking direct push).
+#   - Your account holds the **Admin** role on the repo. The
+#     `protect-main` ruleset blocks direct pushes to main for everyone
+#     except Repository Admins; the release-promotion commit is the
+#     one operation that legitimately needs that bypass. Maintain /
+#     Write roles will see step 4 fail with a ruleset violation.
+#   - If you run this through a fine-grained PAT (recommended), the
+#     token needs `Contents: read+write` and `Administration:
+#     read+write` on the repo. The latter is what carries the ruleset
+#     bypass through API operations.
 #   - The work that is *in* this release is already merged to main.
 #
 # The convention for what counts as MAJOR / MINOR / PATCH is in

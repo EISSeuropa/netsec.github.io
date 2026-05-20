@@ -13,7 +13,36 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Security
+
+- **Branch & tag protection rulesets** added to the repository.
+  - `protect-main`: restricts deletions and force-pushes, requires
+    linear history, requires a pull request before merging, requires
+    all four CodeQL status checks to pass, requires conversation
+    resolution, restricts merge methods to squash. Bypass: the
+    Repository Admin role (so `scripts/release.sh` can still push
+    the changelog-promotion commit directly).
+  - `protect-release-tags`: restricts deletions, updates, and
+    non-fast-forward updates on tags matching `v*`. No bypass for
+    anyone — once a release tag is published it is immutable.
+- Both rulesets are documented in PDF Section 07 ("Branch and tag
+  protection") and visible at the
+  [Settings → Rules → Rulesets page](https://github.com/EISSeuropa/netsec.github.io/settings/rules).
+
+### Changed
+
+- **`docs/admin-guide.md` handover checklist rewritten** around the
+  consequence that the release-cutter needs the repo `Admin` role
+  (not `Maintain`), and that any automation PAT needs
+  `Administration: read+write`. Now in four sub-checklists: Access
+  grants, Automation handover, Verification, Revocation.
+- **Accounts & assets table** in `docs/admin-guide.md` gains rows
+  for the rulesets and the automation PAT.
+- **PDF v1.4.0** with the matching changes in Section 07 (new
+  "Branch and tag protection" subsection) and Section 06 (rewritten
+  handover checklist).
+- **`scripts/release.sh`** docstring now records the Admin-role and
+  PAT-permission requirements that the rulesets imply.
 
 ## [1.1.0] · 2026-05-20
 

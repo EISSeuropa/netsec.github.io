@@ -536,7 +536,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.3.0 · May 2026</div>
+        <div class="value">v1.4.0 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -725,7 +725,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.3.0 · May 2026</span>
+    <span class="url">v1.4.0 · May 2026</span>
   </footer>
 
 </section>
@@ -1595,16 +1595,43 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
   </table>
 
   <h2>Handover checklist</h2>
+  <p>The branch-protection ruleset's bypass is keyed to the repo <code>Admin</code> role, so the role transfer needs care — get it wrong and <code>release.sh</code> stops working until a re-grant. The full version is in <a href="../admin-guide.md"><code>docs/admin-guide.md</code></a>; the headline items:</p>
+
   <div class="card callout">
-    <p style="margin:0 0 .6rem">When admin responsibility moves to a new person:</p>
+    <h4>Access grants — new admin</h4>
     <ul style="margin:0">
-      <li>Add them to the <code>EISSeuropa</code> org with <em>Maintain</em> role.</li>
+      <li>Add them to the <code>EISSeuropa</code> org with the <strong><code>Admin</code></strong> role on this repo (<em>not</em> <code>Maintain</code> or <code>Write</code>). The <code>Admin</code> role is what permits the <code>release.sh</code> bypass against <code>protect-main</code>.</li>
+      <li>If a second person stays on as a non-release-cutting maintainer, give them <code>Maintain</code> separately — the <code>Admin</code> role is for the release-cutter only.</li>
       <li>Grant them ownership of the Google Form + linked Sheet.</li>
       <li>Grant them access to the Formspree project.</li>
-      <li>Make sure they have edit rights to the DNS registrar entry.</li>
-      <li>Walk them through this document.</li>
-      <li>Remove the previous admin's access (defence-in-depth).</li>
-      <li>Update the <em>Owner / login</em> column above with the new owner.</li>
+      <li>Make sure they have edit rights to the DNS registrar entry at Namecheap.</li>
+    </ul>
+  </div>
+
+  <div class="card callout">
+    <h4>Automation handover</h4>
+    <ul style="margin:0">
+      <li>Provision a fresh fine-grained PAT in the new admin's name with the following repository permissions on this repo: <code>Contents: read+write</code>, <code>Pull requests: read+write</code>, <code>Issues: read+write</code>, <code>Workflows: read+write</code>, and crucially <code>Administration: read+write</code> (the last is what permits ruleset management).</li>
+      <li>Verify the new PAT works by listing rulesets: <code>gh api /repos/EISSeuropa/netsec.github.io/rulesets</code>.</li>
+      <li>Revoke the previous admin's PAT immediately after the new one is verified.</li>
+    </ul>
+  </div>
+
+  <div class="card callout">
+    <h4>Verification</h4>
+    <ul style="margin:0">
+      <li>Walk the new admin through this document and the markdown reference under <code>docs/</code>.</li>
+      <li>Have them run <code>scripts/release.sh 0.0.0 --dry-run</code> from a synced <code>main</code>. The pre-flight should report <em>"✓ On main, clean, in sync with origin, v0.0.0 is fresh"</em> and stop there. A dry-run changes nothing.</li>
+      <li>Have them visit <a href="https://github.com/EISSeuropa/netsec.github.io/settings/rules">Settings → Rules → Rulesets</a> and confirm both rulesets are listed as <em>Active</em>.</li>
+    </ul>
+  </div>
+
+  <div class="card callout">
+    <h4>Revocation — previous admin</h4>
+    <ul style="margin:0">
+      <li>Remove the previous admin's repo access. Their bypass capability against <code>protect-main</code> disappears the moment their <code>Admin</code> role is removed — GitHub re-checks on every push, no caching to worry about.</li>
+      <li>Remove or downgrade their org membership per Action policy.</li>
+      <li>Update the <em>Owner / login</em> column in the accounts table with the new owner.</li>
     </ul>
   </div>
 </section>
@@ -1705,6 +1732,43 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
     <li><strong>Source-of-truth visibility.</strong> Both data files (<code>data/bios.json</code>, <code>data/mc-members.json</code>) are version-controlled. Any malicious or accidental change is one <code>git revert</code> away.</li>
   </ul>
 
+  <h2>Branch and tag protection (GitHub rulesets)</h2>
+  <p>Two repository rulesets enforce the boundary between routine and catastrophic operations on this repo. Together they guard against the classes of change that would otherwise bypass review — rewriting <code>main</code>'s history, deleting the deployed branch, or silently re-pointing a published version tag.</p>
+
+  <table>
+    <thead><tr><th>Ruleset</th><th>Target</th><th>What it enforces</th><th>Bypass</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>protect-main</code></td>
+        <td>Default branch (<code>main</code>)</td>
+        <td>
+          Restricts deletions; restricts force-pushes (no bypass);
+          requires linear history; requires a pull request before
+          merging; requires conversation resolution; restricts merge
+          methods to <em>squash</em>; requires all four CodeQL status
+          checks (<code>CodeQL</code>, <code>Analyze (actions)</code>,
+          <code>Analyze (javascript-typescript)</code>,
+          <code>Analyze (python)</code>) to pass.
+        </td>
+        <td><strong>Repository Admin</strong>, always. Allows <code>scripts/release.sh</code> to push the changelog-promotion commit directly while still blocking everyone else.</td>
+      </tr>
+      <tr>
+        <td><code>protect-release-tags</code></td>
+        <td>Tags matching <code>v*</code></td>
+        <td>Restricts deletions, updates, and non-fast-forward updates. Once a release tag is published it cannot be moved or deleted via normal operations.</td>
+        <td><strong>None — not even admins.</strong> To genuinely correct a mis-tagged release, the ruleset must be temporarily disabled from the UI. The friction is the point.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card callout">
+    <h4>Why these two rules, in this shape</h4>
+    <p style="margin:0 0 .5rem">The threat model singles out four catastrophic moves: force-pushing <code>main</code>, deleting <code>main</code>, deleting a published tag, and silently re-pointing a published tag. The first three are hard-blocked outright. The fourth (silent re-tagging) is the most insidious — a third party with write access could move <code>v1.0.0</code> to a different commit without leaving any auditable trace beyond the tag's own reflog. Restricting <em>tag updates</em> entirely, with no bypass, makes that class of change physically impossible without first toggling the ruleset off in the UI.</p>
+    <p style="margin:0">All other operations route through the normal pull-request + CodeQL flow.</p>
+  </div>
+
+  <p>Both rulesets are visible at <a href="https://github.com/EISSeuropa/netsec.github.io/settings/rules">Settings → Rules → Rulesets</a>; their JSON definitions are stored in the repo's GitHub configuration (not in the working tree) and can be exported via <code>gh api /repos/EISSeuropa/netsec.github.io/rulesets</code>.</p>
+
   <h2>Web-platform hardening</h2>
   <ul>
     <li><strong>HTTPS everywhere.</strong> GitHub Pages enforces HTTPS with an auto-renewed Let's Encrypt certificate. Plain-HTTP requests are redirected.</li>
@@ -1719,7 +1783,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
     <li><strong>Two-factor authentication</strong> is required on every account with push access via GitHub's org-level 2FA enforcement.</li>
     <li><strong>Maintain role, not Admin,</strong> for routine collaborators. The <em>Admin</em> role is held only by accounts that genuinely need branch-protection or settings access.</li>
     <li><strong>Defence-in-depth on handover.</strong> The admin handover checklist (Section 06) ends with revoking the previous admin's access; nobody keeps access "just in case".</li>
-    <li><strong>Branch-protection on <code>main</code></strong> (recommended): require pull-request review, require status checks (<code>pages build and deployment</code>, <code>i18n drift check</code>, <code>CodeQL</code>) to pass, disallow force-push.</li>
+    <li><strong>Branch and tag protection</strong> enforced via GitHub rulesets — see the dedicated section above. The <code>Admin</code> role is what grants the release-cutter their bypass against <code>protect-main</code>, so it is treated as a distinct, sparingly-granted role, separate from the routine <code>Maintain</code> permission.</li>
   </ul>
 
   <h2>Personal-data minimisation</h2>
@@ -1888,8 +1952,16 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <p>This changelog tracks the documentation pack itself, not the website. Website history is in <code>git log</code> on <code>main</code> and in <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/CHANGELOG.md">the repository's own <code>CHANGELOG.md</code></a>; documentation-pack versions are stamped on the cover and follow <strong>Semantic Versioning 2.0.0</strong> from v1.0.0 onwards. Earlier entries (v1.0 / v1.1 / v1.2 on previous covers) are re-numbered to their SemVer equivalents below for consistency; the content of those revisions is unchanged.</p>
 
-  <h2>v1.3.0 · May 2026</h2>
+  <h2>v1.4.0 · May 2026</h2>
   <p class="small muted" style="margin-top:-6pt">Current revision.</p>
+  <ul>
+    <li><strong>New Section 07 subsection — Branch and tag protection.</strong> Documents the two GitHub rulesets now enforcing on the repo (<code>protect-main</code> and <code>protect-release-tags</code>), what each one blocks, where the bypass sits, and why the tag ruleset has no bypass for anyone. Also tightens the "Account and access hygiene" bullet that previously called branch protection <em>recommended</em>; it is now in place.</li>
+    <li><strong>Admin guide handover checklist rewritten</strong> in Section 06 around the consequence that the release-cutter needs the repo <code>Admin</code> role (not <code>Maintain</code>), and that any automation PAT needs <code>Administration: read+write</code>. Four sub-checklists: Access grants, Automation handover, Verification, Revocation.</li>
+    <li><strong>Accounts &amp; assets table</strong> in Section 06 gains rows for the branch &amp; tag protection rulesets and the automation PAT.</li>
+    <li>Cover, poster footer, and last-page footer stamped <strong>v1.4.0</strong>.</li>
+  </ul>
+
+  <h2>v1.3.0 · May 2026</h2>
   <ul>
     <li><strong>Semantic Versioning adopted</strong> for this documentation pack from v1.0.0 onwards, matching the repository's wider release convention (see <code>README.md</code> → "Versioning" and the root <code>CHANGELOG.md</code>). Earlier covers' v1.0 / v1.1 / v1.2 are re-stamped as v1.0.0 / v1.1.0 / v1.2.0 in the entries below; no content change to those revisions.</li>
     <li><strong>Admin guide gains a "Cutting a release" subsection</strong> in Section 06, walking through the <code>scripts/release.sh</code> helper that promotes <code>[Unreleased]</code> in the root changelog, tags <code>main</code>, and publishes a GitHub Release in one command.</li>
@@ -1928,7 +2000,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <p class="small muted center" style="margin-top:24pt">
     NetSec — Networking European Security Knowledge · COST Action CA24154 · MoU 063/25 · Running 10 Oct 2025 – 09 Oct 2029.<br>
-    Documentation v1.3.0 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich CSS) as part of Deliverable D1.<br>
+    Documentation v1.4.0 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich CSS) as part of Deliverable D1.<br>
     The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union.
   </p>
 </section>
