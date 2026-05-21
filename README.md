@@ -191,6 +191,28 @@ at the close of a sprint of work, or after a noteworthy fix. We do
 not tag every commit; we tag when the cumulative change reads as a
 release.
 
+**Every release has a short title** that summarises the key
+contribution in 3–8 words, sentence case, no trailing punctuation.
+The title appears in three places: the CHANGELOG heading (`## [1.4.0]
+· 2026-05-22 — Site-wide search`), the GitHub Release name
+(`v1.4.0 — Site-wide search`), and the release-cutting commit
+message. `scripts/release.sh` requires the title as a positional
+argument so the rule cannot be silently skipped:
+
+```sh
+./scripts/release.sh 1.4.0 "Site-wide search"
+./scripts/release.sh 1.4.0 "Site-wide search" --dry-run
+```
+
+Examples from the existing release history:
+
+| Tag | Title |
+| --- | --- |
+| `v1.3.0` | *Introducing FAQ and Glossary pages* |
+| `v1.2.0` | *Press kit, directory tour, compact view* |
+| `v1.1.0` | *Release tooling and PDF SemVer* |
+| `v1.0.0` | *Initial public release* |
+
 The documentation pack at `docs/pdf/NetSec-website-documentation.pdf`
 carries its own version stamp on its cover (currently v1.2) and its
 own changelog appendix. The two version axes are independent for

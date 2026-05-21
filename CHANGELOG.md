@@ -17,7 +17,13 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 - **iCalendar feed at `/calendar.ics`** with the dated events from the home page (Summer School, European Security Conference). Hand-authored RFC 5545 file with a `Europe/Stockholm` `VTIMEZONE` block; refresh interval set to seven days. The Events section on the home page gains a subtle *Subscribe to NetSec events* link (using `webcal://` so Apple Calendar / iOS Calendar / Outlook prompt to subscribe natively) with a fallback `.ics` download for one-shot imports. Localised in EN/FR/DE. A `<link rel="alternate" type="text/calendar">` in each home-page `<head>` makes the feed autodiscoverable for capable clients. `docs/architecture.md` gains an "adding a new event" checklist that walks through keeping the feed in step with the HTML cards.
 
-## [1.3.0] · 2026-05-21
+### Changed
+
+- **Release-cutting now requires a short title.** `scripts/release.sh` takes the title as a required second positional argument (`./scripts/release.sh 1.4.0 "Site-wide search"`); the title appears in the CHANGELOG heading, the GitHub Release name, the release commit message, and the annotated tag. Convention is 3–8 words, sentence case, no trailing punctuation. Empty title and `--dry-run`-as-title both fail with helpful messages. README's *Versioning* section documents the convention and lists the canonical titles for v1.0.0 → v1.3.0.
+- **Historical release entries retitled** to match the new convention — v1.0.0 *Initial public release*, v1.1.0 *Release tooling and PDF SemVer*, v1.2.0 *Press kit, directory tour, compact view*, v1.3.0 *Introducing FAQ and Glossary pages*. Applied to both the `CHANGELOG.md` headings and the corresponding GitHub Release titles (the `isImmutable: true` setting at the repo level does not in fact lock release titles via `gh release edit` — flagged separately).
+- **`.gitignore` now excludes `.DS_Store`** site-wide. macOS Finder metadata files had been at risk of being swept in by `git add -A`.
+
+## [1.3.0] · 2026-05-21 — Introducing FAQ and Glossary pages
 
 ### Added
 
@@ -41,7 +47,7 @@ appendix; see Appendix C of that PDF for documentation-pack history.
   - **Flex-shrink collapse.** Inside flex containers (e.g. `.resource-card` on the Grants page) the `::after` becomes a flex item with default `flex-shrink:1` and collapses to width 0 — the *Resources & reference documents* cards appeared to have no external-link indicator at all. Fix: `flex:none` on the pseudo-element.
   - **Double-arrow on news cards.** Two news cards on the home page (*View the school*, *See the programme*) carried both a hardcoded `→` and the auto-injected icon. Fix: drop the hardcoded `→` from the external-link news cards (kept on the internal-link ones, where there is no auto-icon). EN/FR/DE.
 
-## [1.2.0] · 2026-05-21
+## [1.2.0] · 2026-05-21 — Press kit, directory tour, compact view
 
 ### Added
 
@@ -86,7 +92,7 @@ appendix; see Appendix C of that PDF for documentation-pack history.
   - `protect-release-tags`: restricts deletions, updates, and non-fast-forward updates on tags matching `v*`. No bypass for anyone — once a release tag is published it is immutable.
 - Both rulesets are documented in PDF Section 07 ("Branch and tag protection") and visible at the [Settings → Rules → Rulesets page](https://github.com/EISSeuropa/netsec.github.io/settings/rules).
 
-## [1.1.0] · 2026-05-20
+## [1.1.0] · 2026-05-20 — Release tooling and PDF SemVer
 
 ### Added
 
@@ -112,7 +118,7 @@ appendix; see Appendix C of that PDF for documentation-pack history.
   `snap-network.png`, `snap-grants.png`) against the current state
   of <https://netsec-cost.eu>.
 
-## [1.0.0] · 2026-05-20
+## [1.0.0] · 2026-05-20 — Initial public release
 
 The first tagged release. This snapshot captures the state of the
 website and open directory at the point Deliverable D1 of COST
