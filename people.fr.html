@@ -157,6 +157,30 @@
       <p class="lede">Un annuaire ouvert de chercheur·euses, décideur·ses politiques et praticien·nes travaillant dans ou aux côtés des études de sécurité européennes — direction de l'Action, participant·es des groupes de travail et communauté élargie. Toute personne engagée dans le domaine est invitée à <a href="#join">ajouter sa biographie</a>.</p>
     </div>
 
+    <!-- Bandeau d'orientation à usage unique pour les nouveaux
+         visiteurs. Le JS de la page le révèle lorsque
+         localStorage('netsec-directory-tour-seen') est absent, et
+         le masque (durablement) lors du clic « Compris ». Les
+         membres habituels et toute personne ayant déjà cliqué ne
+         le voient plus. Une prochaine itération ajoutera un bouton
+         « ? » dans la barre d'outils pour rejouer l'orientation
+         sous forme de visite guidée. -->
+    <aside class="welcome-strip" id="welcome-strip" role="region" aria-labelledby="welcome-strip-title" hidden>
+      <h2 class="welcome-strip-title" id="welcome-strip-title">
+        👋 Première visite&nbsp;?
+      </h2>
+      <p class="welcome-strip-lede">
+        Voici l'<strong>annuaire ouvert</strong> de NetSec. Toute personne travaillant dans ou auprès des études de sécurité européennes est la bienvenue — pas uniquement les membres du Comité de gestion.
+      </p>
+      <ul class="welcome-strip-tips">
+        <li>🔍 <strong>Recherchez</strong> par nom, affiliation ou pays.</li>
+        <li>🎚️ <strong>Filtrez</strong> par groupe de travail, rôle CG ou pays.</li>
+        <li>🪪 <strong>Changez la densité</strong> dans la barre d'outils pour afficher plus.</li>
+        <li>👤 <strong>Tout le monde peut rejoindre</strong> — le formulaire est en pied de page.</li>
+      </ul>
+      <button class="welcome-strip-dismiss" type="button" id="welcome-strip-dismiss" aria-controls="welcome-strip">Compris</button>
+    </aside>
+
     <div class="members-toolbar glass">
       <label class="members-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -285,6 +309,20 @@
   const countrySelect = document.getElementById('member-country');
   const tpl = document.getElementById('member-card-template');
   const viewToggle = document.querySelectorAll('.view-toggle button[data-view]');
+
+  /* Welcome strip — shared dismiss key with the upcoming tour. */
+  const TOUR_KEY = 'netsec-directory-tour-seen';
+  const welcome  = document.getElementById('welcome-strip');
+  const welcomeDismiss = document.getElementById('welcome-strip-dismiss');
+  if (welcome && welcomeDismiss) {
+    let seen = false;
+    try { seen = localStorage.getItem(TOUR_KEY) === 'true'; } catch (e) {}
+    if (!seen) welcome.hidden = false;
+    welcomeDismiss.addEventListener('click', () => {
+      welcome.hidden = true;
+      try { localStorage.setItem(TOUR_KEY, 'true'); } catch (e) {}
+    });
+  }
 
   function applyView(mode) {
     const compact = (mode === 'compact');
