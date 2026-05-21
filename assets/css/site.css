@@ -1231,6 +1231,20 @@ form button:disabled{opacity:.65;cursor:wait}
 .dark .tour-trigger:hover,
 .dark .tour-trigger:focus-visible{background:var(--accent-2);color:#fff}
 
+/* The `+` join-trigger is styled as a primary CTA, not as a hint
+   button. It reads as the bright sibling next to the muted `?`. */
+.tour-trigger-cta{
+  background:var(--accent);color:#fff;
+  font-size:1.15rem;
+}
+.tour-trigger-cta:hover,
+.tour-trigger-cta:focus-visible{
+  background:var(--accent-2);color:#fff;transform:translateY(-1px);
+}
+.dark .tour-trigger-cta{background:var(--accent);color:#fff}
+.dark .tour-trigger-cta:hover,
+.dark .tour-trigger-cta:focus-visible{background:var(--accent-2)}
+
 /* Tour backdrop */
 .tour-backdrop{
   position:fixed;inset:0;z-index:100;
@@ -1388,37 +1402,49 @@ form button:disabled{opacity:.65;cursor:wait}
    hidden. Tighter grid (~3 cards across on a desktop, vs ~2 in the
    detailed view). Toggled via the .is-compact class on the grid,
    set by the view-mode toggle in the toolbar. Preference persists
-   in localStorage. */
+   in localStorage.
+
+   Every compact rule is scoped to `.member-card:not(.is-expanded)`
+   so that one clicked card can revert to its detailed form
+   in-place while the rest of the grid stays compact. See the
+   `.is-expanded` block further down. */
 .members-grid.is-compact{
   grid-template-columns:repeat(auto-fill, minmax(min(280px,100%), 1fr));
   gap:12px;
 }
-.members-grid.is-compact .member-card{
+.members-grid.is-compact .member-card:not(.is-expanded){
   flex-direction:row;
   padding:12px 14px;
   gap:14px;
   align-items:center;
+  cursor:pointer;            /* hint that clicking will expand */
 }
-.members-grid.is-compact .member-photo{
+.members-grid.is-compact .member-card:not(.is-expanded):hover{
+  background:rgba(255,255,255,.04);
+}
+.members-grid.is-compact .member-card:not(.is-expanded):focus-visible{
+  outline:2px solid var(--accent-2);outline-offset:2px;
+}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-photo{
   width:46px;height:46px;
   margin:0;flex-shrink:0;
   border-width:1px;
 }
-.members-grid.is-compact .member-photo-fallback{
+.members-grid.is-compact .member-card:not(.is-expanded) .member-photo-fallback{
   font-size:.95rem;
 }
-.members-grid.is-compact .member-body{
+.members-grid.is-compact .member-card:not(.is-expanded) .member-body{
   align-items:flex-start;text-align:left;
   flex:1;min-width:0;        /* min-width:0 lets the affiliation truncate */
   gap:2px;
 }
-.members-grid.is-compact .member-name{
+.members-grid.is-compact .member-card:not(.is-expanded) .member-name{
   font-size:.95rem;margin:0;line-height:1.25;
 }
-.members-grid.is-compact .member-role{
+.members-grid.is-compact .member-card:not(.is-expanded) .member-role{
   font-size:.66rem;margin:1px 0 0;letter-spacing:.04em;
 }
-.members-grid.is-compact .member-affiliation{
+.members-grid.is-compact .member-card:not(.is-expanded) .member-affiliation{
   font-size:.78rem;margin:0;line-height:1.35;
   justify-content:flex-start;
   /* Single line, with ellipsis when an affiliation runs long. */
@@ -1428,15 +1454,37 @@ form button:disabled{opacity:.65;cursor:wait}
 /* Compact mode drops position + country in full; the flag
    still conveys country implicitly and the affiliation is the
    one piece every card needs at a glance. */
-.members-grid.is-compact .member-affiliation .aff-full{display:none}
-.members-grid.is-compact .member-affiliation .aff-compact{display:inline}
-.members-grid.is-compact .member-wgs{
+.members-grid.is-compact .member-card:not(.is-expanded) .member-affiliation .aff-full{display:none}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-affiliation .aff-compact{display:inline}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-wgs{
   margin:4px 0 0;justify-content:flex-start;
 }
-.members-grid.is-compact .member-bio,
-.members-grid.is-compact .member-bio-toggle,
-.members-grid.is-compact .member-contact{
+.members-grid.is-compact .member-card:not(.is-expanded) .member-bio,
+.members-grid.is-compact .member-card:not(.is-expanded) .member-bio-toggle,
+.members-grid.is-compact .member-card:not(.is-expanded) .member-contact{
   display:none !important;
+}
+
+/* Click-to-expand: in compact mode, one card at a time can revert
+   to the detailed layout in-place. Triggered by a click anywhere
+   on the card (delegated handler in people.html), Enter/Space on a
+   focused card, or a #slug hash in the URL. Esc collapses. */
+.members-grid.is-compact .member-card.is-expanded{
+  /* Spans two grid columns where the grid is wide enough to have
+     them — gives the expanded card the room of a detailed one. */
+  grid-column:span 2;
+  cursor:default;
+  outline:2px solid var(--accent-2);
+  outline-offset:0;
+  box-shadow:0 12px 30px rgba(11,18,32,.16);
+}
+.members-grid.is-compact .member-card.is-expanded:focus-visible{
+  outline:3px solid var(--accent-2);
+}
+/* Make sure single-column grids (narrow viewports) don't try to
+   span past the available columns. */
+@media (max-width: 640px){
+  .members-grid.is-compact .member-card.is-expanded{grid-column:auto}
 }
 
 /* View-mode toggle (segmented control in the toolbar) */

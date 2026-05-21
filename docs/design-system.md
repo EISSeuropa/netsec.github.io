@@ -144,6 +144,27 @@ Responsive card grid showing the 30 MC countries with FlagCDN flags.
 Toolbar at the top of `people.html`. Free-text search + WG/MC chips
 + country `<select>`. All ANDed by the directory's render loop.
 
+The toolbar also carries the **view-mode toggle** (`.view-toggle`),
+the **`?` tour-trigger** (`#tour-trigger`), and the **`+`
+join-trigger** (`#join-trigger`). The view-toggle switches the
+grid between detailed (`.members-grid` default) and compact
+(`.members-grid.is-compact`), persisted in
+`localStorage('netsec-directory-view')`. The `?` opens the 6-step
+guided tour. The `+` smooth-scrolls to `#join` and focuses the
+*Add your bio* CTA — visually distinguished as an accent CTA
+(`.tour-trigger-cta`) rather than the muted help affordance.
+
+### `.member-card.is-expanded` (click-to-expand in compact mode)
+
+In compact mode a single card may carry `.is-expanded`, which
+reverts its compact-mode CSS overrides so it renders as a
+detailed card in place. Triggered by clicks on the card body
+(delegated handler on `.members-grid`), Enter/Space on a focused
+card, or a `#slug` hash in the URL. Esc collapses; clicks outside
+any card collapse. URL hash mirrors the expanded card's
+`data-slug`. Long-term plan is to replace this with a sticky
+side-panel pattern — see Issue #72.
+
 ## Animations
 
 - `.reveal` — fades in + slides up 12 px when intersecting viewport.

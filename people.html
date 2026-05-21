@@ -222,6 +222,10 @@
            assets/js/site.js (window.netsecTour); the steps and
            localised labels are configured inline below. -->
       <button class="tour-trigger" type="button" id="tour-trigger" title="Take a tour" aria-label="Take a tour">?</button>
+      <!-- Quick-jump to the join card at the foot of the page. The
+           click handler smooth-scrolls to #join and focuses the
+           CTA so a keyboard user can submit immediately. -->
+      <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Jump to the join form" aria-label="Jump to the join form">+</button>
     </div>
 
     <p class="members-count" id="members-count" aria-live="polite"></p>
@@ -381,7 +385,10 @@
           body:  'The country dropdown is populated automatically from the current membership — only countries that have members appear.' },
         { target: '.view-toggle',
           title: 'Switch card density',
-          body:  'Detailed view shows photos and bios; compact view shows initials, name, affiliation, and WG chips, three across on a desktop.' },
+          body:  'Detailed view shows photos and bios; compact view shows initials, name, affiliation, and WG chips, three across on a desktop. Click any compact card to expand it in place.' },
+        { target: '#join-trigger',
+          title: 'Jump to the join form',
+          body:  'The + button takes you straight to the join card at the foot of this page.' },
         { target: '#join',
           title: 'Anyone can join',
           body:  'Add yourself via the form here. About five minutes to fill in; cards appear on this page within a week.',
@@ -418,6 +425,16 @@
     viewToggle.forEach(btn => {
       btn.setAttribute('aria-pressed', btn.dataset.view === mode ? 'true' : 'false');
     });
+    // Manage tabindex + collapse any expanded card when leaving
+    // compact mode — there's nothing left to expand into in detailed.
+    grid.querySelectorAll('.member-card').forEach(card => {
+      if (compact) card.setAttribute('tabindex', '0');
+      else { card.removeAttribute('tabindex'); card.classList.remove('is-expanded'); }
+    });
+    if (!compact && location.hash) {
+      // Strip the slug hash too — it has no meaning in detailed view.
+      history.replaceState(null, '', location.pathname + location.search);
+    }
   }
   try {
     const saved = localStorage.getItem('netsec-directory-view');
@@ -430,6 +447,82 @@
       try { localStorage.setItem('netsec-directory-view', mode); } catch (e) {}
     });
   });
+
+  /* Expand-in-place on the compact directory.
+     ─────────────────────────────────────────
+     In compact mode a click anywhere on a card (other than on a
+     link or button child) toggles `.is-expanded` on that card. The
+     CSS rules for `.member-card.is-expanded` revert the compact
+     overrides for that one card, leaving the rest of the grid
+     compact. The expanded card's slug is mirrored to location.hash
+     so the state is shareable; on page load, an existing hash that
+     matches a member's slug auto-expands their card.
+
+     Open Issue #71 (to come) tracks the longer-term plan: replace
+     this with a sticky side panel on desktop / bottom sheet on
+     mobile when membership growth makes the in-place expansion
+     visually disruptive. */
+  function clearHashIfFocus() {
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  }
+  grid.addEventListener('click', (e) => {
+    if (!grid.classList.contains('is-compact')) return;
+    if (e.target.closest('a, button')) return; // let contact icons work
+    const card = e.target.closest('.member-card');
+    if (!card) return;
+    const wasExpanded = card.classList.contains('is-expanded');
+    grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
+    if (!wasExpanded) {
+      card.classList.add('is-expanded');
+      const slug = card.getAttribute('data-slug');
+      if (slug) history.replaceState(null, '', '#' + slug);
+    } else {
+      clearHashIfFocus();
+    }
+  });
+  // Enter/Space on a focused card mirrors the click.
+  grid.addEventListener('keydown', (e) => {
+    if (!grid.classList.contains('is-compact')) return;
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const card = e.target.closest('.member-card');
+    if (!card) return;
+    e.preventDefault();
+    card.click();
+  });
+  // Esc anywhere collapses; click outside any card also collapses.
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const expanded = grid.querySelector('.member-card.is-expanded');
+    if (expanded) {
+      expanded.classList.remove('is-expanded');
+      expanded.focus({ preventScroll: true });
+      clearHashIfFocus();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!grid.classList.contains('is-compact')) return;
+    const expanded = grid.querySelector('.member-card.is-expanded');
+    if (!expanded) return;
+    if (e.target.closest('.member-card.is-expanded')) return;
+    if (e.target.closest('.tour-backdrop, .tour-tooltip, .tour-trigger')) return;
+    expanded.classList.remove('is-expanded');
+    clearHashIfFocus();
+  });
+
+  // "+" button in the toolbar: smooth-scroll to the join card and
+  // focus its "Add your bio" CTA so the next keypress submits.
+  const joinTrigger = document.getElementById('join-trigger');
+  if (joinTrigger) {
+    joinTrigger.addEventListener('click', () => {
+      const joinCard = document.getElementById('join');
+      if (!joinCard) return;
+      joinCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        const cta = joinCard.querySelector('.join-card-cta');
+        if (cta && !cta.hidden) cta.focus({ preventScroll: true });
+      }, 380);
+    });
+  }
 
   let MEMBERS = [];
   // activeWG values:
@@ -493,6 +586,16 @@
 
     filtered.forEach(m => {
       const node = tpl.content.firstElementChild.cloneNode(true);
+      // Slug attribute powers the deep-link "expand this card" flow
+      // and gives the existing leadership-card live-refresh anywhere
+      // else on the site a consistent hook to find members by id.
+      if (m.id) node.setAttribute('data-slug', m.id);
+      // Keyboard focusability is mode-dependent: in compact mode
+      // cards are interactive (click expands), in detailed mode the
+      // card itself doesn't do anything (contact icons inside it do).
+      if (grid.classList.contains('is-compact')) {
+        node.setAttribute('tabindex', '0');
+      }
       const img = node.querySelector('img');
       const fallback = node.querySelector('.member-photo-fallback');
       if (m.photo) {
@@ -759,12 +862,23 @@
     const scrollToHash = () => {
       const hash = (location.hash || '').replace(/^#/, '');
       if (!hash) return;
+      // Try first the legacy ID-on-element pattern (older
+      // deep-links to e.g. #arthur-laudrain rendered on detailed
+      // cards via an inline id attribute). Then try a member card
+      // by slug — for the new expand-in-place flow this also flips
+      // the matching card into its expanded form in compact view.
       const target =
         document.getElementById(hash) ||
-        document.getElementById(hash.replace(/^(dr|prof|mr|ms|mrs)-/i, ''));
-      if (target) requestAnimationFrame(() =>
-        target.scrollIntoView({ behavior: 'instant', block: 'start' })
-      );
+        document.getElementById(hash.replace(/^(dr|prof|mr|ms|mrs)-/i, '')) ||
+        grid.querySelector('.member-card[data-slug="' + CSS.escape(hash) + '"]');
+      if (target) requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: 'instant', block: 'center' });
+        if (target.classList.contains('member-card')
+            && grid.classList.contains('is-compact')) {
+          grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
+          target.classList.add('is-expanded');
+        }
+      });
     };
     scrollToHash();
     window.addEventListener('hashchange', scrollToHash);
