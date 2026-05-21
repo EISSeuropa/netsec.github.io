@@ -28,6 +28,13 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 - **Wiki `FAQ.md` and `Glossary.md` are now short stubs** that point at the canonical public versions. Keeping the source of truth in one place stops the FAQ and Glossary from drifting between two surfaces.
 
+### Fixed
+
+- **External-link icon now appears, suppresses, and renders in the right places.** Four related regressions, all rooted in the auto-injecting `a[target="_blank"][href^="http"]::after` rule introduced in v1.2.0.
+  - **Specificity bug.** The global selector was (0,0,2,2); every exclusion (`.cost-mark::after`, `.socials a::after`, `.grant-cta::after`, `.member-contact a::after`, `.brand::after`, `.eu-mark::after`, `.lang-switch a::after`, `.tour-trigger::after`, `.welcome-strip-tips a::after`) was (0,0,1,1) or (0,0,1,2) and silently lost. Result: the icon was appearing on the COST mark, the EU mark, the GitHub footer link, the language switcher, the social-icon row on member cards, and was rendering on top of the inline arrow inside *Apply on e-COST* buttons. Fix: wrap the global selector in `:where()` so it contributes 0 to specificity; every exclusion now wins naturally.
+  - **Flex-shrink collapse.** Inside flex containers (e.g. `.resource-card` on the Grants page) the `::after` becomes a flex item with default `flex-shrink:1` and collapses to width 0 — the *Resources & reference documents* cards appeared to have no external-link indicator at all. Fix: `flex:none` on the pseudo-element.
+  - **Double-arrow on news cards.** Two news cards on the home page (*View the school*, *See the programme*) carried both a hardcoded `→` and the auto-injected icon. Fix: drop the hardcoded `→` from the external-link news cards (kept on the internal-link ones, where there is no auto-icon). EN/FR/DE.
+
 ## [1.2.0] · 2026-05-21
 
 ### Added

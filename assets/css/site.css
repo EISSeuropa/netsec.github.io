@@ -65,10 +65,19 @@ html{scroll-behavior:smooth;color-scheme:light dark;scroll-padding-top:90px}
    .grant-cta is excluded because it carries its own inline
    external-link SVG that participates in the hover translate
    animation. */
-a[target="_blank"][href^="http"]::after,
-a[target="_blank"][href^="//"]::after{
+/* Specificity note: the global selector is wrapped in :where() so it
+   contributes 0 to specificity (only the ::after pseudo-element does).
+   That way every per-context override below — .grant-cta::after,
+   .cost-mark::after, .socials a::after, etc. — wins naturally without
+   needing !important. Without :where(), the multi-attribute selector
+   was (0,0,2,2), beating every exclusion in the list. */
+:where(a[target="_blank"][href^="http"])::after,
+:where(a[target="_blank"][href^="//"])::after{
   content:"";
   display:inline-block;
+  /* In flex containers (e.g. .resource-card) the pseudo-element
+     becomes a flex item and would otherwise shrink to 0; pin it. */
+  flex:none;
   width:0.85em;height:0.85em;
   margin:0 0.05em 0 0.3em;
   vertical-align:-0.08em;
