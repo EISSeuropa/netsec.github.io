@@ -1,0 +1,50 @@
+# Search-index drift check.
+#
+# Runs scripts/build-search.sh --check on every PR that touches
+# searchable HTML, the committed Pagefind index, the builder
+# script, or the JS that consumes the index. If the committed
+# /pagefind/ directory doesn't match what `npx pagefind` would
+# produce from the current HTML, this check fails and the PR
+# cannot be merged until the maintainer runs
+#
+#     ./scripts/build-search.sh
+#
+# and commits the result.
+#
+# Mirrors the i18n-drift / calendar-drift pattern so all three
+# drift-style checks behave identically from the contributor's
+# point of view: one script, one --check flag, one CI workflow.
+name: Search-index drift check
+
+on:
+  pull_request:
+    paths:
+      - '*.html'
+      - 'pagefind/**'
+      - 'scripts/build-search.sh'
+      - 'assets/js/site.js'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    name: Check search-index drift
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Python (for the JSON-normalise step in the script)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run drift checker
+        run: ./scripts/build-search.sh --check

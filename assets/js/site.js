@@ -541,3 +541,326 @@
   }
   window.netsecTour = netsecTour;
 })();
+
+/* ════════════════════════════════════════════════════════════════
+   SITE-WIDE SEARCH (Pagefind)
+   ────────────────────────────────────────────────────────────────
+   A modal overlay search UI powered by a Pagefind index served from
+   /pagefind/. Triggers:
+     - Click on the .search-trigger button in the nav.
+     - Cmd/Ctrl-K from anywhere.
+     - "/" from anywhere except inside an input/textarea/contenteditable.
+   The overlay lazy-loads Pagefind on first open so non-searchers
+   never pay the runtime cost.
+   ════════════════════════════════════════════════════════════════ */
+(function () {
+  // Per-locale strings. Picked off the <html lang="..."> attribute.
+  // English is the authoritative source; FR/DE are mirrors.
+  const STRINGS = {
+    en: {
+      placeholder: 'Search the site…',
+      close: 'Close',
+      navigate: 'navigate',
+      open: 'open',
+      escClose: 'close',
+      noResults: 'No results for',
+      typeToSearch: 'Type to search across pages, FAQ entries, glossary terms, and more.',
+      resultsCount: (n) => `${n} ${n === 1 ? 'result' : 'results'}`,
+      loading: 'Loading search…',
+      loadError: 'Search is unavailable. Reload the page to try again.',
+      searchLabel: 'Search',
+    },
+    fr: {
+      placeholder: 'Rechercher sur le site…',
+      close: 'Fermer',
+      navigate: 'naviguer',
+      open: 'ouvrir',
+      escClose: 'fermer',
+      noResults: 'Aucun résultat pour',
+      typeToSearch: 'Tapez pour chercher dans les pages, la FAQ, le glossaire, et plus encore.',
+      resultsCount: (n) => `${n} résultat${n === 1 ? '' : 's'}`,
+      loading: 'Chargement de la recherche…',
+      loadError: 'La recherche est indisponible. Rechargez la page pour réessayer.',
+      searchLabel: 'Rechercher',
+    },
+    de: {
+      placeholder: 'Website durchsuchen…',
+      close: 'Schließen',
+      navigate: 'navigieren',
+      open: 'öffnen',
+      escClose: 'schließen',
+      noResults: 'Keine Treffer für',
+      typeToSearch: 'Tippen Sie, um Seiten, FAQ-Einträge, Glossarbegriffe und mehr zu durchsuchen.',
+      resultsCount: (n) => `${n} ${n === 1 ? 'Treffer' : 'Treffer'}`,
+      loading: 'Suche wird geladen…',
+      loadError: 'Suche nicht verfügbar. Seite neu laden und erneut versuchen.',
+      searchLabel: 'Suchen',
+    },
+  };
+
+  const lang = (document.documentElement.lang || 'en').slice(0, 2);
+  const t = STRINGS[lang] || STRINGS.en;
+
+  // ── State ────────────────────────────────────────────────────
+  let pagefind = null;           // The loaded Pagefind module
+  let pagefindError = false;     // Set if the index fails to load
+  let pagefindPromise = null;    // Memoised loader
+  let overlay = null;            // The injected DOM
+  let lastFocus = null;          // Restore on close
+  let debounceTimer = 0;
+  let activeIndex = -1;          // Highlighted result row
+  let currentResults = [];       // Hits from the last search
+
+  // ── Lazy-load Pagefind ────────────────────────────────────────
+  // On first open we dynamically import the index runtime. Errors
+  // (e.g. missing /pagefind/ in dev) surface as a friendly inline
+  // message; nothing else on the page is affected.
+  function loadPagefind() {
+    if (pagefindPromise) return pagefindPromise;
+    pagefindPromise = (async () => {
+      try {
+        const mod = await import('/pagefind/pagefind.js');
+        await mod.init();
+        // Restrict results to the current locale. Pagefind reads
+        // each indexed page's <html lang> at build time and labels
+        // shards by language; .filters({language: lang}) further
+        // narrows queries.
+        pagefind = mod;
+        return mod;
+      } catch (e) {
+        pagefindError = true;
+        console.error('Pagefind failed to load', e);
+        throw e;
+      }
+    })();
+    return pagefindPromise;
+  }
+
+  // ── Build the overlay DOM (once, on first open) ──────────────
+  function buildOverlay() {
+    if (overlay) return overlay;
+    overlay = document.createElement('div');
+    overlay.className = 'search-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', t.searchLabel);
+    overlay.hidden = true;
+    overlay.innerHTML = `
+      <div class="search-backdrop" data-search-close></div>
+      <div class="search-panel glass" role="document">
+        <div class="search-header">
+          <svg class="search-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input class="search-input" type="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="${t.placeholder}" aria-label="${t.searchLabel}" aria-controls="search-results-list" aria-expanded="false" aria-autocomplete="list">
+          <button class="search-close" type="button" aria-label="${t.close}" data-search-close>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="search-meta" aria-live="polite" aria-atomic="true"></div>
+        <ul class="search-results" id="search-results-list" role="listbox" aria-label="${t.searchLabel}"></ul>
+        <div class="search-hints">
+          <span><kbd>↑</kbd><kbd>↓</kbd> ${t.navigate}</span>
+          <span><kbd>↵</kbd> ${t.open}</span>
+          <span><kbd>Esc</kbd> ${t.escClose}</span>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    const input = overlay.querySelector('.search-input');
+    const list = overlay.querySelector('.search-results');
+    const meta = overlay.querySelector('.search-meta');
+
+    // Idle state — empty input shows the prompt.
+    meta.textContent = t.typeToSearch;
+
+    input.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => runSearch(input.value.trim()), 120);
+    });
+
+    // Keyboard navigation between results.
+    overlay.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        moveActive(1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        moveActive(-1);
+      } else if (e.key === 'Enter' && activeIndex >= 0 && currentResults[activeIndex]) {
+        e.preventDefault();
+        const a = list.children[activeIndex]?.querySelector('a');
+        if (a) a.click();
+      }
+    });
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target.closest('[data-search-close]')) close();
+    });
+
+    return overlay;
+  }
+
+  // ── Query + render ───────────────────────────────────────────
+  async function runSearch(query) {
+    const meta = overlay.querySelector('.search-meta');
+    const list = overlay.querySelector('.search-results');
+    const input = overlay.querySelector('.search-input');
+
+    activeIndex = -1;
+    currentResults = [];
+
+    if (!query) {
+      meta.textContent = t.typeToSearch;
+      list.innerHTML = '';
+      input.setAttribute('aria-expanded', 'false');
+      return;
+    }
+
+    if (pagefindError) {
+      meta.textContent = t.loadError;
+      list.innerHTML = '';
+      return;
+    }
+
+    try {
+      const pf = await loadPagefind();
+      // Pagefind's per-language filtering: only results in the
+      // active locale appear. (Each indexed page's <html lang>
+      // determines the shard it lands in.)
+      const search = await pf.search(query, { filters: { language: lang } });
+      // search.results is a Promise array of hit handles. Resolve
+      // the first ~10 — Pagefind returns ranked results lazily.
+      const hits = await Promise.all(search.results.slice(0, 12).map((r) => r.data()));
+      currentResults = hits;
+      renderResults(hits, query);
+    } catch (e) {
+      meta.textContent = t.loadError;
+      list.innerHTML = '';
+    }
+  }
+
+  function renderResults(hits, query) {
+    const meta = overlay.querySelector('.search-meta');
+    const list = overlay.querySelector('.search-results');
+    const input = overlay.querySelector('.search-input');
+
+    if (hits.length === 0) {
+      meta.textContent = `${t.noResults} "${query}"`;
+      list.innerHTML = '';
+      input.setAttribute('aria-expanded', 'false');
+      return;
+    }
+
+    meta.textContent = t.resultsCount(hits.length);
+    input.setAttribute('aria-expanded', 'true');
+
+    list.innerHTML = hits.map((hit, i) => {
+      // Pagefind populates meta.title from the page's <title>; the
+      // section heading comes via sub_results[0].title if the hit
+      // matched within an anchored sub-section.
+      const title = escapeHtml(hit.meta.title || hit.url);
+      const sub = hit.sub_results && hit.sub_results[0];
+      const heading = sub ? escapeHtml(sub.title) : '';
+      const url = sub ? sub.url : hit.url;
+      const excerpt = sub ? sub.excerpt : hit.excerpt;
+      return `
+        <li role="option" aria-selected="false" id="search-result-${i}">
+          <a href="${url}">
+            <div class="search-result-head">
+              <span class="search-result-title">${title}</span>
+              ${heading ? `<span class="search-result-sep">·</span><span class="search-result-section">${heading}</span>` : ''}
+            </div>
+            <div class="search-result-excerpt">${excerpt}</div>
+          </a>
+        </li>
+      `;
+    }).join('');
+  }
+
+  function moveActive(delta) {
+    const list = overlay.querySelector('.search-results');
+    const items = list.children;
+    if (items.length === 0) return;
+    activeIndex = (activeIndex + delta + items.length) % items.length;
+    for (let i = 0; i < items.length; i++) {
+      const isActive = i === activeIndex;
+      items[i].classList.toggle('is-active', isActive);
+      items[i].setAttribute('aria-selected', isActive ? 'true' : 'false');
+    }
+    const active = items[activeIndex];
+    if (active) {
+      const input = overlay.querySelector('.search-input');
+      input.setAttribute('aria-activedescendant', active.id);
+      active.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  // ── Open / close ─────────────────────────────────────────────
+  function open() {
+    if (overlay && !overlay.hidden) return;
+    lastFocus = document.activeElement;
+    buildOverlay();
+    overlay.hidden = false;
+    document.body.classList.add('search-open');
+    // Pre-load the index in the background so the first keystroke
+    // is fast (we don't await; if it fails the input still works
+    // and surfaces the error).
+    loadPagefind().catch(() => {});
+    requestAnimationFrame(() => {
+      overlay.querySelector('.search-input').focus();
+    });
+  }
+
+  function close() {
+    if (!overlay || overlay.hidden) return;
+    overlay.hidden = true;
+    document.body.classList.remove('search-open');
+    const input = overlay.querySelector('.search-input');
+    if (input) input.value = '';
+    const list = overlay.querySelector('.search-results');
+    if (list) list.innerHTML = '';
+    const meta = overlay.querySelector('.search-meta');
+    if (meta) meta.textContent = t.typeToSearch;
+    activeIndex = -1;
+    currentResults = [];
+    if (lastFocus && typeof lastFocus.focus === 'function') {
+      lastFocus.focus();
+    }
+  }
+
+  // ── Trigger wiring ───────────────────────────────────────────
+  // 1. Click on the magnifying-glass button in the nav.
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.search-trigger')) {
+      e.preventDefault();
+      open();
+    }
+  });
+
+  // 2. Cmd/Ctrl-K from anywhere.
+  // 3. "/" from anywhere EXCEPT inside an input / textarea / contenteditable.
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+      e.preventDefault();
+      open();
+      return;
+    }
+    if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      const tag = (e.target.tagName || '').toLowerCase();
+      const editable = e.target.isContentEditable;
+      if (tag === 'input' || tag === 'textarea' || tag === 'select' || editable) return;
+      e.preventDefault();
+      open();
+    }
+  });
+
+  // Expose for debugging / programmatic open if ever needed.
+  window.netsecSearch = { open, close };
+})();

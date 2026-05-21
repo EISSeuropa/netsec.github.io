@@ -149,6 +149,19 @@ flowchart TD
   rejected by the Grant Awarding Coordinator. The Grants page sets
   expectations openly so members don't apply for what we can't
   fund.
+- **Site-wide search** powered by [Pagefind](https://pagefind.app/).
+  A modal overlay triggered by Cmd/Ctrl-K, `/` (anywhere outside
+  an input), or the magnifying-glass button in the nav. Indexes
+  every `<main data-pagefind-body>` across all 30 public pages
+  (EN + FR + DE); results are scoped to the visitor's active
+  locale automatically. Each `<h1>`/`<h2>`/`<h3>` becomes a
+  sub-result with a deep-link anchor — searches against long
+  pages like FAQ and Glossary jump straight to the matched
+  section. Lazy-loaded on first overlay open. Queries never
+  leave the visitor's browser; the index is served from
+  `/pagefind/` on the same origin. Keyboard navigation, focus
+  trap, `aria-live` result count, full light + dark theme
+  parity.
 
 ### Operator-facing
 
@@ -275,7 +288,10 @@ besides GitHub Pages' own access logs. The full processor list is in
 ├── data/
 │   ├── bios.json                    # The directory (members, roles, WGs, contacts)
 │   ├── mc-members.json              # MC roster per country (used to auto-tag MC role)
-│   └── i18n-state.json              # SHA-1 stamps for translation-drift tracking
+│   ├── i18n-state.json              # SHA-1 stamps for translation-drift tracking
+│   └── events.json                  # Source of truth for /calendar.ics (and Events cards)
+│
+├── pagefind/                        # Pre-built search index served at /pagefind/ for the in-page overlay
 │
 ├── scripts/
 │   ├── sync-cost.py                 # Pulls WG_MAP + leadership from cost.eu
@@ -283,13 +299,17 @@ besides GitHub Pages' own access logs. The full processor list is in
 │   ├── bios-source.json             # CSV URL + form URL + column mapping
 │   ├── inject-seo.py                # Idempotent canonical/OG/JSON-LD generator
 │   ├── check-i18n-drift.py          # Reports stale translations vs. EN source
+│   ├── build-calendar.py            # Generates /calendar.ics from data/events.json
+│   ├── build-search.sh              # Rebuilds /pagefind/ via `npx pagefind` (--check for CI)
 │   ├── release.sh                   # Cuts a tagged release; promotes CHANGELOG
 │   └── requirements.txt             # requests, beautifulsoup4, Pillow
 │
 ├── .github/workflows/
 │   ├── sync-cost.yml                # Weekly cron — opens PR if WG_MAP / roles changed
 │   ├── sync-bios.yml                # Weekly cron — opens PR if bios.json changed
-│   └── i18n-drift.yml               # Runs the drift checker on PRs touching HTML
+│   ├── i18n-drift.yml               # Drift checker for FR/DE translations
+│   ├── calendar-drift.yml           # Drift checker for /calendar.ics vs. events.json
+│   └── search-drift.yml             # Drift checker for /pagefind/ vs. searchable HTML
 │
 ├── docs/                            # ← you are here
 │   ├── README.md                    # ToC for this folder
@@ -350,7 +370,12 @@ If you're adding a new page:
 7. Add a footer link on every other page (`grep` for an existing
    footer-link pattern and replicate it across the 24 page × locale
    permutations).
-8. Bump the version stamp in the page meta-strip if you're adding
+8. Mark the new page's searchable content with `data-pagefind-body`
+   on the `<main>` element so the Pagefind indexer picks it up.
+   Run `./scripts/build-search.sh` to rebuild `/pagefind/`; commit
+   the result. CI (`search-drift.yml`) blocks any PR that adds an
+   indexable page without a matching index rebuild.
+9. Bump the version stamp in the page meta-strip if you're adding
    a privacy- or accessibility-relevant page.
 
 If you're adding a new field to `bios.json`:
