@@ -13,6 +13,12 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Search backend now works** (was: *"SEARCH IS UNAVAILABLE. RELOAD THE PAGE TO TRY AGAIN"* on every query). The overlay was calling `pagefind.search(query, { filters: { language: lang } })` — interpreted by Pagefind as "filter results to pages tagged with a `language` metadata field". We never tag pages with such a field; Pagefind returned zero matches and the catch branch fired. Pagefind v1 already handles locale isolation through per-language shards keyed off `<html lang>`, so no filter is required. Empty options is correct. The error UI now also surfaces the actual Pagefind error message so the next debugging session is faster.
+- **Search trigger no longer overflows the floating header on the home page.** The `⌘K` hint badge was always visible above 880 px viewport and pushed the `.nav-actions` cluster past the bubble's edge on the 10-link home nav. Badge is now hidden in all viewports; the keyboard shortcut is still discoverable via the button's `title` tooltip and the *open* row inside the search overlay.
+- **`Cmd-K` / `Ctrl-K` hardened.** The keydown handler now also checks `e.code === 'KeyK'` so the shortcut survives keyboard layouts where the printed glyph isn't at the physical KeyK position (Dvorak, AZERTY-in-some-browsers, etc.). The listener moved from `document` to `window` so it doesn't get swallowed by extensions that install higher-priority document-level handlers.
+
 ### Added
 
 - **iCalendar feed at `/calendar.ics`** with the dated events from the home page (Summer School, European Security Conference). Hand-authored RFC 5545 file with a `Europe/Stockholm` `VTIMEZONE` block; refresh interval set to seven days. The Events section on the home page gains a subtle *Subscribe to NetSec events* link (using `webcal://` so Apple Calendar / iOS Calendar / Outlook prompt to subscribe natively) with a fallback `.ics` download for one-shot imports. Localised in EN/FR/DE. A `<link rel="alternate" type="text/calendar">` in each home-page `<head>` makes the feed autodiscoverable for capable clients.
