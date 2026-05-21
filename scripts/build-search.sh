@@ -60,6 +60,12 @@ if [[ "${1-}" == "--check" ]]; then
   TMPROOT="$(mktemp -d -t netsec-pagefind-check-XXXXXX)"
   trap 'rm -rf "$TMPROOT"' EXIT
   TMPDIR="$TMPROOT/pagefind"
+  # Regenerate bio stubs first so the page count matches what the
+  # actual build would produce. Without this, a fresh checkout's
+  # search/bios/ directory could be empty if a maintainer ran the
+  # stub generator without committing, and CI would report drift.
+  echo "→ Regenerating bio search stubs"
+  python3 "$REPO_ROOT/scripts/build-bio-search-stubs.py" >/dev/null
   echo "→ Building search index to $TMPDIR for comparison"
   npx -y "pagefind@$PAGEFIND_VERSION" --site . --output-path "$TMPDIR" >/dev/null
   if ! counts_diff "$TMPDIR/pagefind-entry.json" "$REPO_ROOT/pagefind/pagefind-entry.json"; then
@@ -72,6 +78,9 @@ if [[ "${1-}" == "--check" ]]; then
   echo "✓ Per-language page counts match."
   exit 0
 fi
+
+echo "→ Generating bio search stubs from data/bios.json"
+python3 "$REPO_ROOT/scripts/build-bio-search-stubs.py"
 
 echo "→ Rebuilding search index to ./pagefind/"
 rm -rf "$REPO_ROOT/pagefind"

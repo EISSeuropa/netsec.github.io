@@ -1898,6 +1898,53 @@ body.search-open{overflow:hidden}
 }
 .dark .search-result-excerpt mark{background:rgba(255,204,0,.22)}
 
+/* Directory-bio result card. Used for hits whose Pagefind meta
+   reports `kind:bio` — the search/bios/<lang>/<slug>.html stubs
+   generated from data/bios.json by scripts/build-bio-search-stubs.
+   The card uses the avatar + flag + WG chip language already
+   established on the Network page, so a name search reads as
+   "directory entry" at a glance, distinct from a page-content hit. */
+.search-bio a{
+  display:flex;align-items:center;gap:14px;
+  padding:12px 18px;
+}
+.search-bio-photo{
+  flex-shrink:0;
+  width:48px;height:48px;border-radius:50%;
+  object-fit:cover;
+  background:linear-gradient(135deg,#cfd9ee,#e8d8c2);
+  border:2px solid rgba(255,255,255,.7);
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+}
+.dark .search-bio-photo{border-color:rgba(255,255,255,.15)}
+.search-bio-photo-fallback{
+  display:grid;place-items:center;
+  color:var(--accent);font-weight:700;font-size:1rem;letter-spacing:.04em;
+}
+.search-bio-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.search-bio-head{display:flex;align-items:center;gap:8px}
+.search-bio-name{
+  font-weight:600;font-size:1rem;color:var(--ink);letter-spacing:-.01em;
+  font-family:'Lexend','Inter',sans-serif;
+}
+.search-bio-flag{
+  width:18px;height:14px;border-radius:2px;flex-shrink:0;
+  box-shadow:0 0 0 1px rgba(0,0,0,.08);
+}
+.search-bio-subline,
+.search-bio-affiliation{
+  font-size:.85rem;color:var(--ink-2);line-height:1.4;
+  overflow:hidden;text-overflow:ellipsis;
+}
+.search-bio-affiliation{color:var(--muted)}
+.search-bio-wgs{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
+.search-bio-wg{
+  font-size:.7rem;font-weight:700;letter-spacing:.04em;
+  padding:2px 8px;border-radius:999px;
+  background:rgba(10,132,255,.10);color:var(--accent);
+}
+.dark .search-bio-wg{background:rgba(10,132,255,.18)}
+
 .search-hints{
   display:flex;flex-wrap:wrap;gap:6px 14px;
   padding:10px 18px;

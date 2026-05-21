@@ -821,27 +821,128 @@
     meta.textContent = t.resultsCount(hits.length);
     input.setAttribute('aria-expanded', 'true');
 
-    list.innerHTML = hits.map((hit, i) => {
-      // Pagefind populates meta.title from the page's <title>; the
-      // section heading comes via sub_results[0].title if the hit
-      // matched within an anchored sub-section.
-      const title = escapeHtml(hit.meta.title || hit.url);
-      const sub = hit.sub_results && hit.sub_results[0];
-      const heading = sub ? escapeHtml(sub.title) : '';
-      const url = sub ? sub.url : hit.url;
-      const excerpt = sub ? sub.excerpt : hit.excerpt;
-      return `
-        <li role="option" aria-selected="false" id="search-result-${i}">
-          <a href="${url}">
-            <div class="search-result-head">
-              <span class="search-result-title">${title}</span>
-              ${heading ? `<span class="search-result-sep">·</span><span class="search-result-section">${heading}</span>` : ''}
+    list.innerHTML = hits.map((hit, i) => renderHit(hit, i)).join('');
+  }
+
+  // Per-hit renderer. Directory bio hits get a richer card with the
+  // member's photo / country flag / WG chips. Everything else falls
+  // back to the plain title + section + excerpt layout.
+  function renderHit(hit, i) {
+    if (hit.meta && hit.meta.kind === 'bio') {
+      return renderBioHit(hit, i);
+    }
+    return renderPageHit(hit, i);
+  }
+
+  function renderPageHit(hit, i) {
+    // Pagefind populates meta.title from the page's <title>; the
+    // section heading comes via sub_results[0].title if the hit
+    // matched within an anchored sub-section.
+    const title = escapeHtml(hit.meta.title || hit.url);
+    const sub = hit.sub_results && hit.sub_results[0];
+    const heading = sub ? escapeHtml(sub.title) : '';
+    const url = sub ? sub.url : hit.url;
+    const excerpt = sub ? sub.excerpt : hit.excerpt;
+    return `
+      <li role="option" aria-selected="false" id="search-result-${i}">
+        <a href="${url}">
+          <div class="search-result-head">
+            <span class="search-result-title">${title}</span>
+            ${heading ? `<span class="search-result-sep">·</span><span class="search-result-section">${heading}</span>` : ''}
+          </div>
+          <div class="search-result-excerpt">${excerpt}</div>
+        </a>
+      </li>
+    `;
+  }
+
+  function renderBioHit(hit, i) {
+    // Bio stubs (search/bios/<lang>/<slug>.html) set:
+    //   meta.kind == 'bio'
+    //   meta.title       — Dr Name (from the stub's <title>, sans " — NetSec directory")
+    //   meta.photo       — relative path to the headshot
+    //   meta.country     — ISO 3166-1 alpha-2 country code (lowercase)
+    //   meta.affiliation — text
+    //   meta.role        — "MC member · Switzerland", or "" for non-MC
+    //   meta.wgs         — comma-separated WG numbers, e.g. "2,3"
+    const rawTitle = (hit.meta.title || '').replace(/\s+—\s+NetSec directory$/, '');
+    const name = escapeHtml(rawTitle);
+    const affiliation = escapeHtml(hit.meta.affiliation || '');
+    const role = escapeHtml(hit.meta.role || '');
+    const country = (hit.meta.country || '').toLowerCase().replace(/[^a-z]/g, '');
+    const photo = hit.meta.photo || '';
+    const wgs = (hit.meta.wgs || '').split(',').map((s) => s.trim()).filter(Boolean);
+    // Rewrite the stub URL to the canonical directory anchor.
+    // Pagefind v1 doesn't have a per-page URL-override mechanism,
+    // so we do it client-side: parse the stub URL's path for the
+    // locale + slug, build /people.html#<slug> (locale-aware),
+    // and carry the highlight query through if present.
+    const url = canonicalBioUrl(hit.url) || hit.url;
+
+    const flagImg = country
+      ? `<img class="search-bio-flag" src="https://flagcdn.com/h20/${country}.png" alt="" loading="lazy">`
+      : '';
+    const photoEl = photo
+      ? `<img class="search-bio-photo" src="${escapeHtml(photo)}" alt="" loading="lazy">`
+      : `<span class="search-bio-photo search-bio-photo-fallback" aria-hidden="true">${initialsFor(rawTitle)}</span>`;
+    const wgChips = wgs
+      .map((w) => `<span class="search-bio-wg">WG${escapeHtml(w)}</span>`)
+      .join('');
+    const subline = role || affiliation;
+
+    return `
+      <li role="option" aria-selected="false" id="search-result-${i}" class="search-bio">
+        <a href="${url}">
+          ${photoEl}
+          <div class="search-bio-text">
+            <div class="search-bio-head">
+              <span class="search-bio-name">${name}</span>
+              ${flagImg}
             </div>
-            <div class="search-result-excerpt">${excerpt}</div>
-          </a>
-        </li>
-      `;
-    }).join('');
+            ${subline ? `<div class="search-bio-subline">${subline}</div>` : ''}
+            ${role && affiliation && role !== affiliation
+                ? `<div class="search-bio-affiliation">${affiliation}</div>` : ''}
+            ${wgChips ? `<div class="search-bio-wgs">${wgChips}</div>` : ''}
+          </div>
+        </a>
+      </li>
+    `;
+  }
+
+  // Rewrites a Pagefind bio-stub URL to the canonical directory
+  // entry. Stubs live at /search/bios/<lang>/<slug>.html and are
+  // never visited; the overlay link points straight at
+  // /people.html#<slug> (or /people.<lang>.html#<slug>) with the
+  // pagefind-highlight query carried through.
+  //   /search/bios/en/arthur-laudrain.html?pagefind-highlight=foo
+  //     → /people.html?pagefind-highlight=foo#arthur-laudrain
+  function canonicalBioUrl(stubUrl) {
+    if (!stubUrl) return null;
+    const m = stubUrl.match(
+      /\/search\/bios\/([a-z]{2})\/([^/?#.]+)\.html(\?[^#]*)?/
+    );
+    if (!m) return null;
+    const [, bioLang, slug, query] = m;
+    const peoplePath = bioLang === 'en'
+      ? '/people.html'
+      : `/people.${bioLang}.html`;
+    return `${peoplePath}${query || ''}#${slug}`;
+  }
+
+  // Two-letter initials for the photo fallback — mirrors the
+  // directory's own avatar fallback rule (strip salutation, take
+  // first letter of first and last name).
+  function initialsFor(name) {
+    const tokens = String(name)
+      .replace(/^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+/i, '')
+      .trim()
+      .split(/\s+/);
+    if (tokens.length === 0) return '?';
+    const first = tokens[0].charAt(0).toUpperCase();
+    const last = tokens.length > 1
+      ? tokens[tokens.length - 1].charAt(0).toUpperCase()
+      : '';
+    return escapeHtml(first + last);
   }
 
   function moveActive(delta) {
