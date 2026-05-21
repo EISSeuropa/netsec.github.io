@@ -13,6 +13,10 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.3.0] · 2026-05-21
+
 ### Added
 
 - **Public FAQ page at `/faq.html`** (plus FR + DE beta variants). 21 Q&As across six themed sections (About the Action / Joining & participating / Grants & funding / Meetings & reimbursement / Website & directory / For NetSec members) with a jump-to TOC and per-question deep-link anchors. Migrated from the members' Wiki so that academics, journalists, and prospective members — who will not naturally browse to GitHub — can find the answers on the public site. The Wiki FAQ page now stubs to this URL.
@@ -193,7 +197,8 @@ reuse-friendly and attributed in the footer of every page.
 - **GitHub org:** `EISSeuropa`. Two-factor authentication enforced
   at the org level.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.0.0
