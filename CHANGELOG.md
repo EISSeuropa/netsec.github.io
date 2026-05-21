@@ -19,264 +19,46 @@ _Nothing yet._
 
 ### Added
 
-### Fixed
-
-- **Press-kit page primary buttons no longer render near-black in
-  light theme.** The site-wide `.btn-primary` rule fills with
-  `var(--ink)` (#0b1220), which on the outreach-oriented press-kit
-  page (§1 *What's on it* downloads, §8 *Open the documentation
-  pack*) read as harshly heavy against the light-mode page. A
-  scoped override inside the press-kit's inline `<style>`
-  re-themes those buttons to EU blue (`--accent`), with Apple
-  blue (`--accent-2`) on hover / focus. No change to any other
-  page's button styling.
-
-### Changed
-
-- **Grants page: explicit framing of the e-COST portal model.**
-  The portal note at the top of `/grants/` now spells out three
-  things openly: applications go through the general e-COST
-  portal (no NetSec-specific form); the portal **filters by
-  applicant profile** (ITC visible only to ITC affiliates, YRIG
-  visible only to under-40s) so a member may not see every
-  scheme listed; and only the five schemes on the page are in
-  NetSec's WBP — applications for anything else **will be
-  rejected** by the Grant Awarding Coordinator. The YRIG and ITC
-  cards gain a small italic visibility caption under their
-  eligibility lists. Wiki FAQ gains two matching entries ("Why
-  don't I see grant X?" / "Why might my application be
-  rejected?"). `docs/architecture.md` user-facing features list
-  notes the portal model. PDF intentionally not touched.
-
-- **Click-to-expand on compact directory cards** + **`+`
-  quick-join button** in the toolbar.
-  - Clicking a card in compact mode flips it to its detailed form
-    in place (photo, role, full affiliation, WGs, bio, contact
-    icons), while every other card on the grid stays compact.
-    Click outside / Esc / click another card collapses. Cards
-    become keyboard-focusable in compact mode; Enter / Space
-    triggers expansion. The expanded card's `data-slug` mirrors
-    to `location.hash` so the state is shareable;
-    `/people.html#eugenio-sanchez` auto-expands that card on
-    page load. Long-term upgrade path to a sticky side-panel
-    pattern is tracked in
-    [Issue #72](https://github.com/EISSeuropa/netsec.github.io/issues/72).
-  - The directory toolbar gains a **`+` button** (styled as a
-    bright accent CTA next to the muted `?` tour-trigger).
-    Clicking it smooth-scrolls to the join card at the foot of
-    the page and focuses the *Add your bio* CTA. Localised in
-    EN/FR/DE.
-  - The guided tour gains a sixth step targeting the `+`
-    button, and the view-toggle step now mentions the
-    click-to-expand affordance.
-
-- **Guided five-step directory tour.** Companion to the welcome
-  strip. Two new entry points on `/people/`:
-  - A *Take the tour* button in the welcome-strip actions row
-    (next to *Got it*), so first-time visitors can opt into the
-    full walkthrough as their first action.
-  - A persistent **`?` button** in the toolbar (right of the
-    view-toggle), so returning visitors can re-open the tour at
-    any time even after dismissal.
-  The tour anchors coachmark tooltips to: search box → WG/MC
-  filter chips → country dropdown → view-mode toggle → join
-  CTA (with smooth-scroll into view). Keyboard navigable: ← / →
-  step, Enter advances, Esc skips. Focus trap on the tooltip's
-  Prev/Skip/Next buttons. Backdrop click also skips. Honours
-  `prefers-reduced-motion`. The completion / skip handler sets
-  the same `localStorage('netsec-directory-tour-seen')` flag as
-  the welcome strip, so a finished tour hides the strip
-  permanently. Engine lives in `assets/js/site.js` as
-  `window.netsecTour({steps, labels, onComplete})` — designed
-  to be reusable for other pages later. Localised in EN/FR/DE.
-
-- **First-visit orientation strip on the directory.** A dismissible
-  banner above the `/people/` toolbar that introduces the directory
-  to first-time visitors in three lines: it's open (not only MC),
-  search and filter affordances, density toggle, and where the join
-  form lives. One click to dismiss; preference persists in
-  `localStorage('netsec-directory-tour-seen')`; returning visitors
-  never see it. Localised in EN/FR/DE. Honours
-  `prefers-reduced-motion` (no fade animation).
-
-- **Compact directory view** on `/people/`. A two-button segmented
-  toggle in the toolbar (next to the country filter) switches the
-  member grid between the existing detailed view (photo + bio +
-  contact icons) and a new compact view (initials/photo + name +
-  affiliation + WG chips only, three across on a desktop), modelled
-  on the directory mock in the promotional poster. The preference
-  persists per visitor via `localStorage('netsec-directory-view')`.
-  Applied to all three locale variants of `people.html`.
+- **Click-to-expand on compact directory cards** + a **`+` quick-join button** in the toolbar.
+  - Clicking a card in compact mode flips it to its detailed form in place (photo, role, full affiliation, WGs, bio, contact icons), while every other card on the grid stays compact. Click outside / Esc / click another card collapses. Cards become keyboard-focusable in compact mode; Enter / Space triggers expansion. The expanded card's `data-slug` mirrors to `location.hash` so the state is shareable; `/people.html#eugenio-sanchez` auto-expands that card on page load. Long-term upgrade path to a sticky side-panel pattern is tracked in [Issue #72](https://github.com/EISSeuropa/netsec.github.io/issues/72).
+  - The directory toolbar gains a **`+` button** (styled as a bright accent CTA next to the muted `?` tour-trigger). Clicking it smooth-scrolls to the join card at the foot of the page and focuses the *Add your bio* CTA. Localised in EN/FR/DE.
+- **Guided six-step directory tour.** Anchors coachmark tooltips to: search box → WG/MC filter chips → country dropdown → view-mode toggle → `+` quick-join button → join card (with smooth-scroll into view). Two entry points: a *Take the tour* button in the welcome strip and a persistent **`?` button** in the toolbar. Keyboard navigable (← / → / Enter / Esc), focus trap on the tooltip's Prev/Skip/Next buttons, backdrop click skips, honours `prefers-reduced-motion`. Completion or skip sets the same `localStorage('netsec-directory-tour-seen')` flag as the welcome strip. Engine lives in `assets/js/site.js` as `window.netsecTour({steps, labels, onComplete})` — designed to be reusable for other pages later. Localised in EN/FR/DE.
+- **First-visit orientation strip on the directory.** A dismissible banner above the `/people/` toolbar that introduces the directory in three lines: it's open (not only MC), search and filter affordances, density toggle, where the join form lives. One click to dismiss; preference persists in `localStorage('netsec-directory-tour-seen')`; returning visitors never see it. Localised in EN/FR/DE. Honours `prefers-reduced-motion`.
+- **Compact directory view.** A two-button segmented toggle in the toolbar (next to the country filter) switches the member grid between detailed (photo + bio + contact icons) and compact (initials/photo + name + affiliation + WG chips only, three across on a desktop). Preference persists per visitor via `localStorage('netsec-directory-view')`. The compact card's affiliation line drops the position prefix and country name in text (the flag conveys the country implicitly).
+- **Public press-kit page at `/press-kit.html`** (plus FR + DE beta variants). One canonical URL for outreach: the poster with print and card-size downloads, the NetSec / COST / EU emblems with pairing rules, the colour palette and typography reference, the funding-statement boilerplate in three forms (full, short, one-line credit), suggested CC BY 4.0 attribution wording, and explicit do / don't rules. Linked from every page's footer between *Licensing* and *Site map*. Added to `sitemap.xml`, the i18n drift manifest, and the `scripts/inject-seo.py` `PAGES` list.
+- **Promotional poster** for the Action, sized A3 portrait and ready for outreach print runs. Source HTML version-controlled at [`docs/promo/poster-promo.html`](docs/promo/poster-promo.html); rendered raster at `docs/pdf/poster-promo.png` (2480 × 3508 px, ~192 dpi); 800 × 1131 px card-size variant (544 KB) at `docs/promo/poster-promo-card.png` for inline use in README, Wiki, email, and chat. Embedded as Appendix C of the documentation PDF (Appendix D in PDF v1.5.0, reordered to C in v1.5.2).
+- **README banner** at the top of the repo's `README.md` showing the card-size poster and linking to the public press kit.
+- **Members' Wiki "Templates & press kit" page** at <https://github.com/EISSeuropa/netsec.github.io/wiki/Templates> — member-facing companion to `/press-kit.html`, with the funding-statement boilerplate and attribution wording in fast copy-paste form. The Wiki sidebar "Templates" entry now resolves to this page; the Wiki Home page gains the same poster banner as the README.
 
 ### Changed
 
-- **Documentation PDF re-ordered**: the changelog is now the last
-  appendix (Appendix D) and the promotional poster moves up to
-  Appendix C. Opening the PDF on its last page now lands the
-  reader on a per-version record of what changed and when, rather
-  than on the poster image. PDF bumped to v1.5.2.
-- **PDF poster image plate is now full-bleed** via a dedicated
-  `@page promo-plate { margin: 0 }` rule. Previously the A3
-  raster, rendered at 178mm content width inside a standard
-  `.page` container, came out ~252mm tall — just over the ~257mm
-  column height once the figure caption was included — and
-  overflowed to a successor page, leaving the parent page blank.
-  Visible to readers as two blank pages flanking the poster.
-  Fixed.
+- **Grants page: explicit framing of the e-COST portal model.** The portal note at the top of `/grants/` now spells out three things openly: applications go through the general e-COST portal (no NetSec-specific form); the portal **filters by applicant profile** (ITC visible only to ITC affiliates, YRIG visible only to under-40s) so a member may not see every scheme listed; and only the five schemes on the page are in NetSec's WBP — applications for anything else **will be rejected** by the Grant Awarding Coordinator. The YRIG and ITC cards gain a small italic visibility caption under their eligibility lists. Wiki FAQ gains two matching entries ("Why don't I see grant X?" / "Why might my application be rejected?"). `docs/architecture.md` user-facing features list notes the portal model.
+- **Documentation PDF reorganised** (cumulative across v1.4.0 → v1.5.2 of the PDF, see Appendix D of the pack for per-revision detail):
+  - **New Section 07 — Branch and tag protection.** Documents the two GitHub rulesets, what each blocks, where the bypass sits, and why the tag ruleset has no bypass for anyone.
+  - **Section 06 (Admin guide) handover checklist rewritten** around the consequence that the release-cutter needs the repo `Admin` role (not `Maintain`). Four sub-checklists: Access grants, Automation handover, Verification, Revocation.
+  - **Accounts & assets table** in Section 06 gains rows for the branch-and-tag rulesets and the automation PAT.
+  - **Appendices C and D swapped** (v1.5.2): the changelog is now the last appendix (D); the promotional poster is C. Opening the PDF on its last page lands the reader on a per-version record of what changed, not on the poster image.
+  - **HTML `<title>` now carries the documentation-pack version** (v1.5.1) — surfaces the version in PDF metadata and the browser tab.
+  - **Maintainer affiliation simplified** on the cover and last-page footer from *"ETH Zurich CSS"* to *"ETH Zurich"* (v1.5.1).
+- **`docs/admin-guide.md` handover checklist rewritten** to mirror the PDF Section 06 changes — Access grants, Automation handover, Verification, Revocation.
+- **Press kit page now names the maintainer.** A short attribution paragraph at the foot of section 9 ("Contact for media enquiries"); the meta footer-line reads *"prepared … by Dr Arthur Laudrain"*. Applied identically across EN / FR / DE.
+- **`scripts/release.sh` header docstring** records the Admin-role and PAT-permission requirements that the new rulesets imply.
 
 ### Fixed
 
-- **ORCID URL handling resilient to full-URL submissions.** The
-  Google Form's *ORCID* field asks for the 19-character ID
-  (`0000-0002-1825-0097`) but members frequently paste their
-  whole profile URL (`https://orcid.org/0000-0002-1825-0097`).
-  The previous render concatenated `'https://orcid.org/' + m.orcid`
-  unconditionally, producing a broken double-prefixed href.
-  `scripts/sync-bios.py` now normalises ORCID input at write time
-  via a new `normalize_orcid()` helper (strips
-  `https?://(sandbox\.)?orcid.org/`, drops trailing slash / query
-  / fragment, reinserts hyphens for the 16-digit-no-hyphen form,
-  asserts the canonical pattern, returns empty string otherwise).
-  `people.html` and its FR/DE variants apply the same defensive
-  normaliser at render time, so any historical bios.json record
-  with a pasted URL still renders correctly. 16-case smoke test
-  covers all common variants.
-
-- **Public press-kit page at `/press-kit.html`** (plus FR + DE
-  beta variants). One canonical URL for outreach — the poster
-  with print and card-size downloads, the NetSec / COST / EU
-  emblems with pairing rules, the colour palette and typography
-  reference, the funding-statement boilerplate in three forms
-  (full, short, one-line credit), the suggested CC BY 4.0
-  attribution wording, and explicit do / don't rules. Linked from
-  every page's footer between *Licensing* and *Site map*, and from
-  the home-page About section eyebrow. Added to `sitemap.xml`, the
-  i18n drift manifest, and the `scripts/inject-seo.py` `PAGES`
-  list so the SEO block stays in sync.
-- **`docs/promo/poster-promo-card.png`** — an 800 × 1131 px
-  card-size rendering of the poster (544 KB), suitable for inline
-  use in README, Wiki, email, and Slack-style chat without
-  shipping the full 1.8 MB print version.
-- **README banner** at the top of the repo's `README.md` showing
-  the card-size poster and linking to the public press kit.
-- **Members' Wiki "Templates & press kit" page** at
-  <https://github.com/EISSeuropa/netsec.github.io/wiki/Templates>
-  — member-facing companion to `/press-kit.html`, with the
-  funding-statement boilerplate and attribution wording in fast
-  copy-paste form. The Wiki sidebar "Templates" entry now resolves
-  to this page (was a "to come" placeholder); the Wiki Home page
-  gains the same poster banner as the README.
-
-### Fixed
-
-- **Accessibility FR / DE footers** previously linked at the
-  English versions of Privacy and Licensing (and the
-  Lizenz/Licence label pointed at `privacy.html#main` rather than
-  `licensing.{fr,de}.html`). Replaced with the correctly
-  localised footer that already exists on the other FR / DE
-  pages, plus the new Press kit link.
-
-### Changed (pre-release polish)
-
-- **Press kit page now names the maintainer.** A short attribution
-  paragraph appears at the foot of section 9 ("Contact for media
-  enquiries"), and the meta footer-line now reads *"prepared … by
-  Dr Arthur Laudrain"*. Applied identically across EN / FR / DE.
-- **PDF `<title>` now carries the documentation-pack version**,
-  rendering as *"NetSec — Website & Directory · Documentation Pack
-  v1.5.1"* — visible in the PDF's metadata and the browser tab
-  without having to open the cover.
-- **Maintainer affiliation simplified** from *"ETH Zurich CSS"* to
-  *"ETH Zurich"* on the PDF cover, on the PDF last-page footer,
-  and in `SECURITY.md`. The Action's contact URL
-  (<https://css.ethz.ch>) is preserved where it appears.
-- **PDF bumped to v1.5.1** (PATCH) with an entry recording the
-  above in Appendix C. v1.5.0 entry retained intact below it.
-
-- **Promotional poster** for the Action, sized A3 portrait and
-  ready for outreach print runs. Source HTML version-controlled at
-  [`docs/promo/poster-promo.html`](docs/promo/poster-promo.html);
-  rendered raster at `docs/pdf/poster-promo.png` (2480 × 3508 px,
-  ~192 dpi). The poster carries the Action's name and MoU, the
-  eight headline features, the directory's running numbers, a mock
-  of the Network search UI, a scannable QR code to
-  <https://netsec-cost.eu>, and the COST / EU funding-statement
-  strip.
-- **PDF Appendix D — Promotional poster** added to
-  `docs/pdf/NetSec-website-documentation.pdf` (now **v1.5.0**),
-  giving the pack a built-in outreach artefact and documenting
-  intended uses (conference print runs, departmental noticeboards,
-  the members' Wiki press kit, email outreach, COST annual
-  reporting) and intentional non-uses (do not crop the
-  funding-statement strip; do not use as the OG share image).
-
-### Changed
-
-- **PDF doc-footer relocated** from the end of Appendix C to the
-  end of the new Appendix D text page, so it sits on the last
-  textual page of the pack as intended.
+- **Press-kit page primary buttons no longer render near-black in light theme.** The site-wide `.btn-primary` rule fills with `var(--ink)` (#0b1220), which read as harshly heavy on the outreach-oriented press-kit page (§1 *What's on it* downloads, §8 *Open the documentation pack*). A scoped override re-themes those buttons to EU blue (`--accent`), with Apple blue (`--accent-2`) on hover / focus.
+- **ORCID URL handling resilient to full-URL submissions.** The Google Form's *ORCID* field asks for the 19-character ID but members frequently paste their whole profile URL, producing a broken double-prefixed `href`. `scripts/sync-bios.py` now normalises ORCID input at write time via a new `normalize_orcid()` helper (strips `https?://(sandbox\.)?orcid.org/`, drops trailing slash / query / fragment, reinserts hyphens for the 16-digit-no-hyphen form, asserts the canonical pattern, returns empty string otherwise). `people.html` and its FR/DE variants apply the same defensive normaliser at render time. 16-case smoke test covers all common variants.
+- **PDF poster image plate is now full-bleed.** The A3 raster, rendered inside a standard `.page` container, came out ~252mm tall — just over the ~257mm column height once the figure caption was included — and overflowed to a successor page, leaving the parent page blank. Visible to readers as two blank pages flanking the poster. Fixed via a dedicated `@page promo-plate { margin: 0 }` rule.
+- **Accessibility FR / DE footers** previously linked at the English versions of Privacy and Licensing (with the *Lizenz*/*Licence* label mis-targeted at `privacy.html#main`). Replaced with the correctly localised footer used by the other FR / DE pages, plus the new Press kit link.
+- **`LICENSE-CONTENT` now contains the canonical CC BY 4.0 legal code text**, fronted by a short NetSec-specific preamble. The previous file held only the human-readable summary deed, which is explicitly not the legal instrument; GitHub's licence detector (licensee) accordingly listed the file as *Unknown*. With the canonical text in place — sourced from <https://creativecommons.org/licenses/by/4.0/legalcode.txt> — the file matches licensee's `CC-BY-4.0` template well above the 95 % similarity threshold, and the "Licenses found" panel now correctly identifies it as **CC-BY-4.0**.
+- **PAT permissions for automation clarified to least-privilege.** Earlier handover guidance recommended `Administration: read+write` indefinitely, but the ruleset bypass that lets `release.sh` push directly to `main` is keyed to the user's *repository role* (`Admin`), not to the PAT's `Administration` permission. Steady-state automation now runs with `Administration: Read` (sufficient for `gh api .../rulesets` verification) or no `Administration` access at all. The handover checklist grants `read+write` only at takeover for verification, then downgrades to `Read`. A misleading comment in `scripts/release.sh` that attributed the bypass to the PAT permission rather than the user's role has been corrected.
 
 ### Security
 
 - **Branch & tag protection rulesets** added to the repository.
-  - `protect-main`: restricts deletions and force-pushes, requires
-    linear history, requires a pull request before merging, requires
-    all four CodeQL status checks to pass, requires conversation
-    resolution, restricts merge methods to squash. Bypass: the
-    Repository Admin role (so `scripts/release.sh` can still push
-    the changelog-promotion commit directly).
-  - `protect-release-tags`: restricts deletions, updates, and
-    non-fast-forward updates on tags matching `v*`. No bypass for
-    anyone — once a release tag is published it is immutable.
-- Both rulesets are documented in PDF Section 07 ("Branch and tag
-  protection") and visible at the
-  [Settings → Rules → Rulesets page](https://github.com/EISSeuropa/netsec.github.io/settings/rules).
-
-### Changed
-
-- **`docs/admin-guide.md` handover checklist rewritten** around the
-  consequence that the release-cutter needs the repo `Admin` role
-  (not `Maintain`), and that any automation PAT needs
-  `Administration: read+write`. Now in four sub-checklists: Access
-  grants, Automation handover, Verification, Revocation.
-- **Accounts & assets table** in `docs/admin-guide.md` gains rows
-  for the rulesets and the automation PAT.
-- **PDF v1.4.0** with the matching changes in Section 07 (new
-  "Branch and tag protection" subsection) and Section 06 (rewritten
-  handover checklist).
-- **`scripts/release.sh`** docstring now records the Admin-role and
-  PAT-permission requirements that the rulesets imply.
-
-### Fixed
-
-- **`LICENSE-CONTENT` now contains the canonical CC BY 4.0 legal
-  code text**, fronted by a short NetSec-specific preamble that
-  states scope and attribution. The previous file held only the
-  human-readable summary ("Share / Adapt / Attribution …" deed),
-  which is explicitly not the legal instrument; GitHub's licence
-  detector (licensee) accordingly listed the file as *Unknown* in
-  the "Licenses found" panel. With the canonical legal code in
-  place — sourced from
-  <https://creativecommons.org/licenses/by/4.0/legalcode.txt> — the
-  file matches licensee's `CC-BY-4.0` template well above the 95 %
-  similarity threshold, and the panel now correctly identifies it
-  as **CC-BY-4.0**.
-
-- **Clarification on PAT permissions for automation.** The earlier
-  handover guidance overstated what the steady-state PAT needs by
-  recommending `Administration: read+write` indefinitely. The
-  ruleset bypass that lets `release.sh` push directly to `main` is
-  keyed to the user's *repository role* (`Admin`), not to the PAT's
-  `Administration` permission, so steady-state can run with
-  `Administration: Read` (sufficient for `gh api .../rulesets`
-  verification) or no `Administration` access at all. The handover
-  checklist now grants `read+write` only at takeover time for
-  verification, then downgrades to `Read` as the resting position.
-  Re-grant `read+write` temporarily when a ruleset adjustment is
-  actually needed. Also corrected a misleading comment in
-  `scripts/release.sh` that had attributed the bypass to the PAT
-  permission rather than the user's role. Documented in
-  `docs/admin-guide.md` and PDF v1.4.1.
+  - `protect-main`: restricts deletions and force-pushes, requires linear history, requires a pull request before merging, requires all four CodeQL status checks to pass, requires conversation resolution, restricts merge methods to squash. Bypass: the Repository Admin role (so `scripts/release.sh` can still push the changelog-promotion commit directly).
+  - `protect-release-tags`: restricts deletions, updates, and non-fast-forward updates on tags matching `v*`. No bypass for anyone — once a release tag is published it is immutable.
+- Both rulesets are documented in PDF Section 07 ("Branch and tag protection") and visible at the [Settings → Rules → Rulesets page](https://github.com/EISSeuropa/netsec.github.io/settings/rules).
 
 ## [1.1.0] · 2026-05-20
 
