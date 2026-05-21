@@ -15,6 +15,18 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ### Added
 
+- **First-visit orientation strip on the directory.** A dismissible
+  banner above the `/people/` toolbar that introduces the directory
+  to first-time visitors in three lines: it's open (not only MC),
+  search and filter affordances, density toggle, and where the join
+  form lives. One click to dismiss; preference persists in
+  `localStorage('netsec-directory-tour-seen')`; returning visitors
+  never see it. Localised in EN/FR/DE. Honours
+  `prefers-reduced-motion` (no fade animation). First of two PRs
+  for the directory tutorial UX; the second will add a `?` button
+  in the toolbar that re-opens the orientation as an opt-in
+  coachmark tour.
+
 - **Compact directory view** on `/people/`. A two-button segmented
   toggle in the toolbar (next to the country filter) switches the
   member grid between the existing detailed view (photo + bio +
