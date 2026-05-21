@@ -601,6 +601,42 @@
   const lang = (document.documentElement.lang || 'en').slice(0, 2);
   const t = STRINGS[lang] || STRINGS.en;
 
+  // ── Platform-aware shortcut label ────────────────────────────
+  // Mac users have a ⌘ key; everyone else uses Ctrl. The button's
+  // `title` tooltip is rewritten on load so each visitor sees the
+  // shortcut that applies to *their* keyboard, not a generic
+  // "Cmd/Ctrl-K" mash-up that adds visual noise.
+  const isMac = /mac|iphone|ipad|ipod/i.test(
+    navigator.platform || navigator.userAgent || ''
+  );
+  const shortcutLabel = isMac ? '⌘ K' : 'Ctrl K';
+
+  // ── Highlight-on-landing bootstrap ────────────────────────────
+  // When a search result link navigates here with a
+  // `?pagefind-highlight=<term>` query, dynamically import
+  // Pagefind's mark.js wrapper and highlight every match of the
+  // term. The script injects a default `:where(.pagefind-
+  // highlight){background:yellow;color:black}` style. If the URL
+  // has no fragment to scroll to, also scroll the first highlight
+  // into view so the visitor lands on the matched term, not on
+  // the page top.
+  if (window.location.search.indexOf('pagefind-highlight=') !== -1) {
+    import('/pagefind/pagefind-highlight.js')
+      .then((mod) => {
+        const ph = new mod.default();
+        ph.highlight();
+        if (!window.location.hash) {
+          requestAnimationFrame(() => {
+            const first = document.querySelector('.pagefind-highlight');
+            if (first) {
+              first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          });
+        }
+      })
+      .catch((e) => console.warn('Pagefind highlight failed', e));
+  }
+
   // ── State ────────────────────────────────────────────────────
   let pagefind = null;           // The loaded Pagefind module
   let pagefindError = false;     // Set if the index fails to load
@@ -627,8 +663,16 @@
         const mod = await import('/pagefind/pagefind.js');
         // mod.init() doesn't wait for the WASM to load — that
         // happens lazily on first .search() — but calling it lets
-        // us set options before the first query if we ever want to.
+        // us set options before the first query.
         await mod.init();
+        // Opt into the URL-based highlight feature. With this set,
+        // Pagefind appends `?pagefind-highlight=<term>` to every
+        // sub-result URL. The destination page's highlight script
+        // (the bootstrap block at the top of this file) reads the
+        // param and marks the matched term — so the visitor lands
+        // on the anchored section AND sees the matched word
+        // highlighted in yellow.
+        await mod.options({ highlightParam: 'pagefind-highlight' });
         pagefind = mod;
         return mod;
       } catch (e) {
@@ -700,7 +744,17 @@
     });
 
     overlay.addEventListener('click', (e) => {
-      if (e.target.closest('[data-search-close]')) close();
+      // Close on the explicit close button / backdrop, AND on any
+      // result-link click. Without the latter, the overlay would
+      // stay open after navigation: same-page hash-only links
+      // don't reload, so the visitor would see the modal still
+      // covering the page they're trying to read.
+      if (
+        e.target.closest('[data-search-close]') ||
+        e.target.closest('.search-results a')
+      ) {
+        close();
+      }
     });
 
     return overlay;
@@ -848,6 +902,19 @@
   }
 
   // ── Trigger wiring ───────────────────────────────────────────
+
+  // Rewrite the .search-trigger button titles to show the visitor's
+  // platform shortcut (⌘ K on Mac, Ctrl K elsewhere). The HTML
+  // ships a generic "Search (Cmd/Ctrl-K)" placeholder; the rewrite
+  // happens once on page load.
+  (function setTriggerTitles() {
+    const title = `${t.searchLabel} (${shortcutLabel})`;
+    document.querySelectorAll('.search-trigger').forEach((btn) => {
+      btn.setAttribute('title', title);
+      btn.setAttribute('aria-keyshortcuts', isMac ? 'Meta+K' : 'Control+K');
+    });
+  })();
+
   // 1. Click on the magnifying-glass button in the nav.
   document.addEventListener('click', (e) => {
     if (e.target.closest('.search-trigger')) {

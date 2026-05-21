@@ -183,12 +183,36 @@ img{max-width:100%;display:block}
 .nav-inner .nav-links{order:1}
 .nav-inner .nav-actions{order:2}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink);font-size:1.02rem;letter-spacing:-.01em}
+/* The NS-square mark stays; the "NetSec" wordmark is hidden so the
+   floating header has room for the new search trigger plus the
+   existing language switcher and theme toggle. The aria-label on
+   the <a> still reads "NetSec home" for screen readers, so the
+   brand name is announced even when the visual text is suppressed.
+   On a future redesign that grows the bubble (or trims the nav),
+   removing this rule restores the wordmark. */
+.brand > span:last-child{display:none}
 .brand-mark{
   width:34px;height:34px;border-radius:10px;
   background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
   display:grid;place-items:center;color:#fff;font-weight:800;font-size:.78rem;letter-spacing:.04em;
   box-shadow:0 6px 16px var(--accent-glow);
 }
+
+/* Match the in-overlay snippet style for the on-page highlight
+   Pagefind paints when a result link lands here. Pagefind's
+   bundled script injects `:where(.pagefind-highlight){background:
+   yellow; color: black}` by default — we re-paint with the same
+   EU yellow used in the overlay's <mark>, with a soft ring so the
+   landed term reads as a deliberate UI element rather than a
+   browser default. The selector includes :where() at zero
+   specificity from Pagefind's side, so our rule wins. */
+.pagefind-highlight{
+  background:rgba(255,204,0,.45);
+  color:inherit;
+  padding:0 2px;border-radius:3px;
+  box-shadow:0 0 0 1px rgba(255,204,0,.6);
+}
+.dark .pagefind-highlight{background:rgba(255,204,0,.32);box-shadow:0 0 0 1px rgba(255,204,0,.45)}
 .nav-links{display:flex;gap:4px;align-items:center}
 .nav-links a{
   color:var(--ink-2);font-size:.92rem;font-weight:500;padding:8px 12px;border-radius:10px;
