@@ -1758,18 +1758,13 @@ form button:disabled{opacity:.65;cursor:wait}
 }
 .search-trigger:hover{background:var(--glass-bg);border-color:var(--accent);color:var(--ink)}
 .search-trigger svg{width:16px;height:16px}
-.search-trigger kbd{
-  display:none;
-  font:600 .7rem/1 'Inter',sans-serif;letter-spacing:.04em;
-  padding:1px 5px;margin-left:6px;border-radius:4px;
-  background:rgba(0,0,0,.05);color:var(--muted);
-  border:1px solid var(--line);
-}
-.dark .search-trigger kbd{background:rgba(255,255,255,.06)}
-@media (min-width: 880px){
-  .search-trigger{width:auto;padding:6px 10px 6px 8px;gap:6px}
-  .search-trigger kbd{display:inline-block}
-}
+/* The ⌘K hint badge was previously visible above 880 px viewport, but
+   it pushed the nav-actions cluster past the floating-header bubble
+   on the home page (10 nav links + brand + actions = tight at 1200 px
+   max-width). The badge is hidden by default; the keyboard shortcut
+   is still discoverable via the button's `title` tooltip and via
+   the *open* row inside the search overlay. */
+.search-trigger kbd{display:none}
 
 body.search-open{overflow:hidden}
 

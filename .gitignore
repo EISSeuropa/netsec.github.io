@@ -6,3 +6,7 @@ scripts/__pycache__/
 # macOS Finder metadata
 .DS_Store
 **/.DS_Store
+
+# macOS/iCloud "Foo 2.ext" duplicate files that get spawned in
+# the working tree by some sync tools.
+* 2.*

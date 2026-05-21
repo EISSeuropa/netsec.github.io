@@ -611,6 +611,11 @@
   let activeIndex = -1;          // Highlighted result row
   let currentResults = [];       // Hits from the last search
 
+  // Last error from Pagefind, surfaced in the overlay's meta line
+  // alongside the user-facing message so a maintainer reading over
+  // a user's shoulder can see what actually broke.
+  let pagefindErrorMessage = '';
+
   // ── Lazy-load Pagefind ────────────────────────────────────────
   // On first open we dynamically import the index runtime. Errors
   // (e.g. missing /pagefind/ in dev) surface as a friendly inline
@@ -620,15 +625,15 @@
     pagefindPromise = (async () => {
       try {
         const mod = await import('/pagefind/pagefind.js');
+        // mod.init() doesn't wait for the WASM to load — that
+        // happens lazily on first .search() — but calling it lets
+        // us set options before the first query if we ever want to.
         await mod.init();
-        // Restrict results to the current locale. Pagefind reads
-        // each indexed page's <html lang> at build time and labels
-        // shards by language; .filters({language: lang}) further
-        // narrows queries.
         pagefind = mod;
         return mod;
       } catch (e) {
         pagefindError = true;
+        pagefindErrorMessage = String(e && e.message ? e.message : e);
         console.error('Pagefind failed to load', e);
         throw e;
       }
@@ -718,24 +723,31 @@
     }
 
     if (pagefindError) {
-      meta.textContent = t.loadError;
+      meta.textContent = pagefindErrorMessage
+        ? `${t.loadError} (${pagefindErrorMessage})`
+        : t.loadError;
       list.innerHTML = '';
       return;
     }
 
     try {
       const pf = await loadPagefind();
-      // Pagefind's per-language filtering: only results in the
-      // active locale appear. (Each indexed page's <html lang>
-      // determines the shard it lands in.)
-      const search = await pf.search(query, { filters: { language: lang } });
+      // Pagefind v1 ships one shard per language and picks the
+      // active one from <html lang> at init time. No filter needed
+      // on the search call — passing `{filters: {language: lang}}`
+      // is interpreted as "filter by a `language` metadata field
+      // on each page", which we never set, so it threw / returned
+      // nothing. Empty options is correct.
+      const search = await pf.search(query);
       // search.results is a Promise array of hit handles. Resolve
-      // the first ~10 — Pagefind returns ranked results lazily.
+      // the first ~12 — Pagefind returns ranked results lazily.
       const hits = await Promise.all(search.results.slice(0, 12).map((r) => r.data()));
       currentResults = hits;
       renderResults(hits, query);
     } catch (e) {
-      meta.textContent = t.loadError;
+      pagefindErrorMessage = String(e && e.message ? e.message : e);
+      console.error('Pagefind search failed', e);
+      meta.textContent = `${t.loadError} (${pagefindErrorMessage})`;
       list.innerHTML = '';
     }
   }
@@ -846,8 +858,22 @@
 
   // 2. Cmd/Ctrl-K from anywhere.
   // 3. "/" from anywhere EXCEPT inside an input / textarea / contenteditable.
-  document.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+  //
+  // For Cmd/Ctrl-K we check both e.key and e.code so the shortcut
+  // still works on layouts where the printed `k` glyph isn't at the
+  // physical KeyK position (Dvorak, AZERTY in some browsers, etc.).
+  // We also listen on `window` rather than `document` because some
+  // browser extensions install higher-priority listeners on document
+  // that swallow Cmd-K before it reaches a document-level handler.
+  function isCmdK(e) {
+    if (!(e.metaKey || e.ctrlKey)) return false;
+    if (e.altKey) return false;
+    const key = (e.key || '').toLowerCase();
+    return key === 'k' || e.code === 'KeyK';
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (isCmdK(e)) {
       e.preventDefault();
       open();
       return;
