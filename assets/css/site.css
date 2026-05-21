@@ -1141,6 +1141,11 @@ form button:disabled{opacity:.65;cursor:wait}
   font-size:.88rem;color:var(--muted);margin:0 0 12px;line-height:1.45;
   display:inline-flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;
 }
+/* Detailed mode shows the full position · affiliation · country
+   string; the compact variant is hidden. The compact-mode block
+   further down inverts these. */
+.member-affiliation .aff-compact{display:none}
+.member-affiliation .aff-full{display:inline}
 .member-flag{
   width:18px;height:auto;border-radius:2px;
   box-shadow:0 1px 2px rgba(0,0,0,.18);
@@ -1420,6 +1425,11 @@ form button:disabled{opacity:.65;cursor:wait}
   display:flex;flex-wrap:nowrap;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
 }
+/* Compact mode drops position + country in full; the flag
+   still conveys country implicitly and the affiliation is the
+   one piece every card needs at a glance. */
+.members-grid.is-compact .member-affiliation .aff-full{display:none}
+.members-grid.is-compact .member-affiliation .aff-compact{display:inline}
 .members-grid.is-compact .member-wgs{
   margin:4px 0 0;justify-content:flex-start;
 }
