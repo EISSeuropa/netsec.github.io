@@ -363,3 +363,27 @@ If you're adding a new field to `bios.json`:
    `index.html` if leadership, `grants.html` if grant manager).
 5. Update `docs/bios-setup.md` so the next admin doesn't have to
    reverse-engineer the change.
+
+If you're adding a new event to the Events section:
+
+1. Add an `<article class="event-card">` to `index.html` (plus the
+   FR and DE siblings — same dates, translated copy). Re-stamp i18n
+   drift if the EN markup changed.
+2. **Add a matching `VEVENT` block to `/calendar.ics`** at the
+   repository root. The `.ics` feed is hand-maintained alongside
+   the HTML cards — there is deliberately no build step.
+   - Use a stable `UID` of the form `<slug>@netsec-cost.eu` so
+     subscribers don't get duplicate events on later edits.
+   - Bump every event's `DTSTAMP` to the date of this edit (any
+     edit to any event counts as a republication of the whole
+     feed under RFC 5545; in practice modern clients also accept
+     per-event timestamps).
+   - Use `DTSTART;TZID=Europe/Stockholm:` style for timed events
+     in Stockholm; for events elsewhere add the appropriate
+     `VTIMEZONE` block at the top of the file.
+   - Escape commas inside `SUMMARY` / `DESCRIPTION` / `LOCATION`
+     with a backslash (`\,`) — that's the TEXT-type rule in the
+     RFC.
+3. TBA / undated event cards are deliberately **not** added to the
+   feed until they have firm dates — calendar subscribers should
+   not see placeholders.

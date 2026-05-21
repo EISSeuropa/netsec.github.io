@@ -13,7 +13,9 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+
+- **iCalendar feed at `/calendar.ics`** with the dated events from the home page (Summer School, European Security Conference). Hand-authored RFC 5545 file with a `Europe/Stockholm` `VTIMEZONE` block; refresh interval set to seven days. The Events section on the home page gains a subtle *Subscribe to NetSec events* link (using `webcal://` so Apple Calendar / iOS Calendar / Outlook prompt to subscribe natively) with a fallback `.ics` download for one-shot imports. Localised in EN/FR/DE. A `<link rel="alternate" type="text/calendar">` in each home-page `<head>` makes the feed autodiscoverable for capable clients. `docs/architecture.md` gains an "adding a new event" checklist that walks through keeping the feed in step with the HTML cards.
 
 ## [1.3.0] · 2026-05-21
 
