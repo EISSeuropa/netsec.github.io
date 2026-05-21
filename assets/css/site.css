@@ -1205,6 +1205,111 @@ form button:disabled{opacity:.65;cursor:wait}
 .dark .member-card .member-contact a.contact-orcid{color:#a6ce39}
 .dark .member-card .member-contact a.contact-orcid:hover{background:#a6ce39}
 
+/* ─── Directory tour ──────────────────────────────────────────
+   Trigger button in the toolbar; backdrop, spotlight, and
+   tooltip are mounted to <body> by the engine in site.js when
+   the tour starts. */
+.tour-trigger{
+  appearance:none;border:0;cursor:pointer;
+  width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(11,18,32,.04);color:var(--muted);
+  font:inherit;font-size:1rem;font-weight:600;
+  transition:background .2s var(--ease),color .2s var(--ease);
+  align-self:center;
+}
+.tour-trigger:hover,
+.tour-trigger:focus-visible{
+  background:var(--accent-2);color:#fff;outline:none;
+}
+.dark .tour-trigger{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.dark .tour-trigger:hover,
+.dark .tour-trigger:focus-visible{background:var(--accent-2);color:#fff}
+
+/* Tour backdrop */
+.tour-backdrop{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(11,18,32,.55);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s var(--ease);
+}
+.tour-backdrop.is-visible{opacity:1;pointer-events:auto}
+
+/* Spotlight: a glowing ring around the highlighted target */
+.tour-spotlight{
+  position:fixed;z-index:101;
+  border-radius:12px;
+  pointer-events:none;
+  box-shadow:
+    0 0 0 3px rgba(10,132,255,.9),
+    0 0 0 10px rgba(10,132,255,.35),
+    0 0 30px 4px rgba(10,132,255,.45);
+  transition:top .28s var(--ease),left .28s var(--ease),
+             width .28s var(--ease),height .28s var(--ease);
+}
+
+/* Tooltip card */
+.tour-tooltip{
+  position:fixed;z-index:102;
+  background:#ffffff;color:var(--ink);
+  border-radius:14px;
+  padding:18px 22px 16px;
+  box-shadow:
+    0 18px 50px rgba(11,18,32,.22),
+    0 1px 3px rgba(11,18,32,.10);
+  max-width:360px;
+  font-size:.92rem;line-height:1.5;
+  border:1px solid var(--line);
+}
+.dark .tour-tooltip{
+  background:#1a2434;color:var(--ink);
+  border-color:rgba(255,255,255,.10);
+}
+.tour-tooltip .tour-title{
+  font-family:'Lexend','Inter',sans-serif;
+  font-size:1.05rem;font-weight:600;letter-spacing:-.01em;
+  margin:0 0 6px;color:var(--ink);
+}
+.tour-tooltip .tour-body{
+  margin:0 0 14px;color:var(--ink-2);
+}
+.tour-tooltip .tour-footer{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  flex-wrap:wrap;
+}
+.tour-tooltip .tour-progress{
+  font-size:.78rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;font-weight:600;
+}
+.tour-tooltip .tour-actions{display:flex;gap:6px;flex-wrap:wrap}
+.tour-btn{
+  appearance:none;border:0;cursor:pointer;
+  font:inherit;font-size:.85rem;font-weight:600;
+  padding:7px 14px;border-radius:999px;
+  transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease);
+}
+.tour-btn:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.tour-btn-primary{background:var(--accent);color:#fff}
+.tour-btn-primary:hover{background:var(--accent-2)}
+.tour-btn-ghost{background:transparent;color:var(--muted)}
+.tour-btn-ghost:hover{background:rgba(11,18,32,.06);color:var(--ink)}
+.dark .tour-btn-ghost:hover{background:rgba(255,255,255,.08);color:#fff}
+
+/* Mobile: tooltip spans almost the full viewport. */
+@media (max-width: 640px){
+  .tour-tooltip{
+    max-width:none;
+    width:calc(100vw - 24px) !important;
+    left:12px !important;right:12px;
+    font-size:.88rem;
+  }
+}
+
+/* Reduced motion: instant transitions for both spotlight and backdrop. */
+@media (prefers-reduced-motion: reduce){
+  .tour-backdrop,
+  .tour-spotlight{transition:none}
+}
+
 /* ─── Welcome strip on the directory ──────────────────────────
    Shown once to first-time visitors above the directory toolbar.
    Dismiss is sticky via localStorage('netsec-directory-tour-seen').
@@ -1250,17 +1355,21 @@ form button:disabled{opacity:.65;cursor:wait}
 .welcome-strip-tips li{margin:0;padding:0}
 .welcome-strip-tips li::marker{content:""}
 .welcome-strip-tips strong{color:var(--ink);font-weight:600}
+.welcome-strip-actions{
+  display:flex;gap:8px;align-items:center;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
 .welcome-strip-dismiss{
-  position:absolute;top:14px;right:14px;
   appearance:none;border:0;cursor:pointer;
   background:transparent;color:var(--muted);
-  font:inherit;font-size:.84rem;font-weight:600;
-  padding:6px 12px;border-radius:999px;
+  font:inherit;font-size:.85rem;font-weight:600;
+  padding:7px 14px;border-radius:999px;
   transition:background .2s var(--ease),color .2s var(--ease);
 }
 .welcome-strip-dismiss:hover,
 .welcome-strip-dismiss:focus-visible{
-  background:rgba(11,18,32,.06);color:var(--ink);
+  background:rgba(11,18,32,.06);color:var(--ink);outline:none;
 }
 .dark .welcome-strip-dismiss:hover,
 .dark .welcome-strip-dismiss:focus-visible{

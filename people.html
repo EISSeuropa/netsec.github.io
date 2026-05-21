@@ -177,7 +177,10 @@
         <li>🪪 <strong>Switch density</strong> in the toolbar to fit more on screen.</li>
         <li>👤 <strong>Anyone can join</strong> — see the form at the foot of the page.</li>
       </ul>
-      <button class="welcome-strip-dismiss" type="button" id="welcome-strip-dismiss" aria-controls="welcome-strip">Got it</button>
+      <div class="welcome-strip-actions">
+        <button class="tour-btn tour-btn-primary" type="button" id="welcome-strip-tour">Take the tour</button>
+        <button class="welcome-strip-dismiss" type="button" id="welcome-strip-dismiss" aria-controls="welcome-strip">Got it</button>
+      </div>
     </aside>
 
     <div class="members-toolbar glass">
@@ -213,6 +216,12 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
         </button>
       </div>
+      <!-- Tour trigger — re-opens the orientation as a guided
+           5-step walkthrough at any time, regardless of whether the
+           welcome strip has been dismissed. The engine lives in
+           assets/js/site.js (window.netsecTour); the steps and
+           localised labels are configured inline below. -->
+      <button class="tour-trigger" type="button" id="tour-trigger" title="Take a tour" aria-label="Take a tour">?</button>
     </div>
 
     <p class="members-count" id="members-count" aria-live="polite"></p>
@@ -331,24 +340,71 @@
   const tpl = document.getElementById('member-card-template');
   const viewToggle = document.querySelectorAll('.view-toggle button[data-view]');
 
-  /* Welcome strip: shown once per browser/profile. On first visit
-     (no localStorage flag), reveal it; on dismiss, set the flag so
-     subsequent visits stay quiet. Wrapped in try/catch because
-     localStorage throws in some private-browsing modes. The tour key
-     is shared with the upcoming `?`-button tour so the welcome
-     strip and the tour are mutually-exclusive on first contact. */
+  /* Welcome strip + guided tour.
+     Both share localStorage('netsec-directory-tour-seen'). On first
+     visit (key absent) the strip auto-opens; the visitor can either
+     "Take the tour" → tour runs, mark seen on completion; or "Got
+     it" → mark seen and hide. The `?` button in the toolbar
+     re-opens the tour at any time, regardless of the saved state. */
   const TOUR_KEY = 'netsec-directory-tour-seen';
-  const welcome  = document.getElementById('welcome-strip');
+  const welcome      = document.getElementById('welcome-strip');
   const welcomeDismiss = document.getElementById('welcome-strip-dismiss');
+  const welcomeTour    = document.getElementById('welcome-strip-tour');
+  const tourTrigger    = document.getElementById('tour-trigger');
+
+  function markSeen() {
+    try { localStorage.setItem(TOUR_KEY, 'true'); } catch (e) {}
+    if (welcome) welcome.hidden = true;
+  }
+
+  // Tour configuration — selectors anchor each step to a real DOM
+  // element on this page. Strings are localised per-page.
+  //
+  // We build the tour *lazily* (inside startTour()) because
+  // assets/js/site.js is loaded with `defer`, which runs the engine
+  // AFTER this inline script has been parsed. So window.netsecTour
+  // is not yet defined when this IIFE runs — only by click time has
+  // the deferred script finished executing.
+  function startTour() {
+    if (!window.netsecTour) return;  // engine missing — fail gracefully
+    if (welcome) welcome.hidden = true;
+    window.netsecTour({
+      steps: [
+        { target: '#member-search',
+          title: 'Search',
+          body:  'Free-text search across names, affiliations, and countries. Combines with the filters on the right.' },
+        { target: '.members-filter',
+          title: 'Filter by working group or MC role',
+          body:  'WG1–WG4 filter by Working Group; MC members surfaces only Management Committee representatives.' },
+        { target: '.members-country',
+          title: 'Filter by country',
+          body:  'The country dropdown is populated automatically from the current membership — only countries that have members appear.' },
+        { target: '.view-toggle',
+          title: 'Switch card density',
+          body:  'Detailed view shows photos and bios; compact view shows initials, name, affiliation, and WG chips, three across on a desktop.' },
+        { target: '#join',
+          title: 'Anyone can join',
+          body:  'Add yourself via the form here. About five minutes to fill in; cards appear on this page within a week.',
+          scroll: true },
+      ],
+      labels: {
+        next: 'Next', prev: 'Back', done: 'Done', skip: 'Skip',
+        stepOf: 'Step %1 of %2', closeLabel: 'Close tour',
+      },
+      onComplete: markSeen,
+    }).start();
+  }
+
+  // Auto-show the welcome strip on first visit.
   if (welcome && welcomeDismiss) {
     let seen = false;
     try { seen = localStorage.getItem(TOUR_KEY) === 'true'; } catch (e) {}
     if (!seen) welcome.hidden = false;
-    welcomeDismiss.addEventListener('click', () => {
-      welcome.hidden = true;
-      try { localStorage.setItem(TOUR_KEY, 'true'); } catch (e) {}
-    });
+    welcomeDismiss.addEventListener('click', markSeen);
+    if (welcomeTour) welcomeTour.addEventListener('click', startTour);
   }
+  // The `?` button re-opens the tour any time, even after dismissal.
+  if (tourTrigger) tourTrigger.addEventListener('click', startTour);
 
   /* View-mode toggle: persists in localStorage as
        netsec-directory-view = "compact" | "detailed"
