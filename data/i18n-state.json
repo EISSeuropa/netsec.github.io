@@ -103,14 +103,14 @@
     "grants.html": {
       "fr": {
         "file": "grants.fr.html",
-        "source_sha1": "86c060db2ecc587cd95022aaacd8039855b48346",
+        "source_sha1": "99473c309f9b0583de0a304573d7d36263a92be6",
         "translated_on": "2026-05-21",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "grants.de.html",
-        "source_sha1": "86c060db2ecc587cd95022aaacd8039855b48346",
+        "source_sha1": "99473c309f9b0583de0a304573d7d36263a92be6",
         "translated_on": "2026-05-21",
         "status": "beta",
         "reviewed_by": null

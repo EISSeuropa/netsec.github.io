@@ -41,6 +41,52 @@ html{scroll-behavior:smooth;color-scheme:light dark;scroll-padding-top:90px}
   box-shadow:0 0 0 3px rgba(10,132,255,.45);
   border-radius:8px;
 }
+
+/* ──────────────────────────────────────────────────────────────
+   External-link indicator. Any anchor that opens in a new tab
+   AND points at an absolute URL (http(s):// or //protocol-
+   relative) automatically gains a small "external link" icon
+   after its text content, so visitors can tell at a glance that
+   clicking will take them off the NetSec site.
+
+   Implementation: a CSS-mask pseudo-element that inherits the
+   text colour via `background-color: currentColor`, so the icon
+   tints with whatever the link is using — works in both light
+   and dark themes, on buttons, in body text, on tinted cards.
+
+   The icon is the same Lucide "external-link" mark used in
+   sitemap's Off-site card (URL-encoded inline so no external
+   asset needed).
+
+   Exclusions below cover contexts where the icon would be noise
+   rather than signal: contact icons (already brand-recognisable),
+   social icons, the brand logo, the language switcher, in-toolbar
+   single-glyph buttons, and the welcome-strip body text.
+   .grant-cta is excluded because it carries its own inline
+   external-link SVG that participates in the hover translate
+   animation. */
+a[target="_blank"][href^="http"]::after,
+a[target="_blank"][href^="//"]::after{
+  content:"";
+  display:inline-block;
+  width:0.85em;height:0.85em;
+  margin:0 0.05em 0 0.3em;
+  vertical-align:-0.08em;
+  background-color:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3h7v7'/%3E%3Cpath d='M10 14L21 3'/%3E%3Cpath d='M21 14v7H3V3h7'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3h7v7'/%3E%3Cpath d='M10 14L21 3'/%3E%3Cpath d='M21 14v7H3V3h7'/%3E%3C/svg%3E") center/contain no-repeat;
+  opacity:.75;
+}
+/* Contexts where the icon would be noise rather than signal. */
+.member-contact a::after,
+.socials a::after,
+.brand::after,
+.cost-mark::after,
+.eu-mark::after,
+.lang-switch a::after,
+.tour-trigger::after,
+.grant-cta::after,
+.welcome-strip-tips a::after{ content:none }
 .btn:focus-visible,.nav-cta:focus-visible,.ca-badge:focus-visible,
 .cost-mark:focus-visible,.event-link:focus-visible{
   box-shadow:0 0 0 3px rgba(10,132,255,.55);
