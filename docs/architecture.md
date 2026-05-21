@@ -373,8 +373,12 @@ If you're adding a new page:
 8. Mark the new page's searchable content with `data-pagefind-body`
    on the `<main>` element so the Pagefind indexer picks it up.
    Run `./scripts/build-search.sh` to rebuild `/pagefind/`; commit
-   the result. CI (`search-drift.yml`) blocks any PR that adds an
-   indexable page without a matching index rebuild.
+   the result. CI (`search-drift.yml`) compares per-language page
+   counts between a fresh Linux build and the committed index — so
+   adding or removing a page without rebuilding is caught. *Content
+   edits within an existing page are **not** caught by CI* because
+   Pagefind's WASM build is non-deterministic across platforms; the
+   maintainer must remember to rebuild after content edits.
 9. Bump the version stamp in the page meta-strip if you're adding
    a privacy- or accessibility-relevant page.
 
