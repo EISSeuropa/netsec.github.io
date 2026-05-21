@@ -139,6 +139,15 @@
     .pk-poster{grid-template-columns:1fr}
     .pk-do-dont{grid-template-columns:1fr}
   }
+
+  /* Override .btn-primary scopé à la presse — voir press-kit.html. */
+  .prose-page .btn-primary{
+    background:var(--accent);color:#fff;
+  }
+  .prose-page .btn-primary:hover,
+  .prose-page .btn-primary:focus-visible{
+    background:var(--accent-2);
+  }
 </style>
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
