@@ -1,20 +1,24 @@
-# Search-index drift check.
+# Search-index page-count check.
 #
 # Runs scripts/build-search.sh --check on every PR that touches
-# searchable HTML, the committed Pagefind index, the builder
-# script, or the JS that consumes the index. If the committed
-# /pagefind/ directory doesn't match what `npx pagefind` would
-# produce from the current HTML, this check fails and the PR
-# cannot be merged until the maintainer runs
+# searchable HTML, the committed index, the builder script, or the
+# JS that consumes the index. The check builds a fresh Pagefind
+# index in /tmp and compares its per-language page_count against
+# the committed pagefind-entry.json — fails if they differ.
 #
-#     ./scripts/build-search.sh
+# Why page counts, not a byte diff:
+#   Pagefind's per-platform WASM build is non-deterministic between
+#   Linux (CI) and macOS (typical local). The WASM binaries and
+#   shard hashes differ across platforms even when the content is
+#   identical — both versions work in any browser at runtime, but
+#   they wouldn't byte-equal. Page counts ARE deterministic and
+#   catch the most common "forgot to rebuild" mistake (adding /
+#   removing an indexable page).
 #
-# and commits the result.
-#
-# Mirrors the i18n-drift / calendar-drift pattern so all three
-# drift-style checks behave identically from the contributor's
-# point of view: one script, one --check flag, one CI workflow.
-name: Search-index drift check
+# Content edits inside an existing page are NOT caught by this CI
+# check — the maintainer must remember to ./scripts/build-search.sh
+# after content edits. The architecture doc spells this out.
+name: Search-index page-count check
 
 on:
   pull_request:
@@ -30,7 +34,7 @@ permissions:
 
 jobs:
   drift:
-    name: Check search-index drift
+    name: Check search-index page counts
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -41,10 +45,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Set up Python (for the JSON-normalise step in the script)
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Run drift checker
+      - name: Run page-count check
         run: ./scripts/build-search.sh --check
