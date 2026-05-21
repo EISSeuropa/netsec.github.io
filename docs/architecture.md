@@ -366,24 +366,32 @@ If you're adding a new field to `bios.json`:
 
 If you're adding a new event to the Events section:
 
-1. Add an `<article class="event-card">` to `index.html` (plus the
-   FR and DE siblings — same dates, translated copy). Re-stamp i18n
-   drift if the EN markup changed.
-2. **Add a matching `VEVENT` block to `/calendar.ics`** at the
-   repository root. The `.ics` feed is hand-maintained alongside
-   the HTML cards — there is deliberately no build step.
-   - Use a stable `UID` of the form `<slug>@netsec-cost.eu` so
-     subscribers don't get duplicate events on later edits.
-   - Bump every event's `DTSTAMP` to the date of this edit (any
-     edit to any event counts as a republication of the whole
-     feed under RFC 5545; in practice modern clients also accept
-     per-event timestamps).
-   - Use `DTSTART;TZID=Europe/Stockholm:` style for timed events
-     in Stockholm; for events elsewhere add the appropriate
-     `VTIMEZONE` block at the top of the file.
-   - Escape commas inside `SUMMARY` / `DESCRIPTION` / `LOCATION`
-     with a backslash (`\,`) — that's the TEXT-type rule in the
-     RFC.
-3. TBA / undated event cards are deliberately **not** added to the
-   feed until they have firm dates — calendar subscribers should
-   not see placeholders.
+1. **Add the structured form to `data/events.json`.** This is the
+   single source of truth for the public `/calendar.ics` feed.
+   - `uid`: stable identifier of the form `<slug>@netsec-cost.eu`
+     so subscribers don't get duplicate events on later edits.
+   - `start` / `end`: ISO-8601 local time in the format
+     `YYYY-MM-DDTHH:MM` (no timezone suffix — the file-level
+     `tzid` attaches the zone).
+   - Update the top-level `dtstamp` field to today (any edit
+     counts as a republication of the feed under RFC 5545).
+   - Escape sequences are handled by the generator — write commas
+     and apostrophes naturally in the JSON.
+2. **Regenerate `calendar.ics`**: `python3 scripts/build-calendar.py`.
+   CI (`.github/workflows/calendar-drift.yml`) runs the same script
+   with `--check` on every PR and fails if `calendar.ics` would
+   change — so you can't merge an `events.json` edit without
+   regenerating.
+3. **Add the matching `<article class="event-card">`** to
+   `index.html` plus the FR and DE siblings — same dates,
+   translated copy. The HTML cards stay hand-authored because they
+   carry locale-specific framing that doesn't trivially derive
+   from JSON. Re-stamp i18n drift if the EN markup changed.
+4. TBA / undated events are deliberately **not** added to
+   `data/events.json` until they have firm dates — calendar
+   subscribers should not see placeholders. The TBA HTML card on
+   `index.html` is fine to leave as a teaser.
+5. If a new event sits outside `Europe/Stockholm`, add the
+   corresponding `VTIMEZONE` block to `render_vtimezone()` in
+   `scripts/build-calendar.py` (the script refuses to run without
+   one).

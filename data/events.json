@@ -1,0 +1,38 @@
+{
+  "_documentation": "Single source of truth for calendar.ics. Maintained by hand alongside the HTML event cards in index.html. When you edit an event here, also update the corresponding <article class=\"event-card\"> in index.html (and its FR/DE siblings), and bump dtstamp. CI fails if calendar.ics drifts from what scripts/build-calendar.py would produce from this file.",
+
+  "calname": "NetSec — COST Action CA24154",
+  "caldesc": "Events from the NetSec COST Action (CA24154) — annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
+  "tzid": "Europe/Stockholm",
+  "refresh_days": 7,
+  "dtstamp": "20260522T000000Z",
+
+  "events": [
+    {
+      "uid": "summer-school-2026@netsec-cost.eu",
+      "summary": "NetSec Early-Career Scholars Summer School",
+      "description": "Three days of training and mentoring for early-career researchers in European security — research presentations, individualised feedback from senior scholars, and structured mentorship. Open to PhD candidates and post-docs (within one year of defence) in strategic studies and international security, as well as SWAMOS / Euro-SWAMOS alumni.\n\nScientific Coordinators: Dr Silvia D'Amato, Prof Chiara Ruffa.\n\nFull details: https://eiss-europa.com/NetSecSchool.html",
+      "location": "Stockholm University, Frescativägen 114 18, Sweden",
+      "url": "https://eiss-europa.com/NetSecSchool.html",
+      "start": "2026-06-09T09:00",
+      "end": "2026-06-11T18:00",
+      "organizer": {
+        "cn": "NetSec Summer School",
+        "mailto": "ecs.netsec@eiss-europa.com"
+      },
+      "categories": ["Training School", "NetSec"],
+      "status": "CONFIRMED"
+    },
+    {
+      "uid": "european-security-conference-2026@netsec-cost.eu",
+      "summary": "European Security Conference 2026",
+      "description": "The flagship annual gathering of the NetSec community: an interdisciplinary conference on European defence and security open to academics, policy-makers, and practitioners. Held back-to-back with the Summer School so early-career scholars can join the wider conversation.\n\nChairpersons: Dr Julia Carver, Dr Sanne Verschuren.\n\nProgramme and registration: https://indico.eiss-europa.com/event/22/",
+      "location": "Stockholm University, Frescativägen, 114 19 Stockholm, Sweden",
+      "url": "https://indico.eiss-europa.com/event/22/",
+      "start": "2026-06-11T08:00",
+      "end": "2026-06-12T20:00",
+      "categories": ["Annual Conference", "NetSec"],
+      "status": "CONFIRMED"
+    }
+  ]
+}
