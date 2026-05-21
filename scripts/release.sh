@@ -2,33 +2,41 @@
 # scripts/release.sh — cut a tagged release of this repository.
 #
 # Usage:
-#   scripts/release.sh <version>          # promote [Unreleased] → [<version>],
-#                                         # tag main, create the GitHub Release.
-#   scripts/release.sh <version> --dry-run
-#                                         # print everything that *would* happen,
-#                                         # change nothing.
+#   scripts/release.sh <version> "<title>"          # cut the release
+#   scripts/release.sh <version> "<title>" --dry-run # preview only
+#
+#   <version>  X.Y.Z, no leading "v" (e.g. 1.4.0)
+#   <title>    short phrase summarising the key contribution of this
+#              release — appears in BOTH the CHANGELOG heading
+#              (`## [1.4.0] · YYYY-MM-DD — <title>`) AND the GitHub
+#              Release title (`v1.4.0 — <title>`). Convention: 3-8
+#              words, sentence case, no trailing punctuation.
+#              Examples:
+#                "Introducing FAQ and Glossary pages"      (v1.3.0)
+#                "Press kit, directory tour, compact view" (v1.2.0)
+#                "Initial public release"                  (v1.0.0)
+#              The title is REQUIRED; the script will not run without it.
 #
 # What it does, in order:
 #   1.  Validate <version> against SemVer 2.0.0 (X.Y.Z, no leading "v").
-#   2.  Refuse to run if anything is uncommitted, or if local main is
+#   2.  Validate <title> is non-empty.
+#   3.  Refuse to run if anything is uncommitted, or if local main is
 #       behind/ahead of origin/main.
-#   3.  Read the [Unreleased] body from CHANGELOG.md; refuse to run if
+#   4.  Read the [Unreleased] body from CHANGELOG.md; refuse to run if
 #       it's empty or still the literal "_Nothing yet._" placeholder.
-#   4.  Print the [Unreleased] body and prompt for explicit "y"
-#       confirmation before proceeding. This is the last point at
-#       which an abort leaves everything untouched — important
-#       because, with "Enforce release immutability" turned on at
-#       the repo level, the published GitHub Release notes become
-#       write-once. (--dry-run skips the prompt; the dry-run output
-#       IS the preview.)
-#   5.  Promote [Unreleased] to [<version>] · <today> and start a
-#       fresh [Unreleased] section above it. Update the bottom
-#       compare links accordingly.
-#   6.  Commit the changelog edit ("Release v<version>"), push to main.
-#   7.  Create an annotated tag v<version> on the new commit, push it.
-#   8.  Use `gh release create` to publish a GitHub Release whose body
-#       is the [<version>] section of the changelog (markdown sliced
-#       between the two headings).
+#   5.  Print the [Unreleased] body AND the title, then prompt for
+#       explicit "y" confirmation before proceeding. This is the last
+#       point at which an abort leaves everything untouched.
+#       (--dry-run skips the prompt; the dry-run output IS the preview.)
+#   6.  Promote [Unreleased] to `[<version>] · <today> — <title>` and
+#       start a fresh [Unreleased] section above it. Update the
+#       bottom compare links accordingly.
+#   7.  Commit the changelog edit ("Release v<version> — <title>"),
+#       push to main.
+#   8.  Create an annotated tag v<version> on the new commit, push it.
+#   9.  Use `gh release create` to publish a GitHub Release titled
+#       "v<version> — <title>" whose body is the [<version>] section
+#       of the changelog (markdown sliced between the two headings).
 #
 # Pre-conditions:
 #   - `gh` CLI installed and authenticated against EISSeuropa/netsec.github.io.
@@ -67,14 +75,17 @@ set -euo pipefail
 # Argument parsing
 # ────────────────────────────────────────────────────────────────────
 
-if [[ $# -lt 1 || $# -gt 2 ]]; then
-  echo "usage: $0 <version> [--dry-run]"
-  echo "       <version> is X.Y.Z, e.g. 1.1.0"
+if [[ $# -lt 2 || $# -gt 3 ]]; then
+  echo "usage: $0 <version> \"<title>\" [--dry-run]"
+  echo "       <version>  X.Y.Z, e.g. 1.4.0"
+  echo "       <title>    short phrase summarising the key contribution,"
+  echo "                  e.g. \"Introducing FAQ and Glossary pages\""
   exit 1
 fi
 
 VERSION="$1"
-DRY_RUN="${2:-}"
+TITLE="$2"
+DRY_RUN="${3:-}"
 
 if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   echo "✗ Version must match X.Y.Z (got '$VERSION')."
@@ -82,8 +93,27 @@ if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 
+# A title is required by convention. Short phrase that reflects the
+# key contribution of this release — appears in the CHANGELOG heading
+# and the GitHub Release title. See the header docstring for examples.
+if [[ -z "$TITLE" ]]; then
+  echo "✗ Release title is required (got empty string)."
+  echo "  Pick a short phrase that reflects the key contribution, e.g."
+  echo "    \"Introducing FAQ and Glossary pages\""
+  echo "  Convention: 3-8 words, sentence case, no trailing punctuation."
+  exit 1
+fi
+
+# Guard against accidentally passing --dry-run as the title.
+if [[ "$TITLE" == --* ]]; then
+  echo "✗ Title looks like a flag ('$TITLE'). Did you forget to quote it,"
+  echo "  or are you missing the title argument?"
+  echo "  Correct: $0 $VERSION \"Introducing FAQ and Glossary pages\""
+  exit 1
+fi
+
 if [[ -n "$DRY_RUN" && "$DRY_RUN" != "--dry-run" ]]; then
-  echo "✗ Second argument, if given, must be --dry-run (got '$DRY_RUN')."
+  echo "✗ Third argument, if given, must be --dry-run (got '$DRY_RUN')."
   exit 1
 fi
 
@@ -201,11 +231,11 @@ echo "  Promoting to [$VERSION] · $TODAY and resetting [Unreleased]."
 if [[ "$DRY_RUN" != "--dry-run" ]]; then
   step "Preview & confirm — the release notes that will be published"
   printf '\n'
+  printf '  Title:   v%s — %s\n' "$VERSION" "$TITLE"
   printf '  ──────────────────────────────────────────────────────────────\n'
   printf '%s\n' "$UNRELEASED_BODY" | sed 's/^/  /'
   printf '  ──────────────────────────────────────────────────────────────\n\n'
-  printf '  Publish v%s with the notes above?\n' "$VERSION"
-  printf '  (If release immutability is enabled, the notes become write-once.)\n'
+  printf '  Publish v%s — %s with the title + notes above?\n' "$VERSION" "$TITLE"
   printf '  Type "y" to publish, anything else to abort: '
   read -r CONFIRM
   case "$CONFIRM" in
@@ -221,7 +251,7 @@ fi
 # Rewrite the file via Python for safety (BSD sed makes in-place edits
 # of multi-line patterns painful).
 if [[ "$DRY_RUN" != "--dry-run" ]]; then
-  python3 - "$CHANGELOG" "$VERSION" "$TODAY" <<'PY'
+  python3 - "$CHANGELOG" "$VERSION" "$TODAY" "$TITLE" <<'PY'
 import re
 import sys
 from pathlib import Path
@@ -229,6 +259,7 @@ from pathlib import Path
 path = Path(sys.argv[1])
 version = sys.argv[2]
 today   = sys.argv[3]
+title   = sys.argv[4]
 src     = path.read_text(encoding="utf-8")
 
 # 1. Replace the [Unreleased] heading with two headings: a fresh
@@ -236,7 +267,7 @@ src     = path.read_text(encoding="utf-8")
 new_block = (
     f"## [Unreleased]\n\n"
     f"_Nothing yet._\n\n"
-    f"## [{version}] · {today}"
+    f"## [{version}] · {today} — {title}"
 )
 src, n = re.subn(r"^## \[Unreleased\]", new_block, src, count=1, flags=re.M)
 if n != 1:
@@ -303,10 +334,10 @@ fi
 step "Commit, tag, push"
 
 run git add CHANGELOG.md
-run git commit -m \"Release v$VERSION\" \
-       -m \"Promotes the CHANGELOG.md [Unreleased] section to [$VERSION] · $TODAY and resets [Unreleased].\"
+run git commit -m \"Release v$VERSION — $TITLE\" \
+       -m \"Promotes the CHANGELOG.md [Unreleased] section to [$VERSION] · $TODAY — $TITLE and resets [Unreleased].\"
 run git tag -a \"v$VERSION\" \
-       -m \"v$VERSION · $TODAY\" \
+       -m \"v$VERSION — $TITLE\" \
        -m \"See CHANGELOG.md and https://github.com/EISSeuropa/netsec.github.io/releases/tag/v$VERSION\"
 
 run git push origin main
@@ -343,7 +374,7 @@ else
 fi
 
 run gh release create \"v$VERSION\" \
-       --title \"v$VERSION\" \
+       --title \"v$VERSION — $TITLE\" \
        --notes-file \"$NOTES_FILE\" \
        --latest
 

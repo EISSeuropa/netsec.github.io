@@ -2,3 +2,7 @@
 # Tooling caches that should never be tracked
 .claude/
 scripts/__pycache__/
+
+# macOS Finder metadata
+.DS_Store
+**/.DS_Store
