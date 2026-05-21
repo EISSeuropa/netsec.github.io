@@ -1,0 +1,43 @@
+# Calendar drift check.
+#
+# Runs scripts/build-calendar.py --check on every PR that touches
+# data/events.json, calendar.ics, or the generator itself. If the
+# committed calendar.ics doesn't match what the script would produce
+# from data/events.json, this check fails and the PR can't be merged
+# until the maintainer runs `python3 scripts/build-calendar.py` and
+# commits the result.
+#
+# That guarantees the public .ics feed stays in step with the JSON
+# source of truth — a maintainer editing data/events.json without
+# regenerating calendar.ics will get a clear error before merge,
+# rather than silently shipping a stale calendar to subscribers.
+#
+# Zero cost: no third-party services, no API keys.
+name: Calendar drift check
+
+on:
+  pull_request:
+    paths:
+      - 'data/events.json'
+      - 'calendar.ics'
+      - 'scripts/build-calendar.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    name: Check calendar drift
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run drift checker
+        run: python3 scripts/build-calendar.py --check
