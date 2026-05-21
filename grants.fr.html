@@ -61,10 +61,12 @@
   .grants-page h1{font-size:clamp(2.4rem,5vw,3.6rem);margin:0 0 1rem;text-align:center;background:linear-gradient(180deg,var(--ink) 0%,#3a4a6b 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
   .dark .grants-page h1{background:linear-gradient(180deg,#f4f8ff 0%,#aeb7d6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
   .grants-page .lede{max-width:64ch;margin:0 auto 1.2rem;font-size:1.05rem;text-align:center;color:var(--ink-2)}
-  .grants-portal-note{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:18px 22px;margin:24px auto 40px;max-width:760px;border-radius:14px;background:linear-gradient(135deg,rgba(0,51,153,.06),rgba(10,132,255,.04));border:1px solid rgba(10,132,255,.20)}
+  .grants-portal-note{display:flex;flex-wrap:wrap;align-items:flex-start;gap:14px;padding:18px 22px;margin:24px auto 40px;max-width:760px;border-radius:14px;background:linear-gradient(135deg,rgba(0,51,153,.06),rgba(10,132,255,.04));border:1px solid rgba(10,132,255,.20)}
   .grants-portal-note .icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
-  .grants-portal-note p{margin:0;font-size:.92rem;color:var(--ink-2);flex:1 1 200px}
+  .grants-portal-note > div{flex:1 1 200px}
+  .grants-portal-note p{font-size:.92rem;color:var(--ink-2);line-height:1.55}
   .grants-portal-note strong{color:var(--ink)}
+  .grant-visibility{margin:.5em 0 0;font-size:.85rem;color:var(--muted);line-height:1.45;padding-left:20px}
   .grants-list{display:flex;flex-direction:column;gap:18px;margin:0 0 60px}
   .grant-card{padding:28px 32px}
   .grant-card .grant-head{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:14px}
@@ -238,9 +240,17 @@
       <span class="icon" aria-hidden="true">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
       </span>
-      <p>
-        <strong>Toutes les candidatures sont soumises via e-COST</strong>, le portail officiel de l'Association COST — pas sur cette page. Chaque carte ci-dessous renvoie au bon endroit sur <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-services.cost.eu</a>. Connectez-vous avec votre compte e-COST (gratuit à créer) et sélectionnez l'Action COST CA24154 (NetSec).
-      </p>
+      <div>
+        <p style="margin:0 0 .5em">
+          <strong>Toutes les candidatures sont soumises via e-COST</strong>, le portail officiel de l'Association COST — pas sur cette page. Chaque carte ci-dessous renvoie au bon endroit sur <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-services.cost.eu</a>. Connectez-vous avec votre compte e-COST (gratuit à créer) et sélectionnez l'Action COST CA24154 (NetSec).
+        </p>
+        <p style="margin:0 0 .5em">
+          Le portail e-COST est une surface COST générale et <strong>affiche à chaque candidat·e les subventions auxquelles son profil le rend éligible</strong>. Ainsi une Subvention de conférence ITC n'apparaît qu'aux personnes affiliées à un pays cible d'inclusion, et la Subvention de conférence pour jeunes chercheur·euses et innovateur·rices n'apparaît qu'aux candidat·es de moins de 40 ans. Si un dispositif listé ci-dessous ne vous apparaît pas, votre profil ne vous y rend pas éligible — c'est normal, ce n'est pas un bug.
+        </p>
+        <p style="margin:0">
+          Le portail peut aussi proposer des subventions issues d'autres programmes COST que NetSec ne finance pas. <strong>Seules les cinq subventions documentées sur cette page font partie du Plan de Travail et Budget (WBP) de NetSec</strong> ; toute candidature hors plan sera rejetée par la coordinatrice d'attribution. En cas de doute, demandez avant de candidater.
+        </p>
+      </div>
     </div>
 
     <h2 class="visually-hidden" style="position:absolute;left:-9999px">Types de subventions</h2>
@@ -332,6 +342,7 @@
             <li>Affilié·e à un pays participant.</li>
             <li>Pas de chevauchement avec une autre subvention COST ou réunion pour la même activité.</li>
           </ul>
+          <p class="grant-visibility"><em>Sur le portail e-COST, cette candidature n'apparaît qu'aux candidat·es de moins de 40 ans.</em></p>
         </div>
         <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=YRIG" target="_blank" rel="noopener">
           Postuler sur e-COST
@@ -363,6 +374,7 @@
             <li>Accepté·e pour donner une <strong>présentation orale de votre propre travail</strong>, dans le périmètre de l'Action.</li>
             <li>Pas de chevauchement avec une autre subvention COST ou réunion pour la même activité.</li>
           </ul>
+          <p class="grant-visibility"><em>Sur le portail e-COST, cette candidature n'apparaît qu'aux candidat·es affilié·es à un ITC.</em></p>
         </div>
         <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=ITCCG" target="_blank" rel="noopener">
           Postuler sur e-COST

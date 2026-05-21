@@ -15,6 +15,21 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ### Added
 
+- **Grants page: explicit framing of the e-COST portal model.**
+  The portal note at the top of `/grants/` now spells out three
+  things openly: applications go through the general e-COST
+  portal (no NetSec-specific form); the portal **filters by
+  applicant profile** (ITC visible only to ITC affiliates, YRIG
+  visible only to under-40s) so a member may not see every
+  scheme listed; and only the five schemes on the page are in
+  NetSec's WBP — applications for anything else **will be
+  rejected** by the Grant Awarding Coordinator. The YRIG and ITC
+  cards gain a small italic visibility caption under their
+  eligibility lists. Wiki FAQ gains two matching entries ("Why
+  don't I see grant X?" / "Why might my application be
+  rejected?"). `docs/architecture.md` user-facing features list
+  notes the portal model. PDF intentionally not touched.
+
 - **Click-to-expand on compact directory cards** + **`+`
   quick-join button** in the toolbar.
   - Clicking a card in compact mode flips it to its detailed form
