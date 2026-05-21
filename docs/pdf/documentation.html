@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NetSec — Website & Directory · Documentation Pack v1.5.2</title>
+<title>NetSec — Website & Directory · Documentation Pack v1.6.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -566,7 +566,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.5.2 · May 2026</div>
+        <div class="value">v1.6.0 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -755,7 +755,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.5.2 · May 2026</span>
+    <span class="url">v1.6.0 · May 2026</span>
   </footer>
 
 </section>
@@ -944,24 +944,32 @@ flowchart LR
 
   <h2>Site structure</h2>
 
-  <p>Six public pages in total. The home page is the hub — it hosts most of the static content as anchored sections; three full-page applications and two statutory pages branch off it.</p>
+  <p>Ten public pages in total (each with FR and DE beta siblings, plus a locale-detecting <code>404.html</code>). The home page is the hub — it hosts most of the static content as anchored sections and now signposts the discovery / reference pages and the members' Wiki through two dedicated home-page sections. Three full-page applications and six reference / statutory pages branch off it.</p>
 
   <div class="diagram">
     <div class="mermaid">
 flowchart TB
-    H["<b>index.html · Home</b><br/><span style='font-size:11px;color:#5a6679'>anchored sections:</span><br/><span style='font-size:11px'>news · about · working-groups · committee</span><br/><span style='font-size:11px'>events · roadmap · outputs · contact</span>"]
+    H["<b>index.html · Home</b><br/><span style='font-size:11px;color:#5a6679'>anchored sections:</span><br/><span style='font-size:11px'>news · about (incl. Find out more)</span><br/><span style='font-size:11px'>working-groups · committee · events</span><br/><span style='font-size:11px'>roadmap · outputs · for-members · contact</span>"]
 
     P["<b>people.html</b><br/>The Network"]
     G["<b>grants.html</b><br/>Grants &amp; Calls"]
+    F["<b>faq.html</b><br/>FAQ"]
+    X["<b>glossary.html</b><br/>Glossary"]
+    K["<b>press-kit.html</b><br/>Press kit"]
     S["<b>sitemap.html</b><br/>Site map"]
     A["<b>accessibility.html</b>"]
     R["<b>privacy.html</b>"]
+    L["<b>licensing.html</b>"]
 
     H ==> |"top nav"| P
     H ==> G
-    H ==> S
+    H -.-> |"About &gt; Find out more"| F
+    H -.-> X
+    H -.-> K
     H -.-> |"footer only"| A
     H -.-> R
+    H -.-> L
+    H -.-> S
 
     P -.-> |"cross-link"| G
     G -.-> P
@@ -969,26 +977,35 @@ flowchart TB
     style H fill:#0a84ff,stroke:#0a84ff,color:#fff
     style P fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style G fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style S fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style F fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style X fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style K fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style S fill:#ffffff,stroke:#5a6679,color:#0b1220
     style A fill:#ffffff,stroke:#5a6679,color:#0b1220
     style R fill:#ffffff,stroke:#5a6679,color:#0b1220
-    linkStyle 0,1,2 stroke:#003399,stroke-width:2.2px
-    linkStyle 3,4 stroke:#5a6679,stroke-dasharray:3 3,stroke-width:1.4px
-    linkStyle 5,6 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.4px
+    style L fill:#ffffff,stroke:#5a6679,color:#0b1220
+    linkStyle 0,1 stroke:#003399,stroke-width:2.2px
+    linkStyle 2,3,4 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
+    linkStyle 5,6,7,8 stroke:#5a6679,stroke-dasharray:3 3,stroke-width:1.4px
+    linkStyle 9,10 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.4px
     </div>
-    <div class="diagram-caption">Figure 3 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav bar links to these from every page). <strong>Dashed grey arrows</strong> are footer-only links (Accessibility and Privacy live in the footer of every page, not the top nav). <strong>Dashed blue arrows</strong> are in-page cross-links between the Network and Grants pages.</div>
+    <div class="diagram-caption">Figure 3 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav links to Network and Grants from every page). <strong>Dashed blue arrows from Home</strong> are the four-card <em>Find out more</em> discovery grid at the end of the About section (FAQ, Glossary, Press kit) — these pages are not in the top nav. <strong>Dashed grey arrows</strong> are footer-only links (Accessibility, Privacy, Licensing, Site map appear in every page's footer). <strong>Dashed blue arrows between people / grants</strong> are in-page cross-links between the Network and Grants pages.</div>
   </div>
 
   <h3>Page inventory</h3>
   <table>
     <thead><tr><th>Page</th><th>Purpose</th><th>Reads at runtime</th></tr></thead>
     <tbody>
-      <tr><td><code>index.html</code></td><td>Overview, news, WGs, Management Committee, events, roadmap, outputs, contact.</td><td>—</td></tr>
+      <tr><td><code>index.html</code></td><td>Overview, news, WGs, MC, events, roadmap, outputs, <em>Find out more</em> discovery grid, <em>For NetSec members</em> Wiki signposting strip, contact.</td><td>—</td></tr>
       <tr><td><code>people.html</code></td><td>Open community directory with WG / MC / country filters; Join-the-network CTA.</td><td><code>data/bios.json</code> (all)</td></tr>
       <tr><td><code>grants.html</code></td><td>Five grant schemes, the e-COST timeline, resources, grant-manager contact cards.</td><td><code>data/bios.json</code> (Grant Awarding Coordinator only)</td></tr>
+      <tr><td><code>faq.html</code></td><td>21 Q&amp;As across six themed sections; jump-to TOC; per-question deep-link anchors. <em>Added v1.3.0; migrated from the members' Wiki.</em></td><td>—</td></tr>
+      <tr><td><code>glossary.html</code></td><td>~35 COST and NetSec terms across five sections; per-term deep-link anchors. <em>Added v1.3.0; migrated from the members' Wiki.</em></td><td>—</td></tr>
+      <tr><td><code>press-kit.html</code></td><td>Logos with pairing rules, palette, typography, funding acknowledgements, attribution wording, do / don't rules. <em>Added v1.2.0.</em></td><td>—</td></tr>
       <tr><td><code>sitemap.html</code></td><td>User-friendly site map linking every page and every in-page anchor.</td><td>—</td></tr>
       <tr><td><code>accessibility.html</code></td><td>WCAG 2.1 conformance statement.</td><td>—</td></tr>
-      <tr><td><code>privacy.html</code></td><td>GDPR-compliant privacy notice. §10 is the licensing section.</td><td>—</td></tr>
+      <tr><td><code>privacy.html</code></td><td>GDPR-compliant privacy notice.</td><td>—</td></tr>
+      <tr><td><code>licensing.html</code></td><td>Dual-licence posture (MIT for code, CC BY 4.0 for prose) with the carve-outs spelt out. <em>Split off from <code>privacy.html</code> §10.</em></td><td>—</td></tr>
     </tbody>
   </table>
 
@@ -1102,30 +1119,50 @@ flowchart LR
 ├── index.html                       # Home
 ├── people.html                      # The Network
 ├── grants.html                      # Grants &amp; Calls
+├── faq.html                         # Public FAQ
+├── glossary.html                    # COST + NetSec terminology
+├── press-kit.html                   # Logos, palette, funding acknowledgements
 ├── accessibility.html               # WCAG statement
 ├── privacy.html                     # GDPR notice
+├── licensing.html                   # Dual-licence posture
 ├── sitemap.html                     # User-friendly site map
+├── 404.html                         # Locale-detecting not-found page
+├── *.fr.html  *.de.html             # French + German beta of every page above
+│
+├── sitemap.xml                      # Machine-readable sitemap, hreflang siblings
+├── CNAME                            # GitHub Pages → netsec-cost.eu
 │
 ├── assets/
 │   ├── css/site.css                 # Single shared stylesheet
-│   ├── js/site.js                   # Nav, theme, reveal, accordions
+│   ├── js/site.js                   # Nav, theme, reveal, directory, tour
 │   └── images/people/*.{jpg,png}    # Member headshots
 │
 ├── data/
 │   ├── bios.json                    # The directory
-│   └── mc-members.json              # MC roster per country
+│   ├── mc-members.json              # MC roster per country
+│   └── i18n-state.json              # SHA-1 stamps for drift checker
 │
 ├── scripts/
 │   ├── sync-cost.py                 # cost.eu → WG_MAP + roles
 │   ├── sync-bios.py                 # Google Form → bios.json
+│   ├── inject-seo.py                # Canonical + OG + JSON-LD generator
+│   ├── check-i18n-drift.py          # Reports stale translations
+│   ├── release.sh                   # Cuts a tagged release
 │   ├── bios-source.json             # Pipeline config
 │   └── requirements.txt
 │
 ├── .github/workflows/
 │   ├── sync-cost.yml                # Weekly cron
-│   └── sync-bios.yml                # Weekly cron
+│   ├── sync-bios.yml                # Weekly cron
+│   └── i18n-drift.yml               # Runs drift checker on HTML PRs
 │
 ├── docs/                            # Internal documentation
+│   ├── architecture.md  design-system.md  admin-guide.md
+│   ├── i18n.md  seo.md  bios-setup.md
+│   ├── pdf/                         # Source for this documentation pack
+│   └── promo/                       # Promotional poster (A3) + card-size
+│
+├── CHANGELOG.md     # Keep a Changelog, SemVer 2.0.0
 ├── LICENSE          # MIT (code)
 ├── LICENSE-CONTENT  # CC BY 4.0 (prose)
 ├── README.md
@@ -1609,7 +1646,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
       <li>The work that is <em>in</em> the release is already merged to <code>main</code>.</li>
     </ul>
   </div>
-  <p>For changes that warrant a documentation-pack refresh, also bump the version stamp on the cover and run <span class="kbd">./docs/pdf/build.sh</span> before tagging. The PDF carries its own version stamp on the cover and its own changelog in Appendix C — the two version axes are independent for historical reasons (see the v1.3.0 changelog entry).</p>
+  <p>For changes that warrant a documentation-pack refresh, also bump the version stamp on the cover and run <span class="kbd">./docs/pdf/build.sh</span> before tagging. The PDF carries its own version stamp on the cover and its own changelog in Appendix D — the two version axes are independent for historical reasons (see the v1.3.0 entry of this pack's own changelog appendix).</p>
 
   <h2>The Grants page in practice</h2>
   <div class="snapshot">
@@ -2045,8 +2082,17 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <p>This changelog tracks the documentation pack itself, not the website. Website history is in <code>git log</code> on <code>main</code> and in <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/CHANGELOG.md">the repository's own <code>CHANGELOG.md</code></a>; documentation-pack versions are stamped on the cover and follow <strong>Semantic Versioning 2.0.0</strong> from v1.0.0 onwards. Earlier entries (v1.0 / v1.1 / v1.2 on previous covers) are re-numbered to their SemVer equivalents below for consistency; the content of those revisions is unchanged.</p>
 
-  <h2>v1.5.2 · May 2026</h2>
+  <h2>v1.6.0 · May 2026</h2>
   <p class="small muted" style="margin-top:-6pt">Current revision.</p>
+  <ul>
+    <li><strong>Catches the documentation pack up to website v1.2.0 → v1.3.0.</strong> Between v1.5.2 (the previous pack revision) and this one, the website added four new public pages — <code>licensing.html</code> (split out of <code>privacy.html</code> §10), <code>press-kit.html</code> (website v1.2.0), and <code>faq.html</code> + <code>glossary.html</code> (both website v1.3.0, migrated from the members' Wiki). This revision brings the pack's site-graph, page inventory, and repository-layout sections in line with reality.</li>
+    <li><strong>Site structure section rewritten in Section 02</strong> — page graph now shows ten public pages instead of six, with the new <em>Find out more</em> discovery grid (dashed blue arrows from Home to FAQ / Glossary / Press kit) and the <em>For NetSec members</em> Wiki signposting strip surfaced explicitly. Page inventory table extended with the four new rows, each annotated with the website version in which it landed. Caption updated.</li>
+    <li><strong>Repository layout reflects current state</strong> — adds the four new top-level HTML files (plus their FR/DE siblings and the <code>404.html</code> sentinel), the new <code>sitemap.xml</code>, the new scripts (<code>inject-seo.py</code>, <code>check-i18n-drift.py</code>, <code>release.sh</code>), the new <code>data/i18n-state.json</code>, the <code>i18n-drift.yml</code> workflow, the top-level <code>CHANGELOG.md</code>, and the previously-omitted <code>docs/pdf/</code> and <code>docs/promo/</code> subtrees.</li>
+    <li><strong>Site screenshots refreshed</strong> against the current state of <code>netsec-cost.eu</code> — the home-page snapshot now shows the <em>Find out more</em> grid and the <em>For NetSec members</em> strip.</li>
+    <li>Cover, poster footer, and last-page footer all stamped <strong>v1.6.0</strong>. HTML <code>&lt;title&gt;</code> updated to match.</li>
+  </ul>
+
+  <h2>v1.5.2 · May 2026</h2>
   <ul>
     <li><strong>Appendices reordered</strong>: the promotional poster moves from Appendix D to Appendix C, and the changelog from Appendix C to Appendix D. The pack now ends on its changelog rather than the poster image, so opening the last page lands the reader on a list of what has changed and when.</li>
     <li><strong>Blank pages around the poster image fixed.</strong> The image plate was previously rendered inside a standard <code>.page</code> container, where the A3-portrait raster at 178mm content width came out ~252mm tall, just over the ~257mm column height once the caption was included. The image overflowed to a successor page, leaving the parent page blank — visible to readers as blank pages flanking the poster. The image plate is now a true <strong>full-bleed</strong> page via a dedicated <code>@page promo-plate { margin: 0 }</code> rule, fitting the A3 raster centred in the A4 sheet edge-to-edge. No surrounding blanks, and the figure caption — which had been the over-the-edge straw — folds into the preceding text page.</li>
@@ -2121,7 +2167,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <p class="small muted center" style="margin-top:24pt">
     NetSec — Networking European Security Knowledge · COST Action CA24154 · MoU 063/25 · Running 10 Oct 2025 – 09 Oct 2029.<br>
-    Documentation v1.5.2 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich) as part of Deliverable D1.<br>
+    Documentation v1.6.0 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich) as part of Deliverable D1.<br>
     The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union.
   </p>
 </section>

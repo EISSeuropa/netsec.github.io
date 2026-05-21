@@ -56,36 +56,54 @@ flowchart TD
     P["people.html<br/><i>The Network</i>"]
     G["grants.html<br/><i>Grants &amp; Calls</i>"]
     S["sitemap.html<br/><i>Site map</i>"]
-    A["accessibility.html<br/><i>Accessibility statement</i>"]
-    R["privacy.html<br/><i>Privacy notice (+ Licensing §10)</i>"]
+    A["accessibility.html<br/><i>Accessibility</i>"]
+    R["privacy.html<br/><i>Privacy notice</i>"]
+    L["licensing.html<br/><i>Licensing &amp; reuse</i>"]
+    K["press-kit.html<br/><i>Press kit</i>"]
+    F["faq.html<br/><i>FAQ</i>"]
+    X["glossary.html<br/><i>Glossary</i>"]
 
-    H -- "anchor links<br/>#news #about #working-groups<br/>#committee #events #roadmap<br/>#outputs #contact" --> H
+    H -- "anchor links<br/>#news #about #working-groups<br/>#committee #events #roadmap<br/>#outputs #for-members #contact" --> H
     H --> P
     H --> G
+    H -. "About &gt; Find out more" .-> F
+    H -. "About &gt; Find out more" .-> X
+    H -. "About &gt; Find out more" .-> K
     H --> S
     P --> G
     G --> P
     S --> H
     S --> P
     S --> G
+    S --> F
+    S --> X
+    S --> K
     S --> A
     S --> R
+    S --> L
     A -.->|footer| R
-    R -.->|footer| A
+    R -.->|footer| L
 
     style H fill:#0a84ff,stroke:#0a84ff,color:#fff
     style P fill:#eef2fb,stroke:#0a84ff
     style G fill:#eef2fb,stroke:#0a84ff
+    style F fill:#eef2fb,stroke:#0a84ff
+    style X fill:#eef2fb,stroke:#0a84ff
+    style K fill:#eef2fb,stroke:#0a84ff
 ```
 
 | Page                  | Purpose                                                                         | Reads at runtime         |
 | --------------------- | ------------------------------------------------------------------------------- | ------------------------ |
-| `index.html`          | Action overview, news, WGs, MC composition, events, roadmap, outputs, contact   | `data/bios.json` (none — leadership baked in via `data-bios-roles`) |
+| `index.html`          | Action overview, news, WGs, MC composition, events, roadmap, outputs, *Find out more* discovery grid, *For NetSec members* Wiki signposting strip, contact | `data/bios.json` (none — leadership baked in via `data-bios-roles`) |
 | `people.html`         | Open community directory with WG/MC/country filters and the Join-the-network CTA| `data/bios.json` (full) |
 | `grants.html`         | The five NetSec grant schemes, the e-COST timeline, resources, grant managers   | `data/bios.json` (Grant Awarding Coordinator cards) |
+| `faq.html`            | 21 Q&As across six themed sections, with a jump-to TOC and per-question deep-link anchors. Migrated from the members' Wiki in website v1.3.0. | nothing |
+| `glossary.html`       | ~35 COST and NetSec terms across five sections, with per-term deep-link anchors. Migrated from the members' Wiki in website v1.3.0. | nothing |
+| `press-kit.html`      | Logos with pairing rules, colour palette, typography reference, funding-acknowledgement boilerplate (full / short / one-line), CC BY 4.0 attribution wording, do / don't rules. Added in website v1.2.0. | nothing |
 | `sitemap.html`        | User-friendly site map linking every page and every in-page anchor              | nothing |
 | `accessibility.html`  | WCAG 2.1 conformance statement                                                  | nothing |
-| `privacy.html`        | GDPR-compliant privacy notice; §10 covers reuse/licensing                       | nothing |
+| `privacy.html`        | GDPR-compliant privacy notice                                                   | nothing |
+| `licensing.html`      | Dual-licence posture (MIT for code, CC BY 4.0 for prose) with the carve-outs spelt out. Split off from `privacy.html` §10. | nothing |
 
 ## Feature inventory
 
@@ -232,43 +250,66 @@ besides GitHub Pages' own access logs. The full processor list is in
 ├── index.html                       # Home
 ├── people.html                      # The Network
 ├── grants.html                      # Grants & Calls
+├── faq.html                         # Public FAQ (21 Q&As, six sections)
+├── glossary.html                    # COST + NetSec terminology (~35 terms)
+├── press-kit.html                   # Logos, palette, funding acknowledgements
 ├── accessibility.html               # WCAG statement
 ├── privacy.html                     # GDPR notice
+├── licensing.html                   # Dual-licence posture
 ├── sitemap.html                     # User-friendly site map
+├── 404.html                         # Not-found page (locale-detecting)
+├── {page}.fr.html                   # French beta of every page above (except 404)
+├── {page}.de.html                   # German beta of every page above (except 404)
+│
+├── sitemap.xml                      # Machine-readable sitemap with hreflang siblings
+├── CNAME                            # GitHub Pages → netsec-cost.eu
 │
 ├── assets/
 │   ├── css/site.css                 # Single shared stylesheet
-│   ├── js/site.js                   # Nav, theme, reveal-on-scroll, accordions
+│   ├── js/site.js                   # Nav, theme, reveal-on-scroll, accordions, directory
 │   ├── images/people/*.{jpg,png}    # Member headshots (downloaded by sync-bios)
 │   ├── images/cost-logo.jpg         # COST logotype
+│   ├── images/og-image.png          # Open Graph card (1200 × 630)
 │   └── images/logo.png              # Favicon / NS mark
 │
 ├── data/
 │   ├── bios.json                    # The directory (members, roles, WGs, contacts)
-│   └── mc-members.json              # MC roster per country (used to auto-tag MC role)
+│   ├── mc-members.json              # MC roster per country (used to auto-tag MC role)
+│   └── i18n-state.json              # SHA-1 stamps for translation-drift tracking
 │
 ├── scripts/
 │   ├── sync-cost.py                 # Pulls WG_MAP + leadership from cost.eu
 │   ├── sync-bios.py                 # Pulls Google Form submissions
 │   ├── bios-source.json             # CSV URL + form URL + column mapping
+│   ├── inject-seo.py                # Idempotent canonical/OG/JSON-LD generator
+│   ├── check-i18n-drift.py          # Reports stale translations vs. EN source
+│   ├── release.sh                   # Cuts a tagged release; promotes CHANGELOG
 │   └── requirements.txt             # requests, beautifulsoup4, Pillow
 │
 ├── .github/workflows/
 │   ├── sync-cost.yml                # Weekly cron — opens PR if WG_MAP / roles changed
-│   └── sync-bios.yml                # Weekly cron — opens PR if bios.json changed
+│   ├── sync-bios.yml                # Weekly cron — opens PR if bios.json changed
+│   └── i18n-drift.yml               # Runs the drift checker on PRs touching HTML
 │
 ├── docs/                            # ← you are here
 │   ├── README.md                    # ToC for this folder
 │   ├── architecture.md              # this file
 │   ├── design-system.md
 │   ├── admin-guide.md
-│   └── bios-setup.md                # One-time Google Form set-up guide
+│   ├── i18n.md                      # Translation workflow + drift conventions
+│   ├── seo.md                       # SEO injector design, OG/JSON-LD schema
+│   ├── bios-setup.md                # One-time Google Form set-up guide
+│   ├── pdf/                         # Source for the documentation pack
+│   │   ├── documentation.html       # Single-file source, rendered to PDF
+│   │   ├── build.sh                 # Headless-Chrome → PDF builder
+│   │   └── NetSec-website-documentation.pdf
+│   └── promo/                       # Promotional poster (A3) and card-size variant
 │
+├── CHANGELOG.md                     # Keep a Changelog format, SemVer 2.0.0
 ├── LICENSE                          # MIT (code)
 ├── LICENSE-CONTENT                  # CC BY 4.0 (prose) with carve-outs
 ├── README.md                        # Project entry point
-├── SECURITY.md                      # Coordinated-disclosure policy
-└── CNAME                            # GitHub Pages → netsec-cost.eu
+└── SECURITY.md                      # Coordinated-disclosure policy
 ```
 
 ## Naming and code conventions
@@ -290,13 +331,26 @@ besides GitHub Pages' own access logs. The full processor list is in
 
 If you're adding a new page:
 
-1. Copy `accessibility.html` as a skeleton — it has the canonical
-   `<head>`, theme-FOUC script, ambience blobs, nav, and footer.
-2. Update the nav `<a aria-current="page">` on the new page so the
-   header shows the active link.
-3. Add the page to `sitemap.html` and to every other page's footer
-   list of statutory links if it's a statutory page.
-4. Bump the version stamp in the page meta-strip if you're adding
+1. Copy a prose-page skeleton (e.g. `licensing.html` or `faq.html`) —
+   either provides the canonical `<head>`, theme-FOUC script,
+   ambience blobs, nav, and footer.
+2. Decide whether the page belongs in the top nav (10 items already;
+   keep tight). If not, signpost it via the home page's *Find out
+   more* discovery grid at the end of the About section.
+3. Create FR + DE beta siblings (`page.fr.html`, `page.de.html`).
+   Translate chrome and content manually — no machine translation.
+4. Add the page to `data/i18n-state.json` (the SHA-1 drift manifest)
+   and run `python3 scripts/check-i18n-drift.py --mark-fresh page.html fr`
+   (and `... de`) to stamp the translations.
+5. Add the slug to the `PAGES` list in `scripts/inject-seo.py` and
+   run it to inject canonical / OG / Twitter Card / JSON-LD blocks.
+6. Add the page (with `<xhtml:link>` siblings for FR/DE) to
+   `sitemap.xml`, and list it in `sitemap.html` (+ FR/DE) under the
+   right branch.
+7. Add a footer link on every other page (`grep` for an existing
+   footer-link pattern and replicate it across the 24 page × locale
+   permutations).
+8. Bump the version stamp in the page meta-strip if you're adding
    a privacy- or accessibility-relevant page.
 
 If you're adding a new field to `bios.json`:
