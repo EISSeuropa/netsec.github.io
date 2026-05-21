@@ -101,6 +101,22 @@ flowchart TD
   code (~200), used in the MC-by-country grid and member cards.
 - **Network directory filters** — free-text search × WG/MC chip ×
   country dropdown, all AND-combined client-side.
+- **Two view densities on the directory** — detailed (photo + bio
+  + contact icons) and compact (one-row, flag + affiliation + WG
+  chips). Switched via a segmented toggle in the toolbar; preference
+  persists in `localStorage('netsec-directory-view')`.
+- **Click-to-expand in compact mode** — clicking a compact card
+  flips it to its detailed form in place while the rest of the
+  grid stays compact. URL hash `#slug` mirrors the expanded card
+  for shareable deep-links; Esc / click-outside collapses. Tracked
+  upgrade path to a sticky side panel in Issue #72.
+- **First-visit orientation** — a dismissible welcome strip above
+  the directory toolbar, plus a `?` button that re-opens an
+  opt-in six-step guided tour (search → filter chips → country
+  → density toggle → `+` quick-join → join card).
+- **`+` quick-join button** in the directory toolbar — smooth-
+  scrolls to the join card at the foot of the page and focuses
+  the *Add your bio* CTA.
 - **Bio collapse** — bios over 4 lines auto-detect and add a "Show
   more / Show less" toggle.
 - **Awarding-process timeline** on `grants.html` — numbered nodes on

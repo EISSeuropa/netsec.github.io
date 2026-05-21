@@ -15,6 +15,28 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ### Added
 
+- **Click-to-expand on compact directory cards** + **`+`
+  quick-join button** in the toolbar.
+  - Clicking a card in compact mode flips it to its detailed form
+    in place (photo, role, full affiliation, WGs, bio, contact
+    icons), while every other card on the grid stays compact.
+    Click outside / Esc / click another card collapses. Cards
+    become keyboard-focusable in compact mode; Enter / Space
+    triggers expansion. The expanded card's `data-slug` mirrors
+    to `location.hash` so the state is shareable;
+    `/people.html#eugenio-sanchez` auto-expands that card on
+    page load. Long-term upgrade path to a sticky side-panel
+    pattern is tracked in
+    [Issue #72](https://github.com/EISSeuropa/netsec.github.io/issues/72).
+  - The directory toolbar gains a **`+` button** (styled as a
+    bright accent CTA next to the muted `?` tour-trigger).
+    Clicking it smooth-scrolls to the join card at the foot of
+    the page and focuses the *Add your bio* CTA. Localised in
+    EN/FR/DE.
+  - The guided tour gains a sixth step targeting the `+`
+    button, and the view-toggle step now mentions the
+    click-to-expand affordance.
+
 - **Guided five-step directory tour.** Companion to the welcome
   strip. Two new entry points on `/people/`:
   - A *Take the tour* button in the welcome-strip actions row

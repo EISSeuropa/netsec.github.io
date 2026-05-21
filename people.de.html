@@ -218,6 +218,8 @@
            geführte fünfschrittige Tour, unabhängig vom Status
            der Begrüßungsbanner. Engine in assets/js/site.js. -->
       <button class="tour-trigger" type="button" id="tour-trigger" title="Tour starten" aria-label="Tour starten">?</button>
+      <!-- Direktsprung zur Anmeldekarte am Seitenende. -->
+      <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Zum Anmeldeformular" aria-label="Zum Anmeldeformular">+</button>
     </div>
 
     <p class="members-count" id="members-count" aria-live="polite"></p>
@@ -346,7 +348,10 @@
         body:  'Die Länderliste wird automatisch aus der aktuellen Mitgliedschaft erzeugt — es erscheinen nur Länder mit Mitgliedern.' },
       { target: '.view-toggle',
         title: 'Kartendichte wechseln',
-        body:  'Detailansicht: Fotos und Bios. Kompaktansicht: Initialen, Name, Affiliation und WG-Chips, drei Karten pro Reihe auf dem Desktop.' },
+        body:  'Detailansicht: Fotos und Bios. Kompaktansicht: Initialen, Name, Affiliation und WG-Chips, drei Karten pro Reihe auf dem Desktop. Klicken Sie eine kompakte Karte an, um sie an Ort und Stelle aufzuklappen.' },
+      { target: '#join-trigger',
+        title: 'Zum Formular springen',
+        body:  'Der +-Button bringt Sie direkt zur „Beitreten"-Karte am Seitenende.' },
       { target: '#join',
         title: 'Beitritt offen für alle',
         body:  'Tragen Sie sich über das Formular unten ein. Etwa fünf Minuten; die Karte erscheint binnen einer Woche auf dieser Seite.',
@@ -375,6 +380,13 @@
     viewToggle.forEach(btn => {
       btn.setAttribute('aria-pressed', btn.dataset.view === mode ? 'true' : 'false');
     });
+    grid.querySelectorAll('.member-card').forEach(card => {
+      if (compact) card.setAttribute('tabindex', '0');
+      else { card.removeAttribute('tabindex'); card.classList.remove('is-expanded'); }
+    });
+    if (!compact && location.hash) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
   }
   try {
     const saved = localStorage.getItem('netsec-directory-view');
@@ -387,6 +399,62 @@
       try { localStorage.setItem('netsec-directory-view', mode); } catch (e) {}
     });
   });
+
+  /* Inline-Erweiterung — siehe people.html für Details. */
+  function clearHashIfFocus() {
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  }
+  grid.addEventListener('click', (e) => {
+    if (!grid.classList.contains('is-compact')) return;
+    if (e.target.closest('a, button')) return;
+    const card = e.target.closest('.member-card');
+    if (!card) return;
+    const wasExpanded = card.classList.contains('is-expanded');
+    grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
+    if (!wasExpanded) {
+      card.classList.add('is-expanded');
+      const slug = card.getAttribute('data-slug');
+      if (slug) history.replaceState(null, '', '#' + slug);
+    } else { clearHashIfFocus(); }
+  });
+  grid.addEventListener('keydown', (e) => {
+    if (!grid.classList.contains('is-compact')) return;
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const card = e.target.closest('.member-card');
+    if (!card) return;
+    e.preventDefault(); card.click();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const expanded = grid.querySelector('.member-card.is-expanded');
+    if (expanded) {
+      expanded.classList.remove('is-expanded');
+      expanded.focus({ preventScroll: true });
+      clearHashIfFocus();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!grid.classList.contains('is-compact')) return;
+    const expanded = grid.querySelector('.member-card.is-expanded');
+    if (!expanded) return;
+    if (e.target.closest('.member-card.is-expanded')) return;
+    if (e.target.closest('.tour-backdrop, .tour-tooltip, .tour-trigger')) return;
+    expanded.classList.remove('is-expanded');
+    clearHashIfFocus();
+  });
+
+  const joinTrigger = document.getElementById('join-trigger');
+  if (joinTrigger) {
+    joinTrigger.addEventListener('click', () => {
+      const joinCard = document.getElementById('join');
+      if (!joinCard) return;
+      joinCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        const cta = joinCard.querySelector('.join-card-cta');
+        if (cta && !cta.hidden) cta.focus({ preventScroll: true });
+      }, 380);
+    });
+  }
 
   let MEMBERS = [];
   let activeWG = 'all';
@@ -444,6 +512,11 @@
 
     filtered.forEach(m => {
       const node = tpl.content.firstElementChild.cloneNode(true);
+      // Slug + bedingte Fokussierbarkeit — siehe people.html
+      if (m.id) node.setAttribute('data-slug', m.id);
+      if (grid.classList.contains('is-compact')) {
+        node.setAttribute('tabindex', '0');
+      }
       const img = node.querySelector('img');
       const fallback = node.querySelector('.member-photo-fallback');
       if (m.photo) {
@@ -630,10 +703,16 @@
       if (!hash) return;
       const target =
         document.getElementById(hash) ||
-        document.getElementById(hash.replace(/^(dr|prof|mr|ms|mrs)-/i, ''));
-      if (target) requestAnimationFrame(() =>
-        target.scrollIntoView({ behavior: 'instant', block: 'start' })
-      );
+        document.getElementById(hash.replace(/^(dr|prof|mr|ms|mrs)-/i, '')) ||
+        grid.querySelector('.member-card[data-slug="' + CSS.escape(hash) + '"]');
+      if (target) requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: 'instant', block: 'center' });
+        if (target.classList.contains('member-card')
+            && grid.classList.contains('is-compact')) {
+          grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
+          target.classList.add('is-expanded');
+        }
+      });
     };
     scrollToHash();
     window.addEventListener('hashchange', scrollToHash);

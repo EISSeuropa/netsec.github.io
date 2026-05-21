@@ -219,6 +219,8 @@
            sous forme de visite en 5 étapes, quel que soit l'état
            de la bannière. Le moteur est dans assets/js/site.js. -->
       <button class="tour-trigger" type="button" id="tour-trigger" title="Faire la visite" aria-label="Faire la visite">?</button>
+      <!-- Raccourci vers la carte « Rejoindre le réseau » en pied de page. -->
+      <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Aller au formulaire d'inscription" aria-label="Aller au formulaire d'inscription">+</button>
     </div>
 
     <p class="members-count" id="members-count" aria-live="polite"></p>
@@ -347,7 +349,10 @@
           body:  'La liste des pays est générée automatiquement à partir des membres présents — seuls les pays représentés y figurent.' },
         { target: '.view-toggle',
           title: 'Densité des cartes',
-          body:  'Vue détaillée : photos et bios. Vue compacte : initiales, nom, affiliation et chips WG, trois cartes par ligne sur ordinateur.' },
+          body:  'Vue détaillée : photos et bios. Vue compacte : initiales, nom, affiliation et chips WG, trois cartes par ligne sur ordinateur. Cliquez sur une carte compacte pour la développer sur place.' },
+        { target: '#join-trigger',
+          title: 'Aller au formulaire',
+          body:  'Le bouton + vous amène directement à la carte « Rejoindre le réseau » au pied de la page.' },
         { target: '#join',
           title: 'Tout le monde peut rejoindre',
           body:  'Inscrivez-vous via le formulaire ci-dessous. Environ cinq minutes ; les cartes apparaissent sur cette page sous une semaine.',
@@ -376,6 +381,13 @@
     viewToggle.forEach(btn => {
       btn.setAttribute('aria-pressed', btn.dataset.view === mode ? 'true' : 'false');
     });
+    grid.querySelectorAll('.member-card').forEach(card => {
+      if (compact) card.setAttribute('tabindex', '0');
+      else { card.removeAttribute('tabindex'); card.classList.remove('is-expanded'); }
+    });
+    if (!compact && location.hash) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
   }
   try {
     const saved = localStorage.getItem('netsec-directory-view');
@@ -388,6 +400,62 @@
       try { localStorage.setItem('netsec-directory-view', mode); } catch (e) {}
     });
   });
+
+  /* Développement sur place — voir people.html pour le détail. */
+  function clearHashIfFocus() {
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  }
+  grid.addEventListener('click', (e) => {
+    if (!grid.classList.contains('is-compact')) return;
+    if (e.target.closest('a, button')) return;
+    const card = e.target.closest('.member-card');
+    if (!card) return;
+    const wasExpanded = card.classList.contains('is-expanded');
+    grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
+    if (!wasExpanded) {
+      card.classList.add('is-expanded');
+      const slug = card.getAttribute('data-slug');
+      if (slug) history.replaceState(null, '', '#' + slug);
+    } else { clearHashIfFocus(); }
+  });
+  grid.addEventListener('keydown', (e) => {
+    if (!grid.classList.contains('is-compact')) return;
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const card = e.target.closest('.member-card');
+    if (!card) return;
+    e.preventDefault(); card.click();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const expanded = grid.querySelector('.member-card.is-expanded');
+    if (expanded) {
+      expanded.classList.remove('is-expanded');
+      expanded.focus({ preventScroll: true });
+      clearHashIfFocus();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!grid.classList.contains('is-compact')) return;
+    const expanded = grid.querySelector('.member-card.is-expanded');
+    if (!expanded) return;
+    if (e.target.closest('.member-card.is-expanded')) return;
+    if (e.target.closest('.tour-backdrop, .tour-tooltip, .tour-trigger')) return;
+    expanded.classList.remove('is-expanded');
+    clearHashIfFocus();
+  });
+
+  const joinTrigger = document.getElementById('join-trigger');
+  if (joinTrigger) {
+    joinTrigger.addEventListener('click', () => {
+      const joinCard = document.getElementById('join');
+      if (!joinCard) return;
+      joinCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        const cta = joinCard.querySelector('.join-card-cta');
+        if (cta && !cta.hidden) cta.focus({ preventScroll: true });
+      }, 380);
+    });
+  }
 
   let MEMBERS = [];
   let activeWG = 'all';
@@ -445,6 +513,11 @@
 
     filtered.forEach(m => {
       const node = tpl.content.firstElementChild.cloneNode(true);
+      // Slug + focusabilité conditionnelle — voir people.html
+      if (m.id) node.setAttribute('data-slug', m.id);
+      if (grid.classList.contains('is-compact')) {
+        node.setAttribute('tabindex', '0');
+      }
       const img = node.querySelector('img');
       const fallback = node.querySelector('.member-photo-fallback');
       if (m.photo) {
@@ -631,10 +704,16 @@
       if (!hash) return;
       const target =
         document.getElementById(hash) ||
-        document.getElementById(hash.replace(/^(dr|prof|mr|ms|mrs)-/i, ''));
-      if (target) requestAnimationFrame(() =>
-        target.scrollIntoView({ behavior: 'instant', block: 'start' })
-      );
+        document.getElementById(hash.replace(/^(dr|prof|mr|ms|mrs)-/i, '')) ||
+        grid.querySelector('.member-card[data-slug="' + CSS.escape(hash) + '"]');
+      if (target) requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: 'instant', block: 'center' });
+        if (target.classList.contains('member-card')
+            && grid.classList.contains('is-compact')) {
+          grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
+          target.classList.add('is-expanded');
+        }
+      });
     };
     scrollToHash();
     window.addEventListener('hashchange', scrollToHash);
