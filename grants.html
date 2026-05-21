@@ -71,7 +71,7 @@
 
   /* "Apply via e-COST" notice strip */
   .grants-portal-note{
-    display:flex;flex-wrap:wrap;align-items:flex-start;gap:14px;
+    display:flex;flex-wrap:wrap;align-items:center;gap:14px;
     padding:18px 22px;margin:24px auto 40px;max-width:760px;
     border-radius:14px;
     background:linear-gradient(135deg,rgba(0,51,153,.06),rgba(10,132,255,.04));
@@ -82,8 +82,7 @@
     display:grid;place-items:center;color:#fff;
     background:linear-gradient(135deg,var(--accent),var(--accent-2));
   }
-  .grants-portal-note > div{flex:1 1 200px}
-  .grants-portal-note p{font-size:.92rem;color:var(--ink-2);line-height:1.55}
+  .grants-portal-note p{margin:0;font-size:.92rem;color:var(--ink-2);flex:1 1 200px;line-height:1.55}
   .grants-portal-note strong{color:var(--ink)}
   /* Per-card "visible only to ..." caption, sized to read as a
      parenthetical under the bullet list, not as a new requirement. */
@@ -422,17 +421,9 @@
       <span class="icon" aria-hidden="true">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
       </span>
-      <div>
-        <p style="margin:0 0 .5em">
-          <strong>All applications are submitted through e-COST</strong>, the COST Association's official portal — not on this page. Each grant card below links to the right place on <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-services.cost.eu</a>. Sign in with your e-COST account (free to create) and select COST Action CA24154 (NetSec).
-        </p>
-        <p style="margin:0 0 .5em">
-          The e-COST portal is a general COST surface and <strong>shows what each applicant is eligible for based on their profile</strong>. So an ITC Conference Grant only appears to applicants affiliated in an Inclusiveness Target Country, and a Young Researcher and Innovator Conference Grant only appears to applicants under 40. If you don't see a scheme that's listed below, your profile doesn't make you eligible for it — that's expected, not an error.
-        </p>
-        <p style="margin:0">
-          The portal may also surface grant types from other COST programmes that NetSec doesn't fund. <strong>Only the five schemes documented on this page are in NetSec's Work and Budget Plan</strong>; applications for anything else will be rejected by the Grant Awarding Coordinator. If in doubt, ask before applying.
-        </p>
-      </div>
+      <p>
+        Applications go through <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-COST</a> — sign in and select Action CA24154. <strong>Only the five schemes below are funded by NetSec</strong>; other grant types you may see in the portal aren't, and will be rejected if applied for.
+      </p>
     </div>
 
     <!-- ============ Grant types ============ -->
@@ -467,7 +458,7 @@
         </div>
         <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=STSM" target="_blank" rel="noopener">
           Apply on e-COST
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7"/><path d="M10 14L21 3"/><path d="M21 14v7H3V3h7"/></svg>
         </a>
       </article>
 
@@ -497,7 +488,7 @@
         </div>
         <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=VM" target="_blank" rel="noopener">
           Apply on e-COST
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7"/><path d="M10 14L21 3"/><path d="M21 14v7H3V3h7"/></svg>
         </a>
       </article>
 
@@ -529,7 +520,7 @@
         </div>
         <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=YRIG" target="_blank" rel="noopener">
           Apply on e-COST
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7"/><path d="M10 14L21 3"/><path d="M21 14v7H3V3h7"/></svg>
         </a>
       </article>
 
@@ -561,7 +552,7 @@
         </div>
         <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=ITCCG" target="_blank" rel="noopener">
           Apply on e-COST
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7"/><path d="M10 14L21 3"/><path d="M21 14v7H3V3h7"/></svg>
         </a>
       </article>
 
@@ -591,7 +582,7 @@
         </div>
         <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=DCG" target="_blank" rel="noopener">
           Apply on e-COST
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7"/><path d="M10 14L21 3"/><path d="M21 14v7H3V3h7"/></svg>
         </a>
       </article>
 
