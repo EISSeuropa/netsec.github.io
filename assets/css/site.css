@@ -1205,6 +1205,86 @@ form button:disabled{opacity:.65;cursor:wait}
 .dark .member-card .member-contact a.contact-orcid{color:#a6ce39}
 .dark .member-card .member-contact a.contact-orcid:hover{background:#a6ce39}
 
+/* ─── Compact directory mode ──────────────────────────────────
+   A higher-density layout for the directory: each member becomes
+   a single-row card (initials/photo on the left, name + affiliation
+   + WG chips stacked on the right), with bio and contact icons
+   hidden. Tighter grid (~3 cards across on a desktop, vs ~2 in the
+   detailed view). Toggled via the .is-compact class on the grid,
+   set by the view-mode toggle in the toolbar. Preference persists
+   in localStorage. */
+.members-grid.is-compact{
+  grid-template-columns:repeat(auto-fill, minmax(min(280px,100%), 1fr));
+  gap:12px;
+}
+.members-grid.is-compact .member-card{
+  flex-direction:row;
+  padding:12px 14px;
+  gap:14px;
+  align-items:center;
+}
+.members-grid.is-compact .member-photo{
+  width:46px;height:46px;
+  margin:0;flex-shrink:0;
+  border-width:1px;
+}
+.members-grid.is-compact .member-photo-fallback{
+  font-size:.95rem;
+}
+.members-grid.is-compact .member-body{
+  align-items:flex-start;text-align:left;
+  flex:1;min-width:0;        /* min-width:0 lets the affiliation truncate */
+  gap:2px;
+}
+.members-grid.is-compact .member-name{
+  font-size:.95rem;margin:0;line-height:1.25;
+}
+.members-grid.is-compact .member-role{
+  font-size:.66rem;margin:1px 0 0;letter-spacing:.04em;
+}
+.members-grid.is-compact .member-affiliation{
+  font-size:.78rem;margin:0;line-height:1.35;
+  justify-content:flex-start;
+  /* Single line, with ellipsis when an affiliation runs long. */
+  display:flex;flex-wrap:nowrap;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+}
+.members-grid.is-compact .member-wgs{
+  margin:4px 0 0;justify-content:flex-start;
+}
+.members-grid.is-compact .member-bio,
+.members-grid.is-compact .member-bio-toggle,
+.members-grid.is-compact .member-contact{
+  display:none !important;
+}
+
+/* View-mode toggle (segmented control in the toolbar) */
+.view-toggle{
+  display:inline-flex;
+  border-radius:999px;
+  background:rgba(11,18,32,.04);
+  padding:3px;
+  gap:2px;
+  align-self:center;
+}
+.dark .view-toggle{background:rgba(255,255,255,.06)}
+.view-toggle button{
+  appearance:none;border:0;background:transparent;cursor:pointer;
+  width:30px;height:30px;
+  border-radius:999px;
+  display:grid;place-items:center;color:var(--muted);
+  transition:background .2s var(--ease),color .2s var(--ease);
+}
+.view-toggle button[aria-pressed="true"]{
+  background:#ffffff;color:var(--accent);
+  box-shadow:0 1px 2px rgba(11,18,32,.10);
+}
+.dark .view-toggle button[aria-pressed="true"]{
+  background:rgba(255,255,255,.14);color:#fff;
+}
+.view-toggle button:hover:not([aria-pressed="true"]){color:var(--ink-2)}
+.view-toggle button svg{width:16px;height:16px}
+
 @media (max-width:540px){
   .people-page{padding:120px 0 60px}
   .members-toolbar{padding:12px 14px}

@@ -147,6 +147,41 @@ def parse_keywords(raw: str) -> list[str]:
     return [k.strip() for k in re.split(r"[,;]", raw) if k.strip()]
 
 
+def normalize_orcid(raw: str) -> str:
+    """Return the canonical 19-character ORCID iD given anything users
+    are likely to paste into the form. Accepts any of:
+
+      0000-0002-1825-0097              # the ID, the form we want
+      https://orcid.org/0000-0002-...  # full URL (commonest mistake)
+      http://orcid.org/0000-0002-...   # http scheme
+      orcid.org/0000-0002-1825-0097    # bare host + path
+      sandbox.orcid.org/...            # sandbox host (rare)
+       0000-0002-1825-0097             # leading/trailing whitespace
+      0000000218250097                 # 16 digits, no hyphens
+      0000-0002-1825-009X              # legal checksum digit X
+
+    Returns the canonical hyphenated form ("0000-0002-1825-0097"),
+    or an empty string if no plausible ID is found. Render code can
+    safely build the URL as 'https://orcid.org/' + this return value.
+    """
+    if not raw:
+        return ""
+    s = raw.strip()
+    # Strip any URL prefix variant. Doing this case-insensitively
+    # with one regex keeps us tolerant to "HTTPS://ORCID.ORG/..." etc.
+    s = re.sub(r"(?i)^(?:https?://)?(?:sandbox\.)?orcid\.org/", "", s)
+    # Drop a trailing slash, anchor, or query string the user might
+    # have copied alongside the ID.
+    s = s.split("?", 1)[0].split("#", 1)[0].rstrip("/").strip()
+    # Allow the 16-digit (no hyphen) form by inserting hyphens.
+    bare = re.fullmatch(r"\d{15}[\dX]", s, flags=re.I)
+    if bare:
+        s = f"{s[0:4]}-{s[4:8]}-{s[8:12]}-{s[12:16]}"
+    # Final validation against the canonical pattern (uppercase X).
+    m = re.fullmatch(r"(\d{4}-\d{4}-\d{4}-\d{3}[\dX])", s.upper())
+    return m.group(1) if m else ""
+
+
 def drive_file_id(url: str) -> str | None:
     """Extract a Google Drive file ID from any common URL form."""
     if not url:
@@ -249,7 +284,7 @@ def row_to_member(row: dict, cols: dict) -> dict | None:
         "keywords": parse_keywords(row.get(cols.get("keywords", ""), "")),
         "email": (row.get(cols.get("public_email", ""), "") or "").strip(),
         "website": (row.get(cols.get("website", ""), "") or "").strip(),
-        "orcid": (row.get(cols.get("orcid", ""), "") or "").strip(),
+        "orcid": normalize_orcid(row.get(cols.get("orcid", ""), "")),
         "linkedin": (row.get(cols.get("linkedin", ""), "") or "").strip(),
         "twitter": (row.get(cols.get("twitter", ""), "") or "").strip(),
         "bluesky": (row.get(cols.get("bluesky", ""), "") or "").strip(),

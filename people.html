@@ -179,6 +179,17 @@
           <option value="all">All countries</option>
         </select>
       </label>
+      <!-- View-mode toggle: detailed (default, photo + bio) vs
+           compact (initials + name + affiliation + WG chips only).
+           Preference persists via localStorage('netsec-directory-view'). -->
+      <div class="view-toggle" role="group" aria-label="Card density">
+        <button type="button" data-view="detailed" aria-pressed="true" title="Detailed view" aria-label="Detailed view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+        </button>
+        <button type="button" data-view="compact" aria-pressed="false" title="Compact view" aria-label="Compact view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+        </button>
+      </div>
     </div>
 
     <p class="members-count" id="members-count" aria-live="polite"></p>
@@ -295,6 +306,32 @@
   const filterChips = document.querySelectorAll('.members-filter-chip');
   const countrySelect = document.getElementById('member-country');
   const tpl = document.getElementById('member-card-template');
+  const viewToggle = document.querySelectorAll('.view-toggle button[data-view]');
+
+  /* View-mode toggle: persists in localStorage as
+       netsec-directory-view = "compact" | "detailed"
+     Default is "detailed". On load we apply whichever was saved; on
+     click we flip the class on the grid, update the button states,
+     and persist. Wrapped in try/catch because some browser modes
+     (cookies disabled, private mode) throw on localStorage access. */
+  function applyView(mode) {
+    const compact = (mode === 'compact');
+    grid.classList.toggle('is-compact', compact);
+    viewToggle.forEach(btn => {
+      btn.setAttribute('aria-pressed', btn.dataset.view === mode ? 'true' : 'false');
+    });
+  }
+  try {
+    const saved = localStorage.getItem('netsec-directory-view');
+    if (saved === 'compact' || saved === 'detailed') applyView(saved);
+  } catch (e) {}
+  viewToggle.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.view;
+      applyView(mode);
+      try { localStorage.setItem('netsec-directory-view', mode); } catch (e) {}
+    });
+  });
 
   let MEMBERS = [];
   // activeWG values:
@@ -415,6 +452,28 @@
       // Contact links. Two icon styles: `stroke` (generic Lucide-like
       // line icons, used for email + website) and `fill` (official brand
       // glyphs, used for ORCID, LinkedIn, X, Bluesky, Mastodon).
+      //
+      // ORCID normaliser: defensive against bios.json containing a
+      // pasted full URL rather than the bare 19-character ID. The
+      // sync script (sync-bios.py → normalize_orcid) is the primary
+      // line of defence at write time; this is the safety net at
+      // render time for any historical or hand-edited record. Strips
+      // any orcid.org URL prefix, drops trailing slashes / queries /
+      // fragments, then asserts the canonical pattern. Returns null
+      // for unrecognised input so the icon is silently omitted
+      // rather than rendered with a broken double-prefixed href.
+      const orcidId = (raw => {
+        if (!raw) return null;
+        let s = String(raw).trim();
+        s = s.replace(/^(?:https?:\/\/)?(?:sandbox\.)?orcid\.org\//i, '');
+        s = s.split('?')[0].split('#')[0].replace(/\/+$/, '').trim();
+        // 16 digits no hyphens → re-insert
+        if (/^\d{15}[\dX]$/i.test(s)) {
+          s = `${s.slice(0,4)}-${s.slice(4,8)}-${s.slice(8,12)}-${s.slice(12,16)}`;
+        }
+        return /^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/i.test(s) ? s.toUpperCase() : null;
+      })(m.orcid);
+
       const contact = node.querySelector('.member-contact');
       const icons = [
         m.email && {
@@ -425,8 +484,8 @@
           href: m.website, label: 'Website', style: 'stroke',
           path: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/>'
         },
-        m.orcid && {
-          href: 'https://orcid.org/' + m.orcid, label: 'ORCID iD', style: 'orcid',
+        orcidId && {
+          href: 'https://orcid.org/' + orcidId, label: 'ORCID iD', style: 'orcid',
           // ORCID brand mark (single path, even-odd fill-rule): solid
           // circle with the "iD" cut out via sub-paths. Rendered in
           // ORCID green via the `.contact-orcid` class below.
