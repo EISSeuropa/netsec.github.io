@@ -13,6 +13,10 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.2.0] · 2026-05-21
+
 ### Added
 
 ### Fixed
@@ -387,6 +391,7 @@ reuse-friendly and attributed in the footer of every page.
 - **GitHub org:** `EISSeuropa`. Two-factor authentication enforced
   at the org level.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.0.0
