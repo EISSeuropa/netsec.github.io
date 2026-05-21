@@ -15,6 +15,20 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ### Added
 
+### Fixed
+
+- **Press-kit page primary buttons no longer render near-black in
+  light theme.** The site-wide `.btn-primary` rule fills with
+  `var(--ink)` (#0b1220), which on the outreach-oriented press-kit
+  page (§1 *What's on it* downloads, §8 *Open the documentation
+  pack*) read as harshly heavy against the light-mode page. A
+  scoped override inside the press-kit's inline `<style>`
+  re-themes those buttons to EU blue (`--accent`), with Apple
+  blue (`--accent-2`) on hover / focus. No change to any other
+  page's button styling.
+
+### Changed
+
 - **Grants page: explicit framing of the e-COST portal model.**
   The portal note at the top of `/grants/` now spells out three
   things openly: applications go through the general e-COST

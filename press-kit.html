@@ -139,6 +139,22 @@
     .pk-poster{grid-template-columns:1fr}
     .pk-do-dont{grid-template-columns:1fr}
   }
+
+  /* Press-kit-scoped override for .btn-primary. The site-wide
+     rule fills primary buttons with --ink (near-black), which
+     reads as harshly heavy on this outreach-oriented page —
+     particularly in §1 ("What's on it" downloads) and §8
+     ("Open the documentation pack"). Override to EU blue so the
+     CTAs read as branded action rather than as page-weight
+     anchors. Light + dark theme both handled by --accent /
+     --accent-2 (Apple-blue hover) which are theme-invariant. */
+  .prose-page .btn-primary{
+    background:var(--accent);color:#fff;
+  }
+  .prose-page .btn-primary:hover,
+  .prose-page .btn-primary:focus-visible{
+    background:var(--accent-2);
+  }
 </style>
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
