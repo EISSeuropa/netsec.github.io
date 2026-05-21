@@ -12,12 +12,21 @@
 #   1.  Validate <version> against SemVer 2.0.0 (X.Y.Z, no leading "v").
 #   2.  Refuse to run if anything is uncommitted, or if local main is
 #       behind/ahead of origin/main.
-#   3.  Open CHANGELOG.md, find the [Unreleased] section, promote it to
-#       [<version>] · <today>, and start a fresh [Unreleased] section
-#       above it. Update the bottom compare links accordingly.
-#   4.  Commit the changelog edit ("Release v<version>"), push to main.
-#   5.  Create an annotated tag v<version> on the new commit, push it.
-#   6.  Use `gh release create` to publish a GitHub Release whose body
+#   3.  Read the [Unreleased] body from CHANGELOG.md; refuse to run if
+#       it's empty or still the literal "_Nothing yet._" placeholder.
+#   4.  Print the [Unreleased] body and prompt for explicit "y"
+#       confirmation before proceeding. This is the last point at
+#       which an abort leaves everything untouched — important
+#       because, with "Enforce release immutability" turned on at
+#       the repo level, the published GitHub Release notes become
+#       write-once. (--dry-run skips the prompt; the dry-run output
+#       IS the preview.)
+#   5.  Promote [Unreleased] to [<version>] · <today> and start a
+#       fresh [Unreleased] section above it. Update the bottom
+#       compare links accordingly.
+#   6.  Commit the changelog edit ("Release v<version>"), push to main.
+#   7.  Create an annotated tag v<version> on the new commit, push it.
+#   8.  Use `gh release create` to publish a GitHub Release whose body
 #       is the [<version>] section of the changelog (markdown sliced
 #       between the two headings).
 #
@@ -178,6 +187,36 @@ fi
 
 echo "  [Unreleased] body found, $(printf '%s' "$UNRELEASED_BODY" | wc -l) lines."
 echo "  Promoting to [$VERSION] · $TODAY and resetting [Unreleased]."
+
+# ────────────────────────────────────────────────────────────────────
+# Final-review confirmation. With "Enforce release immutability"
+# turned on at the repo level, the GitHub Release page is write-once
+# after publication. This prompt is the last moment to abort if a
+# typo or omission is spotted in the notes that will be published.
+# Skipped during --dry-run (the dry-run is itself the preview).
+#
+# Aborting here leaves the working tree, commits, tag, and remote
+# all in their pre-release state — nothing has been mutated yet.
+# ────────────────────────────────────────────────────────────────────
+if [[ "$DRY_RUN" != "--dry-run" ]]; then
+  step "Preview & confirm — the release notes that will be published"
+  printf '\n'
+  printf '  ──────────────────────────────────────────────────────────────\n'
+  printf '%s\n' "$UNRELEASED_BODY" | sed 's/^/  /'
+  printf '  ──────────────────────────────────────────────────────────────\n\n'
+  printf '  Publish v%s with the notes above?\n' "$VERSION"
+  printf '  (If release immutability is enabled, the notes become write-once.)\n'
+  printf '  Type "y" to publish, anything else to abort: '
+  read -r CONFIRM
+  case "$CONFIRM" in
+    [yY]|[yY][eE][sS]) ;;
+    *)
+      printf '\n  Aborted. No commits, tags, or release were made.\n'
+      printf '  CHANGELOG.md is unchanged. Edit [Unreleased] and re-run when ready.\n'
+      exit 0
+      ;;
+  esac
+fi
 
 # Rewrite the file via Python for safety (BSD sed makes in-place edits
 # of multi-line patterns painful).
