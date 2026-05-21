@@ -15,6 +15,49 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ### Added
 
+- **Compact directory view** on `/people/`. A two-button segmented
+  toggle in the toolbar (next to the country filter) switches the
+  member grid between the existing detailed view (photo + bio +
+  contact icons) and a new compact view (initials/photo + name +
+  affiliation + WG chips only, three across on a desktop), modelled
+  on the directory mock in the promotional poster. The preference
+  persists per visitor via `localStorage('netsec-directory-view')`.
+  Applied to all three locale variants of `people.html`.
+
+### Changed
+
+- **Documentation PDF re-ordered**: the changelog is now the last
+  appendix (Appendix D) and the promotional poster moves up to
+  Appendix C. Opening the PDF on its last page now lands the
+  reader on a per-version record of what changed and when, rather
+  than on the poster image. PDF bumped to v1.5.2.
+- **PDF poster image plate is now full-bleed** via a dedicated
+  `@page promo-plate { margin: 0 }` rule. Previously the A3
+  raster, rendered at 178mm content width inside a standard
+  `.page` container, came out ~252mm tall — just over the ~257mm
+  column height once the figure caption was included — and
+  overflowed to a successor page, leaving the parent page blank.
+  Visible to readers as two blank pages flanking the poster.
+  Fixed.
+
+### Fixed
+
+- **ORCID URL handling resilient to full-URL submissions.** The
+  Google Form's *ORCID* field asks for the 19-character ID
+  (`0000-0002-1825-0097`) but members frequently paste their
+  whole profile URL (`https://orcid.org/0000-0002-1825-0097`).
+  The previous render concatenated `'https://orcid.org/' + m.orcid`
+  unconditionally, producing a broken double-prefixed href.
+  `scripts/sync-bios.py` now normalises ORCID input at write time
+  via a new `normalize_orcid()` helper (strips
+  `https?://(sandbox\.)?orcid.org/`, drops trailing slash / query
+  / fragment, reinserts hyphens for the 16-digit-no-hyphen form,
+  asserts the canonical pattern, returns empty string otherwise).
+  `people.html` and its FR/DE variants apply the same defensive
+  normaliser at render time, so any historical bios.json record
+  with a pasted URL still renders correctly. 16-case smoke test
+  covers all common variants.
+
 - **Public press-kit page at `/press-kit.html`** (plus FR + DE
   beta variants). One canonical URL for outreach — the poster
   with print and card-size downloads, the NetSec / COST / EU

@@ -1,0 +1,4 @@
+
+# Tooling caches that should never be tracked
+.claude/
+scripts/__pycache__/
