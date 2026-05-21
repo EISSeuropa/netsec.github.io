@@ -13,7 +13,20 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+
+- **Public FAQ page at `/faq.html`** (plus FR + DE beta variants). 21 Q&As across six themed sections (About the Action / Joining & participating / Grants & funding / Meetings & reimbursement / Website & directory / For NetSec members) with a jump-to TOC and per-question deep-link anchors. Migrated from the members' Wiki so that academics, journalists, and prospective members — who will not naturally browse to GitHub — can find the answers on the public site. The Wiki FAQ page now stubs to this URL.
+- **Public glossary at `/glossary.html`** (plus FR + DE beta variants). ~35 COST and NetSec terms grouped into five sections (COST framework / NetSec structure / People / Grants & meetings / Documents & outputs) with per-term deep-link anchors. Same migration rationale as the FAQ.
+- **Discovery surface on the home page.** End of the About section gains a four-card "Find out more" grid pointing at the FAQ, the glossary, the press kit, and the members' Wiki — keeps the floating header at ten items while making the reference pages visible at a glance. Localised in EN/FR/DE.
+- **Wiki signposting on the home page.** New "For NetSec members" strip between Outputs and Contact with a tinted card and two CTAs ("Open the Wiki" / "e-COST portal"). MC reps and WG participants don't drift to GitHub on their own; this strip leads them there. Localised in EN/FR/DE.
+- **Footer references on every page.** FAQ and Glossary links inserted between *Licensing* and *Press kit* on every locale of every existing page (24 files).
+- **Sitemap entries** for `/faq.html` and `/glossary.html` in `sitemap.xml`; the in-page `/sitemap.html` "About & policies" branch lists them (plus the press kit which was previously missing) on EN / FR / DE.
+- **SEO metadata** (canonical, OG, Twitter Card, JSON-LD WebPage) for the six new pages via `scripts/inject-seo.py` — the `PAGES` list now includes `faq` and `glossary`.
+- **i18n drift tracking** for `faq.html` and `glossary.html` (FR + DE) in `data/i18n-state.json`.
+
+### Changed
+
+- **Wiki `FAQ.md` and `Glossary.md` are now short stubs** that point at the canonical public versions. Keeping the source of truth in one place stops the FAQ and Glossary from drifting between two surfaces.
 
 ## [1.2.0] · 2026-05-21
 

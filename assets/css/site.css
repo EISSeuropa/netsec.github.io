@@ -1599,3 +1599,113 @@ form button:disabled{opacity:.65;cursor:wait}
   font-size:.85rem;
   color:var(--muted) !important;
 }
+
+/* -------- About > Find out more cards --------
+   A four-card grid appended to the About section: short signposts
+   to the FAQ, glossary, press kit, and members' Wiki. Lighter
+   visual weight than .wg-card — these are reference shortcuts. */
+.find-out-more{
+  margin-top:48px;
+  padding-top:32px;
+  border-top:1px solid var(--line);
+}
+.find-out-more-head{
+  margin:0 0 18px;
+  font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);font-weight:700;text-align:center;
+}
+.find-out-more-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));
+  gap:16px;
+}
+.find-card{
+  padding:22px 22px 24px;
+  display:flex;flex-direction:column;gap:10px;
+  text-decoration:none;color:inherit;
+  transition:transform .2s var(--ease),background .2s var(--ease);
+}
+.find-card:hover{
+  transform:translateY(-2px);
+  background:rgba(255,255,255,.78);
+}
+.dark .find-card:hover{background:rgba(28,32,46,.78)}
+.find-card-icon{
+  width:36px;height:36px;border-radius:10px;display:grid;place-items:center;
+  background:linear-gradient(135deg,rgba(0,51,153,.10),rgba(10,132,255,.10));
+  color:var(--accent);
+}
+.find-card-icon svg{width:18px;height:18px}
+.find-card h3{
+  margin:0;font-size:1rem;letter-spacing:-.005em;
+  font-family:'Lexend','Inter',sans-serif;
+}
+.find-card p{margin:0;font-size:.86rem;color:var(--muted);line-height:1.5}
+
+/* -------- For NetSec members (Wiki signposting) --------
+   Sits between Outputs and Contact on the home page. Visually
+   distinct (lightly tinted) so members notice it on first scroll. */
+.members-strip{padding:60px 0}
+.members-strip .members-card{
+  padding:36px 40px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:24px;align-items:center;
+  background:
+    linear-gradient(135deg,rgba(0,51,153,.06),rgba(10,132,255,.04)),
+    var(--glass-bg-strong);
+  border:1px solid var(--line);
+  border-radius:16px;
+}
+.dark .members-strip .members-card{
+  background:
+    linear-gradient(135deg,rgba(10,132,255,.10),rgba(0,51,153,.05)),
+    rgba(28,32,46,.6);
+}
+.members-strip .eyebrow{
+  display:inline-block;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);font-weight:700;margin:0 0 8px;
+}
+.members-strip h2{
+  margin:0 0 .4rem;
+  font-size:clamp(1.3rem,2.2vw,1.6rem);
+  letter-spacing:-.015em;
+}
+.members-strip p{
+  margin:0;color:var(--ink-2);font-size:.97rem;line-height:1.55;
+  max-width:62ch;
+}
+.members-strip .members-actions{
+  display:flex;flex-direction:column;gap:8px;align-items:stretch;
+  min-width:200px;
+}
+.members-strip .members-actions a{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 18px;border-radius:10px;
+  font-size:.92rem;font-weight:600;text-decoration:none;
+  white-space:nowrap;
+  transition:transform .15s var(--ease),background .15s var(--ease);
+}
+.members-strip .members-actions a.primary{
+  background:var(--accent);color:#fff;
+}
+.members-strip .members-actions a.primary:hover{
+  background:var(--accent-2);transform:translateY(-1px);
+}
+.members-strip .members-actions a.secondary{
+  background:rgba(255,255,255,.6);color:var(--ink);
+  border:1px solid var(--line);
+}
+.dark .members-strip .members-actions a.secondary{background:rgba(255,255,255,.05);color:var(--ink)}
+.members-strip .members-actions a.secondary:hover{
+  background:rgba(255,255,255,.85);
+}
+.dark .members-strip .members-actions a.secondary:hover{background:rgba(255,255,255,.12)}
+@media (max-width: 700px){
+  .members-strip .members-card{
+    grid-template-columns:1fr;
+    padding:28px 24px;
+  }
+  .members-strip .members-actions{min-width:0}
+}
