@@ -1,0 +1,54 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//NetSec//CA24154 Events//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:NetSec — COST Action CA24154
+X-WR-CALDESC:Events from the NetSec COST Action (CA24154) — annual conferences\, training schools\, policy workshops\, MC plenaries. Authoritative source: https://netsec-cost.eu/#events
+X-WR-TIMEZONE:Europe/Stockholm
+REFRESH-INTERVAL;VALUE=DURATION:P7D
+X-PUBLISHED-TTL:P7D
+BEGIN:VTIMEZONE
+TZID:Europe/Stockholm
+X-LIC-LOCATION:Europe/Stockholm
+BEGIN:STANDARD
+DTSTART:19701025T030000
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19700329T020000
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:summer-school-2026@netsec-cost.eu
+DTSTAMP:20260522T000000Z
+DTSTART;TZID=Europe/Stockholm:20260609T090000
+DTEND;TZID=Europe/Stockholm:20260611T180000
+SUMMARY:NetSec Early-Career Scholars Summer School
+DESCRIPTION:Three days of training and mentoring for early-career researchers in European security — research presentations\, individualised feedback from senior scholars\, and structured mentorship. Open to PhD candidates and post-docs (within one year of defence) in strategic studies and international security\, as well as SWAMOS / Euro-SWAMOS alumni.\n\nScientific Coordinators: Dr Silvia D'Amato\, Prof Chiara Ruffa.\n\nFull details: https://eiss-europa.com/NetSecSchool.html
+LOCATION:Stockholm University\, Frescativägen 114 18\, Sweden
+URL;VALUE=URI:https://eiss-europa.com/NetSecSchool.html
+ORGANIZER;CN=NetSec Summer School:mailto:ecs.netsec@eiss-europa.com
+CATEGORIES:Training School,NetSec
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:european-security-conference-2026@netsec-cost.eu
+DTSTAMP:20260522T000000Z
+DTSTART;TZID=Europe/Stockholm:20260611T080000
+DTEND;TZID=Europe/Stockholm:20260612T200000
+SUMMARY:European Security Conference 2026
+DESCRIPTION:The flagship annual gathering of the NetSec community: an interdisciplinary conference on European defence and security open to academics\, policy-makers\, and practitioners. Held back-to-back with the Summer School so early-career scholars can join the wider conversation.\n\nChairpersons: Dr Julia Carver\, Dr Sanne Verschuren.\n\nProgramme and registration: https://indico.eiss-europa.com/event/22/
+LOCATION:Stockholm University\, Frescativägen\, 114 19 Stockholm\, Sweden
+URL;VALUE=URI:https://indico.eiss-europa.com/event/22/
+CATEGORIES:Annual Conference,NetSec
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

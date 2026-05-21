@@ -426,6 +426,29 @@ section{padding:80px 0;position:relative}
 }
 .event-card.featured .event-date{background:var(--accent);color:#fff}
 
+/* Subscribe-to-calendar affordance under the events grid.
+   Quiet by design — power users will recognise it, casual
+   visitors won't have it shouting at them. */
+.event-subscribe-line{
+  margin:24px 0 0;
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;
+  font-size:.9rem;color:var(--muted);
+}
+.event-subscribe{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 14px;border-radius:10px;
+  background:var(--glass-bg);border:1px solid var(--line);
+  color:var(--ink);font-weight:600;text-decoration:none;
+  transition:background .15s var(--ease),border-color .15s var(--ease);
+}
+.event-subscribe:hover{background:var(--glass-bg-strong);border-color:var(--accent)}
+.event-subscribe svg{width:16px;height:16px;color:var(--accent)}
+.event-subscribe-hint{flex:1;min-width:240px;line-height:1.45}
+.event-subscribe-hint a{color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--line)}
+.event-subscribe-hint a:hover{color:var(--accent);text-decoration-color:var(--accent)}
+.event-subscribe-hint code{font-size:.85em;background:rgba(0,0,0,.04);padding:1px 5px;border-radius:4px}
+.dark .event-subscribe-hint code{background:rgba(255,255,255,.06)}
+
 .output-list,.news-list{grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
 .output-kind{font-size:.75rem;font-weight:700;color:var(--accent-2);text-transform:uppercase;letter-spacing:.1em}
 .news-date{font-size:.82rem;color:var(--muted)}
