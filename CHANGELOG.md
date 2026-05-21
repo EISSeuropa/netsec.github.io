@@ -15,6 +15,26 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ### Added
 
+- **Guided five-step directory tour.** Companion to the welcome
+  strip. Two new entry points on `/people/`:
+  - A *Take the tour* button in the welcome-strip actions row
+    (next to *Got it*), so first-time visitors can opt into the
+    full walkthrough as their first action.
+  - A persistent **`?` button** in the toolbar (right of the
+    view-toggle), so returning visitors can re-open the tour at
+    any time even after dismissal.
+  The tour anchors coachmark tooltips to: search box → WG/MC
+  filter chips → country dropdown → view-mode toggle → join
+  CTA (with smooth-scroll into view). Keyboard navigable: ← / →
+  step, Enter advances, Esc skips. Focus trap on the tooltip's
+  Prev/Skip/Next buttons. Backdrop click also skips. Honours
+  `prefers-reduced-motion`. The completion / skip handler sets
+  the same `localStorage('netsec-directory-tour-seen')` flag as
+  the welcome strip, so a finished tour hides the strip
+  permanently. Engine lives in `assets/js/site.js` as
+  `window.netsecTour({steps, labels, onComplete})` — designed
+  to be reusable for other pages later. Localised in EN/FR/DE.
+
 - **First-visit orientation strip on the directory.** A dismissible
   banner above the `/people/` toolbar that introduces the directory
   to first-time visitors in three lines: it's open (not only MC),
@@ -22,10 +42,7 @@ appendix; see Appendix C of that PDF for documentation-pack history.
   form lives. One click to dismiss; preference persists in
   `localStorage('netsec-directory-tour-seen')`; returning visitors
   never see it. Localised in EN/FR/DE. Honours
-  `prefers-reduced-motion` (no fade animation). First of two PRs
-  for the directory tutorial UX; the second will add a `?` button
-  in the toolbar that re-opens the orientation as an opt-in
-  coachmark tour.
+  `prefers-reduced-motion` (no fade animation).
 
 - **Compact directory view** on `/people/`. A two-button segmented
   toggle in the toolbar (next to the country filter) switches the

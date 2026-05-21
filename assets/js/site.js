@@ -307,4 +307,237 @@
       }
     })();
   }
+
+  /* ─────────────────────────────────────────────────────────────
+     Guided tour engine — netsecTour({steps, labels, onComplete})
+     ─────────────────────────────────────────────────────────────
+     Coachmark-style walkthrough exposed as window.netsecTour so
+     page-specific scripts can configure their own tours. Currently
+     used by /people/ for the directory orientation; designed to be
+     reusable on other pages later.
+
+     Each `step` is { target, title, body, scroll? }:
+       - target : CSS selector for the element to spotlight.
+       - title  : short heading shown above the body.
+       - body   : one or two short sentences.
+       - scroll : optional bool. If true, the target is scrolled
+                  into view before the spotlight is positioned —
+                  needed for the "Join CTA" step which sits below
+                  the fold on most viewports.
+
+     `labels` carries the localised UI strings: next / prev / done
+     / skip / stepOf (e.g. "Step 2 of 5"). Tour module never
+     synthesises strings; everything visible comes from labels.
+
+     `onComplete` fires when the user finishes or skips — used by
+     the caller to set localStorage so the first-visit welcome
+     strip stays dismissed.
+
+     Behaviour:
+       - Backdrop dims the page (50% black). Spotlight is a glowing
+         ring around the target. Tooltip card carries the step
+         content + Prev / Next / Done buttons.
+       - Tooltip positions itself below the target by default, or
+         above when the target sits in the bottom half of the
+         viewport. On narrow viewports (< 640 px) it spans the
+         full width minus a 12 px margin.
+       - Focus trap: Tab cycles only inside the tooltip's buttons.
+       - Keyboard: Enter advances (matching the focused Next
+         button), Esc exits (treated as a skip), Left/Right arrows
+         step back/forward.
+       - prefers-reduced-motion: animations are disabled (the
+         transitions are pure CSS so this is handled in the stylesheet).
+       - On viewport resize, the spotlight + tooltip reposition.
+       - If a target selector resolves to nothing (e.g. the page
+         changed shape), that step is skipped silently and the tour
+         continues. */
+  function netsecTour(config) {
+    const steps  = (config && config.steps) || [];
+    const labels = Object.assign(
+      { next: 'Next', prev: 'Back', done: 'Done', skip: 'Skip',
+        stepOf: 'Step %1 of %2', closeLabel: 'Close tour' },
+      (config && config.labels) || {}
+    );
+    const onComplete = (config && config.onComplete) || function () {};
+
+    let idx = -1;
+    let backdrop = null, spotlight = null, tooltip = null;
+    let prevFocus = null;
+    let resizeBound = null;
+
+    function $el(tag, cls, html) {
+      const el = document.createElement(tag);
+      if (cls) el.className = cls;
+      if (html !== undefined) el.innerHTML = html;
+      return el;
+    }
+
+    function mount() {
+      backdrop  = $el('div', 'tour-backdrop');
+      spotlight = $el('div', 'tour-spotlight');
+      tooltip   = $el('div', 'tour-tooltip', '');
+      tooltip.setAttribute('role', 'dialog');
+      tooltip.setAttribute('aria-modal', 'true');
+      tooltip.setAttribute('aria-live', 'polite');
+      document.body.appendChild(backdrop);
+      document.body.appendChild(spotlight);
+      document.body.appendChild(tooltip);
+      // Click outside the tooltip (i.e. on the backdrop) is a skip.
+      backdrop.addEventListener('click', skip);
+    }
+
+    function unmount() {
+      [backdrop, spotlight, tooltip].forEach(n => n && n.remove());
+      backdrop = spotlight = tooltip = null;
+      document.removeEventListener('keydown', onKey);
+      window.removeEventListener('resize', resizeBound);
+      window.removeEventListener('scroll', resizeBound, true);
+      if (prevFocus && typeof prevFocus.focus === 'function') {
+        try { prevFocus.focus(); } catch (e) {}
+      }
+    }
+
+    function start() {
+      if (!steps.length) return;
+      prevFocus = document.activeElement;
+      mount();
+      resizeBound = () => positionForStep(steps[idx]);
+      window.addEventListener('resize', resizeBound);
+      // Use capture so we catch any container's scroll, not only window's.
+      window.addEventListener('scroll', resizeBound, true);
+      document.addEventListener('keydown', onKey);
+      idx = 0;
+      render();
+    }
+
+    function next() {
+      if (idx >= steps.length - 1) return done();
+      idx++;
+      render();
+    }
+    function prev() {
+      if (idx <= 0) return;
+      idx--;
+      render();
+    }
+    function done() { unmount(); onComplete('done'); }
+    function skip() { unmount(); onComplete('skip'); }
+
+    function onKey(e) {
+      if (e.key === 'Escape') { e.preventDefault(); return skip(); }
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault(); return next();
+      }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault(); return prev();
+      }
+      // Focus trap: keep Tab inside the tooltip's buttons.
+      if (e.key === 'Tab' && tooltip) {
+        const focusables = tooltip.querySelectorAll('button');
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last  = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
+      }
+    }
+
+    function render() {
+      const step = steps[idx];
+      if (!step) return done();
+      const target = document.querySelector(step.target);
+      if (!target) {
+        // Target missing — silently advance to keep the tour going.
+        if (idx < steps.length - 1) return next();
+        return done();
+      }
+      if (step.scroll) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Wait briefly for the scroll to settle before positioning.
+        setTimeout(() => positionForStep(step), 360);
+      } else {
+        positionForStep(step);
+      }
+      // Render the tooltip content. Buttons in DOM order: Prev → Skip → Next/Done.
+      const showPrev = idx > 0;
+      const isLast   = idx === steps.length - 1;
+      const stepLabel = labels.stepOf
+        .replace('%1', String(idx + 1)).replace('%2', String(steps.length));
+      tooltip.innerHTML = '';
+      const titleEl   = $el('h3', 'tour-title');
+      titleEl.textContent = step.title || '';
+      const bodyEl    = $el('p',  'tour-body');
+      bodyEl.textContent = step.body || '';
+      const footerEl  = $el('div', 'tour-footer');
+      const progress  = $el('span', 'tour-progress');
+      progress.textContent = stepLabel;
+      const actions   = $el('div', 'tour-actions');
+      if (showPrev) {
+        const b = $el('button', 'tour-btn tour-btn-ghost');
+        b.type = 'button'; b.textContent = labels.prev;
+        b.addEventListener('click', prev);
+        actions.appendChild(b);
+      }
+      const skipBtn = $el('button', 'tour-btn tour-btn-ghost');
+      skipBtn.type = 'button'; skipBtn.textContent = labels.skip;
+      skipBtn.addEventListener('click', skip);
+      actions.appendChild(skipBtn);
+      const nextBtn = $el('button', 'tour-btn tour-btn-primary');
+      nextBtn.type = 'button';
+      nextBtn.textContent = isLast ? labels.done : labels.next;
+      nextBtn.addEventListener('click', isLast ? done : next);
+      actions.appendChild(nextBtn);
+      footerEl.appendChild(progress);
+      footerEl.appendChild(actions);
+      tooltip.appendChild(titleEl);
+      tooltip.appendChild(bodyEl);
+      tooltip.appendChild(footerEl);
+      // Focus the Next/Done button so Enter advances.
+      requestAnimationFrame(() => nextBtn.focus());
+      // Reveal the backdrop on the first render (it mounts hidden).
+      backdrop.classList.add('is-visible');
+    }
+
+    function positionForStep(step) {
+      if (!step || !tooltip || !spotlight) return;
+      const target = document.querySelector(step.target);
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      // Spotlight is positioned in the viewport (fixed). We pad the
+      // target rectangle by 6 px so the ring sits just outside it.
+      const pad = 6;
+      spotlight.style.top    = (rect.top - pad) + 'px';
+      spotlight.style.left   = (rect.left - pad) + 'px';
+      spotlight.style.width  = (rect.width + pad * 2) + 'px';
+      spotlight.style.height = (rect.height + pad * 2) + 'px';
+
+      // Tooltip placement. Prefer below; flip to above if the
+      // target's bottom is in the lower half of the viewport.
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const ttRect = tooltip.getBoundingClientRect();
+      // We need to set position first, then measure — but the
+      // tooltip may not have a stable size yet. Use a sensible
+      // estimate (180px tall) for the first frame, then refine.
+      const ttH = ttRect.height || 180;
+      const ttW = Math.min(360, vw - 24);
+      tooltip.style.width = ttW + 'px';
+      const gap = 14;
+      const placeBelow = (rect.bottom + ttH + gap) < vh - 8;
+      let top  = placeBelow ? (rect.bottom + gap) : (rect.top - ttH - gap);
+      // Clamp into viewport vertically.
+      top = Math.max(8, Math.min(top, vh - ttH - 8));
+      // Horizontally: try to centre on the target, then clamp.
+      let left = rect.left + (rect.width / 2) - (ttW / 2);
+      left = Math.max(12, Math.min(left, vw - ttW - 12));
+      tooltip.style.top  = top + 'px';
+      tooltip.style.left = left + 'px';
+    }
+
+    return { start };
+  }
+  window.netsecTour = netsecTour;
 })();
