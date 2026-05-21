@@ -61,10 +61,12 @@
   .grants-page h1{font-size:clamp(2.4rem,5vw,3.6rem);margin:0 0 1rem;text-align:center;background:linear-gradient(180deg,var(--ink) 0%,#3a4a6b 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
   .dark .grants-page h1{background:linear-gradient(180deg,#f4f8ff 0%,#aeb7d6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
   .grants-page .lede{max-width:64ch;margin:0 auto 1.2rem;font-size:1.05rem;text-align:center;color:var(--ink-2)}
-  .grants-portal-note{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:18px 22px;margin:24px auto 40px;max-width:760px;border-radius:14px;background:linear-gradient(135deg,rgba(0,51,153,.06),rgba(10,132,255,.04));border:1px solid rgba(10,132,255,.20)}
+  .grants-portal-note{display:flex;flex-wrap:wrap;align-items:flex-start;gap:14px;padding:18px 22px;margin:24px auto 40px;max-width:760px;border-radius:14px;background:linear-gradient(135deg,rgba(0,51,153,.06),rgba(10,132,255,.04));border:1px solid rgba(10,132,255,.20)}
   .grants-portal-note .icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
-  .grants-portal-note p{margin:0;font-size:.92rem;color:var(--ink-2);flex:1 1 200px}
+  .grants-portal-note > div{flex:1 1 200px}
+  .grants-portal-note p{font-size:.92rem;color:var(--ink-2);line-height:1.55}
   .grants-portal-note strong{color:var(--ink)}
+  .grant-visibility{margin:.5em 0 0;font-size:.85rem;color:var(--muted);line-height:1.45;padding-left:20px}
   .grants-list{display:flex;flex-direction:column;gap:18px;margin:0 0 60px}
   .grant-card{padding:28px 32px}
   .grant-card .grant-head{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:14px}
@@ -238,9 +240,17 @@
       <span class="icon" aria-hidden="true">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
       </span>
-      <p>
-        <strong>Alle Anträge werden über e-COST gestellt</strong>, das offizielle Portal der COST Association — nicht auf dieser Seite. Jede Förderkarte unten verweist auf die richtige Stelle auf <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-services.cost.eu</a>. Melden Sie sich mit Ihrem e-COST-Konto an (kostenlos zu erstellen) und wählen Sie COST-Aktion CA24154 (NetSec).
-      </p>
+      <div>
+        <p style="margin:0 0 .5em">
+          <strong>Alle Anträge werden über e-COST gestellt</strong>, das offizielle Portal der COST Association — nicht auf dieser Seite. Jede Förderkarte unten verweist auf die richtige Stelle auf <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-services.cost.eu</a>. Melden Sie sich mit Ihrem e-COST-Konto an (kostenlos zu erstellen) und wählen Sie COST-Aktion CA24154 (NetSec).
+        </p>
+        <p style="margin:0 0 .5em">
+          Das e-COST-Portal ist eine allgemeine COST-Oberfläche und <strong>zeigt jeder antragstellenden Person genau diejenigen Förderungen an, für die ihr Profil sie berechtigt</strong>. Ein ITC-Konferenzzuschuss erscheint also nur Personen, die an einem Inclusiveness Target Country affiliiert sind; ein Young Researcher and Innovator Conference Grant erscheint nur Antragstellenden unter 40. Wenn eines der unten gelisteten Förderschemen für Sie im Portal nicht erscheint, sind Sie laut Profil nicht berechtigt — das ist Absicht, kein Fehler.
+        </p>
+        <p style="margin:0">
+          Das Portal kann zudem Förderungen aus anderen COST-Programmen anzeigen, die NetSec nicht finanziert. <strong>Nur die fünf auf dieser Seite dokumentierten Förderschemen sind im NetSec-Arbeits- und Budgetplan (WBP) enthalten</strong>; Anträge für andere Förderungen werden vom Grant Awarding Coordinator abgelehnt. Im Zweifelsfall vor dem Antrag nachfragen.
+        </p>
+      </div>
     </div>
 
     <h2 class="visually-hidden" style="position:absolute;left:-9999px">Förderarten</h2>
@@ -332,6 +342,7 @@
             <li>An ein teilnehmendes Land angegliedert.</li>
             <li>Keine Überschneidung mit einer anderen COST-Förderung oder Sitzung für dieselbe Aktivität.</li>
           </ul>
+          <p class="grant-visibility"><em>Im e-COST-Portal wird dieser Antrag nur Antragstellenden unter 40 angezeigt.</em></p>
         </div>
         <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=YRIG" target="_blank" rel="noopener">
           Auf e-COST beantragen
@@ -363,6 +374,7 @@
             <li>Angenommen, einen <strong>Vortrag über die eigene Arbeit</strong> im Rahmen der Aktion zu halten.</li>
             <li>Keine Überschneidung mit einer anderen COST-Förderung oder Sitzung für dieselbe Aktivität.</li>
           </ul>
+          <p class="grant-visibility"><em>Im e-COST-Portal wird dieser Antrag nur Personen mit Anbindung an einen ITC angezeigt.</em></p>
         </div>
         <a class="grant-cta" href="https://e-services.cost.eu/activity/grants/add?type=ITCCG" target="_blank" rel="noopener">
           Auf e-COST beantragen

@@ -121,6 +121,16 @@ flowchart TD
   more / Show less" toggle.
 - **Awarding-process timeline** on `grants.html` — numbered nodes on
   a gradient rail with Before / During / After pills.
+- **e-COST portal model** spelt out on `grants.html`: the portal is
+  a single general COST surface that NetSec cannot customise. It
+  filters visibility by applicant profile (ITC only to ITC
+  affiliates, YRIG only to under-40s), so an applicant might not
+  see every scheme listed. The portal can also surface grant types
+  from other COST programmes that NetSec hasn't budgeted for;
+  applications for anything outside the Work and Budget Plan are
+  rejected by the Grant Awarding Coordinator. The Grants page sets
+  expectations openly so members don't apply for what we can't
+  fund.
 
 ### Operator-facing
 
