@@ -517,12 +517,41 @@
         roleEl.classList.add('is-soft');
       }
       // Affiliation line: optional position prefix (e.g. PhD candidate)
-      // + institution + flag + country
+      // + institution + flag + country.
+      //
+      // We render TWO parallel versions inside this line so the
+      // compact view can show a tighter form without re-rendering
+      // the card. Both versions sit in the DOM; CSS picks which is
+      // visible based on the .is-compact class on the grid:
+      //
+      //   .aff-full    — position · affiliation · country  (detailed)
+      //   .aff-compact — affiliation only                  (compact)
+      //
+      // The flag stays in both modes — it conveys country
+      // implicitly so we drop the country name from the compact
+      // form to save the row.
       const aff = node.querySelector('.member-affiliation');
       const affParts = [m.position, m.affiliation, m.country].filter(Boolean);
       if (affParts.length) {
-        const flag = m.country_code ? `<img class="member-flag" src="https://flagcdn.com/h20/${m.country_code}.png" alt="" loading="lazy"> ` : '';
-        aff.innerHTML = flag + affParts.join(' · ');
+        aff.innerHTML = '';
+        if (m.country_code) {
+          const flag = document.createElement('img');
+          flag.className = 'member-flag';
+          flag.src = `https://flagcdn.com/h20/${m.country_code}.png`;
+          flag.alt = ''; flag.loading = 'lazy';
+          aff.appendChild(flag);
+          aff.appendChild(document.createTextNode(' '));
+        }
+        const full = document.createElement('span');
+        full.className = 'aff-full';
+        full.textContent = affParts.join(' · ');
+        aff.appendChild(full);
+        if (m.affiliation) {
+          const compact = document.createElement('span');
+          compact.className = 'aff-compact';
+          compact.textContent = m.affiliation;
+          aff.appendChild(compact);
+        }
       } else {
         aff.remove();
       }

@@ -467,8 +467,25 @@
       const aff = node.querySelector('.member-affiliation');
       const affParts = [m.position, m.affiliation, m.country].filter(Boolean);
       if (affParts.length) {
-        const flag = m.country_code ? `<img class="member-flag" src="https://flagcdn.com/h20/${m.country_code}.png" alt="" loading="lazy"> ` : '';
-        aff.innerHTML = flag + affParts.join(' · ');
+        aff.innerHTML = '';
+        if (m.country_code) {
+          const flag = document.createElement('img');
+          flag.className = 'member-flag';
+          flag.src = `https://flagcdn.com/h20/${m.country_code}.png`;
+          flag.alt = ''; flag.loading = 'lazy';
+          aff.appendChild(flag);
+          aff.appendChild(document.createTextNode(' '));
+        }
+        const full = document.createElement('span');
+        full.className = 'aff-full';
+        full.textContent = affParts.join(' · ');
+        aff.appendChild(full);
+        if (m.affiliation) {
+          const compact = document.createElement('span');
+          compact.className = 'aff-compact';
+          compact.textContent = m.affiliation;
+          aff.appendChild(compact);
+        }
       } else {
         aff.remove();
       }
