@@ -13,6 +13,10 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
+### Added
+
+- **Public roadmap page at `/roadmap.html`** (plus FR + DE). A visual, audience-facing companion to the internal `docs/roadmap-2026.md` working document. Hero with last-updated stamp, a four-pill colour legend (*Shipped* — green, *In progress* — blue, *Planned* — purple, *Under watch* — amber), and a vertical timeline grouped by quarter (Q2 / Q3 / Q4). Twelve dated entries interleave shipped releases (v1.0.0 – v1.3.0), the in-progress v1.4.0, the planned releases (v1.5.0 – v1.8.0), and Action milestones (Stockholm Conference + Summer School, inaugural MC plenary, Year-1 anniversary). Each entry is a card with the status pill, the date, a one-line title, a short description, and — for shipped releases — a link to the GitHub Release notes. An *Under watch* section at the foot lists four items that are tracked but not on the timeline yet (sticky directory side panel, member self-edit, newsletter, result-type filter chips), each with the explicit trigger that would move it onto the timeline. A footnote points GitHub-literate readers at the full working doc. Linked from every page footer (EN / FR / DE) between *Glossary* and *Members' Wiki*, listed in the sitemap under *About & policies*, indexed by Pagefind. Manual translations only (no machine translation).
+
 ### Fixed
 
 - ***Meet the team* link on the home-page news block was dead** (it pointed at `#committee`, which no longer exists on the home page after the IA pass). Now points at `about.html#leadership` (locale-aware). EN / FR / DE.

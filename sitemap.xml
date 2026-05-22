@@ -160,4 +160,15 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/news.html"/>
   </url>
 
+  <url>
+    <loc>https://netsec-cost.eu/roadmap.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://netsec-cost.eu/roadmap.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/roadmap.fr.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://netsec-cost.eu/roadmap.de.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/roadmap.html"/>
+  </url>
+
 </urlset>
