@@ -779,27 +779,53 @@
 
     // After the cards are in the DOM, detect which bios overflow the
     // four-line clamp and add a "Show more"/"Show less" toggle to those.
-    // requestAnimationFrame ensures layout has happened so scrollHeight
-    // and clientHeight are populated.
-    requestAnimationFrame(() => {
-      grid.querySelectorAll('.member-bio').forEach(bio => {
-        if (bio.classList.contains('is-pending')) return;
-        if (bio.nextElementSibling && bio.nextElementSibling.classList.contains('member-bio-toggle')) return;
-        if (bio.scrollHeight - bio.clientHeight < 2) return;  // fits within clamp
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'member-bio-toggle';
-        btn.setAttribute('aria-expanded', 'false');
-        btn.innerHTML = '<span class="lbl">' + window.netsecT('Show more') + '</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
-        btn.addEventListener('click', () => {
-          const expanded = bio.classList.toggle('is-expanded');
-          btn.classList.toggle('is-expanded', expanded);
-          btn.setAttribute('aria-expanded', expanded);
-          btn.querySelector('.lbl').textContent = window.netsecT(expanded ? 'Show less' : 'Show more');
-        });
-        bio.insertAdjacentElement('afterend', btn);
+    //
+    // Previously this check was wrapped in requestAnimationFrame on the
+    // theory that we needed to wait for layout before reading
+    // scrollHeight. That turned out to be unnecessary AND unreliable:
+    // reading scrollHeight already forces a synchronous layout in every
+    // modern browser, and the rAF callback was observed to fire too
+    // early in some scenarios (returning scrollHeight == clientHeight
+    // because the line-clamp hadn't settled), or not fire at all on
+    // tabs that lost focus during data fetch. The symptom in production
+    // was that long bios stayed clamped to four lines with no expand
+    // affordance, so the user could never read the full text.
+    //
+    // The synchronous version works for the same reason rAF was
+    // *thought* to be needed: scrollHeight access flushes layout. We
+    // also observe each newly-rendered bio with a ResizeObserver so
+    // that any later metric change (font swap, theme toggle, viewport
+    // resize) re-runs the overflow check.
+    function tryInsertBioToggle(bio) {
+      if (!bio || bio.classList.contains('is-pending')) return;
+      if (bio.nextElementSibling && bio.nextElementSibling.classList.contains('member-bio-toggle')) return;
+      if (bio.scrollHeight - bio.clientHeight < 2) return;  // fits within clamp
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'member-bio-toggle';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.innerHTML = '<span class="lbl">' + window.netsecT('Show more') + '</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
+      btn.addEventListener('click', () => {
+        const expanded = bio.classList.toggle('is-expanded');
+        btn.classList.toggle('is-expanded', expanded);
+        btn.setAttribute('aria-expanded', expanded);
+        btn.querySelector('.lbl').textContent = window.netsecT(expanded ? 'Show less' : 'Show more');
       });
-    });
+      bio.insertAdjacentElement('afterend', btn);
+    }
+    grid.querySelectorAll('.member-bio').forEach(tryInsertBioToggle);
+    // ResizeObserver belt-and-braces: handles the rare case where the
+    // bio's clamped height isn't final at sync time (web-font swap,
+    // user changes zoom, etc.). The observer fires once per bio after
+    // its first layout box, then on every subsequent box change.
+    if (typeof ResizeObserver === 'function') {
+      if (!window.__bioResizeObserver) {
+        window.__bioResizeObserver = new ResizeObserver(entries => {
+          entries.forEach(entry => tryInsertBioToggle(entry.target));
+        });
+      }
+      grid.querySelectorAll('.member-bio').forEach(b => window.__bioResizeObserver.observe(b));
+    }
   }
 
   // Filter handlers
