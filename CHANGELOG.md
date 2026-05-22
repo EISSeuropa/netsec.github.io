@@ -83,6 +83,15 @@ audit trail. Same content, terser.
    `[Unreleased]` body verbatim** into the GitHub Release notes.
    Eyeball the body before confirming the script's prompt.
 
+6. **No hard wraps in prose.** Each prose paragraph, blockquote lede,
+   and multi-line bullet must be a single source line — do not break
+   mid-sentence with a `\n`. GitHub Releases renders markdown with the
+   *break-on-newline* GFM variant; every soft `\n` becomes a `<br>`
+   and forces the prose to render narrow on the Releases page (even
+   though it looks flowing on the `github.com` file view). One long
+   line per paragraph keeps both renderings correct. Code fences,
+   headings, blank lines, and the compare-link footer are unaffected.
+
 v1.4.0 was the first release cut under this rule; v1.0.0 → v1.3.0 were
 retrofitted to match. `docs/admin-guide.md` repeats this rule for the
 maintainer-facing audience.
