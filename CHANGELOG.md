@@ -13,6 +13,10 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.4.0] · 2026-05-22 — Site-wide search, infrastructure and directory improvements
+
 ### Fixed
 
 - **Beta-translation ribbon was missing from every recently-added FR/DE page** — `about.{fr,de}.html`, `outputs.{fr,de}.html`, `news.{fr,de}.html`, `faq.{fr,de}.html`, `glossary.{fr,de}.html`, `press-kit.{fr,de}.html`, `roadmap.{fr,de}.html`. The "Traduction automatique — la version anglaise fait foi" / "Maschinell übersetzt — die englische Fassung ist verbindlich" strip at the top of every non-authoritative translation flags the page as machine-assisted and links to the EN sibling. New pages had been added in the IA pass + roadmap PRs without picking up the two-part recipe (`data-i18n-status="beta"` on `<html>`, plus the ribbon `<div>` right after `<body>`). All 14 missing page-locales fixed in one pass; the "View in English" link on each points at its EN sibling (e.g. `roadmap.fr.html` → `roadmap.html`, not the home page).
@@ -280,7 +284,8 @@ reuse-friendly and attributed in the footer of every page.
 - **GitHub org:** `EISSeuropa`. Two-factor authentication enforced
   at the org level.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.0.0...v1.1.0
