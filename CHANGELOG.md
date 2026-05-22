@@ -13,8 +13,15 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
+### Fixed
+
+- ***Meet the team* link on the home-page news block was dead** (it pointed at `#committee`, which no longer exists on the home page after the IA pass). Now points at `about.html#leadership` (locale-aware). EN / FR / DE.
+- **Gantt chart misaligned on mobile**: Year 1 Q4 visually bled into Year 2 because the year row's `1fr` columns had no minimum, while the quarter row enforced `minmax(46px, 1fr)`. At narrow widths the year columns collapsed below 4 × 46 px and the column borders fell out of sync with the quarter borders below. Year row now uses `repeat(4, minmax(184px, 1fr))` — every year column is guaranteed to be exactly 4 × quarter width. The Gantt's overall `min-width` raised from 780 px to 916 px so the whole grid is wide enough by default.
+- **`.mc-subhead` section dividers leaking onto a second line on narrow screens**: the heading text + two 48 px separator lines + 14 px margins ran past iPhone-class viewport widths and the trailing line dropped to its own row. Switched the layout from `inline-block` + `vertical-align` to flexbox; pseudo-elements now use `flex: 0 0 48px` so they can't wrap. Shrinks the separator widths and text further at `≤ 540 px` for clean rendering on small phones.
+
 ### Added
 
+- **FAQ + Glossary teaser sections on the About page** (EN / FR / DE). Five hand-picked frequently-asked questions and eight core glossary terms surfaced directly on `/about.html`, each linking to the dedicated `/faq.html` or `/glossary.html` deep-link anchor; *View all 21 FAQ entries* / *Browse the full glossary* CTAs at the foot of each section. The About TOC gains FAQ + Glossary entries between *Leadership* and *Relationship with EISS*. Picks: `what-is-netsec`, `who-runs`, `how-join`, `what-grants`, `members-area` (FAQ); `action`, `cost`, `ca24154`, `mou`, `mc-member`, `eci`, `stsm`, `wg` (Glossary). Translations come for free — content is extracted from the existing localised FAQ + Glossary pages at build time.
 - **New `/about.html` page** (plus FR + DE) bringing together the *Action* narrative, the deliverables Gantt, the *Leadership* grids (Action Leadership + WG Leaders + WG Co-leaders + the *MC by country* collapsible), and a *Relationship with EISS* section currently a marked placeholder pending content from the Action Chair + WG4 lead. The home-page *About* anchor still exists for the short intro; the dedicated page is for the full story.
 - **New `/outputs.html` and `/news.html`** stub pages (each in EN / FR / DE) — `/outputs.html` shows a *First outputs expected October 2026* status banner with a deep-link to the deliverables timeline on `/about.html`; `/news.html` is the future home for older news entries as the home-page block grows past four cards. Both fully indexable by search and listed in `sitemap.xml`.
 - **Wiki link in the footer** on every page (EN / FR / DE) — *Glossary · Members' Wiki · Press kit*. Compensates for removing the *Members' Wiki* card from the home-page *Find out more* grid so the strip below now owns that signpost cleanly.

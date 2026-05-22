@@ -410,15 +410,25 @@ section{padding:80px 0;position:relative}
 .country-card .wg-chip{
   font-size:.6rem;padding:2px 6px;letter-spacing:.04em;
 }
+/* Flex layout (rather than inline-block + vertical-align) so the
+   pseudo-element separator lines never wrap onto a second line on
+   narrow screens. Previously a long heading like "Working Group
+   Leadership" plus its two 48 px lines + 14 px margins would
+   exceed iPhone-class widths and the trailing line would drop. */
 .mc-subhead{
+  display:flex;align-items:center;justify-content:center;gap:14px;
   font-family:'Lexend','Inter',sans-serif;font-weight:600;font-size:.78rem;letter-spacing:.18em;
   text-transform:uppercase;color:var(--muted);text-align:center;
-  margin:48px 0 22px;position:relative;
+  margin:48px 0 22px;
 }
 .mc-subhead:first-of-type{margin-top:8px}
 .mc-subhead::before,.mc-subhead::after{
-  content:'';display:inline-block;width:48px;height:1px;background:var(--line);
-  vertical-align:middle;margin:0 14px;
+  content:'';height:1px;background:var(--line);
+  flex:0 0 48px;       /* fixed 48 px each; flex item can't wrap */
+}
+@media (max-width: 540px){
+  .mc-subhead{font-size:.7rem;letter-spacing:.12em;gap:10px}
+  .mc-subhead::before,.mc-subhead::after{flex:0 0 24px}
 }
 
 /* -------- Events / Outputs / News timeline + cards -------- */
@@ -902,15 +912,22 @@ form button:disabled{opacity:.65;cursor:wait}
   .details-grid{grid-template-columns:repeat(2,1fr);gap:8px}
   .details-grid .item{border-right:0;border-bottom:1px solid var(--line);padding:14px}
   .details-grid .item:nth-child(2n),.details-grid .item:last-child{border-bottom:0}
-  /* Gantt mobile tweaks */
+  /* Gantt mobile tweaks.
+     Year row uses `minmax(184px, 1fr)` so each year column is
+     guaranteed to be exactly 4 × quarter min (46 × 4 = 184). Without
+     this, the year row's 1fr cols would shrink below 184 px while
+     the quarter row enforced its minmax(46, 1fr) — Year 1 Q4 would
+     visibly bleed into the Year 2 column at narrow widths. */
   .scroll-hint{display:block}
-  .g-row-y{grid-template-columns:180px 1fr 1fr 1fr 1fr}
+  .g-row-y{grid-template-columns:180px repeat(4,minmax(184px,1fr))}
   .g-row-q,.g-row-d{grid-template-columns:180px repeat(16,minmax(46px,1fr))}
   .g-label{padding:10px 12px}
   .g-label .d-name{font-size:.78rem}
   .g-year{font-size:.78rem;padding:10px 4px}
   .g-year .y-sub{display:none}
-  .gantt{min-width:780px}
+  /* Match the year row's enforced min so the whole gantt is at least
+     wide enough to keep year + quarter grids aligned. */
+  .gantt{min-width:916px}
   .milestone{font-size:.62rem;padding:4px 6px}
 }
 @media (prefers-reduced-motion:reduce){
