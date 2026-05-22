@@ -318,6 +318,9 @@
       errAbsent: 'ESSC 2026 isn’t published yet.',
       errEmpty:  'The programme isn’t published yet.',
       readItOn:  'Read it on',
+      viewFullProfile: 'View full profile →',
+      memberCardLabel: 'Member preview',
+      closeCard: 'Close preview',
     },
     fr: {
       day: 'Jour',
@@ -333,6 +336,9 @@
       errAbsent: 'L’ESSC 2026 n’est pas encore publiée.',
       errEmpty:  'Le programme n’est pas encore publié.',
       readItOn:  'Voir sur',
+      viewFullProfile: 'Voir le profil complet →',
+      memberCardLabel: 'Aperçu du membre',
+      closeCard: 'Fermer l’aperçu',
     },
     de: {
       day: 'Tag',
@@ -348,6 +354,9 @@
       errAbsent: 'ESSC 2026 ist noch nicht veröffentlicht.',
       errEmpty:  'Das Programm ist noch nicht veröffentlicht.',
       readItOn:  'Lesen auf',
+      viewFullProfile: 'Vollständiges Profil ansehen →',
+      memberCardLabel: 'Mitgliedsvorschau',
+      closeCard: 'Vorschau schließen',
     },
   };
   const lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
@@ -456,15 +465,17 @@
     // nicknames, married/maiden, transliteration variants — anything
     // the algorithm can't see). Later aliases don't overwrite an
     // earlier match for the same key, so two members can't shadow
-    // each other through colliding aliases by accident.
+    // each other through colliding aliases by accident. The value
+    // stored is the full bios record so the on-hover member card has
+    // every field it needs without a second fetch.
     const map = new Map();
-    const add = (rawName, id) => {
+    const add = (rawName, member) => {
       const k = nameKey(rawName);
-      if (k && id && !map.has(k)) map.set(k, id);
+      if (k && member && member.id && !map.has(k)) map.set(k, member);
     };
     for (const m of (bios && bios.members || [])) {
-      add(m.name, m.id);
-      for (const alias of (m.name_aliases || [])) add(alias, m.id);
+      add(m.name, m);
+      for (const alias of (m.name_aliases || [])) add(alias, m);
     }
     return map;
   }
@@ -712,11 +723,23 @@
     people.forEach((p, i) => {
       if (i > 0) node.appendChild(document.createTextNode(', '));
       const k = nameKey(p.name);
-      const slug = k && memberLookup.get(k);
-      if (k && !slug) unmatchedSpeakers.add(p.name);
-      const nameNode = slug
-        ? el('a', { class: 'name', href: peopleUrl + '#' + slug }, p.name || '—')
-        : el('span', { class: 'name' }, p.name || '—');
+      const member = k && memberLookup.get(k);
+      if (k && !member) unmatchedSpeakers.add(p.name);
+      let nameNode;
+      if (member) {
+        // The anchor is a real link to /people.html#<slug>. Default
+        // left-click is intercepted to open the card; modifier-click
+        // and middle-click pass through to native behaviour so
+        // "open in new tab" still works.
+        nameNode = el('a', {
+          class: 'name has-member-card',
+          href: peopleUrl + '#' + member.id,
+          'aria-haspopup': 'dialog',
+        }, p.name || '—');
+        nameNode.addEventListener('click', (e) => openMemberCard(e, nameNode, member));
+      } else {
+        nameNode = el('span', { class: 'name' }, p.name || '—');
+      }
       node.appendChild(el('span', { class: 'programme-person' },
         nameNode,
         p.affiliation ? el('span', { class: 'aff' }, ' (' + p.affiliation + ')') : null,
@@ -732,6 +755,108 @@
       `[essc] ${unmatchedSpeakers.size} speakers didn't match a member: ` +
       [...unmatchedSpeakers].sort().join(', ')
     );
+  }
+
+  // ── member card popover ──────────────────────────────────────
+  // One <div popover="auto"> appended to <body>, reused across all
+  // member-linked names. The browser's Popover API gives us light-
+  // dismiss (click outside) and Escape-to-close for free, plus
+  // top-layer rendering so the card escapes any clipped ancestor.
+  // We position it ourselves with getBoundingClientRect so it works
+  // in every browser that ships popover (no dependency on CSS
+  // anchor positioning, which lags in Firefox as of this writing).
+  let cardEl = null;
+  function ensureMemberCard() {
+    if (cardEl) return cardEl;
+    if (typeof HTMLElement.prototype.showPopover !== 'function') {
+      // No Popover API — graceful degrade: leave the anchor as a
+      // plain link to /people.html#slug and don't intercept clicks.
+      return null;
+    }
+    cardEl = el('div', {
+      id: 'essc-member-card',
+      class: 'member-card',
+      popover: 'auto',
+      role: 'dialog',
+      'aria-labelledby': 'essc-member-card-name',
+      'aria-label': t.memberCardLabel,
+    });
+    document.body.appendChild(cardEl);
+    return cardEl;
+  }
+
+  function populateMemberCard(card, member) {
+    card.innerHTML = '';
+    const inner = el('div', { class: 'member-card-inner' });
+    if (member.photo) {
+      inner.appendChild(el('img', {
+        class: 'member-card-photo',
+        src: member.photo,
+        alt: '',
+        loading: 'lazy',
+        decoding: 'async',
+      }));
+    } else {
+      inner.appendChild(el('div', { class: 'member-card-photo member-card-photo-placeholder', 'aria-hidden': 'true' }));
+    }
+    const text = el('div', { class: 'member-card-text' });
+    text.appendChild(el('p', { class: 'member-card-name', id: 'essc-member-card-name' }, member.name || ''));
+    if (member.position)    text.appendChild(el('p', { class: 'member-card-role' }, member.position));
+    if (member.affiliation) text.appendChild(el('p', { class: 'member-card-aff' },  member.affiliation));
+    if (member.country) {
+      const c = el('p', { class: 'member-card-country' });
+      if (member.country_code) {
+        c.appendChild(el('img', {
+          src: `https://flagcdn.com/h20/${member.country_code}.png`,
+          alt: '', width: '18', height: '12', loading: 'lazy',
+        }));
+      }
+      c.appendChild(document.createTextNode(member.country));
+      text.appendChild(c);
+    }
+    if (member.bio) {
+      text.appendChild(el('p', { class: 'member-card-bio' }, member.bio));
+    }
+    inner.appendChild(text);
+    card.appendChild(inner);
+
+    const footer = el('div', { class: 'member-card-footer' });
+    footer.appendChild(el('a', { href: peopleUrl + '#' + member.id }, t.viewFullProfile));
+    card.appendChild(footer);
+  }
+
+  function positionMemberCard(card, anchor) {
+    // Pre-position to anchor's neighbourhood so the first paint after
+    // showPopover is in roughly the right place; refine after we can
+    // measure the real card dimensions.
+    const ar = anchor.getBoundingClientRect();
+    card.style.left = ar.left + 'px';
+    card.style.top  = (ar.bottom + 6) + 'px';
+    card.showPopover();
+    const cr = card.getBoundingClientRect();
+    const margin = 8;
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+    let left = ar.left + ar.width / 2 - cr.width / 2;
+    left = Math.max(margin, Math.min(left, vw - cr.width - margin));
+    let top = ar.bottom + 6;
+    if (top + cr.height > vh - margin && ar.top - cr.height - 6 >= margin) {
+      top = ar.top - cr.height - 6;
+    }
+    card.style.left = left + 'px';
+    card.style.top  = top  + 'px';
+  }
+
+  function openMemberCard(e, anchor, member) {
+    // Modifier or non-primary clicks fall through to native link
+    // behaviour (open in new tab, etc.).
+    if (e.defaultPrevented) return;
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const card = ensureMemberCard();
+    if (!card) return; // Popover unsupported; let the link navigate.
+    e.preventDefault();
+    populateMemberCard(card, member);
+    positionMemberCard(card, anchor);
   }
 })();
 </script>

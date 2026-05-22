@@ -2715,6 +2715,108 @@ body.search-open{overflow:hidden}
   opacity:1;
 }
 
+/* Member preview card — opened via the Popover API when a reader
+   clicks a speaker name that resolves to a NetSec member. One card
+   element is built lazily, attached to <body>, and reused for every
+   member; positionMemberCard() in the renderer sets left/top after
+   each show. Top-layer rendering means it isn't clipped by any
+   programme-grid overflow. */
+.member-card{
+  position:fixed;
+  margin:0;
+  padding:0;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--surface);
+  color:var(--ink);
+  width:min(360px, calc(100vw - 16px));
+  box-shadow:0 12px 36px rgba(0,0,0,.18);
+  font-size:.9rem;
+  line-height:1.4;
+  inset:auto;        /* override default popover centering */
+  overflow:hidden;
+}
+@media (prefers-color-scheme: dark){
+  .member-card{
+    box-shadow:0 12px 36px rgba(0,0,0,.5);
+  }
+}
+.member-card-inner{
+  display:grid;
+  grid-template-columns:64px 1fr;
+  gap:14px;
+  padding:14px 16px;
+  align-items:start;
+}
+.member-card-photo{
+  width:64px;height:64px;
+  border-radius:50%;
+  object-fit:cover;
+  background:var(--surface-2);
+  display:block;
+}
+.member-card-photo-placeholder{
+  /* Same dimensions as the photo so the grid doesn't reflow when the
+     member has no photo yet. */
+  background:var(--surface-2);
+}
+.member-card-text{min-width:0}
+.member-card-name{
+  font-weight:600;
+  font-size:1rem;
+  margin:0 0 2px;
+  color:var(--ink);
+}
+.member-card-role{
+  margin:0 0 2px;
+  color:var(--muted);
+  font-size:.85rem;
+}
+.member-card-aff{
+  margin:0 0 6px;
+  font-size:.88rem;
+  color:var(--ink-2);
+}
+.member-card-country{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin:0;
+  color:var(--muted);
+  font-size:.82rem;
+}
+.member-card-country img{
+  width:18px;height:auto;
+  border-radius:2px;
+  display:inline-block;
+}
+.member-card-bio{
+  margin:10px 0 0;
+  font-size:.85rem;
+  color:var(--ink-2);
+  /* Clamp to three lines so the card never gets taller than a phone
+     keyboard's worth of vertical space. */
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.member-card-footer{
+  border-top:1px solid var(--border);
+  padding:10px 16px;
+  text-align:right;
+  background:var(--surface-2);
+}
+.member-card-footer a{
+  font-size:.85rem;
+  font-weight:500;
+}
+@media print{
+  /* The card is interactive chrome; never relevant on paper. */
+  .member-card{display:none !important}
+}
+
 /* Contributions <details> — only on session cards that have papers. */
 .programme-contribs{
   margin-top:.8rem;
