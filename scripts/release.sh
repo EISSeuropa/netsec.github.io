@@ -17,6 +17,18 @@
 #                "Initial public release"                  (v1.0.0)
 #              The title is REQUIRED; the script will not run without it.
 #
+# Before running:
+#
+#   ❗ `[Unreleased]` in CHANGELOG.md must follow the structure rule
+#      documented at the top of that file: ONE `### Added`, ONE
+#      `### Changed`, ONE `### Fixed` (etc.) at most, in that order.
+#      The script extracts `[Unreleased]` *verbatim* into the GitHub
+#      Release notes — any duplicate headings carry into the public
+#      release page. v1.4.0 was cut while this rule was implicit and
+#      ended up with 13 category headings instead of 3.
+#      The confirmation prompt below prints the body so you can
+#      eyeball it; bail out if the structure looks wrong.
+#
 # What it does, in order:
 #   1.  Validate <version> against SemVer 2.0.0 (X.Y.Z, no leading "v").
 #   2.  Validate <title> is non-empty.

@@ -172,6 +172,53 @@ No tooling required:
 
 GitHub Pages rebuilds in ~30 seconds after merge.
 
+### Cutting a release
+
+The release script handles the SemVer bump, the CHANGELOG promotion,
+the annotated tag, and the GitHub Release publication in one pass:
+
+```bash
+./scripts/release.sh <X.Y.Z> "<short title>"
+```
+
+Three things to get right *before* running it:
+
+1. **`[Unreleased]` is clean.** Each release section follows the
+   structure rule documented at the top of `CHANGELOG.md`: at most
+   one of each category heading (`### Added`, `### Changed`,
+   `### Deprecated`, `### Removed`, `### Fixed`, `### Security`),
+   in that order. PRs that add entries should merge into the
+   *existing* subsection — never create a second `### Fixed` below
+   the first.
+
+   The release script extracts `[Unreleased]` *verbatim* into the
+   GitHub Release notes. Any duplicate headings carry through to
+   the public release page; eyeball the section before running the
+   script. v1.4.0 was cut with 13 `### …` headings instead of 3
+   because the rule wasn't yet written down — it has since been
+   cleaned up in place and the rule is now explicit in `CHANGELOG.md`.
+
+2. **Bullets ordered by user impact.** Headline changes first
+   (new features, IA shifts), polish after. Use the `#### Headline`
+   / `#### Tooling` sub-sub-heading pattern (see v1.4.0) when a
+   single category has more than ~8 bullets, but the parent `###`
+   stays unique.
+
+3. **Title is 3–8 words, sentence case, no trailing punctuation.**
+   The title flows into the CHANGELOG heading, the GitHub Release
+   name, the release commit message, and the tag. Past titles:
+
+   - v1.4.0: *Site-wide search, infrastructure and directory improvements*
+   - v1.3.0: *Introducing FAQ and Glossary pages*
+   - v1.2.0: *Press kit, directory tour, compact view*
+   - v1.1.0: *Release tooling and PDF SemVer*
+   - v1.0.0: *Initial public release*
+
+The script prints `[Unreleased]` + the proposed tag/title and prompts
+for `y` confirmation before publishing. That prompt is the last
+moment to abort cleanly. Re-run with `--dry-run` to preview without
+the prompt.
+
 ### Rotating the Formspree project
 
 If submission volume hits the free-tier quota, or if we move to a

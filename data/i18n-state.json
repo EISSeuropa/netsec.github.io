@@ -23,14 +23,14 @@
     "accessibility.html": {
       "fr": {
         "file": "accessibility.fr.html",
-        "source_sha1": "0aa2009126d1df544e3cfd1d38b336ba4e5e7571",
+        "source_sha1": "ff6e19976a243647030be7af9c59037f0655bd8c",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "accessibility.de.html",
-        "source_sha1": "0aa2009126d1df544e3cfd1d38b336ba4e5e7571",
+        "source_sha1": "ff6e19976a243647030be7af9c59037f0655bd8c",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
