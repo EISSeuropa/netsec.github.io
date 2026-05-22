@@ -2725,21 +2725,25 @@ body.search-open{overflow:hidden}
   position:fixed;
   margin:0;
   padding:0;
-  border:1px solid var(--border);
+  border:1px solid var(--line);
   border-radius:14px;
-  background:var(--surface);
+  /* Opaque card surface. We can't use --glass-bg / --glass-bg-strong
+     here because the card floats over arbitrary content (including
+     the photo of a session card behind it), and a translucent panel
+     leaves the user looking at two layers of text. --bg-1 reads as
+     "elevated surface" against the page bg-0 in both light and dark
+     palettes — same role the mobile-nav menu uses. */
+  background:var(--bg-1);
   color:var(--ink);
   width:min(360px, calc(100vw - 16px));
-  box-shadow:0 12px 36px rgba(0,0,0,.18);
+  box-shadow:0 12px 36px rgba(20,35,80,.18);
   font-size:.9rem;
   line-height:1.4;
   inset:auto;        /* override default popover centering */
   overflow:hidden;
 }
-@media (prefers-color-scheme: dark){
-  .member-card{
-    box-shadow:0 12px 36px rgba(0,0,0,.5);
-  }
+.dark .member-card{
+  box-shadow:0 12px 36px rgba(0,0,0,.55);
 }
 .member-card-inner{
   display:grid;
@@ -2752,13 +2756,13 @@ body.search-open{overflow:hidden}
   width:64px;height:64px;
   border-radius:50%;
   object-fit:cover;
-  background:var(--surface-2);
+  background:var(--line);
   display:block;
 }
 .member-card-photo-placeholder{
   /* Same dimensions as the photo so the grid doesn't reflow when the
      member has no photo yet. */
-  background:var(--surface-2);
+  background:var(--line);
 }
 .member-card-text{min-width:0}
 .member-card-name{
@@ -2802,7 +2806,7 @@ body.search-open{overflow:hidden}
 }
 .member-card-badge.is-wg{
   /* WG chips read as a secondary tier — same shape, lower contrast. */
-  background:var(--surface-2);
+  background:var(--line);
   color:var(--muted);
 }
 .member-card-country{
@@ -2863,10 +2867,17 @@ body.search-open{overflow:hidden}
   background:color-mix(in oklab, #A6CE39 14%, transparent);
 }
 .member-card-footer{
-  border-top:1px solid var(--border);
+  border-top:1px solid var(--line);
   padding:10px 16px;
   text-align:right;
-  background:var(--surface-2);
+  /* Subtle tint so the footer separates from the card body. The
+     translucent overlay sits on top of --bg-1, so the resulting
+     colour reads as a slightly darker shade in light mode and a
+     slightly lighter shade in dark mode without needing two rules. */
+  background:rgba(11,18,32,.04);
+}
+.dark .member-card-footer{
+  background:rgba(255,255,255,.05);
 }
 .member-card-footer a{
   font-size:.85rem;
