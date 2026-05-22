@@ -2789,3 +2789,29 @@ body.search-open{overflow:hidden}
   .programme-day-chip:hover{transform:none}
   .programme-slot:hover{transform:none}
 }
+
+/* Live-programme freshness signal. Show-don't-tell: the pulsing
+   green dot next to the "Live programme" heading on
+   /essc-2026.html signals that the data on the page is synced
+   rather than static. Honours prefers-reduced-motion. */
+.programme-live-dot{
+  display:inline-block;
+  width:.6em; height:.6em;
+  border-radius:50%;
+  background:#22c55e;
+  vertical-align:.1em;
+  margin-right:.4em;
+  box-shadow:0 0 0 0 rgba(34,197,94,.7);
+  animation: programmeLivePulse 2.4s ease-out infinite;
+}
+@keyframes programmeLivePulse{
+  0%   { box-shadow:0 0 0 0 rgba(34,197,94,.55); }
+  70%  { box-shadow:0 0 0 .65em rgba(34,197,94,0); }
+  100% { box-shadow:0 0 0 0 rgba(34,197,94,0); }
+}
+.dark .programme-live-dot{
+  background:#34d775;
+}
+@media (prefers-reduced-motion: reduce){
+  .programme-live-dot{animation:none}
+}

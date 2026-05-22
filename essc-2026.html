@@ -170,9 +170,7 @@
     <p class="lede">
       Jointly organised by <a href="about.html">COST Action NetSec</a>, the
       <a href="https://eiss-europa.com" target="_blank" rel="noopener">European Initiative for Security Studies (EISS)</a>,
-      and <strong>Stockholm University</strong>. Two days, parallel panels, three keynote
-      roundtables. The programme below is the live timetable — synced daily from the
-      conference Indico, so this page always reads what the organisers just changed.
+      and <strong>Stockholm University</strong>.
     </p>
 
     <!-- Quick facts. Dates / location / Indico link rendered by inline
@@ -182,7 +180,7 @@
       <div class="essc-quickfact"><span class="lbl">Dates</span><span class="val" data-field="dates">—</span></div>
       <div class="essc-quickfact"><span class="lbl">Venue</span><span class="val" data-field="venue">—</span></div>
       <div class="essc-quickfact"><span class="lbl">Room</span><span class="val" data-field="room">—</span></div>
-      <div class="essc-quickfact"><span class="lbl">Source of truth</span><span class="val" data-field="indico">—</span></div>
+      <div class="essc-quickfact"><span class="lbl">On Indico</span><span class="val" data-field="indico">—</span></div>
     </div>
   </div>
 </section>
@@ -190,13 +188,14 @@
 <section class="essc-programme" id="programme" aria-labelledby="programme-title">
   <div class="container">
     <span class="eyebrow">Programme</span>
-    <h2 id="programme-title">Live programme</h2>
+    <h2 id="programme-title">
+      <span class="programme-live-dot" aria-hidden="true"></span>
+      Live programme
+    </h2>
     <p class="muted" style="max-width:46rem">
-      Synced daily from the conference Indico at <code>indico.eiss-europa.com</code> via
-      <code>scripts/sync-indico.py</code>. Times shown in
-      <span id="programme-tz">Europe/Paris</span>. Click a session title to read the
-      contributions; expand any contribution to read the abstract teaser. Full abstracts
-      live on Indico — every card links straight through.
+      Times in <span id="programme-tz">Europe/Paris</span>. Full abstracts and
+      registration on
+      <a href="https://indico.eiss-europa.com/event/22/" target="_blank" rel="noopener">Indico</a>.
     </p>
 
     <!-- Day chips and grid live here. Rendered by the inline JS at
@@ -210,11 +209,9 @@
 
     <noscript>
       <div class="programme-error">
-        The live programme is rendered by JavaScript from
-        <a href="data/indico.json" target="_blank" rel="noopener"><code>data/indico.json</code></a>
-        in this repository, which is itself synced daily from
-        <a href="https://indico.eiss-europa.com/event/22/" target="_blank" rel="noopener"><code>indico.eiss-europa.com</code></a>.
-        Open either link to read the programme without JavaScript.
+        The programme renders with JavaScript. Read it on
+        <a href="https://indico.eiss-europa.com/event/22/" target="_blank" rel="noopener">Indico</a>
+        instead.
       </div>
     </noscript>
   </div>
@@ -301,7 +298,7 @@
     root.dataset.state = 'error';
     root.innerHTML =
       '<p class="programme-error">' +
-      'Couldn’t load the live programme. ' + msg + ' Try the canonical view on ' +
+      'Couldn’t load the live programme. ' + msg + ' Read it on ' +
       '<a href="https://indico.eiss-europa.com/event/22/" target="_blank" rel="noopener">Indico</a>.' +
       '</p>';
     if (quickfacts) {
@@ -365,13 +362,13 @@
     indico = await res.json();
   } catch (err) {
     console.error('indico.json fetch failed:', err);
-    setError('The data file isn’t reachable.');
+    setError('Couldn’t fetch the programme data.');
     return;
   }
 
   const conf = indico.annualConferences && indico.annualConferences['2026'];
   if (!conf) {
-    setError('ESSC 2026 isn’t present in the latest sync.');
+    setError('ESSC 2026 isn’t published yet.');
     return;
   }
 
@@ -399,7 +396,7 @@
   // ── programme grid ────────────────────────────────────────────
   const days = (conf.programme && conf.programme.days) || [];
   if (!days.length) {
-    setError('The programme is empty — the conference organisers may not have populated the timetable yet.');
+    setError('The programme isn’t published yet.');
     return;
   }
 

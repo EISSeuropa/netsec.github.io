@@ -209,7 +209,52 @@ design. The release script's confirmation prompt is the last
 moment to bail if the cross-check surfaces something that needs
 to land in the same release.
 
-## 7. Working tree hygiene
+## 6. Voice for public-facing copy
+
+Public-facing copy means anything that appears on `netsec-cost.eu`
+pages, the beta ribbon, the accessibility statement, the press
+kit, OG card descriptions. Readers are COST evaluators,
+journalists, MC representatives, and prospective members. None
+of them are developers; none of them care how the site is built.
+
+**No "source of truth".** It is developer jargon. Acceptable
+substitutes by context include "authoritative source", "Indico",
+"the form", "the directory".
+
+**Show, don't tell, for feature mechanics.** If a page surfaces
+synced data, don't write a sentence explaining the sync. Surface
+liveness with a visual cue. The pulsing green dot next to "Live
+programme" on `/essc-2026.html` is the canonical example.
+Mechanism descriptions belong in the maintainer docs and the
+decisions log.
+
+## 7. Prose voice (em dashes and AI patterns)
+
+These apply to every piece of prose I author in this project:
+the public site, the CHANGELOG, PR descriptions, the Wiki
+decisions log, the documentation pack body text, multi-paragraph
+code comments. (One-line `# label` code comments stay flexible.)
+
+**No em dashes.** Use commas, parentheses, full stops, or
+colons. Em dashes pattern-match to AI-generated prose; a careful
+reader notices.
+
+**No rule-of-three rhythm.** If there are two items, write two.
+If there are five, write five. Manufactured triplets for cadence
+are the most reliable AI tell.
+
+**No synonym cycling.** Pick one referent for an entity and
+reuse it across consecutive sentences. Writing "the script" then
+"the sync" then "the workflow" for the same thing in three
+sentences is an AI tell, even when each label is technically
+accurate.
+
+The rules are forward-looking. They apply to prose authored from
+the PR that introduces them onwards; pre-existing em dashes in
+the repo aren't retroactively scrubbed unless the surrounding
+text is being edited anyway.
+
+## 8. Working tree hygiene
 
 - Never leave the working tree dirty across PR boundaries. If a
   script (e.g. `sync-bios.py`, `build-search.sh`) modifies tracked
@@ -222,7 +267,7 @@ to land in the same release.
   apparently-empty PR, that's a regression — open an issue and
   investigate before silencing.
 
-## 8. Accessibility & i18n cadence
+## 9. Accessibility & i18n cadence
 
 - The accessibility statement at `/accessibility.html` (+ FR + DE)
   is bumped on every release that touches a11y conformance,
