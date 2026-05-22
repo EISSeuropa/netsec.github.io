@@ -1646,6 +1646,51 @@ form button:disabled{opacity:.65;cursor:wait}
   .members-grid.is-compact .member-card.is-expanded{grid-column:auto}
 }
 
+/* Expand/collapse affordance on compact directory cards.
+   Without it, visitors don't know that compact cards can be clicked
+   to expand. A small chevron sits at the bottom-right of each card
+   — pointing ▼ when the card is collapsed, rotating to ▲ when it's
+   expanded. Hidden in detailed mode (no toggle behaviour there).
+   `pointer-events: none` so the chevron never absorbs the click —
+   the whole card is the hit target (delegated handler in
+   people.html). */
+.member-card{position:relative}
+.member-toggle-chevron{display:none}
+.members-grid.is-compact .member-toggle-chevron{
+  display:grid;place-items:center;
+  position:absolute;bottom:10px;right:12px;
+  width:24px;height:24px;border-radius:50%;
+  background:rgba(255,255,255,.65);
+  border:1px solid var(--glass-border);
+  color:var(--muted);
+  pointer-events:none;
+  transition:transform .25s var(--ease),background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease);
+}
+.dark .members-grid.is-compact .member-toggle-chevron{
+  background:rgba(28,32,46,.55);
+}
+.members-grid.is-compact .member-toggle-chevron svg{width:14px;height:14px;display:block}
+.members-grid.is-compact .member-card:hover .member-toggle-chevron{
+  color:var(--accent);
+  border-color:rgba(0,51,153,.30);
+}
+.dark .members-grid.is-compact .member-card:hover .member-toggle-chevron{
+  color:#a9c2ff;
+  border-color:rgba(110,161,255,.36);
+}
+.members-grid.is-compact .member-card.is-expanded .member-toggle-chevron{
+  transform:rotate(180deg);
+  color:var(--accent-2);
+  border-color:rgba(10,132,255,.36);
+  background:rgba(255,255,255,.85);
+}
+.dark .members-grid.is-compact .member-card.is-expanded .member-toggle-chevron{
+  background:rgba(28,32,46,.75);
+}
+@media (prefers-reduced-motion: reduce){
+  .members-grid.is-compact .member-toggle-chevron{transition:none}
+}
+
 /* View-mode toggle (segmented control in the toolbar) */
 .view-toggle{
   display:inline-flex;
@@ -2227,6 +2272,55 @@ body.search-open{overflow:hidden}
 }
 .rm-later-item p{
   margin:0;font-size:.86rem;color:var(--ink-2);line-height:1.5;
+}
+
+/* Roadmap signpost — small accent callout that sits at the foot of
+   the Deliverables section on /about.html. Frames the public roadmap
+   as the website + directory counterpart to the Action's
+   deliverables timeline (the Gantt above). Stakeholders who arrive
+   on /about.html for the deliverables view also see "here's the
+   shipping cadence on the website itself". */
+.deliverables-roadmap-link{
+  margin:28px 0 0;
+  padding:18px 22px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:14px;
+  border-radius:14px;
+  background:linear-gradient(135deg,rgba(0,51,153,.06),rgba(10,132,255,.04));
+  border:1px solid rgba(10,132,255,.20);
+}
+.dark .deliverables-roadmap-link{
+  background:linear-gradient(135deg,rgba(110,161,255,.10),rgba(10,132,255,.06));
+  border-color:rgba(110,161,255,.30);
+}
+.deliverables-roadmap-link-icon{
+  width:36px;height:36px;flex-shrink:0;border-radius:10px;
+  display:grid;place-items:center;color:var(--accent);
+  background:linear-gradient(135deg,rgba(0,51,153,.12),rgba(10,132,255,.12));
+}
+.deliverables-roadmap-link-icon svg{width:18px;height:18px}
+.deliverables-roadmap-link-text{
+  flex:1 1 320px;min-width:0;
+  font-size:.95rem;color:var(--ink-2);line-height:1.5;
+}
+.deliverables-roadmap-link-text strong{color:var(--ink)}
+.deliverables-roadmap-link-cta{
+  flex-shrink:0;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 16px;border-radius:10px;
+  font-size:.92rem;font-weight:600;color:#fff;
+  background:var(--accent);border:1px solid var(--accent);
+  text-decoration:none;
+  box-shadow:0 4px 12px var(--accent-glow);
+  transition:background .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease);
+}
+.deliverables-roadmap-link-cta:hover{
+  background:var(--accent-2);border-color:var(--accent-2);
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px var(--accent-glow);
+}
+@media (prefers-reduced-motion: reduce){
+  .deliverables-roadmap-link-cta{transition:none}
+  .deliverables-roadmap-link-cta:hover{transform:none}
 }
 
 /* "Help shape this" card — invites community feedback / feature
