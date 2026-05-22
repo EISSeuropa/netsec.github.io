@@ -1,12 +1,53 @@
-# Website & directory roadmap — H2 2026
+# NetSec website + directory — 2026 roadmap
 
 > *Audience: Action Chair, Vice-Chair, MC members, and the site
-> maintainer. This document sets expectations for what the NetSec
-> website and the open community directory (Deliverable D1) will
-> deliver between now and 31 December 2026.*
+> maintainer. Covers the website and the open community directory
+> (Deliverable D1) across all of 2026 — what's shipped, what's
+> next, who needs to decide what, and when.*
 
 Maintained by Dr Arthur Laudrain (MC member, CH; ETH Zurich).
 Last revised **22 May 2026**.
+
+---
+
+## At a glance — 2026 timeline
+
+```mermaid
+timeline
+  title NetSec website + directory · 2026
+  section Shipped — May
+    20 May : v1.0.0 — Initial public release
+           : 10 public pages, glass UI, open directory (D1 first version)
+    20 May : v1.1.0 — Release tooling and PDF SemVer
+           : scripts/release.sh, PDF re-versioned
+    21 May : v1.2.0 — Press kit, directory tour, compact view
+           : click-to-expand, 6-step tour, A3 poster, press kit
+    21 May : v1.3.0 — Introducing FAQ and Glossary pages
+           : 21 Q&As, ~35 terms, Wiki signposting on home
+  section Q2 — Jun (planned)
+    Early Jun : v1.4.0 — Site-wide search + IA Phase 1
+              : Pagefind, calendar feed, /about page, slimmer header
+    9–12 Jun : Summer School + ESC Conference (Stockholm)
+    Late Jun : v1.5.0 — Logos, socials, IA polish
+              : official logos site-wide, social channels live
+  section Q3 (planned)
+    Early Sep : v1.6.0 — FR/DE reviewed, deliverables hosted
+              : translation review pass, D8 + D10 PDFs hosted
+    Before late Sep : Inaugural Management Committee plenary
+  section Q4 (planned)
+    10 Oct : Year 1 anniversary (M12)
+           : D1 first-version state, D6 first policy briefs
+    Mid Oct : v1.7.0 — Year 1 closes
+            : retrospective, Outputs section refresh, Phase 2 IA
+    Late Dec : v1.8.0 — Year 2 ready
+             : D11 + D12 hosting, per-page OG, print stylesheet
+```
+
+The chart above and the per-section detail below are the same
+information at two zoom levels. Action milestones (Conference,
+plenary, anniversary) and release milestones (`v1.x.0`) are
+interleaved so the website cadence reads alongside the Action's
+own calendar.
 
 ---
 
@@ -17,20 +58,155 @@ delivery state is:
 
 - **Website live** at <https://netsec-cost.eu> on GitHub Pages,
   HTTPS-only, EN/FR/DE.
-- **Ten public pages**: home, network directory, grants & calls,
-  press kit, FAQ, glossary, sitemap, accessibility, privacy,
-  licensing.
+- **Thirteen public pages**: home, network directory, grants &
+  calls, press kit, FAQ, glossary, *about*, *publications*
+  (placeholder), *news* archive, sitemap, accessibility,
+  privacy, licensing.
 - **Open community directory** (D1, first version) accepting
   bios via a public Google Form. 13 members ingested at last
   weekly sync; the form is open to MC reps, WG participants, and
   the wider community.
 - **Site-wide search** (Pagefind, EN/FR/DE shards) with rich
-  bio result cards.
+  bio result cards and on-page highlight-on-landing.
+- **`/about` page** (EN/FR/DE) consolidating the Action narrative,
+  deliverables Gantt, leadership, FAQ + Glossary teasers, and
+  the relationship with EISS (placeholder pending content from
+  Action Chair + WG4 lead).
 - **Documentation pack v1.6.0** (`docs/pdf/NetSec-website-
-  documentation.pdf`) reflects the current site.
-- **CHANGELOG** at SemVer v1.3.0; release tooling (`scripts/
-  release.sh`) requires a short title per release.
+  documentation.pdf`) reflects the v1.3 state of the site;
+  refresh queued for v1.4 release.
+- **CHANGELOG** at SemVer v1.3.0 with `[Unreleased]` full of v1.4
+  content; release tooling (`scripts/release.sh`) requires a
+  short title per release.
 - **Maintainer**: one person (AL) running on volunteered time.
+
+---
+
+## Release history
+
+Each tagged release at a glance — what landed, when, and the
+GitHub Release link. The release-titles convention (every release
+has a short title) was retroactively applied in v1.4 to all
+historical releases.
+
+### v1.0.0 · 20 May 2026 — *Initial public release*
+
+The Action's first public website. **Deliverable D1** (open
+community directory) presented for COST review.
+
+- **Public website** at <https://netsec-cost.eu> on GitHub
+  Pages, HTTPS-only.
+- **Seven public pages**: Home, Network directory, Grants &
+  Calls, Sitemap, Accessibility, Privacy, Licensing.
+- Apple-style glass UI; light / dark themes with OS-default
+  detection + manual override; responsive from 4K to phone.
+- EU + COST branding compliance throughout.
+- **Open community directory** accepting submissions via a
+  public Google Form; weekly sync workflow opens a PR rather
+  than pushing silently. MC roster auto-merged from cost.eu.
+- GDPR-compliant privacy notice; WCAG 2.1 AA conformance
+  statement; coordinated-disclosure policy.
+
+[Release notes →](https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.0.0)
+
+### v1.1.0 · 20 May 2026 — *Release tooling and PDF SemVer*
+
+Operational hygiene. Made future releases boring to cut.
+
+- **`scripts/release.sh`** one-command release helper: validates
+  SemVer, promotes `[Unreleased]`, tags, pushes, creates the
+  GitHub Release.
+- Documentation pack re-versioned to SemVer (v1.0 / v1.1 / v1.2
+  retroactively re-stamped as v1.0.0 / v1.1.0 / v1.2.0).
+- Section 06 of the PDF: *Admin guide — Cutting a release*.
+- Site screenshots refreshed.
+
+[Release notes →](https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.1.0)
+
+### v1.2.0 · 21 May 2026 — *Press kit, directory tour, compact view*
+
+Outward-facing surface area expansion + directory polish.
+
+- **Click-to-expand on compact directory cards** + a `+`
+  quick-join button in the toolbar.
+- **Guided six-step directory tour** anchored to the toolbar
+  affordances. Two entry points: a *Take the tour* button in
+  the welcome strip and a persistent `?` button. Keyboard nav,
+  focus trap, `prefers-reduced-motion`. Engine generalised as
+  `window.netsecTour(...)` for reuse on other pages.
+- **First-visit orientation strip** above the directory toolbar.
+- **Compact directory view** — three-across grid, density toggle
+  in the toolbar, preference persists in `localStorage`.
+- **Public press-kit page** at `/press-kit.html` — logos with
+  pairing rules, palette, typography, funding-statement
+  boilerplate (full / short / one-line), CC BY 4.0 attribution
+  wording, do/don't rules.
+- **Promotional A3 poster** as Appendix C of the docs PDF and
+  embedded as a card-sized teaser at the top of the repo
+  README.
+- **Members' Wiki *Templates & press kit* page** — copy-paste
+  versions of the boilerplate.
+- **Grants page** spells out the e-COST portal model explicitly
+  (filtering by profile, WBP boundaries).
+
+[Release notes →](https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.2.0)
+
+### v1.3.0 · 21 May 2026 — *Introducing FAQ and Glossary pages*
+
+Reference content moved from the Wiki to the public site so
+non-GitHub audiences can find it.
+
+- **`/faq.html`** (+ FR + DE) — 21 Q&As across six themed
+  sections with a jump-to TOC and per-question deep-link
+  anchors.
+- **`/glossary.html`** (+ FR + DE) — ~35 COST and NetSec terms
+  with per-term anchors. The original Wiki pages were
+  rewritten as short stubs pointing at the public URLs.
+- **Discovery surface on the home page**: a four-card *Find
+  out more* grid at the end of About (FAQ, Glossary, Press kit,
+  members' Wiki) — keeps the floating header at ten items
+  while making reference pages visible at a glance.
+- **Wiki signposting on the home page**: tinted *For NetSec
+  members* strip between Outputs and Contact with *Open the
+  Wiki* + *e-COST portal* CTAs.
+- **Footer FAQ + Glossary links** across all 24 page-locale
+  permutations.
+- **`scripts/inject-seo.py` `PAGES` list extended**; SEO blocks
+  (canonical, OG, Twitter Card, JSON-LD WebPage) injected on
+  the six new pages.
+- **External-link icon CSS fix** — specificity bug + flex-shrink
+  collapse + double-arrow on news cards all resolved.
+
+[Release notes →](https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.3.0)
+
+### v1.4.0 · early Jun 2026 (in progress) — *Site-wide search + IA Phase 1*
+
+Currently being assembled in `[Unreleased]`. Largest release
+since v1.0 — bundles two distinct streams:
+
+- **Search**: site-wide overlay (Pagefind, EN/FR/DE shards) with
+  rich bio result cards for directory entries, deep-link to the
+  matched sub-section, on-page yellow highlight of the matched
+  term, Cmd-K / Ctrl-K / `/` shortcuts.
+- **iCalendar feed** at `/calendar.ics` with a centred *Subscribe
+  to NetSec events* CTA in the Events section; calendar pipeline
+  is JSON-source-of-truth with a CI drift check.
+- **Header streamlined**: NetSec wordmark hidden in the floating
+  bubble; nav reduced from 10 to 8 items (*Committee* and
+  *Roadmap* merged into the new About page; *Outputs* renamed to
+  *Publications*).
+- **`/about` page** (EN/FR/DE) consolidating Action narrative +
+  deliverables Gantt + Leadership + FAQ teaser + Glossary teaser
+  + Relationship with EISS placeholder.
+- **`/outputs` page** (placeholder) and **`/news` archive page**
+  ready to receive content as it accrues.
+- **Members' Wiki link** added to every page's footer between
+  Glossary and Press kit.
+- **Mobile fixes**: Gantt Year/Quarter column alignment;
+  `.mc-subhead` separator wrapping.
+- Many polish items from MC feedback iteration.
+
+Release notes to follow at the v1.4.0 cut.
 
 ---
 
