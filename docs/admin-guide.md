@@ -181,7 +181,7 @@ the annotated tag, and the GitHub Release publication in one pass:
 ./scripts/release.sh <X.Y.Z> "<short title>"
 ```
 
-Three things to get right *before* running it:
+Four things to get right *before* running it:
 
 1. **`[Unreleased]` follows the hybrid release-notes format** spelled
    out at the top of `CHANGELOG.md`. Concretely:
@@ -225,6 +225,15 @@ Three things to get right *before* running it:
    - v1.2.0: *Press kit, directory tour, compact view*
    - v1.1.0: *Release tooling and PDF SemVer*
    - v1.0.0: *Initial public release*
+
+4. **No hard wraps in prose.** Each prose paragraph, blockquote lede,
+   and multi-line bullet in `[Unreleased]` must be a single source
+   line. GitHub Releases renders markdown with the *break-on-newline*
+   GFM variant — every soft `\n` becomes a `<br>` and forces the
+   prose to render visibly narrow on the Releases page (even though
+   it looks flowing on the `github.com` file view). One long line per
+   paragraph keeps both renderings correct. Editor soft-wrap is fine;
+   hard line-breaks inside a paragraph are not.
 
 The script prints `[Unreleased]` + the proposed tag/title and prompts
 for `y` confirmation before publishing. That prompt is the last
