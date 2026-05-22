@@ -310,6 +310,8 @@
       session: 'Session', plenary: 'Plenary', roundtable: 'Roundtable',
       contribution: 'contribution', contributions: 'contributions',
       readOnIndico: 'Read on Indico →',
+      livestream: 'Livestream',
+      livestreamAria: 'This session will be livestreamed',
       errLoad:   'Couldn’t load the live programme.',
       errFetch:  'Couldn’t fetch the programme data.',
       errAbsent: 'ESSC 2026 isn’t published yet.',
@@ -323,6 +325,8 @@
       session: 'Session', plenary: 'Plénière', roundtable: 'Table ronde',
       contribution: 'communication', contributions: 'communications',
       readOnIndico: 'Lire sur Indico →',
+      livestream: 'Diffusion directe',
+      livestreamAria: 'Session diffusée en direct',
       errLoad:   'Impossible de charger le programme en direct.',
       errFetch:  'Impossible de récupérer les données du programme.',
       errAbsent: 'L’ESSC 2026 n’est pas encore publiée.',
@@ -336,6 +340,8 @@
       session: 'Sitzung', plenary: 'Plenum', roundtable: 'Podiumsdiskussion',
       contribution: 'Beitrag', contributions: 'Beiträge',
       readOnIndico: 'Auf Indico lesen →',
+      livestream: 'Livestream',
+      livestreamAria: 'Diese Sitzung wird per Livestream übertragen',
       errLoad:   'Das Live-Programm konnte nicht geladen werden.',
       errFetch:  'Die Programmdaten konnten nicht abgerufen werden.',
       errAbsent: 'ESSC 2026 ist noch nicht veröffentlicht.',
@@ -533,15 +539,57 @@
     );
   }
 
+  // Small broadcast / radio-waves SVG. Used inside the livestream
+  // badge on plenary + roundtable session cards.
+  function livestreamIcon() {
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('aria-hidden', 'true');
+    const paths = [
+      ['circle', { cx: 12, cy: 12, r: 1.6, fill: 'currentColor', stroke: 'none' }],
+      ['path', { d: 'M8.5 8.5a5 5 0 000 7' }],
+      ['path', { d: 'M15.5 8.5a5 5 0 010 7' }],
+      ['path', { d: 'M5.6 5.6a9 9 0 000 12.8' }],
+      ['path', { d: 'M18.4 5.6a9 9 0 010 12.8' }],
+    ];
+    for (const [tag, attrs] of paths) {
+      const n = document.createElementNS(svgNS, tag);
+      for (const k in attrs) n.setAttribute(k, attrs[k]);
+      svg.appendChild(n);
+    }
+    return svg;
+  }
+
   function renderSession(slot) {
     const subtype = slot.subtype;
     const isRoundtable = subtype === 'roundtable';
     const isPlenary    = subtype === 'plenary';
+    // EISS livestreams plenaries (INTRO / KEY / CONC codes) and
+    // roundtables (RT). Both map to non-null `subtype` here, so
+    // the test is just "did sync-indico.py tag this slot with a
+    // subtype". Regular panel sessions stay quiet.
+    const isLive = isRoundtable || isPlenary;
 
     const head = el('header', { class: 'programme-slot-head' });
     head.appendChild(el('span', {
       class: 'programme-slot-kind' + (isRoundtable ? ' is-roundtable' : isPlenary ? ' is-plenary' : ''),
     }, subtypeLabel(subtype)));
+    if (isLive) {
+      const badge = el('span', {
+        class: 'programme-slot-livestream',
+        title: t.livestreamAria,
+        'aria-label': t.livestreamAria,
+      });
+      badge.appendChild(livestreamIcon());
+      badge.appendChild(el('span', { class: 'lbl' }, t.livestream));
+      head.appendChild(badge);
+    }
     if (slot.room) head.appendChild(el('span', { class: 'programme-slot-room' }, slot.room));
 
     const titleNode = el('h4', { class: 'programme-slot-title' },
