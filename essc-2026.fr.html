@@ -738,16 +738,20 @@
       if (k && !member) unmatchedSpeakers.add(p.name);
       let nameNode;
       if (member) {
-        // The anchor is a real link to /people.html#<slug>. Default
-        // left-click is intercepted to open the card; modifier-click
-        // and middle-click pass through to native behaviour so
-        // "open in new tab" still works.
+        // The anchor is a real link to /people.html#<slug>. Hover and
+        // focus open the preview card; left-click also opens it
+        // instead of navigating. Modifier-click and middle-click pass
+        // through to native behaviour so "open in new tab" still works.
         nameNode = el('a', {
           class: 'name has-member-card',
           href: peopleUrl + '#' + member.id,
           'aria-haspopup': 'dialog',
         }, p.name || '—');
-        nameNode.addEventListener('click', (e) => openMemberCard(e, nameNode, member));
+        nameNode.addEventListener('click',      (e) => openMemberCard(e, nameNode, member));
+        nameNode.addEventListener('mouseenter', () => showMemberCard(nameNode, member));
+        nameNode.addEventListener('mouseleave', scheduleHideMemberCard);
+        nameNode.addEventListener('focus',      () => showMemberCard(nameNode, member));
+        nameNode.addEventListener('blur',       scheduleHideMemberCard);
       } else {
         nameNode = el('span', { class: 'name' }, p.name || '—');
       }
@@ -776,7 +780,18 @@
   // We position it ourselves with getBoundingClientRect so it works
   // in every browser that ships popover (no dependency on CSS
   // anchor positioning, which lags in Firefox as of this writing).
+  //
+  // Show/hide model: hover or focus a member's name → card appears
+  // after the next frame and stays open while the cursor is over
+  // either the anchor or the card. Leaving both schedules a short
+  // delay before hiding so the user can cross the gap between them.
+  // A direct click also opens the card and keeps it open until the
+  // browser dismisses it (Esc, outside click).
   let cardEl = null;
+  let hideTimer = null;
+  let currentMember = null;
+  const HIDE_DELAY_MS = 180;
+
   function ensureMemberCard() {
     if (cardEl) return cardEl;
     if (typeof HTMLElement.prototype.showPopover !== 'function') {
@@ -792,8 +807,67 @@
       'aria-labelledby': 'essc-member-card-name',
       'aria-label': t.memberCardLabel,
     });
+    // Hovering over the card itself keeps it open even after the
+    // pointer leaves the originating anchor — without this, moving
+    // the cursor onto the card to click a contact icon would
+    // immediately trigger the hide timer.
+    cardEl.addEventListener('mouseenter', cancelHideMemberCard);
+    cardEl.addEventListener('mouseleave', scheduleHideMemberCard);
+    // Clean up when the browser closes the card (Esc, outside click).
+    cardEl.addEventListener('toggle', (e) => {
+      if (e.newState === 'closed') {
+        currentMember = null;
+        cancelHideMemberCard();
+      }
+    });
     document.body.appendChild(cardEl);
     return cardEl;
+  }
+
+  function cancelHideMemberCard() {
+    if (hideTimer != null) {
+      clearTimeout(hideTimer);
+      hideTimer = null;
+    }
+  }
+
+  function scheduleHideMemberCard() {
+    cancelHideMemberCard();
+    hideTimer = setTimeout(() => {
+      if (cardEl && cardEl.matches(':popover-open')) cardEl.hidePopover();
+    }, HIDE_DELAY_MS);
+  }
+
+  // Show the card for `member`, attached to `anchor`. If the card is
+  // already showing this exact member, just cancel any pending hide.
+  // If it's showing a different one, swap content and reposition
+  // without closing-then-reopening (which would cause a visual blink).
+  function showMemberCard(anchor, member) {
+    const card = ensureMemberCard();
+    if (!card) return null;
+    cancelHideMemberCard();
+    if (currentMember === member && card.matches(':popover-open')) return card;
+    currentMember = member;
+    populateMemberCard(card, member);
+    // Pre-position so the first paint after showPopover is near the
+    // anchor, then measure and refine.
+    const ar = anchor.getBoundingClientRect();
+    card.style.left = ar.left + 'px';
+    card.style.top  = (ar.bottom + 6) + 'px';
+    if (!card.matches(':popover-open')) card.showPopover();
+    const cr = card.getBoundingClientRect();
+    const margin = 8;
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+    let left = ar.left + ar.width / 2 - cr.width / 2;
+    left = Math.max(margin, Math.min(left, vw - cr.width - margin));
+    let top = ar.bottom + 6;
+    if (top + cr.height > vh - margin && ar.top - cr.height - 6 >= margin) {
+      top = ar.top - cr.height - 6;
+    }
+    card.style.left = left + 'px';
+    card.style.top  = top  + 'px';
+    return card;
   }
 
   // Brand glyphs reused from /people.html (single-path SVGs, even-odd
@@ -936,46 +1010,14 @@
     card.appendChild(footer);
   }
 
-  function positionMemberCard(card, anchor) {
-    // Pre-position to anchor's neighbourhood so the first paint after
-    // showPopover is in roughly the right place; refine after we can
-    // measure the real card dimensions.
-    const ar = anchor.getBoundingClientRect();
-    card.style.left = ar.left + 'px';
-    card.style.top  = (ar.bottom + 6) + 'px';
-    card.showPopover();
-    const cr = card.getBoundingClientRect();
-    const margin = 8;
-    const vw = document.documentElement.clientWidth;
-    const vh = document.documentElement.clientHeight;
-    let left = ar.left + ar.width / 2 - cr.width / 2;
-    left = Math.max(margin, Math.min(left, vw - cr.width - margin));
-    let top = ar.bottom + 6;
-    if (top + cr.height > vh - margin && ar.top - cr.height - 6 >= margin) {
-      top = ar.top - cr.height - 6;
-    }
-    card.style.left = left + 'px';
-    card.style.top  = top  + 'px';
-  }
-
   function openMemberCard(e, anchor, member) {
     // Modifier or non-primary clicks fall through to native link
     // behaviour (open in new tab, etc.).
     if (e.defaultPrevented) return;
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    const card = ensureMemberCard();
+    const card = showMemberCard(anchor, member);
     if (!card) return; // Popover unsupported; let the link navigate.
     e.preventDefault();
-    populateMemberCard(card, member);
-    positionMemberCard(card, anchor);
-    // Move keyboard focus to the primary CTA inside the card so a
-    // reader who opened it via Enter on the anchor can Tab through
-    // the contact icons and reach the full-profile link without
-    // hunting. When the popover closes (Esc or click outside), the
-    // browser returns focus to the previously-focused element, so
-    // the anchor regains focus automatically.
-    const cta = card.querySelector('.member-card-cta');
-    if (cta) cta.focus({ preventScroll: true });
   }
 })();
 </script>
