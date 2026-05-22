@@ -188,7 +188,8 @@ the annotated tag, and the GitHub Release publication in one pass:
 ./scripts/release.sh <X.Y.Z> "<short title>"
 ```
 
-Four things to get right *before* running it:
+Five things to get right *before* running it (the fifth applies on
+minor / major releases only):
 
 1. **`[Unreleased]` follows the hybrid release-notes format** spelled
    out at the top of `CHANGELOG.md`. Concretely:
@@ -241,6 +242,38 @@ Four things to get right *before* running it:
    it looks flowing on the `github.com` file view). One long line per
    paragraph keeps both renderings correct. Editor soft-wrap is fine;
    hard line-breaks inside a paragraph are not.
+
+5. **For minor / major releases (`X.Y.0` / `X.0.0`) — cross-check
+   five surfaces.** Skip on patch releases (`X.Y.Z` where `Z > 0`);
+   they're scoped to small fixes. For each, ask *"did anything in
+   this release change what this surface documents?"* and either edit
+   in the same release or open a tracking issue.
+
+   - **Roadmap** — `/roadmap.html` (+ FR + DE) and
+     `docs/roadmap-2026.md`. Promote the just-shipped release from
+     *In progress* → *Shipped*; confirm next planned release is
+     still accurate; consider whether anything in *Under watch* is
+     ready to promote.
+   - **Sitemap** — `sitemap.xml` and `/sitemap.html` (+ FR + DE).
+     Add any new pages. Re-run `scripts/inject-seo.py` if titles /
+     canonicals / hreflang changed.
+   - **Translations** — `python3 scripts/check-i18n-drift.py`
+     should report zero drift before cutting. Manual update on FR
+     / DE for any EN copy that moved.
+   - **Repo docs + PDF** — the markdown docs under `docs/` and the
+     stakeholder PDF doc-pack. Cover-bump the PDF every minor /
+     major release; defer the section-level catch-up via an
+     explicit "gap" appendix entry when needed (see
+     `docs/pdf/documentation.html` v1.7.0 entry as the canonical
+     example).
+   - **Members' Wiki** — <https://github.com/EISSeuropa/netsec.github.io/wiki>.
+     Public FAQ / Glossary are source-of-truth (the Wiki holds
+     stubs); decisions log should record any structural rewrite
+     or convention change; *Templates & press kit* should match
+     `/press-kit.html`.
+
+   The full version of this checklist, with the cadence reasoning,
+   lives in [`CLAUDE.md`](../CLAUDE.md) §5.
 
 The script prints `[Unreleased]` + the proposed tag/title and prompts
 for `y` confirmation before publishing. That prompt is the last
