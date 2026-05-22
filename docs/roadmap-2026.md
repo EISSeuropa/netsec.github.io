@@ -8,6 +8,15 @@
 Maintained by Dr Arthur Laudrain (MC member, CH; ETH Zurich).
 Last revised **22 May 2026**.
 
+> **Sync convention.** This file is the source of truth. The
+> public-facing summary at [`/roadmap.html`](../roadmap.html) (+ FR
+> + DE) is a derived view. Whenever you edit this document, scan
+> the three public-roadmap pages for entries that need to follow
+> — and bump the *Last reviewed* line on each. Most edits to this
+> file don't touch the public view (audit-scope tweaks, decision
+> deadlines, maintainer reasoning); a release shipping, a date
+> slip, or a scope change to a card title or description does.
+
 ---
 
 ## At a glance — 2026 timeline

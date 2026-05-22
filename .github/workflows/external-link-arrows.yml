@@ -1,0 +1,40 @@
+# External-link arrow lint.
+#
+# Runs scripts/check-external-link-arrows.py on every PR that touches an
+# HTML file at the repo root. The script flags external links (target=
+# "_blank" + absolute href) whose visible text ends with a manual arrow
+# glyph (→ / ↗ / » / >>). The site CSS already auto-injects a small
+# external-link icon after such links, so a trailing arrow renders a
+# double affordance.
+#
+# When this fails: delete the arrow glyph from the link text. The
+# auto-icon stays put.
+#
+# Zero cost: no third-party services, no API keys.
+name: external-link arrows
+
+on:
+  pull_request:
+    paths:
+      - '*.html'
+      - 'scripts/check-external-link-arrows.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint external links for double-arrow affordance
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run external-link arrow lint
+        run: python3 scripts/check-external-link-arrows.py

@@ -38,7 +38,8 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <!-- seo:auto END -->
-<link rel="icon" href="assets/images/logo.png" type="image/x-icon">
+<link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="assets/images/logo.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&display=swap">
@@ -152,7 +153,7 @@
     <span class="eyebrow">Plan</span>
     <h1>Roadmap</h1>
     <p class="lede">What we've shipped, what's underway, and what comes next for the NetSec website and the open community directory across 2026. Action milestones (conference, plenary, anniversary) are interleaved with release milestones so the website cadence reads alongside the Action's own calendar.</p>
-    <p class="roadmap-updated">Last updated <time datetime="2026-05-22">22 May 2026</time>.</p>
+    <p class="roadmap-updated">Last updated <time datetime="2026-05-22">22 May 2026</time> · last reviewed against the internal working document on <time datetime="2026-05-22">22 May 2026</time>.</p>
 
     <!-- Legend / colour key -->
     <div class="rm-legend" aria-label="Status colour key">
@@ -178,7 +179,7 @@
           </div>
           <h3>Initial public release</h3>
           <p>First public website at netsec-cost.eu. Ten pages, glass UI in light + dark, EU + COST branding, and the open community directory (Deliverable D1, first version) accepting bios via a public form.</p>
-          <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.0.0" target="_blank" rel="noopener">Release notes →</a>
+          <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.0.0" target="_blank" rel="noopener">Release notes</a>
         </article>
       </li>
 
@@ -190,7 +191,7 @@
           </div>
           <h3>Release tooling and documentation pack</h3>
           <p>One-command release helper, SemVer documentation pack, and a refreshed admin guide. Made future releases boring to cut.</p>
-          <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.1.0" target="_blank" rel="noopener">Release notes →</a>
+          <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.1.0" target="_blank" rel="noopener">Release notes</a>
         </article>
       </li>
 
@@ -202,7 +203,7 @@
           </div>
           <h3>Press kit, directory tour, compact view</h3>
           <p>Public press kit with logos and boilerplate, a six-step guided tour of the directory, click-to-expand on compact cards, an A3 promotional poster, and Wiki templates for members.</p>
-          <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.2.0" target="_blank" rel="noopener">Release notes →</a>
+          <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.2.0" target="_blank" rel="noopener">Release notes</a>
         </article>
       </li>
 
@@ -214,7 +215,7 @@
           </div>
           <h3>FAQ and Glossary pages</h3>
           <p>Public FAQ (21 Q&amp;As across six themes) and Glossary (~35 COST and NetSec terms), with deep-link anchors. <em>Find out more</em> grid added to the home page; Wiki signposted for members.</p>
-          <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.3.0" target="_blank" rel="noopener">Release notes →</a>
+          <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.3.0" target="_blank" rel="noopener">Release notes</a>
         </article>
       </li>
 
@@ -368,6 +369,26 @@
           <p>Filter chips (<em>All / Pages / People</em>) in the search overlay header. <em>Trigger:</em> Q3 capacity, after FR&nbsp;/&nbsp;DE review and calendar work land.</p>
         </li>
       </ul>
+    </section>
+
+    <!-- Community feedback card -->
+    <section class="rm-feedback" aria-labelledby="feedback-h">
+      <h2 id="feedback-h">Help shape this</h2>
+      <p>The NetSec website and directory are built openly, for the benefit of the Action's members, partners, and the wider European security community. We welcome feedback, feature requests, and bug reports — every issue you open helps prioritise what ships next.</p>
+      <div class="rm-feedback-actions">
+        <a class="rm-feedback-action is-primary" href="https://github.com/EISSeuropa/netsec.github.io/issues/new/choose" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Open an issue
+        </a>
+        <a class="rm-feedback-action" href="https://github.com/EISSeuropa/netsec.github.io/discussions" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Start a discussion
+        </a>
+        <a class="rm-feedback-action" href="https://github.com/EISSeuropa/netsec.github.io" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.16c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.39.97.11-.75.41-1.27.74-1.56-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.79 0c2.21-1.5 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.68.42.36.79 1.08.79 2.18v3.23c0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+          Browse the source
+        </a>
+      </div>
     </section>
 
     <p class="rm-footnote">This page is the public-facing summary. The full working document — with per-deliverable detail, open decisions awaiting the Action Chair, audit scopes, and the maintainer's reasoning — lives in <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/docs/roadmap-2026.md" target="_blank" rel="noopener">docs/roadmap-2026.md</a> on GitHub.</p>
