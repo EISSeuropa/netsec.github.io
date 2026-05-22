@@ -121,6 +121,25 @@ Announce the form widely — not just to the MC. Sample announcement copy:
 
 If you delete by accident, Drive's version history can restore the Sheet row.
 
+### Optional: `name_aliases` for hard-to-match speakers
+
+The ESSC live programme page (`essc-2026.html`) tries to link any Indico speaker who is one of our members straight to their `/people.html` card. Matching is name-based, with diacritics, honorifics, post-nominals, and particles stripped, then keyed on (first surviving token, last surviving token). That handles most cases automatically, but a few patterns slip through: nickname vs legal name, married vs maiden, transliteration variants, reversed name order on Hungarian or East-Asian conventions.
+
+When you spot a member whose name on the Indico programme doesn't link to their bio, hand-add a `name_aliases` array to that member's record in `data/bios.json`:
+
+```json
+{
+  "id": "alex-petrova",
+  "name": "Alexandra Petrova",
+  "name_aliases": ["Sasha Petrova", "Petrova Alexandra"],
+  ...
+}
+```
+
+The sync script preserves this field across runs. It's only overwritten if a form submission explicitly resets it, and the form has no aliases column today, so in practice your edit survives. Each alias is fed through the same matcher as the canonical name, so add the variant exactly as it would appear on Indico.
+
+To check what's currently missing, open the live programme in any browser, then `console.debug` in DevTools: the page logs `[essc] N speakers didn't match a member: ...` after render.
+
 ## Exporting the data
 
 `data/bios.json` is the canonical export, version-controlled in this repo. To dump it to CSV one-off:

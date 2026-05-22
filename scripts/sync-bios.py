@@ -127,7 +127,20 @@ def name_key(name: str) -> tuple[str, str] | None:
     tokens = [t.lower() for t in re.split(r"[^A-Za-z]+", s) if t]
     # Strip common post-nominal tokens that aren't really part of the name.
     POST_NOMINALS = {"phd", "jr", "sr", "ii", "iii", "iv", "esq"}
-    tokens = [t for t in tokens if t not in POST_NOMINALS]
+    # Strip nobiliary / patronymic particles too. Without this, "Jéssica
+    # da Costa Pereira" keys as (jessica, pereira) while a bios.json entry
+    # of "Jéssica da Costa" keys as (jessica, costa) and the two miss
+    # each other. Dropping particles makes both reduce to (jessica,
+    # pereira) / (jessica, costa) cleanly based on the actual surname
+    # tokens. Conservative list — only particles that are reliably
+    # connectors, not standalone names.
+    PARTICLES = {
+        "de", "del", "della", "di", "da", "das", "dos",
+        "van", "von", "vom", "der", "den", "ter", "ten",
+        "la", "le", "el", "al", "ibn", "bin", "bint",
+        "zu", "auf", "af",
+    }
+    tokens = [t for t in tokens if t not in POST_NOMINALS and t not in PARTICLES]
     if len(tokens) < 2:
         return None
     return (tokens[0], tokens[-1])
