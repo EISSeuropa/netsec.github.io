@@ -183,26 +183,38 @@ the annotated tag, and the GitHub Release publication in one pass:
 
 Three things to get right *before* running it:
 
-1. **`[Unreleased]` is clean.** Each release section follows the
-   structure rule documented at the top of `CHANGELOG.md`: at most
-   one of each category heading (`### Added`, `### Changed`,
-   `### Deprecated`, `### Removed`, `### Fixed`, `### Security`),
-   in that order. PRs that add entries should merge into the
-   *existing* subsection — never create a second `### Fixed` below
-   the first.
+1. **`[Unreleased]` follows the hybrid release-notes format** spelled
+   out at the top of `CHANGELOG.md`. Concretely:
+
+   - A one- to three-sentence **lede** in voice (what is this
+     release *about*?).
+   - Two to four **themed `### sub-sections`** carrying the actual
+     narrative — prose intro per theme, with bullets inside only if
+     the theme has multiple distinct pieces.
+   - A canonical **`### Index of changes`** at the bottom with
+     `#### Added` / `#### Changed` / `#### Deprecated` /
+     `#### Removed` / `#### Fixed` / `#### Security` sub-headings
+     (in that order, each appearing at most once).
+
+   When a PR adds to `[Unreleased]` during the release cycle, the
+   bullet goes into the *existing* index sub-heading. The lede +
+   themes are written at release-cutting time — that's the moment
+   the maintainer reads back through the index and shapes it into a
+   release story.
 
    The release script extracts `[Unreleased]` *verbatim* into the
-   GitHub Release notes. Any duplicate headings carry through to
-   the public release page; eyeball the section before running the
-   script. v1.4.0 was cut with 13 `### …` headings instead of 3
-   because the rule wasn't yet written down — it has since been
-   cleaned up in place and the rule is now explicit in `CHANGELOG.md`.
+   GitHub Release notes. Eyeball the body before confirming the
+   prompt; whatever lives in `[Unreleased]` lands on the public
+   release page.
 
-2. **Bullets ordered by user impact.** Headline changes first
-   (new features, IA shifts), polish after. Use the `#### Headline`
-   / `#### Tooling` sub-sub-heading pattern (see v1.4.0) when a
-   single category has more than ~8 bullets, but the parent `###`
-   stays unique.
+2. **Self-policing tier**:
+
+   - **Patch releases** (`1.x.y` with no headline feature) skip the
+     lede + themes. Index only. People reading patch notes care
+     about specifics, not narrative.
+   - **Minor / major** releases get the full hybrid.
+   - If you can't write a meaningful lede about a release, it's a
+     patch. The format mirrors the actual significance.
 
 3. **Title is 3–8 words, sentence case, no trailing punctuation.**
    The title flows into the CHANGELOG heading, the GitHub Release
