@@ -877,10 +877,24 @@
         grid.querySelector('.member-card[data-slug="' + CSS.escape(hash) + '"]');
       if (target) requestAnimationFrame(() => {
         target.scrollIntoView({ behavior: 'instant', block: 'center' });
-        if (target.classList.contains('member-card')
-            && grid.classList.contains('is-compact')) {
-          grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
-          target.classList.add('is-expanded');
+        if (target.classList.contains('member-card')) {
+          // Always: visual spotlight so the landed card is obvious
+          // even in detailed view (where every other card is also
+          // showing its full content). The class auto-fades after
+          // ~3 s so it doesn't read as a permanent selection state.
+          // Survives subsequent hashchanges via the cleanup below.
+          grid.querySelectorAll('.member-card.is-search-landed')
+              .forEach(c => c.classList.remove('is-search-landed'));
+          target.classList.add('is-search-landed');
+          setTimeout(() => target.classList.remove('is-search-landed'), 3500);
+          // In compact view also expand the card in place. In
+          // detailed view, all cards are already showing full bio
+          // content, so the expand class is unnecessary — the
+          // spotlight is the only visual treatment needed.
+          if (grid.classList.contains('is-compact')) {
+            grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
+            target.classList.add('is-expanded');
+          }
         }
       });
     };

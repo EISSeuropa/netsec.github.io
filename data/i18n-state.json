@@ -87,14 +87,14 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "a6debaf818b466565e75d380a30d07ed4d67ed11",
+        "source_sha1": "e627404aa96c9f069bedc091e72880d1eb0ca3ad",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "a6debaf818b466565e75d380a30d07ed4d67ed11",
+        "source_sha1": "e627404aa96c9f069bedc091e72880d1eb0ca3ad",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
@@ -119,14 +119,14 @@
     "index.html": {
       "fr": {
         "file": "index.fr.html",
-        "source_sha1": "2dc206744273bc35b44cad539ef8770874d95280",
+        "source_sha1": "524c8936d60da530fe52066e148a83f08f80e38c",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "index.de.html",
-        "source_sha1": "2dc206744273bc35b44cad539ef8770874d95280",
+        "source_sha1": "524c8936d60da530fe52066e148a83f08f80e38c",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
