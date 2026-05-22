@@ -71,14 +71,14 @@
     "licensing.html": {
       "fr": {
         "file": "licensing.fr.html",
-        "source_sha1": "69e3708be4c2918214cdd248b19922f15a1499c8",
+        "source_sha1": "59e2b9ae21276a0a52ee26358ed68b66f9a0bd5d",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "licensing.de.html",
-        "source_sha1": "69e3708be4c2918214cdd248b19922f15a1499c8",
+        "source_sha1": "59e2b9ae21276a0a52ee26358ed68b66f9a0bd5d",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
@@ -151,14 +151,14 @@
     "faq.html": {
       "fr": {
         "file": "faq.fr.html",
-        "source_sha1": "1f448b824b72721194018bac316c5e5321090a05",
+        "source_sha1": "04a4c4817cd1f12f9aa38b6adfc065a159e38671",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "faq.de.html",
-        "source_sha1": "1f448b824b72721194018bac316c5e5321090a05",
+        "source_sha1": "04a4c4817cd1f12f9aa38b6adfc065a159e38671",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null

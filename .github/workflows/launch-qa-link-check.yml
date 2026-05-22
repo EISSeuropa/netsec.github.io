@@ -1,0 +1,49 @@
+# Broken-link check.
+#
+# Runs scripts/check-links.sh on:
+#   - every PR that touches an HTML file at the repo root (catches a
+#     bad link before merge)
+#   - weekly on main (catches external link rot — the EU Commission
+#     and COST sometimes shuffle their public URLs, and we want to
+#     hear about it within a week rather than weeks later when a
+#     visitor reports it)
+#   - manual dispatch from the Actions tab
+#
+# The script is a portable Python-only check that exits non-zero on
+# any broken link. See the script header for the host-skip list
+# (auth-gated URLs are skipped, not failed).
+#
+# This workflow's first run was at the launch-QA pass in May 2026
+# (see docs/launch-qa-2026.md).
+name: Link check
+
+on:
+  pull_request:
+    paths:
+      - '*.html'
+      - 'scripts/check-links.sh'
+      - '.github/workflows/launch-qa-link-check.yml'
+  schedule:
+    # Weekly on Mondays at 06:00 UTC — picks up external link rot
+    # without waking anyone at a bad hour.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    name: Resolve every internal + external link
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run link check
+        run: ./scripts/check-links.sh --quiet
