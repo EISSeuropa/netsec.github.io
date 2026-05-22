@@ -89,6 +89,47 @@
     return dict[s] || s;
   };
 
+  /* Beta-translation ribbon: keep the layout offset in step with the
+     ribbon's real measured height.
+
+     The ribbon is `position: fixed; top: 0` and the body's
+     `padding-top` + nav's `top` are derived from `--ribbon-h` so
+     content doesn't sit under it. The fallback in CSS is 38px
+     (single-line desktop). On narrow viewports the long
+     "Traduction automatique…" sentence + link wraps to two or
+     three lines, making the ribbon 60–100px tall. Without this
+     measurement the nav would overlap the bottom of the ribbon
+     (reported on mobile).
+
+     The measurement runs:
+       - once on script start (catches the initial layout),
+       - on every viewport resize (catches wrap-state changes),
+       - on every ribbon resize (covers anything we don't predict).
+  */
+  const ribbon = document.querySelector('.i18n-beta-ribbon');
+  if (ribbon && document.documentElement.hasAttribute('data-i18n-status')) {
+    const syncRibbonHeight = () => {
+      const h = ribbon.offsetHeight;
+      if (h > 0) {
+        document.documentElement.style.setProperty('--ribbon-h', h + 'px');
+      }
+    };
+    // Run now (best-effort: defer scripts run after DOM but before
+    // CSS is guaranteed to have applied, so offsetHeight may still be
+    // 0 here), then again once everything has loaded, then on every
+    // viewport resize / ribbon resize. The window.load + ResizeObserver
+    // pair guarantees we eventually set the right value even if the
+    // synchronous read returned 0.
+    syncRibbonHeight();
+    if (document.readyState !== 'complete') {
+      window.addEventListener('load', syncRibbonHeight, { once: true });
+    }
+    window.addEventListener('resize', syncRibbonHeight, { passive: true });
+    if (typeof ResizeObserver === 'function') {
+      new ResizeObserver(syncRibbonHeight).observe(ribbon);
+    }
+  }
+
   /* Nav: stronger shadow once scrolled past the top. */
   const nav = document.querySelector('.nav');
   if (nav) {
