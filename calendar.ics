@@ -28,7 +28,7 @@ END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
 UID:summer-school-2026@netsec-cost.eu
-DTSTAMP:20260522T000000Z
+DTSTAMP:20260523T000000Z
 DTSTART;TZID=Europe/Stockholm:20260609T090000
 DTEND;TZID=Europe/Stockholm:20260611T180000
 SUMMARY:NetSec Early-Career Scholars Summer School
@@ -41,13 +41,13 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:european-security-conference-2026@netsec-cost.eu
-DTSTAMP:20260522T000000Z
+DTSTAMP:20260523T000000Z
 DTSTART;TZID=Europe/Stockholm:20260611T080000
 DTEND;TZID=Europe/Stockholm:20260612T200000
 SUMMARY:European Security Conference 2026
-DESCRIPTION:The flagship annual gathering of the NetSec community: an interdisciplinary conference on European defence and security open to academics\, policy-makers\, and practitioners. Held back-to-back with the Summer School so early-career scholars can join the wider conversation.\n\nChairpersons: Dr Julia Carver\, Dr Sanne Verschuren.\n\nProgramme and registration: https://indico.eiss-europa.com/event/22/
+DESCRIPTION:The flagship annual gathering of the NetSec community: an interdisciplinary conference on European defence and security open to academics\, policy-makers\, and practitioners. Held back-to-back with the Summer School so early-career scholars can join the wider conversation.\n\nChairpersons: Dr Julia Carver\, Dr Sanne Verschuren.\n\nLive programme: https://netsec-cost.eu/essc-2026.html\nRegistration: https://indico.eiss-europa.com/event/22/
 LOCATION:Stockholm University\, Frescativägen\, 114 19 Stockholm\, Sweden
-URL;VALUE=URI:https://indico.eiss-europa.com/event/22/
+URL;VALUE=URI:https://netsec-cost.eu/essc-2026.html
 CATEGORIES:Annual Conference,NetSec
 STATUS:CONFIRMED
 END:VEVENT
