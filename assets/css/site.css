@@ -2459,3 +2459,333 @@ body.search-open{overflow:hidden}
   border-color:#0a4ed0;
   color:#fff;
 }
+
+/* -------- ESSC 2026 page (essc-2026.html) -------- */
+
+/* Hero — narrower than the home hero; this isn't the front door. */
+.essc-hero{
+  padding:140px 0 36px;
+  position:relative;
+}
+.essc-hero h1{
+  font-size:clamp(2rem,1.4rem+2.8vw,3.4rem);
+  line-height:1.1;
+  margin:0 0 1rem;
+  background:linear-gradient(120deg,var(--ink) 30%,var(--accent-2) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+.essc-hero .lede{
+  font-size:1.1rem;
+  line-height:1.6;
+  color:var(--ink-2);
+  max-width:46rem;
+  margin:0 0 1.6rem;
+}
+
+/* Quick facts — 4-cell grid; collapses to 2 on tablet, 1 on phone. */
+.essc-quickfacts{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+  margin-top:1.4rem;
+  padding:18px 22px;
+  background:var(--glass-bg);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border:1px solid var(--glass-border);
+  border-radius:16px;
+  box-shadow:var(--glass-shadow);
+}
+.essc-quickfacts[data-state="loading"]{opacity:.65}
+.essc-quickfacts[data-state="error"]{opacity:.5}
+.essc-quickfact{display:flex;flex-direction:column;gap:.25rem;min-width:0}
+.essc-quickfact .lbl{
+  font-size:.72rem;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.essc-quickfact .val{
+  font-size:.95rem;
+  font-weight:500;
+  color:var(--ink);
+  overflow-wrap:anywhere;
+}
+@media (max-width:780px){
+  .essc-quickfacts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:480px){
+  .essc-quickfacts{grid-template-columns:1fr}
+}
+
+/* Programme section */
+.essc-programme{padding-top:24px}
+.essc-programme h2{
+  font-size:clamp(1.8rem,1.4rem+1.8vw,2.5rem);
+  margin:0 0 .8rem;
+}
+
+/* Day-chip nav. Anchor-link based, no JS scroll handler — keeps
+   `prefers-reduced-motion` honoured by the browser. */
+.programme-day-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:1.4rem 0 2rem;
+  padding-top:.4rem;
+}
+.programme-day-chip{
+  display:inline-flex;
+  align-items:baseline;
+  gap:.5rem;
+  padding:.6rem 1rem;
+  border-radius:999px;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  color:var(--ink);
+  font-size:.92rem;
+  font-weight:500;
+  text-decoration:none;
+  transition:background .2s var(--ease),transform .2s var(--ease);
+}
+.programme-day-chip:hover{
+  background:var(--glass-bg-strong);
+  transform:translateY(-1px);
+  opacity:1;
+}
+.programme-day-chip .lbl{font-weight:600;color:var(--accent)}
+.programme-day-chip .date{color:var(--muted);font-size:.85rem}
+
+/* Day blocks */
+.programme-day{
+  margin:0 0 3rem;
+  scroll-margin-top:100px;     /* Anchor-link landing clears the floating header */
+}
+.programme-day-head{
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:.6rem 1rem;
+  margin-bottom:1.2rem;
+  padding-bottom:.8rem;
+  border-bottom:1px solid var(--line);
+}
+.programme-day-head h3{
+  margin:0;
+  font-size:1.5rem;
+  font-weight:600;
+}
+.programme-day-date{
+  color:var(--muted);
+  font-size:.95rem;
+}
+
+/* Row = one time-block in the day. Two-column on desktop:
+   time-gutter | items. On mobile (<700px), the gutter stacks
+   above the items as a small label. */
+.programme-row{
+  display:grid;
+  grid-template-columns:120px 1fr;
+  gap:18px;
+  margin:0 0 18px;
+}
+@media (max-width:700px){
+  .programme-row{grid-template-columns:1fr;gap:8px}
+}
+.programme-row-time{
+  font-variant-numeric:tabular-nums;
+  font-size:.92rem;
+  color:var(--muted);
+  font-weight:500;
+  padding-top:.4rem;
+  white-space:nowrap;
+}
+.programme-row-time .start{color:var(--ink)}
+.programme-row-items{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+.programme-row.is-parallel .programme-row-items{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+@media (max-width:900px){
+  .programme-row.is-parallel .programme-row-items{grid-template-columns:1fr}
+}
+
+/* Slot = a single card. Three kinds: session, contribution, break. */
+.programme-slot{
+  padding:18px 20px;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  border-radius:14px;
+  box-shadow:0 1px 2px rgba(20,35,80,.04);
+  transition:box-shadow .25s var(--ease),transform .25s var(--ease);
+}
+.programme-slot:hover{
+  box-shadow:0 10px 28px rgba(20,35,80,.10);
+}
+.programme-slot.is-break{
+  background:transparent;
+  border-style:dashed;
+  border-color:var(--line);
+  box-shadow:none;
+  padding:10px 18px;
+  text-align:center;
+  color:var(--muted);
+  font-size:.92rem;
+  font-style:italic;
+}
+.programme-slot.is-break:hover{box-shadow:none;transform:none}
+.programme-slot-head{
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  flex-wrap:wrap;
+  margin-bottom:.6rem;
+}
+.programme-slot-kind{
+  display:inline-block;
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  padding:.25rem .65rem;
+  border-radius:999px;
+  background:rgba(11,18,32,.06);
+  color:var(--ink-2);
+}
+.programme-slot-kind.is-roundtable{
+  background:rgba(220,140,40,.12);
+  color:#a85b00;
+}
+.programme-slot-kind.is-plenary{
+  background:rgba(10,132,255,.12);
+  color:var(--accent-2);
+}
+.programme-slot-room{
+  font-size:.82rem;
+  color:var(--muted);
+}
+.programme-slot-title{
+  margin:0 0 .5rem;
+  font-size:1.05rem;
+  font-weight:600;
+  line-height:1.35;
+  color:var(--ink);
+}
+.programme-slot-title a{color:inherit}
+.programme-slot-title a:hover{color:var(--accent-2);opacity:1}
+.programme-slot-abstract{
+  margin:.6rem 0 0;
+  font-size:.92rem;
+  color:var(--ink-2);
+  line-height:1.55;
+}
+
+/* Chairs / speakers / discussants list. */
+.programme-people{
+  margin:.3rem 0;
+  font-size:.88rem;
+  color:var(--ink-2);
+  line-height:1.5;
+}
+.programme-people-label{
+  font-weight:600;
+  color:var(--muted);
+}
+.programme-person .name{font-weight:500}
+.programme-person .aff{color:var(--muted)}
+
+/* Contributions <details> — only on session cards that have papers. */
+.programme-contribs{
+  margin-top:.8rem;
+  padding-top:.8rem;
+  border-top:1px solid var(--line);
+}
+.programme-contribs > summary{
+  cursor:pointer;
+  font-size:.85rem;
+  font-weight:500;
+  color:var(--accent-2);
+  user-select:none;
+  list-style:none;
+}
+.programme-contribs > summary::-webkit-details-marker{display:none}
+.programme-contribs > summary::before{
+  content:"▸";
+  display:inline-block;
+  margin-right:.4em;
+  font-size:.8em;
+  transition:transform .2s var(--ease);
+}
+.programme-contribs[open] > summary::before{transform:rotate(90deg)}
+.programme-contribs-list{
+  list-style:none;
+  padding:0;
+  margin:.8rem 0 0;
+  display:flex;
+  flex-direction:column;
+  gap:.9rem;
+}
+.programme-contrib{
+  padding:.6rem .8rem;
+  background:rgba(11,18,32,.03);
+  border-radius:10px;
+}
+.dark .programme-contrib{background:rgba(255,255,255,.04)}
+.programme-contrib-head{
+  display:flex;
+  gap:.6rem;
+  align-items:baseline;
+  flex-wrap:wrap;
+}
+.programme-contrib-time{
+  font-variant-numeric:tabular-nums;
+  font-size:.78rem;
+  color:var(--muted);
+}
+.programme-contrib-title{
+  margin:0;
+  font-size:.95rem;
+  font-weight:600;
+  line-height:1.35;
+  color:var(--ink);
+}
+.programme-contrib-title a{color:inherit}
+.programme-contrib-title a:hover{color:var(--accent-2);opacity:1}
+.programme-contrib-abstract{
+  margin:.4rem 0 0;
+  font-size:.86rem;
+  color:var(--ink-2);
+  line-height:1.5;
+}
+.programme-contrib-more{
+  white-space:nowrap;
+  margin-left:.25rem;
+  font-size:.82rem;
+}
+
+/* Empty / loading / error states */
+.programme-loading,
+.programme-error{
+  padding:24px;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  border-radius:14px;
+  color:var(--muted);
+  text-align:center;
+}
+.programme-error{
+  border-color:rgba(220,90,90,.35);
+  background:rgba(220,90,90,.05);
+  color:var(--ink-2);
+}
+
+/* Reduced-motion: kill the day-chip hover-lift. */
+@media (prefers-reduced-motion: reduce){
+  .programme-day-chip:hover{transform:none}
+  .programme-slot:hover{transform:none}
+}
