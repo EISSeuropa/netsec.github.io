@@ -50,8 +50,8 @@ Three streams set the pace:
 | Date | Event | Site impact |
 |---|---|---|
 | **9–11 Jun 2026** | Early-Career Scholars Summer School (Stockholm University) | Liveness check on the event card, calendar feed up-to-date, post-event recap |
-| **11–12 Jun 2026** | European Security Conference (Stockholm University) | Same; flagship outreach moment |
-| **Q3 2026** *(date TBA)* | Inaugural Management Committee Plenary | Date confirmation on home page, agenda/minutes path to the members' Wiki |
+| **11–12 Jun 2026** | European Security Conference (Stockholm University) | Same; flagship outreach moment. **Official logos + social channels in place** (see Q2 ship list) |
+| **Before late Sep 2026** | Inaugural Management Committee Plenary *(date TBA)* | Date confirmation on home page well ahead of the meeting; agenda + minutes path to the members' Wiki; site reads as the canonical entry point for new MC reps |
 | **10 Oct 2026** | Year 1 anniversary (M12) | Year-1 retrospective; D1 first-version milestone |
 | **Throughout** | STSM applications, conference grants | Calls visible on `/grants`, application flow stable |
 
@@ -94,8 +94,13 @@ it.
 
 ### Q2 wrap-up — May / June 2026 *(in progress)*
 
-**Theme**: ship the major polish items so the Conference + School
-deployment is rock-solid.
+**Theme**: ship the search and brand polish so the Conference is
+the moment NetSec's public identity reads as deliberate. **The
+Conference + the inaugural MC plenary (before late Sep) both
+benefit from official logos and social channels already being in
+place** — so brand work is pulled into June, not deferred to Q3.
+
+#### Pre-Conference (target: before **5 Jun 2026**)
 
 - [x] Public FAQ and Glossary, multilingual (v1.3.0)
 - [x] Site-wide search, including directory bios (v1.3.x → v1.4.0)
@@ -112,10 +117,40 @@ deployment is rock-solid.
       search additions. Title: *Search the directory, polished
       header*.
 
+#### Pre-July — brand identity + social presence (target: before **30 Jun 2026**)
+
+The Action's first public mass-outreach moments (Conference,
+Summer School, then the inaugural MC plenary) all benefit from
+having a finalised visual identity and live social channels
+*before* they happen, not after. The pre-Conference dates would
+be ideal; the firm deadline is **end of June**.
+
+- [ ] **Issue #62 — official logos and favicon**. Replace the
+      placeholder NS-square mark and favicon with the Action's
+      approved official versions. Audit logo placements across
+      the site, the PDF documentation pack, the promotional
+      poster, and the press kit. Verify the OG / Twitter Card
+      / Bluesky preview images still render correctly with the
+      new mark. *Blocker: receive the approved final-form logos
+      from the Action Chair / WG4 lead.*
+- [ ] **Issue #63 — social media presence**. Channels live,
+      handles registered (consistent across networks), profile
+      art using the new logos, biographies in EN/FR/DE.
+      Footprint on the site: footer chips, press-kit page row,
+      and a small *Follow us* card in the home-page *Find out
+      more* grid. *Working proposal (pending decision):
+      LinkedIn primary + Bluesky secondary, no X.*
+- [ ] **Cut v1.5.0** — title: *Official logos + social channels
+      live*. Ships the visual identity refresh, the social-media
+      surfaces, and any small polish from the Conference dry-run
+      feedback.
+
 ### Q3 — July / August / September 2026
 
-**Theme**: capitalise on the Conference momentum, harden the
-infrastructure, host the first Year-1 deliverables.
+**Theme**: harden the infrastructure, host the first Year-1
+deliverables, prepare the site to be the canonical entry point
+for new MC reps joining around the **inaugural MC plenary**
+(before late September).
 
 #### Content & deliverables
 
@@ -123,29 +158,21 @@ infrastructure, host the first Year-1 deliverables.
   the news block. Photo gallery (a small one — opt-in basis
   from participants), participant feedback summary, recordings
   link if available.
-- **Host D8** (STSM planning guidelines, M9) as a permalink on
-  the Grants page once the Grant Awarding Coordinator approves
-  the final document.
-- **Host D10** (risk management strategy, M10) — likely a new
-  sub-page `/risk-management.html` with the PDF embedded and a
-  short summary; or appended to the existing Documentation
-  Pack appendix if the strategy is short.
-- **Inaugural MC plenary** dates + minutes path published, once
-  confirmed.
+- **Host D8** (STSM planning guidelines, M9 ≈ Jul) as a
+  permalink on the Grants page once the Grant Awarding
+  Coordinator approves the final document.
+- **Host D10** (risk management strategy, M10 ≈ Aug) — likely
+  a new sub-page `/risk-management.html` with the PDF embedded
+  and a short summary; or appended to the existing
+  Documentation Pack appendix if the strategy is short.
+- **Inaugural MC plenary** — date confirmation on home page as
+  soon as known; agenda + minutes path to the members' Wiki
+  finalised; the *For NetSec members* strip and the Wiki
+  *Onboarding* page reviewed for new MC reps arriving via the
+  plenary.
 
 #### Features
 
-- **Issue #62 — favicon and logo refinement**. Refresh the
-  favicon with an adapted NetSec mark; audit logo placements
-  across the site, the PDF, and the promotional poster; verify
-  SEO/Open-Graph image still looks right on social-card
-  previews (Twitter / X / LinkedIn / Bluesky).
-- **Issue #63 — social media integration**, *if* the Action
-  agrees on channels. Working assumption: LinkedIn (primary,
-  professional reach) + Bluesky (privacy-friendly alternative
-  to X for academic audiences). Footprint: footer chips +
-  optional press-kit page section. **Decision needed from
-  Action Chair / WG4 lead** before development starts.
 - **FR / DE review pass on FAQ + Glossary content**. The
   translations are beta — flag a single native-speaker review
   per locale to lift them out of the beta banner.
@@ -206,12 +233,12 @@ infrastructure, host the first Year-1 deliverables.
 
 #### Releases & docs
 
-- **v1.5.0** — bundles the Q3 features (favicons, social,
-  translation review). Title TBD.
-- **v1.6.0** — Year-1 milestone release alongside D1's M12.
-  Title likely: *Year 1 closes*.
-- **Documentation pack v1.7.0** at each website MINOR bump, in
-  step with the website. (Pack version is independent of the
+- **v1.7.0** — Year-1 milestone release alongside D1's M12.
+  Title: *Year 1 closes*.
+- **v1.8.0** — late-December "Year 2 ready" release if scope
+  warrants; PATCHes otherwise.
+- **Documentation pack** bumped at each website MINOR release,
+  in step with the website. (Pack version is independent of the
   website version axis — see CHANGELOG header.)
 
 ---
@@ -282,10 +309,11 @@ delta and is lazy-loaded.
 
 | Version | Target date | Working title | What's in it |
 |---|---|---|---|
-| v1.4.0 | early Jun 2026 | *Search the directory, polished header* | Site-wide search + bio cards + header streamline + small fixes from MC-feedback iteration |
-| v1.5.0 | mid Sep 2026 | *Iconography, social, FR/DE reviewed* | #62 favicon/logos, #63 social, native-speaker translation pass |
-| v1.6.0 | mid Oct 2026 | *Year 1 closes* | D1 first-version state, D6 policy-brief hosting, Year-1 retrospective content |
-| v1.7.0 | late Dec 2026 | *Year 2 ready* | D11 + D12 hosting; #72 side-panel **if** triggers fired; whatever Q4 polish accumulates |
+| v1.4.0 | early Jun 2026 *(pre-Conference)* | *Search the directory, polished header* | Site-wide search + bio cards + header streamline + small fixes from MC-feedback iteration |
+| v1.5.0 | late Jun 2026 *(pre-July)* | *Official logos + social channels live* | #62 official logos / favicon refresh across site + PDF + poster, #63 social-media presence and on-site footprint |
+| v1.6.0 | early Sep 2026 *(pre-MC plenary, with buffer)* | *FR / DE reviewed, deliverables hosted* | Native-speaker translation pass; D8 (M9 STSM guidelines) + D10 (M10 risk management) hosted; accessibility re-audit ships |
+| v1.7.0 | mid Oct 2026 | *Year 1 closes* | D1 first-version state, D6 policy-brief hosting, Year-1 retrospective content |
+| v1.8.0 | late Dec 2026 | *Year 2 ready* | D11 + D12 hosting; #72 side-panel **if** triggers fired; whatever Q4 polish accumulates |
 
 Patch releases (`1.x.y`) ship as needed; we don't pre-schedule
 them.
