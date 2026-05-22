@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-05-22T11:55:50+00:00",
+  "generated_at": "2026-05-22T18:43:14+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-05-22T11:55:50+00:00"
+    "last_synced": "2026-05-22T18:43:14+00:00"
   },
   "members": [
     {
@@ -43,7 +43,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/moritz-weiss.jpg",
-      "source": "form"
+      "source": "form",
+      "photo_source_sha256": "7cbdfd936f99eeb8fb14a18219594942869d7261281cf9371bf0735347c900b2"
     },
     {
       "id": "marie-robin",
@@ -101,7 +102,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/eugenio-sanchez.jpg",
-      "source": "form"
+      "source": "form",
+      "photo_source_sha256": "346be37395701ade22f6dbbd5ebe5e808890808662e65e888cf15b92dc7b0f1b"
     },
     {
       "id": "eliza-gheorghe",
@@ -187,7 +189,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/john-helferich.jpg",
-      "source": "form"
+      "source": "form",
+      "photo_source_sha256": "9edb78d985955231ba40d36fd16267b5c86d30c2257ad60d98b3eea6e416850f"
     },
     {
       "id": "chiara-ruffa",
@@ -399,7 +402,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/arthur-laudrain.jpg",
-      "source": "form"
+      "source": "form",
+      "photo_source_sha256": "d6927b276ccffbbb2bc5bccf38502563a079862a500fbde9e79941f4851cae6a"
     }
   ]
 }
