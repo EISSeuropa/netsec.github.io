@@ -269,14 +269,21 @@ Checks:
 
 ### Journey checklist
 
-| Journey | Chrome | Safari | Firefox | iPhone emul |
-|---|---|---|---|---|
-| 1 Home landing | | | | |
-| 2 Search STSM | | | | |
-| 3 Press kit | | | | |
-| 4 Directory card | | | | |
-| 5 Join form | | | | |
-| 6 Calendar subscribe | | | | |
+Tested 22 May 2026 against the local static mirror (Pagefind built
+locally for the search-overlay journeys) via the Claude Code
+preview tool, which drives a headless Chromium. The desktop +
+mobile-emul columns are the two viewports the preview tool covers
+directly; Safari + Firefox + real-device iPhone need a manual
+sweep before public push.
+
+| Journey | Headless Chromium (desktop) | Mobile-emul 390 × 844 | Safari | Firefox | Real iPhone |
+|---|---|---|---|---|---|
+| 1 Home landing | ✓ (one i18n-ribbon copy issue → I-1) | ✓ (one menu-panel contrast issue → M-1) | pending | pending | pending |
+| 2 Search STSM | ✓ (7 EN / 7 FR / 7 DE; one nested-`<mark>` issue → J2-1) | — | pending | pending | pending |
+| 3 Press kit | ✓ | — | pending | pending | pending |
+| 4 Directory card | ⚠ (deep-link auto-expand + spotlight didn't fire under headless → J4-1) | — | pending | pending | pending |
+| 5 Join form | ✓ | — | pending | pending | pending |
+| 6 Calendar subscribe | ✓ (2 events at Stockholm, webcal:// link) | — | pending | pending | pending |
 
 ## Phase 2 — Accessibility + cross-browser + perf
 
@@ -431,6 +438,18 @@ left as P0 findings below.
 | PR1 | 2 / print | site.css | P2 | Print stylesheet is one-rule (collapses the MC-by-country detail). No proper print formatting for FAQ / Glossary / individual pages. | Roadmap (`docs/roadmap-2026.md`) already queues this for v1.8.0; out of scope for launch. | deferred (already planned for v1.8.0) |
 | US1 | 2 / journey smoke | `/index.html` | resolved | Home loads cleanly: H1 reads correctly, 4 Find-out-more cards, 3 event cards + Subscribe CTA, 4 news cards, footer has 15 links, search trigger / theme toggle / 3-language switch all present. Mobile (375 × 812): no horizontal scroll, menu toggle visible, nav drawer hidden by default. | none. | **green** |
 | US2 | 2 / journey smoke | `/index.html` search overlay | resolved | Search trigger opens overlay; query `STSM` returns 14 results in EN with relevant hits (FAQ + Grants); first 3 results readable. | none. | **green** |
+
+### Phase 1 journeys (22 May 2026)
+
+Six pre-launch journeys run end-to-end against the local static mirror (Pagefind built locally) via headless Chromium at both desktop (1280 × 800) and iPhone-emulated 390 × 844 viewports. Most journeys green; five findings logged below. The journey-by-journey checklist is at *Journey checklist* above.
+
+| ID | Phase | Page / locale | Severity | Finding | Resolution | Status |
+|---|---|---|---|---|---|---|
+| I-1 | 1 / Journey 1 | `index.fr.html`, `index.de.html` + 36 other `*.fr.html` / `*.de.html` files | **P0** | Beta-translation ribbon says *"Traduction automatique"* (FR) / *"Maschinell übersetzt"* (DE) — "machine translation". The translations are **manual**. This is a public-facing falsehood about the build methodology, directly contradicting the standing project constraint "No machine translation; EN/FR/DE done manually". Same misclaim appears in the top-of-file HTML comments of 36 files and on `accessibility.html` (line 9: *"machine-translated beta versions"*). | Rewrite the ribbon copy (FR + DE), the HTML comment header (EN + FR + DE), and the accessibility statement. Replacement: keep the BETA marker, replace the methodology claim with a manual-translation framing (e.g. "Traduction manuelle (bêta) — la version anglaise fait foi" / "Manuelle Übersetzung (Beta) — die englische Fassung ist verbindlich" / "manually translated beta variants"). | open — fix in a follow-up PR before public push |
+| J2-1 | 1 / Journey 2 | every `*-highlight=*` landing page | P2 | Pagefind's built-in `<mark>` highlighter and the page's own highlighter both wrap matched terms, producing `<mark><mark>STSM</mark></mark>` on Grants/FAQ/etc. landings. Renders identically (single highlight), but invalid-nesting markup will read awkwardly to a screen reader on terms in the result excerpt ("STSM STSM"). | Remove the page-side highlighter once Pagefind's `pagefind-highlight=` query-string already does the job. `assets/js/site.js` has the duplicate; the Pagefind highlight is what stays. | open — fix in v1.5.0 search-polish PR |
+| J4-1 | 1 / Journey 4 | `/people.html` (compact view) | P1 (needs live confirmation) | Deep-link auto-expand + spotlight (`/people.html#<slug>` → expanded card + `is-search-landed` glow) did **not** fire under headless Chromium on a cold page load — neither via the URL bar nor via an overlay-search result click. The same code path works when invoked manually from the console. The handler is wrapped in `requestAnimationFrame` (line 908 of `people.html`); headless Chromium can defer RAF when the tab paint isn't requested. May or may not reproduce in a real browser. | Verify in real Chrome / Safari / Firefox before the public push. If the bug is real (and not a headless quirk), drop the RAF wrap on the initial-load path — RAF is only needed on `hashchange` to defer past in-flight layout, not on `bios.json`'s post-render call. | open — verify on live site, then fix if reproducible |
+| J4-2 | 1 / Journey 4 | `.member-toggle-chevron` | observation | `getComputedStyle(chev).transform` reads as `matrix(1, 0, 0, 1, 0, 0)` (identity) when the card is `.is-expanded`, even though the matched CSS rule is `rotate(180deg)`. Pure-JS verification; visual confirmation in a real browser still pending. Likely a headless-renderer quirk in how the preview tool exposes computed-style of nested transforms. | Spot-check by eye in real Chrome before public push. No code change planned — the CSS is correct. | open — sanity-check only |
+| M-1 | 1 / Mobile sweep | `index.html` (mobile, 390 × 844) | P2 | Hamburger-menu panel renders with a transparent background — the hero text shows through behind every nav item (8-item list). The active item (*Contact*) has a white pill, but the other items sit on the transparent surface, harming legibility. | Add an opaque (or strongly tinted) background to the mobile nav-menu panel; bump z-index above the hero. Match the desktop floating-bubble glass treatment so light/dark mode are both covered. | open — fix in a follow-up PR before public push |
 
 ## Sign-off
 
