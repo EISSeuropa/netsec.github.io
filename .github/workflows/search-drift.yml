@@ -1,40 +1,39 @@
-# Search-index page-count check.
+# Pagefind build sanity check.
 #
-# Runs scripts/build-search.sh --check on every PR that touches
-# searchable HTML, the committed index, the builder script, or the
-# JS that consumes the index. The check builds a fresh Pagefind
-# index in /tmp and compares its per-language page_count against
-# the committed pagefind-entry.json — fails if they differ.
+# Since the search index is built at deploy time (see
+# .github/workflows/pages-deploy.yml) and is no longer committed to
+# main, the old "committed index vs fresh build" page-count drift
+# check became moot. What we still want on every PR that touches
+# searchable content is: confirm the build succeeds, produces a
+# valid pagefind-entry.json, and indexes at least one page per
+# locale. That catches the realistic regressions:
 #
-# Why page counts, not a byte diff:
-#   Pagefind's per-platform WASM build is non-deterministic between
-#   Linux (CI) and macOS (typical local). The WASM binaries and
-#   shard hashes differ across platforms even when the content is
-#   identical — both versions work in any browser at runtime, but
-#   they wouldn't byte-equal. Page counts ARE deterministic and
-#   catch the most common "forgot to rebuild" mistake (adding /
-#   removing an indexable page).
+#   - a syntax error in HTML that makes Pagefind silently skip a page
+#   - a forgotten `<main data-pagefind-body>` marker on a new page
+#   - a build-script regression that produces an empty index
 #
-# Content edits inside an existing page are NOT caught by this CI
-# check — the maintainer must remember to ./scripts/build-search.sh
-# after content edits. The architecture doc spells this out.
-name: Search-index page-count check
+# Content-level drift (an edit inside an existing page) is no longer
+# a CI concern — the deploy workflow always rebuilds the index from
+# the current main, so the live site can't be stale relative to source.
+name: Pagefind build sanity check
 
 on:
   pull_request:
     paths:
       - '*.html'
-      - 'pagefind/**'
+      - 'data/bios.json'
       - 'scripts/build-search.sh'
+      - 'scripts/build-bio-search-stubs.py'
       - 'assets/js/site.js'
+      - '.github/workflows/search-drift.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  drift:
-    name: Check search-index page counts
+  build:
+    name: Verify Pagefind builds and indexes content
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -50,5 +49,25 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Run page-count check
-        run: ./scripts/build-search.sh --check
+      - name: Build Pagefind index
+        run: bash scripts/build-search.sh
+
+      - name: Verify per-locale page counts are non-zero
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          entry = json.load(open('pagefind/pagefind-entry.json'))
+          langs = entry.get('languages', {})
+          if not langs:
+              sys.exit('FAIL: no languages indexed')
+          failed = False
+          for lang, meta in langs.items():
+              n = meta.get('page_count', 0)
+              if n == 0:
+                  print(f'FAIL: {lang} shard has 0 pages')
+                  failed = True
+              else:
+                  print(f'  {lang}: {n} pages')
+          if failed:
+              sys.exit(1)
+          PY

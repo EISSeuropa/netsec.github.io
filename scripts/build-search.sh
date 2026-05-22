@@ -2,28 +2,26 @@
 # scripts/build-search.sh — rebuild the Pagefind search index.
 #
 # Usage:
-#   ./scripts/build-search.sh           # rebuild ./pagefind/
-#   ./scripts/build-search.sh --check   # exit 1 if per-language page count drifted
+#   ./scripts/build-search.sh
 #
-# When to run:
-#   - After any HTML change that affects searchable content (any
-#     <main data-pagefind-body> body, on any page in any locale).
-#   - CI runs this with --check on every PR; merging is blocked
-#     when the committed page counts diverge from what the script
-#     would produce.
+# Where the index lives:
+#   /pagefind/ at the repo root. The directory is gitignored — the
+#   index is built fresh at deploy time by the Pages workflow
+#   (.github/workflows/pages-deploy.yml), not committed to main.
+#   We deliberately stopped committing it: two parallel PRs that
+#   each rebuilt the index conflicted on the content-hashed shard
+#   filenames in pagefind-entry.json. Deferring the build to the
+#   deploy step eliminates that conflict source for good.
+#
+# When you'd still run this locally:
+#   - To preview a content change with working search before
+#     pushing — the gitignored /pagefind/ is served by any local
+#     static server (`python3 -m http.server`, etc.).
+#   - The script is also what CI calls in pages-deploy.yml and in
+#     search-drift.yml (build sanity check on PRs).
 #
 # Pinned to Pagefind 1.5.2 so re-builds across machines / CI runs
 # produce the same per-language page counts.
-#
-# A note on --check
-#   Pagefind's per-platform WASM build is non-deterministic between
-#   Linux (CI) and macOS (typical local). The shard hashes and WASM
-#   binaries differ. We therefore *cannot* enforce a byte-diff drift
-#   check. Instead we compare the per-language page_count from
-#   pagefind-entry.json — which is deterministic — which catches
-#   "added/removed a page without rebuilding". Content edits inside
-#   an existing page are NOT caught by CI; maintainers must remember
-#   to rebuild. The architecture doc spells this out.
 set -euo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -34,49 +32,21 @@ PAGEFIND_VERSION="1.5.2"
 
 # npm/npx, depending on Node version, sometimes drops a
 # node-compile-cache directory inside the output path. It's a
-# cache, not part of the index; remove it before committing.
+# cache, not part of the index; remove it after build.
 strip_cache() {
   rm -rf "$1/node-compile-cache"
 }
 
-# Compare per-language page counts between two pagefind-entry.json
-# files. Exits 1 if they differ; prints a per-locale breakdown.
-counts_diff() {
-  local fresh="$1" committed="$2"
-  python3 - "$fresh" "$committed" <<'PY'
-import json, sys
-a = json.load(open(sys.argv[1]))["languages"]
-b = json.load(open(sys.argv[2]))["languages"]
-acounts = {k: v["page_count"] for k, v in a.items()}
-bcounts = {k: v["page_count"] for k, v in b.items()}
-if acounts != bcounts:
-    print(f"  fresh:     {acounts}")
-    print(f"  committed: {bcounts}")
-    sys.exit(1)
-PY
-}
-
+# Backwards-compatibility shim: the old --check mode compared a
+# fresh build against the committed index. Since /pagefind/ is no
+# longer committed, the comparison has no anchor and the flag is a
+# no-op now. Print a deprecation note so old muscle memory and any
+# stray references in docs / scripts surface, then run the build
+# anyway so callers don't break.
 if [[ "${1-}" == "--check" ]]; then
-  TMPROOT="$(mktemp -d -t netsec-pagefind-check-XXXXXX)"
-  trap 'rm -rf "$TMPROOT"' EXIT
-  TMPDIR="$TMPROOT/pagefind"
-  # Regenerate bio stubs first so the page count matches what the
-  # actual build would produce. Without this, a fresh checkout's
-  # search/bios/ directory could be empty if a maintainer ran the
-  # stub generator without committing, and CI would report drift.
-  echo "→ Regenerating bio search stubs"
-  python3 "$REPO_ROOT/scripts/build-bio-search-stubs.py" >/dev/null
-  echo "→ Building search index to $TMPDIR for comparison"
-  npx -y "pagefind@$PAGEFIND_VERSION" --site . --output-path "$TMPDIR" >/dev/null
-  if ! counts_diff "$TMPDIR/pagefind-entry.json" "$REPO_ROOT/pagefind/pagefind-entry.json"; then
-    echo "✗ Per-language page count drifted between the committed index"
-    echo "  and a fresh build."
-    echo "  Run: ./scripts/build-search.sh"
-    echo "  Then commit the resulting changes under ./pagefind/."
-    exit 1
-  fi
-  echo "✓ Per-language page counts match."
-  exit 0
+  echo "ℹ️  --check is deprecated: /pagefind/ is no longer committed."
+  echo "    CI now runs a build sanity check directly (see "
+  echo "    .github/workflows/search-drift.yml). Running a full build."
 fi
 
 echo "→ Generating bio search stubs from data/bios.json"

@@ -291,7 +291,7 @@ besides GitHub Pages' own access logs. The full processor list is in
 │   ├── i18n-state.json              # SHA-1 stamps for translation-drift tracking
 │   └── events.json                  # Source of truth for /calendar.ics (and Events cards)
 │
-├── pagefind/                        # Pre-built search index served at /pagefind/ for the in-page overlay
+├── pagefind/                        # Built at deploy time, not committed (gitignored)
 │
 ├── scripts/
 │   ├── sync-cost.py                 # Pulls WG_MAP + leadership from cost.eu
@@ -300,16 +300,18 @@ besides GitHub Pages' own access logs. The full processor list is in
 │   ├── inject-seo.py                # Idempotent canonical/OG/JSON-LD generator
 │   ├── check-i18n-drift.py          # Reports stale translations vs. EN source
 │   ├── build-calendar.py            # Generates /calendar.ics from data/events.json
-│   ├── build-search.sh              # Rebuilds /pagefind/ via `npx pagefind` (--check for CI)
+│   ├── build-search.sh              # Builds /pagefind/ via `npx pagefind` (gitignored)
 │   ├── release.sh                   # Cuts a tagged release; promotes CHANGELOG
 │   └── requirements.txt             # requests, beautifulsoup4, Pillow
 │
 ├── .github/workflows/
+│   ├── pages-deploy.yml             # Build → deploy on push-to-main (builds /pagefind/ here)
 │   ├── sync-cost.yml                # Weekly cron — opens PR if WG_MAP / roles changed
 │   ├── sync-bios.yml                # Weekly cron — opens PR if bios.json changed
 │   ├── i18n-drift.yml               # Drift checker for FR/DE translations
 │   ├── calendar-drift.yml           # Drift checker for /calendar.ics vs. events.json
-│   └── search-drift.yml             # Drift checker for /pagefind/ vs. searchable HTML
+│   ├── external-link-arrows.yml    # Lint: trailing → on external links
+│   └── search-drift.yml             # Build sanity check on PRs (per-locale page count > 0)
 │
 ├── docs/                            # ← you are here
 │   ├── README.md                    # ToC for this folder
@@ -372,13 +374,15 @@ If you're adding a new page:
    permutations).
 8. Mark the new page's searchable content with `data-pagefind-body`
    on the `<main>` element so the Pagefind indexer picks it up.
-   Run `./scripts/build-search.sh` to rebuild `/pagefind/`; commit
-   the result. CI (`search-drift.yml`) compares per-language page
-   counts between a fresh Linux build and the committed index — so
-   adding or removing a page without rebuilding is caught. *Content
-   edits within an existing page are **not** caught by CI* because
-   Pagefind's WASM build is non-deterministic across platforms; the
-   maintainer must remember to rebuild after content edits.
+   You don't need to commit anything under `/pagefind/`: the index
+   is built fresh on every deploy by `.github/workflows/pages-deploy.yml`
+   and `/pagefind/` itself is gitignored. `search-drift.yml` runs on
+   every PR that touches HTML and verifies the build succeeds with
+   non-zero per-locale page counts — so a forgotten `data-pagefind-body`
+   marker or a regression in `scripts/build-search.sh` is still caught.
+   To preview a content change with working search locally, run
+   `./scripts/build-search.sh` and serve the working tree
+   (`python3 -m http.server`); the result is gitignored.
 9. Bump the version stamp in the page meta-strip if you're adding
    a privacy- or accessibility-relevant page.
 
