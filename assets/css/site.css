@@ -2766,6 +2766,9 @@ body.search-open{overflow:hidden}
   font-size:1rem;
   margin:0 0 2px;
   color:var(--ink);
+  /* Long names with no spaces (e.g. transliterated long surnames)
+     should wrap rather than push the card wider than its max-width. */
+  overflow-wrap:anywhere;
 }
 .member-card-role{
   margin:0 0 2px;
@@ -2776,6 +2779,31 @@ body.search-open{overflow:hidden}
   margin:0 0 6px;
   font-size:.88rem;
   color:var(--ink-2);
+}
+/* Roles + WG badges. Sit between affiliation and country, kept on a
+   single wrappable row so a member with three or four chips doesn't
+   force the card taller than necessary. */
+.member-card-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  margin:4px 0 8px;
+}
+.member-card-badge{
+  display:inline-block;
+  font-size:.72rem;
+  font-weight:600;
+  letter-spacing:.02em;
+  padding:2px 7px;
+  border-radius:999px;
+  background:color-mix(in oklab, var(--accent-2) 14%, transparent);
+  color:var(--accent-2);
+  line-height:1.4;
+}
+.member-card-badge.is-wg{
+  /* WG chips read as a secondary tier — same shape, lower contrast. */
+  background:var(--surface-2);
+  color:var(--muted);
 }
 .member-card-country{
   display:flex;
@@ -2801,6 +2829,38 @@ body.search-open{overflow:hidden}
   line-clamp:3;
   -webkit-box-orient:vertical;
   overflow:hidden;
+}
+/* Social-link row. Compact 18px icons in a flex row, same brand
+   glyphs and colour conventions as /people.html so the card reads
+   visually as a smaller cousin of the directory card. */
+.member-card-contacts{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:10px 0 0;
+}
+.member-card-contact{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:28px;height:28px;
+  border-radius:6px;
+  color:var(--muted);
+  background:transparent;
+  transition:color .15s var(--ease), background .15s var(--ease);
+}
+.member-card-contact svg{width:18px;height:18px}
+.member-card-contact:hover,
+.member-card-contact:focus-visible{
+  color:var(--accent-2);
+  background:color-mix(in oklab, var(--accent-2) 12%, transparent);
+  opacity:1;
+}
+.member-card-contact.is-orcid{color:#A6CE39}
+.member-card-contact.is-orcid:hover,
+.member-card-contact.is-orcid:focus-visible{
+  color:#A6CE39;
+  background:color-mix(in oklab, #A6CE39 14%, transparent);
 }
 .member-card-footer{
   border-top:1px solid var(--border);
