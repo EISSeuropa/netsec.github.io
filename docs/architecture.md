@@ -256,6 +256,30 @@ Formspree is the only third-party that ever sees visitor data
 besides GitHub Pages' own access logs. The full processor list is in
 [`privacy.html`](https://netsec-cost.eu/privacy.html).
 
+### How the ESSC programme stays live
+
+The annual conference page at `/essc-2026.html` (and FR / DE
+variants) renders its programme grid from `data/indico.json`,
+which is mirrored daily from the shared EISS Indico instance at
+`indico.eiss-europa.com`. The full pipeline:
+
+1. `scripts/sync-indico.py` runs at 03:45 UTC each day via
+   `.github/workflows/sync-indico.yml`. It calls Indico's
+   `/export/categ/1.json` and `/export/timetable/{event_id}.json`,
+   normalises the response, and writes `data/indico.json`.
+2. When the data half of the payload has changed, the workflow
+   commits the new `indico.json` to `main`. Otherwise the working
+   tree stays clean and the workflow is a no-op. (Same anti-pattern
+   fix as `sync-bios.py`; see PR #117.)
+3. On every visit to `/essc-2026.html`, the inline JS at the foot
+   of the page fetches `data/indico.json`, picks the right year
+   under `annualConferences`, and renders the day chips, time
+   blocks, parallel sessions, and contributions.
+
+The design rationale lives at
+[`docs/indico-sync.md`](indico-sync.md) and (canonically) in the
+EISS repository's `docs/indico-programme-integration.md`.
+
 ## Repository layout
 
 ```
