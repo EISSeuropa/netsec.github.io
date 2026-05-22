@@ -87,6 +87,44 @@
   .about-section > .container > h2 + p.section-lede{
     max-width:62ch;color:var(--ink-2);font-size:1rem;line-height:1.6;margin:0 0 2rem;
   }
+  /* FAQ + Glossary teaser sections on the About page. Light-weight
+     list of links that point at the dedicated /faq + /glossary pages,
+     so the About page stays a one-stop landing for a curious visitor. */
+  .about-teaser-list{
+    margin:0;padding-left:0;list-style:none;
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .about-teaser-list li{padding:0;margin:0}
+  .about-teaser-list a{
+    display:block;padding:12px 18px;border-radius:10px;
+    background:var(--glass-bg);border:1px solid var(--line);
+    color:var(--ink);font-size:.96rem;text-decoration:none;
+    transition:background .15s var(--ease),border-color .15s var(--ease);
+  }
+  .about-teaser-list a:hover{background:var(--glass-bg-strong);border-color:var(--accent)}
+  .about-glossary-list{
+    margin:0;padding:0;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:14px;
+  }
+  .about-glossary-entry{
+    padding:14px 18px;border-radius:10px;
+    background:var(--glass-bg);border:1px solid var(--line);
+  }
+  .about-glossary-entry dt{
+    margin:0 0 4px;font-weight:600;font-size:.95rem;
+    font-family:'Lexend','Inter',sans-serif;
+  }
+  .about-glossary-entry dt a{color:var(--accent);text-decoration:none}
+  .about-glossary-entry dt a:hover{text-decoration:underline}
+  .about-glossary-entry dd{
+    margin:0;font-size:.88rem;color:var(--ink-2);line-height:1.5;
+  }
+  .about-teaser-cta{margin-top:1.4rem;text-align:right;font-size:.95rem}
+  .about-teaser-cta a{
+    color:var(--accent);font-weight:600;text-decoration:none;
+    border-bottom:1px solid transparent;transition:border-color .15s var(--ease);
+  }
+  .about-teaser-cta a:hover{border-color:var(--accent)}
   .eiss-placeholder{
     padding:24px 28px;border-radius:14px;
     background:linear-gradient(135deg,rgba(255,204,0,.06),rgba(0,51,153,.03)),var(--glass-bg-strong);
@@ -201,6 +239,8 @@
       <ul>
         <li><a href="#the-action">The Action</a></li>
         <li><a href="#leadership">Leadership</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#glossary">Glossary</a></li>
         <li><a href="#eiss">Relationship with EISS</a></li>
       </ul>
     </nav>
@@ -644,6 +684,41 @@
       </div>
     </details>
   </div>
+  </div>
+</section>
+
+<!-- FAQ teaser -->
+<section id="faq" class="about-section">
+  <div class="container reveal">
+    <h2>Frequently asked questions</h2>
+    <p class="section-lede">A sample of the most-asked questions, with the full set on the dedicated FAQ page.</p>
+    <ul class="about-teaser-list">
+      <li><a href="faq.html#what-is-netsec">What is NetSec, in one paragraph?</a></li>
+      <li><a href="faq.html#who-runs">Who runs the Action?</a></li>
+      <li><a href="faq.html#how-join">How do I join the directory?</a></li>
+      <li><a href="faq.html#what-grants">What grants can I apply for through NetSec?</a></li>
+      <li><a href="faq.html#members-area">Where's the working space for members?</a></li>
+    </ul>
+    <p class="about-teaser-cta"><a href="faq.html">Read all 21 FAQ entries →</a></p>
+  </div>
+</section>
+
+<!-- Glossary teaser -->
+<section id="glossary" class="about-section">
+  <div class="container reveal">
+    <h2>Glossary</h2>
+    <p class="section-lede">Core COST + NetSec terms that appear most often across the site, with the full set on the dedicated glossary page.</p>
+    <dl class="about-glossary-list">
+      <div class="about-glossary-entry"><dt><a href="glossary.html#action">Action</a></dt><dd>A four-year, EU-funded research network.</dd></div>
+      <div class="about-glossary-entry"><dt><a href="glossary.html#cost">COST</a></dt><dd>European Cooperation in Science and Technology.</dd></div>
+      <div class="about-glossary-entry"><dt><a href="glossary.html#ca24154">CA24154</a></dt><dd>The official Action number for NetSec.</dd></div>
+      <div class="about-glossary-entry"><dt><a href="glossary.html#mou">MoU</a></dt><dd>Memorandum of Understanding.</dd></div>
+      <div class="about-glossary-entry"><dt><a href="glossary.html#mc-member">MC Member</a></dt><dd>A Management Committee representative.</dd></div>
+      <div class="about-glossary-entry"><dt><a href="glossary.html#eci">ECI</a></dt><dd>Early Career Investigator.</dd></div>
+      <div class="about-glossary-entry"><dt><a href="glossary.html#stsm">STSM</a></dt><dd>Short-Term Scientific Mission.</dd></div>
+      <div class="about-glossary-entry"><dt><a href="glossary.html#wg">Working Group (WG)</a></dt><dd>A thematic sub-team of the Action.</dd></div>
+    </dl>
+    <p class="about-teaser-cta"><a href="glossary.html">Browse the full glossary →</a></p>
   </div>
 </section>
 

@@ -119,14 +119,14 @@
     "index.html": {
       "fr": {
         "file": "index.fr.html",
-        "source_sha1": "48c68b45a49889cc213456f2ffe3b6f409e7ffda",
+        "source_sha1": "a970872aa058d4ec348cc6a25bb23e2aeeb81cdc",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "index.de.html",
-        "source_sha1": "48c68b45a49889cc213456f2ffe3b6f409e7ffda",
+        "source_sha1": "a970872aa058d4ec348cc6a25bb23e2aeeb81cdc",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
@@ -183,14 +183,14 @@
     "about.html": {
       "fr": {
         "file": "about.fr.html",
-        "source_sha1": "f35e94de8ef80bb16ba64b2e7a93f3573243c895",
+        "source_sha1": "eaabd91c759117758ad528916a6129ea363cb2dc",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "about.de.html",
-        "source_sha1": "f35e94de8ef80bb16ba64b2e7a93f3573243c895",
+        "source_sha1": "eaabd91c759117758ad528916a6129ea363cb2dc",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
