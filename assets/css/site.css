@@ -2406,3 +2406,45 @@ body.search-open{overflow:hidden}
   .rm-card{transition:none}
   .rm-card:hover{transform:none}
 }
+
+/* -------- Dark-mode accent-bg CTA contrast fix --------
+   In light mode the EU-blue accent (`--accent: #003399`) gives
+   ~10.9:1 contrast with white text — solidly above the WCAG AA
+   4.5:1 floor. In dark mode `--accent` is `#6ea1ff` (lighter, so
+   that accent text reads against the dark page background), and a
+   filled button using `background: var(--accent); color: #fff`
+   collapses to **2.56:1** — failing AA.
+
+   The dark-mode `.btn-primary` and `.nav-cta` already invert to
+   light-bg + dark-text, side-stepping the problem. The CTAs below
+   used `var(--accent)` directly with no dark override and silently
+   regressed. Pinning their background to the brand EU-blue
+   `#003399` in dark mode restores ~10.9:1 contrast while keeping
+   the brand colour consistent across both modes (which feels
+   right for the badge / pill / link-CTA family — they're more
+   "site identity" than "page primary").
+
+   Verified ≥ 4.5:1 with the in-browser contrast helper in
+   docs/launch-qa-2026.md Phase 2. */
+.dark .event-card.featured .event-date,
+.dark .event-subscribe,
+.dark #for-members .members-actions .primary,
+.dark .tour-btn-primary,
+.dark .tour-trigger-cta,
+.dark .rm-feedback-action.is-primary,
+.dark .deliverables-roadmap-link-cta{
+  background:#003399;
+  border-color:#003399;
+  color:#fff;
+}
+.dark .event-subscribe:hover,
+.dark #for-members .members-actions .primary:hover,
+.dark .tour-btn-primary:hover,
+.dark .rm-feedback-action.is-primary:hover,
+.dark .deliverables-roadmap-link-cta:hover{
+  /* Hover deepens to a darker blue (luminance ~0.06 → 11:1 with
+     white text). Stays on-brand and passes AA. */
+  background:#0a4ed0;
+  border-color:#0a4ed0;
+  color:#fff;
+}
