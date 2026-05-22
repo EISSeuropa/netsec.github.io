@@ -13,6 +13,10 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Public-roadmap "milestone" cards rendered as saturated-blue panels with hard-to-read dark-on-blue text** (Inaugural MC plenary, Year-1 anniversary, Summer School + Conference). Root cause: a class-name collision. The Gantt chart on `/about.html` ships a `.milestone {}` rule that paints `background: linear-gradient(135deg, var(--accent), var(--accent-2))` (the EU-blue → Apple-blue gradient) on whatever element carries the class. My public-roadmap timeline entries used `<li class="rm-entry planned milestone">` — so the `<li>` underneath each milestone *card* was getting the strong-blue Gantt-pill gradient applied directly, and the semi-transparent card on top bled through. Earlier "fix" in PR #97 (bumping the card from `--glass-bg` to `--glass-bg-strong`) was masking the symptom but the underlying gradient was still painting the row. Fix: renamed the public-roadmap class from `.milestone` to `.rm-milestone` (CSS + HTML, EN / FR / DE), which removes the collision entirely. CSS comment in `site.css` now flags the collision risk so the next person adding a class to the roadmap doesn't repeat the mistake.
+
 ### Added
 
 - **Brand favicon replacing the Mobirise placeholder.** The previous favicon was the Mobirise builder's default mark (a pink coral phone-with-sun icon) — unmistakably "this site was made with a no-code tool". Replaced with `assets/images/favicon.svg`, a clean SVG matching the in-header `.brand-mark` style: rounded square in the EU-blue → Apple-blue gradient with "NS" in white, designed to read cleanly at 16, 32, 48 px. Every page now declares `<link rel="icon" type="image/svg+xml">` for modern browsers and `<link rel="alternate icon" type="image/png">` (a re-rendered 256 × 256 PNG, same design) as fallback. The JSON-LD Organization `logo` still points at `logo.png` so the new mark also flows to SEO crawlers and rich-results previews. 43 page-locales updated.

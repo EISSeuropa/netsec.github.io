@@ -2139,13 +2139,13 @@ body.search-open{overflow:hidden}
 }
 .rm-entry.planned::before{background:#8b8fe8}
 .rm-entry.deferred::before{background:#f59e0b}
-.rm-entry.milestone::before{
+.rm-entry.rm-milestone::before{
   width:14px;height:14px;left:-32px;top:21px;
   background:var(--ink);border-radius:3px;transform:rotate(45deg);
   border-width:2px;
 }
 .dark .rm-entry::before{border-color:var(--bg-0)}
-.dark .rm-entry.milestone::before{background:#cbd5e1}
+.dark .rm-entry.rm-milestone::before{background:#cbd5e1}
 
 .rm-card{
   padding:16px 20px;border-radius:14px;
@@ -2158,18 +2158,20 @@ body.search-open{overflow:hidden}
   border-color:rgba(0,51,153,.18);
 }
 .dark .rm-card:hover{box-shadow:0 8px 22px rgba(0,0,0,.35)}
-/* Milestone cards (Action events — Conference, MC plenary, Year-1
-   anniversary) read as different from release cards via the dashed
-   border + diamond marker. The background stays opaque (was
-   transparent in v1.4 — the .ambience blue blob behind the page
-   showed straight through, making milestone cards look like
-   saturated-blue panels with unreadable dark-on-blue text). */
-.rm-entry.milestone .rm-card{
-  background:var(--glass-bg);
+/* "Milestone" cards on the public roadmap = Action events (Conference,
+   MC plenary, Year-1 anniversary) — read as different from release
+   cards via the diamond-shaped marker dot + a soft dashed border. The
+   class is named `.rm-milestone` (NOT `.milestone`) to avoid colliding
+   with the pre-existing `.milestone` pill used in the Gantt chart,
+   which paints a saturated EU-blue → Apple-blue gradient directly on
+   whichever element carries the class. That collision was the cause
+   of the "milestone cards render as a strong blue panel with
+   unreadable text" regression in PRs #95 / #97. */
+.rm-entry.rm-milestone .rm-card{
   border-style:dashed;
   border-color:rgba(0,51,153,.22);
 }
-.dark .rm-entry.milestone .rm-card{
+.dark .rm-entry.rm-milestone .rm-card{
   border-color:rgba(110,161,255,.30);
 }
 .rm-head{
@@ -2293,7 +2295,7 @@ body.search-open{overflow:hidden}
      to ~26px; mirror that in marker top so centres still line up. */
   .rm-entry::before{left:-30px;width:16px;height:16px;top:18px}
   .rm-entry.in-progress::before{box-shadow:0 0 0 1px var(--line),0 0 0 4px rgba(10,132,255,.18)}
-  .rm-entry.milestone::before{left:-28px;width:12px;height:12px;top:20px}
+  .rm-entry.rm-milestone::before{left:-28px;width:12px;height:12px;top:20px}
   .rm-card{padding:14px 16px}
   .rm-card h3{font-size:.98rem}
   .rm-legend{padding:12px 14px;gap:8px}
