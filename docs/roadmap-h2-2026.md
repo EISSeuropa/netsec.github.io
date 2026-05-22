@@ -176,8 +176,26 @@ for new MC reps joining around the **inaugural MC plenary**
 - **FR / DE review pass on FAQ + Glossary content**. The
   translations are beta — flag a single native-speaker review
   per locale to lift them out of the beta banner.
+- **Per-event `.ics` files + Add-to-calendar buttons.** Rounds
+  out the calendar story shipped in v1.3.x — each event card
+  gets a single-event download alongside the master Subscribe
+  feed.
+- **News RSS feed.** Generated from the news block at build
+  time; academic + policy audiences still consume RSS.
+- **Search acronym-synonyms.** `STSM` ↔ *Short-Term Scientific
+  Mission*, `ITC` ↔ *Inclusiveness Target Country*, etc., via
+  a small per-page keywords meta table.
 - **Search index auto-rebuild** (consideration only — see *Open
   questions* below).
+
+#### Quality (pre-MC plenary)
+
+- **Pre-MC-plenary accessibility + cross-browser audit** —
+  scope spelt out in the *Quality, accessibility, performance*
+  theme below. Anchored at **early Sep**, ahead of the plenary
+  date.
+- **Performance audit** — Lighthouse + Core Web Vitals baseline
+  on the four heaviest pages.
 
 #### Infrastructure
 
@@ -189,10 +207,6 @@ for new MC reps joining around the **inaugural MC plenary**
   format watch — having Dependabot on `actions` gives us the
   fix automatically if `peter-evans/create-pull-request` ships
   one.*
-- **Re-test accessibility**: re-run axe-core on the new search
-  overlay, the directory cards (post-spotlight class), and the
-  FAQ/Glossary pages. Update the accessibility statement
-  date stamp.
 
 ### Q4 — October / November / December 2026
 
@@ -220,6 +234,18 @@ for new MC reps joining around the **inaugural MC plenary**
 
 #### Features
 
+- **Outputs section refresh** (v1.7.0). Real card design for
+  D6 policy briefs, `schema.org/ScholarlyArticle` JSON-LD,
+  filter/sort if briefs accrue past ~10.
+- **URL-encoded directory filter state** (v1.7.0). Shareable
+  pre-filtered directory links — `/people.html?wg=3&country=fr`
+  opens the directory with WG3 members in France already
+  filtered.
+- **Per-page Open Graph images** (v1.8.0). Distinct OG cards
+  per page (FAQ, Grants, Press kit) so social previews tell
+  the right story.
+- **Print stylesheet for FAQ + Glossary** (v1.8.0). Researchers
+  occasionally want offline hard copy.
 - **Issue #72 reassessment**. By end-November we re-evaluate
   whether the directory's expand-in-place pattern is still
   serving. If membership has crossed the ~150 mark or if MC
@@ -230,6 +256,12 @@ for new MC reps joining around the **inaugural MC plenary**
   weekly sync), spike a *Suggest an edit* CTA on each card
   that pre-fills the form with the existing bio. Decision
   point: only if at least 3 MC members ask for it.
+
+#### Quality
+
+- **Year-1-close audit** — focused re-test on whatever D6 /
+  D11 / D12 surface lands, plus the *Outputs* section refresh.
+  Light touch compared to the Q3 audit.
 
 #### Releases & docs
 
@@ -275,20 +307,196 @@ from approved-PDF-in-hand to live-on-site, with:
 
 ### 3 · Quality, accessibility, performance
 
-The site shipped at WCAG 2.1 AA in v1.0. We re-test once a
-quarter:
+Last formal a11y audit shipped with **v1.0** (20 May). Between
+then and now we've added a substantial surface area — search
+overlay (modal, keyboard nav, focus trap, lazy WASM), directory
+click-to-expand + search-landing spotlight, FAQ / Glossary with
+deep-link anchors, press kit, *For NetSec members* strip, *Find
+out more* grid, external-link auto-icon, calendar Subscribe
+button, Pagefind `<mark>` painting, bio cards in search,
+⌘K / `/` shortcuts. None of those have had a formal pass.
 
-- **Q3 audit**: search overlay, directory spotlight, FAQ /
-  Glossary deep-links.
-- **Q4 audit**: complete re-test after D11 (inclusion &
-  diversity) ships.
+Three audit moments scheduled for H2:
+
+#### **Pre-v1.5 audit (mid-to-late Jun 2026)** — comprehensive
+
+Covers everything shipped between v1.0 and the brand refresh.
+Necessary because v1.5 swaps in official logos that may shift
+contrast ratios on icons / chips / shadows; auditing *before*
+is the cheaper order than re-doing the audit after.
+
+Scope:
+
+- **Colour contrast (WCAG 2.1 AA, 4.5:1 text / 3:1 large)** — re-run
+  on light + dark for: external-link icon, search-result cards
+  (incl. bio cards), `<mark>` highlight, search-landing
+  spotlight, calendar Subscribe button, *Find out more* cards,
+  *For NetSec members* strip, FAQ / Glossary anchor `:target`
+  state, news-card buttons.
+- **Keyboard navigation** — full tab traversal of every page;
+  visible focus indicators everywhere; no focus traps outside
+  the search overlay. Verify ⌘K / Ctrl-K / `/` shortcuts in
+  Chrome / Firefox / Safari (Mac) and Chrome / Firefox / Edge
+  (Windows).
+- **Screen-reader smoke test** — VoiceOver on macOS + NVDA on
+  Windows. Specifically: the search overlay's modal semantics,
+  `aria-live` result count, directory card auto-expand
+  announcements, the `data-pagefind-body`-marked content vs.
+  the (ignored) nav and footer.
+- **Reduced motion** — confirm the spotlight scale-in, the
+  overlay slide-in, and the bio-card hover transforms all
+  respect `prefers-reduced-motion`.
+- **Resize / zoom** — text-only zoom to 200 %, full-page zoom
+  to 200 %; layout doesn't break, no horizontal scroll, no
+  clipped content. Headers stay usable on the floating bubble.
+- **Mobile** — touch tap targets ≥ 44 × 44 CSS px on all
+  interactive elements (search trigger, overlay close,
+  navigation, footer chips). Conference-week visitors will be
+  on phones.
+- **Translation** — `<html lang>` correct on every variant;
+  `lang` attribute on inline foreign-language fragments where
+  applicable; `:lang(fr)` / `:lang(de)` CSS rules still apply.
+
+Method: axe-core CLI run across every page + locale (≈ 30
+pages × 3 locales), spot-checks with the manual scripts above,
+quick Lighthouse runs as a sanity check.
+
+Output: a published a11y-audit report appended as Appendix to
+the documentation pack; updated *Last assessed* date stamp on
+`/accessibility.html`.
+
+#### **Pre-MC-plenary audit (early Sep 2026)** — cross-browser + perf
+
+The inaugural MC plenary brings 30+ new visitors who will form
+their first impression of the site. Catch the long-tail issues.
+
+Scope:
+
+- **Cross-browser** — full smoke pass on Safari (Mac + iOS),
+  Firefox (desktop + mobile), Edge, plus the Chrome baseline.
+  Specific risks: `:where()` specificity (used in the external-
+  link icon CSS) on older Safari, the `webcal://` Subscribe
+  link on non-Apple platforms, Pagefind WASM on older
+  browsers.
+- **Cross-platform** — verify the directory looks right on
+  Windows Edge, on a small Chromebook screen, on a phone in
+  one-handed reach.
+- **Performance** — Lighthouse run on the four heaviest pages
+  (home, directory, FAQ, press kit). Target: ≥ 90 on every
+  metric. Verify the page-weight budget hasn't drifted
+  (baseline: ~140 KB excluding `bios.json`; Pagefind adds
+  ~80 KB on first overlay open).
+- **Core Web Vitals** — LCP, INP, CLS via WebPageTest.
+- **Lighthouse SEO** — verify the new pages (FAQ, Glossary, the
+  bio stubs) carry the right canonical + JSON-LD.
+- **Re-run the axe-core suite** with any v1.5 deltas folded in.
+
+#### **Year-1-close audit (mid Oct 2026)** — light touch
+
+A focused re-test on whatever D6 / D11 / D12 surface lands in
+v1.7.0. Plus a sweep of the *Outputs* section refresh (see
+*Feature candidates* below).
 
 Performance budget stays at the v1.0 number: **~140 KB
 uncompressed page weight excluding bios.json**. The Pagefind
 runtime (~80 KB on first overlay open) is the only meaningful
 delta and is lazy-loaded.
 
-### 4 · Infrastructure & DevOps hygiene
+### 4 · Feature candidates
+
+Beyond what the release plan already commits to (search, brand,
+deliverable hosting), these are the candidates worth queueing.
+Each has a rough cost estimate and a decision point.
+
+#### Round out the calendar story
+
+- **Per-event "Add to calendar" buttons.** The `calendar.ics`
+  master feed shipped in v1.3.x; this adds a one-shot
+  `/calendar/<slug>.ics` per event so an MC member sharing a
+  conference link can include the single-event invite. Cost:
+  ~½ day. Slots into **v1.6.0**. Decision: ship as part of
+  Q3.
+- **RSS feed for the news block.** Academic + policy
+  communities still consume RSS; the news block is small
+  enough to render as Atom or RSS from `index.html` at build
+  time. Cost: ~1 day (Python script + a workflow trigger).
+  Slots into **v1.6.0**. Decision: ship as part of Q3.
+
+#### Search improvements
+
+- **Acronym synonyms.** Today `STSM` and `Short-Term
+  Scientific Mission` are separate queries. Pagefind has a
+  `data-pagefind-meta="keywords"` mechanism — adding a
+  central acronym table baked into the relevant pages would
+  let either form match. Cost: ~½ day. Slots into v1.6.0
+  alongside the FR/DE review pass.
+- **Result-type filter chips** (*All / Pages / People*) in
+  the overlay header. Quality-of-life when both a page and a
+  bio match the same query. Cost: ~1 day. Optional for v1.6;
+  could defer if Q3 is tight.
+
+#### Outputs section refresh
+
+The `/outputs` section on the home page currently shows three
+*Forthcoming* placeholder cards. **D6** (policy briefs) lands
+in October as part of the Year-1 close. We need:
+
+- A real card design with metadata (authors, date, abstract).
+- A landing page per brief if briefs are PDF + abstract.
+- `schema.org/ScholarlyArticle` JSON-LD for SEO + Google
+  Scholar indexing.
+- Filter / sort if briefs accrue past ~10.
+
+Cost: ~2 days. Hard-blocked on the first brief being
+production-ready. Slots into **v1.7.0** (*Year 1 closes*) by
+design.
+
+#### Directory ergonomics
+
+- **URL-encoded filter state.** Today, `/people.html#stsm` opens
+  Arthur's card; `/people.html?wg=3&country=fr` should open
+  the directory pre-filtered to *WG3 members in France*.
+  Powerful for share-links among the MC. Cost: ~1 day. Slots
+  into **v1.7.0** (sized to match the Year-1 close moment).
+- **Member self-edit CTA.** Still gated on at least 3 MC
+  members asking for it. Visibility only.
+- **Sticky side panel (#72).** Re-evaluate end-November as
+  before — trigger is membership > 150 OR friction reports.
+
+#### Engagement
+
+- **Newsletter signup** (Formspree-backed, no analytics, no
+  list-management dashboard — the form just forwards to the
+  Action mailbox). Cost: ~½ day. Decision: only if the AC
+  wants a newsletter channel and is willing to maintain the
+  cadence. Otherwise skip.
+- **Print stylesheet for FAQ + Glossary.** Researchers
+  occasionally want hard copy for offline reference. Cost:
+  ~1 day. Nice-to-have.
+
+#### Operational
+
+- **Open Graph image per page** — currently one global
+  `og-image.png` shows for every share. Distinct per-page
+  cards (FAQ uses one, Grants another, etc.) improve social
+  preview quality. Pre-rendered at build time. Cost: ~1 day
+  including OG-image design.
+
+#### What I'm *not* proposing
+
+A few patterns I considered and chose to skip, with reasons —
+in case any of these surprises you:
+
+- **Analytics / tracking pixels.** Violates the established
+  privacy posture (no third-party trackers documented in
+  `/privacy.html`). No change.
+- **Search analytics** — same reason.
+- **Comments on news / FAQ entries** — moderation burden + spam
+  risk + accessibility complexity. Use the contact form.
+- **Service worker / offline mode** — overkill for a content
+  site; ROI not there yet.
+
+### 5 · Infrastructure & DevOps hygiene
 
 - **Release immutability** on GitHub Releases: enabled at the
   repo level but found in practice not to enforce on
@@ -311,9 +519,9 @@ delta and is lazy-loaded.
 |---|---|---|---|
 | v1.4.0 | early Jun 2026 *(pre-Conference)* | *Search the directory, polished header* | Site-wide search + bio cards + header streamline + small fixes from MC-feedback iteration |
 | v1.5.0 | late Jun 2026 *(pre-July)* | *Official logos + social channels live* | #62 official logos / favicon refresh across site + PDF + poster, #63 social-media presence and on-site footprint |
-| v1.6.0 | early Sep 2026 *(pre-MC plenary, with buffer)* | *FR / DE reviewed, deliverables hosted* | Native-speaker translation pass; D8 (M9 STSM guidelines) + D10 (M10 risk management) hosted; accessibility re-audit ships |
-| v1.7.0 | mid Oct 2026 | *Year 1 closes* | D1 first-version state, D6 policy-brief hosting, Year-1 retrospective content |
-| v1.8.0 | late Dec 2026 | *Year 2 ready* | D11 + D12 hosting; #72 side-panel **if** triggers fired; whatever Q4 polish accumulates |
+| v1.6.0 | early Sep 2026 *(pre-MC plenary, with buffer)* | *FR / DE reviewed, calendar + search rounded out* | Native-speaker translation pass; D8 (M9 STSM guidelines) + D10 (M10 risk management) hosted; per-event `.ics` files + Add-to-calendar buttons; news RSS feed; search acronym-synonyms; pre-MC-plenary a11y + cross-browser pass |
+| v1.7.0 | mid Oct 2026 | *Year 1 closes* | D1 first-version state, D6 policy-brief hosting with proper *Outputs* card design + schema.org metadata, Year-1 retrospective content, URL-encoded directory filter state |
+| v1.8.0 | late Dec 2026 | *Year 2 ready* | D11 + D12 hosting; #72 side-panel **if** triggers fired; per-page Open Graph images; print stylesheet for FAQ + Glossary; whatever Q4 polish accumulates |
 
 Patch releases (`1.x.y`) ship as needed; we don't pre-schedule
 them.
