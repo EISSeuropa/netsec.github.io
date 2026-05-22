@@ -7,6 +7,13 @@
 This guide is the answer to: *"It's six months later, the maintainer
 is on parental leave, something needs editing — where do I start?"*
 
+> **Working with Claude Code in this repo?** The standing rules
+> (British English, no machine translation, auto-merge by default,
+> release-notes carve-out, the *open-an-issue-for-every-deferred-item*
+> policy) are at [`CLAUDE.md`](../CLAUDE.md) in the repository root.
+> Claude reads it automatically on every session. Edit it via PR
+> when a rule shifts.
+
 ## Accounts and assets
 
 A snapshot of every external account or asset the site depends on.
