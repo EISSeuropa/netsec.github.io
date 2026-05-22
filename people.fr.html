@@ -715,6 +715,8 @@
         joinLink.hidden = true;
       }
     }
+    // See people.html for the rationale behind the de-RAF refactor
+    // (finding J4-1 of the launch-QA Phase 1 pass).
     const scrollToHash = () => {
       const hash = (location.hash || '').replace(/^#/, '');
       if (!hash) return;
@@ -722,19 +724,20 @@
         document.getElementById(hash) ||
         document.getElementById(hash.replace(/^(dr|prof|mr|ms|mrs)-/i, '')) ||
         grid.querySelector('.member-card[data-slug="' + CSS.escape(hash) + '"]');
-      if (target) requestAnimationFrame(() => {
-        target.scrollIntoView({ behavior: 'instant', block: 'center' });
-        if (target.classList.contains('member-card')) {
-          grid.querySelectorAll('.member-card.is-search-landed')
-              .forEach(c => c.classList.remove('is-search-landed'));
-          target.classList.add('is-search-landed');
-          setTimeout(() => target.classList.remove('is-search-landed'), 3500);
-          if (grid.classList.contains('is-compact')) {
-            grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
-            target.classList.add('is-expanded');
-          }
+      if (!target) return;
+      if (target.classList.contains('member-card')) {
+        grid.querySelectorAll('.member-card.is-search-landed')
+            .forEach(c => c.classList.remove('is-search-landed'));
+        target.classList.add('is-search-landed');
+        setTimeout(() => target.classList.remove('is-search-landed'), 3500);
+        if (grid.classList.contains('is-compact')) {
+          grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
+          target.classList.add('is-expanded');
         }
-      });
+      }
+      const doScroll = () => target.scrollIntoView({ behavior: 'instant', block: 'center' });
+      requestAnimationFrame(doScroll);
+      setTimeout(doScroll, 50);
     };
     scrollToHash();
     window.addEventListener('hashchange', scrollToHash);
