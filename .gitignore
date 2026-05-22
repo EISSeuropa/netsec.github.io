@@ -10,3 +10,13 @@ scripts/__pycache__/
 # macOS/iCloud "Foo 2.ext" duplicate files that get spawned in
 # the working tree by some sync tools.
 * 2.*
+
+# Pagefind search index — built at deploy time by the Pages workflow
+# (.github/workflows/pages-deploy.yml), not committed to main. See
+# docs/architecture.md ("Site-wide search") for the rationale. Two
+# parallel PRs that both touched HTML used to conflict on this
+# directory's content-hashed shard filenames; deferring the build to
+# the deploy step eliminates the conflict source. To rebuild the
+# index locally for testing, run ./scripts/build-search.sh — the
+# result is gitignored and won't be staged.
+pagefind/

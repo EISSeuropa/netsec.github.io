@@ -1,0 +1,92 @@
+# Deploy to GitHub Pages.
+#
+# This workflow replaces the "legacy" Pages source (deploy from the
+# main branch directly) with an Actions-based build → deploy pipeline.
+# The single reason for the move is the search index: Pagefind's
+# content-hashed shard filenames change on every rebuild, so two PRs
+# that each rebuilt /pagefind/ inevitably conflicted on the manifest
+# (pagefind/pagefind-entry.json). By building the index here at deploy
+# time rather than committing it, the conflict source is gone for good.
+#
+# Inputs / outputs:
+#   - reads:  the working tree on main (HTML, assets, scripts)
+#   - builds: ./pagefind/ via scripts/build-search.sh (which calls
+#             `npx pagefind@1.5.2`; no manual install step needed)
+#   - deploys: the entire working tree (with freshly-built ./pagefind/)
+#             to the github-pages environment, custom domain
+#             netsec-cost.eu preserved via the repo-root CNAME file.
+#
+# One-time enablement step (the only thing a maintainer has to do
+# manually, once, after this workflow lands):
+#   Settings → Pages → Source: change from "Deploy from a branch"
+#   to "GitHub Actions". Until that flip happens, Pages keeps building
+#   from main on its old schedule and this workflow's deploy step
+#   would fail with a "Pages site is not enabled for Actions" error;
+#   that's expected during the transition.
+#
+# Concurrency: at most one in-flight deploy per branch; queued
+# deploys do not cancel an in-progress one (we'd rather finish a
+# deploy than truncate it half-way).
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site (incl. Pagefind index)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build Pagefind index (and bio search stubs)
+        # scripts/build-search.sh handles both: regenerates the bio
+        # stubs from data/bios.json, then runs pagefind against the
+        # repo root. Output lands in ./pagefind/ which is gitignored
+        # — it ships to Pages via the artifact upload below.
+        run: bash scripts/build-search.sh
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        # path: . uploads the whole working tree, which now includes
+        # the freshly-built ./pagefind/. The CNAME file at the root
+        # tells Pages the custom domain.
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    name: Deploy to github-pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
