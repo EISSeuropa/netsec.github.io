@@ -15,7 +15,8 @@ reference for maintainers, MC representatives, and admins.
 | [`bios-setup.md`](./bios-setup.md)             | One-time set-up guide for the Google Form → bios.json pipeline.                              |
 | [`i18n.md`](./i18n.md)                         | How translations work (FR + DE in beta), what's in scope, how to refresh when English drifts.|
 | [`seo.md`](./seo.md)                           | SEO posture — Open Graph, Twitter Card, JSON-LD, canonical URLs, hreflang, sitemap, 404. |
-| [`search-assessment.md`](./search-assessment.md) | Decide whether to add site-wide search — options compared (Pagefind / Lunr / MiniSearch / DDG / Algolia), constraints, recommendation. Not built yet; this is a scoping doc. |
+| [`search-assessment.md`](./search-assessment.md) | Decide whether to add site-wide search — options compared (Pagefind / Lunr / MiniSearch / DDG / Algolia), constraints, recommendation. *(Status: shipped in v1.4.x — kept as the design history.)* |
+| [`roadmap-h2-2026.md`](./roadmap-h2-2026.md) | Where the website + directory are headed between now and 31 Dec 2026 — quarter-by-quarter plan, deliverables we host, open decisions, the release schedule. Intended for the Action Chair, MC members, and the maintainer. |
 | [`pdf/NetSec-website-documentation.pdf`](./pdf/NetSec-website-documentation.pdf) | All of the above combined into a stakeholder-ready PDF deliverable. Cover, table of contents, every diagram, and three site screenshots. Rebuild via `docs/pdf/build.sh`. |
 
 ## Conventions across all docs
