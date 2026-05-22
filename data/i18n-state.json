@@ -87,14 +87,14 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "3cd7bbb042b20728d8b2da21e9d42cca75c6ff34",
+        "source_sha1": "769ed0251cf47046e16af090574af5011fbef874",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "3cd7bbb042b20728d8b2da21e9d42cca75c6ff34",
+        "source_sha1": "769ed0251cf47046e16af090574af5011fbef874",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
@@ -119,14 +119,14 @@
     "index.html": {
       "fr": {
         "file": "index.fr.html",
-        "source_sha1": "f5815b709501f2bbd7ef17b08a7f9c4e8e6f3d5d",
+        "source_sha1": "95735d66e280c19d499c873a7888ab6e903145c9",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "index.de.html",
-        "source_sha1": "f5815b709501f2bbd7ef17b08a7f9c4e8e6f3d5d",
+        "source_sha1": "95735d66e280c19d499c873a7888ab6e903145c9",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
@@ -183,14 +183,14 @@
     "about.html": {
       "fr": {
         "file": "about.fr.html",
-        "source_sha1": "fccaa55643d691aa9dc87188aaa73273a26ee4a3",
+        "source_sha1": "dc2e0f7a91e021a61e05ac2c0b6b6d83aa279ed2",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "about.de.html",
-        "source_sha1": "fccaa55643d691aa9dc87188aaa73273a26ee4a3",
+        "source_sha1": "dc2e0f7a91e021a61e05ac2c0b6b6d83aa279ed2",
         "translated_on": "2026-05-22",
         "status": "beta",
         "reviewed_by": null
