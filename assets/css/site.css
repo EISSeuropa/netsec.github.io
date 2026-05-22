@@ -2698,6 +2698,22 @@ body.search-open{overflow:hidden}
 }
 .programme-person .name{font-weight:500}
 .programme-person .aff{color:var(--muted)}
+/* When the speaker is one of our members, .name renders as <a> pointing
+   at /people.html#<slug>. A dotted underline tells the reader it's
+   actionable without competing visually with body links; the override
+   on :hover{opacity:1} cancels the site-wide a:hover opacity dim. */
+.programme-person a.name{
+  color:inherit;
+  text-decoration:none;
+  border-bottom:1px dotted color-mix(in oklab, var(--accent-2) 55%, transparent);
+  transition:color .15s var(--ease), border-color .15s var(--ease);
+}
+.programme-person a.name:hover,
+.programme-person a.name:focus-visible{
+  color:var(--accent-2);
+  border-bottom-color:var(--accent-2);
+  opacity:1;
+}
 
 /* Contributions <details> — only on session cards that have papers. */
 .programme-contribs{

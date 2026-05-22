@@ -351,6 +351,11 @@
     lang === 'fr' ? 'fr-FR' :
     lang === 'de' ? 'de-DE' :
                     'en-GB';
+  // Where to send a reader who clicks a member's name in the programme.
+  const peopleUrl =
+    lang === 'fr' ? 'people.fr.html' :
+    lang === 'de' ? 'people.de.html' :
+                    'people.html';
 
   function setError(msg) {
     root.dataset.state = 'error';
@@ -412,6 +417,32 @@
     return t.session;
   }
 
+  // Mirror of scripts/sync-bios.py's name_key(): strip diacritics,
+  // honorifics, post-nominals, and apostrophes, then key on the
+  // first + last surviving tokens. Lets us match an Indico speaker
+  // record like "Dr Marie Robin" to a NetSec member record "Marie
+  // Robin" without a manual mapping table.
+  const NAME_POSTNOMINALS = new Set(['phd', 'jr', 'sr', 'ii', 'iii', 'iv', 'esq']);
+  function nameKey(name) {
+    if (!name) return null;
+    let s = name.normalize('NFKD').replace(/[̀-ͯ]/g, '');
+    s = s.replace(/^(Dr|Prof|Mr|Ms|Mrs)\.?\s+/i, '');
+    s = s.replace(/[‘’ʼ'`]/g, '');
+    const tokens = s.split(/[^A-Za-z]+/).filter(Boolean).map(t => t.toLowerCase());
+    const real = tokens.filter(t => !NAME_POSTNOMINALS.has(t));
+    if (real.length < 2) return null;
+    return real[0] + '|' + real[real.length - 1];
+  }
+
+  function buildMemberLookup(bios) {
+    const map = new Map();
+    for (const m of (bios && bios.members || [])) {
+      const k = nameKey(m.name);
+      if (k && m.id) map.set(k, m.id);
+    }
+    return map;
+  }
+
   // ── fetch ─────────────────────────────────────────────────────
   let indico;
   try {
@@ -422,6 +453,16 @@
     console.error('indico.json fetch failed:', err);
     setError(t.errFetch);
     return;
+  }
+
+  // Member lookup is best-effort: if bios.json can't be fetched, the
+  // programme still renders, just without name → /people.html links.
+  let memberLookup = new Map();
+  try {
+    const res = await fetch('data/bios.json', { cache: 'no-cache' });
+    if (res.ok) memberLookup = buildMemberLookup(await res.json());
+  } catch (err) {
+    console.warn('bios.json fetch failed; speaker links disabled:', err);
   }
 
   const conf = indico.annualConferences && indico.annualConferences['2026'];
@@ -641,8 +682,12 @@
     if (label) node.appendChild(el('span', { class: 'programme-people-label' }, label + ': '));
     people.forEach((p, i) => {
       if (i > 0) node.appendChild(document.createTextNode(', '));
+      const slug = memberLookup.get(nameKey(p.name) || '');
+      const nameNode = slug
+        ? el('a', { class: 'name', href: peopleUrl + '#' + slug }, p.name || '—')
+        : el('span', { class: 'name' }, p.name || '—');
       node.appendChild(el('span', { class: 'programme-person' },
-        el('span', { class: 'name' }, p.name || '—'),
+        nameNode,
         p.affiliation ? el('span', { class: 'aff' }, ' (' + p.affiliation + ')') : null,
       ));
     });
