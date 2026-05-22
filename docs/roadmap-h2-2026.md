@@ -362,27 +362,56 @@ redesign. Scope:
   homepage entries (D6 policy briefs, D11, D12, possibly a
   publications hub).
 
-#### Timing
+#### Timing — two phases
 
-**Audit: July–August 2026.** Post-Conference, post-Summer
-School (so we have real recap content to work with), before
-the MC plenary. Two weeks of focused work; produces a written
-audit doc (mirror of `search-assessment.md`).
+The biggest hidden cost of waiting for one big audit is that
+the **official logos ship in v1.5 into a known-suboptimal IA,
+then restructure in v1.7** — two brand-facing changes in four
+months. Splitting the audit into two passes avoids that:
 
-**Implementation: lands in v1.7.0 (mid-Oct)** as part of *Year
-1 closes*. The deliberate framing for the release lets the
-home-page restructure show up alongside D1 / D6, which is the
-natural moment for "Year 1 retrospective, plus how the site
-reads for Year 2".
+**Phase 1 — Structural quick-pass (this week)**
+
+- 1–2 days of work, maintainer alone
+- Focus: the structural decisions that need to land **before
+  the v1.5 logo refresh** (consolidate the *Find out more* +
+  *For NetSec members* overlap, regroup nav into dropdowns or
+  not, sticky TOC on home or not, offload *Outputs* to its
+  own page or wait for D6, etc.)
+- Output: a written audit doc at `docs/homepage-ia-quick-
+  audit.md` mirroring the `search-assessment.md` shape —
+  issues, options, recommendations, costs per change.
+- No consulting needed at this stage.
+
+**Phase 2 — Detailed UX pass (July–August 2026)**
+
+- Post-Conference, post-Summer School (so we have real recap
+  content to audit against)
+- Post-v1.5 (so the audit happens against the real new
+  visual identity, not placeholders)
+- Optional consulting time here — same budget question as
+  the original framing, just deferred to where the consulting
+  budget pays off most.
+- Output: deeper recommendations covering audience tracks,
+  mobile patterns, content lifecycle, future-proofing for
+  D6 / D11 / D12 / publications hub.
+
+#### Implementation
+
+- **v1.5.0 (late June)** absorbs the Phase 1 quick-wins
+  alongside the brand refresh. Release title shifts to
+  *Logos, socials, IA polish* to flag the broader scope.
+- **v1.7.0 (mid Oct)** ships the deeper restructure from
+  Phase 2 alongside the Year-1 close.
 
 #### Open question
 
-**Bring in a UI / UX professional for the audit?** A few hours
-of an experienced practitioner's time produces a substantively
-better recommendation than I can on my own, particularly on
-audience-track separation and mobile patterns. Decision owner:
-**Action Chair** (budget question). My on-my-own version is
-the fallback if there's no budget.
+**Bring in a UI / UX professional for the Phase 2 audit?** A
+few hours of an experienced practitioner's time produces a
+substantively better recommendation than I can on my own,
+particularly on audience-track separation and mobile patterns.
+Decision owner: **Action Chair** (budget question). My
+on-my-own version is the fallback if there's no budget.
+Phase 1 runs without consulting regardless.
 
 ### 3 · Content cadence — deliverables hit the site
 
@@ -612,7 +641,7 @@ in case any of these surprises you:
 | Version | Target date | Working title | What's in it |
 |---|---|---|---|
 | v1.4.0 | early Jun 2026 *(pre-Conference)* | *Search the directory, polished header* | Site-wide search + bio cards + header streamline + small fixes from MC-feedback iteration |
-| v1.5.0 | late Jun 2026 *(pre-July)* | *Official logos + social channels live* | #62 official logos / favicon refresh across site + PDF + poster, #63 social-media presence and on-site footprint |
+| v1.5.0 | late Jun 2026 *(pre-July)* | *Logos, socials, IA polish* | #62 official logos / favicon refresh across site + PDF + poster, #63 social-media presence and on-site footprint, **structural IA quick-wins from `docs/homepage-ia-quick-audit.md` (Phase 1)** |
 | v1.6.0 | early Sep 2026 *(pre-MC plenary, with buffer)* | *FR / DE reviewed, calendar + search rounded out* | Native-speaker translation pass; D8 (M9 STSM guidelines) + D10 (M10 risk management) hosted; per-event `.ics` files + Add-to-calendar buttons; news RSS feed; search acronym-synonyms; pre-MC-plenary a11y + cross-browser pass |
 | v1.7.0 | mid Oct 2026 | *Year 1 closes* | D1 first-version state, D6 policy-brief hosting with proper *Outputs* card design + schema.org metadata, Year-1 retrospective content, URL-encoded directory filter state, **homepage restructure landing the IA-audit recommendations** |
 | v1.8.0 | late Dec 2026 | *Year 2 ready* | D11 + D12 hosting; #72 side-panel **if** triggers fired; per-page Open Graph images; print stylesheet for FAQ + Glossary; whatever Q4 polish accumulates |
@@ -661,15 +690,16 @@ lead where indicated) before the related work can start:
    owner: **respective WG / coordinator**.
 
 7. **Homepage + header IA audit — bring in a UI/UX
-   professional?** A few hours of an experienced practitioner's
-   time produces a substantively better audit than the
-   maintainer alone can — particularly on audience-track
-   separation, mobile patterns, and convention-vs.-invention
-   trade-offs. **Cost:** budget question, modest (~½ day of
-   consulting time). **If no budget:** the maintainer
-   self-runs the audit, output is acceptable but less rich.
-   Decision owner: **Action Chair**. Decision deadline: end of
-   June so the audit can start in July.
+   professional for *Phase 2*?** *Phase 1 runs without
+   consulting regardless — the maintainer writes the
+   structural quick-audit this week.* The decision is whether
+   the deeper Phase 2 pass in July–August warrants a few hours
+   of an experienced practitioner's time. **Cost:** modest
+   (~½ day of consulting). **If no budget:** the maintainer
+   self-runs Phase 2 too; output is acceptable but less rich,
+   particularly on audience-track separation and mobile
+   patterns. Decision owner: **Action Chair**. Decision
+   deadline: **end of June** so the audit can start in July.
 
 ---
 

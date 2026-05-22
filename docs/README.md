@@ -17,6 +17,7 @@ reference for maintainers, MC representatives, and admins.
 | [`seo.md`](./seo.md)                           | SEO posture — Open Graph, Twitter Card, JSON-LD, canonical URLs, hreflang, sitemap, 404. |
 | [`search-assessment.md`](./search-assessment.md) | Decide whether to add site-wide search — options compared (Pagefind / Lunr / MiniSearch / DDG / Algolia), constraints, recommendation. *(Status: shipped in v1.4.x — kept as the design history.)* |
 | [`roadmap-h2-2026.md`](./roadmap-h2-2026.md) | Where the website + directory are headed between now and 31 Dec 2026 — quarter-by-quarter plan, deliverables we host, open decisions, the release schedule. Intended for the Action Chair, MC members, and the maintainer. |
+| [`homepage-ia-quick-audit.md`](./homepage-ia-quick-audit.md) | Phase 1 of the two-phase IA pass — structural decisions the home page + header need before v1.5.0 ships in late June. Eight issues identified, five queued for Phase 1, three deferred to Phase 2. Six decisions needed from the Action Chair. |
 | [`pdf/NetSec-website-documentation.pdf`](./pdf/NetSec-website-documentation.pdf) | All of the above combined into a stakeholder-ready PDF deliverable. Cover, table of contents, every diagram, and three site screenshots. Rebuild via `docs/pdf/build.sh`. |
 
 ## Conventions across all docs
