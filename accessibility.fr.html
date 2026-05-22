@@ -176,7 +176,7 @@
       </div>
       <div class="prose-meta-item">
         <span class="label">Dernière évaluation</span>
-        <span class="value">14 mai 2026</span>
+        <span class="value">22 mai 2026</span>
       </div>
     </div>
 
@@ -184,16 +184,17 @@
     <p>Le site NetSec (<a href="https://netsec-cost.eu">netsec-cost.eu</a>) est conçu pour répondre aux exigences des <strong>Règles pour l'accessibilité des contenus web (WCAG) 2.1 au niveau AA</strong>, en cohérence avec la norme européenne <strong>EN 301 549</strong>. Sur la base de notre évaluation interne la plus récente, le site est <em>partiellement conforme</em> — la majorité des critères de succès WCAG 2.1 AA sont satisfaits, avec les limitations énumérées ci-dessous.</p>
 
     <h2>Audit interne le plus récent</h2>
-    <p>Notre dernier audit automatisé, réalisé le 14 mai 2026 avec <a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener">axe-core 4.10.2</a> sur toutes les sections de la page d'accueil (toutes les régions repliables développées), a renvoyé les résultats suivants :</p>
+    <p>L'audit du 22 mai 2026 s'inscrit dans la passe de QA pré-lancement (plan complet : <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/docs/launch-qa-2026.md" target="_blank" rel="noopener">docs/launch-qa-2026.md</a> dans le dépôt). Il a porté sur les huit pages les plus fréquentées (accueil, annuaire, subventions, kit presse, feuille de route, à propos, FAQ, glossaire) en versions anglaise, française et allemande. Résultats :</p>
 
     <div class="audit-card glass">
       <div class="grid">
-        <div class="stat ok"><span class="num">0</span><span class="lbl">Violations</span></div>
-        <div class="stat neutral"><span class="num">50</span><span class="lbl">Réussites</span></div>
+        <div class="stat ok"><span class="num">0</span><span class="lbl">Violations après correction</span></div>
+        <div class="stat neutral"><span class="num">100</span><span class="lbl">Score a11y Lighthouse</span></div>
         <div class="stat warn"><span class="num">1</span><span class="lbl">Examen manuel requis</span></div>
       </div>
     </div>
-    <p>Le seul élément signalé pour examen manuel concerne le contraste des couleurs du texte rendu sur des surfaces en verre avec <code>backdrop-filter</code>, qu'axe-core ne peut pas évaluer automatiquement car le contraste perçu dépend de ce qui se trouve derrière la surface. Nous avons vérifié que ces surfaces respectent le contraste WCAG 2.1 AA dans les modes clair et sombre.</p>
+    <p>Un problème <strong>WCAG 2.1 SC 1.4.3 (Contraste minimum)</strong> a été relevé lors de l'audit et corrigé avant la publication de cette déclaration : sept boutons d'appel à l'action en mode sombre affichaient du texte blanc sur l'accent clair du mode sombre (<code>#6ea1ff</code>), donnant un rapport de 2,56:1, inférieur au seuil de 4,5:1 (niveau AA). Les boutons concernés ont été passés au bleu UE de la marque (<code>#003399</code>) en mode sombre, donnant un contraste de 10,86:1. Le correctif a été livré dans la même version que cet audit.</p>
+    <p>L'élément restant signalé pour examen manuel concerne le contraste sur les surfaces en verre avec <code>backdrop-filter</code>, que l'outillage automatisé ne peut pas évaluer de manière fiable car le contraste perçu dépend de ce qui se trouve derrière la surface (le fond de la page plus l'ambiance décorative des « blobs »). Nous avons vérifié élément par élément dans le navigateur que ces surfaces respectent le contraste WCAG 2.1 AA dans les deux modes.</p>
 
     <h2>Contenu non accessible ou limité</h2>
     <p>Les parties suivantes du site ne respectent pas encore pleinement la norme WCAG 2.1 AA, ou présentent des contraintes à signaler :</p>
@@ -221,13 +222,16 @@
     </ul>
 
     <h2>Préparation de cette déclaration</h2>
-    <p>Cette déclaration a été préparée par auto-évaluation le <strong>14 mai 2026</strong>. Le site a été examiné au regard de WCAG 2.1 AA en s'appuyant sur :</p>
+    <p>Cette déclaration a été préparée par auto-évaluation le <strong>22 mai 2026</strong>, dans le cadre de la passe de QA pré-lancement. Le site a été examiné au regard de WCAG 2.1 AA en s'appuyant sur :</p>
     <ul>
-      <li>Examen manuel du HTML sémantique, de la navigation au clavier, de la gestion du focus et de l'ordre de tabulation.</li>
-      <li>Analyses automatisées avec <a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener">axe-core 4.10.2</a> sur la page d'accueil, toutes les régions repliables développées.</li>
-      <li>Vérifications manuelles ponctuelles de contraste sur les surfaces en verre, en modes clair et sombre.</li>
+      <li><strong>Analyses structurelles + a11y automatisées</strong> avec <a href="https://pa11y.org/" target="_blank" rel="noopener">pa11y</a> (encapsulant <a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener">axe-core 4.11</a> et <a href="https://squizlabs.github.io/HTML_CodeSniffer/" target="_blank" rel="noopener">HTML_CodeSniffer</a>) sur les huit pages publiques les plus fréquentées, régions repliables développées.</li>
+      <li><strong>Lighthouse</strong> performance + accessibilité + bonnes pratiques + SEO sur l'accueil, l'annuaire, les subventions et le kit presse. Accessibilité : 96-100 ; bonnes pratiques : 96 ; SEO : 100.</li>
+      <li><strong>Vérification manuelle de contraste</strong> sur les surfaces en verre et les CTA en mode sombre, via un assistant intégré au navigateur (couleurs calculées réelles, pas d'estimations heuristiques). C'est ce qui a permis de détecter le problème de contraste sur les CTA en mode sombre que l'outillage automatisé sous-estimait.</li>
+      <li>Navigation manuelle au clavier sur la page d'accueil, l'annuaire et la page des subventions.</li>
+      <li>Vérification de tous les liens par le nouveau <code>scripts/check-links.sh</code> (910 liens internes, 56 externes) — neuf ancres résiduelles de la passe d'AI ont été détectées et corrigées.</li>
     </ul>
-    <p>Nous réévaluons après toute modification significative du système de design ou de la structure du contenu, et au minimum une fois par an.</p>
+    <p>L'audit a également relevé quatre scores Lighthouse de performance en deçà du seuil interne de 80 (entre 67 et 75 en local + en production), liés au CSS de polices externes bloquant le rendu. Il s'agit d'un enjeu de qualité d'expérience, non d'un manquement de conformité WCAG ; le suivi est assuré dans la feuille de route v1.5.0.</p>
+    <p>Nous réévaluons après toute modification significative du système de design ou de la structure du contenu, et au minimum une fois par an. La prochaine révision est prévue pour le <strong>22 mai 2027</strong> ou avant.</p>
 
     <h2>Retour d'information et contact</h2>
     <p>Si vous rencontrez un obstacle d'accessibilité sur ce site, ou si vous avez besoin de l'un de ses contenus dans un format alternatif, contactez-nous :</p>
@@ -240,7 +244,7 @@
     <h2>Procédure d'exécution</h2>
     <p>Si vous n'êtes pas satisfait·e de notre réponse, vous pouvez contacter l'organisme de promotion de l'égalité ou l'organisme de mise en conformité d'accessibilité de votre pays. Au sein de l'Union européenne, chaque État membre désigne son propre organisme d'exécution en vertu de la <a href="https://eur-lex.europa.eu/eli/dir/2016/2102/oj" target="_blank" rel="noopener">Directive sur l'accessibilité des sites internet 2016/2102</a>.</p>
 
-    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Déclaration d'accessibilité v1.0 · préparée le 14 mai 2026 · prochaine révision prévue le 14 mai 2027.</p>
+    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Déclaration d'accessibilité v1.1 · préparée le 22 mai 2026 (revue QA pré-lancement) · remplace la v1.0 du 14 mai 2026 · prochaine révision prévue le 22 mai 2027.</p>
   </div>
 </section>
 </main>
