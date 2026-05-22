@@ -64,7 +64,14 @@ html{scroll-behavior:smooth;color-scheme:light dark;scroll-padding-top:90px}
    single-glyph buttons, and the welcome-strip body text.
    .grant-cta is excluded because it carries its own inline
    external-link SVG that participates in the hover translate
-   animation. */
+   animation.
+
+   ❗ Content-authoring rule: do NOT type a trailing arrow
+   (→ / ↗ / » / >>) in the link text. The auto-icon below already
+   signals "this opens externally"; an arrow on top renders a
+   double affordance. The lint at scripts/check-external-link-
+   arrows.py (CI workflow external-link-arrows.yml) fails any PR
+   that introduces one. */
 /* Specificity note: the global selector is wrapped in :where() so it
    contributes 0 to specificity (only the ::after pseudo-element does).
    That way every per-context override below — .grant-cta::after,
@@ -2111,11 +2118,17 @@ body.search-open{overflow:hidden}
 }
 .rm-entry{position:relative;margin:0 0 18px;padding:0}
 .rm-entry:last-child{margin-bottom:0}
+/* Marker is vertically centred on the status-pill row.
+   Pill row sits at the top of the card (.rm-card has padding-top:16px);
+   the pill is ~24px tall, so its visual centre lands ~28px below the
+   card top. The marker top values below put each shape's centre at 28px:
+     circle (18×18)   → top:19px  → centre 28px
+     diamond (14×14)  → top:21px  → geometric centre 28px (rotated 45°) */
 .rm-entry::before{
-  content:'';position:absolute;left:-34px;top:16px;
+  content:'';position:absolute;left:-34px;top:19px;
   width:18px;height:18px;border-radius:50%;
   background:var(--accent);
-  border:3px solid var(--bg);
+  border:3px solid var(--bg-0);
   box-shadow:0 0 0 1px var(--line);
   z-index:1;
 }
@@ -2127,11 +2140,11 @@ body.search-open{overflow:hidden}
 .rm-entry.planned::before{background:#8b8fe8}
 .rm-entry.deferred::before{background:#f59e0b}
 .rm-entry.milestone::before{
-  width:14px;height:14px;left:-32px;top:18px;
+  width:14px;height:14px;left:-32px;top:21px;
   background:var(--ink);border-radius:3px;transform:rotate(45deg);
   border-width:2px;
 }
-.dark .rm-entry::before{border-color:var(--bg)}
+.dark .rm-entry::before{border-color:var(--bg-0)}
 .dark .rm-entry.milestone::before{background:#cbd5e1}
 
 .rm-card{
@@ -2145,8 +2158,19 @@ body.search-open{overflow:hidden}
   border-color:rgba(0,51,153,.18);
 }
 .dark .rm-card:hover{box-shadow:0 8px 22px rgba(0,0,0,.35)}
+/* Milestone cards (Action events — Conference, MC plenary, Year-1
+   anniversary) read as different from release cards via the dashed
+   border + diamond marker. The background stays opaque (was
+   transparent in v1.4 — the .ambience blue blob behind the page
+   showed straight through, making milestone cards look like
+   saturated-blue panels with unreadable dark-on-blue text). */
 .rm-entry.milestone .rm-card{
-  background:transparent;border-style:dashed;
+  background:var(--glass-bg);
+  border-style:dashed;
+  border-color:rgba(0,51,153,.22);
+}
+.dark .rm-entry.milestone .rm-card{
+  border-color:rgba(110,161,255,.30);
 }
 .rm-head{
   display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:6px;
@@ -2203,6 +2227,56 @@ body.search-open{overflow:hidden}
   margin:0;font-size:.86rem;color:var(--ink-2);line-height:1.5;
 }
 
+/* "Help shape this" card — invites community feedback / feature
+   requests / issue reports via GitHub. Sits between the under-watch
+   section and the docs footnote so the page closes on a participatory
+   note rather than a one-way announcement. */
+.rm-feedback{
+  margin-top:36px;padding:24px 26px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(0,51,153,.06),rgba(10,132,255,.04));
+  border:1px solid rgba(10,132,255,.20);
+}
+.dark .rm-feedback{
+  background:linear-gradient(135deg,rgba(110,161,255,.10),rgba(10,132,255,.06));
+  border-color:rgba(110,161,255,.30);
+}
+.rm-feedback h2{
+  margin:0 0 .4rem;font-size:1.25rem;letter-spacing:-.01em;
+  font-family:'Lexend','Inter',sans-serif;font-weight:600;color:var(--ink);
+}
+.rm-feedback > p{
+  margin:0 0 18px;font-size:.95rem;color:var(--ink-2);line-height:1.55;max-width:60ch;
+}
+.rm-feedback-actions{
+  display:flex;flex-wrap:wrap;gap:10px;
+}
+.rm-feedback-action{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 16px;border-radius:10px;
+  font-size:.92rem;font-weight:600;color:var(--ink);
+  background:var(--glass-bg);border:1px solid var(--glass-border);
+  text-decoration:none;
+  transition:background .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease);
+}
+.rm-feedback-action:hover{
+  background:var(--glass-bg-strong);
+  border-color:rgba(10,132,255,.32);
+  transform:translateY(-1px);
+}
+.rm-feedback-action.is-primary{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+  box-shadow:0 4px 12px var(--accent-glow);
+}
+.rm-feedback-action.is-primary:hover{
+  background:var(--accent-2);border-color:var(--accent-2);
+  box-shadow:0 6px 16px var(--accent-glow);
+}
+.rm-feedback-action svg{flex-shrink:0;width:16px;height:16px}
+@media (prefers-reduced-motion: reduce){
+  .rm-feedback-action{transition:none}
+  .rm-feedback-action:hover{transform:none}
+}
+
 /* Footer note pointing at the internal doc */
 .rm-footnote{
   margin:48px 0 0;padding:18px 22px;border-radius:12px;
@@ -2215,9 +2289,11 @@ body.search-open{overflow:hidden}
 @media (max-width:640px){
   .roadmap-page{padding:120px 0 60px}
   .rm-timeline{padding-left:30px}
-  .rm-entry::before{left:-30px;width:16px;height:16px;top:17px}
+  /* Smaller card padding-top on mobile (14px) shifts the pill centre
+     to ~26px; mirror that in marker top so centres still line up. */
+  .rm-entry::before{left:-30px;width:16px;height:16px;top:18px}
   .rm-entry.in-progress::before{box-shadow:0 0 0 1px var(--line),0 0 0 4px rgba(10,132,255,.18)}
-  .rm-entry.milestone::before{left:-28px;width:12px;height:12px;top:19px}
+  .rm-entry.milestone::before{left:-28px;width:12px;height:12px;top:20px}
   .rm-card{padding:14px 16px}
   .rm-card h3{font-size:.98rem}
   .rm-legend{padding:12px 14px;gap:8px}
