@@ -1,20 +1,20 @@
 {
   "version": 1,
-  "generated_at": "2026-05-21T12:39:08+00:00",
+  "generated_at": "2026-05-22T11:46:53+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-05-21T12:39:08+00:00"
+    "last_synced": "2026-05-22T11:46:53+00:00"
   },
   "members": [
     {
       "id": "moritz-weiss",
-      "name": "Dr Moritz Weiss",
+      "name": "Dr. Moritz Weiss",
       "country": "Germany",
       "country_code": "de",
-      "affiliation": "Ludwig-Maximilians-Universität München",
-      "position": "",
+      "affiliation": "LMU Munich",
+      "position": "Senior lecturer",
       "roles": [
         "Action Chair",
         "WG1 Leader"
@@ -28,17 +28,22 @@
           1
         ]
       },
-      "bio": "",
-      "keywords": [],
+      "bio": "Moritz Weiss (he) is Senior Lecturer of International Relations and European Studies at LMU Munich. He is Action Chair of 'NetSec'; and also Principal Investigator of the projects ‘The Making of National Security’ (funded by the Fritz Thyssen Stiftung) and 'Big Tech and Regulatory Capture' (funded by the Mercator Foundation Switzerland). His research focuses on the governance of European and international security as well as the political economy of digital technologies. He was a visiting professor of international politics at the Leibniz University Hannover and the LMU Munich as well as a Jean-Monnet-Fellow at the EUI in Florence. His research was published in Security Studies, Contemporary Security Policy, Journal of Global Security Studies, Governance, Review of International Political Economy, International Studies Review, Journal of Common Market Studies, West European Politics and Journal of European Public Policy.",
+      "keywords": [
+        "international security",
+        "political economy",
+        "digital governance",
+        "power"
+      ],
       "email": "moritz.weiss@gsi.lmu.de",
-      "website": "",
-      "orcid": "",
-      "linkedin": "",
+      "website": "https://www.en.gsi.uni-muenchen.de/people/academic/moritz-weiss/index.html",
+      "orcid": "0000-0001-9311-6480",
+      "linkedin": "https://www.linkedin.com/in/moritz-weiss-1aa70b27b/",
       "twitter": "",
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/moritz-weiss.jpg",
-      "source": "seed"
+      "source": "form"
     },
     {
       "id": "marie-robin",
@@ -388,6 +393,35 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/arthur-laudrain.jpg",
+      "source": "form"
+    },
+    {
+      "id": "john-n-t-helferich",
+      "name": "Dr John N.T. Helferich",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "affiliation": "University of Oxford",
+      "position": "Lecturer in Politics",
+      "roles": [],
+      "wgs": [
+        2
+      ],
+      "wg_leadership": {},
+      "bio": "John Helferich is a Lecturer in Politics at Hertford College and a researcher with the Oxford Global Security Programme. His research focuses on European security and transformations in international order. He holds a Doctor of Philosophy (DPhil) in International Relations from the University of Oxford and a Master’s degree in International Security (summa cum laude) from Sciences Po. His dissertation on EU defence integration won the PSA Best Dissertation Prize in International Relations. He chairs the Working Group on Transfer of Knowledge within the COST Action Networking European Security Knowledge and serves as a board member of the European Initiative for Security Studies (EISS).",
+      "keywords": [
+        "Foreign Policy Analysis",
+        "EU–NATO Relations",
+        "Political Psychology",
+        "Research Methods"
+      ],
+      "email": "john.helferich@hertford.ox.ac.uk",
+      "website": "johnhelferich.com",
+      "orcid": "0000-0002-9085-846X",
+      "linkedin": "https://www.linkedin.com/in/john-h-990850158",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/john-n-t-helferich.jpg",
       "source": "form"
     }
   ]
