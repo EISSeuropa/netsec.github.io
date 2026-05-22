@@ -171,4 +171,15 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/roadmap.html"/>
   </url>
 
+  <url>
+    <loc>https://netsec-cost.eu/essc-2026.html</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://netsec-cost.eu/essc-2026.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/essc-2026.fr.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://netsec-cost.eu/essc-2026.de.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/essc-2026.html"/>
+  </url>
+
 </urlset>
