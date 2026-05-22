@@ -127,4 +127,37 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/glossary.html"/>
   </url>
 
+  <url>
+    <loc>https://netsec-cost.eu/about.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://netsec-cost.eu/about.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/about.fr.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://netsec-cost.eu/about.de.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/about.html"/>
+  </url>
+
+  <url>
+    <loc>https://netsec-cost.eu/outputs.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://netsec-cost.eu/outputs.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/outputs.fr.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://netsec-cost.eu/outputs.de.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/outputs.html"/>
+  </url>
+
+  <url>
+    <loc>https://netsec-cost.eu/news.html</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://netsec-cost.eu/news.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/news.fr.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://netsec-cost.eu/news.de.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/news.html"/>
+  </url>
+
 </urlset>

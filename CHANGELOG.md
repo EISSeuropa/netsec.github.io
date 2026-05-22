@@ -13,6 +13,19 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
+### Added
+
+- **New `/about.html` page** (plus FR + DE) bringing together the *Action* narrative, the deliverables Gantt, the *Leadership* grids (Action Leadership + WG Leaders + WG Co-leaders + the *MC by country* collapsible), and a *Relationship with EISS* section currently a marked placeholder pending content from the Action Chair + WG4 lead. The home-page *About* anchor still exists for the short intro; the dedicated page is for the full story.
+- **New `/outputs.html` and `/news.html`** stub pages (each in EN / FR / DE) — `/outputs.html` shows a *First outputs expected October 2026* status banner with a deep-link to the deliverables timeline on `/about.html`; `/news.html` is the future home for older news entries as the home-page block grows past four cards. Both fully indexable by search and listed in `sitemap.xml`.
+- **Wiki link in the footer** on every page (EN / FR / DE) — *Glossary · Members' Wiki · Press kit*. Compensates for removing the *Members' Wiki* card from the home-page *Find out more* grid so the strip below now owns that signpost cleanly.
+
+### Changed
+
+- **Header IA: nav reduced from 10 to 8 items**. Removed *Committee* and *Roadmap* and *Outputs* as standalone nav entries; *About* now points to the dedicated `/about.html` (which contains the merged Committee + Roadmap content); *Outputs* renamed to *Publications* and points to `/outputs.html`. New nav order across all 30 page × locale permutations: *News · About · Working Groups · Network · Events · Grants · Publications · Contact*.
+- **Home page slimmed**. The *Committee* section (3 leadership grids + the MC-by-country collapsible — ~265 lines), the *Roadmap* Gantt (~150 lines), and the three *Forthcoming* placeholder *Outputs* cards (~25 lines) are all migrated to `/about.html` or `/outputs.html` respectively. EN / FR / DE home pages now ~745 / ~660 / ~660 lines (down from ~990 / ~905 / ~905).
+- **`/sitemap.html`, `/sitemap.fr.html`, `/sitemap.de.html`** rebuilt to match the new IA: the *Home* branch shrinks to the sections that still live there; new *About* and *Publications* branches list the new dedicated pages and their deep-link anchors.
+- **CHANGELOG note**: this is **Phase 1** of the homepage IA pass described in `docs/homepage-ia-quick-audit.md`. Phase 2 (deeper UX work — audience tracks, nav grouping, mobile patterns) runs Jul–Aug 2026 and ships in v1.7.0 alongside the Year-1 close.
+
 ### Fixed
 
 - **Search-result clicks on a directory entry now visually confirm the landing.** The hash-based deep-link to `/people.html#<slug>` already scrolled the matched card into view, but in detailed view (the default) the card looked exactly like every other already-detailed card — visitors reported "the click just sends me to the top of the directory". The matched card now gets an `.is-search-landed` class on hash arrival: a 2 px accent-blue outline with a soft glow, a 0.4 s scale-in animation, auto-fading after 3.5 s. Honours `prefers-reduced-motion`. In compact view the card is also expanded in place (existing behaviour). EN / FR / DE.
