@@ -24,6 +24,7 @@ name_key = sync_bios.name_key
 country_key = sync_bios.country_key
 slugify = sync_bios.slugify
 merge = sync_bios.merge
+download_photo = sync_bios.download_photo
 
 
 def expect(label: str, got, want) -> None:
@@ -187,6 +188,91 @@ def test_merge_name_match_same_country_collapses() -> None:
     expect("role preserved", merged[0]["roles"], ["WG3 Leader"])
 
 
+def test_download_photo_idempotent_on_unchanged_upstream() -> None:
+    """The fix for the empty-PR bug. download_photo computes a sha256
+    of the raw upstream bytes; on a second call with the same
+    `prior_hash` and an existing dest file, it must NOT re-encode and
+    must NOT write — even though PIL/libjpeg-turbo would otherwise
+    emit subtly different bytes on the second run, dirtying the
+    working tree and triggering an auto-PR with a lone binary diff.
+    """
+    print("\ndownload_photo() — idempotent on unchanged upstream:")
+    import io as _io
+    try:
+        from PIL import Image as _Image
+    except ImportError:
+        print("  skip — Pillow not available")
+        return
+
+    # Build a small in-memory JPEG fixture (different content than
+    # whatever the real Drive URL would return — pure isolation).
+    fixture = _Image.new("RGB", (320, 240), (180, 60, 90))
+    buf = _io.BytesIO()
+    fixture.save(buf, format="JPEG", quality=88)
+    raw_jpeg_bytes = buf.getvalue()
+
+    class _MockResponse:
+        def __init__(self, data: bytes):
+            self.content = data
+        def raise_for_status(self) -> None:
+            pass
+
+    saved_get = sync_bios.requests.get
+    saved_drive_id = sync_bios.drive_file_id
+    sync_bios.requests.get = lambda *args, **kwargs: _MockResponse(raw_jpeg_bytes)
+    # Skip the drive_file_id parsing — we're using a fake URL.
+    sync_bios.drive_file_id = lambda url: None
+
+    # download_photo computes its return path as `dest.relative_to(ROOT)`,
+    # so the fixture has to live under ROOT. Use PHOTO_DIR with a
+    # test-only slug that we clean up in `finally` regardless of how
+    # the test exits.
+    slug = "zztest-idempotent-fixture"
+    dest_no_ext = sync_bios.PHOTO_DIR / slug
+    dest_jpg = dest_no_ext.with_suffix(".jpg")
+    if dest_jpg.exists():
+        dest_jpg.unlink()
+
+    try:
+        # First call: no prior hash → re-encode + write.
+        path1, hash1 = download_photo(
+            "https://fake/photo.jpg", dest_no_ext, prior_hash=None,
+        )
+        expect("first call returns path",        path1 is not None, True)
+        expect("first call returns hash",        bool(hash1), True)
+        expect("first call wrote file",          dest_jpg.exists(), True)
+
+        jpeg_after_first = dest_jpg.read_bytes()
+        mtime_after_first = dest_jpg.stat().st_mtime_ns
+
+        # Second call: prior hash matches → must NOT write.
+        path2, hash2 = download_photo(
+            "https://fake/photo.jpg", dest_no_ext, prior_hash=hash1,
+        )
+        expect("second call returns same path",  path2, path1)
+        expect("second call returns same hash",  hash2, hash1)
+        expect("second call did not touch file (bytes)",
+               dest_jpg.read_bytes(), jpeg_after_first)
+        expect("second call did not touch file (mtime)",
+               dest_jpg.stat().st_mtime_ns, mtime_after_first)
+
+        # Third call with a wrong prior_hash → falls through and
+        # re-encodes; the byte-equality guard then catches the
+        # write (PIL is deterministic for THIS process, even if
+        # not across PIL minor-version updates).
+        path3, hash3 = download_photo(
+            "https://fake/photo.jpg", dest_no_ext, prior_hash="deadbeef",
+        )
+        expect("wrong prior_hash → returns same path", path3, path1)
+        expect("wrong prior_hash → returns the upstream hash, not the bogus prior",
+               hash3, hash1)
+    finally:
+        sync_bios.requests.get = saved_get
+        sync_bios.drive_file_id = saved_drive_id
+        if dest_jpg.exists():
+            dest_jpg.unlink()
+
+
 def main() -> None:
     test_name_key()
     test_country_key()
@@ -194,6 +280,7 @@ def main() -> None:
     test_merge_country_guards_false_positive()
     test_merge_name_match_different_country_does_not_collapse()
     test_merge_name_match_same_country_collapses()
+    test_download_photo_idempotent_on_unchanged_upstream()
     print("\nAll tests passed.")
 
 

@@ -43,6 +43,7 @@ available; if not, photos are saved as-is.
 from __future__ import annotations
 
 import csv
+import hashlib
 import io
 import json
 import os
@@ -244,11 +245,40 @@ def drive_file_id(url: str) -> str | None:
     return None
 
 
-def download_photo(url: str, dest_no_ext: Path) -> str | None:
-    """Download a photo, optimise if Pillow available, return final path
-    (relative to ROOT) or None on failure."""
+def download_photo(
+    url: str,
+    dest_no_ext: Path,
+    *,
+    prior_hash: str | None = None,
+) -> tuple[str | None, str | None]:
+    """Download a photo, optimise if Pillow available, return
+    (path-relative-to-ROOT, sha256-of-upstream-bytes). Returns
+    (None, None) on failure / empty URL.
+
+    The sha256 is computed over the *raw upstream bytes* (the response
+    body from Google Drive, before any PIL processing). It is stable
+    across runs as long as the form submitter hasn't re-uploaded.
+
+    `prior_hash` is the photo_source_sha256 stored against this slug
+    in the existing data/bios.json (or None for a new slug). When
+    the upstream hash matches `prior_hash` AND the destination JPEG
+    already exists on disk, we skip the entire PIL re-encode + write.
+    This is the fix for the empty-PR bug: libjpeg-turbo's
+    `optimize=True` heuristic is not bit-stable across PIL versions /
+    runner hosts, so re-encoding an identical input could produce
+    subtly different output bytes — the old byte-equality guard at
+    the bottom of this function would then fail open, write the
+    "new" bytes, dirty the working tree, and trigger an auto-PR with
+    a lone binary diff even though sync-bios.py's data-level check
+    correctly determined nothing had substantively changed.
+
+    Falling back to the byte-equality guard for the rare case where
+    `prior_hash` is None but the file exists (e.g. a member that
+    pre-dates this field's introduction). After one sync the hash is
+    populated and subsequent runs short-circuit cleanly.
+    """
     if not url:
-        return None
+        return None, None
     file_id = drive_file_id(url)
     fetch_url = (
         f"https://drive.google.com/uc?export=download&id={file_id}"
@@ -260,18 +290,23 @@ def download_photo(url: str, dest_no_ext: Path) -> str | None:
         data = r.content
     except Exception as e:
         print(f"  ! photo download failed for {url}: {e}", file=sys.stderr)
-        return None
+        return None, None
 
-    # Build the bytes we *would* write, then only touch disk if they
-    # differ from what's already there. Without this, every weekly
-    # sync re-encodes every headshot and emits subtly different JPEG
-    # bytes (libjpeg quantisation is not bit-stable across PIL runs),
-    # which dirties the working tree even when no submitter has
-    # actually changed their photo — and triggers an otherwise-empty
-    # auto-PR.
+    upstream_hash = hashlib.sha256(data).hexdigest()
     dest = dest_no_ext.with_suffix(".jpg")
-    out_bytes: bytes | None = None
 
+    # Fast path: if the upstream bytes match what produced the file
+    # on disk last time, the file on disk is still correct — no need
+    # to re-encode, no need to compare libjpeg-quantised bytes.
+    if prior_hash and prior_hash == upstream_hash and dest.exists():
+        return (
+            str(dest.relative_to(ROOT)).replace(os.sep, "/"),
+            upstream_hash,
+        )
+
+    # Re-encode through PIL (downscale + optimise), or pass through
+    # if Pillow isn't installed.
+    out_bytes: bytes
     if HAS_PIL:
         try:
             img = Image.open(io.BytesIO(data))
@@ -292,15 +327,33 @@ def download_photo(url: str, dest_no_ext: Path) -> str | None:
     else:
         out_bytes = data
 
+    # Belt-and-braces: the upstream-hash fast path above is the
+    # primary determinism guarantee. This byte-equality guard is the
+    # last-line backstop for the migration window where stored
+    # hashes haven't propagated to every member yet.
     if not (dest.exists() and dest.read_bytes() == out_bytes):
         dest.write_bytes(out_bytes)
 
-    return str(dest.relative_to(ROOT)).replace(os.sep, "/")
+    return (
+        str(dest.relative_to(ROOT)).replace(os.sep, "/"),
+        upstream_hash,
+    )
 
 
-def row_to_member(row: dict, cols: dict) -> dict | None:
+def row_to_member(
+    row: dict,
+    cols: dict,
+    old_by_id: dict[str, dict] | None = None,
+) -> dict | None:
     """Convert one CSV row dict to a bios.json member entry, or None if
-    the row should be skipped."""
+    the row should be skipped.
+
+    `old_by_id` is the prior bios.json members keyed by slug — passed
+    in so download_photo can look up the prior photo_source_sha256
+    and short-circuit the PIL re-encode when the upstream bytes
+    haven't changed. Pass None and the photo will always be re-encoded
+    (only relevant for tests / one-off scripted runs).
+    """
     name = (row.get(cols["name"], "") or "").strip()
     consent = (row.get(cols["consent"], "") or "").strip().lower()
     if not name:
@@ -314,12 +367,20 @@ def row_to_member(row: dict, cols: dict) -> dict | None:
     slug = slugify(name)
     email = norm_email(row.get(cols.get("email", ""), ""))
     photo_url = (row.get(cols.get("photo", ""), "") or "").strip()
-    photo_path = None
+    photo_path: str | None = None
+    photo_hash: str | None = None
     if photo_url:
-        # Save under assets/images/people/<slug>
-        photo_path = download_photo(photo_url, PHOTO_DIR / slug)
+        # Save under assets/images/people/<slug>. Look up the prior
+        # hash so an unchanged photo doesn't get re-encoded.
+        prior_hash = None
+        if old_by_id is not None:
+            prior = old_by_id.get(slug) or {}
+            prior_hash = prior.get("photo_source_sha256") or None
+        photo_path, photo_hash = download_photo(
+            photo_url, PHOTO_DIR / slug, prior_hash=prior_hash,
+        )
 
-    return {
+    out = {
         "id": slug,
         "name": name,
         "country": (row.get(cols.get("country", ""), "") or "").strip(),
@@ -343,6 +404,12 @@ def row_to_member(row: dict, cols: dict) -> dict | None:
         "_email_key": email,  # internal, stripped before write
         "_timestamp": (row.get(cols.get("timestamp", ""), "") or "").strip(),
     }
+    if photo_hash:
+        # Only set when we have a hash to record — keeps the field
+        # absent for members with no photo, rather than serialising
+        # "photo_source_sha256": "" everywhere.
+        out["photo_source_sha256"] = photo_hash
+    return out
 
 
 # Country-name → ISO 3166-1 alpha-2 code, used by /people.html to render
@@ -788,6 +855,10 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
                     existing[k] = entry[k]
             if entry.get("photo"):
                 existing["photo"] = entry["photo"]
+            if entry.get("photo_source_sha256"):
+                # Carry the freshly-computed upstream hash forward so
+                # next week's sync can short-circuit the PIL re-encode.
+                existing["photo_source_sha256"] = entry["photo_source_sha256"]
             if entry.get("wgs"):
                 # Union of prior and form WGs — submitters can add WG
                 # membership but cannot remove an existing assignment.
@@ -863,6 +934,13 @@ def main() -> None:
     # only — for merge purposes, "the prior state of the directory"
     # is what we want to preserve roles, position, and email-match
     # identity against.
+    #
+    # Index by slug so row_to_member → download_photo can look up
+    # the prior `photo_source_sha256` for each submitter in O(1) and
+    # skip the PIL re-encode when the upstream photo bytes are
+    # unchanged. See download_photo's docstring for the empty-PR
+    # failure mode this guards against.
+    old_by_id = {m["id"]: m for m in old_members}
 
     # Fetch the sheet CSV
     print(f"Fetching {csv_url}")
@@ -876,7 +954,7 @@ def main() -> None:
         # The CSV from Google Sheets uses the form question text as the
         # header. Trim whitespace from header keys.
         row = {(k or "").strip(): v for k, v in raw_row.items()}
-        entry = row_to_member(row, cols)
+        entry = row_to_member(row, cols, old_by_id)
         if entry:
             form_entries.append(entry)
 
