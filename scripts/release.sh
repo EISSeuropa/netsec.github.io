@@ -19,15 +19,18 @@
 #
 # Before running:
 #
-#   ❗ `[Unreleased]` in CHANGELOG.md must follow the structure rule
-#      documented at the top of that file: ONE `### Added`, ONE
-#      `### Changed`, ONE `### Fixed` (etc.) at most, in that order.
-#      The script extracts `[Unreleased]` *verbatim* into the GitHub
-#      Release notes — any duplicate headings carry into the public
-#      release page. v1.4.0 was cut while this rule was implicit and
-#      ended up with 13 category headings instead of 3.
-#      The confirmation prompt below prints the body so you can
-#      eyeball it; bail out if the structure looks wrong.
+#   ❗ `[Unreleased]` in CHANGELOG.md must follow the hybrid release-
+#      notes format documented at the top of that file: a one- to
+#      three-sentence lede + 2-4 themed `### sub-sections` (prose-
+#      led) + a canonical `### Index of changes` block at the bottom
+#      with `#### Added` / `#### Changed` / `#### Fixed` etc. (each
+#      appearing at most once, in that order). Patch releases skip
+#      the lede + themes and ship the index only.
+#
+#      The script extracts `[Unreleased]` *verbatim* into the
+#      GitHub Release notes. The confirmation prompt below prints
+#      the body — eyeball it. Whatever lives in `[Unreleased]` lands
+#      on the public release page.
 #
 # What it does, in order:
 #   1.  Validate <version> against SemVer 2.0.0 (X.Y.Z, no leading "v").
