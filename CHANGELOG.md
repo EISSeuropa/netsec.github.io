@@ -13,7 +13,13 @@ appendix; see Appendix C of that PDF for documentation-pack history.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+
+- **Launch-QA plan + automation** for the late-May 2026 public push. New `docs/launch-qa-2026.md` lays out the three-phase audit (automation pre-flight → critical user journeys → a11y + cross-browser + perf), the Go / No-Go criteria, the five-day schedule, the tooling cheatsheet, and a findings log. Two new scripts: `scripts/check-links.sh` (broken-link checker — internal anchors + external HTTP/HTTPS, Python-only, threads with rate-limit-respecting concurrency of 3, retries SSL-cert failures with verification off as a macOS-friendly fallback, validates `people.*.html#<slug>` deep-links against `data/bios.json`, skips known auth-gated hosts) and `scripts/check-a11y.sh` (axe-core scan via `@axe-core/cli`, spins up a localhost server so the scan sees the pages as a browser would, aggregates a per-page summary into `tmp/a11y-report.md`). New CI workflow `launch-qa-link-check.yml` runs the link checker on every PR that touches HTML and weekly on main, so link rot is visible within seven days. First Phase-0 run is recorded in the findings log.
+
+### Fixed
+
+- **Nine broken internal anchors** uncovered by the new link checker. `faq.{en,fr,de}.html` and `licensing.{en,fr,de}.html` still pointed at `index.html#committee`, `#roadmap`, `#outputs` — three home-page sections that the Phase 1 IA pass (PR #93) migrated to dedicated pages months ago without the FAQ + Licensing copy following. Updated to `about.X.html#leadership`, `roadmap.X.html`, `outputs.X.html` across the six page-locale combinations.
 
 ## [1.4.0] · 2026-05-22 — Site-wide search, infrastructure and directory improvements
 
