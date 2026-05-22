@@ -891,8 +891,19 @@
     //  - a hash that includes the salutation (e.g. #dr-arthur-laudrain →
     //    slug is arthur-laudrain because slugify strips the title)
     //  - the URL changing later (hashchange)
-    //  - the browser firing scrollIntoView before layout has settled
-    //    (wrap in requestAnimationFrame)
+    //
+    // We used to wrap the whole body in requestAnimationFrame so that
+    // scrollIntoView ran on a settled layout. Problem: if RAF didn't
+    // fire (headless Chromium in some timing scenarios; possibly real
+    // browsers under heavy load), NONE of the spotlight / expand /
+    // scroll actions ran, leaving the visitor staring at the top of
+    // the directory with no landed card. Phase 1 Journey 4 of the
+    // launch-QA pass (finding J4-1) repro'd this consistently in
+    // headless. Fix: do the class manipulations synchronously — they
+    // are layout-safe (no rect-measurement) — and only gate
+    // `scrollIntoView` behind RAF so the scroll target's box is
+    // computed from a settled layout *after* `.is-expanded` has had
+    // a frame to recompute card height.
     const scrollToHash = () => {
       const hash = (location.hash || '').replace(/^#/, '');
       if (!hash) return;
@@ -905,28 +916,33 @@
         document.getElementById(hash) ||
         document.getElementById(hash.replace(/^(dr|prof|mr|ms|mrs)-/i, '')) ||
         grid.querySelector('.member-card[data-slug="' + CSS.escape(hash) + '"]');
-      if (target) requestAnimationFrame(() => {
-        target.scrollIntoView({ behavior: 'instant', block: 'center' });
-        if (target.classList.contains('member-card')) {
-          // Always: visual spotlight so the landed card is obvious
-          // even in detailed view (where every other card is also
-          // showing its full content). The class auto-fades after
-          // ~3 s so it doesn't read as a permanent selection state.
-          // Survives subsequent hashchanges via the cleanup below.
-          grid.querySelectorAll('.member-card.is-search-landed')
-              .forEach(c => c.classList.remove('is-search-landed'));
-          target.classList.add('is-search-landed');
-          setTimeout(() => target.classList.remove('is-search-landed'), 3500);
-          // In compact view also expand the card in place. In
-          // detailed view, all cards are already showing full bio
-          // content, so the expand class is unnecessary — the
-          // spotlight is the only visual treatment needed.
-          if (grid.classList.contains('is-compact')) {
-            grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
-            target.classList.add('is-expanded');
-          }
+      if (!target) return;
+      if (target.classList.contains('member-card')) {
+        // Always: visual spotlight so the landed card is obvious
+        // even in detailed view (where every other card is also
+        // showing its full content). The class auto-fades after
+        // ~3 s so it doesn't read as a permanent selection state.
+        // Survives subsequent hashchanges via the cleanup below.
+        grid.querySelectorAll('.member-card.is-search-landed')
+            .forEach(c => c.classList.remove('is-search-landed'));
+        target.classList.add('is-search-landed');
+        setTimeout(() => target.classList.remove('is-search-landed'), 3500);
+        // In compact view also expand the card in place. In
+        // detailed view, all cards are already showing full bio
+        // content, so the expand class is unnecessary — the
+        // spotlight is the only visual treatment needed.
+        if (grid.classList.contains('is-compact')) {
+          grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
+          target.classList.add('is-expanded');
         }
-      });
+      }
+      // Scroll on the next paint — after `.is-expanded` recomputes
+      // the box. setTimeout(0) is a belt-and-braces fallback in case
+      // RAF doesn't fire (the original bug); it queues a fresh task
+      // that will run in either case.
+      const doScroll = () => target.scrollIntoView({ behavior: 'instant', block: 'center' });
+      requestAnimationFrame(doScroll);
+      setTimeout(doScroll, 50);
     };
     scrollToHash();
     window.addEventListener('hashchange', scrollToHash);
