@@ -635,25 +635,34 @@
     countEl.textContent = filtered.length + ' ' + window.netsecT(filtered.length === 1 ? 'member' : 'members');
     empty.hidden = filtered.length > 0;
 
-    requestAnimationFrame(() => {
-      grid.querySelectorAll('.member-bio').forEach(bio => {
-        if (bio.classList.contains('is-pending')) return;
-        if (bio.nextElementSibling && bio.nextElementSibling.classList.contains('member-bio-toggle')) return;
-        if (bio.scrollHeight - bio.clientHeight < 2) return;
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'member-bio-toggle';
-        btn.setAttribute('aria-expanded', 'false');
-        btn.innerHTML = '<span class="lbl">' + window.netsecT('Show more') + '</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
-        btn.addEventListener('click', () => {
-          const expanded = bio.classList.toggle('is-expanded');
-          btn.classList.toggle('is-expanded', expanded);
-          btn.setAttribute('aria-expanded', expanded);
-          btn.querySelector('.lbl').textContent = window.netsecT(expanded ? 'Show less' : 'Show more');
-        });
-        bio.insertAdjacentElement('afterend', btn);
+    // See people.html for the explanation of why this is no longer
+    // wrapped in requestAnimationFrame.
+    function tryInsertBioToggle(bio) {
+      if (!bio || bio.classList.contains('is-pending')) return;
+      if (bio.nextElementSibling && bio.nextElementSibling.classList.contains('member-bio-toggle')) return;
+      if (bio.scrollHeight - bio.clientHeight < 2) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'member-bio-toggle';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.innerHTML = '<span class="lbl">' + window.netsecT('Show more') + '</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
+      btn.addEventListener('click', () => {
+        const expanded = bio.classList.toggle('is-expanded');
+        btn.classList.toggle('is-expanded', expanded);
+        btn.setAttribute('aria-expanded', expanded);
+        btn.querySelector('.lbl').textContent = window.netsecT(expanded ? 'Show less' : 'Show more');
       });
-    });
+      bio.insertAdjacentElement('afterend', btn);
+    }
+    grid.querySelectorAll('.member-bio').forEach(tryInsertBioToggle);
+    if (typeof ResizeObserver === 'function') {
+      if (!window.__bioResizeObserver) {
+        window.__bioResizeObserver = new ResizeObserver(entries => {
+          entries.forEach(entry => tryInsertBioToggle(entry.target));
+        });
+      }
+      grid.querySelectorAll('.member-bio').forEach(b => window.__bioResizeObserver.observe(b));
+    }
   }
 
   filterChips.forEach(b => {
