@@ -95,6 +95,55 @@ def slugify(name: str) -> str:
     return s or "member"
 
 
+def name_key(name: str) -> tuple[str, str] | None:
+    """Reduce a name to (first_token, last_token), lowercased and
+    diacritic-stripped, dropping titles and any middle names / initials.
+
+    Used as a fallback dedup signal in merge(): collapses cases where a
+    member who already has a seed entry (e.g. "Dr John Helferich") fills
+    in the public form with a slightly different name spelling (e.g.
+    "Dr John N.T. Helferich"). slugify() would treat those two as
+    different ids (john-helferich vs john-n-t-helferich), and the form
+    submitter's Google account email isn't on the seed entry to bridge
+    them — so without a third signal, the form submission creates a
+    new alphabetical entry beside the seed one.
+
+    Returns None when we can't extract both a first and a last token —
+    the caller treats that as "no fallback match available".
+
+    Conservative on purpose: only the *first* and the *last* token are
+    used, so middle names, suffixes ("Jr"), and academic post-nominals
+    ("PhD") don't affect the key. The matcher in merge() additionally
+    requires the country to match, so two genuinely different members
+    who happen to share first + last names won't collapse.
+    """
+    s = unicodedata.normalize("NFKD", name or "")
+    s = "".join(c for c in s if not unicodedata.combining(c))
+    s = re.sub(r"^(Dr|Prof|Mr|Ms|Mrs)\.?\s+", "", s, flags=re.I)
+    s = re.sub(r"[‘’ʼ'`]", "", s)
+    # Tokenise on any non-letter so "N.T." becomes ["N", "T"] (and the
+    # initials get dropped by the first/last selection below).
+    tokens = [t.lower() for t in re.split(r"[^A-Za-z]+", s) if t]
+    # Strip common post-nominal tokens that aren't really part of the name.
+    POST_NOMINALS = {"phd", "jr", "sr", "ii", "iii", "iv", "esq"}
+    tokens = [t for t in tokens if t not in POST_NOMINALS]
+    if len(tokens) < 2:
+        return None
+    return (tokens[0], tokens[-1])
+
+
+def country_key(s: str) -> str:
+    """Normalise a country string for case-insensitive comparison in
+    name_key fallback matching. We don't try to canonicalise aliases
+    here — that's load_mc_lookup()'s job for the country_code field.
+    Bare lowercase is enough to absorb the obvious case differences
+    ("united kingdom" vs "United Kingdom") without false-merging
+    "United Kingdom" with "United States". Returns "" for empty input,
+    which the caller uses as "skip the name-based fallback" — we don't
+    want to collapse entries that lack a country to confirm identity."""
+    return (s or "").strip().lower()
+
+
 def parse_timestamp(raw: str) -> float:
     """Parse a Google-Forms timestamp string to epoch seconds. The
     format depends on the form-owner's account locale at sheet creation:
@@ -612,8 +661,22 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
       its role and position. See the regression around eugenio-sanchez
       (PR #51 / fix PR).
     - Prior entries are keyed by id (slug).
-    - Form entries are keyed by email if available, otherwise slug.
-    - When a form entry matches a prior entry (by slug OR by email),
+    - Form entries are matched to prior entries by three signals, tried
+      in this order:
+        1. The submitter's Google-account email (`_email_key`) matches
+           any prior entry's published `email` column.
+        2. The submitter's slug (derived from the form's "Full name"
+           answer via slugify()) matches a prior entry's id.
+        3. The submitter's (first-name, last-name, country) tuple
+           matches a prior entry's (via name_key()).
+      Signal #3 is the fallback that catches "Dr John N.T. Helferich"
+      submitting against an existing "Dr John Helferich" seed entry —
+      slugify() gives different ids ("john-n-t-helferich" vs
+      "john-helferich"), and the seed entry has no public email to
+      bridge them. We require the *country* to also match to avoid
+      false-merging two genuinely different members who happen to
+      share first + last names.
+    - When a form entry matches a prior entry (by any of the three),
       the form data wins for content fields, but role data
       (`roles`, `wg_leadership`) is preserved unconditionally — the
       form has no roles column, so it can only ever overwrite a real
@@ -624,6 +687,16 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
         (s.get("email") or "").lower(): s["id"]
         for s in prior if s.get("email")
     }
+    # Index of (first_name, last_name, country) → prior id, used by the
+    # third matching signal in the form-entry loop below. Only entries
+    # with both a parseable name and a non-empty country are indexed —
+    # we don't trust the name fallback without a country to confirm.
+    by_name_country: dict[tuple[str, str, str], str] = {}
+    for s in prior:
+        nk = name_key(s.get("name", ""))
+        ck = country_key(s.get("country", ""))
+        if nk and ck:
+            by_name_country[(nk[0], nk[1], ck)] = s["id"]
 
     # Two-pass dedup so a returning submitter never lands twice on the
     # directory. Pass 1 keys by the form-collected Google-account email,
@@ -661,12 +734,45 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
     form_entries = list(slug_dedup.values())
 
     for entry in form_entries:
-        # Find matching prior entry by email first, then slug.
+        # Find matching prior entry by email first, then slug, then by
+        # (first-name, last-name, country) — see merge() docstring for
+        # why the third signal is needed and how the country guard
+        # bounds its false-positive risk.
         target_id = None
         if entry["_email_key"] and entry["_email_key"] in by_email:
             target_id = by_email[entry["_email_key"]]
         elif entry["id"] in by_slug:
             target_id = entry["id"]
+        else:
+            nk = name_key(entry.get("name", ""))
+            ck = country_key(entry.get("country", ""))
+            if nk and ck and (nk[0], nk[1], ck) in by_name_country:
+                target_id = by_name_country[(nk[0], nk[1], ck)]
+                print(
+                    f"  · collapsing form entry {entry['id']!r} → prior "
+                    f"{target_id!r} via name+country fallback "
+                    f"({entry.get('name','')!r} matches "
+                    f"{by_slug[target_id].get('name','')!r})",
+                    file=sys.stderr,
+                )
+                # The new form photo (if any) was downloaded to
+                # <new-slug>.<ext>. Rebase it to the prior slug so the
+                # existing entry's photo field stays valid and we don't
+                # leave an orphan file under the abandoned slug.
+                new_photo = entry.get("photo") or ""
+                if new_photo:
+                    src = ROOT / new_photo
+                    if src.exists():
+                        dest_ext = src.suffix
+                        dest = PHOTO_DIR / f"{target_id}{dest_ext}"
+                        # If the previous entry had a photo at a
+                        # different extension, drop it — the form
+                        # submission is authoritative for the visual.
+                        for stale in PHOTO_DIR.glob(f"{target_id}.*"):
+                            if stale != dest and stale.is_file():
+                                stale.unlink()
+                        src.replace(dest)
+                        entry["photo"] = str(dest.relative_to(ROOT)).replace(os.sep, "/")
 
         if target_id:
             existing = by_slug[target_id]
