@@ -5,7 +5,7 @@
   "caldesc": "Events from the NetSec COST Action (CA24154) — annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
   "tzid": "Europe/Stockholm",
   "refresh_days": 7,
-  "dtstamp": "20260522T000000Z",
+  "dtstamp": "20260523T000000Z",
 
   "events": [
     {
@@ -26,9 +26,9 @@
     {
       "uid": "european-security-conference-2026@netsec-cost.eu",
       "summary": "European Security Conference 2026",
-      "description": "The flagship annual gathering of the NetSec community: an interdisciplinary conference on European defence and security open to academics, policy-makers, and practitioners. Held back-to-back with the Summer School so early-career scholars can join the wider conversation.\n\nChairpersons: Dr Julia Carver, Dr Sanne Verschuren.\n\nProgramme and registration: https://indico.eiss-europa.com/event/22/",
+      "description": "The flagship annual gathering of the NetSec community: an interdisciplinary conference on European defence and security open to academics, policy-makers, and practitioners. Held back-to-back with the Summer School so early-career scholars can join the wider conversation.\n\nChairpersons: Dr Julia Carver, Dr Sanne Verschuren.\n\nLive programme: https://netsec-cost.eu/essc-2026.html\nRegistration: https://indico.eiss-europa.com/event/22/",
       "location": "Stockholm University, Frescativägen, 114 19 Stockholm, Sweden",
-      "url": "https://indico.eiss-europa.com/event/22/",
+      "url": "https://netsec-cost.eu/essc-2026.html",
       "start": "2026-06-11T08:00",
       "end": "2026-06-12T20:00",
       "categories": ["Annual Conference", "NetSec"],
