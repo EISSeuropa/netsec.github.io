@@ -20,3 +20,8 @@ scripts/__pycache__/
 # index locally for testing, run ./scripts/build-search.sh — the
 # result is gitignored and won't be staged.
 pagefind/
+
+# Scratch / report directory used by the QA scripts (a11y report,
+# Lighthouse JSON, link-check output). Always regeneratable; never
+# tracked.
+tmp/
