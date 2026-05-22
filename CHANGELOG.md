@@ -89,8 +89,7 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-> *Lede + themes get written at release-cutting time. Until then,
-> accumulate bullets in the index below.*
+> *Lede + themes get written at release-cutting time. Until then, accumulate bullets in the index below.*
 
 <!--
 TEMPLATE — uncomment and fill in when cutting the next release.
@@ -131,126 +130,47 @@ it now? Inline links to docs / PRs where relevant.
 
 ## [1.4.0] · 2026-05-22 — Site-wide search, infrastructure and directory improvements
 
-> The largest release since launch. In the two days since v1.0.0 the
-> site doubled in surface area — site-wide search, a Phase-1 IA pass
-> that gives the home page room to breathe, a public roadmap, a
-> proper brand favicon, and the infrastructure work that turns
-> Pagefind from a recurring PR-conflict source into a deploy-time
-> artefact. The shape of the site for the late-May public push.
+> The largest release since launch. In the two days since v1.0.0 the site doubled in surface area — site-wide search, a Phase-1 IA pass that gives the home page room to breathe, a public roadmap, a proper brand favicon, and the infrastructure work that turns Pagefind from a recurring PR-conflict source into a deploy-time artefact. The shape of the site for the late-May public push.
 
 ### Site-wide search
 
-The button you'd expect, where you'd expect it. Magnifying-glass in
-the nav, Cmd-K or `/` anywhere outside an input. Modal overlay,
-results scoped to the visitor's locale automatically (Pagefind per-
-language shards key off `<html lang>`), per-section deep-link
-anchors so long pages like FAQ and Glossary jump straight to the
-matched section. Snippets highlight with the EU-yellow `<mark>` from
-the press kit, on-page highlighting on landing too. Privacy posture
-preserved: index served from `/pagefind/` on `netsec-cost.eu`,
-queries never leave the visitor's browser, no third-party calls.
-Lazy-loaded on first overlay open. Design history in
-`docs/search-assessment.md`.
+The button you'd expect, where you'd expect it. Magnifying-glass in the nav, Cmd-K or `/` anywhere outside an input. Modal overlay, results scoped to the visitor's locale automatically (Pagefind per- language shards key off `<html lang>`), per-section deep-link anchors so long pages like FAQ and Glossary jump straight to the matched section. Snippets highlight with the EU-yellow `<mark>` from the press kit, on-page highlighting on landing too. Privacy posture preserved: index served from `/pagefind/` on `netsec-cost.eu`, queries never leave the visitor's browser, no third-party calls. Lazy-loaded on first overlay open. Design history in `docs/search-assessment.md`.
 
-**Directory bios are searchable.** A name search returns a rich
-card with the member's photo, country flag, role, and WG chips —
-rather than the plain page-text card used elsewhere. Member data
-is rendered as Pagefind index stubs under `search/bios/<lang>/<slug>.html`
-at build time, in all three locales, so a French visitor searching
-*"Laudrain"* hits the French shard too.
+**Directory bios are searchable.** A name search returns a rich card with the member's photo, country flag, role, and WG chips — rather than the plain page-text card used elsewhere. Member data is rendered as Pagefind index stubs under `search/bios/<lang>/<slug>.html` at build time, in all three locales, so a French visitor searching *"Laudrain"* hits the French shard too.
 
 ### Phase 1 information-architecture pass
 
-The home page had ten sections after v1.0; the floating header ran
-at ten nav items. Every new release added more. Time to redistribute.
+The home page had ten sections after v1.0; the floating header ran at ten nav items. Every new release added more. Time to redistribute.
 
-- **New `/about.html`** consolidates the Action narrative, the
-  deliverables Gantt, the leadership grids, and FAQ + Glossary
-  teasers. The home-page *About* anchor still carries the short
-  intro; the dedicated page is the full story.
-- **New `/outputs.html` and `/news.html`** stub pages — both
-  ready to receive content as it accrues.
-- **Header nav reduced from 10 to 8 items.** *Committee* and
-  *Roadmap* and *Outputs* dropped as standalone nav entries;
-  *About* points to the new `/about.html`; *Outputs* renamed to
-  *Publications*.
-- **Home page slimmed by ~25%.** EN / FR / DE go from ~990 / ~905
-  / ~905 lines down to ~745 / ~660 / ~660. Phase 2 of the IA pass
-  (audience tracks, mobile patterns, deeper UX work) runs Jul–Aug
-  2026 and ships in v1.7.0; this round is the structural
-  redistribution that needed to land before official logos in v1.5.
+- **New `/about.html`** consolidates the Action narrative, the deliverables Gantt, the leadership grids, and FAQ + Glossary teasers. The home-page *About* anchor still carries the short intro; the dedicated page is the full story.
+- **New `/outputs.html` and `/news.html`** stub pages — both ready to receive content as it accrues.
+- **Header nav reduced from 10 to 8 items.** *Committee* and *Roadmap* and *Outputs* dropped as standalone nav entries; *About* points to the new `/about.html`; *Outputs* renamed to *Publications*.
+- **Home page slimmed by ~25%.** EN / FR / DE go from ~990 / ~905 / ~905 lines down to ~745 / ~660 / ~660. Phase 2 of the IA pass (audience tracks, mobile patterns, deeper UX work) runs Jul–Aug 2026 and ships in v1.7.0; this round is the structural redistribution that needed to land before official logos in v1.5.
 
 ### Public roadmap
 
-`/roadmap.html` (+ FR + DE). Visual, audience-facing companion to
-the internal `docs/roadmap-2026.md`. Vertical timeline grouped by
-quarter; four-pill status legend (*Shipped* — green, *In progress*
-— blue, *Planned* — purple, *Under watch* — amber); twelve dated
-entries interleave shipped releases (v1.0 → v1.3), the in-progress
-v1.4, planned v1.5 → v1.8, and the Action's own milestones
-(Stockholm Conference + Summer School, inaugural MC plenary, Year-1
-anniversary). *Under watch* section at the foot lists deferred items
-with explicit triggers ("kick off the sticky-side-panel work if
-membership crosses ~150 OR an MC member reports friction"). A
-"Help shape this" card frames the roadmap as participatory and
-points readers at GitHub Issues + Discussions. Manual translations
-only — no machine translation.
+`/roadmap.html` (+ FR + DE). Visual, audience-facing companion to the internal `docs/roadmap-2026.md`. Vertical timeline grouped by quarter; four-pill status legend (*Shipped* — green, *In progress* — blue, *Planned* — purple, *Under watch* — amber); twelve dated entries interleave shipped releases (v1.0 → v1.3), the in-progress v1.4, planned v1.5 → v1.8, and the Action's own milestones (Stockholm Conference + Summer School, inaugural MC plenary, Year-1 anniversary). *Under watch* section at the foot lists deferred items with explicit triggers ("kick off the sticky-side-panel work if membership crosses ~150 OR an MC member reports friction"). A "Help shape this" card frames the roadmap as participatory and points readers at GitHub Issues + Discussions. Manual translations only — no machine translation.
 
-Signposted in two places: a 4th card in the home-page *Find out
-more* grid, and an accent callout at the foot of the Deliverables
-section on `/about.html`.
+Signposted in two places: a 4th card in the home-page *Find out more* grid, and an accent callout at the foot of the Deliverables section on `/about.html`.
 
 ### Infrastructure, quietly improved
 
-- **Pagefind built at deploy time, not committed to main.** Two
-  parallel PRs that both touched HTML used to conflict on the
-  index manifest (content-hashed shard filenames diverging). The
-  new Pages-deploy workflow rebuilds the index on every push and
-  deploys via the artifact + `actions/deploy-pages` flow; `/pagefind/`
-  is now gitignored. PR conflicts on the index are structurally gone.
-- **iCalendar feed at `/calendar.ics`** + *Subscribe to NetSec
-  events* CTA on the home page. Single-source-of-truth pipeline:
-  generated from `data/events.json` by `scripts/build-calendar.py`;
-  CI fails any PR where the JSON and the generated ICS disagree.
-- **Brand favicon replacing the Mobirise placeholder.** New SVG
-  favicon — rounded square in the EU-blue → Apple-blue gradient
-  with "NS" in white, matching the in-header brand mark. Visitors
-  no longer see a pink phone-with-sun icon in their browser tab.
-- **Persistent lint against trailing arrows on external links**
-  (`scripts/check-external-link-arrows.py` + CI workflow). The
-  site CSS auto-injects an external-link icon after every
-  `<a target="_blank">`, so a manually-typed arrow on top renders
-  a double affordance — the lint catches it before merge.
-- **Release-cutting now requires a short title** as a positional
-  argument to `scripts/release.sh`. Past titles retitled to match
-  the convention.
+- **Pagefind built at deploy time, not committed to main.** Two parallel PRs that both touched HTML used to conflict on the index manifest (content-hashed shard filenames diverging). The new Pages-deploy workflow rebuilds the index on every push and deploys via the artifact + `actions/deploy-pages` flow; `/pagefind/` is now gitignored. PR conflicts on the index are structurally gone.
+- **iCalendar feed at `/calendar.ics`** + *Subscribe to NetSec events* CTA on the home page. Single-source-of-truth pipeline: generated from `data/events.json` by `scripts/build-calendar.py`; CI fails any PR where the JSON and the generated ICS disagree.
+- **Brand favicon replacing the Mobirise placeholder.** New SVG favicon — rounded square in the EU-blue → Apple-blue gradient with "NS" in white, matching the in-header brand mark. Visitors no longer see a pink phone-with-sun icon in their browser tab.
+- **Persistent lint against trailing arrows on external links** (`scripts/check-external-link-arrows.py` + CI workflow). The site CSS auto-injects an external-link icon after every `<a target="_blank">`, so a manually-typed arrow on top renders a double affordance — the lint catches it before merge.
+- **Release-cutting now requires a short title** as a positional argument to `scripts/release.sh`. Past titles retitled to match the convention.
 
 ### Directory polish
 
-The compact-view cards on `/people.html` got two improvements that
-make the underlying click-to-expand pattern discoverable. First, a
-small circular chevron at the bottom-right of every compact card
-— ▼ when collapsed, rotates to ▲ when expanded. Hidden in detailed
-view. Touch-friendly. Second, **search-result clicks on a
-directory entry now visually confirm the landing** with a 2 px
-accent-blue outline and a soft glow that auto-fades after 3.5 s.
+The compact-view cards on `/people.html` got two improvements that make the underlying click-to-expand pattern discoverable. First, a small circular chevron at the bottom-right of every compact card — ▼ when collapsed, rotates to ▲ when expanded. Hidden in detailed view. Touch-friendly. Second, **search-result clicks on a directory entry now visually confirm the landing** with a 2 px accent-blue outline and a soft glow that auto-fades after 3.5 s.
 
 ### Polish + bug fixes
 
 The full list is in the index below. Two patterns worth flagging:
 
-- **Search overlay had several issues** that hadn't surfaced under
-  light testing — backend returning *"SEARCH IS UNAVAILABLE"* (a
-  stray filter argument), the modal sitting on top of the
-  navigated page so users couldn't tell their click had worked,
-  the Cmd-K shortcut breaking on non-QWERTY layouts. All fixed
-  before the public push.
-- **Mobile + IA aftermath.** The IA pass moved sections off the
-  home page but a few stale references followed — a *Meet the
-  team* link to a defunct anchor, the Gantt's responsive grid
-  collapsing oddly at narrow widths, the mc-subhead dividers
-  wrapping onto two lines. Caught during the launch-QA pass and
-  fixed in the same window.
+- **Search overlay had several issues** that hadn't surfaced under light testing — backend returning *"SEARCH IS UNAVAILABLE"* (a stray filter argument), the modal sitting on top of the navigated page so users couldn't tell their click had worked, the Cmd-K shortcut breaking on non-QWERTY layouts. All fixed before the public push.
+- **Mobile + IA aftermath.** The IA pass moved sections off the home page but a few stale references followed — a *Meet the team* link to a defunct anchor, the Gantt's responsive grid collapsing oddly at narrow widths, the mc-subhead dividers wrapping onto two lines. Caught during the launch-QA pass and fixed in the same window.
 
 ### Index of changes
 
@@ -304,66 +224,32 @@ The full list is in the index below. Two patterns worth flagging:
 
 ## [1.3.0] · 2026-05-21 — Introducing FAQ and Glossary pages
 
-> The reference content lived on the members' Wiki, which means it
-> lived on GitHub — and academics, journalists, and prospective
-> members don't naturally browse to GitHub. v1.3.0 brings the FAQ
-> and the Glossary to the public site so the people who actually
-> need them can find them.
+> The reference content lived on the members' Wiki, which means it lived on GitHub — and academics, journalists, and prospective members don't naturally browse to GitHub. v1.3.0 brings the FAQ and the Glossary to the public site so the people who actually need them can find them.
 
 ### Reference content goes public
 
-**Public FAQ at `/faq.html`** (plus FR + DE) — 21 Q&As across six
-themed sections (*About the Action* / *Joining & participating* /
-*Grants & funding* / *Meetings & reimbursement* / *Website &
-directory* / *For NetSec members*), with a jump-to TOC and per-
-question deep-link anchors. The Wiki FAQ page now stubs to this URL.
+**Public FAQ at `/faq.html`** (plus FR + DE) — 21 Q&As across six themed sections (*About the Action* / *Joining & participating* / *Grants & funding* / *Meetings & reimbursement* / *Website & directory* / *For NetSec members*), with a jump-to TOC and per- question deep-link anchors. The Wiki FAQ page now stubs to this URL.
 
-**Public Glossary at `/glossary.html`** (plus FR + DE) — ~35 COST
-and NetSec terms grouped into five sections (*COST framework* /
-*NetSec structure* / *People* / *Grants & meetings* / *Documents
-& outputs*), with per-term anchors. Same migration rationale.
+**Public Glossary at `/glossary.html`** (plus FR + DE) — ~35 COST and NetSec terms grouped into five sections (*COST framework* / *NetSec structure* / *People* / *Grants & meetings* / *Documents & outputs*), with per-term anchors. Same migration rationale.
 
-The source of truth is now in one place — the public pages — so
-the FAQ and Glossary can't drift between two surfaces.
+The source of truth is now in one place — the public pages — so the FAQ and Glossary can't drift between two surfaces.
 
 ### Discovery surfaces on the home page
 
-Reference content that nobody can find isn't reference content.
-Two new affordances make the FAQ and Glossary visible from the
-front door:
+Reference content that nobody can find isn't reference content. Two new affordances make the FAQ and Glossary visible from the front door:
 
-- A **four-card *Find out more* grid** at the end of the About
-  section, pointing at FAQ / Glossary / Press kit / Members' Wiki.
-  Keeps the header at ten items while surfacing the reference
-  pages at a glance.
-- A **"For NetSec members" strip** between Outputs and Contact,
-  with two CTAs — *Open the Wiki* and *e-COST portal*. MC reps
-  and WG participants don't drift to GitHub on their own; the
-  strip leads them there.
+- A **four-card *Find out more* grid** at the end of the About section, pointing at FAQ / Glossary / Press kit / Members' Wiki. Keeps the header at ten items while surfacing the reference pages at a glance.
+- A **"For NetSec members" strip** between Outputs and Contact, with two CTAs — *Open the Wiki* and *e-COST portal*. MC reps and WG participants don't drift to GitHub on their own; the strip leads them there.
 
 Both localised in EN / FR / DE.
 
 ### External-link icon polish
 
-The auto-injecting external-link icon introduced in v1.2.0 had
-four related regressions, all rooted in CSS specificity:
+The auto-injecting external-link icon introduced in v1.2.0 had four related regressions, all rooted in CSS specificity:
 
-- **Specificity bug**: the global selector was `(0,0,2,2)`; every
-  exclusion (`.cost-mark::after`, `.socials a::after`, etc.) was
-  weaker and silently lost. The icon appeared on the COST mark,
-  the EU mark, the GitHub footer link, the language switcher, the
-  social-icon row on member cards, and stacked on top of inline
-  arrows inside *Apply on e-COST* buttons. Fix: wrapped the global
-  selector in `:where()` so it contributes 0 to specificity; every
-  exclusion wins naturally.
-- **Flex-shrink collapse**: inside flex containers the `::after`
-  became a flex item with default `flex-shrink:1` and collapsed
-  to width 0 — *Resources & reference documents* cards on the
-  Grants page appeared to have no external-link indicator. Fix:
-  `flex:none` on the pseudo-element.
-- **Double-arrow on news cards**: two news cards carried both a
-  hardcoded `→` and the auto-injected icon. The hardcoded arrow
-  was dropped; the auto-icon remains.
+- **Specificity bug**: the global selector was `(0,0,2,2)`; every exclusion (`.cost-mark::after`, `.socials a::after`, etc.) was weaker and silently lost. The icon appeared on the COST mark, the EU mark, the GitHub footer link, the language switcher, the social-icon row on member cards, and stacked on top of inline arrows inside *Apply on e-COST* buttons. Fix: wrapped the global selector in `:where()` so it contributes 0 to specificity; every exclusion wins naturally.
+- **Flex-shrink collapse**: inside flex containers the `::after` became a flex item with default `flex-shrink:1` and collapsed to width 0 — *Resources & reference documents* cards on the Grants page appeared to have no external-link indicator. Fix: `flex:none` on the pseudo-element.
+- **Double-arrow on news cards**: two news cards carried both a hardcoded `→` and the auto-injected icon. The hardcoded arrow was dropped; the auto-icon remains.
 
 ### Index of changes
 
@@ -390,95 +276,44 @@ four related regressions, all rooted in CSS specificity:
 
 ## [1.2.0] · 2026-05-21 — Press kit, directory tour, compact view
 
-> Three coordinated threads. The press kit goes live so anyone
-> writing about NetSec — journalist, partner, MC member — has one
-> URL to send. The directory gets a guided tour, a compact view,
-> and click-to-expand cards, lowering the friction for first-time
-> visitors. And the repository's branch + tag protection lands, so
-> the release tags become immutable once published.
+> Three coordinated threads. The press kit goes live so anyone writing about NetSec — journalist, partner, MC member — has one URL to send. The directory gets a guided tour, a compact view, and click-to-expand cards, lowering the friction for first-time visitors. And the repository's branch + tag protection lands, so the release tags become immutable once published.
 
 ### Public press kit
 
-**`/press-kit.html`** (+ FR + DE). One canonical URL for outreach.
-Includes the **promotional A3 poster** (with print + card-size
-downloads), the NetSec / COST / EU emblems with pairing rules, the
-colour palette and typography reference, the funding-statement
-boilerplate in three lengths (full, short, one-line credit), suggested
-CC BY 4.0 attribution wording, and explicit do / don't rules. Linked
-from every page's footer between *Licensing* and *Site map*.
+**`/press-kit.html`** (+ FR + DE). One canonical URL for outreach. Includes the **promotional A3 poster** (with print + card-size downloads), the NetSec / COST / EU emblems with pairing rules, the colour palette and typography reference, the funding-statement boilerplate in three lengths (full, short, one-line credit), suggested CC BY 4.0 attribution wording, and explicit do / don't rules. Linked from every page's footer between *Licensing* and *Site map*.
 
-The poster source is version-controlled (HTML-to-raster build), so
-future content changes don't require a manual reflow. A card-size
-variant ships as the README banner and as Appendix C of the
-documentation PDF; a member-facing copy-paste page lives at the
-**Members' Wiki *Templates & press kit*** entry.
+The poster source is version-controlled (HTML-to-raster build), so future content changes don't require a manual reflow. A card-size variant ships as the README banner and as Appendix C of the documentation PDF; a member-facing copy-paste page lives at the **Members' Wiki *Templates & press kit*** entry.
 
 ### Directory: tour, compact view, click-to-expand
 
-The first-visit directory experience used to assume the visitor
-knew it was open (not MC-only), knew filters existed, knew where
-the join form was. The directory now teaches that itself:
+The first-visit directory experience used to assume the visitor knew it was open (not MC-only), knew filters existed, knew where the join form was. The directory now teaches that itself:
 
-- **First-visit orientation strip** above the toolbar — three lines
-  introducing the directory and its affordances. Dismissible;
-  returning visitors never see it.
-- **Six-step guided tour** anchored to: search box → filter chips →
-  country dropdown → view-mode toggle → `+` quick-join button →
-  join card. Two entry points (the welcome strip's *Take the tour*
-  button and a persistent `?` button in the toolbar). Keyboard
-  navigable; focus trap; reduced-motion aware. Engine generalised
-  as `window.netsecTour({steps, labels, onComplete})` for reuse.
-- **Compact view** — a two-button toggle next to the country filter
-  switches between detailed (photo + bio + contact icons) and
-  compact (initials/photo + name + affiliation + WG chips, three
-  across on desktop). Preference persists per visitor.
-- **Click-to-expand on compact cards** — clicking a compact card
-  flips it to its detailed form in place, while every other card
-  on the grid stays compact. Keyboard-focusable, Enter / Space
-  triggers expansion, Esc collapses. The expanded card's slug
-  mirrors to `location.hash` so the state is shareable:
-  `/people.html#eugenio-sanchez` auto-expands that card on load.
-- **`+` quick-join button** in the toolbar (bright accent CTA next
-  to the muted `?` tour-trigger), smooth-scrolls to the join card
-  at the foot of the page.
+- **First-visit orientation strip** above the toolbar — three lines introducing the directory and its affordances. Dismissible; returning visitors never see it.
+- **Six-step guided tour** anchored to: search box → filter chips → country dropdown → view-mode toggle → `+` quick-join button → join card. Two entry points (the welcome strip's *Take the tour* button and a persistent `?` button in the toolbar). Keyboard navigable; focus trap; reduced-motion aware. Engine generalised as `window.netsecTour({steps, labels, onComplete})` for reuse.
+- **Compact view** — a two-button toggle next to the country filter switches between detailed (photo + bio + contact icons) and compact (initials/photo + name + affiliation + WG chips, three across on desktop). Preference persists per visitor.
+- **Click-to-expand on compact cards** — clicking a compact card flips it to its detailed form in place, while every other card on the grid stays compact. Keyboard-focusable, Enter / Space triggers expansion, Esc collapses. The expanded card's slug mirrors to `location.hash` so the state is shareable: `/people.html#eugenio-sanchez` auto-expands that card on load.
+- **`+` quick-join button** in the toolbar (bright accent CTA next to the muted `?` tour-trigger), smooth-scrolls to the join card at the foot of the page.
 
 All localised in EN / FR / DE.
 
 ### Branch + tag protection
 
-Two GitHub rulesets added to the repo, both visible at the
-[Settings → Rules → Rulesets page](https://github.com/EISSeuropa/netsec.github.io/settings/rules):
+Two GitHub rulesets added to the repo, both visible at the [Settings → Rules → Rulesets page](https://github.com/EISSeuropa/netsec.github.io/settings/rules):
 
-- **`protect-main`** — restricts deletions and force-pushes,
-  requires linear history, requires a pull request before merging,
-  requires all four CodeQL status checks to pass, requires
-  conversation resolution, restricts merge methods to squash.
-  Bypass: the *Repository Admin* role (so `scripts/release.sh` can
-  push the changelog-promotion commit directly).
-- **`protect-release-tags`** — restricts deletions, updates, and
-  non-fast-forward updates on tags matching `v*`. **No bypass for
-  anyone** — once a release tag is published, it is immutable.
+- **`protect-main`** — restricts deletions and force-pushes, requires linear history, requires a pull request before merging, requires all four CodeQL status checks to pass, requires conversation resolution, restricts merge methods to squash. Bypass: the *Repository Admin* role (so `scripts/release.sh` can push the changelog-promotion commit directly).
+- **`protect-release-tags`** — restricts deletions, updates, and non-fast-forward updates on tags matching `v*`. **No bypass for anyone** — once a release tag is published, it is immutable.
 
-The release script's docstring is updated to record the consequence:
-the release-cutter needs the repo `Admin` role (not `Maintain`).
+The release script's docstring is updated to record the consequence: the release-cutter needs the repo `Admin` role (not `Maintain`).
 
 ### Grants page transparency
 
-The Grants page used to imply a simple application flow. The
-reality on e-COST is more nuanced. Updated copy spells it out:
+The Grants page used to imply a simple application flow. The reality on e-COST is more nuanced. Updated copy spells it out:
 
-- Applications go through the general e-COST portal (no
-  NetSec-specific form).
-- The portal **filters by applicant profile** — ITC schemes are
-  visible only to ITC affiliates; YRIG is visible only to
-  under-40s. A member may not see every scheme listed on the page.
-- Only the five schemes on the page are in NetSec's WBP;
-  applications for anything else **will be rejected** by the Grant
-  Awarding Coordinator.
+- Applications go through the general e-COST portal (no NetSec-specific form).
+- The portal **filters by applicant profile** — ITC schemes are visible only to ITC affiliates; YRIG is visible only to under-40s. A member may not see every scheme listed on the page.
+- Only the five schemes on the page are in NetSec's WBP; applications for anything else **will be rejected** by the Grant Awarding Coordinator.
 
-The YRIG and ITC cards gain visibility captions; the Wiki FAQ
-gains two matching entries; the architecture doc lists the portal
-model.
+The YRIG and ITC cards gain visibility captions; the Wiki FAQ gains two matching entries; the architecture doc lists the portal model.
 
 ### Index of changes
 
@@ -522,25 +357,11 @@ model.
 
 ### One-command release tooling
 
-**`scripts/release.sh`** lands as the canonical way to cut a
-release. Validates the SemVer string, runs a pre-flight check
-(on `main`, clean tree, in sync with origin, tag not yet used),
-promotes `[Unreleased]` → `[<version>]` in this file, resets a
-fresh `[Unreleased]`, updates the compare-link block, commits,
-pushes, creates an annotated `v<version>` tag on the new commit,
-pushes the tag, and publishes the GitHub Release whose body is the
-changelog section for the new version. `--dry-run` previews the
-whole flow without touching anything. Documented in PDF Section 06
-*Admin guide → Cutting a release*.
+**`scripts/release.sh`** lands as the canonical way to cut a release. Validates the SemVer string, runs a pre-flight check (on `main`, clean tree, in sync with origin, tag not yet used), promotes `[Unreleased]` → `[<version>]` in this file, resets a fresh `[Unreleased]`, updates the compare-link block, commits, pushes, creates an annotated `v<version>` tag on the new commit, pushes the tag, and publishes the GitHub Release whose body is the changelog section for the new version. `--dry-run` previews the whole flow without touching anything. Documented in PDF Section 06 *Admin guide → Cutting a release*.
 
 ### Documentation pack re-versioned
 
-The stakeholder PDF previously used `v1.0` / `v1.1` / `v1.2` cover
-stamps — readable, but inconsistent with the website's SemVer
-discipline. Re-numbered in place to `v1.0.0` / `v1.1.0` / `v1.2.0`
-(content unchanged); the new cover stamp is **v1.3.0**. Section 06
-gains the *Cutting a release* subsection mentioned above. Site
-screenshots refreshed against the live state.
+The stakeholder PDF previously used `v1.0` / `v1.1` / `v1.2` cover stamps — readable, but inconsistent with the website's SemVer discipline. Re-numbered in place to `v1.0.0` / `v1.1.0` / `v1.2.0` (content unchanged); the new cover stamp is **v1.3.0**. Section 06 gains the *Cutting a release* subsection mentioned above. Site screenshots refreshed against the live state.
 
 ### Index of changes
 
@@ -556,93 +377,41 @@ screenshots refreshed against the live state.
 
 ## [1.0.0] · 2026-05-20 — Initial public release
 
-> The first tagged release. Captures the state of the website and
-> open community directory at the moment Deliverable D1 of COST
-> Action CA24154 (NetSec) is presented for COST review. The site
-> goes live publicly at <https://netsec-cost.eu>.
+> The first tagged release. Captures the state of the website and open community directory at the moment Deliverable D1 of COST Action CA24154 (NetSec) is presented for COST review. The site goes live publicly at <https://netsec-cost.eu>.
 
 ### The website
 
-Seven public pages plus a designed 404: Home, The Network, Grants
-& Calls, Sitemap, Accessibility, Privacy, Licensing. Apple-style
-glass UI, light and dark themes, responsive from 4K screens down
-to a phone, EU + COST branding throughout. Hosted on GitHub Pages
-from `main` with HTTPS enforced and a Let's Encrypt certificate
-auto-managed by GitHub.
+Seven public pages plus a designed 404: Home, The Network, Grants & Calls, Sitemap, Accessibility, Privacy, Licensing. Apple-style glass UI, light and dark themes, responsive from 4K screens down to a phone, EU + COST branding throughout. Hosted on GitHub Pages from `main` with HTTPS enforced and a Let's Encrypt certificate auto-managed by GitHub.
 
 ### Open community directory (Deliverable D1)
 
-Members join via a public Google Form linked from the Network
-page. A weekly GitHub Action pulls submissions, deduplicates
-against the cost.eu MC roster, downloads + resizes headshots, and
-opens a pull request for human review before publication.
-`data/bios.json` is the canonical source-of-truth; leadership
-roles, directory position, and email-keyed identity all survive
-form re-submissions (see `scripts/sync-bios.py`). The home page's
-Action Leadership / WG Leadership / WG Co-Leader cards live-refresh
-from `bios.json` on page load.
+Members join via a public Google Form linked from the Network page. A weekly GitHub Action pulls submissions, deduplicates against the cost.eu MC roster, downloads + resizes headshots, and opens a pull request for human review before publication. `data/bios.json` is the canonical source-of-truth; leadership roles, directory position, and email-keyed identity all survive form re-submissions (see `scripts/sync-bios.py`). The home page's Action Leadership / WG Leadership / WG Co-Leader cards live-refresh from `bios.json` on page load.
 
 ### Multilingual support (beta)
 
-Full French and German variants of every public page (sibling
-`.fr.html` / `.de.html` files; English authoritative). A SHA-1
-based drift checker (`scripts/check-i18n-drift.py` + CI) flags
-translations that need refreshing when English changes. No
-machine-translation, no recurring API cost. Beta-banner on every
-non-authoritative page explaining the status and linking back to
-the English version.
+Full French and German variants of every public page (sibling `.fr.html` / `.de.html` files; English authoritative). A SHA-1 based drift checker (`scripts/check-i18n-drift.py` + CI) flags translations that need refreshing when English changes. No machine-translation, no recurring API cost. Beta-banner on every non-authoritative page explaining the status and linking back to the English version.
 
 ### SEO + discoverability
 
-Open Graph, Twitter Card, JSON-LD (Organization + WebSite +
-WebPage), canonical URLs, hreflang annotations, and a
-machine-readable `sitemap.xml` on every page — all generated from
-a single source-of-truth script (`scripts/inject-seo.py`) with
-sentinel-bracketed idempotent rewrites.
+Open Graph, Twitter Card, JSON-LD (Organization + WebSite + WebPage), canonical URLs, hreflang annotations, and a machine-readable `sitemap.xml` on every page — all generated from a single source-of-truth script (`scripts/inject-seo.py`) with sentinel-bracketed idempotent rewrites.
 
 ### Accessibility, security, licensing
 
-- **Accessibility**: WCAG 2.1 AA target, EN 301 549 aligned. Zero
-  axe-core violations on the home page at the v1.0 assessment.
-  Statement at `/accessibility.html`. Skip-links, semantic
-  landmarks, `:focus-visible` rings, `prefers-reduced-motion`
-  honoured.
-- **Security**: Five GitHub Advanced Security features enrolled
-  (private vulnerability reporting, security advisories, Dependabot
-  alerts, CodeQL code scanning with the security-and-quality + the
-  security-extended suites, secret scanning with push protection).
-  Pinned third-party Actions; least-privilege `GITHUB_TOKEN`.
-  Coordinated-disclosure policy in `SECURITY.md`.
-- **Licensing**: code under MIT (`LICENSE`), content + docs under
-  CC BY 4.0 (`LICENSE-CONTENT`). Both attributed in every page's
-  footer.
+- **Accessibility**: WCAG 2.1 AA target, EN 301 549 aligned. Zero axe-core violations on the home page at the v1.0 assessment. Statement at `/accessibility.html`. Skip-links, semantic landmarks, `:focus-visible` rings, `prefers-reduced-motion` honoured.
+- **Security**: Five GitHub Advanced Security features enrolled (private vulnerability reporting, security advisories, Dependabot alerts, CodeQL code scanning with the security-and-quality + the security-extended suites, secret scanning with push protection). Pinned third-party Actions; least-privilege `GITHUB_TOKEN`. Coordinated-disclosure policy in `SECURITY.md`.
+- **Licensing**: code under MIT (`LICENSE`), content + docs under CC BY 4.0 (`LICENSE-CONTENT`). Both attributed in every page's footer.
 
 ### Documentation
 
-- **Stakeholder PDF**: `docs/pdf/NetSec-website-documentation.pdf`
-  (v1.2 at v1.0.0). Cover, key-numbers poster, ToC, six chapters
-  (Overview / Architecture / Design system / Translation / SEO /
-  Admin guide / Security & DevSecOps), three appendices
-  (Accessibility / Licensing / Changelog). Build pipeline at
-  `docs/pdf/build.sh`.
-- **Maintainer docs**: markdown reference under `docs/` for anyone
-  working on the site — `architecture.md`, `design-system.md`,
-  `admin-guide.md`, `bios-setup.md`, `i18n.md`, `seo.md`.
-- **Members' Wiki**: working space for members + MC reps at
-  <https://github.com/EISSeuropa/netsec.github.io/wiki>. Glossary,
-  FAQ, onboarding, meeting-notes convention, decisions log.
-  Member-editable without PR.
+- **Stakeholder PDF**: `docs/pdf/NetSec-website-documentation.pdf` (v1.2 at v1.0.0). Cover, key-numbers poster, ToC, six chapters (Overview / Architecture / Design system / Translation / SEO / Admin guide / Security & DevSecOps), three appendices (Accessibility / Licensing / Changelog). Build pipeline at `docs/pdf/build.sh`.
+- **Maintainer docs**: markdown reference under `docs/` for anyone working on the site — `architecture.md`, `design-system.md`, `admin-guide.md`, `bios-setup.md`, `i18n.md`, `seo.md`.
+- **Members' Wiki**: working space for members + MC reps at <https://github.com/EISSeuropa/netsec.github.io/wiki>. Glossary, FAQ, onboarding, meeting-notes convention, decisions log. Member-editable without PR.
 
 ### Operational baseline
 
-- **Domain**: `netsec-cost.eu`, registered at Namecheap under Dr
-  Moritz Weiss (Action Chair), with Dr Arthur Laudrain as admin
-  contact.
-- **Hosting cost**: €0/month. GitHub Pages + the Google Form +
-  Formspree's free tier cover everything; domain renewal is the
-  only recurring expense.
-- **GitHub org**: `EISSeuropa`. Two-factor authentication enforced
-  at the org level.
+- **Domain**: `netsec-cost.eu`, registered at Namecheap under Dr Moritz Weiss (Action Chair), with Dr Arthur Laudrain as admin contact.
+- **Hosting cost**: €0/month. GitHub Pages + the Google Form + Formspree's free tier cover everything; domain renewal is the only recurring expense.
+- **GitHub org**: `EISSeuropa`. Two-factor authentication enforced at the org level.
 
 ### Index of changes
 
