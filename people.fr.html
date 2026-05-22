@@ -712,10 +712,15 @@
         grid.querySelector('.member-card[data-slug="' + CSS.escape(hash) + '"]');
       if (target) requestAnimationFrame(() => {
         target.scrollIntoView({ behavior: 'instant', block: 'center' });
-        if (target.classList.contains('member-card')
-            && grid.classList.contains('is-compact')) {
-          grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
-          target.classList.add('is-expanded');
+        if (target.classList.contains('member-card')) {
+          grid.querySelectorAll('.member-card.is-search-landed')
+              .forEach(c => c.classList.remove('is-search-landed'));
+          target.classList.add('is-search-landed');
+          setTimeout(() => target.classList.remove('is-search-landed'), 3500);
+          if (grid.classList.contains('is-compact')) {
+            grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
+            target.classList.add('is-expanded');
+          }
         }
       });
     };

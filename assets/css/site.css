@@ -451,23 +451,32 @@ section{padding:80px 0;position:relative}
 .event-card.featured .event-date{background:var(--accent);color:#fff}
 
 /* Subscribe-to-calendar affordance under the events grid.
-   Quiet by design — power users will recognise it, casual
-   visitors won't have it shouting at them. */
+   Centred CTA + supporting hint sentence beneath it. */
 .event-subscribe-line{
-  margin:24px 0 0;
-  display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;
+  margin:36px auto 0;
+  max-width:560px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  text-align:center;
   font-size:.9rem;color:var(--muted);
 }
 .event-subscribe{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:8px 14px;border-radius:10px;
-  background:var(--glass-bg);border:1px solid var(--line);
-  color:var(--ink);font-weight:600;text-decoration:none;
-  transition:background .15s var(--ease),border-color .15s var(--ease);
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:12px 22px;border-radius:12px;
+  background:var(--accent);
+  border:1px solid var(--accent);
+  color:#fff;font-weight:600;font-size:.95rem;
+  text-decoration:none;
+  box-shadow:0 4px 12px var(--accent-glow);
+  transition:transform .15s var(--ease),box-shadow .15s var(--ease),background .15s var(--ease);
 }
-.event-subscribe:hover{background:var(--glass-bg-strong);border-color:var(--accent)}
-.event-subscribe svg{width:16px;height:16px;color:var(--accent)}
-.event-subscribe-hint{flex:1;min-width:240px;line-height:1.45}
+.event-subscribe:hover{
+  background:var(--accent-2);border-color:var(--accent-2);
+  transform:translateY(-1px);
+  box-shadow:0 6px 18px var(--accent-glow);
+  opacity:1;
+}
+.event-subscribe svg{width:18px;height:18px;color:#fff}
+.event-subscribe-hint{line-height:1.5;max-width:48ch}
 .event-subscribe-hint a{color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--line)}
 .event-subscribe-hint a:hover{color:var(--accent);text-decoration-color:var(--accent)}
 .event-subscribe-hint code{font-size:.85em;background:rgba(0,0,0,.04);padding:1px 5px;border-radius:4px}
@@ -1311,6 +1320,30 @@ form button:disabled{opacity:.65;cursor:wait}
 .member-card .member-contact a.contact-orcid:hover{background:#a6ce39;color:#fff}
 .dark .member-card .member-contact a.contact-orcid{color:#a6ce39}
 .dark .member-card .member-contact a.contact-orcid:hover{background:#a6ce39}
+
+/* Search-landing spotlight. Applied to the card a visitor lands
+   on after clicking a search result that points at
+   /people.html#<slug>. Auto-fades after ~3.5 s (the JS removes
+   the class) so it confirms the landing without becoming a
+   permanent selection state. Works in detailed AND compact view —
+   in detailed view it's the only visual cue that this card is
+   "the one you searched for". */
+.member-card.is-search-landed{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+  box-shadow:
+    0 0 0 6px rgba(10,132,255,.15),
+    var(--glass-shadow);
+  animation:search-landed-in .4s var(--ease);
+  position:relative;z-index:2;
+}
+@keyframes search-landed-in{
+  from{transform:scale(.98);box-shadow:0 0 0 0 rgba(10,132,255,.45),var(--glass-shadow)}
+  to  {transform:scale(1);   box-shadow:0 0 0 6px rgba(10,132,255,.15),var(--glass-shadow)}
+}
+@media (prefers-reduced-motion: reduce){
+  .member-card.is-search-landed{animation:none}
+}
 
 /* ─── Directory tour ──────────────────────────────────────────
    Trigger button in the toolbar; backdrop, spotlight, and
