@@ -121,7 +121,95 @@ Hard rule: **no hard wraps in prose.** One source line per
 paragraph / bullet / blockquote. GitHub Releases renders soft `\n`
 as `<br>` and would otherwise produce visibly narrow prose.
 
-## 5. Working tree hygiene
+## 5. Release-time five-point cross-check (minor / major only)
+
+Every **minor (`X.Y.0` where `Y > prev`) or major (`X.0.0`)
+release** should trigger a deliberate check across five surfaces
+before `scripts/release.sh` runs. Skip the cross-check on **patch
+releases** (`X.Y.Z` where `Z > 0`) — they're scoped to small
+fixes and the overhead isn't justified. The release script's
+*self-policing tier* mirrors this: patches ship the index only.
+
+For each surface, the question is the same: *"Did anything in
+this release change what this surface documents?"* If yes, edit
+in the same release. If yes but too big to fit, open a tracking
+issue (rule §3) and reference it from the surface itself.
+
+### 1. Roadmap (`/roadmap.html` + FR + DE + `docs/roadmap-2026.md`)
+
+- Move the just-shipped release from *In progress* → *Shipped*
+  in both the public timeline and the internal doc.
+- Is the next planned release on the timeline still accurate?
+- Anything in *Under watch* (the deferred-items section at the
+  foot of the page) ready to promote to a dated entry?
+- Bump *Last reviewed* on `docs/roadmap-2026.md` if you touched it.
+
+### 2. Sitemap (`sitemap.xml` + `/sitemap.html` + FR + DE)
+
+- New pages added in this release? Add to `sitemap.xml` and to
+  the visual `/sitemap.html` inventory.
+- `scripts/inject-seo.py` regenerates `sitemap.xml` — re-run if
+  any `<title>` / canonical / hreflang changed.
+- The visual sitemap is hand-edited; confirm new pages show up
+  in the correct branch (*About & policies* / *Working areas* /
+  etc.).
+
+### 3. Translations (FR + DE variants)
+
+- Run `python3 scripts/check-i18n-drift.py` locally. CI catches
+  drift on HTML-touching PRs, but a release moment is the right
+  place to confirm zero drift before stamping a version.
+- Did any EN copy change in this release? FR / DE need manual
+  updates (no machine translation — rule §1).
+- Ribbon stamps on `*.fr.html` / `*.de.html` carry
+  `data-i18n-status="beta"`; if a translation has been
+  re-verified against current EN, consider whether the *beta*
+  marker still applies.
+
+### 4. Repo docs + documentation PDF
+
+- The maintainer-facing markdown docs under `docs/`
+  (`architecture.md`, `design-system.md`, `admin-guide.md`,
+  `bios-setup.md`, `i18n.md`, `seo.md`, `search-assessment.md`,
+  `launch-qa-2026.md`) — does anything in this release contradict
+  what's documented?
+- The stakeholder PDF (`docs/pdf/NetSec-website-documentation.pdf`,
+  source at `docs/pdf/documentation.html`) carries its own
+  version stamp and changelog appendix. Two-tier cadence:
+  - **Cover bump** — fast, always. Bump the stamp + add a
+    short appendix entry. Acceptable to defer section-level
+    catch-up via an explicit "gap" entry (pattern: pack
+    v1.7.0 in PR #116; tracking
+    [#122](https://github.com/EISSeuropa/netsec.github.io/issues/122)).
+  - **Section-level catch-up** — substantive; refresh
+    Section 02 site graph + page inventory, refresh
+    screenshots via `./docs/pdf/build.sh --shots`. Batch
+    when site shape stabilises (typically every 2-3 minor
+    releases, not every release).
+
+### 5. Members' Wiki
+
+- The Wiki at <https://github.com/EISSeuropa/netsec.github.io/wiki>
+  holds glossary, FAQ stubs, onboarding for new MC reps, meeting
+  notes, decisions log, templates & press-kit page.
+- The public FAQ at `/faq.html` and Glossary at `/glossary.html`
+  are the source of truth; the Wiki pages of the same name are
+  short stubs pointing at them. **Don't drift the stubs** — if
+  the public pages change, leave the stubs alone (they only
+  link).
+- *Decisions log* — did anything in this release warrant a brief
+  decision-log entry? (Format choices, structural rewrites,
+  branch-protection changes are typical examples.)
+- *Templates & press kit* — does the public press kit `/press-kit.html`
+  match the Wiki copy-paste boilerplate?
+
+This is a deliberate friction-point: cutting a minor release on
+this repo is **slightly more work than running release.sh**, by
+design. The release script's confirmation prompt is the last
+moment to bail if the cross-check surfaces something that needs
+to land in the same release.
+
+## 7. Working tree hygiene
 
 - Never leave the working tree dirty across PR boundaries. If a
   script (e.g. `sync-bios.py`, `build-search.sh`) modifies tracked
@@ -134,7 +222,7 @@ as `<br>` and would otherwise produce visibly narrow prose.
   apparently-empty PR, that's a regression — open an issue and
   investigate before silencing.
 
-## 6. Accessibility & i18n cadence
+## 8. Accessibility & i18n cadence
 
 - The accessibility statement at `/accessibility.html` (+ FR + DE)
   is bumped on every release that touches a11y conformance,
