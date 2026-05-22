@@ -196,6 +196,10 @@ for new MC reps joining around the **inaugural MC plenary**
   date.
 - **Performance audit** — Lighthouse + Core Web Vitals baseline
   on the four heaviest pages.
+- **Homepage + header IA audit** (Jul–Aug). Written
+  recommendation document, mirror of `search-assessment.md`.
+  Output feeds the homepage restructure in v1.7.0. See the
+  *Homepage IA* theme below for scope.
 
 #### Infrastructure
 
@@ -293,7 +297,94 @@ count climbs, the trade-offs shift:
 - **Past ~150**: the sticky-side-panel pattern (#72) becomes
   worth the engineering. The decision deadline is end-November.
 
-### 2 · Content cadence — deliverables hit the site
+### 2 · Homepage + header IA — surviving content growth
+
+The home page has accreted 10 sections since v1.0; the floating
+header runs at 10 nav items (capacity, post-wordmark-removal).
+Every Year-1 milestone adds more content:
+
+- **News block** will gain Conference + Summer School recaps in
+  June, then monthly highlights, then post-plenary updates.
+- **Outputs** currently shows three *Forthcoming* placeholders;
+  D6 (policy briefs) makes it real in October and the section
+  will keep accruing.
+- **Events** will collect past + upcoming entries; a year out
+  we'll need a "Past events" treatment.
+- **D11 / D12** when they ship may need their own homepage
+  presence (Inclusion & diversity, Environmental sustainability).
+- **Find out more** grid + **For NetSec members** strip — both
+  recently added (v1.3) — sit close together in the page and
+  arguably compete for the same after-About attention.
+
+Without a proactive pass, this gets messy and confusing.
+Specific risks I can name:
+
+- **No visual hierarchy** beyond ordering — every section uses
+  similar weights, so nothing reads as "more important".
+- **Long-scroll fatigue**, especially on mobile (10 sections
+  × phone screen ≈ a lot of swiping).
+- **First-time visitor** vs. **returning member** want
+  different things from the same page: the new visitor wants
+  *"what is NetSec"*; the returning visitor wants news /
+  grants / directory.
+- **Header at capacity** — there's no room for a new top-level
+  page without restructuring; even *Outputs* / *Roadmap* are
+  arguably internal-jargon labels that a journalist wouldn't
+  parse instantly.
+- **Audience tracks** (researcher, policy-maker, MC member,
+  press) aren't differentiated; they all follow the same path.
+
+#### What an IA pass would cover
+
+A structured audit produces a written recommendation, not a
+redesign. Scope:
+
+- **Current-state inventory** — every section measured for
+  content density, time-to-find for common tasks, mobile
+  behaviour. Including: how does the home page perform for
+  the visitor who arrives via search vs. direct vs. social?
+- **Header IA** — does the flat 10-item nav still work, or
+  should we group into dropdowns (e.g. *Activities* >
+  Events / Grants / Training; *Reference* > FAQ / Glossary /
+  Press kit)? Cost vs. benefit of each grouping vs. a flat
+  list.
+- **Homepage structure** — current order vs. an alternative
+  rooted in audience tracks. Options to explore: sticky
+  table-of-contents for long-scroll, mobile-specific section
+  reordering, an *I'm a…* chooser at the top, offloading
+  Outputs to a dedicated `/outputs.html` page.
+- **Content lifecycle** — pagination / archive treatment for
+  News and Events as they accumulate.
+- **Consolidation** — *Find out more* grid + *For NetSec
+  members* strip overlap; should one absorb the other, or
+  should they sit further apart?
+- **Future-proofing** — explicit positioning for the next 3-6
+  homepage entries (D6 policy briefs, D11, D12, possibly a
+  publications hub).
+
+#### Timing
+
+**Audit: July–August 2026.** Post-Conference, post-Summer
+School (so we have real recap content to work with), before
+the MC plenary. Two weeks of focused work; produces a written
+audit doc (mirror of `search-assessment.md`).
+
+**Implementation: lands in v1.7.0 (mid-Oct)** as part of *Year
+1 closes*. The deliberate framing for the release lets the
+home-page restructure show up alongside D1 / D6, which is the
+natural moment for "Year 1 retrospective, plus how the site
+reads for Year 2".
+
+#### Open question
+
+**Bring in a UI / UX professional for the audit?** A few hours
+of an experienced practitioner's time produces a substantively
+better recommendation than I can on my own, particularly on
+audience-track separation and mobile patterns. Decision owner:
+**Action Chair** (budget question). My on-my-own version is
+the fallback if there's no budget.
+
+### 3 · Content cadence — deliverables hit the site
 
 The site's value over 2026 grows as each MoU deliverable
 publishes. The maintainer's commitment is **48-hour turnaround**
@@ -305,7 +396,7 @@ from approved-PDF-in-hand to live-on-site, with:
 - a press-kit-style social card if the deliverable warrants
   outreach.
 
-### 3 · Quality, accessibility, performance
+### 4 · Quality, accessibility, performance
 
 Last formal a11y audit shipped with **v1.0** (20 May). Between
 then and now we've added a substantial surface area — search
@@ -395,14 +486,17 @@ Scope:
 
 A focused re-test on whatever D6 / D11 / D12 surface lands in
 v1.7.0. Plus a sweep of the *Outputs* section refresh (see
-*Feature candidates* below).
+*Feature candidates* below). **And: a re-pass over whatever the
+homepage IA audit recommended that landed in v1.7.0** — new
+sectional groupings, dropdown nav, or audience-track strips all
+need their own keyboard / screen-reader / mobile coverage.
 
 Performance budget stays at the v1.0 number: **~140 KB
 uncompressed page weight excluding bios.json**. The Pagefind
 runtime (~80 KB on first overlay open) is the only meaningful
 delta and is lazy-loaded.
 
-### 4 · Feature candidates
+### 5 · Feature candidates
 
 Beyond what the release plan already commits to (search, brand,
 deliverable hosting), these are the candidates worth queueing.
@@ -496,7 +590,7 @@ in case any of these surprises you:
 - **Service worker / offline mode** — overkill for a content
   site; ROI not there yet.
 
-### 5 · Infrastructure & DevOps hygiene
+### 6 · Infrastructure & DevOps hygiene
 
 - **Release immutability** on GitHub Releases: enabled at the
   repo level but found in practice not to enforce on
@@ -520,7 +614,7 @@ in case any of these surprises you:
 | v1.4.0 | early Jun 2026 *(pre-Conference)* | *Search the directory, polished header* | Site-wide search + bio cards + header streamline + small fixes from MC-feedback iteration |
 | v1.5.0 | late Jun 2026 *(pre-July)* | *Official logos + social channels live* | #62 official logos / favicon refresh across site + PDF + poster, #63 social-media presence and on-site footprint |
 | v1.6.0 | early Sep 2026 *(pre-MC plenary, with buffer)* | *FR / DE reviewed, calendar + search rounded out* | Native-speaker translation pass; D8 (M9 STSM guidelines) + D10 (M10 risk management) hosted; per-event `.ics` files + Add-to-calendar buttons; news RSS feed; search acronym-synonyms; pre-MC-plenary a11y + cross-browser pass |
-| v1.7.0 | mid Oct 2026 | *Year 1 closes* | D1 first-version state, D6 policy-brief hosting with proper *Outputs* card design + schema.org metadata, Year-1 retrospective content, URL-encoded directory filter state |
+| v1.7.0 | mid Oct 2026 | *Year 1 closes* | D1 first-version state, D6 policy-brief hosting with proper *Outputs* card design + schema.org metadata, Year-1 retrospective content, URL-encoded directory filter state, **homepage restructure landing the IA-audit recommendations** |
 | v1.8.0 | late Dec 2026 | *Year 2 ready* | D11 + D12 hosting; #72 side-panel **if** triggers fired; per-page Open Graph images; print stylesheet for FAQ + Glossary; whatever Q4 polish accumulates |
 
 Patch releases (`1.x.y`) ship as needed; we don't pre-schedule
@@ -565,6 +659,17 @@ lead where indicated) before the related work can start:
    sustainability owns D12. The website work is short (a few
    hours per deliverable) once the PDFs are approved. Decision
    owner: **respective WG / coordinator**.
+
+7. **Homepage + header IA audit — bring in a UI/UX
+   professional?** A few hours of an experienced practitioner's
+   time produces a substantively better audit than the
+   maintainer alone can — particularly on audience-track
+   separation, mobile patterns, and convention-vs.-invention
+   trade-offs. **Cost:** budget question, modest (~½ day of
+   consulting time). **If no budget:** the maintainer
+   self-runs the audit, output is acceptable but less rich.
+   Decision owner: **Action Chair**. Decision deadline: end of
+   June so the audit can start in July.
 
 ---
 
