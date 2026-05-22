@@ -1076,9 +1076,16 @@ form button:disabled{opacity:.65;cursor:wait}
 }
 .i18n-beta-ribbon a{color:var(--accent-2);text-decoration:underline}
 /* When the ribbon is present, push the nav and the top of the page
-   down so nothing sits underneath. */
-[data-i18n-status="beta"] body{padding-top:38px}
-[data-i18n-status="beta"] .nav{top:52px}
+   down so nothing sits underneath.
+   `--ribbon-h` is set in JS (site.js) from the ribbon's measured
+   offsetHeight and updated by a ResizeObserver — so the offset
+   matches reality regardless of whether the ribbon wraps to one
+   line (desktop) or two-plus lines (mobile, where the long
+   "Traduction automatique…" sentence + link wrap).
+   The fallback 38px matches a single-line desktop ribbon and only
+   applies if the JS hasn't run yet. */
+[data-i18n-status="beta"] body{padding-top:var(--ribbon-h,38px)}
+[data-i18n-status="beta"] .nav{top:calc(var(--ribbon-h,38px) + 14px)}
 
 /* -------- Licensing table (licensing page §1) --------
    A simple 3-column responsive table. Reuses prose-page typography
