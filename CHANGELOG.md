@@ -98,43 +98,47 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-> *Lede + themes get written at release-cutting time. Until then, accumulate bullets in the index below.*
+> The pre-launch quality pass. v1.5.0 closes the launch-QA loop before the public push — a swarm of polish fixes that surfaced from the user-journey sweep, an accessibility statement bumped to v1.2 with three new audit results, a hybrid release-notes format rolled out across the whole CHANGELOG so future releases read consistently, and the documentation pack caught up to v1.7.0.
 
-<!--
-TEMPLATE — uncomment and fill in when cutting the next release.
-For patch releases (no headline feature), delete this block and ship
-the index only.
+### Pre-launch polish
 
-### <First theme — name it for the thing that changed>
+Six user journeys × four-viewport sweep (desktop + iPhone-emulated mobile) ran end-to-end in headless Chromium across the eight most-trafficked pages. Three findings shipped in this release:
 
-Two to four sentences of prose. What changed for users? Why ship
-it now? Inline links to docs / PRs where relevant.
+- **The FR / DE beta-translation ribbon said "machine translation"; the translations are manual.** Public-facing falsehood about how the site is built, directly contradicting the standing project constraint baked into the architecture doc and the documentation PDF. Corrected across 35 files: FR ribbon copy → *"Traduction manuelle"*, DE ribbon copy → *"Manuell übersetzt"*, EN top-of-file comments → *"manually translated"*, the accessibility statement, and the longer privacy-page ribbon flavour.
+- **The mobile hamburger menu's panel was transparent in dark mode** — the floating-header bubble's own `backdrop-filter` and the panel's nested one didn't re-stack reliably, so the hero text bled through behind every nav item. Pinned the drawer to near-opaque (rgba(246,248,252,.97) / rgba(11,18,32,.97)) scoped to the mobile breakpoint, with a stronger elevation shadow.
+- **`/people.html#<slug>` deep-links could fail to spotlight + expand the target card on cold load.** The whole hash-handler was wrapped in `requestAnimationFrame`; when RAF deferred (headless Chromium, plausibly real browsers under heavy load), nothing fired. Pulled the spotlight + expand class-manipulations out of RAF — they're layout-safe — and kept only `scrollIntoView` behind it, with a `setTimeout(50)` belt-and-braces fallback.
 
-### <Second theme>
+### Accessibility statement v1.2
 
-(same shape)
+Three new audits ran on top of the Phase 2 baseline from the earlier v1.1 statement: a programmatic structural assistive-technology audit of the four most-trafficked pages (landmarks, heading hierarchy, alt-text coverage, accessible names on every interactive element, label association on inputs — all clean); an Open Graph + Twitter Card metadata sweep on home / about / roadmap / press-kit with a render-check of the 2400×1260 shared `og-image.png`; and a dark-mode readability sweep across all sixteen public English pages, with both a per-element programmatic contrast probe and visual review. No new low-contrast findings surfaced beyond the manual-review item already documented on `/accessibility.html`. The statement at `/accessibility.html` (+ FR + DE) is updated to v1.2 with these results and the three corrections above explicitly referenced.
 
-### <Third theme>
+### Release-notes hybrid format
 
-(same shape)
+Adopted across the whole CHANGELOG, with the structure-rule documented in three places (the CHANGELOG preamble itself, `docs/admin-guide.md` *Cutting a release*, and the header comment in `scripts/release.sh`). The shape: lede + 2-4 themed `### sub-sections` + a canonical `### Index of changes` block with `#### Added` / `#### Changed` / `#### Deprecated` / `#### Removed` / `#### Fixed` / `#### Security` sub-headings. Self-policing tier: patch releases skip the lede + themes and ship the index only; minor and major releases get the full hybrid. v1.0.0 → v1.4.0 were retrofitted in place and their GitHub Release bodies overwritten to match. A `<!-- TEMPLATE -->` block at the top of `[Unreleased]` shows the shape so the next maintainer doesn't reverse-engineer it. A separate rule was added afterwards explaining why CHANGELOG prose must not be hard-wrapped: GitHub Releases use the *break-on-newline* GFM variant and every soft `\n` becomes a `<br>`, so a hard-wrapped paragraph renders narrow on the Releases page even though it looks flowing on the github.com file view.
 
--->
+### Launch-QA plan + automation
+
+`docs/launch-qa-2026.md` lays out a three-phase audit (automation pre-flight → critical user journeys → a11y + cross-browser + perf) with explicit Go / No-Go criteria, a schedule, a tooling cheatsheet, and a findings log that survives past the launch as the audit trail. Two new scripts back it: `scripts/check-links.sh` (broken-link checker, Python-only, threads with per-host rate-limit-respecting concurrency, validates `people.*.html#<slug>` deep-links against `data/bios.json`, skips known auth-gated hosts) and `scripts/check-a11y.sh` (pa11y scan, aggregates per-page summary into `tmp/a11y-report.md`). New CI workflow `launch-qa-link-check.yml` runs the link checker on every HTML-touching PR and weekly on main. The findings log records the journey results, the I-1 / M-1 / J4-1 fixes, and the four "green" final-pass audits (VoiceOver-substitute, OG metadata, dark-mode sweep, structural AT).
 
 ### Index of changes
 
 #### Added
 
-- **Release-notes hybrid format**, applied across the whole CHANGELOG. v1.0.0 → v1.4.0 retrofitted in place and their GitHub Release bodies overwritten to match. The new format rule lives at the top of `CHANGELOG.md`, in `docs/admin-guide.md` (*Cutting a release*), and in `scripts/release.sh`'s header. The shape: lede + 2-4 themed `### sub-sections` + canonical `### Index of changes` at the bottom (with `#### Added`/`Changed`/`Fixed`). Self-policing tier: patch releases skip the lede + themes and ship the index only. A template block lives at the top of `[Unreleased]` showing the shape so the next maintainer doesn't reverse-engineer it.
-- **Launch-QA plan + automation** for the late-May 2026 public push. New `docs/launch-qa-2026.md` lays out the three-phase audit (automation pre-flight → critical user journeys → a11y + cross-browser + perf), Go / No-Go criteria, schedule, tooling cheatsheet, findings log. Two new scripts: `scripts/check-links.sh` (broken-link checker, Python-only, threads with rate-limit-respecting concurrency, validates `people.*.html#<slug>` deep-links against `data/bios.json`, skips known auth-gated hosts) and `scripts/check-a11y.sh` (pa11y scan, aggregates per-page summary into `tmp/a11y-report.md`). New CI workflow `launch-qa-link-check.yml` runs the link checker on every HTML-touching PR and weekly on main.
+- **Release-notes hybrid format**, applied across the whole CHANGELOG. v1.0.0 → v1.4.0 retrofitted in place and their GitHub Release bodies overwritten to match. Format rule documented in three places (CHANGELOG preamble, `docs/admin-guide.md`, `scripts/release.sh` header). Shape: lede + 2-4 themed `### sub-sections` + canonical `### Index of changes`. Self-policing tier: patch releases skip the lede + themes. Template block at the top of `[Unreleased]`. Companion rule against hard-wrapped prose (GitHub Releases renders soft `\n` as `<br>`).
+- **Launch-QA plan + automation** for the late-May 2026 public push. New `docs/launch-qa-2026.md` lays out the three-phase audit with Go / No-Go criteria, schedule, tooling cheatsheet, findings log. Two new scripts (`scripts/check-links.sh`, `scripts/check-a11y.sh`) and a new CI workflow (`launch-qa-link-check.yml`).
+- **Documentation pack refreshed to v1.7.0** — cover stamp bumped, changelog appendix entry recording what the pack now reflects (site v1.4.0 → v1.5.0), and a section-level catch-up scheduled for v1.8.0.
 
 #### Changed
 
+- **Accessibility statement bumped to v1.2** on `/accessibility.html` (+ FR + DE). New paragraph in the audit narrative covering three additional final-pass checks (structural AT audit, OG metadata sweep, dark-mode sweep). Three new bullets in the methods list. Version footer updated; *Last assessed* stays at 22 May 2026 (same day).
 - **`scripts/check-a11y.sh` switched from `@axe-core/cli` to pa11y.** The original CLI requires a system Chrome that matches a system ChromeDriver — brittle. pa11y wraps the same axe-core engine behind a Puppeteer-bundled headless Chromium that doesn't depend on the system pair. Fixed a heredoc-vs-stdin race in the report generator while in there.
-- **Accessibility statement bumped to v1.1** on `/accessibility.html` (+ FR + DE). New audit date (22 May 2026), methodology section expanded to list pa11y + Lighthouse + per-element in-browser contrast verification + the link sweep, audit-card recast, and a paragraph documenting the dark-mode CTA contrast fix.
 
 #### Fixed
 
 - **Seven primary-CTA backgrounds failed WCAG AA contrast in dark mode.** The dark-mode `--accent` is `#6ea1ff` (lighter blue, chosen so accent text reads against the dark page). Buttons using `background: var(--accent); color: #fff` directly collapsed to 2.56:1 — below the 4.5:1 AA floor. Affected: `.event-card.featured .event-date`, `.event-subscribe`, `#for-members .members-actions .primary` (home); `.tour-btn-primary`, `.tour-trigger-cta` (people); `.deliverables-roadmap-link-cta` (about); `.rm-feedback-action.is-primary` (roadmap). Fix: pin those CTAs to brand EU-blue `#003399` in dark mode (10.86:1) plus a `#0a4ed0` hover (11:1). Surfaced by Phase 2 of the launch-QA audit.
+- **FR / DE beta-translation ribbon misclaimed "machine translation".** The translations are manual. Public-facing falsehood about the build methodology, contradicting the standing project constraint. 35 files corrected: FR copy → "Traduction manuelle", DE copy → "Manuell übersetzt", EN HTML comments → "manually translated", accessibility statement updated.
+- **Mobile hamburger menu drawer was transparent in dark mode** — hero text bled through behind nav items because the nested `backdrop-filter` didn't re-stack inside the floating-header bubble. Pinned the drawer to ~97 % opacity (rgba(246,248,252,.97) / rgba(11,18,32,.97)) scoped to `@media (max-width: 980px)`; bumped `box-shadow` so the drawer reads as elevated.
+- **`/people.html#<slug>` hash-deep-link spotlight + expand could fail to fire on cold page load.** Handler was wrapped end-to-end in `requestAnimationFrame`; if RAF deferred (headless reliably, real browsers under load plausibly), none of the spotlight / expand / scroll actions ran. Pulled the class-manipulations out of RAF (layout-safe); kept `scrollIntoView` behind RAF with a `setTimeout(50)` fallback. Applied identically across `people.html` / `people.fr.html` / `people.de.html`.
 - **Nine broken internal anchors** caught by the new link checker. `faq.{en,fr,de}.html` and `licensing.{en,fr,de}.html` still pointed at `index.html#committee`, `#roadmap`, `#outputs` — sections that the Phase 1 IA pass migrated to dedicated pages. Updated to `about.X.html#leadership`, `roadmap.X.html`, `outputs.X.html`.
 
 ## [1.4.0] · 2026-05-22 — Site-wide search, infrastructure and directory improvements
