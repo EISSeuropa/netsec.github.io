@@ -1317,15 +1317,43 @@ form button:disabled{opacity:.65;cursor:wait}
 [data-i18n-status="beta"] .i18n-beta-ribbon{
   display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
   padding:7px 18px;
-  background:linear-gradient(135deg,rgba(0,51,153,.07),rgba(10,132,255,.05));
+  /* Layered background: an accent tint sits above an opaque glass
+     base so page content can't ghost through. Matches the floating
+     nav's pattern (.nav uses var(--glass-bg-strong) + backdrop-
+     filter for the same reason). Without the base, the accent
+     gradient sat at ~5-15% alpha over nothing, and badges or text
+     scrolled behind the ribbon stayed visible on FR/DE pages. */
+  background:
+    linear-gradient(135deg,rgba(0,51,153,.07),rgba(10,132,255,.05)),
+    var(--glass-bg-strong);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
   border-bottom:1px solid var(--glass-border);
   font-size:.82rem;color:var(--ink-2);
   position:fixed;top:0;left:0;right:0;z-index:101;
   text-align:center;line-height:1.4;
 }
 .dark [data-i18n-status="beta"] .i18n-beta-ribbon{
-  background:linear-gradient(135deg,rgba(10,132,255,.15),rgba(0,51,153,.10));
+  background:
+    linear-gradient(135deg,rgba(10,132,255,.15),rgba(0,51,153,.10)),
+    var(--glass-bg-strong);
   color:var(--ink);
+}
+/* Mobile: iOS Safari's backdrop-filter is honoured but inconsistent,
+   so on small viewports we bump the base to a near-opaque page-bg
+   tint (same trick as .nav). Content scrolling behind the ribbon
+   stays hidden regardless of how the browser handles the blur. */
+@media (max-width: 720px){
+  [data-i18n-status="beta"] .i18n-beta-ribbon{
+    background:
+      linear-gradient(135deg,rgba(0,51,153,.07),rgba(10,132,255,.05)),
+      color-mix(in oklab, var(--bg-0) 92%, transparent);
+  }
+  .dark [data-i18n-status="beta"] .i18n-beta-ribbon{
+    background:
+      linear-gradient(135deg,rgba(10,132,255,.15),rgba(0,51,153,.10)),
+      color-mix(in oklab, var(--bg-0) 92%, transparent);
+  }
 }
 .i18n-beta-ribbon-badge{
   display:inline-block;
