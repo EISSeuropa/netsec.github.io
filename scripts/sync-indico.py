@@ -196,6 +196,34 @@ def _looks_like_break(title: str) -> bool:
     return t.startswith("coffee") or t.startswith("tea break") or t == "lunch"
 
 
+def _canonical_room(room: str) -> str:
+    """Collapse the cosmetic differences between equivalent room
+    labels so the sort key treats them as one column. ESSC organisers
+    sometimes enter "Lecture Hall 8" and sometimes "D House, Lecture
+    Hall 8" for the same physical room; we strip a leading "D House,"
+    or similar building prefix, normalise whitespace + case, so both
+    forms collapse to the same key. The full original label still
+    renders on the card; only the sort key is canonicalised."""
+    s = (room or "").strip().lower()
+    if not s:
+        return ""
+    # Common building prefixes ESSC + sibling Indico events use. Add
+    # to this list when a new venue ships with its own prefix style.
+    for prefix in ("d house,", "building,", "venue,"):
+        if s.startswith(prefix):
+            s = s[len(prefix):].lstrip()
+    return " ".join(s.split())
+
+
+def _room_sort_key(slot: dict) -> tuple:
+    """Sort key for parallel-row items so same-room panels stack
+    vertically across the day. Slots with no room sink to the end
+    (empty canonical room → ('~', '')), so they don't displace the
+    room-bearing columns."""
+    room = _canonical_room(slot.get("room", ""))
+    return ("~", "") if not room else ("", room)
+
+
 # ──────────────────────────── normalise ────────────────────────────
 
 
@@ -469,6 +497,15 @@ def extract_programme(timetable_results: dict, event_id: str) -> dict:
                 group.append(slots[j])
                 j += 1
             row_end = max(s["endTime"] for s in group)
+            # Sort parallel-row items by a normalised room key so the
+            # same room consistently lands in the same column across
+            # rows of the day. Indico itself orders parallel panels
+            # by submission / convener id, so without this the same
+            # room can jump left → right between two time slots,
+            # which breaks the "stay in your seat for the next panel
+            # in this room" reading. Slots with no room sink to the
+            # end so they don't displace the room-bearing columns.
+            group.sort(key=_room_sort_key)
             rows.append({
                 "startTime": current["startTime"],
                 "endTime": row_end,
