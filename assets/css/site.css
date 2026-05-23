@@ -2773,25 +2773,27 @@ body.search-open{overflow:hidden}
   opacity:1;
 }
 
-/* Member preview card — opened via the Popover API when a reader
-   clicks a speaker name that resolves to a NetSec member. One card
-   element is built lazily, attached to <body>, and reused for every
-   member; positionMemberCard() in the renderer sets left/top after
-   each show. Top-layer rendering means it isn't clipped by any
-   programme-grid overflow. */
-.member-card{
+/* ESSC member preview card — opened via the Popover API when a
+   reader hovers a speaker name that resolves to a NetSec member.
+   One card element is built lazily, attached to <body>, and reused
+   for every member. Class names are prefixed `essc-member-card-*`
+   to avoid a collision with the directory's existing `.member-card`
+   class on /people.html. Top-layer rendering means the card escapes
+   any clipped programme-grid ancestor. */
+.essc-member-card{
   position:fixed;
   margin:0;
   padding:0;
-  border:1px solid var(--line);
+  border:1px solid var(--glass-border);
   border-radius:14px;
-  /* Opaque card surface. We can't use --glass-bg / --glass-bg-strong
-     here because the card floats over arbitrary content (including
-     the photo of a session card behind it), and a translucent panel
-     leaves the user looking at two layers of text. --bg-1 reads as
-     "elevated surface" against the page bg-0 in both light and dark
-     palettes — same role the mobile-nav menu uses. */
+  /* Glassmorphism — same recipe the site uses for nav/menu surfaces.
+     A solid fallback colour sits under the translucent layer so
+     browsers that don't support backdrop-filter still get a readable
+     surface (Firefox until 103, older Safari). */
   background:var(--bg-1);
+  background:var(--glass-bg-strong);
+  -webkit-backdrop-filter:saturate(160%) blur(18px);
+  backdrop-filter:saturate(160%) blur(18px);
   color:var(--ink);
   width:min(360px, calc(100vw - 16px));
   box-shadow:0 12px 36px rgba(20,35,80,.18);
@@ -2800,30 +2802,36 @@ body.search-open{overflow:hidden}
   inset:auto;        /* override default popover centering */
   overflow:hidden;
 }
-.dark .member-card{
+.dark .essc-member-card{
   box-shadow:0 12px 36px rgba(0,0,0,.55);
 }
-.member-card-inner{
+/* Browsers without backdrop-filter — fall back to the opaque bg-1
+   colour that came in just above the glass layer, so the surface is
+   never see-through. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))){
+  .essc-member-card{background:var(--bg-1)}
+}
+.essc-member-card-inner{
   display:grid;
   grid-template-columns:64px 1fr;
   gap:14px;
   padding:14px 16px;
   align-items:start;
 }
-.member-card-photo{
+.essc-member-card-photo{
   width:64px;height:64px;
   border-radius:50%;
   object-fit:cover;
   background:var(--line);
   display:block;
 }
-.member-card-photo-placeholder{
+.essc-member-card-photo-placeholder{
   /* Same dimensions as the photo so the grid doesn't reflow when the
      member has no photo yet. */
   background:var(--line);
 }
-.member-card-text{min-width:0}
-.member-card-name{
+.essc-member-card-text{min-width:0}
+.essc-member-card-name{
   font-weight:600;
   font-size:1rem;
   margin:0 0 2px;
@@ -2832,12 +2840,12 @@ body.search-open{overflow:hidden}
      should wrap rather than push the card wider than its max-width. */
   overflow-wrap:anywhere;
 }
-.member-card-role{
+.essc-member-card-role{
   margin:0 0 2px;
   color:var(--muted);
   font-size:.85rem;
 }
-.member-card-aff{
+.essc-member-card-aff{
   margin:0 0 6px;
   font-size:.88rem;
   color:var(--ink-2);
@@ -2845,13 +2853,13 @@ body.search-open{overflow:hidden}
 /* Roles + WG badges. Sit between affiliation and country, kept on a
    single wrappable row so a member with three or four chips doesn't
    force the card taller than necessary. */
-.member-card-badges{
+.essc-member-card-badges{
   display:flex;
   flex-wrap:wrap;
   gap:4px;
   margin:4px 0 8px;
 }
-.member-card-badge{
+.essc-member-card-badge{
   display:inline-block;
   font-size:.72rem;
   font-weight:600;
@@ -2862,12 +2870,12 @@ body.search-open{overflow:hidden}
   color:var(--accent-2);
   line-height:1.4;
 }
-.member-card-badge.is-wg{
+.essc-member-card-badge.is-wg{
   /* WG chips read as a secondary tier — same shape, lower contrast. */
   background:var(--line);
   color:var(--muted);
 }
-.member-card-country{
+.essc-member-card-country{
   display:flex;
   align-items:center;
   gap:6px;
@@ -2875,12 +2883,12 @@ body.search-open{overflow:hidden}
   color:var(--muted);
   font-size:.82rem;
 }
-.member-card-country img{
+.essc-member-card-country img{
   width:18px;height:auto;
   border-radius:2px;
   display:inline-block;
 }
-.member-card-bio{
+.essc-member-card-bio{
   margin:10px 0 0;
   font-size:.85rem;
   color:var(--ink-2);
@@ -2895,13 +2903,13 @@ body.search-open{overflow:hidden}
 /* Social-link row. Compact 18px icons in a flex row, same brand
    glyphs and colour conventions as /people.html so the card reads
    visually as a smaller cousin of the directory card. */
-.member-card-contacts{
+.essc-member-card-contacts{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
   margin:10px 0 0;
 }
-.member-card-contact{
+.essc-member-card-contact{
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -2911,39 +2919,40 @@ body.search-open{overflow:hidden}
   background:transparent;
   transition:color .15s var(--ease), background .15s var(--ease);
 }
-.member-card-contact svg{width:18px;height:18px}
-.member-card-contact:hover,
-.member-card-contact:focus-visible{
+.essc-member-card-contact svg{width:18px;height:18px}
+.essc-member-card-contact:hover,
+.essc-member-card-contact:focus-visible{
   color:var(--accent-2);
   background:color-mix(in oklab, var(--accent-2) 12%, transparent);
   opacity:1;
 }
-.member-card-contact.is-orcid{color:#A6CE39}
-.member-card-contact.is-orcid:hover,
-.member-card-contact.is-orcid:focus-visible{
+.essc-member-card-contact.is-orcid{color:#A6CE39}
+.essc-member-card-contact.is-orcid:hover,
+.essc-member-card-contact.is-orcid:focus-visible{
   color:#A6CE39;
   background:color-mix(in oklab, #A6CE39 14%, transparent);
 }
-.member-card-footer{
-  border-top:1px solid var(--line);
+.essc-member-card-footer{
+  border-top:1px solid var(--glass-border);
   padding:10px 16px;
   text-align:right;
   /* Subtle tint so the footer separates from the card body. The
-     translucent overlay sits on top of --bg-1, so the resulting
-     colour reads as a slightly darker shade in light mode and a
-     slightly lighter shade in dark mode without needing two rules. */
+     translucent overlay sits on top of the glass layer, so the
+     resulting colour reads as a slightly darker shade in light mode
+     and a slightly lighter shade in dark mode without needing two
+     rules. */
   background:rgba(11,18,32,.04);
 }
-.dark .member-card-footer{
+.dark .essc-member-card-footer{
   background:rgba(255,255,255,.05);
 }
-.member-card-footer a{
+.essc-member-card-footer a{
   font-size:.85rem;
   font-weight:500;
 }
 @media print{
   /* The card is interactive chrome; never relevant on paper. */
-  .member-card{display:none !important}
+  .essc-member-card{display:none !important}
 }
 
 /* Contributions <details> — only on session cards that have papers. */
