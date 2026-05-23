@@ -1,6 +1,53 @@
 /* -------------------------------------------------------------
    NetSec — modern glassmorphism, Apple-inspired
    ------------------------------------------------------------- */
+
+/* ── Self-hosted variable fonts ────────────────────────────────
+   Inter (400–800) and Lexend (400–700), latin + latin-ext subsets
+   only. Sourced from Google Fonts (SIL Open Font License) and
+   committed at `assets/fonts/`. Removes the render-blocking
+   `<link rel="stylesheet" href="fonts.googleapis.com/css2?…">`
+   tag from every HTML page — Lighthouse Performance previously
+   sat at 67–75 because that link blocked first paint while the
+   third-party CSS resolved. With the files local the browser can
+   start rendering immediately and only fetches the latin-ext
+   subset on demand via the unicode-range filter.
+
+   `font-display: swap` keeps text visible during the brief window
+   between system-font render and webfont swap. Resolves #121. */
+@font-face{
+  font-family:'Inter';
+  font-style:normal;
+  font-weight:400 800;
+  font-display:swap;
+  src:url('../fonts/inter-latin.woff2') format('woff2');
+  unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face{
+  font-family:'Inter';
+  font-style:normal;
+  font-weight:400 800;
+  font-display:swap;
+  src:url('../fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face{
+  font-family:'Lexend';
+  font-style:normal;
+  font-weight:400 700;
+  font-display:swap;
+  src:url('../fonts/lexend-latin.woff2') format('woff2');
+  unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face{
+  font-family:'Lexend';
+  font-style:normal;
+  font-weight:400 700;
+  font-display:swap;
+  src:url('../fonts/lexend-latin-ext.woff2') format('woff2');
+  unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 :root{
   --bg-0:#f6f8fc;
   --bg-1:#eef2fb;
@@ -3120,4 +3167,100 @@ body.search-open{overflow:hidden}
   color:#52d775;
   background:rgba(52,215,117,.16);
   border-color:rgba(52,215,117,.32);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Print stylesheet (#123).
+   ──────────────────────────────────────────────────────────────
+   Some readers (academics, COST evaluators, MC reps preparing
+   for plenary) actually print these pages. Default Chrome output
+   wastes a sheet on the floating-header bubble and bleeds the
+   dark-mode aurora blobs whenever "background graphics" is on.
+   This block strips the page chrome, drops glassmorphism, and
+   adds page-break hints where the content reads better grouped.
+   The earlier tiny `@media print` blocks higher in the file
+   (programme-grid, popover, roadmap-toggle) handle their own
+   feature-specific needs; this is the cross-cutting baseline. */
+@media print {
+  /* Universal — flatten the colour story for paper, drop chrome. */
+  html, body { background:#fff !important; color:#000 !important; }
+  .ambience, .blob,
+  .nav, .menu-toggle, .nav-cta,
+  .footer .socials,
+  .scroll-progress, .scroll-progress-bar,
+  .search-trigger, .theme-toggle, .lang-switch,
+  .i18n-beta-ribbon,
+  .skip-link,
+  .tour-trigger, .welcome-strip,
+  .toast, .toast-region,
+  #search-overlay,
+  .rm-shipped-toggle,
+  .members-toolbar,
+  .essc-member-card,
+  .member-bio-toggle { display:none !important; }
+
+  /* Body padding-top compensates for the fixed header. With the
+     header hidden, we don't need the cushion. */
+  body, main, .container { padding-top:0 !important; }
+
+  /* Drop glass — opaque white, no shadows, no blur. */
+  .glass, .resource-card, .event-card, .mc-card, .rm-card,
+  .programme-slot, .deliverable-card,
+  .member-card {
+    background:#fff !important;
+    box-shadow:none !important;
+    border:1px solid #ccc !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+
+  /* Links: keep them legible. Spell out external URLs after the
+     link text so a paper reader can still resolve where it points. */
+  a { color:inherit !important; text-decoration:underline; }
+  a[href^="http"]:not([href*="netsec-cost.eu"])::after {
+    content:" (" attr(href) ")";
+    font-size:.85em;
+    font-weight:normal;
+    word-break:break-all;
+  }
+
+  /* Avoid orphan headings — keep a heading with its first content. */
+  h1, h2, h3, h4 { page-break-after:avoid; }
+  h2, h3 { page-break-inside:avoid; }
+
+  /* FAQ — keep a question with its answer where possible. */
+  .faq-section, .faq-item {
+    page-break-inside:avoid;
+  }
+
+  /* Glossary — keep a term with its definition. */
+  dl > dt { page-break-after:avoid; }
+  dl > dd { page-break-before:avoid; }
+
+  /* Press-kit colour swatches: when the background is off (the
+     default in Chrome's "save as PDF"), the chip shape collapses
+     to nothing visible. Print the hex code after the swatch so
+     the colour name is still useful on paper. */
+  .pk-colour-swatch::after {
+    content:" — " attr(data-hex);
+    font-family:ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size:.85em;
+    color:#555;
+  }
+
+  /* Roadmap — landscape orientation gives the timeline room to
+     breathe. Most printers accept the per-page orientation hint;
+     others fall back to portrait, which still renders correctly
+     just narrower. */
+  @page roadmap { size: A4 landscape; margin: 12mm; }
+  body.is-roadmap { page: roadmap; }
+
+  /* Programme grid — give each day its own start so a 3-day
+     programme prints as 3 pages, not as one continuous run. */
+  .programme-day { page-break-before:always; }
+  .programme-day:first-of-type { page-break-before:auto; }
+  .programme-slot { page-break-inside:avoid; }
+
+  /* Strip the directory's expand-in-place hint chrome too. */
+  .members-grid.is-compact .member-card { padding:16px !important; }
 }
