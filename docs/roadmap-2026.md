@@ -6,7 +6,7 @@
 > next, who needs to decide what, and when.*
 
 Maintained by Dr Arthur Laudrain (MC member, CH; ETH Zurich).
-Last revised **23 May 2026** (release-day date-stamp; v1.4.0 → v1.6.0 release-history catch-up is queued — the public CHANGELOG is authoritative for shipped scope and dates).
+Last revised **23 May 2026** — at-a-glance timeline and *Where we are today* snapshot refreshed for v1.6.0. The per-release narrative further down still lags from the v1.4.0–v1.6.0 cycle; that catch-up is queued and the public CHANGELOG remains authoritative for shipped scope and dates.
 
 > **Sync convention.** This file is the source of truth. The
 > public-facing summary at [`/roadmap.html`](../roadmap.html) (+ FR
@@ -21,72 +21,66 @@ Last revised **23 May 2026** (release-day date-stamp; v1.4.0 → v1.6.0 release-
 
 ## At a glance — 2026 timeline
 
-```mermaid
-timeline
-  title NetSec website + directory · 2026
-  section Shipped — May
-    20 May : v1.0.0 — Initial public release
-           : 10 public pages, glass UI, open directory (D1 first version)
-    20 May : v1.1.0 — Release tooling and PDF SemVer
-           : scripts/release.sh, PDF re-versioned
-    21 May : v1.2.0 — Press kit, directory tour, compact view
-           : click-to-expand, 6-step tour, A3 poster, press kit
-    21 May : v1.3.0 — Introducing FAQ and Glossary pages
-           : 21 Q&As, ~35 terms, Wiki signposting on home
-  section Q2 — Jun (planned)
-    Early Jun : v1.4.0 — Site-wide search + IA Phase 1
-              : Pagefind, calendar feed, /about page, slimmer header
-    9–12 Jun : Summer School + ESC Conference (Stockholm)
-    Late Jun : v1.5.0 — Logos, socials, IA polish
-              : official logos site-wide, social channels live
-  section Q3 (planned)
-    Early Sep : v1.6.0 — FR/DE reviewed, deliverables hosted
-              : translation review pass, D8 + D10 PDFs hosted
-    Before late Sep : Inaugural Management Committee plenary
-  section Q4 (planned)
-    10 Oct : Year 1 anniversary (M12)
-           : D1 first-version state, D6 first policy briefs
-    Mid Oct : v1.7.0 — Year 1 closes
-            : retrospective, Outputs section refresh, Phase 2 IA
-    Late Dec : v1.8.0 — Year 2 ready
-             : D11 + D12 hosting, per-page OG, print stylesheet
-```
+The two columns on the right read in chronological order. Action
+milestones (conference, plenary, anniversary) and website
+releases (`v1.x.0`) are interleaved so the site cadence sits
+alongside the Action's own calendar. The public-facing summary at
+[`/roadmap.html`](../roadmap.html) is the same information
+rendered visually.
 
-The chart above and the per-section detail below are the same
-information at two zoom levels. Action milestones (Conference,
-plenary, anniversary) and release milestones (`v1.x.0`) are
-interleaved so the website cadence reads alongside the Action's
-own calendar.
+| When | What | Detail |
+| --- | --- | --- |
+| 20 May 2026 | ✅ **v1.0.0–v1.3.0** | Initial site, release tooling, FAQ + Glossary (back-to-back same week as the v1.0 launch sprint) |
+| 22 May 2026 | ✅ **v1.4.0** | Site-wide Pagefind search · `/about` page · Phase 1 IA · iCalendar feed |
+| 22 May 2026 | ✅ **v1.5.0** | Launch-QA polish · accessibility statement v1.2 · hybrid release-notes format |
+| 23 May 2026 | ✅ **v1.6.0** | Live ESSC programme on `/essc-2026.html` · member-preview popover · collapsible shipped-list on the public roadmap · CSS class-collision lint |
+| 9–12 Jun 2026 | 📅 *Stockholm* | Early-Career Scholars Summer School (9–11 Jun) + European Security Conference (11–12 Jun) |
+| Early Jun 2026 | 📅 **v1.6.1** | Self-hosted variable fonts (perf) + print stylesheet — patch landing before the conference |
+| Early Sep 2026 | 📅 **v1.7.0** | FR/DE translation review pass · D8 + D10 PDFs hosted · per-event `.ics` · news RSS · pre-plenary a11y + cross-browser sweep |
+| Before late Sep | 📅 *MC plenary* | Inaugural Management Committee plenary (date TBA) |
+| 10 Oct 2026 | 📅 *M12* | Year 1 anniversary · D1 first-version state · D6 first policy briefs |
+| Mid Oct 2026 | 📅 **v1.8.0** | Year 1 retrospective · Outputs section refresh · Phase 2 IA |
+| Late Dec 2026 | 📅 **v1.9.0** | D11 + D12 hosting · Year 2 readiness |
+
+Symbol key: ✅ shipped, 📅 planned.
 
 ---
 
 ## Where we are today
 
-As of May 2026 — month **M8** of the four-year Action — the
+As of late May 2026 — month **M8** of the four-year Action — the
 delivery state is:
 
 - **Website live** at <https://netsec-cost.eu> on GitHub Pages,
   HTTPS-only, EN/FR/DE.
-- **Thirteen public pages**: home, network directory, grants &
+- **Fourteen public pages**: home, network directory, grants &
   calls, press kit, FAQ, glossary, *about*, *publications*
-  (placeholder), *news* archive, sitemap, accessibility,
-  privacy, licensing.
+  (placeholder), *news* archive, *roadmap*, *ESSC 2026 live
+  programme*, sitemap, accessibility, privacy, licensing.
 - **Open community directory** (D1, first version) accepting
-  bios via a public Google Form. 13 members ingested at last
-  weekly sync; the form is open to MC reps, WG participants, and
+  bios via a public Google Form. 13 members ingested at the most
+  recent sync; the form is open to MC reps, WG participants, and
   the wider community.
 - **Site-wide search** (Pagefind, EN/FR/DE shards) with rich
   bio result cards and on-page highlight-on-landing.
+- **Live ESSC 2026 programme** at `/essc-2026.html` (+ FR + DE),
+  rebuilt daily from `indico.eiss-europa.com`. Day chips, parallel
+  session cards, livestream badges, member-preview popovers on
+  speaker names that resolve to a `bios.json` record.
 - **`/about` page** (EN/FR/DE) consolidating the Action narrative,
   deliverables Gantt, leadership, FAQ + Glossary teasers, and
   the relationship with EISS (placeholder pending content from
   Action Chair + WG4 lead).
-- **Documentation pack v1.6.0** (`docs/pdf/NetSec-website-
-  documentation.pdf`) reflects the v1.3 state of the site;
-  refresh queued for v1.4 release.
-- **CHANGELOG** at SemVer v1.3.0 with `[Unreleased]` full of v1.4
-  content; release tooling (`scripts/release.sh`) requires a
-  short title per release.
+- **Documentation pack v1.8.0** (`docs/pdf/NetSec-website-
+  documentation.pdf`) carries the current cover stamp; the
+  substantive section-level catch-up to website v1.4 → v1.6 is
+  tracked in [#122](https://github.com/EISSeuropa/netsec.github.io/issues/122),
+  due before end of May.
+- **CHANGELOG** at SemVer v1.6.0 with `[Unreleased]` accumulating
+  v1.6.1 content (font perf + print stylesheet). Release tooling
+  (`scripts/release.sh`) requires a short title per release; the
+  hybrid release-notes format (lede + themes + index) is in place
+  across the whole changelog.
 - **Maintainer**: one person (AL) running on volunteered time.
 
 ---
