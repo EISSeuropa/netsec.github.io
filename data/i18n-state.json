@@ -87,15 +87,15 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "277f73146615a2d81f26e94e23756f0f5d0955fd",
-        "translated_on": "2026-05-22",
+        "source_sha1": "98a1296eff846d8ee346b0bdc8fcbc3bfc2a2563",
+        "translated_on": "2026-05-23",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "277f73146615a2d81f26e94e23756f0f5d0955fd",
-        "translated_on": "2026-05-22",
+        "source_sha1": "98a1296eff846d8ee346b0bdc8fcbc3bfc2a2563",
+        "translated_on": "2026-05-23",
         "status": "beta",
         "reviewed_by": null
       }
@@ -231,15 +231,15 @@
     "roadmap.html": {
       "fr": {
         "file": "roadmap.fr.html",
-        "source_sha1": "7dc234cdd9d1c55e9477f52bd9ab7af127a87009",
-        "translated_on": "2026-05-22",
+        "source_sha1": "1eb2fabf0636e7d0aa7f08600f65d5213eee4a7e",
+        "translated_on": "2026-05-23",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "roadmap.de.html",
-        "source_sha1": "7dc234cdd9d1c55e9477f52bd9ab7af127a87009",
-        "translated_on": "2026-05-22",
+        "source_sha1": "1eb2fabf0636e7d0aa7f08600f65d5213eee4a7e",
+        "translated_on": "2026-05-23",
         "status": "beta",
         "reviewed_by": null
       }

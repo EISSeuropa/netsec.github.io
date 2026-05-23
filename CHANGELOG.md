@@ -98,7 +98,52 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+> The live ESSC programme release. v1.6.0 turns netsec-cost.eu into the canonical entry point for the European Security Studies Conference: a daily-synced live programme page at `/essc-2026.html`, in-place bio previews for speakers who are NetSec members, a collapsible shipped-history on the public roadmap, and a CSS lint that catches the class-name collisions that bit the directory mid-cycle.
+
+### Live ESSC 2026 programme on netsec-cost.eu
+
+The flagship outreach moment of the year now has its own page on the NetSec site rather than living only on Indico. `scripts/sync-indico.py` runs daily at 03:45 UTC, talks to `indico.eiss-europa.com`'s API, scopes to category 1 (Annual Conferences), and writes the normalised programme to `data/indico.json`. The page at `/essc-2026.html` (+ `.fr.html` + `.de.html`) reads that file at render-time and lays out a programme grid with day-chip navigation, parallel-session rows, contributions, abstracts, livestream badges on plenaries and roundtables, and a pulse-dot beside the page-level "Live programme" cue. Chrome strings (chair / speakers / discussants / day labels / error messages) translate via an inline I18N table; programme content stays in whatever language the submitter wrote it in. The home-page Events block now deep-links to the live page; the sitemap and calendar.ics treat it as the canonical URL for the conference. Schema-compatible with EISS's existing programme generator so a future port to a build-time renderer drops in.
+
+### Member-aware previews on the programme
+
+Hover a speaker name on the programme — if the speaker resolves to a NetSec member through `data/bios.json`, a glass-surfaced preview card opens via the native Popover API. The card carries photo, name, position, affiliation, country with flag, role / working-group chips, three-line bio excerpt, contact-icon row (email, website, ORCID, LinkedIn, X, Bluesky, Mastodon — only the ones the member has filled in), and a "View full profile →" link to `/people.html#<slug>` that scrolls to the matching directory card with a persistent spotlight. Matching uses a JS port of `scripts/sync-bios.py`'s `name_key()`: NFKD-normalise, strip diacritics, drop honorifics, drop apostrophes, drop post-nominals, drop nobiliary particles, key on first + last surviving tokens. Members whose Indico spelling won't match the canonical bios.json name can declare an optional `name_aliases: []` field to bridge the gap. Show / hide model: hover or focus opens; the popover stays open while the cursor is over either anchor or card; leaving both, scrolling the page, clicking outside, or pressing Esc all dismiss. Graceful degrade: feature-detects `HTMLElement.showPopover`; on browsers without it the anchor navigates straight to `/people.html#<slug>`.
+
+### Roadmap UX + CSS hygiene
+
+The Shipped list on `/roadmap.html` now collapses behind a single toggle (default collapsed) so the in-progress and planned items stay above the fold as the shipped history grows. A new CSS class-collision lint (`scripts/check-css-class-collisions.py`) runs on every PR that touches `assets/css/site.css` and flags the kind of mistake that briefly broke `/people.html` mid-cycle — the popover originally used `.member-card` as its container class, which was already the directory's main card class. The lint walks the CSS, finds classes declared as the sole-compound selector of two or more rule blocks more than 200 lines apart, and reports them as cross-feature collisions. Inline `/* css-collision-allow: .my-class */` markers handle legitimate cross-cutting cases.
+
+### Polish
+
+The matcher gained a debug logger that lists unmatched speakers via `console.debug` during render; useful for spotting near-misses (typo, name-order flip, missing alias) without bothering readers. The `/people.html` deep-link spotlight is now persistent instead of auto-fading after 3.5 s — in detailed view, where every card shows its full bio, the old timer often expired before the visitor noticed the landing; the spotlight now clears on user-initiated action (typing in search, clicking a different card, changing a filter) and the hash strips with it. The popover's glass background respects `@supports (backdrop-filter)` with a solid `--bg-1` fallback. The roadmap's chevron animation respects `prefers-reduced-motion`.
+
+### Index of changes
+
+#### Added
+
+- **Live ESSC 2026 programme page** at `/essc-2026.html` (+ FR + DE), sourced from a daily Indico sync (`scripts/sync-indico.py` + `.github/workflows/sync-indico.yml`, runs 03:45 UTC). Schema-compatible with EISS's programme generator. Home-page Events block, sitemap, and `calendar.ics` link to the live page rather than directly to Indico. New `data/indico.json` artefact. New `docs/indico-sync.md` documenting the pipeline.
+- **Member preview popover** on the ESSC programme. Tap or hover a member-linked speaker name and a glass card opens with photo, position, affiliation, country, role + WG chips, bio excerpt, contact icons, and a deep-link CTA. Position is computed in JS (viewport-flipped, edge-clamped). Class family is `.essc-member-card*` to avoid colliding with the directory's `.member-card`.
+- **Member-aware speaker links** on the programme. Names that match a `bios.json` record become dotted-underlined anchors to `/people.html#<slug>`. JS port of `name_key()` with diacritic / honorific / post-nominal / particle stripping. Optional `name_aliases: []` field on bios records for hard-to-match cases — documented in `docs/bios-setup.md`.
+- **Collapsible Shipped list** on `/roadmap.html` (+ FR + DE). One toggle injected per `<ol class="rm-timeline">` that has shipped entries. Locale-aware labels. JS-off graceful degrade leaves entries visible.
+- **CSS class-collision lint** (`scripts/check-css-class-collisions.py` + `.github/workflows/css-class-collisions.yml`). Catches same-class declarations >200 source lines apart and orphan BEM children. Inline suppression marker for legit cross-cutting patterns.
+- **Particles drop in `name_key()`** (Python + JS). 24 nobiliary / patronymic connectors (de, van, von, da, della, etc.) excluded from the key so "Jéssica da Costa Pereira" matches "Jéssica da Costa".
+- **`console.debug` unmatched-speaker log** on the programme render. Filtered to keyable names; surfaces near-misses during preview.
+- **Three writing-voice rules** in `CLAUDE.md` §6 + §7: no "source of truth" on public copy, no em dashes, no rule-of-three rhythm, no synonym cycling.
+
+#### Changed
+
+- **`/people.html` deep-link spotlight is now persistent.** The 3.5 s auto-fade is gone; the spotlight clears when the visitor types in search, clicks a different card, focuses a filter, or changes the country select. Visual treatment strengthened: accent-2 outline + 6 px halo + 14 px drop shadow + subtle tinted background. Hash is stripped on dismissal.
+- **Roadmap retro-truth-up**: v1.4.0 + v1.5.0 marked Shipped with their actual content; the "Official logos and social channels" milestone moved to *Under watch* with a clear external trigger.
+- **Sitemap + calendar.ics** updated to reflect the NetSec-hosted ESSC live programme as the canonical URL. ESSC entry in `data/events.json` URL flipped from `indico.eiss-europa.com/event/22/` to `netsec-cost.eu/essc-2026.html`; Indico stays in the calendar `DESCRIPTION` as a registration link.
+
+#### Fixed
+
+- **Directory regression on `/people.html`.** The ESSC popover's CSS used `.member-card` — the directory's own class since launch. The new rules (`position: fixed; width: 360px; box-shadow; overflow: hidden`) cascaded onto every directory card and stacked all 13 of them at the viewport's top-left. The reported symptom — "only Arthur Laudrain shows, his card is half blue" — was 13 cards stacked, with `var(--bg-1)` showing through where the width clamp narrowed them. Renamed the entire popover class family to `.essc-member-card*` across CSS + JS in all three locale files; directory's own rules untouched.
+- **Popover light-dismiss and visibility** in early popover drafts. The card was rendering with no background because `var(--surface)` / `var(--border)` / `var(--surface-2)` referenced design tokens that don't exist on this site (it uses `--bg-1` / `--line`). Without visible chrome, clicks that the visitor thought were "outside the card" often landed inside the invisible bounds, and the Popover API correctly didn't dismiss. Fix: use the tokens the site actually defines, add glassmorphism (`backdrop-filter: blur(18px)`), add a scroll-dismiss listener.
+- **Pulse-dot vertical alignment** beside the "Live programme" heading on `/essc-2026.html`, pulled rightward from the heading column edge after multiple fine-tunes.
+
+🤖 _Authored with help from [Claude Code](https://claude.com/claude-code)._
+
+
 
 ## [1.5.0] · 2026-05-22 — Pre-launch polish and accessibility v1.2
 

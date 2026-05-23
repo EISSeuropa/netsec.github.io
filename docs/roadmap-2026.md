@@ -6,7 +6,7 @@
 > next, who needs to decide what, and when.*
 
 Maintained by Dr Arthur Laudrain (MC member, CH; ETH Zurich).
-Last revised **22 May 2026**.
+Last revised **23 May 2026** (release-day date-stamp; v1.4.0 → v1.6.0 release-history catch-up is queued — the public CHANGELOG is authoritative for shipped scope and dates).
 
 > **Sync convention.** This file is the source of truth. The
 > public-facing summary at [`/roadmap.html`](../roadmap.html) (+ FR
