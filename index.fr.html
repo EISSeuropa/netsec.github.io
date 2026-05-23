@@ -202,6 +202,32 @@
   </div>
 </section>
 
+<!-- Bandeau d'événement à venir.
+     Une carte dynamique unique qui pointe vers la prochaine
+     conférence / école doctorale / plénière NetSec. Construite à
+     partir de `data/events.json` au chargement de la page.
+     `hidden` jusqu'à ce que le script inline confirme qu'un
+     événement éligible existe — les visiteurs sans JS ne voient
+     donc aucun bandeau cassé ou périmé. -->
+<section class="upcoming-event" aria-label="Événement à venir" hidden>
+  <div class="container reveal">
+    <article class="ue-card glass" data-state="upcoming">
+      <div class="ue-body">
+        <div class="ue-status">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="ue-status-label"></span>
+        </div>
+        <h2 class="ue-headline"></h2>
+        <p class="ue-meta"></p>
+      </div>
+      <div class="ue-cta">
+        <a class="btn btn-primary ue-primary" href="#"></a>
+        <a class="btn btn-ghost ue-secondary" href="webcal://netsec-cost.eu/calendar.ics" rel="alternate" type="text/calendar">Ajouter au calendrier</a>
+      </div>
+    </article>
+  </div>
+</section>
+
 <!-- Actualités -->
 <section id="news">
   <div class="container reveal">
@@ -222,12 +248,6 @@
         <h3>École d'été NetSec : candidatures closes</h3>
         <p>L'appel pour l'école d'été NetSec 2026 des chercheur·euses en début de carrière, à Stockholm (9–11 juin 2026), s'est clôturé le 1er mars 2026. Les participant·es sélectionné·es seront contacté·es par les coordinateur·rices scientifiques en temps voulu. Un nouvel appel sera annoncé à l'ouverture de la cohorte 2027.</p>
         <a href="https://eiss-europa.com/NetSecSchool.html" target="_blank" rel="noopener">Voir l'école</a>
-      </article>
-      <article class="news-card glass">
-        <span class="news-date">11–12 juin 2026</span>
-        <h3>European Security Conference à Stockholm</h3>
-        <p>La conférence annuelle phare de NetSec se tient à l'Université de Stockholm, présidée par la Dr Julia Carver et la Dr Sanne Verschuren. Le programme sur deux jours est désormais en ligne.</p>
-        <a href="essc-2026.fr.html">Voir le programme</a>
       </article>
       <article class="news-card glass">
         <span class="news-date">10 octobre 2025</span>
@@ -662,6 +682,194 @@ document.addEventListener('DOMContentLoaded', function () {
     el.appendChild(wrap);
   });
 });
+</script>
+
+<!-- ──────────────────────────────────────────────────────────────
+     Upcoming-event banner populator.
+     Reads data/events.json (the canonical source the calendar.ics
+     feed is also built from), filters to events whose URL lives on
+     netsec-cost.eu (so the CTA never sends visitors off-site by
+     surprise), and shows the most-imminent one. Auto-hides when
+     no qualifying event is upcoming or recently-concluded.
+     ────────────────────────────────────────────────────────────── -->
+<script>
+(async function () {
+  const section = document.querySelector('.upcoming-event');
+  if (!section) return;
+  const lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
+  const L = ({
+    en: {
+      starts_in: (n) => n === 1 ? 'Starts tomorrow' : `Starts in ${n} days`,
+      day_of:    'Starts today',
+      live:      (n) => `Live now · ${n} session${n === 1 ? '' : 's'} today`,
+      live_no_n: 'Live now',
+      ended:     'Concluded · Programme archive',
+      view_live: 'View live programme →',
+      view_arch: 'View programme archive →',
+      view_pg:   'View programme →',
+      add_cal:   'Add to calendar',
+    },
+    fr: {
+      starts_in: (n) => n === 1 ? 'Commence demain' : `Commence dans ${n} jours`,
+      day_of:    'Commence aujourd’hui',
+      live:      (n) => `En direct · ${n} session${n === 1 ? '' : 's'} aujourd’hui`,
+      live_no_n: 'En direct',
+      ended:     'Terminée · Archive du programme',
+      view_live: 'Voir le programme en direct →',
+      view_arch: 'Voir l’archive du programme →',
+      view_pg:   'Voir le programme →',
+      add_cal:   'Ajouter au calendrier',
+    },
+    de: {
+      starts_in: (n) => n === 1 ? 'Beginnt morgen' : `Beginnt in ${n} Tagen`,
+      day_of:    'Beginnt heute',
+      live:      (n) => `Jetzt live · ${n} Sitzung${n === 1 ? '' : 'en'} heute`,
+      live_no_n: 'Jetzt live',
+      ended:     'Abgeschlossen · Programmarchiv',
+      view_live: 'Live-Programm ansehen →',
+      view_arch: 'Programmarchiv ansehen →',
+      view_pg:   'Programm ansehen →',
+      add_cal:   'Zum Kalender hinzufügen',
+    },
+  })[lang] || null;
+  if (!L) return;
+
+  let events;
+  try {
+    const res = await fetch('data/events.json', { cache: 'no-cache' });
+    if (!res.ok) return;
+    events = (await res.json()).events || [];
+  } catch (err) {
+    return; // Silent — banner is enhancement, not load-blocking.
+  }
+
+  // Keep events whose URL lives on netsec-cost.eu (so the CTA lands
+  // on a NetSec-hosted page) AND whose end-date is within ±35 days
+  // of today. That window keeps the strip visible from "five weeks
+  // out" through "just concluded".
+  const now = Date.now();
+  const DAY = 86_400_000;
+  const HOSTED = /netsec-cost\.eu/i;
+  const candidates = events
+    .filter(e => e.url && HOSTED.test(e.url))
+    .map(e => {
+      const start = new Date(e.start).getTime();
+      const end   = new Date(e.end).getTime();
+      return { ...e, _start: start, _end: end };
+    })
+    .filter(e => !isNaN(e._start) && !isNaN(e._end))
+    .filter(e => e._end >= now - 35 * DAY && e._start <= now + 60 * DAY)
+    // Sort: live first, then nearest upcoming, then most-recently concluded
+    .sort((a, b) => {
+      const aLive = a._start <= now && now <= a._end;
+      const bLive = b._start <= now && now <= b._end;
+      if (aLive && !bLive) return -1;
+      if (bLive && !aLive) return  1;
+      return a._start - b._start;
+    });
+
+  if (candidates.length === 0) return;
+  const ev = candidates[0];
+
+  // Compute the state + status label.
+  const card = section.querySelector('.ue-card');
+  const statusLbl = section.querySelector('.ue-status-label');
+  const headlineE = section.querySelector('.ue-headline');
+  const metaE     = section.querySelector('.ue-meta');
+  const primary   = section.querySelector('.ue-primary');
+  const secondary = section.querySelector('.ue-secondary');
+
+  const daysUntilStart = Math.ceil((ev._start - now) / DAY);
+
+  if (now < ev._start) {
+    // Upcoming
+    if (daysUntilStart === 0) {
+      card.dataset.state = 'live';
+      statusLbl.textContent = L.day_of;
+    } else if (daysUntilStart <= 7) {
+      card.dataset.state = 'soon';
+      statusLbl.textContent = L.starts_in(daysUntilStart);
+    } else {
+      card.dataset.state = 'upcoming';
+      statusLbl.textContent = L.starts_in(daysUntilStart);
+    }
+    primary.textContent = L.view_pg;
+  } else if (now <= ev._end) {
+    // Live now. Try to read indico.json to surface today's session count;
+    // fall back to a no-count label if the fetch fails.
+    card.dataset.state = 'live';
+    statusLbl.textContent = L.live_no_n;
+    primary.textContent = L.view_live;
+    fetch('data/indico.json', { cache: 'no-cache' })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!d || !d.annualConferences) return;
+        const year = new Date(ev._start).getFullYear();
+        const conf = d.annualConferences[String(year)];
+        if (!conf || !conf.programme || !conf.programme.days) return;
+        const today = new Date().toISOString().slice(0, 10);
+        const day = conf.programme.days.find(d => d.date === today);
+        if (!day) return;
+        const sessionCount = (day.rows || []).reduce(
+          (n, r) => n + ((r.items || []).filter(i => i.kind === 'session').length), 0
+        );
+        if (sessionCount > 0) statusLbl.textContent = L.live(sessionCount);
+      })
+      .catch(() => {});
+  } else {
+    // Concluded
+    card.dataset.state = 'concluded';
+    statusLbl.textContent = L.ended;
+    primary.textContent = L.view_arch;
+  }
+
+  // Localised date range for the meta line. Use the page's lang for
+  // formatting so "11–12 June" → "11–12 juin" / "11.–12. Juni".
+  const dateLocale = lang === 'fr' ? 'fr-FR' : lang === 'de' ? 'de-DE' : 'en-GB';
+  const startD = new Date(ev._start);
+  const endD   = new Date(ev._end);
+  let dateStr;
+  if (startD.toDateString() === endD.toDateString()) {
+    dateStr = startD.toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' });
+  } else if (startD.getMonth() === endD.getMonth() && startD.getFullYear() === endD.getFullYear()) {
+    const month = startD.toLocaleDateString(dateLocale, { month: 'long' });
+    dateStr = `${startD.getDate()}–${endD.getDate()} ${month} ${endD.getFullYear()}`;
+  } else {
+    const a = startD.toLocaleDateString(dateLocale, { day: 'numeric', month: 'short' });
+    const b = endD.toLocaleDateString(dateLocale, { day: 'numeric', month: 'short', year: 'numeric' });
+    dateStr = `${a} – ${b}`;
+  }
+
+  headlineE.textContent = ev.summary || '';
+
+  // Build the meta line from dates + location (first comma-segment of
+  // the address, to keep it short on mobile). Use <strong> for the
+  // venue so the eye lands on "Stockholm University" rather than the
+  // street address.
+  const venue = (ev.location || '').split(',')[0].trim();
+  metaE.innerHTML = '';
+  const dateSpan = document.createElement('strong');
+  dateSpan.textContent = dateStr;
+  metaE.appendChild(dateSpan);
+  if (venue) {
+    metaE.append(' · ');
+    const venueSpan = document.createElement('strong');
+    venueSpan.textContent = venue;
+    metaE.appendChild(venueSpan);
+  }
+
+  // Locale-aware programme URL. The data/events.json url is the
+  // canonical EN URL; rewrite it to the matching FR / DE sibling.
+  let url = ev.url;
+  if (lang !== 'en') {
+    url = url.replace(/\.html(?:[#?]|$)/, m => '.' + lang + m);
+  }
+  primary.href = url;
+  secondary.textContent = L.add_cal;
+
+  // Reveal.
+  section.hidden = false;
+})();
 </script>
 
 </body>
