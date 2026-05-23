@@ -661,11 +661,16 @@
   // has no fragment to scroll to, also scroll the first highlight
   // into view so the visitor lands on the matched term, not on
   // the page top.
+  //
+  // We instantiate but deliberately DON'T call `.highlight()` on the
+  // result — the constructor runs `this.highlight()` itself, so a
+  // second call wraps every already-marked term in a nested second
+  // `<mark>` (issue #118). Screen readers announce the inner mark
+  // twice; visual rendering is unaffected.
   if (window.location.search.indexOf('pagefind-highlight=') !== -1) {
     import('/pagefind/pagefind-highlight.js')
       .then((mod) => {
-        const ph = new mod.default();
-        ph.highlight();
+        new mod.default();
         if (!window.location.hash) {
           requestAnimationFrame(() => {
             const first = document.querySelector('.pagefind-highlight');
