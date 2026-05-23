@@ -551,6 +551,141 @@ section{padding:80px 0;position:relative}
 .news-date{font-size:.82rem;color:var(--muted)}
 .news-card a{font-size:.9rem;font-weight:600;margin-top:auto}
 
+/* ── Upcoming-event banner ────────────────────────────────────
+   A single dynamic card slotted between the hero and Latest News
+   on the home page. Reads `data/events.json`, picks the most-
+   imminent event whose URL is hosted on netsec-cost.eu (so it
+   never sends the visitor off-site without warning), and renders
+   a state-aware strip: a countdown when the event is upcoming, a
+   live indicator when it is happening, and a "concluded" archive
+   pointer for up to ~30 days after.
+
+   The banner is `hidden` by default; the inline JS in index.html
+   reveals it only when a qualifying event exists. With JS off the
+   strip never appears, the Latest News card still carries the
+   conference information, and nothing breaks. */
+.upcoming-event{
+  margin:24px 0 0;
+}
+.ue-card{
+  position:relative;
+  display:grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap:24px;
+  align-items:center;
+  padding:22px 26px;
+  border-radius:18px;
+  overflow:hidden;
+  background:
+    linear-gradient(135deg, color-mix(in oklab, var(--accent-2) 18%, transparent), transparent 60%),
+    linear-gradient(225deg, color-mix(in oklab, var(--gold) 12%, transparent), transparent 65%),
+    var(--glass-bg-strong);
+  border:1px solid color-mix(in oklab, var(--accent-2) 30%, var(--glass-border));
+}
+.dark .ue-card{
+  background:
+    linear-gradient(135deg, color-mix(in oklab, var(--accent-2) 30%, transparent), transparent 60%),
+    linear-gradient(225deg, color-mix(in oklab, var(--gold) 18%, transparent), transparent 65%),
+    var(--glass-bg-strong);
+}
+.ue-body{min-width:0}
+.ue-status{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:.74rem;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--accent-2);
+  margin-bottom:6px;
+}
+.ue-status .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--accent-2);
+  flex:none;
+}
+/* When the event is live (`data-state="live"`), the pill turns
+   green and the dot pulses — same colour family as the per-session
+   `.programme-slot-livestream` badge on /essc-2026.html so the
+   visual story stays coherent. */
+.ue-card[data-state="live"] .ue-status{
+  color:#15803d;
+}
+.dark .ue-card[data-state="live"] .ue-status{
+  color:#52d775;
+}
+.ue-card[data-state="live"] .ue-status .dot{
+  background:currentColor;
+  box-shadow:0 0 0 0 currentColor;
+  animation:ue-pulse 1.8s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce){
+  .ue-card[data-state="live"] .ue-status .dot{animation:none}
+}
+@keyframes ue-pulse{
+  0%   { box-shadow: 0 0 0 0   color-mix(in oklab, currentColor 50%, transparent); }
+  70%  { box-shadow: 0 0 0 9px color-mix(in oklab, currentColor 0%,  transparent); }
+  100% { box-shadow: 0 0 0 0   color-mix(in oklab, currentColor 0%,  transparent); }
+}
+/* "Soon" state (≤ 7 days out) — amber rather than blue, to nudge
+   the eye toward the imminence. */
+.ue-card[data-state="soon"] .ue-status{
+  color:#a85b00;
+}
+.dark .ue-card[data-state="soon"] .ue-status{
+  color:#fbbf24;
+}
+.ue-card[data-state="soon"] .ue-status .dot{
+  background:currentColor;
+}
+.ue-card[data-state="concluded"] .ue-status{
+  color:var(--muted);
+}
+.ue-card[data-state="concluded"] .ue-status .dot{
+  background:var(--muted);
+}
+.ue-headline{
+  font-family:'Lexend','Inter',sans-serif;
+  font-size:1.5rem;
+  font-weight:600;
+  letter-spacing:-.015em;
+  margin:0 0 6px;
+  color:var(--ink);
+  line-height:1.2;
+}
+.ue-meta{
+  margin:0;
+  font-size:.92rem;
+  color:var(--ink-2);
+  line-height:1.5;
+}
+.ue-meta strong{color:var(--ink);font-weight:600}
+.ue-cta{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:stretch;
+  min-width:160px;
+}
+.ue-cta .btn{
+  text-align:center;
+  white-space:nowrap;
+}
+/* Narrow viewports: stack the CTA below the body so the card
+   doesn't squeeze the headline into two illegible columns. */
+@media (max-width: 720px){
+  .ue-card{
+    grid-template-columns: 1fr;
+    padding:18px 20px;
+  }
+  .ue-cta{align-items:stretch}
+  .ue-headline{font-size:1.25rem}
+}
+@media print{
+  .upcoming-event{display:none}
+}
+
 /* -------- Contact -------- */
 .contact-wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:32px;align-items:start}
 .contact-info{padding:36px}
