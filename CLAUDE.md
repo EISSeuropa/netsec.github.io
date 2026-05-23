@@ -91,6 +91,11 @@ re-deriving the analysis. Code paths, file names, line numbers.
 Milestone or version, e.g. "v1.6.0 / v1.7.0".
 ```
 
+**Set the GitHub milestone at creation time** (rule §10):
+`gh issue create --milestone vX.Y.Z ...`. The `Target` line
+in the body is human-readable context; the milestone is the
+queryable commitment.
+
 Labels — use the standard set already present in this repo (`bug`,
 `enhancement`, `documentation`). Don't invent new labels without
 asking; the label set is small on purpose.
@@ -203,6 +208,18 @@ issue (rule §3) and reference it from the surface itself.
 - *Templates & press kit* — does the public press kit `/press-kit.html`
   match the Wiki copy-paste boilerplate?
 
+### 6. Milestone hygiene (gate, not a surface)
+
+- Every issue closed by this release carries the matching
+  milestone — `gh issue list --milestone vX.Y.Z --state closed`
+  should equal the *Fixed/Resolved/Closes* references in the
+  changelog index.
+- Every issue still open and tagged with this milestone has
+  either been ticked off in the release notes or has been moved
+  to the next milestone with a one-line reason in the issue
+  thread. The release should not ship with its own milestone
+  holding open work — see rule §10.
+
 This is a deliberate friction-point: cutting a minor release on
 this repo is **slightly more work than running release.sh**, by
 design. The release script's confirmation prompt is the last
@@ -277,6 +294,51 @@ text is being edited anyway.
 - FR / DE drift checker (`scripts/check-i18n-drift.py`) runs in CI
   on every HTML-touching PR. When it flags drift, refresh the
   translation manually before merging.
+
+## 10. Milestone tagging
+
+Every open issue belongs to exactly one milestone. The milestone
+is the bridge between the `Target` line in the issue template
+(rule §3) and the planned releases on the roadmap; without it,
+the backlog drifts and "queued for v1.7.0" becomes a string
+floating in prose rather than a queryable commitment.
+
+### The milestone set
+
+Milestones are created on GitHub from the version-tagged rows of
+[`docs/roadmap-2026.md`](docs/roadmap-2026.md)'s *At a glance*
+timeline. One milestone per planned release plus a single
+`Backlog — Under watch` bucket for items waiting on external
+triggers (COST-office decisions, post-conference activities,
+larger redesigns with no fixed slot yet).
+
+Due dates on the milestones come from the same timeline. When the
+roadmap shifts a planned release, **bump the milestone's due date
+in the same commit that updates the roadmap row** — they're two
+projections of the same plan.
+
+### When to set the milestone
+
+- **At issue creation.** Whenever rule §3 fires, set the
+  milestone alongside the title and body. `gh issue create
+  --milestone v1.7.0 ...` keeps it inline.
+- **When an issue moves between releases.** Update the milestone
+  in the same edit that records the slip ("deferred to v1.8.0 —
+  out of scope for v1.7.0 in this PR").
+- **Never leave an open issue without one.** A milestone-less
+  open issue is invisible to release planning. The `Backlog —
+  Under watch` bucket exists so there's no excuse: items with no
+  clear release home still get tagged.
+
+### Pre-release check
+
+Add to the rule §5 five-point cross-check: before running
+`scripts/release.sh`, confirm that every issue **closed by this
+release** carries the matching milestone, and that any **still-
+open issue tagged with this milestone** has either been ticked off
+in the release notes or moved to the next milestone with a one-
+line reason in the issue thread. The release should not ship with
+its own milestone holding open work.
 
 ---
 
