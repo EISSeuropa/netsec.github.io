@@ -221,6 +221,40 @@ img{max-width:100%;display:block}
   box-shadow:var(--glass-shadow);
   transition:box-shadow .3s var(--ease),transform .3s var(--ease);
 }
+/* Mobile top-scrim + nav reinforcement.
+   On a narrow viewport, two things conspire to make the floating
+   nav read poorly:
+     1. The nav sits at top:14px, so a sliver of page content
+        shows above the bubble.
+     2. iOS Safari's backdrop-filter is real, but high-contrast
+        text (like the bold dates in .details-grid) still ghosts
+        through the .72 / .78 glass background.
+   We address both at once. A fixed gradient layer fades the top
+   of the viewport into the page background so scrolled content
+   never lands in the gap above the nav, and the nav itself gets
+   a more opaque background on mobile so it reads as a chip rather
+   than a translucent overlay. Desktop keeps the lighter glass
+   feel where it works. */
+@media (max-width: 720px){
+  body::before{
+    content:'';
+    position:fixed;
+    inset:0 0 auto 0;
+    height:72px;
+    z-index:99; /* one below .nav (z:100) */
+    pointer-events:none;
+    background:linear-gradient(
+      to bottom,
+      var(--bg-0) 0%,
+      var(--bg-0) 40%,
+      color-mix(in oklab, var(--bg-0) 60%, transparent) 80%,
+      transparent 100%
+    );
+  }
+  .nav{
+    background:color-mix(in oklab, var(--bg-0) 88%, transparent);
+  }
+}
 /* Nav layout: brand on the left; everything else (nav-links and
    utility chips like the language switcher and theme toggle) on
    the right. We achieve this without changing the HTML source
@@ -592,17 +626,26 @@ section{padding:80px 0;position:relative}
 .ue-status{
   display:inline-flex;
   align-items:center;
-  gap:8px;
+  gap:7px;
   font-size:.74rem;
   font-weight:700;
   letter-spacing:.1em;
   text-transform:uppercase;
   color:var(--accent-2);
-  margin-bottom:6px;
+  margin-bottom:8px;
+  /* Backing chip so the dot reads as part of a single pill rather
+     than as a floating speck next to the label. Background tints
+     are colour-mixed from `currentColor`, which the state modifiers
+     below override (live → green, soon → amber, concluded → muted),
+     so the chip stays in sync with whichever state is active. */
+  padding:4px 10px 4px 8px;
+  border-radius:999px;
+  background:color-mix(in oklab, currentColor 10%, transparent);
+  border:1px solid color-mix(in oklab, currentColor 22%, transparent);
 }
 .ue-status .dot{
-  width:8px;height:8px;border-radius:50%;
-  background:var(--accent-2);
+  width:7px;height:7px;border-radius:50%;
+  background:currentColor;
   flex:none;
 }
 /* When the event is live (`data-state="live"`), the pill turns
@@ -689,8 +732,12 @@ section{padding:80px 0;position:relative}
   flex:none;
 }
 /* Narrow viewports: stack the CTA below the body so the card
-   doesn't squeeze the headline into two illegible columns. */
+   doesn't squeeze the headline into two illegible columns.
+   The vertical rhythm above the banner is also tightened: the
+   24+24 px combo from .details-strip and .upcoming-event reads
+   as too much space on a small screen. */
 @media (max-width: 720px){
+  .upcoming-event{margin-top:8px}
   .ue-card{
     grid-template-columns: 1fr;
     padding:18px 20px;
@@ -845,6 +892,9 @@ form button:disabled{opacity:.65;cursor:wait}
 
 /* -------- Action details strip -------- */
 .details-strip{padding:24px 0 0}
+@media (max-width: 720px){
+  .details-strip{padding:12px 0 0}
+}
 .details-grid{
   display:grid;grid-template-columns:repeat(4,1fr);gap:0;
   padding:20px 8px;border-radius:var(--radius);
