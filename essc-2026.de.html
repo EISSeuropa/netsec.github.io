@@ -1033,15 +1033,22 @@
     const footer = el('div', { class: 'essc-member-card-footer' });
     const ctaHref = peopleUrl + '#' + member.id;
     const cta = el('a', { class: 'essc-member-card-cta', href: ctaHref }, t.viewFullProfile);
-    // Safari 17.x has a bug where clicks on an <a href> inside an
-    // open `popover="auto"` element fire the click event but the
-    // default navigation gets silently swallowed by the top-layer
-    // machinery — the visitor ends up still on /essc-2026.html with
-    // no error. Workaround: intercept the click, close the popover
-    // ourselves, then navigate via window.location.assign on the
-    // next tick so the popover-close paint settles before nav.
-    // Cmd/Ctrl/middle-click pass through to native behaviour so
-    // "open in new tab" still works.
+    // Safari Technology Preview (as of May 2026) has a bug where
+    // clicks on an <a href> inside an open `popover="auto"` element
+    // fire the click event but the default navigation gets silently
+    // swallowed by the top-layer machinery — the visitor ends up
+    // still on /essc-2026.html with no error. Confirmed maintainer-
+    // reproducible on Safari TP; release Safari, Chrome, Firefox
+    // are unaffected. The workaround below is harmless on those
+    // browsers — preventDefault + JS-driven nav is functionally
+    // identical to letting the <a> default fire — so we ship it as
+    // a belt-and-braces fix rather than gating on a UA sniff.
+    //
+    // Intercept the click, close the popover ourselves, then
+    // navigate via window.location.assign on the next tick so the
+    // popover-close paint settles before nav. Cmd/Ctrl/middle-click
+    // pass through to native behaviour so "open in new tab" still
+    // works.
     cta.addEventListener('click', (e) => {
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
       e.preventDefault();

@@ -493,6 +493,20 @@ Signed: ____________________________  Date: ____________________
 
 ---
 
+## Known browser issues
+
+Discovered post-launch; documented here rather than as open issues because they don't affect release-channel user populations.
+
+### Safari Technology Preview — ESSC member-popover CTA swallowed
+
+**Reproducer.** Safari TP only (release Safari, Chrome, Firefox unaffected). On `/essc-2026.html`, open a member popover (hover or click a NetSec-member speaker name), then click *View full profile* inside the popover. The click event fires but the default `<a href>` navigation is silently swallowed by the top-layer machinery — the visitor stays on the page.
+
+**Status.** Treated as **resolved** for the public site: the Safari-stable population doesn't see it, and the JS workaround in `essc-2026.{en,fr,de}.html` (intercept click → `hidePopover()` → `setTimeout(0, () => window.location.assign(...))`) bypasses the bug on every browser at zero behavioural cost. The workaround is harmless on browsers that already navigated correctly because preventing the default and assigning `location.href` is functionally identical to letting `<a>` fire.
+
+**If this resurfaces on release Safari**, the symptom and remediation are documented inline at the CTA construction site (search `Safari Technology Preview` in `essc-2026.html` near the `essc-member-card-cta` element).
+
+---
+
 *This document survives past launch as the audit trail. The next
 audit (anchored at the pre-MC-plenary deadline in early September
 per `docs/roadmap-2026.md`) will reference this one as the
