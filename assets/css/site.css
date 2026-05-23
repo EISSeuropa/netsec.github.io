@@ -1371,17 +1371,26 @@ form button:disabled{opacity:.65;cursor:wait}
    in detailed view it's the only visual cue that this card is
    "the one you searched for". */
 .member-card.is-search-landed{
-  outline:2px solid var(--accent);
+  outline:2px solid var(--accent-2);
   outline-offset:3px;
   box-shadow:
-    0 0 0 6px rgba(10,132,255,.15),
+    0 0 0 6px rgba(10,132,255,.20),
+    0 14px 36px rgba(10,132,255,.18),
     var(--glass-shadow);
-  animation:search-landed-in .4s var(--ease);
+  background:color-mix(in oklab, var(--accent-2) 8%, var(--glass-bg));
+  animation:search-landed-in .45s var(--ease);
   position:relative;z-index:2;
 }
+.dark .member-card.is-search-landed{
+  background:color-mix(in oklab, var(--accent-2) 14%, var(--glass-bg));
+}
 @keyframes search-landed-in{
-  from{transform:scale(.98);box-shadow:0 0 0 0 rgba(10,132,255,.45),var(--glass-shadow)}
-  to  {transform:scale(1);   box-shadow:0 0 0 6px rgba(10,132,255,.15),var(--glass-shadow)}
+  from{transform:scale(.98);box-shadow:0 0 0 0 rgba(10,132,255,.55),var(--glass-shadow)}
+  to  {transform:scale(1);
+       box-shadow:
+         0 0 0 6px rgba(10,132,255,.20),
+         0 14px 36px rgba(10,132,255,.18),
+         var(--glass-shadow)}
 }
 @media (prefers-reduced-motion: reduce){
   .member-card.is-search-landed{animation:none}
