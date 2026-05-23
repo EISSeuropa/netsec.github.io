@@ -949,6 +949,22 @@
     };
     scrollToHash();
     window.addEventListener('hashchange', scrollToHash);
+    // Back-button re-entry path: if the visitor goes
+    //   /essc-2026.html → /people.html#A → back → /people.html#B
+    // the second arrival on /people.html is often served from
+    // bfcache. bfcache restores the page exactly as it was when
+    // the visitor left — including the previous spotlight on #A
+    // — without firing `hashchange` (full navigations don't),
+    // leaving the URL bar showing #B while card A stays
+    // highlighted. `pageshow` with `event.persisted === true`
+    // is the canonical signal that a bfcache restore happened;
+    // re-running scrollToHash re-aligns the spotlight with the
+    // current hash. The `e.persisted` guard keeps this from
+    // double-firing alongside the initial `scrollToHash()` call
+    // on a cold load.
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) scrollToHash();
+    });
 
     // Dismiss the spotlight as soon as the visitor signals they've
     // engaged with the page beyond just receiving the landing. We

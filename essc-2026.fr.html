@@ -789,6 +789,7 @@
   let cardEl = null;
   let hideTimer = null;
   let currentMember = null;
+  let openScrollY = 0;        // window.scrollY at the moment the popover opened
   const HIDE_DELAY_MS = 180;
 
   function ensureMemberCard() {
@@ -821,13 +822,23 @@
     });
     // The card is position:fixed, so it stays put while the page
     // scrolls — meanwhile the anchor scrolls away underneath. Hide
-    // on any window scroll so the card never floats over an unrelated
-    // session card. Passive listener; we don't preventDefault.
+    // on any meaningful window scroll so the card never floats over
+    // an unrelated session card. Passive listener; we don't
+    // preventDefault.
+    //
+    // Threshold: only dismiss when the scroll delta exceeds 24 px
+    // from the position the popover opened at. Without the threshold,
+    // iOS rubber-banding (or a momentum scroll started just before
+    // the user tapped a speaker name) can fire `scroll` immediately
+    // after `showPopover()` and close the popover before the visitor
+    // has had a chance to read it. The reference scrollY is reset
+    // each time a new popover open completes.
     window.addEventListener('scroll', () => {
-      if (cardEl && cardEl.matches(':popover-open')) {
-        cancelHideMemberCard();
-        cardEl.hidePopover();
-      }
+      if (!cardEl || !cardEl.matches(':popover-open')) return;
+      const delta = Math.abs(window.scrollY - openScrollY);
+      if (delta < 24) return;
+      cancelHideMemberCard();
+      cardEl.hidePopover();
     }, { passive: true });
     document.body.appendChild(cardEl);
     return cardEl;
@@ -864,6 +875,10 @@
     card.style.left = ar.left + 'px';
     card.style.top  = (ar.bottom + 6) + 'px';
     if (!card.matches(':popover-open')) card.showPopover();
+    // Record the scroll position at open time so the scroll-dismiss
+    // listener can apply a 24 px threshold and ignore rubber-band
+    // bounces or stray sub-pixel scrolls that fire right after a tap.
+    openScrollY = window.scrollY;
     const cr = card.getBoundingClientRect();
     const margin = 8;
     const vw = document.documentElement.clientWidth;

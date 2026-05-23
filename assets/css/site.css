@@ -672,6 +672,22 @@ section{padding:80px 0;position:relative}
   text-align:center;
   white-space:nowrap;
 }
+/* "Add to calendar" carries a leading calendar glyph that matches
+   the one used by `.event-subscribe` further down the page, so the
+   two surfaces read as the same gesture. The SVG sits inline with
+   the label via flex; size + spacing mirror the existing button
+   icon convention. */
+.ue-secondary{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.ue-secondary svg{
+  width:16px;
+  height:16px;
+  flex:none;
+}
 /* Narrow viewports: stack the CTA below the body so the card
    doesn't squeeze the headline into two illegible columns. */
 @media (max-width: 720px){
