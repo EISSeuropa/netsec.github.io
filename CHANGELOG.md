@@ -98,6 +98,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.6.0] · 2026-05-23 — Live ESSC programme and member previews
+
 > The live ESSC programme release. v1.6.0 turns netsec-cost.eu into the canonical entry point for the European Security Studies Conference: a daily-synced live programme page at `/essc-2026.html`, in-place bio previews for speakers who are NetSec members, a collapsible shipped-history on the public roadmap, and a CSS lint that catches the class-name collisions that bit the directory mid-cycle.
 
 ### Live ESSC 2026 programme on netsec-cost.eu
@@ -498,7 +502,8 @@ Open Graph, Twitter Card, JSON-LD (Organization + WebSite + WebPage), canonical 
 - Members' Wiki seeded with glossary, FAQ, onboarding, meeting-notes convention, decisions log.
 - Dual licensing — MIT for code, CC BY 4.0 for content + docs.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.2.0...v1.3.0
