@@ -114,7 +114,7 @@ The Shipped list on `/roadmap.html` now collapses behind a single toggle (defaul
 
 ### Polish
 
-The matcher gained a debug logger that lists unmatched speakers via `console.debug` during render; useful for spotting near-misses (typo, name-order flip, missing alias) without bothering readers. The `/people.html` deep-link spotlight is now persistent instead of auto-fading after 3.5 s — in detailed view, where every card shows its full bio, the old timer often expired before the visitor noticed the landing; the spotlight now clears on user-initiated action (typing in search, clicking a different card, changing a filter) and the hash strips with it. The popover's glass background respects `@supports (backdrop-filter)` with a solid `--bg-1` fallback. The roadmap's chevron animation respects `prefers-reduced-motion`.
+The matcher gained a debug logger that lists unmatched speakers via `console.debug` during render; useful for spotting near-misses (typo, name-order flip, missing alias) without bothering readers. The `/people.html` deep-link spotlight is now persistent instead of auto-fading after 3.5 s — in detailed view, where every card shows its full bio, the old timer often expired before the visitor noticed the landing; the spotlight now clears on user-initiated action (typing in search, clicking a different card, changing a filter) and the hash strips with it. Linked speaker names on the programme now read as tappable at rest (visible accent-coloured dotted underline plus a soft accent tint to the text) so touch users — who never see a `:hover` reveal — can tell at a glance which names lead to a profile. The popover's glass background respects `@supports (backdrop-filter)` with a solid `--bg-1` fallback. The roadmap's chevron animation respects `prefers-reduced-motion`.
 
 ### Index of changes
 
@@ -132,6 +132,7 @@ The matcher gained a debug logger that lists unmatched speakers via `console.deb
 #### Changed
 
 - **`/people.html` deep-link spotlight is now persistent.** The 3.5 s auto-fade is gone; the spotlight clears when the visitor types in search, clicks a different card, focuses a filter, or changes the country select. Visual treatment strengthened: accent-2 outline + 6 px halo + 14 px drop shadow + subtle tinted background. Hash is stripped on dismissal.
+- **Linked speaker names on the programme read as tappable at rest.** Resting state: dotted underline at full accent-2 opacity + a 70 / 30 colour mix of accent-2 / `--ink` for the text. Hover / focus brings the text to full accent-2. Replaces the earlier 55 %-transparent dotted underline that was effectively invisible at rest on a touch device.
 - **Roadmap retro-truth-up**: v1.4.0 + v1.5.0 marked Shipped with their actual content; the "Official logos and social channels" milestone moved to *Under watch* with a clear external trigger.
 - **Sitemap + calendar.ics** updated to reflect the NetSec-hosted ESSC live programme as the canonical URL. ESSC entry in `data/events.json` URL flipped from `indico.eiss-europa.com/event/22/` to `netsec-cost.eu/essc-2026.html`; Indico stays in the calendar `DESCRIPTION` as a registration link.
 

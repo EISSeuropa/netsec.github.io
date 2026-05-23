@@ -2767,13 +2767,17 @@ body.search-open{overflow:hidden}
 .programme-person .name{font-weight:500}
 .programme-person .aff{color:var(--muted)}
 /* When the speaker is one of our members, .name renders as <a> pointing
-   at /people.html#<slug>. A dotted underline tells the reader it's
-   actionable without competing visually with body links; the override
-   on :hover{opacity:1} cancels the site-wide a:hover opacity dim. */
+   at /people.html#<slug>. The resting state has a fully-opaque accent
+   dotted underline AND a soft tint to the text colour, so touch users
+   (who never see a :hover reveal) can still tell at a glance which
+   names in a long Chairs / Speakers list are tappable. Desktop users
+   get an additional brightness shift to full accent-2 on :hover /
+   :focus-visible. The opacity:1 override cancels the site-wide
+   a:hover opacity dim. */
 .programme-person a.name{
-  color:inherit;
+  color:color-mix(in oklab, var(--accent-2) 70%, var(--ink));
   text-decoration:none;
-  border-bottom:1px dotted color-mix(in oklab, var(--accent-2) 55%, transparent);
+  border-bottom:1px dotted var(--accent-2);
   transition:color .15s var(--ease), border-color .15s var(--ease);
 }
 .programme-person a.name:hover,
