@@ -918,15 +918,19 @@
         grid.querySelector('.member-card[data-slug="' + CSS.escape(hash) + '"]');
       if (!target) return;
       if (target.classList.contains('member-card')) {
-        // Always: visual spotlight so the landed card is obvious
-        // even in detailed view (where every other card is also
-        // showing its full content). The class auto-fades after
-        // ~3 s so it doesn't read as a permanent selection state.
-        // Survives subsequent hashchanges via the cleanup below.
+        // Visual spotlight so the landed card is unmissable, even in
+        // detailed view where every other card is also showing its
+        // full content. The class is persistent — it sticks until the
+        // visitor dismisses it explicitly (clicks elsewhere in the
+        // grid, types in the search box, or changes a filter). That
+        // matches the "I clicked through to see this specific person"
+        // mental model better than the old 3.5 s auto-fade did: in
+        // detailed view a quick fade often passed unseen if the page
+        // was still settling, leaving the visitor unsure they'd
+        // actually landed on the right card.
         grid.querySelectorAll('.member-card.is-search-landed')
             .forEach(c => c.classList.remove('is-search-landed'));
         target.classList.add('is-search-landed');
-        setTimeout(() => target.classList.remove('is-search-landed'), 3500);
         // In compact view also expand the card in place. In
         // detailed view, all cards are already showing full bio
         // content, so the expand class is unnecessary — the
@@ -946,6 +950,34 @@
     };
     scrollToHash();
     window.addEventListener('hashchange', scrollToHash);
+
+    // Dismiss the spotlight as soon as the visitor signals they've
+    // engaged with the page beyond just receiving the landing. We
+    // explicitly do NOT listen for scroll events — the deep-link's
+    // own scrollIntoView fires those, and dismissing on them would
+    // clear the spotlight before the visitor has had a chance to
+    // notice it.
+    const dismissLanded = () => {
+      const landed = grid.querySelector('.member-card.is-search-landed');
+      if (landed) {
+        landed.classList.remove('is-search-landed');
+        // Strip the hash too — keeps the URL honest about state.
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      }
+    };
+    grid.addEventListener('pointerdown', (e) => {
+      // Only dismiss when clicking on a DIFFERENT card or empty grid
+      // space. Clicking the landed card itself (e.g. to follow a
+      // contact icon) is not a dismissal.
+      const onLanded = e.target.closest('.member-card.is-search-landed');
+      if (!onLanded) dismissLanded();
+    });
+    if (search) {
+      search.addEventListener('focus', dismissLanded);
+      search.addEventListener('input', dismissLanded);
+    }
+    filterChips.forEach(b => b.addEventListener('click', dismissLanded));
+    if (countrySelect) countrySelect.addEventListener('change', dismissLanded);
   } catch (err) {
     // Locale-aware contact link so a French / German visitor lands
     // on the FR / DE index page if it exists (else falls back to EN).
