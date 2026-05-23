@@ -2210,6 +2210,64 @@ body.search-open{overflow:hidden}
 .dark .rm-entry::before{border-color:var(--bg-0)}
 .dark .rm-entry.rm-milestone::before{background:#cbd5e1}
 
+/* Collapsed shipped section. JS injects a toggle <li> at the top of
+   any rm-timeline that contains shipped entries and sets
+   data-shipped-state="collapsed" on the parent <ol>. The CSS below
+   hides only entries marked .shipped, leaving in-progress, planned,
+   and milestone entries visible. */
+.rm-timeline[data-shipped-state="collapsed"] > .rm-entry.shipped{
+  display:none;
+}
+/* The toggle itself sits in the timeline gutter like a regular entry
+   but without the marker dot or the connector — it's chrome, not
+   content. */
+.rm-shipped-toggle{
+  position:relative;
+  list-style:none;
+  margin:0 0 14px;
+  padding:0;
+}
+.rm-shipped-toggle::before,
+.rm-shipped-toggle::marker{content:none}
+.rm-shipped-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 14px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:transparent;
+  color:var(--ink-2);
+  font:inherit;
+  font-size:.86rem;
+  font-weight:500;
+  cursor:pointer;
+  transition:background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
+}
+.rm-shipped-btn:hover,
+.rm-shipped-btn:focus-visible{
+  background:var(--glass-bg);
+  border-color:var(--accent-2);
+  color:var(--accent-2);
+  opacity:1;
+}
+.rm-shipped-chevron{
+  width:14px;height:14px;
+  flex-shrink:0;
+  transition:transform .2s var(--ease);
+}
+.rm-shipped-btn[aria-expanded="true"] .rm-shipped-chevron{
+  transform:rotate(180deg);
+}
+@media (prefers-reduced-motion: reduce){
+  .rm-shipped-chevron{transition:none}
+}
+@media print{
+  /* Print should show the full history. */
+  .rm-shipped-toggle{display:none}
+  .rm-timeline[data-shipped-state="collapsed"] > .rm-entry.shipped{display:list-item}
+}
+
 .rm-card{
   padding:16px 20px;border-radius:14px;
   background:var(--glass-bg-strong);border:1px solid var(--line);
