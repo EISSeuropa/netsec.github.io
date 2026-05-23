@@ -3010,8 +3010,23 @@ body.search-open{overflow:hidden}
   color:var(--accent-2);
 }
 .programme-slot-room{
-  font-size:.82rem;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-size:.78rem;
   color:var(--muted);
+  /* The room badge sits next to the time + kind chips on session
+     cards, and at the foot of break / contribution cards (where it
+     gets a little top spacing, see the selector below). The pin
+     SVG inherits currentColor so it stays in sync with light + dark
+     text. */
+}
+.programme-slot-room svg{
+  width:12px;height:12px;flex:none;opacity:.85;
+}
+.programme-slot.is-break .programme-slot-room,
+.programme-slot.is-contribution .programme-slot-room{
+  margin-top:4px;
 }
 .programme-slot-title{
   margin:0 0 .5rem;

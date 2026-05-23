@@ -613,9 +613,40 @@
     return renderSession(slot);
   }
 
+  // Petite icône épingle. Identique à essc-2026.html (EN).
+  function roomPinIcon() {
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('aria-hidden', 'true');
+    const paths = [
+      ['path', { d: 'M12 22s7-7.58 7-13a7 7 0 10-14 0c0 5.42 7 13 7 13z' }],
+      ['circle', { cx: 12, cy: 9, r: 2.5 }],
+    ];
+    for (const [tag, attrs] of paths) {
+      const n = document.createElementNS(svgNS, tag);
+      for (const k in attrs) n.setAttribute(k, attrs[k]);
+      svg.appendChild(n);
+    }
+    return svg;
+  }
+  function roomBadge(slot) {
+    if (!slot.room) return null;
+    const badge = el('span', { class: 'programme-slot-room' });
+    badge.appendChild(roomPinIcon());
+    badge.appendChild(el('span', { class: 'lbl' }, slot.room));
+    return badge;
+  }
+
   function renderBreak(slot) {
     return el('article', { class: 'programme-slot is-break' },
-      el('span', { class: 'programme-break-title' }, slot.title || 'Break'),
+      el('span', { class: 'programme-break-title' }, slot.title || 'Pause'),
+      roomBadge(slot),
     );
   }
 
@@ -624,6 +655,7 @@
       slot.title ? el('h4', { class: 'programme-slot-title' },
         slot.url ? el('a', { href: slot.url, target: '_blank', rel: 'noopener' }, slot.title) : slot.title,
       ) : null,
+      roomBadge(slot),
       slot.speakers && slot.speakers.length ? renderPeople(slot.speakers, t.speakers) : null,
       slot.abstract ? el('p', { class: 'programme-slot-abstract' }, slot.abstract) : null,
     );
@@ -680,7 +712,8 @@
       badge.appendChild(el('span', { class: 'lbl' }, t.livestream));
       head.appendChild(badge);
     }
-    if (slot.room) head.appendChild(el('span', { class: 'programme-slot-room' }, slot.room));
+    const room = roomBadge(slot);
+    if (room) head.appendChild(room);
 
     const titleNode = el('h4', { class: 'programme-slot-title' },
       slot.url ? el('a', { href: slot.url, target: '_blank', rel: 'noopener' }, slot.title || '(untitled session)')
