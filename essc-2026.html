@@ -1029,7 +1029,27 @@
     card.appendChild(inner);
 
     const footer = el('div', { class: 'essc-member-card-footer' });
-    footer.appendChild(el('a', { class: 'essc-member-card-cta', href: peopleUrl + '#' + member.id }, t.viewFullProfile));
+    const ctaHref = peopleUrl + '#' + member.id;
+    const cta = el('a', { class: 'essc-member-card-cta', href: ctaHref }, t.viewFullProfile);
+    // Safari 17.x has a bug where clicks on an <a href> inside an
+    // open `popover="auto"` element fire the click event but the
+    // default navigation gets silently swallowed by the top-layer
+    // machinery — the visitor ends up still on /essc-2026.html with
+    // no error. Workaround: intercept the click, close the popover
+    // ourselves, then navigate via window.location.assign on the
+    // next tick so the popover-close paint settles before nav.
+    // Cmd/Ctrl/middle-click pass through to native behaviour so
+    // "open in new tab" still works.
+    cta.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      e.preventDefault();
+      if (cardEl && cardEl.matches(':popover-open')) cardEl.hidePopover();
+      // Defer one tick so Safari can settle the popover-close before
+      // assigning location.href; without the defer the nav can be
+      // rolled back by the still-in-flight top-layer teardown.
+      setTimeout(() => { window.location.assign(ctaHref); }, 0);
+    });
+    footer.appendChild(cta);
     card.appendChild(footer);
   }
 
