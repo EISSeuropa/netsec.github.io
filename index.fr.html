@@ -222,7 +222,10 @@
       </div>
       <div class="ue-cta">
         <a class="btn btn-primary ue-primary" href="#"></a>
-        <a class="btn btn-ghost ue-secondary" href="webcal://netsec-cost.eu/calendar.ics" rel="alternate" type="text/calendar">Ajouter au calendrier</a>
+        <a class="btn btn-ghost ue-secondary" href="webcal://netsec-cost.eu/calendar.ics" rel="alternate" type="text/calendar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>
+          <span class="lbl">Ajouter au calendrier</span>
+        </a>
       </div>
     </article>
   </div>
@@ -865,7 +868,9 @@ document.addEventListener('DOMContentLoaded', function () {
     url = url.replace(/\.html(?:[#?]|$)/, m => '.' + lang + m);
   }
   primary.href = url;
-  secondary.textContent = L.add_cal;
+  // Only swap the label span; the leading <svg> icon stays put.
+  const secondaryLbl = secondary.querySelector('.lbl');
+  if (secondaryLbl) secondaryLbl.textContent = L.add_cal;
 
   // Reveal.
   section.hidden = false;
