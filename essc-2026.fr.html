@@ -801,7 +801,7 @@
     }
     cardEl = el('div', {
       id: 'essc-member-card',
-      class: 'member-card',
+      class: 'essc-member-card',
       popover: 'auto',
       role: 'dialog',
       'aria-labelledby': 'essc-member-card-name',
@@ -820,6 +820,16 @@
         cancelHideMemberCard();
       }
     });
+    // The card is position:fixed, so it stays put while the page
+    // scrolls — meanwhile the anchor scrolls away underneath. Hide
+    // on any window scroll so the card never floats over an unrelated
+    // session card. Passive listener; we don't preventDefault.
+    window.addEventListener('scroll', () => {
+      if (cardEl && cardEl.matches(':popover-open')) {
+        cancelHideMemberCard();
+        cardEl.hidePopover();
+      }
+    }, { passive: true });
     document.body.appendChild(cardEl);
     return cardEl;
   }
@@ -900,7 +910,7 @@
   }
 
   function contactIconLink(kind, href, label) {
-    const a = el('a', { class: 'member-card-contact', href, 'aria-label': label, title: label });
+    const a = el('a', { class: 'essc-member-card-contact', href, 'aria-label': label, title: label });
     if (kind === 'orcid') a.classList.add('is-orcid');
     if (href.startsWith('http')) { a.target = '_blank'; a.rel = 'noopener'; }
     const glyph = CONTACT_GLYPHS[kind];
@@ -924,22 +934,22 @@
 
   function populateMemberCard(card, member) {
     card.innerHTML = '';
-    const inner = el('div', { class: 'member-card-inner' });
+    const inner = el('div', { class: 'essc-member-card-inner' });
     if (member.photo) {
       inner.appendChild(el('img', {
-        class: 'member-card-photo',
+        class: 'essc-member-card-photo',
         src: member.photo,
         alt: '',
         loading: 'lazy',
         decoding: 'async',
       }));
     } else {
-      inner.appendChild(el('div', { class: 'member-card-photo member-card-photo-placeholder', 'aria-hidden': 'true' }));
+      inner.appendChild(el('div', { class: 'essc-member-card-photo essc-member-card-photo-placeholder', 'aria-hidden': 'true' }));
     }
-    const text = el('div', { class: 'member-card-text' });
-    text.appendChild(el('p', { class: 'member-card-name', id: 'essc-member-card-name' }, member.name || ''));
-    if (member.position)    text.appendChild(el('p', { class: 'member-card-role' }, member.position));
-    if (member.affiliation) text.appendChild(el('p', { class: 'member-card-aff' },  member.affiliation));
+    const text = el('div', { class: 'essc-member-card-text' });
+    text.appendChild(el('p', { class: 'essc-member-card-name', id: 'essc-member-card-name' }, member.name || ''));
+    if (member.position)    text.appendChild(el('p', { class: 'essc-member-card-role' }, member.position));
+    if (member.affiliation) text.appendChild(el('p', { class: 'essc-member-card-aff' },  member.affiliation));
 
     // Roles + WG badges. Roles come straight from bios.json strings
     // ("Action Chair", "WG1 Leader", "MC Member", ...). WG numbers
@@ -958,17 +968,17 @@
       badges.push({ text: `${t.wgPrefix}${n}`, kind: 'wg' });
     }
     if (badges.length) {
-      const bRow = el('div', { class: 'member-card-badges' });
+      const bRow = el('div', { class: 'essc-member-card-badges' });
       for (const b of badges) {
         bRow.appendChild(el('span', {
-          class: 'member-card-badge' + (b.kind === 'wg' ? ' is-wg' : ''),
+          class: 'essc-member-card-badge' + (b.kind === 'wg' ? ' is-wg' : ''),
         }, b.text));
       }
       text.appendChild(bRow);
     }
 
     if (member.country) {
-      const c = el('p', { class: 'member-card-country' });
+      const c = el('p', { class: 'essc-member-card-country' });
       if (member.country_code) {
         c.appendChild(el('img', {
           src: `https://flagcdn.com/h20/${member.country_code}.png`,
@@ -979,7 +989,7 @@
       text.appendChild(c);
     }
     if (member.bio) {
-      text.appendChild(el('p', { class: 'member-card-bio' }, member.bio));
+      text.appendChild(el('p', { class: 'essc-member-card-bio' }, member.bio));
     }
 
     // Social-link icons. Order mirrors people.html: email, website,
@@ -997,7 +1007,7 @@
       member.mastodon  && ['mastodon', member.mastodon,          t.iconMastodon],
     ].filter(Boolean);
     if (contacts.length) {
-      const row = el('div', { class: 'member-card-contacts' });
+      const row = el('div', { class: 'essc-member-card-contacts' });
       for (const [kind, href, label] of contacts) row.appendChild(contactIconLink(kind, href, label));
       text.appendChild(row);
     }
@@ -1005,8 +1015,8 @@
     inner.appendChild(text);
     card.appendChild(inner);
 
-    const footer = el('div', { class: 'member-card-footer' });
-    footer.appendChild(el('a', { class: 'member-card-cta', href: peopleUrl + '#' + member.id }, t.viewFullProfile));
+    const footer = el('div', { class: 'essc-member-card-footer' });
+    footer.appendChild(el('a', { class: 'essc-member-card-cta', href: peopleUrl + '#' + member.id }, t.viewFullProfile));
     card.appendChild(footer);
   }
 
