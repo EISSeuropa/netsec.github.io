@@ -354,12 +354,21 @@ def extract_programme(timetable_results: dict, event_id: str) -> dict:
                     display_title = display_title[len(prefix):].strip()
                     break
 
+            # `inheritRoom` / `inheritLoc` come straight from Indico
+            # and let the renderer tell apart "this slot was given an
+            # explicit room" from "this slot fell back to the event
+            # default". Coffee breaks and lunches can carry distinct
+            # locations too, so both flags surface for every slot
+            # type, not just sessions.
             base = {
                 "id": str(slot.get("id", slot_id)),
                 "title": display_title,
                 "startTime": (start.get("time") or "")[:5],
                 "endTime": (end.get("time") or "")[:5],
                 "room": slot.get("room") or "",
+                "location": slot.get("location") or "",
+                "inheritRoom": bool(slot.get("inheritRoom", True)),
+                "inheritLoc": bool(slot.get("inheritLoc", True)),
                 "url": _absolutize_indico_url(slot.get("url") or ""),
             }
 
