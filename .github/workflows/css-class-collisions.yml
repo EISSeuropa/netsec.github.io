@@ -1,0 +1,53 @@
+# CSS class-name collision lint.
+#
+# Runs scripts/check-css-class-collisions.py on every PR that touches
+# assets/css/site.css. The script flags two patterns:
+#
+#   1. A class declared as the sole-compound selector of two or more
+#      rule blocks separated by >200 source lines (heuristic for
+#      "different feature areas" — related rules cluster).
+#   2. A BEM-style child .foo-bar declared >200 lines from the nearest
+#      .foo declaration, where .foo already exists (suspect collision).
+#
+# Backstory (May 2026): we accidentally re-used `.member-card` — the
+# directory's main card class on /people.html — as the container
+# class for a new popover on the ESSC programme page. Two unrelated
+# rule blocks ~1500 lines apart, both styling `.member-card`. The
+# second silently overwrote parts of the first and broke /people.html.
+# This lint catches that pattern before merge.
+#
+# When this fails: read the script's output for the colliding class
+# name and line ranges. Rename one feature's class to disambiguate.
+# For known-safe false positives (theme switchers, cross-cutting
+# helpers), add a `/* css-collision-allow: .my-class */` comment on
+# the line immediately above the offending rule.
+#
+# Zero cost: no third-party services, no API keys.
+name: css class-collisions
+
+on:
+  pull_request:
+    paths:
+      - 'assets/css/site.css'
+      - 'scripts/check-css-class-collisions.py'
+      - '.github/workflows/css-class-collisions.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint CSS for class-name collisions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run CSS class-collision lint
+        run: python3 scripts/check-css-class-collisions.py

@@ -1672,6 +1672,7 @@ form button:disabled{opacity:.65;cursor:wait}
    `pointer-events: none` so the chevron never absorbs the click —
    the whole card is the hit target (delegated handler in
    people.html). */
+/* css-collision-allow: .member-card */
 .member-card{position:relative}
 .member-toggle-chevron{display:none}
 .members-grid.is-compact .member-toggle-chevron{
@@ -3082,6 +3083,7 @@ body.search-open{overflow:hidden}
    .programme-live-dot so visitors read the page-level "Live
    programme" cue and the per-session "this one is livestreamed"
    cue as the same colour family. */
+/* css-collision-allow: .programme-slot-livestream */
 .programme-slot-livestream{
   display:inline-flex;
   align-items:center;
