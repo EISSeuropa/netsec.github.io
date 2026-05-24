@@ -42,9 +42,15 @@ if [[ "${1-}" == "--shots" ]]; then
   for page in home:index.html about:about.html essc-2026:essc-2026.html network:people.html grants:grants.html; do
     label="${page%%:*}"
     path="${page#*:}"
+    # Window height bumped from 1600 to 3200 so the IntersectionObserver-
+    # gated reveal-on-scroll sections on the home page are inside the
+    # viewport at first paint; otherwise the screenshot captures the
+    # hero but everything below stays hidden with opacity 0. The
+    # virtual-time budget also goes up so the reveal transition has
+    # room to complete inside the synthetic clock.
     "$CHROME" --headless --no-sandbox --disable-gpu \
-      --window-size=1280,1600 --hide-scrollbars \
-      --virtual-time-budget=5000 \
+      --window-size=1280,3200 --hide-scrollbars \
+      --virtual-time-budget=12000 \
       --screenshot="$HERE/snap-$label.png" \
       "http://127.0.0.1:$PORT/$path" 2>/dev/null
     echo "   $HERE/snap-$label.png"

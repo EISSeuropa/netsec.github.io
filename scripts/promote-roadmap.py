@@ -42,11 +42,26 @@ Exit codes:
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+
+# Card-body staleness check (option 1, git-blame age). At release
+# time, after the script has flipped the status pill, run `git blame`
+# on the planned card's <p> prose and report how long ago it was
+# last touched. If the age exceeds this threshold, print a warning
+# so the maintainer remembers to refresh the body before tag + GH
+# Release land. 30 days is a balance between false-positives (cards
+# polished a month before release look fresh by blame but might
+# still describe wrong scope) and missing genuinely-stale bodies.
+# The check is best-effort: subprocess failures, missing git history,
+# or unparseable blame output silently skip the warning rather than
+# blocking release.sh.
+CARD_BODY_AGE_THRESHOLD_DAYS = 30
 
 # Per-locale strings. Keep the keys aligned across locales: anywhere
 # the script needs a localised label, this is the single source of
@@ -301,6 +316,125 @@ def bump_updated_stamp(
     return new_html, n > 0 and new_html != html
 
 
+def find_planned_card_lines(
+    html: str, version: str,
+) -> tuple[int, int] | None:
+    """Locate the planned card's prose body in `html` and return its
+    (start_line, end_line) 1-indexed range, or None if no planned card
+    for this version exists. The range covers the <p> inside the
+    <article>, not the wrapper <li>, since the body is what we're
+    checking for staleness. Lines are 1-based to match git's
+    `-L start,end` convention."""
+    # Match the planned card by version, then narrow to its <p>.
+    card_re = re.compile(
+        r'<li class="rm-entry planned"(?:\s+rm-milestone)?>'
+        r'.*?<span class="when">[^<]*\bv'
+        + re.escape(version)
+        + r'\b.*?</li>',
+        flags=re.DOTALL,
+    )
+    m = card_re.search(html)
+    if not m:
+        return None
+    block = m.group(0)
+    block_start_offset = m.start()
+    # Find the <p>...</p> inside the card. There's typically one
+    # body paragraph; if multiple, use the first (the description).
+    p_re = re.compile(r'<p>.*?</p>', flags=re.DOTALL)
+    p_match = p_re.search(block)
+    if not p_match:
+        return None
+    p_start_offset = block_start_offset + p_match.start()
+    p_end_offset = block_start_offset + p_match.end()
+    start_line = html[:p_start_offset].count("\n") + 1
+    end_line = html[:p_end_offset].count("\n") + 1
+    return (start_line, end_line)
+
+
+def git_blame_max_age_days(
+    file_path: Path, start_line: int, end_line: int,
+) -> int | None:
+    """Run `git blame` on the line range and return how many days
+    have passed since the most recent commit that touched any line
+    in the range. Returns None on any subprocess error or unparseable
+    output. Best-effort by design: a missing git history shouldn't
+    abort the release."""
+    try:
+        result = subprocess.run(
+            ["git", "blame", "--porcelain",
+             "-L", f"{start_line},{end_line}",
+             "--", str(file_path)],
+            capture_output=True, text=True, cwd=ROOT,
+            check=True, timeout=10,
+        )
+    except (subprocess.CalledProcessError,
+            subprocess.TimeoutExpired,
+            FileNotFoundError):
+        return None
+    # Porcelain output: each commit block contains a
+    # "committer-time <unix-timestamp>" header line for each
+    # blamed line. We want the newest (largest) timestamp.
+    timestamps: list[int] = []
+    for line in result.stdout.splitlines():
+        if line.startswith("committer-time "):
+            try:
+                timestamps.append(int(line.split()[1]))
+            except (ValueError, IndexError):
+                continue
+    if not timestamps:
+        return None
+    newest = max(timestamps)
+    age_seconds = time.time() - newest
+    return int(age_seconds // 86400)
+
+
+def maybe_warn_stale_card_body(
+    file_path: Path, html: str, version: str, lang: str,
+) -> None:
+    """Print a warning if the planned card's body looks stale.
+    Called AFTER promotion succeeds. Best-effort: silently no-ops
+    on any signal we can't interpret (missing card, blame failure,
+    threshold not met). The expensive consequence is letting a
+    stale card body ship with a release; the cheap one is occasional
+    false positives."""
+    line_range = find_planned_card_lines(html, version)
+    if line_range is None:
+        # No planned card found in the post-promotion HTML — expected,
+        # since the promotion just flipped it to "shipped". Re-search
+        # for the shipped card to get its line range instead.
+        shipped_re = re.compile(
+            r'<li class="rm-entry shipped"(?:\s+rm-milestone)?>'
+            r'.*?<span class="when">[^<]*\bv'
+            + re.escape(version)
+            + r'\b.*?</li>',
+            flags=re.DOTALL,
+        )
+        m = shipped_re.search(html)
+        if not m:
+            return
+        block = m.group(0)
+        block_start_offset = m.start()
+        p_match = re.search(r'<p>.*?</p>', block, flags=re.DOTALL)
+        if not p_match:
+            return
+        line_range = (
+            html[:block_start_offset + p_match.start()].count("\n") + 1,
+            html[:block_start_offset + p_match.end()].count("\n") + 1,
+        )
+    age = git_blame_max_age_days(file_path, *line_range)
+    if age is None or age < CARD_BODY_AGE_THRESHOLD_DAYS:
+        return
+    print(
+        f"  ⚠ {lang}: card body for v{version} was last touched "
+        f"{age} days ago (threshold {CARD_BODY_AGE_THRESHOLD_DAYS}). "
+        f"That's probably the planned scope from when the card was "
+        f"written, not what actually shipped. Review {file_path.name} "
+        f"lines {line_range[0]}–{line_range[1]} and edit the body "
+        f"in a follow-up commit on this release branch before the "
+        f"tag + GH Release land."
+    )
+
+
 def main() -> None:
     version, iso_date, dry_run = parse_args(sys.argv)
 
@@ -353,6 +487,13 @@ def main() -> None:
         else:
             path.write_text(updated, encoding="utf-8")
             print(f"  · {lang}: {' + '.join(past_bits)}.")
+            # Staleness check on the just-promoted card body.
+            # `updated` is the post-promotion HTML, so the card is
+            # now `class="rm-entry shipped"`; the helper handles both
+            # planned + shipped lookups. Best-effort: silently no-ops
+            # on any subprocess error.
+            if promoted:
+                maybe_warn_stale_card_body(path, updated, version, lang)
 
     # Soft warning: if nothing happened AND no locale was already at
     # the desired state, the maintainer probably forgot to add a
