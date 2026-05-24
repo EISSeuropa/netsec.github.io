@@ -389,6 +389,24 @@ different cadence for staying current.
    keeps it deliberately shallow (no comprehensive read-through;
    spot-check only).
 
+#### Automation note: `docs/roadmap-2026.md` autostamp
+
+`.github/workflows/sync-roadmap.yml` keeps the AUTOSTAMP block
+near the top of `docs/roadmap-2026.md` in sync with `CHANGELOG.md`'s
+`[Unreleased]` section. It counts the bullets per category,
+records the freshness date, and anchors against the most recent
+SemVer tag. Triggers on every push to `main` that touches
+`CHANGELOG.md` (plus weekly Monday 06:00 UTC + manual dispatch),
+opens an auto-PR on `roadmap-sync/auto` with auto-merge armed.
+
+So the maintainer never has to manually refresh the count or
+freshness stamp; that's handled. **What the automation does NOT
+do**: rewrite the prose timeline rows. When the count visibly
+diverges from what the prose says is in flight, the maintainer
+resynthesises by hand (which is also a §5 cross-check item at
+release time). The autostamp is the staleness alarm; humans
+write the synthesis.
+
 **Why per-release instead of every N PRs.** Threshold options
 considered: (a) at every release; (b) every N user-visible PRs
 (N=5 was the candidate); (c) every M days (M=14). Option (a)
