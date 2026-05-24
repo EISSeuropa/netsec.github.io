@@ -273,6 +273,126 @@ def test_download_photo_idempotent_on_unchanged_upstream() -> None:
             dest_jpg.unlink()
 
 
+def test_substance_check_catches_photo_only_change() -> None:
+    """Regression: the "no substantive changes" guard in main()
+    compares `merged != old_members`. A respondent submitting a fresh
+    form to update only their photo (the documented workaround for
+    the Google Forms file-upload-edit bug, see #183) leaves every
+    text field identical to the prior submission. The ONLY thing
+    distinguishing the new state from the old is the photo bytes,
+    captured as `photo_source_sha256` on the member dict.
+
+    This test pins down the contract: when sha256 changes, the
+    merge output differs from the prior, so the guard correctly
+    triggers a PR. When sha256 is unchanged (respondent re-uploaded
+    the same bytes), the merge output equals the prior and the
+    guard correctly no-ops. A legacy bio without a stored sha256
+    still triggers a PR on the next form submission, because the
+    sha256 field appears for the first time.
+    """
+    print("\nmerge(): substance guard, photo-only resubmissions:")
+
+    def _strip_internal(members: list[dict]) -> list[dict]:
+        """Mirror what main() does before comparing. Internal `_`
+        prefixed fields are stripped from `merged` by the post-loop
+        in merge() but not from `prior` (the prior comes straight off
+        bios.json which never carried them). For an apples-to-apples
+        comparison the test must compare against the prior in the
+        same shape."""
+        return [{k: v for k, v in m.items() if not k.startswith("_")} for m in members]
+
+    base_prior = {
+        "id": "alex-petrova",
+        "name": "Dr Alexandra Petrova",
+        "country": "Germany",
+        "country_code": "de",
+        "roles": ["WG1 Co-Leader"],
+        "wgs": [1],
+        "wg_leadership": {"co_lead": [1]},
+        "affiliation": "TU Berlin",
+        "position": "Postdoc",
+        "bio": "Researches X.",
+        "keywords": ["cybersecurity"],
+        "email": "alex@tu-berlin.de",
+        "website": "",
+        "orcid": "0000-0001-2345-6789",
+        "linkedin": "https://linkedin.com/in/alex",
+        "twitter": "",
+        "bluesky": "",
+        "mastodon": "",
+        "photo": "data/photos/alex-petrova.jpg",
+        "source": "form",
+    }
+
+    # Scenario 1: sparse resubmission, new photo bytes (new sha256),
+    # all text fields identical to prior. Guard MUST trigger.
+    prior1 = [{**base_prior, "photo_source_sha256": "OLDhash" + "0" * 57}]
+    form_sparse_new_photo = [{
+        "id": "alex-petrova",
+        "name": "Dr Alexandra Petrova",
+        "country": "Germany",
+        "country_code": "",
+        "affiliation": "TU Berlin",
+        "position": "Postdoc",
+        "roles": [],
+        "wgs": [],
+        "wg_leadership": {},
+        "bio": "Researches X.",
+        "keywords": [],
+        "email": "",
+        "website": "",
+        "orcid": "",
+        "linkedin": "",
+        "twitter": "",
+        "bluesky": "",
+        "mastodon": "",
+        "photo": "data/photos/alex-petrova.jpg",
+        "photo_source_sha256": "NEWhash" + "1" * 57,
+        "source": "form",
+        "_email_key": "alex@tu-berlin.de",
+        "_timestamp": "2026-05-25 10:00:00",
+    }]
+    merged1 = merge(prior1, form_sparse_new_photo)
+    expect("photo-only change → merged differs from prior",
+           merged1 != _strip_internal(prior1), True)
+    expect("photo-only change → new sha replaces old",
+           merged1[0]["photo_source_sha256"], "NEWhash" + "1" * 57)
+    # Sparse resubmission must NOT wipe optional fields the respondent
+    # left blank in the new form. (Already covered by truthy-merge logic
+    # in merge() but worth pinning here since the photo workaround makes
+    # this guarantee user-visible.)
+    expect("sparse: LinkedIn survives",
+           merged1[0]["linkedin"], "https://linkedin.com/in/alex")
+    expect("sparse: ORCID survives",
+           merged1[0]["orcid"], "0000-0001-2345-6789")
+    expect("sparse: keywords survive",
+           merged1[0]["keywords"], ["cybersecurity"])
+    expect("sparse: role survives",
+           merged1[0]["roles"], ["WG1 Co-Leader"])
+
+    # Scenario 2: respondent re-uploaded byte-identical photo (same
+    # sha256). Nothing genuinely changed. Guard MUST no-op.
+    prior2 = [{**base_prior, "photo_source_sha256": "SAMEhash" + "0" * 56}]
+    form_same_photo = [{**form_sparse_new_photo[0],
+                        "photo_source_sha256": "SAMEhash" + "0" * 56}]
+    merged2 = merge(prior2, form_same_photo)
+    expect("identical photo → merged equals prior",
+           merged2 == _strip_internal(prior2), True)
+
+    # Scenario 3: legacy bio without a stored sha256 (e.g. a member
+    # that pre-dates the photo_source_sha256 field). The first new
+    # submission populates the field, which itself is a substance
+    # change that triggers a one-time migration PR. Acceptable.
+    prior3_legacy = {k: v for k, v in base_prior.items()}
+    # explicitly no photo_source_sha256 on the prior
+    prior3 = [prior3_legacy]
+    merged3 = merge(prior3, form_sparse_new_photo)
+    expect("legacy bio + new sha → merged differs from prior",
+           merged3 != _strip_internal(prior3), True)
+    expect("legacy bio + new sha → sha now stored",
+           "photo_source_sha256" in merged3[0], True)
+
+
 def main() -> None:
     test_name_key()
     test_country_key()
@@ -281,6 +401,7 @@ def main() -> None:
     test_merge_name_match_different_country_does_not_collapse()
     test_merge_name_match_same_country_collapses()
     test_download_photo_idempotent_on_unchanged_upstream()
+    test_substance_check_catches_photo_only_change()
     print("\nAll tests passed.")
 
 
