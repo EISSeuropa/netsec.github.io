@@ -550,44 +550,27 @@
       .split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('');
   }
 
-  // Curated acronyms that should keep their canonical capitalisation
-  // through the sentence-case normaliser below. Lowercased key →
-  // preferred display form. Maintainer can extend this list when a
-  // new acronym appears in submissions and goes through the
-  // mid-keyword "Eu-nato" treatment. Phase 2 of the keyword work
-  // (issue #175) will move this into `data/keyword-aliases.json` so
-  // the same list lives in one place and the sync script handles
-  // it; for now it's inline at the render layer.
-  const KEYWORD_ACRONYMS = {
+  // Fallback normaliser. Used only when a bio lacks the sync-emitted
+  // `canonical_keywords` field (an old bios.json, a hand-edited
+  // record, or a transition period). For any normal sync, the Python
+  // sync script (`scripts/sync-bios.py` + `data/keyword-aliases.json`)
+  // produces fully canonicalised keywords already; the renderer just
+  // reads them. A short acronym list stays inline so the fallback
+  // path doesn't render "Eu-nato relations" on first paint while the
+  // upgrade rolls through.
+  const KEYWORD_ACRONYMS_FALLBACK = {
     'un':'UN','eu':'EU','nato':'NATO','uk':'UK','us':'US','usa':'USA',
-    'undp':'UNDP','eeas':'EEAS','osce':'OSCE','asean':'ASEAN','oecd':'OECD',
-    'imf':'IMF','wto':'WTO','who':'WHO','unhcr':'UNHCR','unesco':'UNESCO',
-    'icc':'ICC','icj':'ICJ','iaea':'IAEA','ipcc':'IPCC','ebrd':'EBRD',
-    'ecb':'ECB','eib':'EIB','cfsp':'CFSP','csdp':'CSDP','pesco':'PESCO',
-    'esdp':'ESDP','eda':'EDA','edf':'EDF','sco':'SCO','csto':'CSTO',
-    'brics':'BRICS','mena':'MENA','ai':'AI','ml':'ML','nlp':'NLP',
-    'iot':'IoT','gdpr':'GDPR','ict':'ICT','nato-eu':'NATO-EU',
-    'r&d':'R&D','npt':'NPT','wmd':'WMD','cbrn':'CBRN','r2p':'R2P',
-    'g7':'G7','g20':'G20',
+    'ai':'AI','iot':'IoT','gdpr':'GDPR','r&d':'R&D',
   };
-
-  // Sentence-case a keyword while preserving recognised acronyms.
-  // The naive prior `s[0].toUpperCase() + s.slice(1).toLowerCase()`
-  // mangled compound forms like "EU-NATO" into "Eu-nato". The
-  // matcher below walks each letter-run in the string, checks its
-  // lowercase form against KEYWORD_ACRONYMS, emits the canonical
-  // acronym when matched, otherwise sentence-cases (first word
-  // gets a capital, rest lowercase). Separators (-, /, &, etc.) are
-  // preserved as-is via the regex split.
   function normaliseKeywordDisplay(raw) {
     const trimmed = String(raw || '').trim();
     if (!trimmed) return '';
     let firstAlpha = true;
     return trimmed.replace(/[\p{L}&]+/gu, (word) => {
       const lower = word.toLowerCase();
-      if (KEYWORD_ACRONYMS[lower]) {
+      if (KEYWORD_ACRONYMS_FALLBACK[lower]) {
         firstAlpha = false;
-        return KEYWORD_ACRONYMS[lower];
+        return KEYWORD_ACRONYMS_FALLBACK[lower];
       }
       if (firstAlpha) {
         firstAlpha = false;
@@ -631,7 +614,7 @@
         if ((m.country || '') !== activeCountry) return false;
       }
       if (q) {
-        const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' ')].join(' ').toLowerCase();
+        const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -734,21 +717,23 @@
         bio.classList.add('is-pending');
         bio.textContent = window.netsecT('Bio coming soon.');
       }
-      // Research-interest keywords. Detailed view only (.is-detailed
-      // CSS hides the block in compact mode so the dense card stays
-      // readable). Display form is normalised to sentence case so
-      // submissions like "International Security" and "international
-      // security" collapse to one rendered pill style; the raw form
-      // is preserved in m.keywords for the directory search vector
-      // (line 586 already includes m.keywords). When the proper
-      // canonical-form alias map ships (Phase 2, issue TBD) the
-      // normalisation moves into the sync script.
+      // Research-interest keywords. Detailed view only (CSS hides
+      // the block in compact mode so the dense card stays readable).
+      // Prefer `canonical_keywords` produced by the Python sync —
+      // those are already resolved through `data/keyword-aliases.json`
+      // (aliases) + the acronym word-walk. Falls back to the raw
+      // `keywords` list and a tiny inline normaliser when the field
+      // is missing (older bios.json, hand-edited record). The raw
+      // `keywords` list also still feeds the directory search vector
+      // (see line ~586).
       const kwWrap = node.querySelector('.member-keywords');
-      const kws = Array.isArray(m.keywords) ? m.keywords.filter(Boolean) : [];
+      const canonical = Array.isArray(m.canonical_keywords) ? m.canonical_keywords.filter(Boolean) : null;
+      const kws = canonical && canonical.length
+        ? canonical
+        : (Array.isArray(m.keywords) ? m.keywords.filter(Boolean).map(normaliseKeywordDisplay) : []);
       if (kws.length) {
         const seen = new Set();
-        kws.forEach(raw => {
-          const display = normaliseKeywordDisplay(raw);
+        kws.forEach(display => {
           if (!display) return;
           const dedupKey = display.toLowerCase();
           if (seen.has(dedupKey)) return;

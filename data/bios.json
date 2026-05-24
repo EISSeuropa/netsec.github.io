@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-05-22T18:43:14+00:00",
+  "generated_at": "2026-05-24T14:50:19+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-05-22T18:43:14+00:00"
+    "last_synced": "2026-05-24T14:50:19+00:00"
   },
   "members": [
     {
@@ -44,7 +44,13 @@
       "mastodon": "",
       "photo": "assets/images/people/moritz-weiss.jpg",
       "source": "form",
-      "photo_source_sha256": "7cbdfd936f99eeb8fb14a18219594942869d7261281cf9371bf0735347c900b2"
+      "photo_source_sha256": "7cbdfd936f99eeb8fb14a18219594942869d7261281cf9371bf0735347c900b2",
+      "canonical_keywords": [
+        "Digital governance",
+        "International security",
+        "Political economy",
+        "Power"
+      ]
     },
     {
       "id": "marie-robin",
@@ -103,7 +109,12 @@
       "mastodon": "",
       "photo": "assets/images/people/eugenio-sanchez.jpg",
       "source": "form",
-      "photo_source_sha256": "346be37395701ade22f6dbbd5ebe5e808890808662e65e888cf15b92dc7b0f1b"
+      "photo_source_sha256": "346be37395701ade22f6dbbd5ebe5e808890808662e65e888cf15b92dc7b0f1b",
+      "canonical_keywords": [
+        "Economic security",
+        "Economic statecraft",
+        "Industrial policy"
+      ]
     },
     {
       "id": "eliza-gheorghe",
@@ -190,7 +201,13 @@
       "mastodon": "",
       "photo": "assets/images/people/john-helferich.jpg",
       "source": "form",
-      "photo_source_sha256": "9edb78d985955231ba40d36fd16267b5c86d30c2257ad60d98b3eea6e416850f"
+      "photo_source_sha256": "9edb78d985955231ba40d36fd16267b5c86d30c2257ad60d98b3eea6e416850f",
+      "canonical_keywords": [
+        "EU–NATO relations",
+        "Foreign policy analysis",
+        "Political psychology",
+        "Research methods"
+      ]
     },
     {
       "id": "chiara-ruffa",
@@ -378,7 +395,7 @@
       "name": "Dr Arthur Laudrain",
       "country": "Switzerland",
       "country_code": "ch",
-      "affiliation": "Center for Security Studies - ETH Zurich",
+      "affiliation": "ETH Zurich - Center for Security Studies",
       "position": "Team Lead & Senior Researcher, Cyber Security",
       "roles": [
         "MC member · Switzerland"
@@ -403,7 +420,70 @@
       "mastodon": "",
       "photo": "assets/images/people/arthur-laudrain.jpg",
       "source": "form",
-      "photo_source_sha256": "d6927b276ccffbbb2bc5bccf38502563a079862a500fbde9e79941f4851cae6a"
+      "photo_source_sha256": "d6927b276ccffbbb2bc5bccf38502563a079862a500fbde9e79941f4851cae6a",
+      "canonical_keywords": [
+        "Disinformation",
+        "Election interference",
+        "Subversion"
+      ]
+    }
+  ],
+  "keyword_aggregate": [
+    {
+      "keyword": "Digital governance",
+      "count": 1
+    },
+    {
+      "keyword": "Disinformation",
+      "count": 1
+    },
+    {
+      "keyword": "Economic security",
+      "count": 1
+    },
+    {
+      "keyword": "Economic statecraft",
+      "count": 1
+    },
+    {
+      "keyword": "Election interference",
+      "count": 1
+    },
+    {
+      "keyword": "EU–NATO relations",
+      "count": 1
+    },
+    {
+      "keyword": "Foreign policy analysis",
+      "count": 1
+    },
+    {
+      "keyword": "Industrial policy",
+      "count": 1
+    },
+    {
+      "keyword": "International security",
+      "count": 1
+    },
+    {
+      "keyword": "Political economy",
+      "count": 1
+    },
+    {
+      "keyword": "Political psychology",
+      "count": 1
+    },
+    {
+      "keyword": "Power",
+      "count": 1
+    },
+    {
+      "keyword": "Research methods",
+      "count": 1
+    },
+    {
+      "keyword": "Subversion",
+      "count": 1
     }
   ]
 }
