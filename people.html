@@ -229,6 +229,23 @@
       <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Jump to the join form" aria-label="Jump to the join form">+</button>
     </div>
 
+    <!-- Research-interest filter chips. Populated from
+         `bios.json#keyword_aggregate` (sorted by use count). Top 8
+         visible by default; "Show all" expands to the full list.
+         Multi-select with OR semantics. State persists in the URL
+         hash (`#keywords=a-slug,another-slug`) so it's bookmarkable
+         and chip-on-card clicks (member-keyword-chip in detailed
+         view) can deep-link visitors here. Hidden when no keywords
+         exist at all. -->
+    <div class="members-keyword-filter" id="members-keyword-filter" role="group" aria-label="Filter by research interest" hidden>
+      <div class="members-keyword-filter-head">
+        <span class="members-keyword-filter-label">Research interests</span>
+        <button type="button" class="members-keyword-filter-clear" id="members-keyword-filter-clear" hidden>Clear</button>
+      </div>
+      <div class="members-keyword-filter-chips" id="members-keyword-filter-chips"></div>
+      <button type="button" class="members-keyword-filter-toggle" id="members-keyword-filter-toggle" aria-expanded="false" hidden>Show all</button>
+    </div>
+
     <p class="members-count" id="members-count" aria-live="polite"></p>
 
     <div id="members-empty" hidden class="members-empty glass">
@@ -540,9 +557,35 @@
   //                          these as "MC member · <Country>")
   let activeWG = 'all';
   let activeCountry = 'all';
+  // Research-interest filter: a Set of canonical-keyword *slugs*
+  // (lowercase, non-word → hyphen). Kept as slugs so URL hash
+  // round-trips are stable and chip-on-card clicks resolve cleanly.
+  // OR semantics across selected entries (any match keeps the bio).
+  // Empty Set = no keyword filter applied.
+  const activeKeywords = new Set();
+  let KEYWORD_AGGREGATE = []; // [{ keyword: string, count: number }, …]
+  let keywordFilterExpanded = false;
+  const KEYWORD_FILTER_VISIBLE_TOP_N = 8;
 
   function isMC(m) {
     return (m.roles || []).some(r => /^MC member\b/i.test(r));
+  }
+
+  // Slugify a canonical keyword for URL hash use. Lowercase the
+  // string, then replace any run of non-word characters (including
+  // spaces, en-dashes, ampersands) with a single hyphen, and trim
+  // hyphens from the ends. Examples:
+  //   "International security"     → "international-security"
+  //   "EU–NATO relations"          → "eu-nato-relations"
+  //   "R&D"                        → "r-d"
+  // The slug is reversible only via the keyword_aggregate (slug →
+  // canonical lookup), which is fine because the aggregate is
+  // always loaded alongside the filter chips.
+  function keywordSlug(canonical) {
+    return String(canonical || '')
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]+/gu, '-')
+      .replace(/^-+|-+$/g, '');
   }
 
   function initials(name) {
@@ -616,6 +659,18 @@
       if (q) {
         const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
+      }
+      // Keyword filter: OR semantics. A bio passes when at least
+      // one of its canonical keywords (or, as a fallback for
+      // not-yet-resynced data, raw keywords) slugifies to a slug
+      // present in the active set. An empty active set = no
+      // filter applied.
+      if (activeKeywords.size > 0) {
+        const bioSlugs = (m.canonical_keywords && m.canonical_keywords.length
+          ? m.canonical_keywords
+          : (m.keywords || []))
+          .map(keywordSlug);
+        if (!bioSlugs.some(s => activeKeywords.has(s))) return false;
       }
       return true;
     });
@@ -738,9 +793,28 @@
           const dedupKey = display.toLowerCase();
           if (seen.has(dedupKey)) return;
           seen.add(dedupKey);
-          const chip = document.createElement('span');
+          // Render as a button so it's clickable: tapping a chip on a
+          // bio card adds that keyword to the directory filter and
+          // scrolls the visitor up to the filter row so they can see
+          // the result land. Multi-select OR semantics, so clicking a
+          // chip when the same keyword is already active toggles it
+          // off (handled inside toggleKeywordFilter).
+          const chip = document.createElement('button');
+          chip.type = 'button';
           chip.className = 'member-keyword-chip';
           chip.textContent = display;
+          const slug = keywordSlug(display);
+          chip.setAttribute('data-keyword-slug', slug);
+          chip.setAttribute('aria-label',
+            window.netsecT('Filter by research interest') + ': ' + display);
+          chip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleKeywordFilter(slug);
+            const filterRow = document.getElementById('members-keyword-filter');
+            if (filterRow && !filterRow.hidden) {
+              filterRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          });
           kwWrap.appendChild(chip);
         });
         kwWrap.removeAttribute('hidden');
@@ -923,13 +997,170 @@
     });
   }
 
+  // ─────────── Research-interest filter (Phase 3) ───────────
+
+  // Hash schema: `#keywords=slug-one,slug-two`. The slug form is
+  // produced by keywordSlug(). Other consumers of the URL hash on
+  // /people.html (the deep-link-to-member-card path that uses
+  // `#<member-id>`) coexist because slugs always contain a hyphen
+  // and an `=` sign while member-id hashes are bare slugs without
+  // a query-string-style key. We disambiguate by checking for the
+  // `keywords=` prefix.
+  function parseHashKeywords() {
+    activeKeywords.clear();
+    const raw = (location.hash || '').replace(/^#/, '');
+    if (!raw) return;
+    // Try query-string-style first: `keywords=a,b,c` or
+    // `keywords=a,b&other=…`.
+    const params = new URLSearchParams(raw.includes('&') || raw.includes('=') ? raw : '');
+    const csv = params.get('keywords');
+    if (!csv) return;
+    csv.split(',').map(s => s.trim()).filter(Boolean).forEach(s => activeKeywords.add(s));
+  }
+  function writeHashKeywords() {
+    const slugs = Array.from(activeKeywords);
+    const rawHash = (location.hash || '').replace(/^#/, '');
+    // Preserve any non-`keywords=` portion of the hash (e.g. a
+    // member-card deep-link slug stays intact).
+    const hasKeywordsKey = /(^|&)keywords=/.test(rawHash);
+    let rest = '';
+    if (rawHash && hasKeywordsKey) {
+      const params = new URLSearchParams(rawHash);
+      params.delete('keywords');
+      rest = params.toString();
+    } else if (rawHash && !hasKeywordsKey && !rawHash.includes('=')) {
+      // A bare member-id-style hash; keep it as a separate fragment.
+      rest = '';
+    } else if (rawHash) {
+      rest = rawHash;
+    }
+    const parts = [];
+    if (slugs.length) parts.push('keywords=' + slugs.join(','));
+    if (rest) parts.push(rest);
+    const next = parts.join('&');
+    // Use replaceState rather than assigning location.hash so that
+    // the page does not jump to a same-page anchor when the slug
+    // happens to match an element id. When the result is empty, strip
+    // the `#` entirely rather than leaving a bare `#` in the URL bar.
+    if (next) {
+      history.replaceState(null, '', '#' + next);
+    } else {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  }
+
+  // Build / re-build the chip row. Renders top-N by count when
+  // collapsed, full list when expanded. Active state mirrors
+  // `activeKeywords`. Hidden entirely when the aggregate is empty.
+  function renderKeywordFilter() {
+    const root = document.getElementById('members-keyword-filter');
+    const chipsWrap = document.getElementById('members-keyword-filter-chips');
+    const toggleBtn = document.getElementById('members-keyword-filter-toggle');
+    const clearBtn = document.getElementById('members-keyword-filter-clear');
+    if (!root || !chipsWrap) return;
+    if (!KEYWORD_AGGREGATE.length) {
+      root.hidden = true;
+      return;
+    }
+    root.hidden = false;
+    chipsWrap.replaceChildren();
+    const total = KEYWORD_AGGREGATE.length;
+    const limit = keywordFilterExpanded ? total : Math.min(KEYWORD_FILTER_VISIBLE_TOP_N, total);
+    KEYWORD_AGGREGATE.slice(0, limit).forEach(entry => {
+      const slug = keywordSlug(entry.keyword);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'members-keyword-filter-chip';
+      const isActive = activeKeywords.has(slug);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      btn.dataset.slug = slug;
+      btn.dataset.canonical = entry.keyword;
+      const label = document.createElement('span');
+      label.className = 'lbl';
+      label.textContent = entry.keyword;
+      btn.appendChild(label);
+      const count = document.createElement('span');
+      count.className = 'count';
+      count.textContent = entry.count;
+      btn.appendChild(count);
+      btn.addEventListener('click', () => toggleKeywordFilter(slug));
+      chipsWrap.appendChild(btn);
+    });
+    // Show / hide the "show all" toggle.
+    if (total > KEYWORD_FILTER_VISIBLE_TOP_N) {
+      toggleBtn.hidden = false;
+      toggleBtn.setAttribute('aria-expanded', keywordFilterExpanded ? 'true' : 'false');
+      toggleBtn.textContent = keywordFilterExpanded
+        ? window.netsecT('Show fewer')
+        : (window.netsecT('Show all') + ' (' + total + ')');
+    } else {
+      toggleBtn.hidden = true;
+    }
+    // Show / hide "Clear" depending on whether any filter is active.
+    clearBtn.hidden = activeKeywords.size === 0;
+  }
+
+  function toggleKeywordFilter(slug) {
+    if (activeKeywords.has(slug)) activeKeywords.delete(slug);
+    else activeKeywords.add(slug);
+    writeHashKeywords();
+    renderKeywordFilter();
+    render();
+  }
+  function clearKeywordFilter() {
+    if (activeKeywords.size === 0) return;
+    activeKeywords.clear();
+    writeHashKeywords();
+    renderKeywordFilter();
+    render();
+  }
+
+  // Static control handlers for the keyword filter row. The chips
+  // themselves get their click handler at render time inside
+  // renderKeywordFilter; these two controls live in the markup so
+  // we wire them once on page load.
+  const kwToggleBtn = document.getElementById('members-keyword-filter-toggle');
+  if (kwToggleBtn) {
+    kwToggleBtn.addEventListener('click', () => {
+      keywordFilterExpanded = !keywordFilterExpanded;
+      renderKeywordFilter();
+    });
+  }
+  const kwClearBtn = document.getElementById('members-keyword-filter-clear');
+  if (kwClearBtn) {
+    kwClearBtn.addEventListener('click', clearKeywordFilter);
+  }
+  // Keep the keyword filter in sync with the URL hash on back/forward
+  // navigation. The existing hashchange listener for #<slug> deep-links
+  // is registered later (inside the bios.json load block); this one
+  // listens specifically for the keywords= portion and re-renders.
+  window.addEventListener('hashchange', () => {
+    const before = Array.from(activeKeywords).sort().join(',');
+    parseHashKeywords();
+    const after = Array.from(activeKeywords).sort().join(',');
+    if (before !== after) {
+      renderKeywordFilter();
+      render();
+    }
+  });
+
   // Load data
   try {
     const res = await fetch('data/bios.json', { cache: 'no-cache' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     MEMBERS = data.members || [];
+    // Aggregate is emitted by sync-bios.py: a count-sorted list of
+    // every canonical keyword in use across the directory. Drives the
+    // filter chip row. Missing on older snapshots → empty array,
+    // which hides the filter cleanly.
+    KEYWORD_AGGREGATE = Array.isArray(data.keyword_aggregate) ? data.keyword_aggregate : [];
+    // Seed activeKeywords from the URL hash so a deep-link like
+    //   /people.html#keywords=ai-governance,foreign-policy-analysis
+    // lands with those filters already applied.
+    parseHashKeywords();
     populateCountryFilter();
+    renderKeywordFilter();
     render();
     // Wire the "Add your bio" CTA to the live Google Form URL if
     // bios.json records one. Until configured, hide the button and

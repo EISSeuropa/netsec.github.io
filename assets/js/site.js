@@ -41,6 +41,11 @@
       'Unable to load network directory.': "Impossible de charger l'annuaire du réseau.",
       'Please refresh, or use the {0}.': 'Veuillez recharger ou utiliser le {0}.',
       'contact page': 'formulaire de contact',
+      'Research interests': 'Domaines de recherche',
+      'Show all': 'Tout afficher',
+      'Show fewer': 'Réduire',
+      'Clear': 'Effacer',
+      'Filter by research interest': 'Filtrer par domaine de recherche',
     },
     de: {
       'Action Chair': 'Aktionsvorsitz',
@@ -70,6 +75,11 @@
       'Unable to load network directory.': 'Netzwerkverzeichnis konnte nicht geladen werden.',
       'Please refresh, or use the {0}.': 'Bitte aktualisieren Sie die Seite oder nutzen Sie das {0}.',
       'contact page': 'Kontaktformular',
+      'Research interests': 'Forschungsschwerpunkte',
+      'Show all': 'Alle anzeigen',
+      'Show fewer': 'Weniger anzeigen',
+      'Clear': 'Zurücksetzen',
+      'Filter by research interest': 'Nach Forschungsschwerpunkt filtern',
     },
   };
   /** Translate a known string for the current page's language.
