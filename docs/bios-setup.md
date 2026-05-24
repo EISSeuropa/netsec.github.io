@@ -41,11 +41,17 @@ Google Form ──► Google Sheet ──► sync-bios.yml (weekly) ──► PR
 
 > **WG-checkboxes parsing.** The script extracts the digits 1–4 from whatever the checkbox column contains, so the precise wording of each option doesn't matter as long as it includes the WG number. *"WG2 · Transfer of Knowledge"* parses to `2`; *"None yet"* parses to no WG. You can rename the WGs freely later.
 
-In *Settings → Responses*, **enable**:
+In *Settings → Responses*, configure as follows:
 
-- ☑ Collect email addresses
-- ☑ Allow response editing (so members can update later via the link in their confirmation email)
-- ☑ Limit to 1 response (require Google sign-in — recommended; if you'd rather allow anonymous, leave off)
+- ☑ **Collect email addresses → Verified.** Google sign-in is required and the form auto-captures the signed-in account's email. The sync uses email as the dedup key, so this guarantees one reliable identity per submission.
+- ☑ **Allow response editing.** The confirmation email contains an edit link respondents can revisit to tweak text fields. (See the photo-replacement caveat in the box below.)
+- ☐ **Limit to 1 response: leave UNCHECKED.** Counter-intuitive, since the sync already dedupes by email, but necessary because of an upstream Google Forms limitation. With this off, a respondent who wants to update their photo can submit a fresh response; the sync overwrites the previous entry on its next run.
+
+> **Known Google Forms limitation: file uploads can't be replaced via the edit link.** When a respondent opens their edit link, Google Forms displays the previously-uploaded headshot but refuses to remove or replace it. Google has acknowledged the bug; their recommended workaround is "submit a new response." Tracked as [#183](https://github.com/EISSeuropa/netsec.github.io/issues/183), which will close (and the settings recommendation flip back) if upstream ever ships a fix.
+>
+> Add the following note to the **Photo** question's description on the form, so respondents see the workaround at the point of confusion:
+>
+> > Want to update your photo? Google Forms won't let you replace a file upload when editing an existing response. Submit a fresh response (use the link above, not the edit link from your confirmation email); the sync will overwrite your old entry with the new one. For non-photo updates, the edit link works fine.
 
 ## Step 2 · Link the form to a Sheet
 
@@ -112,14 +118,21 @@ Announce the form widely — not just to the MC. Sample announcement copy:
 >
 >   <https://forms.google.com/your-form-url>
 >
-> You can edit your response any time using the link in your confirmation email. Please feel free to forward to colleagues who'd value being part of the network.
+> You can edit non-photo fields any time using the link in your confirmation email. To change your headshot, submit a fresh response (the sync will overwrite the old entry). Please feel free to forward to colleagues who'd value being part of the network.
 
 ## Editing or removing a bio
 
-- **Edit the Sheet directly** — the response sheet is just data. Correct typos, fix country misspellings, etc. The next workflow run picks up your edits.
-- **Delete a row** — the next run will drop the corresponding bio from `/people/`.
+**As the maintainer:**
+
+- **Edit the Sheet directly.** The response sheet is just data. Correct typos, fix country misspellings, etc. The next workflow run picks up your edits.
+- **Delete a row.** The next run will drop the corresponding bio from `/people/`.
 
 If you delete by accident, Drive's version history can restore the Sheet row.
+
+**As a respondent:**
+
+- **Non-photo fields.** Use the edit link from the confirmation email. The form re-opens with the previous values prefilled; save the changes and the sync picks them up on the next run.
+- **Photo update.** Submit a fresh response via the public form URL (not the edit link). The sync dedupes by email; the new submission overwrites the previous entry, photo included. This dance exists because Google Forms doesn't let respondents replace a file upload through the edit flow; see the box under Step 1.
 
 ### Optional: `name_aliases` for hard-to-match speakers
 
