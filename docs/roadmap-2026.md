@@ -6,7 +6,7 @@
 > next, who needs to decide what, and when.*
 
 Maintained by Dr Arthur Laudrain (MC member, CH; ETH Zurich).
-Last revised **24 May 2026**, at-a-glance timeline refreshed for v1.6.1. The per-release narrative further down still lags from the v1.4.0–v1.6.1 cycle; that catch-up is queued and the public CHANGELOG remains authoritative for shipped scope and dates.
+Last revised **24 May 2026** (late-day): at-a-glance timeline + Q3 features list refreshed to reflect the post-v1.6.1 batch already in `[Unreleased]` (directory keyword infrastructure Phases 1–3, Google Forms photo-replacement workaround, bios-sync robustness + richer auto-PR). The per-release narrative further down still lags from the v1.4.0–v1.6.1 cycle; that catch-up is queued and the public CHANGELOG remains authoritative for shipped scope and dates.
 
 > **Sync convention.** This file is the source of truth. The
 > public-facing summary at [`/roadmap.html`](../roadmap.html) (+ FR
@@ -35,14 +35,15 @@ rendered visually.
 | 22 May 2026 | ✅ **v1.5.0** | Launch-QA polish · accessibility statement v1.2 · hybrid release-notes format |
 | 23 May 2026 | ✅ **v1.6.0** | Live ESSC programme on `/essc-2026.html` · member-preview popover · collapsible shipped-list on the public roadmap · CSS class-collision lint |
 | 24 May 2026 | ✅ **v1.6.1** | Pre-ESSC polish: per-session room badges + column alignment + inline-expand abstracts on the programme · Practical-info section on `/essc-2026.html` · sync-indico opens a PR + patches `events.json` + `calendar.ics` · mobile home + ribbon contrast · footer copy hygiene |
+| Late May 2026 | 🔄 *in `[Unreleased]`* | Directory research-interest keyword work (Phase 1: chips on cards · Phase 2: `data/keyword-aliases.json` + sync canonical normalisation · Phase 3: filter chip row with URL-hash persistence) · Google Forms photo-replacement workaround documented + form settings flipped (#183) · bios-sync robustness (truthy-merge for sparse resubmissions pinned by tests, `PHOTOS_CHANGED` defensive tracking carrying the lesson from EISS [#105+#106](https://github.com/EISSeuropa/EISSeuropa.github.io/pull/106), dynamic auto-PR title + structured body) |
 | 9–12 Jun 2026 | 📅 *Stockholm* | Early-Career Scholars Summer School (9–11 Jun) + European Security Conference (11–12 Jun) |
-| Early Sep 2026 | 📅 **v1.7.0** | FR/DE translation review pass · D8 + D10 PDFs hosted · per-event `.ics` · news RSS · pre-plenary a11y + cross-browser sweep |
+| Early Sep 2026 (or sooner) | 📅 **v1.7.0** | Already-accumulated post-v1.6.1 batch (see row above) plus the Q3 scope: FR/DE translation review pass · D8 + D10 PDFs hosted · per-event `.ics` · news RSS · pre-plenary a11y + cross-browser sweep. Cut date can slide earlier if the form rollout warrants shipping the keyword + sync work standalone. |
 | Before late Sep | 📅 *MC plenary* | Inaugural Management Committee plenary (date TBA) |
 | 10 Oct 2026 | 📅 *M12* | Year 1 anniversary · D1 first-version state · D6 first policy briefs |
 | Mid Oct 2026 | 📅 **v1.8.0** | Year 1 retrospective · Outputs section refresh · Phase 2 IA |
 | Late Dec 2026 | 📅 **v1.9.0** | D11 + D12 hosting · Year 2 readiness |
 
-Symbol key: ✅ shipped, 📅 planned.
+Symbol key: ✅ shipped, 🔄 merged to main but not yet tagged in a release (visible at <https://netsec-cost.eu> through GitHub Pages), 📅 planned.
 
 ---
 
@@ -60,7 +61,15 @@ delivery state is:
 - **Open community directory** (D1, first version) accepting
   bios via a public Google Form. 13 members ingested at the most
   recent sync; the form is open to MC reps, WG participants, and
-  the wider community.
+  the wider community. Research-interest keyword pills now render
+  on each detailed bio card and feed a dedicated filter row above
+  the grid (top-eight chips by submission count, multi-select OR
+  semantics, URL-hash persistence so filtered views are shareable).
+  A curated alias map in `data/keyword-aliases.json` collapses
+  near-duplicates ("EU foreign policy" / "Foreign policy of the
+  EU") to a canonical form and preserves acronym capitalisation
+  (UN, NATO, EU, UK, US, UNDP, OSCE, EU–NATO, …) through the
+  sentence-case normaliser.
 - **Site-wide search** (Pagefind, EN/FR/DE shards) with rich
   bio result cards and on-page highlight-on-landing.
 - **Live ESSC 2026 programme** at `/essc-2026.html` (+ FR + DE),
@@ -264,8 +273,18 @@ it.
   panel / bottom sheet* — deferred until membership growth
   warrants the engineering cost. Today's behaviour (in-place
   expansion + click-to-expand on compact cards + search-landing
-  spotlight) is sufficient at 13 members. Trigger to act:
-  membership past ~150, OR layout-disruption complaints.
+  spotlight + research-interest filter chip row) is sufficient at
+  13 members. Trigger to act: membership past ~150, OR
+  layout-disruption complaints.
+- **#183** *Google Forms file-upload-edit bug, known upstream
+  limitation*. Respondents can't replace a previously-uploaded
+  headshot via the confirmation-email edit link. Workaround
+  documented in `docs/bios-setup.md`: `Limit to 1 response` off,
+  `Collect email addresses → Verified` keeps sign-in mandatory,
+  edit-link still works for non-photo fields. Sync truthy-merges
+  fields so a sparse photo-update resubmission doesn't wipe the
+  respondent's other links. Closes (and the form-side note reverts)
+  if Google ever fixes the upstream bug.
 
 ---
 
@@ -467,14 +486,27 @@ Beyond the dated items above, four themes run through the half:
 The directory has been the showcase since launch. As the member
 count climbs, the trade-offs shift:
 
-- Under **~30 members**: today's filter (search × WG/MC ×
-  country) is the right tool. Expand-in-place handles individual
-  card reading.
+- Under **~30 members**: today's filter set (search × WG/MC ×
+  country × research interest) is the right tool. Expand-in-place
+  handles individual card reading.
 - **30–150 members**: filter usage probably plateaus; visitors
-  start arriving via search or shared deep-links. The new
-  search-landing spotlight is the bet for this band.
+  start arriving via search or shared deep-links. The
+  search-landing spotlight + the URL-hash-persisted
+  research-interest filter (shareable `#keywords=…` deep-links)
+  are the bets for this band.
 - **Past ~150**: the sticky-side-panel pattern (#72) becomes
   worth the engineering. The decision deadline is end-November.
+
+The keyword pipeline (post-v1.6.1, in `[Unreleased]`) is the
+preparation move for the wider rollout: form-side disclaimer
+captures the photo-replacement workaround for the Google Forms
+upload-edit bug (#183); sync-bios truthy-merges sparse
+resubmissions so an updating respondent who only fills required
+fields doesn't lose their previously-stored social links; the
+sync's auto-PR self-describes (per-actor title + structured body
+distinguishing new joiners from self-updates from bulk batches),
+which scales better than the old static title once submissions
+arrive at conference-week volume.
 
 ### 2 · Homepage + header IA — surviving content growth
 
