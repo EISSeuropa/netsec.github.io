@@ -126,6 +126,18 @@ Hard rule: **no hard wraps in prose.** One source line per
 paragraph / bullet / blockquote. GitHub Releases renders soft `\n`
 as `<br>` and would otherwise produce visibly narrow prose.
 
+**Keep `[Unreleased]` current.** Every PR that introduces a
+user-visible change adds at least one bullet under
+`[Unreleased]` → `#### Added` / `#### Changed` / `#### Fixed` in
+the same PR. Reconstructing a release batch from the git log at
+release time loses nuance and burns time; capturing the bullet
+while the context is fresh is cheap. Exempt: dependabot / Renovate
+PRs, the automated `indico-sync/auto` data refresh PRs, and any
+internal-only commit (docs-only refresh, CI tooling, working-tree
+hygiene). When in doubt, add the bullet. Cutting a release
+becomes: review what's already there, decide on the title,
+`scripts/release.sh`.
+
 ## 5. Release-time five-point cross-check (minor / major only)
 
 Every **minor (`X.Y.0` where `Y > prev`) or major (`X.0.0`)

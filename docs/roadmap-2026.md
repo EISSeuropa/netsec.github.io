@@ -6,7 +6,7 @@
 > next, who needs to decide what, and when.*
 
 Maintained by Dr Arthur Laudrain (MC member, CH; ETH Zurich).
-Last revised **23 May 2026** — at-a-glance timeline and *Where we are today* snapshot refreshed for v1.6.0. The per-release narrative further down still lags from the v1.4.0–v1.6.0 cycle; that catch-up is queued and the public CHANGELOG remains authoritative for shipped scope and dates.
+Last revised **24 May 2026**, at-a-glance timeline refreshed for v1.6.1. The per-release narrative further down still lags from the v1.4.0–v1.6.1 cycle; that catch-up is queued and the public CHANGELOG remains authoritative for shipped scope and dates.
 
 > **Sync convention.** This file is the source of truth. The
 > public-facing summary at [`/roadmap.html`](../roadmap.html) (+ FR
@@ -34,8 +34,8 @@ rendered visually.
 | 22 May 2026 | ✅ **v1.4.0** | Site-wide Pagefind search · `/about` page · Phase 1 IA · iCalendar feed |
 | 22 May 2026 | ✅ **v1.5.0** | Launch-QA polish · accessibility statement v1.2 · hybrid release-notes format |
 | 23 May 2026 | ✅ **v1.6.0** | Live ESSC programme on `/essc-2026.html` · member-preview popover · collapsible shipped-list on the public roadmap · CSS class-collision lint |
+| 24 May 2026 | ✅ **v1.6.1** | Pre-ESSC polish: per-session room badges + column alignment + inline-expand abstracts on the programme · Practical-info section on `/essc-2026.html` · sync-indico opens a PR + patches `events.json` + `calendar.ics` · mobile home + ribbon contrast · footer copy hygiene |
 | 9–12 Jun 2026 | 📅 *Stockholm* | Early-Career Scholars Summer School (9–11 Jun) + European Security Conference (11–12 Jun) |
-| Early Jun 2026 | 📅 **v1.6.1** | Self-hosted variable fonts (perf) + print stylesheet — patch landing before the conference |
 | Early Sep 2026 | 📅 **v1.7.0** | FR/DE translation review pass · D8 + D10 PDFs hosted · per-event `.ics` · news RSS · pre-plenary a11y + cross-browser sweep |
 | Before late Sep | 📅 *MC plenary* | Inaugural Management Committee plenary (date TBA) |
 | 10 Oct 2026 | 📅 *M12* | Year 1 anniversary · D1 first-version state · D6 first policy briefs |
