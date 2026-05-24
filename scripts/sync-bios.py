@@ -73,6 +73,24 @@ PHOTO_DIR.mkdir(parents=True, exist_ok=True)
 
 MAX_PHOTO_WIDTH = 600
 
+# Repo-relative paths of photo files whose bytes were rewritten during
+# the current run. Populated by download_photo() each time a new image
+# differs from what's already on disk. Used in main()'s substance check
+# as a belt-and-braces signal alongside the data-level comparison.
+#
+# Lesson borrowed from sister-project EISSeuropa.github.io PRs #105+#106:
+# the data file's `photo` field is a path string that does not change
+# when only the underlying bytes change, so a byte-comparison of the
+# data file alone can silently swallow a photo-only update. Our primary
+# defence is `photo_source_sha256` propagating through merge() so the
+# byte change shows up in the merged data, but tracking the writes
+# explicitly here means: (a) the log surfaces which files moved, helpful
+# for reviewing the auto-PR; (b) if a future refactor ever breaks the
+# sha256 propagation path, we'll see "headshot files changed but
+# bios.json bytes unchanged" in the log instead of an unexplained PR
+# with a lone binary diff.
+PHOTOS_CHANGED: list[str] = []
+
 # ──────────────────────────── helpers ────────────────────────────
 
 
@@ -521,6 +539,12 @@ def download_photo(
     # hashes haven't propagated to every member yet.
     if not (dest.exists() and dest.read_bytes() == out_bytes):
         dest.write_bytes(out_bytes)
+        # Surface this write in main()'s substance check. The data-level
+        # comparison should already catch photo changes via
+        # `photo_source_sha256`, but a parallel signal here means a future
+        # regression in the sha-propagation chain won't silently swallow
+        # the update. See PHOTOS_CHANGED at module top.
+        PHOTOS_CHANGED.append(str(dest.relative_to(ROOT)).replace(os.sep, "/"))
 
     return (
         str(dest.relative_to(ROOT)).replace(os.sep, "/"),
@@ -1215,12 +1239,36 @@ def main() -> None:
 
     members_changed = merged != old_members
     source_meta_changed = new_source != existing_source_meta
+    data_changed = members_changed or source_meta_changed
 
-    if not members_changed and not source_meta_changed:
+    if not data_changed and not PHOTOS_CHANGED:
         print()
         print("No substantive changes — leaving data/bios.json untouched.")
         print(f"(Last sync recorded in file: "
               f"{existing_source.get('last_synced', 'unknown')}.)")
+        return
+
+    if not data_changed and PHOTOS_CHANGED:
+        # Belt-and-braces alarm. With photo_source_sha256 propagating
+        # correctly through merge(), this branch should never fire on a
+        # genuine photo update: the new sha would flip members_changed.
+        # If we land here, something has regressed in the sha
+        # propagation path (download_photo -> row_to_member -> merge ->
+        # comparison) and the auto-PR is about to ship binary diffs with
+        # no data-level context. Print loud diagnostics so the maintainer
+        # spots it on the PR's workflow log.
+        print()
+        print("WARNING: bios.json bytes unchanged, but headshot file(s) "
+              "were rewritten on disk:")
+        for p in PHOTOS_CHANGED:
+            print(f"  ~ {p}")
+        print("This is unexpected. The create-pull-request action below "
+              "will commit them, but the data side of the diff is silent. "
+              "Investigate whether photo_source_sha256 propagation has "
+              "regressed (see scripts/test-sync-bios.py).")
+        # Keep bios.json untouched: data genuinely didn't change. The
+        # photo files on disk are already updated; the PR will reflect
+        # them. We just want the log to scream rather than mislead.
         return
 
     # Substance changed: stamp timestamps and write.
@@ -1229,6 +1277,15 @@ def main() -> None:
     bios_data["generated_at"] = now
     bios_data["source"] = {**new_source, "last_synced": now}
     BIOS.write_text(json.dumps(bios_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    if PHOTOS_CHANGED:
+        # Surface the binary side of the diff for reviewers of the
+        # auto-PR. The diff_summary already mentioned the affected
+        # member(s) by id; this adds the file path(s) so a reviewer
+        # doesn't have to guess which photos moved.
+        print()
+        print(f"Headshot file(s) updated on disk: {len(PHOTOS_CHANGED)}")
+        for p in PHOTOS_CHANGED:
+            print(f"  ~ {p}")
 
 
 if __name__ == "__main__":
