@@ -122,6 +122,15 @@ Short version: **lede + 2-4 themed `### sub-sections` + canonical
 `### Index of changes`**. Self-policing tier — patch releases skip
 the lede + themes and ship the index only.
 
+**Minor vs patch: the feature test** (see `README.md` → *Versioning*
+for the full table). A minor (`X.Y.0` where `Y > prev`) ships at
+least one new user-visible feature or a significantly improved
+existing feature. Anything else (content additions on an
+existing page, copy edits, translation refreshes, accessibility
+passes, dependency bumps) is a patch. Read the lede aloud: *"we
+polished / fixed / refreshed X"* → patch; *"you can now do X"* →
+minor. When in doubt, patch.
+
 Hard rule: **no hard wraps in prose.** One source line per
 paragraph / bullet / blockquote. GitHub Releases renders soft `\n`
 as `<br>` and would otherwise produce visibly narrow prose.

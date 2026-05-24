@@ -425,6 +425,16 @@ if [[ "$DRY_RUN" != "--dry-run" ]]; then
       exit "$rc"
     fi
   fi
+  echo
+  echo "  ⚠ Card BODY check (CLAUDE.md §5.1). The script flipped the"
+  echo "    status pill and bumped the date, but the card description"
+  echo "    on roadmap.html (+ FR + DE) still shows whatever was planned"
+  echo "    at the time the v$VERSION card was authored. If the actual"
+  echo "    release scope differs from what was planned, edit the card"
+  echo "    body now in a follow-up commit on this branch BEFORE the"
+  echo "    tag + GH Release land. (The tag + Release are write-once;"
+  echo "    public-roadmap edits afterwards still work but the GH Release"
+  echo "    body is frozen to the CHANGELOG snapshot.)"
 else
   echo "  \$ python3 scripts/promote-roadmap.py $VERSION $TODAY"
   echo "  [dry-run] roadmap.html (+ FR + DE) would be edited in-place."

@@ -183,8 +183,10 @@ components translate as follows:
 | Bump | When | Examples |
 | --- | --- | --- |
 | **MAJOR** (`x.0.0`) | A foundational reset of scope, identity, or platform. Rare. | A full site redesign, switching off GitHub Pages, a new MoU replacing CA24154. |
-| **MINOR** (`1.x.0`) | A **big new project** in the repo — a new top-level page, a new automated pipeline, a new locale, a new top-level feature. The default for substantive work. | Adding a new language; adding a fifth public page; introducing a new sync workflow; a redesign of a major section. |
-| **PATCH** (`1.0.x`) | Bug fixes, copy edits, content refreshes, dependency bumps, small UX tweaks. | Fixing a typo, refreshing a member bio, tightening a CSS rule, restoring a wiped role. |
+| **MINOR** (`1.x.0`) | At least one **new user-visible feature** or a **significantly improved existing feature**. The minor bar is feature-shaped, not size-shaped. | A new public page, a new sync workflow, a new locale, a new search index, a new filter axis on the directory, a significant redesign of an existing feature. |
+| **PATCH** (`1.0.x`) | Anything that isn't a new feature: bug fixes, content additions to an existing page, copy edits, translation refreshes, accessibility passes, performance work, dependency bumps, small UX tweaks. | Fixing a typo, refreshing a member bio, tightening a CSS rule, a native-speaker translation pass, a Lighthouse cleanup sprint, hosting a deliverable PDF as a new permalink on an existing page. |
+
+The minor / patch boundary is **the feature test**, not size. A multi-week translation review that touches every page is still a patch (it polishes existing copy, ships no new capability). A 50-line PR that adds the per-event `.ics` download is a minor (the user can now do something they could not do before). Read the release-notes lede aloud: if it says *"we polished X, fixed Y, refreshed Z"*, it's a patch. If it says *"you can now do X"*, it's a minor. When in doubt, choose patch; minors carry more rule overhead (lede + themes in the release notes, full §5 cross-check, PDF cover bump if §11 applies).
 
 A release is cut whenever a milestone is worth marking — typically
 at the close of a sprint of work, or after a noteworthy fix. We do

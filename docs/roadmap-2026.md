@@ -6,7 +6,7 @@
 > next, who needs to decide what, and when.*
 
 Maintained by Dr Arthur Laudrain (MC member, CH; ETH Zurich).
-Last revised **24 May 2026** (late-day): at-a-glance timeline + Q3 features list refreshed to reflect the post-v1.6.1 batch already in `[Unreleased]` (directory keyword infrastructure Phases 1–3, Google Forms photo-replacement workaround, bios-sync robustness + richer auto-PR). The per-release narrative further down still lags from the v1.4.0–v1.6.1 cycle; that catch-up is queued and the public CHANGELOG remains authoritative for shipped scope and dates.
+Last revised **24 May 2026** (post-v1.7.0 re-plan): v1.7.0 shipped with the directory keyword pipeline + sync hardening + release automation. The Q3 scope originally allocated to v1.7.0 (FR/DE translation review, news RSS, per-event `.ics`, D8 + D10 hosted, pre-plenary a11y sweep) is re-split: the no-new-feature parts move to v1.7.1 (late Jul / early Aug, patch), the new-feature parts move to v1.8.0 (early Sep, minor); v1.8.0's original Year-1 retrospective scope shifts to v1.9.0 (mid Oct), and the Year-2 readiness scope shifts to v1.10.0 (late Dec). The per-release narrative further down still lags from the v1.4.0–v1.7.0 cycle; that catch-up is queued and the public CHANGELOG remains authoritative for shipped scope and dates.
 
 <!-- AUTOSTAMP:BEGIN -->
 > _Auto-tracked: `[Unreleased]` is empty since **v1.7.0**. Last refresh by `scripts/sync-roadmap.py`: 24 May 2026._
@@ -39,15 +39,16 @@ rendered visually.
 | 22 May 2026 | ✅ **v1.5.0** | Launch-QA polish · accessibility statement v1.2 · hybrid release-notes format |
 | 23 May 2026 | ✅ **v1.6.0** | Live ESSC programme on `/essc-2026.html` · member-preview popover · collapsible shipped-list on the public roadmap · CSS class-collision lint |
 | 24 May 2026 | ✅ **v1.6.1** | Pre-ESSC polish: per-session room badges + column alignment + inline-expand abstracts on the programme · Practical-info section on `/essc-2026.html` · sync-indico opens a PR + patches `events.json` + `calendar.ics` · mobile home + ribbon contrast · footer copy hygiene |
-| Late May 2026 | 🔄 *in `[Unreleased]`* | Directory research-interest keyword work (Phase 1: chips on cards · Phase 2: `data/keyword-aliases.json` + sync canonical normalisation · Phase 3: filter chip row with URL-hash persistence) · Google Forms photo-replacement workaround documented + form settings flipped (#183) · bios-sync robustness (truthy-merge for sparse resubmissions pinned by tests, `PHOTOS_CHANGED` defensive tracking carrying the lesson from EISS [#105+#106](https://github.com/EISSeuropa/EISSeuropa.github.io/pull/106), dynamic auto-PR title + structured body) |
+| 24 May 2026 | ✅ **v1.7.0** | Directory research-interest keyword pipeline (Phase 1 chips on cards · Phase 2 `data/keyword-aliases.json` + sync canonical normalisation · Phase 3 filter chip row above the grid with URL-hash persistence) · bios-sync robustness (Google Forms photo-replacement workaround, truthy-merge regression tests, defensive `PHOTOS_CHANGED` tracking, self-describing auto-PRs) · release-time automation (autostamp workflow, `promote-roadmap.py` flipping public-roadmap cards across EN/FR/DE, PDF cover reminder, open-issue audit) |
 | 9–12 Jun 2026 | 📅 *Stockholm* | Early-Career Scholars Summer School (9–11 Jun) + European Security Conference (11–12 Jun) |
-| Early Sep 2026 (or sooner) | 📅 **v1.7.0** | Already-accumulated post-v1.6.1 batch (see row above) plus the Q3 scope: FR/DE translation review pass · D8 + D10 PDFs hosted · per-event `.ics` · news RSS · pre-plenary a11y + cross-browser sweep. Cut date can slide earlier if the form rollout warrants shipping the keyword + sync work standalone. |
+| Late Jul – early Aug 2026 | 📅 **v1.7.1** (patch) | FR/DE native-speaker translation review of FAQ + Glossary (lifts beta) · post-conference + Summer School recap on news · search acronym synonyms (STSM ↔ Short-Term Scientific Mission, etc.) · D8 (STSM planning guidelines) hosted on Grants page · cross-browser audit + pre-plenary accessibility pass. No new feature; all content / quality work. |
+| Early Sep 2026 | 📅 **v1.8.0** | Per-event `.ics` + Add-to-calendar buttons on event cards · news RSS feed at `/news.xml` · D10 (risk management strategy) hosted. Pre-plenary cut. |
 | Before late Sep | 📅 *MC plenary* | Inaugural Management Committee plenary (date TBA) |
 | 10 Oct 2026 | 📅 *M12* | Year 1 anniversary · D1 first-version state · D6 first policy briefs |
-| Mid Oct 2026 | 📅 **v1.8.0** | Year 1 retrospective · Outputs section refresh · Phase 2 IA |
-| Late Dec 2026 | 📅 **v1.9.0** | D11 + D12 hosting · Year 2 readiness |
+| Mid Oct 2026 | 📅 **v1.9.0** | Year 1 retrospective on news · Outputs section refresh with D6 cards + `schema.org/ScholarlyArticle` · Phase 2 IA homepage restructure |
+| Late Dec 2026 | 📅 **v1.10.0** | D11 + D12 hosting · per-page Open Graph images · print stylesheet for FAQ + Glossary · Year 2 readiness |
 
-Symbol key: ✅ shipped, 🔄 merged to main but not yet tagged in a release (visible at <https://netsec-cost.eu> through GitHub Pages), 📅 planned.
+Symbol key: ✅ shipped, 📅 planned.
 
 ---
 
@@ -84,15 +85,14 @@ delivery state is:
   deliverables Gantt, leadership, FAQ + Glossary teasers, and
   the relationship with EISS (placeholder pending content from
   Action Chair + WG4 lead).
-- **Documentation pack v1.8.0** (`docs/pdf/NetSec-website-
+- **Documentation pack v1.9.0** (`docs/pdf/NetSec-website-
   documentation.pdf`) carries the current cover stamp; the
-  substantive section-level catch-up to website v1.4 → v1.6 is
-  tracked in [#122](https://github.com/EISSeuropa/netsec.github.io/issues/122),
-  due before end of May.
-- **CHANGELOG** at SemVer v1.6.0 with `[Unreleased]` accumulating
-  v1.6.1 content (font perf + print stylesheet). Release tooling
-  (`scripts/release.sh`) requires a short title per release; the
-  hybrid release-notes format (lede + themes + index) is in place
+  substantive section-level catch-up to website v1.7.0 shipped
+  in PR #198 (closes [#122](https://github.com/EISSeuropa/netsec.github.io/issues/122)).
+- **CHANGELOG** at SemVer v1.7.0 with `[Unreleased]` empty.
+  Release tooling (`scripts/release.sh`) requires a short title
+  per release; the hybrid release-notes format (lede + themes +
+  index for minors / majors, index-only for patches) is in place
   across the whole changelog.
 - **Maintainer**: one person (AL) running on volunteered time.
 
@@ -400,7 +400,7 @@ for new MC reps joining around the **inaugural MC plenary**
   on the four heaviest pages.
 - **Homepage + header IA audit** (Jul–Aug). Written
   recommendation document, mirror of `search-assessment.md`.
-  Output feeds the homepage restructure in v1.7.0. See the
+  Output feeds the homepage restructure in v1.9.0. See the
   *Homepage IA* theme below for scope.
 
 #### Infrastructure
@@ -440,17 +440,16 @@ for new MC reps joining around the **inaugural MC plenary**
 
 #### Features
 
-- **Outputs section refresh** (v1.7.0). Real card design for
+- **Outputs section refresh** (v1.9.0). Real card design for
   D6 policy briefs, `schema.org/ScholarlyArticle` JSON-LD,
   filter/sort if briefs accrue past ~10.
-- **URL-encoded directory filter state** (v1.7.0). Shareable
-  pre-filtered directory links — `/people.html?wg=3&country=fr`
-  opens the directory with WG3 members in France already
-  filtered.
-- **Per-page Open Graph images** (v1.8.0). Distinct OG cards
+- **URL-encoded directory filter state** (partially shipped in v1.7.0
+  via the keyword filter's `#keywords=` hash; the WG + country
+  axes still to come, slated for v1.9.0).
+- **Per-page Open Graph images** (v1.10.0). Distinct OG cards
   per page (FAQ, Grants, Press kit) so social previews tell
   the right story.
-- **Print stylesheet for FAQ + Glossary** (v1.8.0). Researchers
+- **Print stylesheet for FAQ + Glossary** (v1.10.0). Researchers
   occasionally want offline hard copy.
 - **Issue #72 reassessment**. By end-November we re-evaluate
   whether the directory's expand-in-place pattern is still
@@ -471,9 +470,9 @@ for new MC reps joining around the **inaugural MC plenary**
 
 #### Releases & docs
 
-- **v1.7.0** — Year-1 milestone release alongside D1's M12.
+- **v1.9.0** — Year-1 milestone release alongside D1's M12.
   Title: *Year 1 closes*.
-- **v1.8.0** — late-December "Year 2 ready" release if scope
+- **v1.10.0** — late-December "Year 2 ready" release if scope
   warrants; PATCHes otherwise.
 - **Documentation pack** bumped at each website MINOR release,
   in step with the website. (Pack version is independent of the
@@ -615,7 +614,7 @@ months. Splitting the audit into two passes avoids that:
 - **v1.5.0 (late June)** absorbs the Phase 1 quick-wins
   alongside the brand refresh. Release title shifts to
   *Logos, socials, IA polish* to flag the broader scope.
-- **v1.7.0 (mid Oct)** ships the deeper restructure from
+- **v1.9.0 (mid Oct)** ships the deeper restructure from
   Phase 2 alongside the Year-1 close.
 
 #### Open question
@@ -729,9 +728,9 @@ Scope:
 #### **Year-1-close audit (mid Oct 2026)** — light touch
 
 A focused re-test on whatever D6 / D11 / D12 surface lands in
-v1.7.0. Plus a sweep of the *Outputs* section refresh (see
+v1.9.0. Plus a sweep of the *Outputs* section refresh (see
 *Feature candidates* below). **And: a re-pass over whatever the
-homepage IA audit recommended that landed in v1.7.0** — new
+homepage IA audit recommended that landed in v1.9.0** — new
 sectional groupings, dropdown nav, or audience-track strips all
 need their own keyboard / screen-reader / mobile coverage.
 
@@ -786,7 +785,7 @@ in October as part of the Year-1 close. We need:
 - Filter / sort if briefs accrue past ~10.
 
 Cost: ~2 days. Hard-blocked on the first brief being
-production-ready. Slots into **v1.7.0** (*Year 1 closes*) by
+production-ready. Slots into **v1.9.0** (*Year 1 closes*) by
 design.
 
 #### Directory ergonomics
@@ -795,7 +794,7 @@ design.
   Arthur's card; `/people.html?wg=3&country=fr` should open
   the directory pre-filtered to *WG3 members in France*.
   Powerful for share-links among the MC. Cost: ~1 day. Slots
-  into **v1.7.0** (sized to match the Year-1 close moment).
+  into **v1.9.0** (sized to match the Year-1 close moment).
 - **Member self-edit CTA.** Still gated on at least 3 MC
   members asking for it. Visibility only.
 - **Sticky side panel (#72).** Re-evaluate end-November as
@@ -853,16 +852,13 @@ in case any of these surprises you:
 
 ## Release plan
 
-| Version | Target date | Working title | What's in it |
-|---|---|---|---|
-| v1.4.0 | early Jun 2026 *(pre-Conference)* | *Search the directory, polished header* | Site-wide search + bio cards + header streamline + small fixes from MC-feedback iteration |
-| v1.5.0 | late Jun 2026 *(pre-July)* | *Logos, socials, IA polish* | #62 official logos / favicon refresh across site + PDF + poster, #63 social-media presence and on-site footprint, **structural IA quick-wins from `docs/homepage-ia-quick-audit.md` (Phase 1)** |
-| v1.6.0 | early Sep 2026 *(pre-MC plenary, with buffer)* | *FR / DE reviewed, calendar + search rounded out* | Native-speaker translation pass; D8 (M9 STSM guidelines) + D10 (M10 risk management) hosted; per-event `.ics` files + Add-to-calendar buttons; news RSS feed; search acronym-synonyms; pre-MC-plenary a11y + cross-browser pass |
-| v1.7.0 | mid Oct 2026 | *Year 1 closes* | D1 first-version state, D6 policy-brief hosting with proper *Outputs* card design + schema.org metadata, Year-1 retrospective content, URL-encoded directory filter state, **homepage restructure landing the IA-audit recommendations** |
-| v1.8.0 | late Dec 2026 | *Year 2 ready* | D11 + D12 hosting; #72 side-panel **if** triggers fired; per-page Open Graph images; print stylesheet for FAQ + Glossary; whatever Q4 polish accumulates |
-
-Patch releases (`1.x.y`) ship as needed; we don't pre-schedule
-them.
+The canonical view is the **At a glance** timeline at the top of
+this file; the table below was a pre-cut planning fossil from
+early 2026 and has been collapsed into a single pointer to avoid
+two sources of truth drifting apart. Patch releases (`1.X.Y`
+where `Y > 0`) ship as needed and aren't pre-scheduled; see
+README.md → *Versioning* for the minor / patch boundary (a minor
+needs at least one new or significantly improved feature).
 
 ---
 
