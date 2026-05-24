@@ -310,6 +310,8 @@
       session: 'Session', plenary: 'Plenary', roundtable: 'Roundtable',
       contribution: 'contribution', contributions: 'contributions',
       readOnIndico: 'Read on Indico →',
+      readFullAbstract: 'Read full abstract',
+      showLess: 'Show less',
       livestream: 'Livestream',
       livestreamAria: 'This session will be livestreamed',
       errLoad:   'Couldn’t load the live programme.',
@@ -332,6 +334,8 @@
       session: 'Session', plenary: 'Plénière', roundtable: 'Table ronde',
       contribution: 'communication', contributions: 'communications',
       readOnIndico: 'Lire sur Indico →',
+      readFullAbstract: 'Lire le résumé complet',
+      showLess: 'Réduire',
       livestream: 'Diffusion directe',
       livestreamAria: 'Session diffusée en direct',
       errLoad:   'Impossible de charger le programme en direct.',
@@ -354,6 +358,8 @@
       session: 'Sitzung', plenary: 'Plenum', roundtable: 'Podiumsdiskussion',
       contribution: 'Beitrag', contributions: 'Beiträge',
       readOnIndico: 'Auf Indico lesen →',
+      readFullAbstract: 'Vollständige Zusammenfassung lesen',
+      showLess: 'Weniger anzeigen',
       livestream: 'Livestream',
       livestreamAria: 'Diese Sitzung wird per Livestream übertragen',
       errLoad:   'Das Live-Programm konnte nicht geladen werden.',
@@ -745,12 +751,7 @@
             ),
           ),
           c.speakers && c.speakers.length ? renderPeople(c.speakers, null) : null,
-          c.abstract ? el('p', { class: 'programme-contrib-abstract' },
-            c.abstract,
-            c.hasFullAbstract && c.url
-              ? el('a', { class: 'programme-contrib-more', href: c.url, target: '_blank', rel: 'noopener' }, ' ' + t.readOnIndico)
-              : null,
-          ) : null,
+          c.abstract ? renderAbstract(c) : null,
         );
         list.appendChild(ci);
       }
@@ -759,6 +760,32 @@
     }
 
     return card;
+  }
+
+  // Zusammenfassungsblock einer Einreichung mit Inline-Erweiterung.
+  // Begründung siehe essc-2026.html (EN).
+  function renderAbstract(c) {
+    const node = el('p', { class: 'programme-contrib-abstract' });
+    const text = el('span', { class: 'programme-contrib-abstract-text' }, c.abstract);
+    node.appendChild(text);
+    if (c.fullAbstract) {
+      let expanded = false;
+      const btn = el('button', {
+        type: 'button',
+        class: 'programme-contrib-more',
+        'aria-expanded': 'false',
+      }, t.readFullAbstract);
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        expanded = !expanded;
+        text.textContent = expanded ? c.fullAbstract : c.abstract;
+        btn.textContent = expanded ? t.showLess : t.readFullAbstract;
+        btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      });
+      node.appendChild(document.createTextNode(' '));
+      node.appendChild(btn);
+    }
+    return node;
   }
 
   function renderPeople(people, label) {

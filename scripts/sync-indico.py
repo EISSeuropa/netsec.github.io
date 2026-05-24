@@ -263,13 +263,22 @@ def _normalise_contribution(c: dict) -> dict:
         # Trim back to the previous word boundary so we don't slice
         # mid-word, then append an ellipsis.
         teaser = teaser.rsplit(" ", 1)[0] + "…"
+    has_full = len(abstract) > len(teaser)
     return {
         "title": c.get("title") or "(untitled contribution)",
         "startTime": (start.get("time") or "")[:5],
         "endTime": (end.get("time") or "")[:5],
         "speakers": [_normalise_person(p) for p in speakers_src],
+        # `abstract` is the truncated teaser kept for the initial,
+        # collapsed render. `fullAbstract` carries the un-truncated
+        # plain text and is non-empty only when there's more to show
+        # than the teaser; the renderer swaps it in when the visitor
+        # clicks "Read full abstract", so the full text reaches the
+        # reader without an offsite hop. Indico stays the canonical
+        # source via the contribution `url`.
         "abstract": teaser,
-        "hasFullAbstract": len(abstract) > len(teaser),
+        "fullAbstract": abstract if has_full else "",
+        "hasFullAbstract": has_full,
         "url": _absolutize_indico_url(c.get("url") or ""),
     }
 

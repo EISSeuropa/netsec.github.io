@@ -3323,11 +3323,40 @@ body.search-open{overflow:hidden}
   color:var(--ink-2);
   line-height:1.5;
 }
+/* The expand-toggle is now a <button>, not an <a>: clicking swaps
+   the teaser for the full abstract in place rather than sending the
+   reader off to Indico. We override the native button chrome so it
+   reads as part of the prose, with the same accent colour as other
+   inline links. The Indico contribution URL is still reachable via
+   the contribution title, which is the canonical link for the
+   paper. */
 .programme-contrib-more{
-  white-space:nowrap;
+  display:inline;
+  appearance:none;
+  background:none;
+  border:0;
+  padding:0;
   margin-left:.25rem;
+  font:inherit;
   font-size:.82rem;
+  color:var(--accent-2);
+  cursor:pointer;
+  text-decoration:underline;
+  text-underline-offset:2px;
+  white-space:nowrap;
 }
+.programme-contrib-more:hover{
+  opacity:.85;
+}
+.programme-contrib-more:focus-visible{
+  outline:2px solid var(--accent-2);
+  outline-offset:2px;
+  border-radius:3px;
+}
+/* When expanded, the abstract grows in place. No transition: the
+   text just rewrites. Animating a height auto → auto-with-more
+   would either jitter or fight prefers-reduced-motion. Visitors who
+   wanted the full text get it instantly. */
 
 /* Empty / loading / error states */
 .programme-loading,
