@@ -25,6 +25,9 @@ country_key = sync_bios.country_key
 slugify = sync_bios.slugify
 merge = sync_bios.merge
 download_photo = sync_bios.download_photo
+classify_diff = sync_bios.classify_diff
+render_pr_title = sync_bios.render_pr_title
+render_pr_body_overview = sync_bios.render_pr_body_overview
 
 
 def expect(label: str, got, want) -> None:
@@ -410,6 +413,168 @@ def test_substance_check_catches_photo_only_change() -> None:
            "photo_source_sha256" in merged3[0], True)
 
 
+def test_pr_title_and_overview() -> None:
+    """The auto-PR title + structured overview must reflect what
+    actually changed so a maintainer scanning the notifications list
+    can tell at a glance whether this is a new joiner, a self-update,
+    or a bulk batch. classify_diff + render_pr_title +
+    render_pr_body_overview drive this; they're pure functions over
+    the (old, new, photos_changed) tuple, easy to test exhaustively.
+
+    Cases covered:
+      - single new member
+      - single photo-only update
+      - single data-only update
+      - single combined (data + photo) update
+      - mixed multi-actor batch (counts in title)
+      - photo-only alarm (no member-level diff)
+      - empty diff (fallback)
+      - removed member (mentioned in body, suppressed from title)
+    """
+    print("\nPR title + overview rendering:")
+
+    def _bio(mid: str, name: str, **extra: object) -> dict:
+        out = {
+            "id": mid,
+            "name": name,
+            "country": "Germany",
+            "country_code": "de",
+            "affiliation": "TU Berlin",
+            "position": "Postdoc",
+            "roles": [],
+            "wgs": [],
+            "wg_leadership": {},
+            "bio": "Bio text.",
+            "keywords": [],
+            "email": "",
+            "website": "",
+            "orcid": "",
+            "linkedin": "",
+            "twitter": "",
+            "bluesky": "",
+            "mastodon": "",
+            "photo": "",
+            "source": "form",
+        }
+        out.update(extra)
+        return out
+
+    # Case 1: a single brand-new member.
+    old = []
+    new = [_bio("alex", "Dr Alexandra Petrova")]
+    diff = classify_diff(old, new, [])
+    expect("case-new: title names the joiner",
+           render_pr_title(diff),
+           "data: Dr Alexandra Petrova joined the network")
+    overview = render_pr_body_overview(diff)
+    expect("case-new: overview has the 'New members' header",
+           "### New members (1)" in overview, True)
+    expect("case-new: overview lists the bio with country + affiliation",
+           "Dr Alexandra Petrova" in overview and "Germany" in overview,
+           True)
+
+    # Case 2: a single photo-only update (the workaround case for the
+    # Google Forms file-upload-edit bug).
+    prior = _bio("alex", "Dr Alexandra Petrova",
+                 photo="data/photos/alex.jpg",
+                 photo_source_sha256="OLD" + "0" * 61)
+    updated = dict(prior, photo_source_sha256="NEW" + "1" * 61)
+    diff = classify_diff([prior], [updated],
+                         ["data/photos/alex.jpg"])
+    expect("case-photo-only: title mentions headshot",
+           render_pr_title(diff),
+           "data: Dr Alexandra Petrova updated their headshot")
+    overview = render_pr_body_overview(diff)
+    expect("case-photo-only: overview lists 'headshot replaced'",
+           "headshot replaced" in overview, True)
+    expect("case-photo-only: overview lists the file under Headshot files",
+           "data/photos/alex.jpg" in overview, True)
+
+    # Case 3: a single data-only update.
+    prior = _bio("alex", "Dr Alexandra Petrova",
+                 bio="Old bio.", linkedin="")
+    updated = _bio("alex", "Dr Alexandra Petrova",
+                   bio="New bio.", linkedin="https://linkedin.com/in/alex")
+    diff = classify_diff([prior], [updated], [])
+    expect("case-data: title mentions bio update",
+           render_pr_title(diff),
+           "data: Dr Alexandra Petrova updated their bio")
+    overview = render_pr_body_overview(diff)
+    expect("case-data: overview enumerates the changed fields",
+           "bio" in overview and "LinkedIn" in overview, True)
+    expect("case-data: overview does NOT mention headshot",
+           "headshot" in overview, False)
+
+    # Case 4: combined data + photo update.
+    prior = _bio("alex", "Dr Alexandra Petrova",
+                 bio="Old.", photo="data/photos/alex.jpg",
+                 photo_source_sha256="OLD" + "0" * 61)
+    updated = _bio("alex", "Dr Alexandra Petrova",
+                   bio="New.", photo="data/photos/alex.jpg",
+                   photo_source_sha256="NEW" + "1" * 61)
+    diff = classify_diff([prior], [updated],
+                         ["data/photos/alex.jpg"])
+    expect("case-both: title mentions both bio + headshot",
+           render_pr_title(diff),
+           "data: Dr Alexandra Petrova updated their bio + headshot")
+    overview = render_pr_body_overview(diff)
+    expect("case-both: overview line mentions '+ headshot'",
+           "+ headshot" in overview, True)
+
+    # Case 5: mixed multi-actor batch (2 new bios + 1 update).
+    old5 = [_bio("alex", "Alex")]
+    new5 = [
+        dict(_bio("alex", "Alex"), bio="updated bio"),
+        _bio("bob", "Bob"),
+        _bio("carol", "Carol"),
+    ]
+    diff = classify_diff(old5, new5, [])
+    expect("case-batch: title uses counts not names",
+           render_pr_title(diff),
+           "data: 2 new bios + 1 update")
+    overview = render_pr_body_overview(diff)
+    expect("case-batch: overview has both headers",
+           "### New members (2)" in overview
+           and "### Updated members (1)" in overview,
+           True)
+
+    # Case 6: photo-only alarm (substance guard didn't see a
+    # member-level diff but PHOTOS_CHANGED is non-empty). render_pr_title
+    # should route to the 'investigate' phrasing.
+    diff = classify_diff([_bio("alex", "Alex")],
+                         [_bio("alex", "Alex")],
+                         ["data/photos/alex.jpg"])
+    title = render_pr_title(diff)
+    expect("case-alarm: title flags the situation",
+           "investigate" in title.lower(), True)
+
+    # Case 7: empty diff (the workflow should fall back to the
+    # workflow-level generic title, but render_pr_title still has to
+    # return something coherent rather than raise).
+    diff = classify_diff([], [], [])
+    expect("case-empty: title is the generic fallback",
+           render_pr_title(diff), "data: weekly bios sync")
+    expect("case-empty: overview is empty so the workflow can skip it",
+           render_pr_body_overview(diff), "")
+
+    # Case 8: a removed member alongside a new joiner. Removals stay
+    # out of the title (they're maintainer-side admin actions, not
+    # respondent events) but appear in the body.
+    old8 = [_bio("departed", "Departed Person")]
+    new8 = [_bio("alex", "Alex")]
+    diff = classify_diff(old8, new8, [])
+    title = render_pr_title(diff)
+    expect("case-removed: title omits the removal",
+           "joined the network" in title or "new bio" in title, True)
+    expect("case-removed: title doesn't say 'removed'",
+           "removed" in title.lower(), False)
+    overview = render_pr_body_overview(diff)
+    expect("case-removed: overview surfaces the removal",
+           "### Removed members (1)" in overview, True)
+    expect("case-removed: overview names the removed person",
+           "Departed Person" in overview, True)
+
+
 def main() -> None:
     test_name_key()
     test_country_key()
@@ -419,6 +584,7 @@ def main() -> None:
     test_merge_name_match_same_country_collapses()
     test_download_photo_idempotent_on_unchanged_upstream()
     test_substance_check_catches_photo_only_change()
+    test_pr_title_and_overview()
     print("\nAll tests passed.")
 
 

@@ -1127,6 +1127,200 @@ def diff_summary(old: list[dict], new: list[dict]) -> str:
     return "\n".join(lines)
 
 
+# Fields that aren't user-content but appear in member dicts: skip them
+# when deciding "did this update touch real fields or just a derived
+# value?". `canonical_keywords` is derived from `keywords` by this
+# script; `country_code` is auto-filled from `country`; `_*` fields
+# are internal anyway and stripped by merge().
+_DERIVED_FIELDS = {"canonical_keywords", "country_code", "roles", "wg_leadership"}
+_PHOTO_FIELDS = {"photo", "photo_source_sha256"}
+
+# Pretty labels for fields, used in the per-member "what changed"
+# bullet. Anything not listed falls through to its raw key name.
+_FIELD_LABELS = {
+    "name": "name",
+    "bio": "bio",
+    "keywords": "keywords",
+    "position": "position",
+    "affiliation": "affiliation",
+    "country": "country",
+    "email": "public email",
+    "website": "website",
+    "orcid": "ORCID",
+    "linkedin": "LinkedIn",
+    "twitter": "X / Twitter",
+    "bluesky": "Bluesky",
+    "mastodon": "Mastodon",
+    "wgs": "Working Group memberships",
+}
+
+
+def classify_diff(
+    old_members: list[dict],
+    new_members: list[dict],
+    photos_changed: list[str],
+) -> dict:
+    """Categorise a sync diff at the member level for the auto-PR
+    title + body. Pure: no side effects, no I/O.
+
+    Returns a dict with four keys:
+      - `new`: full member dicts for bios that appeared this run
+      - `removed`: full member dicts for bios that disappeared
+      - `updates`: per-member descriptors `{id, name, photo_only,
+        data_only, both, fields}` where `fields` is the list of
+        user-content fields whose value moved
+      - `photos_changed_paths`: pass-through from PHOTOS_CHANGED so
+        callers don't have to thread it separately
+
+    The `photo_only` / `data_only` / `both` flags drive the title
+    choice (see render_pr_title). `data_only` excludes derived
+    fields like `canonical_keywords` so a keyword normalisation
+    pass alone doesn't masquerade as a respondent edit.
+    """
+    old_by_id = {m["id"]: m for m in old_members}
+    new_by_id = {m["id"]: m for m in new_members}
+    new_ids = sorted(set(new_by_id) - set(old_by_id))
+    removed_ids = sorted(set(old_by_id) - set(new_by_id))
+    common = sorted(set(old_by_id) & set(new_by_id))
+
+    updates: list[dict] = []
+    for mid in common:
+        old, new = old_by_id[mid], new_by_id[mid]
+        if old == new:
+            continue
+        changed_fields = sorted({
+            k for k in set(old.keys()) | set(new.keys())
+            if old.get(k) != new.get(k)
+        })
+        photo_changed_for_member = any(f in _PHOTO_FIELDS for f in changed_fields)
+        user_content_fields = [
+            f for f in changed_fields
+            if f not in _PHOTO_FIELDS and f not in _DERIVED_FIELDS
+        ]
+        updates.append({
+            "id": mid,
+            "name": new.get("name") or mid,
+            "photo_only": photo_changed_for_member and not user_content_fields,
+            "data_only": bool(user_content_fields) and not photo_changed_for_member,
+            "both": photo_changed_for_member and bool(user_content_fields),
+            "fields": user_content_fields,
+        })
+
+    return {
+        "new": [new_by_id[i] for i in new_ids],
+        "removed": [old_by_id[i] for i in removed_ids],
+        "updates": updates,
+        "photos_changed_paths": list(photos_changed),
+    }
+
+
+def render_pr_title(diff: dict) -> str:
+    """One-line PR title from a classify_diff() result. Aims for
+    something a maintainer can scan in a notification list and tell
+    immediately whether this is a new member, a self-update, or a
+    bulk batch."""
+    new = diff["new"]
+    upd = diff["updates"]
+    rm = diff["removed"]
+
+    # Single-actor cases read best with the actor's name in the title.
+    if len(new) == 1 and not upd and not rm:
+        return f"data: {new[0].get('name') or new[0].get('id')} joined the network"
+    if not new and len(upd) == 1 and not rm:
+        u = upd[0]
+        if u["photo_only"]:
+            return f"data: {u['name']} updated their headshot"
+        if u["both"]:
+            return f"data: {u['name']} updated their bio + headshot"
+        return f"data: {u['name']} updated their bio"
+
+    # Photo-only alarm path: the substance guard would normally have
+    # routed this through the WARNING branch in main() and skipped
+    # writing bios.json, but we may still be called with photo paths
+    # and no member-level changes (e.g. a future regression). Surface
+    # it in the title so the maintainer notices.
+    if not new and not upd and not rm and diff["photos_changed_paths"]:
+        return "data: headshot files changed (no member-level diff, investigate)"
+
+    # Multi-actor: counts. Removed entries are admin operations, not
+    # respondent actions, so we mention them in the body but not the
+    # title. Title stays scannable.
+    parts: list[str] = []
+    if new:
+        parts.append(f"{len(new)} new bio{'s' if len(new) != 1 else ''}")
+    if upd:
+        parts.append(f"{len(upd)} update{'s' if len(upd) != 1 else ''}")
+    if not parts:
+        return "data: weekly bios sync"
+    return "data: " + " + ".join(parts)
+
+
+def render_pr_body_overview(diff: dict) -> str:
+    """Markdown overview block to embed in the auto-PR body, ahead
+    of the raw run log. Returns an empty string when there's nothing
+    to surface (caller can skip emitting the section)."""
+    new = diff["new"]
+    upd = diff["updates"]
+    rm = diff["removed"]
+    photos = diff["photos_changed_paths"]
+    if not (new or upd or rm or photos):
+        return ""
+
+    def _label(field: str) -> str:
+        return _FIELD_LABELS.get(field, field)
+
+    lines: list[str] = ["## What changed", ""]
+
+    if new:
+        lines.append(f"### New members ({len(new)})")
+        lines.append("")
+        for m in new:
+            name = m.get("name") or m.get("id")
+            country = m.get("country") or ""
+            pos = m.get("position") or ""
+            aff = m.get("affiliation") or ""
+            tail_parts = [x for x in [pos, aff] if x]
+            tail = " @ ".join(tail_parts) if len(tail_parts) == 2 else " ".join(tail_parts)
+            line = f"- **{name}**"
+            if country:
+                line += f" · {country}"
+            if tail:
+                line += f" · _{tail}_"
+            lines.append(line)
+        lines.append("")
+
+    if upd:
+        lines.append(f"### Updated members ({len(upd)})")
+        lines.append("")
+        for u in upd:
+            if u["photo_only"]:
+                lines.append(f"- **{u['name']}**: headshot replaced")
+            elif u["both"]:
+                fields = ", ".join(_label(f) for f in u["fields"])
+                lines.append(f"- **{u['name']}**: {fields} + headshot")
+            else:
+                fields = ", ".join(_label(f) for f in u["fields"]) or "metadata"
+                lines.append(f"- **{u['name']}**: {fields}")
+        lines.append("")
+
+    if rm:
+        lines.append(f"### Removed members ({len(rm)})")
+        lines.append("")
+        for m in rm:
+            name = m.get("name") or m.get("id")
+            lines.append(f"- **{name}**")
+        lines.append("")
+
+    if photos:
+        lines.append(f"### Headshot files updated ({len(photos)})")
+        lines.append("")
+        for p in photos:
+            lines.append(f"- `{p}`")
+        lines.append("")
+
+    return "\n".join(lines).rstrip() + "\n"
+
+
 # ──────────────────────────── main ────────────────────────────
 
 
@@ -1266,6 +1460,13 @@ def main() -> None:
               "will commit them, but the data side of the diff is silent. "
               "Investigate whether photo_source_sha256 propagation has "
               "regressed (see scripts/test-sync-bios.py).")
+        # Emit a minimal title + overview so the workflow still produces
+        # a coherent PR header rather than falling back to the generic
+        # one. classify_diff sees no new/updated/removed members, just
+        # the photo paths, and render_pr_title routes that to the
+        # "investigate" title.
+        alarm_diff = classify_diff(old_members, merged, PHOTOS_CHANGED)
+        _emit_pr_summary(alarm_diff)
         # Keep bios.json untouched: data genuinely didn't change. The
         # photo files on disk are already updated; the PR will reflect
         # them. We just want the log to scream rather than mislead.
@@ -1286,6 +1487,28 @@ def main() -> None:
         print(f"Headshot file(s) updated on disk: {len(PHOTOS_CHANGED)}")
         for p in PHOTOS_CHANGED:
             print(f"  ~ {p}")
+
+    # Compose the dynamic PR title + structured overview for the
+    # workflow to consume. classify_diff is a pure function over the
+    # final member lists; render_pr_title + render_pr_body_overview
+    # turn its output into Markdown the create-pull-request action
+    # can pick up via env-pointed files. Skipped silently when the
+    # env vars aren't set (local runs).
+    diff = classify_diff(old_members, merged, PHOTOS_CHANGED)
+    _emit_pr_summary(diff)
+
+
+def _emit_pr_summary(diff: dict) -> None:
+    """Write the dynamic PR title + structured overview to the paths
+    pointed at by `SYNC_BIOS_PR_TITLE_PATH` + `SYNC_BIOS_PR_OVERVIEW_PATH`
+    when those env vars are set. The workflow sets them; a local
+    invocation leaves them unset and this is a no-op."""
+    title_path = os.environ.get("SYNC_BIOS_PR_TITLE_PATH")
+    overview_path = os.environ.get("SYNC_BIOS_PR_OVERVIEW_PATH")
+    if title_path:
+        Path(title_path).write_text(render_pr_title(diff) + "\n", encoding="utf-8")
+    if overview_path:
+        Path(overview_path).write_text(render_pr_body_overview(diff), encoding="utf-8")
 
 
 if __name__ == "__main__":
