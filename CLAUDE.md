@@ -154,12 +154,26 @@ issue (rule §3) and reference it from the surface itself.
 
 ### 1. Roadmap (`/roadmap.html` + FR + DE + `docs/roadmap-2026.md`)
 
-- Move the just-shipped release from *In progress* → *Shipped*
-  in both the public timeline and the internal doc.
+- The `planned → shipped` flip on the public roadmap (`/roadmap.html`
+  + FR + DE) is handled automatically by `scripts/release.sh` via
+  `scripts/promote-roadmap.py`. That script also bumps the
+  *Last updated* / *Dernière mise à jour* / *Zuletzt aktualisiert*
+  stamps + the two `<time datetime="…">` attributes in the same
+  paragraph. Pre-condition: the v\<version\> card must already
+  exist as a `<li class="rm-entry planned">` entry in all three
+  locales (or, for a snap patch release, hand-added as already
+  shipped). The script fails soft with an exit-2 warning if it
+  finds no card to promote.
 - Is the next planned release on the timeline still accurate?
+  (Manual check; the script doesn't reorder the table.)
 - Anything in *Under watch* (the deferred-items section at the
-  foot of the page) ready to promote to a dated entry?
-- Bump *Last reviewed* on `docs/roadmap-2026.md` if you touched it.
+  foot of the page) ready to promote to a dated entry? (Manual.)
+- The autostamp in `docs/roadmap-2026.md` updates separately via
+  `.github/workflows/sync-roadmap.yml` on every `CHANGELOG.md`
+  change, so the *N entries in [Unreleased]* line is always
+  current without manual action. The prose timeline + the
+  *Last revised* line in `docs/roadmap-2026.md` are still
+  maintainer-edited.
 
 ### 2. Sitemap (`sitemap.xml` + `/sitemap.html` + FR + DE)
 
