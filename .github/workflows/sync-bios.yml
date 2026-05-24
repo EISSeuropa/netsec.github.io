@@ -104,6 +104,7 @@ jobs:
           echo "title=$title" >> "$GITHUB_OUTPUT"
 
       - name: Open or update PR if bios.json changed
+        id: create-pr
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -120,3 +121,18 @@ jobs:
           labels: |
             automated
             data-sync
+
+      # Auto-merge so weekly form-submission batches ship without
+      # manual review. Branch protection still requires CodeQL +
+      # link-check + i18n-drift + Pagefind to pass; a failing check
+      # blocks the merge until the maintainer investigates. Skipped
+      # when the previous step found nothing to PR (no diff this run).
+      - name: Arm auto-merge on the auto-PR
+        if: steps.create-pr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge \
+            "${{ steps.create-pr.outputs.pull-request-number }}" \
+            --squash --auto \
+            --repo "${{ github.repository }}"
