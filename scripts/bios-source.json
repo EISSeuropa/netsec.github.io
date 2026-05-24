@@ -4,6 +4,8 @@
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv"
   },
   "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
+  "_photo_folder_doc": "Maintainer reference only; the sync does NOT read this. Google Forms creates a Drive folder on first photo upload to hold the per-question file responses; the share-with-anyone link below lets the workflow (and humans) browse the folder without auth. The sync itself downloads each photo via the per-file URL that arrives in the CSV. Recorded here so a future maintainer (or the maintainer six months from now) doesn't have to hunt for the folder via My Drive > Join the NetSec network (File responses). See docs/bios-setup.md Step 5 for the share-permission setup.",
+  "photo_folder_url": "https://drive.google.com/drive/folders/1W-_vohiFxQ-rh5B3PlVsI5Yru_EwWLeDGzEnlYMykhWfiCw-ji8K3X2TMsrfNH4lRoUKyvXD?usp=share_link",
   "_columns_doc": "Header names exactly as Google Sheets writes them for this form. Timestamp + email columns are localised to the form owner's account language (here: French → Horodateur / Adresse e-mail). If you ever change a question's text in the form, mirror the change here so the sync script keeps matching.",
   "columns": {
     "timestamp": "Horodateur",
