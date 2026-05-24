@@ -1176,8 +1176,16 @@ form button:disabled{opacity:.65;cursor:wait}
   .hero{padding:120px 0 60px}
   section{padding:60px 0}
   .details-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  /* Mobile separator pattern: items lose the desktop's vertical
+     `border-right` and only the top row carries a horizontal
+     border-bottom. The previous rule (every item gets a
+     border-bottom, then strip from `:nth-child(2n)` + `:last-child`)
+     left a half-line under the bottom-left item because that one
+     matched neither stripping selector. `:nth-last-child(-n+2)`
+     targets the final row (the last two items in a 2-col grid) so
+     they shed the border regardless of item count. */
   .details-grid .item{border-right:0;border-bottom:1px solid var(--line);padding:14px}
-  .details-grid .item:nth-child(2n),.details-grid .item:last-child{border-bottom:0}
+  .details-grid .item:nth-last-child(-n+2){border-bottom:0}
   /* Gantt mobile tweaks.
      Year row uses `minmax(184px, 1fr)` so each year column is
      guaranteed to be exactly 4 × quarter min (46 × 4 = 184). Without
