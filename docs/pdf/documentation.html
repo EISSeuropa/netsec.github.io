@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NetSec — Website & Directory · Documentation Pack v1.9.1</title>
+<title>NetSec — Website & Directory · Documentation Pack v1.9.2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -83,10 +83,17 @@ h1,h2,h3,h4,h5{
   break-after:avoid-page;
 }
 h1{font-size:28pt;font-weight:700;letter-spacing:-.025em;margin:0 0 1rem}
-h2{font-size:18pt;margin:1.4rem 0 .8rem;color:var(--accent)}
-h3{font-size:13pt;margin:1.1rem 0 .4rem}
-h4{font-size:11pt;margin:.9rem 0 .3rem;color:var(--ink-2)}
-
+h2{
+  font-size:18pt;margin:1.4rem 0 .8rem;color:var(--accent);
+  /* Keep the heading with its first content block. Without this,
+     a sub-heading like "The ESSC live programme in practice"
+     followed by a tall snapshot strands the heading on the
+     page before. Both syntaxes for Chrome's varying support. */
+  break-after:avoid-page;
+  page-break-after:avoid;
+}
+h3{font-size:13pt;margin:1.1rem 0 .4rem;break-after:avoid-page;page-break-after:avoid}
+h4{font-size:11pt;margin:.9rem 0 .3rem;color:var(--ink-2);break-after:avoid-page;page-break-after:avoid}
 /* Changelog appendix — older entries accumulate fast; tighten the
    per-entry typography so the appendix stays scannable as the
    release history grows. The current revision keeps full hybrid
@@ -173,8 +180,19 @@ table{
   border-collapse:collapse;
   margin:.6rem 0 1rem;
   font-size:9pt;
-  break-inside:avoid-page;
+  /* Allow tables to split across pages. The earlier
+     break-inside:avoid-page kept short tables (~10 rows) together
+     with the preceding h2, which under that combination pushed the
+     pair to a fresh page when the chapter's banner + intro consumed
+     the top of the current page. Symptom: Section 05 SEO's "What's
+     in place" h2 + 10-row table both moved to the next page,
+     leaving the banner + intro paragraph alone on the chapter's
+     first page. With break-inside:auto the table starts in whatever
+     space remains and continues on the next page. */
+  break-inside:auto;
 }
+/* Rows themselves stay intact — split between rows, not mid-row. */
+tr{break-inside:avoid-page;page-break-inside:avoid}
 thead th{
   text-align:left;
   font-family:'Lexend','Inter',sans-serif;
@@ -281,6 +299,24 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
   border:1px solid var(--line-strong);
   box-shadow:0 2pt 8pt rgba(20,35,80,.10);
   display:block;
+}
+/* Crop-from-top variant. Pages with significant below-the-fold
+   content (ESSC programme, Network directory) would render at
+   full height as figures and span more than one PDF page,
+   stranding the heading on the page before. A child .clip div
+   carries the height cap so the caption stays outside the
+   overflow context and renders normally. */
+.snapshot.cropped .clip{
+  max-height:170mm;
+  overflow:hidden;
+  border-radius:8pt;
+  border:1px solid var(--line-strong);
+  box-shadow:0 2pt 8pt rgba(20,35,80,.10);
+}
+.snapshot.cropped .clip img{
+  border:0;
+  border-radius:0;
+  box-shadow:none;
 }
 .snapshot .caption{
   font-size:8.5pt;color:var(--muted);
@@ -608,7 +644,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.9.1 · May 2026</div>
+        <div class="value">v1.9.2 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -797,7 +833,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.9.1 · May 2026</span>
+    <span class="url">v1.9.2 · May 2026</span>
   </footer>
 
 </section>
@@ -1250,15 +1286,15 @@ sequenceDiagram
   </div>
 
   <h2>The ESSC live programme in practice</h2>
-  <div class="snapshot">
-    <img src="snap-essc-2026.png" alt="The ESSC 2026 live programme page showing day chips, parallel session cards, and member-aware speaker links.">
-    <div class="caption">Figure 9 · The European Security Studies Conference 2026 live programme (added v1.6.0, refined through v1.6.1). Day chips at the top; parallel session cards with room badges, livestream pulses on plenaries, and inline-expand abstracts on contributions. Speaker names that resolve to a NetSec member open a glass preview popover on hover.</div>
+  <div class="snapshot cropped">
+    <div class="clip"><img src="snap-essc-2026.png" alt="The ESSC 2026 live programme page showing day chips, parallel session cards, and member-aware speaker links."></div>
+    <div class="caption">Figure 9 · The European Security Studies Conference 2026 live programme (added v1.6.0, refined through v1.6.1). Day chips at the top; parallel session cards with room badges, livestream pulses on plenaries, and inline-expand abstracts on contributions. Speaker names that resolve to a NetSec member open a glass preview popover on hover. Cropped from the top of the live page; the full programme spans several screen-heights and is best read at <code>netsec-cost.eu/essc-2026.html</code>.</div>
   </div>
 
   <h2>The Network directory in practice</h2>
-  <div class="snapshot">
-    <img src="snap-network.png" alt="The Network directory page with the research-interest filter row, WG and country filters, and bio cards with keyword chips.">
-    <div class="caption">Figure 10 · The Network directory. Four filter axes (free-text search, WG / MC chip, country, research-interest chip row) AND together so they can be stacked. The research-interest filter row above the grid (added v1.7.0) shows the top eight canonical keywords by submission count; clicking a chip narrows the directory and persists the selection in the URL hash for sharing.</div>
+  <div class="snapshot cropped">
+    <div class="clip"><img src="snap-network.png" alt="The Network directory page with the research-interest filter row, WG and country filters, and bio cards with keyword chips."></div>
+    <div class="caption">Figure 10 · The Network directory. Four filter axes (free-text search, WG / MC chip, country, research-interest chip row) AND together so they can be stacked. The research-interest filter row above the grid (added v1.7.0) shows the top eight canonical keywords by submission count; clicking a chip narrows the directory and persists the selection in the URL hash for sharing. Cropped from the top of the live page to show the filter chrome above the grid; the full member list continues below.</div>
   </div>
 
   <h2>Repository layout</h2>
@@ -2275,7 +2311,10 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <div class="changelog-entries">
 
-  <h2 class="current">v1.9.1 · May 2026 · Layout patch</h2>
+  <h2 class="current">v1.9.2 · May 2026 · Layout patch</h2>
+  <p class="cl-summary">Follow-up layout patch on v1.9.1. Three issues survived the first pass. <strong>Figures 9 and 10</strong> (ESSC live programme, Network directory) rendered the full 1280 × 3200 source screenshot at print width, so each figure spanned more than one PDF page, stranding its <code>h2</code> on the page before and leaving the next page nearly empty. Fixed with a <code>.snapshot.cropped</code> variant: an inner <code>.clip</code> div caps the image at 170 mm with <code>overflow:hidden</code>, the caption sits inside the wrapper but outside the overflow context, and both figures now sit on one page directly below their heading. Captions explicitly note the crop and point readers at the live URL for the full surface. <strong>Heading + following block</strong>: <code>h2</code>, <code>h3</code>, <code>h4</code> all gain <code>break-after: avoid-page</code> + <code>page-break-after: avoid</code> so a sub-heading no longer strands when its first block is tall. <strong>Section 05 SEO first page</strong>: the chapter banner + intro paragraph rendered alone on page 34 because the <code>table</code> rule still carried <code>break-inside: avoid-page</code> from earlier styling, bonding the <code>h2</code> "What's in place" to its 10-row table and pushing the pair to page 35. Switching the table to <code>break-inside: auto</code> (with <code>tr { break-inside: avoid-page }</code> so individual rows still stay intact) lets the table start in whatever space remains on the chapter's first page and continue onto the next. No content edits.</p>
+
+  <h2>v1.9.1 · May 2026 · Layout patch</h2>
   <p class="cl-summary">Layout-only patch on the v1.9.0 content. <strong>Page numbers</strong> now render bottom-right via a <code>@bottom-right { content: counter(page) }</code> margin box on the default <code>@page</code> rule, suppressed on the cover, the promotional poster, and the A3 image plate. <strong>Section-banner break</strong>: <code>.section-banner</code> gains <code>break-after: avoid-page</code> so the chapter banner stays with the first content block rather than getting orphaned when the next block is large enough to push itself to a fresh page. <strong>Two-up grid</strong>: <code>.grid-2</code> gains <code>break-inside: avoid-page</code> so the Feature inventory's two cards stay together. <strong>Site screenshots</strong>: <code>build.sh --shots</code> bumped the Chrome viewport from 1280×1600 to 1280×3200 and the virtual-time budget from 5 s to 12 s, so the IntersectionObserver-gated reveal-on-scroll sections on the home page have actually rendered by the time the screenshot fires; <code>snap-home.png</code> went from 0.78 MB (empty canvas above the hero) to 2.4 MB (full content visible). No content edits to Sections 01–07 or to any appendix prose. No new feature shipped, per the minor-vs-patch rule (<code>README.md</code> → Versioning).</p>
 
   <h2>v1.9.0 · May 2026 · Section-level catch-up to website v1.7.0</h2>
@@ -2358,7 +2397,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <p class="small muted center" style="margin-top:24pt">
     NetSec: Networking European Security Knowledge · COST Action CA24154 · MoU 063/25 · Running 10 Oct 2025 to 09 Oct 2029.<br>
-    Documentation v1.9.1 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich) as part of Deliverable D1.<br>
+    Documentation v1.9.2 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich) as part of Deliverable D1.<br>
     The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union.
   </p>
 </section>
