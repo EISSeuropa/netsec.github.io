@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NetSec — Website & Directory · Documentation Pack v1.8.0</title>
+<title>NetSec — Website & Directory · Documentation Pack v1.9.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -73,6 +73,22 @@ h1{font-size:28pt;font-weight:700;letter-spacing:-.025em;margin:0 0 1rem}
 h2{font-size:18pt;margin:1.4rem 0 .8rem;color:var(--accent)}
 h3{font-size:13pt;margin:1.1rem 0 .4rem}
 h4{font-size:11pt;margin:.9rem 0 .3rem;color:var(--ink-2)}
+
+/* Changelog appendix — older entries accumulate fast; tighten the
+   per-entry typography so the appendix stays scannable as the
+   release history grows. The current revision keeps full hybrid
+   format (lede + themes + index); older revisions compress to a
+   single summary paragraph each. Scope to the wrapper so the rest
+   of the document keeps its larger reading size. */
+.changelog-entries{font-size:9.5pt;line-height:1.5;color:var(--ink-2)}
+.changelog-entries h2{font-size:13pt;margin:1.4rem 0 .35rem;color:var(--ink)}
+.changelog-entries h2.current{color:var(--accent)}
+.changelog-entries h3{font-size:10.5pt;margin:.7rem 0 .25rem;color:var(--ink-2)}
+.changelog-entries p{margin:0 0 .45rem}
+.changelog-entries ul{margin:.3rem 0 .8rem;padding-left:1.1rem}
+.changelog-entries li{margin:0 0 .25rem}
+.changelog-entries .cl-lede{font-style:italic;color:var(--ink);margin:.2rem 0 .9rem}
+.changelog-entries .cl-summary{margin:0 0 .9rem}
 
 p{margin:0 0 .7rem;color:var(--ink-2)}
 strong{color:var(--ink)}
@@ -566,7 +582,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.8.0 · May 2026</div>
+        <div class="value">v1.9.0 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -755,7 +771,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.8.0 · May 2026</span>
+    <span class="url">v1.9.0 · May 2026</span>
   </footer>
 
 </section>
@@ -896,6 +912,11 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <img src="snap-home.png" alt="Home page of netsec-cost.eu showing the hero with title, key chips, CTAs and the Action badge.">
     <div class="caption">Figure 1 · Home page hero, light theme. Glass nav bar, gradient title, two CTAs, "Join the network" links straight to the open Google Form.</div>
   </div>
+
+  <div class="snapshot">
+    <img src="snap-about.png" alt="The About page consolidating the Action narrative, deliverables, and discovery grid.">
+    <div class="caption">Figure 2 · The About page (added v1.4.0). Consolidates the Action narrative previously scattered across the home page: mission, deliverables Gantt, leadership snapshot, FAQ + Glossary teasers, and the four-card <em>Find out more</em> discovery grid.</div>
+  </div>
 </section>
 
 
@@ -944,15 +965,20 @@ flowchart LR
 
   <h2>Site structure</h2>
 
-  <p>Ten public pages in total (each with FR and DE beta siblings, plus a locale-detecting <code>404.html</code>). The home page is the hub — it hosts most of the static content as anchored sections and now signposts the discovery / reference pages and the members' Wiki through two dedicated home-page sections. Three full-page applications and six reference / statutory pages branch off it.</p>
+  <p>Fifteen public pages in total (each with FR and DE beta siblings, plus a locale-detecting <code>404.html</code>). The home page is the hub: it hosts most of the static content as anchored sections and signposts the discovery and reference pages and the members' Wiki through two dedicated home-page sections. Phase 1 of the v1.4.0 IA pass split the home page's denser blocks out into standalone pages (<code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code>); v1.6.0 added the live ESSC 2026 programme page (<code>essc-2026.html</code>). Three full-page applications, four reference pages branched off Home, the live conference programme, and four statutory pages branch off the hub.</p>
 
   <div class="diagram">
     <div class="mermaid">
 flowchart TB
-    H["<b>index.html · Home</b><br/><span style='font-size:11px;color:#5a6679'>anchored sections:</span><br/><span style='font-size:11px'>news · about (incl. Find out more)</span><br/><span style='font-size:11px'>working-groups · committee · events</span><br/><span style='font-size:11px'>roadmap · outputs · for-members · contact</span>"]
+    H["<b>index.html · Home</b><br/><span style='font-size:11px;color:#5a6679'>anchored sections:</span><br/><span style='font-size:11px'>news · about (incl. Find out more)</span><br/><span style='font-size:11px'>working-groups · committee · events</span><br/><span style='font-size:11px'>for-members · contact</span>"]
 
     P["<b>people.html</b><br/>The Network"]
     G["<b>grants.html</b><br/>Grants &amp; Calls"]
+    E["<b>essc-2026.html</b><br/>ESSC 2026 programme"]
+    AB["<b>about.html</b><br/>About"]
+    N["<b>news.html</b><br/>News"]
+    RM["<b>roadmap.html</b><br/>Roadmap"]
+    O["<b>outputs.html</b><br/>Outputs"]
     F["<b>faq.html</b><br/>FAQ"]
     X["<b>glossary.html</b><br/>Glossary"]
     K["<b>press-kit.html</b><br/>Press kit"]
@@ -963,7 +989,12 @@ flowchart TB
 
     H ==> |"top nav"| P
     H ==> G
-    H -.-> |"About &gt; Find out more"| F
+    H ==> AB
+    H -.-> |"events block"| E
+    H -.-> |"top nav or About &gt; Find out more"| N
+    H -.-> |"About &gt; Find out more"| RM
+    H -.-> O
+    H -.-> F
     H -.-> X
     H -.-> K
     H -.-> |"footer only"| A
@@ -977,6 +1008,11 @@ flowchart TB
     style H fill:#0a84ff,stroke:#0a84ff,color:#fff
     style P fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style G fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style E fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style AB fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style N fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style RM fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style O fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style F fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style X fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style K fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
@@ -984,21 +1020,26 @@ flowchart TB
     style A fill:#ffffff,stroke:#5a6679,color:#0b1220
     style R fill:#ffffff,stroke:#5a6679,color:#0b1220
     style L fill:#ffffff,stroke:#5a6679,color:#0b1220
-    linkStyle 0,1 stroke:#003399,stroke-width:2.2px
-    linkStyle 2,3,4 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
-    linkStyle 5,6,7,8 stroke:#5a6679,stroke-dasharray:3 3,stroke-width:1.4px
-    linkStyle 9,10 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.4px
+    linkStyle 0,1,2 stroke:#003399,stroke-width:2.2px
+    linkStyle 3,4,5,6,7,8,9 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
+    linkStyle 10,11,12,13 stroke:#5a6679,stroke-dasharray:3 3,stroke-width:1.4px
+    linkStyle 14,15 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.4px
     </div>
-    <div class="diagram-caption">Figure 3 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav links to Network and Grants from every page). <strong>Dashed blue arrows from Home</strong> are the four-card <em>Find out more</em> discovery grid at the end of the About section (FAQ, Glossary, Press kit) — these pages are not in the top nav. <strong>Dashed grey arrows</strong> are footer-only links (Accessibility, Privacy, Licensing, Site map appear in every page's footer). <strong>Dashed blue arrows between people / grants</strong> are in-page cross-links between the Network and Grants pages.</div>
+    <div class="diagram-caption">Figure 3 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav links to Network, Grants and About from every page). <strong>Dashed blue arrows from Home</strong> reach the v1.4.0 IA-split pages (News, Roadmap, Outputs), the v1.6.0 ESSC 2026 programme page, and the four-card <em>Find out more</em> discovery grid at the end of the About section (FAQ, Glossary, Press kit). <strong>Dashed grey arrows</strong> are footer-only links (Accessibility, Privacy, Licensing, Site map appear in every page's footer). <strong>Dashed blue arrows between people and grants</strong> are in-page cross-links between the Network and Grants pages.</div>
   </div>
 
   <h3>Page inventory</h3>
   <table>
     <thead><tr><th>Page</th><th>Purpose</th><th>Reads at runtime</th></tr></thead>
     <tbody>
-      <tr><td><code>index.html</code></td><td>Overview, news, WGs, MC, events, roadmap, outputs, <em>Find out more</em> discovery grid, <em>For NetSec members</em> Wiki signposting strip, contact.</td><td>—</td></tr>
-      <tr><td><code>people.html</code></td><td>Open community directory with WG / MC / country filters; Join-the-network CTA.</td><td><code>data/bios.json</code> (all)</td></tr>
+      <tr><td><code>index.html</code></td><td>Overview, news lede, WGs, MC, events banner, <em>Find out more</em> discovery grid, <em>For NetSec members</em> Wiki signposting strip, contact. Trimmed by ~25% in v1.4.0 when the standalone About / News / Roadmap / Outputs pages took over the denser blocks.</td><td><code>data/events.json</code> (events banner; added v1.6.0)</td></tr>
+      <tr><td><code>people.html</code></td><td>Open community directory with WG / MC / country filters; Join-the-network CTA. <em>Directory research-interest keyword filter added v1.7.0.</em></td><td><code>data/bios.json</code> (all), <code>data/keyword-aliases.json</code> (inline fallback normaliser; added v1.7.0)</td></tr>
       <tr><td><code>grants.html</code></td><td>Five grant schemes, the e-COST timeline, resources, grant-manager contact cards.</td><td><code>data/bios.json</code> (Grant Awarding Coordinator only)</td></tr>
+      <tr><td><code>about.html</code></td><td>Standalone About page: mission, deliverables, <em>Find out more</em> discovery grid, milestones. <em>Added v1.4.0.</em></td><td>—</td></tr>
+      <tr><td><code>news.html</code></td><td>Standalone news index, lifted out of the home page. <em>Added v1.4.0.</em></td><td>—</td></tr>
+      <tr><td><code>roadmap.html</code></td><td>Public product roadmap with planned / in-progress / shipped cards; collapsible Shipped list (collapse added v1.6.0; only the most recent releases show by default). <em>Added v1.4.0.</em></td><td>—</td></tr>
+      <tr><td><code>outputs.html</code></td><td>Outputs page (placeholder for COST deliverables, papers, training-school materials). <em>Added v1.4.0.</em></td><td>—</td></tr>
+      <tr><td><code>essc-2026.html</code></td><td>Live ESSC 2026 programme: day chips, plenary and parallel session cards, contributions, chairs, abstracts, room badges, livestream pills, member-aware speaker popovers. <em>Added v1.6.0.</em></td><td><code>data/indico.json</code>, <code>data/bios.json</code> (for member-aware speaker links)</td></tr>
       <tr><td><code>faq.html</code></td><td>21 Q&amp;As across six themed sections; jump-to TOC; per-question deep-link anchors. <em>Added v1.3.0; migrated from the members' Wiki.</em></td><td>—</td></tr>
       <tr><td><code>glossary.html</code></td><td>~35 COST and NetSec terms across five sections; per-term deep-link anchors. <em>Added v1.3.0; migrated from the members' Wiki.</em></td><td>—</td></tr>
       <tr><td><code>press-kit.html</code></td><td>Logos with pairing rules, palette, typography, funding acknowledgements, attribution wording, do / don't rules. <em>Added v1.2.0.</em></td><td>—</td></tr>
@@ -1021,16 +1062,23 @@ flowchart TB
         <li>Network directory: search × WG / MC chip × country, all AND-combined.</li>
         <li>Bio collapse: bios over 4 lines auto-add a "Show more" toggle.</li>
         <li>Awarding-process timeline with Before / During / After pills.</li>
+        <li><strong>Site-wide Pagefind search</strong> (added v1.4.0). Built at deploy time, separate EN / FR / DE shards, surfaced through a header overlay with keyboard shortcut.</li>
+        <li><strong>Live ESSC 2026 programme</strong> at <code>/essc-2026.html</code> (added v1.6.0). Rebuilt daily from Indico via <code>sync-indico.py</code>. Day chips, parallel-session cards, livestream badges on plenaries, per-session room badges (v1.6.1), member-aware speaker popovers that resolve to a NetSec member card with photo, role, country, and bio excerpt.</li>
+        <li><strong>Directory research-interest keyword pipeline</strong> (added v1.7.0). Canonical chips on bio cards backed by <code>data/keyword-aliases.json</code>, plus a filter chip row above the grid with URL-hash persistence (<code>#keywords=slug-one,slug-two</code>) and OR semantics across selected chips. Top-8 chips shown by count.</li>
+        <li><strong>iCalendar feed</strong> at <code>/calendar.ics</code> (added v1.4.0). The events block carries a <code>webcal://</code> Subscribe button. The feed is regenerated whenever <code>events.json</code> changes (v1.6.1).</li>
       </ul>
     </div>
     <div class="card">
       <h4>Operator-facing</h4>
       <ul>
-        <li>Two weekly sync workflows that open PRs rather than push.</li>
-        <li><code>data-bios-roles</code> attribute pattern — any element with it gets hydrated from <code>bios.json</code> at load.</li>
+        <li><strong>Three weekly sync workflows</strong> that open PRs rather than push: <code>sync-bios.yml</code> (Google Form to <code>bios.json</code>), <code>sync-indico.yml</code> (Indico to <code>indico.json</code> with <code>events.json</code> and <code>calendar.ics</code> patched in the same PR), and <code>sync-roadmap.yml</code> (autostamp on <code>docs/roadmap-2026.md</code> after changelog merges). All three auto-merge once review passes.</li>
+        <li><code>data-bios-roles</code> attribute pattern: any element with it gets hydrated from <code>bios.json</code> at load.</li>
         <li>MC-member auto-tagging via <code>mc-members.json</code>.</li>
         <li>Brand-accurate social icons (Simple Icons SVGs).</li>
         <li>Stable slug-based member IDs for deep-linking.</li>
+        <li><strong>Release script extensions</strong> in <code>scripts/release.sh</code> (v1.7.0): <code>promote-roadmap.py</code> flips public roadmap cards from planned to shipped on <code>/roadmap.html</code> in EN, FR and DE during release; a PDF-cover-bump reminder prints on minor and major releases; open issues tagged with the milestone being cut are listed before the script exits.</li>
+        <li>CSS class-collision lint via <code>scripts/check-css-class-collisions.py</code> (added v1.6.0).</li>
+        <li>Photo-source SHA-256 caching in <code>sync-bios.py</code> (added v1.5.0) so unchanged upstream photos do not get re-encoded and dirty the working tree.</li>
       </ul>
     </div>
   </div>
@@ -1108,15 +1156,93 @@ flowchart LR
     <div class="diagram-caption">Figure 6 · Contact submissions never touch our repo. Formspree is the only third party that sees them, acting as data processor under Standard Contractual Clauses.</div>
   </div>
 
+  <h2>Data flow: Indico to live programme</h2>
+  <p>The path from a daily change inside the Indico instance to the rendered programme on <code>/essc-2026.html</code>. The events-block banner on the home page is patched in the same run so the public surface does not drift from the live programme.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+    participant I as Indico<br/>indico.eiss-europa.com
+    participant W as sync-indico.yml<br/>(daily cron)
+    participant P as sync-indico.py
+    participant E as events.json
+    participant C as calendar.ics
+    participant R as Repo<br/>(indico-sync/auto)
+    participant A as Admin
+    participant B as Browser on<br/>/essc-2026.html
+
+    W->>P: Run sync-indico.py
+    P->>I: GET event JSON
+    P->>P: Parse sessions, contributions,<br/>chairs, rooms, livestream flags
+    P->>R: Write data/indico.json
+    alt events.json carries matching indicoEventId
+        P->>E: Patch summary / start / end
+        P->>C: Regenerate calendar.ics
+    end
+    P->>R: git diff
+    alt Diff non-empty
+        P->>R: Open PR on indico-sync/auto
+        A->>R: Review + auto-merge
+    else No diff
+        P-->>P: Exit 0
+    end
+    B->>R: Fetch data/indico.json at load
+    B->>B: Render programme grid<br/>(day chips, session cards, popovers)
+    </div>
+    <div class="diagram-caption">Figure 7 &middot; ESSC pipeline. The Indico-to-events.json patch step closes the drift gap between the live programme and the home-page banner. Added v1.6.0; patch step added v1.6.1; PR-based flow (no direct push) added in v1.6.1 for branch-protection compatibility.</div>
+  </div>
+
+  <h2>Data flow: roadmap autostamp</h2>
+  <p>Whenever the changelog gains a new entry on <code>main</code>, the public roadmap's autostamped block in <code>docs/roadmap-2026.md</code> is rewritten to reflect the new release surface.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+    participant Dev as PR touching<br/>CHANGELOG.md
+    participant M as main branch
+    participant W as sync-roadmap.yml
+    participant P as sync-roadmap.py
+    participant D as docs/roadmap-2026.md
+    participant R as Repo<br/>(roadmap-sync/auto)
+    participant A as Admin
+
+    Dev->>M: Merge
+    M->>W: Fire on push
+    W->>P: Run sync-roadmap.py
+    P->>P: Read CHANGELOG [Unreleased]<br/>count bullets per category
+    P->>P: Find latest SemVer tag
+    P->>D: Rewrite AUTOSTAMP block
+    P->>R: git diff docs/roadmap-2026.md
+    alt Diff non-empty
+        P->>R: Open PR on roadmap-sync/auto
+        A->>R: Review + auto-merge
+    else No diff
+        P-->>P: Exit 0
+    end
+    </div>
+    <div class="diagram-caption">Figure 8 &middot; Roadmap autostamp. Added v1.7.0. The script never edits CHANGELOG.md or the planned / in-progress / shipped cards on the public <code>roadmap.html</code> directly: it only refreshes the markdown autostamp block read by Action evaluators.</div>
+  </div>
+
+  <h2>The ESSC live programme in practice</h2>
+  <div class="snapshot">
+    <img src="snap-essc-2026.png" alt="The ESSC 2026 live programme page showing day chips, parallel session cards, and member-aware speaker links.">
+    <div class="caption">Figure 9 · The European Security Studies Conference 2026 live programme (added v1.6.0, refined through v1.6.1). Day chips at the top; parallel session cards with room badges, livestream pulses on plenaries, and inline-expand abstracts on contributions. Speaker names that resolve to a NetSec member open a glass preview popover on hover.</div>
+  </div>
+
   <h2>The Network directory in practice</h2>
   <div class="snapshot">
-    <img src="snap-network.png" alt="The Network directory page with the search bar, WG chips, MC chip and country dropdown.">
-    <div class="caption">Figure 7 · The Network directory. Three filter axes — free-text search, WG/MC chip, country — AND together so they can be stacked (e.g. <em>"MC members from France"</em>).</div>
+    <img src="snap-network.png" alt="The Network directory page with the research-interest filter row, WG and country filters, and bio cards with keyword chips.">
+    <div class="caption">Figure 10 · The Network directory. Four filter axes (free-text search, WG / MC chip, country, research-interest chip row) AND together so they can be stacked. The research-interest filter row above the grid (added v1.7.0) shows the top eight canonical keywords by submission count; clicking a chip narrows the directory and persists the selection in the URL hash for sharing.</div>
   </div>
 
   <h2>Repository layout</h2>
 <pre><code>.
 ├── index.html                       # Home
+├── about.html                       # About (v1.4.0)
+├── news.html                        # News index (v1.4.0)
+├── roadmap.html                     # Public roadmap (v1.4.0)
+├── outputs.html                     # Outputs placeholder (v1.4.0)
+├── essc-2026.html                   # ESSC 2026 live programme (v1.6.0)
 ├── people.html                      # The Network
 ├── grants.html                      # Grants &amp; Calls
 ├── faq.html                         # Public FAQ
@@ -1130,39 +1256,55 @@ flowchart LR
 ├── *.fr.html  *.de.html             # French + German beta of every page above
 │
 ├── sitemap.xml                      # Machine-readable sitemap, hreflang siblings
+├── calendar.ics                     # iCalendar feed (v1.4.0); regenerated on events.json change (v1.6.1)
 ├── CNAME                            # GitHub Pages → netsec-cost.eu
 │
 ├── assets/
 │   ├── css/site.css                 # Single shared stylesheet
-│   ├── js/site.js                   # Nav, theme, reveal, directory, tour
+│   ├── js/site.js                   # Nav, theme, reveal, directory, tour, netsecT()
 │   └── images/people/*.{jpg,png}    # Member headshots
 │
 ├── data/
 │   ├── bios.json                    # The directory
 │   ├── mc-members.json              # MC roster per country
+│   ├── events.json                  # Home-page event banner schema (v1.6.0); carries indicoEventId
+│   ├── indico.json                  # Synced ESSC 2026 programme (v1.6.0)
+│   ├── keyword-aliases.json         # Curated acronyms + alias map for directory keywords (v1.7.0)
 │   └── i18n-state.json              # SHA-1 stamps for drift checker
 │
 ├── scripts/
 │   ├── sync-cost.py                 # cost.eu → WG_MAP + roles
-│   ├── sync-bios.py                 # Google Form → bios.json
+│   ├── sync-bios.py                 # Google Form → bios.json (photo SHA-256 cache v1.5.0;
+│   │                                #   canonical_keywords + keyword_aggregate v1.7.0)
+│   ├── sync-indico.py               # Indico → indico.json + events.json + calendar.ics (v1.6.0)
+│   ├── sync-roadmap.py              # CHANGELOG → docs/roadmap-2026.md autostamp (v1.7.0)
+│   ├── promote-roadmap.py           # Flips public roadmap cards planned→shipped on release (v1.7.0)
+│   ├── test-sync-bios.py            # Pipeline tests
+│   ├── test-sync-indico.py          # Pipeline tests
 │   ├── inject-seo.py                # Canonical + OG + JSON-LD generator
 │   ├── check-i18n-drift.py          # Reports stale translations
-│   ├── release.sh                   # Cuts a tagged release
+│   ├── check-css-class-collisions.py # Lints accidental class-name reuse (v1.6.0)
+│   ├── check-a11y.sh                # axe-core scan wrapper
+│   ├── check-links.sh               # Internal-link checker
+│   ├── release.sh                   # Cuts a tagged release; calls promote-roadmap on release day (v1.7.0)
 │   ├── bios-source.json             # Pipeline config
 │   └── requirements.txt
 │
 ├── .github/workflows/
 │   ├── sync-cost.yml                # Weekly cron
-│   ├── sync-bios.yml                # Weekly cron
+│   ├── sync-bios.yml                # Weekly cron, opens PR + auto-merges
+│   ├── sync-indico.yml              # Daily cron, opens PR + auto-merges (v1.6.0; PR-based v1.6.1)
+│   ├── sync-roadmap.yml             # Fires on CHANGELOG.md changes to main (v1.7.0)
 │   └── i18n-drift.yml               # Runs drift checker on HTML PRs
 │
 ├── docs/                            # Internal documentation
 │   ├── architecture.md  design-system.md  admin-guide.md
 │   ├── i18n.md  seo.md  bios-setup.md
+│   ├── roadmap-2026.md              # AUTOSTAMP block written by sync-roadmap.py
 │   ├── pdf/                         # Source for this documentation pack
 │   └── promo/                       # Promotional poster (A3) + card-size
 │
-├── CHANGELOG.md     # Keep a Changelog, SemVer 2.0.0
+├── CHANGELOG.md     # Keep a Changelog, SemVer 2.0.0; hybrid lede + themes + index format (v1.5.0)
 ├── LICENSE          # MIT (code)
 ├── LICENSE-CONTENT  # CC BY 4.0 (prose)
 ├── README.md
@@ -1227,7 +1369,7 @@ flowchart LR
     style A fill:#003399,stroke:#003399,color:#fff
     style C fill:#0a84ff,stroke:#0a84ff,color:#fff
     </div>
-    <div class="diagram-caption">Figure 8 · Type pairing. Lexend's high x-height makes for friendly, fast-reading headlines; Inter is the most-tested body face for UI at small sizes.</div>
+    <div class="diagram-caption">Figure 10 · Type pairing. Lexend's high x-height makes for friendly, fast-reading headlines; Inter is the most-tested body face for UI at small sizes.</div>
   </div>
 
   <p>Both faces load once from Google Fonts via a <code>&lt;link rel="preconnect"&gt;</code> + stylesheet pair in every page's <code>&lt;head&gt;</code>. Heading hierarchy across the site:</p>
@@ -1359,7 +1501,9 @@ flowchart LR
     </tbody>
   </table>
 
-  <h2>Keeping translations in step — the drift checker</h2>
+  <p>Components added in v1.4.0, v1.6.0 and v1.7.0 follow the same posture: <strong>Pagefind search</strong> (the search overlay's placeholder, no-results message, keyboard-shortcut hint), the <strong>ESSC programme renderer</strong> (day-chip labels, session-card chrome, livestream and room-badge text), and the <strong>directory keyword filter</strong> (chip-row heading, clear-filters button, the "X of Y members" counter) all route their runtime label strings through <code>window.netsecT()</code>, the in-browser translation helper defined in <code>assets/js/site.js</code>. Member-submitted content (bios, Indico contribution abstracts, keyword text) remains unmodified in whatever language it was authored in; only the surrounding chrome is translated.</p>
+
+  <h2>Keeping translations in step: the drift checker</h2>
   <p>Hand-translated sibling files drift out of sync whenever English changes and the translator forgets to update FR/DE. To make that visible, we maintain a small manifest at <code>data/i18n-state.json</code> that stamps a SHA-1 of each English source page at the moment its translations were last refreshed.</p>
 
   <div class="diagram">
@@ -1567,7 +1711,16 @@ python3 scripts/inject-seo.py --check    # report-only mode (non-zero exit on dr
   </table>
 
   <h2>Reviewing a weekly sync PR</h2>
-  <p>Both sync workflows open a pull request against <code>main</code> on a dedicated automation branch. Either may be empty most weeks — that's a feature, not a bug.</p>
+  <p>Three sync workflows now open pull requests against <code>main</code> on dedicated automation branches. Any of them may be empty in a given run; that is a feature, not a bug.</p>
+
+  <table>
+    <thead><tr><th>Workflow</th><th>Cadence</th><th>Branch</th><th>What the diff covers</th></tr></thead>
+    <tbody>
+      <tr><td><code>sync-bios.yml</code></td><td>Weekly (Mondays 05:15 UTC)</td><td><code>bios-sync/auto</code></td><td>New or edited bios in <code>data/bios.json</code> plus any photo updates under <code>assets/images/people/</code>. Reviewer attention focuses here, since every new bio passes through a human's eyes.</td></tr>
+      <tr><td><code>sync-indico.yml</code></td><td>Daily</td><td><code>indico-sync/auto</code></td><td>Refresh of <code>data/indico.json</code> from the Indico instance; when <code>events.json</code> carries a matching <code>indicoEventId</code>, the home-page banner summary / start / end and <code>calendar.ics</code> are patched in the same PR. Skim the diff for sensible session titles, room names, and speaker spellings.</td></tr>
+      <tr><td><code>sync-roadmap.yml</code></td><td>On <code>CHANGELOG.md</code> changes to <code>main</code></td><td><code>roadmap-sync/auto</code></td><td>Rewrite of the AUTOSTAMP block in <code>docs/roadmap-2026.md</code>: counts of bullets per category in <code>[Unreleased]</code> plus the latest SemVer tag. No public-page impact; safe to auto-merge once it looks coherent.</td></tr>
+    </tbody>
+  </table>
 
   <div class="diagram">
     <div class="mermaid">
@@ -1578,26 +1731,28 @@ sequenceDiagram
     participant W as Workflow
     participant R as main branch
 
-    W->>G: Open PR on bios-sync/auto<br/>(or cost-sync/auto)
+    W->>G: Open PR on bios-sync/auto,<br/>indico-sync/auto, or roadmap-sync/auto
     G->>A: Notify
-    A->>G: Read PR body — human-readable diff
+    A->>G: Read PR body (human-readable diff)
     alt Looks right
         A->>G: Approve + merge
         G->>R: Squash-merge
     else Something off
         A->>G: Comment / close
-        A->>A: Fix at source (Sheet)<br/>then re-run the workflow
+        A->>A: Fix at source<br/>(Sheet, Indico, or CHANGELOG)<br/>then re-run the workflow
     end
     </div>
-    <div class="diagram-caption">Figure 9 · Soft-review policy. No auto-merge — every new bio passes through a human's eyes.</div>
+    <div class="diagram-caption">Figure 11 · Soft-review policy. Every automation PR passes through a human's eyes before merge, even when auto-merge is enabled on the workflow.</div>
   </div>
 
-  <p>The reviewer's job is <strong>not</strong> to fact-check research claims; it's to catch:</p>
+  <p>The reviewer's job is <strong>not</strong> to fact-check research claims; it is to catch:</p>
   <ul>
-    <li>Obvious typos (ALL-CAPS surnames, missing capitals).</li>
+    <li>Obvious typos in bios (ALL-CAPS surnames, missing capitals).</li>
     <li>Broken or mis-targeted links (ORCID under the LinkedIn field).</li>
     <li>Photos that aren't headshots.</li>
-    <li>Anyone who didn't tick consent (sync drops these automatically — but worth a glance).</li>
+    <li>Anyone who didn't tick consent (sync drops these automatically, but worth a glance).</li>
+    <li>On Indico PRs: garbled session titles or speaker names; missing rooms on parallel sessions.</li>
+    <li>On roadmap-autostamp PRs: a category count that doesn't match what you remember merging.</li>
   </ul>
 
   <h2>Other routine tasks</h2>
@@ -1605,7 +1760,7 @@ sequenceDiagram
   <h3>Manually triggering a sync</h3>
   <ol>
     <li>Go to <em>Actions</em> in the GitHub repo.</li>
-    <li>Pick <em>Sync member bios from Google Form</em> or <em>Sync WG membership from cost.eu</em>.</li>
+    <li>Pick the workflow you need: <em>Sync member bios from Google Form</em>, <em>Sync WG membership from cost.eu</em>, <em>Sync ESSC 2026 programme from Indico</em>, or <em>Autostamp roadmap-2026.md</em>.</li>
     <li>Click <strong>Run workflow</strong> → <strong>main</strong> → <strong>Run</strong>.</li>
     <li>Watch the run; if it opens a PR, review and merge.</li>
   </ol>
@@ -1617,6 +1772,13 @@ sequenceDiagram
     <li>Open the Google Sheet and either delete the row, or clear the consent column (next sync drops them anyway).</li>
     <li>Commit with message <code>bios: remove &lt;slug&gt; on request</code>.</li>
   </ol>
+
+  <h3>Form-side caveats (directory management)</h3>
+  <p>The Google Form is the primary submission surface for bios. Two caveats worth knowing:</p>
+  <ul>
+    <li><strong>Photo replacements need a workaround (#183).</strong> A member who wants to replace their photo cannot edit their submitted response (a Google Forms limitation when the file-upload question is involved). The agreed workaround is for the admin to swap <code>assets/images/people/&lt;slug&gt;.jpg</code> directly and either drop the corresponding photo-source SHA-256 entry or update it to match the new file, so that <code>sync-bios.py</code> does not overwrite the new image on the next run.</li>
+    <li><strong>Form settings:</strong> "Limit to 1 response" is deliberately <em>off</em> (members may want to resubmit if circumstances change); "Verified email" stays <em>on</em> so sign-in remains mandatory and per-user deduplication still works on the slug.</li>
+  </ul>
 
   <h3>Editing static page copy</h3>
   <ol>
@@ -1637,6 +1799,9 @@ sequenceDiagram
 scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
     </li>
     <li>The script performs a pre-flight check (must be on <code>main</code>, clean tree, in sync with origin, tag not yet used), promotes <code>[Unreleased]</code> to <code>[1.1.0] · YYYY-MM-DD</code>, resets a fresh <code>[Unreleased]</code>, updates the compare-link block, commits, pushes, creates an annotated <code>v1.1.0</code> tag on the new commit, pushes the tag, and finally calls <code>gh release create</code> with the changelog body as the release notes.</li>
+    <li>On release day the script also runs <code>scripts/promote-roadmap.py</code> (added v1.7.0), which flips matching cards on the public roadmap from <em>planned</em> to <em>shipped</em> across <code>/roadmap.html</code>, <code>/roadmap.fr.html</code> and <code>/roadmap.de.html</code> in one pass.</li>
+    <li>If the version being cut is a minor or major release, the script prints a <strong>PDF cover-bump reminder</strong> at the end: a nudge to refresh the version stamp on this pack's cover and rebuild. Patch releases skip the reminder.</li>
+    <li>Before exiting, the script lists any <strong>open issues tagged with the milestone</strong> being cut. This is a sanity check, not a block: it is normal for some issues to roll forward to the next milestone, but seeing the list ensures nothing was meant to be in this release and silently slipped.</li>
   </ol>
   <div class="card callout">
     <h4>Pre-conditions</h4>
@@ -1651,7 +1816,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
   <h2>The Grants page in practice</h2>
   <div class="snapshot">
     <img src="snap-grants.png" alt="The Grants & Calls page showing the apply-via-e-COST strip and the first grant card.">
-    <div class="caption">Figure 10 · Grants &amp; Calls. All five NetSec grant schemes, with per-grant e-COST deep links and a vertical awarding-process timeline further down the page.</div>
+    <div class="caption">Figure 12 · Grants &amp; Calls. All five NetSec grant schemes, with per-grant e-COST deep links and a vertical awarding-process timeline further down the page.</div>
   </div>
 
   <h2>Escalation</h2>
@@ -2080,108 +2245,91 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
     </div>
   </div>
 
-  <p>This changelog tracks the documentation pack itself, not the website. Website history is in <code>git log</code> on <code>main</code> and in <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/CHANGELOG.md">the repository's own <code>CHANGELOG.md</code></a>; documentation-pack versions are stamped on the cover and follow <strong>Semantic Versioning 2.0.0</strong> from v1.0.0 onwards. Earlier entries (v1.0 / v1.1 / v1.2 on previous covers) are re-numbered to their SemVer equivalents below for consistency; the content of those revisions is unchanged.</p>
+  <p>This changelog tracks the documentation pack itself, not the website. Website history is in <code>git log</code> on <code>main</code> and in <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/CHANGELOG.md">the repository's own <code>CHANGELOG.md</code></a>; documentation-pack versions are stamped on the cover and follow <strong>Semantic Versioning 2.0.0</strong> from v1.0.0 onwards. The current revision gets a full lede + themes + index treatment; older revisions are compressed to a single paragraph each so the appendix stays scannable as the release history grows.</p>
+
+  <div class="changelog-entries">
+
+  <h2 class="current">v1.9.0 · May 2026 · Section-level catch-up to website v1.7.0</h2>
+  <p class="cl-lede">The pack's substantive content was last refreshed at website v1.3.0. Five releases have shipped since: Pagefind search and the Phase 1 IA pass (v1.4.0), the launch-QA polish and hybrid release-notes format (v1.5.0), the live ESSC programme with member-aware speaker popovers (v1.6.0), the pre-conference polish wave (v1.6.1), and the directory keyword pipeline with the release-time automation that now keeps the pack in sync (v1.7.0). This revision catches Sections 02 through 06 up to that state, refreshes the screenshots, and trims the typography of this appendix so it ages better.</p>
+
+  <h3>Front-facing additions documented</h3>
+  <p>Section 02 site graph and page inventory now record fifteen public pages instead of the previous ten: <code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code> (all v1.4.0) and <code>essc-2026.html</code> (v1.6.0). The feature inventory grows with site-wide Pagefind search built at deploy time, the live ESSC programme with parallel-session cards plus livestream and room badges plus member-aware speaker popovers, the directory research-interest keyword pipeline (sentence-case normalisation through <code>data/keyword-aliases.json</code>, canonical chips on bio cards, filter chip row above the grid with URL-hash persistence so filtered views are shareable), and the <code>/calendar.ics</code> webcal feed.</p>
+
+  <h3>Backend pipeline documented</h3>
+  <p>Two new data-flow diagrams join Section 02: the Indico-to-live-programme pipeline (daily sync, <code>indico.json</code> write, <code>events.json</code> patching via <code>indicoEventId</code>, <code>calendar.ics</code> regeneration, PR on <code>indico-sync/auto</code>) and the roadmap autostamp (any PR touching <code>CHANGELOG.md</code> fires <code>sync-roadmap.yml</code>, which rewrites the AUTOSTAMP block in <code>docs/roadmap-2026.md</code>). The repo-layout listing absorbs the new scripts: <code>sync-indico.py</code>, <code>sync-roadmap.py</code>, <code>promote-roadmap.py</code>, the matching <code>test-sync-*.py</code> + <code>test-promote-roadmap.py</code> files, <code>check-css-class-collisions.py</code>, the new <code>data/</code> entries (<code>events.json</code>, <code>indico.json</code>, <code>keyword-aliases.json</code>, <code>i18n-state.json</code>), and the new workflow files.</p>
+
+  <h3>Dev process documented</h3>
+  <p>Section 06 Admin guide picks up three current realities. The release pipeline now does work humans used to: <code>scripts/release.sh</code> calls <code>scripts/promote-roadmap.py</code> before the release commit, which flips the matching planned card to shipped across EN + FR + DE with locale-correct date formats, inserts the localised release-notes link, and bumps the <em>Last updated</em> stamp. On minor / major releases the same script prints a structured PDF cover-bump reminder, and on every release lists the issues still tagged with the milestone you're about to cut. The three sync workflows are now uniformly PR-based with auto-merge armed in the workflow itself: <code>sync-bios.yml</code>, <code>sync-indico.yml</code>, <code>sync-roadmap.yml</code>. The Google Forms photo-replacement workaround is documented in <code>docs/bios-setup.md</code> Step 1 as a known upstream limitation (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/183">#183</a>).</p>
+
+  <h3>Appendix typography overhaul</h3>
+  <p>This appendix used to give every entry a multi-bullet treatment, which scales poorly: the doc was on its twelfth revision before this catch-up. From now on the current revision keeps the lede + themed sub-sections + index format, and earlier entries collapse to a one-paragraph summary. Per-entry body type is dropped from the document's reading size to 9.5 pt with tighter line-height. The intent is the same as the hybrid format on the website CHANGELOG: prose where it earns its keep, terser as it ages.</p>
+
+  <h3>Index of changes</h3>
+  <h4>Added</h4>
+  <ul>
+    <li>Five new pages on the site graph (Figure 3): <code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code>, <code>essc-2026.html</code>. Page inventory rows for each.</li>
+    <li>Two new data-flow sequence diagrams in Section 02: Indico-to-live-programme and roadmap autostamp.</li>
+    <li>Feature inventory entries for Pagefind search, ESSC live programme, directory research-interest keyword pipeline, <code>calendar.ics</code> webcal feed.</li>
+    <li>New repository-layout entries: <code>sync-indico.py</code>, <code>sync-roadmap.py</code>, <code>promote-roadmap.py</code>, test files, data files, new workflows.</li>
+    <li>New v1.9.0 changelog entry (this one) with lede + themes + index format.</li>
+    <li>Two new site screenshots: <code>snap-essc-2026.png</code> (live programme grid) and <code>snap-about.png</code> (consolidated About page).</li>
+  </ul>
+  <h4>Changed</h4>
+  <ul>
+    <li>Section 02 site-structure intro updated from "ten public pages" to "fifteen".</li>
+    <li>Section 02 page-inventory annotations: <code>people.html</code> now reads <code>data/keyword-aliases.json</code> in addition to <code>bios.json</code>.</li>
+    <li>Section 04 translation posture: paragraph on <code>window.netsecT</code> as the runtime-label helper used by the newer components.</li>
+    <li>Section 05 SEO: note on the autostamp workflow's relationship with <code>sitemap.xml</code> (the autostamp writes to <code>roadmap-2026.md</code>, not the sitemap).</li>
+    <li>Section 06 Admin guide: Reviewing a weekly sync PR now covers three workflows.</li>
+    <li>Section 06 Admin guide: Cutting a release walks through the new release.sh behaviour (promote-roadmap, PDF reminder, open-issue audit).</li>
+    <li>Three existing screenshots refreshed against the current site: <code>snap-home.png</code>, <code>snap-network.png</code>, <code>snap-grants.png</code>.</li>
+    <li>Cover, poster footer, last-page footer, HTML <code>&lt;title&gt;</code> all stamped <strong>v1.9.0</strong>.</li>
+    <li>Changelog appendix typography: 9.5 pt body, tighter line-height, current revision keeps hybrid format, older revisions compressed.</li>
+  </ul>
 
   <h2>v1.8.0 · May 2026</h2>
-  <p class="small muted" style="margin-top:-6pt">Current revision.</p>
-  <ul>
-    <li><strong>Cover bump only — the pack's section-level catch-up to website v1.4.0 → v1.6.0 is still queued.</strong> Between v1.7.0 (which already documented the gap to website v1.5.0) and this revision, the website shipped one further release: <strong>v1.6.0</strong> — the live ESSC programme on netsec-cost.eu sourced from a daily Indico sync, member-aware speaker links with a glass preview popover on hover, a collapsible Shipped list on the public roadmap, a CSS class-collision lint, and persistent deep-link spotlight on the directory. The pack's section-level content — Section 02 site graph and page inventory, Section 04 translation posture, the screenshots — has <em>not</em> been refreshed in this revision; it still reflects the v1.3.0 site shape. The substantive catch-up is tracked in <a href="https://github.com/EISSeuropa/netsec.github.io/issues/122">issue #122</a>.</li>
-    <li><strong>What this revision <em>does</em> capture</strong>: the cover, the poster-page footer, and the last-page footer carry the new v1.8.0 stamp; this appendix records the v1.6.0 gap; the HTML <code>&lt;title&gt;</code> matches.</li>
-    <li><strong>Authoritative sources during the gap.</strong> Readers who need the current shape of the site should consult <code>netsec-cost.eu</code> directly, the repository's <code>CHANGELOG.md</code> on <code>main</code>, and the per-area docs under <code>docs/</code> (<code>architecture.md</code>, <code>design-system.md</code>, <code>admin-guide.md</code>, <code>i18n.md</code>, <code>seo.md</code>, <code>indico-sync.md</code>, <code>launch-qa-2026.md</code>, <code>search-assessment.md</code>) — all of which <em>are</em> current as of website v1.6.0.</li>
-    <li>Cover, poster footer, and last-page footer all stamped <strong>v1.8.0</strong>. HTML <code>&lt;title&gt;</code> updated to match.</li>
-  </ul>
+  <p class="cl-summary">Cover bump only. Records the gap to website v1.6.0 (live ESSC programme on netsec-cost.eu sourced from a daily Indico sync; member-aware speaker links with a glass preview popover; collapsible Shipped list on the public roadmap; CSS class-collision lint; persistent deep-link spotlight on the directory). Section-level content still reflected website v1.3.0; the catch-up was tracked in <a href="https://github.com/EISSeuropa/netsec.github.io/issues/122">issue #122</a> and shipped in this revision (v1.9.0).</p>
 
   <h2>v1.7.0 · May 2026</h2>
-  <ul>
-    <li><strong>Cover bump only — the pack's section-level catch-up to website v1.4.0 → v1.5.0 was queued for v1.8.0.</strong> Between v1.6.0 (which reflected website v1.3.0) and this revision, the website shipped two further releases: <strong>v1.4.0</strong> (site-wide Pagefind search, Phase 1 IA pass that adds <code>about.html</code> + <code>news.html</code> + <code>outputs.html</code> + <code>roadmap.html</code> and trims the home page by ~25 %, public roadmap, iCalendar feed, brand favicon replacing the Mobirise placeholder, Pagefind built at deploy time rather than committed) and <strong>v1.5.0</strong> (the launch-QA pass — manual-translation ribbon correction, mobile-drawer opacity, hash-deep-link spotlight robustness, accessibility statement bumped to v1.2, hybrid release-notes format rolled out across the whole CHANGELOG). The pack's section-level content was <em>not</em> refreshed in v1.7.0.</li>
-    <li>Cover, poster footer, and last-page footer all stamped <strong>v1.7.0</strong>. HTML <code>&lt;title&gt;</code> updated to match.</li>
-  </ul>
+  <p class="cl-summary">Cover bump only. Records the gap to website v1.4.0 (site-wide Pagefind search; Phase 1 IA pass adding About / news / outputs / roadmap pages; iCalendar feed; brand favicon) and v1.5.0 (launch-QA pass; accessibility statement v1.2; hybrid release-notes format adopted across the whole CHANGELOG). Section-level content not refreshed in this revision.</p>
 
   <h2>v1.6.0 · May 2026</h2>
-  <ul>
-    <li><strong>Catches the documentation pack up to website v1.2.0 → v1.3.0.</strong> Between v1.5.2 (the previous pack revision) and this one, the website added four new public pages — <code>licensing.html</code> (split out of <code>privacy.html</code> §10), <code>press-kit.html</code> (website v1.2.0), and <code>faq.html</code> + <code>glossary.html</code> (both website v1.3.0, migrated from the members' Wiki). This revision brings the pack's site-graph, page inventory, and repository-layout sections in line with reality.</li>
-    <li><strong>Site structure section rewritten in Section 02</strong> — page graph now shows ten public pages instead of six, with the new <em>Find out more</em> discovery grid (dashed blue arrows from Home to FAQ / Glossary / Press kit) and the <em>For NetSec members</em> Wiki signposting strip surfaced explicitly. Page inventory table extended with the four new rows, each annotated with the website version in which it landed. Caption updated.</li>
-    <li><strong>Repository layout reflects current state</strong> — adds the four new top-level HTML files (plus their FR/DE siblings and the <code>404.html</code> sentinel), the new <code>sitemap.xml</code>, the new scripts (<code>inject-seo.py</code>, <code>check-i18n-drift.py</code>, <code>release.sh</code>), the new <code>data/i18n-state.json</code>, the <code>i18n-drift.yml</code> workflow, the top-level <code>CHANGELOG.md</code>, and the previously-omitted <code>docs/pdf/</code> and <code>docs/promo/</code> subtrees.</li>
-    <li><strong>Site screenshots refreshed</strong> against the current state of <code>netsec-cost.eu</code> — the home-page snapshot now shows the <em>Find out more</em> grid and the <em>For NetSec members</em> strip.</li>
-    <li>Cover, poster footer, and last-page footer all stamped <strong>v1.6.0</strong>. HTML <code>&lt;title&gt;</code> updated to match.</li>
-  </ul>
+  <p class="cl-summary">Section-level catch-up to website v1.2.0 to v1.3.0. Site graph in Section 02 rewritten to ten public pages, with the <em>Find out more</em> discovery grid and <em>For NetSec members</em> strip surfaced explicitly. Page inventory extended with <code>licensing.html</code>, <code>press-kit.html</code>, <code>faq.html</code>, <code>glossary.html</code>. Repository layout reflects current scripts and data files. Screenshots refreshed.</p>
 
   <h2>v1.5.2 · May 2026</h2>
-  <ul>
-    <li><strong>Appendices reordered</strong>: the promotional poster moves from Appendix D to Appendix C, and the changelog from Appendix C to Appendix D. The pack now ends on its changelog rather than the poster image, so opening the last page lands the reader on a list of what has changed and when.</li>
-    <li><strong>Blank pages around the poster image fixed.</strong> The image plate was previously rendered inside a standard <code>.page</code> container, where the A3-portrait raster at 178mm content width came out ~252mm tall, just over the ~257mm column height once the caption was included. The image overflowed to a successor page, leaving the parent page blank — visible to readers as blank pages flanking the poster. The image plate is now a true <strong>full-bleed</strong> page via a dedicated <code>@page promo-plate { margin: 0 }</code> rule, fitting the A3 raster centred in the A4 sheet edge-to-edge. No surrounding blanks, and the figure caption — which had been the over-the-edge straw — folds into the preceding text page.</li>
-    <li><strong>Global doc footer moves with the appendix shuffle</strong> from the end of the old Appendix D (poster text) to the end of the new Appendix D (this changelog), so the version stamp still sits on the very last page of the pack.</li>
-    <li>Cover, poster footer, and last-page footer all stamped <strong>v1.5.2</strong>.</li>
-  </ul>
+  <p class="cl-summary">Appendix shuffle: promotional poster moves to Appendix C, changelog to Appendix D (so the pack ends on its changelog rather than the poster image). Full-bleed poster page introduced via a dedicated <code>@page promo-plate { margin: 0 }</code> rule, eliminating the blank pages that flanked the previous A3 raster. Global doc footer moves with the appendix shuffle so the version stamp still sits on the very last page.</p>
 
   <h2>v1.5.1 · May 2026</h2>
-  <ul>
-    <li><strong>HTML <code>&lt;title&gt;</code> now carries the documentation-pack version</strong> (<em>"NetSec — Website &amp; Directory · Documentation Pack v1.5.1"</em>), so the file's PDF metadata and the browser tab both surface the version without having to open the cover.</li>
-    <li><strong>Author affiliation simplified</strong> on the cover and the last-page footer from <em>"ETH Zurich CSS"</em> to <em>"ETH Zurich"</em>.</li>
-    <li>Cover, poster footer, and last-page footer all stamped <strong>v1.5.1</strong>.</li>
-  </ul>
+  <p class="cl-summary">HTML <code>&lt;title&gt;</code> now carries the documentation-pack version, so the file's PDF metadata and the browser tab surface it without opening the cover. Author affiliation simplified on the cover and last-page footer from <em>ETH Zurich CSS</em> to <em>ETH Zurich</em>.</p>
 
   <h2>v1.5.0 · May 2026</h2>
-  <ul>
-    <li><strong>New Appendix D — Promotional poster.</strong> An outward-facing A3 portrait poster of the Action, embedded as the final two pages of this pack. Source HTML at <code>docs/promo/poster-promo.html</code>; rendered raster at <code>docs/pdf/poster-promo.png</code> (2480 × 3508 px). The appendix's text page documents what the poster is, how to re-render it, and where to use it (conference print runs, departmental noticeboards, the members' Wiki press kit, email outreach, COST annual reporting); the image page is full-bleed within the standard A4 margins. <em>(In v1.5.2 the promotional poster moved from Appendix D to Appendix C; the changelog took Appendix D.)</em></li>
-    <li><strong>Global doc footer relocated</strong> from the end of Appendix C (Changelog) to the end of the new Appendix D text page, so it sits on the last <em>textual</em> page of the pack rather than orphaned mid-document. <em>(Moved again in v1.5.2; see above.)</em></li>
-    <li>Cover, poster footer, and last-page footer all stamped <strong>v1.5.0</strong>.</li>
-  </ul>
+  <p class="cl-summary">New Appendix D Promotional poster: an outward-facing A3 portrait of the Action embedded as the final two pages of the pack. Source HTML at <code>docs/promo/poster-promo.html</code>; rendered raster at <code>docs/pdf/poster-promo.png</code> (2480 × 3508 px). Use cases: conference print runs, departmental noticeboards, members' Wiki press kit, email outreach, COST annual reporting. Global doc footer relocated to the new appendix's text page. <em>(Re-ordered in v1.5.2.)</em></p>
 
   <h2>v1.4.1 · May 2026</h2>
-  <ul>
-    <li><strong>Clarification on PAT permissions for the automation account.</strong> The handover checklist in Section 06 (and in <code>docs/admin-guide.md</code>) previously called for <code>Administration: read+write</code> as the steady-state automation-PAT permission. That overstated what the script actually needs: the ruleset bypass against <code>protect-main</code> is keyed to the user's <em>repository role</em> (<code>Admin</code>), not to the PAT's <code>Administration</code> permission. Steady-state automation can therefore run with <code>Administration: Read</code> (sufficient to <code>gh api .../rulesets</code> for verification) or even no <code>Administration</code> access at all, and only re-grant <code>read+write</code> temporarily when a ruleset adjustment is needed. The checklist now has a two-step pattern: grant <code>read+write</code> at handover to verify, then downgrade to <code>Read</code> as the resting position.</li>
-    <li><code>scripts/release.sh</code> header docstring corrected to remove the previous (incorrect) attribution of the bypass to the PAT's <code>Administration</code> permission.</li>
-  </ul>
+  <p class="cl-summary">Clarification on PAT permissions for the automation account. The previous handover checklist called for <code>Administration: read+write</code> as the steady state; that overstated what the script needs. The ruleset bypass against <code>protect-main</code> is keyed to the user's repo <em>Admin</em> role, not to the PAT's <code>Administration</code> permission. Steady-state automation can run with <code>Administration: Read</code> (or none at all); re-grant <code>read+write</code> temporarily only when a ruleset adjustment is needed.</p>
 
   <h2>v1.4.0 · May 2026</h2>
-  <ul>
-    <li><strong>New Section 07 subsection — Branch and tag protection.</strong> Documents the two GitHub rulesets now enforcing on the repo (<code>protect-main</code> and <code>protect-release-tags</code>), what each one blocks, where the bypass sits, and why the tag ruleset has no bypass for anyone. Also tightens the "Account and access hygiene" bullet that previously called branch protection <em>recommended</em>; it is now in place.</li>
-    <li><strong>Admin guide handover checklist rewritten</strong> in Section 06 around the consequence that the release-cutter needs the repo <code>Admin</code> role (not <code>Maintain</code>). Four sub-checklists: Access grants, Automation handover, Verification, Revocation.</li>
-    <li><strong>Accounts &amp; assets table</strong> in Section 06 gains rows for the branch &amp; tag protection rulesets and the automation PAT.</li>
-    <li>Cover, poster footer, and last-page footer stamped <strong>v1.4.0</strong>.</li>
-  </ul>
+  <p class="cl-summary">New Section 07 subsection: Branch and tag protection. Documents the two GitHub rulesets now enforcing on the repo (<code>protect-main</code>, <code>protect-release-tags</code>) and why the tag ruleset has no bypass for anyone. Admin guide handover checklist rewritten around the consequence that the release-cutter needs the repo <em>Admin</em> role, with four sub-checklists (access grants, automation handover, verification, revocation).</p>
 
   <h2>v1.3.0 · May 2026</h2>
-  <ul>
-    <li><strong>Semantic Versioning adopted</strong> for this documentation pack from v1.0.0 onwards, matching the repository's wider release convention (see <code>README.md</code> → "Versioning" and the root <code>CHANGELOG.md</code>). Earlier covers' v1.0 / v1.1 / v1.2 are re-stamped as v1.0.0 / v1.1.0 / v1.2.0 in the entries below; no content change to those revisions.</li>
-    <li><strong>Admin guide gains a "Cutting a release" subsection</strong> in Section 06, walking through the <code>scripts/release.sh</code> helper that promotes <code>[Unreleased]</code> in the root changelog, tags <code>main</code>, and publishes a GitHub Release in one command.</li>
-    <li><strong>Repository tagged <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.0.0">v1.0.0</a></strong> on 20 May 2026, marking Deliverable D1 ready for review.</li>
-    <li><strong>Site screenshots refreshed</strong> against the current state of <code>netsec-cost.eu</code>.</li>
-    <li>Cover, poster footer, and last-page footer all stamped v1.3.0 for consistency.</li>
-  </ul>
+  <p class="cl-summary">Semantic Versioning adopted for this pack from v1.0.0 onwards, matching the wider release convention (see <code>README.md</code> Versioning and the root <code>CHANGELOG.md</code>). Earlier covers' v1.0 / v1.1 / v1.2 are re-stamped as v1.0.0 / v1.1.0 / v1.2.0 in the entries below; content unchanged. Admin guide gains a <em>Cutting a release</em> subsection walking through <code>scripts/release.sh</code>. Repository tagged <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.0.0">v1.0.0</a> on 20 May 2026, marking Deliverable D1 ready for review.</p>
 
   <h2>v1.2.0 · May 2026 <span class="small muted">(was: v1.2)</span></h2>
-  <ul>
-    <li><strong>New Section 07 — Security &amp; DevSecOps.</strong> Threat model in a paragraph; coordinated-disclosure policy moved up from the appendix; full inventory of GitHub-native automation now in place (private vulnerability reporting, security advisories, Dependabot alerts, CodeQL code scanning with the security-and-quality and security-extended suites at high precision on push, pull-request, and a weekly cron, secret scanning with push protection); supply-chain hardening (pinned Actions, least-privilege <code>GITHUB_TOKEN</code>, two-person review on <code>main</code>); web-platform hardening (HTTPS-only, HSTS, no third-party trackers); account hygiene (org-level 2FA, branch protection); personal-data minimisation; audit-trail posture.</li>
-    <li><strong>Appendix B split.</strong> Security content promoted to Section 07; Appendix B now covers Licensing only, with the rationale for keeping the code and content licences separate.</li>
-    <li><strong>New Appendix C — Changelog</strong> (this page).</li>
-    <li><strong>Footer version corrected</strong> to match the cover.</li>
-  </ul>
+  <p class="cl-summary">New Section 07 Security &amp; DevSecOps: threat model, coordinated-disclosure policy, GitHub-native automation inventory (private vulnerability reporting, security advisories, Dependabot alerts, CodeQL on push / pull-request / weekly cron, secret scanning with push protection), supply-chain hardening (pinned Actions, least-privilege <code>GITHUB_TOKEN</code>), web-platform hardening (HTTPS-only, HSTS, no third-party trackers), account hygiene, personal-data minimisation. Appendix B split: security promoted to Section 07; Appendix B now licensing only. New Appendix C Changelog (this appendix).</p>
 
   <h2>v1.1.0 · May 2026 <span class="small muted">(was: v1.1)</span></h2>
-  <ul>
-    <li><strong>New full-bleed poster page</strong> after the cover, summarising the website in numbers (30 countries, 49 MC members, 4 Working Groups, 5 grant schemes) and eight headline features.</li>
-    <li><strong>New Section 04 — Translation &amp; multilingual posture.</strong> Sibling-file approach for FR/DE beta, what is and is not translated, the SHA-1 drift-checker workflow with diagram, refresh procedure, and the explicit "no machine-translation, no recurring API cost" stance.</li>
-    <li><strong>New Section 05 — SEO &amp; discoverability.</strong> Open Graph, Twitter Card, JSON-LD, canonical URLs, hreflang, sitemap, 404 strategy; the <code>inject-seo.py</code> idempotent generator with diagram; new-page SEO checklist; GitHub Pages header limits.</li>
-    <li><strong>DNS row clarified</strong> — Namecheap, registered under Dr Moritz Weiss (Action Chair), with Dr Arthur Laudrain as admin contact.</li>
-    <li><strong>Screenshots refreshed</strong> against the current site (post FR/DE nav-fit fix, post-ITC-grants edit).</li>
-    <li>Admin guide renumbered from Section 04 to Section 06; cover bumped to v1.1.</li>
-  </ul>
+  <p class="cl-summary">New full-bleed poster page after the cover with the website in numbers (30 countries, 49 MC members, 4 Working Groups, 5 grant schemes) and eight headline features. New Section 04 Translation posture: sibling-file approach for FR/DE beta, drift-checker workflow, explicit no-machine-translation stance. New Section 05 SEO &amp; discoverability: Open Graph, Twitter Card, JSON-LD, canonical URLs, hreflang, sitemap, 404 strategy; <code>inject-seo.py</code> idempotent generator. DNS row clarified: Namecheap, registered under Dr Moritz Weiss with Dr Arthur Laudrain as admin contact.</p>
 
   <h2>v1.0.0 · May 2026 <span class="small muted">(was: v1.0)</span></h2>
-  <ul>
-    <li><strong>Initial release</strong> of the documentation pack as part of Deliverable D1.</li>
-    <li>Cover, table of contents, and six core chapters: Overview &amp; purpose, Architecture (with data-flow diagrams for the weekly sync workflows), Design system (tokens, components, motion, accessibility floor), Admin guide (accounts, routine tasks, escalation, handover), Appendix A Accessibility (WCAG 2.1 AA target, axe-core results), Appendix B Security &amp; Licensing (single combined appendix in this revision).</li>
-    <li>Three site screenshots, Mermaid diagrams inlined and rendered client-side at build time.</li>
-    <li>Build pipeline (<code>docs/pdf/build.sh</code>) using a local HTTP server plus Chrome headless <code>--print-to-pdf</code>, no external services.</li>
-  </ul>
+  <p class="cl-summary">Initial release of the documentation pack as part of Deliverable D1. Cover, table of contents, six core chapters (Overview &amp; purpose, Architecture with data-flow diagrams for the weekly sync workflows, Design system, Admin guide, Appendix A Accessibility, Appendix B Security &amp; Licensing as a single combined appendix in this revision). Three site screenshots, Mermaid diagrams inlined and rendered client-side at build time. Build pipeline (<code>docs/pdf/build.sh</code>) using a local HTTP server plus Chrome headless <code>--print-to-pdf</code>, no external services.</p>
+
+  </div><!-- /.changelog-entries -->
 
   <hr style="margin-top:36pt">
 
   <p class="small muted center" style="margin-top:24pt">
-    NetSec — Networking European Security Knowledge · COST Action CA24154 · MoU 063/25 · Running 10 Oct 2025 – 09 Oct 2029.<br>
-    Documentation v1.8.0 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich) as part of Deliverable D1.<br>
+    NetSec: Networking European Security Knowledge · COST Action CA24154 · MoU 063/25 · Running 10 Oct 2025 to 09 Oct 2029.<br>
+    Documentation v1.9.0 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich) as part of Deliverable D1.<br>
     The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union.
   </p>
 </section>
