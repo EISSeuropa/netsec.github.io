@@ -1,34 +1,56 @@
 # Daily sync of data/indico.json from the EISS Indico instance.
 #
-# Why direct commit, not auto-PR
-# ------------------------------
-# Same justification as EISS's sync-indico.yml: this sync is fully
-# read-only against public Indico data. The information is already
-# visible on indico.eiss-europa.com; surfacing the same titles +
-# dates + speaker names on the NetSec static site doesn't introduce
-# new privacy or accuracy risk. So this workflow commits directly to
-# main when indico.json changes substantively (the script's idempotency
-# guard suppresses no-op writes — see scripts/sync-indico.py).
+# What this does
+#   1. Every day at 03:45 UTC (and on manual dispatch), runs
+#      scripts/sync-indico.py which hits the public Indico export API
+#      and writes data/indico.json.
+#   2. If anything changed substantively (the script's own idempotency
+#      guard suppresses no-op writes), opens or updates a pull request
+#      on the branch `indico-sync/auto`.
+#   3. Enables auto-merge (squash) on the PR so the daily refresh
+#      ships without needing a human to click. The PR sits until
+#      branch-protection status checks pass.
+#
+# Why PR-based, not direct push
+#   The repo's `main` ruleset blocks direct pushes; the sync used to
+#   push straight to `main` and now gets rejected with GH013.
+#   Mirroring the pattern in sync-bios.yml keeps every change in the
+#   PR + checks flow. Auto-merge preserves the original "no human
+#   needed" promise for this read-only data.
+#
+# A note on status checks + PAT
+#   Pull requests opened by the default `GITHUB_TOKEN` do NOT trigger
+#   workflow runs on other workflows (a GitHub safety rule against
+#   accidental loops). If branch protection requires status checks
+#   that are normally driven by `push` or `pull_request` events, the
+#   auto-merge will sit forever waiting for green.
+#
+#   The clean fix is a fine-grained Personal Access Token stored as
+#   `secrets.WORKFLOW_PAT` (or a GitHub App). When set, this workflow
+#   uses it to open the PR and the resulting `pull_request` event
+#   will trigger the rest of the suite. When unset, the workflow
+#   falls back to `GITHUB_TOKEN` and the PR will need a manual nudge
+#   (push, close + reopen, or a maintainer override on merge).
 #
 # Failure handling
-# ----------------
-# If Indico is unreachable, sync-indico.py exits 1 and this workflow
-# fails. The existing indico.json snapshot in the repo is NOT touched
-# — the site keeps working with the last good data. The only signal
-# is a red badge on the Actions tab. Same posture as sync-bios.yml.
+#   If Indico is unreachable, sync-indico.py exits 1 and the workflow
+#   fails. The existing indico.json snapshot in the repo is not
+#   touched, so the site keeps working with the last good data. The
+#   only signal is a red badge on the Actions tab.
 
 name: Sync events from Indico
 
 on:
   schedule:
-    # 03:45 UTC daily. EISS runs at the same time (we share the Indico
-    # instance but the two workflows don't coordinate — each one
+    # 03:45 UTC daily. EISS runs at the same time (we share the
+    # Indico instance but the two workflows don't coordinate; each
     # makes its own ~2 HTTP calls so the instance load is trivial).
     - cron: "45 3 * * *"
   workflow_dispatch:      # Manual run from the Actions tab
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: indico-sync
@@ -52,27 +74,56 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r scripts/requirements.txt
 
-      - name: Run sync-indico.py
+      - name: Run sync-indico.py and capture diff stats
         env:
           # Opt-in Bearer auth for the (future) /api/* call sites.
           # Stored as a repo-level Actions secret; provisioned by the
           # maintainer on the shared service account that the EISS
           # sync also uses. Anonymous /export/* calls work without
-          # this — set it for forward compatibility.
+          # this, so set it only for forward compatibility.
           INDICO_API_TOKEN: ${{ secrets.INDICO_API_TOKEN }}
-        run: python3 scripts/sync-indico.py
-
-      - name: Commit if changed
         run: |
-          if [[ -z "$(git status --porcelain data/indico.json)" ]]; then
-            echo "No substantive change — nothing to commit."
-            exit 0
-          fi
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/indico.json
-          git commit -m "data: refresh indico.json from sync-indico.py
+          set -o pipefail
+          python3 scripts/sync-indico.py | tee /tmp/sync-indico.txt
+          {
+            echo "Auto-detected changes in the Indico programme."
+            echo "Source: https://indico.eiss-europa.com/export/categ/1.json"
+            echo ""
+            echo '```'
+            cat /tmp/sync-indico.txt
+            echo '```'
+            echo ""
+            echo "_Generated by the **Sync events from Indico** workflow._"
+            echo "_Triggered: \`${{ github.event_name }}\` · run_id: \`${{ github.run_id }}\`_"
+          } > /tmp/indico-pr-body.md
 
-          Auto-generated by .github/workflows/sync-indico.yml.
-          Source: https://indico.eiss-europa.com/export/categ/1.json"
-          git push
+      - name: Open or update PR if indico.json changed
+        id: cpr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          # Prefer the WORKFLOW_PAT when present so the PR triggers
+          # the rest of the workflow suite (status checks, etc.).
+          # Falls back to GITHUB_TOKEN; the PR will then need a
+          # manual nudge to acquire green checks.
+          token: ${{ secrets.WORKFLOW_PAT || secrets.GITHUB_TOKEN }}
+          branch: indico-sync/auto
+          base: main
+          delete-branch: true
+          title: 'data: sync programme from Indico'
+          commit-message: |
+            data: refresh indico.json from sync-indico.py
+
+            Auto-generated by .github/workflows/sync-indico.yml.
+            Source: https://indico.eiss-europa.com/export/categ/1.json
+          body-path: /tmp/indico-pr-body.md
+          labels: |
+            automated
+            data-sync
+
+      - name: Enable auto-merge on the PR
+        if: steps.cpr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ secrets.WORKFLOW_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" \
+            --auto --squash --repo "${{ github.repository }}"
