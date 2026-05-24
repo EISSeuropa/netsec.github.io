@@ -192,17 +192,19 @@ issue (rule §3) and reference it from the surface itself.
   what's documented?
 - The stakeholder PDF (`docs/pdf/NetSec-website-documentation.pdf`,
   source at `docs/pdf/documentation.html`) carries its own
-  version stamp and changelog appendix. Two-tier cadence:
-  - **Cover bump** — fast, always. Bump the stamp + add a
-    short appendix entry. Acceptable to defer section-level
-    catch-up via an explicit "gap" entry (pattern: pack
-    v1.7.0 in PR #116; tracking
+  version stamp and changelog appendix. **Minor / major releases
+  only; patches skip the PDF entirely.** Two-tier cadence within
+  the minor / major track:
+  - **Cover bump** on every minor / major release. Bump the
+    stamp + add a short appendix entry. Acceptable to defer
+    section-level catch-up via an explicit "gap" entry (pattern:
+    pack v1.7.0 in PR #116; tracking
     [#122](https://github.com/EISSeuropa/netsec.github.io/issues/122)).
-  - **Section-level catch-up** — substantive; refresh
+  - **Section-level catch-up** is substantive: refresh
     Section 02 site graph + page inventory, refresh
     screenshots via `./docs/pdf/build.sh --shots`. Batch
     when site shape stabilises (typically every 2-3 minor
-    releases, not every release).
+    releases, not every minor).
 
 ### 5. Members' Wiki
 
@@ -351,6 +353,59 @@ open issue tagged with this milestone** has either been ticked off
 in the release notes or moved to the next milestone with a one-
 line reason in the issue thread. The release should not ship with
 its own milestone holding open work.
+
+## 11. Documentation currency
+
+The site has three classes of documentation, and each has a
+different cadence for staying current.
+
+### Repo `.md` docs + Wiki: three rules
+
+1. **Inline at PR time.** If a PR changes something a doc
+   describes (an architectural component, a documented
+   procedure, the public surface of a script that has its own
+   `.md` doc), the same PR updates that doc. Same posture as
+   the per-PR `[Unreleased]` rule in §4. Examples:
+   `architecture.md` for data-flow changes, `admin-guide.md`
+   for procedure changes, `indico-sync.md` for sync changes,
+   `bios-setup.md` for bios-form changes, the Wiki *How-tos*
+   page when the matching public surface changes.
+
+2. **Wiki *Decisions* log when a structural decision lands.**
+   "Structural" here means: chose A over a credible B, future
+   maintainer might re-litigate. Format and criteria are
+   already at the top of the Wiki *Decisions* page. Cadence:
+   within a week of the decision (ideally the same PR), single
+   entry per decision. Roughly 1-3 entries per release at the
+   current cadence.
+
+3. **Catch-up sweep at every release** (patch, minor, major).
+   Walk the repo `.md` index + the Wiki page list, spot-check
+   each against what shipped, fix what's wrong. Lightweight by
+   design: most PRs already updated their target doc inline, so
+   the sweep is the safety net rather than the workhorse. This
+   is also point 4 in §5's cross-check, which only fires on
+   minor / major; the new rule extends the sweep to patches but
+   keeps it deliberately shallow (no comprehensive read-through;
+   spot-check only).
+
+**Why per-release instead of every N PRs.** Threshold options
+considered: (a) at every release; (b) every N user-visible PRs
+(N=5 was the candidate); (c) every M days (M=14). Option (a)
+ties to a rhythm the maintainer already runs and never drifts
+into "I forgot when I last swept". Options (b) and (c) decouple
+from cadence but add a counter to remember. (a) wins on the
+"will the maintainer actually do this" metric. If the release
+cadence ever slows to less than monthly, revisit and consider
+adding a calendar fallback.
+
+### PDF documentation pack: minor / major only
+
+Per §5 point 4: the PDF (`docs/pdf/NetSec-website-documentation.pdf`)
+is refreshed on every minor / major release; patches skip it.
+Cover bump always, section-level catch-up batched every 2-3
+minor releases. The PDF carries its own version stamp and
+appendix, and is built from `docs/pdf/documentation.html`.
 
 ---
 
