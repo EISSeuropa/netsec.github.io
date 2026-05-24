@@ -2827,10 +2827,14 @@ body.search-open{overflow:hidden}
   margin:0 0 1.6rem;
 }
 
-/* Quick facts — 4-cell grid; collapses to 2 on tablet, 1 on phone. */
+/* Quick facts: 5-cell grid (dates / venue / room / Indico /
+   practical info anchor); collapses to 3 on small laptop, 2 on
+   tablet, 1 on phone. The fifth cell is the in-page jump to
+   #practical, styled like the rest so the strip stays balanced,
+   with a small down-arrow on the value to telegraph the jump. */
 .essc-quickfacts{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-columns:repeat(5,minmax(0,1fr));
   gap:14px;
   margin-top:1.4rem;
   padding:18px 22px;
@@ -2857,11 +2861,132 @@ body.search-open{overflow:hidden}
   color:var(--ink);
   overflow-wrap:anywhere;
 }
+/* Anchor variant of a quick-fact tile. Reads as part of the row,
+   value sits in accent colour to mark it as a link, the arrow
+   nudges down on hover to telegraph the in-page jump. */
+a.essc-quickfact.is-jump{
+  text-decoration:none;
+  color:inherit;
+}
+a.essc-quickfact.is-jump .val{
+  color:var(--accent-2);
+}
+a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
+  transform:translateY(2px);
+}
+.essc-quickfact-arrow{
+  display:inline-block;
+  transition:transform .2s var(--ease);
+  margin-left:.15rem;
+}
+@media (max-width:980px){
+  .essc-quickfacts{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
 @media (max-width:780px){
   .essc-quickfacts{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:480px){
   .essc-quickfacts{grid-template-columns:1fr}
+}
+
+/* Practical information. Static section sourced from the local
+   organisers (not Indico). Subsection-driven so the page can grow
+   from accommodation to transport / dining / need-to-know without
+   restructuring. */
+.essc-practical{padding:64px 0}
+.essc-practical h2{
+  font-size:clamp(1.8rem,1.4rem+1.8vw,2.5rem);
+  margin:0 0 1.4rem;
+}
+.essc-practical-block{
+  padding:28px;
+  border-radius:18px;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  margin-bottom:24px;
+}
+.essc-practical-block:last-child{margin-bottom:0}
+.essc-practical-block-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 .8rem;
+  font-size:1.2rem;
+  font-weight:600;
+  color:var(--ink);
+}
+.essc-practical-block-title svg{
+  width:20px;height:20px;flex:none;color:var(--accent-2);
+}
+.essc-practical-lede{
+  margin:0 0 1.4rem;
+  font-size:1rem;
+  color:var(--ink-2);
+  line-height:1.55;
+  max-width:62ch;
+}
+.essc-practical-foot{
+  margin:1.2rem 0 0;
+  font-size:.9rem;
+  color:var(--muted);
+}
+.essc-area-grid{
+  list-style:none;
+  padding:0;margin:0;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:14px;
+}
+.essc-area{
+  padding:16px 18px;
+  border-radius:12px;
+  background:color-mix(in oklab, var(--bg-0) 60%, transparent);
+  border:1px solid var(--glass-border);
+  display:flex;
+  flex-direction:column;
+  gap:.5rem;
+}
+.essc-area-name{
+  margin:0;
+  font-size:1rem;
+  font-weight:600;
+  letter-spacing:-.01em;
+  color:var(--ink);
+}
+.essc-area-note{
+  margin:0;
+  font-size:.85rem;
+  color:var(--ink-2);
+  line-height:1.4;
+}
+.essc-stop-chips{
+  list-style:none;
+  padding:0;margin:auto 0 0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.essc-stop-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:3px 9px 3px 8px;
+  border-radius:999px;
+  font-size:.78rem;
+  font-weight:500;
+  color:var(--ink-2);
+  background:color-mix(in oklab, var(--accent-2) 8%, transparent);
+  border:1px solid color-mix(in oklab, var(--accent-2) 22%, transparent);
+}
+/* Leading dot follows SL convention of marking line colour. Every
+   recommended neighbourhood sits on the red line (T13), so all
+   chips carry the same red marker. If a future year needs other
+   lines, branch on a `data-line` attribute. */
+.essc-stop-chip::before{
+  content:'';
+  display:inline-block;
+  width:7px;height:7px;border-radius:50%;
+  background:#d71920; /* SL red line */
 }
 
 /* Programme section */
