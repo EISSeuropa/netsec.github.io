@@ -233,6 +233,11 @@ def test_download_photo_idempotent_on_unchanged_upstream() -> None:
     if dest_jpg.exists():
         dest_jpg.unlink()
 
+    # Reset the module-level PHOTOS_CHANGED tracker so assertions
+    # below see a clean slate. This list is shared state across tests
+    # in the same process, so explicit reset keeps test ordering safe.
+    sync_bios.PHOTOS_CHANGED.clear()
+
     try:
         # First call: no prior hash → re-encode + write.
         path1, hash1 = download_photo(
@@ -241,11 +246,16 @@ def test_download_photo_idempotent_on_unchanged_upstream() -> None:
         expect("first call returns path",        path1 is not None, True)
         expect("first call returns hash",        bool(hash1), True)
         expect("first call wrote file",          dest_jpg.exists(), True)
+        expect("first call recorded write in PHOTOS_CHANGED",
+               len(sync_bios.PHOTOS_CHANGED), 1)
+        expect("PHOTOS_CHANGED entry points at the written file",
+               sync_bios.PHOTOS_CHANGED[0], path1)
 
         jpeg_after_first = dest_jpg.read_bytes()
         mtime_after_first = dest_jpg.stat().st_mtime_ns
 
-        # Second call: prior hash matches → must NOT write.
+        # Second call: prior hash matches → must NOT write, must NOT
+        # append to PHOTOS_CHANGED.
         path2, hash2 = download_photo(
             "https://fake/photo.jpg", dest_no_ext, prior_hash=hash1,
         )
@@ -255,20 +265,27 @@ def test_download_photo_idempotent_on_unchanged_upstream() -> None:
                dest_jpg.read_bytes(), jpeg_after_first)
         expect("second call did not touch file (mtime)",
                dest_jpg.stat().st_mtime_ns, mtime_after_first)
+        expect("second call did not append to PHOTOS_CHANGED",
+               len(sync_bios.PHOTOS_CHANGED), 1)
 
         # Third call with a wrong prior_hash → falls through and
         # re-encodes; the byte-equality guard then catches the
         # write (PIL is deterministic for THIS process, even if
-        # not across PIL minor-version updates).
+        # not across PIL minor-version updates). Bytes on disk
+        # already match the freshly-encoded output, so no write
+        # happens → PHOTOS_CHANGED stays at one entry.
         path3, hash3 = download_photo(
             "https://fake/photo.jpg", dest_no_ext, prior_hash="deadbeef",
         )
         expect("wrong prior_hash → returns same path", path3, path1)
         expect("wrong prior_hash → returns the upstream hash, not the bogus prior",
                hash3, hash1)
+        expect("byte-equality fast path also avoided PHOTOS_CHANGED append",
+               len(sync_bios.PHOTOS_CHANGED), 1)
     finally:
         sync_bios.requests.get = saved_get
         sync_bios.drive_file_id = saved_drive_id
+        sync_bios.PHOTOS_CHANGED.clear()
         if dest_jpg.exists():
             dest_jpg.unlink()
 
