@@ -98,7 +98,30 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Index of changes
+
+#### Added
+
+- **Inline-expand full abstract on programme contribution cards** (`/essc-2026.html` + FR + DE). `scripts/sync-indico.py` now emits a `fullAbstract` field alongside the truncated teaser; clicking *Read full abstract* swaps the teaser for the full text in place, *Show less* swaps it back. Title still anchors to the Indico contribution page for the canonical record. [#158](https://github.com/EISSeuropa/netsec.github.io/pull/158).
+- **Per-session room badge on the programme grid.** Surfaces "D House, Lecture Hall 8" / "Lecture Hall 9" / "Floor 3" on session, contribution, and break cards via a small pin-icon chip. The sync exposes `inheritRoom` and `inheritLoc` flags from Indico for forward use. [#156](https://github.com/EISSeuropa/netsec.github.io/pull/156).
+- **Practical information section** on `/essc-2026.html` after the live programme. Two cards: Accommodation (five recommended Stockholm neighbourhoods with their nearest red-line metro stops as chips) and Getting around (T13 context + sl.se link). Quick-facts strip grows from 4 to 5 tiles with a new *Practical info / Stockholm tips ↓* in-page anchor. Mirrored to FR + DE. [#159](https://github.com/EISSeuropa/netsec.github.io/pull/159).
+- **`indicoEventId` link field on `data/events.json`.** Entries that opt in get their `summary`, `start`, and `end` overwritten from the fresh Indico payload on every sync, closing the drift between the live programme and the home-page banner / `calendar.ics`. Allow-list is tight; `location`, `description`, `url`, `categories` stay hand-edited. Documented in `docs/indico-sync.md`. Refactor to fully-derived data tracked in [#170](https://github.com/EISSeuropa/netsec.github.io/issues/170). [#171](https://github.com/EISSeuropa/netsec.github.io/pull/171).
+- **Per-PR `[Unreleased]` maintenance rule** added to `CLAUDE.md` §4. Every PR that ships a user-visible change adds at least one bullet to `[Unreleased]` in the same PR; reconstructing the batch at release time loses nuance.
+
+#### Changed
+
+- **Parallel programme rows sorted by canonical room name** so the same room consistently lands in the same column across the day. Indico orders parallel panels by convener id; without normalisation, Lecture Hall 8 jumped between left and right between time slots. A small `_canonical_room` helper strips cosmetic building prefixes so "Lecture Hall 8" and "D House, Lecture Hall 8" collapse to the same column key. [#157](https://github.com/EISSeuropa/netsec.github.io/pull/157).
+- **`sync-indico.yml` opens a PR via `peter-evans/create-pull-request@v7`** instead of pushing directly to `main`. Branch protection on `main` had started rejecting the direct push with `GH013`. CodeQL still runs on the bot PR (separate workflow), all checks complete, auto-merge fires, daily cadence stays hands-free. PAT not required; `GITHUB_TOKEN` is enough. [#160](https://github.com/EISSeuropa/netsec.github.io/pull/160).
+- **Sitewide footer attribution: em-dash → colon.** `COST Action NetSec — Networking European Security Knowledge` becomes `COST Action NetSec: Networking European Security Knowledge` (and locale variants) across 45 page footers (15 EN + 15 FR + 15 DE). Voice-rule cleanup pass; rest of the em-dash audit tracked in [#164](https://github.com/EISSeuropa/netsec.github.io/issues/164). [#166](https://github.com/EISSeuropa/netsec.github.io/pull/166).
+
+#### Fixed
+
+- **Mobile home visual polish.** The floating nav no longer ghosts high-contrast details-strip text through its backdrop-filter on iOS Safari: a fixed top-scrim covers the gap above the bubble and the nav itself takes a near-opaque background on small viewports. Details-strip ↔ event-banner vertical gap tightened from 24 + 24 px to 12 + 8 px at ≤ 720 px. The event-banner status pill is now wrapped in a subtle `currentColor`-tinted chip so the dot reads as part of the same pill rather than a floating speck. [#154](https://github.com/EISSeuropa/netsec.github.io/pull/154).
+- **Beta-translation ribbon ghosting on FR / DE pages.** The disclaimer ribbon used a ~5-15% alpha accent gradient over no base, so page content scrolled visibly through. Layered over `var(--glass-bg-strong)` + `backdrop-filter: saturate(180%) blur(20px)` on desktop, plus a near-opaque page-bg tint on mobile (≤ 720 px). [#155](https://github.com/EISSeuropa/netsec.github.io/pull/155).
+- **Details-strip separator half-line on mobile home.** The 2 × 2 grid at ≤ 1100 px left a stray border-bottom under the third tile only. Switched the strip rule from `:nth-child(2n) + :last-child` to `:nth-last-child(-n+2)` so the final row sheds the border regardless of total item count. [#163](https://github.com/EISSeuropa/netsec.github.io/pull/163).
+- **Break-card title and room badge collision** on `/essc-2026.html`. The pin icon sat right against the last word of the title; italic muted styling made the title vanish next to the badge. Now flex-laid with `gap: 14 px`, title in normal weight + `ink-2` colour, middle-dot `·` separator before the badge. [#168](https://github.com/EISSeuropa/netsec.github.io/pull/168).
+
+🤖 _Authored with help from [Claude Code](https://claude.com/claude-code)._
 
 ## [1.6.0] · 2026-05-23 — Live ESSC programme and member previews
 
