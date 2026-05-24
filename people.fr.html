@@ -477,20 +477,12 @@
       .split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('');
   }
 
-  // Acronymes préservés à travers la normalisation. Voir people.html
-  // (EN) pour la justification ; déplacé dans data/keyword-aliases.json
-  // lors de la phase 2 (#175).
-  const KEYWORD_ACRONYMS = {
+  // Normaliseur de secours. Utilisé uniquement quand un bio n'a pas
+  // le champ `canonical_keywords` produit par sync-bios.py. Voir
+  // people.html (EN) pour la justification complète.
+  const KEYWORD_ACRONYMS_FALLBACK = {
     'un':'UN','eu':'EU','nato':'NATO','uk':'UK','us':'US','usa':'USA',
-    'undp':'UNDP','eeas':'EEAS','osce':'OSCE','asean':'ASEAN','oecd':'OECD',
-    'imf':'IMF','wto':'WTO','who':'WHO','unhcr':'UNHCR','unesco':'UNESCO',
-    'icc':'ICC','icj':'ICJ','iaea':'IAEA','ipcc':'IPCC','ebrd':'EBRD',
-    'ecb':'ECB','eib':'EIB','cfsp':'CFSP','csdp':'CSDP','pesco':'PESCO',
-    'esdp':'ESDP','eda':'EDA','edf':'EDF','sco':'SCO','csto':'CSTO',
-    'brics':'BRICS','mena':'MENA','ai':'AI','ml':'ML','nlp':'NLP',
-    'iot':'IoT','gdpr':'GDPR','ict':'ICT','nato-eu':'NATO-EU',
-    'r&d':'R&D','npt':'NPT','wmd':'WMD','cbrn':'CBRN','r2p':'R2P',
-    'g7':'G7','g20':'G20',
+    'ai':'AI','iot':'IoT','gdpr':'GDPR','r&d':'R&D',
   };
   function normaliseKeywordDisplay(raw) {
     const trimmed = String(raw || '').trim();
@@ -498,9 +490,9 @@
     let firstAlpha = true;
     return trimmed.replace(/[\p{L}&]+/gu, (word) => {
       const lower = word.toLowerCase();
-      if (KEYWORD_ACRONYMS[lower]) {
+      if (KEYWORD_ACRONYMS_FALLBACK[lower]) {
         firstAlpha = false;
-        return KEYWORD_ACRONYMS[lower];
+        return KEYWORD_ACRONYMS_FALLBACK[lower];
       }
       if (firstAlpha) {
         firstAlpha = false;
@@ -543,7 +535,7 @@
         if ((m.country || '') !== activeCountry) return false;
       }
       if (q) {
-        const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' ')].join(' ').toLowerCase();
+        const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -621,15 +613,17 @@
         bio.classList.add('is-pending');
         bio.textContent = window.netsecT('Bio coming soon.');
       }
-      // Mots-clés de recherche : visibles en vue détaillée uniquement.
-      // Normalisation en casse de phrase + acronymes préservés via
-      // normaliseKeywordDisplay (ci-dessus). Voir people.html (EN).
+      // Mots-clés de recherche. Préfère `canonical_keywords` du sync,
+      // se replie sur `keywords` + normaliseur local si absent. Voir
+      // people.html (EN) pour le détail.
       const kwWrap = node.querySelector('.member-keywords');
-      const kws = Array.isArray(m.keywords) ? m.keywords.filter(Boolean) : [];
+      const canonical = Array.isArray(m.canonical_keywords) ? m.canonical_keywords.filter(Boolean) : null;
+      const kws = canonical && canonical.length
+        ? canonical
+        : (Array.isArray(m.keywords) ? m.keywords.filter(Boolean).map(normaliseKeywordDisplay) : []);
       if (kws.length) {
         const seen = new Set();
-        kws.forEach(raw => {
-          const display = normaliseKeywordDisplay(raw);
+        kws.forEach(display => {
           if (!display) return;
           const dedupKey = display.toLowerCase();
           if (seen.has(dedupKey)) return;

@@ -140,6 +140,20 @@ The sync script preserves this field across runs. It's only overwritten if a for
 
 To check what's currently missing, open the live programme in any browser, then `console.debug` in DevTools: the page logs `[essc] N speakers didn't match a member: ...` after render.
 
+## Research-keyword normalisation (`data/keyword-aliases.json`)
+
+The Google Form accepts free-text research keywords. To keep the directory's pill display + filter coherent, the sync resolves each submitted keyword to a canonical form via `data/keyword-aliases.json`, then writes the result to a per-bio `canonical_keywords` field (and an aggregate count to the top-level `keyword_aggregate`). The renderer reads the canonical list.
+
+The file has two sections:
+
+- **`acronyms`** is a flat list of preferred display forms (`UN`, `NATO`, `EU`, `IoT`, `R&D`, …). When one of these words appears in any position in a submitted keyword, the sentence-case normaliser preserves its canonical capitalisation. So `eu foreign policy` becomes `EU foreign policy`, not `Eu foreign policy`.
+
+- **`aliases`** maps a canonical display form to a list of lowercased aliases that resolve to it. Use this when two genuinely-distinct submitted phrases should collapse (`fpa` → `Foreign policy analysis`) or when a phrase needs to override the auto-normaliser (`eu-nato relations` → `EU–NATO relations` with the en-dash).
+
+The maintainer extends the file by hand when a submission lands. The sync also logs `· possible alias candidate (3× 'foreign policy') ↔ (1× 'foreign policy analysis'); distance=9, substring` for pairs that look close enough to be worth a manual merge. Distance ≤ 2 Levenshtein and word-boundary substring containment both trigger the hint; already-paired canonicals are suppressed.
+
+If `data/keyword-aliases.json` is missing or malformed, the sync falls back to identity normalisation (sentence-case the whole string, no acronym preservation) and prints a warning. The renderer's own inline fallback covers the same case for visitors who land before the next sync runs.
+
 ## Exporting the data
 
 `data/bios.json` is the canonical export, version-controlled in this repo. To dump it to CSV one-off:

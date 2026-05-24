@@ -476,20 +476,12 @@
       .split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('');
   }
 
-  // Erhaltene Akronyme bei der Normalisierung. Begründung siehe
-  // people.html (EN); ziehen in Phase 2 (#175) nach
-  // data/keyword-aliases.json um.
-  const KEYWORD_ACRONYMS = {
+  // Fallback-Normalisierer. Nur verwendet, wenn ein Bio kein vom
+  // Sync emittiertes `canonical_keywords`-Feld hat. Begründung in
+  // people.html (EN).
+  const KEYWORD_ACRONYMS_FALLBACK = {
     'un':'UN','eu':'EU','nato':'NATO','uk':'UK','us':'US','usa':'USA',
-    'undp':'UNDP','eeas':'EEAS','osce':'OSCE','asean':'ASEAN','oecd':'OECD',
-    'imf':'IMF','wto':'WTO','who':'WHO','unhcr':'UNHCR','unesco':'UNESCO',
-    'icc':'ICC','icj':'ICJ','iaea':'IAEA','ipcc':'IPCC','ebrd':'EBRD',
-    'ecb':'ECB','eib':'EIB','cfsp':'CFSP','csdp':'CSDP','pesco':'PESCO',
-    'esdp':'ESDP','eda':'EDA','edf':'EDF','sco':'SCO','csto':'CSTO',
-    'brics':'BRICS','mena':'MENA','ai':'AI','ml':'ML','nlp':'NLP',
-    'iot':'IoT','gdpr':'GDPR','ict':'ICT','nato-eu':'NATO-EU',
-    'r&d':'R&D','npt':'NPT','wmd':'WMD','cbrn':'CBRN','r2p':'R2P',
-    'g7':'G7','g20':'G20',
+    'ai':'AI','iot':'IoT','gdpr':'GDPR','r&d':'R&D',
   };
   function normaliseKeywordDisplay(raw) {
     const trimmed = String(raw || '').trim();
@@ -497,9 +489,9 @@
     let firstAlpha = true;
     return trimmed.replace(/[\p{L}&]+/gu, (word) => {
       const lower = word.toLowerCase();
-      if (KEYWORD_ACRONYMS[lower]) {
+      if (KEYWORD_ACRONYMS_FALLBACK[lower]) {
         firstAlpha = false;
-        return KEYWORD_ACRONYMS[lower];
+        return KEYWORD_ACRONYMS_FALLBACK[lower];
       }
       if (firstAlpha) {
         firstAlpha = false;
@@ -542,7 +534,7 @@
         if ((m.country || '') !== activeCountry) return false;
       }
       if (q) {
-        const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' ')].join(' ').toLowerCase();
+        const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -620,15 +612,17 @@
         bio.classList.add('is-pending');
         bio.textContent = window.netsecT('Bio coming soon.');
       }
-      // Forschungsschwerpunkte: nur in der Detailansicht sichtbar.
-      // Satzschreibweise + Akronyme über normaliseKeywordDisplay
-      // (siehe oben). Begründung in people.html (EN).
+      // Forschungsschwerpunkte. Bevorzugt `canonical_keywords` aus
+      // dem Sync; fällt auf `keywords` + lokalen Normalisierer
+      // zurück. Begründung in people.html (EN).
       const kwWrap = node.querySelector('.member-keywords');
-      const kws = Array.isArray(m.keywords) ? m.keywords.filter(Boolean) : [];
+      const canonical = Array.isArray(m.canonical_keywords) ? m.canonical_keywords.filter(Boolean) : null;
+      const kws = canonical && canonical.length
+        ? canonical
+        : (Array.isArray(m.keywords) ? m.keywords.filter(Boolean).map(normaliseKeywordDisplay) : []);
       if (kws.length) {
         const seen = new Set();
-        kws.forEach(raw => {
-          const display = normaliseKeywordDisplay(raw);
+        kws.forEach(display => {
           if (!display) return;
           const dedupKey = display.toLowerCase();
           if (seen.has(dedupKey)) return;

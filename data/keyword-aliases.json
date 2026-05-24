@@ -1,0 +1,33 @@
+{
+  "_documentation": "Hand-curated controlled vocabulary for the directory's research-interest keywords. Two sections drive the same surface: `acronyms` is a flat list of preferred display forms (UN, NATO, EU, IoT, …); when one of those words appears anywhere in a submitted keyword, the sync emits it in the canonical form rather than letting the sentence-case normaliser mangle it. `aliases` maps a canonical display form to a list of lowercased aliases that resolve to it; use this when two genuinely-distinct submitted phrases should collapse (e.g. `fpa` → `Foreign policy analysis`, or `political economy of europe` → `Political economy`). scripts/sync-bios.py reads this file, normalises each bio's `keywords` into a `canonical_keywords` field, and logs Levenshtein-close pairs that aren't already merged so the maintainer can decide whether to add them. The file is hand-edited; changes land in the same PR that submits the new bio (or in a periodic curation pass).",
+  "version": 1,
+
+  "acronyms": [
+    "UN", "EU", "NATO", "UK", "US", "USA", "UNDP", "EEAS", "OSCE",
+    "ASEAN", "OECD", "IMF", "WTO", "WHO", "UNHCR", "UNESCO",
+    "ICC", "ICJ", "IAEA", "IPCC", "EBRD", "ECB", "EIB",
+    "CFSP", "CSDP", "PESCO", "ESDP", "EDA", "EDF",
+    "SCO", "CSTO", "BRICS", "MENA",
+    "AI", "ML", "NLP", "IoT", "GDPR", "ICT",
+    "R&D", "NPT", "WMD", "CBRN", "R2P", "G7", "G20"
+  ],
+
+  "aliases": {
+    "EU": ["european union"],
+    "NATO": ["north atlantic treaty organization", "north atlantic treaty organisation"],
+    "UN": ["united nations"],
+    "UK": ["united kingdom"],
+    "US": ["united states", "united states of america"],
+    "UNDP": ["united nations development programme"],
+    "EEAS": ["european external action service"],
+    "AI": ["artificial intelligence"],
+    "ML": ["machine learning"],
+    "NLP": ["natural language processing"],
+    "IoT": ["internet of things"],
+    "R&D": ["research and development"],
+    "WMD": ["weapons of mass destruction"],
+    "R2P": ["responsibility to protect"],
+
+    "EU–NATO relations": ["eu-nato relations", "nato-eu relations"]
+  }
+}

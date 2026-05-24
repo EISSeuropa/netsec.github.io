@@ -210,6 +210,181 @@ def parse_keywords(raw: str) -> list[str]:
     return [k.strip() for k in re.split(r"[,;]", raw) if k.strip()]
 
 
+# ─────────────────── keyword normalisation (Phase 2) ───────────────────
+#
+# The directory renders each bio's `keywords` as small pills. Submitters
+# enter free-text via the Google Form, so the corpus drifts in three
+# directions over time:
+#
+#   1. Casing: "International Security" vs "international security".
+#   2. Acronyms get mangled by naive sentence-case: "EU-NATO relations"
+#      → "Eu-nato relations" if normalised letter-by-letter.
+#   3. Near-duplicates: two submitters write "Foreign policy analysis"
+#      and "FPA" for the same concept.
+#
+# We solve all three at sync time so the renderer can be dumb. The
+# alias file `data/keyword-aliases.json` is the curated source: an
+# `acronyms` list (preferred display forms preserved through any
+# normalisation) and an `aliases` map (canonical phrase → list of
+# lowercased aliases that resolve to it). The maintainer extends the
+# file by hand when a submission lands; sync emits a `canonical_keywords`
+# field per bio and a `keyword_aggregate` top-level array.
+
+ALIAS_FILE = ROOT / "data" / "keyword-aliases.json"
+
+
+def load_keyword_aliases() -> tuple[set[str], dict[str, str]]:
+    """Return (acronym_set, alias_to_canonical_map).
+
+    - acronym_set: lowercased forms of every entry in `acronyms`. Used
+      by the word-walking normaliser to preserve in-word capitalisation
+      ("eu foreign policy" → "EU foreign policy").
+    - alias_to_canonical_map: lowercased alias string → canonical
+      display string. Used for whole-keyword aliasing ("fpa" →
+      "Foreign policy analysis"). Auto-extended so every canonical's
+      own lowercase form maps back to it ("eu" → "EU"), and so each
+      acronym entry maps to itself ("nato" → "NATO")."""
+    acronym_set: set[str] = set()
+    alias_map: dict[str, str] = {}
+    if not ALIAS_FILE.exists():
+        return acronym_set, alias_map
+    try:
+        doc = json.loads(ALIAS_FILE.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as exc:
+        print(f"  ! cannot read {ALIAS_FILE.name}: {exc}; falling back "
+              f"to identity normalisation.")
+        return acronym_set, alias_map
+
+    for entry in doc.get("acronyms", []):
+        if not isinstance(entry, str):
+            continue
+        lower = entry.lower()
+        acronym_set.add(lower)
+        # Each acronym also maps to its own canonical display, so a raw
+        # "eu" or "EU" both resolve to the same key.
+        alias_map[lower] = entry
+
+    for canonical, aliases in (doc.get("aliases") or {}).items():
+        if not isinstance(canonical, str):
+            continue
+        alias_map[canonical.lower()] = canonical
+        for alias in aliases or []:
+            if isinstance(alias, str) and alias.strip():
+                alias_map[alias.strip().lower()] = canonical
+
+    return acronym_set, alias_map
+
+
+_WORD_RE = re.compile(r"[\w&]+", re.UNICODE)
+
+
+def normalise_keyword(raw: str, acronyms: set[str], alias_map: dict[str, str]) -> str:
+    """Resolve a raw submitted keyword to its canonical display form.
+
+    Two stages:
+      1. Whole-keyword alias lookup. Strip + lowercase + check the
+         reverse alias map. If hit, return the canonical verbatim.
+      2. Word-walk normalisation. For each letter-run, if its lowercase
+         form is in the acronym set, emit the canonical acronym (also
+         from the alias map, which stores acronyms by their lowercase
+         form). Otherwise: first word gets a capital, rest stay lower.
+         Separators (hyphens, en-dashes, spaces, slashes) pass through
+         untouched."""
+    trimmed = (raw or "").strip()
+    if not trimmed:
+        return ""
+
+    # Stage 1: whole-keyword alias.
+    direct = alias_map.get(trimmed.lower())
+    if direct:
+        return direct
+
+    # Stage 2: word-walk with acronym preservation.
+    state = {"first_alpha": True}
+
+    def _replace(match: "re.Match[str]") -> str:
+        word = match.group(0)
+        lower = word.lower()
+        if lower in acronyms:
+            state["first_alpha"] = False
+            return alias_map.get(lower, word)
+        if state["first_alpha"]:
+            state["first_alpha"] = False
+            return lower[:1].upper() + lower[1:]
+        return lower
+
+    return _WORD_RE.sub(_replace, trimmed)
+
+
+def _levenshtein(a: str, b: str) -> int:
+    """Tight Levenshtein for the sync-time alias-candidate hint. The
+    corpus is small (tens of unique keywords) so a quadratic
+    implementation is fine; no need to pull in a dependency."""
+    if a == b:
+        return 0
+    if not a:
+        return len(b)
+    if not b:
+        return len(a)
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        curr = [i] + [0] * len(b)
+        for j, cb in enumerate(b, 1):
+            curr[j] = min(
+                prev[j] + 1,            # deletion
+                curr[j - 1] + 1,        # insertion
+                prev[j - 1] + (0 if ca == cb else 1),  # substitution
+            )
+        prev = curr
+    return prev[-1]
+
+
+def flag_alias_candidates(aggregate: dict[str, int], alias_map: dict[str, str]) -> None:
+    """Print a human-readable hint when two canonical keywords look
+    close enough to be candidates for merging via the alias map.
+    Two heuristics fire:
+
+      1. Levenshtein distance ≤ 2 (catches typo-ish variants the
+         normaliser missed).
+      2. One canonical is a strict suffix-or-prefix substring of
+         another at a word boundary (catches "foreign policy" inside
+         "foreign policy analysis").
+
+    Already-aliased pairs are skipped (if the maintainer has decided
+    they're different concepts, the script shouldn't keep nagging)."""
+    canonicals = sorted(aggregate.keys())
+    seen: set[tuple[str, str]] = set()
+    aliased = set(alias_map.values())
+    for i, a in enumerate(canonicals):
+        for b in canonicals[i + 1:]:
+            pair = tuple(sorted((a, b)))
+            if pair in seen:
+                continue
+            seen.add(pair)
+            a_lower, b_lower = a.lower(), b.lower()
+            distance = _levenshtein(a_lower, b_lower)
+            substring_hit = (
+                f" {a_lower} " in f" {b_lower} "
+                or f" {b_lower} " in f" {a_lower} "
+                or b_lower.startswith(a_lower + " ")
+                or a_lower.startswith(b_lower + " ")
+                or b_lower.endswith(" " + a_lower)
+                or a_lower.endswith(" " + b_lower)
+            )
+            if distance <= 2 or substring_hit:
+                # Suppress noise from canonicals already paired via
+                # the alias map.
+                if a in aliased and b in aliased:
+                    continue
+                print(
+                    f"  · possible alias candidate "
+                    f"({aggregate[a]}× {a!r}) "
+                    f"↔ ({aggregate[b]}× {b!r}); "
+                    f"distance={distance}"
+                    f"{', substring' if substring_hit else ''}"
+                )
+
+
 def normalize_orcid(raw: str) -> str:
     """Return the canonical 19-character ORCID iD given anything users
     are likely to paste into the form. Accepts any of:
@@ -973,6 +1148,42 @@ def main() -> None:
 
     merged = merge(old_members, form_entries)
     print(diff_summary(old_members, merged))
+
+    # Resolve raw keywords through the alias map + sentence-case +
+    # acronym word-walk normaliser. Emits a `canonical_keywords` field
+    # per bio and a top-level `keyword_aggregate` array sorted by use
+    # count (ties broken alphabetically). Phase 3 (filter chips on
+    # /people.html) will read the aggregate to seed the chip list.
+    print()
+    print("Normalising keywords against data/keyword-aliases.json …")
+    acronyms, alias_map = load_keyword_aliases()
+    aggregate: dict[str, int] = {}
+    for m in merged:
+        raw_kws = m.get("keywords") or []
+        seen: dict[str, str] = {}  # lowercase canonical → canonical
+        for raw in raw_kws:
+            canon = normalise_keyword(raw, acronyms, alias_map)
+            if not canon:
+                continue
+            key = canon.lower()
+            if key in seen:
+                continue
+            seen[key] = canon
+        # Stable order: alphabetical by canonical display form.
+        canonicals = sorted(seen.values(), key=str.lower)
+        if canonicals:
+            m["canonical_keywords"] = canonicals
+        else:
+            m.pop("canonical_keywords", None)
+        for c in canonicals:
+            aggregate[c] = aggregate.get(c, 0) + 1
+    print(f"  {len(aggregate)} unique canonical keywords across "
+          f"{sum(aggregate.values())} bio mentions.")
+    flag_alias_candidates(aggregate, alias_map)
+    bios_data["keyword_aggregate"] = sorted(
+        ({"keyword": k, "count": v} for k, v in aggregate.items()),
+        key=lambda e: (-e["count"], e["keyword"].lower()),
+    )
 
     # Substance check: did anything actually change?
     #
