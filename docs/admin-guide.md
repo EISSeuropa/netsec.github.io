@@ -204,11 +204,15 @@ minor / major releases only):
      `#### Removed` / `#### Fixed` / `#### Security` sub-headings
      (in that order, each appearing at most once).
 
-   When a PR adds to `[Unreleased]` during the release cycle, the
-   bullet goes into the *existing* index sub-heading. The lede +
-   themes are written at release-cutting time — that's the moment
-   the maintainer reads back through the index and shapes it into a
-   release story.
+   **Every PR that ships a user-visible change adds at least one
+   bullet to `[Unreleased]` in the same PR** (`CLAUDE.md` §4). The
+   bullet goes into the *existing* index sub-heading, never in a new
+   one with the same name below it. Exempt: dependabot / Renovate
+   PRs, the automated `indico-sync/auto` data refresh, and any
+   internal-only commit (docs-only refresh, CI tooling, working-tree
+   hygiene). The lede + themes are written at release-cutting time
+   for minor / major releases only. That's the moment the maintainer
+   reads back through the index and shapes it into a release story.
 
    The release script extracts `[Unreleased]` *verbatim* into the
    GitHub Release notes. Eyeball the body before confirming the
