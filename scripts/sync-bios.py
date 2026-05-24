@@ -1192,6 +1192,17 @@ def main() -> None:
     # diff and the workflow's create-pull-request step would open an
     # otherwise-empty auto-PR every week. We only want a PR when the
     # member data or the configured source URLs have genuinely moved.
+    #
+    # Note for the photo-only-change case (#183): a respondent who
+    # submits a fresh response to update only their headshot (the
+    # workaround for the Google Forms file-upload-edit bug) is detected
+    # via `photo_source_sha256`. download_photo computes the upstream
+    # sha; row_to_member sets it on the form entry; merge propagates it
+    # onto the existing record. The list-of-dicts comparison below then
+    # sees the field differ and opens a PR. Pinned by
+    # test_substance_check_catches_photo_only_change() in
+    # scripts/test-sync-bios.py. If the sha propagation path is ever
+    # refactored, that test will fail.
     new_source = {
         "type": "google_sheet",
         "csv_url": csv_url,
