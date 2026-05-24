@@ -477,6 +477,39 @@
       .split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('');
   }
 
+  // Acronymes préservés à travers la normalisation. Voir people.html
+  // (EN) pour la justification ; déplacé dans data/keyword-aliases.json
+  // lors de la phase 2 (#175).
+  const KEYWORD_ACRONYMS = {
+    'un':'UN','eu':'EU','nato':'NATO','uk':'UK','us':'US','usa':'USA',
+    'undp':'UNDP','eeas':'EEAS','osce':'OSCE','asean':'ASEAN','oecd':'OECD',
+    'imf':'IMF','wto':'WTO','who':'WHO','unhcr':'UNHCR','unesco':'UNESCO',
+    'icc':'ICC','icj':'ICJ','iaea':'IAEA','ipcc':'IPCC','ebrd':'EBRD',
+    'ecb':'ECB','eib':'EIB','cfsp':'CFSP','csdp':'CSDP','pesco':'PESCO',
+    'esdp':'ESDP','eda':'EDA','edf':'EDF','sco':'SCO','csto':'CSTO',
+    'brics':'BRICS','mena':'MENA','ai':'AI','ml':'ML','nlp':'NLP',
+    'iot':'IoT','gdpr':'GDPR','ict':'ICT','nato-eu':'NATO-EU',
+    'r&d':'R&D','npt':'NPT','wmd':'WMD','cbrn':'CBRN','r2p':'R2P',
+    'g7':'G7','g20':'G20',
+  };
+  function normaliseKeywordDisplay(raw) {
+    const trimmed = String(raw || '').trim();
+    if (!trimmed) return '';
+    let firstAlpha = true;
+    return trimmed.replace(/[\p{L}&]+/gu, (word) => {
+      const lower = word.toLowerCase();
+      if (KEYWORD_ACRONYMS[lower]) {
+        firstAlpha = false;
+        return KEYWORD_ACRONYMS[lower];
+      }
+      if (firstAlpha) {
+        firstAlpha = false;
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      }
+      return lower;
+    });
+  }
+
   function leadershipOrder(m) {
     const r = (m.roles || []).join(' ');
     if (/Action Chair$/.test(r)) return '01';
@@ -589,16 +622,15 @@
         bio.textContent = window.netsecT('Bio coming soon.');
       }
       // Mots-clés de recherche : visibles en vue détaillée uniquement.
-      // Normalisation en casse de phrase au moment du rendu. Voir
-      // people.html pour le détail.
+      // Normalisation en casse de phrase + acronymes préservés via
+      // normaliseKeywordDisplay (ci-dessus). Voir people.html (EN).
       const kwWrap = node.querySelector('.member-keywords');
       const kws = Array.isArray(m.keywords) ? m.keywords.filter(Boolean) : [];
       if (kws.length) {
         const seen = new Set();
         kws.forEach(raw => {
-          const trimmed = String(raw).trim();
-          if (!trimmed) return;
-          const display = trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+          const display = normaliseKeywordDisplay(raw);
+          if (!display) return;
           const dedupKey = display.toLowerCase();
           if (seen.has(dedupKey)) return;
           seen.add(dedupKey);

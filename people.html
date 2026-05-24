@@ -550,6 +550,53 @@
       .split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('');
   }
 
+  // Curated acronyms that should keep their canonical capitalisation
+  // through the sentence-case normaliser below. Lowercased key →
+  // preferred display form. Maintainer can extend this list when a
+  // new acronym appears in submissions and goes through the
+  // mid-keyword "Eu-nato" treatment. Phase 2 of the keyword work
+  // (issue #175) will move this into `data/keyword-aliases.json` so
+  // the same list lives in one place and the sync script handles
+  // it; for now it's inline at the render layer.
+  const KEYWORD_ACRONYMS = {
+    'un':'UN','eu':'EU','nato':'NATO','uk':'UK','us':'US','usa':'USA',
+    'undp':'UNDP','eeas':'EEAS','osce':'OSCE','asean':'ASEAN','oecd':'OECD',
+    'imf':'IMF','wto':'WTO','who':'WHO','unhcr':'UNHCR','unesco':'UNESCO',
+    'icc':'ICC','icj':'ICJ','iaea':'IAEA','ipcc':'IPCC','ebrd':'EBRD',
+    'ecb':'ECB','eib':'EIB','cfsp':'CFSP','csdp':'CSDP','pesco':'PESCO',
+    'esdp':'ESDP','eda':'EDA','edf':'EDF','sco':'SCO','csto':'CSTO',
+    'brics':'BRICS','mena':'MENA','ai':'AI','ml':'ML','nlp':'NLP',
+    'iot':'IoT','gdpr':'GDPR','ict':'ICT','nato-eu':'NATO-EU',
+    'r&d':'R&D','npt':'NPT','wmd':'WMD','cbrn':'CBRN','r2p':'R2P',
+    'g7':'G7','g20':'G20',
+  };
+
+  // Sentence-case a keyword while preserving recognised acronyms.
+  // The naive prior `s[0].toUpperCase() + s.slice(1).toLowerCase()`
+  // mangled compound forms like "EU-NATO" into "Eu-nato". The
+  // matcher below walks each letter-run in the string, checks its
+  // lowercase form against KEYWORD_ACRONYMS, emits the canonical
+  // acronym when matched, otherwise sentence-cases (first word
+  // gets a capital, rest lowercase). Separators (-, /, &, etc.) are
+  // preserved as-is via the regex split.
+  function normaliseKeywordDisplay(raw) {
+    const trimmed = String(raw || '').trim();
+    if (!trimmed) return '';
+    let firstAlpha = true;
+    return trimmed.replace(/[\p{L}&]+/gu, (word) => {
+      const lower = word.toLowerCase();
+      if (KEYWORD_ACRONYMS[lower]) {
+        firstAlpha = false;
+        return KEYWORD_ACRONYMS[lower];
+      }
+      if (firstAlpha) {
+        firstAlpha = false;
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      }
+      return lower;
+    });
+  }
+
   function leadershipOrder(m) {
     // Sort key: leadership first, then country reps alphabetical
     const r = (m.roles || []).join(' ');
@@ -701,13 +748,8 @@
       if (kws.length) {
         const seen = new Set();
         kws.forEach(raw => {
-          const trimmed = String(raw).trim();
-          if (!trimmed) return;
-          // Sentence case: first letter upper, rest lower. Keeps
-          // acronyms readable enough (EU, NATO render as "Eu", "Nato",
-          // not perfect, but the alias map will fix the half-dozen
-          // real acronym cases when it ships).
-          const display = trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+          const display = normaliseKeywordDisplay(raw);
+          if (!display) return;
           const dedupKey = display.toLowerCase();
           if (seen.has(dedupKey)) return;
           seen.add(dedupKey);
