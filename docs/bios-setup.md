@@ -51,7 +51,21 @@ In *Settings → Responses*, configure as follows:
 >
 > Add the following note to the **Photo** question's description on the form, so respondents see the workaround at the point of confusion:
 >
-> > Want to update your photo? Google Forms won't let you replace a file upload when editing an existing response. Submit a fresh response (use the link above, not the edit link from your confirmation email); the sync will overwrite your old entry with the new one. For non-photo updates, the edit link works fine.
+> > Want to update your photo? Google Forms won't let you replace a file upload when editing an existing response. Submit a fresh response (use the link above, not the edit link from your confirmation email); the sync will merge your new answers into your old entry. Anything you leave blank in the new submission stays as it was, so you only have to fill in what's changing plus the required fields. For non-photo updates, the edit link works fine.
+
+### How the sync handles a sparse resubmission
+
+A natural worry, given the workaround above: if a respondent submits a "minimum-viable" second response that only fills the required fields (name, role, affiliation, country, bio, consent) plus the new photo, will the sync wipe their previously-entered LinkedIn, ORCID, keywords, etc?
+
+**No.** `scripts/sync-bios.py` does a truthy-merge per field, not a full-record replacement:
+
+- Optional fields (`email`, `website`, `orcid`, `linkedin`, `twitter`, `bluesky`, `mastodon`, `keywords`, `position`, `affiliation`, `bio`, `country`, etc.) only overwrite the prior value when the new submission carries a non-empty value for that field. Blanks are skipped.
+- The headshot follows the same rule. A submission with no upload doesn't wipe the previous photo.
+- Working-group memberships use **union** semantics; a sparse resubmission can never drop a WG.
+
+The knock-on consequence: respondents can't intentionally clear a field via the form. Submitting an empty Twitter field won't remove a previously-stored URL. To unset a link, a respondent can either use the confirmation-email edit link (which lets them actively delete the contents) or ask the maintainer to blank the cell in the Sheet directly.
+
+This makes the photo-replacement workaround safe to recommend in practice: respondents only need to retype the required fields, not the full bio.
 
 ## Step 2 · Link the form to a Sheet
 
@@ -132,7 +146,7 @@ If you delete by accident, Drive's version history can restore the Sheet row.
 **As a respondent:**
 
 - **Non-photo fields.** Use the edit link from the confirmation email. The form re-opens with the previous values prefilled; save the changes and the sync picks them up on the next run.
-- **Photo update.** Submit a fresh response via the public form URL (not the edit link). The sync dedupes by email; the new submission overwrites the previous entry, photo included. This dance exists because Google Forms doesn't let respondents replace a file upload through the edit flow; see the box under Step 1.
+- **Photo update.** Submit a fresh response via the public form URL (not the edit link). The sync dedupes by email; the new submission is *merged* into the previous entry (truthy-merge per field: non-empty new values overwrite, blanks leave the old value alone), photo included. So only the required fields plus the changed photo need to be filled in. This dance exists because Google Forms doesn't let respondents replace a file upload through the edit flow; see the box under Step 1.
 
 ### Optional: `name_aliases` for hard-to-match speakers
 
