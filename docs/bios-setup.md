@@ -108,6 +108,8 @@ Files uploaded via Google Forms land in a private Drive folder. For the workflow
 
 In Google Drive, find the form's auto-created folder (under *My Drive → Join the NetSec network (File responses)*). Right-click → *Share* → set general access to **Anyone with the link → Viewer**. This inherits to every file uploaded later.
 
+Record the resulting share URL in `scripts/bios-source.json` under `photo_folder_url`. The sync doesn't read it, but a future maintainer (including future-you, six months from now) will save a few minutes when something needs spot-checking.
+
 (If you'd rather control sharing per-file, do the same right-click → *Share* dance on each upload as submissions arrive. More secure, more work.)
 
 ## Test the workflow
