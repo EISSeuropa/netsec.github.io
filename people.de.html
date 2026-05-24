@@ -225,6 +225,18 @@
       <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Zum Anmeldeformular" aria-label="Zum Anmeldeformular">+</button>
     </div>
 
+    <!-- Filter nach Forschungsschwerpunkt (Phase 3). Vollständige
+         Dokumentation der Pillen-Reihe und URL-Hash-Persistenz in
+         people.html (EN). -->
+    <div class="members-keyword-filter" id="members-keyword-filter" role="group" aria-label="Nach Forschungsschwerpunkt filtern" hidden>
+      <div class="members-keyword-filter-head">
+        <span class="members-keyword-filter-label">Forschungsschwerpunkte</span>
+        <button type="button" class="members-keyword-filter-clear" id="members-keyword-filter-clear" hidden>Zurücksetzen</button>
+      </div>
+      <div class="members-keyword-filter-chips" id="members-keyword-filter-chips"></div>
+      <button type="button" class="members-keyword-filter-toggle" id="members-keyword-filter-toggle" aria-expanded="false" hidden>Alle anzeigen</button>
+    </div>
+
     <p class="members-count" id="members-count" aria-live="polite"></p>
 
     <div id="members-empty" hidden class="members-empty glass">
@@ -466,9 +478,22 @@
   let MEMBERS = [];
   let activeWG = 'all';
   let activeCountry = 'all';
+  // Forschungsschwerpunkt-Filter (Phase 3). Siehe people.html (EN)
+  // für die vollständige Dokumentation. Slug-Format für URL-Hash.
+  const activeKeywords = new Set();
+  let KEYWORD_AGGREGATE = [];
+  let keywordFilterExpanded = false;
+  const KEYWORD_FILTER_VISIBLE_TOP_N = 8;
 
   function isMC(m) {
     return (m.roles || []).some(r => /^MC member\b/i.test(r));
+  }
+
+  function keywordSlug(canonical) {
+    return String(canonical || '')
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]+/gu, '-')
+      .replace(/^-+|-+$/g, '');
   }
 
   function initials(name) {
@@ -536,6 +561,14 @@
       if (q) {
         const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
+      }
+      // Schlüsselwort-Filter mit ODER-Semantik. Siehe people.html (EN).
+      if (activeKeywords.size > 0) {
+        const bioSlugs = (m.canonical_keywords && m.canonical_keywords.length
+          ? m.canonical_keywords
+          : (m.keywords || []))
+          .map(keywordSlug);
+        if (!bioSlugs.some(s => activeKeywords.has(s))) return false;
       }
       return true;
     });
@@ -627,9 +660,23 @@
           const dedupKey = display.toLowerCase();
           if (seen.has(dedupKey)) return;
           seen.add(dedupKey);
-          const chip = document.createElement('span');
+          // Pille als Button. Klick fügt zum aktiven Filter hinzu.
+          const chip = document.createElement('button');
+          chip.type = 'button';
           chip.className = 'member-keyword-chip';
           chip.textContent = display;
+          const slug = keywordSlug(display);
+          chip.setAttribute('data-keyword-slug', slug);
+          chip.setAttribute('aria-label',
+            window.netsecT('Filter by research interest') + ': ' + display);
+          chip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleKeywordFilter(slug);
+            const filterRow = document.getElementById('members-keyword-filter');
+            if (filterRow && !filterRow.hidden) {
+              filterRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          });
           kwWrap.appendChild(chip);
         });
         kwWrap.removeAttribute('hidden');
@@ -743,12 +790,131 @@
     });
   }
 
+  // ─────────── Forschungsschwerpunkt-Filter (Phase 3) ───────────
+  // Voll dokumentiert in people.html (EN). Dieses Modul spiegelt
+  // den EN-Code 1:1; lokalisiert sind nur ARIA-Labels.
+  function parseHashKeywords() {
+    activeKeywords.clear();
+    const raw = (location.hash || '').replace(/^#/, '');
+    if (!raw) return;
+    const params = new URLSearchParams(raw.includes('&') || raw.includes('=') ? raw : '');
+    const csv = params.get('keywords');
+    if (!csv) return;
+    csv.split(',').map(s => s.trim()).filter(Boolean).forEach(s => activeKeywords.add(s));
+  }
+  function writeHashKeywords() {
+    const slugs = Array.from(activeKeywords);
+    const rawHash = (location.hash || '').replace(/^#/, '');
+    const hasKeywordsKey = /(^|&)keywords=/.test(rawHash);
+    let rest = '';
+    if (rawHash && hasKeywordsKey) {
+      const params = new URLSearchParams(rawHash);
+      params.delete('keywords');
+      rest = params.toString();
+    } else if (rawHash && !hasKeywordsKey && !rawHash.includes('=')) {
+      rest = '';
+    } else if (rawHash) {
+      rest = rawHash;
+    }
+    const parts = [];
+    if (slugs.length) parts.push('keywords=' + slugs.join(','));
+    if (rest) parts.push(rest);
+    const next = parts.join('&');
+    if (next) {
+      history.replaceState(null, '', '#' + next);
+    } else {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  }
+  function renderKeywordFilter() {
+    const root = document.getElementById('members-keyword-filter');
+    const chipsWrap = document.getElementById('members-keyword-filter-chips');
+    const toggleBtn = document.getElementById('members-keyword-filter-toggle');
+    const clearBtn = document.getElementById('members-keyword-filter-clear');
+    if (!root || !chipsWrap) return;
+    if (!KEYWORD_AGGREGATE.length) {
+      root.hidden = true;
+      return;
+    }
+    root.hidden = false;
+    chipsWrap.replaceChildren();
+    const total = KEYWORD_AGGREGATE.length;
+    const limit = keywordFilterExpanded ? total : Math.min(KEYWORD_FILTER_VISIBLE_TOP_N, total);
+    KEYWORD_AGGREGATE.slice(0, limit).forEach(entry => {
+      const slug = keywordSlug(entry.keyword);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'members-keyword-filter-chip';
+      const isActive = activeKeywords.has(slug);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      btn.dataset.slug = slug;
+      btn.dataset.canonical = entry.keyword;
+      const label = document.createElement('span');
+      label.className = 'lbl';
+      label.textContent = entry.keyword;
+      btn.appendChild(label);
+      const count = document.createElement('span');
+      count.className = 'count';
+      count.textContent = entry.count;
+      btn.appendChild(count);
+      btn.addEventListener('click', () => toggleKeywordFilter(slug));
+      chipsWrap.appendChild(btn);
+    });
+    if (total > KEYWORD_FILTER_VISIBLE_TOP_N) {
+      toggleBtn.hidden = false;
+      toggleBtn.setAttribute('aria-expanded', keywordFilterExpanded ? 'true' : 'false');
+      toggleBtn.textContent = keywordFilterExpanded
+        ? window.netsecT('Show fewer')
+        : (window.netsecT('Show all') + ' (' + total + ')');
+    } else {
+      toggleBtn.hidden = true;
+    }
+    clearBtn.hidden = activeKeywords.size === 0;
+  }
+  function toggleKeywordFilter(slug) {
+    if (activeKeywords.has(slug)) activeKeywords.delete(slug);
+    else activeKeywords.add(slug);
+    writeHashKeywords();
+    renderKeywordFilter();
+    render();
+  }
+  function clearKeywordFilter() {
+    if (activeKeywords.size === 0) return;
+    activeKeywords.clear();
+    writeHashKeywords();
+    renderKeywordFilter();
+    render();
+  }
+  const kwToggleBtn = document.getElementById('members-keyword-filter-toggle');
+  if (kwToggleBtn) {
+    kwToggleBtn.addEventListener('click', () => {
+      keywordFilterExpanded = !keywordFilterExpanded;
+      renderKeywordFilter();
+    });
+  }
+  const kwClearBtn = document.getElementById('members-keyword-filter-clear');
+  if (kwClearBtn) {
+    kwClearBtn.addEventListener('click', clearKeywordFilter);
+  }
+  window.addEventListener('hashchange', () => {
+    const before = Array.from(activeKeywords).sort().join(',');
+    parseHashKeywords();
+    const after = Array.from(activeKeywords).sort().join(',');
+    if (before !== after) {
+      renderKeywordFilter();
+      render();
+    }
+  });
+
   try {
     const res = await fetch('data/bios.json', { cache: 'no-cache' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     MEMBERS = data.members || [];
+    KEYWORD_AGGREGATE = Array.isArray(data.keyword_aggregate) ? data.keyword_aggregate : [];
+    parseHashKeywords();
     populateCountryFilter();
+    renderKeywordFilter();
     render();
     const joinLink = document.querySelector('[data-form-link]');
     const formUrl = data.source && data.source.form_url;
