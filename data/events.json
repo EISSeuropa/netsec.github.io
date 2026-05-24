@@ -1,12 +1,10 @@
 {
-  "_documentation": "Single source of truth for calendar.ics. Maintained by hand alongside the HTML event cards in index.html. When you edit an event here, also update the corresponding <article class=\"event-card\"> in index.html (and its FR/DE siblings), and bump dtstamp. CI fails if calendar.ics drifts from what scripts/build-calendar.py would produce from this file.",
-
+  "_documentation": "Authoritative source for calendar.ics. Maintained by hand alongside the HTML event cards in index.html. When you edit an event here, also update the corresponding <article class=\"event-card\"> in index.html (and its FR/DE siblings), and bump dtstamp. CI fails if calendar.ics drifts from what scripts/build-calendar.py would produce from this file. Entries that also live on Indico can opt into a partial auto-sync by adding an `indicoEventId` field; scripts/sync-indico.py then overwrites the `summary`, `start`, and `end` fields from the fresh Indico payload on each run. `location`, `description`, `url`, `categories`, etc. stay hand-edited (the curated text is richer than what Indico returns).",
   "calname": "NetSec — COST Action CA24154",
   "caldesc": "Events from the NetSec COST Action (CA24154) — annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
   "tzid": "Europe/Stockholm",
   "refresh_days": 7,
-  "dtstamp": "20260523T000000Z",
-
+  "dtstamp": "20260524T130656Z",
   "events": [
     {
       "uid": "summer-school-2026@netsec-cost.eu",
@@ -20,18 +18,25 @@
         "cn": "NetSec Summer School",
         "mailto": "ecs.netsec@eiss-europa.com"
       },
-      "categories": ["Training School", "NetSec"],
+      "categories": [
+        "Training School",
+        "NetSec"
+      ],
       "status": "CONFIRMED"
     },
     {
       "uid": "european-security-conference-2026@netsec-cost.eu",
-      "summary": "European Security Conference 2026",
+      "indicoEventId": 22,
+      "summary": "2026 European Security Studies Conference",
       "description": "The flagship annual gathering of the NetSec community: an interdisciplinary conference on European defence and security open to academics, policy-makers, and practitioners. Held back-to-back with the Summer School so early-career scholars can join the wider conversation.\n\nChairpersons: Dr Julia Carver, Dr Sanne Verschuren.\n\nLive programme: https://netsec-cost.eu/essc-2026.html\nRegistration: https://indico.eiss-europa.com/event/22/",
       "location": "Stockholm University, Frescativägen, 114 19 Stockholm, Sweden",
       "url": "https://netsec-cost.eu/essc-2026.html",
       "start": "2026-06-11T08:00",
       "end": "2026-06-12T20:00",
-      "categories": ["Annual Conference", "NetSec"],
+      "categories": [
+        "Annual Conference",
+        "NetSec"
+      ],
       "status": "CONFIRMED"
     }
   ]

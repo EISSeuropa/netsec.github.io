@@ -55,6 +55,62 @@ runs after the initial write produce zero subsequent `git diff`
 output. The workflow's commit step is a no-op when the data is
 unchanged.
 
+## Companion files: events.json + calendar.ics
+
+`data/indico.json` is not the only file with ESSC dates and title
+on it. `data/events.json` is the hand-curated source for
+`calendar.ics` and the home-page "upcoming event" banner; it
+historically duplicated the title / start / end / location that
+also live in Indico. Hand-curated files drift: a maintainer who
+fixed a typo on Indico in March would not remember to also fix
+`events.json` in April.
+
+The sync script closes that loop without trampling the curated
+copy. Entries in `events.json` can opt into a partial auto-sync
+by carrying a single field:
+
+```json
+{
+  "uid": "european-security-conference-2026@netsec-cost.eu",
+  "indicoEventId": 22,
+  "summary": "…",
+  "start": "…", "end": "…",
+  "location": "…", "description": "…", "url": "…",
+  ...
+}
+```
+
+For each entry with `indicoEventId`, `_patch_events_json`
+overwrites `summary`, `start`, and `end` from the fresh Indico
+payload. Everything else is preserved.
+
+The allow-list is tight on purpose. Specifically, `location` is
+**not** auto-synced: events.json carries the full postal address
+("Stockholm University, Frescativägen, 114 19 Stockholm, Sweden")
+while Indico returns the short venue label ("Stockholm
+University"). Overwriting would lose the curated detail. Same
+posture for `description`, `url`, `categories`: those are the
+banner / calendar copy and stay hand-edited.
+
+After patching, `_regenerate_calendar` invokes
+`scripts/build-calendar.py` so the on-disk `calendar.ics` matches
+the new `events.json`. The calendar-drift CI check (see
+`.github/workflows/calendar-drift.yml`) would otherwise block the
+sync PR. The patch step runs **before** the early-return on a
+quiet Indico day, so a maintainer who hand-edited `events.json`
+with stale values gets caught up on the next nightly sync even if
+Indico itself did not change.
+
+### Why not delete `events.json` entirely
+
+A cleaner architecture would derive Indico-tracked entries
+directly from `indico.json` at build time and keep
+`events-supplemental.json` for items Indico does not host
+(deliverable deadlines, training schools on a different platform).
+That refactor is tracked in [#170](https://github.com/EISSeuropa/netsec.github.io/issues/170).
+For now the link-field approach gets the same correctness with a
+~50-line change and zero consumer-side rewrite.
+
 ## Privacy posture
 
 The EISS design doc states it cleanly:

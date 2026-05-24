@@ -71,6 +71,15 @@ except ImportError:
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "indico.json"
 
+# Companion file: the hand-curated calendar / homepage-banner source.
+# Entries that opt into a partial auto-sync (by carrying an
+# `indicoEventId` field) get their `summary`, `start`, and `end`
+# overwritten from the fresh Indico payload. Everything else stays
+# hand-edited. See the function `_patch_events_json` for the
+# allow-list rationale.
+EVENTS_OUT = ROOT / "data" / "events.json"
+EVENTS_JSON_SYNCED_FIELDS = ("summary", "start", "end")
+
 INDICO_BASE = "https://indico.eiss-europa.com"
 
 # The Indico category we sync. Currently `1` (Annual Conferences) on
@@ -536,6 +545,122 @@ def extract_programme(timetable_results: dict, event_id: str) -> dict:
 # ──────────────────────────── main ────────────────────────────
 
 
+def _patch_events_json(annual_by_year: dict[str, dict]) -> bool:
+    """Refresh Indico-linked entries in data/events.json.
+
+    `data/events.json` is the authoritative source for calendar.ics and
+    the home-page upcoming-event banner. Most of its fields are
+    hand-curated (richer descriptions, full postal addresses, etc.) and
+    must stay that way. A handful of fields, though, are duplicated
+    from Indico: the title, the start, the end. When those drift, the
+    banner and the .ics feed silently disagree with the live programme.
+
+    To close that drift without trampling the curated copy, entries
+    can opt into a partial auto-sync by carrying an `indicoEventId`
+    field. For each such entry, this step looks up the matching event
+    in the freshly-fetched Indico payload and overwrites only the
+    allow-listed fields in `EVENTS_JSON_SYNCED_FIELDS`. Returns True
+    when at least one entry was actually changed (so the caller knows
+    whether to invoke build-calendar.py).
+
+    Why `location` is NOT in the allow-list: events.json carries the
+    full street address (`Stockholm University, Frescativägen,
+    114 19 Stockholm, Sweden`) while Indico returns the short venue
+    name (`Stockholm University`). Auto-overwriting would lose the
+    curated postal detail; a future drift check could surface the
+    mismatch without clobbering."""
+    if not EVENTS_OUT.exists():
+        return False
+    try:
+        events_doc = json.loads(EVENTS_OUT.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as exc:
+        print(f"  ! cannot read {EVENTS_OUT.name}: {exc}", file=sys.stderr)
+        return False
+
+    # Flatten the year-keyed Indico map into id-keyed lookup so we can
+    # find any Indico event by its numeric id regardless of year.
+    by_id: dict[str, dict] = {
+        str(ev.get("id")): ev for ev in annual_by_year.values() if ev.get("id")
+    }
+
+    changed = False
+    for entry in events_doc.get("events", []):
+        indico_id = entry.get("indicoEventId")
+        if indico_id is None:
+            continue
+        source = by_id.get(str(indico_id))
+        if source is None:
+            print(
+                f"  ! events.json entry {entry.get('uid', '?')!r} has "
+                f"indicoEventId={indico_id} but no matching event was "
+                f"fetched this run. Skipping (the maintainer may have "
+                f"removed the event from Indico).",
+                file=sys.stderr,
+            )
+            continue
+
+        # Map the small set of fields. Indico timestamps come with
+        # seconds (`2026-06-11T08:00:00`); events.json convention is
+        # minute-precision (`2026-06-11T08:00`), so trim.
+        patch = {
+            "summary": source.get("title", ""),
+            "start": (source.get("start") or "")[:16],
+            "end": (source.get("end") or "")[:16],
+        }
+        for field in EVENTS_JSON_SYNCED_FIELDS:
+            new = patch.get(field)
+            if new and entry.get(field) != new:
+                print(
+                    f"  • events.json[{entry.get('uid')}] {field}: "
+                    f"{entry.get(field)!r} → {new!r}",
+                    file=sys.stderr,
+                )
+                entry[field] = new
+                changed = True
+
+    if not changed:
+        return False
+
+    # Bump dtstamp so calendar.ics build picks up a fresh modified
+    # timestamp. Format follows the existing convention in the file
+    # (`YYYYMMDDTHHMMSSZ`, UTC).
+    events_doc["dtstamp"] = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    EVENTS_OUT.write_text(
+        json.dumps(events_doc, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    print(f"  Patched {EVENTS_OUT.name} from Indico (allow-list).", file=sys.stderr)
+    return True
+
+
+def _regenerate_calendar() -> None:
+    """Invoke scripts/build-calendar.py so calendar.ics stays in step
+    with the freshly-patched events.json. Run as a subprocess (rather
+    than imported as a module) so the build script's exit code and
+    logs surface cleanly into the workflow output. A non-zero exit
+    here aborts the sync so the workflow doesn't ship a half-updated
+    state."""
+    import subprocess
+    cal_script = ROOT / "scripts" / "build-calendar.py"
+    print(f"  Regenerating calendar.ics …", file=sys.stderr)
+    result = subprocess.run(
+        ["python3", str(cal_script)],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.stdout:
+        print(result.stdout, file=sys.stderr, end="")
+    if result.stderr:
+        print(result.stderr, file=sys.stderr, end="")
+    if result.returncode != 0:
+        sys.exit(
+            f"build-calendar.py exited with {result.returncode}; "
+            f"aborting sync so the PR doesn't ship a half-updated state."
+        )
+
+
 def main() -> None:
     mode = "authenticated" if INDICO_API_TOKEN else "anonymous"
     print(f"Indico sync running in {mode} mode", file=sys.stderr)
@@ -598,6 +723,14 @@ def main() -> None:
             }
         except (json.JSONDecodeError, OSError):
             existing_data = None  # malformed → treat as no prior state
+
+    # Patch hand-curated companion files (events.json + calendar.ics)
+    # BEFORE the early-return below: a quiet Indico day doesn't mean
+    # events.json is in sync. If a maintainer edited events.json by
+    # hand last week, this is the run that catches them up. The patch
+    # is a no-op when nothing changed, so quiet days stay quiet.
+    if _patch_events_json(annual_by_year):
+        _regenerate_calendar()
 
     if existing_data == data_payload:
         print(
