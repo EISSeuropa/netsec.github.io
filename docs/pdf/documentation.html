@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NetSec — Website & Directory · Documentation Pack v1.9.0</title>
+<title>NetSec — Website & Directory · Documentation Pack v1.9.1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -608,7 +608,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.9.0 · May 2026</div>
+        <div class="value">v1.9.1 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -797,7 +797,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.9.0 · May 2026</span>
+    <span class="url">v1.9.1 · May 2026</span>
   </footer>
 
 </section>
@@ -2275,7 +2275,10 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <div class="changelog-entries">
 
-  <h2 class="current">v1.9.0 · May 2026 · Section-level catch-up to website v1.7.0</h2>
+  <h2 class="current">v1.9.1 · May 2026 · Layout patch</h2>
+  <p class="cl-summary">Layout-only patch on the v1.9.0 content. <strong>Page numbers</strong> now render bottom-right via a <code>@bottom-right { content: counter(page) }</code> margin box on the default <code>@page</code> rule, suppressed on the cover, the promotional poster, and the A3 image plate. <strong>Section-banner break</strong>: <code>.section-banner</code> gains <code>break-after: avoid-page</code> so the chapter banner stays with the first content block rather than getting orphaned when the next block is large enough to push itself to a fresh page. <strong>Two-up grid</strong>: <code>.grid-2</code> gains <code>break-inside: avoid-page</code> so the Feature inventory's two cards stay together. <strong>Site screenshots</strong>: <code>build.sh --shots</code> bumped the Chrome viewport from 1280×1600 to 1280×3200 and the virtual-time budget from 5 s to 12 s, so the IntersectionObserver-gated reveal-on-scroll sections on the home page have actually rendered by the time the screenshot fires; <code>snap-home.png</code> went from 0.78 MB (empty canvas above the hero) to 2.4 MB (full content visible). No content edits to Sections 01–07 or to any appendix prose. No new feature shipped, per the minor-vs-patch rule (<code>README.md</code> → Versioning).</p>
+
+  <h2>v1.9.0 · May 2026 · Section-level catch-up to website v1.7.0</h2>
   <p class="cl-lede">The pack's substantive content was last refreshed at website v1.3.0. Five releases have shipped since: Pagefind search and the Phase 1 IA pass (v1.4.0), the launch-QA polish and hybrid release-notes format (v1.5.0), the live ESSC programme with member-aware speaker popovers (v1.6.0), the pre-conference polish wave (v1.6.1), and the directory keyword pipeline with the release-time automation that now keeps the pack in sync (v1.7.0). This revision catches Sections 02 through 06 up to that state, refreshes the screenshots, and trims the typography of this appendix so it ages better.</p>
 
   <h3>Front-facing additions documented</h3>
@@ -2355,7 +2358,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <p class="small muted center" style="margin-top:24pt">
     NetSec: Networking European Security Knowledge · COST Action CA24154 · MoU 063/25 · Running 10 Oct 2025 to 09 Oct 2029.<br>
-    Documentation v1.9.0 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich) as part of Deliverable D1.<br>
+    Documentation v1.9.1 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich) as part of Deliverable D1.<br>
     The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union.
   </p>
 </section>
