@@ -267,11 +267,22 @@ which is mirrored daily from the shared EISS Indico instance at
    `.github/workflows/sync-indico.yml`. It calls Indico's
    `/export/categ/1.json` and `/export/timetable/{event_id}.json`,
    normalises the response, and writes `data/indico.json`.
-2. When the data half of the payload has changed, the workflow
-   commits the new `indico.json` to `main`. Otherwise the working
-   tree stays clean and the workflow is a no-op. (Same anti-pattern
-   fix as `sync-bios.py`; see PR #117.)
-3. On every visit to `/essc-2026.html`, the inline JS at the foot
+2. The script also patches `data/events.json` (entries with an
+   `indicoEventId` field get `summary` / `start` / `end` overwritten
+   from the same Indico payload, allow-list only) and regenerates
+   `calendar.ics` so the home-page banner + the subscribable
+   calendar feed stay in step with the live programme. See
+   `docs/indico-sync.md` *Companion files* for the rationale.
+3. When the data half of any output changed, the workflow opens (or
+   updates) a pull request on `indico-sync/auto` via
+   `peter-evans/create-pull-request`, labels it `automated`, and
+   enables auto-merge with squash. CodeQL runs as a separate
+   workflow on the bot PR, all four required checks complete, and
+   auto-merge fires hands-free. Otherwise the working tree stays
+   clean and the workflow is a no-op. (Direct push to `main` was the
+   previous design; the v1.6.1 ruleset tightening made it
+   incompatible. See the 2026-05-24 entry in the Wiki Decisions log.)
+4. On every visit to `/essc-2026.html`, the inline JS at the foot
    of the page fetches `data/indico.json`, picks the right year
    under `annualConferences`, and renders the day chips, time
    blocks, parallel sessions, and contributions.
