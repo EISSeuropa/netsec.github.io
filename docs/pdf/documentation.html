@@ -36,12 +36,25 @@
 @page {
   size: A4;
   margin: 18mm 16mm 22mm 16mm;
-  /* Running footer with title + page number. Chrome renders this
-     via @page margin boxes when --print-to-pdf-no-header is OFF. */
+  /* Page number bottom-right. Plain numeral; the rest of the
+     running-foot space is reserved for future additions if the pack
+     grows section-aware navigation later. Chrome renders the
+     @bottom-right margin box even with the build script's
+     --no-pdf-header-footer flag (that flag only suppresses Chrome's
+     own built-in header/footer, not CSS-paged-media margin boxes). */
+  @bottom-right {
+    content: counter(page);
+    font-family: 'Inter', sans-serif;
+    font-size: 8pt;
+    color: #5a6679;
+    margin-top: 6mm;
+  }
 }
-@page :first       { margin: 0; }
-@page poster       { margin: 0; }
-@page promo-plate  { margin: 0; }
+/* Cover, poster, and the A3 image plate are full-bleed; suppress
+   the page number on those (no margin = no margin-box). */
+@page :first       { margin: 0; @bottom-right { content: ""; } }
+@page poster       { margin: 0; @bottom-right { content: ""; } }
+@page promo-plate  { margin: 0; @bottom-right { content: ""; } }
 /* The image-plate page (Appendix C, image) is full-bleed: the A3
    portrait raster fills the A4 page edge to edge. Without this,
    the image rendered at content width was just over the 257mm
@@ -281,6 +294,11 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
   grid-template-columns:1fr 1fr;
   gap:12pt;
   margin:.5rem 0 1rem;
+  /* Keep the two cards together. If the grid doesn't fit on the
+     current page (eg. the v1.9.0 Feature inventory which is two
+     dense cards), move the whole grid to the next page rather than
+     splitting one card onto each page and leaving a half-grid. */
+  break-inside:avoid-page;
 }
 
 /* ── Chip / pill ────────────────────────────────────────────── */
@@ -544,6 +562,14 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
   padding:0 0 16pt;
   border-bottom:2pt solid var(--accent);
   margin-bottom:18pt;
+  /* Stay with the chapter's first content block. Without this, if
+     the first content after the banner is a large block with
+     break-inside:avoid-page (eg. a long table or diagram), that
+     block pushes itself to the next page and leaves the banner
+     alone on a near-empty page. Symptom: Section 5 SEO landed its
+     banner + intro paragraph on a short page, then the "What's in
+     place" table on the next page. */
+  break-after:avoid-page;
 }
 .section-banner .num{
   font-family:'Lexend','Inter',sans-serif;font-weight:700;
