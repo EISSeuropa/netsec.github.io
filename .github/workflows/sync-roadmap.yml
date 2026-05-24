@@ -93,6 +93,7 @@ jobs:
           } > /tmp/roadmap-sync-pr-body.md
 
       - name: Open or update PR if autostamp changed
+        id: create-pr
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -109,3 +110,17 @@ jobs:
           labels: |
             automated
             documentation
+
+      # Auto-merge so the autostamp ships without manual review. The
+      # diff is mechanical (one blockquote line); CodeQL still runs
+      # and a failing check would block the merge. Skipped when the
+      # previous step found nothing to PR (pull-request-number empty).
+      - name: Arm auto-merge on the auto-PR
+        if: steps.create-pr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge \
+            "${{ steps.create-pr.outputs.pull-request-number }}" \
+            --squash --auto \
+            --repo "${{ github.repository }}"
