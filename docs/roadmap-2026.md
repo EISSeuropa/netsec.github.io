@@ -9,7 +9,7 @@ Maintained by Dr Arthur Laudrain (MC member, CH; ETH Zurich).
 Last revised **24 May 2026** (late-day): at-a-glance timeline + Q3 features list refreshed to reflect the post-v1.6.1 batch already in `[Unreleased]` (directory keyword infrastructure Phases 1–3, Google Forms photo-replacement workaround, bios-sync robustness + richer auto-PR). The per-release narrative further down still lags from the v1.4.0–v1.6.1 cycle; that catch-up is queued and the public CHANGELOG remains authoritative for shipped scope and dates.
 
 <!-- AUTOSTAMP:BEGIN -->
-> _Auto-tracked: **7 entries** in [`[Unreleased]`](../CHANGELOG.md#unreleased) since **v1.6.1** (3 Added, 4 Changed). Last refresh by `scripts/sync-roadmap.py`: 24 May 2026. Prose in the timeline below may lag; the maintainer resynthesises on release-time §5 sweep._
+> _Auto-tracked: **9 entries** in [`[Unreleased]`](../CHANGELOG.md#unreleased) since **v1.6.1** (3 Added, 6 Changed). Last refresh by `scripts/sync-roadmap.py`: 24 May 2026. Prose in the timeline below may lag; the maintainer resynthesises on release-time §5 sweep._
 <!-- AUTOSTAMP:END -->
 
 > **Sync convention.** This file is the source of truth. The
