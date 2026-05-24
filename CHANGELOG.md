@@ -109,6 +109,7 @@ maintainer-facing audience.
 #### Changed
 
 - **Directory guided tour + welcome strip** updated to introduce the research-interest filter row. A new tour step lands between Country and Card density, explaining the chip row, multi-select OR semantics, the clickable per-bio pills, and the URL-shareability of a filtered view. The welcome strip gains a matching bullet so the orientation is visible even to visitors who skip the tour. Mirrored to FR + DE. `docs/bios-setup.md` also gets a one-paragraph note that `keyword_aggregate` powers the filter automatically.
+- **Join-form Google Forms settings flipped** to work around an upstream limitation: file uploads can't be replaced via the response-edit link, so photo updates need a fresh submission. `Limit to 1 response` is now off; `Collect email addresses → Verified` keeps sign-in mandatory and gives the sync a reliable dedup key; `Allow response editing` stays on for non-photo updates. A note on the form's Photo question points respondents at the workaround at the point of confusion. `docs/bios-setup.md` Step 1 + the Editing section rewritten accordingly. Tracked as [#183](https://github.com/EISSeuropa/netsec.github.io/issues/183); will revert if Google ever fixes the upstream bug.
 
 ## [1.6.1] · 2026-05-24 — Pre-ESSC polish, sync robustness, copy hygiene
 
