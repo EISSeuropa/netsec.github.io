@@ -180,6 +180,10 @@
       <div class="essc-quickfact"><span class="lbl">Venue</span><span class="val" data-field="venue">—</span></div>
       <div class="essc-quickfact"><span class="lbl">Room</span><span class="val" data-field="room">—</span></div>
       <div class="essc-quickfact"><span class="lbl">On Indico</span><span class="val" data-field="indico">—</span></div>
+      <a class="essc-quickfact is-jump" href="#practical">
+        <span class="lbl">Practical info</span>
+        <span class="val">Stockholm tips <span class="essc-quickfact-arrow" aria-hidden="true">↓</span></span>
+      </a>
     </div>
   </div>
 </section>
@@ -213,6 +217,97 @@
         instead.
       </div>
     </noscript>
+  </div>
+</section>
+
+<!-- Practical information.
+     Static content from the local organisers, kept in the HTML
+     directly (not synced from Indico). Subsections live as
+     `<section class="essc-practical-block">` so we can add more
+     (transport, dining, need-to-know) without restructuring. -->
+<section class="essc-practical" id="practical" aria-labelledby="practical-title">
+  <div class="container">
+    <span class="eyebrow">Practical information</span>
+    <h2 id="practical-title">Plan your visit</h2>
+
+    <section class="essc-practical-block" aria-labelledby="practical-stay-title">
+      <h3 id="practical-stay-title" class="essc-practical-block-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 21V8l9-5 9 5v13"/>
+          <path d="M9 21V12h6v9"/>
+        </svg>
+        Accommodation
+      </h3>
+      <p class="essc-practical-lede">
+        Look for accommodation in town. Any of the neighbourhoods below puts
+        you within a short ride of Stockholm University. Södermalm tends to
+        be the most affordable and has the widest choice of hostels.
+      </p>
+      <ul class="essc-area-grid">
+        <li class="essc-area">
+          <h4 class="essc-area-name">Södermalm</h4>
+          <p class="essc-area-note">Cheaper end of the centre, plenty of hostels.</p>
+          <ul class="essc-stop-chips" aria-label="Nearest metro stops">
+            <li class="essc-stop-chip">Hornstull</li>
+            <li class="essc-stop-chip">Zinkensdamm</li>
+            <li class="essc-stop-chip">Mariatorget</li>
+            <li class="essc-stop-chip">Slussen</li>
+          </ul>
+        </li>
+        <li class="essc-area">
+          <h4 class="essc-area-name">Gamla stan</h4>
+          <p class="essc-area-note">Old Town, on its own island in the centre.</p>
+          <ul class="essc-stop-chips" aria-label="Nearest metro stops">
+            <li class="essc-stop-chip">Gamla stan</li>
+          </ul>
+        </li>
+        <li class="essc-area">
+          <h4 class="essc-area-name">T-Centralen</h4>
+          <p class="essc-area-note">Stockholm City, the main interchange.</p>
+          <ul class="essc-stop-chips" aria-label="Nearest metro stops">
+            <li class="essc-stop-chip">T-Centralen</li>
+          </ul>
+        </li>
+        <li class="essc-area">
+          <h4 class="essc-area-name">Östermalm</h4>
+          <p class="essc-area-note">Quieter, slightly upscale.</p>
+          <ul class="essc-stop-chips" aria-label="Nearest metro stops">
+            <li class="essc-stop-chip">Östermalmstorg</li>
+          </ul>
+        </li>
+        <li class="essc-area">
+          <h4 class="essc-area-name">Stadion</h4>
+          <p class="essc-area-note">Near the 1912 Olympic Stadium.</p>
+          <ul class="essc-stop-chips" aria-label="Nearest metro stops">
+            <li class="essc-stop-chip">Stadion</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section class="essc-practical-block" aria-labelledby="practical-transport-title">
+      <h3 id="practical-transport-title" class="essc-practical-block-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="4" y="3" width="16" height="16" rx="2"/>
+          <path d="M4 12h16"/>
+          <path d="M8 19l-2 3"/>
+          <path d="M16 19l2 3"/>
+          <circle cx="8.5" cy="15.5" r=".8" fill="currentColor" stroke="none"/>
+          <circle cx="15.5" cy="15.5" r=".8" fill="currentColor" stroke="none"/>
+        </svg>
+        Getting around
+      </h3>
+      <p class="essc-practical-lede">
+        Stockholm's red metro line (T13) runs from the far south to the far
+        north of the city. All the recommended neighbourhoods above sit on
+        it, so the ride to Stockholm University is short and direct.
+      </p>
+      <p class="essc-practical-foot">
+        Route planning and ticket purchase on
+        <a href="https://sl.se/en" target="_blank" rel="noopener">sl.se</a>.
+      </p>
+    </section>
+
   </div>
 </section>
 
