@@ -98,6 +98,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.7.0] · 2026-05-24 — Directory keyword filter, bios-sync hardening, release automation
+
 > Conference-prep release. The directory gets a research-interest filter chip row so visitors can drill in by topic across the membership; the bios-sync pipeline gets the robustness work to handle the volume the open form is about to deliver; and the release process itself gets the automation that will make every future release lighter than the last. Cut before the European Security Conference on 9–12 June so the new directory shape is what the incoming submissions land against.
 
 ### Directory research-interest filter
@@ -558,7 +562,8 @@ Open Graph, Twitter Card, JSON-LD (Organization + WebSite + WebPage), canonical 
 - Members' Wiki seeded with glossary, FAQ, onboarding, meeting-notes convention, decisions log.
 - Dual licensing — MIT for code, CC BY 4.0 for content + docs.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.6.1...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.4.0...v1.5.0
