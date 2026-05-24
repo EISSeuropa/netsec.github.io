@@ -98,6 +98,20 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+> Conference-prep release. The directory gets a research-interest filter chip row so visitors can drill in by topic across the membership; the bios-sync pipeline gets the robustness work to handle the volume the open form is about to deliver; and the release process itself gets the automation that will make every future release lighter than the last. Cut before the European Security Conference on 9–12 June so the new directory shape is what the incoming submissions land against.
+
+### Directory research-interest filter
+
+Three phases shipped end-to-end across the three locales. Phase 1 renders a member's research keywords as outlined chips on the detailed bio card. Phase 2 normalises submissions through a curated [`data/keyword-aliases.json`](data/keyword-aliases.json) so near-duplicates collapse to a single canonical form and acronyms (UN, NATO, EU, UK, US, UNDP, …) survive the sentence-case pass; an aggregate count per canonical keyword falls out as a by-product. Phase 3 surfaces that aggregate as a multi-select toggle chip row above the directory grid: top eight by count, *Show all* expander, OR semantics, URL-hash persistence so filtered views are shareable (`#keywords=ai-governance,foreign-policy-analysis`), and clickable per-bio pills that feed into the same filter. The guided tour and the welcome strip on `/people.html` were updated in EN / FR / DE to introduce the new row.
+
+### Bios-sync robustness, before the firehose
+
+The Google Form is about to open to ~50 incoming submissions. Three improvements harden the pipeline. The merge logic was already truthy-merge per field; that semantic guarantee is now pinned by [a regression test](scripts/test-sync-bios.py) and explained in [`docs/bios-setup.md`](docs/bios-setup.md) so respondents who resubmit sparsely (the documented workaround for the Google Forms file-upload-edit bug, [#183](https://github.com/EISSeuropa/netsec.github.io/issues/183)) don't lose their previously-stored optional links. Defensive `PHOTOS_CHANGED` tracking carries the lesson from sister-project EISSeuropa.github.io [#105+#106](https://github.com/EISSeuropa/EISSeuropa.github.io/pull/106): if `photo_source_sha256` propagation ever regresses, the script screams loudly instead of silently producing an unexplained binary diff. And the auto-PR itself self-describes now: title becomes `data: Dr Alex Petrova joined the network` or `data: 2 new bios + 3 updates`; body opens with a structured *What changed* section listing new joiners with country + affiliation, updated members with the specific fields that moved, and the list of headshot files rewritten on disk.
+
+### Release-time automation
+
+The maintainer-facing release process picks up two pieces of automation that close the *between-releases drift* gap [CLAUDE.md §11](CLAUDE.md) had deliberately left open. `docs/roadmap-2026.md` carries a machine-managed AUTOSTAMP block; a new workflow regenerates it on every push to `main` that touches `CHANGELOG.md`, auto-merging the PR. And `scripts/release.sh` now calls `scripts/promote-roadmap.py` before the release commit, which flips the matching `<li class="rm-entry planned">` card across EN / FR / DE to shipped with locale-correct date formats (`8 September 2026` / `8 septembre 2026` / `8. September 2026`), inserts the localised release-notes link, and bumps the *Last updated* paragraph's two `<time>` attributes plus visible text. On minor / major releases the script also prints a structured PDF-cover reminder pointing at the four version stamps to update. First observation of the workflow firing caught an auto-merge gap on `sync-roadmap.yml` and `sync-bios.yml`; fixed in the same window.
+
 ### Index of changes
 
 #### Added
