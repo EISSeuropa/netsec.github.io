@@ -263,6 +263,7 @@
       <p class="member-affiliation"></p>
       <div class="member-wgs" role="group" aria-label="Appartenance aux groupes de travail"></div>
       <p class="member-bio"></p>
+      <div class="member-keywords" aria-label="Domaines de recherche" hidden></div>
       <div class="member-contact" aria-label="Contact"></div>
     </div>
     <span class="member-toggle-chevron" aria-hidden="true">
@@ -586,6 +587,27 @@
       } else {
         bio.classList.add('is-pending');
         bio.textContent = window.netsecT('Bio coming soon.');
+      }
+      // Mots-clés de recherche : visibles en vue détaillée uniquement.
+      // Normalisation en casse de phrase au moment du rendu. Voir
+      // people.html pour le détail.
+      const kwWrap = node.querySelector('.member-keywords');
+      const kws = Array.isArray(m.keywords) ? m.keywords.filter(Boolean) : [];
+      if (kws.length) {
+        const seen = new Set();
+        kws.forEach(raw => {
+          const trimmed = String(raw).trim();
+          if (!trimmed) return;
+          const display = trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+          const dedupKey = display.toLowerCase();
+          if (seen.has(dedupKey)) return;
+          seen.add(dedupKey);
+          const chip = document.createElement('span');
+          chip.className = 'member-keyword-chip';
+          chip.textContent = display;
+          kwWrap.appendChild(chip);
+        });
+        kwWrap.removeAttribute('hidden');
       }
       // Defensive ORCID normaliser — see people.html for the rationale.
       const orcidId = (raw => {

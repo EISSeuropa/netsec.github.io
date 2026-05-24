@@ -98,7 +98,11 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Index of changes
+
+#### Added
+
+- **Research-interest keyword chips on directory cards** (`/people.html` + FR + DE). Detailed view only. Sentence-case normalisation at render time so submissions like "International Security" and "international security" collapse to a single visual form. Distinct styling from the WG chips (subdued outlined pill vs. bright gradient pill) so visitors parse the two layers at a glance. Keywords already entered the directory search vector and now also enter the site-wide Pagefind index via rendered DOM. Phase 2 (alias map for cross-bio canonical forms) and Phase 3 (dedicated filter chips) tracked separately.
 
 ## [1.6.1] · 2026-05-24 — Pre-ESSC polish, sync robustness, copy hygiene
 

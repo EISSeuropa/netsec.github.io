@@ -269,6 +269,7 @@
       <p class="member-affiliation"></p>
       <div class="member-wgs" role="group" aria-label="Working-group membership"></div>
       <p class="member-bio"></p>
+      <div class="member-keywords" aria-label="Research interests" hidden></div>
       <div class="member-contact" aria-label="Contact"></div>
     </div>
     <!-- Toggle affordance for compact mode. CSS hides this in
@@ -685,6 +686,37 @@
       } else {
         bio.classList.add('is-pending');
         bio.textContent = window.netsecT('Bio coming soon.');
+      }
+      // Research-interest keywords. Detailed view only (.is-detailed
+      // CSS hides the block in compact mode so the dense card stays
+      // readable). Display form is normalised to sentence case so
+      // submissions like "International Security" and "international
+      // security" collapse to one rendered pill style; the raw form
+      // is preserved in m.keywords for the directory search vector
+      // (line 586 already includes m.keywords). When the proper
+      // canonical-form alias map ships (Phase 2, issue TBD) the
+      // normalisation moves into the sync script.
+      const kwWrap = node.querySelector('.member-keywords');
+      const kws = Array.isArray(m.keywords) ? m.keywords.filter(Boolean) : [];
+      if (kws.length) {
+        const seen = new Set();
+        kws.forEach(raw => {
+          const trimmed = String(raw).trim();
+          if (!trimmed) return;
+          // Sentence case: first letter upper, rest lower. Keeps
+          // acronyms readable enough (EU, NATO render as "Eu", "Nato",
+          // not perfect, but the alias map will fix the half-dozen
+          // real acronym cases when it ships).
+          const display = trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+          const dedupKey = display.toLowerCase();
+          if (seen.has(dedupKey)) return;
+          seen.add(dedupKey);
+          const chip = document.createElement('span');
+          chip.className = 'member-keyword-chip';
+          chip.textContent = display;
+          kwWrap.appendChild(chip);
+        });
+        kwWrap.removeAttribute('hidden');
       }
       // Contact links. Two icon styles: `stroke` (generic Lucide-like
       // line icons, used for email + website) and `fill` (official brand

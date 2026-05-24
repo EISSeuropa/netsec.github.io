@@ -1591,6 +1591,32 @@ form button:disabled{opacity:.65;cursor:wait}
 .member-card .member-wgs{
   display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:0 0 14px;
 }
+/* Research-interest keywords. Distinct from `.wg-chip` so visitors
+   parse the two layers at a glance: WG chips are bright + bold
+   gradient pills tied to the four working groups; keyword chips are
+   subdued outlined pills tied to a member's own research interests.
+   Compact view hides them entirely (handled below) since the small
+   card is already dense with photo + name + WGs + chevron. */
+.member-card .member-keywords{
+  display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start;
+  margin:6px 0 14px;
+}
+.member-keyword-chip{
+  font-family:'Inter',sans-serif;
+  font-size:.74rem;font-weight:500;letter-spacing:-.005em;
+  padding:2px 9px;border-radius:999px;
+  color:var(--ink-2);
+  background:color-mix(in oklab, var(--accent-2) 7%, transparent);
+  border:1px solid color-mix(in oklab, var(--accent-2) 22%, transparent);
+  white-space:nowrap;
+}
+/* Compact (grid) view: keyword block hidden. Full keywords show on
+   expand. The matcher (line 1885-ish, .is-compact .member-card:not
+   (.is-expanded) …) is the canonical rule for "this card is in
+   compact-collapsed state"; we mirror it here. */
+.members-grid.is-compact .member-card:not(.is-expanded) .member-keywords{
+  display:none;
+}
 .member-card .member-bio{
   font-size:.92rem;line-height:1.55;color:var(--ink-2);margin:0 0 6px;
   flex:1;text-align:left;
