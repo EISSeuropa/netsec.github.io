@@ -144,6 +144,8 @@ To check what's currently missing, open the live programme in any browser, then 
 
 The Google Form accepts free-text research keywords. To keep the directory's pill display + filter coherent, the sync resolves each submitted keyword to a canonical form via `data/keyword-aliases.json`, then writes the result to a per-bio `canonical_keywords` field (and an aggregate count to the top-level `keyword_aggregate`). The renderer reads the canonical list.
 
+`keyword_aggregate` also drives the **research-interest filter chip row** above the directory grid on `/people.html`. The top eight canonical keywords by submission count appear as toggle pills; visitors can multi-select (OR semantics), expand to the full list, and persist their selection through the URL hash (`#keywords=slug-one,slug-two`). The per-bio keyword pills on each card are clickable too, feeding into the same filter. Nothing for the maintainer to wire: the row appears automatically as soon as any bio carries a canonical keyword, and hides cleanly when the aggregate is empty.
+
 The file has two sections:
 
 - **`acronyms`** is a flat list of preferred display forms (`UN`, `NATO`, `EU`, `IoT`, `R&D`, …). When one of these words appears in any position in a submitted keyword, the sentence-case normaliser preserves its canonical capitalisation. So `eu foreign policy` becomes `EU foreign policy`, not `Eu foreign policy`.

@@ -106,6 +106,10 @@ maintainer-facing audience.
 - **Phase 2 keyword infrastructure** for the directory. New `data/keyword-aliases.json` carries a curated acronym list + alias map. `scripts/sync-bios.py` resolves each bio's raw `keywords` through the alias map (with sentence-case + acronym preservation as the auto-normaliser), emits a `canonical_keywords` field per bio plus a top-level `keyword_aggregate` count, and logs Levenshtein / substring-close pairs as "possible alias candidate" hints so the maintainer can merge them by hand. The renderer (EN / FR / DE) prefers `canonical_keywords`, falling back to the inline normaliser for older data. Documented in `docs/bios-setup.md`. Phase 3 (dedicated filter chips above the grid) still tracked in [#175](https://github.com/EISSeuropa/netsec.github.io/issues/175).
 - **Phase 3 research-interest filter chip row** above the directory (`/people.html` + FR + DE). Reads `keyword_aggregate` from `bios.json`, renders the top eight canonical keywords as toggle pills with submission counts, and expands to the full list on demand. Multi-select with OR semantics: any bio carrying at least one selected interest passes. Per-bio keyword pills are now buttons too: tap one to add it to the active filter and scroll to the result. Selection persists in the URL hash (`#keywords=…`) so filtered views are shareable and survive back-forward navigation. Visible as soon as the directory has any canonical keywords; hidden cleanly otherwise.
 
+#### Changed
+
+- **Directory guided tour + welcome strip** updated to introduce the research-interest filter row. A new tour step lands between Country and Card density, explaining the chip row, multi-select OR semantics, the clickable per-bio pills, and the URL-shareability of a filtered view. The welcome strip gains a matching bullet so the orientation is visible even to visitors who skip the tour. Mirrored to FR + DE. `docs/bios-setup.md` also gets a one-paragraph note that `keyword_aggregate` powers the filter automatically.
+
 ## [1.6.1] · 2026-05-24 — Pre-ESSC polish, sync robustness, copy hygiene
 
 ### Index of changes
