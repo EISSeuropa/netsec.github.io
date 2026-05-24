@@ -368,6 +368,21 @@ in the release notes or moved to the next milestone with a one-
 line reason in the issue thread. The release should not ship with
 its own milestone holding open work.
 
+`scripts/release.sh` lists the currently-open issues tagged with
+the milestone you're about to cut, in the y/n confirmation prompt
+block. Skim it before typing `y`. If the work for an issue actually
+shipped (the PR landed, the bullet sits in `[Unreleased]`, the
+feature works on the live site) but no one wrote `Closes #N` in the
+PR description, that issue is still open and needs explicit closure
+on release day:
+
+```
+gh issue close <N> --comment "Shipped in v<X.Y.Z>"
+```
+
+If the work hasn't shipped, the issue should already have been
+re-milestoned in the PR that decided to defer it.
+
 ## 11. Documentation currency
 
 The site has three classes of documentation, and each has a

@@ -276,6 +276,27 @@ if [[ "$DRY_RUN" != "--dry-run" ]]; then
     printf '  ──────────────────────────────────────────────────────────────\n\n'
   fi
 
+  # Pre-release milestone audit (CLAUDE.md §10). List the issues
+  # currently open under the v$VERSION milestone so the maintainer
+  # can spot any work that shipped without explicit `gh issue close`.
+  # gh may not have the milestone defined yet (first time a version
+  # is cut from a milestone-less repo), so failures are non-fatal.
+  open_count=$(gh issue list \
+    --milestone "v$VERSION" --state open \
+    --json number --jq 'length' 2>/dev/null || true)
+  if [[ -n "$open_count" && "$open_count" != "0" ]]; then
+    printf '  Open issues tagged with milestone v%s (CLAUDE.md §10):\n' "$VERSION"
+    gh issue list \
+      --milestone "v$VERSION" --state open \
+      --json number,title \
+      --jq '.[] | "    #\(.number)  \(.title)"' 2>/dev/null || true
+    printf '\n'
+    printf '  For each: did the work ACTUALLY ship in this release? If yes, close it now:\n'
+    printf '      gh issue close <N> --comment "Shipped in v%s"\n' "$VERSION"
+    printf '  If no, re-milestone before cutting (e.g. defer to v1.X+1.0 or Backlog).\n'
+    printf '  ──────────────────────────────────────────────────────────────\n\n'
+  fi
+
   printf '  Publish v%s — %s with the title + notes above?\n' "$VERSION" "$TITLE"
   printf '  Type "y" to publish, anything else to abort: '
   read -r CONFIRM
