@@ -369,14 +369,55 @@ PY
 fi
 
 # ────────────────────────────────────────────────────────────────────
+# Promote the public roadmap card (EN / FR / DE).
+#
+# scripts/promote-roadmap.py flips a matching <li class="rm-entry planned">
+# card to shipped, formats the date per locale, adds the Release-notes
+# link, and bumps the "Last updated" stamp paragraph. Idempotent: safe
+# to re-run if the maintainer aborts and retries.
+#
+# Exit codes from the script:
+#   0  one or more locales updated, or all already up-to-date.
+#   2  no planned card AND no shipped card AND no stamp moved (the
+#      maintainer probably forgot to write the v$VERSION card). We
+#      print the warning, continue, and let the maintainer abort at
+#      the confirmation prompt above (which already happened) OR
+#      decide whether to commit anyway.
+#
+# Done BEFORE the commit so the roadmap edits land in the release
+# commit, then ship with the tag.
+# ────────────────────────────────────────────────────────────────────
+
+step "Promote public roadmap card (EN / FR / DE)"
+
+if [[ "$DRY_RUN" != "--dry-run" ]]; then
+  if python3 "$REPO_ROOT/scripts/promote-roadmap.py" "$VERSION" "$TODAY"; then
+    echo "  ✓ roadmap promotion succeeded."
+  else
+    rc=$?
+    if [[ $rc -eq 2 ]]; then
+      echo "  ! roadmap promotion ran but found nothing to do."
+      echo "    See warnings above. release.sh will continue; abort with Ctrl-C if"
+      echo "    you want to fix the roadmap before committing."
+    else
+      echo "✗ roadmap promotion failed (exit $rc). Aborting before commit."
+      exit "$rc"
+    fi
+  fi
+else
+  echo "  \$ python3 scripts/promote-roadmap.py $VERSION $TODAY"
+  echo "  [dry-run] roadmap.html (+ FR + DE) would be edited in-place."
+fi
+
+# ────────────────────────────────────────────────────────────────────
 # Commit + tag + push
 # ────────────────────────────────────────────────────────────────────
 
 step "Commit, tag, push"
 
-run git add CHANGELOG.md
+run git add CHANGELOG.md roadmap.html roadmap.fr.html roadmap.de.html
 run git commit -m \"Release v$VERSION — $TITLE\" \
-       -m \"Promotes the CHANGELOG.md [Unreleased] section to [$VERSION] · $TODAY — $TITLE and resets [Unreleased].\"
+       -m \"Promotes the CHANGELOG.md [Unreleased] section to [$VERSION] · $TODAY — $TITLE, resets [Unreleased], promotes the matching public-roadmap card on EN + FR + DE from planned to shipped, and bumps the roadmap last-updated stamp.\"
 run git tag -a \"v$VERSION\" \
        -m \"v$VERSION — $TITLE\" \
        -m \"See CHANGELOG.md and https://github.com/EISSeuropa/netsec.github.io/releases/tag/v$VERSION\"
@@ -426,3 +467,49 @@ fi
 step "Done"
 echo "  ✓ Released v$VERSION."
 echo "  https://github.com/EISSeuropa/netsec.github.io/releases/tag/v$VERSION"
+
+# ────────────────────────────────────────────────────────────────────
+# Post-release maintainer reminder: PDF documentation pack.
+#
+# Per CLAUDE.md §5.4 + §11, the PDF cover bumps on every minor / major
+# release; patches skip it. The PDF version axis is independent from
+# the website version (they don't track 1-to-1; see CHANGELOG appendix
+# inside docs/pdf/documentation.html). The script doesn't auto-bump
+# the cover stamp; too much heuristic about which version to pick.
+# What it CAN do is surface the reminder + the four stamps to update
+# + the build command, so the maintainer doesn't have to remember.
+# ────────────────────────────────────────────────────────────────────
+
+PATCH_PART="${VERSION##*.}"
+if [[ "$PATCH_PART" == "0" ]]; then
+  PDF_HTML="$REPO_ROOT/docs/pdf/documentation.html"
+  CURRENT_PDF_VERSION=""
+  if [[ -f "$PDF_HTML" ]]; then
+    # Scrape the current PDF version from the cover. Match the first
+    # occurrence of `vX.Y.Z` after "Documentation Pack". The grep falls
+    # back to a sentinel if the pattern moves so the reminder still fires.
+    CURRENT_PDF_VERSION="$(grep -oE 'Documentation Pack v[0-9]+\.[0-9]+\.[0-9]+' "$PDF_HTML" | head -n 1 | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || true)"
+  fi
+  echo
+  echo "── Reminder: PDF documentation pack (minor / major release)"
+  echo "  v$VERSION is a minor / major release, so the PDF cover bumps."
+  if [[ -n "$CURRENT_PDF_VERSION" ]]; then
+    echo "  Current PDF version stamp: $CURRENT_PDF_VERSION."
+  else
+    echo "  Could not auto-detect current PDF version; check the cover yourself."
+  fi
+  echo
+  echo "  Stamps to update in docs/pdf/documentation.html:"
+  echo "    1. <title>NetSec — Website & Directory · Documentation Pack vX.Y.Z</title>"
+  echo "    2. <div class=\"value\">vX.Y.Z · <Month> <Year></div>          (cover)"
+  echo "    3. <span class=\"url\">vX.Y.Z · <Month> <Year></span>          (poster + last-page footer)"
+  echo "    4. <h2>vX.Y.Z · <Month> <Year></h2>                         (appendix changelog)"
+  echo
+  echo "  Then rebuild the PDF:"
+  echo "    ./docs/pdf/build.sh"
+  echo
+  echo "  Bump policy (CLAUDE.md §11):"
+  echo "    cover-only bump (no section content refresh) → PDF patch (vX.Y.Z → vX.Y.(Z+1))"
+  echo "    section-level catch-up                       → PDF minor (vX.Y.Z → vX.(Y+1).0)"
+  echo "  Catch-ups are batched every 2-3 website minor releases."
+fi
