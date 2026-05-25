@@ -1,0 +1,26 @@
+# One-shot test: does promoting the bot account to admin unblock
+# Bearer-token auth on /event/<id>/manage/* routes? See #210 Phase
+# 1.5 — both the workflow and the probe script will be removed in
+# the follow-up PR once we read the result.
+name: Indico API probe (Phase 1.5 admin re-test)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Run probe
+        env:
+          INDICO_WRITE_TOKEN: ${{ secrets.INDICO_WRITE_TOKEN }}
+        run: python3 scripts/indico_probe.py
