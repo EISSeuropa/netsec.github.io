@@ -126,7 +126,14 @@ def main() -> int:
     print("Indico API probe — Phase 1.5 endpoint discovery for #210")
     print(f"Base: {INDICO_BASE}")
     print(f"Event: {EVENT_ID}")
-    print(f"Token: present ({len(token)} chars, prefix {token[:6]}…)")
+    # Don't log any bytes of the token, not even a prefix. CodeQL's
+    # `py/clear-text-logging-sensitive-data` rule flags any flow from
+    # the env var to print — and rightly so: workflow logs are
+    # readable by anyone with repo access, and a token prefix can
+    # accelerate offline guessing if the prefix encodes anything
+    # structural. The /api/user/ probe below confirms the token
+    # works without needing us to print any of it here.
+    print("Token: present.")
 
     # ── Probe 0: confirm the token works ──
     probe(
