@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
 """
-Minimal one-shot probe to test whether promoting the bot account
-to admin unblocks /event/<id>/manage/* writes for Personal Access
-Token auth. See #210 Phase 1.5 for the back-story.
+Phase 1.5 write-side confirmation. The previous probe (PR #215)
+proved GETs on /manage/* routes work for the admin-promoted bot.
+This one validates the write path too — without actually mutating
+anything.
 
-Runs four targeted requests — the same four that failed with 403
-in the previous probe runs (PR #213's workflow output). Reports
-status + key response headers. Strictly read-only.
+Safe-by-construction tests:
+  - OPTIONS on the suspected write routes (returns Allow header
+    without touching state).
+  - PATCH with empty {} body — if the route's update schema is
+    partial=True (per the agent's earlier source reading), an empty
+    body is a structural no-op: either 200/204 (nothing to change)
+    or 400 (validation error). Either tells us the route accepts
+    PATCH from Bearer-auth admin tokens without mutating data.
+  - Re-fetch of /api/user/ at the end to verify the bot identity
+    didn't accidentally change.
 
-Delete after this run; tracked in #210.
+NO POSTs with form data — those would risk mutating state.
 """
 
 from __future__ import annotations
@@ -19,7 +27,7 @@ import requests
 INDICO_BASE = "https://indico.eiss-europa.com"
 EVENT_ID = 22
 SESSION_ID = 117          # TRANS — Military Transformation
-CONTRIB_ID = 362          # Baram — Resilience-by-Design
+CONTRIB_ID = 362          # Baram
 
 TOKEN = os.environ.get("INDICO_WRITE_TOKEN") or os.environ.get("INDICO_API_TOKEN")
 if not TOKEN:
@@ -28,62 +36,69 @@ if not TOKEN:
 HEADERS = {
     "Authorization": f"Bearer {TOKEN}",
     "Accept": "application/json",
+    "Content-Type": "application/json",
 }
 
 
-def probe(label: str, method: str, path: str) -> None:
+def call(label: str, method: str, path: str, body: dict | None = None) -> None:
     url = INDICO_BASE + path
     print(f"\n──── {label} ────")
     print(f"  {method} {url}")
+    if body is not None:
+        print(f"  Body: {body!r}")
     try:
-        r = requests.request(method, url, headers=HEADERS, timeout=30)
+        kwargs = {"headers": HEADERS, "timeout": 30}
+        if body is not None:
+            kwargs["json"] = body
+        r = requests.request(method, url, **kwargs)
     except requests.RequestException as e:
         print(f"  ERROR: {type(e).__name__}: {e}")
         return
     print(f"  Status: {r.status_code} {r.reason}")
-    print(f"  Content-Type: {r.headers.get('Content-Type', '(none)')}")
-    # Headers worth knowing for the auth-mechanism question:
-    for h in ("Vary", "WWW-Authenticate", "Allow"):
+    ct = r.headers.get("Content-Type", "")
+    print(f"  Content-Type: {ct}")
+    for h in ("Allow", "Vary"):
         if h in r.headers:
             print(f"  {h}: {r.headers[h]}")
-    if "Set-Cookie" in r.headers:
-        print(f"  Set-Cookie: <redacted, length {len(r.headers['Set-Cookie'])}>")
-    # If JSON, dump top-level keys; if HTML, just say so.
-    ct = r.headers.get("Content-Type", "")
     if "application/json" in ct and r.content:
         try:
-            body = r.json()
-            if isinstance(body, dict):
-                print(f"  JSON keys: {sorted(body.keys())}")
-                if "admin" in body:
-                    print(f"    admin: {body['admin']!r}")
-            elif isinstance(body, list):
-                print(f"  JSON array, {len(body)} items")
+            j = r.json()
+            if isinstance(j, dict):
+                print(f"  JSON keys: {sorted(j.keys())}")
+                for k in ("error", "message", "errors", "id", "html"):
+                    if k in j:
+                        v = j[k]
+                        if isinstance(v, str):
+                            print(f"    {k}: {v[:120]!r}")
+                        else:
+                            print(f"    {k}: {type(v).__name__}")
         except Exception:
-            print(f"  (Content-Type JSON but body didn't parse)")
+            print(f"  (JSON parse failed)")
     else:
         print(f"  Body: {len(r.content)} bytes of {ct.split(';')[0] or 'unknown'}")
 
 
 def main() -> int:
-    print("Indico bot-admin re-test — #210 Phase 1.5")
-    print("Confirming whether admin status unblocks Bearer auth on /manage/* routes.")
-    print("Token: present.")
+    print("Indico write-confirm probe — admin-promoted bot, #210 Phase 1.5")
 
-    probe("0. Whoami — does the bot now report admin=true?",
-          "GET", "/api/user/")
+    call("0. Pre-test whoami", "GET", "/api/user/")
 
-    probe("1. Session modify (TRANS / 117)",
-          "GET", f"/event/{EVENT_ID}/manage/sessions/{SESSION_ID}/modify")
+    # OPTIONS — discover allowed methods on each candidate write route.
+    call("1. Session modify — OPTIONS",
+         "OPTIONS", f"/event/{EVENT_ID}/manage/sessions/{SESSION_ID}/modify")
+    call("2. Contribution REST — OPTIONS",
+         "OPTIONS", f"/event/{EVENT_ID}/manage/contributions/{CONTRIB_ID}")
+    call("3. Contribution edit — OPTIONS",
+         "OPTIONS", f"/event/{EVENT_ID}/manage/contributions/{CONTRIB_ID}/edit")
 
-    probe("2. Contribution edit (Baram / 362)",
-          "GET", f"/event/{EVENT_ID}/manage/contributions/{CONTRIB_ID}/edit")
+    # Empty PATCH — if the schema is partial=True, empty body is a no-op.
+    # Either succeeds (no changes applied) or rejects with 400. NEVER 403
+    # if Bearer-auth admin is honoured on writes.
+    call("4. Contribution REST — empty PATCH (no-op test)",
+         "PATCH", f"/event/{EVENT_ID}/manage/contributions/{CONTRIB_ID}", body={})
 
-    probe("3. Event persons (manage namespace)",
-          "GET", f"/event/{EVENT_ID}/manage/persons/")
-
-    probe("4. Timetable management",
-          "GET", f"/event/{EVENT_ID}/manage/timetable/")
+    # Post-test whoami — confirm identity unchanged.
+    call("5. Post-test whoami", "GET", "/api/user/")
 
     print("\n──── Probe complete ────")
     return 0
