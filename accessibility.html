@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Accessibility statement for the NetSec website — COST Action CA24154. Conformance status, known limitations, and how to report barriers.">
-<title>Accessibility · NetSec — COST Action CA24154</title>
+<meta name="description" content="Accessibility statement for the NetSec website: COST Action CA24154. Conformance status, known limitations, and how to report barriers.">
+<title>Accessibility · NetSec, COST Action CA24154</title>
 <!-- Language alternates. English is authoritative (x-default); the
      French and German variants are manually translated beta versions
      marked via the data-i18n-status attribute on <html>. -->
@@ -17,22 +17,22 @@
 
 <!-- Open Graph (social cards) -->
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="NetSec — COST Action CA24154">
+<meta property="og:site_name" content="NetSec, COST Action CA24154">
 <meta property="og:locale" content="en_GB">
 <meta property="og:locale:alternate" content="fr_FR">
 <meta property="og:locale:alternate" content="de_DE">
-<meta property="og:title" content="Accessibility · NetSec — COST Action CA24154">
-<meta property="og:description" content="Accessibility statement for the NetSec website — COST Action CA24154. Conformance status, known limitations, and how to report barriers.">
+<meta property="og:title" content="Accessibility · NetSec, COST Action CA24154">
+<meta property="og:description" content="Accessibility statement for the NetSec website: COST Action CA24154. Conformance status, known limitations, and how to report barriers.">
 <meta property="og:url" content="https://netsec-cost.eu/accessibility.html">
 <meta property="og:image" content="https://netsec-cost.eu/assets/images/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="NetSec — Networking European Security Knowledge. COST Action CA24154.">
+<meta property="og:image:alt" content="NetSec: Networking European Security Knowledge. COST Action CA24154.">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Accessibility · NetSec — COST Action CA24154">
-<meta name="twitter:description" content="Accessibility statement for the NetSec website — COST Action CA24154. Conformance status, known limitations, and how to report barriers.">
+<meta name="twitter:title" content="Accessibility · NetSec, COST Action CA24154">
+<meta name="twitter:description" content="Accessibility statement for the NetSec website: COST Action CA24154. Conformance status, known limitations, and how to report barriers.">
 <meta name="twitter:image" content="https://netsec-cost.eu/assets/images/og-image.png">
 
 <!-- General SEO + UA hints -->
@@ -67,10 +67,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "COST Action CA24154 — NetSec",
+    "name": "COST Action CA24154 (NetSec)",
     "alternateName": "Networking European Security Knowledge",
     "url": "https://netsec-cost.eu",
-    "logo": "https://netsec-cost.eu/assets/images/brand/android-chrome-512.png",
+    "logo": "https://netsec-cost.eu/assets/images/logo.png",
     "image": "https://netsec-cost.eu/assets/images/og-image.png",
     "description": "An inclusive, multidisciplinary network integrating diverse perspectives on European defence and security.",
     "sameAs": [
@@ -92,8 +92,8 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "Accessibility · NetSec — COST Action CA24154",
-    "description": "Accessibility statement for the NetSec website — COST Action CA24154. Conformance status, known limitations, and how to report barriers.",
+    "name": "Accessibility · NetSec, COST Action CA24154",
+    "description": "Accessibility statement for the NetSec website: COST Action CA24154. Conformance status, known limitations, and how to report barriers.",
     "url": "https://netsec-cost.eu/accessibility.html",
     "inLanguage": "en-GB",
     "isPartOf": {
@@ -178,7 +178,7 @@
     </div>
 
     <h2>Conformance status</h2>
-    <p>The NetSec website (<a href="https://netsec-cost.eu">netsec-cost.eu</a>) is designed to meet the requirements of the <strong>Web Content Accessibility Guidelines (WCAG) 2.1 at Level AA</strong>, in line with the European standard <strong>EN 301 549</strong>. Based on our most recent internal assessment, the site is <em>partially compliant</em> — the majority of WCAG 2.1 AA success criteria are satisfied, with the limitations listed below.</p>
+    <p>The NetSec website (<a href="https://netsec-cost.eu">netsec-cost.eu</a>) is designed to meet the requirements of the <strong>Web Content Accessibility Guidelines (WCAG) 2.1 at Level AA</strong>, in line with the European standard <strong>EN 301 549</strong>. Based on our most recent internal assessment, the site is <em>partially compliant</em>, the majority of WCAG 2.1 AA success criteria are satisfied, with the limitations listed below.</p>
 
     <h2>Most recent internal audit</h2>
     <p>The 22 May 2026 audit ran as part of the launch-QA pass before the public push (full plan: <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/docs/launch-qa-2026.md" target="_blank" rel="noopener">docs/launch-qa-2026.md</a> in the repository). It covered the eight most-trafficked pages (home, network directory, grants, press kit, roadmap, about, FAQ, glossary) across English, French, and German variants. Results:</p>
@@ -192,7 +192,7 @@
     </div>
     <p>One <strong>WCAG 2.1 SC 1.4.3 (Contrast Minimum)</strong> issue surfaced during the audit and was fixed before this statement was published: seven primary calls-to-action in dark mode rendered white text on the lighter dark-mode accent (`#6ea1ff`) for a 2.56:1 ratio, below the 4.5:1 AA floor. The affected buttons were pinned to the EU-blue brand colour (`#003399`) in dark mode, giving 10.86:1 contrast. The fix shipped in the same release as this audit.</p>
     <p>The remaining item flagged for manual review is colour contrast on text rendered over <code>backdrop-filter</code> glass surfaces, which automated tooling cannot evaluate reliably because the perceived contrast depends on what's behind the surface (the body background plus the decorative blob ambience). We verified these surfaces meet WCAG 2.1 AA contrast in both light and dark mode by inspecting computed colours element-by-element in the browser.</p>
-    <p>Three additional final-pass checks completed the launch-QA review on the same day: a structural assistive-technology audit across the four most-trafficked pages (landmarks, heading hierarchy, alt-text, accessible names — all clean); Open Graph and Twitter Card metadata verified complete on every public page; and a dark-mode readability sweep across all sixteen public English pages, with no further low-contrast text or surfaces beyond the manual-review item above. Three small corrections that surfaced during this pass are reflected in this release: the FR / DE beta-translation ribbon, which had misclaimed <em>"machine translation"</em>, was corrected to <em>"manual translation"</em> (which has always been the methodology); the mobile navigation drawer's transparent background was tightened to near-opaque so the hero text no longer bleeds through behind nav items in dark mode; and the network-directory deep-link spotlight was made resilient to a <code>requestAnimationFrame</code> deferral edge-case that could leave a shared <code>/people.html#&lt;slug&gt;</code> link visually unhighlighted on cold page load.</p>
+    <p>Three additional final-pass checks completed the launch-QA review on the same day: a structural assistive-technology audit across the four most-trafficked pages (landmarks, heading hierarchy, alt-text, accessible names, all clean); Open Graph and Twitter Card metadata verified complete on every public page; and a dark-mode readability sweep across all sixteen public English pages, with no further low-contrast text or surfaces beyond the manual-review item above. Three small corrections that surfaced during this pass are reflected in this release: the FR / DE beta-translation ribbon, which had misclaimed <em>"machine translation"</em>, was corrected to <em>"manual translation"</em> (which has always been the methodology); the mobile navigation drawer's transparent background was tightened to near-opaque so the hero text no longer bleeds through behind nav items in dark mode; and the network-directory deep-link spotlight was made resilient to a <code>requestAnimationFrame</code> deferral edge-case that could leave a shared <code>/people.html#&lt;slug&gt;</code> link visually unhighlighted on cold page load.</p>
 
     <h2>Non-accessible or limited content</h2>
     <p>The following parts of the site do not yet fully meet WCAG 2.1 AA, or have constraints worth flagging:</p>
@@ -212,7 +212,7 @@
       <li><code>alt</code> text on every image; explicit <code>&lt;label for&gt;</code> association on every form input.</li>
       <li>Light and dark themes with a manual toggle in the navigation; the operating system's <code>prefers-color-scheme</code> is the default.</li>
       <li><code>prefers-reduced-motion</code> disables decorative animations.</li>
-      <li>The Management Committee by Country directory uses a native <code>&lt;details&gt;</code> accordion — fully keyboard- and screen-reader-accessible without bespoke ARIA wiring. Deep-links to specific country cards auto-expand the section.</li>
+      <li>The Management Committee by Country directory uses a native <code>&lt;details&gt;</code> accordion, fully keyboard- and screen-reader-accessible without bespoke ARIA wiring. Deep-links to specific country cards auto-expand the section.</li>
       <li>The Gantt grid uses ARIA grid roles (<code>role="table"</code>, <code>role="row"</code>, <code>role="columnheader"</code>, <code>role="cell"</code>) so assistive technology parses it as tabular data; the scrollable region itself is keyboard-focusable.</li>
       <li>Working-group membership chips on each member are grouped with <code>role="group"</code> and an <code>aria-label</code> so screen readers announce them as a group (e.g. <em>"Working-group membership: WG1, WG3"</em>) rather than as loose tokens.</li>
       <li>Contact form: inline validation, accessible error reporting, and a confirmation toast announced via <code>role="status" aria-live="polite"</code>.</li>
@@ -226,10 +226,10 @@
       <li><strong>Lighthouse</strong> performance + accessibility + best-practices + SEO scans on home, network directory, grants, and press kit. Accessibility scored 96-100; best practices 96; SEO 100.</li>
       <li><strong>Manual contrast verification</strong> on glass surfaces and dark-mode CTAs using a per-element in-browser helper (real computed colours, not heuristic estimates). This caught the dark-mode CTA contrast issue that automated tooling under-reported.</li>
       <li><strong>Structural assistive-technology audit</strong> across home, network directory, grants, and press kit: landmark roles, heading-level monotonicity (no skipped levels), image alt-text coverage, accessible names on every interactive element, label association on every input. All four pages cleared.</li>
-      <li><strong>Open Graph and Twitter Card metadata sweep</strong> on the home, About, roadmap, and press-kit pages — full coverage of <code>og:type</code> / <code>og:title</code> / <code>og:description</code> / <code>og:url</code> / <code>og:image</code> (+ width / height / alt) and the equivalent Twitter Card tags, plus a render check on the 2400×1260 shared <code>og-image.png</code>.</li>
+      <li><strong>Open Graph and Twitter Card metadata sweep</strong> on the home, About, roadmap, and press-kit pages, full coverage of <code>og:type</code> / <code>og:title</code> / <code>og:description</code> / <code>og:url</code> / <code>og:image</code> (+ width / height / alt) and the equivalent Twitter Card tags, plus a render check on the 2400×1260 shared <code>og-image.png</code>.</li>
       <li><strong>Dark-mode readability sweep</strong> across all sixteen public English pages, with both visual review and a programmatic per-element contrast probe; no new low-contrast findings beyond the manual-review item already flagged above.</li>
       <li>Manual keyboard navigation through the home page, network directory, and grants page.</li>
-      <li>A per-page broken-link sweep via the new <code>scripts/check-links.sh</code> (910 internal links, 56 external) — caught nine anchor refs left over from the IA pass.</li>
+      <li>A per-page broken-link sweep via the new <code>scripts/check-links.sh</code> (910 internal links, 56 external), caught nine anchor refs left over from the IA pass.</li>
     </ul>
     <p>The audit also flagged four Lighthouse performance scores below the internal floor of 80 (range 67-75 on local + live runs), driven by render-blocking external font CSS. This is a quality-of-experience concern, not a WCAG conformance gap; it is tracked separately in the v1.5.0 roadmap.</p>
     <p>We re-assess after material changes to the design system or content structure, and at a minimum once per year. The next scheduled review is <strong>22 May 2027</strong> or sooner.</p>
@@ -255,7 +255,7 @@
   <div class="container">
     <div class="footer-cobranding">
       <a class="cost-mark" href="https://www.cost.eu/actions/CA24154/" target="_blank" rel="noopener" aria-label="View COST Action CA24154 NetSec on cost.eu">
-        <img src="assets/images/cost-logo.jpg" alt="COST — European Cooperation in Science and Technology">
+        <img src="assets/images/cost-logo.jpg" alt="COST, European Cooperation in Science and Technology">
       </a>
       <div class="eu-mark" role="img" aria-label="Funded by the European Union">
         <svg class="eu-flag" viewBox="0 0 810 540" role="img" aria-hidden="true">
