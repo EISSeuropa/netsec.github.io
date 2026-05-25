@@ -1,65 +1,87 @@
 # Indico patch helper
 
-The write-side companion to `scripts/sync-indico.py`. Designed to
-apply small metadata corrections to a live Indico event without
-clicking through the UI — useful when the authoritative programme
-document drifts from what's on Indico, as happened during ESSC 2026
-prep (audit at #208, six items hand-fixed in the UI).
+The write-side companion to `scripts/sync-indico.py`. Applies small
+metadata corrections to a live Indico event without clicking through
+the UI — useful when the authoritative programme document drifts
+from what's on Indico, as happened during ESSC 2026 prep (audit at
+#208, six items hand-fixed in the UI).
 
 > [!IMPORTANT]
-> **Writes are architecturally blocked on the EISS Indico instance
-> with current auth.** Phase 1.5 (#210, PRs #212/#213) established
-> that Personal Access Tokens cannot reach `/event/<id>/manage/*`
-> routes at any scope — the management UI is session-cookie-only.
-> See "Findings" below. The tool is in **dry-run-only mode** until
-> OAuth-app or service-account auth is set up.
->
-> What still works: friendly→internal ID resolution against the read
-> API, fix-plan YAML schema as a structured audit-trail, and the
-> dry-run output as a deterministic checklist of UI clicks a human
-> needs to make. What doesn't: the actual `--apply` step (will hit
-> the 403 wall described below).
+> **Precondition: the bot account owning `INDICO_WRITE_TOKEN` must
+> have the admin flag set on Indico.** Phase 1.5 (#210, PRs #212-#216)
+> established this is the unlock — scope alone (even `full:everything`)
+> is insufficient. With admin on, every `/event/<id>/manage/*` route
+> returns 200 + JSON; with admin off, every same route returns 403
+> with the anonymous-session pattern (`Vary: Cookie` + fresh
+> `Set-Cookie` + no `WWW-Authenticate`). See "Findings" below.
 
 ## Findings (Phase 1.5)
 
-The probe (`scripts/indico_probe.py`, since deleted; results in
-PRs #212 and #213) tried every plausible write endpoint shape
-against a Personal Access Token with `full:everything` scope plus
-every other available scope ticked:
+Three probe iterations narrowed down what unlocks management-route
+writes for Bearer-token auth on the EISS Indico instance:
 
-- **Every `/event/<id>/manage/*` route returns 403** with
-  `Vary: Cookie`, a fresh `Set-Cookie`, and **no `WWW-Authenticate`
-  header**. Indico is ignoring the Bearer header on these routes
-  entirely and treating the request as an anonymous browser
-  visitor. The route doesn't acknowledge the token enough to even
-  declare which scope it would need.
-- **`/api/user/` returns 200** — auth works fine on the `/api/*`
-  read surface. Probe whoami confirms `admin=true`.
-- **OAuth introspect at `/oauth/introspect`** returns 401 — endpoint
-  exists but rejects Personal Access Tokens (it's OAuth-app-only).
+| Probe | Result |
+|---|---|
+| **Read-only PAT** | All `/manage/*` → 403, anonymous session pattern |
+| **PAT with `full:everything` + every scope ticked** | Identical 403 — scope alone isn't enough |
+| **Same PAT, bot user now flagged `admin=true`** | All `/manage/*` → **200 OK**, returning JSON form data or HTML pages |
 
-This pattern matches documented Indico behaviour: the management UI
-checks `g.flask_login_user` (session cookie), not `g.current_user`
-(any auth source). Personal Access Tokens populate the latter, not
-the former, so management routes always see them as anonymous.
+The 403-with-anonymous-session pattern was misleading: it looks like
+the route is *ignoring* Bearer auth, but it's actually checking the
+token, finding the user lacks management permission, and falling
+through to the anonymous-render path (which happens to use cookies).
+Admin status on the token-owning user is the gate. Once on, the
+Bearer header is honoured normally.
 
-## Path forward (separate work, requires admin cooperation)
+OAuth introspection at `/oauth/introspect` returns 401 — endpoint
+exists but rejects Personal Access Tokens. That's expected (it's
+OAuth-app-only) and unrelated to our use case.
 
-1. **OAuth 2.0 Client App.** Indico supports OAuth-app registration
-   under admin panel; an app with `full:everything` scope can drive
-   management routes via the authorization-code or client-credentials
-   grant. This is the documented path for third-party programmatic
-   writes against Indico. Needs the EISS Indico admin team to
-   register an app for our use case.
-2. **Service account.** Newer Indico feature (≥ v3.3 IIRC) — a
-   non-interactive user with API-driven UI access. Not enabled on
-   the current EISS instance per the probe.
+### Endpoint shape — what writes look like
 
-When either lands, only the `IndicoClient` methods in
-`scripts/indico_patch.py` need updating; the dispatch / resolution
-/ CLI layers are already correct.
+Allow headers retrieved via OPTIONS (PR #216 probe), after the
+admin unlock:
 
-## Status: Phase 1 (writes blocked)
+| Route | Methods | Body format |
+|---|---|---|
+| `/manage/sessions/<sid>/modify` | HEAD, GET, OPTIONS, POST | wtforms |
+| `/manage/contributions/<cid>` | OPTIONS, PATCH, DELETE | clean JSON |
+| `/manage/contributions/<cid>/edit` | HEAD, GET, OPTIONS, POST | wtforms |
+
+GET against the wtforms routes (with `Accept: application/json`)
+returns `{html, js}` — `html` is the rendered form template with
+current values baked in. To round-trip a write: parse current
+values from `html`, mutate one field, POST back. The clean-JSON
+PATCH route on contributions accepts `{session_id, track_id}` per
+the agent's source reading.
+
+## Operational setup
+
+1. **Dedicated bot account** on Indico (don't share with a human's
+   personal token — keeps audit trail clean and blast radius
+   isolated).
+2. **Admin flag enabled** on the bot user.
+3. **Personal Access Token** under the bot, with `full:everything`
+   scope.
+4. **GH Actions secret `INDICO_WRITE_TOKEN`** carries the `indp_…`
+   value. The Indico admin status is what unlocks writes; the
+   secret value rotation policy is independent.
+
+## What's still unknown (resolve on first real apply)
+
+- The empty-PATCH no-op test returned 404 with a structured error
+  dict (PR #216 probe). The route accepts PATCH (Allow header
+  confirms) and our token is honoured (auth works), so the 404 is
+  likely an ID-namespace subtlety — the REST path may want the
+  global contribution ID rather than the friendly one used by the
+  `/edit` route. We'll iron this out on the first real apply during
+  ESSC 2027 prep.
+- Whether the wtforms POST endpoints need the full form re-submitted
+  or accept a partial; the read path's `{html, js}` JSON shape
+  suggests we'll need to parse current values out of the HTML and
+  resubmit everything.
+
+## Status: Phase 1 + 1.5 complete
 
 Two of four endpoint families are validated end-to-end against the
 live API:
