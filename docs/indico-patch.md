@@ -1,12 +1,65 @@
 # Indico patch helper
 
-The write-side companion to `scripts/sync-indico.py`. Lets us apply
-small metadata corrections to a live Indico event without clicking
-through the UI — useful when the authoritative programme document
-drifts from what's on Indico, as happened during ESSC 2026 prep
-(audit at #208, six items hand-fixed in the UI).
+The write-side companion to `scripts/sync-indico.py`. Designed to
+apply small metadata corrections to a live Indico event without
+clicking through the UI — useful when the authoritative programme
+document drifts from what's on Indico, as happened during ESSC 2026
+prep (audit at #208, six items hand-fixed in the UI).
 
-## Status: Phase 1
+> [!IMPORTANT]
+> **Writes are architecturally blocked on the EISS Indico instance
+> with current auth.** Phase 1.5 (#210, PRs #212/#213) established
+> that Personal Access Tokens cannot reach `/event/<id>/manage/*`
+> routes at any scope — the management UI is session-cookie-only.
+> See "Findings" below. The tool is in **dry-run-only mode** until
+> OAuth-app or service-account auth is set up.
+>
+> What still works: friendly→internal ID resolution against the read
+> API, fix-plan YAML schema as a structured audit-trail, and the
+> dry-run output as a deterministic checklist of UI clicks a human
+> needs to make. What doesn't: the actual `--apply` step (will hit
+> the 403 wall described below).
+
+## Findings (Phase 1.5)
+
+The probe (`scripts/indico_probe.py`, since deleted; results in
+PRs #212 and #213) tried every plausible write endpoint shape
+against a Personal Access Token with `full:everything` scope plus
+every other available scope ticked:
+
+- **Every `/event/<id>/manage/*` route returns 403** with
+  `Vary: Cookie`, a fresh `Set-Cookie`, and **no `WWW-Authenticate`
+  header**. Indico is ignoring the Bearer header on these routes
+  entirely and treating the request as an anonymous browser
+  visitor. The route doesn't acknowledge the token enough to even
+  declare which scope it would need.
+- **`/api/user/` returns 200** — auth works fine on the `/api/*`
+  read surface. Probe whoami confirms `admin=true`.
+- **OAuth introspect at `/oauth/introspect`** returns 401 — endpoint
+  exists but rejects Personal Access Tokens (it's OAuth-app-only).
+
+This pattern matches documented Indico behaviour: the management UI
+checks `g.flask_login_user` (session cookie), not `g.current_user`
+(any auth source). Personal Access Tokens populate the latter, not
+the former, so management routes always see them as anonymous.
+
+## Path forward (separate work, requires admin cooperation)
+
+1. **OAuth 2.0 Client App.** Indico supports OAuth-app registration
+   under admin panel; an app with `full:everything` scope can drive
+   management routes via the authorization-code or client-credentials
+   grant. This is the documented path for third-party programmatic
+   writes against Indico. Needs the EISS Indico admin team to
+   register an app for our use case.
+2. **Service account.** Newer Indico feature (≥ v3.3 IIRC) — a
+   non-interactive user with API-driven UI access. Not enabled on
+   the current EISS instance per the probe.
+
+When either lands, only the `IndicoClient` methods in
+`scripts/indico_patch.py` need updating; the dispatch / resolution
+/ CLI layers are already correct.
+
+## Status: Phase 1 (writes blocked)
 
 Two of four endpoint families are validated end-to-end against the
 live API:

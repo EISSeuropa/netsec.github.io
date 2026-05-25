@@ -2,6 +2,43 @@
 """
 Indico patch helper: apply a YAML fix-plan to an Indico event.
 
+╔══════════════════════════════════════════════════════════════════╗
+║  STATUS: writes architecturally blocked. Dry-run mode only.      ║
+║                                                                  ║
+║  The Phase 1.5 probe (#210, PRs #212/#213) established that      ║
+║  Personal Access Tokens on the EISS Indico instance cannot       ║
+║  reach `/event/<id>/manage/*` routes at any scope — not even     ║
+║  with `full:everything` plus every other box ticked. The         ║
+║  management routes return 403 with `Vary: Cookie` and a fresh    ║
+║  Set-Cookie, meaning Indico is ignoring the Bearer header        ║
+║  entirely and treating the request as anonymous. There's no      ║
+║  scope hint on the 403 either (no WWW-Authenticate header) —     ║
+║  the route literally doesn't process token auth.                 ║
+║                                                                  ║
+║  This is consistent with documented Indico behaviour: the        ║
+║  management UI is session-cookie-only. Token-driven writes       ║
+║  require either an OAuth 2.0 Client App (registered by an        ║
+║  Indico admin) or a service account (newer feature, not yet      ║
+║  enabled on this instance). Both routes need admin cooperation.  ║
+║                                                                  ║
+║  Until that lands, this script is useful as:                     ║
+║    1. A specification of what fixes are needed — the fix-plan    ║
+║       YAML format is a structured, auditable, git-trackable      ║
+║       checklist of UI changes a human will make.                 ║
+║    2. A dry-run validator — friendly→internal ID resolution      ║
+║       works against the read API, so every patch is             ║
+║       verified to point at a real session/contribution/person   ║
+║       before a human clicks anything in the UI.                  ║
+║    3. A future-proof skeleton — when OAuth-app auth lands,       ║
+║       only the IndicoClient methods need to change; the          ║
+║       dispatch/resolution/CLI layers are correct as-is.          ║
+║                                                                  ║
+║  `--apply` will still attempt the write calls but will hit       ║
+║  the same 403 wall. The validate_token() check on startup        ║
+║  doesn't catch this because /api/user/ works fine — only the     ║
+║  /manage/* surface is blocked.                                   ║
+╚══════════════════════════════════════════════════════════════════╝
+
 This is the write-side companion to `sync-indico.py` (which is
 read-only). It exists to make the next ESSC's prep cycle faster:
 when we spot drift between the authoritative programme document
