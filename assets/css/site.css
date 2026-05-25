@@ -270,15 +270,46 @@ img{max-width:100%;display:block}
 .nav-inner .brand{margin-right:auto;order:0}
 .nav-inner .nav-links{order:1}
 .nav-inner .nav-actions{order:2}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink);font-size:1.02rem;letter-spacing:-.01em}
-/* The NS-square mark stays; the "NetSec" wordmark is hidden so the
-   floating header has room for the new search trigger plus the
-   existing language switcher and theme toggle. The aria-label on
-   the <a> still reads "NetSec home" for screen readers, so the
-   brand name is announced even when the visual text is suppressed.
-   On a future redesign that grows the bubble (or trims the nav),
-   removing this rule restores the wordmark. */
-.brand > span:last-child{display:none}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+/* Brand logo: three <img>s in the DOM, exactly one visible at a time.
+     .brand-logo--light  → coloured lockup, light site theme, desktop
+     .brand-logo--dark   → white lockup,    dark site theme,  desktop
+     .brand-mark-only    → petal mark only, mobile (<700px), both themes
+   The dark variant is keyed off `<html class="dark">` (the site's own
+   theme toggle, not the OS `prefers-color-scheme`) so the logo
+   follows whatever theme the visitor explicitly picked. The DOM
+   carries both images so a theme toggle is purely a CSS-flip with
+   no fetch round-trip. Browsers do load both PNGs — they're tiny
+   (~35–100 KB) so the bandwidth cost is in the noise.
+   We deliberately use distinct white/colour PNGs (not CSS
+   `filter: invert()`) because inversion mangles the petal gradient. */
+.brand-logo{
+  /* Height drives the visual size; width auto-scales to lockup aspect.
+     38 CSS px ≈ ~12 mm, comfortably above the 30 mm clearance-aware
+     minimum once you count surrounding padding in the header pill. */
+  display:none;height:38px;width:auto;
+}
+.brand-logo--light{display:block}
+.dark .brand-logo--light{display:none}
+.dark .brand-logo--dark{display:block}
+.brand-mark-only{
+  display:inline-block;width:32px;height:32px;
+}
+@media (min-width:700px){
+  /* Desktop: show the full lockup, hide the mark-only fallback. */
+  .brand-mark-only{display:none}
+}
+@media (max-width:699.98px){
+  /* Mobile: hide both lockups (regardless of theme) and show the
+     petal mark instead. Saves header real estate against the
+     hamburger + language switcher + theme toggle. The aria-label
+     on the parent <a> keeps AT users covered. */
+  .brand-logo--light,
+  .dark .brand-logo--dark{display:none}
+}
+/* The original `.brand-mark` rule lives on for any place still
+   using the old NS-square pattern (defensive — nothing in repo
+   uses it at time of writing). Kept as a graceful fallback. */
 .brand-mark{
   width:34px;height:34px;border-radius:10px;
   background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
