@@ -112,6 +112,48 @@
 ]
 </script>
 <!-- seo:jsonld END -->
+
+<!-- Programme print-to-PDF: per-locale @page rule.
+     The running-header text on pages 2+ has to be a literal string
+     (CSS @page margin boxes can't read custom properties from the
+     document) and the language differs per locale, so the @page
+     rule lives inline next to the locale's HTML rather than in
+     site.css. Cross-cutting print rules (cover masthead styling,
+     tightened cards, chrome stripping) stay in site.css under the
+     "Programme page print refinement" block. Tracked in #208. -->
+<style>
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 20mm 14mm 16mm;
+    @top-center {
+      content: "European Security Studies Conference 2026 · 11–12 June 2026 · Stockholm University";
+      font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 9pt;
+      color: #555;
+      padding-bottom: 3mm;
+      border-bottom: 0.4pt solid #ccc;
+    }
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 8.5pt;
+      color: #666;
+    }
+    @bottom-left {
+      content: "netsec-cost.eu/essc-2026";
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 8.5pt;
+      color: #888;
+    }
+  }
+  /* First page carries the cover masthead, so suppress the running
+     header on that page — the masthead itself does that job. */
+  @page :first {
+    @top-center { content: none; border: none; padding: 0; }
+  }
+}
+</style>
 </head>
 <body>
 
@@ -161,6 +203,21 @@
 </header>
 
 <main id="main" data-pagefind-body>
+
+<!-- Cover masthead, print-only. `display:none` on screen so the
+     on-screen `.essc-hero` continues to carry the visible H1; on
+     paper this block replaces it and gives the printed PDF its
+     own title, dates, and venue. We deliberately use `<p class="title">`
+     not `<h1>` to keep the document at one H1 (the hero's) — adding
+     a second H1 hidden via aria + display would technically still
+     be in the DOM and slightly muddy heading structure for
+     crawlers and AT. `aria-hidden` because the on-screen hero
+     already carries the same content. Tracked in #208. -->
+<header class="essc-print-masthead" aria-hidden="true">
+  <p class="title">European Security Studies Conference 2026</p>
+  <p class="when-where">11–12 June 2026 · Stockholm University · D House, Lecture Halls 8 &amp; 9</p>
+  <p class="organisers">Jointly organised by COST Action NetSec (CA24154), the European Initiative for Security Studies (EISS), and Stockholm University.</p>
+</header>
 
 <section class="essc-hero">
   <div class="container reveal">

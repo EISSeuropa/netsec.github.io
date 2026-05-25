@@ -98,7 +98,9 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Programme page · improved print-to-PDF
+
+- **Cover masthead + running header on `essc-2026.html` (EN/FR/DE) print output.** Page 1 carries a full title block — conference name, dates, venue, organisers — so the printed PDF self-identifies when shared or archived separately from the URL. Pages 2+ get a thin single-line running header (locale-aware: EN/FR/DE) and a bottom-right page counter (`Page 2 of 4` / `sur` / `von`). A4 portrait, 20 / 14 / 16 mm margins. Tighter cards (9.5 pt body, 0.6 pt borders, no shadows) recover roughly a third of each page from screen padding. Contributions list is forced open on print so the full paper line-up and abstracts make it onto paper. Closes #208.
 
 ## [1.7.0] · 2026-05-24 — Directory keyword filter, bios-sync hardening, release automation
 
