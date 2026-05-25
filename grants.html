@@ -870,7 +870,7 @@
     // Role label flows through window.netsecT() so the FR/DE pages
      // show a translated label (e.g. "Coordinateur·rice d'attribution
      // des subventions" / "Koordination Fördervergabe") while the
-     // bios.json itself stays English — the single source of truth.
+     // authoritative bios.json itself stays English.
     const localisedRole = (window.netsecT && window.netsecT(displayRole)) || displayRole;
     article.innerHTML =
       '<div class="gm-avatar">' + photoHtml + '</div>' +

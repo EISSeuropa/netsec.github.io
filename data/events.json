@@ -1,7 +1,7 @@
 {
   "_documentation": "Authoritative source for calendar.ics. Maintained by hand alongside the HTML event cards in index.html. When you edit an event here, also update the corresponding <article class=\"event-card\"> in index.html (and its FR/DE siblings), and bump dtstamp. CI fails if calendar.ics drifts from what scripts/build-calendar.py would produce from this file. Entries that also live on Indico can opt into a partial auto-sync by adding an `indicoEventId` field; scripts/sync-indico.py then overwrites the `summary`, `start`, and `end` fields from the fresh Indico payload on each run. `location`, `description`, `url`, `categories`, etc. stay hand-edited (the curated text is richer than what Indico returns).",
-  "calname": "NetSec — COST Action CA24154",
-  "caldesc": "Events from the NetSec COST Action (CA24154) — annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
+  "calname": "NetSec, COST Action CA24154",
+  "caldesc": "Events from the NetSec COST Action (CA24154): annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
   "tzid": "Europe/Stockholm",
   "refresh_days": 7,
   "dtstamp": "20260524T130656Z",
@@ -9,7 +9,7 @@
     {
       "uid": "summer-school-2026@netsec-cost.eu",
       "summary": "NetSec Early-Career Scholars Summer School",
-      "description": "Three days of training and mentoring for early-career researchers in European security — research presentations, individualised feedback from senior scholars, and structured mentorship. Open to PhD candidates and post-docs (within one year of defence) in strategic studies and international security, as well as SWAMOS / Euro-SWAMOS alumni.\n\nScientific Coordinators: Dr Silvia D'Amato, Prof Chiara Ruffa.\n\nFull details: https://eiss-europa.com/NetSecSchool.html",
+      "description": "Three days of training and mentoring for early-career researchers in European security: research presentations, individualised feedback from senior scholars, and structured mentorship. Open to PhD candidates and post-docs (within one year of defence) in strategic studies and international security, as well as SWAMOS / Euro-SWAMOS alumni.\n\nScientific Coordinators: Dr Silvia D'Amato, Prof Chiara Ruffa.\n\nFull details: https://eiss-europa.com/NetSecSchool.html",
       "location": "Stockholm University, Frescativägen 114 18, Sweden",
       "url": "https://eiss-europa.com/NetSecSchool.html",
       "start": "2026-06-09T09:00",
