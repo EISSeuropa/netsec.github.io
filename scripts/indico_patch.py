@@ -2,42 +2,39 @@
 """
 Indico patch helper: apply a YAML fix-plan to an Indico event.
 
-╔══════════════════════════════════════════════════════════════════╗
-║  STATUS: writes architecturally blocked. Dry-run mode only.      ║
-║                                                                  ║
-║  The Phase 1.5 probe (#210, PRs #212/#213) established that      ║
-║  Personal Access Tokens on the EISS Indico instance cannot       ║
-║  reach `/event/<id>/manage/*` routes at any scope — not even     ║
-║  with `full:everything` plus every other box ticked. The         ║
-║  management routes return 403 with `Vary: Cookie` and a fresh    ║
-║  Set-Cookie, meaning Indico is ignoring the Bearer header        ║
-║  entirely and treating the request as anonymous. There's no      ║
-║  scope hint on the 403 either (no WWW-Authenticate header) —     ║
-║  the route literally doesn't process token auth.                 ║
-║                                                                  ║
-║  This is consistent with documented Indico behaviour: the        ║
-║  management UI is session-cookie-only. Token-driven writes       ║
-║  require either an OAuth 2.0 Client App (registered by an        ║
-║  Indico admin) or a service account (newer feature, not yet      ║
-║  enabled on this instance). Both routes need admin cooperation.  ║
-║                                                                  ║
-║  Until that lands, this script is useful as:                     ║
-║    1. A specification of what fixes are needed — the fix-plan    ║
-║       YAML format is a structured, auditable, git-trackable      ║
-║       checklist of UI changes a human will make.                 ║
-║    2. A dry-run validator — friendly→internal ID resolution      ║
-║       works against the read API, so every patch is             ║
-║       verified to point at a real session/contribution/person   ║
-║       before a human clicks anything in the UI.                  ║
-║    3. A future-proof skeleton — when OAuth-app auth lands,       ║
-║       only the IndicoClient methods need to change; the          ║
-║       dispatch/resolution/CLI layers are correct as-is.          ║
-║                                                                  ║
-║  `--apply` will still attempt the write calls but will hit       ║
-║  the same 403 wall. The validate_token() check on startup        ║
-║  doesn't catch this because /api/user/ works fine — only the     ║
-║  /manage/* surface is blocked.                                   ║
-╚══════════════════════════════════════════════════════════════════╝
+PRECONDITION: the Indico user owning INDICO_WRITE_TOKEN must have
+the **admin flag set** on the Indico instance. Without it,
+management routes (/event/<id>/manage/*) return 403 with the
+anonymous-session pattern (Vary: Cookie + fresh Set-Cookie + no
+WWW-Authenticate). Phase 1.5 (#210, PRs #212-#216) walked the
+permission ladder: read-only token → full:everything + every
+scope ticked → still 403 → admin flag on the user → 200 +
+JSON form data. The admin precondition is the unlock; scope on
+top of it is needed but not sufficient.
+
+Practical setup:
+  1. Dedicated bot account on Indico (recommended: not a human's
+     personal token — separates audit trail and blast radius).
+  2. The bot's user has the admin flag enabled.
+  3. A Personal Access Token under that bot account, with
+     full:everything scope.
+  4. That token goes in GH Actions secret INDICO_WRITE_TOKEN.
+
+Endpoint families confirmed by the write-confirm probe (PR #216),
+Allow headers retrieved via OPTIONS:
+
+  | Route                                  | Methods           | Body format |
+  | -------------------------------------- | ----------------- | ----------- |
+  | /manage/sessions/<sid>/modify          | HEAD GET OPTIONS POST | wtforms |
+  | /manage/contributions/<cid>            | OPTIONS PATCH DELETE  | clean JSON |
+  | /manage/contributions/<cid>/edit       | HEAD GET OPTIONS POST | wtforms |
+  | /manage/persons/<pid>                  | (PATCH expected)      | clean JSON |
+  | /manage/timetable/<entry_id>           | (PATCH expected)      | clean JSON |
+
+The wtforms POST endpoints need read-modify-write: GET with
+Accept: application/json returns {html, js} where `html` is the
+rendered form with current values; we either parse it or use a
+companion JSON endpoint (TBD on the first real apply attempt).
 
 This is the write-side companion to `sync-indico.py` (which is
 read-only). It exists to make the next ESSC's prep cycle faster:
