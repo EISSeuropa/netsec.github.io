@@ -1,0 +1,75 @@
+# Example fix-plan. Documents the schema. Not meant to be applied —
+# the refs below are real items from the ESSC 2026 audit (#208) that
+# have already been corrected.
+#
+# Usage:
+#   dry-run : python3 scripts/indico_patch.py data/indico-fix-plans/EXAMPLE.yaml
+#   apply   : python3 scripts/indico_patch.py data/indico-fix-plans/EXAMPLE.yaml --apply
+#
+# Each patch is a dict with these keys:
+#   kind         — 'session' | 'person' | 'contribution' | 'block_time'
+#   by           — how `ref` identifies the target
+#                  ('friendlyId' for sessions, 'name' for persons,
+#                   'title_match' for contributions, etc.)
+#   ref          — the friendly reference (number or substring)
+#   in_session   — friendly session id, ONLY needed for person patches
+#                  (because conveners are scoped to a session)
+#   set          — dict of field → new value
+#   note         — free-text reason (optional, surfaces in the log)
+#
+# Resolved internal IDs are NOT stored in this file — they live in
+# a sidecar JSON (EXAMPLE.yaml.resolved.json, gitignored) that the
+# script auto-creates on first dry-run. Keeps the YAML pristine
+# and comment-friendly.
+
+event_id: 22   # ESSC 2026
+
+patches:
+  # 1. Rename a session
+  - kind: session
+    by: friendlyId
+    ref: 43            # Indico's UI number for the session
+    note: "Add the word 'Military' before 'Innovation'"
+    set:
+      title: "Military Transformation: Military Innovation and Strategic Change in the Transatlantic Context"
+
+  # 2. Move a room assignment
+  - kind: session
+    by: friendlyId
+    ref: 42
+    note: "Add 'D House' prefix to match the other 13 sessions"
+    set:
+      room_name: "D House, Lecture Hall 9"
+
+  # 3. Edit a convener's affiliation
+  - kind: person
+    in_session: 57     # CYBER1 — Virtually Transformed?
+    by: name
+    ref: "Julia Carver"
+    note: "Use Leiden University per the source-of-truth PDF"
+    set:
+      affiliation: "Leiden University"
+
+  # 4. Move a contribution between sessions
+  - kind: contribution
+    by: title_match
+    ref: "Cyber risk logics"
+    note: "Backman/Stevens belongs in Virtually Transformed, not Disruptive Machines"
+    set:
+      session: 57      # friendly id of destination session
+
+  # 5. Rename a contribution
+  - kind: contribution
+    by: title_match
+    ref: "Resilience-by-Design"
+    note: "Restore the 'Cybercrime & AI:' prefix the speaker used"
+    set:
+      title: "Cybercrime & AI: Resilience-by-Design in the Information Age: Tabletop Evidence on AI-Enabled Cybercrime, Coordination, and Public Trust"
+
+  # 6. Change a session block's end time
+  - kind: block_time
+    by: friendlyId
+    ref: 39            # STRAT1
+    note: "End at 12:55 to align with the lunch break"
+    set:
+      end_dt: "2026-06-12T12:55:00+02:00"
