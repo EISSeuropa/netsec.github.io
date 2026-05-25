@@ -112,6 +112,41 @@
 ]
 </script>
 <!-- seo:jsonld END -->
+
+<!-- Impression PDF du programme : règle @page propre à la locale.
+     Voir essc-2026.html pour le commentaire explicatif détaillé.
+     Suivi dans #208. -->
+<style>
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 20mm 14mm 16mm;
+    @top-center {
+      content: "European Security Studies Conference 2026 · 11–12 juin 2026 · Université de Stockholm";
+      font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 9pt;
+      color: #555;
+      padding-bottom: 3mm;
+      border-bottom: 0.4pt solid #ccc;
+    }
+    @bottom-right {
+      content: "Page " counter(page) " sur " counter(pages);
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 8.5pt;
+      color: #666;
+    }
+    @bottom-left {
+      content: "netsec-cost.eu/essc-2026.fr";
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 8.5pt;
+      color: #888;
+    }
+  }
+  @page :first {
+    @top-center { content: none; border: none; padding: 0; }
+  }
+}
+</style>
 </head>
 <body>
 
@@ -167,6 +202,15 @@
 </header>
 
 <main id="main" data-pagefind-body>
+
+<!-- En-tête d'impression : visible uniquement à l'impression
+     (`display:none` à l'écran). Voir essc-2026.html pour le détail.
+     Suivi dans #208. -->
+<header class="essc-print-masthead" aria-hidden="true">
+  <p class="title">European Security Studies Conference 2026</p>
+  <p class="when-where">11–12 juin 2026 · Université de Stockholm · D House, salles 8 &amp; 9</p>
+  <p class="organisers">Co-organisée par l'Action COST NetSec (CA24154), l'European Initiative for Security Studies (EISS) et l'Université de Stockholm.</p>
+</header>
 
 <section class="essc-hero">
   <div class="container reveal">

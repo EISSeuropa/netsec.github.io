@@ -3782,9 +3782,25 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
      link text so a paper reader can still resolve where it points. */
   a { color:inherit !important; text-decoration:underline; }
   a[href^="http"]:not([href*="netsec-cost.eu"])::after {
+    /* Reset the screen-mode external-link icon (a 0.85em×0.85em
+       inline-block with a -webkit-mask) so the print URL disclosure
+       isn't crammed into a 12px-wide box. Without these resets,
+       `word-break: break-all` wraps the URL one character per line
+       and inflates the parent (e.g. a session-card H4 wrapping an
+       Indico link) to ~565px tall — which in turn made Chrome's
+       print engine put every programme row on its own page. */
+    display:inline !important;
+    width:auto !important;
+    height:auto !important;
+    margin:0 !important;
+    background:none !important;
+    -webkit-mask:none !important;
+            mask:none !important;
     content:" (" attr(href) ")";
-    font-size:.85em;
-    font-weight:normal;
+    font-size:.78em;
+    font-weight:400;
+    color:#666 !important;        /* visually separate the URL from the link text */
+    text-decoration:none !important;  /* the URL doesn't need its own underline */
     word-break:break-all;
   }
 
@@ -3820,11 +3836,211 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   body.is-roadmap { page: roadmap; }
 
   /* Programme grid — give each day its own start so a 3-day
-     programme prints as 3 pages, not as one continuous run. */
+     programme prints as 3 pages, not as one continuous run.
+     The fuller per-day breaks and tightened cards live in the
+     dedicated programme print block further down. */
   .programme-day { page-break-before:always; }
   .programme-day:first-of-type { page-break-before:auto; }
   .programme-slot { page-break-inside:avoid; }
 
   /* Strip the directory's expand-in-place hint chrome too. */
   .members-grid.is-compact .member-card { padding:16px !important; }
+}
+
+/* ── Programme page print refinement (essc-2026.html + FR/DE) ──
+   The earlier print block above handles the cross-cutting baseline.
+   This block is programme-specific: cover masthead on page 1,
+   tightened session cards, locale-neutral chrome stripping.
+   The per-locale `@page` rule with running header text and page
+   numbers lives inline in each essc-2026.*.html — the running
+   header content has to be a literal string and the language
+   differs per locale, so keeping it next to the locale's HTML
+   document avoids three near-duplicate `@page` rules here.
+
+   Cover masthead default state: hidden on screen, only the print
+   block flips it on. Marked aria-hidden in the HTML because the
+   on-screen `.essc-hero` already carries the same information for
+   AT users; a duplicate landmark on screen would be noise. */
+.essc-print-masthead { display:none; }
+@media print {
+  .essc-print-masthead {
+    display:block;
+    margin: 0 0 8mm;
+    padding: 0 0 5mm;
+    border-bottom: 1pt solid #000;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+  .essc-print-masthead .title {
+    margin: 0 0 3mm;
+    font-family: 'Lexend', 'Inter', sans-serif;
+    font-size: 22pt;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+    font-weight: 700;
+    color: #000;
+  }
+  .essc-print-masthead .when-where {
+    margin: 0 0 2mm;
+    font-size: 11pt;
+    line-height: 1.4;
+    color: #000;
+  }
+  .essc-print-masthead .organisers {
+    margin: 0;
+    font-size: 9.5pt;
+    line-height: 1.4;
+    color: #444;
+  }
+
+  /* Hide on-screen chrome that's redundant once the masthead is in
+     place, or that has no meaning on paper. The "Times in Europe/Paris
+     … on Indico" line is dropped because the masthead already names
+     the conference and the Indico URL will appear after each link via
+     the existing link-disclosure rule. */
+  .essc-hero,
+  .programme-day-chips,
+  .programme-live-dot,
+  .programme-loading,
+  .programme-error,
+  .essc-programme > .container > p.muted,
+  .essc-programme > .container > .eyebrow,
+  .essc-practical { display:none !important; }
+
+  /* The "Live programme" h2 is screen chrome — replace with a
+     tighter section opener on paper. */
+  .essc-programme h2 {
+    font-size: 14pt;
+    margin: 0 0 5mm;
+    color: #000;
+  }
+
+  /* Day — own page after the first; tighter head with stronger rule. */
+  .programme-day {
+    margin: 0 0 8mm;
+  }
+  .programme-day-head {
+    margin: 0 0 4mm;
+    padding: 0 0 2mm;
+    border-bottom: 0.75pt solid #000;
+    gap: .4rem 1rem;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+  .programme-day-head h3 {
+    font-size: 13pt;
+    font-weight: 700;
+    color: #000;
+  }
+  .programme-day-date {
+    font-size: 10pt;
+    color: #444;
+  }
+
+  /* Row — narrower time gutter, smaller gap. Keep parallel sessions
+     side-by-side; the viewport in print is ~595pt wide so the
+     screen breakpoint at 900px does not fire.
+
+     `align-items: start` + `grid-auto-rows: min-content` is the
+     critical pairing for Chrome's print engine: without them, the
+     `break-inside: avoid` hint on the slot child causes the parent
+     grid row track to expand to the remaining page height (the
+     engine reserves the next-page worth of vertical space "in
+     case" the slot needs it), then the slot stretches to fill
+     that track. End result was a one-row-per-page programme. The
+     two declarations together pin track height to the content's
+     intrinsic min-content size and stop the stretch.
+
+     `align-content: start` on the inner grid does the same job for
+     parallel rows. */
+  .programme-row {
+    grid-template-columns: 70pt 1fr;
+    grid-auto-rows: min-content;
+    align-items: start;
+    align-content: start;
+    gap: 8pt;
+    margin: 0 0 3mm;
+  }
+  .programme-row-time {
+    font-size: 9pt;
+    padding-top: 2pt;
+    align-self: start;
+  }
+  .programme-row-items {
+    gap: 5pt;
+    grid-auto-rows: min-content;
+    align-items: start;
+    align-content: start;
+  }
+  .programme-row.is-parallel .programme-row-items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6pt;
+  }
+
+  /* Slot — sharper corners, thinner border, no shadow, paper-sized
+     type. `align-self: start` is the belt-and-braces companion to
+     the row's `align-items: start` above. */
+  .programme-slot {
+    padding: 6pt 9pt;
+    border-radius: 3pt;
+    border: 0.6pt solid #888 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    font-size: 9.5pt;
+    line-height: 1.35;
+    align-self: start;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .programme-slot.is-break {
+    padding: 4pt 8pt;
+    border-style: dashed !important;
+    border-color: #aaa !important;
+    color: #555 !important;
+    font-size: 9pt;
+  }
+  .programme-slot-head {
+    gap: .3rem;
+    margin-bottom: .35rem;
+  }
+  /* Session title — high contrast on paper. Without an explicit
+     near-black colour here, the global `h4 { color: var(--ink) }`
+     stays in force, and `--ink` resolves to a dark navy that prints
+     as light grey on cheap office printers / faint preview viewers.
+     Same idea for the `<a>` inside the title — `a { color: inherit }`
+     is already set above, so this colour cascades through. */
+  .programme-slot-title,
+  .programme-slot-title a,
+  .programme-contrib-title,
+  .programme-contrib-title a { color:#000 !important; }
+  .programme-slot-title { font-size: 10pt; font-weight: 600; }
+  .programme-slot-meta,
+  .programme-slot-people { font-size: 8.5pt; color: #444; }
+  .programme-slot-room { font-size: 8pt; }
+  .programme-slot-livestream { display:none; }   /* dot has no meaning on paper */
+
+  /* Force the contributions list open on print so the full paper
+     line-up + abstracts make it onto paper. The toggle summary is
+     suppressed; the "Show more" inline button has no use on paper. */
+  .programme-contribs,
+  .programme-contribs[open] { display: block; }
+  .programme-contribs > summary { display: none; }
+  .programme-contribs-list {
+    margin-top: 3mm;
+    gap: 2mm;
+  }
+  .programme-contrib {
+    padding: 3pt 6pt;
+    background: rgba(0,0,0,.03) !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .programme-contrib-title { font-size: 9pt; }
+  .programme-contrib-time  { font-size: 7.5pt; }
+  .programme-contrib-abstract {
+    font-size: 8.5pt;
+    color: #333;
+    margin-top: 1mm;
+  }
+  .programme-contrib-more { display: none; }
 }
