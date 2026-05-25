@@ -1,8 +1,6 @@
-# One-shot test: does promoting the bot account to admin unblock
-# Bearer-token auth on /event/<id>/manage/* routes? See #210 Phase
-# 1.5 — both the workflow and the probe script will be removed in
-# the follow-up PR once we read the result.
-name: Indico API probe (Phase 1.5 admin re-test)
+# Phase 1.5 write-confirm — final check before un-parking
+# scripts/indico_patch.py. See #210.
+name: Indico API probe (Phase 1.5 write-confirm)
 
 on:
   workflow_dispatch:
