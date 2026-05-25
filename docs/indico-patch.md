@@ -141,6 +141,50 @@ human. Different failure modes too: sync soft-fails (CI continues
 with last good data); patch hard-fails on the first error so the
 operator can investigate before continuing.
 
+## Companion tool: `scripts/indico_clean_duplicate.py`
+
+Different shape of problem, same auth precondition. When we duplicate
+ESSC 2026 → ESSC 2027 in Indico (which is the right move — preserves
+the abstract review workflow, custom fields, registration form
+schema, etc.) the duplicate also copies content: contributions,
+session blocks, materials. New submissions then carry over the old
+event's friendly-ID counter — your first ESSC 2027 abstract becomes
+#342 instead of #1.
+
+The cleanup script lists inherited content via the read API and
+selectively `DELETE`s it via the management API. Configuration
+stays. Counters effectively reset (modulo the open question of
+whether Indico recycles deleted friendly IDs — resolved on first
+real use).
+
+```bash
+# Dry-run: list what would be deleted from event 23
+python3 scripts/indico_clean_duplicate.py --event 23
+
+# Real cleanup of contributions + sessions
+python3 scripts/indico_clean_duplicate.py --event 23 --apply \
+    --delete contributions --delete sessions
+```
+
+**Safety net:** `PROTECTED_EVENTS` in the script hardcodes a list of
+event IDs that this script refuses to touch (currently ESSC 2026 =
+event 22). Override with `--force` only when you mean it.
+
+**Recommended workflow for ESSC 2027:**
+
+1. Indico UI → Manage Event 22 → Clone → pick the "Configuration
+   only" preset (uncheck contributions, sessions, registrations,
+   materials). This may already be sufficient.
+2. If the duplicate UI still carries content over: run this script
+   in dry-run against the new event ID to see what's inherited.
+3. Run with `--apply --delete contributions --delete sessions` to
+   clear it.
+4. Verify the next-contribution friendly ID by adding a test
+   contribution via the UI — that tells us whether Indico recycled
+   the deleted IDs (next is #1) or continued from the high-water
+   mark (next is #342). Document the answer here.
+5. Delete the test contribution.
+
 ## Predecessors
 
 - #208 — programme print-to-PDF improvements; surfaced just how much
