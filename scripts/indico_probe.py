@@ -220,9 +220,98 @@ def main() -> int:
         token=token,
     )
 
+    # ── Probe 6: scope introspection ──
+    # Every management-route probe so far returned 403. Need to know
+    # if the wall is "wrong scope" (fixable by regenerating the
+    # token) or "Personal Access Tokens can never reach /manage/*"
+    # (which is the documented behaviour of session-cookie-only
+    # routes in Indico).
+    probe(
+        "6a. List user's own API tokens (web UI route)",
+        "GET", "/user/api/tokens/",
+        token=token,
+    )
+    probe(
+        "6b. OAuth introspection (RFC 7662)",
+        "POST", "/oauth/introspect",
+        token=token,
+    )
+    probe(
+        "6c. Self-info with scopes hint",
+        "GET", "/api/user/?detail=scopes",
+        token=token,
+    )
+
+    # ── Probe 7: try /api/* write surfaces with OPTIONS ──
+    # /api/event/22/persons was 405 on GET — route exists, GET not
+    # allowed. OPTIONS may leak the allowed-methods header so we
+    # know if it accepts PATCH/POST.
+    probe(
+        "7a. /api/event/22/persons — OPTIONS",
+        "OPTIONS", f"/api/event/{EVENT_ID}/persons",
+        token=token,
+    )
+    probe(
+        "7b. /api/event/22 — OPTIONS",
+        "OPTIONS", f"/api/event/{EVENT_ID}",
+        token=token,
+    )
+    probe(
+        "7c. /api/event/22/sessions — OPTIONS",
+        "OPTIONS", f"/api/event/{EVENT_ID}/sessions",
+        token=token,
+    )
+
+    # ── Probe 8: OPTIONS on the management routes that 403'd ──
+    probe(
+        "8a. Session modify — OPTIONS",
+        "OPTIONS", f"/event/{EVENT_ID}/manage/sessions/{SESSION_ID_TRANS}/modify",
+        token=token,
+    )
+    probe(
+        "8b. Contribution REST — OPTIONS",
+        "OPTIONS", f"/event/{EVENT_ID}/manage/contributions/{CONTRIB_ID_BARAM}",
+        token=token,
+    )
+
+    # ── Probe 9: full response headers on a 403 ──
+    # The 403 response should include WWW-Authenticate with a scope
+    # hint, telling us what scope is actually required.
+    probe_headers(
+        "9. Session modify — full headers on 403",
+        "GET", f"/event/{EVENT_ID}/manage/sessions/{SESSION_ID_TRANS}/modify",
+        token=token,
+    )
+
     print("\n──── Probe complete ────")
     print("Read the report above and update scripts/indico_patch.py accordingly.")
     return 0
+
+
+def probe_headers(name: str, method: str, path: str, *, token: str) -> None:
+    """Variant of probe() that dumps all response headers — useful
+    for inspecting WWW-Authenticate scope hints on 403s. Set-Cookie
+    contents are redacted to avoid leaking session state into the
+    workflow log."""
+    url = INDICO_BASE + path
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/json",
+    }
+    print(f"\n──── {name} ────")
+    print(f"  {method} {url}")
+    try:
+        r = requests.request(method, url, headers=headers, timeout=30)
+    except requests.RequestException as e:
+        print(f"  ERROR: {type(e).__name__}: {e}")
+        return
+    print(f"  Status: {r.status_code} {r.reason}")
+    print(f"  All response headers:")
+    for k, v in r.headers.items():
+        if k.lower() == "set-cookie":
+            print(f"    {k}: <redacted, length {len(v)}>")
+        else:
+            print(f"    {k}: {v}")
 
 
 if __name__ == "__main__":
