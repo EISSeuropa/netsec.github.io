@@ -111,7 +111,7 @@
 <!-- Bandeau bêta — visible uniquement quand <html data-i18n-status="beta">. -->
 <div class="i18n-beta-ribbon" role="status">
   <span class="i18n-beta-ribbon-badge">Bêta</span>
-  <span>Traduction manuelle — la version anglaise fait foi. <a href="accessibility.html" hreflang="en">Voir en anglais →</a></span>
+  <span>Traduction manuelle, la version anglaise fait foi. <a href="accessibility.html" hreflang="en">Voir en anglais →</a></span>
 </div>
 
 <a class="skip-link" href="#main">Aller au contenu principal</a>
@@ -184,7 +184,7 @@
     </div>
 
     <h2>Statut de conformité</h2>
-    <p>Le site NetSec (<a href="https://netsec-cost.eu">netsec-cost.eu</a>) est conçu pour répondre aux exigences des <strong>Règles pour l'accessibilité des contenus web (WCAG) 2.1 au niveau AA</strong>, en cohérence avec la norme européenne <strong>EN 301 549</strong>. Sur la base de notre évaluation interne la plus récente, le site est <em>partiellement conforme</em> — la majorité des critères de succès WCAG 2.1 AA sont satisfaits, avec les limitations énumérées ci-dessous.</p>
+    <p>Le site NetSec (<a href="https://netsec-cost.eu">netsec-cost.eu</a>) est conçu pour répondre aux exigences des <strong>Règles pour l'accessibilité des contenus web (WCAG) 2.1 au niveau AA</strong>, en cohérence avec la norme européenne <strong>EN 301 549</strong>. Sur la base de notre évaluation interne la plus récente, le site est <em>partiellement conforme</em>, la majorité des critères de succès WCAG 2.1 AA sont satisfaits, avec les limitations énumérées ci-dessous.</p>
 
     <h2>Audit interne le plus récent</h2>
     <p>L'audit du 22 mai 2026 s'inscrit dans la passe de QA pré-lancement (plan complet : <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/docs/launch-qa-2026.md" target="_blank" rel="noopener">docs/launch-qa-2026.md</a> dans le dépôt). Il a porté sur les huit pages les plus fréquentées (accueil, annuaire, subventions, kit presse, feuille de route, à propos, FAQ, glossaire) en versions anglaise, française et allemande. Résultats :</p>
@@ -198,7 +198,7 @@
     </div>
     <p>Un problème <strong>WCAG 2.1 SC 1.4.3 (Contraste minimum)</strong> a été relevé lors de l'audit et corrigé avant la publication de cette déclaration : sept boutons d'appel à l'action en mode sombre affichaient du texte blanc sur l'accent clair du mode sombre (<code>#6ea1ff</code>), donnant un rapport de 2,56:1, inférieur au seuil de 4,5:1 (niveau AA). Les boutons concernés ont été passés au bleu UE de la marque (<code>#003399</code>) en mode sombre, donnant un contraste de 10,86:1. Le correctif a été livré dans la même version que cet audit.</p>
     <p>L'élément restant signalé pour examen manuel concerne le contraste sur les surfaces en verre avec <code>backdrop-filter</code>, que l'outillage automatisé ne peut pas évaluer de manière fiable car le contraste perçu dépend de ce qui se trouve derrière la surface (le fond de la page plus l'ambiance décorative des « blobs »). Nous avons vérifié élément par élément dans le navigateur que ces surfaces respectent le contraste WCAG 2.1 AA dans les deux modes.</p>
-    <p>Trois vérifications finales ont complété la passe de QA le même jour : un audit structurel d'accessibilité (technologies d'assistance) sur les quatre pages les plus fréquentées — points de repère, hiérarchie des titres, textes alternatifs, noms accessibles — tout propre ; les balises Open Graph et Twitter Card ont été vérifiées sur l'ensemble des pages publiques ; et une revue de lisibilité en mode sombre, page par page, sur les seize pages publiques anglaises n'a révélé aucune autre zone à faible contraste. Trois petites corrections issues de cette passe sont reflétées dans cette version : le ruban de traduction bêta FR / DE, qui affichait à tort <em>« traduction automatique »</em>, a été corrigé en <em>« traduction manuelle »</em> (méthode utilisée depuis le début) ; le tiroir de navigation mobile, dont l'arrière-plan transparent laissait transparaître le texte du hero derrière les éléments de menu en mode sombre, a été rendu quasi opaque ; et le repère visuel des liens profonds vers une fiche de l'annuaire (<code>/people.html#&lt;slug&gt;</code>) a été rendu résilient à un report de <code>requestAnimationFrame</code> qui pouvait empêcher l'affichage du repère au chargement à froid.</p>
+    <p>Trois vérifications finales ont complété la passe de QA le même jour : un audit structurel d'accessibilité (technologies d'assistance) sur les quatre pages les plus fréquentées, points de repère, hiérarchie des titres, textes alternatifs, noms accessibles, tout propre ; les balises Open Graph et Twitter Card ont été vérifiées sur l'ensemble des pages publiques ; et une revue de lisibilité en mode sombre, page par page, sur les seize pages publiques anglaises n'a révélé aucune autre zone à faible contraste. Trois petites corrections issues de cette passe sont reflétées dans cette version : le ruban de traduction bêta FR / DE, qui affichait à tort <em>« traduction automatique »</em>, a été corrigé en <em>« traduction manuelle »</em> (méthode utilisée depuis le début) ; le tiroir de navigation mobile, dont l'arrière-plan transparent laissait transparaître le texte du hero derrière les éléments de menu en mode sombre, a été rendu quasi opaque ; et le repère visuel des liens profonds vers une fiche de l'annuaire (<code>/people.html#&lt;slug&gt;</code>) a été rendu résilient à un report de <code>requestAnimationFrame</code> qui pouvait empêcher l'affichage du repère au chargement à froid.</p>
 
     <h2>Contenu non accessible ou limité</h2>
     <p>Les parties suivantes du site ne respectent pas encore pleinement la norme WCAG 2.1 AA, ou présentent des contraintes à signaler :</p>
@@ -218,7 +218,7 @@
       <li>Texte <code>alt</code> sur chaque image ; association explicite <code>&lt;label for&gt;</code> sur chaque champ de formulaire.</li>
       <li>Thèmes clair et sombre avec commutateur manuel dans la navigation ; <code>prefers-color-scheme</code> du système d'exploitation comme valeur par défaut.</li>
       <li><code>prefers-reduced-motion</code> désactive les animations décoratives.</li>
-      <li>Le répertoire « Comité de gestion par pays » utilise un accordéon natif <code>&lt;details&gt;</code> — pleinement accessible au clavier et aux lecteurs d'écran sans câblage ARIA personnalisé. Les liens profonds vers une carte pays développent automatiquement la section.</li>
+      <li>Le répertoire « Comité de gestion par pays » utilise un accordéon natif <code>&lt;details&gt;</code>, pleinement accessible au clavier et aux lecteurs d'écran sans câblage ARIA personnalisé. Les liens profonds vers une carte pays développent automatiquement la section.</li>
       <li>La grille Gantt utilise les rôles ARIA tabulaires (<code>role="table"</code>, <code>role="row"</code>, <code>role="columnheader"</code>, <code>role="cell"</code>) pour que les technologies d'assistance la parsent comme un tableau ; la zone défilante elle-même peut recevoir le focus clavier.</li>
       <li>Les puces d'appartenance aux groupes de travail sur chaque membre sont regroupées avec <code>role="group"</code> et un <code>aria-label</code> pour que les lecteurs d'écran les annoncent comme un groupe (par ex. <em>« Appartenance aux groupes de travail : WG1, WG3 »</em>) plutôt que comme des jetons isolés.</li>
       <li>Formulaire de contact : validation en ligne, signalement d'erreurs accessible et toast de confirmation annoncé via <code>role="status" aria-live="polite"</code>.</li>
@@ -232,10 +232,10 @@
       <li><strong>Lighthouse</strong> performance + accessibilité + bonnes pratiques + SEO sur l'accueil, l'annuaire, les subventions et le kit presse. Accessibilité : 96-100 ; bonnes pratiques : 96 ; SEO : 100.</li>
       <li><strong>Vérification manuelle de contraste</strong> sur les surfaces en verre et les CTA en mode sombre, via un assistant intégré au navigateur (couleurs calculées réelles, pas d'estimations heuristiques). C'est ce qui a permis de détecter le problème de contraste sur les CTA en mode sombre que l'outillage automatisé sous-estimait.</li>
       <li><strong>Audit structurel d'accessibilité (technologies d'assistance)</strong> sur l'accueil, l'annuaire, les subventions et le kit presse : rôles de repère, monotonie des niveaux de titres (aucun saut), couverture du texte alternatif sur les images, noms accessibles sur tous les éléments interactifs, association des étiquettes sur tous les champs. Les quatre pages sont passées.</li>
-      <li><strong>Revue des balises Open Graph et Twitter Card</strong> sur l'accueil, À propos, la feuille de route et le kit presse — couverture complète de <code>og:type</code> / <code>og:title</code> / <code>og:description</code> / <code>og:url</code> / <code>og:image</code> (avec largeur / hauteur / alt) et des balises Twitter Card équivalentes, plus un contrôle de rendu sur l'image partagée <code>og-image.png</code> 2400×1260.</li>
+      <li><strong>Revue des balises Open Graph et Twitter Card</strong> sur l'accueil, À propos, la feuille de route et le kit presse, couverture complète de <code>og:type</code> / <code>og:title</code> / <code>og:description</code> / <code>og:url</code> / <code>og:image</code> (avec largeur / hauteur / alt) et des balises Twitter Card équivalentes, plus un contrôle de rendu sur l'image partagée <code>og-image.png</code> 2400×1260.</li>
       <li><strong>Revue de lisibilité en mode sombre</strong> sur les seize pages publiques anglaises, avec inspection visuelle et sonde de contraste programmatique élément par élément ; aucun nouveau problème de contraste au-delà de l'item d'examen manuel déjà signalé ci-dessus.</li>
       <li>Navigation manuelle au clavier sur la page d'accueil, l'annuaire et la page des subventions.</li>
-      <li>Vérification de tous les liens par le nouveau <code>scripts/check-links.sh</code> (910 liens internes, 56 externes) — neuf ancres résiduelles de la passe d'AI ont été détectées et corrigées.</li>
+      <li>Vérification de tous les liens par le nouveau <code>scripts/check-links.sh</code> (910 liens internes, 56 externes), neuf ancres résiduelles de la passe d'AI ont été détectées et corrigées.</li>
     </ul>
     <p>L'audit a également relevé quatre scores Lighthouse de performance en deçà du seuil interne de 80 (entre 67 et 75 en local + en production), liés au CSS de polices externes bloquant le rendu. Il s'agit d'un enjeu de qualité d'expérience, non d'un manquement de conformité WCAG ; le suivi est assuré dans la feuille de route v1.5.0.</p>
     <p>Nous réévaluons après toute modification significative du système de design ou de la structure du contenu, et au minimum une fois par an. La prochaine révision est prévue pour le <strong>22 mai 2027</strong> ou avant.</p>
@@ -261,7 +261,7 @@
   <div class="container">
     <div class="footer-cobranding">
       <a class="cost-mark" href="https://www.cost.eu/actions/CA24154/" target="_blank" rel="noopener" aria-label="Consulter l'Action COST CA24154 NetSec sur cost.eu">
-        <img src="assets/images/cost-logo.jpg" alt="COST — European Cooperation in Science and Technology">
+        <img src="assets/images/cost-logo.jpg" alt="COST, European Cooperation in Science and Technology">
       </a>
       <div class="eu-mark" role="img" aria-label="Financé par l'Union européenne">
         <svg class="eu-flag" viewBox="0 0 810 540" role="img" aria-hidden="true">
