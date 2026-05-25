@@ -9,7 +9,7 @@ Maintained by Dr Arthur Laudrain (MC member, CH; ETH Zurich).
 Last revised **24 May 2026** (post-v1.7.0 re-plan): v1.7.0 shipped with the directory keyword pipeline + sync hardening + release automation. The Q3 scope originally allocated to v1.7.0 (FR/DE translation review, news RSS, per-event `.ics`, D8 + D10 hosted, pre-plenary a11y sweep) is re-split: the no-new-feature parts move to v1.7.1 (late Jul / early Aug, patch), the new-feature parts move to v1.8.0 (early Sep, minor); v1.8.0's original Year-1 retrospective scope shifts to v1.9.0 (mid Oct), and the Year-2 readiness scope shifts to v1.10.0 (late Dec). The per-release narrative further down still lags from the v1.4.0–v1.7.0 cycle; that catch-up is queued and the public CHANGELOG remains authoritative for shipped scope and dates.
 
 <!-- AUTOSTAMP:BEGIN -->
-> _Auto-tracked: `[Unreleased]` is empty since **v1.7.0**. Last refresh by `scripts/sync-roadmap.py`: 24 May 2026._
+> _Auto-tracked: `[Unreleased]` is empty since **v1.7.0**. Last refresh by `scripts/sync-roadmap.py`: 25 May 2026._
 <!-- AUTOSTAMP:END -->
 
 > **Sync convention.** This file is the source of truth. The
