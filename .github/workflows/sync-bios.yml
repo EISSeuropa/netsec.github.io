@@ -121,6 +121,11 @@ jobs:
           labels: |
             automated
             data-sync
+          # Assign the maintainer as reviewer so GitHub emails +
+          # mobile push the auto-PR opening. The PR auto-merges
+          # via the next step regardless; the reviewer line is
+          # purely for the change-awareness signal.
+          reviewers: APB-LDN
 
       # Auto-merge so weekly form-submission batches ship without
       # manual review. Branch protection still requires CodeQL +
