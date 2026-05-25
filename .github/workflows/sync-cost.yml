@@ -109,5 +109,8 @@ jobs:
           labels: |
             automated
             data-sync
-          # Reviewers can be added here once the team is known:
-          # reviewers: NewArthur
+          # Assign the maintainer as reviewer so GitHub emails +
+          # mobile push the auto-PR opening. The PR auto-merges
+          # via the next step regardless; the reviewer line is
+          # purely for the change-awareness signal.
+          reviewers: APB-LDN
