@@ -98,7 +98,9 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Changed
+
+- **`scripts/sync-cost.py` now propagates per-bio WG memberships from cost.eu into `data/bios.json`** ([#236](https://github.com/EISSeuropa/netsec.github.io/issues/236) Gap A). The weekly Monday sync (plus any manual `workflow_dispatch`) parses the Membership table on <https://www.cost.eu/actions/CA24154/>, looks each row up against `bios.json.members[].name` via the existing `norm()` helper, and overwrites the matched entry's `wgs` field with cost.eu's list. Entries not present on cost.eu (community members in the directory who aren't on the MC, or seed entries for leaders not yet on the Membership table) are left untouched. Before this change, the home-page WG chips (driven by `WG_MAP` in `index.html`) and the `/people.html` per-bio chips (driven by the Google Form submitter's answer) could drift indefinitely. cost.eu is now the authoritative source for formal WG membership on both surfaces; the Google Form remains the seed when a bio first lands. Rule documented in [`docs/bios-setup.md`](docs/bios-setup.md). Six new smoke tests in `scripts/test-sync-cost.py` cover the overwrite, idempotency, leave-unmatched-alone, salutation normalisation, missing-file, and leadership-suffix regression cases. Gaps B (statistics + country roster) and C (leadership-label regex holes) are tracked under the same issue for a post-conference patch.
 
 ## [1.8.0] · 2026-05-25 — Brand launch, Indico writes, programme PDF, voice sweep
 

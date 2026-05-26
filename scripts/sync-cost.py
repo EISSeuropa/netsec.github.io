@@ -3,14 +3,26 @@
 Sync helper: refresh data sourced from
 https://www.cost.eu/actions/CA24154/
 
-Two things kept in step with cost.eu:
+Three things kept in step with cost.eu:
 
   1. WG_MAP in index.html
      Parsed from cost.eu's Membership table — the {normalised-name → [WGs]}
      dictionary that drives the colour-coded WG chips next to people's
      names throughout the site.
 
-  2. Leadership roles in data/bios.json
+  2. Per-bio `wgs` field in data/bios.json
+     Same Membership-table parse: for each bio entry whose name
+     matches a row on cost.eu, the `wgs` list is overwritten with
+     cost.eu's value. cost.eu is the authoritative source for
+     FORMAL WG membership; the Google Form's "Working Group
+     memberships" field is the seed when a bio first lands, and on
+     subsequent weekly syncs cost.eu wins. Entries not present on
+     cost.eu (community members in the directory who aren't on
+     the MC, or seed entries for leaders who haven't appeared
+     in the Membership table yet) are left untouched. The rule
+     is restated in docs/bios-setup.md for respondents.
+
+  3. Leadership roles in data/bios.json
      Parsed from cost.eu's Leadership and Additional-Roles tables —
      when the Action Chair, Grant Awarding Coordinator, WG Lead, etc.
      change, the change propagates here. Each leadership role is
@@ -111,6 +123,62 @@ def report_wg(old: dict, new: dict) -> list[str]:
     if not (added or removed or changed):
         lines.append("  (no changes)")
     return lines
+
+
+# ─── Per-bio WG sync (cost.eu Membership → data/bios.json) ─────────
+
+def apply_wgs_to_bios(new_map: dict[str, list[int]]) -> list[str]:
+    """Propagate cost.eu's per-member WG list into data/bios.json.
+
+    For each bio entry whose `name` normalises to a key in `new_map`,
+    overwrite `wgs` with cost.eu's list. Entries not present on
+    cost.eu (a non-MC community member listed in the directory, or a
+    seed entry for a leader who hasn't appeared in the Membership
+    table yet) are left untouched.
+
+    The rule, documented in docs/bios-setup.md: cost.eu is the
+    authoritative source for FORMAL WG membership. The Google Form's
+    "Working Group memberships" field is the seed when a bio first
+    lands; on subsequent weekly syncs, cost.eu wins. Respondents who
+    want to surface an informal WG affiliation that cost.eu hasn't
+    recorded should write it into their bio prose rather than the
+    structured field.
+
+    Returns diff lines for the sync report. No-ops idempotently when
+    every entry already matches cost.eu."""
+    if not BIOS.exists():
+        return ["Per-bio WGs: data/bios.json not present, skipped."]
+
+    data = json.loads(BIOS.read_text(encoding="utf-8"))
+    members: list[dict] = data.get("members", [])
+
+    diffs: list[str] = []
+    matched = 0
+    for m in members:
+        name = m.get("name") or ""
+        key = norm(name)
+        if not key or key not in new_map:
+            continue
+        matched += 1
+        current = sorted(m.get("wgs") or [])
+        target = sorted(new_map[key])
+        if current == target:
+            continue
+        m["wgs"] = target
+        diffs.append(f"  ~ {name}: {current} -> {target}")
+
+    out_lines = [
+        f"Per-bio WGs: {matched} bios matched on cost.eu's Membership table"
+    ]
+    if diffs:
+        out_lines.extend(diffs)
+        BIOS.write_text(
+            json.dumps(data, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+    else:
+        out_lines.append("  (no changes)")
+    return out_lines
 
 
 # ─── Leadership sync (Leadership + Additional Roles tables) ────────
@@ -263,7 +331,14 @@ def main() -> None:
     for line in report_wg(old_map, new_map):
         print(line)
 
-    # 2) Leadership → data/bios.json — uses raw HTML because cost.eu's
+    # 2) Per-bio WGs → data/bios.json. Uses the same `new_map` that
+    #    drove the home-page WG_MAP refresh, so the two surfaces stay
+    #    in lockstep against cost.eu's formal record.
+    print()
+    for line in apply_wgs_to_bios(new_map):
+        print(line)
+
+    # 3) Leadership → data/bios.json — uses raw HTML because cost.eu's
     #    Leadership table contains a malformed </div> closing tag that
     #    fools BeautifulSoup's table parser.
     leadership = extract_leadership(r.text)
