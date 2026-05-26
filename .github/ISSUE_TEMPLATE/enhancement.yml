@@ -1,0 +1,74 @@
+name: ✨ Enhancement
+description: Propose a new feature, scope improvement, or structural change to the site, the directory, or the repo tooling
+title: "[enhancement] "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to propose something new. The shape below mirrors what the maintainer fills in when filing an internal enhancement, so the issue lands ready for triage:
+
+        - **What's happening**: the current state, with a concrete example or pointer.
+        - **Why it matters**: user impact, audit-trail context, or accessibility / compliance angle.
+        - **Fix path**: specific enough that a future maintainer can pick it up without re-deriving the analysis (code paths, file names, line numbers).
+        - **Target**: planned release milestone, or *Backlog* if there's no clear release home yet.
+
+        Convention is documented in [CLAUDE.md §3](https://github.com/EISSeuropa/netsec.github.io/blob/main/CLAUDE.md).
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Preflight
+      description: Please confirm before submitting.
+      options:
+        - label: I searched existing issues and this isn't already proposed
+          required: true
+        - label: This is a single enhancement (please file separate issues for unrelated proposals)
+          required: true
+  - type: textarea
+    id: whats_happening
+    attributes:
+      label: What's happening
+      description: One paragraph on the current state, with a concrete example or pointer to a file / line / page.
+      placeholder: |
+        The home-page Events block ranks upcoming events by start date, but
+        the ESSC 2026 banner sits below the Summer School card even though
+        the Summer School is back-to-back with ESSC. Visitors landing
+        on the home page see the smaller event first.
+    validations:
+      required: true
+  - type: textarea
+    id: why_it_matters
+    attributes:
+      label: Why it matters
+      description: User impact, audit-trail context, or accessibility / compliance angle. One paragraph.
+      placeholder: |
+        ESSC is the flagship outreach moment of the year. The home-page
+        banner is the first thing prospective members see, and the
+        ranking suggests we're prioritising the smaller event. COST
+        evaluators and prospective MC reps notice this kind of detail.
+    validations:
+      required: true
+  - type: textarea
+    id: fix_path
+    attributes:
+      label: Fix path
+      description: Specific enough that a maintainer can pick it up without re-deriving the analysis. Mention code paths, file names, line numbers, and alternatives considered.
+      placeholder: |
+        Two options:
+        (1) Add a `weight` field to data/events.json entries and sort by
+            (weight DESC, start ASC) in index.html's events renderer.
+        (2) Hand-pin the ESSC entry via a `pinned: true` flag and render
+            pinned entries first regardless of date.
+        Option 1 is more general but adds a field nobody uses today; option 2
+        ships faster. Lean towards (2) for the v1.8.1 patch.
+    validations:
+      required: true
+  - type: input
+    id: target
+    attributes:
+      label: Target
+      description: Planned milestone or *Backlog*.
+      placeholder: v1.8.1, v1.9.0, or Backlog
+    validations:
+      required: false

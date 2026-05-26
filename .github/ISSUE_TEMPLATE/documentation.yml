@@ -1,0 +1,70 @@
+name: 📚 Documentation issue
+description: Report a content error, gap, or improvement opportunity in the maintainer docs (`docs/`), the Wiki, the PDF documentation pack, or the public copy
+title: "[docs] "
+labels:
+  - documentation
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for issues affecting the documentation surfaces:
+
+        - **Maintainer docs** in [`docs/`](https://github.com/EISSeuropa/netsec.github.io/tree/main/docs) (architecture, design system, admin guide, translation, SEO, security).
+        - **The members' Wiki** at <https://github.com/EISSeuropa/netsec.github.io/wiki>.
+        - **The PDF documentation pack** ([`docs/pdf/NetSec-website-documentation.pdf`](https://github.com/EISSeuropa/netsec.github.io/blob/main/docs/pdf/NetSec-website-documentation.pdf)).
+        - **Public-site copy** that's primarily informational rather than a bug (typo, outdated fact, missing context). For straightforward typos, the [contact form](https://netsec-cost.eu/#contact) is faster.
+
+        For the public FAQ or Glossary content, the source-of-truth pages are at `/faq.html` and `/glossary.html` on the public site; the Wiki has stubs pointing at them. Don't propose changes to the stubs unless the public pages also need updating.
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Preflight
+      description: Please confirm before submitting.
+      options:
+        - label: I searched existing issues and this one isn't already filed
+          required: true
+        - label: This is a single doc issue (please file separate issues for unrelated docs problems)
+          required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Which documentation surface
+      options:
+        - Maintainer docs (`docs/*.md`)
+        - Members' Wiki
+        - PDF documentation pack
+        - Public site copy (`*.html`)
+        - Multiple surfaces (cross-cutting)
+    validations:
+      required: true
+  - type: textarea
+    id: location
+    attributes:
+      label: Where exactly
+      description: File path, section heading, page URL, Wiki page name, or PDF page number. The more specific, the better.
+      placeholder: |
+        docs/architecture.md, "Data sync workflows" section, paragraph about indico-sync.py
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: What's wrong or missing
+      description: Describe the error, gap, or improvement opportunity. Quote the affected text if useful.
+      placeholder: |
+        The section says sync-indico.py "pushes directly to main", but
+        since v1.6.1 it opens a PR via peter-evans/create-pull-request@v7.
+        See the entry in the Decisions log for the rationale.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed correction
+      description: Optional. A specific rewrite, or a pointer to the authoritative source.
+      placeholder: |
+        Replace "pushes directly to main" with "opens a pull request on
+        branch indico-sync/auto with auto-merge enabled" and link to the
+        Decisions log entry from 2026-05-24.
+    validations:
+      required: false

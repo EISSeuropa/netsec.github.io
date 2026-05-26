@@ -1,0 +1,27 @@
+# GitHub issue-template chooser configuration.
+#
+# `blank_issues_enabled: false` forces every new issue to use one of
+# the structured forms below (bug_report.yml, enhancement.yml,
+# documentation.yml). Off-tracker traffic (general questions, FAQ
+# lookups, member onboarding) is routed to the public site and the
+# Wiki instead, so the issue tracker stays scoped to actionable
+# items the maintainer can work.
+
+blank_issues_enabled: false
+
+contact_links:
+  - name: 💬 Question about NetSec or the directory
+    url: https://netsec-cost.eu/#contact
+    about: For routine questions, content corrections, or directory enquiries, use the contact form on the public site. The maintainer reads it and answers personally.
+
+  - name: 📖 FAQ
+    url: https://netsec-cost.eu/faq.html
+    about: Frequently-asked questions about the Action, STSMs, the open directory, and how to get involved.
+
+  - name: 👋 Onboarding for new MC representatives
+    url: https://github.com/EISSeuropa/netsec.github.io/wiki/Onboarding
+    about: The step-by-step for joining the Action as a Management Committee representative or Working Group participant.
+
+  - name: 📅 ESSC 2026 member orientation
+    url: https://github.com/EISSeuropa/netsec.github.io/wiki/ESSC-2026-member-orientation
+    about: Members-only prep for the European Security Studies Conference (9–12 June 2026, Stockholm).
