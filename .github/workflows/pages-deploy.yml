@@ -27,6 +27,34 @@
 # Concurrency: at most one in-flight deploy per branch; queued
 # deploys do not cancel an in-progress one (we'd rather finish a
 # deploy than truncate it half-way).
+#
+# GOTCHA — cascading workflow suppression on auto-merge:
+# GitHub Actions intentionally suppresses downstream workflow runs
+# when the same GITHUB_TOKEN that triggered the upstream merge would
+# also trigger them. When a PR auto-merges via `gh pr merge --auto`,
+# the resulting push to main is signed by `github-actions[bot]` (the
+# same token), and this deploy workflow does not fire. The runs
+# appear in the Actions tab as "This workflow run has been marked as
+# disruptive" with no further detail. Sister project EISSeuropa.github.io
+# hit this in May 2026 (see commit b6f0873c on master).
+#
+# Symptoms: main and the live site diverge, PRs land but the deploy
+# never runs, scheduled syncs that ran via `gh pr merge --auto`
+# leave the live site behind main.
+#
+# Fix: push any commit to main from a human-authenticated token
+# (your personal access token, not GITHUB_TOKEN). An empty commit
+# works:
+#     git commit --allow-empty -m "ops: wake deploy workflow"
+#     git push origin main
+# A comment-only edit on any file in the repo leaves a more useful
+# audit trail than an empty commit.
+#
+# The same pattern can suppress PR checks (i18n-drift, css-class-
+# collisions, external-link-arrows, launch-qa-link-check) on the PR
+# branch when those PR branches were created via bot identity. Wake
+# them the same way: push from your human token. CodeQL is managed by
+# the GitHub-default scan and follows the same suppression heuristic.
 name: Deploy to GitHub Pages
 
 on:
