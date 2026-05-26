@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NetSec — Website & Directory · Documentation Pack v1.9.2</title>
+<title>NetSec — Website & Directory · Documentation Pack v1.9.3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -644,7 +644,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.9.2 · May 2026</div>
+        <div class="value">v1.9.3 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -833,7 +833,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.9.2 · May 2026</span>
+    <span class="url">v1.9.3 · May 2026</span>
   </footer>
 
 </section>
@@ -2311,7 +2311,10 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <div class="changelog-entries">
 
-  <h2 class="current">v1.9.2 · May 2026 · Layout patch</h2>
+  <h2 class="current">v1.9.3 · May 2026 · Cover bump for website v1.8.0</h2>
+  <p class="cl-summary">Cover-only bump matching website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.8.0">v1.8.0</a> ("Brand launch, Indico writes, programme PDF, voice sweep"). Records the gap to that release: the designer's four-petal NetSec mark and lockup are now deployed across all 46 site pages (header, favicon family, OG card, JSON-LD logo), two new operational scripts (<code>scripts/indico_patch.py</code> and <code>scripts/indico_clean_duplicate.py</code>) handle Indico write-side automation and the ESSC-N to ESSC-N+1 rollover, the programme page exports a self-identifying PDF with cover masthead and running header, the bios-sync and cost-sync workflows notify the maintainer when an auto-PR opens, and the CLAUDE.md §7 writing-voice rules are now applied retroactively across the EN public HTML surface. Section-level content not refreshed in this revision; the next pack release will catch Sections 02 through 06 up to website v1.8.0 (brand assets in Section 03 design system, two new Indico scripts in Section 02 repo layout, the writing-voice rules in Section 06 admin guide) and address the table-of-contents page-numbers structural improvement deferred from this pass. Tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/122">#122</a>.</p>
+
+  <h2>v1.9.2 · May 2026 · Layout patch</h2>
   <p class="cl-summary">Follow-up layout patch on v1.9.1. Three issues survived the first pass. <strong>Figures 9 and 10</strong> (ESSC live programme, Network directory) rendered the full 1280 × 3200 source screenshot at print width, so each figure spanned more than one PDF page, stranding its <code>h2</code> on the page before and leaving the next page nearly empty. Fixed with a <code>.snapshot.cropped</code> variant: an inner <code>.clip</code> div caps the image at 170 mm with <code>overflow:hidden</code>, the caption sits inside the wrapper but outside the overflow context, and both figures now sit on one page directly below their heading. Captions explicitly note the crop and point readers at the live URL for the full surface. <strong>Heading + following block</strong>: <code>h2</code>, <code>h3</code>, <code>h4</code> all gain <code>break-after: avoid-page</code> + <code>page-break-after: avoid</code> so a sub-heading no longer strands when its first block is tall. <strong>Section 05 SEO first page</strong>: the chapter banner + intro paragraph rendered alone on page 34 because the <code>table</code> rule still carried <code>break-inside: avoid-page</code> from earlier styling, bonding the <code>h2</code> "What's in place" to its 10-row table and pushing the pair to page 35. Switching the table to <code>break-inside: auto</code> (with <code>tr { break-inside: avoid-page }</code> so individual rows still stay intact) lets the table start in whatever space remains on the chapter's first page and continue onto the next. No content edits.</p>
 
   <h2>v1.9.1 · May 2026 · Layout patch</h2>
