@@ -1,0 +1,72 @@
+# Auto-post the standard message when a lifecycle label lands.
+#
+# Saves the maintainer the manual copy-paste of "please provide a
+# repro" / "this duplicates #N, closing" / "no activity in 60+
+# days". Each label fires its own comment. Labels not in the
+# vocabulary below are ignored (no spurious bot comment).
+#
+# Label vocabulary documented in CLAUDE.md §12 (release-infra
+# hygiene). When adding a new label here, update the rule.
+#
+# Zero cost: no third-party services, no API keys.
+name: Issue lifecycle comment
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  issues: write
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    # Skip when a bot applied the label (avoids loops if another
+    # workflow auto-labels and triggers this one in turn).
+    if: github.event.sender.type != 'Bot'
+    steps:
+      - name: Post lifecycle comment
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # v7 (sha-pinned)
+        with:
+          script: |
+            const label = context.payload.label.name;
+            const issueNumber = context.payload.issue.number;
+
+            const messages = {
+              'needs-info':
+                `Thanks for filing this. To work it, the maintainer needs more information — ` +
+                `please reply with the missing details (a concrete repro, the affected page URL, ` +
+                `the browser + OS combination, or whatever the asker requested above). ` +
+                `If there's no follow-up within 14 days, the issue is auto-closed under the ` +
+                `\`stale\` label; a fresh comment from anyone resets the clock.`,
+
+              'duplicate':
+                `Closing as a duplicate. Please continue the conversation on the original issue ` +
+                `(linked above by the maintainer). If you think this is actually distinct, comment ` +
+                `here within the next 14 days and we'll reopen.`,
+
+              'wontfix':
+                `Closing as \`wontfix\` — the maintainer has decided not to act on this. The reasoning ` +
+                `is in the comment above. If circumstances change (a related issue lands, a new ` +
+                `data point arrives, the cost/benefit shifts), please open a fresh issue referencing ` +
+                `this one rather than reopening here.`,
+
+              'stale':
+                `No activity in 60+ days. Marking \`stale\`; auto-closing in 14 days unless a fresh ` +
+                `comment lands. If this is still relevant, drop a one-line update to keep it active.`,
+            };
+
+            const body = messages[label];
+            if (!body) {
+              console.log(`No lifecycle message for label "${label}"; skipping.`);
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body,
+            });
+            console.log(`Posted "${label}" comment on #${issueNumber}.`);
