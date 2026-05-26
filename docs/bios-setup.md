@@ -61,11 +61,21 @@ A natural worry, given the workaround above: if a respondent submits a "minimum-
 
 - Optional fields (`email`, `website`, `orcid`, `linkedin`, `twitter`, `bluesky`, `mastodon`, `keywords`, `position`, `affiliation`, `bio`, `country`, etc.) only overwrite the prior value when the new submission carries a non-empty value for that field. Blanks are skipped.
 - The headshot follows the same rule. A submission with no upload doesn't wipe the previous photo.
-- Working-group memberships use **union** semantics; a sparse resubmission can never drop a WG.
+- Working-group memberships use **union** semantics on the Google Form sync, so a sparse resubmission can never drop a WG via the form alone. See the next subsection for the cost.eu-side reconciliation that runs weekly on top of this.
 
 The knock-on consequence: respondents can't intentionally clear a field via the form. Submitting an empty Twitter field won't remove a previously-stored URL. To unset a link, a respondent can either use the confirmation-email edit link (which lets them actively delete the contents) or ask the maintainer to blank the cell in the Sheet directly.
 
 This makes the photo-replacement workaround safe to recommend in practice: respondents only need to retype the required fields, not the full bio.
+
+### How Working Group memberships stay in sync with cost.eu
+
+The Google Form's *Working Group involvement* checkboxes seed each bio's `wgs` field on first submission. From then on, `scripts/sync-cost.py` (weekly Monday 05:00 UTC, plus manual `workflow_dispatch`) reconciles `wgs` against the Membership table on <https://www.cost.eu/actions/CA24154/>:
+
+- **cost.eu is the authoritative source for formal WG membership.** If a member's WG list on cost.eu differs from `bios.json.members[].wgs`, the sync overwrites with cost.eu's list. The auto-PR opened by the workflow surfaces the diff in its body.
+- **Entries not on cost.eu are left untouched.** Wider-community researchers in the directory who aren't on the MC, plus seed entries for new leaders who haven't yet appeared in cost.eu's Membership table, keep whatever `wgs` value the form (or the maintainer) last set.
+- **Informal affiliations belong in the bio prose, not the structured field.** A member who participates in WG discussions without formal cost.eu membership can describe that in their bio text. The structured `wgs` field is reserved for what cost.eu records.
+
+When the maintainer (or COST admin) updates a member's WG list on cost.eu, the change reaches the directory on the next sync run. No respondent action required.
 
 ## Step 2 · Link the form to a Sheet
 

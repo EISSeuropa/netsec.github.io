@@ -98,13 +98,16 @@ jobs:
           branch: cost-sync/auto
           base: main
           delete-branch: true
-          title: 'data: sync WG membership from cost.eu'
+          title: 'data: sync WG memberships + leadership from cost.eu'
           commit-message: |
-            data: sync WG_MAP from cost.eu
+            data: sync WG memberships + leadership from cost.eu
 
-            Refreshed the WG_MAP literal in index.html from the
-            Membership table on cost.eu/actions/CA24154/. See the
-            PR body for the exact diff (added / removed / changed).
+            Refreshed three surfaces against the Membership and
+            Leadership tables on cost.eu/actions/CA24154/:
+              - WG_MAP literal in index.html (home-page WG chips)
+              - per-bio `wgs` field in data/bios.json (directory chips)
+              - leadership `roles` array on seed entries in data/bios.json
+            See the PR body for the exact diffs.
           body-path: /tmp/pr-body.md
           labels: |
             automated
