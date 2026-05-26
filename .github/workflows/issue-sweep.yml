@@ -1,0 +1,151 @@
+# Bound the open-issue backlog with three timeouts:
+#
+#   * `needs-info` issues with no comment in 14+ days → close
+#     (the lifecycle-comment workflow already warned the reporter
+#     this would happen when the label landed).
+#   * Any open issue with no activity in 60+ days → label `stale`
+#     (the lifecycle-comment workflow auto-posts the warning).
+#   * `stale` issues with no comment in another 14 days → close.
+#
+# The thresholds are softer than upstream claude-code's defaults
+# because our absolute volume is small (≈ 12 open issues at the
+# time of writing) and the maintainer reads every notification.
+# When the directory crosses ~100 open issues, revisit the
+# stale threshold downwards.
+#
+# Once-daily cadence is plenty at our volume. Increase to twice
+# daily only if the backlog starts producing same-day stale-and-
+# close transitions.
+#
+# Zero cost: no third-party services, no API keys.
+name: Issue sweep
+
+on:
+  schedule:
+    - cron: '0 14 * * *'   # Daily 14:00 UTC, an hour after the lock workflow
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+concurrency:
+  group: issue-sweep
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Apply stale labels + close stale + close abandoned needs-info
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # v7 (sha-pinned)
+        with:
+          script: |
+            const STALE_AFTER_DAYS       = 60;   // open → stale
+            const STALE_CLOSE_AFTER_DAYS = 14;   // stale → closed
+            const NEEDS_INFO_AFTER_DAYS  = 14;   // needs-info → closed
+
+            const now = new Date();
+            const staleCutoff      = new Date(now); staleCutoff.setDate(now.getDate() - STALE_AFTER_DAYS);
+            const closeStaleCutoff = new Date(now); closeStaleCutoff.setDate(now.getDate() - STALE_CLOSE_AFTER_DAYS);
+            const closeNeedsInfo   = new Date(now); closeNeedsInfo.setDate(now.getDate() - NEEDS_INFO_AFTER_DAYS);
+
+            const counters = { labelled_stale: 0, closed_stale: 0, closed_needs_info: 0, scanned: 0 };
+
+            // Helper: find the most recent non-bot human comment date.
+            // We use this instead of `updated_at` because a label or
+            // mention change bumps `updated_at` without representing
+            // a substantive response from the reporter.
+            async function lastHumanCommentAt(issueNumber) {
+              const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                per_page: 100,
+                sort: 'created',
+                direction: 'desc',
+              });
+              for (const c of comments) {
+                if (c.user.type !== 'Bot') return new Date(c.created_at);
+              }
+              return null;
+            }
+
+            let page = 1;
+            while (true) {
+              const { data: issues } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                per_page: 100,
+                page,
+              });
+              if (issues.length === 0) break;
+
+              for (const issue of issues) {
+                if (issue.pull_request) continue;
+                counters.scanned++;
+
+                const labels = new Set(issue.labels.map(l => typeof l === 'string' ? l : l.name));
+                const updated = new Date(issue.updated_at);
+
+                // 1. needs-info → close after NEEDS_INFO_AFTER_DAYS of no human comment.
+                if (labels.has('needs-info')) {
+                  const lastHuman = await lastHumanCommentAt(issue.number);
+                  const sinceHuman = lastHuman ?? new Date(issue.created_at);
+                  if (sinceHuman < closeNeedsInfo) {
+                    await github.rest.issues.createComment({
+                      owner: context.repo.owner, repo: context.repo.repo,
+                      issue_number: issue.number,
+                      body: `No follow-up since the maintainer asked for more information ${NEEDS_INFO_AFTER_DAYS}+ days ago. Auto-closing. Please open a fresh issue when you have the details.`,
+                    });
+                    await github.rest.issues.update({
+                      owner: context.repo.owner, repo: context.repo.repo,
+                      issue_number: issue.number,
+                      state: 'closed', state_reason: 'not_planned',
+                    });
+                    counters.closed_needs_info++;
+                    console.log(`closed (needs-info abandoned) #${issue.number}`);
+                    continue;
+                  }
+                }
+
+                // 2. stale → close after STALE_CLOSE_AFTER_DAYS additional days.
+                if (labels.has('stale')) {
+                  if (updated < closeStaleCutoff) {
+                    await github.rest.issues.createComment({
+                      owner: context.repo.owner, repo: context.repo.repo,
+                      issue_number: issue.number,
+                      body: `No fresh activity since the \`stale\` label landed ${STALE_CLOSE_AFTER_DAYS}+ days ago. Auto-closing. Reopen if still relevant.`,
+                    });
+                    await github.rest.issues.update({
+                      owner: context.repo.owner, repo: context.repo.repo,
+                      issue_number: issue.number,
+                      state: 'closed', state_reason: 'not_planned',
+                    });
+                    counters.closed_stale++;
+                    console.log(`closed (stale) #${issue.number}`);
+                    continue;
+                  }
+                }
+
+                // 3. Plain open issue with no activity in STALE_AFTER_DAYS → label stale.
+                //    (lifecycle-comment workflow auto-posts the warning.)
+                if (!labels.has('stale') && !labels.has('needs-info') && updated < staleCutoff) {
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner, repo: context.repo.repo,
+                    issue_number: issue.number,
+                    labels: ['stale'],
+                  });
+                  counters.labelled_stale++;
+                  console.log(`labelled stale #${issue.number}`);
+                }
+              }
+
+              if (issues.length < 100) break;
+              page++;
+            }
+
+            console.log(`Sweep complete. Scanned ${counters.scanned}; ` +
+                        `labelled ${counters.labelled_stale} stale, ` +
+                        `closed ${counters.closed_stale} stale, ` +
+                        `closed ${counters.closed_needs_info} needs-info.`);

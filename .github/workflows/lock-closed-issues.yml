@@ -1,0 +1,89 @@
+# Lock closed issues after a quiet period.
+#
+# Once an issue closes, the conversation should ideally end there.
+# Drive-by comments on long-closed threads tend to be off-topic
+# (someone hits a similar-looking problem via Google, drops a "+1
+# still happens to me" without context). The locked issue still
+# renders publicly; the only thing the lock prevents is new
+# comments, exactly the noise we want to filter.
+#
+# Threshold tuned softer than upstream claude-code's 7 days because
+# our release cadence is slower and the maintainer reads every
+# notification by hand. 14 days is "enough time for the reporter
+# to come back and say it didn't actually fix it" without keeping
+# threads alive long after they're settled.
+#
+# Zero cost: no third-party services, no API keys.
+name: Lock closed issues
+
+on:
+  schedule:
+    # Daily 13:00 UTC. Picks up everything closed in the last day
+    # plus older issues that crossed the 14-day threshold today.
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+concurrency:
+  group: lock-closed-issues
+
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Lock issues closed 14+ days ago with no recent activity
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # v7 (sha-pinned)
+        with:
+          script: |
+            const THRESHOLD_DAYS = 14;
+            const cutoff = new Date();
+            cutoff.setDate(cutoff.getDate() - THRESHOLD_DAYS);
+
+            const lockComment =
+              `This issue was closed ${THRESHOLD_DAYS}+ days ago and has not had recent activity, ` +
+              `so it's being locked to keep the conversation focused. ` +
+              `If you're hitting a similar problem, please open a fresh issue ` +
+              `(referencing this one if useful).`;
+
+            let page = 1;
+            let locked = 0;
+            while (true) {
+              const { data: issues } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'closed',
+                sort: 'updated',
+                direction: 'asc',
+                per_page: 100,
+                page,
+              });
+              if (issues.length === 0) break;
+
+              for (const issue of issues) {
+                if (issue.locked) continue;
+                if (issue.pull_request) continue;       // PRs handled separately
+                if (new Date(issue.updated_at) > cutoff) continue;
+
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: lockComment,
+                });
+                await github.rest.issues.lock({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  lock_reason: 'resolved',
+                });
+                locked++;
+                console.log(`locked #${issue.number}: ${issue.title}`);
+              }
+
+              if (issues.length < 100) break;
+              page++;
+            }
+            console.log(`Done. Locked ${locked} issue(s).`);
