@@ -1,0 +1,75 @@
+name: 🐛 Bug report
+description: Report something on netsec-cost.eu, the directory, or the repo tooling that isn't working as expected
+title: "[bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this. Before submitting, please:
+
+        - **Search [existing issues](https://github.com/EISSeuropa/netsec.github.io/issues?q=is%3Aissue)** in case the same bug is already known.
+        - Make sure this is a **bug**, not a content correction or feature request. For content corrections, use the [contact form](https://netsec-cost.eu/#contact). For features, file an [enhancement](https://github.com/EISSeuropa/netsec.github.io/issues/new?template=enhancement.yml) instead.
+        - If the bug is on the public site, note your browser and operating system in the details box below.
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Preflight
+      description: Please confirm before submitting.
+      options:
+        - label: I searched existing issues and this one isn't already filed
+          required: true
+        - label: This is a single bug report (please file separate issues for unrelated bugs)
+          required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What's going wrong
+      description: Describe what's happening that shouldn't be. Include the page URL if it's on the public site.
+      placeholder: |
+        On https://netsec-cost.eu/people.html the directory's keyword filter
+        chip row shows nothing on mobile Safari below 400 px. Desktop Safari
+        and mobile Chrome render the chips correctly.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should happen
+      description: Describe the expected behaviour.
+      placeholder: |
+        The chip row should be visible on every device, possibly wrapping
+        onto a second line below 400 px.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      description: Step-by-step instructions, ideally something a maintainer can follow on their own machine.
+      placeholder: |
+        1. Open https://netsec-cost.eu/people.html on iPhone Safari (iOS 17.4)
+        2. Scroll to the directory below the welcome strip
+        3. Notice the chip row above the grid is missing
+    validations:
+      required: false
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser + OS + viewport size for site bugs; Python version + OS for sync-script bugs.
+      placeholder: |
+        Mobile Safari, iOS 17.4, viewport 375 × 667
+    validations:
+      required: false
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Screenshots, error messages from the browser console, links to related issues, hypotheses about the cause.
+      placeholder: |
+        Browser console shows no errors. The chip row's `display: none`
+        rule in site.css might be firing under an unintended @media query.
+    validations:
+      required: false

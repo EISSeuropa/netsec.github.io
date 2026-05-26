@@ -73,7 +73,20 @@ and release cycles.
 - Trivial inline fixes you can do in seconds without context
   switch.
 
-### Issue template (informal — there are no `.github/ISSUE_TEMPLATE/` files)
+### Issue template
+
+External contributors filing through the GitHub UI land on one of
+three structured YAML forms in `.github/ISSUE_TEMPLATE/`:
+`bug_report.yml`, `enhancement.yml`, `documentation.yml`. Each
+form has required preflight checkboxes and required-field
+textareas; the chooser's `config.yml` disables blank issues and
+routes routine questions to the public contact form, the FAQ,
+and the Wiki onboarding page.
+
+Maintainer-authored issues filed via `gh issue create` (the
+common path for follow-up work spotted mid-session) follow the
+same four-section shape the forms enforce, kept here as the
+canonical body content:
 
 ```markdown
 ## What's happening
