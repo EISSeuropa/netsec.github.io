@@ -249,6 +249,7 @@
       <ul>
         <li><a href="#the-action">Die Aktion</a></li>
         <li><a href="#leadership">Leitung</a></li>
+        <li><a href="#founding">Gründungsbeteiligte</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="#glossary">Glossar</a></li>
         <li><a href="#eiss">Verhältnis zur EISS</a></li>
@@ -716,6 +717,115 @@
   </div>
   </div>
 </section>
+
+<!-- ===== Gründungsbeteiligte ===== -->
+<section id="founding" class="about-section">
+  <div class="container reveal">
+    <h2>Gründungsbeteiligte</h2>
+    <div class="container-inner">
+
+    <p class="mc-intro">NetSec wurde im Rahmen der COST-Ausschreibung OC-2024-1-27931 vorgeschlagen, eingereicht von Dr. Hugo Meijer (Sciences Po, Paris). Zweiundfünfzig Forscherinnen und Forscher aus einundzwanzig Ländern haben sich bei der Gründung zur Aktion verpflichtet. Das aktuelle Management Committee, oben aufgeführt, ist aus dieser Gruppe gewachsen, als weitere COST-Mitgliedsländer ihre Teilnahme nach der Ausschreibung ratifiziert haben.</p>
+
+    <div class="mc-stats" role="list" aria-label="Übersicht der Gründungskohorte">
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num">52</span>
+        <span class="mc-stat-label">Gründungsbeteiligte</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num">21</span>
+        <span class="mc-stat-label">Länder bei der Gründung</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num">23</span>
+        <span class="mc-stat-label">verfügbar für das MC<sup aria-hidden="true">*</sup></span>
+      </div>
+    </div>
+    <p class="mc-stats-note"><sup aria-hidden="true">*</sup> laut Ausschreibung; die aktuelle MC-Zusammensetzung weicht ab</p>
+
+    <details class="mc-collapse" id="founding-countries" data-pagefind-ignore="all">
+      <summary>
+        <span class="mc-collapse-hint">
+          <span class="mc-collapse-when-closed">Alle 21 Gründungsländer anzeigen</span>
+          <span class="mc-collapse-when-open">Liste ausblenden</span>
+          <svg class="mc-collapse-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </summary>
+      <div class="country-grid" id="founding-grid">
+        <!-- Zur Laufzeit aus data/founding-proposers.json befüllt. -->
+      </div>
+    </details>
+
+    <p class="founding-footnote">Quelle: veröffentlichter Ausschreibungsantrag. Um einen Eintrag entfernen zu lassen, bitte das <a href="index.de.html#contact">Kontaktformular</a> verwenden; verantwortlich für die Datenverarbeitung ist <strong>Universiteit Leiden</strong>, siehe <a href="privacy.de.html">Datenschutzhinweis</a>.</p>
+
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  fetch('data/founding-proposers.json', { cache: 'no-cache' })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(data => {
+      const grid = document.getElementById('founding-grid');
+      if (!grid || !data || !Array.isArray(data.proposers)) return;
+
+      const byCountry = new Map();
+      for (const p of data.proposers) {
+        if (!byCountry.has(p.country)) byCountry.set(p.country, []);
+        byCountry.get(p.country).push(p);
+      }
+
+      // DE display labels for countries. Falls back to the EN
+      // canonical form when the locale-specific label is missing.
+      const DE_COUNTRY = {
+        "Bulgaria": "Bulgarien", "Croatia": "Kroatien", "Cyprus": "Zypern",
+        "Czech Republic": "Tschechische Republik", "Denmark": "Dänemark",
+        "France": "Frankreich", "Germany": "Deutschland", "Greece": "Griechenland",
+        "Hungary": "Ungarn", "Italy": "Italien", "Lithuania": "Litauen",
+        "Moldova": "Moldau", "Netherlands": "Niederlande", "Poland": "Polen",
+        "Portugal": "Portugal", "Serbia": "Serbien", "Slovakia": "Slowakei",
+        "Slovenia": "Slowenien", "Sweden": "Schweden", "Türkiye": "Türkiye",
+        "United Kingdom": "Vereinigtes Königreich"
+      };
+
+      const sortedCountries = Array.from(byCountry.keys()).sort((a, b) => {
+        return (DE_COUNTRY[a] || a).localeCompare(DE_COUNTRY[b] || b, 'de');
+      });
+
+      const html = sortedCountries.map(country => {
+        const people = byCountry.get(country).slice().sort((a, b) => a.name.localeCompare(b.name, 'de'));
+        const cc = (people[0].country_code || '').toLowerCase();
+        const display = DE_COUNTRY[country] || country;
+        const liItems = people.map(p => {
+          const proposerBadge = p.is_proposer
+            ? ' <span class="founding-proposer-badge" title="Antragsteller der COST-Ausschreibung">Antragsteller</span>'
+            : '';
+          const aff = p.affiliation
+            ? `<span class="founding-affiliation">${escapeHtml(p.affiliation)}</span>`
+            : '';
+          return `<li data-person="${escapeHtml(p.name)}"><span class="founding-name">${escapeHtml(p.name)}${proposerBadge}</span>${aff}</li>`;
+        }).join('');
+        return `<article class="country-card glass founding-country-card">
+        <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/${cc}.png" alt="${escapeHtml(display)} Flagge" loading="lazy"><span class="country-name">${escapeHtml(display)}</span><span class="founding-country-count" aria-label="${people.length} Gründungsbeteiligte">${people.length}</span></div>
+        <ul class="founding-list">${liItems}</ul>
+      </article>`;
+      }).join('\n');
+
+      grid.innerHTML = html;
+    })
+    .catch(err => {
+      console.warn('founding-proposers: render failed', err);
+      const grid = document.getElementById('founding-grid');
+      if (grid) grid.innerHTML = '<p class="muted">Die Liste der Gründungsbeteiligten konnte nicht geladen werden. Siehe <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/data/founding-proposers.json">data/founding-proposers.json</a> auf GitHub.</p>';
+    });
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+})();
+</script>
 
 <!-- FAQ teaser -->
 <section id="faq" class="about-section">
