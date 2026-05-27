@@ -643,15 +643,27 @@ section{padding:80px 0;position:relative}
 .event-atc-icon svg{width:14px;height:14px}
 .event-atc-chev{font-size:.7em;opacity:.7;margin-left:2px}
 .event-atc-menu{
-  position:absolute;right:0;top:calc(100% + 4px);z-index:20;
+  /* Default shape. The renderer reparents the menu to <body> on
+     open and pins it with `position: fixed` (inline coords from
+     getBoundingClientRect) so it escapes every parent stacking
+     context. .event-card carries `.glass` → backdrop-filter, which
+     creates a stacking context that would otherwise trap a
+     z-indexed absolute child — see the bug fixed in v1.9.0 Phase 3
+     where an open menu was occluded by the next event card. The
+     `--portal` modifier locks in `position: fixed` so the menu
+     doesn't briefly fall back to absolute layout between attach
+     and the first position() call. */
+  position:absolute;right:0;top:calc(100% + 4px);
   min-width:220px;padding:6px;border-radius:10px;
   border:1px solid var(--line);
   background:var(--glass-bg-strong);
   backdrop-filter:saturate(180%) blur(20px);
   -webkit-backdrop-filter:saturate(180%) blur(20px);
-  box-shadow:0 8px 28px rgba(0,0,0,.12);
+  box-shadow:0 10px 32px rgba(0,0,0,.18);
   display:flex;flex-direction:column;gap:2px;
+  z-index:1000;
 }
+.event-atc-menu--portal{position:fixed}
 .event-atc-menu[hidden]{display:none}
 .event-atc-item{
   display:block;padding:8px 12px;border-radius:6px;
@@ -660,10 +672,10 @@ section{padding:80px 0;position:relative}
 .event-atc-item:hover,.event-atc-item:focus-visible{
   background:rgba(10,132,255,.08);color:var(--ink);outline:none;
 }
-.dark .event-atc-menu{background:rgba(20,22,28,.95)}
+.dark .event-atc-menu{background:rgba(20,22,28,.96)}
 @media (max-width:560px){
   .event-atc{margin-left:0}
-  .event-atc-menu{right:auto;left:0;min-width:200px}
+  .event-atc-menu{min-width:200px}
 }
 @media print{
   .event-atc{display:none}
