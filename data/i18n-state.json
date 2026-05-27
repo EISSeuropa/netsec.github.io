@@ -39,15 +39,15 @@
     "sitemap.html": {
       "fr": {
         "file": "sitemap.fr.html",
-        "source_sha1": "84a39929ab12a4877de75afbc07c70dc72aa765c",
-        "translated_on": "2026-05-26",
+        "source_sha1": "de65775f2a93277ef4b0c407cc7e4bd73bae7ed7",
+        "translated_on": "2026-05-28",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "sitemap.de.html",
-        "source_sha1": "84a39929ab12a4877de75afbc07c70dc72aa765c",
-        "translated_on": "2026-05-26",
+        "source_sha1": "de65775f2a93277ef4b0c407cc7e4bd73bae7ed7",
+        "translated_on": "2026-05-28",
         "status": "beta",
         "reviewed_by": null
       }
