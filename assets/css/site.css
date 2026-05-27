@@ -1084,6 +1084,39 @@ form button:disabled{opacity:.65;cursor:wait}
   position:absolute;left:2px;top:0;line-height:inherit;
 }
 
+/* -------- Founding contributors (about.html #founding) --------
+ * Reuses .country-grid / .country-card scaffolding from the MC
+ * snapshot directly above; the differences (per-person affiliation
+ * line, count badge, proposer badge) are layered on top here. */
+.founding-country-card .country-head{position:relative}
+.founding-country-count{
+  margin-left:auto;
+  font-size:.78rem;font-weight:600;color:var(--muted);
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:2px 8px;line-height:1.6;
+  min-width:1.8em;text-align:center;
+}
+.founding-list .founding-name{font-weight:500;color:var(--ink-2);display:block}
+.founding-affiliation{
+  display:block;
+  font-size:.78rem;color:var(--muted);font-style:italic;
+  margin-top:1px;line-height:1.35;
+}
+.founding-proposer-badge{
+  display:inline-block;margin-left:6px;
+  font-size:.7rem;font-weight:600;letter-spacing:.02em;
+  text-transform:uppercase;
+  color:#fff;background:var(--accent);
+  border-radius:999px;padding:1px 8px;line-height:1.5;
+  vertical-align:middle;
+}
+.founding-footnote{
+  text-align:center;color:var(--muted);font-size:.86rem;
+  max-width:60ch;margin:22px auto 0;line-height:1.55;
+}
+
 /* -------- MC by Country: intro paragraph + snapshot stats -------- */
 .mc-intro{
   text-align:center;color:var(--muted);font-size:.92rem;

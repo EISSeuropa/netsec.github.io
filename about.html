@@ -243,6 +243,7 @@
       <ul>
         <li><a href="#the-action">The Action</a></li>
         <li><a href="#leadership">Leadership</a></li>
+        <li><a href="#founding">Founding contributors</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="#glossary">Glossary</a></li>
         <li><a href="#eiss">Relationship with EISS</a></li>
@@ -704,6 +705,123 @@
   </div>
   </div>
 </section>
+
+<!-- ===== Founding contributors =====
+     The 52 researchers across 21 countries listed in the COST Open
+     Call proposal OC-2024-1-27931 that established NetSec. Sourced
+     from data/founding-proposers.json; rendered runtime via the
+     inline <script> at the bottom of this section. Pattern mirrors
+     the MC country-grid (collapsible <details>, stats strip, glass
+     country cards) so the founding-cohort narrative reads as a
+     parallel to the current-MC narrative directly above.
+
+     Per-individual opt-out documented at /privacy.html and surfaced
+     in the section footer below; data is from a published Open Call
+     proposal so the lawful basis is "data made public in a
+     professional capacity in support of the Action's establishment".
+-->
+<section id="founding" class="about-section">
+  <div class="container reveal">
+    <h2>Founding contributors</h2>
+    <div class="container-inner">
+
+    <p class="mc-intro">NetSec was proposed under COST Open Call OC-2024-1-27931, submitted by Dr Hugo Meijer (Sciences Po, Paris). Fifty-two researchers across twenty-one countries committed to the Action at founding. The current Management Committee, shown above, expanded from this cohort as further COST Member countries ratified participation after the Open Call.</p>
+
+    <div class="mc-stats" role="list" aria-label="Founding cohort snapshot">
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num">52</span>
+        <span class="mc-stat-label">founding contributors</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num">21</span>
+        <span class="mc-stat-label">countries committed at founding</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num">23</span>
+        <span class="mc-stat-label">indicated availability for MC<sup aria-hidden="true">*</sup></span>
+      </div>
+    </div>
+    <p class="mc-stats-note"><sup aria-hidden="true">*</sup> as recorded in the Open Call proposal; current MC composition differs</p>
+
+    <details class="mc-collapse" id="founding-countries" data-pagefind-ignore="all">
+      <summary>
+        <span class="mc-collapse-hint">
+          <span class="mc-collapse-when-closed">Show all 21 founding countries</span>
+          <span class="mc-collapse-when-open">Hide list</span>
+          <svg class="mc-collapse-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </summary>
+      <div class="country-grid" id="founding-grid">
+        <!-- Populated at runtime from data/founding-proposers.json. -->
+      </div>
+    </details>
+
+    <p class="founding-footnote">Sourced from the published Open Call proposal. To request removal from this listing, please <a href="index.html#contact">use the contact form</a>; the data controller is <strong>Universiteit Leiden</strong>, per the <a href="privacy.html">Privacy Notice</a>.</p>
+
+    </div>
+  </div>
+</section>
+
+<script>
+/* Founding-contributors renderer.
+ * Fetches data/founding-proposers.json at runtime, groups the 52
+ * entries by country, sorts countries alphabetically, and writes
+ * the result into #founding-grid using the same .country-card
+ * pattern as the MC country-grid directly above.
+ *
+ * Hugo Meijer (the Open Call Proposer) gets a small badge so the
+ * "Submitted by" line on the section intro is reinforced visually
+ * within the country card. Affiliations sit under each name as
+ * secondary text. */
+(function() {
+  fetch('data/founding-proposers.json', { cache: 'no-cache' })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(data => {
+      const grid = document.getElementById('founding-grid');
+      if (!grid || !data || !Array.isArray(data.proposers)) return;
+
+      // Group by country.
+      const byCountry = new Map();
+      for (const p of data.proposers) {
+        if (!byCountry.has(p.country)) byCountry.set(p.country, []);
+        byCountry.get(p.country).push(p);
+      }
+      // Sort countries alphabetically; within each, sort by name.
+      const sortedCountries = Array.from(byCountry.keys()).sort((a, b) => a.localeCompare(b));
+
+      const html = sortedCountries.map(country => {
+        const people = byCountry.get(country).slice().sort((a, b) => a.name.localeCompare(b.name));
+        const cc = (people[0].country_code || '').toLowerCase();
+        const liItems = people.map(p => {
+          const proposerBadge = p.is_proposer
+            ? ' <span class="founding-proposer-badge" title="Open Call Proposer">Proposer</span>'
+            : '';
+          const aff = p.affiliation
+            ? `<span class="founding-affiliation">${escapeHtml(p.affiliation)}</span>`
+            : '';
+          return `<li data-person="${escapeHtml(p.name)}"><span class="founding-name">${escapeHtml(p.name)}${proposerBadge}</span>${aff}</li>`;
+        }).join('');
+        return `<article class="country-card glass founding-country-card">
+        <div class="country-head"><img class="flag" src="https://flagcdn.com/h40/${cc}.png" alt="${escapeHtml(country)} flag" loading="lazy"><span class="country-name">${escapeHtml(country)}</span><span class="founding-country-count" aria-label="${people.length} founding contributors">${people.length}</span></div>
+        <ul class="founding-list">${liItems}</ul>
+      </article>`;
+      }).join('\n');
+
+      grid.innerHTML = html;
+    })
+    .catch(err => {
+      console.warn('founding-proposers: render failed', err);
+      const grid = document.getElementById('founding-grid');
+      if (grid) grid.innerHTML = '<p class="muted">Founding-contributor list could not be loaded. See <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/data/founding-proposers.json">data/founding-proposers.json</a> on GitHub.</p>';
+    });
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+})();
+</script>
 
 <!-- FAQ teaser -->
 <section id="faq" class="about-section">
