@@ -1,10 +1,10 @@
 {
-  "_documentation": "Authoritative source for calendar.ics. Maintained by hand alongside the HTML event cards in index.html. When you edit an event here, also update the corresponding <article class=\"event-card\"> in index.html (and its FR/DE siblings), and bump dtstamp. CI fails if calendar.ics drifts from what scripts/build-calendar.py would produce from this file. Entries that also live on Indico can opt into a partial auto-sync by adding an `indicoEventId` field; scripts/sync-indico.py then overwrites the `summary`, `start`, and `end` fields from the fresh Indico payload on each run. `location`, `description`, `url`, `categories`, etc. stay hand-edited (the curated text is richer than what Indico returns).",
+  "_documentation": "Single source of truth for the public calendar feeds AND the home-page event cards (#249). Two consumers: (a) `scripts/build-calendar.py` generates `calendar.ics` + `calendar/<slug>.ics` from the top-level scheduling fields (`uid`, `summary`, `description`, `start`, `end`, `location`, `url`, `organizer`, `categories`, `status`); see `docs/architecture.md` *Adding a new event*. (b) The inline JS renderer in `index.html` (+ FR + DE) reads the *renderer* fields (`eventType`, `featured`, `displayDate`, `i18n`, `meta`, `cta`) to build the event cards on the home page. EN content comes from the canonical top-level `summary` + `description` (also used by the .ics); FR + DE overrides live under `i18n.{fr,de}`. The renderer falls back to EN if a locale block is missing, and the hand-coded HTML in each home page is preserved as a `<noscript>`-style fail-soft fallback that the renderer empties on success. When you edit an event here: bump `dtstamp`, run `python3 scripts/build-calendar.py`, and confirm the FR/DE i18n blocks track any EN copy changes. CI runs the drift checker on every PR.",
   "calname": "NetSec, COST Action CA24154",
   "caldesc": "Events from the NetSec COST Action (CA24154): annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
   "tzid": "Europe/Stockholm",
   "refresh_days": 7,
-  "dtstamp": "20260527T080000Z",
+  "dtstamp": "20260528T120000Z",
   "events": [
     {
       "uid": "summer-school-2026@netsec-cost.eu",
@@ -22,7 +22,59 @@
         "Training School",
         "NetSec"
       ],
-      "status": "CONFIRMED"
+      "status": "CONFIRMED",
+      "eventType": "training-school",
+      "featured": true,
+      "displayDate": {
+        "en": "9–11 June 2026",
+        "fr": "9–11 juin 2026",
+        "de": "9.–11. Juni 2026"
+      },
+      "cardDescription": {
+        "en": "Three days of training and mentoring for early-career researchers in European security: research presentations, individualised feedback from senior scholars, and structured mentorship. Open to PhD candidates and post-docs (within one year of defence) in strategic studies and international security, as well as SWAMOS / Euro-SWAMOS alumni. Travel and hotel reimbursement is available for 15 PhD students, and selected participants receive free access to the European Security Conference that follows.",
+        "fr": "Trois jours de formation et de mentorat pour les chercheur·euses en début de carrière en sécurité européenne, présentations de recherche, retours individualisés de chercheur·euses senior et mentorat structuré. Ouverte aux doctorant·es et post-doctorant·es (dans l'année suivant la soutenance) en études stratégiques et sécurité internationale, ainsi qu'aux alumni SWAMOS / Euro-SWAMOS. Remboursement des frais de voyage et d'hôtel pour 15 doctorant·es, et accès gratuit à la European Security Conference qui suit pour les participant·es sélectionné·es.",
+        "de": "Drei Tage Ausbildung und Mentoring für Nachwuchsforschende in der europäischen Sicherheitsforschung, Forschungspräsentationen, individuelles Feedback von Senior-Forschenden und strukturiertes Mentoring. Offen für Promovierende und Post-Docs (innerhalb eines Jahres nach Verteidigung) in Strategischen Studien und Internationaler Sicherheit sowie SWAMOS- / Euro-SWAMOS-Alumni. Reise- und Hotelkostenerstattung für 15 Promovierende, und ausgewählte Teilnehmer·innen erhalten freien Zugang zur anschließenden European Security Conference."
+      },
+      "cardTitle": {
+        "en": "NetSec Early-Career Scholars Summer School",
+        "fr": "École d'été NetSec des chercheur·euses en début de carrière",
+        "de": "NetSec-Summer-School für Nachwuchsforschende"
+      },
+      "meta": [
+        {
+          "icon": "pin",
+          "i18n": {
+            "en": "<strong>Stockholm University</strong> · Frescativägen 114 18, Sweden",
+            "fr": "<strong>Université de Stockholm</strong> · Frescativägen 114 18, Suède",
+            "de": "<strong>Universität Stockholm</strong> · Frescativägen 114 18, Schweden"
+          }
+        },
+        {
+          "icon": "people",
+          "i18n": {
+            "en": "<strong>Scientific Coordinators:</strong> Dr Silvia D'Amato · Prof Chiara Ruffa",
+            "fr": "<strong>Coordinateur·rices scientifiques :</strong> Dr Silvia D'Amato · Prof Chiara Ruffa",
+            "de": "<strong>Wissenschaftliche Koordination:</strong> Dr Silvia D'Amato · Prof Chiara Ruffa"
+          }
+        },
+        {
+          "icon": "calendar",
+          "i18n": {
+            "en": "<strong>Applications closed</strong> on 1 March 2026. Selected participants will be contacted by the scientific coordinators.",
+            "fr": "<strong>Candidatures closes</strong> depuis le 1er mars 2026. Les participant·es sélectionné·es seront contacté·es par les coordinateur·rices scientifiques.",
+            "de": "<strong>Bewerbungen geschlossen</strong> seit dem 1. März 2026. Ausgewählte Teilnehmer·innen werden von den wissenschaftlichen Koordinator·innen kontaktiert."
+          }
+        }
+      ],
+      "cta": {
+        "href": "https://eiss-europa.com/NetSecSchool.html",
+        "external": true,
+        "i18n": {
+          "en": "Full details",
+          "fr": "Détails complets",
+          "de": "Vollständige Details"
+        }
+      }
     },
     {
       "uid": "european-security-conference-2026@netsec-cost.eu",
@@ -37,7 +89,63 @@
         "Annual Conference",
         "NetSec"
       ],
-      "status": "CONFIRMED"
+      "status": "CONFIRMED",
+      "eventType": "annual-conference",
+      "featured": true,
+      "displayDate": {
+        "en": "11–12 June 2026",
+        "fr": "11–12 juin 2026",
+        "de": "11.–12. Juni 2026"
+      },
+      "cardDescription": {
+        "en": "The flagship annual gathering of the NetSec community: an interdisciplinary conference on European defence and security open to academics, policy-makers, and practitioners. Held back-to-back with the Summer School so early-career scholars can join the wider conversation.",
+        "fr": "Rassemblement annuel phare de la communauté NetSec : une conférence interdisciplinaire sur la défense et la sécurité européennes, ouverte aux académiques, décideur·ses politiques et praticien·nes. Organisée à la suite de l'école d'été pour que les chercheur·euses en début de carrière rejoignent la discussion plus large.",
+        "de": "Das jährliche Flaggschiff-Treffen der NetSec-Community: eine interdisziplinäre Konferenz zu europäischer Verteidigung und Sicherheit, offen für Wissenschaft, Politik und Praxis. Findet im Anschluss an die Summer School statt, damit Nachwuchsforschende am breiteren Austausch teilnehmen können."
+      },
+      "cardTitle": {
+        "en": "European Security Conference",
+        "fr": "European Security Conference",
+        "de": "European Security Conference"
+      },
+      "meta": [
+        {
+          "icon": "clock",
+          "i18n": {
+            "en": "<strong>11 Jun 08:00 – 12 Jun 20:00</strong> (Europe/Stockholm)",
+            "fr": "<strong>11 juin 08:00, 12 juin 20:00</strong> (Europe/Stockholm)",
+            "de": "<strong>11. Juni 08:00, 12. Juni 20:00</strong> (Europe/Stockholm)"
+          }
+        },
+        {
+          "icon": "pin",
+          "i18n": {
+            "en": "<strong>Stockholm University</strong> · Frescativägen, 114 19 Stockholm, Sweden",
+            "fr": "<strong>Université de Stockholm</strong> · Frescativägen, 114 19 Stockholm, Suède",
+            "de": "<strong>Universität Stockholm</strong> · Frescativägen, 114 19 Stockholm, Schweden"
+          }
+        },
+        {
+          "icon": "people",
+          "i18n": {
+            "en": "<strong>Chairpersons:</strong> Dr Julia Carver · Dr Sanne Verschuren",
+            "fr": "<strong>Président·es :</strong> Dr Julia Carver · Dr Sanne Verschuren",
+            "de": "<strong>Vorsitz:</strong> Dr Julia Carver · Dr Sanne Verschuren"
+          }
+        }
+      ],
+      "cta": {
+        "href": {
+          "en": "essc-2026.html",
+          "fr": "essc-2026.fr.html",
+          "de": "essc-2026.de.html"
+        },
+        "external": false,
+        "i18n": {
+          "en": "View live programme →",
+          "fr": "Voir le programme en direct →",
+          "de": "Live-Programm ansehen →"
+        }
+      }
     },
     {
       "uid": "policy-workshop-2026-09@netsec-cost.eu",
@@ -51,7 +159,34 @@
         "Policy workshop",
         "NetSec"
       ],
-      "status": "CONFIRMED"
+      "status": "CONFIRMED",
+      "eventType": "policy-workshop",
+      "featured": false,
+      "displayDate": {
+        "en": "4 September 2026",
+        "fr": "4 septembre 2026",
+        "de": "4. September 2026"
+      },
+      "cardDescription": {
+        "en": "A NetSec-hosted workshop bringing together members of the Action with policy practitioners on a topic to be confirmed. Programme and registration details will be published on the Action's website ahead of the date.",
+        "fr": "Un atelier organisé par NetSec rassemblant des membres de l'Action et des praticien·nes des politiques publiques sur un sujet à confirmer. Programme et inscriptions seront publiés sur le site de l'Action avant la date.",
+        "de": "Ein von NetSec ausgerichteter Workshop, der Mitglieder der Aktion mit Praktiker·innen aus der Politik zu einem noch festzulegenden Thema zusammenbringt. Programm und Anmeldung werden rechtzeitig vor dem Termin auf der Website der Aktion veröffentlicht."
+      },
+      "cardTitle": {
+        "en": "NetSec Policy Workshop",
+        "fr": "Atelier politique NetSec",
+        "de": "NetSec Politik-Workshop"
+      },
+      "meta": [
+        {
+          "icon": "calendar",
+          "i18n": {
+            "en": "Format and venue to be confirmed",
+            "fr": "Format et lieu à confirmer",
+            "de": "Format und Ort werden noch bestätigt"
+          }
+        }
+      ]
     },
     {
       "uid": "itc-conference-2026-09@netsec-cost.eu",
@@ -65,7 +200,34 @@
         "ITC Conference",
         "NetSec"
       ],
-      "status": "CONFIRMED"
+      "status": "CONFIRMED",
+      "eventType": "itc-conference",
+      "featured": false,
+      "displayDate": {
+        "en": "8–11 September 2026",
+        "fr": "8–11 septembre 2026",
+        "de": "8.–11. September 2026"
+      },
+      "cardDescription": {
+        "en": "An Inclusiveness Target Country (ITC) Conference supported by the COST ITC Conference Grant scheme. The format prioritises participation from researchers based in ITCs, with travel-grant support coordinated through the Action. Programme and registration to be announced.",
+        "fr": "Une conférence pour les Pays Cibles d'Inclusivité (ITC), soutenue par le dispositif de subventions COST ITC Conference Grant. Le format privilégie la participation des chercheur·euses basé·es dans les ITC, avec un soutien aux frais de déplacement coordonné par l'Action. Programme et inscriptions à venir.",
+        "de": "Eine Konferenz für Inclusiveness Target Countries (ITC), unterstützt durch das COST-Förderinstrument *ITC Conference Grant*. Das Format priorisiert die Teilnahme von Forschenden aus ITC-Ländern, mit über die Aktion koordinierter Reisekostenunterstützung. Programm und Anmeldung folgen."
+      },
+      "cardTitle": {
+        "en": "NetSec ITC Conference",
+        "fr": "Conférence ITC NetSec",
+        "de": "NetSec ITC-Konferenz"
+      },
+      "meta": [
+        {
+          "icon": "calendar",
+          "i18n": {
+            "en": "Venue to be confirmed · Travel-grant details on <a href=\"grants.html\">grants.html</a>",
+            "fr": "Lieu à confirmer · Détails sur les subventions de voyage : <a href=\"grants.fr.html\">grants.fr.html</a>",
+            "de": "Ort wird noch bestätigt · Details zu Reisestipendien auf <a href=\"grants.de.html\">grants.de.html</a>"
+          }
+        }
+      ]
     },
     {
       "uid": "mc-plenary-2026-09@netsec-cost.eu",
@@ -79,7 +241,34 @@
         "MC Plenary",
         "NetSec"
       ],
-      "status": "CONFIRMED"
+      "status": "CONFIRMED",
+      "eventType": "mc-plenary",
+      "featured": false,
+      "displayDate": {
+        "en": "18 September 2026",
+        "fr": "18 septembre 2026",
+        "de": "18. September 2026"
+      },
+      "cardDescription": {
+        "en": "The Action's first formal plenary meeting, bringing together Management Committee representatives and Working Group leads to align on workstreams, confirm leadership for the coming cycle, and elect any remaining roles. The Action officially started on 10 October 2025; this is the first in-person plenary.",
+        "fr": "La première réunion plénière formelle de l'Action, rassemblant les représentant·es du Comité de gestion et les responsables des groupes de travail pour s'aligner sur les chantiers, confirmer les positions de direction pour le cycle à venir et élire les rôles restants. L'Action a officiellement débuté le 10 octobre 2025 ; il s'agit de la première plénière en présentiel.",
+        "de": "Die erste formelle Plenarsitzung der Aktion, die die Vertreter·innen des Management-Ausschusses und die Arbeitsgruppen-Leitungen zusammenbringt, um die Arbeitsstränge abzustimmen, die Leitung für den kommenden Zyklus zu bestätigen und verbleibende Rollen zu wählen. Die Aktion startete offiziell am 10. Oktober 2025; dies ist das erste Plenum vor Ort."
+      },
+      "cardTitle": {
+        "en": "Inaugural Management Committee Plenary",
+        "fr": "Plénière inaugurale du Comité de gestion",
+        "de": "Konstituierende Plenarsitzung des Management-Ausschusses"
+      },
+      "meta": [
+        {
+          "icon": "calendar",
+          "i18n": {
+            "en": "Venue to be announced. Access is restricted to MC representatives, Working Group leads, and invited observers.",
+            "fr": "Lieu à annoncer. L'accès est réservé aux représentant·es du CG, aux responsables des groupes de travail et aux observateur·rices invité·es.",
+            "de": "Ort wird noch bekannt gegeben. Der Zugang ist auf MC-Vertreter·innen, Arbeitsgruppen-Leitungen und eingeladene Beobachter·innen beschränkt."
+          }
+        }
+      ]
     }
   ]
 }

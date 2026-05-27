@@ -690,6 +690,20 @@
      mc-countries collapse, year stamp. Loaded by every page. -->
 <script src="assets/js/site.js" defer></script>
 
+<!-- Home-page events renderer (#249). Wipes the hand-coded event
+     cards above on success and rebuilds them from data/events.json;
+     the hand-coded HTML survives as fail-soft fallback if the fetch
+     or parse fails. Each rebuilt card carries the per-card Add to
+     calendar dropdown wired against /calendar/<slug>.ics. -->
+<script src="assets/js/home-events.js" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.NetSec && window.NetSec.renderHomeEvents) {
+      window.NetSec.renderHomeEvents({ container: '#events .event-list', locale: 'en' });
+    }
+  });
+</script>
+
 <!-- Page-specific behaviour: toast helper, contact form, WG chips -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
