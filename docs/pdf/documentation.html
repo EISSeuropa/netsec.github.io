@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NetSec — Website & Directory · Documentation Pack v1.9.3</title>
+<title>NetSec — Website & Directory · Documentation Pack v1.9.4</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -644,7 +644,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.9.3 · May 2026</div>
+        <div class="value">v1.9.4 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -833,7 +833,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.9.3 · May 2026</span>
+    <span class="url">v1.9.4 · May 2026</span>
   </footer>
 
 </section>
@@ -2311,7 +2311,10 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <div class="changelog-entries">
 
-  <h2 class="current">v1.9.3 · May 2026 · Cover bump for website v1.8.0</h2>
+  <h2 class="current">v1.9.4 · June 2026 · Cover bump for website v1.9.0</h2>
+  <p class="cl-summary">Cover-only bump matching website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.9.0">v1.9.0</a> ("Pre-Stockholm calendar plumbing"), four days before the Summer School and European Security Conference open at Stockholm University. Records the gap to that release: per-event <code>.ics</code> downloads now live at <code>/calendar/&lt;slug&gt;.ics</code> alongside the aggregate subscribable feed; the home-page event cards derive at runtime from <code>data/events.json</code> across all three locales (events-from-JSON refactor, <a href="https://github.com/EISSeuropa/netsec.github.io/issues/249">#249</a>) and each card carries an *Add to calendar* dropdown with Google / Outlook / Apple webcal / direct <code>.ics</code> destinations; the home-page news cards mirror the same pattern from a new <code>data/news.json</code>, with an RSS 2.0 feed at <code>/news.xml</code> exposed for academic and policy aggregators (Feedly / Inoreader / NetNewsWire) via <code>&lt;link rel="alternate"&gt;</code> auto-discovery plus a visible subscribe affordance under the news block. Card descriptions get a five-line clamp with a locale-aware *Read more* toggle. Section-level content not refreshed in this revision; section-level catch-up to website v1.9.0 (Section 02 repo layout adding <code>scripts/build-news-rss.py</code> + the <code>calendar/</code> directory + the new renderers, Section 04 architecture for the runtime-render-from-JSON pattern, the table-of-contents page-numbers structural improvement) remains queued for the next substantive section-level catch-up. Tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>.</p>
+
+  <h2>v1.9.3 · May 2026 · Cover bump for website v1.8.0</h2>
   <p class="cl-summary">Cover-only bump matching website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.8.0">v1.8.0</a> ("Brand launch, Indico writes, programme PDF, voice sweep"). Records the gap to that release: the designer's four-petal NetSec mark and lockup are now deployed across all 46 site pages (header, favicon family, OG card, JSON-LD logo), two new operational scripts (<code>scripts/indico_patch.py</code> and <code>scripts/indico_clean_duplicate.py</code>) handle Indico write-side automation and the ESSC-N to ESSC-N+1 rollover, the programme page exports a self-identifying PDF with cover masthead and running header, the bios-sync and cost-sync workflows notify the maintainer when an auto-PR opens, and the CLAUDE.md §7 writing-voice rules are now applied retroactively across the EN public HTML surface. Section-level content not refreshed in this revision; the next pack release will catch Sections 02 through 06 up to website v1.8.0 (brand assets in Section 03 design system, two new Indico scripts in Section 02 repo layout, the writing-voice rules in Section 06 admin guide) and address the table-of-contents page-numbers structural improvement deferred from this pass. Tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/122">#122</a>.</p>
 
   <h2>v1.9.2 · May 2026 · Layout patch</h2>
@@ -2400,7 +2403,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <p class="small muted center" style="margin-top:24pt">
     NetSec: Networking European Security Knowledge · COST Action CA24154 · MoU 063/25 · Running 10 Oct 2025 to 09 Oct 2029.<br>
-    Documentation v1.9.2 · Compiled May 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich) as part of Deliverable D1.<br>
+    Documentation v1.9.4 · Compiled June 2026 by Dr Arthur Laudrain (MC member, CH; ETH Zurich) as part of Deliverable D1.<br>
     The views expressed are those of the Action and do not necessarily reflect those of COST or the European Union.
   </p>
 </section>
