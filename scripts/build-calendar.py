@@ -1,14 +1,24 @@
 #!/usr/bin/env python3
 """
-Generate calendar.ics from data/events.json.
+Generate calendar.ics + per-event /calendar/<slug>.ics files from
+data/events.json.
 
-The .ics file is the public calendar feed at
-https://netsec-cost.eu/calendar.ics; the JSON is the
-single source of truth for what goes in it.
+Two output classes share the same source-of-truth JSON:
+  1. `calendar.ics` at the repo root — the public *subscribable* feed
+     (RFC 5545 with `REFRESH-INTERVAL` / `X-PUBLISHED-TTL`). Surfaced
+     as `webcal://netsec-cost.eu/calendar.ics`.
+  2. `calendar/<slug>.ics` per event — one-shot *download* files
+     intended for the "Add to calendar" buttons on each event card.
+     Same VTIMEZONE block as the aggregate, but no REFRESH-INTERVAL
+     since these aren't meant to be subscribed to.
+
+`<slug>` is derived from the event's `uid` by stripping the
+`@netsec-cost.eu` tail. Slugs must match `^[a-z0-9-]+$`; the
+generator refuses non-conforming slugs to keep URLs predictable.
 
 Usage:
-    python3 scripts/build-calendar.py           # write calendar.ics
-    python3 scripts/build-calendar.py --check   # exit 1 if file would change
+    python3 scripts/build-calendar.py           # write all .ics files
+    python3 scripts/build-calendar.py --check   # exit 1 if anything would change
 
 Run from the repo root.
 
@@ -41,12 +51,36 @@ expect:
 from __future__ import annotations
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 EVENTS = ROOT / "data" / "events.json"
 ICS = ROOT / "calendar.ics"
+CALENDAR_DIR = ROOT / "calendar"
+
+# Slug shape: lowercase alphanumeric + hyphens. Keeps the on-disk
+# filename + the public URL predictable; refuses anything that would
+# need escaping in either.
+SLUG_RE = re.compile(r"^[a-z0-9-]+$")
+
+
+def slug_for(uid: str) -> str:
+    """Derive the per-event .ics slug from the event UID.
+
+    UIDs look like ``summer-school-2026@netsec-cost.eu``; we keep the
+    part to the left of ``@``. Raises if the result wouldn't match
+    ``SLUG_RE`` so a bad UID surfaces at generation time rather than
+    as a 404 later.
+    """
+    slug = uid.split("@", 1)[0]
+    if not SLUG_RE.fullmatch(slug):
+        raise ValueError(
+            f"event uid {uid!r} yields slug {slug!r} which doesn't "
+            f"match {SLUG_RE.pattern}. Fix the uid in data/events.json."
+        )
+    return slug
 
 
 # ─── Helpers ──────────────────────────────────────────────────────
@@ -171,6 +205,40 @@ def build_ics(data: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+def build_single_event_ics(ev: dict, data: dict) -> str:
+    """Render a one-shot .ics for a single event.
+
+    Same VTIMEZONE block as the aggregate so the TZID reference
+    resolves, but no `REFRESH-INTERVAL` / `X-PUBLISHED-TTL` — these
+    files are downloaded once and imported, not subscribed to.
+    """
+    tzid = data["tzid"]
+    dtstamp = data["dtstamp"]
+    lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//NetSec//CA24154 Events//EN",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+    ]
+    lines.extend(render_vtimezone(tzid))
+    lines.extend(render_vevent(ev, dtstamp, tzid))
+    lines.append("END:VCALENDAR")
+    return "\n".join(lines) + "\n"
+
+
+def per_event_targets(data: dict) -> dict[Path, str]:
+    """Map each per-event .ics path to its rendered content.
+
+    Stable ordering for predictable diffs.
+    """
+    out: dict[Path, str] = {}
+    for ev in data["events"]:
+        slug = slug_for(ev["uid"])
+        out[CALENDAR_DIR / f"{slug}.ics"] = build_single_event_ics(ev, data)
+    return out
+
+
 # ─── Main ─────────────────────────────────────────────────────────
 
 def main() -> int:
@@ -178,32 +246,75 @@ def main() -> int:
     p.add_argument(
         "--check",
         action="store_true",
-        help="Exit 1 if calendar.ics would change. Don't write.",
+        help=(
+            "Exit 1 if any output file (calendar.ics or any "
+            "calendar/<slug>.ics) would change, or if there's a stale "
+            "calendar/*.ics no longer referenced by data/events.json. "
+            "Don't write."
+        ),
     )
     args = p.parse_args()
 
     data = json.loads(EVENTS.read_text(encoding="utf-8"))
-    rendered = build_ics(data)
+    rendered_agg = build_ics(data)
+    rendered_per_event = per_event_targets(data)
+    expected_per_event_files = set(rendered_per_event.keys())
+
+    # Any extra .ics files in calendar/ that aren't expected this run
+    # are stale (an event was removed from JSON). On write, we delete
+    # them; on --check, we flag them as drift.
+    existing_per_event_files = (
+        set(CALENDAR_DIR.glob("*.ics")) if CALENDAR_DIR.exists() else set()
+    )
+    stale = sorted(existing_per_event_files - expected_per_event_files)
 
     if args.check:
-        existing = ICS.read_text(encoding="utf-8") if ICS.exists() else ""
-        if rendered != existing:
+        drift: list[str] = []
+        existing_agg = ICS.read_text(encoding="utf-8") if ICS.exists() else ""
+        if rendered_agg != existing_agg:
+            drift.append("  · calendar.ics out of sync")
+        for path, content in sorted(rendered_per_event.items()):
+            current = path.read_text(encoding="utf-8") if path.exists() else ""
+            if content != current:
+                drift.append(f"  · {path.relative_to(ROOT)} out of sync")
+        for path in stale:
+            drift.append(
+                f"  · {path.relative_to(ROOT)} stale (no matching event)"
+            )
+        if drift:
             print(
-                f"✗ calendar.ics is out of sync with data/events.json.",
+                "✗ Calendar files are out of sync with data/events.json:",
                 file=sys.stderr,
             )
+            for line in drift:
+                print(line, file=sys.stderr)
             print(
                 "  Run `python3 scripts/build-calendar.py` and commit "
                 "the result.",
                 file=sys.stderr,
             )
             return 1
-        print("✓ calendar.ics matches data/events.json.")
+        print(
+            f"✓ calendar.ics + {len(rendered_per_event)} per-event files "
+            f"match data/events.json."
+        )
         return 0
 
-    ICS.write_text(rendered, encoding="utf-8")
-    print(f"✓ Wrote {ICS.relative_to(ROOT)} "
-          f"({len(data['events'])} events).")
+    # Write the aggregate, then the per-event files, then clean up.
+    ICS.write_text(rendered_agg, encoding="utf-8")
+    CALENDAR_DIR.mkdir(exist_ok=True)
+    for path, content in rendered_per_event.items():
+        path.write_text(content, encoding="utf-8")
+    for path in stale:
+        path.unlink()
+
+    print(
+        f"✓ Wrote {ICS.relative_to(ROOT)} + "
+        f"{len(rendered_per_event)} per-event files under "
+        f"{CALENDAR_DIR.relative_to(ROOT)}/."
+    )
+    if stale:
+        print(f"  removed {len(stale)} stale file(s).")
     return 0
 
 

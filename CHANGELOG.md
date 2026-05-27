@@ -98,7 +98,9 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+
+- **Per-event `.ics` downloads at `/calendar/<slug>.ics`.** `scripts/build-calendar.py` now writes one `.ics` per event in `data/events.json`, in addition to the existing aggregate `/calendar.ics` subscribable feed. Slug derives from the event's UID (`summer-school-2026@netsec-cost.eu` → `/calendar/summer-school-2026.ics`); the script refuses non-conforming slugs (`^[a-z0-9-]+$`) at generation time so URLs stay predictable. The per-event files carry the same VTIMEZONE block as the aggregate but no `REFRESH-INTERVAL` / `X-PUBLISHED-TTL` since they're one-shot import downloads, not subscribable feeds. Removing an event from JSON auto-deletes the matching `/calendar/*.ics`; the existing `calendar-drift` CI workflow now watches `calendar/**` too and fails the build if any output is stale. Sets up the per-card *Add to calendar* dropdown landing in v1.9.0 Phase 2 (closes the first half of #249's calendar plumbing scope).
 
 ## [1.8.1] · 2026-05-27 — Founding contributors, release-infra hygiene, ribbon and voice polish
 

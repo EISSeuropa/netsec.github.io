@@ -324,7 +324,10 @@ EISS repository's `docs/indico-programme-integration.md`.
 │   ├── bios.json                    # The directory (members, roles, WGs, contacts)
 │   ├── mc-members.json              # MC roster per country (used to auto-tag MC role)
 │   ├── i18n-state.json              # SHA-1 stamps for translation-drift tracking
-│   └── events.json                  # Source of truth for /calendar.ics (and Events cards)
+│   └── events.json                  # Source of truth for /calendar.ics + /calendar/<slug>.ics + Events cards
+│
+├── calendar/                        # Per-event .ics downloads (auto-generated)
+│   └── <slug>.ics                   # One file per event in events.json; powers per-card "Add to calendar" buttons
 │
 ├── pagefind/                        # Built at deploy time, not committed (gitignored)
 │
@@ -334,7 +337,7 @@ EISS repository's `docs/indico-programme-integration.md`.
 │   ├── bios-source.json             # CSV URL + form URL + column mapping
 │   ├── inject-seo.py                # Idempotent canonical/OG/JSON-LD generator
 │   ├── check-i18n-drift.py          # Reports stale translations vs. EN source
-│   ├── build-calendar.py            # Generates /calendar.ics from data/events.json
+│   ├── build-calendar.py            # Generates /calendar.ics + /calendar/<slug>.ics from data/events.json
 │   ├── build-search.sh              # Builds /pagefind/ via `npx pagefind` (gitignored)
 │   ├── release.sh                   # Cuts a tagged release; promotes CHANGELOG
 │   └── requirements.txt             # requests, beautifulsoup4, Pillow
@@ -344,7 +347,7 @@ EISS repository's `docs/indico-programme-integration.md`.
 │   ├── sync-cost.yml                # Weekly cron — opens PR if WG_MAP / roles changed
 │   ├── sync-bios.yml                # Weekly cron — opens PR if bios.json changed
 │   ├── i18n-drift.yml               # Drift checker for FR/DE translations
-│   ├── calendar-drift.yml           # Drift checker for /calendar.ics vs. events.json
+│   ├── calendar-drift.yml           # Drift checker for /calendar.ics + /calendar/*.ics vs. events.json
 │   ├── external-link-arrows.yml    # Lint: trailing → on external links
 │   └── search-drift.yml             # Build sanity check on PRs (per-locale page count > 0)
 │
@@ -435,9 +438,13 @@ If you're adding a new field to `bios.json`:
 If you're adding a new event to the Events section:
 
 1. **Add the structured form to `data/events.json`.** This is the
-   single source of truth for the public `/calendar.ics` feed.
+   single source of truth for the public `/calendar.ics` feed and
+   for the per-event `/calendar/<slug>.ics` downloads.
    - `uid`: stable identifier of the form `<slug>@netsec-cost.eu`
-     so subscribers don't get duplicate events on later edits.
+     so subscribers don't get duplicate events on later edits. The
+     `<slug>` half also becomes the per-event filename
+     (`/calendar/<slug>.ics`), so it must match `^[a-z0-9-]+$` —
+     the generator refuses non-conforming slugs.
    - `start` / `end`: ISO-8601 local time in the format
      `YYYY-MM-DDTHH:MM` (no timezone suffix — the file-level
      `tzid` attaches the zone).
@@ -445,11 +452,14 @@ If you're adding a new event to the Events section:
      counts as a republication of the feed under RFC 5545).
    - Escape sequences are handled by the generator — write commas
      and apostrophes naturally in the JSON.
-2. **Regenerate `calendar.ics`**: `python3 scripts/build-calendar.py`.
-   CI (`.github/workflows/calendar-drift.yml`) runs the same script
-   with `--check` on every PR and fails if `calendar.ics` would
-   change — so you can't merge an `events.json` edit without
-   regenerating.
+2. **Regenerate the .ics files**: `python3 scripts/build-calendar.py`.
+   That writes the aggregate `/calendar.ics` (subscribable feed)
+   *and* one `/calendar/<slug>.ics` per event (one-shot "Add to
+   calendar" downloads). Removing an event from JSON deletes the
+   matching per-event file automatically. CI
+   (`.github/workflows/calendar-drift.yml`) runs the same script
+   with `--check` on every PR and fails if any output would change
+   — so you can't merge an `events.json` edit without regenerating.
 3. **Add the matching `<article class="event-card">`** to
    `index.html` plus the FR and DE siblings — same dates,
    translated copy. The HTML cards stay hand-authored because they
