@@ -73,7 +73,7 @@ GET_HOSTS = {
     "formspree.io",
 }
 
-# Hosts we deliberately skip (auth-gated, internal-only):
+# Hosts we deliberately skip (auth-gated, bot-blocked, internal-only):
 SKIP_HOSTS = {
     "e-services.cost.eu",       # e-COST portal — login required
     "docs.google.com",          # Google Forms require user auth; the
@@ -83,6 +83,11 @@ SKIP_HOSTS = {
     "indico.eiss-europa.com",   # Indico HEADs return 400; works for
                                 # visitors. Real-URL health is
                                 # confirmed manually.
+    "simpleicons.org",          # Bot-blocks GitHub-Actions IP ranges
+                                # with HTTP 403 on both HEAD and GET
+                                # using any Mozilla-style UA. The
+                                # site is reachable for real users;
+                                # confirmed manually 2026-05-27.
 }
 
 internal_links = {}  # (file, target) — for de-dupe display
