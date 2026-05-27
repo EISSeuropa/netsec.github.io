@@ -119,14 +119,14 @@
     "index.html": {
       "fr": {
         "file": "index.fr.html",
-        "source_sha1": "0ae320957c1c618079565587cdd21b5595e6e08c",
+        "source_sha1": "e36c1f54622584e5475644522ad916b02a1ba6b8",
         "translated_on": "2026-05-28",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "index.de.html",
-        "source_sha1": "0ae320957c1c618079565587cdd21b5595e6e08c",
+        "source_sha1": "e36c1f54622584e5475644522ad916b02a1ba6b8",
         "translated_on": "2026-05-28",
         "status": "beta",
         "reviewed_by": null

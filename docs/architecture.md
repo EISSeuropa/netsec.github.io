@@ -338,6 +338,7 @@ EISS repository's `docs/indico-programme-integration.md`.
 │   ├── inject-seo.py                # Idempotent canonical/OG/JSON-LD generator
 │   ├── check-i18n-drift.py          # Reports stale translations vs. EN source
 │   ├── build-calendar.py            # Generates /calendar.ics + /calendar/<slug>.ics from data/events.json
+│   ├── build-news-rss.py            # Generates /news.xml (RSS 2.0) from data/news.json
 │   ├── build-search.sh              # Builds /pagefind/ via `npx pagefind` (gitignored)
 │   ├── release.sh                   # Cuts a tagged release; promotes CHANGELOG
 │   └── requirements.txt             # requests, beautifulsoup4, Pillow
@@ -348,6 +349,7 @@ EISS repository's `docs/indico-programme-integration.md`.
 │   ├── sync-bios.yml                # Weekly cron — opens PR if bios.json changed
 │   ├── i18n-drift.yml               # Drift checker for FR/DE translations
 │   ├── calendar-drift.yml           # Drift checker for /calendar.ics + /calendar/*.ics vs. events.json
+│   ├── news-drift.yml               # Drift checker for /news.xml vs. data/news.json
 │   ├── external-link-arrows.yml    # Lint: trailing → on external links
 │   └── search-drift.yml             # Build sanity check on PRs (per-locale page count > 0)
 │
