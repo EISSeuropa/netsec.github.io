@@ -49,10 +49,28 @@ quiet = sys.argv[3] == "1"
 # regex matches single OR double quotes and ignores attribute order.
 HREF_RE = re.compile(r'<a\s+[^>]*?\bhref\s*=\s*["\']([^"\']+)["\']', re.IGNORECASE)
 
+# Strip <script>...</script> content before the HREF scan. Links
+# inside JavaScript string literals (e.g. inline error fallbacks
+# that build innerHTML with an <a href="…">) are not page links;
+# they are code. Treating them as page links produced a false
+# positive when about.html's founding-contributors renderer
+# error-fallback referenced https://github.com/.../blob/main/data/
+# founding-proposers.json — a URL that 404s until the PR carrying
+# the file merges to main. Same logic applies to <style>: any
+# `url(...)` inside CSS is handled by the browser, not a navigation
+# target.
+SCRIPT_STYLE_RE = re.compile(
+    r'<(script|style)\b[^>]*>.*?</\1>', re.IGNORECASE | re.DOTALL
+)
+
 # Hosts that refuse HEAD and need GET instead. Add to this list when
-# we see a 405 or 403 from a known-good URL.
+# we see a 405 / 403 / 404 from a known-good URL that responds 200 on
+# GET. Formspree's CDN returns 404 to HEAD on the privacy-policy
+# page even though GET returns 200; the site links to the page from
+# its own homepage, so the URL is canonical.
 GET_HOSTS = {
     "docs.google.com", "forms.google.com",
+    "formspree.io",
 }
 
 # Hosts we deliberately skip (auth-gated, internal-only):
@@ -98,6 +116,9 @@ print(f"→ scanning {len(html_files)} HTML files at the repo root...")
 
 for f in html_files:
     text = f.read_text(encoding="utf-8", errors="replace")
+    # Strip <script>/<style> bodies before the regex scan; links
+    # inside JavaScript or CSS string literals aren't page links.
+    text = SCRIPT_STYLE_RE.sub("", text)
     for m in HREF_RE.finditer(text):
         href = m.group(1).strip()
         # Schemes that the checker has nothing useful to say about:

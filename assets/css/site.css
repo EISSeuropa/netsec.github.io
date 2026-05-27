@@ -404,7 +404,17 @@ section{padding:80px 0;position:relative}
 .section-head{text-align:center;margin-bottom:48px}
 .section-head p{max-width:60ch;margin:0 auto;color:var(--muted)}
 
-/* -------- Glass cards -------- */
+/* -------- Glass cards --------
+   `.glass` is a deliberately cross-cutting utility class (used on
+   ~50 cards across the site: MC, country, event, member, founding-
+   contributor cards). The :focus-visible variant near the top of
+   the file lives with the other focus-visible rules so a11y
+   conventions stay clustered; the main .glass + .glass:hover +
+   the iOS Safari fallback live here with the component rules.
+   The CSS class-collision lint flags this as a cross-cluster
+   collision (the two clusters are >200 lines apart) but the
+   split is intentional — see CLAUDE.md §3 *Naming convention*. */
+/* css-collision-allow: .glass */
 .glass{
   background:var(--glass-bg);
   backdrop-filter:saturate(160%) blur(18px);
@@ -414,6 +424,7 @@ section{padding:80px 0;position:relative}
   box-shadow:var(--glass-shadow);
   transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .35s var(--ease);
 }
+/* css-collision-allow: .glass */
 .glass:hover{transform:translateY(-4px);box-shadow:0 18px 50px rgba(20,35,80,.14);background:var(--glass-bg-strong)}
 
 /* Performance: the Management Committee and Countries grids can render
@@ -423,6 +434,7 @@ section{padding:80px 0;position:relative}
    card types we skip the live backdrop blur and use a slightly more
    opaque solid translucent background — visually almost identical
    when each card sits on the aurora background, but reliable. */
+/* css-collision-allow: .glass */
 .mc-card.glass,
 .country-card.glass{
   backdrop-filter:none;
