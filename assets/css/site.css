@@ -669,16 +669,19 @@ section{padding:80px 0;position:relative}
   .event-atc{display:none}
 }
 
-/* Subscribe-to-calendar affordance under the events grid.
-   Centred CTA + supporting hint sentence beneath it. */
-.event-subscribe-line{
+/* Subscribe-to-calendar affordance under the events grid, and
+   subscribe-to-RSS affordance under the news grid. Same shape: a
+   centred CTA + supporting hint sentence beneath. */
+.event-subscribe-line,
+.news-subscribe-line{
   margin:36px auto 0;
   max-width:560px;
   display:flex;flex-direction:column;align-items:center;gap:10px;
   text-align:center;
   font-size:.9rem;color:var(--muted);
 }
-.event-subscribe{
+.event-subscribe,
+.news-subscribe{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
   padding:12px 22px;border-radius:12px;
   background:var(--accent);
@@ -688,16 +691,21 @@ section{padding:80px 0;position:relative}
   box-shadow:0 4px 12px var(--accent-glow);
   transition:transform .15s var(--ease),box-shadow .15s var(--ease),background .15s var(--ease);
 }
-.event-subscribe:hover{
+.event-subscribe:hover,
+.news-subscribe:hover{
   background:var(--accent-2);border-color:var(--accent-2);
   transform:translateY(-1px);
   box-shadow:0 6px 18px var(--accent-glow);
   opacity:1;
 }
-.event-subscribe svg{width:18px;height:18px;color:#fff}
-.event-subscribe-hint{line-height:1.5;max-width:48ch}
-.event-subscribe-hint a{color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--line)}
-.event-subscribe-hint a:hover{color:var(--accent);text-decoration-color:var(--accent)}
+.event-subscribe svg,
+.news-subscribe svg{width:18px;height:18px;color:#fff}
+.event-subscribe-hint,
+.news-subscribe-hint{line-height:1.5;max-width:48ch}
+.event-subscribe-hint a,
+.news-subscribe-hint a{color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--line)}
+.event-subscribe-hint a:hover,
+.news-subscribe-hint a:hover{color:var(--accent);text-decoration-color:var(--accent)}
 .event-subscribe-hint code{font-size:.85em;background:rgba(0,0,0,.04);padding:1px 5px;border-radius:4px}
 .dark .event-subscribe-hint code{background:rgba(255,255,255,.06)}
 
