@@ -3,8 +3,8 @@ VERSION:2.0
 PRODID:-//NetSec//CA24154 Events//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-X-WR-CALNAME:NetSec — COST Action CA24154
-X-WR-CALDESC:Events from the NetSec COST Action (CA24154) — annual conferences\, training schools\, policy workshops\, MC plenaries. Authoritative source: https://netsec-cost.eu/#events
+X-WR-CALNAME:NetSec\, COST Action CA24154
+X-WR-CALDESC:Events from the NetSec COST Action (CA24154): annual conferences\, training schools\, policy workshops\, MC plenaries. Authoritative source: https://netsec-cost.eu/#events
 X-WR-TIMEZONE:Europe/Stockholm
 REFRESH-INTERVAL;VALUE=DURATION:P7D
 X-PUBLISHED-TTL:P7D
@@ -28,11 +28,11 @@ END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
 UID:summer-school-2026@netsec-cost.eu
-DTSTAMP:20260524T130656Z
+DTSTAMP:20260527T080000Z
 DTSTART;TZID=Europe/Stockholm:20260609T090000
 DTEND;TZID=Europe/Stockholm:20260611T180000
 SUMMARY:NetSec Early-Career Scholars Summer School
-DESCRIPTION:Three days of training and mentoring for early-career researchers in European security — research presentations\, individualised feedback from senior scholars\, and structured mentorship. Open to PhD candidates and post-docs (within one year of defence) in strategic studies and international security\, as well as SWAMOS / Euro-SWAMOS alumni.\n\nScientific Coordinators: Dr Silvia D'Amato\, Prof Chiara Ruffa.\n\nFull details: https://eiss-europa.com/NetSecSchool.html
+DESCRIPTION:Three days of training and mentoring for early-career researchers in European security: research presentations\, individualised feedback from senior scholars\, and structured mentorship. Open to PhD candidates and post-docs (within one year of defence) in strategic studies and international security\, as well as SWAMOS / Euro-SWAMOS alumni.\n\nScientific Coordinators: Dr Silvia D'Amato\, Prof Chiara Ruffa.\n\nFull details: https://eiss-europa.com/NetSecSchool.html
 LOCATION:Stockholm University\, Frescativägen 114 18\, Sweden
 URL;VALUE=URI:https://eiss-europa.com/NetSecSchool.html
 ORGANIZER;CN=NetSec Summer School:mailto:ecs.netsec@eiss-europa.com
@@ -41,7 +41,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:european-security-conference-2026@netsec-cost.eu
-DTSTAMP:20260524T130656Z
+DTSTAMP:20260527T080000Z
 DTSTART;TZID=Europe/Stockholm:20260611T080000
 DTEND;TZID=Europe/Stockholm:20260612T200000
 SUMMARY:2026 European Security Studies Conference
@@ -49,6 +49,42 @@ DESCRIPTION:The flagship annual gathering of the NetSec community: an interdisci
 LOCATION:Stockholm University\, Frescativägen\, 114 19 Stockholm\, Sweden
 URL;VALUE=URI:https://netsec-cost.eu/essc-2026.html
 CATEGORIES:Annual Conference,NetSec
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:policy-workshop-2026-09@netsec-cost.eu
+DTSTAMP:20260527T080000Z
+DTSTART;TZID=Europe/Stockholm:20260904T090000
+DTEND;TZID=Europe/Stockholm:20260904T180000
+SUMMARY:NetSec Policy Workshop
+DESCRIPTION:A NetSec-hosted policy workshop bringing together members of the Action with policy practitioners on a topic to be confirmed. Format and registration details will be published on the Action's website ahead of the date.
+LOCATION:To be confirmed
+URL;VALUE=URI:https://netsec-cost.eu/#events
+CATEGORIES:Policy workshop,NetSec
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:itc-conference-2026-09@netsec-cost.eu
+DTSTAMP:20260527T080000Z
+DTSTART;TZID=Europe/Stockholm:20260908T090000
+DTEND;TZID=Europe/Stockholm:20260911T180000
+SUMMARY:NetSec ITC Conference
+DESCRIPTION:A NetSec Inclusiveness Target Country (ITC) Conference\, supported by the COST ITC Conference Grant scheme. The format prioritises participation from researchers based in ITCs\, with travel-grant support coordinated through the Action. Programme and registration to be published on the Action's website.\n\nThe ITC Conference Grant is one of five NetSec grant schemes\; see https://netsec-cost.eu/grants.html for the full set.
+LOCATION:To be confirmed
+URL;VALUE=URI:https://netsec-cost.eu/grants.html
+CATEGORIES:ITC Conference,NetSec
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:mc-plenary-2026-09@netsec-cost.eu
+DTSTAMP:20260527T080000Z
+DTSTART;TZID=Europe/Stockholm:20260918T090000
+DTEND;TZID=Europe/Stockholm:20260918T180000
+SUMMARY:Inaugural NetSec Management Committee plenary
+DESCRIPTION:The Action's first formal Management Committee plenary\, bringing together the MC representatives from the participating COST Member countries to align on workstreams\, confirm Working Group leadership for the coming cycle\, and elect any remaining roles. Followed by a Core Group working session.\n\nAccess is restricted to MC representatives\, Working Group leads\, and invited observers.
+LOCATION:To be confirmed
+URL;VALUE=URI:https://netsec-cost.eu/#events
+CATEGORIES:MC Plenary,NetSec
 STATUS:CONFIRMED
 END:VEVENT
 END:VCALENDAR
