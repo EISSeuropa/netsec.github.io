@@ -1,0 +1,42 @@
+# News-RSS drift check.
+#
+# Runs scripts/build-news-rss.py --check on every PR that touches
+# data/news.json, news.xml, or the generator itself. If the committed
+# news.xml doesn't match what the script would produce from
+# data/news.json, this check fails and the PR can't be merged until
+# the maintainer runs `python3 scripts/build-news-rss.py` and commits
+# the result.
+#
+# Mirrors the calendar-drift workflow shape. Same rationale: the
+# JSON is the source of truth; the rendered feed is a derived view;
+# CI gate prevents silent drift.
+#
+# Zero cost: no third-party services, no API keys.
+name: News RSS drift check
+
+on:
+  pull_request:
+    paths:
+      - 'data/news.json'
+      - 'news.xml'
+      - 'scripts/build-news-rss.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    name: Check news.xml drift
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4 (sha-pinned)
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+
+      - name: Run drift checker
+        run: python3 scripts/build-news-rss.py --check

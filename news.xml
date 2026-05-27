@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>NetSec — Latest news</title>
+    <link>https://netsec-cost.eu/#news</link>
+    <description>Announcements, calls, and milestones from the COST Action CA24154 (NetSec).</description>
+    <language>en-GB</language>
+    <lastBuildDate>Thu, 28 May 2026 12:00:00 +0200</lastBuildDate>
+    <generator>scripts/build-news-rss.py</generator>
+    <atom:link href="https://netsec-cost.eu/news.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>NetSec Grants: Applications now open</title>
+      <link>https://netsec-cost.eu/grants.html</link>
+      <description><![CDATA[Applications are now open for all five NetSec grant categories: Short-Term Scientific Missions, Virtual Mobility Grants, and three Conference Grants (Young Researcher & Innovator, Inclusiveness Target Country, Dissemination). Open to the wider research community, not just Action participants. Submissions go through e-COST; see eligibility and amounts on the Grants page.]]></description>
+      <pubDate>Fri, 15 May 2026 09:00:00 +0200</pubDate>
+      <guid isPermaLink="false">grants-applications-now-open</guid>
+    </item>
+    <item>
+      <title>NetSec Summer School: applications closed</title>
+      <link>https://eiss-europa.com/NetSecSchool.html</link>
+      <description><![CDATA[The call for the 2026 NetSec Early-Career Scholars Summer School in Stockholm (9–11 June 2026) closed on 1 March 2026. Selected participants will be contacted by the scientific coordinators in due course. A new call for the next training school will be announced when the 2027 cohort opens.]]></description>
+      <pubDate>Sun, 01 Mar 2026 18:00:00 +0100</pubDate>
+      <guid isPermaLink="false">summer-school-2026-applications-closed</guid>
+    </item>
+    <item>
+      <title>NetSec officially launched</title>
+      <link>https://netsec-cost.eu/about.html#leadership</link>
+      <description><![CDATA[COST Action CA24154 (MoU 063/25) is live, with leadership and Working Group structure now in place across 30 participating countries. The inaugural Management Committee plenary will be announced shortly.]]></description>
+      <pubDate>Fri, 10 Oct 2025 09:00:00 +0200</pubDate>
+      <guid isPermaLink="false">netsec-officially-launched</guid>
+    </item>
+  </channel>
+</rss>

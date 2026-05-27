@@ -1,0 +1,102 @@
+{
+  "_documentation": "Single source of truth for the home-page news cards (#249 parallel for news) AND the public RSS feed at /news.xml (v1.9.0). Two consumers: (a) the inline JS renderer in `index.html` (+ FR + DE) reads this on `DOMContentLoaded`, picks the locale from <html lang>, and rebuilds the `#news .news-list` cards from structured data. The hand-coded HTML in each home page survives as a `<noscript>`-style fail-soft fallback that the renderer empties on success. (b) `scripts/build-news-rss.py` reads this and emits `/news.xml` (RSS 2.0). The feed is single-language (EN) by RSS convention; per-locale feeds (/news.fr.xml, /news.de.xml) are a deferred follow-up if there's reader demand. When you add or edit an item: bump `lastBuildDate`, run `python3 scripts/build-news-rss.py`, confirm the FR / DE i18n blocks track any EN copy changes. CI runs a drift checker on every PR touching this file or news.xml.",
+  "channelTitle": "NetSec — Latest news",
+  "channelDescription": "Announcements, calls, and milestones from the COST Action CA24154 (NetSec).",
+  "channelLink": "https://netsec-cost.eu/#news",
+  "channelLanguage": "en-GB",
+  "lastBuildDate": "2026-05-28T12:00:00+02:00",
+  "items": [
+    {
+      "id": "grants-applications-now-open",
+      "pubDate": "2026-05-15T09:00:00+02:00",
+      "displayDate": {
+        "en": "Now open",
+        "fr": "Ouvert",
+        "de": "Geöffnet"
+      },
+      "title": {
+        "en": "NetSec Grants: Applications now open",
+        "fr": "Subventions NetSec : candidatures ouvertes",
+        "de": "NetSec-Förderungen: Anträge jetzt geöffnet"
+      },
+      "body": {
+        "en": "Applications are now open for all five NetSec grant categories: Short-Term Scientific Missions, Virtual Mobility Grants, and three Conference Grants (Young Researcher & Innovator, Inclusiveness Target Country, Dissemination). Open to the wider research community, not just Action participants. Submissions go through e-COST; see eligibility and amounts on the Grants page.",
+        "fr": "Les candidatures sont désormais ouvertes pour les cinq catégories de subventions NetSec, missions scientifiques de courte durée, subventions de mobilité virtuelle et trois subventions de conférence (jeunes chercheur·euses et innovateur·rices, pays cibles d'inclusion, diffusion). Ouvertes à la communauté de recherche au sens large, et pas uniquement aux participant·es de l'Action. Soumissions via e-COST ; voir l'éligibilité et les montants sur la page des subventions.",
+        "de": "Anträge sind nun für alle fünf NetSec-Förderkategorien geöffnet, kurzfristige wissenschaftliche Missionen, virtuelle Mobilitätsförderungen und drei Konferenzförderungen (Nachwuchsforschende und Innovator·innen, Inclusiveness Target Countries, Verbreitung). Offen für die gesamte Forschungs-Community, nicht nur für Aktionsteilnehmer·innen. Einreichungen über e-COST; siehe Förderfähigkeit und Beträge auf der Förderseite."
+      },
+      "cta": {
+        "href": {
+          "en": "grants.html",
+          "fr": "grants.fr.html",
+          "de": "grants.de.html"
+        },
+        "external": false,
+        "i18n": {
+          "en": "View grants & apply →",
+          "fr": "Voir les subventions & postuler →",
+          "de": "Förderungen ansehen & beantragen →"
+        }
+      }
+    },
+    {
+      "id": "summer-school-2026-applications-closed",
+      "pubDate": "2026-03-01T18:00:00+01:00",
+      "displayDate": {
+        "en": "Applications closed",
+        "fr": "Candidatures closes",
+        "de": "Bewerbungsphase beendet"
+      },
+      "title": {
+        "en": "NetSec Summer School: applications closed",
+        "fr": "École d'été NetSec : candidatures closes",
+        "de": "NetSec-Summer-School: Bewerbungsphase beendet"
+      },
+      "body": {
+        "en": "The call for the 2026 NetSec Early-Career Scholars Summer School in Stockholm (9–11 June 2026) closed on 1 March 2026. Selected participants will be contacted by the scientific coordinators in due course. A new call for the next training school will be announced when the 2027 cohort opens.",
+        "fr": "L'appel pour l'école d'été NetSec 2026 des chercheur·euses en début de carrière, à Stockholm (9–11 juin 2026), s'est clôturé le 1er mars 2026. Les participant·es sélectionné·es seront contacté·es par les coordinateur·rices scientifiques en temps voulu. Un nouvel appel sera annoncé à l'ouverture de la cohorte 2027.",
+        "de": "Die Ausschreibung für die NetSec-Summer-School 2026 für Nachwuchsforschende in Stockholm (9.–11. Juni 2026) endete am 1. März 2026. Ausgewählte Teilnehmer·innen werden in Kürze von den wissenschaftlichen Koordinator·innen kontaktiert. Eine neue Ausschreibung wird mit dem Start der Kohorte 2027 bekannt gegeben."
+      },
+      "cta": {
+        "href": "https://eiss-europa.com/NetSecSchool.html",
+        "external": true,
+        "i18n": {
+          "en": "View the school",
+          "fr": "Voir l'école",
+          "de": "Zur Summer School"
+        }
+      }
+    },
+    {
+      "id": "netsec-officially-launched",
+      "pubDate": "2025-10-10T09:00:00+02:00",
+      "displayDate": {
+        "en": "10 October 2025",
+        "fr": "10 octobre 2025",
+        "de": "10. Oktober 2025"
+      },
+      "title": {
+        "en": "NetSec officially launched",
+        "fr": "Lancement officiel de NetSec",
+        "de": "NetSec offiziell gestartet"
+      },
+      "body": {
+        "en": "COST Action CA24154 (MoU 063/25) is live, with leadership and Working Group structure now in place across 30 participating countries. The inaugural Management Committee plenary will be announced shortly.",
+        "fr": "L'Action COST CA24154 (MoU 063/25) est lancée, avec une direction et une structure de groupes de travail en place dans 30 pays participants. La plénière inaugurale du Comité de gestion sera annoncée prochainement.",
+        "de": "Die COST-Aktion CA24154 (MoU 063/25) ist gestartet, mit Leitung und Arbeitsgruppen-Struktur in 30 teilnehmenden Ländern. Die konstituierende Plenarsitzung des Management-Ausschusses wird in Kürze bekannt gegeben."
+      },
+      "cta": {
+        "href": {
+          "en": "about.html#leadership",
+          "fr": "about.fr.html#leadership",
+          "de": "about.de.html#leadership"
+        },
+        "external": false,
+        "i18n": {
+          "en": "Meet the team →",
+          "fr": "Rencontrer l'équipe →",
+          "de": "Team kennenlernen →"
+        }
+      }
+    }
+  ]
+}
