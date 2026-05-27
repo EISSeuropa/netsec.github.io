@@ -626,6 +626,18 @@
 
 <script src="assets/js/site.js" defer></script>
 
+<!-- Veranstaltungs-Renderer der Startseite (#249). Ersetzt die
+     handgepflegten Karten oben aus data/events.json; das HTML
+     bleibt als Fallback erhalten, falls das Laden fehlschlägt. -->
+<script src="assets/js/home-events.js" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.NetSec && window.NetSec.renderHomeEvents) {
+      window.NetSec.renderHomeEvents({ container: '#events .event-list', locale: 'de' });
+    }
+  });
+</script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const toast = document.getElementById('toast');

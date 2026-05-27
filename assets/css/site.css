@@ -591,6 +591,84 @@ section{padding:80px 0;position:relative}
 }
 .event-card.featured .event-date{background:var(--accent);color:#fff}
 
+/* Five-line description clamp on home-page event cards (#249).
+   The renderer attaches an `event-desc-toggle` button only when the
+   text actually overflows. Print stylesheet drops the clamp so the
+   PDF carries full text. */
+.event-desc{font-size:.92rem;color:var(--muted);margin:0}
+.event-desc--clamped{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:5;
+  line-clamp:5;
+  overflow:hidden;
+}
+.event-desc-toggle{
+  align-self:flex-start;
+  margin-top:2px;
+  padding:2px 8px;
+  border:0;background:transparent;
+  font:inherit;font-size:.82rem;font-weight:600;
+  color:var(--accent-2);cursor:pointer;
+  border-radius:6px;
+}
+.event-desc-toggle:hover{background:rgba(10,132,255,.08)}
+.event-desc-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media print{
+  .event-desc--clamped{display:block;-webkit-line-clamp:none;line-clamp:none;overflow:visible}
+  .event-desc-toggle{display:none}
+}
+
+/* Add-to-calendar dropdown on each event card (#249).
+   Click trigger reveals a menu of four destinations: Google /
+   Outlook / Apple webcal / direct .ics download. Outside-click +
+   Escape dismiss are wired by home-events.js. */
+.event-card-ctas{
+  display:flex;flex-wrap:wrap;align-items:center;gap:14px;
+  margin-top:6px;padding-top:14px;border-top:1px solid var(--line);
+}
+.event-card-ctas .event-link{margin-top:0;padding-top:0;border-top:0}
+.event-atc{position:relative;margin-left:auto}
+.event-atc-trigger{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 12px;border-radius:8px;
+  border:1px solid var(--line);background:var(--glass-bg);
+  font:inherit;font-size:.84rem;font-weight:600;color:var(--ink-2);
+  cursor:pointer;
+}
+.event-atc-trigger:hover{border-color:var(--accent);color:var(--ink)}
+.event-atc-trigger:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.event-atc-trigger[aria-expanded="true"]{border-color:var(--accent);color:var(--ink)}
+.event-atc-icon{display:inline-flex;width:14px;height:14px;color:var(--accent)}
+.event-atc-icon svg{width:14px;height:14px}
+.event-atc-chev{font-size:.7em;opacity:.7;margin-left:2px}
+.event-atc-menu{
+  position:absolute;right:0;top:calc(100% + 4px);z-index:20;
+  min-width:220px;padding:6px;border-radius:10px;
+  border:1px solid var(--line);
+  background:var(--glass-bg-strong);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  box-shadow:0 8px 28px rgba(0,0,0,.12);
+  display:flex;flex-direction:column;gap:2px;
+}
+.event-atc-menu[hidden]{display:none}
+.event-atc-item{
+  display:block;padding:8px 12px;border-radius:6px;
+  font-size:.86rem;color:var(--ink-2);text-decoration:none;
+}
+.event-atc-item:hover,.event-atc-item:focus-visible{
+  background:rgba(10,132,255,.08);color:var(--ink);outline:none;
+}
+.dark .event-atc-menu{background:rgba(20,22,28,.95)}
+@media (max-width:560px){
+  .event-atc{margin-left:0}
+  .event-atc-menu{right:auto;left:0;min-width:200px}
+}
+@media print{
+  .event-atc{display:none}
+}
+
 /* Subscribe-to-calendar affordance under the events grid.
    Centred CTA + supporting hint sentence beneath it. */
 .event-subscribe-line{

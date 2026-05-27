@@ -628,6 +628,18 @@
 
 <script src="assets/js/site.js" defer></script>
 
+<!-- Moteur de rendu des événements de la page d'accueil (#249).
+     Remplace les cartes ci-dessus à partir de data/events.json ;
+     l'HTML rédigé à la main sert de repli si le chargement échoue. -->
+<script src="assets/js/home-events.js" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.NetSec && window.NetSec.renderHomeEvents) {
+      window.NetSec.renderHomeEvents({ container: '#events .event-list', locale: 'fr' });
+    }
+  });
+</script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const toast = document.getElementById('toast');
