@@ -1,16 +1,19 @@
 # Calendar drift check.
 #
 # Runs scripts/build-calendar.py --check on every PR that touches
-# data/events.json, calendar.ics, or the generator itself. If the
-# committed calendar.ics doesn't match what the script would produce
-# from data/events.json, this check fails and the PR can't be merged
-# until the maintainer runs `python3 scripts/build-calendar.py` and
-# commits the result.
+# data/events.json, calendar.ics, any calendar/<slug>.ics, or the
+# generator itself. If any committed output is out of step with what
+# the script would produce from data/events.json — including stale
+# per-event files for events that have been removed — this check fails
+# and the PR can't be merged until the maintainer runs
+# `python3 scripts/build-calendar.py` and commits the result.
 #
-# That guarantees the public .ics feed stays in step with the JSON
-# source of truth — a maintainer editing data/events.json without
-# regenerating calendar.ics will get a clear error before merge,
-# rather than silently shipping a stale calendar to subscribers.
+# That guarantees both the public subscribable feed (calendar.ics) and
+# the per-event "Add to calendar" downloads (calendar/<slug>.ics) stay
+# in step with the JSON source of truth — a maintainer editing
+# data/events.json without regenerating the .ics files will get a
+# clear error before merge, rather than silently shipping a stale
+# calendar to subscribers or a 404'd per-event button.
 #
 # Zero cost: no third-party services, no API keys.
 name: Calendar drift check
@@ -20,6 +23,7 @@ on:
     paths:
       - 'data/events.json'
       - 'calendar.ics'
+      - 'calendar/**'
       - 'scripts/build-calendar.py'
   workflow_dispatch:
 
