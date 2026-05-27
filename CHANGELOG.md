@@ -98,6 +98,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.8.1] · 2026-05-27 — Founding contributors, release-infra hygiene, ribbon and voice polish
+
 ### Index of changes
 
 #### Added
@@ -625,7 +629,8 @@ Open Graph, Twitter Card, JSON-LD (Organization + WebSite + WebPage), canonical 
 - Members' Wiki seeded with glossary, FAQ, onboarding, meeting-notes convention, decisions log.
 - Dual licensing — MIT for code, CC BY 4.0 for content + docs.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.8.0...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.8.1...HEAD
+[1.8.1]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.6.0...v1.6.1
