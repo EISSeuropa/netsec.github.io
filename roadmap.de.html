@@ -162,7 +162,7 @@
     <span class="eyebrow">Plan</span>
     <h1>Roadmap</h1>
     <p class="lede">Was veröffentlicht ist, was in Arbeit ist, und was als nächstes kommt für die NetSec-Website und das offene Community-Verzeichnis durch das Jahr 2026. Aktion-Meilensteine (Konferenz, Plenum, Jubiläum) verschränken sich mit Release-Meilensteinen, sodass die Kadenz der Website im Takt des Aktionskalenders zu lesen ist.</p>
-    <p class="roadmap-updated">Zuletzt aktualisiert am <time datetime="2026-05-25">25. Mai 2026</time> &middot; zuletzt mit dem internen Arbeitsdokument abgeglichen am <time datetime="2026-05-25">25. Mai 2026</time>.</p>
+    <p class="roadmap-updated">Zuletzt aktualisiert am <time datetime="2026-05-27">27. Mai 2026</time> &middot; zuletzt mit dem internen Arbeitsdokument abgeglichen am <time datetime="2026-05-27">27. Mai 2026</time>.</p>
 
     <!-- Legende / Farbschlüssel -->
     <div class="rm-legend" aria-label="Farbschlüssel der Status">
@@ -300,6 +300,28 @@
         </article>
       </li>
 
+      <li class="rm-entry planned">
+        <article class="rm-card">
+          <div class="rm-head">
+            <span class="rm-pill planned"><span class="dot" aria-hidden="true"></span>Geplant</span>
+            <span class="when">28. Mai 2026 &middot; v1.8.1</span>
+          </div>
+          <h3>Qualitäts-Patch nach v1.8.0</h3>
+          <p>Ein Qualitäts-Patch, der die seit v1.8.0 angesammelte Arbeit abdeckt. Abschnitt der Gründungs-Beitragenden auf der Seite <em>Über uns</em>, der die 52 Forschenden aus 21 Ländern auflistet, die an der COST Open Call (OC-2024-1-27931) zur Einrichtung dieser Action teilgenommen haben. Veranstaltungskarten auf der Startseite gegen das offizielle Veranstaltungsverzeichnis der Action aktualisiert: der <em>NetSec Policy Workshop</em> und die <em>NetSec ITC Conference</em> wurden zwischen der Europäischen Sicherheitskonferenz und dem inaugurierenden MC-Plenum hinzugefügt, und das Plenum selbst wird auf den <strong>18. September 2026</strong> festgelegt. Release-Infrastruktur-Hygiene: Drittanbieter-Actions per SHA gepinnt mit Tag-Kommentar-Annotation, YAML-Issue-Templates mit Preflight-Checkboxen, Issue-Lifecycle-Automatisierung (Labels <code>needs-info</code> / <code>stale</code> / <code>duplicate</code> / <code>wontfix</code> mit automatischen Kommentaren und täglichem Sweep). <code>sync-cost.py</code> überträgt nun die Arbeitsgruppen-Mitgliedschaften pro Bio von cost.eu in <code>data/bios.json</code>, sodass die WG-Chips auf der Startseite und die Per-Bio-Chips nicht mehr auseinanderdriften.</p>
+        </article>
+      </li>
+
+      <li class="rm-entry planned">
+        <article class="rm-card">
+          <div class="rm-head">
+            <span class="rm-pill planned"><span class="dot" aria-hidden="true"></span>Geplant</span>
+            <span class="when">5. Juni 2026 &middot; v1.9.0</span>
+          </div>
+          <h3>Kalender-Infrastruktur vor Stockholm</h3>
+          <p>Pre-Konferenz-Release, vier Tage bevor die Sommerschule und die ESSC in Stockholm beginnen. Auffrischung der Kalender-Infrastruktur auf der gesamten Website: <code>.ics</code>-Downloads pro Veranstaltung und <em>Zum Kalender hinzufügen</em>-Schaltflächen auf jeder Veranstaltungskarte, ein News-RSS-Feed unter <code>/news.xml</code> für akademische und politische Zielgruppen, die Feeds lesen, und ein struktureller Refactor, sodass die Veranstaltungskarten der Startseite aus <code>data/events.json</code> abgeleitet werden statt aus handgepflegtem HTML in drei Sprachen (mit einer Fünf-Zeilen-Grenze und einer <em>Mehr anzeigen</em>-Schaltfläche für längere Beschreibungen). D10 (Risikomanagementstrategie) gehostet, wenn das Dokument fertig ist.</p>
+        </article>
+      </li>
+
       <li class="rm-entry planned rm-milestone">
         <article class="rm-card">
           <div class="rm-head">
@@ -323,10 +345,10 @@
         <article class="rm-card">
           <div class="rm-head">
             <span class="rm-pill planned"><span class="dot" aria-hidden="true"></span>Geplant</span>
-            <span class="when">Juli–August 2026</span>
+            <span class="when">Ende Juli 2026 &middot; v1.10.0</span>
           </div>
-          <h3>Informationsarchitektur-Audit (Phase&nbsp;2)</h3>
-          <p>Tiefere UX-Überprüfung der Startseite und des Kopfbereichs, nach der Konferenz und nach v1.5, mit dem tatsächlichen Visual Design vor Ort. Untersucht Zielgruppenpfade, mobile Muster, Inhaltszyklus und Vorbereitung auf kommende Liefergegenstände und Politikbriefings.</p>
+          <h3>Patch nach der Konferenz</h3>
+          <p>Das reaktive Release nach der Stockholmer Sommerschule und der ESSC. Fehlerbehebungen und Inhalts-Feinschliff aus dem Feedback vor Ort, Übernahmen aus v1.8.1 und v1.9.0 (insbesondere <code>sync-cost.py</code> Gaps B und C: die Auffrischung der Statistiken und des Länderverzeichnisses sowie die Lücken in der Regex für die Leitungs-Labels), Rückblick auf Sommerschule und ESSC im News-Block (Galerie, Feedback-Zusammenfassung, Aufzeichnungen-Link falls verfügbar), und die neuen Feature-Vorschläge, die aus Gesprächen mit Delegierten entstehen. Muttersprachen-Korrekturdurchgang der französischen und deutschen Varianten von <em>FAQ</em> und <em>Glossar</em>, um sie aus der Beta zu heben. Der August ist eine bewusste Pause.</p>
         </article>
       </li>
 
@@ -334,10 +356,10 @@
         <article class="rm-card">
           <div class="rm-head">
             <span class="rm-pill planned"><span class="dot" aria-hidden="true"></span>Geplant</span>
-            <span class="when">Ende Juli &ndash; Mitte August 2026 &middot; v1.8.1</span>
+            <span class="when">Mitte September 2026 &middot; v1.11.0</span>
           </div>
-          <h3>Patch nach der Konferenz: Übersetzung, Rückblick, Barrierefreiheit, Stildurchgang</h3>
-          <p>Muttersprachen-Korrekturdurchgang der französischen und deutschen Varianten von <em>FAQ</em> und <em>Glossar</em>, um sie aus der Beta zu heben. Rückblick auf die Konferenz und die Sommerschule im News-Block (Galerie, Feedback-Zusammenfassung, Aufzeichnungen-Link falls verfügbar). Akronym-Synonyme in der Suche (STSM &harr; Short-Term Scientific Mission, ITC &harr; Inclusiveness Target Country). D8 (STSM-Planungsrichtlinien) als Permalink auf der Förderungs-Seite gehostet, sobald der Förderkoordinator zustimmt. Cross-Browser-Audit und Barrierefreiheits-Durchgang vor dem Plenum. FR&nbsp;/&nbsp;DE-Durchgang zur Entfernung von Gedankenstrichen in öffentlichen Texten. Release-Infrastruktur: struktureller Fix für `promote-roadmap.py`, damit die Veröffentlichungskarte der nächsten Minor-Version aus dem CHANGELOG abgeleitet wird (behebt den wiederkehrenden Bug der veralteten Karte aus v1.8.0).</p>
+          <h3>Pre-MC-Plenum-Release</h3>
+          <p>Drei Tage vor dem inaugurierenden Plenum des Management Committee. Überarbeitung des Abschnitts <em>Publikationen</em> mit einem echten Karten-Design für die D6-Politikbriefings und <code>schema.org/ScholarlyArticle</code>-Metadaten. Informationsarchitektur-Audit Phase&nbsp;2 wird ausgeliefert: tiefere UX-Überprüfung der Startseite und des Kopfbereichs, mit Zielgruppenpfaden, mobilen Mustern, Inhaltszyklus und Vorbereitung auf kommende Liefergegenstände und Politikbriefings. Nachfass-Punkte zur Gründungs-Kohorte (Items C und D aus <a href="https://github.com/EISSeuropa/netsec.github.io/issues/245">#245</a>): <em>Gründungs-Beitragende</em>-Abzeichen pro Bio im Verzeichnis und Gründungs-Kohorten-Statistiken in der Pressemappe. Abschnittsweise Aufholarbeit am PDF-Dokumentationspaket (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>): Site-Graph und Screenshots aufgefrischt. D8 (STSM-Planungsrichtlinien) als Permalink auf der Förderungs-Seite gehostet, sobald der Förderkoordinator zugestimmt hat.</p>
         </article>
       </li>
 
@@ -375,21 +397,10 @@
         <article class="rm-card">
           <div class="rm-head">
             <span class="rm-pill planned"><span class="dot" aria-hidden="true"></span>Geplant</span>
-            <span class="when">Mitte Oktober 2026 &middot; v1.9.0</span>
+            <span class="when">Ende Dezember 2026 &middot; v1.12.0</span>
           </div>
-          <h3>Jahr 1 schließt</h3>
-          <p>Jahresrückblick im News-Block. Aktualisierung des <em>Publikationen</em>-Bereichs mit einem echten Karten-Design für die D6-Politikbriefings und <code>schema.org/ScholarlyArticle</code>-Metadaten. Startseiten-Umstrukturierung, die die Phase-2-IA-Empfehlungen umsetzt.</p>
-        </article>
-      </li>
-
-      <li class="rm-entry planned">
-        <article class="rm-card">
-          <div class="rm-head">
-            <span class="rm-pill planned"><span class="dot" aria-hidden="true"></span>Geplant</span>
-            <span class="when">Ende Dezember 2026 &middot; v1.10.0</span>
-          </div>
-          <h3>Bereit für Jahr 2</h3>
-          <p>Erklärung zu Inklusion und Diversität (D11) und Leitlinien zur ökologischen Nachhaltigkeit (D12) werden mit ihrer Genehmigung gehostet. Pro-Seite-Open-Graph-Bilder. Print-Stylesheet für FAQ und Glossar. Was an Q4-Feinschliff sich ansammelt.</p>
+          <h3>Jahresrückblick und Vorbereitung auf Jahr 2</h3>
+          <p>Jahresrückblick im News-Block. Erklärung zu Inklusion und Diversität (D11) und Leitlinien zur ökologischen Nachhaltigkeit (D12) werden mit ihrer Genehmigung gehostet. Pro-Seite-Open-Graph-Bilder. Print-Stylesheet für <em>FAQ</em> und <em>Glossar</em>. Refactoring der Mitgliedsfotos aus dem Git-Repository (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/119">#119</a>), damit die Größe des Repos linear zum Text statt linear zu den Porträts bleibt. Was an Q4-Feinschliff sich ansammelt.</p>
         </article>
       </li>
     </ol>
