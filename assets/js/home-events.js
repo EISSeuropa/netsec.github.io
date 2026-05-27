@@ -235,23 +235,60 @@
       mkItem(urls.download, t.atcDownload, { download: '' }),
     ]);
 
+    // The .event-card carries `.glass` → `backdrop-filter`, which
+    // creates a new stacking context. A z-indexed absolute child
+    // (the menu) is trapped inside that context, so the NEXT card's
+    // own stacking context can occlude it. To escape every parent
+    // stacking context cleanly we reparent the menu to <body> on
+    // open and pin it with `position: fixed` against the trigger's
+    // bounding rect. Mirrors the essc-2026 member-preview popover
+    // pattern.
+    menu.classList.add('event-atc-menu--portal');
+
+    function position() {
+      const r = trigger.getBoundingClientRect();
+      const vw = document.documentElement.clientWidth;
+      const gap = 6;
+      // Right-align the menu to the trigger; the menu is at most
+      // ~240 px wide. Clamp so it never overflows the viewport.
+      menu.style.position = 'fixed';
+      menu.style.top = (r.bottom + gap) + 'px';
+      // First read the menu's own width post-attach to right-align.
+      const menuW = menu.offsetWidth || 220;
+      let left = r.right - menuW;
+      if (left < 8) left = 8;
+      if (left + menuW > vw - 8) left = vw - menuW - 8;
+      menu.style.left = left + 'px';
+      menu.style.right = 'auto';
+    }
     function close() {
       menu.hidden = true;
       trigger.setAttribute('aria-expanded', 'false');
     }
+    function open() {
+      // Reparent on first open; subsequent opens are no-ops because
+      // the body parent persists across toggles.
+      if (menu.parentElement !== document.body) {
+        document.body.appendChild(menu);
+      }
+      menu.hidden = false;
+      position();
+      trigger.setAttribute('aria-expanded', 'true');
+    }
     function toggle() {
-      const open = menu.hidden;
-      menu.hidden = !open;
-      trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (menu.hidden) open();
+      else close();
     }
 
     trigger.addEventListener('click', e => {
       e.stopPropagation();
       toggle();
     });
-    // Outside-click + Escape dismiss
+    // Outside-click + Escape dismiss. menu.contains() still works
+    // after the body reparent.
     document.addEventListener('click', e => {
-      if (!menu.hidden && !menu.contains(e.target) && e.target !== trigger) close();
+      if (!menu.hidden && !menu.contains(e.target) && e.target !== trigger
+          && !trigger.contains(e.target)) close();
     });
     document.addEventListener('keydown', e => {
       if (!menu.hidden && e.key === 'Escape') {
@@ -259,6 +296,12 @@
         trigger.focus();
       }
     });
+    // Re-anchor on scroll / resize so the menu tracks the trigger
+    // (the trigger moves with the page; the menu is viewport-fixed).
+    // Cheap to just close — matches the existing popover dismissal
+    // pattern elsewhere in the site and avoids reflow churn.
+    window.addEventListener('scroll', () => { if (!menu.hidden) close(); }, true);
+    window.addEventListener('resize', () => { if (!menu.hidden) close(); });
 
     const wrap = el('div', { class: 'event-atc' }, [trigger, menu]);
     return wrap;
