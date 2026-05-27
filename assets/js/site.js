@@ -238,6 +238,21 @@
       });
     }
 
+    // Beta-translation ribbon: the "View in English" link inside
+    // `.i18n-beta-ribbon` lives outside `.lang-switch`, so without this
+    // it doesn't update `netsec-lang`. Result: the auto-redirect below
+    // bounces the user from EN straight back to the FR / DE page they
+    // just left. Persist the destination language on click so the
+    // ribbon-driven switch sticks (#253).
+    document.querySelectorAll('.i18n-beta-ribbon a[hreflang]').forEach(a => {
+      a.addEventListener('click', () => {
+        try {
+          const lang = (a.getAttribute('hreflang') || '').toLowerCase();
+          if (lang) localStorage.setItem('netsec-lang', lang);
+        } catch (e) {}
+      });
+    });
+
     // --- (3): redirect to saved preference when safe
     try {
       const saved = localStorage.getItem('netsec-lang');

@@ -683,7 +683,7 @@ document.addEventListener('DOMContentLoaded', function () {
         await new Promise(r => setTimeout(r, 600));
         console.info('[contact-form] stub submission (no data-endpoint set):', data);
       }
-      showToast("Merci — nous avons bien reçu votre message et nous vous recontacterons.", 'success');
+      showToast("Merci, nous avons bien reçu votre message et nous vous recontacterons.", 'success');
       form.reset();
     } catch (err) {
       const msg = err && err.message && !err.message.startsWith('HTTP ')
