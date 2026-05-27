@@ -4,7 +4,7 @@
   "caldesc": "Events from the NetSec COST Action (CA24154): annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
   "tzid": "Europe/Stockholm",
   "refresh_days": 7,
-  "dtstamp": "20260524T130656Z",
+  "dtstamp": "20260527T080000Z",
   "events": [
     {
       "uid": "summer-school-2026@netsec-cost.eu",
@@ -35,6 +35,48 @@
       "end": "2026-06-12T20:00",
       "categories": [
         "Annual Conference",
+        "NetSec"
+      ],
+      "status": "CONFIRMED"
+    },
+    {
+      "uid": "policy-workshop-2026-09@netsec-cost.eu",
+      "summary": "NetSec Policy Workshop",
+      "description": "A NetSec-hosted policy workshop bringing together members of the Action with policy practitioners on a topic to be confirmed. Format and registration details will be published on the Action's website ahead of the date.",
+      "location": "To be confirmed",
+      "url": "https://netsec-cost.eu/#events",
+      "start": "2026-09-04T09:00",
+      "end": "2026-09-04T18:00",
+      "categories": [
+        "Policy workshop",
+        "NetSec"
+      ],
+      "status": "CONFIRMED"
+    },
+    {
+      "uid": "itc-conference-2026-09@netsec-cost.eu",
+      "summary": "NetSec ITC Conference",
+      "description": "A NetSec Inclusiveness Target Country (ITC) Conference, supported by the COST ITC Conference Grant scheme. The format prioritises participation from researchers based in ITCs, with travel-grant support coordinated through the Action. Programme and registration to be published on the Action's website.\n\nThe ITC Conference Grant is one of five NetSec grant schemes; see https://netsec-cost.eu/grants.html for the full set.",
+      "location": "To be confirmed",
+      "url": "https://netsec-cost.eu/grants.html",
+      "start": "2026-09-08T09:00",
+      "end": "2026-09-11T18:00",
+      "categories": [
+        "ITC Conference",
+        "NetSec"
+      ],
+      "status": "CONFIRMED"
+    },
+    {
+      "uid": "mc-plenary-2026-09@netsec-cost.eu",
+      "summary": "Inaugural NetSec Management Committee plenary",
+      "description": "The Action's first formal Management Committee plenary, bringing together the MC representatives from the participating COST Member countries to align on workstreams, confirm Working Group leadership for the coming cycle, and elect any remaining roles. Followed by a Core Group working session.\n\nAccess is restricted to MC representatives, Working Group leads, and invited observers.",
+      "location": "To be confirmed",
+      "url": "https://netsec-cost.eu/#events",
+      "start": "2026-09-18T09:00",
+      "end": "2026-09-18T18:00",
+      "categories": [
+        "MC Plenary",
         "NetSec"
       ],
       "status": "CONFIRMED"
