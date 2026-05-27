@@ -9,7 +9,7 @@ Maintained by Dr Arthur Laudrain (MC member, CH; ETH Zurich).
 Last revised **26 May 2026** (post-v1.8.0 milestone reshape). v1.7.0 and v1.8.0 both shipped on consecutive days (24 + 25 May). The post-conference patch slot, originally tagged v1.7.1, is renamed **v1.8.1** to follow SemVer order after the v1.8.0 minor; same scope as before (FR/DE translation review, post-conference recap, search synonyms, D8 hosted, cross-browser + pre-plenary a11y pass), now joined by the FR/DE em-dash sweep ([#164](https://github.com/EISSeuropa/netsec.github.io/issues/164)) and the `promote-roadmap.py` structural fix ([#233](https://github.com/EISSeuropa/netsec.github.io/issues/233)). The original v1.8.0-deferred items (per-event `.ics`, news RSS, D10 hosted) absorb into **v1.9.0** (mid October, pre-plenary) alongside the Year 1 retrospective + Outputs section refresh + Phase 2 IA pass. **v1.10.0** keeps its late-December slot for D11 + D12 hosting plus per-page OG images and the FAQ / Glossary print stylesheet. The per-release narrative further down still lags from the v1.4.0–v1.8.0 cycle; that catch-up is queued ([#229](https://github.com/EISSeuropa/netsec.github.io/issues/229)) and the public CHANGELOG remains authoritative for shipped scope and dates.
 
 <!-- AUTOSTAMP:BEGIN -->
-> _Auto-tracked: `[Unreleased]` is empty since **v1.8.0**. Last refresh by `scripts/sync-roadmap.py`: 26 May 2026._
+> _Auto-tracked: `[Unreleased]` is empty since **v1.8.0**. Last refresh by `scripts/sync-roadmap.py`: 27 May 2026._
 <!-- AUTOSTAMP:END -->
 
 > **Sync convention.** This file is the source of truth. The
