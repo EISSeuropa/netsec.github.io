@@ -1495,6 +1495,65 @@ form button:disabled{opacity:.65;cursor:wait}
    Shown only when the page declares itself a non-authoritative
    translation via <html data-i18n-status="beta">. A thin strip
    above the nav explains the status and links to the English. */
+/* What's New banner — sparingly-used announcement.
+   ─────────────────────────────────────────────────
+   In-flow at the top of <body> (above the fixed nav). Scrolls off
+   the viewport naturally so it doesn't compete for sticky real
+   estate. Dismissible per-version via the X button; the
+   localStorage key carries the version string so each visitor
+   sees a given banner at most once. See site.js. */
+.whats-new-banner{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:11px 22px 11px 18px;
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:#fff;
+  font-size:.92rem;line-height:1.35;
+  border-bottom:1px solid rgba(0,0,0,.12);
+  position:relative;z-index:102;
+  /* Smooth slide-in on first paint */
+  animation:whatsNewIn .35s var(--ease,cubic-bezier(.2,.7,.2,1));
+}
+@keyframes whatsNewIn{
+  from{transform:translateY(-100%);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+.whats-new-banner--closing{
+  animation:whatsNewOut .22s var(--ease,cubic-bezier(.2,.7,.2,1)) forwards;
+}
+@keyframes whatsNewOut{
+  from{transform:translateY(0);opacity:1}
+  to{transform:translateY(-100%);opacity:0}
+}
+.whats-new-sparkle{font-size:1.05rem;opacity:.95;flex-shrink:0}
+.whats-new-text{flex:1;min-width:200px;font-weight:500}
+.whats-new-cta{
+  color:#fff;text-decoration:underline;text-underline-offset:3px;
+  text-decoration-thickness:1.5px;text-decoration-color:rgba(255,255,255,.7);
+  font-weight:600;white-space:nowrap;
+}
+.whats-new-cta:hover{text-decoration-color:#fff;opacity:1}
+.whats-new-close{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:30px;height:30px;border-radius:50%;
+  border:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;
+  margin-left:auto;flex-shrink:0;
+  transition:background .15s var(--ease,cubic-bezier(.2,.7,.2,1));
+}
+.whats-new-close:hover{background:rgba(255,255,255,.22)}
+.whats-new-close:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.whats-new-close svg{width:14px;height:14px}
+@media (max-width:560px){
+  .whats-new-banner{padding:10px 14px;font-size:.86rem;gap:8px}
+  .whats-new-text{min-width:120px}
+}
+@media print{
+  .whats-new-banner{display:none}
+}
+/* The banner sits above both ribbon and nav on FR/DE pages — both
+   are position: fixed top: 0 and overlap the banner if scrolled to
+   the very top, which is fine: when the visitor scrolls down the
+   banner moves out of the way and the ribbon/nav take over. */
+
 .i18n-beta-ribbon{display:none}
 [data-i18n-status="beta"] .i18n-beta-ribbon{
   display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;

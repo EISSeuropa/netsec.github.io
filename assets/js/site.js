@@ -1129,3 +1129,82 @@
   // Expose for debugging / programmatic open if ever needed.
   window.netsecSearch = { open, close };
 })();
+
+/* What's New banner — sparingly-used site-wide announcement.
+   ──────────────────────────────────────────────────────────
+   Reads /data/whats-new.json. If `active: true` and the visitor
+   hasn't dismissed this exact `version`, renders a dismissible
+   banner at the top of <body>. Dismissal saves to
+   localStorage('netsec-whats-new-dismissed-<version>') so the
+   visitor sees the banner once and never again for that release.
+
+   Used sparingly per CLAUDE.md §14 — at most 3-4 activations per
+   year, on releases that introduce something a returning visitor
+   would want to know about without scrolling for it. NOT used for
+   quality patches, structural refactors, or release-infrastructure
+   changes. Maintainer flips `active` true → false manually. */
+(function () {
+  fetch('/data/whats-new.json', { cache: 'no-cache' })
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (!data || !data.active || !data.version) return;
+      let dismissed = null;
+      try { dismissed = localStorage.getItem('netsec-whats-new-dismissed-' + data.version); } catch (e) {}
+      if (dismissed) return;
+      renderWhatsNewBanner(data);
+    })
+    .catch(() => { /* JSON 404 or parse error — silent no-op */ });
+
+  function renderWhatsNewBanner(data) {
+    const lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
+    const headline = (data.headline && (data.headline[lang] || data.headline.en)) || '';
+    if (!headline) return;
+    const ctaLabel = data.cta && data.cta.i18n && (data.cta.i18n[lang] || data.cta.i18n.en);
+    const ctaHref = data.cta && data.cta.href;
+
+    const banner = document.createElement('div');
+    banner.className = 'whats-new-banner';
+    banner.setAttribute('role', 'status');
+
+    const sparkle = document.createElement('span');
+    sparkle.className = 'whats-new-sparkle';
+    sparkle.setAttribute('aria-hidden', 'true');
+    sparkle.textContent = '✦';
+    banner.appendChild(sparkle);
+
+    const text = document.createElement('span');
+    text.className = 'whats-new-text';
+    text.textContent = headline;
+    banner.appendChild(text);
+
+    if (ctaLabel && ctaHref) {
+      const cta = document.createElement('a');
+      cta.className = 'whats-new-cta';
+      cta.href = ctaHref;
+      cta.textContent = ctaLabel;
+      if (data.cta.external) {
+        cta.target = '_blank';
+        cta.rel = 'noopener';
+      }
+      banner.appendChild(cta);
+    }
+
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'whats-new-close';
+    const closeLabel = { en: 'Dismiss', fr: 'Fermer', de: 'Schließen' }[lang] || 'Dismiss';
+    close.setAttribute('aria-label', closeLabel);
+    close.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    close.addEventListener('click', () => {
+      try { localStorage.setItem('netsec-whats-new-dismissed-' + data.version, '1'); } catch (e) {}
+      banner.classList.add('whats-new-banner--closing');
+      setTimeout(() => banner.remove(), 240);
+    });
+    banner.appendChild(close);
+
+    // Insert at the very top of <body>, before the beta ribbon if one
+    // exists (FR / DE pages). Visual order: skip-link → banner →
+    // ribbon → nav. Page-level fixed nav is fine — banner is in flow.
+    document.body.insertBefore(banner, document.body.firstChild);
+  }
+})();

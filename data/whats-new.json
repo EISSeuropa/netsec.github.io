@@ -1,0 +1,37 @@
+{
+  "_documentation": "What's New banner — the rare site-wide announcement, used sparingly per CLAUDE.md §14. When this file has `active: true`, every page on the site renders a small dismissible banner under the beta-translation ribbon (if any) and above the page nav, until the visitor dismisses it or until the maintainer flips active back to false. Visitors who dismiss don't see it again unless `version` changes. Used for things a returning visitor would want to know about without having to read the changelog: a new section (founding contributors landed, members directory rebooted), a major new feature visible without scrolling (live ESSC programme, brand launch), or a content milestone (D1 ships, D6 ships). NOT used for: quality patches, structural refactors that don't change what visitors see, release-infrastructure changes, copy edits. The maintainer flips active true → false at most 3-4 times a year. The on-state should run no longer than 4-6 weeks before it goes back off so the banner doesn't decay into furniture.",
+  "active": false,
+  "version": "none",
+  "headline": {
+    "en": "",
+    "fr": "",
+    "de": ""
+  },
+  "cta": {
+    "href": "",
+    "external": false,
+    "i18n": {
+      "en": "",
+      "fr": "",
+      "de": ""
+    }
+  },
+  "_example_active_state": {
+    "active": true,
+    "version": "v1.8.0",
+    "headline": {
+      "en": "NetSec's new brand identity is now live across the site.",
+      "fr": "La nouvelle identité de marque NetSec est désormais déployée sur l'ensemble du site.",
+      "de": "Die neue NetSec-Markenidentität ist jetzt auf der gesamten Website verfügbar."
+    },
+    "cta": {
+      "href": "https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.8.0",
+      "external": true,
+      "i18n": {
+        "en": "Read the release notes →",
+        "fr": "Lire les notes de version →",
+        "de": "Release-Notizen lesen →"
+      }
+    }
+  }
+}
