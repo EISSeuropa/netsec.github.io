@@ -100,26 +100,34 @@
     fill:hsl(216 24% 28%);
     stroke:hsl(216 14% 36%);
   }
-  /* Subtle vertical drift on the broken-star fragments to give the
-     illustration a quiet sense of "letting go" rather than a frozen
-     pictogram. Each fragment offset so they don't move in lockstep.
-     Honoured by prefers-reduced-motion below. */
+  /* The broken-star fragments are blown left-to-right, as if a wind
+     is carrying the loose pieces of the emblem off the page. Each
+     fragment streams in from slightly down-and-left, drifts up and to
+     the right, then fades, on a continuous loop. Per-fragment delays
+     spread the cluster across the cycle so motion never stalls, and
+     `--frag-peak` carries each circle's resting opacity (set inline,
+     matched to its `opacity` attribute) so the depth of the original
+     cloud survives the animation. Honoured by prefers-reduced-motion
+     below, where the fragments fall back to their static attribute
+     opacity with no transform. */
   .err-illu-fragments circle{
-    animation:err-illu-drift 4.2s ease-in-out infinite;
-    transform-origin:center;transform-box:fill-box;
+    animation:err-illu-windblow 5s ease-in-out infinite;
+    transform-box:fill-box;
   }
-  .err-illu-fragments circle:nth-child(2){animation-delay:.3s}
-  .err-illu-fragments circle:nth-child(3){animation-delay:.6s}
-  .err-illu-fragments circle:nth-child(4){animation-delay:.9s}
-  .err-illu-fragments circle:nth-child(5){animation-delay:1.2s}
-  .err-illu-fragments circle:nth-child(6){animation-delay:1.5s}
-  .err-illu-fragments circle:nth-child(7){animation-delay:1.8s}
-  .err-illu-fragments circle:nth-child(8){animation-delay:2.1s}
-  .err-illu-fragments circle:nth-child(9){animation-delay:2.4s}
-  .err-illu-fragments circle:nth-child(10){animation-delay:2.7s}
-  @keyframes err-illu-drift{
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-12px); }
+  .err-illu-fragments circle:nth-child(2){animation-delay:.5s}
+  .err-illu-fragments circle:nth-child(3){animation-delay:1s}
+  .err-illu-fragments circle:nth-child(4){animation-delay:1.5s}
+  .err-illu-fragments circle:nth-child(5){animation-delay:2s}
+  .err-illu-fragments circle:nth-child(6){animation-delay:2.5s}
+  .err-illu-fragments circle:nth-child(7){animation-delay:3s}
+  .err-illu-fragments circle:nth-child(8){animation-delay:3.5s}
+  .err-illu-fragments circle:nth-child(9){animation-delay:4s}
+  .err-illu-fragments circle:nth-child(10){animation-delay:4.5s}
+  @keyframes err-illu-windblow{
+    0%   { transform: translate(-8px, 4px);  opacity: 0; }
+    18%  { opacity: var(--frag-peak, .6); }
+    72%  { opacity: var(--frag-peak, .6); }
+    100% { transform: translate(42px, -22px); opacity: 0; }
   }
   @media (prefers-reduced-motion: reduce){
     .err-illu-fragments circle{animation:none}
@@ -349,20 +357,22 @@
         <use href="#err-illu-star" transform="translate(278.9,205) scale(3.7)"/>
       </g>
 
-      <!-- Fragments drifting up from the three top gaps where the
-           11, 12 and 1 o'clock stars were. Animated subtly via CSS
-           (respects prefers-reduced-motion). -->
+      <!-- Fragments blown left-to-right from the three top gaps where
+           the 11, 12 and 1 o'clock stars were. Streamed via CSS (see
+           the err-illu-windblow keyframes; respects prefers-reduced-
+           motion). `--frag-peak` mirrors each circle's opacity so the
+           animated cloud keeps its depth. -->
       <g class="err-illu-fragments" fill="#FFCC00">
-        <circle cx="530" cy="55" r="8" opacity="0.75"/>
-        <circle cx="548" cy="38" r="5" opacity="0.55"/>
-        <circle cx="515" cy="33" r="6" opacity="0.6"/>
-        <circle cx="535" cy="18" r="3.5" opacity="0.4"/>
-        <circle cx="385" cy="92" r="7" opacity="0.7"/>
-        <circle cx="402" cy="76" r="4.5" opacity="0.5"/>
-        <circle cx="370" cy="72" r="5" opacity="0.55"/>
-        <circle cx="675" cy="92" r="7" opacity="0.7"/>
-        <circle cx="692" cy="76" r="4.5" opacity="0.5"/>
-        <circle cx="660" cy="72" r="5" opacity="0.55"/>
+        <circle cx="530" cy="55" r="8" opacity="0.75" style="--frag-peak:.75"/>
+        <circle cx="548" cy="38" r="5" opacity="0.55" style="--frag-peak:.55"/>
+        <circle cx="515" cy="33" r="6" opacity="0.6" style="--frag-peak:.6"/>
+        <circle cx="535" cy="18" r="3.5" opacity="0.4" style="--frag-peak:.4"/>
+        <circle cx="385" cy="92" r="7" opacity="0.7" style="--frag-peak:.7"/>
+        <circle cx="402" cy="76" r="4.5" opacity="0.5" style="--frag-peak:.5"/>
+        <circle cx="370" cy="72" r="5" opacity="0.55" style="--frag-peak:.55"/>
+        <circle cx="675" cy="92" r="7" opacity="0.7" style="--frag-peak:.7"/>
+        <circle cx="692" cy="76" r="4.5" opacity="0.5" style="--frag-peak:.5"/>
+        <circle cx="660" cy="72" r="5" opacity="0.55" style="--frag-peak:.55"/>
       </g>
     </svg>
     <p class="err-code" aria-hidden="true">404</p>
