@@ -66,6 +66,44 @@
     color:var(--ink);
   }
   .err-page .glass{padding:48px 36px;max-width:560px;width:100%}
+
+  /* Decorative illustration above the 404. A 12-star EU emblem ring
+     with the top star "broken" — its 11 siblings remain, and a small
+     cloud of yellow fragments drifts up from where the 12th was.
+     A faint blue land-mass blob sits behind, hinting at the European
+     continent without trying to literally trace it (a recognisable
+     Europe outline at this scale would either dominate or be too
+     abstract to read). The metaphor: a piece of the Union's emblem
+     is missing — a quiet, on-theme way of saying *something here
+     came loose*. aria-hidden because the visible "404" + "Page not
+     found" text already convey the message verbally. */
+  .err-illu{
+    display:block;width:100%;max-width:260px;height:auto;
+    margin:0 auto 14px;
+  }
+  .err-illu-land{color:#003399;opacity:.12}
+  .dark .err-illu-land{color:#7eb4ff;opacity:.10}
+  /* Subtle vertical drift on the broken-star fragments to give the
+     illustration a quiet sense of "letting go" rather than a frozen
+     pictogram. Each fragment offset so they don't move in lockstep.
+     Honoured by prefers-reduced-motion below. */
+  .err-illu-fragments circle{
+    animation:err-illu-drift 4.2s ease-in-out infinite;
+    transform-origin:center;transform-box:fill-box;
+  }
+  .err-illu-fragments circle:nth-child(2){animation-delay:.35s}
+  .err-illu-fragments circle:nth-child(3){animation-delay:.7s}
+  .err-illu-fragments circle:nth-child(4){animation-delay:1.05s}
+  .err-illu-fragments circle:nth-child(5){animation-delay:1.4s}
+  .err-illu-fragments circle:nth-child(6){animation-delay:1.75s}
+  @keyframes err-illu-drift{
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-3px); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .err-illu-fragments circle{animation:none}
+  }
+
   .err-code{
     font-family:'Lexend','Inter',sans-serif;font-weight:700;
     font-size:clamp(4rem,12vw,7rem);line-height:1;letter-spacing:-.05em;
@@ -91,11 +129,12 @@
     border-color:rgba(255,255,255,.22);background:transparent;color:var(--ink);
   }
   /* Sit the language switcher visually clear of the action buttons —
-     it was reading as part of the same cluster at 18px. Adds a thin
-     border-top as a soft separator and bumps the gap to 28px. */
+     it was reading as part of the same cluster at 18px. The 28 px
+     gap alone reads as enough separation; the border-top we tried
+     in PR #289 ended up looking like a stray rule against the
+     glass-card background, so it's gone. */
   .err-lang{
-    margin-top:28px;padding-top:18px;
-    border-top:1px solid var(--line);
+    margin-top:28px;
     font-size:.85rem;color:var(--muted);
   }
   .err-lang a{color:var(--accent-2);text-decoration:underline;margin:0 6px}
@@ -144,8 +183,13 @@
   .err-search-mount .search-meta:empty{display:none}
   .err-search-mount .search-results{
     border:1px solid var(--line);border-radius:10px;
-    border-top:1px solid var(--line);
     max-height:60vh;
+  }
+  /* Hide the empty results list before the visitor has typed
+     anything — otherwise the bordered box renders as a stray
+     horizontal rule below the search input. */
+  .err-search-mount .search-results:empty{
+    display:none;
   }
 </style>
 <!-- seo:jsonld BEGIN -->
@@ -203,6 +247,58 @@
 
 <main id="main" class="err-page">
   <div class="glass">
+    <!-- Decorative illustration: a 12-star EU emblem ring with the
+         12-o'clock star "broken" — its 11 siblings remain, fragments
+         drift up from the gap, and a faint abstract European
+         land-mass blob sits behind. aria-hidden because the visible
+         "404" + "Page not found" text already convey the message. -->
+    <svg class="err-illu" viewBox="0 0 320 200" role="img" aria-hidden="true" focusable="false">
+      <!-- Abstract continent shape behind the stars. Not literally
+           Europe — a recognisable outline at this scale would either
+           dominate or read as a cartoon. Three soft ellipses suggest
+           "land mass" while staying out of the foreground's way. -->
+      <g class="err-illu-land">
+        <ellipse cx="156" cy="105" rx="112" ry="40" transform="rotate(-4 156 105)" fill="currentColor"/>
+        <ellipse cx="118" cy="80" rx="22" ry="11" fill="currentColor"/>
+        <ellipse cx="202" cy="130" rx="22" ry="10" fill="currentColor"/>
+        <ellipse cx="228" cy="98" rx="14" ry="22" fill="currentColor"/>
+      </g>
+
+      <!-- Reusable EU-emblem star (10-point pentagram per the
+           Council of Europe / EU visual identity manual). -->
+      <defs>
+        <polygon id="err-illu-star" fill="#FFCC00"
+          points="0,-7.5 2.21,-3.03 7.13,-2.32 3.57,1.16 4.4,6.08 0,3.75 -4.4,6.08 -3.57,1.16 -7.13,-2.32 -2.21,-3.03"/>
+      </defs>
+
+      <!-- 11 of 12 stars at clock positions 1 through 11. Centre of
+           the ring is (160, 100); radius 60. -->
+      <g class="err-illu-stars">
+        <use href="#err-illu-star" x="190" y="48"/>
+        <use href="#err-illu-star" x="212" y="70"/>
+        <use href="#err-illu-star" x="220" y="100"/>
+        <use href="#err-illu-star" x="212" y="130"/>
+        <use href="#err-illu-star" x="190" y="152"/>
+        <use href="#err-illu-star" x="160" y="160"/>
+        <use href="#err-illu-star" x="130" y="152"/>
+        <use href="#err-illu-star" x="108" y="130"/>
+        <use href="#err-illu-star" x="100" y="100"/>
+        <use href="#err-illu-star" x="108" y="70"/>
+        <use href="#err-illu-star" x="130" y="48"/>
+      </g>
+
+      <!-- Fragments where the 12-o'clock star was: six small dots
+           drifting upward, fading out. Animated subtly via CSS
+           (respects prefers-reduced-motion). -->
+      <g class="err-illu-fragments" fill="#FFCC00">
+        <circle cx="160" cy="42" r="2.2" opacity="0.75"/>
+        <circle cx="168" cy="33" r="1.5" opacity="0.55"/>
+        <circle cx="152" cy="31" r="1.7" opacity="0.6"/>
+        <circle cx="163" cy="24" r="1.1" opacity="0.4"/>
+        <circle cx="171" cy="26" r="0.9" opacity="0.3"/>
+        <circle cx="148" cy="22" r="0.9" opacity="0.35"/>
+      </g>
+    </svg>
     <p class="err-code" aria-hidden="true">404</p>
     <h1 data-i18n="title">Page not found</h1>
     <p data-i18n="body">
