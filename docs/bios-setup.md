@@ -195,6 +195,12 @@ The maintainer extends the file by hand when a submission lands. The sync also l
 
 If `data/keyword-aliases.json` is missing or malformed, the sync falls back to identity normalisation (sentence-case the whole string, no acronym preservation) and prints a warning. The renderer's own inline fallback covers the same case for visitors who land before the next sync runs.
 
+## Freshness timestamp
+
+`data/bios.json` carries a top-level `generated_at` field: an ISO 8601 stamp (with UTC offset) recording the moment `sync-bios.py` last regenerated the file. It is written on every run that produces a substantive change (`data_changed or PHOTOS_CHANGED`), so it tracks the most recent meaningful refresh rather than the last time the workflow merely executed. The same value is mirrored into `source.last_synced` alongside the form and sheet URLs.
+
+The directory page reads `generated_at` to render a discreet "Directory last updated" line under the page lede, so visitors can see how current the listing is without opening the repo. Because the stamp only moves when the data actually changes, that line stays honest: a week with no new submissions shows the same date as the week before.
+
 ## Exporting the data
 
 `data/bios.json` is the canonical export, version-controlled in this repo. To dump it to CSV one-off:

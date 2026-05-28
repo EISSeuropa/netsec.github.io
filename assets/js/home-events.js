@@ -100,18 +100,78 @@
     return (uid || '').split('@')[0];
   }
 
-  /**
-   * Convert an event's local time ('2026-06-09T09:00') into a UTC
-   * `YYYYMMDDTHHmmssZ` stamp suitable for Google Calendar URLs. All
-   * current events sit in Europe/Stockholm, which is CEST (UTC+2)
-   * from late March to late October — covering every event currently
-   * in events.json. The +02:00 offset is hard-coded for that reason;
-   * if a future event sits outside DST we'll need a richer converter.
+  /* Time-zone resolution (#260).
+   *
+   * Event start/end strings in events.json carry no offset
+   * ('2026-06-09T09:00'); they are wall-clock times in the event's
+   * IANA zone. Earlier this file hard-coded '+02:00', which is right
+   * for Stockholm summer time but silently wrong for any event in
+   * winter (CET, +01:00) or in another zone. We now resolve the real
+   * offset for each wall-clock instant via Intl.DateTimeFormat, so
+   * the Google and Outlook URLs land on the correct UTC time year
+   * round. The .ics downloads were always correct (they ship a
+   * VTIMEZONE block), so only the two inline-URL builders changed.
+   *
+   * TZID is lifted from events.json at render time (top-level `tzid`,
+   * with an optional per-event `ev.tzid` override); this constant is
+   * the fallback when the data omits it.
    */
-  function toUTCStamp(local) {
-    // Append explicit +02:00 so Date parses as Stockholm summer time.
-    const d = new Date(local + ':00+02:00');
-    if (isNaN(d.getTime())) return '';
+  const DEFAULT_TZID = 'Europe/Stockholm';
+  let TZID = DEFAULT_TZID;
+
+  /**
+   * Offset in minutes (positive = ahead of UTC) that the given IANA
+   * zone applies at the supplied UTC instant.
+   */
+  function tzOffsetMinutes(date, tz) {
+    const dtf = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz, hour12: false,
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+    });
+    const map = {};
+    dtf.formatToParts(date).forEach(p => { map[p.type] = p.value; });
+    // Some engines render midnight as hour '24'; normalise to 0.
+    const hour = map.hour === '24' ? 0 : +map.hour;
+    const asUTC = Date.UTC(
+      +map.year, +map.month - 1, +map.day,
+      hour, +map.minute, +map.second
+    );
+    return Math.round((asUTC - date.getTime()) / 60000);
+  }
+
+  /** '+02:00' / '-05:30' style offset string from a minute count. */
+  function offsetString(mins) {
+    const sign = mins >= 0 ? '+' : '-';
+    const abs = Math.abs(mins);
+    const hh = String(Math.floor(abs / 60)).padStart(2, '0');
+    const mm = String(abs % 60).padStart(2, '0');
+    return sign + hh + ':' + mm;
+  }
+
+  /**
+   * Turn a zone-local wall-clock string ('2026-06-09T09:00') into the
+   * UTC Date it denotes in the given IANA zone. Two-pass to stay
+   * correct across a DST transition within the same day.
+   */
+  function zonedTimeToUTC(local, tz) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(local || '');
+    if (!m) return null;
+    const asUTC = Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +(m[6] || 0));
+    const off1 = tzOffsetMinutes(new Date(asUTC), tz);
+    let utc = asUTC - off1 * 60000;
+    const off2 = tzOffsetMinutes(new Date(utc), tz);
+    if (off2 !== off1) utc = asUTC - off2 * 60000;
+    return new Date(utc);
+  }
+
+  /**
+   * Convert an event's zone-local time into a UTC `YYYYMMDDTHHmmssZ`
+   * stamp suitable for Google Calendar URLs.
+   */
+  function toUTCStamp(local, tz) {
+    const d = zonedTimeToUTC(local, tz || TZID);
+    if (!d || isNaN(d.getTime())) return '';
     const y = d.getUTCFullYear();
     const m = String(d.getUTCMonth() + 1).padStart(2, '0');
     const day = String(d.getUTCDate()).padStart(2, '0');
@@ -120,9 +180,12 @@
     return `${y}${m}${day}T${hh}${mm}00Z`;
   }
 
-  /** ISO 8601 with explicit +02:00 offset (Outlook web compose expects this). */
-  function toISOLocal(local) {
-    return local + ':00+02:00';
+  /** ISO 8601 with the zone's actual offset (Outlook web compose expects this). */
+  function toISOLocal(local, tz) {
+    const zone = tz || TZID;
+    const d = zonedTimeToUTC(local, zone);
+    if (!d) return local;
+    return local + ':00' + offsetString(tzOffsetMinutes(d, zone));
   }
 
   /** Build the four Add-to-calendar URLs for one event. */
@@ -131,10 +194,11 @@
     const title = pickLocale(ev.cardTitle, locale, ev.summary);
     const desc = pickLocale(ev.cardDescription, locale, ev.description);
     const loc = ev.location || '';
-    const startUTC = toUTCStamp(ev.start);
-    const endUTC = toUTCStamp(ev.end);
-    const startISO = toISOLocal(ev.start);
-    const endISO = toISOLocal(ev.end);
+    const tz = ev.tzid || TZID;
+    const startUTC = toUTCStamp(ev.start, tz);
+    const endUTC = toUTCStamp(ev.end, tz);
+    const startISO = toISOLocal(ev.start, tz);
+    const endISO = toISOLocal(ev.end, tz);
     const enc = encodeURIComponent;
 
     const google = 'https://www.google.com/calendar/render'
@@ -422,6 +486,11 @@
       console.debug('home-events: fetch failed, keeping fallback HTML.', e);
       return;
     }
+
+    // Lift the calendar time zone from the feed so the Add-to-calendar
+    // URLs resolve the correct UTC offset for each event's wall-clock
+    // time (#260). Per-event `ev.tzid` still overrides this in buildATCUrls.
+    TZID = (data && data.tzid) || DEFAULT_TZID;
 
     const events = Array.isArray(data && data.events) ? data.events : [];
     if (!events.length) return;

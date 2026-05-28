@@ -160,6 +160,10 @@
       <span class="eyebrow">Directory</span>
       <h1>The Network</h1>
       <p class="lede">An open directory of researchers, policy-makers, and practitioners working in or alongside European security studies, Action leadership, Working Group participants, and a wider community. Anyone engaged with the field is welcome to <a href="#join">add their bio</a>.</p>
+      <!-- Populated from bios.json `generated_at` by the page script
+           after the directory renders (#271). Stays hidden until a
+           valid stamp is read, so a fetch failure shows nothing. -->
+      <p class="directory-freshness" data-directory-freshness hidden></p>
     </div>
 
     <!-- One-time orientation strip for first-time visitors. The
@@ -1170,6 +1174,24 @@
     populateCountryFilter();
     renderKeywordFilter();
     render();
+    // Surface how current the directory is, driven by bios.json's
+    // `generated_at` stamp (#271). The stamp only moves when the sync
+    // produces a substantive change, so this date stays honest across
+    // quiet weeks. Hidden until a valid stamp is parsed.
+    const freshnessEl = document.querySelector('[data-directory-freshness]');
+    if (freshnessEl && data.generated_at) {
+      const stamp = new Date(data.generated_at);
+      if (!isNaN(stamp.getTime())) {
+        const lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
+        const dateLocale = { en: 'en-GB', fr: 'fr-FR', de: 'de-DE' }[lang] || 'en-GB';
+        const pretty = stamp.toLocaleDateString(dateLocale, {
+          year: 'numeric', month: 'long', day: 'numeric',
+        });
+        freshnessEl.textContent =
+          window.netsecT('Directory last updated {0}.').replace('{0}', pretty);
+        freshnessEl.hidden = false;
+      }
+    }
     // Wire the "Add your bio" CTA to the live Google Form URL if
     // bios.json records one. Until configured, hide the button and
     // leave only the fineprint fallback.

@@ -46,6 +46,7 @@
       'Show fewer': 'Réduire',
       'Clear': 'Effacer',
       'Filter by research interest': 'Filtrer par domaine de recherche',
+      'Directory last updated {0}.': 'Annuaire mis à jour le {0}.',
     },
     de: {
       'Action Chair': 'Aktionsvorsitz',
@@ -80,6 +81,7 @@
       'Show fewer': 'Weniger anzeigen',
       'Clear': 'Zurücksetzen',
       'Filter by research interest': 'Nach Forschungsschwerpunkt filtern',
+      'Directory last updated {0}.': 'Verzeichnis zuletzt aktualisiert am {0}.',
     },
   };
   /** Translate a known string for the current page's language.
