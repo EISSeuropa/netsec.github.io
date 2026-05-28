@@ -79,8 +79,32 @@
   }
   .err-page p{color:var(--ink-2);font-size:1rem;margin:0 0 24px;line-height:1.55}
   .err-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
-  .err-lang{margin-top:18px;font-size:.85rem;color:var(--muted)}
+  /* Override the global .btn-ghost border, which uses --glass-border
+     (intentionally faint for floating-glass UI elsewhere on the
+     site) and read as near-invisible against the err-page glass
+     card in both themes. Scoped to the 404 actions so we don't
+     restyle ghost buttons elsewhere. */
+  .err-actions .btn-ghost{
+    border-color:var(--line);background:transparent;
+  }
+  .dark .err-actions .btn-ghost{
+    border-color:rgba(255,255,255,.22);background:transparent;color:var(--ink);
+  }
+  /* Sit the language switcher visually clear of the action buttons —
+     it was reading as part of the same cluster at 18px. Adds a thin
+     border-top as a soft separator and bumps the gap to 28px. */
+  .err-lang{
+    margin-top:28px;padding-top:18px;
+    border-top:1px solid var(--line);
+    font-size:.85rem;color:var(--muted);
+  }
   .err-lang a{color:var(--accent-2);text-decoration:underline;margin:0 6px}
+  /* The currently-active language reads as a label, not a link;
+     keeps the click target visible but removes the "navigate"
+     affordance for the no-op case. */
+  .err-lang a[aria-current="page"]{
+    color:var(--ink);font-weight:600;text-decoration:none;cursor:default;
+  }
 
   /* Inline mini-search on the 404 page. We deliberately do NOT use
      Pagefind's bundled `pagefind-ui` here — the default UI renders
@@ -265,22 +289,57 @@
     return 'en';
   }
 
-  var lang = pickLang();
-  if (lang === 'en') return;  // English is the default; nothing to swap.
+  // Apply a locale's strings + link targets + active-language mark.
+  // We deliberately run this for English too (rather than early-
+  // exiting), so a visitor who switches FR → EN sees the page text
+  // change immediately rather than staying frozen on the FR HTML.
+  function applyLang(lang) {
+    if (!STRINGS[lang]) lang = 'en';
+    document.documentElement.lang = lang;
+    var t = STRINGS[lang];
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      if (t[key]) el.textContent = t[key];
+    });
+    // Localise the action-button targets.
+    var home = document.querySelector('a[data-i18n="home"]');
+    if (home) home.href = lang === 'en' ? '/' : '/index.' + lang + '.html';
+    var sm = document.querySelector('a[data-i18n="sitemap"]');
+    if (sm) sm.href = lang === 'en' ? '/sitemap.html' : '/sitemap.' + lang + '.html';
+    // Mark the active language in the switcher so it reads as a
+    // label rather than a link (CSS handles the visual state).
+    document.querySelectorAll('.err-lang a[hreflang]').forEach(function (a) {
+      var isCurrent = a.getAttribute('hreflang') === lang;
+      if (isCurrent) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+  }
 
-  document.documentElement.lang = lang;
-  var t = STRINGS[lang];
-  document.querySelectorAll('[data-i18n]').forEach(function (el) {
-    var key = el.getAttribute('data-i18n');
-    if (t[key]) el.textContent = t[key];
+  applyLang(pickLang());
+
+  // In-place language switch. Clicking *Français* / *Deutsch* /
+  // *English* used to navigate to the localised home (`/`,
+  // `/index.fr.html`, `/index.de.html`), which yanked the visitor
+  // off the 404 they'd just landed on. New behaviour: save the
+  // chosen locale, then reload — GitHub Pages re-serves `404.html`
+  // for the same unknown URL, pickLang() returns the saved locale
+  // on the next load, and the URL bar stays honest about where
+  // the visitor was trying to go. The existing href is preserved
+  // as a no-JS fallback (localised home is still better than a
+  // broken click).
+  document.querySelectorAll('.err-lang a[hreflang]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var newLang = a.getAttribute('hreflang');
+      if (!STRINGS[newLang]) return;
+      e.preventDefault();
+      // Clicking the currently-active language is a no-op — CSS
+      // already de-emphasises it, but the link is still focusable
+      // so a keyboard user can still hit Enter on it.
+      if (document.documentElement.lang === newLang) return;
+      try { localStorage.setItem('netsec-lang', newLang); } catch (e) {}
+      window.location.reload();
+    });
   });
-
-  // Point the home button at the localised index.
-  var home = document.querySelector('a[data-i18n="home"]');
-  if (home) home.href = lang === 'en' ? '/' : '/index.' + lang + '.html';
-  // Sitemap link too.
-  var sm = document.querySelector('a[data-i18n="sitemap"]');
-  if (sm) sm.href = lang === 'en' ? '/sitemap.html' : '/sitemap.' + lang + '.html';
 })();
 </script>
 
