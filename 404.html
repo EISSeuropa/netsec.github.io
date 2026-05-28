@@ -70,19 +70,17 @@
   /* Decorative illustration above the 404. A 12-star EU emblem ring
      with the top star "broken" — its 11 siblings remain, and a small
      cloud of yellow fragments drifts up from where the 12th was.
-     A faint blue land-mass blob sits behind, hinting at the European
-     continent without trying to literally trace it (a recognisable
-     Europe outline at this scale would either dominate or be too
-     abstract to read). The metaphor: a piece of the Union's emblem
-     is missing — a quiet, on-theme way of saying *something here
-     came loose*. aria-hidden because the visible "404" + "Page not
+     The metaphor: a piece of the Union's emblem is missing — a
+     quiet, on-theme way of saying *something here came loose*.
+     (We tried a faint abstract European-continent shape behind in
+     PR #291; at this icon scale it read as a flying-saucer disc
+     rather than a continent, so it's gone — the stars carry the
+     story alone.) aria-hidden because the visible "404" + "Page not
      found" text already convey the message verbally. */
   .err-illu{
     display:block;width:100%;max-width:260px;height:auto;
     margin:0 auto 14px;
   }
-  .err-illu-land{color:#003399;opacity:.12}
-  .dark .err-illu-land{color:#7eb4ff;opacity:.10}
   /* Subtle vertical drift on the broken-star fragments to give the
      illustration a quiet sense of "letting go" rather than a frozen
      pictogram. Each fragment offset so they don't move in lockstep.
@@ -128,13 +126,15 @@
   .dark .err-actions .btn-ghost{
     border-color:rgba(255,255,255,.22);background:transparent;color:var(--ink);
   }
-  /* Sit the language switcher visually clear of the action buttons —
-     it was reading as part of the same cluster at 18px. The 28 px
-     gap alone reads as enough separation; the border-top we tried
-     in PR #289 ended up looking like a stray rule against the
-     glass-card background, so it's gone. */
+  /* Sit the language switcher visually clear of the action buttons.
+     The 28 px we used in PR #291 read tight once the illustration
+     above the 404 changed the page's vertical rhythm; 40 px gives
+     the locale row room to read as meta-footer rather than as a
+     sibling of the buttons. (Earlier attempt at a border-top
+     separator in PR #289 was too rule-like against the glass card
+     and got reverted; pure whitespace works better here.) */
   .err-lang{
-    margin-top:28px;
+    margin-top:40px;
     font-size:.85rem;color:var(--muted);
   }
   .err-lang a{color:var(--accent-2);text-decoration:underline;margin:0 6px}
@@ -248,22 +248,14 @@
 <main id="main" class="err-page">
   <div class="glass">
     <!-- Decorative illustration: a 12-star EU emblem ring with the
-         12-o'clock star "broken" — its 11 siblings remain, fragments
-         drift up from the gap, and a faint abstract European
-         land-mass blob sits behind. aria-hidden because the visible
-         "404" + "Page not found" text already convey the message. -->
+         12-o'clock star "broken" — its 11 siblings remain and a small
+         cloud of fragments drifts up from the gap. (An abstract
+         continent shape behind, first shipped in PR #291, was
+         dropped — at this icon scale it read as a flying-saucer disc
+         rather than Europe, so the stars carry the metaphor alone.)
+         aria-hidden because the visible "404" + "Page not found"
+         text already convey the message. -->
     <svg class="err-illu" viewBox="0 0 320 200" role="img" aria-hidden="true" focusable="false">
-      <!-- Abstract continent shape behind the stars. Not literally
-           Europe — a recognisable outline at this scale would either
-           dominate or read as a cartoon. Three soft ellipses suggest
-           "land mass" while staying out of the foreground's way. -->
-      <g class="err-illu-land">
-        <ellipse cx="156" cy="105" rx="112" ry="40" transform="rotate(-4 156 105)" fill="currentColor"/>
-        <ellipse cx="118" cy="80" rx="22" ry="11" fill="currentColor"/>
-        <ellipse cx="202" cy="130" rx="22" ry="10" fill="currentColor"/>
-        <ellipse cx="228" cy="98" rx="14" ry="22" fill="currentColor"/>
-      </g>
-
       <!-- Reusable EU-emblem star (10-point pentagram per the
            Council of Europe / EU visual identity manual). -->
       <defs>
