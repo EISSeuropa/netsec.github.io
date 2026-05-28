@@ -78,10 +78,28 @@
     font-size:1.6rem;margin:0 0 14px;letter-spacing:-.01em;
   }
   .err-page p{color:var(--ink-2);font-size:1rem;margin:0 0 24px;line-height:1.55}
-  .err-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .err-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
   .err-lang{margin-top:18px;font-size:.85rem;color:var(--muted)}
   .err-lang a{color:var(--accent-2);text-decoration:underline;margin:0 6px}
+
+  /* Pagefind UI embed on the 404 page. Pagefind is built at deploy
+     time into /pagefind/; on local dev the CSS / JS 404s and the
+     mount stays empty (the two action buttons below it still cover
+     the "where do I go" need). */
+  .err-search-prompt{margin:0 0 12px;font-size:.95rem}
+  .err-search-mount{margin:0 auto 6px;max-width:480px;text-align:left}
+  .err-search-mount .pagefind-ui__form{margin:0}
+  .err-search-mount .pagefind-ui__search-input{
+    border-radius:10px;border:1px solid var(--line);
+    background:var(--glass-bg);padding:10px 14px;
+    font-size:.95rem;width:100%;
+  }
+  .err-search-mount .pagefind-ui__search-input:focus{
+    outline:2px solid var(--accent);outline-offset:1px;
+  }
+  .err-search-mount .pagefind-ui__results-area{margin-top:12px}
 </style>
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css" onerror="this.remove()">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -143,6 +161,8 @@
       The page you're looking for may have moved, or the link may be outdated.
       Use one of the routes below to get back into the site.
     </p>
+    <p class="err-search-prompt" data-i18n="searchprompt">Or search the site for what you were looking for:</p>
+    <div class="err-search-mount" id="search-404" data-pagefind-ignore="all"></div>
     <div class="err-actions">
       <a class="btn btn-primary" href="/" data-i18n="home">Back to home</a>
       <a class="btn btn-ghost" href="/sitemap.html" data-i18n="sitemap">Open the site map</a>
@@ -165,6 +185,8 @@
     en: {
       title: 'Page not found',
       body: "The page you're looking for may have moved, or the link may be outdated. Use one of the routes below to get back into the site.",
+      searchprompt: 'Or search the site for what you were looking for:',
+      placeholder: 'Search the site',
       home: 'Back to home',
       sitemap: 'Open the site map',
       langnote: 'Also available in'
@@ -172,6 +194,8 @@
     fr: {
       title: 'Page introuvable',
       body: "La page que vous cherchez a peut-être été déplacée, ou le lien est obsolète. Utilisez l'une des options ci-dessous pour revenir sur le site.",
+      searchprompt: 'Ou cherchez sur le site ce que vous vouliez trouver :',
+      placeholder: 'Rechercher sur le site',
       home: "Retour à l'accueil",
       sitemap: 'Voir le plan du site',
       langnote: 'Disponible aussi en'
@@ -179,6 +203,8 @@
     de: {
       title: 'Seite nicht gefunden',
       body: 'Die gesuchte Seite wurde möglicherweise verschoben oder der Link ist veraltet. Nutzen Sie einen der untenstehenden Wege, um zurück auf die Website zu kommen.',
+      searchprompt: 'Oder durchsuchen Sie die Website nach dem, was Sie suchen wollten:',
+      placeholder: 'Auf der Website suchen',
       home: 'Zurück zur Startseite',
       sitemap: 'Sitemap öffnen',
       langnote: 'Auch verfügbar auf'
@@ -217,6 +243,44 @@
   // Sitemap link too.
   var sm = document.querySelector('a[data-i18n="sitemap"]');
   if (sm) sm.href = lang === 'en' ? '/sitemap.html' : '/sitemap.' + lang + '.html';
+})();
+</script>
+
+<!-- Pagefind UI on the 404 page. Loaded async; if /pagefind/ isn't
+     available (local dev, pre-deploy) the script silently no-ops and
+     the action buttons + sitemap link still cover the user need. -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.src = '/pagefind/pagefind-ui.js';
+  script.async = true;
+  script.onerror = function () {
+    // Pagefind not deployed yet — hide the empty mount so the page
+    // doesn't show an orphan prompt.
+    var mount = document.getElementById('search-404');
+    if (mount) mount.style.display = 'none';
+    var prompt = document.querySelector('.err-search-prompt');
+    if (prompt) prompt.style.display = 'none';
+  };
+  script.onload = function () {
+    if (typeof PagefindUI !== 'function') return;
+    var STRINGS = {
+      en: 'Search the site',
+      fr: 'Rechercher sur le site',
+      de: 'Auf der Website suchen'
+    };
+    var lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
+    new PagefindUI({
+      element: '#search-404',
+      showSubResults: true,
+      resetStyles: false,
+      autofocus: false,
+      translations: {
+        placeholder: STRINGS[lang] || STRINGS.en
+      }
+    });
+  };
+  document.head.appendChild(script);
 })();
 </script>
 
