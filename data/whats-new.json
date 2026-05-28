@@ -6,9 +6,9 @@
   "_active_until": "2026-06-13",
   "_active_reason": "Pointing visitors at the live ESSC 2026 programme on /essc-2026.html in the run-up to Stockholm (9-12 June). Natural off-switch the day after the conference closes. First activation of the banner mechanism shipped in v1.9.0 / PR #281.",
   "headline": {
-    "en": "The full ESSC 2026 programme is live, ahead of Stockholm (11–12 June).",
-    "fr": "Le programme complet de l'ESSC 2026 est en ligne, avant Stockholm (11–12 juin).",
-    "de": "Das vollständige ESSC-2026-Programm ist online, vor Stockholm (11.–12. Juni)."
+    "en": "The full ESSC 2026 programme is live.",
+    "fr": "Le programme complet de l'ESSC 2026 est en ligne.",
+    "de": "Das vollständige ESSC-2026-Programm ist online."
   },
   "cta": {
     "href": {
