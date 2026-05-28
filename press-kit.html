@@ -90,6 +90,17 @@
     display:flex;gap:10px;flex-wrap:wrap;margin-top:auto;
   }
 
+  /* Brand-asset grid. The markup referenced .grid-2 from the start
+     but the rule was never defined, so the four logo cards stacked
+     full-width and touched each other. Define it here: a responsive
+     two-up grid that collapses to one column on narrow viewports,
+     with breathing room between the cards. */
+  .grid-2{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:20px;
+  }
+
   .pk-swatches{
     display:grid;grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));
     gap:14px;margin:1rem 0 1.6rem;
