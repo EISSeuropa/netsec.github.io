@@ -35,7 +35,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Lock issues closed 14+ days ago with no recent activity
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # v7 (sha-pinned)
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v7 (sha-pinned)
         with:
           script: |
             const THRESHOLD_DAYS = 14;
