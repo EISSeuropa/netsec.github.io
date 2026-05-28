@@ -2,7 +2,7 @@
 # scripts/sync-bios.py). Pinned by major version so security patches
 # still apply automatically and the GitHub Actions cache key stays
 # stable.
-requests>=2.31,<3
+requests>=2.34.2,<3
 beautifulsoup4>=4.12,<5
 # Pillow is used by sync-bios.py to downscale + re-encode headshots
 # uploaded via the Google Form. Optional at runtime — sync-bios.py
