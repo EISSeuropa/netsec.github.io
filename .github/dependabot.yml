@@ -1,0 +1,62 @@
+# Dependabot configuration.
+#
+# Watches two surfaces for upstream updates:
+#
+#   1. GitHub Actions used in any .github/workflows/*.yml. We SHA-pin
+#      every third-party action per CLAUDE.md §12 (release-infrastructure
+#      hygiene). Dependabot opens a PR each time an upstream tag moves
+#      to a new SHA, so the SHA-pin stays current without manual sweeps.
+#
+#   2. Python dependencies in scripts/requirements.txt (requests,
+#      beautifulsoup4, Pillow). Used by sync-bios.py, sync-cost.py,
+#      sync-indico.py, build-brand-assets.py — none of which run in
+#      browser code, but they DO run with `contents: write` in the
+#      sync workflows, so a compromised package on the chain matters.
+#
+# Weekly cadence keeps the PR volume manageable. Each PR is auto-mergeable
+# once CI is green (link-check + CodeQL + drift checkers cover the surface
+# Dependabot bumps could break).
+#
+# We don't watch a npm registry because there's no package.json — Pagefind
+# is invoked via npx at deploy time and that's a separate concern.
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Stockholm"
+    reviewers:
+      - "APB-LDN"
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "deps(actions)"
+    open-pull-requests-limit: 5
+    groups:
+      # All GitHub-published actions (actions/*) move in lockstep when a
+      # Node runtime version is deprecated. Group them so we get one PR
+      # per weekly run rather than four.
+      gha-platform:
+        patterns:
+          - "actions/*"
+      # Third-party actions stay individual so the SHA-pin diff is easy
+      # to review per dependency.
+
+  - package-ecosystem: "pip"
+    directory: "/scripts"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Stockholm"
+    reviewers:
+      - "APB-LDN"
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "deps(python)"
+    open-pull-requests-limit: 5
