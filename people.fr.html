@@ -162,6 +162,10 @@
       <span class="eyebrow">Annuaire</span>
       <h1>Le Réseau</h1>
       <p class="lede">Un annuaire ouvert de chercheur·euses, décideur·ses politiques et praticien·nes travaillant dans ou aux côtés des études de sécurité européennes, direction de l'Action, participant·es des groupes de travail et communauté élargie. Toute personne engagée dans le domaine est invitée à <a href="#join">ajouter sa biographie</a>.</p>
+      <!-- Renseigné depuis le champ `generated_at` de bios.json par le
+           script de la page après le rendu de l'annuaire (#271). Masqué
+           tant qu'aucune date valide n'est lue. -->
+      <p class="directory-freshness" data-directory-freshness hidden></p>
     </div>
 
     <!-- Bandeau d'orientation à usage unique pour les nouveaux
@@ -925,6 +929,22 @@
     populateCountryFilter();
     renderKeywordFilter();
     render();
+    // Indique la fraîcheur de l'annuaire à partir de `generated_at`
+    // de bios.json (#271). Masqué tant qu'aucune date valide n'est lue.
+    const freshnessEl = document.querySelector('[data-directory-freshness]');
+    if (freshnessEl && data.generated_at) {
+      const stamp = new Date(data.generated_at);
+      if (!isNaN(stamp.getTime())) {
+        const lang = (document.documentElement.lang || 'fr').toLowerCase().slice(0, 2);
+        const dateLocale = { en: 'en-GB', fr: 'fr-FR', de: 'de-DE' }[lang] || 'fr-FR';
+        const pretty = stamp.toLocaleDateString(dateLocale, {
+          year: 'numeric', month: 'long', day: 'numeric',
+        });
+        freshnessEl.textContent =
+          window.netsecT('Directory last updated {0}.').replace('{0}', pretty);
+        freshnessEl.hidden = false;
+      }
+    }
     const joinLink = document.querySelector('[data-form-link]');
     const formUrl = data.source && data.source.form_url;
     if (joinLink) {

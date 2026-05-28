@@ -403,6 +403,9 @@ img{max-width:100%;display:block}
 section{padding:80px 0;position:relative}
 .section-head{text-align:center;margin-bottom:48px}
 .section-head p{max-width:60ch;margin:0 auto;color:var(--muted)}
+/* Discreet "Directory last updated …" line under the people-page
+   lede (#271): smaller, lighter, with a touch of top space. */
+.directory-freshness{margin-top:14px;font-size:.82rem;letter-spacing:.01em;opacity:.85}
 
 /* -------- Glass cards --------
    `.glass` is a deliberately cross-cutting utility class (used on

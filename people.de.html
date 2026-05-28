@@ -162,6 +162,10 @@
       <span class="eyebrow">Verzeichnis</span>
       <h1>Das Netzwerk</h1>
       <p class="lede">Ein offenes Verzeichnis von Forschenden, politischen Entscheidungsträger·innen und Praktiker·innen, die in oder an der Schnittstelle der europäischen Sicherheitsforschung tätig sind, Aktionsleitung, Arbeitsgruppen-Mitglieder und die weitere Community. Wer im Feld engagiert ist, kann gerne <a href="#join">die eigene Biografie hinzufügen</a>.</p>
+      <!-- Wird aus dem Feld `generated_at` in bios.json durch das
+           Seitenskript nach dem Rendern des Verzeichnisses befüllt
+           (#271). Bleibt verborgen, bis ein gültiges Datum gelesen wird. -->
+      <p class="directory-freshness" data-directory-freshness hidden></p>
     </div>
 
     <!-- Einmaliger Begrüßungsstreifen für Erstbesucher:innen. Das
@@ -924,6 +928,22 @@
     populateCountryFilter();
     renderKeywordFilter();
     render();
+    // Zeigt die Aktualität des Verzeichnisses anhand von `generated_at`
+    // aus bios.json (#271). Verborgen, bis ein gültiges Datum gelesen wird.
+    const freshnessEl = document.querySelector('[data-directory-freshness]');
+    if (freshnessEl && data.generated_at) {
+      const stamp = new Date(data.generated_at);
+      if (!isNaN(stamp.getTime())) {
+        const lang = (document.documentElement.lang || 'de').toLowerCase().slice(0, 2);
+        const dateLocale = { en: 'en-GB', fr: 'fr-FR', de: 'de-DE' }[lang] || 'de-DE';
+        const pretty = stamp.toLocaleDateString(dateLocale, {
+          year: 'numeric', month: 'long', day: 'numeric',
+        });
+        freshnessEl.textContent =
+          window.netsecT('Directory last updated {0}.').replace('{0}', pretty);
+        freshnessEl.hidden = false;
+      }
+    }
     const joinLink = document.querySelector('[data-form-link]');
     const formUrl = data.source && data.source.form_url;
     if (joinLink) {
