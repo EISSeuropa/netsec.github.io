@@ -83,55 +83,68 @@ def render_stub(member: dict, lang: str) -> str:
     wgs_label = " · ".join(f"WG{w}" for w in wgs) if wgs else ""
     canonical = people_url(slug, lang)
 
-    # Build the indexable body. The order matters for Pagefind's
-    # excerpt scoring — name + role appear early so they dominate
-    # the snippet preview.
+    # Meta elements sit *outside* `data-pagefind-body` so they don't
+    # contribute to Pagefind's body excerpt. Pagefind reads
+    # `data-pagefind-meta` from anywhere in the document, so this
+    # keeps every meta key accessible to the custom renderer in
+    # site.js (Cmd-K overlay) and 404.html, while the excerpt that
+    # the renderer falls back on for the visible snippet stays
+    # clean (just the bio body text, no jumbled "role · position ·
+    # affiliation · country · wgs · keywords" trail).
     #
     # We deliberately *don't* try to set Pagefind's `url` meta to
     # override the per-page URL: Pagefind v1 reads
     # `data-pagefind-meta="url"` as a text-meta key (the element's
     # text becomes meta.url) rather than as a URL override that
     # changes `hit.url`. URL rewriting is therefore done client-
-    # side in the overlay's renderBioHit() — it parses the stub
-    # URL (which carries the locale and slug in its path) and
-    # rewrites the link to /people.html#<slug> (locale-aware).
-    parts = [
-        f'<h1>{html_escape(name)}</h1>',
+    # side in renderBioHit() — it parses the stub URL (which
+    # carries the locale and slug in its path) and rewrites the
+    # link to /people.html#<slug> (locale-aware).
+    meta_parts = [
         # `kind:bio` lets the overlay render a rich card; everything
         # else falls back to the plain-page card.
-        '<p data-pagefind-meta="kind:bio">Member of the NetSec community directory.</p>',
+        '<span hidden data-pagefind-meta="kind:bio"></span>',
     ]
     if role_label:
-        parts.append(f'<p data-pagefind-meta="role">{html_escape(role_label)}</p>')
+        meta_parts.append(
+            f'<span hidden data-pagefind-meta="role">{html_escape(role_label)}</span>'
+        )
     if position:
-        parts.append(f'<p data-pagefind-meta="position">{html_escape(position)}</p>')
+        meta_parts.append(
+            f'<span hidden data-pagefind-meta="position">{html_escape(position)}</span>'
+        )
     if affiliation:
-        parts.append(f'<p data-pagefind-meta="affiliation">{html_escape(affiliation)}</p>')
+        meta_parts.append(
+            f'<span hidden data-pagefind-meta="affiliation">{html_escape(affiliation)}</span>'
+        )
     if country:
-        parts.append(
-            f'<p data-pagefind-meta="country:{html_escape(country_code)}">'
-            f'{html_escape(country)}</p>'
+        meta_parts.append(
+            f'<span hidden data-pagefind-meta="country:{html_escape(country_code)}">'
+            f'{html_escape(country)}</span>'
         )
     if wgs_label:
-        parts.append(
-            f'<p data-pagefind-meta="wgs:{wgs_csv}">'
-            f'Working Groups: {wgs_label}</p>'
+        meta_parts.append(
+            f'<span hidden data-pagefind-meta="wgs:{wgs_csv}">'
+            f'{html_escape(wgs_label)}</span>'
         )
     if photo:
-        parts.append(
-            f'<span data-pagefind-meta="photo:/{html_escape(photo.lstrip("/"))}" '
-            f'style="display:none"></span>'
+        meta_parts.append(
+            f'<span hidden data-pagefind-meta="photo:/{html_escape(photo.lstrip("/"))}"></span>'
         )
     if keywords:
-        parts.append(
-            f'<p data-pagefind-meta="keywords">{html_escape(", ".join(keywords))}</p>'
+        meta_parts.append(
+            f'<span hidden data-pagefind-meta="keywords">{html_escape(", ".join(keywords))}</span>'
         )
-    if bio:
-        # Preserve paragraph breaks; the rest of the body is plain text.
-        for paragraph in re.split(r"\n{2,}", bio):
-            parts.append(f"<p>{html_escape(paragraph.strip())}</p>")
+    meta_block = "\n  ".join(meta_parts)
 
-    body = "\n  ".join(parts)
+    # Body content: just the indexable name + bio prose. Pagefind
+    # will excerpt from this, so a search for "laudrain" returns a
+    # snippet from the bio text rather than the structured meta.
+    body_parts = [f'<h1>{html_escape(name)}</h1>']
+    if bio:
+        for paragraph in re.split(r"\n{2,}", bio):
+            body_parts.append(f"<p>{html_escape(paragraph.strip())}</p>")
+    body_block = "\n  ".join(body_parts)
 
     return f"""<!DOCTYPE html>
 <html lang="{lang}">
@@ -143,13 +156,16 @@ def render_stub(member: dict, lang: str) -> str:
 <link rel="canonical" href="{canonical}">
 <!-- These pages are search-index stubs. Direct visitors are
      redirected to the live directory entry; search-result clicks
-     go there too via the data-pagefind-meta="url" override. The
-     stub itself is not user-facing. -->
+     go there too via the URL-rewrite in renderBioHit(). The stub
+     itself is not user-facing. -->
 <style>body{{display:none}}</style>
 </head>
 <body>
+<!-- Meta read from anywhere in the document; kept outside
+     data-pagefind-body so the body excerpt stays clean. -->
+{meta_block}
 <main data-pagefind-body>
-  {body}
+  {body_block}
 </main>
 </body>
 </html>

@@ -82,24 +82,48 @@
   .err-lang{margin-top:18px;font-size:.85rem;color:var(--muted)}
   .err-lang a{color:var(--accent-2);text-decoration:underline;margin:0 6px}
 
-  /* Pagefind UI embed on the 404 page. Pagefind is built at deploy
-     time into /pagefind/; on local dev the CSS / JS 404s and the
-     mount stays empty (the two action buttons below it still cover
-     the "where do I go" need). */
+  /* Inline mini-search on the 404 page. We deliberately do NOT use
+     Pagefind's bundled `pagefind-ui` here — the default UI renders
+     every `meta.*` key it finds as a `TitleCase: value` chip below
+     the result, which exposed our internal bio-stub plumbing
+     (Country: ch, Wgs: 2,3, Photo: /assets/…) as visible UI, and
+     has no dark-mode CSS coverage. Instead we call Pagefind's
+     low-level API and reuse the same `.search-result-*` /
+     `.search-bio-*` classes that the Cmd-K overlay uses — those
+     already carry dark-mode rules and a polished bio-card layout.
+     Pagefind itself is built at deploy time into `/pagefind/`; on
+     local dev the module import 404s and the whole search block
+     hides itself (the two action buttons below still cover the
+     "where do I go" need). */
   .err-search-prompt{margin:0 0 12px;font-size:.95rem}
-  .err-search-mount{margin:0 auto 6px;max-width:480px;text-align:left}
-  .err-search-mount .pagefind-ui__form{margin:0}
-  .err-search-mount .pagefind-ui__search-input{
-    border-radius:10px;border:1px solid var(--line);
-    background:var(--glass-bg);padding:10px 14px;
-    font-size:.95rem;width:100%;
+  .err-search-mount{margin:0 auto 6px;max-width:520px;text-align:left}
+  .err-search-bar{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 14px;
+    border:1px solid var(--line);border-radius:10px;
+    background:var(--glass-bg);
   }
-  .err-search-mount .pagefind-ui__search-input:focus{
+  .err-search-bar:focus-within{
     outline:2px solid var(--accent);outline-offset:1px;
   }
-  .err-search-mount .pagefind-ui__results-area{margin-top:12px}
+  .err-search-bar .search-input{font-size:.95rem}
+  .err-search-bar .search-close{width:28px;height:28px}
+  .err-search-bar .search-close svg{width:14px;height:14px}
+  /* Tighter chrome than the Cmd-K modal — the 404 sits inside the
+     glass card already, so an extra borderless row reads as part
+     of that surface rather than an inset panel. */
+  .err-search-mount .search-meta{
+    padding:10px 2px 6px;font-size:.85rem;
+    text-transform:none;letter-spacing:normal;font-weight:600;
+    color:var(--ink-2);
+  }
+  .err-search-mount .search-meta:empty{display:none}
+  .err-search-mount .search-results{
+    border:1px solid var(--line);border-radius:10px;
+    border-top:1px solid var(--line);
+    max-height:60vh;
+  }
 </style>
-<link rel="stylesheet" href="/pagefind/pagefind-ui.css" onerror="this.remove()">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -162,7 +186,21 @@
       Use one of the routes below to get back into the site.
     </p>
     <p class="err-search-prompt" data-i18n="searchprompt">Or search the site for what you were looking for:</p>
-    <div class="err-search-mount" id="search-404" data-pagefind-ignore="all"></div>
+    <div class="err-search-mount" id="search-404" data-pagefind-ignore="all">
+      <div class="err-search-bar">
+        <svg class="search-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+        </svg>
+        <input type="search" id="err-search-input" class="search-input" autocomplete="off" spellcheck="false" aria-controls="err-search-results" aria-label="Search the site">
+        <button type="button" id="err-search-clear" class="search-close" hidden aria-label="Clear search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="search-meta" id="err-search-meta" aria-live="polite"></div>
+      <ul class="search-results" id="err-search-results" role="listbox" aria-label="Search results"></ul>
+    </div>
     <div class="err-actions">
       <a class="btn btn-primary" href="/" data-i18n="home">Back to home</a>
       <a class="btn btn-ghost" href="/sitemap.html" data-i18n="sitemap">Open the site map</a>
@@ -246,41 +284,230 @@
 })();
 </script>
 
-<!-- Pagefind UI on the 404 page. Loaded async; if /pagefind/ isn't
-     available (local dev, pre-deploy) the script silently no-ops and
-     the action buttons + sitemap link still cover the user need. -->
+<!-- Inline mini-search on the 404 page. Calls Pagefind's low-level
+     `pagefind.js` module directly and renders results using the
+     same .search-result-* / .search-bio-* CSS classes as the
+     Cmd-K overlay, so dark mode and bio cards work consistently.
+     If /pagefind/ isn't available (local dev, pre-deploy) the
+     module import fails and the whole search block hides itself —
+     the action buttons + sitemap link below still cover the user
+     need. -->
 <script>
 (function () {
-  var script = document.createElement('script');
-  script.src = '/pagefind/pagefind-ui.js';
-  script.async = true;
-  script.onerror = function () {
-    // Pagefind not deployed yet — hide the empty mount so the page
-    // doesn't show an orphan prompt.
-    var mount = document.getElementById('search-404');
-    if (mount) mount.style.display = 'none';
-    var prompt = document.querySelector('.err-search-prompt');
-    if (prompt) prompt.style.display = 'none';
+  var input = document.getElementById('err-search-input');
+  var clearBtn = document.getElementById('err-search-clear');
+  var metaEl = document.getElementById('err-search-meta');
+  var listEl = document.getElementById('err-search-results');
+  var mount = document.getElementById('search-404');
+  var prompt = document.querySelector('.err-search-prompt');
+  if (!input || !metaEl || !listEl) return;
+
+  // Locale-aware copy. The 404 already i18n's its visible text via
+  // STRINGS up top; we only need search-specific phrases here.
+  var lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
+  var SEARCH_STRINGS = {
+    en: { placeholder:'Search the site', searching:'Searching…', noresults:'No results for "{q}"', count:'{n} result{s} for {q}', clearLabel:'Clear', unavailable:'Search is currently unavailable.' },
+    fr: { placeholder:'Rechercher sur le site', searching:'Recherche…', noresults:'Aucun résultat pour « {q} »', count:'{n} résultat{s} pour {q}', clearLabel:'Effacer', unavailable:'La recherche est actuellement indisponible.' },
+    de: { placeholder:'Auf der Website suchen', searching:'Suche läuft…', noresults:'Keine Ergebnisse für „{q}"', count:'{n} Ergebnis{s} für {q}', clearLabel:'Leeren', unavailable:'Die Suche ist derzeit nicht verfügbar.' }
   };
-  script.onload = function () {
-    if (typeof PagefindUI !== 'function') return;
-    var STRINGS = {
-      en: 'Search the site',
-      fr: 'Rechercher sur le site',
-      de: 'Auf der Website suchen'
-    };
-    var lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
-    new PagefindUI({
-      element: '#search-404',
-      showSubResults: true,
-      resetStyles: false,
-      autofocus: false,
-      translations: {
-        placeholder: STRINGS[lang] || STRINGS.en
+  var t = SEARCH_STRINGS[lang] || SEARCH_STRINGS.en;
+  // German plural for 'Ergebnis' is 'Ergebnisse' (-se), English / French both add 's'.
+  var pluralS = lang === 'de' ? 'se' : 's';
+  input.placeholder = t.placeholder;
+  if (clearBtn) clearBtn.setAttribute('aria-label', t.clearLabel);
+
+  // Lazy-load the low-level Pagefind module. We don't memoise on
+  // first input the way site.js's overlay does — the 404 lands
+  // with focus elsewhere, so the visitor types when they're ready
+  // and the import overlaps with the keystroke debounce.
+  var pf = null;
+  var pfPromise = null;
+  function loadPF() {
+    if (pfPromise) return pfPromise;
+    pfPromise = (async function() {
+      try {
+        var mod = await import('/pagefind/pagefind.js');
+        // Same highlight-param convention as the Cmd-K overlay.
+        await mod.options({ highlightParam: 'pagefind-highlight' });
+        pf = mod;
+        return mod;
+      } catch (e) {
+        // /pagefind/ not deployed yet (local dev) — hide the whole
+        // block so the page doesn't show an orphan input.
+        if (mount) mount.style.display = 'none';
+        if (prompt) prompt.style.display = 'none';
+        throw e;
       }
+    })();
+    return pfPromise;
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+      return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
     });
-  };
-  document.head.appendChild(script);
+  }
+
+  // Bio stubs live at /search/bios/<lang>/<slug>.html and carry a
+  // meta-refresh that redirects direct visitors to the canonical
+  // /people.html#<slug>. Rewrite Pagefind hit URLs here so the
+  // result link goes straight to the directory entry without an
+  // intermediate stub-page round-trip.
+  function canonicalBioUrl(stubUrl) {
+    if (!stubUrl) return null;
+    var m = stubUrl.match(/\/search\/bios\/([a-z]{2})\/([^/?#.]+)\.html(\?[^#]*)?/);
+    if (!m) return null;
+    var path = m[1] === 'en' ? '/people.html' : '/people.' + m[1] + '.html';
+    return path + (m[3] || '') + '#' + m[2];
+  }
+
+  function initialsFor(name) {
+    var tokens = String(name).replace(/^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+/i,'').trim().split(/\s+/);
+    if (!tokens.length) return '?';
+    var first = tokens[0].charAt(0).toUpperCase();
+    var last = tokens.length > 1 ? tokens[tokens.length - 1].charAt(0).toUpperCase() : '';
+    return escapeHtml(first + last);
+  }
+
+  function renderBioHit(hit, i) {
+    var rawTitle = (hit.meta.title || '').replace(/\s+—\s+NetSec directory$/, '');
+    var name = escapeHtml(rawTitle);
+    var affiliation = escapeHtml(hit.meta.affiliation || '');
+    var role = escapeHtml(hit.meta.role || '');
+    var country = (hit.meta.country || '').toLowerCase().replace(/[^a-z]/g, '');
+    var photo = hit.meta.photo || '';
+    var wgs = (hit.meta.wgs || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+    var url = canonicalBioUrl(hit.url) || hit.url;
+    var flagImg = country
+      ? '<img class="search-bio-flag" src="https://flagcdn.com/h20/' + country + '.png" alt="" loading="lazy">'
+      : '';
+    var photoEl = photo
+      ? '<img class="search-bio-photo" src="' + escapeHtml(photo) + '" alt="" loading="lazy">'
+      : '<span class="search-bio-photo search-bio-photo-fallback" aria-hidden="true">' + initialsFor(rawTitle) + '</span>';
+    var wgChips = wgs.map(function(w){ return '<span class="search-bio-wg">WG' + escapeHtml(w) + '</span>'; }).join('');
+    var subline = role || affiliation;
+    return ''
+      + '<li role="option" aria-selected="false" id="err-search-result-' + i + '" class="search-bio">'
+      +   '<a href="' + url + '">'
+      +     photoEl
+      +     '<div class="search-bio-text">'
+      +       '<div class="search-bio-head">'
+      +         '<span class="search-bio-name">' + name + '</span>'
+      +         flagImg
+      +       '</div>'
+      +       (subline ? '<div class="search-bio-subline">' + subline + '</div>' : '')
+      +       (role && affiliation && role !== affiliation
+                ? '<div class="search-bio-affiliation">' + affiliation + '</div>' : '')
+      +       (wgChips ? '<div class="search-bio-wgs">' + wgChips + '</div>' : '')
+      +     '</div>'
+      +   '</a>'
+      + '</li>';
+  }
+
+  function renderPageHit(hit, i) {
+    var title = escapeHtml(hit.meta.title || hit.url);
+    var sub = hit.sub_results && hit.sub_results[0];
+    var heading = sub ? escapeHtml(sub.title) : '';
+    var url = sub ? sub.url : hit.url;
+    // Pagefind's `excerpt` already contains <mark> tags around the
+    // matched terms; pass through unescaped. The bio-stub fix
+    // means this excerpt is now drawn from the bio body text
+    // rather than from concatenated meta paragraphs.
+    var excerpt = sub ? sub.excerpt : hit.excerpt;
+    return ''
+      + '<li role="option" aria-selected="false" id="err-search-result-' + i + '">'
+      +   '<a href="' + url + '">'
+      +     '<div class="search-result-head">'
+      +       '<span class="search-result-title">' + title + '</span>'
+      +       (heading ? '<span class="search-result-sep">·</span><span class="search-result-section">' + heading + '</span>' : '')
+      +     '</div>'
+      +     '<div class="search-result-excerpt">' + excerpt + '</div>'
+      +   '</a>'
+      + '</li>';
+  }
+
+  function renderHit(hit, i) {
+    if (hit.meta && hit.meta.kind === 'bio') return renderBioHit(hit, i);
+    return renderPageHit(hit, i);
+  }
+
+  function fmtCount(n, query) {
+    return t.count
+      .replace('{n}', String(n))
+      .replace('{s}', n === 1 ? '' : pluralS)
+      .replace('{q}', '"' + query + '"');
+  }
+
+  var lastQuery = '';
+  var debounceId = null;
+
+  async function run(query) {
+    query = query.trim();
+    lastQuery = query;
+    if (!query) {
+      listEl.innerHTML = '';
+      metaEl.textContent = '';
+      if (clearBtn) clearBtn.hidden = true;
+      return;
+    }
+    if (clearBtn) clearBtn.hidden = false;
+    metaEl.textContent = t.searching;
+    try {
+      await loadPF();
+    } catch (e) {
+      metaEl.textContent = t.unavailable;
+      listEl.innerHTML = '';
+      return;
+    }
+    if (lastQuery !== query) return;  // stale
+    var result;
+    try {
+      result = await pf.search(query);
+    } catch (e) {
+      metaEl.textContent = t.unavailable;
+      listEl.innerHTML = '';
+      return;
+    }
+    if (lastQuery !== query) return;
+    if (!result || !result.results.length) {
+      listEl.innerHTML = '';
+      metaEl.textContent = t.noresults.replace('{q}', '"' + query + '"');
+      return;
+    }
+    // Top 10 — Pagefind returns ranked results lazily.
+    var slice = result.results.slice(0, 10);
+    var loaded;
+    try {
+      loaded = await Promise.all(slice.map(function(r){ return r.data(); }));
+    } catch (e) {
+      metaEl.textContent = t.unavailable;
+      listEl.innerHTML = '';
+      return;
+    }
+    if (lastQuery !== query) return;
+    metaEl.textContent = fmtCount(loaded.length, query);
+    listEl.innerHTML = loaded.map(renderHit).join('');
+  }
+
+  input.addEventListener('input', function() {
+    if (debounceId) clearTimeout(debounceId);
+    debounceId = setTimeout(function(){ run(input.value); }, 220);
+  });
+  // Escape clears the field (matches Cmd-K overlay behaviour).
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && input.value) {
+      e.preventDefault();
+      input.value = '';
+      run('');
+    }
+  });
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function() {
+      input.value = '';
+      input.focus();
+      run('');
+    });
+  }
 })();
 </script>
 
