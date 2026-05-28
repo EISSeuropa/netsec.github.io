@@ -43,7 +43,7 @@
 #       explicit "y" confirmation before proceeding. This is the last
 #       point at which an abort leaves everything untouched. For
 #       minor / major releases (X.Y.0 / X.0.0), an additional
-#       five-point cross-check reminder prints before the prompt
+#       six-point cross-check reminder prints before the prompt
 #       (roadmap / sitemap / translations / repo docs + PDF / Wiki)
 #       — see CLAUDE.md §5 for the full checklist.
 #       (--dry-run skips the prompt; the dry-run output IS the preview.)
@@ -256,19 +256,20 @@ if [[ "$DRY_RUN" != "--dry-run" ]]; then
   printf '  ──────────────────────────────────────────────────────────────\n\n'
 
   # For minor / major releases (X.Y.Z where Z == 0), print the
-  # five-point cross-check reminder before the prompt. Skipped for
+  # six-point cross-check reminder before the prompt. Skipped for
   # patch releases — they're scoped to small fixes and the overhead
   # isn't justified. The full version of the checklist lives in
   # CLAUDE.md §5 and is mirrored in docs/admin-guide.md → Cutting a
   # release.
   PATCH_PART="${VERSION##*.}"
   if [[ "$PATCH_PART" == "0" ]]; then
-    printf '  Minor / major release — five-point cross-check (CLAUDE.md §5):\n'
+    printf '  Minor / major release — six-point cross-check (CLAUDE.md §5):\n'
     printf '    1. Roadmap       — /roadmap.html (+ FR + DE) and docs/roadmap-2026.md.\n'
     printf '    2. Sitemap       — sitemap.xml and /sitemap.html (+ FR + DE).\n'
     printf '    3. Translations  — `python3 scripts/check-i18n-drift.py` reports zero drift?\n'
     printf '    4. Repo docs+PDF — docs/ markdown + docs/pdf/documentation.html cover stamp.\n'
     printf "    5. Members' Wiki — decisions log, templates, stubs match public pages.\n"
+    printf "    6. Banner        — data/whats-new.json \`active\` state still appropriate? (§14)\n"
     printf '\n'
     printf '  Land any edits in the same release, or open tracking issues (rule §3)\n'
     printf '  and reference them from the surface. Abort here if anything is missing —\n'

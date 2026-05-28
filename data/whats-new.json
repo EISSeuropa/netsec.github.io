@@ -1,19 +1,26 @@
 {
   "_documentation": "What's New banner — the rare site-wide announcement, used sparingly per CLAUDE.md §14. When this file has `active: true`, every page on the site renders a small dismissible banner under the beta-translation ribbon (if any) and above the page nav, until the visitor dismisses it or until the maintainer flips active back to false. Visitors who dismiss don't see it again unless `version` changes. Used for things a returning visitor would want to know about without having to read the changelog: a new section (founding contributors landed, members directory rebooted), a major new feature visible without scrolling (live ESSC programme, brand launch), or a content milestone (D1 ships, D6 ships). NOT used for: quality patches, structural refactors that don't change what visitors see, release-infrastructure changes, copy edits. The maintainer flips active true → false at most 3-4 times a year. The on-state should run no longer than 4-6 weeks before it goes back off so the banner doesn't decay into furniture.",
-  "active": false,
-  "version": "none",
+  "active": true,
+  "version": "v1.6.0",
+  "_active_since": "2026-05-28",
+  "_active_until": "2026-06-13",
+  "_active_reason": "Pointing visitors at the live ESSC 2026 programme on /essc-2026.html in the run-up to Stockholm (9-12 June). Natural off-switch the day after the conference closes. First activation of the banner mechanism shipped in v1.9.0 / PR #281.",
   "headline": {
-    "en": "",
-    "fr": "",
-    "de": ""
+    "en": "The full ESSC 2026 programme is live, ahead of Stockholm (11–12 June).",
+    "fr": "Le programme complet de l'ESSC 2026 est en ligne, avant Stockholm (11–12 juin).",
+    "de": "Das vollständige ESSC-2026-Programm ist online, vor Stockholm (11.–12. Juni)."
   },
   "cta": {
-    "href": "",
+    "href": {
+      "en": "/essc-2026.html",
+      "fr": "/essc-2026.fr.html",
+      "de": "/essc-2026.de.html"
+    },
     "external": false,
     "i18n": {
-      "en": "",
-      "fr": "",
-      "de": ""
+      "en": "View the programme →",
+      "fr": "Voir le programme →",
+      "de": "Zum Programm →"
     }
   },
   "_example_active_state": {
