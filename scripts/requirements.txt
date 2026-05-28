@@ -10,4 +10,4 @@ beautifulsoup4>=4.12,<5
 Pillow>=10.0,<12
 # PyYAML is used by indico_patch.py to read/write fix-plan files.
 # Capped at <7 since the YAML 1.2 transition is still in flight upstream.
-PyYAML>=6.0,<7
+PyYAML>=6.0.3,<7
