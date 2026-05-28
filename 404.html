@@ -77,8 +77,13 @@
      (public domain), the same map the EISS site uses on its
      initiative page. aria-hidden because the visible "404" + "Page
      not found" text already convey the message verbally. */
+  /* The 10:7 viewBox matches the EISS conference map; cap the width
+     generously so the continent reads at a comfortable size inside
+     the glass card rather than pinched into a narrow column. The card
+     is 560 px wide with 36 px padding each side, so ~460 px nearly
+     fills the content width while keeping a little breathing room. */
   .err-illu{
-    display:block;width:100%;max-width:340px;height:auto;
+    display:block;width:100%;max-width:460px;height:auto;
     margin:0 auto 16px;
   }
   /* Faint pale continent so the broken star-ring reads as the hero.
@@ -144,13 +149,14 @@
     border-color:rgba(255,255,255,.22);background:transparent;color:var(--ink);
   }
   /* Sit the language switcher visually clear of the action buttons.
-     This gap was tuned up across PRs #289 (28 px) and #293 (40 px)
-     and still read tight in review; 56 px finally lets the locale
-     row sit as a meta-footer rather than a sibling of the buttons.
-     (A border-top separator was tried in #289 and reverted as too
-     rule-like against the glass card; pure whitespace works here.) */
+     This gap was tuned up across PRs #289 (28 px), #293 (40 px) and
+     #295 (56 px) and still read tight in review; 80 px finally lets
+     the locale row sit as a meta-footer rather than a sibling of the
+     buttons. (A border-top separator was tried in #289 and reverted
+     as too rule-like against the glass card; pure whitespace works
+     here.) */
   .err-lang{
-    margin-top:56px;
+    margin-top:80px;
     font-size:.85rem;color:var(--muted);
   }
   .err-lang a{color:var(--accent-2);text-decoration:underline;margin:0 6px}
