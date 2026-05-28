@@ -1204,13 +1204,41 @@
     close.addEventListener('click', () => {
       try { localStorage.setItem('netsec-whats-new-dismissed-' + data.version, '1'); } catch (e) {}
       banner.classList.add('whats-new-banner--closing');
-      setTimeout(() => banner.remove(), 240);
+      // Keep --whats-new-h set through the slide-out animation so
+      // content doesn't snap up while the banner is visibly leaving.
+      // Clear it (so ribbon + nav slide back up to top:0) only after
+      // the animation completes.
+      setTimeout(() => {
+        document.documentElement.style.removeProperty('--whats-new-h');
+        banner.remove();
+      }, 240);
     });
     banner.appendChild(close);
 
-    // Insert at the very top of <body>, before the beta ribbon if one
-    // exists (FR / DE pages). Visual order: skip-link → banner →
-    // ribbon → nav. Page-level fixed nav is fine — banner is in flow.
+    // Insert at the very top of <body>. The banner is position: fixed,
+    // so insertion order doesn't change the visual stack; what matters
+    // is the body padding-top and the ribbon/nav top offsets, both
+    // composed against --whats-new-h via CSS calc().
     document.body.insertBefore(banner, document.body.firstChild);
+
+    // Measure and publish the banner height as --whats-new-h on the
+    // documentElement so the existing top-stack math (body padding,
+    // ribbon top, nav top) picks it up. Same pattern as --ribbon-h.
+    // ResizeObserver covers wrap-state changes (the headline can
+    // re-wrap on narrow viewports or as fonts swap).
+    const syncBannerHeight = () => {
+      const h = banner.offsetHeight;
+      if (h > 0) {
+        document.documentElement.style.setProperty('--whats-new-h', h + 'px');
+      }
+    };
+    syncBannerHeight();
+    if (document.readyState !== 'complete') {
+      window.addEventListener('load', syncBannerHeight, { once: true });
+    }
+    window.addEventListener('resize', syncBannerHeight, { passive: true });
+    if (typeof ResizeObserver === 'function') {
+      try { new ResizeObserver(syncBannerHeight).observe(banner); } catch (e) {}
+    }
   }
 })();
