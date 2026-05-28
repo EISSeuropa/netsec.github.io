@@ -160,10 +160,10 @@ hygiene). When in doubt, add the bullet. Cutting a release
 becomes: review what's already there, decide on the title,
 `scripts/release.sh`.
 
-## 5. Release-time five-point cross-check (minor / major only)
+## 5. Release-time six-point cross-check (minor / major only)
 
 Every **minor (`X.Y.0` where `Y > prev`) or major (`X.0.0`)
-release** should trigger a deliberate check across five surfaces
+release** should trigger a deliberate check across six surfaces
 before `scripts/release.sh` runs. Skip the cross-check on **patch
 releases** (`X.Y.Z` where `Z > 0`) — they're scoped to small
 fixes and the overhead isn't justified. The release script's
@@ -258,7 +258,28 @@ issue (rule §3) and reference it from the surface itself.
 - *Templates & press kit* — does the public press kit `/press-kit.html`
   match the Wiki copy-paste boilerplate?
 
-### 6. Milestone hygiene (gate, not a surface)
+### 6. *What's New* banner currency
+
+- `data/whats-new.json` carries `active: false` by default. If it
+  was flipped `true` for a recent campaign (brand launch, ESSC
+  live programme going up, founding cohort going up), is that
+  campaign **still relevant** to a visitor landing in the next
+  4-6 weeks?
+- Yes → leave it on. The dismissal `localStorage` key tracks
+  per-`version`, so as long as you don't change `version`,
+  visitors who dismissed don't re-see it.
+- No → flip `active: false` in the same release. The mechanism
+  is deliberately manual (CLAUDE.md §14): the friction is the
+  gate. Doing this at the release-day cross-check ensures the
+  banner doesn't decay into furniture between cycles.
+- Activating a new banner is the rarer move (§14 sets the bar
+  high: a new visible section, a major feature, a deliverable
+  milestone). If this release qualifies, edit `data/whats-new.json`
+  now and pick a `version` string (typically `vX.Y.0`). The full
+  CTA + headline + locale strings can land in the same release
+  commit.
+
+### 7. Milestone hygiene (gate, not a surface)
 
 - Every issue closed by this release carries the matching
   milestone — `gh issue list --milestone vX.Y.Z --state closed`
@@ -382,7 +403,7 @@ projections of the same plan.
 
 ### Pre-release check
 
-Add to the rule §5 five-point cross-check: before running
+Add to the rule §5 six-point cross-check: before running
 `scripts/release.sh`, confirm that every issue **closed by this
 release** carries the matching milestone, and that any **still-
 open issue tagged with this milestone** has either been ticked off

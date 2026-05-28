@@ -1160,7 +1160,13 @@
     const headline = (data.headline && (data.headline[lang] || data.headline.en)) || '';
     if (!headline) return;
     const ctaLabel = data.cta && data.cta.i18n && (data.cta.i18n[lang] || data.cta.i18n.en);
-    const ctaHref = data.cta && data.cta.href;
+    // href can be a plain string (same URL for every locale, e.g. a
+    // GitHub release page) OR a {en, fr, de} object (locale-specific
+    // landing pages, e.g. /essc-2026.html vs .fr.html vs .de.html).
+    const rawHref = data.cta && data.cta.href;
+    const ctaHref = typeof rawHref === 'string'
+      ? rawHref
+      : (rawHref && (rawHref[lang] || rawHref.en)) || '';
 
     const banner = document.createElement('div');
     banner.className = 'whats-new-banner';
