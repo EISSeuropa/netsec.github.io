@@ -77,13 +77,14 @@
      (public domain), the same map the EISS site uses on its
      initiative page. aria-hidden because the visible "404" + "Page
      not found" text already convey the message verbally. */
-  /* The 10:7 viewBox matches the EISS conference map; cap the width
-     generously so the continent reads at a comfortable size inside
-     the glass card rather than pinched into a narrow column. The card
-     is 560 px wide with 36 px padding each side, so ~460 px nearly
-     fills the content width while keeping a little breathing room. */
+  /* The 10:7 viewBox matches the EISS conference map. The card is
+     560 px wide with 36 px padding each side, so the content box is
+     ~488 px; a 520 px cap is therefore above the available width and
+     lets `width:100%` fill the content box edge to edge. Earlier caps
+     (340 px, then 460 px) left the continent reading slightly pinched
+     against the card; filling the full content width gives it room. */
   .err-illu{
-    display:block;width:100%;max-width:460px;height:auto;
+    display:block;width:100%;max-width:520px;height:auto;
     margin:0 auto 16px;
   }
   /* Faint pale continent so the broken star-ring reads as the hero.
@@ -149,14 +150,17 @@
     border-color:rgba(255,255,255,.22);background:transparent;color:var(--ink);
   }
   /* Sit the language switcher visually clear of the action buttons.
-     This gap was tuned up across PRs #289 (28 px), #293 (40 px) and
-     #295 (56 px) and still read tight in review; 80 px finally lets
-     the locale row sit as a meta-footer rather than a sibling of the
-     buttons. (A border-top separator was tried in #289 and reverted
-     as too rule-like against the glass card; pure whitespace works
-     here.) */
-  .err-lang{
-    margin-top:80px;
+     Earlier passes (#289, #293, #295, #299) bumped a bare `.err-lang`
+     margin-top from 28 px up to 80 px and none of it took: `.err-lang`
+     is a paragraph, and `.err-page p { margin:0 0 24px }` above has
+     higher specificity (0,1,1 vs 0,1,0), so it reset margin-top to 0
+     every time. Qualifying the selector with `.err-page` (0,2,0) wins
+     the cascade, so the gap finally applies. 48 px reads as a
+     meta-footer rather than a sibling of the buttons. (A border-top
+     separator was tried in #289 and reverted as too rule-like against
+     the glass card; pure whitespace works here.) */
+  .err-page .err-lang{
+    margin-top:48px;
     font-size:.85rem;color:var(--muted);
   }
   .err-lang a{color:var(--accent-2);text-decoration:underline;margin:0 6px}
