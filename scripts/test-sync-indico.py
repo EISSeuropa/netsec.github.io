@@ -97,10 +97,40 @@ def test_normalise_contribution_truncates_abstract() -> None:
            out["abstract"].endswith("…"), True)
     expect("hasFullAbstract flag",
            out["hasFullAbstract"], True)
-    expect("speaker emailHash stripped",
-           "emailHash" in out["speakers"][0], False)
+    expect("presenter emailHash stripped",
+           "emailHash" in out["people"][0], False)
+    expect("sole presenter flagged as speaker",
+           out["people"][0]["speaker"], True)
     expect("relative contribution url absolutised",
            out["url"], "https://indico.eiss-europa.com/event/22/contributions/521/")
+
+
+def test_normalise_contribution_coauthors() -> None:
+    """The byline merges speakers + primaryauthors + coauthors into one
+    ordered `people` list (authors first), de-dupes the same person
+    across lists, and flags only the presenters as speakers."""
+    print("\n_normalise_contribution() — co-authors merged + speaker-flagged:")
+    c = {
+        "title": "Co-authored paper",
+        "startDate": {"time": "11:00:00"},
+        "endDate":   {"time": "11:20:00"},
+        # Presenter is also a primary author; a second primary author
+        # and a co-author do not present.
+        "speakers":       [{"name": "Alice Speaker", "affiliation": "Uni A"}],
+        "primaryauthors": [{"name": "Alice Speaker", "affiliation": "Uni A"},
+                           {"name": "Bob Author", "affiliation": "Uni B"}],
+        "coauthors":      [{"name": "Carol Coauthor", "affiliation": "Uni C"}],
+        "description": "",
+        "url": "",
+    }
+    out = _normalise_contribution(c)
+    names = [p["name"] for p in out["people"]]
+    expect("all three people present, authors first, de-duped",
+           names, ["Alice Speaker", "Bob Author", "Carol Coauthor"])
+    flags = {p["name"]: p["speaker"] for p in out["people"]}
+    expect("presenter flagged", flags["Alice Speaker"], True)
+    expect("non-presenting primary author not flagged", flags["Bob Author"], False)
+    expect("co-author not flagged", flags["Carol Coauthor"], False)
 
 
 # ──────────────────────────── integration ────────────────────────────
@@ -246,6 +276,7 @@ def main() -> None:
     test_absolutize_indico_url()
     test_looks_like_break()
     test_normalise_contribution_truncates_abstract()
+    test_normalise_contribution_coauthors()
     test_extract_programme_shape()
     test_extract_programme_parallel_rows()
     test_extract_programme_empty_timetable()

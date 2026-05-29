@@ -3592,6 +3592,20 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 }
 .programme-person .name{font-weight:500}
 .programme-person .aff{color:var(--muted)}
+/* Microphone marking a presenter, shown only on papers that mix
+   speakers with non-presenting co-authors (the renderer decides). */
+.programme-mic{
+  display:inline-flex;
+  align-items:center;
+  margin-left:.25em;
+  color:var(--accent);
+  vertical-align:baseline;
+}
+.programme-mic svg{
+  width:.78em;
+  height:.78em;
+  display:block;
+}
 /* When the speaker is one of our members, .name renders as <a> pointing
    at /people.html#<slug>. The resting state has a fully-opaque accent
    dotted underline AND a soft tint to the text colour, so touch users
