@@ -251,8 +251,8 @@ def parse_keywords(raw: str) -> list[str]:
 ALIAS_FILE = ROOT / "data" / "keyword-aliases.json"
 
 
-def load_keyword_aliases() -> tuple[set[str], dict[str, str]]:
-    """Return (acronym_set, alias_to_canonical_map).
+def load_keyword_aliases() -> tuple[set[str], dict[str, str], dict[str, str]]:
+    """Return (acronym_set, alias_to_canonical_map, spelling_map).
 
     - acronym_set: lowercased forms of every entry in `acronyms`. Used
       by the word-walking normaliser to preserve in-word capitalisation
@@ -261,17 +261,22 @@ def load_keyword_aliases() -> tuple[set[str], dict[str, str]]:
       display string. Used for whole-keyword aliasing ("fpa" →
       "Foreign policy analysis"). Auto-extended so every canonical's
       own lowercase form maps back to it ("eu" → "EU"), and so each
-      acronym entry maps to itself ("nato" → "NATO")."""
+      acronym entry maps to itself ("nato" → "NATO").
+    - spelling_map: lowercased American spelling → lowercased British
+      spelling, applied word-by-word during the walk ("defense" →
+      "defence"), so compound phrases normalise too ("cyber defense"
+      → "Cyber defence")."""
     acronym_set: set[str] = set()
     alias_map: dict[str, str] = {}
+    spelling_map: dict[str, str] = {}
     if not ALIAS_FILE.exists():
-        return acronym_set, alias_map
+        return acronym_set, alias_map, spelling_map
     try:
         doc = json.loads(ALIAS_FILE.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError) as exc:
         print(f"  ! cannot read {ALIAS_FILE.name}: {exc}; falling back "
               f"to identity normalisation.")
-        return acronym_set, alias_map
+        return acronym_set, alias_map, spelling_map
 
     for entry in doc.get("acronyms", []):
         if not isinstance(entry, str):
@@ -290,13 +295,22 @@ def load_keyword_aliases() -> tuple[set[str], dict[str, str]]:
             if isinstance(alias, str) and alias.strip():
                 alias_map[alias.strip().lower()] = canonical
 
-    return acronym_set, alias_map
+    for us, uk in (doc.get("spelling") or {}).items():
+        if isinstance(us, str) and isinstance(uk, str) and us.strip() and uk.strip():
+            spelling_map[us.strip().lower()] = uk.strip().lower()
+
+    return acronym_set, alias_map, spelling_map
 
 
 _WORD_RE = re.compile(r"[\w&]+", re.UNICODE)
 
 
-def normalise_keyword(raw: str, acronyms: set[str], alias_map: dict[str, str]) -> str:
+def normalise_keyword(
+    raw: str,
+    acronyms: set[str],
+    alias_map: dict[str, str],
+    spelling_map: dict[str, str] | None = None,
+) -> str:
     """Resolve a raw submitted keyword to its canonical display form.
 
     Two stages:
@@ -305,9 +319,11 @@ def normalise_keyword(raw: str, acronyms: set[str], alias_map: dict[str, str]) -
       2. Word-walk normalisation. For each letter-run, if its lowercase
          form is in the acronym set, emit the canonical acronym (also
          from the alias map, which stores acronyms by their lowercase
-         form). Otherwise: first word gets a capital, rest stay lower.
-         Separators (hyphens, en-dashes, spaces, slashes) pass through
-         untouched."""
+         form). Otherwise: rewrite American to British spelling via the
+         spelling map, then capitalise the first word and lowercase the
+         rest. Separators (hyphens, en-dashes, spaces, slashes) pass
+         through untouched."""
+    spelling_map = spelling_map or {}
     trimmed = (raw or "").strip()
     if not trimmed:
         return ""
@@ -317,7 +333,7 @@ def normalise_keyword(raw: str, acronyms: set[str], alias_map: dict[str, str]) -
     if direct:
         return direct
 
-    # Stage 2: word-walk with acronym preservation.
+    # Stage 2: word-walk with acronym preservation + spelling normalisation.
     state = {"first_alpha": True}
 
     def _replace(match: "re.Match[str]") -> str:
@@ -326,6 +342,9 @@ def normalise_keyword(raw: str, acronyms: set[str], alias_map: dict[str, str]) -
         if lower in acronyms:
             state["first_alpha"] = False
             return alias_map.get(lower, word)
+        # American → British spelling, applied per word so compounds
+        # normalise too ("cyber defense" → "Cyber defence").
+        lower = spelling_map.get(lower, lower)
         if state["first_alpha"]:
             state["first_alpha"] = False
             return lower[:1].upper() + lower[1:]
@@ -1374,13 +1393,13 @@ def main() -> None:
     # /people.html) will read the aggregate to seed the chip list.
     print()
     print("Normalising keywords against data/keyword-aliases.json …")
-    acronyms, alias_map = load_keyword_aliases()
+    acronyms, alias_map, spelling_map = load_keyword_aliases()
     aggregate: dict[str, int] = {}
     for m in merged:
         raw_kws = m.get("keywords") or []
         seen: dict[str, str] = {}  # lowercase canonical → canonical
         for raw in raw_kws:
-            canon = normalise_keyword(raw, acronyms, alias_map)
+            canon = normalise_keyword(raw, acronyms, alias_map, spelling_map)
             if not canon:
                 continue
             key = canon.lower()
