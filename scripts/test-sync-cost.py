@@ -28,6 +28,7 @@ norm = sync_cost.norm
 slugify = sync_cost.slugify
 apply_wgs_to_bios = sync_cost.apply_wgs_to_bios
 extract_leadership = sync_cost.extract_leadership
+apply_leadership = sync_cost.apply_leadership
 
 
 def expect(label: str, got, want) -> None:
@@ -206,6 +207,63 @@ def test_extract_leadership_matches_known_role_suffixes() -> None:
     expect("Representative found", "MC Representative" in roles, True)
 
 
+def test_extract_leadership_matches_standalone_lead() -> None:
+    """Fix C: a role ending in a bare `Lead` (no trailing `er`, not the
+    hyphenated `Co-Lead`) now matches — e.g. a future Science
+    Communication Lead or Diversity Lead. `Leader` must still win over
+    the shorter `Lead` so "WG1 Leader" keeps its full label."""
+    print("\nextract_leadership() — standalone 'Lead' suffix matches:")
+    html = """
+    <table><tr><td>Science Communication Lead</td></tr></table>
+    <h4><span>Dr</span><span>Science</span><span>Comms</span></h4>
+    <table><tr><td>WG1 Leader</td></tr></table>
+    <h4><span>Prof</span><span>Filip</span><span>Ejdus</span></h4>
+    """
+    pairs = extract_leadership(html)
+    roles = [r for r, _ in pairs]
+    expect("standalone Lead found",
+           "Science Communication Lead" in roles, True)
+    expect("Leader still matches the full label, not truncated to 'Lead'",
+           "WG1 Leader" in roles, True)
+    expect("Leader not mis-captured as 'WG1 Lead'",
+           "WG1 Lead" not in roles, True)
+
+
+# ─── apply_leadership() — Fix C carve-out ──────────────────────────
+
+def test_apply_leadership_reconciles_form_entries() -> None:
+    """Fix C: leadership is reconciled on every entry, not just seeds.
+    A form-submitted member promoted on cost.eu picks up the new role;
+    their form-provided custom role survives; a stale leadership role
+    pointing elsewhere is stripped even from a form entry."""
+    print("\napply_leadership() — reconciles form entries, keeps custom roles:")
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        path = _seed_bios(tmp, [
+            # Form-submitted member, now promoted to WG1 Leader on
+            # cost.eu, carrying a custom non-leadership role.
+            {"id": "moritz-weiss", "name": "Dr Moritz Weiss",
+             "roles": ["MC member · Germany"], "source": "form"},
+            # Form-submitted member who used to be WG1 Leader but isn't
+            # any more — the stale role must be stripped.
+            {"id": "filip-ejdus", "name": "Prof Filip Ejdus",
+             "roles": ["WG1 Leader"], "source": "form"},
+        ])
+        saved = sync_cost.BIOS
+        sync_cost.BIOS = path
+        try:
+            apply_leadership([("WG1 Leader", "Dr Moritz WEISS")])
+        finally:
+            sync_cost.BIOS = saved
+        bios = {m["id"]: m for m in _read_bios(path)}
+        expect("promoted form member gains WG1 Leader",
+               "WG1 Leader" in bios["moritz-weiss"]["roles"], True)
+        expect("custom form role preserved",
+               "MC member · Germany" in bios["moritz-weiss"]["roles"], True)
+        expect("stale leadership role stripped from form entry",
+               "WG1 Leader" not in bios["filip-ejdus"]["roles"], True)
+
+
 # ─── main ──────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -216,6 +274,8 @@ def main() -> None:
     test_apply_wgs_handles_salutation_variants()
     test_apply_wgs_no_bios_file()
     test_extract_leadership_matches_known_role_suffixes()
+    test_extract_leadership_matches_standalone_lead()
+    test_apply_leadership_reconciles_form_entries()
     print("\nAll smoke tests passed.")
 
 
