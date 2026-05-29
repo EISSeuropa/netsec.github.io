@@ -1622,6 +1622,7 @@ form button:disabled{opacity:.65;cursor:wait}
    pre-JS paint window. */
 body{padding-top:var(--whats-new-h, 0px)}
 [data-i18n-status="beta"] body{padding-top:calc(var(--whats-new-h, 0px) + var(--ribbon-h,38px))}
+/* css-collision-allow: .nav */
 .nav{top:calc(var(--whats-new-h, 0px) + 14px)}
 [data-i18n-status="beta"] .nav{top:calc(var(--whats-new-h, 0px) + var(--ribbon-h,38px) + 14px)}
 
