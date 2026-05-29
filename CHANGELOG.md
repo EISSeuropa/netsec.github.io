@@ -98,6 +98,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+#### Added
+
+- **ESSC programme now lists non-presenting co-authors alongside speakers.** Indico keeps presenters and co-authors in separate lists, and the live programme grid on `/essc-2026.html` (+ FR + DE) used to show only presenters, so multi-author papers under-listed their co-authors versus the printed programme. `scripts/sync-indico.py` now emits a full author byline per contribution (a `people` array with a `speaker` flag), and the renderer prints every author, marking presenters with a small microphone icon, shown only on papers that actually mix speakers and co-authors, so single-author talks stay clean. The microphone carries a localised *Speaker* / *Intervenant·e* / *Vortragende·r* label for assistive tech, and member-card links still resolve for co-authors who are NetSec members.
+
 #### Changed
 
 - **Roadmap promotion now derives shipped cards from `CHANGELOG.md` and relocates them by ship date.** `scripts/promote-roadmap.py` (run by `scripts/release.sh`) used to flip only the status pill, date, and notes link, leaving the planned card's hand-authored `<h3>` + `<p>` describing *planned* scope rather than what shipped, and leaving the card in its original quarter even when the release crossed a quarter boundary. It now overwrites the title + body from the released CHANGELOG section's heading and lede, and moves the card into the `QN` / `TN` timeline matching the ship date. FR + DE card bodies get the EN copy plus a `[à traduire]` / `[zu übersetzen]` marker so `check-i18n-drift.py` flags them for a hand translation. The old git-blame staleness warning (which fired only after the wrong body had already shipped) is removed. Closes [#233](https://github.com/EISSeuropa/netsec.github.io/issues/233).

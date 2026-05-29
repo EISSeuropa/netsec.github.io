@@ -448,7 +448,7 @@
     en: {
       day: 'Day',
       chair: 'Chair', chairs: 'Chairs',
-      discussants: 'Discussants', speakers: 'Speakers',
+      discussants: 'Discussants', speakers: 'Speakers', speakerTag: 'Speaker',
       session: 'Session', plenary: 'Plenary', roundtable: 'Roundtable',
       contribution: 'contribution', contributions: 'contributions',
       readOnIndico: 'Read on Indico →',
@@ -472,7 +472,7 @@
     fr: {
       day: 'Jour',
       chair: 'Présidence', chairs: 'Présidence',
-      discussants: 'Discutant·es', speakers: 'Intervenant·es',
+      discussants: 'Discutant·es', speakers: 'Intervenant·es', speakerTag: 'Intervenant·e',
       session: 'Session', plenary: 'Plénière', roundtable: 'Table ronde',
       contribution: 'communication', contributions: 'communications',
       readOnIndico: 'Lire sur Indico →',
@@ -496,7 +496,7 @@
     de: {
       day: 'Tag',
       chair: 'Vorsitz', chairs: 'Vorsitz',
-      discussants: 'Diskutierende', speakers: 'Vortragende',
+      discussants: 'Diskutierende', speakers: 'Vortragende', speakerTag: 'Vortragende·r',
       session: 'Sitzung', plenary: 'Plenum', roundtable: 'Podiumsdiskussion',
       contribution: 'Beitrag', contributions: 'Beiträge',
       readOnIndico: 'Auf Indico lesen →',
@@ -892,7 +892,7 @@
               c.url ? el('a', { href: c.url, target: '_blank', rel: 'noopener' }, c.title) : c.title,
             ),
           ),
-          c.speakers && c.speakers.length ? renderPeople(c.speakers, null) : null,
+          renderContribPeople(c),
           c.abstract ? renderAbstract(c) : null,
         );
         list.appendChild(ci);
@@ -930,9 +930,34 @@
     return node;
   }
 
+  // A small microphone glyph marking who presents a paper. Drawn as
+  // an inline SVG so it prints and scales with the text; carries an
+  // aria-label + title so it isn't silent to assistive tech.
+  function micIcon() {
+    const s = el('span', { class: 'programme-mic', role: 'img', 'aria-label': t.speakerTag, title: t.speakerTag });
+    s.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21H8v2h8v-2h-3v-3.08A7 7 0 0 0 19 11h-2z"/></svg>';
+    return s;
+  }
+
+  // Build the byline for one contribution. Prefers the new `people`
+  // array (full author list, each with a `speaker` flag); falls back
+  // to the legacy `speakers` array (all treated as presenters) so the
+  // page still renders against data synced before this change.
+  function renderContribPeople(c) {
+    const people = (c.people && c.people.length)
+      ? c.people
+      : (c.speakers || []).map((s) => ({ name: s.name, affiliation: s.affiliation, speaker: true }));
+    return people.length ? renderPeople(people, null) : null;
+  }
+
   function renderPeople(people, label) {
     const node = el('p', { class: 'programme-people' });
     if (label) node.appendChild(el('span', { class: 'programme-people-label' }, label + ': '));
+    // Only mark presenters when the list actually mixes speakers and
+    // non-presenting co-authors — a single-author talk or an all-
+    // presenting panel needs no disambiguation, so it stays clean.
+    const markSpeakers = people.some((p) => p.speaker === true)
+                      && people.some((p) => p.speaker === false);
     people.forEach((p, i) => {
       if (i > 0) node.appendChild(document.createTextNode(', '));
       const k = nameKey(p.name);
@@ -957,8 +982,9 @@
       } else {
         nameNode = el('span', { class: 'name' }, p.name || '—');
       }
-      node.appendChild(el('span', { class: 'programme-person' },
+      node.appendChild(el('span', { class: 'programme-person' + (markSpeakers && p.speaker ? ' is-speaker' : '') },
         nameNode,
+        (markSpeakers && p.speaker) ? micIcon() : null,
         p.affiliation ? el('span', { class: 'aff' }, ' (' + p.affiliation + ')') : null,
       ));
     });

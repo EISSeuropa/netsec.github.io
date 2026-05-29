@@ -182,6 +182,48 @@ def _normalise_person(p: dict) -> dict:
     }
 
 
+def _person_key(p: dict) -> str:
+    """Identity key for de-duplicating a person across Indico's
+    speakers / primaryauthors / coauthors lists (Indico repeats the
+    same human in more than one). Matches on the normalised display
+    name: lower-cased, whitespace-collapsed."""
+    name = p.get("name") or p.get("fullName") or ""
+    return re.sub(r"\s+", " ", name).strip().lower()
+
+
+def _people_with_speaker_flags(presenters: list, authors: list) -> list[dict]:
+    """Build the full author byline for a contribution, flagging who
+    actually presents.
+
+    Indico keeps presenters and (co-)authors in separate lists. The
+    timetable export uses `presenters` + `authors` (where `authors`
+    holds the non-presenting co-authors); the contributions export
+    uses `speakers` + `primaryauthors`/`coauthors`. Either way the
+    site used to show only presenters, so multi-author papers
+    under-listed their co-authors versus the printed programme.
+
+    We emit presenters first (each `speaker: true`), then any author
+    who isn't already a presenter (`speaker: false`), de-duped by
+    normalised name. The renderer marks presenters with a mic only
+    when a paper actually mixes the two, so single-author talks stay
+    clean."""
+    speaker_keys = {k for k in (_person_key(p) for p in presenters) if k}
+    ordered: list = []
+    seen: set = set()
+    for p in list(presenters) + list(authors):
+        k = _person_key(p)
+        if not k or k in seen:
+            continue
+        seen.add(k)
+        ordered.append(p)
+    out = []
+    for p in ordered:
+        person = _normalise_person(p)
+        person["speaker"] = _person_key(p) in speaker_keys
+        out.append(person)
+    return out
+
+
 def _absolutize_indico_url(url: str) -> str:
     """Indico's timetable export is inconsistent: session URLs come
     back absolute (https://…), contribution URLs come back relative
@@ -263,8 +305,12 @@ def _normalise_contribution(c: dict) -> dict:
     talks) and `primaryauthors` as fallback."""
     start = c.get("startDate") or {}
     end = c.get("endDate") or {}
-    speakers_src = (
-        c.get("presenters") or c.get("speakers") or c.get("primaryauthors") or []
+    presenters_src = c.get("presenters") or c.get("speakers") or []
+    # Timetable export exposes non-presenting co-authors as `authors`;
+    # the contributions export splits them into primaryauthors+coauthors.
+    authors_src = (
+        c["authors"] if c.get("authors") is not None
+        else (c.get("primaryauthors") or []) + (c.get("coauthors") or [])
     )
     abstract = _strip_html(c.get("description") or "")
     teaser = abstract[:ABSTRACT_TEASER_CHARS]
@@ -277,7 +323,10 @@ def _normalise_contribution(c: dict) -> dict:
         "title": c.get("title") or "(untitled contribution)",
         "startTime": (start.get("time") or "")[:5],
         "endTime": (end.get("time") or "")[:5],
-        "speakers": [_normalise_person(p) for p in speakers_src],
+        # Full author byline with a `speaker` flag per person, so the
+        # renderer can list non-presenting co-authors (which the
+        # printed programme shows) and still mark who presents.
+        "people": _people_with_speaker_flags(presenters_src, authors_src),
         # `abstract` is the truncated teaser kept for the initial,
         # collapsed render. `fullAbstract` carries the un-truncated
         # plain text and is non-empty only when there's more to show
@@ -454,7 +503,7 @@ def extract_programme(timetable_results: dict, event_id: str) -> dict:
                 # itself doesn't add anything.
                 discussants: list[dict] = []
                 if subtype == "roundtable" and len(contribs) == 1:
-                    discussants = contribs[0]["speakers"]
+                    discussants = contribs[0]["people"]
                     contribs = []  # suppress the expander entirely
 
                 slots.append({
