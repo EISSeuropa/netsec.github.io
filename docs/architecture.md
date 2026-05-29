@@ -462,11 +462,18 @@ If you're adding a new event to the Events section:
    (`.github/workflows/calendar-drift.yml`) runs the same script
    with `--check` on every PR and fails if any output would change
    — so you can't merge an `events.json` edit without regenerating.
-3. **Add the matching `<article class="event-card">`** to
-   `index.html` plus the FR and DE siblings — same dates,
-   translated copy. The HTML cards stay hand-authored because they
-   carry locale-specific framing that doesn't trivially derive
-   from JSON. Re-stamp i18n drift if the EN markup changed.
+3. **Add the card-display fields to the same `events.json` entry.**
+   Since v1.9.0 the home-page Events section renders at runtime from
+   `data/events.json` via `assets/js/home-events.js`. The renderer
+   reads `cardTitle`, `cardDescription`, `meta[]`, and `cta`, plus
+   `eventType` / `featured` / `displayDate`, each carrying an
+   `{en, fr, de}` block where the copy is locale-specific. The
+   hand-coded `<article class="event-card">` markup in `index.html`
+   (and the FR + DE siblings) now survives only as a fail-soft
+   fallback that the renderer empties on success, so you no longer
+   hand-author one card per locale: fill in the JSON and all three
+   locales follow. Re-stamp i18n drift only if you edited the
+   fallback markup.
 4. TBA / undated events are deliberately **not** added to
    `data/events.json` until they have firm dates — calendar
    subscribers should not see placeholders. The TBA HTML card on
