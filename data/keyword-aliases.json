@@ -1,5 +1,5 @@
 {
-  "_documentation": "Hand-curated controlled vocabulary for the directory's research-interest keywords. Two sections drive the same surface: `acronyms` is a flat list of preferred display forms (UN, NATO, EU, IoT, …); when one of those words appears anywhere in a submitted keyword, the sync emits it in the canonical form rather than letting the sentence-case normaliser mangle it. `aliases` maps a canonical display form to a list of lowercased aliases that resolve to it; use this when two genuinely-distinct submitted phrases should collapse (e.g. `fpa` → `Foreign policy analysis`, or `political economy of europe` → `Political economy`). scripts/sync-bios.py reads this file, normalises each bio's `keywords` into a `canonical_keywords` field, and logs Levenshtein-close pairs that aren't already merged so the maintainer can decide whether to add them. The file is hand-edited; changes land in the same PR that submits the new bio (or in a periodic curation pass).",
+  "_documentation": "Hand-curated controlled vocabulary for the directory's research-interest keywords. Two sections drive the same surface: `acronyms` is a flat list of preferred display forms (UN, NATO, EU, IoT, …); when one of those words appears anywhere in a submitted keyword, the sync emits it in the canonical form rather than letting the sentence-case normaliser mangle it. `aliases` maps a canonical display form to a list of lowercased aliases that resolve to it; use this when two genuinely-distinct submitted phrases should collapse (e.g. `fpa` → `Foreign policy analysis`, or `political economy of europe` → `Political economy`). scripts/sync-bios.py reads this file, normalises each bio's `keywords` into a `canonical_keywords` field, and logs Levenshtein-close pairs that aren't already merged so the maintainer can decide whether to add them. A third section, `spelling`, is a word-level map from American to British spellings (lowercased key → lowercased British form); during the word-walk each letter-run matching a key is rewritten to its British form before sentence-casing, so `Defense` becomes `Defence` and `Cyber defense` becomes `Cyber defence`. It deliberately omits `program`, which is valid British English in the computing sense. The file is hand-edited; changes land in the same PR that submits the new bio (or in a periodic curation pass).",
   "version": 1,
 
   "acronyms": [
@@ -29,5 +29,29 @@
     "R2P": ["responsibility to protect"],
 
     "EU–NATO relations": ["eu-nato relations", "nato-eu relations"]
+  },
+
+  "spelling": {
+    "defense": "defence",
+    "defenses": "defences",
+    "offense": "offence",
+    "offenses": "offences",
+    "behavior": "behaviour",
+    "behavioral": "behavioural",
+    "organization": "organisation",
+    "organizations": "organisations",
+    "organizational": "organisational",
+    "globalization": "globalisation",
+    "securitization": "securitisation",
+    "militarization": "militarisation",
+    "democratization": "democratisation",
+    "radicalization": "radicalisation",
+    "polarization": "polarisation",
+    "modeling": "modelling",
+    "modeled": "modelled",
+    "labor": "labour",
+    "neighbor": "neighbour",
+    "neighborhood": "neighbourhood",
+    "center": "centre"
   }
 }

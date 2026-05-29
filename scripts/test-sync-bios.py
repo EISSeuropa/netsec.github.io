@@ -28,6 +28,8 @@ download_photo = sync_bios.download_photo
 classify_diff = sync_bios.classify_diff
 render_pr_title = sync_bios.render_pr_title
 render_pr_body_overview = sync_bios.render_pr_body_overview
+load_keyword_aliases = sync_bios.load_keyword_aliases
+normalise_keyword = sync_bios.normalise_keyword
 
 
 def expect(label: str, got, want) -> None:
@@ -575,8 +577,33 @@ def test_pr_title_and_overview() -> None:
            "Departed Person" in overview, True)
 
 
+def test_normalise_keyword() -> None:
+    """Keyword normalisation against the live data/keyword-aliases.json:
+    American-to-British spelling, acronym preservation, whole-keyword
+    aliases, and the sentence-case fallback."""
+    print("\nnormalise_keyword():")
+    acronyms, alias_map, spelling_map = load_keyword_aliases()
+
+    def norm(s: str) -> str:
+        return normalise_keyword(s, acronyms, alias_map, spelling_map)
+
+    # American → British spelling, applied per word so compounds work.
+    expect("defense → Defence", norm("Defense"), "Defence")
+    expect("cyber defense → Cyber defence", norm("Cyber defense"), "Cyber defence")
+    expect("behavioral → Behavioural", norm("Behavioral economics"), "Behavioural economics")
+    expect("organization → Organisation", norm("International organization"), "International organisation")
+    # Existing behaviour still holds.
+    expect("acronym first word", norm("eu foreign policy"), "EU foreign policy")
+    expect("acronym mid-phrase", norm("nato enlargement"), "NATO enlargement")
+    expect("whole-keyword alias", norm("european union"), "EU")
+    expect("sentence-case fallback", norm("Grand Strategy"), "Grand strategy")
+    # British spelling already correct is left untouched.
+    expect("british spelling unchanged", norm("Defence policy"), "Defence policy")
+
+
 def main() -> None:
     test_name_key()
+    test_normalise_keyword()
     test_country_key()
     test_merge_helferich()
     test_merge_country_guards_false_positive()
