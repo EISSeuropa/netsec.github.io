@@ -188,8 +188,12 @@ _ROLE_LABEL_RE = re.compile(
     # what should be a </td>), which breaks BeautifulSoup's table parse.
     # Regex over the raw HTML instead — find every <td>{role}</(td|div)>
     # whose text ends in one of the known leadership suffixes.
+    # `Leader` precedes the standalone `Lead` so a "WG1 Leader" cell
+    # matches the longer suffix first; standalone `Lead` covers a future
+    # label like "Science Communication Lead" or "Diversity Lead" that
+    # carries no trailing "er" and isn't the hyphenated "Co-Lead".
     r"<td[^>]*>([A-Z][A-Za-z0-9 ./()\-]+"
-    r"(?:Chair|Coordinator|Co-Lead|Co-lead|Leader|Representative))"
+    r"(?:Chair|Coordinator|Co-Lead|Co-lead|Leader|Lead|Representative))"
     r"</(?:td|div)>"
 )
 _H4_RE = re.compile(r"<h4[^>]*>(.*?)</h4>", re.S)
@@ -261,8 +265,16 @@ def _make_seed_entry(slug: str, name: str) -> dict:
 
 def apply_leadership(leadership: list[tuple[str, str]]) -> list[str]:
     """Mutate data/bios.json so each leadership role from cost.eu is
-    held by exactly one person there. Only touches `source == "seed"`
-    entries — form submissions are left alone. Returns diff lines."""
+    held by exactly one person there.
+
+    Reconciles leadership roles on EVERY entry, not just `source ==
+    "seed"` ones: a sitting MC member who submitted the Google Form and
+    is later promoted to a Working Group Lead on cost.eu now picks up
+    the role tag. The narrower guarantee that protects form data is at
+    the role level, not the entry level — only roles that look like a
+    cost.eu-tracked leadership label (i.e. appear in `leadership_roles`)
+    are ever removed, so a form-provided custom role such as
+    "MC member · Switzerland" is always kept. Returns diff lines."""
     if not BIOS.exists():
         return ["Leadership: data/bios.json not present, skipped."]
 
@@ -285,13 +297,16 @@ def apply_leadership(leadership: list[tuple[str, str]]) -> list[str]:
 
     leadership_roles = set(desired.keys())
 
-    # Reconcile roles on every seed entry.
+    # Reconcile roles on every entry, seed or form-submitted. The
+    # role-level guard below (only labels in `leadership_roles` are ever
+    # removed) is what protects form-provided custom roles, so the old
+    # entry-level `source == "seed"` skip is no longer needed.
     for m in members:
-        if m.get("source") != "seed":
-            continue
         current = list(m.get("roles") or [])
         kept: list[str] = []
         # Remove leadership roles that no longer point to this person.
+        # Non-leadership roles (form-provided custom labels) are never
+        # in `leadership_roles`, so they always fall through to `kept`.
         for r in current:
             if r in leadership_roles and desired.get(r) != m["id"]:
                 diffs.append(f"  - {m['name']}: -{r!s}")
