@@ -98,6 +98,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.9.0] · 2026-05-29 — Per-event calendar downloads and a news RSS feed
+
 > The pre-Stockholm cut, four days before the Summer School and European Security Conference open at Stockholm University. Visitors who land on the home page in the run-up to the conference get a calendar-savvy events block (per-card *Add to calendar* dropdown, every event downloadable as a single `.ics`), an RSS feed for the news block, and home-page cards that no longer drift between locales because they all derive from JSON. Three themes below; a single canonical index at the bottom.
 
 ### Calendar plumbing
@@ -681,7 +685,8 @@ Open Graph, Twitter Card, JSON-LD (Organization + WebSite + WebPage), canonical 
 - Members' Wiki seeded with glossary, FAQ, onboarding, meeting-notes convention, decisions log.
 - Dual licensing — MIT for code, CC BY 4.0 for content + docs.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.8.1...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.9.0...HEAD
+[1.9.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.8.1...v1.9.0
 [1.8.1]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.6.1...v1.7.0
