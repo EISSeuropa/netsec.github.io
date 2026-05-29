@@ -1,0 +1,87 @@
+# ESSC 2026 — programme reconciliation against the FINAL PDF.
+#
+# Source of truth: the organisers' FINAL programme PDF
+# ("Official European Security Studies 2026 pdf for Indico.pdf",
+# circulated 29 May 2026). Day-1 times were corrected manually by the
+# maintainer, so this plan carries NO time patches — only the panel
+# rename + the paper-placement fixes the PDF reconciliation surfaced.
+#
+# Dry-run : python3 scripts/indico_patch.py data/indico-fix-plans/2026-05-29-essc-programme-reconcile.yaml
+# Apply   : python3 scripts/indico_patch.py data/indico-fix-plans/2026-05-29-essc-programme-reconcile.yaml --apply
+#           (requires INDICO_WRITE_TOKEN — GH Actions secret, not local)
+#
+# `ref` for session/block patches is the SESSION friendlyId from the
+# Indico timetable export. `ref` for contribution patches is a unique
+# title substring (case-insensitive).
+#
+# NOT IN THIS PLAN — needs manual / organiser action:
+#
+# (1) DUPLICATE contributions. Two final-PDF papers exist TWICE in
+#     Indico, so a title match is ambiguous and the duplicate must be
+#     deleted before the keeper can be assigned to its panel:
+#       - "Plus ça change … French Nuclear Approach" — ids 393 AND 523
+#         (assign the keeper to The Politics of Deterrence in Europe, session 72)
+#       - "Bosnia and Herzegovina on the Edge of European Stability" — ids 410 AND 514
+#         (assign the keeper to Regional Security in the Balkans, session 60)
+#
+# (2) Eight contributions are scheduled in Indico panels but are ABSENT
+#     from the final PDF. The patch tool can't unschedule a contribution,
+#     and dropping an accepted paper is the organisers' call, so these
+#     are listed for a manual decision:
+#       - "The EU as a 21st Century Security State" (Schilde)  — in Military Transformation
+#       - "NATO Military Capabilities and the Russian Threat" (Becker) — in Military Transformation
+#       - "From National Incident Response to Zero Trust" (Vilihura) — in Cyber and Digital Sovereignty
+#       - "Soft Power as Deterrence" (Black) — in War & Strategy
+#       - "Proliferating Punishment" (Mathewson/Henry) — in Conduct of Contemporary and Future War
+#       - "Climate Change, Environmental Crime…" (Racoveanu) — in Politics at the Intersection of Climate
+#       - "Winning the Battles of Innovation and Production" (Harkness/DeVore) — in Stepping into the Future
+#       - "Are Tradwives Making Social Reproduction Great Again?" (Whetstone) — in Gender, Politics, and Security
+#
+# Chairs/conveners all already match the PDF — no convener patches needed.
+
+event_id: 22   # ESSC 2026
+
+patches:
+  # ── Session renames ───────────────────────────────────────
+  - kind: session
+    by: friendlyId
+    ref: 43            # Magnus Petersson's panel (Day 2)
+    note: "Add 'Military' before 'Innovation' to match the final PDF"
+    set:
+      title: "Military Transformation: Military Innovation and Strategic Change in the Transatlantic Context"
+
+  - kind: session
+    by: friendlyId
+    ref: 41            # Day 1 LH9 panel, currently titled just "War Abroad"
+    note: "Restore the full panel title from the final PDF"
+    set:
+      title: "War and Peace Abroad: Security Assistance, Multilateral Operations, and Peace-Building"
+
+  # ── Assign final-PDF papers that sit unassigned in Indico ─
+  - kind: contribution
+    by: title_match
+    ref: "Domestic Politics and Military Aid to Ukraine"   # Ghincea
+    note: "Final PDF places this in The Conduct of Contemporary and Future War"
+    set:
+      session: 71
+
+  - kind: contribution
+    by: title_match
+    ref: "From Rogue States to Russia"                    # Kuhn
+    note: "Final PDF places this in Military Transformation"
+    set:
+      session: 43
+
+  - kind: contribution
+    by: title_match
+    ref: "Vectorial Analysis of Hybrid Warfare"           # Duarte
+    note: "Final PDF places this in Military Transformation"
+    set:
+      session: 43
+
+  - kind: contribution
+    by: title_match
+    ref: "Small states in the current international war agenda"  # Arnaudov
+    note: "Final PDF places this in War & Strategy: Strategic Deterrence under Duress"
+    set:
+      session: 63
