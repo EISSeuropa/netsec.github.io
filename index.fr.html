@@ -567,6 +567,7 @@
 
       <form id="contact-form" class="glass"
             data-endpoint="https://formspree.io/f/meenwyrb" novalidate>
+        <p class="contact-signpost">Vous intervenez à une conférence NetSec, cherchez le programme imprimable ou avez besoin d'une lettre d'invitation pour un visa&nbsp;? La <a href="faq.fr.html#conference">FAQ conférence</a> répond à ces questions et explique comment corriger vous-même vos informations sur Indico. Pour tout le reste, le formulaire ci-dessous parvient à l'équipe de l'Action.</p>
         <div class="form-row">
           <div>
             <label for="f-name">Nom</label>
@@ -580,6 +581,19 @@
         <div>
           <label for="f-org">Institution / organisation</label>
           <input id="f-org" name="organisation" type="text" autocomplete="organization">
+        </div>
+        <div>
+          <label for="f-topic">De quoi s'agit-il&nbsp;?</label>
+          <select id="f-topic" name="topic">
+            <option value="" selected>Sélectionnez un sujet (facultatif)</option>
+            <option value="General enquiry">Demande générale</option>
+            <option value="Joining the network">Rejoindre le réseau ou l'annuaire</option>
+            <option value="Grants and funding">Subventions et financement</option>
+            <option value="Conference (ESSC)">Intervention à une conférence NetSec</option>
+            <option value="Visa invitation letter">Lettre d'invitation pour un visa</option>
+            <option value="Website or data correction">Correction du site ou de l'annuaire</option>
+            <option value="Privacy and data protection">Confidentialité et protection des données</option>
+          </select>
         </div>
         <div>
           <label for="f-msg">Message</label>
