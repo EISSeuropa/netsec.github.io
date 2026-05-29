@@ -586,6 +586,7 @@
       -->
       <form id="contact-form" class="glass"
             data-endpoint="https://formspree.io/f/meenwyrb" novalidate>
+        <p class="contact-signpost">Speaking at a NetSec conference, looking for the printable programme, or need a visa letter of invitation? The <a href="faq.html#conference">conference FAQ</a> answers these and shows how to correct your own details on Indico. For anything else, the form below reaches the Action team.</p>
         <div class="form-row">
           <div>
             <label for="f-name">Name</label>
@@ -599,6 +600,19 @@
         <div>
           <label for="f-org">Institution / Organisation</label>
           <input id="f-org" name="organisation" type="text" autocomplete="organization">
+        </div>
+        <div>
+          <label for="f-topic">What's this about?</label>
+          <select id="f-topic" name="topic">
+            <option value="" selected>Select a topic (optional)</option>
+            <option value="General enquiry">General enquiry</option>
+            <option value="Joining the network">Joining the network or directory</option>
+            <option value="Grants and funding">Grants and funding</option>
+            <option value="Conference (ESSC)">Speaking at a NetSec conference</option>
+            <option value="Visa invitation letter">Visa invitation letter</option>
+            <option value="Website or data correction">Website or directory correction</option>
+            <option value="Privacy and data protection">Privacy and data protection</option>
+          </select>
         </div>
         <div>
           <label for="f-msg">Message</label>

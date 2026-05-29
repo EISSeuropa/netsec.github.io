@@ -909,18 +909,23 @@ section{padding:80px 0;position:relative}
 form{padding:36px;display:grid;gap:14px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 label{font-size:.85rem;font-weight:500;color:var(--ink-2);display:block;margin-bottom:6px}
-input,textarea{
+input,textarea,select{
   width:100%;padding:12px 14px;font:inherit;font-size:.95rem;color:var(--ink);
   background:rgba(255,255,255,.6);border:1px solid var(--glass-border);
   border-radius:12px;transition:border-color .2s var(--ease),background .2s var(--ease),box-shadow .2s var(--ease);
 }
-input:focus,textarea:focus{
+input:focus,textarea:focus,select:focus{
   outline:0;border-color:var(--accent-2);background:#fff;
   box-shadow:0 0 0 4px rgba(10,132,255,.15);
 }
 textarea{min-height:140px;resize:vertical}
 form .btn{justify-self:start;margin-top:6px}
 form button:disabled{opacity:.65;cursor:wait}
+.contact-signpost{
+  margin:0;padding:14px 16px;font-size:.9rem;line-height:1.55;color:var(--ink-2);
+  background:rgba(0,51,153,.05);border:1px solid var(--glass-border);border-radius:12px;
+}
+.contact-signpost a{color:var(--accent-2);font-weight:500}
 
 /* -------- Toast notification -------- */
 .toast{
