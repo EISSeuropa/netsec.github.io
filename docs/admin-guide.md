@@ -179,6 +179,38 @@ No tooling required:
 
 GitHub Pages rebuilds in ~30 seconds after merge.
 
+### Setting up a conference on Indico (ESSC and future editions)
+
+A few one-off steps on the Indico event reduce the recurring email
+load described in [#332](https://github.com/EISSeuropa/netsec.github.io/issues/332).
+The public guidance for panelists lives in the FAQ *At a NetSec
+conference* section; these are the organiser-side actions that back
+it up.
+
+1. **Grant panel chairs session-coordinator rights.** Being listed as
+   a session convener is display-only and carries no rights. For a
+   chair to reorganise their own panel (running order, timing within
+   the session), assign them as a session **coordinator** under
+   *Sessions → shield icon → Coordination*, then enable the relevant
+   toggles under *Protection → Session coordinator rights*
+   (Contributions, and Session blocks if they should manage blocks).
+   Do this for every edition; it is not inherited. Chairs then work
+   from *My sessions* on the event page.
+2. **Confirm authors can self-edit their contributions.** Submitters
+   should be able to edit their own contribution (paper title) so the
+   FAQ self-service guidance holds. Name and affiliation shown on the
+   programme come from the per-event author record (Indico stores a
+   snapshot at link time, so a personal-profile change does not
+   propagate), so those corrections come to us or are made on the
+   contribution's author entry.
+3. **Invitation letters via document generation.** If we issue visa
+   invitation letters, build an HTML/Jinja template once under the
+   event or category *Customisation → Document Templates* (admin
+   right required), then bulk-generate from the registrations list
+   (*Actions → Generate Documents*) and publish each letter to the
+   registrant's own registration page for self-download. This keeps
+   letters off the manual-drafting pile.
+
 ### Cutting a release
 
 The release script handles the SemVer bump, the CHANGELOG promotion,
