@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-05-24T14:50:19+00:00",
+  "generated_at": "2026-05-29T19:00:23+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-05-24T14:50:19+00:00"
+    "last_synced": "2026-05-29T19:00:23+00:00"
   },
   "members": [
     {
@@ -426,9 +426,44 @@
         "Election interference",
         "Subversion"
       ]
+    },
+    {
+      "id": "felix-kosterke",
+      "name": "Mr Felix Kösterke",
+      "country": "Belgium",
+      "country_code": "be",
+      "affiliation": "Ghent University; Egmont Institute",
+      "position": "PhD candidate; Research Fellow",
+      "roles": [],
+      "wgs": [],
+      "wg_leadership": {},
+      "bio": "Felix Koesterke joined the Egmont Institute in September 2025 as a Research Fellow in the Europe in the World Programme. He is a doctoral candidate at Ghent University and part of the MSCA-funded doctoral network Contested EU Foreign Policy in an Era of Geopolitics (EUFOG). His research focuses on European Union grand strategy and Europe’s role in a changing international order.\n\nPreviously, he worked at the Friedrich-Ebert-Stiftung in Berlin on Germany’s Zeitenwende, and held positions at Interpeace Europe, the German Bundestag, and the German Federal Foreign Office. He studied Political Science and Communication in Mainz and Strasbourg and holds a Master’s degree in International Security from Sciences Po Paris.",
+      "keywords": [
+        "Grand Strategy",
+        "EU Foreign Policy",
+        "Defense"
+      ],
+      "email": "f.koesterke@egmontinstitute.be",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/felix-koest",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Defense",
+        "EU foreign policy",
+        "Grand strategy"
+      ]
     }
   ],
   "keyword_aggregate": [
+    {
+      "keyword": "Defense",
+      "count": 1
+    },
     {
       "keyword": "Digital governance",
       "count": 1
@@ -450,11 +485,19 @@
       "count": 1
     },
     {
+      "keyword": "EU foreign policy",
+      "count": 1
+    },
+    {
       "keyword": "EU–NATO relations",
       "count": 1
     },
     {
       "keyword": "Foreign policy analysis",
+      "count": 1
+    },
+    {
+      "keyword": "Grand strategy",
       "count": 1
     },
     {
