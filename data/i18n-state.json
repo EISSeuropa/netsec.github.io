@@ -151,15 +151,15 @@
     "faq.html": {
       "fr": {
         "file": "faq.fr.html",
-        "source_sha1": "3412792a46a403c158eb1c0533f118db87c00103",
-        "translated_on": "2026-05-27",
+        "source_sha1": "b46d11783f611f121c7bbbdbee30d7b5133f5c17",
+        "translated_on": "2026-05-29",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "faq.de.html",
-        "source_sha1": "3412792a46a403c158eb1c0533f118db87c00103",
-        "translated_on": "2026-05-27",
+        "source_sha1": "b46d11783f611f121c7bbbdbee30d7b5133f5c17",
+        "translated_on": "2026-05-29",
         "status": "beta",
         "reviewed_by": null
       }
