@@ -23,6 +23,7 @@ _normalise_person = sync_indico._normalise_person
 _normalise_contribution = sync_indico._normalise_contribution
 _absolutize_indico_url = sync_indico._absolutize_indico_url
 _looks_like_break = sync_indico._looks_like_break
+summarise_changes = sync_indico.summarise_changes
 
 
 def expect(label: str, got, want) -> None:
@@ -271,6 +272,44 @@ def test_extract_programme_empty_timetable() -> None:
 # ──────────────────────────── main ────────────────────────────
 
 
+def test_summarise_changes() -> None:
+    print("\nsummarise_changes() — reports session + paper diffs:")
+
+    def conf(sessions):
+        return {"annualConferences": {"2026": {"programme": {"days": [
+            {"date": "2026-06-11", "rows": [
+                {"startTime": s["startTime"], "parallel": False, "items": [s]}
+                for s in sessions
+            ]},
+        ]}}}}
+
+    old = conf([
+        {"id": "s1", "kind": "session", "title": "Panel A",
+         "startTime": "11:00", "endTime": "12:15", "room": "LH8",
+         "contributions": [{"title": "Paper One", "people": [{"name": "Alice"}]}]},
+        {"id": "s2", "kind": "session", "title": "Panel B",
+         "startTime": "14:00", "endTime": "15:00", "room": "LH9", "contributions": []},
+    ])
+    new = conf([
+        {"id": "s1", "kind": "session", "title": "Panel A (revised)",
+         "startTime": "11:15", "endTime": "12:30", "room": "LH8",
+         "contributions": [
+             {"title": "Paper One", "people": [{"name": "Alice"}, {"name": "Bob"}]},
+             {"title": "Paper Two", "people": [{"name": "Carol"}]},
+         ]},
+        {"id": "s3", "kind": "session", "title": "Panel C",
+         "startTime": "16:00", "endTime": "17:00", "room": "LH8", "contributions": []},
+    ])
+    out = "\n".join(summarise_changes(old, new))
+    expect("retime reported", "Retimed" in out and "11:00" in out and "11:15" in out, True)
+    expect("rename reported", "Panel A (revised)" in out, True)
+    expect("added session reported", "Added" in out and "Panel C" in out, True)
+    expect("removed session reported", "Removed" in out and "Panel B" in out, True)
+    expect("new paper reported", "Paper Two" in out, True)
+    expect("author-byline change reported", "Authors" in out and "Bob" in out, True)
+    expect("no-change yields empty list", summarise_changes(old, old), [])
+
+
 def main() -> None:
     test_normalise_person_drops_email_hash()
     test_absolutize_indico_url()
@@ -280,6 +319,7 @@ def main() -> None:
     test_extract_programme_shape()
     test_extract_programme_parallel_rows()
     test_extract_programme_empty_timetable()
+    test_summarise_changes()
     print("\nAll tests passed.")
 
 

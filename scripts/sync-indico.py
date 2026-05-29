@@ -710,6 +710,106 @@ def _regenerate_calendar() -> None:
         )
 
 
+def _flatten_programme(conf: dict) -> dict:
+    """Map a conference's programme to {item-id: compact-summary} for
+    diffing. Items are sessions / breaks (the row entries); each
+    session carries its contributions keyed by title, with the author
+    byline as the value so author changes surface too."""
+    out: dict[str, dict] = {}
+    prog = (conf or {}).get("programme") or {}
+    for day in prog.get("days", []):
+        dlabel = day.get("date") or day.get("label") or ""
+        for row in day.get("rows", []):
+            for it in row.get("items", []):
+                iid = it.get("id") or f"{dlabel}|{it.get('startTime')}|{it.get('title')}"
+                out[iid] = {
+                    "day": dlabel,
+                    "title": it.get("title") or "",
+                    "start": it.get("startTime") or "",
+                    "end": it.get("endTime") or "",
+                    "room": it.get("room") or "",
+                    "kind": it.get("kind") or "",
+                    "contribs": {
+                        (c.get("title") or ""): ", ".join(
+                            p.get("name") or ""
+                            for p in (c.get("people") or c.get("speakers") or [])
+                        )
+                        for c in (it.get("contributions") or [])
+                    },
+                }
+    return out
+
+
+def summarise_changes(old: dict | None, new: dict) -> list[str]:
+    """Human-readable, markdown change list between two indico.json
+    `data` payloads (the `annualConferences` map). Reports event-level
+    edits, sessions/breaks added/removed/retimed/renamed/moved-room,
+    and per-session papers added/removed plus author-byline changes.
+    Returns [] when nothing diffable changed (e.g. a normalisation-only
+    delta)."""
+    lines: list[str] = []
+    old_confs = (old or {}).get("annualConferences", {}) or {}
+    new_confs = new.get("annualConferences", {}) or {}
+    for year in sorted(set(old_confs) | set(new_confs)):
+        oc, nc = old_confs.get(year), new_confs.get(year)
+        if oc is None:
+            lines.append(f"### {year} — new conference added")
+            continue
+        if nc is None:
+            lines.append(f"### {year} — conference removed")
+            continue
+        yl: list[str] = []
+        for field, label in (
+            ("title", "Title"), ("start", "Start date"), ("end", "End date"),
+            ("location", "Venue"), ("room", "Default room"),
+        ):
+            if (oc.get(field) or "") != (nc.get(field) or ""):
+                yl.append(f"- **{label}:** “{oc.get(field) or '—'}” → “{nc.get(field) or '—'}”")
+        oi, ni = _flatten_programme(oc), _flatten_programme(nc)
+        for iid, it in ni.items():
+            if iid not in oi:
+                room = f", {it['room']}" if it["room"] else ""
+                yl.append(
+                    f"- **+ Added {it['kind'] or 'item'}:** “{it['title']}” "
+                    f"({it['day']} {it['start']}–{it['end']}{room})"
+                )
+        for iid, it in oi.items():
+            if iid not in ni:
+                yl.append(
+                    f"- **− Removed {it['kind'] or 'item'}:** “{it['title']}” "
+                    f"({it['day']} {it['start']}–{it['end']})"
+                )
+        for iid, b in ni.items():
+            a = oi.get(iid)
+            if a is None:
+                continue
+            if a["title"] != b["title"]:
+                yl.append(f"- **~ Renamed:** “{a['title']}” → “{b['title']}”")
+            if (a["start"], a["end"]) != (b["start"], b["end"]):
+                yl.append(
+                    f"- **~ Retimed** “{b['title']}”: "
+                    f"{a['start']}–{a['end']} → {b['start']}–{b['end']}"
+                )
+            if a["room"] != b["room"]:
+                yl.append(f"- **~ Room** “{b['title']}”: “{a['room'] or '—'}” → “{b['room'] or '—'}”")
+            for ct in b["contribs"]:
+                if ct not in a["contribs"]:
+                    yl.append(f"  - **+ Paper** added to “{b['title']}”: “{ct}”")
+            for ct in a["contribs"]:
+                if ct not in b["contribs"]:
+                    yl.append(f"  - **− Paper** removed from “{b['title']}”: “{ct}”")
+            for ct, authors in b["contribs"].items():
+                if ct in a["contribs"] and a["contribs"][ct] != authors:
+                    yl.append(
+                        f"  - **~ Authors** on “{ct}”: "
+                        f"{a['contribs'][ct] or '—'} → {authors or '—'}"
+                    )
+        if yl:
+            lines.append(f"### {year}")
+            lines.extend(yl)
+    return lines
+
+
 def main() -> None:
     mode = "authenticated" if INDICO_API_TOKEN else "anonymous"
     print(f"Indico sync running in {mode} mode", file=sys.stderr)
@@ -789,6 +889,19 @@ def main() -> None:
             file=sys.stderr,
         )
         return
+
+    # Substance changed. Emit a human-readable change summary to STDOUT
+    # (the workflow captures stdout into the PR body); operational logs
+    # stay on stderr. This is what tells the maintainer *precisely*
+    # what moved between syncs rather than "something changed".
+    change_lines = summarise_changes(existing_data, data_payload)
+    if change_lines:
+        print("\n".join(change_lines))
+    else:
+        print(
+            "_Data changed at the structural level (normalisation or "
+            "metadata) with no session- or paper-level difference detected._"
+        )
 
     # Substance changed — write with a fresh syncedAt.
     output = {
