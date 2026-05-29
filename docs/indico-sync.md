@@ -29,9 +29,9 @@ data/indico.json        ← NetSec's mirror of programme + event metadata
 
 | Path | Purpose |
 |---|---|
-| `scripts/sync-indico.py` | Hits Indico's anonymous export API, normalises the timetable, writes `data/indico.json`. Strips email hashes; truncates abstracts to ~360 chars. |
-| `scripts/test-sync-indico.py` | Standalone runnable. Mocks `requests.get` with a JPEG fixture; asserts on the normalised output. No live network. |
-| `.github/workflows/sync-indico.yml` | Daily cron at 03:45 UTC, manual `workflow_dispatch`. Direct commit to `main` when `data/indico.json` changes substantively. |
+| `scripts/sync-indico.py` | Hits Indico's anonymous export API, normalises the timetable, writes `data/indico.json`. Strips email hashes; truncates abstracts to ~360 chars. On a substantive change, prints a human-readable markdown change summary to **stdout** (sessions/papers added, removed, retimed, renamed, plus author-byline changes) while operational logs go to stderr. |
+| `scripts/test-sync-indico.py` | Standalone runnable. Mocks `requests.get` with a JPEG fixture; asserts on the normalised output. No live network. Covers `summarise_changes()`. |
+| `.github/workflows/sync-indico.yml` | Daily cron at 03:45 UTC, manual `workflow_dispatch`. Opens/updates a PR on `indico-sync/auto` (auto-merge, squash) when `data/indico.json` changes substantively; the PR body renders the script's stdout change summary so the maintainer sees precisely what moved. |
 | `data/indico.json` | Synced snapshot, year-keyed under `annualConferences`. Schema mirrors EISS's `indico.json` exactly so the renderer is portable. |
 | `essc-2026.html` (+ FR + DE) | The page that consumes the data. Inline JS at the foot fetches `data/indico.json`, looks up `annualConferences["2026"]`, and renders the grid. Locale-aware chrome labels via a small `I18N` lookup keyed on `document.documentElement.lang`. |
 
