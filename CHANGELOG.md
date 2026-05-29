@@ -98,7 +98,9 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+#### Changed
+
+- **Roadmap promotion now derives shipped cards from `CHANGELOG.md` and relocates them by ship date.** `scripts/promote-roadmap.py` (run by `scripts/release.sh`) used to flip only the status pill, date, and notes link, leaving the planned card's hand-authored `<h3>` + `<p>` describing *planned* scope rather than what shipped, and leaving the card in its original quarter even when the release crossed a quarter boundary. It now overwrites the title + body from the released CHANGELOG section's heading and lede, and moves the card into the `QN` / `TN` timeline matching the ship date. FR + DE card bodies get the EN copy plus a `[à traduire]` / `[zu übersetzen]` marker so `check-i18n-drift.py` flags them for a hand translation. The old git-blame staleness warning (which fired only after the wrong body had already shipped) is removed. Closes [#233](https://github.com/EISSeuropa/netsec.github.io/issues/233).
 
 ## [1.9.0] · 2026-05-29 — Per-event calendar downloads and a news RSS feed
 

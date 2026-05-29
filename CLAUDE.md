@@ -186,8 +186,24 @@ issue (rule §3) and reference it from the surface itself.
   locales (or, for a snap patch release, hand-added as already
   shipped). The script fails soft with an exit-2 warning if it
   finds no card to promote.
-- Is the next planned release on the timeline still accurate?
-  (Manual check; the script doesn't reorder the table.)
+- **The card title + body are derived from `CHANGELOG.md` at promote
+  time** (issue #233): the script overwrites the planned card's
+  `<h3>` with the released section's heading title and its `<p>` with
+  the section lede (the first `>` blockquote, or a synthesised
+  sentence for index-only patch releases). This replaced an earlier
+  git-blame staleness warning that only fired *after* stale planned
+  scope had already shipped. EN gets the CHANGELOG copy directly; FR
+  + DE get the EN copy plus a `[à traduire]` / `[zu übersetzen]`
+  marker on the lede, so `check-i18n-drift.py` flags the card for a
+  hand translation (no machine translation, rule §1). Translate the
+  FR + DE card bodies in a follow-up before the marker lingers.
+- **The script also relocates the card into the quarter matching its
+  ship date** (issue #233): if a release shipped earlier or later
+  than its planned card's `<ol class="rm-timeline">` quarter, the
+  card moves to the right `QN` / `TN` section (inserted after that
+  quarter's shipped cards, before its planned ones). So the timeline
+  *is* reordered now; just confirm the next planned release below the
+  shipped card still reads accurately.
 - Anything in *Under watch* (the deferred-items section at the
   foot of the page) ready to promote to a dated entry? (Manual.)
 - The autostamp in `docs/roadmap-2026.md` updates separately via

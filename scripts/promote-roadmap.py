@@ -41,27 +41,22 @@ Exit codes:
 """
 from __future__ import annotations
 
+import html as _html
 import re
-import subprocess
 import sys
-import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+CHANGELOG = ROOT / "CHANGELOG.md"
 
-# Card-body staleness check (option 1, git-blame age). At release
-# time, after the script has flipped the status pill, run `git blame`
-# on the planned card's <p> prose and report how long ago it was
-# last touched. If the age exceeds this threshold, print a warning
-# so the maintainer remembers to refresh the body before tag + GH
-# Release land. 30 days is a balance between false-positives (cards
-# polished a month before release look fresh by blame but might
-# still describe wrong scope) and missing genuinely-stale bodies.
-# The check is best-effort: subprocess failures, missing git history,
-# or unparseable blame output silently skip the warning rather than
-# blocking release.sh.
-CARD_BODY_AGE_THRESHOLD_DAYS = 30
+# Card title + body are derived from CHANGELOG.md at promote time
+# (see parse_changelog_section). The planned card's hand-authored
+# <h3> + <p> describe *planned* scope; what actually ships often
+# differs, so we overwrite both with the released section's heading
+# title and lede. This replaced an earlier git-blame staleness
+# warning that fired to stderr only *after* the wrong body had
+# already landed — structurally too late (see issue #233).
 
 # Per-locale strings. Keep the keys aligned across locales: anywhere
 # the script needs a localised label, this is the single source of
@@ -72,6 +67,13 @@ LOCALES = {
         "pill_planned": "Planned",
         "pill_shipped": "Shipped",
         "notes_link_text": "Release notes",
+        # Quarter heading prefix on this locale's <h2> (e.g. "Q2 2026").
+        # FR uses "Trimestre" → "T"; EN + DE both use "Q".
+        "quarter_prefix": "Q",
+        # Appended to the lede on non-EN cards whose body was overwritten
+        # with EN CHANGELOG content, so check-i18n-drift.py flags the card
+        # for a human translation pass (CLAUDE.md §1). Empty for EN.
+        "needs_translation": "",
         "months": [
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December",
@@ -97,6 +99,8 @@ LOCALES = {
         "pill_planned": "Planifié",
         "pill_shipped": "Livrée",
         "notes_link_text": "Notes de version",
+        "quarter_prefix": "T",
+        "needs_translation": " [à traduire]",
         "months": [
             "janvier", "février", "mars", "avril", "mai", "juin",
             "juillet", "août", "septembre", "octobre", "novembre", "décembre",
@@ -117,6 +121,8 @@ LOCALES = {
         "pill_planned": "Geplant",
         "pill_shipped": "Veröffentlicht",
         "notes_link_text": "Release-Notizen",
+        "quarter_prefix": "Q",
+        "needs_translation": " [zu übersetzen]",
         "months": [
             "Januar", "Februar", "März", "April", "Mai", "Juni",
             "Juli", "August", "September", "Oktober", "November", "Dezember",
@@ -171,8 +177,187 @@ def parse_args(argv: list[str]) -> tuple[str, str, bool]:
     return version, iso_date, dry_run
 
 
+# ─────────────────── CHANGELOG-derived card body ───────────────────
+
+
+def _markdown_inline_to_html(text: str) -> str:
+    """Convert the small slice of inline Markdown that appears in a
+    CHANGELOG lede into the HTML the roadmap card expects. Handles
+    code spans, links, bold, and emphasis; HTML-escapes everything
+    else first so a literal `<head>` in a code span renders safely.
+    The lede is trusted maintainer copy, so this is deliberately
+    minimal rather than a full Markdown parser."""
+    # Escape &, <, > first (leave quotes alone — they read fine in
+    # body prose and we don't want &quot; noise). The Markdown markers
+    # below are all ASCII punctuation untouched by escaping.
+    text = _html.escape(text, quote=False)
+    # Links: [label](url) → <a href="url">label</a>.
+    text = re.sub(
+        r"\[([^\]]+)\]\(([^)]+)\)",
+        r'<a href="\2">\1</a>',
+        text,
+    )
+    # Code spans: `code` → <code>code</code>.
+    text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
+    # Bold before emphasis so **x** doesn't get eaten by the *x* rule.
+    text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
+    text = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", text)
+    return text
+
+
+def _extract_lede(section_body: str) -> str | None:
+    """Return the first blockquote paragraph (the `> …` lede) of a
+    CHANGELOG section, joined to a single line with the `> ` markers
+    stripped, or None if the section has no blockquote (patch
+    releases ship index-only)."""
+    lines = section_body.splitlines()
+    quote: list[str] = []
+    started = False
+    for line in lines:
+        if line.startswith(">"):
+            started = True
+            quote.append(re.sub(r"^>\s?", "", line))
+        elif started:
+            # Blockquote ended (first non-`>` line after it began).
+            break
+    if not quote:
+        return None
+    # A lede may wrap across several `>` lines; join on spaces and
+    # collapse the runs of whitespace that introduces.
+    return re.sub(r"\s+", " ", " ".join(quote)).strip()
+
+
+def _synthesize_lede(section_body: str) -> str:
+    """Fallback lede for index-only patch releases that carry no
+    blockquote. Joins the `#### Added / Changed / Fixed …` sub-section
+    labels present into one sentence."""
+    labels = re.findall(r"^#### (\w[\w ]*)$", section_body, flags=re.MULTILINE)
+    seen: list[str] = []
+    for lbl in labels:
+        lbl = lbl.strip()
+        if lbl and lbl not in seen:
+            seen.append(lbl)
+    if not seen:
+        return "Maintenance release. See the changelog for details."
+    if len(seen) == 1:
+        joined = seen[0].lower()
+    else:
+        joined = ", ".join(s.lower() for s in seen[:-1]) + " and " + seen[-1].lower()
+    return f"Maintenance release covering {joined}. See the changelog for details."
+
+
+def parse_changelog_section(
+    version: str, changelog_text: str,
+) -> tuple[str, str] | None:
+    """Extract (title, lede_html) for the `[<version>]` section of
+    CHANGELOG.md. Title is the text after the em-dash on the section
+    heading; lede_html is the first blockquote paragraph rendered to
+    inline HTML, or a synthesised sentence for index-only patches.
+    Returns None if the section heading is absent."""
+    heading_re = re.compile(
+        r"^## \[" + re.escape(version) + r"\][^\n]*?—\s*(.+?)\s*$",
+        flags=re.MULTILINE,
+    )
+    m = heading_re.search(changelog_text)
+    if not m:
+        return None
+    title = m.group(1).strip()
+    body_start = m.end()
+    nxt = re.search(r"^## \[", changelog_text[body_start:], flags=re.MULTILINE)
+    section_body = (
+        changelog_text[body_start: body_start + nxt.start()]
+        if nxt else changelog_text[body_start:]
+    )
+    lede = _extract_lede(section_body) or _synthesize_lede(section_body)
+    return title, _markdown_inline_to_html(lede)
+
+
+# ───────────────────── quarter relocation ─────────────────────
+
+
+def _target_quarter(iso_date: str) -> tuple[int, int]:
+    """Return (quarter_number, year) for an ISO date. Q1 = Jan–Mar."""
+    y, m, _d = (int(x) for x in iso_date.split("-"))
+    return (m - 1) // 3 + 1, y
+
+
+def _timeline_spans(html: str) -> list[tuple[int, int]]:
+    """Return (start, end) offsets of each `<ol class="rm-timeline">…
+    </ol>` block, in document order."""
+    return [
+        (m.start(), m.end())
+        for m in re.finditer(
+            r'<ol class="rm-timeline">.*?</ol>', html, flags=re.DOTALL,
+        )
+    ]
+
+
+def _heading_before(html: str, offset: int) -> str | None:
+    """Return the text of the nearest `<h2>…</h2>` before `offset`
+    (the quarter heading governing the timeline that follows)."""
+    heads = list(re.finditer(r"<h2[^>]*>([^<]*)</h2>", html[:offset]))
+    return heads[-1].group(1).strip() if heads else None
+
+
+def relocate_card_to_quarter(
+    html: str, version: str, iso_date: str, locale: dict,
+) -> tuple[str, bool]:
+    """Move the just-shipped `v<version>` card into the `<ol>` for the
+    quarter matching its ship date, inserting after that quarter's
+    existing shipped cards and before its first planned card.
+
+    No-op (returns (html, False)) when the card already sits in the
+    right quarter, when no shipped card for the version exists yet,
+    or when the destination quarter has no `<ol>` in this file."""
+    q, year = _target_quarter(iso_date)
+    target_heading = f"{locale['quarter_prefix']}{q} {year}"
+
+    # Locate the full shipped <li> block (with its leading indentation
+    # and trailing newline) whose when-span carries v<version>.
+    card_m = None
+    for m in re.finditer(
+        r'[ \t]*<li class="rm-entry shipped(?: [^"]*)?">.*?</li>\n',
+        html, flags=re.DOTALL,
+    ):
+        if re.search(
+            rf'<span class="when">[^<]*\bv{re.escape(version)}\b',
+            m.group(0),
+        ):
+            card_m = m
+            break
+    if card_m is None:
+        return html, False
+
+    spans = _timeline_spans(html)
+    src = next((s for s in spans if s[0] <= card_m.start() < s[1]), None)
+    if src is None or _heading_before(html, src[0]) == target_heading:
+        # Card isn't inside a timeline, or already in the right quarter.
+        return html, False
+    if not any(_heading_before(html, s[0]) == target_heading for s in spans):
+        # Destination quarter doesn't exist on this page; leave the
+        # card where it is rather than fabricate a section.
+        return html, False
+
+    card_text = card_m.group(0)
+    without = html[: card_m.start()] + html[card_m.end():]
+
+    # Re-find the destination timeline in the card-removed document.
+    dest = next(
+        s for s in _timeline_spans(without)
+        if _heading_before(without, s[0]) == target_heading
+    )
+    ol_text = without[dest[0]: dest[1]]
+    planned = re.search(r'[ \t]*<li class="rm-entry planned', ol_text)
+    if planned:
+        insert_at = dest[0] + planned.start()
+    else:
+        insert_at = dest[0] + re.search(r"[ \t]*</ol>", ol_text).start()
+    return without[:insert_at] + card_text + without[insert_at:], True
+
+
 def promote_planned_card(
     html: str, version: str, iso_date: str, locale: dict,
+    card_body: tuple[str, str] | None = None,
 ) -> tuple[str, bool]:
     """If a planned card for `v<version>` exists, flip it to shipped.
 
@@ -180,6 +365,11 @@ def promote_planned_card(
     `rm-milestone`) whose `<span class="when">` text contains the
     exact string `v<version>` (so non-release planned milestones like
     the Stockholm event stay planned).
+
+    When `card_body` is given as `(title, lede_html)`, the card's
+    `<h3>` and first `<p>` are overwritten with it (the
+    CHANGELOG-derived title + lede). When None, the hand-authored
+    body is left untouched.
 
     Returns (new_html, was_changed). Idempotent: an already-shipped
     card or a missing card both return (html, False).
@@ -278,6 +468,21 @@ def promote_planned_card(
                 new_block,
                 count=1,
             )
+        # 1e. Overwrite the title + body with the CHANGELOG-derived
+        #     content, so the shipped card describes what actually
+        #     shipped rather than the planned scope written months ago.
+        if card_body is not None:
+            title, lede_html = card_body
+            new_block = re.sub(
+                r"<h3>.*?</h3>",
+                "<h3>" + _html.escape(title, quote=False) + "</h3>",
+                new_block, count=1, flags=re.DOTALL,
+            )
+            new_block = re.sub(
+                r"<p>.*?</p>",
+                "<p>" + lede_html + "</p>",
+                new_block, count=1, flags=re.DOTALL,
+            )
         return new_block
 
     new_html, n_subs = li_pattern.subn(maybe_promote, html)
@@ -316,130 +521,28 @@ def bump_updated_stamp(
     return new_html, n > 0 and new_html != html
 
 
-def find_planned_card_lines(
-    html: str, version: str,
-) -> tuple[int, int] | None:
-    """Locate the planned card's prose body in `html` and return its
-    (start_line, end_line) 1-indexed range, or None if no planned card
-    for this version exists. The range covers the <p> inside the
-    <article>, not the wrapper <li>, since the body is what we're
-    checking for staleness. Lines are 1-based to match git's
-    `-L start,end` convention."""
-    # Match the planned card by version, then narrow to its <p>.
-    card_re = re.compile(
-        r'<li class="rm-entry planned"(?:\s+rm-milestone)?>'
-        r'.*?<span class="when">[^<]*\bv'
-        + re.escape(version)
-        + r'\b.*?</li>',
-        flags=re.DOTALL,
-    )
-    m = card_re.search(html)
-    if not m:
-        return None
-    block = m.group(0)
-    block_start_offset = m.start()
-    # Find the <p>...</p> inside the card. There's typically one
-    # body paragraph; if multiple, use the first (the description).
-    p_re = re.compile(r'<p>.*?</p>', flags=re.DOTALL)
-    p_match = p_re.search(block)
-    if not p_match:
-        return None
-    p_start_offset = block_start_offset + p_match.start()
-    p_end_offset = block_start_offset + p_match.end()
-    start_line = html[:p_start_offset].count("\n") + 1
-    end_line = html[:p_end_offset].count("\n") + 1
-    return (start_line, end_line)
-
-
-def git_blame_max_age_days(
-    file_path: Path, start_line: int, end_line: int,
-) -> int | None:
-    """Run `git blame` on the line range and return how many days
-    have passed since the most recent commit that touched any line
-    in the range. Returns None on any subprocess error or unparseable
-    output. Best-effort by design: a missing git history shouldn't
-    abort the release."""
-    try:
-        result = subprocess.run(
-            ["git", "blame", "--porcelain",
-             "-L", f"{start_line},{end_line}",
-             "--", str(file_path)],
-            capture_output=True, text=True, cwd=ROOT,
-            check=True, timeout=10,
-        )
-    except (subprocess.CalledProcessError,
-            subprocess.TimeoutExpired,
-            FileNotFoundError):
-        return None
-    # Porcelain output: each commit block contains a
-    # "committer-time <unix-timestamp>" header line for each
-    # blamed line. We want the newest (largest) timestamp.
-    timestamps: list[int] = []
-    for line in result.stdout.splitlines():
-        if line.startswith("committer-time "):
-            try:
-                timestamps.append(int(line.split()[1]))
-            except (ValueError, IndexError):
-                continue
-    if not timestamps:
-        return None
-    newest = max(timestamps)
-    age_seconds = time.time() - newest
-    return int(age_seconds // 86400)
-
-
-def maybe_warn_stale_card_body(
-    file_path: Path, html: str, version: str, lang: str,
-) -> None:
-    """Print a warning if the planned card's body looks stale.
-    Called AFTER promotion succeeds. Best-effort: silently no-ops
-    on any signal we can't interpret (missing card, blame failure,
-    threshold not met). The expensive consequence is letting a
-    stale card body ship with a release; the cheap one is occasional
-    false positives."""
-    line_range = find_planned_card_lines(html, version)
-    if line_range is None:
-        # No planned card found in the post-promotion HTML — expected,
-        # since the promotion just flipped it to "shipped". Re-search
-        # for the shipped card to get its line range instead.
-        shipped_re = re.compile(
-            r'<li class="rm-entry shipped"(?:\s+rm-milestone)?>'
-            r'.*?<span class="when">[^<]*\bv'
-            + re.escape(version)
-            + r'\b.*?</li>',
-            flags=re.DOTALL,
-        )
-        m = shipped_re.search(html)
-        if not m:
-            return
-        block = m.group(0)
-        block_start_offset = m.start()
-        p_match = re.search(r'<p>.*?</p>', block, flags=re.DOTALL)
-        if not p_match:
-            return
-        line_range = (
-            html[:block_start_offset + p_match.start()].count("\n") + 1,
-            html[:block_start_offset + p_match.end()].count("\n") + 1,
-        )
-    age = git_blame_max_age_days(file_path, *line_range)
-    if age is None or age < CARD_BODY_AGE_THRESHOLD_DAYS:
-        return
-    print(
-        f"  ⚠ {lang}: card body for v{version} was last touched "
-        f"{age} days ago (threshold {CARD_BODY_AGE_THRESHOLD_DAYS}). "
-        f"That's probably the planned scope from when the card was "
-        f"written, not what actually shipped. Review {file_path.name} "
-        f"lines {line_range[0]}–{line_range[1]} and edit the body "
-        f"in a follow-up commit on this release branch before the "
-        f"tag + GH Release land."
-    )
-
-
 def main() -> None:
     version, iso_date, dry_run = parse_args(sys.argv)
 
+    # Derive the shipped card's title + lede from the CHANGELOG once.
+    # If the section is missing (shouldn't happen — release.sh promotes
+    # the CHANGELOG before calling us), fall back to leaving the
+    # hand-authored body untouched rather than blanking it.
+    base_body: tuple[str, str] | None = None
+    if CHANGELOG.exists():
+        base_body = parse_changelog_section(
+            version, CHANGELOG.read_text(encoding="utf-8"),
+        )
+    if base_body is None:
+        print(
+            f"  ! No [{version}] section in CHANGELOG.md; leaving card "
+            f"bodies untouched (title + lede won't be refreshed).",
+            file=sys.stderr,
+        )
+
     any_card_promoted = False
     any_stamp_bumped = False
+    any_card_moved = False
     any_already_current = False
 
     for lang, locale in LOCALES.items():
@@ -449,7 +552,18 @@ def main() -> None:
             continue
         original = path.read_text(encoding="utf-8")
         updated = original
+        # Localise the body: EN gets the CHANGELOG content directly;
+        # FR + DE get the EN content plus a [needs translation] marker
+        # appended to the lede, so check-i18n-drift.py flags the card
+        # for a hand translation (no machine translation — CLAUDE.md §1).
+        card_body = base_body
+        if base_body is not None and locale["needs_translation"]:
+            title, lede_html = base_body
+            card_body = (title, lede_html + locale["needs_translation"])
         updated, promoted = promote_planned_card(
+            updated, version, iso_date, locale, card_body=card_body,
+        )
+        updated, moved = relocate_card_to_quarter(
             updated, version, iso_date, locale,
         )
         updated, bumped = bump_updated_stamp(updated, iso_date, locale)
@@ -478,6 +592,12 @@ def main() -> None:
             past_bits.append(f"promoted v{version} card to shipped")
             future_bits.append(f"promote v{version} card to shipped")
             any_card_promoted = True
+        if moved:
+            q, year = _target_quarter(iso_date)
+            label = f"{locale['quarter_prefix']}{q} {year}"
+            past_bits.append(f"moved card to {label}")
+            future_bits.append(f"move card to {label}")
+            any_card_moved = True
         if bumped:
             past_bits.append(f"bumped updated stamp to {iso_date}")
             future_bits.append(f"bump updated stamp to {iso_date}")
@@ -487,13 +607,6 @@ def main() -> None:
         else:
             path.write_text(updated, encoding="utf-8")
             print(f"  · {lang}: {' + '.join(past_bits)}.")
-            # Staleness check on the just-promoted card body.
-            # `updated` is the post-promotion HTML, so the card is
-            # now `class="rm-entry shipped"`; the helper handles both
-            # planned + shipped lookups. Best-effort: silently no-ops
-            # on any subprocess error.
-            if promoted:
-                maybe_warn_stale_card_body(path, updated, version, lang)
 
     # Soft warning: if nothing happened AND no locale was already at
     # the desired state, the maintainer probably forgot to add a
@@ -502,6 +615,7 @@ def main() -> None:
     # to commit + tag anyway).
     nothing_happened = (
         not any_card_promoted
+        and not any_card_moved
         and not any_stamp_bumped
         and not any_already_current
     )
