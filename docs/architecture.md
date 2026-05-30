@@ -339,6 +339,7 @@ EISS repository's `docs/indico-programme-integration.md`.
 │   ├── check-i18n-drift.py          # Reports stale translations vs. EN source
 │   ├── build-calendar.py            # Generates /calendar.ics + /calendar/<slug>.ics from data/events.json
 │   ├── build-news-rss.py            # Generates /news.xml (RSS 2.0) from data/news.json
+│   ├── sync-roadmap-progress.py     # Writes data/roadmap-progress.json from GitHub milestone closed/total
 │   ├── build-search.sh              # Builds /pagefind/ via `npx pagefind` (gitignored)
 │   ├── release.sh                   # Cuts a tagged release; promotes CHANGELOG
 │   └── requirements.txt             # requests, beautifulsoup4, Pillow
@@ -350,6 +351,7 @@ EISS repository's `docs/indico-programme-integration.md`.
 │   ├── i18n-drift.yml               # Drift checker for FR/DE translations
 │   ├── calendar-drift.yml           # Drift checker for /calendar.ics + /calendar/*.ics vs. events.json
 │   ├── news-drift.yml               # Drift checker for /news.xml vs. data/news.json
+│   ├── roadmap-progress.yml         # Refreshes data/roadmap-progress.json on issue/milestone events
 │   ├── external-link-arrows.yml    # Lint: trailing → on external links
 │   └── search-drift.yml             # Build sanity check on PRs (per-locale page count > 0)
 │
