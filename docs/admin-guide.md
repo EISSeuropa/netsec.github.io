@@ -215,6 +215,20 @@ it up.
    FAQ answer stays signatory-agnostic until then, and the request
    channel for applicants remains the contact form.
 
+### Pinning the member spotlight
+
+The home page can feature one member per week ([#341](https://github.com/EISSeuropa/netsec.github.io/issues/341)).
+Rotation is automatic (`scripts/rotate-spotlight.py`, weekly via the
+`spotlight-rotate.yml` workflow) and stays **dormant until at least
+10 members are eligible** (a member needs a photo and a written bio),
+so nothing renders while the network is small. To feature a specific
+member next run (a new joiner, an award, a deliverable author), set
+`"pinned": "<member-id>"` in `data/spotlight.json` and push; the
+script features them and clears the pin. Do not hand-edit `current`
+or `history`; let the script manage them. Gender is not part of the
+rotation score by design, so the pin is also how you correct any
+visible imbalance.
+
 ### Cutting a release
 
 The release script handles the SemVer bump, the CHANGELOG promotion,
