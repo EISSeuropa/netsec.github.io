@@ -4144,7 +4144,12 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
      dedicated programme print block further down. */
   .programme-day { page-break-before:always; }
   .programme-day:first-of-type { page-break-before:auto; }
-  .programme-slot { page-break-inside:avoid; }
+  /* Slots are allowed to break across pages (a force-opened panel can
+     exceed a page); the per-contribution `break-inside: avoid` in the
+     programme print block keeps each paper intact. Do not re-assert
+     avoid here, or a long Day-2 panel stalls the print engine and
+     truncates the PDF. */
+  .programme-slot { page-break-inside:auto; }
 
   /* Strip the directory's expand-in-place hint chrome too. */
   .members-grid.is-compact .member-card { padding:16px !important; }
@@ -4240,45 +4245,34 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
     color: #444;
   }
 
-  /* Row — narrower time gutter, smaller gap. Keep parallel sessions
-     side-by-side; the viewport in print is ~595pt wide so the
-     screen breakpoint at 900px does not fire.
+  /* Row — block flow on paper, NOT CSS grid. A force-opened session
+     can be taller than a single page, and Chrome's print engine cannot
+     fragment a tall grid (or flex) item across a page boundary: it
+     silently drops every page after the overflowing row. That is what
+     truncated the PDF at "Page 5 of 14" mid-Day-2 once every panel was
+     force-opened. Laying the rows out as ordinary block boxes lets the
+     engine break between contributions and carry on to the last page.
 
-     `align-items: start` + `grid-auto-rows: min-content` is the
-     critical pairing for Chrome's print engine: without them, the
-     `break-inside: avoid` hint on the slot child causes the parent
-     grid row track to expand to the remaining page height (the
-     engine reserves the next-page worth of vertical space "in
-     case" the slot needs it), then the slot stretches to fill
-     that track. End result was a one-row-per-page programme. The
-     two declarations together pin track height to the content's
-     intrinsic min-content size and stop the stretch.
-
-     `align-content: start` on the inner grid does the same job for
-     parallel rows. */
-  .programme-row {
-    grid-template-columns: 70pt 1fr;
-    grid-auto-rows: min-content;
-    align-items: start;
-    align-content: start;
-    gap: 8pt;
-    margin: 0 0 3mm;
-  }
-  .programme-row-time {
-    font-size: 9pt;
-    padding-top: 2pt;
-    align-self: start;
-  }
-  .programme-row-items {
-    gap: 5pt;
-    grid-auto-rows: min-content;
-    align-items: start;
-    align-content: start;
-  }
+     The time prints as a small bold label above its row instead of a
+     left gutter, and parallel sessions stack vertically (each already
+     shows its room badge, so which hall is unambiguous), which reads
+     cleanly on paper and sidesteps grid fragmentation entirely. */
+  .programme-row,
+  .programme-row-items,
   .programme-row.is-parallel .programme-row-items {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6pt;
+    display: block;
+    gap: 0;
   }
+  .programme-row { margin: 0 0 3mm; }
+  .programme-row-time {
+    display: block;
+    font-size: 9pt;
+    font-weight: 700;
+    padding: 0;
+    margin: 0 0 2pt;
+  }
+  /* Space stacked sessions within a row (grid gap no longer applies). */
+  .programme-row-items > * + * { margin-top: 5pt; }
 
   /* Slot — sharper corners, thinner border, no shadow, paper-sized
      type. `align-self: start` is the belt-and-braces companion to
@@ -4292,8 +4286,12 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
     font-size: 9.5pt;
     line-height: 1.35;
     align-self: start;
-    page-break-inside: avoid;
-    break-inside: avoid;
+    /* Allow a tall session to flow across a page boundary. The
+       unbreakable unit is the individual contribution below, not the
+       whole card, so a long panel splits between papers instead of
+       overflowing and stalling the print engine. */
+    page-break-inside: auto;
+    break-inside: auto;
   }
   .programme-slot.is-break {
     padding: 4pt 8pt;
@@ -4305,6 +4303,15 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   .programme-slot-head {
     gap: .3rem;
     margin-bottom: .35rem;
+  }
+  /* Keep the session header (kind, title, chairs) with the start of its
+     paper list so a panel never opens with just its title orphaned at
+     the foot of a page. */
+  .programme-slot-head,
+  .programme-slot-title,
+  .programme-slot-people {
+    page-break-after: avoid;
+    break-after: avoid;
   }
   /* Session title — high contrast on paper. Without an explicit
      near-black colour here, the global `h4 { color: var(--ink) }`
@@ -4328,12 +4335,16 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   .programme-contribs,
   .programme-contribs[open] { display: block; }
   .programme-contribs > summary { display: none; }
+  /* Block, not flex: a flex column fragments across pages as poorly as
+     a grid does. Block flow + per-item margins give the same spacing
+     while letting the list span page boundaries. */
   .programme-contribs-list {
+    display: block;
     margin-top: 3mm;
-    gap: 2mm;
   }
   .programme-contrib {
     padding: 3pt 6pt;
+    margin: 0 0 2mm;
     background: rgba(0,0,0,.03) !important;
     page-break-inside: avoid;
     break-inside: avoid;
