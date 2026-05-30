@@ -2905,6 +2905,18 @@ body.search-open{overflow:hidden}
 .dark .rm-pill.planned{color:#a5b4fc;background:rgba(99,102,241,.18)}
 .dark .rm-pill.deferred{color:#fbbf24;background:rgba(245,158,11,.18)}
 
+/* In-flight milestone progress bar, rendered by roadmap-progress.js
+   from data/roadmap-progress.json (GitHub milestone closed / total).
+   Only planned + in-progress cards get one; the fill follows the
+   card's status colour. */
+.rm-progress{margin-top:14px}
+.rm-progress-track{height:7px;border-radius:99px;background:rgba(99,102,241,.14);overflow:hidden}
+.rm-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#6366f1,#8b8fe8);transition:width .7s var(--ease)}
+.rm-entry.in-progress .rm-progress-track{background:rgba(10,132,255,.14)}
+.rm-entry.in-progress .rm-progress-fill{background:linear-gradient(90deg,#0a84ff,#38bdf8)}
+.rm-progress-label{margin-top:6px;font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.dark .rm-progress-track{background:rgba(255,255,255,.10)}
+
 /* Quarter heading band */
 .rm-quarter{
   margin:44px 0 18px;display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;

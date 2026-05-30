@@ -186,6 +186,17 @@ issue (rule §3) and reference it from the surface itself.
   locales (or, for a snap patch release, hand-added as already
   shipped). The script fails soft with an exit-2 warning if it
   finds no card to promote.
+- **In-flight progress bars are auto-synced.** Each planned /
+  in-progress card carries `data-milestone="vX.Y.Z"`, and
+  `assets/js/roadmap-progress.js` renders a progress bar from
+  `data/roadmap-progress.json` (closed / total issues on the matching
+  GitHub milestone, refreshed by the `roadmap-progress.yml` workflow on
+  every issue / milestone change). No manual action at release time.
+  One thing to remember when **hand-adding a new planned card** (the
+  pre-condition above): give it the matching `data-milestone` so its
+  bar appears. Shipped cards keep no bar (the renderer skips them), so
+  the attribute can be left in place when `promote-roadmap.py` flips
+  the card.
 - **The card title + body are derived from `CHANGELOG.md` at promote
   time** (issue #233): the script overwrites the planned card's
   `<h3>` with the released section's heading title and its `<p>` with
