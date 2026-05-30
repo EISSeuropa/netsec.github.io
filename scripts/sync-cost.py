@@ -263,6 +263,32 @@ def _make_seed_entry(slug: str, name: str) -> dict:
     }
 
 
+# WG lead / co-lead roles look like "WG1 Leader", "WG3 Co-Leader", or
+# "WG3 Co-Lead". The per-bio `wg_leadership` object is derived from these
+# reconciled role strings so it can never drift from `roles`.
+_WG_LEAD_ROLE_RE = re.compile(r"^WG\s*(\d+)\s+(Co-)?Lead(?:er)?$", re.I)
+
+
+def wg_leadership_from_roles(roles: list[str]) -> dict:
+    """Derive the {"lead": [...], "co_lead": [...]} object from a
+    member's reconciled leadership roles. Returns only the non-empty
+    keys, with sorted, de-duplicated WG numbers, matching the shape the
+    directory WG filter on people.html reads."""
+    lead: list[int] = []
+    co_lead: list[int] = []
+    for r in roles:
+        m = _WG_LEAD_ROLE_RE.match(str(r).strip())
+        if not m:
+            continue
+        (co_lead if m.group(2) else lead).append(int(m.group(1)))
+    out: dict[str, list[int]] = {}
+    if lead:
+        out["lead"] = sorted(set(lead))
+    if co_lead:
+        out["co_lead"] = sorted(set(co_lead))
+    return out
+
+
 def apply_leadership(leadership: list[tuple[str, str]]) -> list[str]:
     """Mutate data/bios.json so each leadership role from cost.eu is
     held by exactly one person there.
@@ -320,6 +346,21 @@ def apply_leadership(leadership: list[tuple[str, str]]) -> list[str]:
                 diffs.append(f"  + {m['name']}: +{role!s}")
         if kept != current:
             m["roles"] = kept
+        # Derive `wg_leadership` from the reconciled roles so it can
+        # never drift from them. A WG lead or co-lead change on cost.eu
+        # updates only the flat `roles` array above. Without this step
+        # the per-bio `wg_leadership` object (which the people.html WG
+        # filter reads to place leaders under their group) keeps
+        # pointing at the previous holder until someone hand-edits
+        # bios.json. Recomputing it for every member each run also
+        # removes a stale entry from anyone who has just lost the role.
+        new_wgl = wg_leadership_from_roles(kept)
+        if (m.get("wg_leadership") or {}) != new_wgl:
+            diffs.append(
+                f"  ~ {m['name']}: wg_leadership "
+                f"{m.get('wg_leadership') or {}} -> {new_wgl}"
+            )
+            m["wg_leadership"] = new_wgl
 
     out_lines = [f"Leadership: {len(leadership)} roles on cost.eu"]
     if diffs:
