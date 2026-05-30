@@ -472,7 +472,6 @@ section{padding:80px 0;position:relative}
 
 /* -------- Working groups -------- */
 .wg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:22px}
-.wg-cta{text-align:center;margin:30px 0 0}
 .wg-card{padding:28px}
 /* The home WG tiles link through to their section on the Working
    Groups page, so they read as cards but behave as links. */
