@@ -203,13 +203,17 @@ it up.
    snapshot at link time, so a personal-profile change does not
    propagate), so those corrections come to us or are made on the
    contribution's author entry.
-3. **Invitation letters via document generation.** If we issue visa
-   invitation letters, build an HTML/Jinja template once under the
-   event or category *Customisation → Document Templates* (admin
+3. **Invitation letters via document generation.** We issue visa
+   invitation letters through Indico's document-generation module
+   (decided for ESSC 2026). Build an HTML/Jinja template once under
+   the event or category *Customisation → Document Templates* (admin
    right required), then bulk-generate from the registrations list
    (*Actions → Generate Documents*) and publish each letter to the
    registrant's own registration page for self-download. This keeps
-   letters off the manual-drafting pile.
+   letters off the manual-drafting pile. The signatory is still to be
+   confirmed (likely the Action Chair, Dr Moritz Weiss); the public
+   FAQ answer stays signatory-agnostic until then, and the request
+   channel for applicants remains the contact form.
 
 ### Cutting a release
 
