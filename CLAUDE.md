@@ -197,6 +197,16 @@ issue (rule §3) and reference it from the surface itself.
   bar appears. Shipped cards keep no bar (the renderer skips them), so
   the attribute can be left in place when `promote-roadmap.py` flips
   the card.
+- **The next incoming release shows as *In progress* automatically.**
+  `roadmap-progress.js` promotes the first still-planned version card
+  (event-marker `.rm-milestone` cards excluded) to *In progress* at
+  render, with a slow-blinking status dot. This is **presentational
+  only**: the static markup stays `class="rm-entry planned"`, so
+  `promote-roadmap.py` still finds the card to flip to shipped at
+  release. When a release ships, the next card becomes *In progress*
+  on its own. So on the live site the next-up card reads *In progress*
+  even though the HTML says planned. Do not hand-edit a card to
+  `in-progress` to chase this.
 - **The card title + body are derived from `CHANGELOG.md` at promote
   time** (issue #233): the script overwrites the planned card's
   `<h3>` with the released section's heading title and its `<p>` with
