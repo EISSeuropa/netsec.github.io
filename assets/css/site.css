@@ -550,21 +550,24 @@ section{padding:80px 0;position:relative}
 .wg-section-head{display:flex;align-items:center;gap:12px;margin-bottom:.6rem;flex-wrap:wrap}
 .wg-section-head h2{margin:0;font-size:clamp(1.3rem,2.4vw,1.7rem);letter-spacing:-.01em}
 .wg-objective{font-size:1.05rem;color:var(--ink-2);max-width:64ch;line-height:1.6;margin:.2rem 0 1.1rem;border-left:3px solid var(--wg-accent);padding-left:15px}
-.wg-focus{list-style:none;display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0 0 1.7rem}
-.wg-focus li{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;color:var(--ink-2);background:var(--glass-bg);border:1px solid var(--line);border-radius:999px;padding:7px 14px}
-.wg-focus li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--wg-accent);flex:none}
-.wg-subhead{font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:1.2rem 0 .7rem;font-weight:600}
-.wg-member-card{text-decoration:none}
-.wg-member-card .role{color:var(--wg-accent);font-weight:600}
-.mc-avatar--initials{display:flex;align-items:center;justify-content:center;font-family:'Lexend','Inter',sans-serif;font-weight:600;font-size:1.05rem;color:var(--accent-2);background:var(--glass-bg-strong)}
-.wg-members{margin-top:.6rem}
-.wg-members > summary{cursor:pointer;font-size:.95rem;font-weight:500;color:var(--accent-2);list-style:none;padding:9px 0;user-select:none}
+.wg-focus{list-style:none;display:flex;flex-wrap:wrap;gap:9px;padding:0;margin:0 0 1.7rem}
+.wg-focus li{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;font-weight:500;color:var(--ink-2);background:var(--glass-bg);border:1px solid var(--line);border-radius:999px;padding:7px 15px 7px 12px}
+.wg-focus-ico{width:16px;height:16px;color:var(--wg-accent);flex:none}
+.wg-subhead{font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:1.4rem 0 .8rem;font-weight:600}
+.wg-member-card{text-decoration:none;padding:18px 16px}
+.wg-member-card .mc-avatar{width:64px;height:64px;margin-bottom:11px}
+.wg-member-card h4{font-size:.95rem;line-height:1.3;margin:0 0 3px;font-weight:600}
+.wg-member-card .role{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--wg-accent);font-weight:700;margin-bottom:4px}
+.wg-member-card .org{font-size:.8rem;color:var(--muted);margin:0;line-height:1.4}
+.wg-member-card--plain{cursor:default}
+.mc-avatar--initials{display:flex;align-items:center;justify-content:center;font-family:'Lexend','Inter',sans-serif;font-weight:600;font-size:1.1rem;letter-spacing:.02em;color:var(--wg-accent,var(--accent-2));background:color-mix(in srgb,var(--wg-accent,var(--accent-2)) 14%,transparent);border-color:color-mix(in srgb,var(--wg-accent,var(--accent-2)) 30%,#fff)}
+.wg-members{margin-top:1rem;border-top:1px solid var(--line);padding-top:.4rem}
+.wg-members > summary{cursor:pointer;font-size:.95rem;font-weight:500;color:var(--accent-2);list-style:none;padding:11px 2px;user-select:none}
 .wg-members > summary::-webkit-details-marker{display:none}
-.wg-members > summary::before{content:"\25B8";display:inline-block;margin-right:.5em;transition:transform .2s var(--ease)}
+.wg-members > summary::before{content:"\25B8";display:inline-block;margin-right:.5em;color:var(--wg-accent);transition:transform .2s var(--ease)}
 .wg-members[open] > summary::before{transform:rotate(90deg)}
 .wg-members-count{font-weight:700;color:var(--ink)}
-.wg-member-grid{margin-top:.7rem}
-.wg-members-more{margin-top:.9rem;font-size:.88rem}
+.wg-member-grid{margin-top:.9rem;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
 
 /* Country-grid chips: always stack BELOW the name, indented to match.
    (Earlier attempt with flex + margin-left:auto produced inconsistent

@@ -11,14 +11,9 @@
   'use strict';
 
   var I18N = {
-    en: { lead: 'Lead', coLead: 'Co-lead', showAll: 'Show all members',
-          hide: 'Hide members', more: 'more members without a profile yet' },
-    fr: { lead: 'Responsable', coLead: 'Co-responsable',
-          showAll: 'Voir tous les membres', hide: 'Masquer les membres',
-          more: 'autres membres sans fiche pour le moment' },
-    de: { lead: 'Leitung', coLead: 'Co-Leitung',
-          showAll: 'Alle Mitglieder anzeigen', hide: 'Mitglieder ausblenden',
-          more: 'weitere Mitglieder ohne Profil' },
+    en: { lead: 'Lead', coLead: 'Co-lead' },
+    fr: { lead: 'Responsable', coLead: 'Co-responsable' },
+    de: { lead: 'Leitung', coLead: 'Co-Leitung' },
   };
   var locale = (document.documentElement.lang || 'en').slice(0, 2);
   var t = I18N[locale] || I18N.en;
@@ -45,30 +40,36 @@
     return (a + b).toUpperCase();
   }
 
-  // A member card in the directory's visual language, linking to the
-  // member's directory entry (which auto-expands the matching card).
-  function memberCard(ref, bio, roleLabel) {
-    var name = (bio && bio.name) || ref.name || '';
-    var slug = ref.slug || (bio && bio.id) || '';
-    var avatar;
-    if (bio && bio.photo) {
-      avatar = el('div', { class: 'mc-avatar' },
-        el('img', { src: bio.photo, alt: name, loading: 'lazy' }));
-    } else {
-      avatar = el('div', { class: 'mc-avatar mc-avatar--initials', 'aria-hidden': 'true' },
-        initials(name));
-    }
-    var sub = roleLabel || (bio && (bio.position || bio.affiliation)) || '';
-    var card = el('a', {
-      class: 'mc-card glass wg-member-card',
-      href: 'people.' + (locale === 'en' ? '' : locale + '.') + 'html#' + slug,
-    },
+  // A member with a directory bio gets a photo, their affiliation, and
+  // a link to their card (which auto-expands on arrival). A member with
+  // only the cost.eu record gets an initials avatar, their name, and
+  // their country, as a non-interactive card.
+  function memberCard(entry, bio, roleLabel) {
+    var name = (bio && bio.name) || entry.name || '';
+    var slug = entry.slug || (bio && bio.id) || '';
+    var avatar = (bio && bio.photo)
+      ? el('div', { class: 'mc-avatar' },
+          el('img', { src: bio.photo, alt: name, loading: 'lazy' }))
+      : el('div', { class: 'mc-avatar mc-avatar--initials', 'aria-hidden': 'true' },
+          initials(name));
+    var sub = roleLabel
+      ? null
+      : ((bio && (bio.position || bio.affiliation)) || entry.country || '');
+    var kids = [
       avatar,
       roleLabel ? el('div', { class: 'role', text: roleLabel }) : null,
       el('h4', { text: name }),
-      sub && !roleLabel ? el('p', { class: 'org', text: sub }) : null
-    );
-    return card;
+      sub ? el('p', { class: 'org', text: sub }) : null,
+    ];
+    if (slug) {
+      return el.apply(null, ['a', {
+        class: 'mc-card glass wg-member-card',
+        href: 'people.' + (locale === 'en' ? '' : locale + '.') + 'html#' + slug,
+      }].concat(kids));
+    }
+    return el.apply(null, ['div', {
+      class: 'mc-card glass wg-member-card wg-member-card--plain',
+    }].concat(kids));
   }
 
   Promise.all([
@@ -101,21 +102,9 @@
       var countEl = sec.querySelector('[data-wg-count]');
       if (countEl) countEl.textContent = String(g.memberCount);
 
-      var moreEl = sec.querySelector('[data-wg-more]');
-      if (moreEl) {
-        if (g.membersWithoutProfile > 0) {
-          moreEl.textContent = '+ ' + g.membersWithoutProfile + ' ' + t.more;
-          moreEl.hidden = false;
-        } else {
-          moreEl.hidden = true;
-        }
-      }
-
-      // If a WG has no bio'd members at all, hide the expander entirely.
+      // If a WG has no members at all, hide the expander entirely.
       var details = sec.querySelector('[data-wg-members]');
-      if (details && !(g.members || []).length && !(g.membersWithoutProfile > 0)) {
-        details.hidden = true;
-      }
+      if (details && !(g.members || []).length) details.hidden = true;
     });
   }).catch(function (e) {
     if (window.console && console.debug) console.debug('WG render skipped:', e);
