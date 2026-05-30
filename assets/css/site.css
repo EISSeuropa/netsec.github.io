@@ -3960,6 +3960,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .dark .programme-live-dot{
   background:#34d775;
 }
+.programme-synced{display:block;margin-top:.5rem;font-size:.92em}
 @media (prefers-reduced-motion: reduce){
   .programme-live-dot{animation:none}
 }

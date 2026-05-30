@@ -253,6 +253,7 @@
       Zeiten in <span id="programme-tz">Europe/Paris</span>. Vollständige Abstracts und
       Anmeldung auf
       <a href="https://indico.eiss-europa.com/event/22/" target="_blank" rel="noopener">Indico</a>.
+      <span id="programme-synced" class="programme-synced" hidden></span>
     </p>
 
     <!-- Day chips and grid live here. Rendered by the inline JS at
@@ -715,6 +716,24 @@
     quickfacts.setAttribute('aria-busy', 'false');
   }
   if (tzNode && conf.startTz) tzNode.textContent = conf.startTz;
+
+  // Last-synced cue: reassures a panelist who just edited Indico that
+  // the grid is dated and refreshes overnight, heading off "I edited
+  // it, why is the site still wrong?" emails.
+  if (indico.syncedAt) {
+    const syncNode = document.getElementById('programme-synced');
+    if (syncNode) {
+      let when = indico.syncedAt;
+      try {
+        when = new Date(indico.syncedAt).toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' });
+      } catch (_) { /* keep the ISO fallback */ }
+      syncNode.textContent =
+        lang === 'fr' ? ('Programme mis à jour le ' + when + ' ; actualisé depuis Indico chaque nuit.') :
+        lang === 'de' ? ('Programm aktualisiert am ' + when + '; täglich über Nacht aus Indico erneuert.') :
+                        ('Programme updated ' + when + '; refreshed from Indico daily, overnight.');
+      syncNode.hidden = false;
+    }
+  }
 
   // ── programme grid ────────────────────────────────────────────
   const days = (conf.programme && conf.programme.days) || [];
