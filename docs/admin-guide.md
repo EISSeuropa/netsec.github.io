@@ -187,22 +187,38 @@ The public guidance for panelists lives in the FAQ *At a NetSec
 conference* section; these are the organiser-side actions that back
 it up.
 
-1. **Grant panel chairs session-coordinator rights.** Being listed as
-   a session convener is display-only and carries no rights. For a
-   chair to reorganise their own panel (running order, timing within
-   the session), assign them as a session **coordinator** under
-   *Sessions → shield icon → Coordination*, then enable the relevant
-   toggles under *Protection → Session coordinator rights*
-   (Contributions, and Session blocks if they should manage blocks).
-   Do this for every edition; it is not inherited. Chairs then work
-   from *My sessions* on the event page.
-2. **Confirm authors can self-edit their contributions.** Submitters
-   should be able to edit their own contribution (paper title) so the
-   FAQ self-service guidance holds. Name and affiliation shown on the
-   programme come from the per-event author record (Indico stores a
-   snapshot at link time, so a personal-profile change does not
-   propagate), so those corrections come to us or are made on the
-   contribution's author entry.
+1. **Give chairs editing rights over their own session.** Being listed
+   as a session convener is display-only and carries no rights. The
+   fastest grant is the bulk one: *Participant Roles → Privileges →
+   Modification rights → **Grant modification rights to all session
+   conveners***. With that, every chair, from *My Sessions* on the
+   event page, can reorder talks, adjust timing, **and edit each
+   contribution's content** (title, description, speakers, and author
+   affiliations). Verified against the live ESSC 2026 event: a chair
+   logged in this way sees *My Sessions* and the full *Edit
+   contribution* dialog for every talk in their panel. The per-session
+   alternative is *Sessions → shield icon → Coordination* plus the
+   *Session coordinator rights* toggles, but the bulk grant is simpler.
+   Re-apply each edition; it is not inherited. This makes the chair the
+   reliable correction route for the whole panel, which is what the FAQ
+   tells panelists.
+2. **Optionally let authors self-edit their own contribution.** Turn on
+   *Contributions → Settings (gear) → Submitter privileges → **Edit
+   (basic)*** (lets submitters edit title, description, speakers, and
+   authors; *Edit (custom)* is harmless to leave on). Then grant the
+   submitter role with *Participant Roles → Privileges → **Submission
+   rights*** so authors actually hold it on their contribution. Authors
+   then edit under *My Contributions*. Two limits to know. The **Call
+   for Abstracts** pencil greys out once a paper is accepted: that is
+   the abstract, which stays locked by design, whereas the
+   **contribution** is what is editable and what feeds the programme
+   (name and affiliation ride on the per-event author record, so a
+   personal-profile change does not propagate). And authors **without
+   an Indico account** (the *N users with no Indico account* warning on
+   the Participant Roles page) cannot self-edit at all, so they fall
+   back to their chair or the contact form. Because of those two
+   limits, treat author self-edit as a convenience on top of the chair
+   route in step 1, not the primary path.
 3. **Invitation letters via document generation.** We issue visa
    invitation letters through Indico's document-generation module
    (decided for ESSC 2026). Build an HTML/Jinja template once under

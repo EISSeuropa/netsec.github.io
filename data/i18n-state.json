@@ -151,14 +151,14 @@
     "faq.html": {
       "fr": {
         "file": "faq.fr.html",
-        "source_sha1": "ee24c62fb565c9ea70079f96d342e9afdfc98e42",
+        "source_sha1": "d56e38b2c8da5e73fa0c5c687ea8ffa497206f49",
         "translated_on": "2026-05-30",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "faq.de.html",
-        "source_sha1": "ee24c62fb565c9ea70079f96d342e9afdfc98e42",
+        "source_sha1": "d56e38b2c8da5e73fa0c5c687ea8ffa497206f49",
         "translated_on": "2026-05-30",
         "status": "beta",
         "reviewed_by": null
