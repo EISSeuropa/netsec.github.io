@@ -26,7 +26,8 @@
       "eventType": "training-school",
       "workingGroups": [
         2,
-        3
+        3,
+        4
       ],
       "featured": true,
       "displayDate": {
@@ -95,6 +96,12 @@
       ],
       "status": "CONFIRMED",
       "eventType": "annual-conference",
+      "workingGroups": [
+        1,
+        2,
+        3,
+        4
+      ],
       "featured": true,
       "displayDate": {
         "en": "11–12 June 2026",
