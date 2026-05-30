@@ -4340,10 +4340,24 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   }
   .programme-contrib-title { font-size: 9pt; }
   .programme-contrib-time  { font-size: 7.5pt; }
-  .programme-contrib-abstract {
-    font-size: 8.5pt;
-    color: #333;
-    margin-top: 1mm;
-  }
+  /* Abstracts are dropped on paper. A printed programme is a panel
+     line-up (session, chairs, paper titles, speakers), not a book of
+     abstracts. Anyone wanting the full text reads it on screen or on
+     Indico. Hiding both abstract variants also keeps each session card
+     short enough to avoid the per-card page breaks that long abstracts
+     were forcing. */
+  .programme-contrib-abstract,
+  .programme-slot-abstract { display: none !important; }
   .programme-contrib-more { display: none; }
+
+  /* Suppress the external-URL disclosure on programme title links. The
+     baseline print block appends " (https://indico…/event/22/…)" after
+     every external link so paper readers can resolve it. On the
+     programme that trails every session and paper title with a long
+     Indico URL, which is noise on a printed line-up (and wrapped one
+     character per line in the worst cases). The titles stay underlined
+     as links for on-screen / PDF-hyperlink use; only the printed URL
+     string is dropped. */
+  .programme-slot-title a::after,
+  .programme-contrib-title a::after { content: none !important; }
 }
