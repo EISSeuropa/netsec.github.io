@@ -48,6 +48,32 @@
     return n;
   }
 
+  // Systematically mark the next incoming release as In progress. The
+  // first still-planned version card (event-marker cards, which carry
+  // .rm-milestone, are skipped) is the next-up release, so whichever
+  // card that is gets promoted, with no per-release edit: when a release
+  // ships and promote-roadmap.py flips its card to shipped, the
+  // following one becomes In progress on the next render. The static
+  // markup stays `planned` (so the release tooling still finds it); this
+  // is a presentational promotion only. Runs synchronously, independent
+  // of the progress-bar fetch below, so it works even if that fails.
+  (function promoteNextInProgress() {
+    var next = document.querySelector('.rm-entry.planned:not(.rm-milestone)');
+    if (!next) return;
+    var legend = document.querySelector('.rm-legend .rm-pill.in-progress');
+    var label = (legend && legend.textContent.trim()) || 'In progress';
+    next.classList.remove('planned');
+    next.classList.add('in-progress');
+    var pill = next.querySelector('.rm-pill');
+    if (pill) {
+      pill.classList.remove('planned');
+      pill.classList.add('in-progress');
+      // Rebuild: keep the leading status dot, swap the label text.
+      pill.innerHTML = '<span class="dot" aria-hidden="true"></span>';
+      pill.appendChild(document.createTextNode(label));
+    }
+  })();
+
   fetch('data/roadmap-progress.json')
     .then(function (r) { return r.json(); })
     .then(function (data) {
