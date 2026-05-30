@@ -241,9 +241,59 @@ it up.
    (*Actions → Generate Documents*) and publish each letter to the
    registrant's own registration page for self-download. This keeps
    letters off the manual-drafting pile. The signatory is still to be
-   confirmed (likely the Action Chair, Dr Moritz Weiss); the public
+   confirmed (likely the Action Chair, Dr Moritz Weiss). The public
    FAQ answer stays signatory-agnostic until then, and the request
-   channel for applicants remains the contact form.
+   channel for applicants remains the contact form. This template work
+   is deferred to September 2026, tracked in
+   [#374](https://github.com/EISSeuropa/netsec.github.io/issues/374).
+
+### Canned replies for recurring panelist emails
+
+Copy-paste responses for the emails that arrive every cycle, each one
+pointing the sender at the FAQ answer that carries the full detail.
+Keep them short and friendly. The matching public answers live in the
+FAQ *At a NetSec conference* section. These carry the event id and the
+`essc-<year>` URLs, so they are part of the per-edition rollover below.
+
+**Correcting a name, affiliation, or paper title** (FAQ `#essc-edit-details`)
+
+> Thanks for flagging this. If you have an Indico account you can fix it
+> yourself: open your talk under My Contributions
+> (https://indico.eiss-europa.com/event/22/contributions/mine) and edit
+> the title, or click the small pencil next to your name to change your
+> affiliation. The pencil on the Call for Abstracts page is locked once
+> a paper is accepted, which is normal, so edit the contribution
+> instead. The full steps are at
+> https://netsec-cost.eu/faq.html#essc-edit-details. If you would rather
+> we make the change, just reply with the correction. Either way the
+> website refreshes overnight, so it shows the next morning.
+
+**Finding the printable or PDF programme** (FAQ `#essc-programme-pdf`)
+
+> The official programme is a one-click download from the top of
+> https://netsec-cost.eu/essc-2026.html (the Download programme (PDF)
+> button). If you would rather print the page from your browser, it
+> works well in Safari, but Chrome can cut the long programme short, so
+> the download is the reliable option. More at
+> https://netsec-cost.eu/faq.html#essc-programme-pdf.
+
+**A chair wanting to reorganise their panel** (FAQ `#essc-chair`)
+
+> As chair you can manage your own session directly. Open My Sessions
+> (https://indico.eiss-europa.com/event/22/sessions/mine) to reorder the
+> talks, adjust their timing, and correct any talk's title or author
+> affiliations. Anything that reaches beyond your session, such as
+> moving the panel to a different slot or changing the room, comes to
+> us. Details at https://netsec-cost.eu/faq.html#essc-chair.
+
+**A visa letter of invitation** (FAQ `#essc-visa`)
+
+> Happy to help. Please reply with your full name exactly as it appears
+> in your passport, your affiliation, the title of your contribution if
+> you have one, and the dates you plan to attend, and we will prepare a
+> letter of invitation. If your visa appointment is soon, say so and we
+> will prioritise it. Background at
+> https://netsec-cost.eu/faq.html#essc-visa.
 
 ### The downloadable programme PDF
 
@@ -300,6 +350,7 @@ conference dates, or `event/22`:
 | `data/whats-new.json` | The `/essc-2026.html` links and the campaign reason, if the banner is run for the conference (it is off by default, see CLAUDE.md §14). |
 | `sitemap.xml` + `sitemap.html` (+ FR + DE) | The `essc-2026` URL entry. Re-run `scripts/inject-seo.py` to regenerate `sitemap.xml`. |
 | `scripts/indico_clean_duplicate.py` | The `PROTECTED_EVENTS` allow-list, so the rollover script refuses to touch the new live event. |
+| `docs/admin-guide.md` (*Canned replies* above) | The `event/22/...` and `essc-2026` URLs inside the four reply templates. |
 
 The stakeholder PDF pack (`docs/pdf/documentation.html`) also names
 ESSC 2026, but it refreshes on the release cadence (CLAUDE.md §5.4),
