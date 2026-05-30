@@ -264,6 +264,42 @@ def test_apply_leadership_reconciles_form_entries() -> None:
                "WG1 Leader" not in bios["filip-ejdus"]["roles"], True)
 
 
+# ─── apply_leadership() — wg_leadership reconciliation ─────────────
+
+def test_apply_leadership_reconciles_wg_leadership() -> None:
+    """A WG co-lead change on cost.eu must move the per-bio
+    `wg_leadership` object, not just the flat `roles` array. The new
+    holder gains `co_lead: [3]`, the previous holder loses it. The
+    people.html WG filter reads this field to place leaders under their
+    group, so leaving it stale would show the wrong co-lead."""
+    print("\napply_leadership() — derives wg_leadership from roles:")
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        path = _seed_bios(tmp, [
+            # The previous WG3 co-lead, carrying the now-stale field.
+            {"id": "silvia-damato", "name": "Dr Silvia D'Amato",
+             "roles": ["WG3 Co-Leader"], "wg_leadership": {"co_lead": [3]},
+             "source": "form"},
+            # The new co-lead cost.eu now lists, not yet carrying it.
+            {"id": "new-colead", "name": "Dr New Colead",
+             "roles": ["MC member · France"], "wg_leadership": {},
+             "source": "form"},
+        ])
+        saved = sync_cost.BIOS
+        sync_cost.BIOS = path
+        try:
+            apply_leadership([("WG3 Co-Leader", "Dr New COLEAD")])
+        finally:
+            sync_cost.BIOS = saved
+        bios = {m["id"]: m for m in _read_bios(path)}
+        expect("new holder gains wg_leadership.co_lead [3]",
+               bios["new-colead"].get("wg_leadership"), {"co_lead": [3]})
+        expect("previous holder loses wg_leadership.co_lead",
+               bios["silvia-damato"].get("wg_leadership"), {})
+        expect("new holder also gains the WG3 Co-Leader role",
+               "WG3 Co-Leader" in bios["new-colead"]["roles"], True)
+
+
 # ─── main ──────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -276,6 +312,7 @@ def main() -> None:
     test_extract_leadership_matches_known_role_suffixes()
     test_extract_leadership_matches_standalone_lead()
     test_apply_leadership_reconciles_form_entries()
+    test_apply_leadership_reconciles_wg_leadership()
     print("\nAll smoke tests passed.")
 
 
