@@ -135,15 +135,15 @@
     "press-kit.html": {
       "fr": {
         "file": "press-kit.fr.html",
-        "source_sha1": "de8930cf5de02bee3c2dc554c762a0a397135455",
-        "translated_on": "2026-05-29",
+        "source_sha1": "11fb41970186e92a07c4e5bca0ce09009f50185b",
+        "translated_on": "2026-05-30",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "press-kit.de.html",
-        "source_sha1": "de8930cf5de02bee3c2dc554c762a0a397135455",
-        "translated_on": "2026-05-29",
+        "source_sha1": "11fb41970186e92a07c4e5bca0ce09009f50185b",
+        "translated_on": "2026-05-30",
         "status": "beta",
         "reviewed_by": null
       }

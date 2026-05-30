@@ -1128,6 +1128,7 @@ flowchart TB
         <li><strong>Live ESSC 2026 programme</strong> at <code>/essc-2026.html</code> (added v1.6.0). Rebuilt daily from Indico via <code>sync-indico.py</code>. Day chips, parallel-session cards, livestream badges on plenaries, per-session room badges (v1.6.1), member-aware speaker popovers that resolve to a NetSec member card with photo, role, country, and bio excerpt.</li>
         <li><strong>Directory research-interest keyword pipeline</strong> (added v1.7.0). Canonical chips on bio cards backed by <code>data/keyword-aliases.json</code>, plus a filter chip row above the grid with URL-hash persistence (<code>#keywords=slug-one,slug-two</code>) and OR semantics across selected chips. Top-8 chips shown by count.</li>
         <li><strong>iCalendar feed</strong> at <code>/calendar.ics</code> (added v1.4.0). The events block carries a <code>webcal://</code> Subscribe button. The feed is regenerated whenever <code>events.json</code> changes (v1.6.1).</li>
+        <li><strong>Weekly member spotlight</strong> (added v1.11.0). A home-page block features one network member each week, drawn from the directory. This is an <strong>inclusiveness measure for early-career investigators</strong>: the rotation weights ECIs and Inclusiveness Target Country members upward and de-prioritises full professors (inferred from the public job title), so the visibility goes to the people who benefit from it most. Gender is not part of the score and is corrected by hand. The block is dormant until at least ten members have both a photo and a written bio.</li>
       </ul>
     </div>
     <div class="card">
@@ -1141,6 +1142,7 @@ flowchart TB
         <li><strong>Release script extensions</strong> in <code>scripts/release.sh</code> (v1.7.0): <code>promote-roadmap.py</code> flips public roadmap cards from planned to shipped on <code>/roadmap.html</code> in EN, FR and DE during release; a PDF-cover-bump reminder prints on minor and major releases; open issues tagged with the milestone being cut are listed before the script exits.</li>
         <li>CSS class-collision lint via <code>scripts/check-css-class-collisions.py</code> (added v1.6.0).</li>
         <li>Photo-source SHA-256 caching in <code>sync-bios.py</code> (added v1.5.0) so unchanged upstream photos do not get re-encoded and dirty the working tree.</li>
+        <li><strong>Spotlight rotation</strong> (<code>spotlight-rotate.yml</code> + <code>rotate-spotlight.py</code>, added v1.11.0): a weekly balanced-rotation score over <code>bios.json</code> (early-career and ITC boosts, Working-Group balance, recency hold-out) picks the featured member and opens an auto-PR. A <code>pinned</code> field in <code>data/spotlight.json</code> is the manual override and the way to correct any imbalance, since gender is deliberately not scored.</li>
       </ul>
     </div>
   </div>
