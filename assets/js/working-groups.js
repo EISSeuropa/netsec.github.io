@@ -12,11 +12,23 @@
 
   var I18N = {
     en: { lead: 'Lead', coLead: 'Co-lead',
-          people: 'people', countries: 'countries', groups: 'Working Groups' },
+          people: 'people', countries: 'countries', groups: 'Working Groups',
+          events: 'Related events',
+          types: { 'training-school': 'Training School', 'annual-conference': 'Annual Conference',
+                   'policy-workshop': 'Policy Workshop', 'itc-conference': 'ITC Conference',
+                   'mc-plenary': 'MC Plenary' } },
     fr: { lead: 'Responsable', coLead: 'Co-responsable',
-          people: 'personnes', countries: 'pays représentés', groups: 'groupes de travail' },
+          people: 'personnes', countries: 'pays représentés', groups: 'groupes de travail',
+          events: 'Événements liés',
+          types: { 'training-school': 'École de formation', 'annual-conference': 'Conférence annuelle',
+                   'policy-workshop': 'Atelier politique', 'itc-conference': 'Conférence ITC',
+                   'mc-plenary': 'Plénière du CG' } },
     de: { lead: 'Leitung', coLead: 'Co-Leitung',
-          people: 'Personen', countries: 'vertretene Länder', groups: 'Arbeitsgruppen' },
+          people: 'Personen', countries: 'vertretene Länder', groups: 'Arbeitsgruppen',
+          events: 'Verwandte Veranstaltungen',
+          types: { 'training-school': 'Ausbildungsschule', 'annual-conference': 'Jahreskonferenz',
+                   'policy-workshop': 'Politik-Workshop', 'itc-conference': 'ITC-Konferenz',
+                   'mc-plenary': 'MC-Plenum' } },
   };
   var locale = (document.documentElement.lang || 'en').slice(0, 2);
   var t = I18N[locale] || I18N.en;
@@ -79,11 +91,38 @@
     }].concat(kids));
   }
 
+  // Resolve a possibly-localised field: {en,fr,de} → the current locale,
+  // a plain string → itself.
+  function localize(v) {
+    if (v && typeof v === 'object' && !(v instanceof Array)) return v[locale] || v.en || '';
+    return v || '';
+  }
+
+  // A compact card for an event tagged with this Working Group. Date
+  // chip + type tag + title, the whole card linking to the event.
+  function wgEventCard(ev) {
+    var href = localize(ev.cta && ev.cta.href) || ev.url || '#';
+    var typeLabel = (t.types && t.types[ev.eventType])
+      || (ev.categories && ev.categories[0]) || '';
+    var attrs = { 'class': 'wg-event-card glass', 'href': href };
+    if (ev.cta && ev.cta.external) { attrs.target = '_blank'; attrs.rel = 'noopener'; }
+    return el('a', attrs,
+      typeLabel ? el('span', { 'class': 'wg-event-type', 'text': typeLabel }) : null,
+      el('h4', { 'text': localize(ev.cardTitle) || ev.summary || '' }),
+      el('span', { 'class': 'wg-event-date', 'text': localize(ev.displayDate) + ' →' })
+    );
+  }
+
   Promise.all([
     fetch('data/wg.json').then(function (r) { return r.json(); }),
     fetch('data/bios.json').then(function (r) { return r.json(); }),
+    // Events are an optional enhancement: a failure here must not take
+    // down the core leadership / member render, so swallow it to null.
+    fetch('data/events.json').then(function (r) { return r.json(); })
+      .catch(function () { return null; }),
   ]).then(function (res) {
     var wg = res[0], bios = res[1];
+    var allEvents = (res[2] && res[2].events) || [];
     var bySlug = {};
     (bios.members || []).forEach(function (m) { bySlug[m.id] = m; });
 
@@ -112,6 +151,24 @@
       // If a WG has no members at all, hide the expander entirely.
       var details = sec.querySelector('[data-wg-members]');
       if (details && !(g.members || []).length) details.hidden = true;
+
+      // Related events: any event tagged with this group's number in
+      // data/events.json. One event can belong to several WGs, so it
+      // appears under each without duplication in the data.
+      var evWrap = sec.querySelector('[data-wg-events]');
+      if (evWrap) {
+        var groupEvents = allEvents.filter(function (ev) {
+          return (ev.workingGroups || []).indexOf(g.number) !== -1;
+        });
+        if (groupEvents.length) {
+          evWrap.innerHTML = '';
+          evWrap.appendChild(el('h3', { 'class': 'wg-subhead', 'text': t.events }));
+          var evGrid = el('div', { 'class': 'wg-event-grid' });
+          groupEvents.forEach(function (ev) { evGrid.appendChild(wgEventCard(ev)); });
+          evWrap.appendChild(evGrid);
+          evWrap.hidden = false;
+        }
+      }
     });
 
     // Overall stats across all four groups: unique people (members plus

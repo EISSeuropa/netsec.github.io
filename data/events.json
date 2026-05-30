@@ -24,6 +24,10 @@
       ],
       "status": "CONFIRMED",
       "eventType": "training-school",
+      "workingGroups": [
+        2,
+        3
+      ],
       "featured": true,
       "displayDate": {
         "en": "9–11 June 2026",

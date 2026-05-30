@@ -578,6 +578,23 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .wg-members[open] > summary::before{transform:rotate(90deg)}
 .wg-members-count{font-weight:700;color:var(--ink)}
 .wg-member-grid{margin-top:.9rem;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+/* Related events: compact cards for events tagged with this WG in
+   data/events.json (rendered by working-groups.js). The whole card is
+   a link; the trailing → on the date is the go affordance, so the
+   global external-link icon is suppressed to avoid a detached glyph. */
+.wg-events{margin-top:1rem}
+.wg-event-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:.9rem}
+.wg-event-card{display:flex;flex-direction:column;gap:5px;padding:16px 18px;text-decoration:none;color:inherit;border-radius:14px;border-left:3px solid var(--wg-accent);transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.wg-event-card:hover{transform:translateY(-2px)}
+.wg-event-card::after{content:none !important}
+/* These cards are links on a .prose-page, where `.prose-page a` would
+   otherwise underline + recolour the whole card. Scope a higher-
+   specificity reset so the member, leadership, and event cards read as
+   tiles, not inline prose links. */
+.wg-page a.wg-member-card,.wg-page a.wg-event-card{text-decoration:none;color:inherit}
+.wg-event-type{font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--muted)}
+.wg-event-card h4{margin:0;font-size:.97rem;line-height:1.32;font-weight:600}
+.wg-event-date{margin-top:2px;font-size:.82rem;font-weight:600;color:var(--wg-accent)}
 
 /* Country-grid chips: always stack BELOW the name, indented to match.
    (Earlier attempt with flex + margin-left:auto produced inconsistent
