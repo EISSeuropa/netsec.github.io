@@ -102,11 +102,12 @@ jobs:
           commit-message: |
             data: sync WG memberships + leadership from cost.eu
 
-            Refreshed three surfaces against the Membership and
+            Refreshed four surfaces against the Membership and
             Leadership tables on cost.eu/actions/CA24154/:
               - WG_MAP literal in index.html (home-page WG chips)
-              - per-bio `wgs` field in data/bios.json (directory chips)
+              - per-bio `wgs` + `wg_leadership` in data/bios.json (directory)
               - leadership `roles` array on seed entries in data/bios.json
+              - data/wg.json (per-WG membership + leadership)
             See the PR body for the exact diffs.
           body-path: /tmp/pr-body.md
           labels: |
