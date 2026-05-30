@@ -278,6 +278,14 @@
   </div>
 </section>
 
+<!-- Member spotlight. Rendered by assets/js/home-spotlight.js from
+     data/spotlight.json + data/bios.json. Stays hidden until the
+     spotlight is active (issue #341); the markup is locale-neutral,
+     only the JS chrome translates. -->
+<section id="member-spotlight" aria-labelledby="spotlight-title" hidden>
+  <div class="container"></div>
+</section>
+
 <!-- À propos -->
 <section id="about">
   <div class="container reveal">
@@ -662,6 +670,7 @@
      structure que le moteur d'événements ; les cartes rédigées à
      la main restent en repli si data/news.json ne se charge pas. -->
 <script src="assets/js/home-news.js" defer></script>
+<script src="assets/js/home-spotlight.js" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     if (window.NetSec && window.NetSec.renderHomeEvents) {
