@@ -532,6 +532,40 @@ section{padding:80px 0;position:relative}
 .wg-chip.wg-3{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
 .wg-chip.wg-4{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#3b2a00}
 
+/* ── Working Groups page (working-groups.html) ─────────────────────── */
+.wg-page .wg-page-head{padding:48px 0 8px}
+.wg-page h1{font-size:clamp(2rem,4vw,2.8rem);letter-spacing:-.02em;margin:.2rem 0 .6rem}
+.wg-page .lede{font-size:1.1rem;color:var(--ink-2);max-width:60ch;line-height:1.6}
+.wg-page .wg-synced{font-size:.9rem;color:var(--muted);margin-top:.7rem}
+.wg-page .wg-tag{display:inline-block;font-size:.74rem;font-weight:700;padding:.22rem .55rem;border-radius:7px;color:#fff;letter-spacing:.02em}
+.wg-page .wg-tag.wg-1{background:#0a84ff}
+.wg-page .wg-tag.wg-2{background:#10b981}
+.wg-page .wg-tag.wg-3{background:#8b5cf6}
+.wg-page .wg-tag.wg-4{background:#f59e0b;color:#3b2a00}
+.wg-jump{display:flex;flex-wrap:wrap;gap:10px;margin-top:1.5rem}
+.wg-jump a{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:var(--glass-bg);border:1px solid var(--line);font-size:.9rem;font-weight:500;color:var(--ink-2)}
+.wg-jump a:hover{color:var(--ink);border-color:var(--accent)}
+.wg-section{padding:34px 0;scroll-margin-top:90px}
+.wg-section + .wg-section{border-top:1px solid var(--line)}
+.wg-section-head{display:flex;align-items:center;gap:12px;margin-bottom:.6rem;flex-wrap:wrap}
+.wg-section-head h2{margin:0;font-size:clamp(1.3rem,2.4vw,1.7rem);letter-spacing:-.01em}
+.wg-objective{font-size:1.05rem;color:var(--ink-2);max-width:64ch;line-height:1.6;margin:.2rem 0 1.1rem;border-left:3px solid var(--wg-accent);padding-left:15px}
+.wg-focus{list-style:none;display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0 0 1.7rem}
+.wg-focus li{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;color:var(--ink-2);background:var(--glass-bg);border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+.wg-focus li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--wg-accent);flex:none}
+.wg-subhead{font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:1.2rem 0 .7rem;font-weight:600}
+.wg-member-card{text-decoration:none}
+.wg-member-card .role{color:var(--wg-accent);font-weight:600}
+.mc-avatar--initials{display:flex;align-items:center;justify-content:center;font-family:'Lexend','Inter',sans-serif;font-weight:600;font-size:1.05rem;color:var(--accent-2);background:var(--glass-bg-strong)}
+.wg-members{margin-top:.6rem}
+.wg-members > summary{cursor:pointer;font-size:.95rem;font-weight:500;color:var(--accent-2);list-style:none;padding:9px 0;user-select:none}
+.wg-members > summary::-webkit-details-marker{display:none}
+.wg-members > summary::before{content:"\25B8";display:inline-block;margin-right:.5em;transition:transform .2s var(--ease)}
+.wg-members[open] > summary::before{transform:rotate(90deg)}
+.wg-members-count{font-weight:700;color:var(--ink)}
+.wg-member-grid{margin-top:.7rem}
+.wg-members-more{margin-top:.9rem;font-size:.88rem}
+
 /* Country-grid chips: always stack BELOW the name, indented to match.
    (Earlier attempt with flex + margin-left:auto produced inconsistent
    rendering — chips sometimes inline, sometimes wrapping right-aligned

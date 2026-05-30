@@ -4,7 +4,7 @@
   "groups": [
     {
       "number": 1,
-      "name": "Management & Coordination",
+      "name": "Building the Network",
       "colour": "wg-1",
       "memberCount": 63,
       "lead": {
@@ -33,7 +33,7 @@
     },
     {
       "number": 2,
-      "name": "Framework Development",
+      "name": "Transfer of Knowledge",
       "colour": "wg-2",
       "memberCount": 49,
       "lead": {
@@ -66,7 +66,7 @@
     },
     {
       "number": 3,
-      "name": "Tools & Training",
+      "name": "Fostering the Next Generation of Scholars",
       "colour": "wg-3",
       "memberCount": 65,
       "lead": {
@@ -107,7 +107,7 @@
     },
     {
       "number": 4,
-      "name": "Inclusion & Dissemination",
+      "name": "Inclusion, Representativeness & Ethics",
       "colour": "wg-4",
       "memberCount": 32,
       "lead": {

@@ -391,10 +391,10 @@ WG_JSON = ROOT / "data" / "wg.json"
 # `.wg-chip.wg-{1..4}` in assets/css/site.css. Purpose descriptions are
 # hand-authored per locale in working-groups.html, not here.
 WG_META = {
-    1: {"name": "Management & Coordination", "colour": "wg-1"},
-    2: {"name": "Framework Development", "colour": "wg-2"},
-    3: {"name": "Tools & Training", "colour": "wg-3"},
-    4: {"name": "Inclusion & Dissemination", "colour": "wg-4"},
+    1: {"name": "Building the Network", "colour": "wg-1"},
+    2: {"name": "Transfer of Knowledge", "colour": "wg-2"},
+    3: {"name": "Fostering the Next Generation of Scholars", "colour": "wg-3"},
+    4: {"name": "Inclusion, Representativeness & Ethics", "colour": "wg-4"},
 }
 
 
