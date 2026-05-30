@@ -133,7 +133,15 @@
       border-bottom: 0.4pt solid #ccc;
     }
     @bottom-right {
-      content: "Seite " counter(page) " von " counter(pages);
+      /* Nur `counter(page)` — bewusst ohne `counter(pages)`-Gesamtzahl.
+         Das „von N" zwingt die Druck-Engine zu einem zweiten
+         Layout-Durchlauf über das gesamte Dokument, um die endgültige
+         Seitenzahl zu ermitteln. Chromes „Als PDF speichern" bricht
+         lange Programme dabei mitten auf der Seite ab (das PDF endete
+         bei „Seite 7 von 13", der Rest von Tag 2 fehlte). Das Weglassen
+         der Gesamtzahl entfernt den zweiten Durchlauf und damit den
+         Abbruch. */
+      content: "Seite " counter(page);
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
       font-size: 8.5pt;
       color: #666;

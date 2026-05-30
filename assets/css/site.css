@@ -4304,15 +4304,13 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
     gap: .3rem;
     margin-bottom: .35rem;
   }
-  /* Keep the session header (kind, title, chairs) with the start of its
-     paper list so a panel never opens with just its title orphaned at
-     the foot of a page. */
-  .programme-slot-head,
-  .programme-slot-title,
-  .programme-slot-people {
-    page-break-after: avoid;
-    break-after: avoid;
-  }
+  /* No `break-after: avoid` chain on the session header. Stacking the
+     constraint across the kind label, title, and a multi-name chairs
+     list gives the print engine an unsatisfiable group when the chairs
+     run long, which is the kind of thing that stalls Chrome's
+     interactive print. The baseline `h4 { page-break-after: avoid }`
+     already keeps the session title (an h4) with its first line of
+     content, which is enough orphan control on its own. */
   /* Session title — high contrast on paper. Without an explicit
      near-black colour here, the global `h4 { color: var(--ink) }`
      stays in force, and `--ink` resolves to a dark navy that prints

@@ -138,7 +138,15 @@
       border-bottom: 0.4pt solid #ccc;
     }
     @bottom-right {
-      content: "Page " counter(page) " of " counter(pages);
+      /* `counter(page)` only — deliberately no `counter(pages)` total.
+         The "of N" total forces the print engine into a second,
+         whole-document layout pass to resolve the final page count.
+         Chrome's interactive Save-as-PDF truncates long programmes
+         mid-page during that pass (the PDF stopped at "Page 7 of 13"
+         with the rest of Day 2 dropped); headless print-to-PDF does
+         not, which masked it in automated checks. Dropping the total
+         removes the second pass and the truncation with it. */
+      content: "Page " counter(page);
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
       font-size: 8.5pt;
       color: #666;

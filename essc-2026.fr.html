@@ -133,7 +133,15 @@
       border-bottom: 0.4pt solid #ccc;
     }
     @bottom-right {
-      content: "Page " counter(page) " sur " counter(pages);
+      /* `counter(page)` seul — pas de total `counter(pages)`. Le
+         total « sur N » force le moteur d'impression à refaire une
+         passe de mise en page sur tout le document pour connaître le
+         nombre final de pages. Le « Enregistrer au format PDF » de
+         Chrome tronque alors les longs programmes en milieu de page
+         (le PDF s'arrêtait à « Page 7 sur 13 », le reste du jour 2
+         disparaissant). Retirer le total supprime cette seconde passe
+         et la troncature avec elle. */
+      content: "Page " counter(page);
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
       font-size: 8.5pt;
       color: #666;
