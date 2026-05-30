@@ -304,11 +304,13 @@ def test_apply_leadership_reconciles_wg_leadership() -> None:
 
 def test_build_wg_json_resolves_leaders_and_members() -> None:
     """build_wg_json derives each WG's lead/co-lead from bios'
-    `wg_leadership`, lists bio'd members (excluding the two leaders),
-    and counts the members with no directory bio from the membership
-    map. An empty WG resolves to no leaders and a zero count. A second
-    build with the same inputs is idempotent."""
-    print("\nbuild_wg_json() — resolves leadership + members per WG:")
+    `wg_leadership`, then lists EVERY member of the WG (from the
+    membership list) excluding the two leaders. A member with a
+    directory bio carries a `slug`; one without carries only name +
+    country. memberCount counts the full membership (leaders included).
+    An empty WG resolves to no leaders and a zero count. A second build
+    with the same inputs is idempotent."""
+    print("\nbuild_wg_json() — resolves leadership + full membership per WG:")
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
         biospath = _seed_bios(tmp, [
@@ -323,11 +325,17 @@ def test_build_wg_json_resolves_leaders_and_members() -> None:
         saved_bios, saved_wg = sync_cost.BIOS, sync_cost.WG_JSON
         sync_cost.BIOS, sync_cost.WG_JSON = biospath, wgpath
         try:
-            # WG1 has the three bio'd members plus two with no bio.
-            new_map = {"moritz weiss": [1], "filip ejdus": [1],
-                       "jane doe": [1], "no bio one": [1], "no bio two": [1]}
-            sync_cost.build_wg_json(new_map)
-            second = sync_cost.build_wg_json(new_map)
+            # WG1 membership: the two leaders, one bio'd member, and two
+            # members with no directory bio (the common cost.eu case).
+            members = [
+                {"name": "Dr Moritz Weiss", "country": "Germany", "wgs": [1]},
+                {"name": "Prof Filip Ejdus", "country": "Serbia", "wgs": [1]},
+                {"name": "Dr Jane Doe", "country": "France", "wgs": [1]},
+                {"name": "Prof No Bio One", "country": "Italy", "wgs": [1]},
+                {"name": "Dr No Bio Two", "country": "Spain", "wgs": [1]},
+            ]
+            sync_cost.build_wg_json(members)
+            second = sync_cost.build_wg_json(members)
         finally:
             sync_cost.BIOS, sync_cost.WG_JSON = saved_bios, saved_wg
         data = json.loads(wgpath.read_text(encoding="utf-8"))
@@ -337,9 +345,18 @@ def test_build_wg_json_resolves_leaders_and_members() -> None:
         expect("WG1 co-lead resolved from wg_leadership",
                wg1["coLead"]["slug"], "filip-ejdus")
         expect("WG1 members exclude the two leaders",
-               [m["slug"] for m in wg1["members"]], ["jane-doe"])
-        expect("WG1 total member count", wg1["memberCount"], 5)
-        expect("WG1 members without a profile", wg1["membersWithoutProfile"], 2)
+               sorted(m["name"] for m in wg1["members"]),
+               ["Dr Jane Doe", "Dr No Bio Two", "Prof No Bio One"])
+        expect("WG1 bio'd member carries a slug",
+               next(m for m in wg1["members"] if m["name"] == "Dr Jane Doe")["slug"],
+               "jane-doe")
+        expect("WG1 non-bio member has no slug",
+               "slug" in next(m for m in wg1["members"] if m["name"] == "Prof No Bio One"),
+               False)
+        expect("WG1 non-bio member keeps its country",
+               next(m for m in wg1["members"] if m["name"] == "Prof No Bio One")["country"],
+               "Italy")
+        expect("WG1 total member count (leaders included)", wg1["memberCount"], 5)
         wg2 = next(g for g in data["groups"] if g["number"] == 2)
         expect("empty WG has no lead", wg2["lead"], None)
         expect("empty WG count is zero", wg2["memberCount"], 0)

@@ -391,27 +391,51 @@ WG_JSON = ROOT / "data" / "wg.json"
 # `.wg-chip.wg-{1..4}` in assets/css/site.css. Purpose descriptions are
 # hand-authored per locale in working-groups.html, not here.
 WG_META = {
-    1: {"name": "Management & Coordination", "colour": "wg-1"},
-    2: {"name": "Framework Development", "colour": "wg-2"},
-    3: {"name": "Tools & Training", "colour": "wg-3"},
-    4: {"name": "Inclusion & Dissemination", "colour": "wg-4"},
+    1: {"name": "Building the Network", "colour": "wg-1"},
+    2: {"name": "Transfer of Knowledge", "colour": "wg-2"},
+    3: {"name": "Fostering the Next Generation of Scholars", "colour": "wg-3"},
+    4: {"name": "Inclusion, Representativeness & Ethics", "colour": "wg-4"},
 }
 
 
-def build_wg_json(new_map: dict[str, list[int]]) -> list[str]:
-    """Write data/wg.json: the per-Working-Group membership and
-    leadership dataset the Working Groups page renders from (and, later,
-    the home and About leadership surfaces). Leadership is read from
-    each bio's `wg_leadership` (set by apply_leadership from cost.eu's
-    Leadership table), membership from `new_map` (cost.eu's Membership
-    table), and titles/colours from the static WG_META. cost.eu is the
-    source for both, so this file is regenerated every sync and must not
-    be hand-edited.
+def fetch_members(bs: BeautifulSoup) -> list[dict]:
+    """Parse cost.eu's Membership table (columns: Name, Working Group,
+    Country) into [{name, country, wgs:[...]}]. The display name and
+    country are kept so the Working Groups page can show a card for
+    EVERY member, not only those with a directory bio. The leadership
+    table (which puts a digit in the first cell) and the header row are
+    skipped by the same guards fetch_wg_map uses."""
+    out: list[dict] = []
+    for tr in bs.find_all("tr"):
+        cells = [" ".join(c.stripped_strings) for c in tr.find_all(["td", "th"])]
+        if len(cells) < 3:
+            continue
+        name, wg_cell, country = cells[0], cells[1], cells[2]
+        if not re.search(r"WG\s*\d", wg_cell or ""):
+            continue
+        k = norm(name)
+        if not k or k.isdigit() or k == "name":
+            continue
+        wgs = sorted({int(d) for d in re.findall(r"WG\s*(\d)", wg_cell)})
+        # cost.eu writes some names in ALL CAPS ("ANDREEA DRAGOMIR");
+        # tidy to title case for display, same as leadership names.
+        out.append({"name": titlecase_name(name.strip()),
+                    "country": country.strip(), "wgs": wgs})
+    out.sort(key=lambda m: norm(m["name"]))
+    return out
 
-    `members` lists only directory members (those with a bio), excluding
-    the lead and co-lead. `membersWithoutProfile` counts WG members who
-    have no directory bio yet. Idempotent: deterministic sorted output,
-    written only on change."""
+
+def build_wg_json(members: list[dict]) -> list[str]:
+    """Write data/wg.json: per-Working-Group leadership and FULL
+    membership for the Working Groups page. Leadership is read from each
+    bio's `wg_leadership` (set by apply_leadership from cost.eu's
+    Leadership table); membership from `members` (cost.eu's Membership
+    table, via fetch_members), carrying every member's name and country.
+    A member who also has a directory bio gets a `slug`, so the page can
+    link to their card and show their photo and affiliation. Titles and
+    the colour palette come from the static WG_META. cost.eu is the
+    source, so this file is regenerated every sync and never hand-edited.
+    Idempotent: deterministic sorted output, written only on change."""
     bios: list[dict] = []
     if BIOS.exists():
         bios = json.loads(BIOS.read_text(encoding="utf-8")).get("members", [])
@@ -430,45 +454,42 @@ def build_wg_json(new_map: dict[str, list[int]]) -> list[str]:
     groups = []
     for n in (1, 2, 3, 4):
         meta = WG_META[n]
-        member_norms = sorted(k for k, wgs in new_map.items() if n in wgs)
         lead = lead_by_wg.get(n)
         co_lead = colead_by_wg.get(n)
         leader_slugs = {x["slug"] for x in (lead, co_lead) if x}
-        members = []
-        with_bio = 0
-        for k in member_norms:
-            b = bios_by_norm.get(k)
-            if not b:
-                continue
-            with_bio += 1
-            if b.get("id") in leader_slugs:
-                continue
-            members.append({"slug": b.get("id"), "name": b.get("name") or ""})
-        # A lead or co-lead is a WG member too: if cost.eu's Membership
-        # table has not (yet) listed them under this WG, still count them.
-        with_bio = max(with_bio, len(leader_slugs))
+        rows = [m for m in members if n in m.get("wgs", [])]
+        out_members = []
+        for m in rows:
+            b = bios_by_norm.get(norm(m["name"]))
+            slug = b.get("id") if b else None
+            if slug and slug in leader_slugs:
+                continue  # leaders render in the leadership block
+            entry = {"name": m["name"], "country": m.get("country") or ""}
+            if slug:
+                entry["slug"] = slug
+            out_members.append(entry)
+        out_members.sort(key=lambda e: norm(e["name"]))
         groups.append({
             "number": n,
             "name": meta["name"],
             "colour": meta["colour"],
-            "memberCount": max(len(member_norms), len(leader_slugs)),
+            "memberCount": len(rows) or len(leader_slugs),
             "lead": lead,
             "coLead": co_lead,
-            "members": sorted(members, key=lambda r: r["name"].lower()),
-            "membersWithoutProfile": max(0, len(member_norms) - with_bio),
+            "members": out_members,
         })
 
     payload = {
         "_documentation": (
-            "Per-Working-Group membership and leadership. Generated by "
+            "Per-Working-Group leadership and membership. Generated by "
             "scripts/sync-cost.py from cost.eu's Membership and Leadership "
             "tables cross-referenced with data/bios.json. DO NOT EDIT BY "
             "HAND: the next weekly sync overwrites it. WG titles and the "
-            "colour palette are config in sync-cost.py (WG_META). The "
-            "purpose descriptions are hand-authored per locale in "
-            "working-groups.html. `members` lists directory members "
-            "(those with a bio) excluding the lead and co-lead; "
-            "`membersWithoutProfile` counts WG members with no bio yet."
+            "colour palette are config in sync-cost.py (WG_META); purpose "
+            "descriptions are hand-authored per locale in working-groups.html. "
+            "Each member carries name + country from cost.eu; a `slug` is "
+            "present when they also have a directory bio (photo, affiliation, "
+            "and a link to their card)."
         ),
         "source": URL,
         "groups": groups,
@@ -481,11 +502,7 @@ def build_wg_json(new_map: dict[str, list[int]]) -> list[str]:
     lines = ["WG dataset: data/wg.json updated"]
     for g in groups:
         lead = g["lead"]["name"] if g["lead"] else "(vacant)"
-        co = g["coLead"]["name"] if g["coLead"] else "(vacant)"
-        lines.append(
-            f"  WG{g['number']}: {g['memberCount']} members, "
-            f"lead {lead}, co-lead {co}"
-        )
+        lines.append(f"  WG{g['number']}: {g['memberCount']} members, lead {lead}")
     return lines
 
 
@@ -521,8 +538,9 @@ def main() -> None:
     #    Groups page. Reads the bios.json just reconciled in step 3, so
     #    the leadership it records matches, and the same `new_map` that
     #    drove steps 1 and 2, so all surfaces stay in lockstep.
+    members = fetch_members(bs)
     print()
-    for line in build_wg_json(new_map):
+    for line in build_wg_json(members):
         print(line)
 
 

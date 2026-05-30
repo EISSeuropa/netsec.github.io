@@ -139,6 +139,17 @@
   </url>
 
   <url>
+    <loc>https://netsec-cost.eu/working-groups.html</loc>
+    <lastmod>2026-05-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://netsec-cost.eu/working-groups.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/working-groups.fr.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://netsec-cost.eu/working-groups.de.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/working-groups.html"/>
+  </url>
+
+  <url>
     <loc>https://netsec-cost.eu/outputs.html</loc>
     <lastmod>2026-05-25</lastmod>
     <changefreq>monthly</changefreq>
