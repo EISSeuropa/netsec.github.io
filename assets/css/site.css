@@ -474,6 +474,11 @@ section{padding:80px 0;position:relative}
 .wg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:22px}
 .wg-cta{text-align:center;margin:30px 0 0}
 .wg-card{padding:28px}
+/* The home WG tiles link through to their section on the Working
+   Groups page, so they read as cards but behave as links. */
+a.wg-card{text-decoration:none;color:inherit;display:block;transition:transform .2s var(--ease),box-shadow .2s var(--ease),border-color .2s var(--ease)}
+a.wg-card:hover{transform:translateY(-3px);border-color:var(--accent)}
+a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .wg-icon{
   width:52px;height:52px;border-radius:14px;display:grid;place-items:center;
   background:linear-gradient(135deg,rgba(0,51,153,.10),rgba(10,132,255,.10));
@@ -538,6 +543,10 @@ section{padding:80px 0;position:relative}
 .wg-page h1{font-size:clamp(2rem,4vw,2.8rem);letter-spacing:-.02em;margin:.2rem 0 .6rem}
 .wg-page .lede{font-size:1.1rem;color:var(--ink-2);max-width:60ch;line-height:1.6}
 .wg-page .wg-synced{font-size:.9rem;color:var(--muted);margin-top:.7rem}
+.wg-stats{display:flex;flex-wrap:wrap;gap:14px;margin:1.5rem 0 .3rem}
+.wg-stat{display:flex;flex-direction:column;gap:3px;padding:14px 22px;border-radius:14px;background:var(--glass-bg);border:1px solid var(--line);min-width:118px}
+.wg-stat-n{font-family:'Lexend','Inter',sans-serif;font-size:1.8rem;font-weight:700;line-height:1;color:var(--ink)}
+.wg-stat-l{font-size:.82rem;color:var(--muted)}
 .wg-page .wg-tag{display:inline-block;font-size:.74rem;font-weight:700;padding:.22rem .55rem;border-radius:7px;color:#fff;letter-spacing:.02em}
 .wg-page .wg-tag.wg-1{background:#0a84ff}
 .wg-page .wg-tag.wg-2{background:#10b981}
@@ -546,7 +555,7 @@ section{padding:80px 0;position:relative}
 .wg-jump{display:flex;flex-wrap:wrap;gap:10px;margin-top:1.5rem}
 .wg-jump a{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:var(--glass-bg);border:1px solid var(--line);font-size:.9rem;font-weight:500;color:var(--ink-2)}
 .wg-jump a:hover{color:var(--ink);border-color:var(--accent)}
-.wg-section{padding:34px 0;scroll-margin-top:90px}
+.wg-section{padding:34px 0}
 .wg-section + .wg-section{border-top:1px solid var(--line)}
 .wg-section-head{display:flex;align-items:center;gap:12px;margin-bottom:.6rem;flex-wrap:wrap}
 .wg-section-head h2{margin:0;font-size:clamp(1.3rem,2.4vw,1.7rem);letter-spacing:-.01em}

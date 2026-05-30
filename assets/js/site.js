@@ -153,6 +153,83 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
+  /* Anchor-scroll offset + precise in-page section navigation.
+
+     Two problems this solves:
+       1. The header is `position: fixed` and its height varies with
+          the beta ribbon and the What's-New banner, so the static
+          `scroll-padding-top` in CSS lands section headings under it.
+          We measure the real header bottom and publish it as
+          scroll-padding-top, recomputed whenever the ribbon, banner,
+          or nav changes size. This governs native hash landings
+          (page load with a #hash, and cross-page links like
+          working-groups.html#wg1).
+       2. The primary nav links are authored as `index.html#section`
+          so they resolve from every page. On the home page itself
+          that points at the same document but with a different path
+          string, so the browser does a full reload + native hash jump
+          rather than an in-page scroll, and the events / spotlight
+          blocks that render in after load throw the landing off.
+          We intercept header- and jump-nav links that resolve to the
+          current document and scroll to them ourselves, clearing the
+          measured header. */
+  (function () {
+    const headerBottom = () =>
+      nav ? Math.max(0, nav.getBoundingClientRect().bottom) : 78;
+    const syncPad = () => {
+      document.documentElement.style.scrollPaddingTop =
+        Math.round(headerBottom() + 14) + 'px';
+    };
+    syncPad();
+    window.addEventListener('load', syncPad);
+    window.addEventListener('resize', syncPad, { passive: true });
+    if (nav && typeof ResizeObserver === 'function') {
+      new ResizeObserver(syncPad).observe(nav);
+      const rib = document.querySelector('.i18n-beta-ribbon');
+      if (rib) new ResizeObserver(syncPad).observe(rib);
+    }
+    // The nav is `position: fixed` and its `top` is driven by the CSS
+    // vars --whats-new-h / --ribbon-h, which the banner and ribbon set
+    // on <html> *after* this runs. Changing top moves the nav without
+    // resizing it, so the ResizeObserver above never fires. Watch the
+    // <html> style attribute (where those vars live) and recompute, and
+    // re-measure a few times early on to catch the async banner mount.
+    if (typeof MutationObserver === 'function') {
+      new MutationObserver(syncPad).observe(document.documentElement,
+        { attributes: true, attributeFilter: ['style'] });
+    }
+    [150, 500, 1200].forEach((d) => setTimeout(syncPad, d));
+
+    // Normalise so "/", "/index.html", "/index.fr.html" compare equal.
+    const normPath = (p) =>
+      p.replace(/index(\.[a-z]{2})?\.html$/, '').replace(/\/+$/, '') || '/';
+    const inPageTarget = (a) => {
+      if (!a || !a.hash || a.host !== location.host) return null;
+      if (normPath(a.pathname) !== normPath(location.pathname)) return null;
+      let id;
+      try { id = decodeURIComponent(a.hash.slice(1)); } catch (_) { return null; }
+      return id ? document.getElementById(id) : null;
+    };
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest(
+        '.nav-links a[href], .wg-jump a[href]');
+      if (!a) return;
+      const target = inPageTarget(a);
+      if (!target) return;             // cross-page or no such section: let it navigate
+      e.preventDefault();
+      const y = window.scrollY + target.getBoundingClientRect().top
+        - headerBottom() - 14;
+      const reduce = window.matchMedia
+        && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth' });
+      if (history.replaceState) history.replaceState(null, '', a.hash);
+      // Move focus to the section for keyboard / screen-reader users,
+      // without letting .focus() yank the scroll position back.
+      target.setAttribute('tabindex', '-1');
+      try { target.focus({ preventScroll: true }); } catch (_) {}
+    });
+  })();
+
   /* Theme toggle — flips .dark on <html>, persists choice.
      Initial state is set by the inline <head> script to avoid FOUC. */
   const themeBtn = document.querySelector('.theme-toggle');

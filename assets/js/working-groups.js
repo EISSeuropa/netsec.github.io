@@ -11,9 +11,12 @@
   'use strict';
 
   var I18N = {
-    en: { lead: 'Lead', coLead: 'Co-lead' },
-    fr: { lead: 'Responsable', coLead: 'Co-responsable' },
-    de: { lead: 'Leitung', coLead: 'Co-Leitung' },
+    en: { lead: 'Lead', coLead: 'Co-lead',
+          people: 'people', countries: 'countries', groups: 'Working Groups' },
+    fr: { lead: 'Responsable', coLead: 'Co-responsable',
+          people: 'personnes', countries: 'pays représentés', groups: 'groupes de travail' },
+    de: { lead: 'Leitung', coLead: 'Co-Leitung',
+          people: 'Personen', countries: 'vertretene Länder', groups: 'Arbeitsgruppen' },
   };
   var locale = (document.documentElement.lang || 'en').slice(0, 2);
   var t = I18N[locale] || I18N.en;
@@ -52,9 +55,13 @@
           el('img', { src: bio.photo, alt: name, loading: 'lazy' }))
       : el('div', { class: 'mc-avatar mc-avatar--initials', 'aria-hidden': 'true' },
           initials(name));
+    // Members all show their country, so the bio'd and non-bio cards
+    // read consistently (a bio's position/affiliation fields are not
+    // uniformly populated, which made some cards show a university and
+    // others a job title). Leaders show their role instead.
     var sub = roleLabel
       ? null
-      : ((bio && (bio.position || bio.affiliation)) || entry.country || '');
+      : (entry.country || (bio && (bio.position || bio.affiliation)) || '');
     var kids = [
       avatar,
       roleLabel ? el('div', { class: 'role', text: roleLabel }) : null,
@@ -106,6 +113,41 @@
       var details = sec.querySelector('[data-wg-members]');
       if (details && !(g.members || []).length) details.hidden = true;
     });
+
+    // Overall stats across all four groups: unique people (members plus
+    // leads and co-leads, de-duplicated by name since cost.eu lists a
+    // person under every WG they belong to) and the countries they come
+    // from. Computed client-side from the same dataset, so it tracks the
+    // weekly cost.eu sync with no extra maintenance.
+    var statsEl = document.querySelector('[data-wg-stats]');
+    if (statsEl) {
+      var nameKey = function (n) {
+        return (n || '').toLowerCase()
+          .replace(/^(dr|prof|mr|ms|mrs|mme|m|pr)\.?\s+/, '').trim();
+      };
+      var people = {}, countries = {};
+      (wg.groups || []).forEach(function (g) {
+        [g.lead, g.coLead].forEach(function (L) {
+          if (L && L.name) people[nameKey(L.name)] = 1;
+        });
+        (g.members || []).forEach(function (m) {
+          if (m.name) people[nameKey(m.name)] = 1;
+          if (m.country) countries[m.country] = 1;
+        });
+      });
+      var stats = [
+        { n: Object.keys(people).length, label: t.people },
+        { n: Object.keys(countries).length, label: t.countries },
+        { n: (wg.groups || []).length, label: t.groups },
+      ];
+      statsEl.innerHTML = '';
+      stats.forEach(function (s) {
+        statsEl.appendChild(el('div', { class: 'wg-stat' },
+          el('span', { class: 'wg-stat-n', text: String(s.n) }),
+          el('span', { class: 'wg-stat-l', text: s.label })));
+      });
+      statsEl.hidden = false;
+    }
   }).catch(function (e) {
     if (window.console && console.debug) console.debug('WG render skipped:', e);
   });
