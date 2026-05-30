@@ -219,6 +219,20 @@ it up.
    back to their chair or the contact form. Because of those two
    limits, treat author self-edit as a convenience on top of the chair
    route in step 1, not the primary path.
+
+   **Deep-links for the FAQ.** Indico exposes per-user shortcuts that
+   skip the menu hunt, so the FAQ links them directly:
+   `https://indico.eiss-europa.com/event/<event-id>/contributions/mine`
+   (a speaker's own contributions) and
+   `…/event/<event-id>/sessions/mine` (a chair's own sessions). For
+   ESSC 2026 the event id is `22`. These are per-edition, so swap the
+   id and refresh the two FAQ links (`essc-edit-details`, `essc-chair`)
+   each year. Both were checked on the live event: a speaker reaches
+   the editable contribution, a chair reaches *My Sessions*. To change
+   a name or affiliation the speaker opens the contribution, finds
+   themselves in the *People* section, and clicks the small pencil
+   beside their name, then edits the affiliation. That pencil is a few
+   clicks deep, so the FAQ spells the path out.
 3. **Invitation letters via document generation.** We issue visa
    invitation letters through Indico's document-generation module
    (decided for ESSC 2026). Build an HTML/Jinja template once under
