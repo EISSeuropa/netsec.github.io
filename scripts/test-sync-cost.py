@@ -300,6 +300,53 @@ def test_apply_leadership_reconciles_wg_leadership() -> None:
                "WG3 Co-Leader" in bios["new-colead"]["roles"], True)
 
 
+# ─── build_wg_json() — per-WG dataset ──────────────────────────────
+
+def test_build_wg_json_resolves_leaders_and_members() -> None:
+    """build_wg_json derives each WG's lead/co-lead from bios'
+    `wg_leadership`, lists bio'd members (excluding the two leaders),
+    and counts the members with no directory bio from the membership
+    map. An empty WG resolves to no leaders and a zero count. A second
+    build with the same inputs is idempotent."""
+    print("\nbuild_wg_json() — resolves leadership + members per WG:")
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        biospath = _seed_bios(tmp, [
+            {"id": "moritz-weiss", "name": "Dr Moritz Weiss", "wgs": [1],
+             "wg_leadership": {"lead": [1]}, "source": "seed"},
+            {"id": "filip-ejdus", "name": "Prof Filip Ejdus", "wgs": [1],
+             "wg_leadership": {"co_lead": [1]}, "source": "seed"},
+            {"id": "jane-doe", "name": "Dr Jane Doe", "wgs": [1],
+             "wg_leadership": {}, "source": "form"},
+        ])
+        wgpath = tmp / "wg.json"
+        saved_bios, saved_wg = sync_cost.BIOS, sync_cost.WG_JSON
+        sync_cost.BIOS, sync_cost.WG_JSON = biospath, wgpath
+        try:
+            # WG1 has the three bio'd members plus two with no bio.
+            new_map = {"moritz weiss": [1], "filip ejdus": [1],
+                       "jane doe": [1], "no bio one": [1], "no bio two": [1]}
+            sync_cost.build_wg_json(new_map)
+            second = sync_cost.build_wg_json(new_map)
+        finally:
+            sync_cost.BIOS, sync_cost.WG_JSON = saved_bios, saved_wg
+        data = json.loads(wgpath.read_text(encoding="utf-8"))
+        wg1 = next(g for g in data["groups"] if g["number"] == 1)
+        expect("WG1 lead resolved from wg_leadership",
+               wg1["lead"]["slug"], "moritz-weiss")
+        expect("WG1 co-lead resolved from wg_leadership",
+               wg1["coLead"]["slug"], "filip-ejdus")
+        expect("WG1 members exclude the two leaders",
+               [m["slug"] for m in wg1["members"]], ["jane-doe"])
+        expect("WG1 total member count", wg1["memberCount"], 5)
+        expect("WG1 members without a profile", wg1["membersWithoutProfile"], 2)
+        wg2 = next(g for g in data["groups"] if g["number"] == 2)
+        expect("empty WG has no lead", wg2["lead"], None)
+        expect("empty WG count is zero", wg2["memberCount"], 0)
+        expect("second build is idempotent (no change)",
+               any("(no changes)" in line for line in second), True)
+
+
 # ─── main ──────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -313,6 +360,7 @@ def main() -> None:
     test_extract_leadership_matches_standalone_lead()
     test_apply_leadership_reconciles_form_entries()
     test_apply_leadership_reconciles_wg_leadership()
+    test_build_wg_json_resolves_leaders_and_members()
     print("\nAll smoke tests passed.")
 
 
