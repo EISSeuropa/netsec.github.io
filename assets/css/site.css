@@ -3425,6 +3425,46 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 
 /* Day-chip nav. Anchor-link based, no JS scroll handler — keeps
    `prefers-reduced-motion` honoured by the browser. */
+/* Download-the-whole-programme button. Injected by the renderer above
+   the day chips. Hands over a deploy-built PDF that paginates reliably,
+   since Chrome's interactive print truncates the long programme. */
+.programme-download{
+  display:inline-flex;
+  align-items:center;
+  gap:.65rem;
+  margin:1.1rem 0 1.4rem;
+  padding:.7rem 1.15rem;
+  background:var(--accent);
+  color:#fff;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:600;
+  font-size:.95rem;
+  line-height:1.3;
+  box-shadow:0 6px 18px rgba(0,51,153,.18);
+  transition:transform .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease);
+}
+.programme-download:hover,
+.programme-download:focus-visible{
+  background:var(--accent-2);
+  color:#fff;
+  opacity:1;
+  transform:translateY(-1px);
+  box-shadow:0 10px 26px rgba(0,51,153,.24);
+}
+.programme-download svg{width:1.15em;height:1.15em;flex:none}
+.programme-download-hint{
+  font-weight:400;
+  font-size:.82rem;
+  opacity:.85;
+  border-left:1px solid rgba(255,255,255,.4);
+  padding-left:.65rem;
+}
+@media (max-width:560px){
+  .programme-download{flex-wrap:wrap;gap:.25rem .65rem}
+  .programme-download-hint{border-left:0;padding-left:0;flex-basis:100%}
+}
+
 .programme-day-chips{
   display:flex;
   flex-wrap:wrap;
@@ -4207,6 +4247,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
      the conference and the Indico URL will appear after each link via
      the existing link-disclosure rule. */
   .essc-hero,
+  .programme-download,
   .programme-day-chips,
   .programme-live-dot,
   .programme-loading,

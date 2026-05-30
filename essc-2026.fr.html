@@ -487,6 +487,9 @@
       viewFullProfile: 'View full profile →',
       memberCardLabel: 'Member preview',
       closeCard: 'Close preview',
+      pdfLabel: 'Download programme (PDF)',
+      pdfHint: 'The official conference programme.',
+      pdfFile: 'assets/programme/eiss-2026-programme.pdf',
       wgPrefix: 'WG',
       iconEmail: 'Email', iconWebsite: 'Website', iconOrcid: 'ORCID iD',
       iconLinkedin: 'LinkedIn', iconTwitter: 'X',
@@ -511,6 +514,9 @@
       viewFullProfile: 'Voir le profil complet →',
       memberCardLabel: 'Aperçu du membre',
       closeCard: 'Fermer l’aperçu',
+      pdfLabel: 'Télécharger le programme (PDF)',
+      pdfHint: 'Le programme officiel de la conférence.',
+      pdfFile: 'assets/programme/eiss-2026-programme.pdf',
       wgPrefix: 'GT',
       iconEmail: 'Courriel', iconWebsite: 'Site web', iconOrcid: 'ORCID iD',
       iconLinkedin: 'LinkedIn', iconTwitter: 'X',
@@ -535,6 +541,9 @@
       viewFullProfile: 'Vollständiges Profil ansehen →',
       memberCardLabel: 'Mitgliedsvorschau',
       closeCard: 'Vorschau schließen',
+      pdfLabel: 'Programm herunterladen (PDF)',
+      pdfHint: 'Das offizielle Konferenzprogramm.',
+      pdfFile: 'assets/programme/eiss-2026-programme.pdf',
       wgPrefix: 'AG',
       iconEmail: 'E-Mail', iconWebsite: 'Website', iconOrcid: 'ORCID iD',
       iconLinkedin: 'LinkedIn', iconTwitter: 'X',
@@ -552,6 +561,34 @@
     lang === 'fr' ? 'people.fr.html' :
     lang === 'de' ? 'people.de.html' :
                     'people.html';
+
+  // ── Download-PDF button ───────────────────────────────────────
+  // Hands over the official, tailored conference programme PDF
+  // (provided by the EISS organisers), committed at
+  // assets/programme/eiss-2026-programme.pdf. We link a ready-made file
+  // rather than leaning on the visitor's browser print because Chrome's
+  // interactive "Save as PDF" truncates the long programme mid-document
+  // (a Chrome print-fragmentation defect; Safari prints it fine). The
+  // button is injected here, alongside the day-chip/member-card setup,
+  // and runs independently of the data fetch, so the download stays
+  // available even if the live render fails.
+  (function injectProgrammeDownload() {
+    if (!chips || !chips.parentNode) return;
+    const link = el('a', { class: 'programme-download', href: t.pdfFile, download: '' });
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', '2');
+    svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('aria-hidden', 'true');
+    for (const d of ['M12 3v12', 'M7 10l5 5 5-5', 'M5 21h14']) {
+      const p = document.createElementNS(ns, 'path'); p.setAttribute('d', d); svg.appendChild(p);
+    }
+    link.appendChild(svg);
+    link.appendChild(el('span', { class: 'programme-download-label' }, t.pdfLabel));
+    if (t.pdfHint) link.appendChild(el('span', { class: 'programme-download-hint' }, t.pdfHint));
+    chips.parentNode.insertBefore(link, chips);
+  })();
 
   function setError(msg) {
     root.dataset.state = 'error';

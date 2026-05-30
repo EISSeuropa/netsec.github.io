@@ -215,6 +215,27 @@ it up.
    FAQ answer stays signatory-agnostic until then, and the request
    channel for applicants remains the contact form.
 
+### The downloadable programme PDF
+
+The programme page offers a *Download programme (PDF)* button that
+hands over the official, tailored conference programme. The file lives
+at `assets/programme/eiss-2026-programme.pdf` and is supplied by the
+EISS organisers. To refresh it for a new edition, replace that file
+(keep the name, or update the `pdfFile` value in the three
+`essc-2026*.html` renderers and the FAQ link) and the button picks it
+up. The button label is localised EN/FR/DE; all three point at the same
+file, since the official programme is one document.
+
+**Why a download exists at all.** Chrome's interactive *Save as PDF*
+truncates the long programme mid-document. The print preview itself
+stops part-way through, so it is a Chrome print-fragmentation defect,
+not a page-layout problem we can fix from CSS: by measurement no
+element on the page is too tall to break, and headless Chrome paginates
+the whole thing correctly. **Safari prints the page fine.** The
+in-browser print stylesheet still works (panels expand, abstracts
+drop), but the download is the reliable path for Chrome users. Tracked
+in [#364](https://github.com/EISSeuropa/netsec.github.io/issues/364).
+
 ### Pinning the member spotlight
 
 The home page can feature one member per week ([#341](https://github.com/EISSeuropa/netsec.github.io/issues/341)).
