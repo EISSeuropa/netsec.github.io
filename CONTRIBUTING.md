@@ -1,11 +1,8 @@
 # Contributing to NetSec
 
 Thanks for considering a contribution to the website of COST Action
-CA24154 (NetSec). This page is the front door — it points you at
-the right channel depending on what you want to do.
-
-Most readers of this file are not developers. That's expected. The
-fastest path is almost always one of the first three sections below.
+CA24154 (NetSec). This page points you at
+the right channel depending on what you want to do. The fastest path is almost always one of the first three sections below.
 
 ## I have a question or want to get in touch
 
