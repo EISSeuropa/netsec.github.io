@@ -639,6 +639,16 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   background:rgba(0,51,153,.08);padding:5px 12px;border-radius:8px;align-self:flex-start;
 }
 .event-type{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+/* Working-Group pills on an event card (rendered by home-events.js from
+   the event's `workingGroups`). Each links to its section on the
+   Working Groups page; colours follow the WG palette. */
+.event-wgs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.event-wg-pill{font-family:'Inter',sans-serif;font-size:.66rem;font-weight:700;letter-spacing:.03em;padding:2px 7px;border-radius:6px;color:#fff;text-decoration:none;line-height:1.55;transition:opacity .15s var(--ease)}
+.event-wg-pill:hover{opacity:.85}
+.event-wg-pill.wg-1{background:#0a84ff}
+.event-wg-pill.wg-2{background:#10b981}
+.event-wg-pill.wg-3{background:#8b5cf6}
+.event-wg-pill.wg-4{background:#f59e0b;color:#3b2a00}
 .event-card h3,.output-card h3,.news-card h3{font-size:1.1rem;margin:0}
 .event-card p,.output-card p,.news-card p{font-size:.92rem;color:var(--muted);margin:0;flex-grow:1}
 .event-loc{font-size:.85rem;color:var(--ink-2);display:flex;align-items:center;gap:6px}

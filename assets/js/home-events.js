@@ -43,6 +43,7 @@
       atcOutlook:      'Outlook',
       atcApple:        'Apple Calendar (webcal)',
       atcDownload:     'Download .ics',
+      wgAria:          'Working Groups served',
     },
     fr: {
       type: {
@@ -59,6 +60,7 @@
       atcOutlook:      'Outlook',
       atcApple:        'Apple Calendar (webcal)',
       atcDownload:     'Télécharger le .ics',
+      wgAria:          'Groupes de travail concernés',
     },
     de: {
       type: {
@@ -75,6 +77,7 @@
       atcOutlook:      'Outlook',
       atcApple:        'Apple Kalender (webcal)',
       atcDownload:     '.ics herunterladen',
+      wgAria:          'Beteiligte Arbeitsgruppen',
     },
   };
 
@@ -388,6 +391,21 @@
     const typeLabel = (t.type && t.type[ev.eventType]) || ev.eventType || '';
     if (typeLabel) {
       card.appendChild(el('span', { class: 'event-type' }, [typeLabel]));
+    }
+
+    // Working-Group pills (the reverse of the WG page's Related events
+    // block): which Working Groups this event serves, each linking to
+    // its section on the Working Groups page. Read from the optional
+    // `workingGroups` array in events.json.
+    const wgs = Array.isArray(ev.workingGroups)
+      ? ev.workingGroups.slice().sort((a, b) => a - b) : [];
+    if (wgs.length) {
+      const wgSuffix = locale === 'en' ? '' : locale + '.';
+      card.appendChild(el('div', { class: 'event-wgs', 'aria-label': t.wgAria },
+        wgs.map(n => el('a', {
+          class: 'event-wg-pill wg-' + n,
+          href: 'working-groups.' + wgSuffix + 'html#wg' + n,
+        }, ['WG' + n]))));
     }
 
     const title = pickLocale(ev.cardTitle, locale, ev.summary);
