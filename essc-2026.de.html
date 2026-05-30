@@ -1334,6 +1334,49 @@
     if (!card) return; // Popover unsupported; let the link navigate.
     e.preventDefault();
   }
+
+  // ── Print: expand every panel before the print dialog renders ──
+  // Each session's paper line-up lives in a collapsed <details> that
+  // a reader expands on screen. The print engine honours that
+  // open/closed state, so a printed programme would only show the
+  // panels the reader happened to expand, leaving the rest as a bare
+  // "N contributions" summary. We force every contributions <details>
+  // open before the print render and restore the on-screen state
+  // afterwards, so printing is non-destructive. The print stylesheet
+  // hides the summary toggle and the abstracts, leaving a clean
+  // line-up of session, chairs, paper titles, and speakers.
+  //
+  // `printActive` guards against the double-fire when both
+  // `beforeprint` and the matchMedia('print') change land for the
+  // same print (Chrome fires both): the second expand would otherwise
+  // find nothing closed, empty `printExpanded`, and leave the panels
+  // open after printing. The matchMedia path is the Safari fallback,
+  // which historically does not fire before/afterprint.
+  let printExpanded = [];
+  let printActive = false;
+  function expandForPrint() {
+    if (printActive) return;
+    printActive = true;
+    printExpanded = [];
+    document.querySelectorAll('details.programme-contribs:not([open])').forEach((d) => {
+      d.open = true;
+      printExpanded.push(d);
+    });
+  }
+  function restoreAfterPrint() {
+    if (!printActive) return;
+    printActive = false;
+    printExpanded.forEach((d) => { d.open = false; });
+    printExpanded = [];
+  }
+  window.addEventListener('beforeprint', expandForPrint);
+  window.addEventListener('afterprint', restoreAfterPrint);
+  if (window.matchMedia) {
+    const printMq = window.matchMedia('print');
+    const onPrintChange = (e) => { (e.matches ? expandForPrint : restoreAfterPrint)(); };
+    if (printMq.addEventListener) printMq.addEventListener('change', onPrintChange);
+    else if (printMq.addListener) printMq.addListener(onPrintChange);
+  }
 })();
 </script>
 
