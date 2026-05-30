@@ -266,6 +266,56 @@ in-browser print stylesheet still works (panels expand, abstracts
 drop), but the download is the reliable path for Chrome users. Tracked
 in [#364](https://github.com/EISSeuropa/netsec.github.io/issues/364).
 
+### Rolling over to next year's ESSC edition
+
+Most of the site refreshes itself once `scripts/sync-indico.py` is
+looking at the new event, but a handful of values are hand-edited and
+carry the year or the Indico event id. This is the one place that lists
+them, so a rollover is a find-and-replace plus the Indico-side steps in
+*Setting up a conference on Indico* above.
+
+**Indico URL templates.** Replace `<id>` with the new event's id (the
+number in the Indico event URL once you have duplicated the event). For
+ESSC 2026 the id is `22`.
+
+- Event home and registration: `https://indico.eiss-europa.com/event/<id>/`
+- A speaker's own talks (FAQ self-edit link): `https://indico.eiss-europa.com/event/<id>/contributions/mine`
+- A chair's own sessions (FAQ chair link): `https://indico.eiss-europa.com/event/<id>/sessions/mine`
+
+**What updates itself (do nothing).** The daily sync scopes to the
+*Annual Conferences* category, not a fixed event, so `data/indico.json`,
+the programme grid, `calendar.ics`, and the home-page event banner all
+follow the new edition once it is the live one. The per-session and
+per-contribution Indico URLs inside `data/indico.json` regenerate too.
+
+**What to hand-edit.** Everything below carries `essc-2026`, the
+conference dates, or `event/22`:
+
+| Where | What to change |
+| --- | --- |
+| `essc-2026.html` + `.fr` + `.de` | Rename to `essc-<year>.*`. Inside each: the masthead title and dates, the `@page` running-header date string, the print-footer URL, the JSON-LD dates and venue, the `event/22/` registration links, and the three `pdfFile` paths. |
+| `assets/programme/eiss-2026-programme.pdf` | Replace with the new official programme. Keep the filename to avoid touching the `pdfFile` references, or rename and update them in the three renderers and the FAQ. |
+| `faq.html` + `.fr` + `.de` (*At a NetSec conference* section) | `essc-edit-details` and `essc-chair` deep-links (`event/22/...`), `essc-programme-pdf` (the PDF link, the *ESSC 2026* label, the page link), and `essc-visa` (the dates and venue). Bump the FAQ footer stamp. |
+| `data/events.json` | `indicoEventId`, the `Registration:` URL in the description, the `url` block (`essc-<year>.*`), and the dates, location, and chairpersons. |
+| `data/whats-new.json` | The `/essc-2026.html` links and the campaign reason, if the banner is run for the conference (it is off by default, see CLAUDE.md §14). |
+| `sitemap.xml` + `sitemap.html` (+ FR + DE) | The `essc-2026` URL entry. Re-run `scripts/inject-seo.py` to regenerate `sitemap.xml`. |
+| `scripts/indico_clean_duplicate.py` | The `PROTECTED_EVENTS` allow-list, so the rollover script refuses to touch the new live event. |
+
+The stakeholder PDF pack (`docs/pdf/documentation.html`) also names
+ESSC 2026, but it refreshes on the release cadence (CLAUDE.md §5.4),
+not per-conference, so leave it to the next pack update.
+
+**Indico-side steps** (off-repo, re-apply each edition): grant chairs
+modification rights, optionally enable submitter *Edit (basic)* and
+submission rights, and build the visa-letter document-generation
+template. All three are in *Setting up a conference on Indico* above.
+After Indico duplicates the previous event, run
+`scripts/indico_clean_duplicate.py` to strip the copied contributions
+while keeping the configuration (see `docs/indico-patch.md`).
+
+After the edits, run `python3 scripts/check-i18n-drift.py` and
+`./scripts/check-links.sh --internal` before opening the PR.
+
 ### Pinning the member spotlight
 
 The home page can feature one member per week ([#341](https://github.com/EISSeuropa/netsec.github.io/issues/341)).
