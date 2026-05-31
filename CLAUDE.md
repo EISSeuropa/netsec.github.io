@@ -420,6 +420,14 @@ timeline. One milestone per planned release plus a single
 triggers (COST-office decisions, post-conference activities,
 larger redesigns with no fixed slot yet).
 
+Two non-versioned milestones predate this convention
+(`Directory Page and Workflow`, `Translations (FR+GE) in Beta`).
+Both are closed; they are pre-versioning history, intentionally
+not on the public roadmap (the roadmap-progress sync skips any
+title that isn't `vX.Y.Z`). Leave them as-is, do not rename them
+to versions (their work spanned several early releases, so no
+single version maps).
+
 Due dates on the milestones come from the same timeline. When the
 roadmap shifts a planned release, **bump the milestone's due date
 in the same commit that updates the roadmap row** — they're two

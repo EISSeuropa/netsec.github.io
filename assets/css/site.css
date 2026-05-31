@@ -3126,6 +3126,10 @@ body.search-open{overflow:hidden}
   margin:0 0 .4rem;font-size:1.25rem;letter-spacing:-.01em;
   font-family:'Lexend','Inter',sans-serif;font-weight:600;color:var(--ink);
 }
+/* Count badge on the Under-watch heading (roadmap-progress.js counts the
+   cards actually shown). Amber, matching the Under-watch pill colour. */
+.rm-later-count{display:inline-flex;align-items:center;justify-content:center;min-width:1.5em;height:1.5em;margin-left:.5em;padding:0 .45em;border-radius:999px;background:rgba(245,158,11,.16);color:#b45309;font-size:.62em;font-weight:700;vertical-align:middle;line-height:1}
+.dark .rm-later-count{background:rgba(245,158,11,.2);color:#fbbf24}
 .rm-later > p{
   margin:0 0 16px;font-size:.92rem;color:var(--ink-2);line-height:1.55;max-width:60ch;
 }
