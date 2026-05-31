@@ -105,6 +105,7 @@ maintainer-facing audience.
 #### Changed
 
 - Tagged three more events with their Working Groups, so they now show under the relevant sections on `/working-groups.html` and carry WG pills on the home Events cards: the NetSec ITC Conference (WG2, WG4), the MC Plenary (WG1) and the NetSec Policy Workshop (WG2).
+- Swept prose semicolons out of every page in all three locales, rewriting them as full stops or commas to follow the house voice rules. The one semicolon in the ITC Conference calendar description got the same treatment.
 
 #### Fixed
 
