@@ -109,6 +109,7 @@ maintainer-facing audience.
 #### Fixed
 
 - Stylesheet and script files now carry a content-hash cache-bust token (`site.css?v=…`), so a returning visitor renders new markup against the matching CSS rather than a stale cached copy after a release. A new check stops a CSS or JS change from merging without the hashes being refreshed.
+- Gave the v1.10.0 roadmap card a proper description in all three locales. It had landed with the generic "maintenance release" auto-summary and an untranslated FR/DE body, which undersold a feature release.
 
 ## [1.10.0] · 2026-05-31 — Working Groups page and milestone-aware roadmap
 
