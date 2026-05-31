@@ -98,7 +98,9 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+#### Changed
+
+- Tagged three more events with their Working Groups, so they now show under the relevant sections on `/working-groups.html` and carry WG pills on the home Events cards: the NetSec ITC Conference (WG2, WG4), the MC Plenary (WG1) and the NetSec Policy Workshop (WG2).
 
 ## [1.10.0] · 2026-05-31 — Working Groups page and milestone-aware roadmap
 
