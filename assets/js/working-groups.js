@@ -289,6 +289,22 @@
       });
       statsEl.hidden = false;
     }
+
+    // A deep-link from another page (e.g. the home Working-Groups cards
+    // linking to #wg2) is scrolled to by the browser before this async
+    // render runs. The events, publications, and member content injected
+    // above then changes the page height, leaving the target mis-aligned
+    // under or below the header. Re-apply the scroll once everything is
+    // in place. scroll-padding-top, kept in step with the fixed header by
+    // site.js, supplies the correct offset.
+    if (location.hash.length > 1) {
+      var deepId;
+      try { deepId = decodeURIComponent(location.hash.slice(1)); } catch (_) { deepId = ''; }
+      var deepTarget = deepId && document.getElementById(deepId);
+      // The content above was injected synchronously, so layout is
+      // already final; scrollIntoView honours scroll-padding-top.
+      if (deepTarget) deepTarget.scrollIntoView();
+    }
   }).catch(function (e) {
     if (window.console && console.debug) console.debug('WG render skipped:', e);
   });
