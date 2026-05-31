@@ -546,18 +546,25 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .wg-stat{display:flex;flex-direction:column;gap:3px;padding:14px 22px;border-radius:14px;background:var(--glass-bg);border:1px solid var(--line);min-width:118px}
 .wg-stat-n{font-family:'Lexend','Inter',sans-serif;font-size:1.8rem;font-weight:700;line-height:1;color:var(--ink)}
 .wg-stat-l{font-size:.82rem;color:var(--muted)}
-.wg-page .wg-tag{display:inline-block;font-size:.74rem;font-weight:700;padding:.22rem .55rem;border-radius:7px;color:#fff;letter-spacing:.02em}
+.wg-page .wg-tag{display:inline-flex;align-items:center;margin:0;font-size:.74rem;font-weight:700;padding:.25rem .55rem;border-radius:7px;color:#fff;letter-spacing:.02em;line-height:1}
 .wg-page .wg-tag.wg-1{background:#0a84ff}
 .wg-page .wg-tag.wg-2{background:#10b981}
 .wg-page .wg-tag.wg-3{background:#8b5cf6}
 .wg-page .wg-tag.wg-4{background:#f59e0b;color:#3b2a00}
-.wg-jump{display:flex;flex-wrap:wrap;gap:10px;margin-top:1.5rem}
-.wg-jump a{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:var(--glass-bg);border:1px solid var(--line);font-size:.9rem;font-weight:500;color:var(--ink-2)}
-.wg-jump a:hover{color:var(--ink);border-color:var(--accent)}
+.wg-jump{display:flex;flex-wrap:wrap;gap:10px;margin-top:1.6rem}
+/* Scoped under .wg-page so `text-decoration:none` out-specifies the
+   `.prose-page a` underline (same tie-break trap as the member cards). */
+.wg-page .wg-jump a{display:inline-flex;align-items:center;gap:9px;padding:9px 16px 9px 11px;border-radius:999px;background:var(--glass-bg);border:1px solid var(--line);font-size:.9rem;font-weight:600;color:var(--ink-2);text-decoration:none;transition:transform .18s var(--ease),border-color .18s var(--ease),box-shadow .18s var(--ease),background .18s var(--ease)}
+.wg-page .wg-jump a:hover{color:var(--ink);transform:translateY(-2px);border-color:var(--wg,var(--accent));background:var(--glass-bg-strong);box-shadow:0 7px 20px rgba(20,35,80,.10)}
+.wg-page .wg-jump a:focus-visible{outline:2px solid var(--wg,var(--accent));outline-offset:3px}
 .wg-section{padding:34px 0}
 .wg-section + .wg-section{border-top:1px solid var(--line)}
 .wg-section-head{display:flex;align-items:center;gap:12px;margin-bottom:.6rem;flex-wrap:wrap}
-.wg-section-head h2{margin:0;font-size:clamp(1.3rem,2.4vw,1.7rem);letter-spacing:-.01em}
+/* .wg-page is also .prose-page, whose `h2` rule sets a large top margin
+   that out-specifies a bare `.wg-section-head h2`. Scope the reset under
+   .wg-page so margin:0 wins, which both aligns the WG tag with the
+   heading and tightens the gap above each section title. */
+.wg-page .wg-section-head h2{margin:0;font-size:clamp(1.3rem,2.4vw,1.7rem);letter-spacing:-.01em}
 .wg-objective{font-size:1.05rem;color:var(--ink-2);max-width:64ch;line-height:1.6;margin:.2rem 0 1.1rem;border-left:3px solid var(--wg-accent);padding-left:15px}
 .wg-focus{list-style:none;display:flex;flex-wrap:wrap;gap:9px;padding:0;margin:0 0 1.7rem}
 .wg-focus li{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;font-weight:500;color:var(--ink-2);background:var(--glass-bg);border:1px solid var(--line);border-radius:999px;padding:7px 15px 7px 12px}
