@@ -607,9 +607,17 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
    month(s). Authored static markup, one block per WG section. */
 .wg-deliverables{margin:0 0 1.7rem}
 .wg-deliv-list{list-style:none;margin:.2rem 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
-.wg-deliv{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:11px 15px;background:var(--glass-bg);border:1px solid var(--line);border-left:3px solid var(--wg-accent);border-radius:12px}
+.wg-deliv-item{margin:0}
+.wg-deliv{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:11px 15px;background:var(--glass-bg);border:1px solid var(--line);border-left:3px solid var(--wg-accent);border-radius:12px;text-decoration:none;color:inherit;transition:border-color .2s var(--ease),transform .2s var(--ease)}
+/* The row links to its deliverable in the About-page timeline. Scope the
+   reset higher than `.prose-page a` so the row reads as a tile, not a
+   prose link, and suppress any global external-link ::after marker. */
+.wg-page a.wg-deliv{text-decoration:none;color:inherit}
+.wg-deliv::after{content:none !important}
+.wg-deliv:hover{border-color:color-mix(in srgb,var(--wg-accent) 55%,var(--line));transform:translateY(-1px)}
+.wg-deliv:hover .wg-deliv-name{color:var(--wg-accent)}
 .wg-deliv-id{flex:none;font-family:'Lexend','Inter',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.03em;color:var(--wg-accent);background:color-mix(in srgb,var(--wg-accent) 13%,transparent);border-radius:7px;padding:3px 8px;min-width:36px;text-align:center}
-.wg-deliv-name{flex:1 1 55%;min-width:0;font-size:.93rem;font-weight:500;color:var(--ink);line-height:1.35}
+.wg-deliv-name{flex:1 1 55%;min-width:0;font-size:.93rem;font-weight:500;color:var(--ink);line-height:1.35;transition:color .2s var(--ease)}
 .wg-deliv-when{flex:none;margin-left:auto;font-size:.76rem;font-weight:600;letter-spacing:.02em;color:var(--muted)}
 
 /* Related publications: the same card language as related events, plus
