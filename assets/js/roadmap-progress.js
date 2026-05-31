@@ -74,6 +74,21 @@
     }
   })();
 
+  // Show how many items sit in the Under-watch section, counted from
+  // the cards actually rendered there (so the badge always matches what
+  // a visitor sees). Aria-hidden, since the heading text already reads
+  // "Under watch" and the cards themselves are in the reading order.
+  (function underWatchCount() {
+    var list = document.querySelector('.rm-later-list');
+    var head = document.getElementById('under-watch-h');
+    if (!list || !head) return;
+    var n = list.querySelectorAll('.rm-later-item').length;
+    if (!n) return;
+    head.appendChild(el('span', {
+      'class': 'rm-later-count', 'aria-hidden': 'true', 'text': String(n),
+    }));
+  })();
+
   fetch('data/roadmap-progress.json')
     .then(function (r) { return r.json(); })
     .then(function (data) {
