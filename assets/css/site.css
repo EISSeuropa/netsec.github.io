@@ -602,6 +602,35 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .wg-event-card h4{margin:0;font-size:.97rem;line-height:1.32;font-weight:600}
 .wg-event-date{margin-top:2px;font-size:.82rem;font-weight:600;color:var(--wg-accent)}
 
+/* Deliverables ("Working towards"): a vertical list of the COST
+   deliverables a group leads, each with its D-id chip and target
+   month(s). Authored static markup, one block per WG section. */
+.wg-deliverables{margin:0 0 1.7rem}
+.wg-deliv-list{list-style:none;margin:.2rem 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.wg-deliv{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:11px 15px;background:var(--glass-bg);border:1px solid var(--line);border-left:3px solid var(--wg-accent);border-radius:12px}
+.wg-deliv-id{flex:none;font-family:'Lexend','Inter',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.03em;color:var(--wg-accent);background:color-mix(in srgb,var(--wg-accent) 13%,transparent);border-radius:7px;padding:3px 8px;min-width:36px;text-align:center}
+.wg-deliv-name{flex:1 1 55%;min-width:0;font-size:.93rem;font-weight:500;color:var(--ink);line-height:1.35}
+.wg-deliv-when{flex:none;margin-left:auto;font-size:.76rem;font-weight:600;letter-spacing:.02em;color:var(--muted)}
+
+/* Related publications: the same card language as related events, plus
+   a dashed-border placeholder shown per WG until the first outputs land
+   (data/publications.json, first outputs scheduled October 2026). */
+.wg-publications{margin-top:.4rem}
+.wg-pub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:.9rem}
+.wg-pub-card{display:flex;flex-direction:column;gap:5px;padding:16px 18px;text-decoration:none;color:inherit;border-radius:14px;border-left:3px solid var(--wg-accent);transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.wg-pub-card:hover{transform:translateY(-2px)}
+.wg-pub-card::after{content:none !important}
+.wg-pub-card--plain{cursor:default}
+.wg-page a.wg-pub-card{text-decoration:none;color:inherit}
+.wg-pub-type{font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--muted)}
+.wg-pub-card h4{margin:0;font-size:.97rem;line-height:1.32;font-weight:600}
+.wg-pub-meta{margin-top:2px;font-size:.82rem;color:var(--ink-2)}
+.wg-pub-empty{font-size:.9rem;color:var(--ink-2);line-height:1.55;margin:.2rem 0 0;background:var(--glass-bg);border:1px dashed var(--line);border-radius:12px;padding:14px 16px}
+.wg-pub-empty a,.wg-pub-all{color:var(--wg-accent);font-weight:600;text-decoration:none}
+.wg-pub-empty a:hover,.wg-pub-all:hover{text-decoration:underline}
+.wg-pub-all{display:inline-block;margin-top:.85rem;font-size:.85rem}
+.wg-page a.wg-pub-all{color:var(--wg-accent)}
+
 /* Country-grid chips: always stack BELOW the name, indented to match.
    (Earlier attempt with flex + margin-left:auto produced inconsistent
    rendering — chips sometimes inline, sometimes wrapping right-aligned

@@ -14,21 +14,36 @@
     en: { lead: 'Lead', coLead: 'Co-lead',
           people: 'people', countries: 'countries', groups: 'Working Groups',
           events: 'Related events',
+          pubs: 'Related publications',
+          pubsEmpty: 'First publications expected October 2026.',
+          pubsAll: 'See all publications',
           types: { 'training-school': 'Training School', 'annual-conference': 'Annual Conference',
                    'policy-workshop': 'Policy Workshop', 'itc-conference': 'ITC Conference',
-                   'mc-plenary': 'MC Plenary' } },
+                   'mc-plenary': 'MC Plenary' },
+          pubTypes: { 'policy-brief': 'Policy brief', 'article': 'Peer-reviewed article',
+                   'report': 'Report', 'training-material': 'Training material', 'dataset': 'Dataset' } },
     fr: { lead: 'Responsable', coLead: 'Co-responsable',
           people: 'personnes', countries: 'pays représentés', groups: 'groupes de travail',
           events: 'Événements liés',
+          pubs: 'Publications liées',
+          pubsEmpty: 'Premières publications attendues en octobre 2026.',
+          pubsAll: 'Voir toutes les publications',
           types: { 'training-school': 'École de formation', 'annual-conference': 'Conférence annuelle',
                    'policy-workshop': 'Atelier politique', 'itc-conference': 'Conférence ITC',
-                   'mc-plenary': 'Plénière du CG' } },
+                   'mc-plenary': 'Plénière du CG' },
+          pubTypes: { 'policy-brief': 'Note de politique', 'article': 'Article évalué par les pairs',
+                   'report': 'Rapport', 'training-material': 'Matériel de formation', 'dataset': 'Jeu de données' } },
     de: { lead: 'Leitung', coLead: 'Co-Leitung',
           people: 'Personen', countries: 'vertretene Länder', groups: 'Arbeitsgruppen',
           events: 'Verwandte Veranstaltungen',
+          pubs: 'Verwandte Veröffentlichungen',
+          pubsEmpty: 'Erste Veröffentlichungen werden für Oktober 2026 erwartet.',
+          pubsAll: 'Alle Veröffentlichungen ansehen',
           types: { 'training-school': 'Ausbildungsschule', 'annual-conference': 'Jahreskonferenz',
                    'policy-workshop': 'Politik-Workshop', 'itc-conference': 'ITC-Konferenz',
-                   'mc-plenary': 'MC-Plenum' } },
+                   'mc-plenary': 'MC-Plenum' },
+          pubTypes: { 'policy-brief': 'Policy Brief', 'article': 'Begutachteter Artikel',
+                   'report': 'Bericht', 'training-material': 'Schulungsmaterial', 'dataset': 'Datensatz' } },
   };
   var locale = (document.documentElement.lang || 'en').slice(0, 2);
   var t = I18N[locale] || I18N.en;
@@ -113,6 +128,41 @@
     );
   }
 
+  // A compact card for a publication tagged with this Working Group.
+  // Type tag + title + a meta line (authors, formatted date). Links out
+  // when a URL is present, otherwise renders as a plain (not-yet-public)
+  // card. Date is an ISO year-month string ("2026-10").
+  function wgPubCard(pub) {
+    var typeLabel = (t.pubTypes && t.pubTypes[pub.type]) || '';
+    var bits = [];
+    if (pub.authors && pub.authors.length) {
+      bits.push(pub.authors.length > 2
+        ? pub.authors[0] + ' et al.'
+        : pub.authors.join(', '));
+    }
+    if (pub.date) {
+      var p = String(pub.date).split('-');
+      var d = p.length > 1
+        ? new Date(Date.UTC(+p[0], +p[1] - 1, 1)).toLocaleDateString(
+            locale, { year: 'numeric', month: 'long' })
+        : p[0];
+      bits.push(d);
+    }
+    var title = localize(pub.title) || '';
+    var kids = [
+      typeLabel ? el('span', { 'class': 'wg-pub-type', 'text': typeLabel }) : null,
+      el('h4', { 'text': title }),
+      bits.length ? el('span', { 'class': 'wg-pub-meta', 'text': bits.join(' · ') }) : null,
+    ];
+    if (pub.url) {
+      return el.apply(null, ['a', {
+        'class': 'wg-pub-card glass', 'href': pub.url,
+        'target': '_blank', 'rel': 'noopener',
+      }].concat(kids));
+    }
+    return el.apply(null, ['div', { 'class': 'wg-pub-card glass wg-pub-card--plain' }].concat(kids));
+  }
+
   Promise.all([
     fetch('data/wg.json').then(function (r) { return r.json(); }),
     fetch('data/bios.json').then(function (r) { return r.json(); }),
@@ -120,9 +170,13 @@
     // down the core leadership / member render, so swallow it to null.
     fetch('data/events.json').then(function (r) { return r.json(); })
       .catch(function () { return null; }),
+    // Publications likewise optional: swallow to null on any error.
+    fetch('data/publications.json').then(function (r) { return r.json(); })
+      .catch(function () { return null; }),
   ]).then(function (res) {
     var wg = res[0], bios = res[1];
     var allEvents = (res[2] && res[2].events) || [];
+    var allPubs = (res[3] && res[3].publications) || [];
     var bySlug = {};
     (bios.members || []).forEach(function (m) { bySlug[m.id] = m; });
 
@@ -168,6 +222,36 @@
           evWrap.appendChild(evGrid);
           evWrap.hidden = false;
         }
+      }
+
+      // Related publications: outputs tagged with this group's number in
+      // data/publications.json. The heading shows whether or not any
+      // exist yet; with none, a placeholder sets the expectation and
+      // links to the outputs page, which the same data file will drive
+      // once outputs start landing (first ones scheduled October 2026).
+      var pubWrap = sec.querySelector('[data-wg-publications]');
+      if (pubWrap) {
+        var groupPubs = allPubs.filter(function (p) {
+          return (p.workingGroups || []).indexOf(g.number) !== -1;
+        }).sort(function (a, b) {
+          return String(b.date || '').localeCompare(String(a.date || ''));
+        });
+        pubWrap.innerHTML = '';
+        pubWrap.appendChild(el('h3', { 'class': 'wg-subhead', 'text': t.pubs }));
+        var outputsHref = 'outputs.' + (locale === 'en' ? '' : locale + '.') + 'html';
+        if (groupPubs.length) {
+          var pubGrid = el('div', { 'class': 'wg-pub-grid' });
+          groupPubs.forEach(function (p) { pubGrid.appendChild(wgPubCard(p)); });
+          pubWrap.appendChild(pubGrid);
+          pubWrap.appendChild(el('a', { 'class': 'wg-pub-all', 'href': outputsHref },
+            t.pubsAll, el('span', { 'aria-hidden': 'true', 'text': ' →' })));
+        } else {
+          pubWrap.appendChild(el('p', { 'class': 'wg-pub-empty' },
+            t.pubsEmpty + ' ',
+            el('a', { 'href': outputsHref }, t.pubsAll,
+              el('span', { 'aria-hidden': 'true', 'text': ' →' }))));
+        }
+        pubWrap.hidden = false;
       }
     });
 

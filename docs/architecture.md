@@ -324,7 +324,8 @@ EISS repository's `docs/indico-programme-integration.md`.
 │   ├── bios.json                    # The directory (members, roles, WGs, contacts)
 │   ├── mc-members.json              # MC roster per country (used to auto-tag MC role)
 │   ├── i18n-state.json              # SHA-1 stamps for translation-drift tracking
-│   └── events.json                  # Source of truth for /calendar.ics + /calendar/<slug>.ics + Events cards
+│   ├── events.json                  # Source of truth for /calendar.ics + /calendar/<slug>.ics + Events cards
+│   └── publications.json            # Action outputs, WG-tagged. Drives WG-page "Related publications" (and, later, /outputs.html)
 │
 ├── calendar/                        # Per-event .ics downloads (auto-generated)
 │   └── <slug>.ics                   # One file per event in events.json; powers per-card "Add to calendar" buttons
