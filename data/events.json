@@ -172,6 +172,9 @@
       ],
       "status": "CONFIRMED",
       "eventType": "policy-workshop",
+      "workingGroups": [
+        2
+      ],
       "featured": false,
       "displayDate": {
         "en": "4 September 2026",
@@ -213,6 +216,10 @@
       ],
       "status": "CONFIRMED",
       "eventType": "itc-conference",
+      "workingGroups": [
+        2,
+        4
+      ],
       "featured": false,
       "displayDate": {
         "en": "8–11 September 2026",
@@ -254,6 +261,9 @@
       ],
       "status": "CONFIRMED",
       "eventType": "mc-plenary",
+      "workingGroups": [
+        1
+      ],
       "featured": false,
       "displayDate": {
         "en": "18 September 2026",
