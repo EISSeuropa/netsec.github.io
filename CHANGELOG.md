@@ -98,6 +98,26 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+The headline this cycle is a dedicated Working Groups page: each of the four groups gets its own section with an objective, its leadership, and a live membership grid drawn straight from the COST directory, and the Action's Memorandum-of-Understanding titles are adopted across the whole site. The public roadmap learns to read its own GitHub milestones, showing a progress bar on every in-flight release and marking the next one as in progress on its own. Around those two sit a wave of conference run-up for the European Security Conference and the usual directory and data housekeeping.
+
+### A home for the Working Groups
+
+`/working-groups.html` (with hand-translated FR and DE) gives each Working Group an anchored section: the objective from the MoU, a row of focus areas, the lead and co-lead, and an expandable grid of every member with their country, all rendering at runtime from `data/wg.json`. That file is a new fourth surface the weekly cost.eu sync writes, so a leadership or membership change on the COST directory now flows through to the page, the home-page cards, the About leadership, and the directory filter with no hand-edit. The MoU titles (Building the Network, Transfer of Knowledge, Fostering the Next Generation of Scholars, and Inclusion, Representativeness & Ethics) replace the old working placeholders everywhere. Events and Working Groups cross-link both ways: the page lists the events a group runs, and each home-page Events card shows the groups its event serves.
+
+### A milestone-aware roadmap
+
+The public roadmap now reads the repository's own GitHub milestones. Each in-flight card shows a progress bar of issues closed over total, refreshed automatically whenever an issue or milestone changes, and the next incoming release marks itself as in progress with a softly blinking dot. The Under-watch section gained a count of what sits parked there. The milestone discipline that has always driven release planning behind the scenes finally has a visible public payoff.
+
+### Conference run-up
+
+With the European Security Conference approaching, the live ESSC programme and the FAQ both got attention. The programme now lists non-presenting co-authors alongside the speakers, carries a last-synced cue so a panelist who just edited Indico understands why the page is a day behind, and offers a one-click download of the official PDF (the browser print-to-PDF path had a chain of Chrome-specific truncation bugs, all now fixed). A new *At a NetSec conference* FAQ section, with matching signposts on the contact form and the programme page, answers the recurring questions about correcting your details, printing the programme, chairing a panel, and requesting a visa letter.
+
+### Directory and plumbing
+
+The weekly member-spotlight engine and its home-page block both landed dormant, waking once ten members are eligible. Directory keywords now fold American spellings to British English so a submitted *Defense* reads as *Defence*, the Working-Group filter follows a leadership change on cost.eu on its own, and a long-standing imprecision in where anchor links land under the floating header is fixed.
+
+### Index of changes
+
 #### Added
 
 - **Related events on the Working Groups page.** An event in `data/events.json` can now carry a `workingGroups` array, and the Working Groups page renders a compact *Related events* card for each event tagged with that group. The NetSec Early-Career Scholars Summer School is tagged WG2, WG3, and WG4, and the European Security Conference is tagged across all four groups, so each event appears under the groups it serves with no duplication in the data. `assets/js/working-groups.js` fetches `events.json` alongside the WG data and fails soft if it is absent (the leadership and member render is unaffected). Cards localise the title, date, and event type EN/FR/DE, and a group with no tagged events shows nothing. While here, a `.prose-page a` underline that was bleeding onto the member and leadership cards was scoped out, so those cards read as tiles.

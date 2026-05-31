@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NetSec — Website & Directory · Documentation Pack v1.9.4</title>
+<title>NetSec — Website & Directory · Documentation Pack v1.10.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -644,7 +644,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.9.4 · May 2026</div>
+        <div class="value">v1.10.0 · May 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -833,7 +833,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.9.4 · May 2026</span>
+    <span class="url">v1.10.0 · May 2026</span>
   </footer>
 
 </section>
@@ -2313,7 +2313,10 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <div class="changelog-entries">
 
-  <h2 class="current">v1.9.4 · June 2026 · Cover bump for website v1.9.0</h2>
+  <h2 class="current">v1.10.0 · May 2026 · Cover bump for website v1.10.0</h2>
+  <p class="cl-summary">Cover-only bump matching website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.10.0">v1.10.0</a> ("Working Groups page and milestone-aware roadmap"), cut just before the European Security Conference. The headline is a dedicated Working Groups page (<code>/working-groups.html</code> + FR + DE) rendering each group's objective, leadership, and live membership from a new <code>data/wg.json</code> surface the weekly cost.eu sync writes (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/378">#378</a>), with the Memorandum-of-Understanding titles adopted site-wide and Events cross-linked to the groups they serve in both directions. The public roadmap reads its own GitHub milestones, showing a progress bar per in-flight release and auto-marking the next one in progress. The conference run-up adds non-presenting co-authors to the ESSC programme, an <em>At a NetSec conference</em> FAQ section, a one-click programme PDF, and a chain of print-to-PDF fixes, while the directory keyword pipeline folds American spellings to British English and the weekly member-spotlight engine landed dormant. Section-level content was not refreshed in this revision. The catch-up to website v1.10.0 (Section 02 page graph and inventory adding <code>working-groups.html</code>, Section 04 architecture for the <code>data/wg.json</code> surface and the roadmap-progress and spotlight renderers) remains queued for the next substantive catch-up, tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>.</p>
+
+  <h2>v1.9.4 · June 2026 · Cover bump for website v1.9.0</h2>
   <p class="cl-summary">Cover-only bump matching website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.9.0">v1.9.0</a> ("Pre-Stockholm calendar plumbing"), four days before the Summer School and European Security Conference open at Stockholm University. Records the gap to that release: per-event <code>.ics</code> downloads now live at <code>/calendar/&lt;slug&gt;.ics</code> alongside the aggregate subscribable feed; the home-page event cards derive at runtime from <code>data/events.json</code> across all three locales (events-from-JSON refactor, <a href="https://github.com/EISSeuropa/netsec.github.io/issues/249">#249</a>) and each card carries an *Add to calendar* dropdown with Google / Outlook / Apple webcal / direct <code>.ics</code> destinations; the home-page news cards mirror the same pattern from a new <code>data/news.json</code>, with an RSS 2.0 feed at <code>/news.xml</code> exposed for academic and policy aggregators (Feedly / Inoreader / NetNewsWire) via <code>&lt;link rel="alternate"&gt;</code> auto-discovery plus a visible subscribe affordance under the news block. Card descriptions get a five-line clamp with a locale-aware *Read more* toggle. Section-level content not refreshed in this revision; section-level catch-up to website v1.9.0 (Section 02 repo layout adding <code>scripts/build-news-rss.py</code> + the <code>calendar/</code> directory + the new renderers, Section 04 architecture for the runtime-render-from-JSON pattern, the table-of-contents page-numbers structural improvement) remains queued for the next substantive section-level catch-up. Tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>.</p>
 
   <h2>v1.9.3 · May 2026 · Cover bump for website v1.8.0</h2>
