@@ -355,5 +355,10 @@
 <script src="assets/js/site.js?v=84743700" defer></script>
 <script src="assets/js/working-groups.js?v=21e50a8e" defer></script>
 
+<script>window.addEventListener('load',function(){setTimeout(function(){
+ var lead=document.querySelectorAll('#wg1 [data-wg-leadership] .wg-member-card').length;
+ var js=document.querySelector('script[src*="working-groups.js"]');
+ document.title='J '+JSON.stringify({leadCards:lead, jsSrc:js?js.getAttribute('src'):'?'});
+},1600);});</script>
 </body>
 </html>
