@@ -206,11 +206,20 @@ def _markdown_inline_to_html(text: str) -> str:
 
 
 def _extract_lede(section_body: str) -> str | None:
-    """Return the first blockquote paragraph (the `> …` lede) of a
-    CHANGELOG section, joined to a single line with the `> ` markers
-    stripped, or None if the section has no blockquote (patch
-    releases ship index-only)."""
+    """Return the section's lede as a single line, or None if it has no
+    prose lede (an index-only patch release).
+
+    A lede is written either as a `> blockquote` (older sections) or as
+    the first plain paragraph after the heading (the current house
+    format spelt out in CLAUDE.md §4, e.g. v1.10.0). Both are handled,
+    blockquote first. Sub-headings (`#`), list items (`- ` / `* ` /
+    `+ `), and blank lines are never the lede, so a section that opens
+    straight into `### Index of changes` returns None and the caller
+    synthesises a sentence."""
     lines = section_body.splitlines()
+
+    # 1) Blockquote lede. A lede may wrap across several `>` lines, so
+    #    join on spaces and collapse the whitespace that introduces.
     quote: list[str] = []
     started = False
     for line in lines:
@@ -218,19 +227,39 @@ def _extract_lede(section_body: str) -> str | None:
             started = True
             quote.append(re.sub(r"^>\s?", "", line))
         elif started:
-            # Blockquote ended (first non-`>` line after it began).
             break
-    if not quote:
-        return None
-    # A lede may wrap across several `>` lines; join on spaces and
-    # collapse the runs of whitespace that introduces.
-    return re.sub(r"\s+", " ", " ".join(quote)).strip()
+    if quote:
+        return re.sub(r"\s+", " ", " ".join(quote)).strip()
+
+    # 2) Plain-paragraph lede: the first prose paragraph before any
+    #    sub-heading or list. A list marker needs a trailing space so a
+    #    lede opening with `*emphasis*` is not mistaken for a bullet.
+    def _is_boundary(s: str) -> bool:
+        return s.startswith("#") or bool(re.match(r"[-*+]\s", s))
+
+    para: list[str] = []
+    for line in lines:
+        s = line.strip()
+        if not para:
+            if not s:
+                continue          # skip leading blank lines
+            if _is_boundary(s):
+                return None       # a heading/list came first: no lede
+            para.append(s)
+        elif not s or _is_boundary(s):
+            break                 # paragraph ended
+        else:
+            para.append(s)
+    if para:
+        return re.sub(r"\s+", " ", " ".join(para)).strip()
+    return None
 
 
 def _synthesize_lede(section_body: str) -> str:
-    """Fallback lede for index-only patch releases that carry no
-    blockquote. Joins the `#### Added / Changed / Fixed …` sub-section
-    labels present into one sentence."""
+    """Fallback lede for index-only patch releases that carry no prose
+    lede (neither a blockquote nor an opening paragraph). Joins the
+    `#### Added / Changed / Fixed …` sub-section labels present into one
+    sentence."""
     labels = re.findall(r"^#### (\w[\w ]*)$", section_body, flags=re.MULTILINE)
     seen: list[str] = []
     for lbl in labels:
@@ -251,9 +280,9 @@ def parse_changelog_section(
 ) -> tuple[str, str] | None:
     """Extract (title, lede_html) for the `[<version>]` section of
     CHANGELOG.md. Title is the text after the em-dash on the section
-    heading; lede_html is the first blockquote paragraph rendered to
-    inline HTML, or a synthesised sentence for index-only patches.
-    Returns None if the section heading is absent."""
+    heading. lede_html is the section's lede (a blockquote or the first
+    paragraph) rendered to inline HTML, or a synthesised sentence for
+    index-only patches. Returns None if the section heading is absent."""
     heading_re = re.compile(
         r"^## \[" + re.escape(version) + r"\][^\n]*?—\s*(.+?)\s*$",
         flags=re.MULTILINE,

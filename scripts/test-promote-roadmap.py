@@ -288,6 +288,27 @@ _CHANGELOG_PATCH = """# Changelog
 ## [1.7.0] · 2026-09-08 — Earlier
 """
 
+# A minor release whose lede is a plain paragraph, not a `> blockquote`
+# — the current house format (CLAUDE.md §4), as used by v1.10.0. The
+# script must pick that paragraph up, not fall back to the synthesised
+# "Maintenance release" sentence.
+_CHANGELOG_PARA = """# Changelog
+
+## [1.9.0] · 2026-09-08 — Plain-paragraph lede release
+
+The headline this cycle is a *Working Groups* page rendered from `data/wg.json`. The roadmap also learns to read its own milestones.
+
+### A theme
+
+Theme prose that must not be mistaken for the lede.
+
+#### Added
+
+- A thing.
+
+## [1.8.0] · 2026-08-01 — Earlier
+"""
+
 
 def test_parse_changelog_title_and_lede() -> None:
     print("\nparse_changelog_section() — title + lede:")
@@ -316,6 +337,20 @@ def test_parse_changelog_patch_fallback() -> None:
            "changed" in lede.lower() and "fixed" in lede.lower(), True)
     expect("synthesised lede did not pull a real blockquote",
            "Maintenance release" in lede, True)
+
+
+def test_parse_changelog_paragraph_lede() -> None:
+    print("\nparse_changelog_section() — plain-paragraph lede (issue #422):")
+    title, lede = parse_changelog_section("1.9.0", _CHANGELOG_PARA)
+    expect("title parsed", title, "Plain-paragraph lede release")
+    expect("lede is the opening paragraph, not synthesised",
+           lede.startswith("The headline this cycle"), True)
+    expect("lede did NOT fall back to maintenance text",
+           "Maintenance release" not in lede, True)
+    expect("lede stopped at the theme sub-heading",
+           "Theme prose" not in lede, True)
+    expect("inline markdown still converts in a paragraph lede",
+           "<em>Working Groups</em>" in lede and "<code>data/wg.json</code>" in lede, True)
 
 
 def test_body_replacement_en() -> None:
@@ -478,6 +513,7 @@ def main() -> None:
     test_parse_changelog_title_and_lede()
     test_parse_changelog_missing_section()
     test_parse_changelog_patch_fallback()
+    test_parse_changelog_paragraph_lede()
     test_body_replacement_en()
     test_body_untouched_without_card_body()
     test_relocate_across_quarters()
