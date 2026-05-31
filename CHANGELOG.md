@@ -100,7 +100,7 @@ maintainer-facing audience.
 
 #### Added
 
-- Gave each Working Group on `/working-groups.html` two more sections, in all three locales: a *Working towards* list of the COST deliverables that group leads (with target months) and a *Related publications* section. Publications are tagged by Working Group in a new `data/publications.json` and surface automatically as outputs land. Until the first ones arrive (October 2026), each group shows a short placeholder linking to the Publications page.
+- Gave each Working Group on `/working-groups.html` two more sections, in all three locales: a *Working towards* list of the COST deliverables that group leads (with target months, each row linking to its entry in the About-page deliverables timeline) and a *Related publications* section. Publications are tagged by Working Group in a new `data/publications.json` and surface automatically as outputs land. Until the first ones arrive (October 2026), each group shows a short placeholder linking to the Publications page.
 
 #### Changed
 
