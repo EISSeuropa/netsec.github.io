@@ -98,6 +98,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.10.0] · 2026-05-31 — Working Groups page and milestone-aware roadmap
+
 The headline this cycle is a dedicated Working Groups page: each of the four groups gets its own section with an objective, its leadership, and a live membership grid drawn straight from the COST directory, and the Action's Memorandum-of-Understanding titles are adopted across the whole site. The public roadmap learns to read its own GitHub milestones, showing a progress bar on every in-flight release and marking the next one as in progress on its own. Around those two sit a wave of conference run-up for the European Security Conference and the usual directory and data housekeeping.
 
 ### A home for the Working Groups
@@ -740,7 +744,8 @@ Open Graph, Twitter Card, JSON-LD (Organization + WebSite + WebPage), canonical 
 - Members' Wiki seeded with glossary, FAQ, onboarding, meeting-notes convention, decisions log.
 - Dual licensing — MIT for code, CC BY 4.0 for content + docs.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.9.0...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.10.0...HEAD
+[1.10.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.8.1...v1.9.0
 [1.8.1]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.7.0...v1.8.0
