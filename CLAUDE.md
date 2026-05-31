@@ -25,6 +25,19 @@ and costs context.
 
 ## 2. Pull-request workflow
 
+- **Branch first, always (never commit on `main`).** The very first
+  step of any task that will edit files is `git checkout -b
+  <feature>`, *before* the first edit, not just before the commit. The
+  natural `git checkout main && git pull` at task start leaves you on
+  `main`, so create the branch immediately after. Every change reaches
+  `main` only through a squashed PR. The one exception is the release
+  commit, which `scripts/release.sh` writes on `main` on purpose. A
+  local guard hook (`.claude/hooks/guard-main-commit.sh`, wired in
+  `.claude/settings.local.json`) blocks a stray `git commit` on `main`
+  as a backstop, but the rule is the primary safeguard since the hook
+  is machine-local and `.claude/` is gitignored. Also prefer explicit
+  `git add <paths>` over `git add -A`, so stray scratch files never get
+  swept into a commit.
 - **Auto-merge by default.** Open the PR with `gh pr create`, then
   arm auto-merge with `gh pr merge --auto --squash`. CI checks (the
   link checker on every HTML-touching PR + CodeQL) will hold the
