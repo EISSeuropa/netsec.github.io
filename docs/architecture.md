@@ -336,8 +336,8 @@ EISS repository's `docs/indico-programme-integration.md`.
 │   ├── sync-cost.py                 # Pulls WG_MAP + leadership from cost.eu
 │   ├── sync-bios.py                 # Pulls Google Form submissions
 │   ├── bios-source.json             # CSV URL + form URL + column mapping
-│   ├── inject-seo.py                # Idempotent canonical/OG/JSON-LD generator
-│   ├── check-i18n-drift.py          # Reports stale translations vs. EN source
+│   ├── inject-seo.py                # Idempotent canonical/OG/JSON-LD generator + asset cache-bust stamper (?v=hash)
+│   ├── check-i18n-drift.py          # Reports stale translations vs. EN source (ignores cache-bust query)
 │   ├── build-calendar.py            # Generates /calendar.ics + /calendar/<slug>.ics from data/events.json
 │   ├── build-news-rss.py            # Generates /news.xml (RSS 2.0) from data/news.json
 │   ├── sync-roadmap-progress.py     # Writes data/roadmap-progress.json from GitHub milestone closed/total
@@ -350,6 +350,7 @@ EISS repository's `docs/indico-programme-integration.md`.
 │   ├── sync-cost.yml                # Weekly cron — opens PR if WG_MAP / roles changed
 │   ├── sync-bios.yml                # Weekly cron — opens PR if bios.json changed
 │   ├── i18n-drift.yml               # Drift checker for FR/DE translations
+│   ├── seo-asset-check.yml          # SEO drift + asset cache-bust drift (inject-seo.py --check)
 │   ├── calendar-drift.yml           # Drift checker for /calendar.ics + /calendar/*.ics vs. events.json
 │   ├── news-drift.yml               # Drift checker for /news.xml vs. data/news.json
 │   ├── roadmap-progress.yml         # Refreshes data/roadmap-progress.json on issue/milestone events

@@ -41,6 +41,25 @@ The script is **idempotent** — it looks for sentinel comments
 rewrites the block in place if present, or inserts a new one
 between the hreflang block and `<link rel="icon">`.
 
+### Asset cache-busting
+
+The same script also stamps every `assets/css/*.css` and
+`assets/js/*.js` reference with a content hash, e.g.
+`assets/css/site.css?v=ab12cd34`. The hash is the first eight hex
+characters of the file's SHA-256, so it changes only when the file
+does. This runs on **every** `*.html` file (not just the SEO-managed
+`PAGES`), so a returning visitor's browser re-fetches the asset
+whenever its bytes change instead of serving a stale cached copy
+(issue #416).
+
+The practical rule: **after changing any CSS or JS, run
+`python3 scripts/inject-seo.py`** and commit the restamped HTML in the
+same PR. The `seo-asset-check.yml` workflow runs `--check` on every PR
+that touches an HTML file or a CSS/JS asset and fails if the hashes are
+out of date, so this can't be forgotten. The translation-drift checker
+(`check-i18n-drift.py`) strips the `?v=` query before hashing, so a
+cache-bust never shows up as a false FR/DE drift.
+
 You **do not** need to hand-write the OG/Twitter block on a new page.
 You just need to:
 

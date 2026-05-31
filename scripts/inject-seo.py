@@ -1,27 +1,41 @@
 #!/usr/bin/env python3
 """
-SEO meta + JSON-LD injection.
+SEO meta + JSON-LD injection, plus asset cache-busting.
 
-Walks every HTML page in the repo and inserts:
+Walks every HTML page in the repo and:
 
-  1. A canonical block (<link rel="canonical">, Open Graph, Twitter
-     Card, theme-color, format-detection, author). Locale-aware:
-     og:locale and og:locale:alternate match the page's <html lang>
-     plus its known alternates.
-  2. A JSON-LD <script type="application/ld+json"> with Organization
-     schema on every page; index.html also gets WebSite schema.
+  1. Inserts a canonical block (<link rel="canonical">, Open Graph,
+     Twitter Card, theme-color, format-detection, author) on the
+     managed PAGES. Locale-aware: og:locale and og:locale:alternate
+     match the page's <html lang> plus its known alternates.
+  2. Inserts a JSON-LD <script type="application/ld+json"> with
+     Organization schema on those pages; index.html also gets WebSite.
+  3. Stamps every local stylesheet / script reference with a content
+     hash, e.g. assets/css/site.css?v=ab12cd34. This runs on ALL
+     *.html files (not just the SEO-managed PAGES), so a returning
+     visitor's browser re-fetches the asset whenever its bytes change
+     rather than serving a stale cached copy. The hash is the first 8
+     hex chars of the file's SHA-256, so it only changes when the file
+     does (issue #416).
 
-Idempotent: looks for a sentinel comment (<!-- seo:auto -->) and
-rewrites the block in place if present, otherwise inserts.
+Idempotent: SEO blocks live between sentinel comments and are rewritten
+in place; asset stamps are recomputed from the files on disk, so a
+re-run with unchanged assets is a no-op.
 
 Usage:
     python3 scripts/inject-seo.py            # update all pages
     python3 scripts/inject-seo.py --check    # report drift only (no writes)
 
+--check exits non-zero if anything is out of date (SEO block or asset
+hash). The seo-asset-check.yml workflow runs it on every PR that
+touches an HTML file or a CSS/JS asset, so a CSS change can't merge
+without the cache-bust hashes being refreshed in the same PR.
+
 Run from the repo root.
 """
 from __future__ import annotations
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -267,18 +281,45 @@ def inject(html: str, base: str) -> tuple[str, bool]:
     return new, changed
 
 
-def files_to_process() -> list[Path]:
-    pages: list[Path] = []
-    for base in PAGES:
-        for suffix in ("", ".fr", ".de"):
-            p = ROOT / f"{base}{suffix}.html"
-            if p.exists():
-                pages.append(p)
-    # 404 page if present, treat as base="index".
-    p = ROOT / "404.html"
-    if p.exists():
-        pages.append(p)
-    return pages
+# ─── Asset cache-busting ──────────────────────────────────────────
+
+# Matches a local stylesheet/script reference, capturing the path and
+# discarding any existing ?v=<hash> so re-runs replace rather than
+# stack. Only assets/css/*.css and assets/js/*.js are versioned; fonts
+# and images are effectively immutable and are left alone.
+_ASSET_REF_RE = re.compile(
+    r'(?P<attr>\b(?:href|src))="'
+    r'(?P<path>assets/(?:css|js)/[A-Za-z0-9._-]+\.(?:css|js))'
+    r'(?:\?v=[0-9a-f]+)?"'
+)
+
+
+def compute_asset_versions() -> dict[str, str]:
+    """Map each versionable asset path to a short content hash."""
+    versions: dict[str, str] = {}
+    for sub in ("css", "js"):
+        d = ROOT / "assets" / sub
+        if not d.is_dir():
+            continue
+        for f in sorted(d.glob(f"*.{sub}")):
+            rel = f"assets/{sub}/{f.name}"
+            versions[rel] = hashlib.sha256(f.read_bytes()).hexdigest()[:8]
+    return versions
+
+
+def stamp_assets(html: str, versions: dict[str, str]) -> tuple[str, bool]:
+    """Rewrite asset refs to carry the current ?v=<hash>. Idempotent."""
+    def repl(m: re.Match) -> str:
+        path = m.group("path")
+        h = versions.get(path)
+        if not h:
+            # Referenced file not on disk (typo or deleted asset); leave
+            # the reference untouched so the drift is visible elsewhere.
+            return m.group(0)
+        return f'{m.group("attr")}="{path}?v={h}"'
+
+    new = _ASSET_REF_RE.sub(repl, html)
+    return new, new != html
 
 
 def base_of(path: Path) -> str:
@@ -287,23 +328,37 @@ def base_of(path: Path) -> str:
     return re.sub(r"\.(fr|de)$", "", stem)
 
 
+def is_seo_managed(path: Path) -> bool:
+    """The SEO/JSON-LD blocks are injected only on the managed PAGES
+    (plus 404). Every *.html file still gets asset cache-busting."""
+    return base_of(path) in PAGES or path.name == "404.html"
+
+
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--check", action="store_true", help="Report what would change but don't write.")
     args = p.parse_args()
 
-    pages = files_to_process()
+    pages = sorted(ROOT.glob("*.html"))
     if not pages:
         print("No HTML files to process. Is this the right directory?")
         return 1
 
+    versions = compute_asset_versions()
+    if not versions:
+        print("  WARN: no assets/css or assets/js files found to version")
+
     any_changes = False
     for path in pages:
         rel = path.relative_to(ROOT)
-        base = base_of(path)
         original = path.read_text(encoding="utf-8")
-        new, changed = inject(original, base)
-        if changed:
+        new = original
+        # SEO + JSON-LD only on managed pages; cache-busting everywhere.
+        if is_seo_managed(path):
+            new, _ = inject(new, base_of(path))
+        new, _ = stamp_assets(new, versions)
+
+        if new != original:
             any_changes = True
             if args.check:
                 print(f"would update: {rel}")

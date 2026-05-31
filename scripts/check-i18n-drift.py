@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -36,15 +37,26 @@ ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "data" / "i18n-state.json"
 
 
+# Asset cache-bust queries (assets/.../site.css?v=ab12cd34) are injected
+# by scripts/inject-seo.py and bump on every CSS/JS change. They are
+# identical across locales and carry no translatable meaning, so they
+# are stripped before hashing — otherwise an asset change would flag
+# every page as drifted (issue #416). Any other markup edit is still
+# caught. Normalising to the bare path also keeps the recorded hashes
+# valid: the stripped content equals the pre-cache-bust file.
+_CACHE_BUST_RE = re.compile(
+    r'(assets/(?:css|js)/[A-Za-z0-9._-]+\.(?:css|js))\?v=[0-9a-f]+'
+)
+
+
 def sha1(path: Path) -> str:
-    """SHA-1 of a file's bytes. We hash the raw bytes (not a parsed
-    DOM) because we want any meaningful edit — including markup or
-    attribute changes — to be flagged for review."""
-    h = hashlib.sha1()
-    with path.open("rb") as f:
-        for chunk in iter(lambda: f.read(64 * 1024), b""):
-            h.update(chunk)
-    return h.hexdigest()
+    """SHA-1 of a file's content, with asset cache-bust queries
+    normalised out. We hash the markup (not a parsed DOM) because we
+    want any meaningful edit — markup or attribute changes — flagged for
+    review; the cache-bust hash is the one deliberate exception."""
+    text = path.read_text(encoding="utf-8")
+    text = _CACHE_BUST_RE.sub(r"\1", text)
+    return hashlib.sha1(text.encode("utf-8")).hexdigest()
 
 
 def load_state() -> dict:

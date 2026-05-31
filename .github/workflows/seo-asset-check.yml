@@ -1,0 +1,48 @@
+# SEO + asset cache-bust check.
+#
+# Runs scripts/inject-seo.py --check on every PR that touches an HTML
+# file or a CSS/JS asset. The script exits non-zero if anything is out
+# of date:
+#
+#   - a managed page's SEO / JSON-LD block has drifted from what the
+#     generator would produce, or
+#   - a stylesheet/script reference is missing its current
+#     ?v=<content-hash> cache-bust token (issue #416).
+#
+# That keeps a CSS or JS change from merging without the cache-bust
+# hashes being refreshed in the same PR, so returning visitors never
+# render new markup against a stale cached stylesheet. Re-stamp locally
+# with:
+#
+#     python3 scripts/inject-seo.py
+#
+# Zero cost: no third-party services, no API keys.
+name: SEO + asset cache-bust check
+
+on:
+  pull_request:
+    paths:
+      - '*.html'
+      - 'assets/css/**'
+      - 'assets/js/**'
+      - 'scripts/inject-seo.py'
+  workflow_dispatch:       # Allow manual runs from the Actions tab
+
+permissions:
+  contents: read
+
+jobs:
+  seo-assets:
+    name: Check SEO + asset version drift
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v4 (sha-pinned)
+
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+
+      - name: Run SEO + cache-bust checker
+        run: python3 scripts/inject-seo.py --check
