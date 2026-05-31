@@ -1,6 +1,11 @@
 
-# Tooling caches that should never be tracked
-.claude/
+# Tooling caches that should never be tracked. The whole .claude/ tree
+# is local-only EXCEPT the committed, shared branch-first guard (the
+# settings.json hook + its script). settings.local.json, worktrees/,
+# projects/, and everything else stay ignored.
+.claude/*
+!.claude/settings.json
+!.claude/hooks/
 scripts/__pycache__/
 
 # macOS Finder metadata
