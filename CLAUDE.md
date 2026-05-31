@@ -32,10 +32,10 @@ and costs context.
   `main`, so create the branch immediately after. Every change reaches
   `main` only through a squashed PR. The one exception is the release
   commit, which `scripts/release.sh` writes on `main` on purpose. A
-  local guard hook (`.claude/hooks/guard-main-commit.sh`, wired in
-  `.claude/settings.local.json`) blocks a stray `git commit` on `main`
-  as a backstop, but the rule is the primary safeguard since the hook
-  is machine-local and `.claude/` is gitignored. Also prefer explicit
+  committed guard hook (`.claude/hooks/guard-main-commit.sh`, wired in
+  the shared `.claude/settings.json`) blocks a stray `git commit` on
+  `main` as a backstop. It is the only part of `.claude/` that is not
+  gitignored, so the guard travels with the repo. Also prefer explicit
   `git add <paths>` over `git add -A`, so stray scratch files never get
   swept into a commit.
 - **Auto-merge by default.** Open the PR with `gh pr create`, then
