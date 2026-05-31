@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=7f1b3785">
+<link rel="stylesheet" href="assets/css/site.css?v=84a037c9">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -555,20 +555,20 @@
   const lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
   const L = ({
     en: {
-      show: (n) => n === 1 ? 'Show 1 shipped release' : `Show ${n} shipped releases`,
-      hide: 'Hide shipped releases',
+      show: (n) => n === 1 ? 'Show 1 earlier release' : `Show ${n} earlier releases`,
+      hide: 'Hide earlier releases',
     },
     fr: {
-      show: (n) => n === 1 ? 'Afficher la version livrée' : `Afficher les ${n} versions livrées`,
-      hide: 'Masquer les versions livrées',
+      show: (n) => n === 1 ? 'Afficher la version précédente' : `Afficher les ${n} versions précédentes`,
+      hide: 'Masquer les versions précédentes',
     },
     de: {
-      show: (n) => n === 1 ? 'Eine ausgelieferte Version anzeigen' : `${n} ausgelieferte Versionen anzeigen`,
-      hide: 'Ausgelieferte Versionen ausblenden',
+      show: (n) => n === 1 ? 'Eine frühere Version anzeigen' : `${n} frühere Versionen anzeigen`,
+      hide: 'Frühere Versionen ausblenden',
     },
   })[lang] || ({
-    show: (n) => `Show ${n} shipped releases`,
-    hide: 'Hide shipped releases',
+    show: (n) => `Show ${n} earlier releases`,
+    hide: 'Hide earlier releases',
   });
 
   function chevronSvg() {
@@ -590,7 +590,13 @@
 
   document.querySelectorAll('ol.rm-timeline').forEach((ol) => {
     const shipped = ol.querySelectorAll(':scope > .rm-entry.shipped');
-    if (shipped.length === 0) return;
+    // Keep the most recent shipped card visible and collapse the
+    // earlier ones. With one shipped card (or none) there is nothing to
+    // collapse, so no toggle is injected.
+    if (shipped.length <= 1) return;
+    const collapsible = Array.prototype.slice.call(shipped, 0, -1);
+    collapsible.forEach((el) => el.classList.add('rm-shipped-collapsible'));
+    const n = collapsible.length;
 
     const li = document.createElement('li');
     li.className = 'rm-shipped-toggle';
@@ -601,7 +607,7 @@
     btn.appendChild(chevronSvg());
     const lbl = document.createElement('span');
     lbl.className = 'lbl';
-    lbl.textContent = L.show(shipped.length);
+    lbl.textContent = L.show(n);
     btn.appendChild(lbl);
     li.appendChild(btn);
 
@@ -612,7 +618,7 @@
       const wasExpanded = btn.getAttribute('aria-expanded') === 'true';
       btn.setAttribute('aria-expanded', String(!wasExpanded));
       ol.dataset.shippedState = wasExpanded ? 'collapsed' : 'expanded';
-      lbl.textContent = wasExpanded ? L.show(shipped.length) : L.hide;
+      lbl.textContent = wasExpanded ? L.show(n) : L.hide;
     });
   });
 })();

@@ -3048,11 +3048,13 @@ body.search-open{overflow:hidden}
 .dark .rm-entry.rm-milestone::before{background:#cbd5e1}
 
 /* Collapsed shipped section. JS injects a toggle <li> at the top of
-   any rm-timeline that contains shipped entries and sets
-   data-shipped-state="collapsed" on the parent <ol>. The CSS below
-   hides only entries marked .shipped, leaving in-progress, planned,
-   and milestone entries visible. */
-.rm-timeline[data-shipped-state="collapsed"] > .rm-entry.shipped{
+   any rm-timeline that contains more than one shipped entry, tags every
+   shipped entry except the most recent with .rm-shipped-collapsible,
+   and sets data-shipped-state="collapsed" on the parent <ol>. The CSS
+   below hides only those earlier entries, leaving the most recent
+   shipped card, plus in-progress, planned, and milestone entries,
+   visible. */
+.rm-timeline[data-shipped-state="collapsed"] > .rm-entry.rm-shipped-collapsible{
   display:none;
 }
 /* The toggle itself sits in the timeline gutter like a regular entry
@@ -3102,7 +3104,7 @@ body.search-open{overflow:hidden}
 @media print{
   /* Print should show the full history. */
   .rm-shipped-toggle{display:none}
-  .rm-timeline[data-shipped-state="collapsed"] > .rm-entry.shipped{display:list-item}
+  .rm-timeline[data-shipped-state="collapsed"] > .rm-entry.rm-shipped-collapsible{display:list-item}
 }
 
 .rm-card{
