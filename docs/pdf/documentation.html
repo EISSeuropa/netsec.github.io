@@ -1027,7 +1027,7 @@ flowchart LR
 
   <h2>Site structure</h2>
 
-  <p>Fifteen public pages in total (each with FR and DE beta siblings, plus a locale-detecting <code>404.html</code>). The home page is the hub: it hosts most of the static content as anchored sections and signposts the discovery and reference pages and the members' Wiki through two dedicated home-page sections. Phase 1 of the v1.4.0 IA pass split the home page's denser blocks out into standalone pages (<code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code>); v1.6.0 added the live ESSC 2026 programme page (<code>essc-2026.html</code>). Three full-page applications, four reference pages branched off Home, the live conference programme, and four statutory pages branch off the hub.</p>
+  <p>Sixteen public pages in total (each with FR and DE beta siblings, plus a locale-detecting <code>404.html</code>). The home page is the hub: it hosts most of the static content as anchored sections and signposts the discovery and reference pages and the members' Wiki through two dedicated home-page sections. Phase 1 of the v1.4.0 IA pass split the home page's denser blocks out into standalone pages (<code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code>); v1.6.0 added the live ESSC 2026 programme page (<code>essc-2026.html</code>); v1.10.0 added the dedicated Working Groups page (<code>working-groups.html</code>). Three full-page applications, four reference pages branched off Home, the live conference programme, and four statutory pages branch off the hub.</p>
 
   <div class="diagram">
     <div class="mermaid">
@@ -1037,6 +1037,7 @@ flowchart TB
     P["<b>people.html</b><br/>The Network"]
     G["<b>grants.html</b><br/>Grants &amp; Calls"]
     E["<b>essc-2026.html</b><br/>ESSC 2026 programme"]
+    WG["<b>working-groups.html</b><br/>Working Groups"]
     AB["<b>about.html</b><br/>About"]
     N["<b>news.html</b><br/>News"]
     RM["<b>roadmap.html</b><br/>Roadmap"]
@@ -1066,11 +1067,13 @@ flowchart TB
 
     P -.-> |"cross-link"| G
     G -.-> P
+    H ==> WG
 
     style H fill:#0a84ff,stroke:#0a84ff,color:#fff
     style P fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style G fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style E fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style WG fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style AB fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style N fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style RM fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
@@ -1086,8 +1089,9 @@ flowchart TB
     linkStyle 3,4,5,6,7,8,9 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
     linkStyle 10,11,12,13 stroke:#5a6679,stroke-dasharray:3 3,stroke-width:1.4px
     linkStyle 14,15 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.4px
+    linkStyle 16 stroke:#003399,stroke-width:2.2px
     </div>
-    <div class="diagram-caption">Figure 3 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav links to Network, Grants and About from every page). <strong>Dashed blue arrows from Home</strong> reach the v1.4.0 IA-split pages (News, Roadmap, Outputs), the v1.6.0 ESSC 2026 programme page, and the four-card <em>Find out more</em> discovery grid at the end of the About section (FAQ, Glossary, Press kit). <strong>Dashed grey arrows</strong> are footer-only links (Accessibility, Privacy, Licensing, Site map appear in every page's footer). <strong>Dashed blue arrows between people and grants</strong> are in-page cross-links between the Network and Grants pages.</div>
+    <div class="diagram-caption">Figure 3 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav links to Network, Working Groups, Grants and About from every page). <strong>Dashed blue arrows from Home</strong> reach the v1.4.0 IA-split pages (News, Roadmap, Outputs), the v1.6.0 ESSC 2026 programme page, and the four-card <em>Find out more</em> discovery grid at the end of the About section (FAQ, Glossary, Press kit). <strong>Dashed grey arrows</strong> are footer-only links (Accessibility, Privacy, Licensing, Site map appear in every page's footer). <strong>Dashed blue arrows between people and grants</strong> are in-page cross-links between the Network and Grants pages.</div>
   </div>
 
   <h3>Page inventory</h3>
@@ -1097,6 +1101,7 @@ flowchart TB
       <tr><td><code>index.html</code></td><td>Overview, news lede, WGs, MC, events banner, <em>Find out more</em> discovery grid, <em>For NetSec members</em> Wiki signposting strip, contact. Trimmed by ~25% in v1.4.0 when the standalone About / News / Roadmap / Outputs pages took over the denser blocks.</td><td><code>data/events.json</code> (events banner; added v1.6.0)</td></tr>
       <tr><td><code>people.html</code></td><td>Open community directory with WG / MC / country filters; Join-the-network CTA. <em>Directory research-interest keyword filter added v1.7.0.</em></td><td><code>data/bios.json</code> (all), <code>data/keyword-aliases.json</code> (inline fallback normaliser; added v1.7.0)</td></tr>
       <tr><td><code>grants.html</code></td><td>Five grant schemes, the e-COST timeline, resources, grant-manager contact cards.</td><td><code>data/bios.json</code> (Grant Awarding Coordinator only)</td></tr>
+      <tr><td><code>working-groups.html</code></td><td>The four Working Groups, each an anchored section with its MoU objective, focus areas, lead and co-lead, an expandable member grid rendered live from the COST directory, and a <em>Related events</em> block. Opens with overall stats (people, countries, groups). <em>Added v1.10.0.</em></td><td><code>data/wg.json</code> (leadership + members), <code>data/bios.json</code> (photos + affiliations), <code>data/events.json</code> (related events)</td></tr>
       <tr><td><code>about.html</code></td><td>Standalone About page: mission, deliverables, <em>Find out more</em> discovery grid, milestones. <em>Added v1.4.0.</em></td><td>—</td></tr>
       <tr><td><code>news.html</code></td><td>Standalone news index, lifted out of the home page. <em>Added v1.4.0.</em></td><td>—</td></tr>
       <tr><td><code>roadmap.html</code></td><td>Public product roadmap with planned / in-progress / shipped cards; collapsible Shipped list (collapse added v1.6.0; only the most recent releases show by default). <em>Added v1.4.0.</em></td><td>—</td></tr>
@@ -1333,11 +1338,13 @@ sequenceDiagram
 │   ├── mc-members.json              # MC roster per country
 │   ├── events.json                  # Home-page event banner schema (v1.6.0); carries indicoEventId
 │   ├── indico.json                  # Synced ESSC 2026 programme (v1.6.0)
+│   ├── wg.json                      # Per-WG leadership + members from cost.eu (v1.10.0)
+│   ├── roadmap-progress.json        # GitHub milestone progress for the roadmap (v1.10.0)
 │   ├── keyword-aliases.json         # Curated acronyms + alias map for directory keywords (v1.7.0)
 │   └── i18n-state.json              # SHA-1 stamps for drift checker
 │
 ├── scripts/
-│   ├── sync-cost.py                 # cost.eu → WG_MAP + roles
+│   ├── sync-cost.py                 # cost.eu → WG_MAP + roles + data/wg.json
 │   ├── sync-bios.py                 # Google Form → bios.json (photo SHA-256 cache v1.5.0;
 │   │                                #   canonical_keywords + keyword_aggregate v1.7.0)
 │   ├── sync-indico.py               # Indico → indico.json + events.json + calendar.ics (v1.6.0)
@@ -2313,8 +2320,8 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <div class="changelog-entries">
 
-  <h2 class="current">v1.10.0 · May 2026 · Cover bump for website v1.10.0</h2>
-  <p class="cl-summary">Cover-only bump matching website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.10.0">v1.10.0</a> ("Working Groups page and milestone-aware roadmap"), cut just before the European Security Conference. The headline is a dedicated Working Groups page (<code>/working-groups.html</code> + FR + DE) rendering each group's objective, leadership, and live membership from a new <code>data/wg.json</code> surface the weekly cost.eu sync writes (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/378">#378</a>), with the Memorandum-of-Understanding titles adopted site-wide and Events cross-linked to the groups they serve in both directions. The public roadmap reads its own GitHub milestones, showing a progress bar per in-flight release and auto-marking the next one in progress. The conference run-up adds non-presenting co-authors to the ESSC programme, an <em>At a NetSec conference</em> FAQ section, a one-click programme PDF, and a chain of print-to-PDF fixes, while the directory keyword pipeline folds American spellings to British English and the weekly member-spotlight engine landed dormant. Section-level content was not refreshed in this revision. The catch-up to website v1.10.0 (Section 02 page graph and inventory adding <code>working-groups.html</code>, Section 04 architecture for the <code>data/wg.json</code> surface and the roadmap-progress and spotlight renderers) remains queued for the next substantive catch-up, tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>.</p>
+  <h2 class="current">v1.10.0 · May 2026 · Section-level catch-up to website v1.10.0</h2>
+  <p class="cl-summary">Cover bump and section-level catch-up to website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.10.0">v1.10.0</a> ("Working Groups page and milestone-aware roadmap"), cut just before the European Security Conference. The headline is a dedicated Working Groups page (<code>/working-groups.html</code> + FR + DE) rendering each group's objective, leadership, and live membership from a new <code>data/wg.json</code> surface the weekly cost.eu sync writes (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/378">#378</a>), with the Memorandum-of-Understanding titles adopted site-wide and Events cross-linked to the groups they serve in both directions. The public roadmap reads its own GitHub milestones, showing a progress bar per in-flight release and auto-marking the next one in progress. The conference run-up adds non-presenting co-authors to the ESSC programme, an <em>At a NetSec conference</em> FAQ section, a one-click programme PDF, and a chain of print-to-PDF fixes, while the directory keyword pipeline folds American spellings to British English and the weekly member-spotlight engine landed dormant. This revision also refreshes the sections: Section 02 adds <code>working-groups.html</code> to the page graph (Figure 3) and the page inventory and bumps the page count to sixteen, and Section 04's repository layout records the two new data surfaces (<code>data/wg.json</code>, <code>data/roadmap-progress.json</code>) and the <code>sync-cost.py</code> fourth output. Site screenshots were re-captured from the live worktree. This closes the section-level catch-up tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>.</p>
 
   <h2>v1.9.4 · June 2026 · Cover bump for website v1.9.0</h2>
   <p class="cl-summary">Cover-only bump matching website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.9.0">v1.9.0</a> ("Pre-Stockholm calendar plumbing"), four days before the Summer School and European Security Conference open at Stockholm University. Records the gap to that release: per-event <code>.ics</code> downloads now live at <code>/calendar/&lt;slug&gt;.ics</code> alongside the aggregate subscribable feed; the home-page event cards derive at runtime from <code>data/events.json</code> across all three locales (events-from-JSON refactor, <a href="https://github.com/EISSeuropa/netsec.github.io/issues/249">#249</a>) and each card carries an *Add to calendar* dropdown with Google / Outlook / Apple webcal / direct <code>.ics</code> destinations; the home-page news cards mirror the same pattern from a new <code>data/news.json</code>, with an RSS 2.0 feed at <code>/news.xml</code> exposed for academic and policy aggregators (Feedly / Inoreader / NetNewsWire) via <code>&lt;link rel="alternate"&gt;</code> auto-discovery plus a visible subscribe affordance under the news block. Card descriptions get a five-line clamp with a locale-aware *Read more* toggle. Section-level content not refreshed in this revision; section-level catch-up to website v1.9.0 (Section 02 repo layout adding <code>scripts/build-news-rss.py</code> + the <code>calendar/</code> directory + the new renderers, Section 04 architecture for the runtime-render-from-JSON pattern, the table-of-contents page-numbers structural improvement) remains queued for the next substantive section-level catch-up. Tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>.</p>
