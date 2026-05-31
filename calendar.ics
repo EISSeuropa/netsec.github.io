@@ -69,7 +69,7 @@ DTSTAMP:20260528T120000Z
 DTSTART;TZID=Europe/Stockholm:20260908T090000
 DTEND;TZID=Europe/Stockholm:20260911T180000
 SUMMARY:NetSec ITC Conference
-DESCRIPTION:A NetSec Inclusiveness Target Country (ITC) Conference\, supported by the COST ITC Conference Grant scheme. The format prioritises participation from researchers based in ITCs\, with travel-grant support coordinated through the Action. Programme and registration to be published on the Action's website.\n\nThe ITC Conference Grant is one of five NetSec grant schemes\; see https://netsec-cost.eu/grants.html for the full set.
+DESCRIPTION:A NetSec Inclusiveness Target Country (ITC) Conference\, supported by the COST ITC Conference Grant scheme. The format prioritises participation from researchers based in ITCs\, with travel-grant support coordinated through the Action. Programme and registration to be published on the Action's website.\n\nThe ITC Conference Grant is one of five NetSec grant schemes. See https://netsec-cost.eu/grants.html for the full set.
 LOCATION:To be confirmed
 URL;VALUE=URI:https://netsec-cost.eu/grants.html
 CATEGORIES:ITC Conference,NetSec
