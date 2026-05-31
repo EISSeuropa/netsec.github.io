@@ -231,14 +231,14 @@
     "roadmap.html": {
       "fr": {
         "file": "roadmap.fr.html",
-        "source_sha1": "d11c2b8ed037b61243365a33fc9d20407c616611",
+        "source_sha1": "8648d4589cff32096fb0c8c354c2c94b308e82b1",
         "translated_on": "2026-05-31",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "roadmap.de.html",
-        "source_sha1": "d11c2b8ed037b61243365a33fc9d20407c616611",
+        "source_sha1": "8648d4589cff32096fb0c8c354c2c94b308e82b1",
         "translated_on": "2026-05-31",
         "status": "beta",
         "reviewed_by": null
@@ -247,14 +247,14 @@
     "working-groups.html": {
       "fr": {
         "file": "working-groups.fr.html",
-        "source_sha1": "2dbc7b0ddae819b375e51960847105c24ec907cd",
+        "source_sha1": "f323c08deaeb88d727d4ae484ed54acbde210c92",
         "translated_on": "2026-05-31",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "working-groups.de.html",
-        "source_sha1": "2dbc7b0ddae819b375e51960847105c24ec907cd",
+        "source_sha1": "f323c08deaeb88d727d4ae484ed54acbde210c92",
         "translated_on": "2026-05-31",
         "status": "beta",
         "reviewed_by": null

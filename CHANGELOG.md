@@ -98,6 +98,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+#### Added
+
+- Gave each Working Group on `/working-groups.html` two more sections, in all three locales: a *Working towards* list of the COST deliverables that group leads (with target months) and a *Related publications* section. Publications are tagged by Working Group in a new `data/publications.json` and surface automatically as outputs land. Until the first ones arrive (October 2026), each group shows a short placeholder linking to the Publications page.
+
 #### Changed
 
 - Tagged three more events with their Working Groups, so they now show under the relevant sections on `/working-groups.html` and carry WG pills on the home Events cards: the NetSec ITC Conference (WG2, WG4), the MC Plenary (WG1) and the NetSec Policy Workshop (WG2).

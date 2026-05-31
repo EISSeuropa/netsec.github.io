@@ -1,0 +1,4 @@
+{
+  "_documentation": "Action outputs: policy briefs, peer-reviewed papers, reports, training materials. Hand-maintained. Each entry carries a `workingGroups: [n,...]` array that surfaces it under the matching sections on working-groups.html (assets/js/working-groups.js), the same tag mechanism events.json uses. The file is also the intended authoritative source for the visible list on outputs.html once outputs start landing (first outputs scheduled October 2026, M12). Until `publications` holds entries, the WG page shows a per-group 'first publications expected' placeholder. Locale-aware fields ({en,fr,de}) follow the events.json convention; `date` is an ISO year-month string for sorting; `url` is optional (omit for not-yet-public records).",
+  "publications": []
+}
