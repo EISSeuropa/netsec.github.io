@@ -1,0 +1,8 @@
+# Union-merge the changelog so parallel PRs appending under [Unreleased]
+# don't conflict. git keeps both sides' added lines instead of raising a
+# conflict, which suits an accrue-only list. Re-tidy any duplicate headers
+# or odd ordering at release time, when [Unreleased] is reviewed anyway.
+# Keep this scoped to CHANGELOG.md only: union is wrong for the cache-bust
+# HTML and the i18n variants, where a silent both-sides merge would corrupt
+# output rather than just look untidy.
+CHANGELOG.md merge=union
