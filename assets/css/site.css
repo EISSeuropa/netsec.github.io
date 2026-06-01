@@ -1750,6 +1750,30 @@ form button:disabled{opacity:.65;cursor:wait}
 @media print{
   .whats-new-banner{display:none}
 }
+
+/* In-page status banner (Early Access and similar). Shares the What's
+   New banner's accent-gradient language, but sits in document flow, is
+   not dismissible, and is contained with rounded corners. */
+.page-banner{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 18px;margin:0 0 26px;border-radius:var(--radius);
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:#fff;font-size:.92rem;line-height:1.4;
+  box-shadow:var(--glass-shadow);
+}
+.page-banner-icon{font-size:1.05rem;flex-shrink:0}
+.page-banner-text{flex:1;min-width:200px;margin:0;font-weight:500}
+.page-banner-text strong{font-weight:700}
+.page-banner-link{
+  color:#fff;text-decoration:underline;text-underline-offset:3px;
+  text-decoration-thickness:1.5px;text-decoration-color:rgba(255,255,255,.7);
+  font-weight:600;
+}
+.page-banner-link:hover{text-decoration-color:#fff}
+/* Deeper gradient in dark mode so white text keeps contrast: the
+   light-mode --accent lifts to a pale blue under .dark. */
+.dark .page-banner{background:linear-gradient(135deg,#1b3f80,#2f6fd0)}
+
 .i18n-beta-ribbon{display:none}
 [data-i18n-status="beta"] .i18n-beta-ribbon{
   display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
