@@ -1343,9 +1343,15 @@ form button:disabled{opacity:.65;cursor:wait}
 .g-row-d{position:relative}
 .ms-track{
   position:absolute;top:50%;height:0;border-top:2px dotted var(--accent-2);
+  /* Inset both ends so the dotted line clears the actual pill on the
+     left and stops short of the ghost pill on the right, instead of
+     running underneath the translucent ghost. Insets approximate a
+     pill half-width; the mobile block trims them for the smaller pills. */
+  --ms-inset-start:30px;
+  --ms-inset-end:28px;
   --qspan:calc((100% - var(--g-label)) / 16);
-  left:calc(var(--g-label) + (var(--q-act) - .5) * var(--qspan));
-  width:calc((var(--q-plan) - var(--q-act)) * var(--qspan));
+  left:calc(var(--g-label) + (var(--q-act) - .5) * var(--qspan) + var(--ms-inset-start));
+  width:calc((var(--q-plan) - var(--q-act)) * var(--qspan) - var(--ms-inset-start) - var(--ms-inset-end));
   opacity:.7;pointer-events:none;z-index:0;
 }
 /* Compact pills used inside the legend keys. */
@@ -1557,6 +1563,7 @@ form button:disabled{opacity:.65;cursor:wait}
   .g-row-y{grid-template-columns:180px repeat(4,minmax(184px,1fr))}
   .g-row-q,.g-row-d{grid-template-columns:180px repeat(16,minmax(46px,1fr))}
   .gantt{--g-label:180px}
+  .ms-track{--ms-inset-start:22px;--ms-inset-end:20px}
   .g-label{padding:10px 12px}
   .g-label .d-name{font-size:.78rem}
   .g-year{font-size:.78rem;padding:10px 4px}
