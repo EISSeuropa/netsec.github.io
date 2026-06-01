@@ -21,6 +21,7 @@ reference for maintainers, MC representatives, and admins.
 | [`chair-confirmations.md`](./chair-confirmations.md) | Open questions where the live site rests on maintainer inference or a placeholder and needs Chair / WG-lead sign-off (deliverable assignments, the EISS paragraph, event tags, WG copy, leadership names). A tickable checklist, mirrored on the members' Wiki. |
 | [`launch-qa-2026.md`](./launch-qa-2026.md) | Pre-launch QA plan for the late-May 2026 public push. Three-phase audit (automation pre-flight → critical user journeys → a11y + cross-browser + perf), Go / No-Go criteria, schedule, tooling cheatsheet, and a live findings log. Companion scripts: `scripts/check-links.sh`, `scripts/check-a11y.sh`. |
 | [`claude-usage.md`](./claude-usage.md)         | Choose the right Claude model and reasoning-effort level for a task on this repo, and stay inside the Pro plan's weekly quota. Calibrated to our automation layer (scripts, i18n, CI, release tooling), not a generic static site. |
+| [`audit-2026-06.md`](./audit-2026-06.md)       | Point-in-time cross-cutting static audit (June 2026): accessibility, voice, links, dead code, responsive, SEO, across all pages and locales. Records what was fixed, dismissed as a false positive, and deferred. |
 | [`pdf/NetSec-website-documentation.pdf`](./pdf/NetSec-website-documentation.pdf) | All of the above combined into a stakeholder-ready PDF deliverable. Cover, table of contents, every diagram, and three site screenshots. Rebuild via `docs/pdf/build.sh`. |
 
 ## Conventions across all docs
