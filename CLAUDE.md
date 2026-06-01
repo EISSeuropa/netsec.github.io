@@ -797,6 +797,29 @@ cascade across the locales and the automation layer (cache-bust
 restamp, i18n drift, generators, CI), so `low` tends to produce
 output that looks right but breaks a downstream check.
 
+## 16. Lessons learned
+
+Hard-won checks that earned a place here after a near-miss. Each
+entry is a rule, kept short on purpose.
+
+### A green build is not proof a feature renders
+
+CI checks consistency and structure (link integrity, i18n drift, SEO
+asset stamps, CodeQL). None of them confirm that a feature actually
+shows up on screen. A class can be referenced in new markup but never
+defined in the stylesheet, or a stylesheet can be stale on the
+visitor's device, and every check stays green while the feature
+renders as unstyled plain text. This is exactly how the "Working
+towards" block shipped looking like raw text.
+
+Before calling a visual change done:
+
+1. grep that every class the new markup references is actually
+   defined in the stylesheet.
+2. render it in a preview at both desktop and phone widths.
+3. test the real device class the user reported the problem on, not
+   only the one in front of you.
+
 ---
 
 *This file is short on purpose. If you need to add a rule, add it
