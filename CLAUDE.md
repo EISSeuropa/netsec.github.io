@@ -820,6 +820,49 @@ Before calling a visual change done:
 3. test the real device class the user reported the problem on, not
    only the one in front of you.
 
+### Fix a bug, then grep for its siblings
+
+A bug is rarely unique. The same mistake usually repeats wherever the
+pattern was copied. After fixing one, search the codebase for the same
+shape and fix the siblings in the same PR, rather than waiting for each
+to be reported separately. This recurred with the home-page card
+deep-links that scrolled to the wrong position and with padding
+miscalculations that surfaced on more than one page.
+
+### Trace a sitewide change through every drift gate
+
+A change that touches every file (a cache-bust stamp, a shared header,
+a global class rename) ripples into the CI drift checkers. Before
+shipping, walk each gate the change could trip: i18n drift, calendar
+drift, the SEO asset check, the link checker. The cache-bust `?v=`
+query string is the canonical case. It changed every HTML file and
+silently failed the i18n drift checker until that checker was taught
+to strip `?v=` before hashing.
+
+### Headless Chrome has verification blind spots
+
+Headless Chrome is the verification workhorse here, but it does not
+behave like a real browser in ways that have cost time more than once:
+
+- `--screenshot` and `--dump-dom` do not reliably run a fragment scroll
+  or a programmatic `scrollIntoView`, and do not fire
+  `requestAnimationFrame`. Anything depending on those will not appear.
+- Output from a backgrounded Chrome command often does not flush to
+  stdout. Read the dumped DOM or screenshot file directly instead.
+- Computed-style reads and synchronous DOM queries are reliable.
+- `--force-prefers-reduced-motion=reduce` does emulate reduced motion
+  correctly, so the reduced-motion path can be tested headless.
+
+### Stage named paths, and clear scratch files first
+
+Verification leaves throwaway probe files (one-off HTML pages, swatch
+captures, DOM dumps). `git add -A` and `git add -u` sweep them into the
+commit. Delete the scratch files first, then stage explicit named
+paths. This is the §2 explicit-add rule seen from the other side: the
+risk is not only staging the wrong source file, it is committing
+verification litter that should never have been tracked. Offenders that
+slipped through before: jprobe.html, rmm.html, swatch.html.
+
 ---
 
 *This file is short on purpose. If you need to add a rule, add it
