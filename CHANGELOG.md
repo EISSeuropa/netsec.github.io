@@ -100,6 +100,7 @@ maintainer-facing audience.
 
 #### Added
 
+- The About-page deliverables timeline now shows which deliverables have shipped, not only what is planned, in all three locales. A shipped milestone gains a check mark, and one delivered ahead of plan shows in green with a faded marker left at its originally planned month and a dotted lead-line between the two. The first to land is the NetSec directory (D1). Each status carries a screen-reader description, so the meaning never rests on colour alone.
 - Gave each Working Group on `/working-groups.html` two more sections, in all three locales: a *Working towards* list of the COST deliverables that group leads (with target months, each row linking to its entry in the About-page deliverables timeline) and a *Related publications* section. Publications are tagged by Working Group in a new `data/publications.json` and surface automatically as outputs land. Until the first ones arrive (October 2026), each group shows a short placeholder linking to the Publications page.
 
 #### Changed

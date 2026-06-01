@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=15206dba">
+<link rel="stylesheet" href="assets/css/site.css?v=427e243e">
 <style>
   /* About-page-specific tweaks: a slim hero, a sticky table of contents
      on the page, and section spacing tuned for a single long page. */
@@ -286,7 +286,10 @@
   <div class="container reveal">
 
     <div class="gantt-intro">
-      <span class="gantt-key"><span class="swatch"></span> Milestone (M = month from start)</span>
+      <span class="gantt-key"><span class="milestone gantt-key-pill">M</span> Planned</span>
+      <span class="gantt-key"><span class="milestone is-shipped gantt-key-pill"><span class="ms-check" aria-hidden="true">✓</span>M</span> Shipped</span>
+      <span class="gantt-key"><span class="milestone is-early gantt-key-pill"><span class="ms-check" aria-hidden="true">✓</span>M</span> Shipped early</span>
+      <span class="gantt-key"><span class="swatch"></span> M = month from start</span>
     </div>
 
     <p class="scroll-hint">↔ Scroll horizontally to see the full timeline</p>
@@ -315,10 +318,13 @@
           <div class="g-q" role="columnheader">Q1</div><div class="g-q" role="columnheader">Q2</div><div class="g-q" role="columnheader">Q3</div><div class="g-q" role="columnheader">Q4</div>
         </div>
 
-        <!-- D1 — M12 (Y1 Q4) -->
+        <!-- D1 — planned M12 (Y1 Q4); shipped early ~Y1 Q2. Exact month
+             provisional (M6), pending Chair confirmation post-conference
+             (tracked in the deliverable-status issue). -->
         <div class="g-row g-row-d" id="d1" role="row">
           <div class="g-label"><span class="d-id">D1</span><span class="d-name">First version of NetSec directory (updated regularly)</span></div>
-          <div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"><span class="milestone">M12</span></div>
+          <span class="ms-track" style="--q-act:2;--q-plan:4" aria-hidden="true"></span>
+          <div class="g-cell" role="cell"></div><div class="g-cell" role="cell"><span class="milestone is-early"><span class="ms-check" aria-hidden="true">✓</span>M6<span class="visually-hidden"> — delivered, ahead of the month-12 plan</span></span></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"><span class="milestone is-ghost">M12<span class="visually-hidden"> — originally planned month</span></span></div>
           <div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div>
           <div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div>
           <div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div>
