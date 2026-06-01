@@ -1,0 +1,8 @@
+# Runtime dependencies for the scripts/ automation (sync, build, check).
+# Also installed in CI so the scripts/ pytest suites can import their
+# targets (see .github/workflows/python-tests.yml). The static site
+# itself ships no Python; these are maintainer-tooling deps only.
+beautifulsoup4
+Pillow
+PyYAML
+requests
