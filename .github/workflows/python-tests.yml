@@ -1,0 +1,37 @@
+name: Python tests
+
+# Runs the scripts/ pytest suites on any change to the scripts, the
+# pytest config, or this workflow. The suites are named test-<script>.py
+# (hyphen) to mirror their hyphenated targets; pytest.ini teaches the
+# default collector to pick those up (testpaths=scripts, python_files
+# includes test-*.py). Tests are fully mocked, so no network or repo
+# mutation happens in CI.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'pytest.ini'
+      - '.github/workflows/python-tests.yml'
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - 'pytest.ini'
+      - '.github/workflows/python-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v4 (sha-pinned)
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+      - name: Install pytest
+        run: python -m pip install --quiet pytest
+      - name: Run the script test suites
+        run: python -m pytest -q

@@ -863,7 +863,19 @@ risk is not only staging the wrong source file, it is committing
 verification litter that should never have been tracked. Offenders that
 slipped through before: jprobe.html, rmm.html, swatch.html.
 
----
+### Workflow agents write where you point them, not where they live
+
+An agent spawned with `isolation: worktree` runs in its own fresh
+worktree, but it will still write into the main checkout if the prompt
+hands it an absolute repo path. Give workflow agents only paths relative
+to their working directory, tell them their cwd IS the worktree, and
+forbid absolute paths, `cd`, and any git command. Otherwise parallel
+agents leak files into the shared checkout (and can collide on its git
+state) while you are working in it. This surfaced when a test-writing
+fan-out wrote `scripts/test-*.py` into the main checkout because the
+prompt named the repo by its absolute path. Pair it with the
+scratch-file rule above: when a run is killed, prune its leftover
+worktrees with `git worktree remove -f -f` before continuing.
 
 *This file is short on purpose. If you need to add a rule, add it
 here; if you need to add an example, prefer linking a PR / commit /
