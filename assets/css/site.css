@@ -2979,7 +2979,17 @@ body.search-open{overflow:hidden}
    stays steady. Disabled under reduced-motion. */
 @keyframes rm-inprogress-blink{0%,100%{opacity:1}50%{opacity:.18}}
 .rm-card .rm-pill.in-progress .dot{animation:rm-inprogress-blink 1.8s ease-in-out infinite}
-@media (prefers-reduced-motion:reduce){.rm-card .rm-pill.in-progress .dot{animation:none}}
+/* Reduced motion: drop the blink, but keep the dot reading as "live"
+   with a steady accent halo (a ring + soft glow in the pill colour)
+   instead of looking identical to a static pill dot. No motion. */
+@media (prefers-reduced-motion:reduce){
+  .rm-card .rm-pill.in-progress .dot{
+    animation:none;
+    box-shadow:0 0 0 2px rgba(255,255,255,.4),
+               0 0 0 3px color-mix(in srgb, currentColor 30%, transparent),
+               0 0 5px 1px color-mix(in srgb, currentColor 45%, transparent);
+  }
+}
 
 /* In-flight milestone progress bar, rendered by roadmap-progress.js
    from data/roadmap-progress.json (GitHub milestone closed / total).
