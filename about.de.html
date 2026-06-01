@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=15206dba">
+<link rel="stylesheet" href="assets/css/site.css?v=427e243e">
 <style>
   /* About-page-specific tweaks: a slim hero, a sticky table of contents
      on the page, and section spacing tuned for a single long page. */
@@ -327,7 +327,10 @@
   <div class="container reveal">
 
     <div class="gantt-intro">
-      <span class="gantt-key"><span class="swatch"></span> Meilenstein (M = Monat seit Start)</span>
+      <span class="gantt-key"><span class="milestone gantt-key-pill">M</span> Geplant</span>
+      <span class="gantt-key"><span class="milestone is-shipped gantt-key-pill"><span class="ms-check" aria-hidden="true">✓</span>M</span> Geliefert</span>
+      <span class="gantt-key"><span class="milestone is-early gantt-key-pill"><span class="ms-check" aria-hidden="true">✓</span>M</span> Vorzeitig geliefert</span>
+      <span class="gantt-key"><span class="swatch"></span> M = Monat seit Start</span>
     </div>
 
     <p class="scroll-hint">↔ Horizontal scrollen, um den gesamten Zeitplan zu sehen</p>
@@ -353,7 +356,8 @@
 
         <div class="g-row g-row-d" id="d1" role="row">
           <div class="g-label"><span class="d-id">D1</span><span class="d-name">Erste Version des NetSec-Verzeichnisses (regelmäßig aktualisiert)</span></div>
-          <div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"><span class="milestone">M12</span></div>
+          <span class="ms-track" style="--q-act:2;--q-plan:4" aria-hidden="true"></span>
+          <div class="g-cell" role="cell"></div><div class="g-cell" role="cell"><span class="milestone is-early"><span class="ms-check" aria-hidden="true">✓</span>M6<span class="visually-hidden"> — geliefert, vor dem geplanten Monat 12</span></span></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"><span class="milestone is-ghost">M12<span class="visually-hidden"> — ursprünglich geplanter Monat</span></span></div>
           <div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div>
           <div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div>
           <div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div><div class="g-cell" role="cell"></div>

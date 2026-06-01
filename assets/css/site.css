@@ -1317,6 +1317,40 @@ form button:disabled{opacity:.65;cursor:wait}
 }
 .milestone:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(0,51,153,.40)}
 
+/* -------- Deliverable status: planned / shipped / shipped-early --------
+   Base .milestone reads as "planned". A check glyph (not colour alone,
+   WCAG 1.4.1) marks a shipped milestone. Green is reserved for
+   ahead-of-plan only; on-time and late both read as the neutral
+   "shipped" state by design. */
+.gantt{--g-label:240px}
+.milestone{position:relative;z-index:1}
+.milestone .ms-check{font-weight:800;margin-right:3px}
+.milestone.is-shipped{
+  background:linear-gradient(135deg,#0b3aa0,#1763d6);
+  box-shadow:0 4px 10px rgba(11,58,160,.32), inset 0 0 0 1.6px rgba(255,255,255,.5);
+}
+.milestone.is-early{
+  background:linear-gradient(135deg,#178a4e,#28bd6c);
+  box-shadow:0 4px 10px rgba(23,138,78,.34), inset 0 0 0 1.6px rgba(255,255,255,.55);
+}
+.milestone.is-ghost{
+  background:transparent;color:var(--muted);font-weight:600;
+  box-shadow:inset 0 0 0 1.5px var(--glass-border);
+}
+/* Dotted lead-line from the actual (earlier) month back to the planned
+   ghost. --q-act / --q-plan are 1-based quarter indices set inline on
+   the row; the maths tracks the label-column width across breakpoints. */
+.g-row-d{position:relative}
+.ms-track{
+  position:absolute;top:50%;height:0;border-top:2px dotted var(--accent-2);
+  --qspan:calc((100% - var(--g-label)) / 16);
+  left:calc(var(--g-label) + (var(--q-act) - .5) * var(--qspan));
+  width:calc((var(--q-plan) - var(--q-act)) * var(--qspan));
+  opacity:.7;pointer-events:none;z-index:0;
+}
+/* Compact pills used inside the legend keys. */
+.gantt-key-pill{font-size:.62rem;padding:3px 7px}
+
 /* -------- Country grid (MC composition) -------- */
 .country-grid{
   display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:14px;
@@ -1522,6 +1556,7 @@ form button:disabled{opacity:.65;cursor:wait}
   .scroll-hint{display:block}
   .g-row-y{grid-template-columns:180px repeat(4,minmax(184px,1fr))}
   .g-row-q,.g-row-d{grid-template-columns:180px repeat(16,minmax(46px,1fr))}
+  .gantt{--g-label:180px}
   .g-label{padding:10px 12px}
   .g-label .d-name{font-size:.78rem}
   .g-year{font-size:.78rem;padding:10px 4px}
@@ -1585,6 +1620,9 @@ form button:disabled{opacity:.65;cursor:wait}
 .dark .g-row-q > .g-q:nth-child(n+6):nth-child(-n+9),
 .dark .g-row-q > .g-q:nth-child(n+14):nth-child(-n+17){background-color:rgba(110,161,255,.06)}
 .dark .milestone{background:linear-gradient(135deg,#3b6fe0,#82b7ff);color:#0b1220;box-shadow:0 4px 12px rgba(60,110,230,.45)}
+.dark .milestone.is-shipped{background:linear-gradient(135deg,#2f6fe0,#79b4ff);color:#0b1220}
+.dark .milestone.is-early{background:linear-gradient(135deg,#33c47a,#7ef0ad);color:#06200f}
+.dark .milestone.is-ghost{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1.5px var(--glass-border)}
 .dark .ca-badge .dot{background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.25)}
 .dark .toast{box-shadow:0 18px 50px rgba(0,0,0,.45),0 4px 12px rgba(0,0,0,.30)}
 .dark .toast .toast-close:hover{background:rgba(255,255,255,.06)}

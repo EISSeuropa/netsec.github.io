@@ -183,15 +183,15 @@
     "about.html": {
       "fr": {
         "file": "about.fr.html",
-        "source_sha1": "0787b019153cd382cdd33fa39302ff7f28c42b08",
-        "translated_on": "2026-05-31",
+        "source_sha1": "c766245c5d4008b4d3f39a0e10d9690b1d459ea4",
+        "translated_on": "2026-06-01",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "about.de.html",
-        "source_sha1": "0787b019153cd382cdd33fa39302ff7f28c42b08",
-        "translated_on": "2026-05-31",
+        "source_sha1": "c766245c5d4008b4d3f39a0e10d9690b1d459ea4",
+        "translated_on": "2026-06-01",
         "status": "beta",
         "reviewed_by": null
       }
