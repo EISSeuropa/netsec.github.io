@@ -768,6 +768,35 @@ announcement isn't important enough.
 - The banner is NOT part of any drift checker — there's nothing
   to keep in sync.
 
+## 15. Model & effort defaults
+
+The standing model and reasoning-effort defaults live in
+`.claude/settings.local.json` (gitignored): `opusplan` (plan in
+Opus, execute in Sonnet) at `medium` effort. The full per-task
+matrix and the reasoning behind it are in
+[`docs/claude-usage.md`](docs/claude-usage.md), kept out of this
+file so it costs no per-session context.
+
+Two things a config file cannot do, so they belong here as
+behaviour:
+
+- **Plan first on multi-surface work.** Anything spanning more
+  than one or two files (a feature touching the three locale
+  HTMLs plus CSS, a script, the CHANGELOG) goes through plan mode
+  before the first edit. Front-loading the plan is what avoids
+  expensive rework across locales and CI.
+- **Flag an effort mismatch, do not silently absorb it.** When a
+  task plainly needs deeper reasoning (cross-file debugging, a
+  structural change) or plainly does not (a one-line copy fix),
+  say so and recommend bumping or dropping the dial. The live call
+  on whether a task is worth Opus or high effort stays with the
+  maintainer, the only one who can see the remaining weekly quota.
+
+The effort floor on this repo is `medium`, not `low`: most edits
+cascade across the locales and the automation layer (cache-bust
+restamp, i18n drift, generators, CI), so `low` tends to produce
+output that looks right but breaks a downstream check.
+
 ---
 
 *This file is short on purpose. If you need to add a rule, add it
