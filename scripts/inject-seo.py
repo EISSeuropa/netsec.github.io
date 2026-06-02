@@ -180,6 +180,8 @@ def build_jsonld_block(base: str, lang: str, title: str, desc: str) -> str:
         ),
         "sameAs": [
             "https://www.cost.eu/actions/CA24154/",
+            "https://www.linkedin.com/company/costnetsec/",
+            "https://bsky.app/profile/netsec-cost.eu",
             "https://github.com/EISSeuropa/netsec.github.io",
         ],
         "funder": {
