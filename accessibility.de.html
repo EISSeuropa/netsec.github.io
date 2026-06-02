@@ -180,7 +180,7 @@
       </div>
       <div class="prose-meta-item">
         <span class="label">Letzte Prüfung</span>
-        <span class="value">22. Mai 2026</span>
+        <span class="value">2. Juni 2026</span>
       </div>
     </div>
 
@@ -199,6 +199,7 @@
     </div>
     <p>Ein Problem nach <strong>WCAG 2.1 SC 1.4.3 (Mindestkontrast)</strong> kam bei der Prüfung zum Vorschein und wurde noch vor der Veröffentlichung dieser Erklärung behoben: sieben Call-to-Action-Schaltflächen im Dunkelmodus zeigten weißen Text auf dem helleren Dunkelmodus-Akzent (<code>#6ea1ff</code>) mit einem Verhältnis von 2,56:1, unter dem AA-Mindestwert von 4,5:1. Die betroffenen Schaltflächen wurden im Dunkelmodus auf die EU-Markenblau-Farbe (<code>#003399</code>) festgelegt, was ein Kontrastverhältnis von 10,86:1 ergibt. Die Korrektur wurde im selben Release wie diese Prüfung veröffentlicht.</p>
     <p>Das verbleibende Element, das für die manuelle Prüfung markiert wurde, betrifft den Farbkontrast von Text, der über <code>backdrop-filter</code>-Glasflächen gerendert wird, was automatisierte Werkzeuge nicht zuverlässig bewerten können, da der wahrgenommene Kontrast davon abhängt, was sich hinter der Fläche befindet (der Seitenhintergrund plus die dekorative Blob-Atmosphäre). Wir haben Element für Element im Browser geprüft, dass diese Flächen den WCAG-2.1-AA-Kontrast in beiden Modi einhalten.</p>
+    <p>Eine umfassendere erneute Bewertung am <strong>2. Juni 2026</strong> weitete die Prüfung auf alle Seiten in allen drei Sprachen aus (vollständige Aufzeichnung: <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/docs/audit-2026-06.md" target="_blank" rel="noopener">docs/audit-2026-06.md</a> im Repository). Sie bestätigte die Konformität mit WCAG 2.1 AA erneut, ohne neue Konformitätsprobleme. Zwei automatische Hinweise wurden geprüft und als Fehlalarme eingestuft: eine leere Überschrift in einem Banner, das verborgen bleibt, bis JavaScript es füllt, und ein leeres <code>alt</code>-Attribut an einer Verzeichniskarten-Vorlage, die das Rendering zur Laufzeit befüllt.</p>
     <p>Am selben Tag wurden drei zusätzliche Schluss-Checks durchgeführt: ein struktureller Barrierefreiheits-Audit (assistive Technologien) der vier meistbesuchten Seiten, Landmarken, Überschriftenhierarchie, Alt-Texte, zugängliche Namen, alles in Ordnung. Eine Überprüfung der Open-Graph- und Twitter-Card-Metadaten auf jeder öffentlichen Seite. Eine Lesbarkeitsprüfung im Dunkelmodus Seite für Seite über alle sechzehn öffentlichen englischen Seiten, ohne weitere Kontrastprobleme. Drei kleine Korrekturen, die dabei auftauchten, sind in diesem Release enthalten: das FR / DE Beta-Übersetzungs-Band, das fälschlich <em>„Maschinell übersetzt"</em> auswies, wurde auf <em>„Manuell übersetzt"</em> korrigiert (das war stets die tatsächliche Methode). Der Mobil-Navigations-Vorhang mit transparentem Hintergrund, durch den der Hero-Text in Dunkelmodus hinter den Menüpunkten durchschimmerte, wurde nahezu undurchsichtig gemacht. Das visuelle Hervorheben von Tiefenlinks im Netzwerkverzeichnis wurde gegen einen <code>requestAnimationFrame</code>-Verzögerungsfall robust gemacht, der das Hervorheben beim Kaltstart einer geteilten URL ausbleiben lassen konnte.</p>
 
     <h2>Nicht barrierefreie oder eingeschränkte Inhalte</h2>
@@ -227,7 +228,7 @@
     </ul>
 
     <h2>Erstellung dieser Erklärung</h2>
-    <p>Diese Erklärung wurde am <strong>22. Mai 2026</strong> durch Eigenbewertung im Rahmen des QA-Durchgangs vor dem öffentlichen Start erstellt. Die Website wurde auf WCAG 2.1 AA geprüft mit:</p>
+    <p>Diese Erklärung wurde zunächst am <strong>22. Mai 2026</strong> durch Eigenbewertung im Rahmen des QA-Durchgangs vor dem öffentlichen Start erstellt und am <strong>2. Juni 2026</strong> nach einer umfassenderen erneuten Bewertung aktualisiert. Die Website wurde auf WCAG 2.1 AA geprüft mit:</p>
     <ul>
       <li><strong>Automatisierten Struktur- und A11y-Scans</strong> mit <a href="https://pa11y.org/" target="_blank" rel="noopener">pa11y</a> (umfasst <a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener">axe-core 4.11</a> und <a href="https://squizlabs.github.io/HTML_CodeSniffer/" target="_blank" rel="noopener">HTML_CodeSniffer</a>) auf den acht meistbesuchten öffentlichen Seiten, einklappbare Bereiche aufgeklappt.</li>
       <li><strong>Lighthouse</strong>-Scans für Leistung + Barrierefreiheit + Best Practices + SEO auf Startseite, Netzwerkverzeichnis, Förderungen und Pressemappe. Barrierefreiheit: 96-100. Best Practices: 96. SEO: 100.</li>
@@ -238,7 +239,7 @@
       <li>Manuelle Tastaturnavigation auf der Startseite, im Netzwerkverzeichnis und auf der Förderungsseite.</li>
       <li>Vollständige Linkprüfung mit dem neuen <code>scripts/check-links.sh</code> (910 interne Links, 56 externe), neun verbliebene Anker aus der Informationsarchitektur-Phase wurden erkannt und korrigiert.</li>
     </ul>
-    <p>Die Prüfung hat zudem vier Lighthouse-Leistungswerte unter dem internen Schwellenwert von 80 ergeben (67-75 lokal und live), getrieben durch das renderblockierende CSS externer Schriftarten. Dies ist eine Frage der Benutzererfahrung, kein WCAG-Konformitätsmangel. Das Thema wird im v1.5.0-Fahrplan separat verfolgt.</p>
+    <p>Die Prüfung vom 22. Mai hat zudem vier Lighthouse-Leistungswerte unter dem internen Schwellenwert von 80 ergeben (67-75), getrieben durch das renderblockierende CSS externer Schriftarten. Diese Ursache wurde inzwischen durch das Selbsthosten der Web-Schriftarten beseitigt, und die Leistung wird nun bei jeder Änderung durch einen informativen Lighthouse-Lauf beobachtet. Die Leistung bleibt eine Frage der Benutzererfahrung und kein WCAG-Konformitätsmangel.</p>
     <p>Wir prüfen erneut nach wesentlichen Änderungen am Designsystem oder an der Inhaltsstruktur sowie mindestens einmal pro Jahr. Die nächste planmäßige Überprüfung ist für den <strong>22. Mai 2027</strong> oder früher vorgesehen.</p>
 
     <h2>Rückmeldung und Kontakt</h2>
@@ -252,7 +253,7 @@
     <h2>Durchsetzungsverfahren</h2>
     <p>Sollten Sie mit unserer Antwort nicht zufrieden sein, können Sie sich an die Gleichbehandlungsstelle oder die für Barrierefreiheit zuständige Stelle in Ihrem Land wenden. Innerhalb der Europäischen Union benennt jeder Mitgliedstaat seine eigene Durchsetzungsstelle gemäß der <a href="https://eur-lex.europa.eu/eli/dir/2016/2102/oj" target="_blank" rel="noopener">Richtlinie über den barrierefreien Zugang zu Websites 2016/2102</a>.</p>
 
-    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Erklärung zur Barrierefreiheit v1.2 · erstellt am 22. Mai 2026 (letzter Durchgang vor dem Start) · ersetzt v1.1 vom 22. Mai 2026 (QA-Durchgang vor dem Start) und v1.0 vom 14. Mai 2026 · nächste planmäßige Überprüfung am 22. Mai 2027.</p>
+    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Erklärung zur Barrierefreiheit v1.3 · erstellt am 2. Juni 2026 (erneute Bewertung im Juni) · ersetzt v1.2 vom 22. Mai 2026 (letzter Durchgang vor dem Start), v1.1 vom 22. Mai 2026 (QA-Durchgang vor dem Start) und v1.0 vom 14. Mai 2026 · nächste planmäßige Überprüfung am 22. Mai 2027.</p>
   </div>
 </section>
 </main>
