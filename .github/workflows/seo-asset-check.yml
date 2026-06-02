@@ -1,8 +1,7 @@
 # SEO + asset cache-bust check.
 #
-# Runs scripts/inject-seo.py --check on every PR that touches an HTML
-# file or a CSS/JS asset. The script exits non-zero if anything is out
-# of date:
+# Runs scripts/inject-seo.py --check on every PR. The script exits
+# non-zero if anything is out of date:
 #
 #   - a managed page's SEO / JSON-LD block has drifted from what the
 #     generator would produce, or
@@ -16,16 +15,17 @@
 #
 #     python3 scripts/inject-seo.py
 #
-# Zero cost: no third-party services, no API keys.
+# This is a REQUIRED status check (ruleset protect-main). It used to be
+# path-filtered to HTML/CSS/JS, but a path-filtered required check never
+# reports on PRs outside those paths, so a docs-only or data-only PR
+# stays blocked forever waiting for a status that never arrives. It now
+# runs on every PR; --check is a fast read-only pass (no third-party
+# services, no API keys), so on an unrelated PR it simply confirms
+# everything is current and passes. See issue #483.
 name: SEO + asset cache-bust check
 
 on:
   pull_request:
-    paths:
-      - '*.html'
-      - 'assets/css/**'
-      - 'assets/js/**'
-      - 'scripts/inject-seo.py'
   workflow_dispatch:       # Allow manual runs from the Actions tab
 
 permissions:
