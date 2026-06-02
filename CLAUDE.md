@@ -816,7 +816,13 @@ Before calling a visual change done:
 
 1. grep that every class the new markup references is actually
    defined in the stylesheet.
-2. render it in a preview at both desktop and phone widths.
+2. render it in a preview at both desktop and phone widths, in both
+   light and dark themes. Headless Chrome follows the system
+   preference (usually dark here), so a single render silently checks
+   only one theme. The Early Access banner shipped unreadable in light
+   mode because a global `p` colour rule resolved light under `.dark`
+   but dark under the default theme, and the verification render was
+   dark-only.
 3. test the real device class the user reported the problem on, not
    only the one in front of you.
 
