@@ -107,6 +107,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- Clarified in the FAQ (all three locales) that the confirmation-email edit link can change text fields but cannot replace your photo, so a fresh form submission is the way to swap a headshot.
 - Refreshed the accessibility statement (EN, FR, DE) to v1.3 for the 2 June 2026 re-assessment. It records the broader all-pages re-confirmation of WCAG 2.1 AA, corrects the now-resolved render-blocking-font note (the fonts are self-hosted), and bumps the version footer.
 - Tagged three more events with their Working Groups, so they now show under the relevant sections on `/working-groups.html` and carry WG pills on the home Events cards: the NetSec ITC Conference (WG2, WG4), the MC Plenary (WG1) and the NetSec Policy Workshop (WG2).
 - Swept prose semicolons out of every page in all three locales, rewriting them as full stops or commas to follow the house voice rules. The one semicolon in the ITC Conference calendar description got the same treatment.

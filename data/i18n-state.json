@@ -23,15 +23,15 @@
     "accessibility.html": {
       "fr": {
         "file": "accessibility.fr.html",
-        "source_sha1": "3c6119a42586ff8040b6cad6698d3897848558cc",
-        "translated_on": "2026-06-02",
+        "source_sha1": "a8845f2688cb7c4a04d9b13b422f190f0801e307",
+        "translated_on": "2026-06-03",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "accessibility.de.html",
-        "source_sha1": "3c6119a42586ff8040b6cad6698d3897848558cc",
-        "translated_on": "2026-06-02",
+        "source_sha1": "a8845f2688cb7c4a04d9b13b422f190f0801e307",
+        "translated_on": "2026-06-03",
         "status": "beta",
         "reviewed_by": null
       }
@@ -151,14 +151,14 @@
     "faq.html": {
       "fr": {
         "file": "faq.fr.html",
-        "source_sha1": "0fb276abb932e0f68fa87480aa9d8daea281a930",
+        "source_sha1": "057620b6981ef59a9d2f76d03ec694096cc8bc34",
         "translated_on": "2026-06-03",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "faq.de.html",
-        "source_sha1": "0fb276abb932e0f68fa87480aa9d8daea281a930",
+        "source_sha1": "057620b6981ef59a9d2f76d03ec694096cc8bc34",
         "translated_on": "2026-06-03",
         "status": "beta",
         "reviewed_by": null
