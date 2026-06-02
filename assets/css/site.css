@@ -1762,7 +1762,11 @@ form button:disabled{opacity:.65;cursor:wait}
   box-shadow:var(--glass-shadow);
 }
 .page-banner-icon{font-size:1.05rem;flex-shrink:0}
-.page-banner-text{flex:1;min-width:200px;margin:0;font-weight:500}
+/* color set explicitly: the global `p{color:var(--ink-2)}` rule targets
+   this <p> directly and would otherwise beat the white inherited from
+   .page-banner (dark text on the blue gradient, unreadable in light
+   mode where --ink-2 is a dark slate). */
+.page-banner-text{flex:1;min-width:200px;margin:0;font-weight:500;color:#fff}
 .page-banner-text strong{font-weight:700}
 .page-banner-link{
   color:#fff;text-decoration:underline;text-underline-offset:3px;
