@@ -47,15 +47,15 @@
     },
     "v1.10.1": {
       "closed": 28,
-      "total": 29,
-      "percent": 97,
+      "total": 30,
+      "percent": 93,
       "state": "open",
       "due": "2026-06-17"
     },
     "v1.11.0": {
       "closed": 3,
-      "total": 10,
-      "percent": 30,
+      "total": 9,
+      "percent": 33,
       "state": "open",
       "due": "2026-07-06"
     },
