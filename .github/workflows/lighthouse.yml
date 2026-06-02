@@ -1,0 +1,44 @@
+name: Lighthouse (informational)
+
+# Non-blocking performance / accessibility / SEO visibility. Serves the
+# static site, runs Lighthouse against a handful of key pages, and posts
+# a temporary public report link on the run. It NEVER fails the build:
+# the job is continue-on-error and there are no pass/fail assertions, so
+# it gives a trend signal without the flaky red CI that perf-score
+# budgets produce in shared runners. Promote to a gating budget later if
+# wanted (#270).
+
+on:
+  pull_request:
+    paths:
+      - '**.html'
+      - 'assets/css/**'
+      - 'assets/js/**'
+      - '.github/workflows/lighthouse.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    # Never block a merge on this. It is a signal, not a gate.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v4 (sha-pinned)
+      - name: Serve the static site
+        # Backgrounded; the runner VM keeps it alive for the next step.
+        run: |
+          python3 -m http.server 8080 --directory . &
+          sleep 3
+      - name: Run Lighthouse
+        uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18  # v12 (sha-pinned)
+        with:
+          urls: |
+            http://localhost:8080/index.html
+            http://localhost:8080/people.html
+            http://localhost:8080/about.html
+            http://localhost:8080/essc-2026.html
+          uploadArtifacts: true
+          temporaryPublicStorage: true
