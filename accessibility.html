@@ -175,7 +175,7 @@
       </div>
       <div class="prose-meta-item">
         <span class="label">Last assessed</span>
-        <span class="value">22 May 2026</span>
+        <span class="value">2 June 2026</span>
       </div>
     </div>
 
@@ -194,6 +194,7 @@
     </div>
     <p>One <strong>WCAG 2.1 SC 1.4.3 (Contrast Minimum)</strong> issue surfaced during the audit and was fixed before this statement was published: seven primary calls-to-action in dark mode rendered white text on the lighter dark-mode accent (`#6ea1ff`) for a 2.56:1 ratio, below the 4.5:1 AA floor. The affected buttons were pinned to the EU-blue brand colour (`#003399`) in dark mode, giving 10.86:1 contrast. The fix shipped in the same release as this audit.</p>
     <p>The remaining item flagged for manual review is colour contrast on text rendered over <code>backdrop-filter</code> glass surfaces, which automated tooling cannot evaluate reliably because the perceived contrast depends on what's behind the surface (the body background plus the decorative blob ambience). We verified these surfaces meet WCAG 2.1 AA contrast in both light and dark mode by inspecting computed colours element-by-element in the browser.</p>
+    <p>A broader re-assessment on <strong>2 June 2026</strong> extended the review to every page across all three locales (full record: <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/docs/audit-2026-06.md" target="_blank" rel="noopener">docs/audit-2026-06.md</a>). It re-confirmed WCAG 2.1 AA with no new conformance issues. Two automated flags were checked and cleared as false positives: an empty heading inside a banner that stays hidden until JavaScript fills it, and an empty <code>alt</code> on a directory card template that the renderer populates at runtime.</p>
     <p>Three additional final-pass checks completed the launch-QA review on the same day: a structural assistive-technology audit across the four most-trafficked pages (landmarks, heading hierarchy, alt-text, accessible names, all clean). Open Graph and Twitter Card metadata verified complete on every public page. A dark-mode readability sweep across all sixteen public English pages, with no further low-contrast text or surfaces beyond the manual-review item above. Three small corrections that surfaced during this pass are reflected in this release: the FR / DE beta-translation ribbon, which had misclaimed <em>"machine translation"</em>, was corrected to <em>"manual translation"</em> (which has always been the methodology). The mobile navigation drawer's transparent background was tightened to near-opaque so the hero text no longer bleeds through behind nav items in dark mode. The network-directory deep-link spotlight was made resilient to a <code>requestAnimationFrame</code> deferral edge-case that could leave a shared <code>/people.html#&lt;slug&gt;</code> link visually unhighlighted on cold page load.</p>
 
     <h2>Non-accessible or limited content</h2>
@@ -222,7 +223,7 @@
     </ul>
 
     <h2>Preparation of this statement</h2>
-    <p>This statement was prepared by self-assessment on <strong>22 May 2026</strong>, as part of the launch-QA pass before the public push. The website was reviewed against WCAG 2.1 AA using:</p>
+    <p>This statement was first prepared by self-assessment on <strong>22 May 2026</strong> as part of the launch-QA pass before the public push, and updated on <strong>2 June 2026</strong> after a broader re-assessment. The website was reviewed against WCAG 2.1 AA using:</p>
     <ul>
       <li><strong>Automated structural + a11y scans</strong> with <a href="https://pa11y.org/" target="_blank" rel="noopener">pa11y</a> (wrapping <a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener">axe-core 4.11</a> and <a href="https://squizlabs.github.io/HTML_CodeSniffer/" target="_blank" rel="noopener">HTML_CodeSniffer</a>) on the eight most-trafficked public pages, with collapsible regions expanded.</li>
       <li><strong>Lighthouse</strong> performance + accessibility + best-practices + SEO scans on home, network directory, grants, and press kit. Accessibility scored 96-100. Best practices 96. SEO 100.</li>
@@ -233,7 +234,7 @@
       <li>Manual keyboard navigation through the home page, network directory, and grants page.</li>
       <li>A per-page broken-link sweep via the new <code>scripts/check-links.sh</code> (910 internal links, 56 external), caught nine anchor refs left over from the IA pass.</li>
     </ul>
-    <p>The audit also flagged four Lighthouse performance scores below the internal floor of 80 (range 67-75 on local + live runs), driven by render-blocking external font CSS. This is a quality-of-experience concern, not a WCAG conformance gap. It is tracked separately in the v1.5.0 roadmap.</p>
+    <p>The 22 May audit also flagged four Lighthouse performance scores below the internal floor of 80 (range 67-75), driven by render-blocking external font CSS. That cause has since been removed by self-hosting the web fonts, and performance is now watched by an informational Lighthouse run on each change. Performance remains a quality-of-experience concern, not a WCAG conformance gap.</p>
     <p>We re-assess after material changes to the design system or content structure, and at a minimum once per year. The next scheduled review is <strong>22 May 2027</strong> or sooner.</p>
 
     <h2>Feedback and contact</h2>
@@ -247,7 +248,7 @@
     <h2>Enforcement procedure</h2>
     <p>If you are not satisfied with our response, you may contact the equality body or accessibility-compliance body in your country. Within the European Union, each Member State designates its own enforcement body under the <a href="https://eur-lex.europa.eu/eli/dir/2016/2102/oj" target="_blank" rel="noopener">Web Accessibility Directive 2016/2102</a>.</p>
 
-    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Accessibility Statement v1.2 · prepared 22 May 2026 (final pre-launch pass) · supersedes v1.1 of 22 May 2026 (launch-QA review) and v1.0 of 14 May 2026 · next scheduled review 22 May 2027.</p>
+    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Accessibility Statement v1.3 · prepared 2 June 2026 (June re-assessment) · supersedes v1.2 of 22 May 2026 (final pre-launch pass), v1.1 of 22 May 2026 (launch-QA review) and v1.0 of 14 May 2026 · next scheduled review 22 May 2027.</p>
   </div>
 </section>
 </main>

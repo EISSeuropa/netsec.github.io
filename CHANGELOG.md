@@ -107,6 +107,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- Refreshed the accessibility statement (EN, FR, DE) to v1.3 for the 2 June 2026 re-assessment. It records the broader all-pages re-confirmation of WCAG 2.1 AA, corrects the now-resolved render-blocking-font note (the fonts are self-hosted), and bumps the version footer.
 - Tagged three more events with their Working Groups, so they now show under the relevant sections on `/working-groups.html` and carry WG pills on the home Events cards: the NetSec ITC Conference (WG2, WG4), the MC Plenary (WG1) and the NetSec Policy Workshop (WG2).
 - Swept prose semicolons out of every page in all three locales, rewriting them as full stops or commas to follow the house voice rules. The one semicolon in the ITC Conference calendar description got the same treatment.
 - The public roadmap now shows only the most recent shipped release by default and tucks the earlier ones behind a "Show N earlier releases" toggle, so the shipped history no longer dominates the page as it grows. With JavaScript off, the full list stays visible.
