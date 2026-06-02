@@ -415,6 +415,13 @@ step "Promote public roadmap card (EN / FR / DE)"
 if [[ "$DRY_RUN" != "--dry-run" ]]; then
   if python3 "$REPO_ROOT/scripts/promote-roadmap.py" "$VERSION" "$TODAY"; then
     echo "  ✓ roadmap promotion succeeded."
+    # Re-mark the FR and DE roadmap entries fresh in i18n-state.json.
+    # promote-roadmap.py edits all three locales together (a mechanical
+    # card flip, not a translation change), so the FR/DE versions stay in
+    # sync with EN. Without this the next PR sees a false-positive drift on
+    # roadmap.fr/de (issue #412).
+    python3 "$REPO_ROOT/scripts/check-i18n-drift.py" --mark-fresh roadmap.html fr
+    python3 "$REPO_ROOT/scripts/check-i18n-drift.py" --mark-fresh roadmap.html de
   else
     rc=$?
     if [[ $rc -eq 2 ]]; then
@@ -447,7 +454,7 @@ fi
 
 step "Commit, tag, push"
 
-run git add CHANGELOG.md roadmap.html roadmap.fr.html roadmap.de.html
+run git add CHANGELOG.md roadmap.html roadmap.fr.html roadmap.de.html data/i18n-state.json
 run git commit -m \"Release v$VERSION — $TITLE\" \
        -m \"Promotes the CHANGELOG.md [Unreleased] section to [$VERSION] · $TODAY — $TITLE, resets [Unreleased], promotes the matching public-roadmap card on EN + FR + DE from planned to shipped, and bumps the roadmap last-updated stamp.\"
 run git tag -a \"v$VERSION\" \
