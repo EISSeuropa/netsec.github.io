@@ -106,6 +106,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- Clarified in the FAQ (all three locales) that the confirmation-email edit link can change text fields but cannot replace your photo, so a fresh form submission is the way to swap a headshot.
 - Tagged three more events with their Working Groups, so they now show under the relevant sections on `/working-groups.html` and carry WG pills on the home Events cards: the NetSec ITC Conference (WG2, WG4), the MC Plenary (WG1) and the NetSec Policy Workshop (WG2).
 - Swept prose semicolons out of every page in all three locales, rewriting them as full stops or commas to follow the house voice rules. The one semicolon in the ITC Conference calendar description got the same treatment.
 - The public roadmap now shows only the most recent shipped release by default and tucks the earlier ones behind a "Show N earlier releases" toggle, so the shipped history no longer dominates the page as it grows. With JavaScript off, the full list stays visible.
