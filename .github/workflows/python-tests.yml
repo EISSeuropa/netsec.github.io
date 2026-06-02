@@ -1,11 +1,19 @@
 name: Python tests
 
-# Runs the scripts/ pytest suites on any change to the scripts, the
-# pytest config, or this workflow. The suites are named test-<script>.py
+# Runs the scripts/ pytest suites. The suites are named test-<script>.py
 # (hyphen) to mirror their hyphenated targets; pytest.ini teaches the
 # default collector to pick those up (testpaths=scripts, python_files
 # includes test-*.py). Tests are fully mocked, so no network or repo
 # mutation happens in CI.
+#
+# This is a REQUIRED status check (ruleset protect-main). A required
+# check that is path-filtered never reports on PRs outside those paths,
+# so the merge stays blocked forever: a docs-only or HTML-only PR waits
+# indefinitely for a pytest status that never arrives. The pull_request
+# trigger therefore runs on every PR. The suite is ~15s and
+# side-effect-free, so running it on an unrelated PR costs almost
+# nothing. The push trigger stays scoped to changes that can affect the
+# suite. See issue #483.
 
 on:
   push:
@@ -16,11 +24,6 @@ on:
       - 'requirements.txt'
       - '.github/workflows/python-tests.yml'
   pull_request:
-    paths:
-      - 'scripts/**'
-      - 'pytest.ini'
-      - 'requirements.txt'
-      - '.github/workflows/python-tests.yml'
 
 permissions:
   contents: read

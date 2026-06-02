@@ -88,6 +88,18 @@ SKIP_HOSTS = {
                                 # using any Mozilla-style UA. The
                                 # site is reachable for real users;
                                 # confirmed manually 2026-05-27.
+    "eur-lex.europa.eu",        # EU institutional sites return HTTP
+    "commission.europa.eu",     # 403 to the Actions-runner IP on both
+                                # HEAD and GET, but 200 in a real
+                                # browser. Linked from the
+                                # accessibility, licensing and privacy
+                                # pages; confirmed reachable 2026-06-03.
+    "bsky.app",                 # Profile routes throttle the
+                                # Actions-runner IP: HEAD returns 404,
+                                # GET times out. Reachable for real
+                                # users (GET 200 from a browser) and
+                                # the handle netsec-cost.eu resolves to
+                                # a real DID; confirmed 2026-06-03.
 }
 
 internal_links = {}  # (file, target) — for de-dupe display

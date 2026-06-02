@@ -75,6 +75,8 @@
     "description": "An inclusive, multidisciplinary network integrating diverse perspectives on European defence and security.",
     "sameAs": [
       "https://www.cost.eu/actions/CA24154/",
+      "https://www.linkedin.com/company/costnetsec/",
+      "https://bsky.app/profile/netsec-cost.eu",
       "https://github.com/EISSeuropa/netsec.github.io"
     ],
     "funder": {
@@ -179,7 +181,7 @@
       </div>
       <div class="prose-meta-item">
         <span class="label">Dernière évaluation</span>
-        <span class="value">22 mai 2026</span>
+        <span class="value">2 juin 2026</span>
       </div>
     </div>
 
@@ -198,6 +200,7 @@
     </div>
     <p>Un problème <strong>WCAG 2.1 SC 1.4.3 (Contraste minimum)</strong> a été relevé lors de l'audit et corrigé avant la publication de cette déclaration : sept boutons d'appel à l'action en mode sombre affichaient du texte blanc sur l'accent clair du mode sombre (<code>#6ea1ff</code>), donnant un rapport de 2,56:1, inférieur au seuil de 4,5:1 (niveau AA). Les boutons concernés ont été passés au bleu UE de la marque (<code>#003399</code>) en mode sombre, donnant un contraste de 10,86:1. Le correctif a été livré dans la même version que cet audit.</p>
     <p>L'élément restant signalé pour examen manuel concerne le contraste sur les surfaces en verre avec <code>backdrop-filter</code>, que l'outillage automatisé ne peut pas évaluer de manière fiable car le contraste perçu dépend de ce qui se trouve derrière la surface (le fond de la page plus l'ambiance décorative des « blobs »). Nous avons vérifié élément par élément dans le navigateur que ces surfaces respectent le contraste WCAG 2.1 AA dans les deux modes.</p>
+    <p>Une réévaluation plus large le <strong>2 juin 2026</strong> a étendu l'examen à toutes les pages dans les trois langues (compte rendu complet : <a href="https://github.com/EISSeuropa/netsec.github.io/blob/main/docs/audit-2026-06.md" target="_blank" rel="noopener">docs/audit-2026-06.md</a> dans le dépôt). Elle a reconfirmé la conformité WCAG 2.1 AA sans nouveau problème de conformité. Deux signalements automatiques ont été vérifiés et écartés comme faux positifs : un titre vide à l'intérieur d'une bannière qui reste masquée jusqu'à ce que JavaScript la remplisse, et un attribut <code>alt</code> vide sur le gabarit d'une carte d'annuaire que le moteur de rendu remplit à l'exécution.</p>
     <p>Trois vérifications finales ont complété la passe de QA le même jour : un audit structurel d'accessibilité (technologies d'assistance) sur les quatre pages les plus fréquentées, points de repère, hiérarchie des titres, textes alternatifs, noms accessibles, tout propre. Les balises Open Graph et Twitter Card ont été vérifiées sur l'ensemble des pages publiques. Une revue de lisibilité en mode sombre, page par page, sur les seize pages publiques anglaises n'a révélé aucune autre zone à faible contraste. Trois petites corrections issues de cette passe sont reflétées dans cette version : le ruban de traduction bêta FR / DE, qui affichait à tort <em>« traduction automatique »</em>, a été corrigé en <em>« traduction manuelle »</em> (méthode utilisée depuis le début). Le tiroir de navigation mobile, dont l'arrière-plan transparent laissait transparaître le texte du hero derrière les éléments de menu en mode sombre, a été rendu quasi opaque. Le repère visuel des liens profonds vers une fiche de l'annuaire (<code>/people.html#&lt;slug&gt;</code>) a été rendu résilient à un report de <code>requestAnimationFrame</code> qui pouvait empêcher l'affichage du repère au chargement à froid.</p>
 
     <h2>Contenu non accessible ou limité</h2>
@@ -226,7 +229,7 @@
     </ul>
 
     <h2>Préparation de cette déclaration</h2>
-    <p>Cette déclaration a été préparée par auto-évaluation le <strong>22 mai 2026</strong>, dans le cadre de la passe de QA pré-lancement. Le site a été examiné au regard de WCAG 2.1 AA en s'appuyant sur :</p>
+    <p>Cette déclaration a d'abord été préparée par auto-évaluation le <strong>22 mai 2026</strong>, dans le cadre de la passe de QA pré-lancement, puis mise à jour le <strong>2 juin 2026</strong> après une réévaluation plus large. Le site a été examiné au regard de WCAG 2.1 AA en s'appuyant sur :</p>
     <ul>
       <li><strong>Analyses structurelles + a11y automatisées</strong> avec <a href="https://pa11y.org/" target="_blank" rel="noopener">pa11y</a> (encapsulant <a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener">axe-core 4.11</a> et <a href="https://squizlabs.github.io/HTML_CodeSniffer/" target="_blank" rel="noopener">HTML_CodeSniffer</a>) sur les huit pages publiques les plus fréquentées, régions repliables développées.</li>
       <li><strong>Lighthouse</strong> performance + accessibilité + bonnes pratiques + SEO sur l'accueil, l'annuaire, les subventions et le kit presse. Accessibilité : 96-100. Bonnes pratiques : 96. SEO : 100.</li>
@@ -237,7 +240,7 @@
       <li>Navigation manuelle au clavier sur la page d'accueil, l'annuaire et la page des subventions.</li>
       <li>Vérification de tous les liens par le nouveau <code>scripts/check-links.sh</code> (910 liens internes, 56 externes), neuf ancres résiduelles de la passe d'AI ont été détectées et corrigées.</li>
     </ul>
-    <p>L'audit a également relevé quatre scores Lighthouse de performance en deçà du seuil interne de 80 (entre 67 et 75 en local + en production), liés au CSS de polices externes bloquant le rendu. Il s'agit d'un enjeu de qualité d'expérience, non d'un manquement de conformité WCAG. Le suivi est assuré dans la feuille de route v1.5.0.</p>
+    <p>L'audit du 22 mai a également relevé quatre scores Lighthouse de performance en deçà du seuil interne de 80 (entre 67 et 75), liés au CSS de polices externes bloquant le rendu. Cette cause a depuis été supprimée par l'auto-hébergement des polices web, et la performance est désormais suivie par un passage Lighthouse informatif à chaque modification. La performance reste un enjeu de qualité d'expérience, et non un manquement de conformité WCAG.</p>
     <p>Nous réévaluons après toute modification significative du système de design ou de la structure du contenu, et au minimum une fois par an. La prochaine révision est prévue pour le <strong>22 mai 2027</strong> ou avant.</p>
 
     <h2>Retour d'information et contact</h2>
@@ -251,7 +254,7 @@
     <h2>Procédure d'exécution</h2>
     <p>Si vous n'êtes pas satisfait·e de notre réponse, vous pouvez contacter l'organisme de promotion de l'égalité ou l'organisme de mise en conformité d'accessibilité de votre pays. Au sein de l'Union européenne, chaque État membre désigne son propre organisme d'exécution en vertu de la <a href="https://eur-lex.europa.eu/eli/dir/2016/2102/oj" target="_blank" rel="noopener">Directive sur l'accessibilité des sites internet 2016/2102</a>.</p>
 
-    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Déclaration d'accessibilité v1.2 · préparée le 22 mai 2026 (passe finale avant lancement) · remplace la v1.1 du 22 mai 2026 (revue QA pré-lancement) et la v1.0 du 14 mai 2026 · prochaine révision prévue le 22 mai 2027.</p>
+    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Déclaration d'accessibilité v1.3 · préparée le 2 juin 2026 (réévaluation de juin) · remplace la v1.2 du 22 mai 2026 (passe finale avant lancement), la v1.1 du 22 mai 2026 (revue QA pré-lancement) et la v1.0 du 14 mai 2026 · prochaine révision prévue le 22 mai 2027.</p>
   </div>
 </section>
 </main>
@@ -298,11 +301,11 @@
     <div class="footer-bottom">
       <span>&copy; <span id="year"></span> Action COST NetSec. Les vues exprimées sont celles de l'Action et ne reflètent pas nécessairement celles de COST ou de l'Union européenne. · <a href="accessibility.fr.html">Accessibilité</a> · <a href="privacy.fr.html">Confidentialité</a> · <a href="licensing.fr.html">Licence</a> · <a href="faq.fr.html">FAQ</a> · <a href="glossary.fr.html">Glossaire</a> · <a href="roadmap.fr.html">Feuille de route</a> · <a href="https://github.com/EISSeuropa/netsec.github.io/wiki" target="_blank" rel="noopener">Wiki des membres</a> · <a href="press-kit.fr.html">Kit presse</a> · <a href="sitemap.fr.html">Plan du site</a></span>
       <nav class="socials" aria-label="Réseaux sociaux">
-        <a href="#" aria-label="LinkedIn" rel="noopener">
+        <a href="https://www.linkedin.com/company/costnetsec/" aria-label="LinkedIn" target="_blank" rel="noopener">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.339 18.339v-7.143H6.018v7.143h2.32zM7.179 10.179a1.339 1.339 0 100-2.679 1.339 1.339 0 000 2.679zm10.821 8.16v-3.928c0-2.071-1.107-3.036-2.585-3.036-1.193 0-1.728.661-2.027 1.125v-.964h-2.245c.03.643 0 7.143 0 7.143h2.245v-3.99c0-.2.014-.4.073-.543.16-.4.524-.815 1.135-.815.8 0 1.122.61 1.122 1.506v3.842H18z"/></svg>
         </a>
-        <a href="#" aria-label="X / Twitter" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2H21.5l-7.5 8.572L23 22h-6.844l-5.354-7.003L4.6 22H1.34l8.02-9.171L1 2h6.99l4.84 6.404L18.244 2zm-1.2 18h1.84L7.04 4h-1.96l11.964 16z"/></svg>
+        <a href="https://bsky.app/profile/netsec-cost.eu" aria-label="Bluesky" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078-.139-.017-.277-.034-.415-.056.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364C23.622 9.418 24 4.458 24 3.768c0-.689-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.748 13.087 8.686 12 10.8Z"/></svg>
         </a>
         <a href="https://github.com/EISSeuropa/netsec.github.io" aria-label="Dépôt GitHub" target="_blank" rel="noopener">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.16c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.39.97.11-.75.41-1.27.74-1.56-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.79 0c2.21-1.5 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.68.42.36.79 1.08.79 2.18v3.23c0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
