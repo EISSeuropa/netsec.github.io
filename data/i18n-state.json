@@ -23,15 +23,15 @@
     "accessibility.html": {
       "fr": {
         "file": "accessibility.fr.html",
-        "source_sha1": "9e6c83fd993f08d94676a2824186d1d4bfe7b6d1",
-        "translated_on": "2026-05-31",
+        "source_sha1": "cd34632649ac80781e1ccd54019fb08e9bea53e0",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "accessibility.de.html",
-        "source_sha1": "9e6c83fd993f08d94676a2824186d1d4bfe7b6d1",
-        "translated_on": "2026-05-31",
+        "source_sha1": "cd34632649ac80781e1ccd54019fb08e9bea53e0",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -39,15 +39,15 @@
     "sitemap.html": {
       "fr": {
         "file": "sitemap.fr.html",
-        "source_sha1": "802f7878c19ed9775e7faa89b85c3a9995cf7523",
-        "translated_on": "2026-05-31",
+        "source_sha1": "5336e7583640844da1eed9b88d704264164e8d35",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "sitemap.de.html",
-        "source_sha1": "802f7878c19ed9775e7faa89b85c3a9995cf7523",
-        "translated_on": "2026-05-31",
+        "source_sha1": "5336e7583640844da1eed9b88d704264164e8d35",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -55,15 +55,15 @@
     "privacy.html": {
       "fr": {
         "file": "privacy.fr.html",
-        "source_sha1": "8c6d97574a8562dc605d7aec93afd65e7e562640",
-        "translated_on": "2026-05-31",
+        "source_sha1": "ca610ba2936788ba41dc368facbaf8d2a652f221",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "privacy.de.html",
-        "source_sha1": "8c6d97574a8562dc605d7aec93afd65e7e562640",
-        "translated_on": "2026-05-31",
+        "source_sha1": "ca610ba2936788ba41dc368facbaf8d2a652f221",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -71,15 +71,15 @@
     "licensing.html": {
       "fr": {
         "file": "licensing.fr.html",
-        "source_sha1": "3ebbaf5062dcae64cae5ee86bbba94f0b1ded96e",
-        "translated_on": "2026-05-31",
+        "source_sha1": "bd7435915230c15d9e4b01bb31ef74389a6bed8f",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "licensing.de.html",
-        "source_sha1": "3ebbaf5062dcae64cae5ee86bbba94f0b1ded96e",
-        "translated_on": "2026-05-31",
+        "source_sha1": "bd7435915230c15d9e4b01bb31ef74389a6bed8f",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -87,15 +87,15 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "8c6dbc17ef3cad0556f2f6ca0bcb27ceae2bab3e",
-        "translated_on": "2026-06-01",
+        "source_sha1": "184bf2a42dce231155ff4efea89b46ff56d746e2",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "8c6dbc17ef3cad0556f2f6ca0bcb27ceae2bab3e",
-        "translated_on": "2026-06-01",
+        "source_sha1": "184bf2a42dce231155ff4efea89b46ff56d746e2",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -103,15 +103,15 @@
     "grants.html": {
       "fr": {
         "file": "grants.fr.html",
-        "source_sha1": "fd8bfb9663637ee0f6463e045e06b79ec79674e0",
-        "translated_on": "2026-05-31",
+        "source_sha1": "eadfe9a8e31199809cd241de49e71c1e394861de",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "grants.de.html",
-        "source_sha1": "fd8bfb9663637ee0f6463e045e06b79ec79674e0",
-        "translated_on": "2026-05-31",
+        "source_sha1": "eadfe9a8e31199809cd241de49e71c1e394861de",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -119,15 +119,15 @@
     "index.html": {
       "fr": {
         "file": "index.fr.html",
-        "source_sha1": "7eca9ec70069e49d43ab0fa3ec54c0166d194e8a",
-        "translated_on": "2026-05-31",
+        "source_sha1": "cba30c8e211680e92c27279eb539892a2634dcc9",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "index.de.html",
-        "source_sha1": "7eca9ec70069e49d43ab0fa3ec54c0166d194e8a",
-        "translated_on": "2026-05-31",
+        "source_sha1": "cba30c8e211680e92c27279eb539892a2634dcc9",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -135,15 +135,15 @@
     "press-kit.html": {
       "fr": {
         "file": "press-kit.fr.html",
-        "source_sha1": "2ef2607c58544e690bcd7acaf9b43ede38c8d348",
-        "translated_on": "2026-05-31",
+        "source_sha1": "588b04770f79b88903110713020b2eb3f4f7a5cb",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "press-kit.de.html",
-        "source_sha1": "2ef2607c58544e690bcd7acaf9b43ede38c8d348",
-        "translated_on": "2026-05-31",
+        "source_sha1": "588b04770f79b88903110713020b2eb3f4f7a5cb",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -151,15 +151,15 @@
     "faq.html": {
       "fr": {
         "file": "faq.fr.html",
-        "source_sha1": "4414f9bcf1ab5c784717c8de42e66323c4614cb4",
-        "translated_on": "2026-05-30",
+        "source_sha1": "c1a959eb19b30e5f19d27b88b9c1d0667084a2ab",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "faq.de.html",
-        "source_sha1": "4414f9bcf1ab5c784717c8de42e66323c4614cb4",
-        "translated_on": "2026-05-30",
+        "source_sha1": "c1a959eb19b30e5f19d27b88b9c1d0667084a2ab",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -167,15 +167,15 @@
     "glossary.html": {
       "fr": {
         "file": "glossary.fr.html",
-        "source_sha1": "a12fa16f36be01c9ae66837853f645eae08832e5",
-        "translated_on": "2026-05-31",
+        "source_sha1": "77c6dc2994c02fbf8bb52d88d8c92a36f74f6a82",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "glossary.de.html",
-        "source_sha1": "a12fa16f36be01c9ae66837853f645eae08832e5",
-        "translated_on": "2026-05-31",
+        "source_sha1": "77c6dc2994c02fbf8bb52d88d8c92a36f74f6a82",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -183,15 +183,15 @@
     "about.html": {
       "fr": {
         "file": "about.fr.html",
-        "source_sha1": "c766245c5d4008b4d3f39a0e10d9690b1d459ea4",
-        "translated_on": "2026-06-01",
+        "source_sha1": "1e1a92f1c358d1828e3c30d001f951ac14502d91",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "about.de.html",
-        "source_sha1": "c766245c5d4008b4d3f39a0e10d9690b1d459ea4",
-        "translated_on": "2026-06-01",
+        "source_sha1": "1e1a92f1c358d1828e3c30d001f951ac14502d91",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -199,15 +199,15 @@
     "outputs.html": {
       "fr": {
         "file": "outputs.fr.html",
-        "source_sha1": "b5cf53b58665623afbc93fa26661d272e47c70e7",
-        "translated_on": "2026-05-31",
+        "source_sha1": "c38889b372e210b619773541710327598854dda5",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "outputs.de.html",
-        "source_sha1": "b5cf53b58665623afbc93fa26661d272e47c70e7",
-        "translated_on": "2026-05-31",
+        "source_sha1": "c38889b372e210b619773541710327598854dda5",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -215,15 +215,15 @@
     "news.html": {
       "fr": {
         "file": "news.fr.html",
-        "source_sha1": "75ffe880c99b356075f908154452881fbc7a4ec1",
-        "translated_on": "2026-05-31",
+        "source_sha1": "0377f78f5b18dde170f61effc5a535ff2307bcfb",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "news.de.html",
-        "source_sha1": "75ffe880c99b356075f908154452881fbc7a4ec1",
-        "translated_on": "2026-05-31",
+        "source_sha1": "0377f78f5b18dde170f61effc5a535ff2307bcfb",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -231,15 +231,15 @@
     "roadmap.html": {
       "fr": {
         "file": "roadmap.fr.html",
-        "source_sha1": "7613a9148b2143d24230cb1609270a64b8a7765c",
-        "translated_on": "2026-05-31",
+        "source_sha1": "ceacb73921354e444000b542a967cca524432f99",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "roadmap.de.html",
-        "source_sha1": "7613a9148b2143d24230cb1609270a64b8a7765c",
-        "translated_on": "2026-05-31",
+        "source_sha1": "ceacb73921354e444000b542a967cca524432f99",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
@@ -247,15 +247,15 @@
     "working-groups.html": {
       "fr": {
         "file": "working-groups.fr.html",
-        "source_sha1": "361935aba65a55a852983dc8d6e5723c8a34ccca",
-        "translated_on": "2026-05-31",
+        "source_sha1": "87a442d62581f8bf4aa6a9ea82d9fff37e75762b",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "working-groups.de.html",
-        "source_sha1": "361935aba65a55a852983dc8d6e5723c8a34ccca",
-        "translated_on": "2026-05-31",
+        "source_sha1": "87a442d62581f8bf4aa6a9ea82d9fff37e75762b",
+        "translated_on": "2026-06-02",
         "status": "beta",
         "reviewed_by": null
       }
