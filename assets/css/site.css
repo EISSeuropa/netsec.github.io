@@ -3324,6 +3324,17 @@ body.search-open{overflow:hidden}
   border-bottom:1px solid transparent;transition:border-color .2s var(--ease);
 }
 .rm-card .notes-link:hover{border-bottom-color:currentColor}
+/* Closed-issue tally on shipped cards, sitting on the same row as the
+   Release-notes link (roadmap-progress.js inserts it just before the
+   link). A green check reads the milestone as completed. */
+.rm-card .rm-shipped-count{
+  display:inline-block;margin-top:8px;margin-right:14px;
+  font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;
+}
+.rm-card .rm-shipped-count::before{
+  content:"\2713\00a0";color:#2e9e6a;font-weight:700;
+}
+.dark .rm-card .rm-shipped-count::before{color:#5fcf94}
 
 /* Considering-for-later — deferred / under-watch items */
 .rm-later{
