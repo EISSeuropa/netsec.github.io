@@ -2605,6 +2605,14 @@ body{padding-top:var(--whats-new-h, 0px)}
 .members-grid.is-compact .member-card:not(.is-expanded) .member-wgs{
   margin:4px 0 0;justify-content:flex-start;
 }
+/* Compact mode: the mentorship badge sits snug under the WG chips,
+   left-aligned like them. Without this it keeps the detailed-view
+   margin (-4px top, 14px bottom), leaving a dead gap below the badge
+   that makes a member's compact card noticeably taller than its
+   neighbours. */
+.members-grid.is-compact .member-card:not(.is-expanded) .member-mentorship{
+  margin:4px 0 0;justify-content:flex-start;
+}
 .members-grid.is-compact .member-card:not(.is-expanded) .member-bio,
 .members-grid.is-compact .member-card:not(.is-expanded) .member-bio-toggle,
 .members-grid.is-compact .member-card:not(.is-expanded) .member-contact{
