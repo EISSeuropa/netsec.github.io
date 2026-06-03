@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=de6e8589">
+<link rel="stylesheet" href="assets/css/site.css?v=2826b86b">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -261,6 +261,22 @@
       <button type="button" class="members-keyword-filter-toggle" id="members-keyword-filter-toggle" aria-expanded="false" hidden>Show all</button>
     </div>
 
+    <!-- Mentorship filter. A separate AND-combined dimension: members
+         can offer mentoring, seek a mentor, both, or neither. Single-
+         select (All / Mentors / Seeking a mentor), transient (no URL
+         hash). Hidden entirely until at least one member carries a
+         mentorship facet; each chip is hidden individually if no
+         member has that side. Mirrors the data-driven reveal of the
+         keyword filter above. -->
+    <div class="members-mentorship-filter" id="members-mentorship-filter" role="group" aria-label="Filter by mentorship" hidden>
+      <span class="members-mentorship-filter-label">Mentorship</span>
+      <div class="members-mentorship-filter-chips">
+        <button type="button" class="members-mentorship-chip" data-mentorship="all" aria-pressed="true">All</button>
+        <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Mentors</button>
+        <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Seeking a mentor</button>
+      </div>
+    </div>
+
     <p class="members-count" id="members-count" aria-live="polite"></p>
 
     <div id="members-empty" hidden class="members-empty glass">
@@ -300,6 +316,7 @@
       <p class="member-role"></p>
       <p class="member-affiliation"></p>
       <div class="member-wgs" role="group" aria-label="Working-group membership"></div>
+      <div class="member-mentorship" aria-label="Mentorship" hidden></div>
       <p class="member-bio"></p>
       <div class="member-keywords" aria-label="Research interests" hidden></div>
       <div class="member-contact" aria-label="Contact"></div>
@@ -369,7 +386,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=84743700" defer></script>
+<script src="assets/js/site.js?v=4702a863" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
 <script>
@@ -380,6 +397,7 @@
   const countEl = document.getElementById('members-count');
   const search = document.getElementById('member-search');
   const filterChips = document.querySelectorAll('.members-filter-chip');
+  const mentorshipChips = document.querySelectorAll('.members-mentorship-chip');
   const countrySelect = document.getElementById('member-country');
   const tpl = document.getElementById('member-card-template');
   const viewToggle = document.querySelectorAll('.view-toggle button[data-view]');
@@ -575,6 +593,13 @@
   //                          these as "MC member · <Country>")
   let activeWG = 'all';
   let activeCountry = 'all';
+  // Mentorship filter: a separate AND dimension.
+  //   'all'    — no mentorship filter
+  //   'mentor' — members open to mentoring (m.mentorship includes "mentor")
+  //   'mentee' — members seeking a mentor (m.mentorship includes "mentee")
+  // Single-select, transient (no URL hash). The chip row stays hidden
+  // until the data carries at least one mentorship facet.
+  let activeMentorship = 'all';
   // Research-interest filter: a Set of canonical-keyword *slugs*
   // (lowercase, non-word → hyphen). Kept as slugs so URL hash
   // round-trips are stable and chip-on-card clicks resolve cleanly.
@@ -673,6 +698,9 @@
       }
       if (activeCountry !== 'all') {
         if ((m.country || '') !== activeCountry) return false;
+      }
+      if (activeMentorship !== 'all') {
+        if (!(m.mentorship || []).includes(activeMentorship)) return false;
       }
       if (q) {
         const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
@@ -782,6 +810,28 @@
       } else {
         wgWrap.remove();
       }
+      // Mentorship badges. Offering ("mentor") and/or seeking
+      // ("mentee"), read from m.mentorship (a list of role tags
+      // emitted by sync-bios.py). The block stays hidden when the
+      // member carries no facet, so it costs nothing while the Form
+      // question is dormant and no member has opted in yet.
+      const mentorWrap = node.querySelector('.member-mentorship');
+      const mentorship = Array.isArray(m.mentorship) ? m.mentorship : [];
+      const MENTOR_BADGES = [
+        { tag: 'mentor', cls: 'is-offering', label: 'Mentor' },
+        { tag: 'mentee', cls: 'is-seeking', label: 'Seeking a mentor' },
+      ];
+      let mentorAdded = false;
+      MENTOR_BADGES.forEach(badge => {
+        if (!mentorship.includes(badge.tag)) return;
+        const span = document.createElement('span');
+        span.className = 'mentorship-badge ' + badge.cls;
+        span.textContent = window.netsecT(badge.label);
+        mentorWrap.appendChild(span);
+        mentorAdded = true;
+      });
+      if (mentorAdded) mentorWrap.removeAttribute('hidden');
+      else mentorWrap.remove();
       // Bio (or pending notice)
       const bio = node.querySelector('.member-bio');
       if (m.bio) {
@@ -986,6 +1036,13 @@
       render();
     });
   });
+  mentorshipChips.forEach(b => {
+    b.addEventListener('click', () => {
+      activeMentorship = b.dataset.mentorship;
+      mentorshipChips.forEach(o => o.setAttribute('aria-pressed', o === b));
+      render();
+    });
+  });
   if (countrySelect) {
     countrySelect.addEventListener('change', () => {
       activeCountry = countrySelect.value;
@@ -1012,6 +1069,27 @@
       const opt = document.createElement('option');
       opt.value = c; opt.textContent = c;
       countrySelect.appendChild(opt);
+    });
+  }
+
+  // Reveal the mentorship filter only when the data carries at least
+  // one mentorship facet, and hide each side's chip individually when
+  // no member is on that side. Mirrors the keyword filter's data-
+  // driven reveal: the dimension stays invisible until the Form
+  // question is live and members opt in.
+  function setupMentorshipFilter() {
+    const root = document.getElementById('members-mentorship-filter');
+    if (!root) return;
+    const hasMentor = MEMBERS.some(m => (m.mentorship || []).includes('mentor'));
+    const hasMentee = MEMBERS.some(m => (m.mentorship || []).includes('mentee'));
+    if (!hasMentor && !hasMentee) {
+      root.hidden = true;
+      return;
+    }
+    root.hidden = false;
+    mentorshipChips.forEach(chip => {
+      if (chip.dataset.mentorship === 'mentor') chip.hidden = !hasMentor;
+      if (chip.dataset.mentorship === 'mentee') chip.hidden = !hasMentee;
     });
   }
 
@@ -1178,6 +1256,7 @@
     // lands with those filters already applied.
     parseHashKeywords();
     populateCountryFilter();
+    setupMentorshipFilter();
     renderKeywordFilter();
     render();
     // Surface how current the directory is, driven by bios.json's
