@@ -3,7 +3,8 @@
  * Reads data/roadmap-progress.json (per-milestone closed/total, synced
  * from the repo's GitHub milestones by scripts/sync-roadmap-progress.py)
  * and renders a progress bar into each *in-flight* roadmap card that
- * carries a data-milestone attribute. Shipped cards are left alone.
+ * carries a data-milestone attribute, plus a closed-issue tally beside
+ * the release notes on each *shipped* card.
  *
  * Fail-soft: on any error, or for a card with no matching milestone, no
  * bar is added and the card renders exactly as authored. Same
@@ -19,6 +20,7 @@
       aria: 'Milestone progress',
       pct: function (n) { return n + '%'; },
       done: function (c, t) { return c + ' of ' + t + ' task' + (t === 1 ? '' : 's') + ' done'; },
+      doneCount: function (c) { return c + ' task' + (c === 1 ? '' : 's') + ' done'; },
     },
     fr: {
       aria: 'Progression du jalon',
@@ -27,11 +29,15 @@
         return c + ' tâche' + (c > 1 ? 's' : '') + ' sur ' + t
           + ' terminée' + (c > 1 ? 's' : '');
       },
+      doneCount: function (c) {
+        return c + ' tâche' + (c > 1 ? 's' : '') + ' terminée' + (c > 1 ? 's' : '');
+      },
     },
     de: {
       aria: 'Meilenstein-Fortschritt',
       pct: function (n) { return n + ' %'; },
       done: function (c, t) { return c + ' von ' + t + ' Aufgaben erledigt'; },
+      doneCount: function (c) { return (c === 1 ? '1 Aufgabe' : c + ' Aufgaben') + ' erledigt'; },
     },
   };
   var t = I18N[locale] || I18N.en;
@@ -93,16 +99,44 @@
     .then(function (r) { return r.json(); })
     .then(function (data) {
       var ms = (data && data.milestones) || {};
-      var cards = document.querySelectorAll('.rm-card[data-milestone]');
+      var cards = document.querySelectorAll('.rm-card');
       Array.prototype.forEach.call(cards, function (card) {
         var entry = card.closest('.rm-entry');
-        // In-flight only: skip shipped (and anything else) even if the
-        // attribute lingers after a release.
-        if (!entry || !(entry.classList.contains('planned')
-            || entry.classList.contains('in-progress'))) return;
+        if (!entry) return;
 
-        var m = ms[card.getAttribute('data-milestone')];
-        if (!m || !m.total || m.percent == null) return;
+        var notes = card.querySelector('.notes-link');
+
+        // Milestone key: the explicit data-milestone attribute (in-flight
+        // cards carry it), else parsed from the release-notes link, which
+        // every shipped card points at (/releases/tag/vX.Y.Z). Deriving it
+        // from the link means the closed-issue tally appears on every
+        // historical shipped card without retrofitting the attribute.
+        var key = card.getAttribute('data-milestone');
+        if (!key && notes) {
+          var mt = (notes.getAttribute('href') || '')
+            .match(/\/releases\/tag\/(v\d+\.\d+\.\d+)/);
+          if (mt) key = mt[1];
+        }
+        var m = key && ms[key];
+        if (!m || !m.total) return;
+
+        // Shipped: a closed-issue tally beside the release notes. (The
+        // milestone is closed, so closed === total; we show the count
+        // rather than a full progress bar.) Some early milestones were
+        // sparsely tagged, so a low count there is honest, not a bug.
+        if (entry.classList.contains('shipped')) {
+          var count = el('span', {
+            'class': 'rm-shipped-count', 'text': t.doneCount(m.closed),
+          });
+          if (notes) card.insertBefore(count, notes);
+          else card.appendChild(count);
+          return;
+        }
+
+        // In-flight (planned, or promoted to in-progress above): a bar.
+        if (!(entry.classList.contains('planned')
+            || entry.classList.contains('in-progress'))) return;
+        if (m.percent == null) return;
 
         var pct = Math.max(0, Math.min(100, m.percent));
         var bar = el('div', {
@@ -121,7 +155,6 @@
 
         // Sit the bar above the Release-notes link if there is one,
         // otherwise at the end of the card body.
-        var notes = card.querySelector('.notes-link');
         if (notes) card.insertBefore(bar, notes);
         else card.appendChild(bar);
       });
