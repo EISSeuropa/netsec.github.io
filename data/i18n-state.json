@@ -87,14 +87,14 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "b31d69f42a8a1f1c47cb9a512a0e7f19268c5f00",
+        "source_sha1": "5ea9f31b30ca4d44742afd3c3a99bb1f00a77e02",
         "translated_on": "2026-06-03",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "b31d69f42a8a1f1c47cb9a512a0e7f19268c5f00",
+        "source_sha1": "5ea9f31b30ca4d44742afd3c3a99bb1f00a77e02",
         "translated_on": "2026-06-03",
         "status": "beta",
         "reviewed_by": null
