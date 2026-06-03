@@ -47,8 +47,8 @@
       'Clear': 'Effacer',
       'Filter by research interest': 'Filtrer par domaine de recherche',
       'Directory last updated {0}.': 'Annuaire mis à jour le {0}.',
-      'Mentor': 'Mentor',
-      'Seeking a mentor': 'En recherche de mentor',
+      'Available to mentor': 'Disponible comme mentor',
+      'Seeking mentorship': 'En recherche de mentorat',
     },
     de: {
       'Action Chair': 'Aktionsvorsitz',
@@ -84,8 +84,8 @@
       'Clear': 'Zurücksetzen',
       'Filter by research interest': 'Nach Forschungsschwerpunkt filtern',
       'Directory last updated {0}.': 'Verzeichnis zuletzt aktualisiert am {0}.',
-      'Mentor': 'Mentor',
-      'Seeking a mentor': 'Sucht Mentor',
+      'Available to mentor': 'Als Mentor verfügbar',
+      'Seeking mentorship': 'Sucht Mentoring',
     },
   };
   /** Translate a known string for the current page's language.
