@@ -30,6 +30,7 @@ render_pr_title = sync_bios.render_pr_title
 render_pr_body_overview = sync_bios.render_pr_body_overview
 load_keyword_aliases = sync_bios.load_keyword_aliases
 normalise_keyword = sync_bios.normalise_keyword
+parse_mentorship = sync_bios.parse_mentorship
 
 
 def expect(label: str, got, want) -> None:
@@ -601,9 +602,31 @@ def test_normalise_keyword() -> None:
     expect("british spelling unchanged", norm("Defence policy"), "Defence policy")
 
 
+def test_parse_mentorship() -> None:
+    """Mentorship checkbox cell -> {mentor, mentee} role tags."""
+    print("\nparse_mentorship():")
+    expect("empty -> []", parse_mentorship(""), [])
+    expect("none -> []", parse_mentorship(None), [])
+    expect("offering only",
+           parse_mentorship("Open to mentoring early-career researchers"),
+           ["mentor"])
+    expect("seeking only",
+           parse_mentorship("Looking for a mentor"),
+           ["mentee"])
+    expect("both ticked (order: mentor, mentee)",
+           parse_mentorship("Open to mentoring early-career researchers, Looking for a mentor"),
+           ["mentor", "mentee"])
+    expect("order-independent in cell",
+           parse_mentorship("Looking for a mentor, Open to mentoring early-career researchers"),
+           ["mentor", "mentee"])
+    expect("unrelated text -> []",
+           parse_mentorship("Maybe later"), [])
+
+
 def main() -> None:
     test_name_key()
     test_normalise_keyword()
+    test_parse_mentorship()
     test_country_key()
     test_merge_helferich()
     test_merge_country_guards_false_positive()

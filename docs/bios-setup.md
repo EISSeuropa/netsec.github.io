@@ -30,16 +30,19 @@ Google Form ──► Google Sheet ──► sync-bios.yml (weekly) ──► PR
 | 6 | **Short bio (max 300 words)** | Paragraph | ✅ |
 | 7 | **Research keywords (comma-separated, 3–5 suggested)** | Short answer | ⬜ |
 | 8 | **Working Group involvement (tick all that apply)** | Checkboxes: *WG1 · Building the Network · WG2 · Transfer of Knowledge · WG3 · Fostering the Next Generation · WG4 · Ensuring Inclusion · None yet* | ⬜ |
-| 9 | **Personal or institutional website (optional)** | Short answer | ⬜ |
-| 10 | **ORCID iD (optional)** | Short answer | ⬜ |
-| 11 | **LinkedIn URL (optional)** | Short answer | ⬜ |
-| 12 | **X / Twitter URL (optional)** | Short answer | ⬜ |
-| 13 | **Bluesky URL (optional)** | Short answer | ⬜ |
-| 14 | **Mastodon URL (optional)** | Short answer | ⬜ |
-| 15 | **Headshot photo (optional)** | File upload — image only — max 5 MB | ⬜ |
-| 16 | **I consent to publication of my bio on netsec-cost.eu** | Checkboxes — single option | ✅ |
+| 9 | **Mentorship (optional)** | Checkboxes: *Open to mentoring early-career researchers · Looking for a mentor* | ⬜ |
+| 10 | **Personal or institutional website (optional)** | Short answer | ⬜ |
+| 11 | **ORCID iD (optional)** | Short answer | ⬜ |
+| 12 | **LinkedIn URL (optional)** | Short answer | ⬜ |
+| 13 | **X / Twitter URL (optional)** | Short answer | ⬜ |
+| 14 | **Bluesky URL (optional)** | Short answer | ⬜ |
+| 15 | **Mastodon URL (optional)** | Short answer | ⬜ |
+| 16 | **Headshot photo (optional)** | File upload — image only — max 5 MB | ⬜ |
+| 17 | **I consent to publication of my bio on netsec-cost.eu** | Checkboxes — single option | ✅ |
 
 > **WG-checkboxes parsing.** The script extracts the digits 1–4 from whatever the checkbox column contains, so the precise wording of each option doesn't matter as long as it includes the WG number. *"WG2 · Transfer of Knowledge"* parses to `2`; *"None yet"* parses to no WG. You can rename the WGs freely later.
+
+> **Mentorship parsing.** The script reads the two checkbox options into a `mentorship` list of role tags. *"Open to mentoring …"* parses to `mentor`; *"Looking for a mentor"* parses to `mentee`; a member can tick both, or neither. The match is a tolerant substring check on the cell text, so light rewording is safe as long as an offering option still says *mentoring* / *as a mentor* and a seeking option still says *looking for* / *seeking a mentor*. Put the senior / mid-level framing (mentors are typically senior or mid-level scholars) in the question's **description** text, not in the option labels: it stays guidance for respondents and never reaches the parser. The field is dormant until the question is live and members resubmit; an absent column parses to an empty list and renders nothing.
 
 In *Settings → Responses*, configure as follows:
 
