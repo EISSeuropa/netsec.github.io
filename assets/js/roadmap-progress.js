@@ -122,9 +122,15 @@
 
         // Shipped: a closed-issue tally beside the release notes. (The
         // milestone is closed, so closed === total; we show the count
-        // rather than a full progress bar.) Some early milestones were
-        // sparsely tagged, so a low count there is honest, not a bug.
+        // rather than a full progress bar.) Only from v1.8.1 onward:
+        // milestones were sparsely tagged before then (v1.7.0 and v1.8.0
+        // carried only a couple of issues each), so an earlier count
+        // would undersell the release rather than inform.
         if (entry.classList.contains('shipped')) {
+          var v = key.replace(/^v/, '').split('.');
+          // Rank as MAJOR*10000 + MINOR*100 + PATCH (minor/patch < 100).
+          // 10801 == v1.8.1, the first release with full milestone tagging.
+          if (((+v[0]) * 10000 + (+v[1]) * 100 + (+v[2])) < 10801) return;
           var count = el('span', {
             'class': 'rm-shipped-count', 'text': t.doneCount(m.closed),
           });
