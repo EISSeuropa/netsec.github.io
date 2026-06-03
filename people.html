@@ -188,7 +188,7 @@
       </p>
       <ul class="welcome-strip-tips">
         <li>🔍 <strong>Search</strong> by name, affiliation, or country.</li>
-        <li>🎚️ <strong>Filter</strong> by working group, MC role, or country.</li>
+        <li>🎚️ <strong>Filter</strong> by working group, MC role, country, or mentorship status.</li>
         <li>🏷️ <strong>Drill in by research interest</strong>: tap a chip above the directory, or any keyword pill on a member card, to narrow the results.</li>
         <li>🪪 <strong>Switch density</strong> in the toolbar to fit more on screen.</li>
         <li>👤 <strong>Anyone can join</strong>, see the form at the foot of the page.</li>
@@ -272,8 +272,8 @@
       <span class="members-mentorship-filter-label">Mentorship</span>
       <div class="members-mentorship-filter-chips">
         <button type="button" class="members-mentorship-chip" data-mentorship="all" aria-pressed="true">All</button>
-        <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Mentors</button>
-        <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Seeking a mentor</button>
+        <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Available to mentor</button>
+        <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Seeking mentorship</button>
       </div>
     </div>
 
@@ -386,7 +386,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=08edac26" defer></script>
+<script src="assets/js/site.js?v=1e56233c" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
 <script>
@@ -444,6 +444,9 @@
         { target: '.members-keyword-filter',
           title: 'Filter by research interest',
           body:  'Chips along this row show the most common research interests in the directory, with submission counts. Tap one to narrow to bios that share it; tap a second to widen the match (any interest in the set passes). The keyword pills on each member card are clickable too. The active selection lives in the URL, so a filtered view is shareable just by copying the address.' },
+        { target: '.members-mentorship-filter',
+          title: 'Filter by mentorship',
+          body:  'Members can flag that they are available to mentor early-career researchers, or seeking mentorship themselves. Use these chips to find them. This row appears once at least one member has opted in.' },
         { target: '.view-toggle',
           title: 'Switch card density',
           body:  'Detailed view shows photos and bios; compact view shows initials, name, affiliation, and WG chips, three across on a desktop. Click any compact card to expand it in place.' },

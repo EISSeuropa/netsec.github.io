@@ -598,8 +598,10 @@
       const step = steps[idx];
       if (!step) return done();
       const target = document.querySelector(step.target);
-      if (!target) {
-        // Target missing — silently advance to keep the tour going.
+      if (!target || target.hidden) {
+        // Target missing, or present but hidden (e.g. a data-driven
+        // filter row that has no data yet, like the keyword or
+        // mentorship filters) — silently advance to keep the tour going.
         if (idx < steps.length - 1) return next();
         return done();
       }
