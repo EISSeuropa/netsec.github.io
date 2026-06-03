@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-05-29T19:00:23+00:00",
+  "generated_at": "2026-06-03T14:33:42+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-05-29T19:00:23+00:00"
+    "last_synced": "2026-06-03T14:33:42+00:00"
   },
   "members": [
     {
@@ -458,9 +458,45 @@
         "EU foreign policy",
         "Grand strategy"
       ]
+    },
+    {
+      "id": "meret-steybe",
+      "name": "Ms Meret Steybe",
+      "country": "Switzerland",
+      "country_code": "ch",
+      "affiliation": "ETH Zurich - Center for Security Studies",
+      "position": "Researcher",
+      "roles": [],
+      "wgs": [],
+      "wg_leadership": {},
+      "bio": "Meret Steybe is a security policy researcher at the Center for Security \nStudies (CSS) at ETH Zurich, where she works on German and European security \npolicy, institutional impact assessment, and strategic planning. \n\nPreviously, Meret served as a policy advisor for the Bundestag's Study Commission \non \"Lessons from Afghanistan for Germany's Comprehensive International \nEngagement in the Future,\" where she developed cross-party positions and \ncoordinated strategic negotiations. She has deep expertise in translating \ncomplex security challenges into actionable policy recommendations.\n\nMeret holds a bachelor's degree in European Studies with a minor in European and International Law, and a master's degree in European Public Affairs, both from Maastricht University.",
+      "keywords": [
+        "EU Foreign Policy",
+        "Germany Security Policy",
+        "Policy Evaluation & Lessons Learned (Afghanistan)"
+      ],
+      "email": "meret.steybe@sipo.gess.ethz.ch",
+      "website": "https://css.ethz.ch/en/center/people/steybe-meret.html",
+      "orcid": "",
+      "linkedin": "https://ch.linkedin.com/in/meret-steybe-18b857199",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/meret-steybe.jpg",
+      "source": "form",
+      "photo_source_sha256": "8c73d65e4a5c41ee4a1861935d7f425b8cc090ffb857e09cad75c2d96b8dbc8d",
+      "canonical_keywords": [
+        "EU foreign policy",
+        "Germany security policy",
+        "Policy evaluation & lessons learned (afghanistan)"
+      ]
     }
   ],
   "keyword_aggregate": [
+    {
+      "keyword": "EU foreign policy",
+      "count": 2
+    },
     {
       "keyword": "Defence",
       "count": 1
@@ -486,15 +522,15 @@
       "count": 1
     },
     {
-      "keyword": "EU foreign policy",
-      "count": 1
-    },
-    {
       "keyword": "EU–NATO relations",
       "count": 1
     },
     {
       "keyword": "Foreign policy analysis",
+      "count": 1
+    },
+    {
+      "keyword": "Germany security policy",
       "count": 1
     },
     {
@@ -507,6 +543,10 @@
     },
     {
       "keyword": "International security",
+      "count": 1
+    },
+    {
+      "keyword": "Policy evaluation & lessons learned (afghanistan)",
       "count": 1
     },
     {
