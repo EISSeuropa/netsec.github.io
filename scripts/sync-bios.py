@@ -222,6 +222,41 @@ def parse_wgs(raw: str) -> list[int]:
     return sorted({int(d) for d in matches})
 
 
+def parse_mentorship(raw: str) -> list[str]:
+    """Map the mentorship checkbox cell to role tags for the directory.
+
+    The cell is the comma-joined list of ticked options. We emit a
+    small ordered list drawn from {"mentor", "mentee"}:
+
+      - "mentor"  the member is offering to mentor (a mid-career or
+                  senior scholar open to mentoring early-career ones).
+      - "mentee"  the member is looking for a mentor.
+
+    Matching is tolerant substring matching against the option text, so
+    light edits to the Form wording keep working. Distinct phrases keep
+    the two directions apart even though both contain "mentor":
+    "open to mentoring" / "as a mentor" -> mentor;
+    "looking for a mentor" / "seeking a mentor" -> mentee. An empty or
+    absent cell (the question is optional, and unconfigured columns read
+    as "") yields []."""
+    if not raw:
+        return []
+    s = str(raw).lower()
+    out: list[str] = []
+    if any(p in s for p in (
+        "open to mentoring", "offer mentor", "offering mentor",
+        "happy to mentor", "as a mentor", "provide mentor",
+        "mentoring early",
+    )):
+        out.append("mentor")
+    if any(p in s for p in (
+        "looking for a mentor", "seeking a mentor", "find a mentor",
+        "want a mentor", "need a mentor", "be mentored", "as a mentee",
+    )):
+        out.append("mentee")
+    return out
+
+
 def parse_keywords(raw: str) -> list[str]:
     if not raw:
         return []
@@ -620,6 +655,7 @@ def row_to_member(
         "position": (row.get(cols.get("position", ""), "") or "").strip(),
         "roles": [],
         "wgs": parse_wgs(row.get(cols.get("wgs", ""), "")),
+        "mentorship": parse_mentorship(row.get(cols.get("mentorship", ""), "")),
         "wg_leadership": {},
         "bio": (row.get(cols.get("bio", ""), "") or "").strip(),
         "keywords": parse_keywords(row.get(cols.get("keywords", ""), "")),
@@ -1171,6 +1207,7 @@ _FIELD_LABELS = {
     "bluesky": "Bluesky",
     "mastodon": "Mastodon",
     "wgs": "Working Group memberships",
+    "mentorship": "mentorship",
 }
 
 

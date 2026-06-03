@@ -18,6 +18,7 @@
     "bio": "Short bio (max. 300 words)",
     "keywords": "Research keywords (comma-separated, 3 to 5 suggested)",
     "wgs": "Working Group involvement (tick all that apply)",
+    "mentorship": "Mentorship (optional)",
     "website": "Personal or institutional website (optional)",
     "orcid": "ORCID iD (optional)",
     "linkedin": "LinkedIn URL (optional)",
