@@ -190,7 +190,7 @@
       </p>
       <ul class="welcome-strip-tips">
         <li>🔍 <strong>Suchen</strong> nach Name, Affiliation oder Land.</li>
-        <li>🎚️ <strong>Filtern</strong> nach Arbeitsgruppe, MC-Rolle oder Land.</li>
+        <li>🎚️ <strong>Filtern</strong> nach Arbeitsgruppe, MC-Rolle, Land oder Mentoring-Status.</li>
         <li>🏷️ <strong>Nach Forschungsschwerpunkt filtern</strong>: Klicken Sie auf eine Pille über dem Verzeichnis oder auf eine Schlüsselwort-Pille auf einer Karte, um die Ergebnisse einzugrenzen.</li>
         <li>🪪 <strong>Dichte umschalten</strong> in der Werkzeugleiste, um mehr zu sehen.</li>
         <li>👤 <strong>Beitritt offen für alle</strong>, das Formular steht am Seitenende.</li>
@@ -260,8 +260,8 @@
       <span class="members-mentorship-filter-label">Mentoring</span>
       <div class="members-mentorship-filter-chips">
         <button type="button" class="members-mentorship-chip" data-mentorship="all" aria-pressed="true">Alle</button>
-        <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Mentor:innen</button>
-        <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Sucht Mentor</button>
+        <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Als Mentor verfügbar</button>
+        <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Sucht Mentoring</button>
       </div>
     </div>
 
@@ -349,7 +349,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=08edac26" defer></script>
+<script src="assets/js/site.js?v=1e56233c" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json.
      This script is identical to the English version; translatable
@@ -398,6 +398,9 @@
       { target: '.members-keyword-filter',
         title: 'Nach Forschungsschwerpunkt filtern',
         body:  'Die Pillen in dieser Reihe zeigen die häufigsten Forschungsschwerpunkte im Verzeichnis mit der Anzahl der zugehörigen Bios. Klicken Sie auf eine Pille, um das Verzeichnis auf passende Bios einzugrenzen; klicken Sie auf eine zweite, um die Auswahl zu erweitern (Bios werden angezeigt, sobald ein Schwerpunkt aus der Auswahl vorkommt). Die Schlüsselwort-Pillen auf jeder Karte sind ebenfalls klickbar. Die aktive Auswahl steht in der URL: zum Teilen einer gefilterten Ansicht reicht es, die Adresse zu kopieren.' },
+      { target: '.members-mentorship-filter',
+        title: 'Nach Mentoring filtern',
+        body:  'Mitglieder können angeben, dass sie als Mentor für Nachwuchsforschende verfügbar sind oder selbst Mentoring suchen. Mit diesen Chips finden Sie sie. Diese Reihe erscheint, sobald mindestens ein Mitglied teilnimmt.' },
       { target: '.view-toggle',
         title: 'Kartendichte wechseln',
         body:  'Detailansicht: Fotos und Bios. Kompaktansicht: Initialen, Name, Affiliation und WG-Chips, drei Karten pro Reihe auf dem Desktop. Klicken Sie eine kompakte Karte an, um sie an Ort und Stelle aufzuklappen.' },
