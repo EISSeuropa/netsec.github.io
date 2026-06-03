@@ -26,7 +26,7 @@
 #   auto-merge will sit forever waiting for green.
 #
 #   The clean fix is a fine-grained Personal Access Token stored as
-#   `secrets.WORKFLOW_PAT` (or a GitHub App). When set, this workflow
+#   `secrets.AUTOPR_TOKEN` (or a GitHub App). When set, this workflow
 #   uses it to open the PR and the resulting `pull_request` event
 #   will trigger the rest of the suite. When unset, the workflow
 #   falls back to `GITHUB_TOKEN` and the PR will need a manual nudge
@@ -108,11 +108,11 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)
         with:
-          # Prefer the WORKFLOW_PAT when present so the PR triggers
+          # Prefer the AUTOPR_TOKEN when present so the PR triggers
           # the rest of the workflow suite (status checks, etc.).
           # Falls back to GITHUB_TOKEN; the PR will then need a
           # manual nudge to acquire green checks.
-          token: ${{ secrets.WORKFLOW_PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
           branch: indico-sync/auto
           base: main
           delete-branch: true
@@ -130,7 +130,7 @@ jobs:
       - name: Enable auto-merge on the PR
         if: steps.cpr.outputs.pull-request-number
         env:
-          GH_TOKEN: ${{ secrets.WORKFLOW_PAT || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" \
             --auto --squash --repo "${{ github.repository }}"

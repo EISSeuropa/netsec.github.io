@@ -94,7 +94,7 @@ jobs:
       - name: Open or update PR if WG_MAP changed
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
           branch: cost-sync/auto
           base: main
           delete-branch: true
