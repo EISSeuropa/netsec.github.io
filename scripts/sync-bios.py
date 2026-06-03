@@ -313,13 +313,18 @@ def load_keyword_aliases() -> tuple[set[str], dict[str, str], dict[str, str]]:
               f"to identity normalisation.")
         return acronym_set, alias_map, spelling_map
 
-    for entry in doc.get("acronyms", []):
+    # `acronyms` and `proper_nouns` feed the same preservation set: any
+    # token matching one (case-insensitively) is emitted in the exact
+    # listed form, bypassing the sentence-case lowercasing. Acronyms keep
+    # their all-caps form (EU, NATO); proper nouns keep their Title-case
+    # form (Afghanistan, Ukraine) so they don't lowercase mid-phrase.
+    for entry in list(doc.get("acronyms", [])) + list(doc.get("proper_nouns", [])):
         if not isinstance(entry, str):
             continue
         lower = entry.lower()
         acronym_set.add(lower)
-        # Each acronym also maps to its own canonical display, so a raw
-        # "eu" or "EU" both resolve to the same key.
+        # Each preserved form also maps to its own canonical display, so a
+        # raw "eu"/"EU" or "ukraine"/"Ukraine" both resolve to the same key.
         alias_map[lower] = entry
 
     for canonical, aliases in (doc.get("aliases") or {}).items():
@@ -386,6 +391,35 @@ def normalise_keyword(
         return lower
 
     return _WORD_RE.sub(_replace, trimmed)
+
+
+def normalise_affiliation(raw: str) -> str:
+    """Standardise the separator style inside a free-text affiliation so
+    the directory reads uniformly. Submitters write an institution plus a
+    named sub-unit, or two affiliations, in several styles ("ETH Zurich -
+    Center for Security Studies", "Ghent University; Egmont Institute",
+    "Sciences Po, Center for International Studies"). We settle on two
+    conventions:
+
+      - a spaced hyphen or dash between an institution and its named part
+        becomes a comma ("ETH Zurich, Center for Security Studies");
+      - a semicolon between two separate affiliations becomes a slash
+        ("Ghent University / Egmont Institute").
+
+    Whitespace is collapsed. This does not merge differently-spelled names
+    for the same institution (that needs a hand-curated alias map, tracked
+    separately); it only fixes the punctuation so the field is consistent.
+    Idempotent: an already-normalised value is returned unchanged."""
+    s = " ".join((raw or "").split())
+    if not s:
+        return ""
+    # Two separate affiliations: semicolon -> slash.
+    s = re.sub(r"\s*;\s*", " / ", s)
+    # Institution + named sub-unit: spaced hyphen / en-dash / em-dash -> comma.
+    # The surrounding spaces are required, so hyphenated names with no
+    # spaces ("Aix-Marseille", "Friedrich-Alexander") are left untouched.
+    s = re.sub(r"\s+[-–—]\s+", ", ", s)
+    return s
 
 
 def _levenshtein(a: str, b: str) -> int:
@@ -1458,6 +1492,14 @@ def main() -> None:
         ({"keyword": k, "count": v} for k, v in aggregate.items()),
         key=lambda e: (-e["count"], e["keyword"].lower()),
     )
+
+    # Standardise affiliation punctuation so the same employer doesn't read
+    # three different ways across cards. Runs over every member (seed and
+    # form) each sync, so it survives a re-read of the raw Sheet value.
+    for m in merged:
+        aff = m.get("affiliation")
+        if aff:
+            m["affiliation"] = normalise_affiliation(aff)
 
     # Substance check: did anything actually change?
     #

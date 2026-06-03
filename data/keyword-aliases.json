@@ -1,6 +1,6 @@
 {
-  "_documentation": "Hand-curated controlled vocabulary for the directory's research-interest keywords. Two sections drive the same surface: `acronyms` is a flat list of preferred display forms (UN, NATO, EU, IoT, …); when one of those words appears anywhere in a submitted keyword, the sync emits it in the canonical form rather than letting the sentence-case normaliser mangle it. `aliases` maps a canonical display form to a list of lowercased aliases that resolve to it; use this when two genuinely-distinct submitted phrases should collapse (e.g. `fpa` → `Foreign policy analysis`, or `political economy of europe` → `Political economy`). scripts/sync-bios.py reads this file, normalises each bio's `keywords` into a `canonical_keywords` field, and logs Levenshtein-close pairs that aren't already merged so the maintainer can decide whether to add them. A third section, `spelling`, is a word-level map from American to British spellings (lowercased key → lowercased British form); during the word-walk each letter-run matching a key is rewritten to its British form before sentence-casing, so `Defense` becomes `Defence` and `Cyber defense` becomes `Cyber defence`. It deliberately omits `program`, which is valid British English in the computing sense. The file is hand-edited; changes land in the same PR that submits the new bio (or in a periodic curation pass).",
-  "version": 1,
+  "_documentation": "Hand-curated controlled vocabulary for the directory's research-interest keywords. Several sections drive the same surface. `acronyms` is a flat list of preferred display forms (UN, NATO, EU, IoT, …); when one of those words appears anywhere in a submitted keyword, the sync emits it in the canonical form rather than letting the sentence-case normaliser mangle it. `proper_nouns` works identically but for capitalised place names (countries and regions): the sentence-case normaliser only capitalises the first word of a keyword, so without this list a mid-phrase Afghanistan or Ukraine would render lowercased (`Russia-ukraine war`). Both lists are matched case-insensitively against each token and emitted in the exact form listed here, so keep each entry in its correct display form. `aliases` maps a canonical display form to a list of lowercased aliases that resolve to it; use this when two genuinely-distinct submitted phrases should collapse (e.g. `fpa` → `Foreign policy analysis`, or `political economy of europe` → `Political economy`). scripts/sync-bios.py reads this file, normalises each bio's `keywords` into a `canonical_keywords` field, and logs Levenshtein-close pairs that aren't already merged so the maintainer can decide whether to add them. A `spelling` section is a word-level map from American to British spellings (lowercased key → lowercased British form); during the word-walk each letter-run matching a key is rewritten to its British form before sentence-casing, so `Defense` becomes `Defence` and `Cyber defense` becomes `Cyber defence`. It deliberately omits `program`, which is valid British English in the computing sense. The file is hand-edited; changes land in the same PR that submits the new bio (or in a periodic curation pass).",
+  "version": 2,
 
   "acronyms": [
     "UN", "EU", "NATO", "UK", "US", "USA", "UNDP", "EEAS", "OSCE",
@@ -10,6 +10,23 @@
     "SCO", "CSTO", "BRICS", "MENA",
     "AI", "ML", "NLP", "IoT", "GDPR", "ICT",
     "R&D", "NPT", "WMD", "CBRN", "R2P", "G7", "G20"
+  ],
+
+  "proper_nouns": [
+    "Europe", "Africa", "Asia", "Americas", "Eurasia", "Mediterranean",
+    "Balkans", "Sahel", "Caucasus", "Arctic", "Baltic", "Atlantic",
+    "Pacific", "Maghreb", "Scandinavia", "Levant",
+    "Afghanistan", "Ukraine", "Russia", "Germany", "France", "China",
+    "Iran", "Iraq", "Syria", "Israel", "Palestine", "Lebanon", "Yemen",
+    "Libya", "Mali", "Somalia", "Sudan", "Ethiopia", "Nigeria", "Egypt",
+    "Turkey", "Taiwan", "Japan", "India", "Pakistan", "Korea", "Vietnam",
+    "Poland", "Serbia", "Kosovo", "Bosnia", "Georgia", "Armenia",
+    "Azerbaijan", "Belarus", "Moldova", "Greece", "Cyprus", "Hungary",
+    "Romania", "Bulgaria", "Croatia", "Slovenia", "Slovakia", "Czechia",
+    "Austria", "Switzerland", "Belgium", "Netherlands", "Luxembourg",
+    "Sweden", "Finland", "Norway", "Denmark", "Estonia", "Latvia",
+    "Lithuania", "Portugal", "Spain", "Italy", "Ireland", "Iceland",
+    "Albania", "Montenegro"
   ],
 
   "aliases": {

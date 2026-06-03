@@ -120,6 +120,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- Directory research keywords now keep country and region names capitalised wherever they sit in a phrase, not only as the first word. Previously the canonicaliser lowercased a proper noun in the middle of a keyword, so *Policy evaluation & lessons learned (Afghanistan)* rendered with a lowercase *afghanistan* and *Russia-Ukraine war* lost the capital on *Ukraine*. A curated list of countries and regions is now preserved through normalisation.
+- Directory affiliations now read uniformly. The same employer was being written several ways depending on punctuation, so an institution and its named centre now use a comma (*ETH Zurich, Center for Security Studies*) and two separate affiliations use a slash (*Ghent University / Egmont Institute*), applied automatically on every sync.
 - The Early Access Preview banner on the directory now keeps its white text readable in light mode. A global paragraph-colour rule was overriding the banner's intended white with a dark slate, which happened to read fine on the blue gradient in dark mode (where the same colour variable is light) but left dark-on-blue text in light mode.
 - Stylesheet and script files now carry a content-hash cache-bust token (`site.css?v=…`), so a returning visitor renders new markup against the matching CSS rather than a stale cached copy after a release. A new check stops a CSS or JS change from merging without the hashes being refreshed.
 - Gave the v1.10.0 roadmap card a proper description in all three locales. It had landed with the generic "maintenance release" auto-summary and an untranslated FR/DE body, which undersold a feature release.
