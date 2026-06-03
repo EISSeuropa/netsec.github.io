@@ -1,0 +1,89 @@
+name: AUTOPR token health
+
+# The six auto-PR sync workflows authenticate peter-evans/create-pull-request
+# with the AUTOPR_TOKEN fine-grained PAT, so the PRs they open trigger the
+# required status checks (issue #486). A fine-grained PAT expires. If it
+# lapses unnoticed, every sync PR silently falls back to GITHUB_TOKEN and
+# stops triggering checks, so the bios / cost / roadmap / indico refreshes
+# quietly stall behind admin-merge friction.
+#
+# This job probes the token weekly and opens (or refreshes) a tracking
+# issue when the token is missing, rejected, or within 10 days of expiry,
+# so a rotation never slips past GitHub's own expiry email. It is fail-soft:
+# a network blip or a parsing miss is treated as "ok" rather than a false
+# alarm. No third-party actions, so nothing to SHA-pin.
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'      # Mondays 07:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check AUTOPR_TOKEN validity and expiry
+        id: check
+        env:
+          AUTOPR_TOKEN: ${{ secrets.AUTOPR_TOKEN }}
+        run: |
+          set -uo pipefail
+          if [ -z "${AUTOPR_TOKEN:-}" ]; then
+            echo "status=missing" >> "$GITHUB_OUTPUT"
+            echo "detail=The AUTOPR_TOKEN secret is not set." >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          headers=$(curl -sS -D - -o /dev/null \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${AUTOPR_TOKEN}" \
+            https://api.github.com/user 2>/dev/null | tr -d '\r' || true)
+          if [ -z "$headers" ]; then
+            echo "status=ok" >> "$GITHUB_OUTPUT"
+            echo "detail=Probe could not reach the API; treating as transient." >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if echo "$headers" | grep -qiE '^HTTP/[0-9.]+ (401|403)'; then
+            echo "status=rejected" >> "$GITHUB_OUTPUT"
+            echo "detail=The token was rejected by the API (401/403); it is likely expired or revoked." >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          exp=$(echo "$headers" | awk -F': ' 'tolower($1)=="github-authentication-token-expiration"{print $2}' | awk '{print $1}')
+          if [ -z "$exp" ]; then
+            echo "status=ok" >> "$GITHUB_OUTPUT"
+            echo "detail=Token valid; no expiry advertised (no-expiry PAT or classic token)." >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          exp_epoch=$(date -u -d "$exp" +%s 2>/dev/null || echo 0)
+          now_epoch=$(date -u +%s)
+          days=$(( (exp_epoch - now_epoch) / 86400 ))
+          if [ "$exp_epoch" -ne 0 ] && [ "$days" -le 10 ]; then
+            echo "status=expiring" >> "$GITHUB_OUTPUT"
+            echo "detail=Token expires on ${exp} (in ${days} days)." >> "$GITHUB_OUTPUT"
+          else
+            echo "status=ok" >> "$GITHUB_OUTPUT"
+            echo "detail=Token valid until ${exp} (${days} days remaining)." >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or refresh the alert issue
+        if: steps.check.outputs.status != 'ok'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STATUS: ${{ steps.check.outputs.status }}
+          DETAIL: ${{ steps.check.outputs.detail }}
+        run: |
+          set -uo pipefail
+          title="AUTOPR_TOKEN needs attention (${STATUS})"
+          body=$(printf '%s\n\n%s\n\n%s\n' \
+            "The weekly AUTOPR_TOKEN health check reports: **${DETAIL}**" \
+            "While this stands, the auto-PR sync workflows (roadmap-sync, roadmap-progress, sync-bios, sync-cost, sync-indico, spotlight-rotate) fall back to GITHUB_TOKEN, so the PRs they open do not trigger the required checks and each needs a manual admin-merge (background in #486)." \
+            "Fix: regenerate the eisseuropa-mac-cli fine-grained PAT and paste the new value into the AUTOPR_TOKEN repository secret, under Settings then Secrets and variables then Actions. No workflow edit is needed.")
+          existing=$(gh issue list --search "AUTOPR_TOKEN needs attention in:title" --state open --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body" --label bug
+          fi
