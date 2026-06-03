@@ -395,7 +395,7 @@
       "name": "Dr Arthur Laudrain",
       "country": "Switzerland",
       "country_code": "ch",
-      "affiliation": "ETH Zurich - Center for Security Studies",
+      "affiliation": "ETH Zurich, Center for Security Studies",
       "position": "Team Lead & Senior Researcher, Cyber Security",
       "roles": [
         "MC member · Switzerland"
@@ -433,7 +433,7 @@
       "name": "Mr Felix Kösterke",
       "country": "Belgium",
       "country_code": "be",
-      "affiliation": "Ghent University; Egmont Institute",
+      "affiliation": "Ghent University / Egmont Institute",
       "position": "PhD candidate; Research Fellow",
       "roles": [],
       "wgs": [],
@@ -464,7 +464,7 @@
       "name": "Ms Meret Steybe",
       "country": "Switzerland",
       "country_code": "ch",
-      "affiliation": "ETH Zurich - Center for Security Studies",
+      "affiliation": "ETH Zurich, Center for Security Studies",
       "position": "Researcher",
       "roles": [],
       "wgs": [],
@@ -488,7 +488,7 @@
       "canonical_keywords": [
         "EU foreign policy",
         "Germany security policy",
-        "Policy evaluation & lessons learned (afghanistan)"
+        "Policy evaluation & lessons learned (Afghanistan)"
       ]
     }
   ],
@@ -546,7 +546,7 @@
       "count": 1
     },
     {
-      "keyword": "Policy evaluation & lessons learned (afghanistan)",
+      "keyword": "Policy evaluation & lessons learned (Afghanistan)",
       "count": 1
     },
     {

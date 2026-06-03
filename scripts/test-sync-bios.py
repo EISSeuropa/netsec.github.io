@@ -30,6 +30,7 @@ render_pr_title = sync_bios.render_pr_title
 render_pr_body_overview = sync_bios.render_pr_body_overview
 load_keyword_aliases = sync_bios.load_keyword_aliases
 normalise_keyword = sync_bios.normalise_keyword
+normalise_affiliation = sync_bios.normalise_affiliation
 parse_mentorship = sync_bios.parse_mentorship
 
 
@@ -600,6 +601,41 @@ def test_normalise_keyword() -> None:
     expect("sentence-case fallback", norm("Grand Strategy"), "Grand strategy")
     # British spelling already correct is left untouched.
     expect("british spelling unchanged", norm("Defence policy"), "Defence policy")
+    # Proper nouns (countries / regions) keep their capital mid-phrase,
+    # not just as the first word (regression for #505).
+    expect("proper noun in parens", norm("Policy evaluation & lessons learned (Afghanistan)"),
+           "Policy evaluation & lessons learned (Afghanistan)")
+    expect("proper noun mid-phrase", norm("Russia-Ukraine war"), "Russia-Ukraine war")
+    expect("region mid-phrase", norm("NATO enlargement in Europe"), "NATO enlargement in Europe")
+    expect("proper noun first word still capitalised", norm("Germany security policy"),
+           "Germany security policy")
+
+
+def test_normalise_affiliation() -> None:
+    """Affiliation punctuation is standardised: spaced hyphen/dash -> comma
+    (institution + sub-unit), semicolon -> slash (two affiliations).
+    Regression for #506."""
+    print("\nnormalise_affiliation():")
+    expect("empty stays empty", normalise_affiliation(""), "")
+    expect("None safe", normalise_affiliation(None), "")  # type: ignore[arg-type]
+    expect("spaced hyphen -> comma",
+           normalise_affiliation("ETH Zurich - Center for Security Studies"),
+           "ETH Zurich, Center for Security Studies")
+    expect("en-dash -> comma",
+           normalise_affiliation("ETH Zurich – Center for Security Studies"),
+           "ETH Zurich, Center for Security Studies")
+    expect("semicolon -> slash",
+           normalise_affiliation("Ghent University; Egmont Institute"),
+           "Ghent University / Egmont Institute")
+    expect("already-comma unchanged",
+           normalise_affiliation("Sciences Po, Center for International Studies (CERI)"),
+           "Sciences Po, Center for International Studies (CERI)")
+    expect("plain name unchanged", normalise_affiliation("Sciences Po Paris"), "Sciences Po Paris")
+    expect("hyphenated name with no spaces untouched",
+           normalise_affiliation("Aix-Marseille University"), "Aix-Marseille University")
+    expect("idempotent",
+           normalise_affiliation(normalise_affiliation("ETH Zurich - Center for Security Studies")),
+           "ETH Zurich, Center for Security Studies")
 
 
 def test_parse_mentorship() -> None:
@@ -626,6 +662,7 @@ def test_parse_mentorship() -> None:
 def main() -> None:
     test_name_key()
     test_normalise_keyword()
+    test_normalise_affiliation()
     test_parse_mentorship()
     test_country_key()
     test_merge_helferich()
