@@ -195,6 +195,29 @@ def test_merge_name_match_same_country_collapses() -> None:
     expect("role preserved", merged[0]["roles"], ["WG3 Leader"])
 
 
+def test_merge_mentorship_propagates() -> None:
+    """A form submission carrying a mentorship facet must overwrite the
+    matched prior entry's mentorship, the same way keywords do. Regression
+    for the merge field allow-list omitting `mentorship`, which silently
+    dropped the facet for any member who already had a directory entry."""
+    print("\nmerge() — mentorship propagates onto a prior entry:")
+    prior = [
+        {"id": "arthur-laudrain", "name": "Dr Arthur Laudrain", "country": "Switzerland",
+         "roles": ["Science Communication Coordinator"], "wgs": [], "source": "seed"},
+    ]
+    form_entries = [
+        {
+            "id": "arthur-laudrain", "name": "Dr Arthur Laudrain", "country": "Switzerland",
+            "country_code": "", "mentorship": ["mentor"], "wgs": [],
+            "source": "form", "_email_key": "", "_timestamp": "2026-06-04 09:00:00",
+        },
+    ]
+    merged = merge(prior, form_entries)
+    expect("one entry", len(merged), 1)
+    expect("mentorship carried from form", merged[0].get("mentorship"), ["mentor"])
+    expect("role preserved", merged[0]["roles"], ["Science Communication Coordinator"])
+
+
 def test_download_photo_idempotent_on_unchanged_upstream() -> None:
     """The fix for the empty-PR bug. download_photo computes a sha256
     of the raw upstream bytes; on a second call with the same
@@ -669,6 +692,7 @@ def main() -> None:
     test_merge_country_guards_false_positive()
     test_merge_name_match_different_country_does_not_collapse()
     test_merge_name_match_same_country_collapses()
+    test_merge_mentorship_propagates()
     test_download_photo_idempotent_on_unchanged_upstream()
     test_substance_check_catches_photo_only_change()
     test_pr_title_and_overview()
