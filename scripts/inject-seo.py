@@ -46,6 +46,11 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://netsec-cost.eu"
 SITE_NAME = "NetSec, COST Action CA24154"
 OG_IMAGE = f"{SITE}/assets/images/og-image.png"
+OG_IMAGE_ALT = "NetSec: Networking European Security Knowledge. COST Action CA24154."
+# The directory (/people.html) advertises a dedicated social card showing
+# the searchable directory; every other page uses the general card above.
+OG_IMAGE_PEOPLE = f"{SITE}/assets/images/og-image-people.png"
+OG_IMAGE_PEOPLE_ALT = "The NetSec directory: an open, searchable directory of the network's members, filterable by working group, role, and country."
 AUTHOR = "Dr Arthur Laudrain"
 THEME_COLOR = "#003399"
 
@@ -126,6 +131,8 @@ def build_seo_block(base: str, lang: str, title: str, desc: str) -> str:
     og_type = OG_TYPES.get(base, "website")
     og_locale = OG_LOCALES.get(lang, "en_GB")
     alt_locales = [OG_LOCALES[k] for k in ("en", "fr", "de") if k != lang]
+    og_image = OG_IMAGE_PEOPLE if base == "people" else OG_IMAGE
+    og_image_alt = OG_IMAGE_PEOPLE_ALT if base == "people" else OG_IMAGE_ALT
 
     lines = [
         SENTINEL_BEGIN,
@@ -142,16 +149,16 @@ def build_seo_block(base: str, lang: str, title: str, desc: str) -> str:
         f'<meta property="og:title" content="{_attr_escape(title)}">',
         f'<meta property="og:description" content="{_attr_escape(desc)}">',
         f'<meta property="og:url" content="{canonical}">',
-        f'<meta property="og:image" content="{OG_IMAGE}">',
+        f'<meta property="og:image" content="{og_image}">',
         '<meta property="og:image:width" content="1200">',
         '<meta property="og:image:height" content="630">',
-        '<meta property="og:image:alt" content="NetSec: Networking European Security Knowledge. COST Action CA24154.">',
+        f'<meta property="og:image:alt" content="{_attr_escape(og_image_alt)}">',
         '',
         '<!-- Twitter Card -->',
         '<meta name="twitter:card" content="summary_large_image">',
         f'<meta name="twitter:title" content="{_attr_escape(title)}">',
         f'<meta name="twitter:description" content="{_attr_escape(desc)}">',
-        f'<meta name="twitter:image" content="{OG_IMAGE}">',
+        f'<meta name="twitter:image" content="{og_image}">',
         '',
         '<!-- General SEO + UA hints -->',
         f'<meta name="author" content="{AUTHOR}">',

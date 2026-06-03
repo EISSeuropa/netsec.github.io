@@ -5,9 +5,11 @@ One-shot brand-asset processor for the designer's logo deliverable.
 Takes the designer's raw PNGs (mark only, primary lockup, white-on-
 dark, monochrome) and produces the deployment set the site needs:
 cleaned lockups (cropped to content bbox, no transparent padding),
-a favicon family at standard sizes, the manifest icons, and an OG
-social card composed from the primary lockup over a brand-coloured
-background.
+a favicon family at standard sizes, and the manifest icons.
+
+The OG / social cards are hand-designed marketing graphics, kept as
+design assets (assets/images/og-image.png and og-image-people.png)
+rather than generated here, so this script never overwrites them.
 
 The designer sent PNG only. SVG masters would be better for favicon
 and high-DPI rendering; tracked as a follow-up. Until then,
@@ -72,13 +74,6 @@ FAVICON_SIZES = {
     "android-chrome-512.png": 512,    # PWA manifest, splash screens
 }
 
-# OG card: 1200×630 is the canonical Twitter/OG size; 2× for retina.
-# Card design: primary lockup centred on a soft brand-tinted canvas
-# (very light blue, the lightest swatch from the palette). Matches
-# the existing og-image.png 2400×1260 dimensions so HTML references
-# don't need to change.
-OG_SIZE = (2400, 1260)
-OG_BACKGROUND = (240, 247, 255, 255)   # near-white with a hint of brand blue
 
 
 # ──────────────────────────── helpers ────────────────────────────
@@ -139,36 +134,13 @@ def build_favicons(source: Path) -> None:
     print(f"  wrote {ico_path.relative_to(ROOT)} ({ico_path.stat().st_size:,} bytes, sizes={ico_sizes})")
 
 
-def build_og_card(source: Path) -> None:
-    """Compose a 2400×1260 OG card: primary lockup centred over a
-    light-brand-tinted background. The size matches the existing
-    og-image.png so the HTML meta tags don't need updating."""
-    print("\n── 4. OG social card ──")
-    lockup = Image.open(source / "primary.png").convert("RGBA")
-    lockup = crop_to_content(lockup)
-
-    # Scale the lockup to ~55% of the canvas width. Leaves clearance
-    # on all sides (brand guidelines: 1 petal width = ~10% of mark
-    # width, so 22% padding either side is well above the minimum).
-    target_w = int(OG_SIZE[0] * 0.55)
-    scale = target_w / lockup.size[0]
-    target_h = int(lockup.size[1] * scale)
-    lockup_scaled = lockup.resize((target_w, target_h), Image.Resampling.LANCZOS)
-
-    card = Image.new("RGBA", OG_SIZE, OG_BACKGROUND)
-    x = (OG_SIZE[0] - target_w) // 2
-    y = (OG_SIZE[1] - target_h) // 2
-    card.paste(lockup_scaled, (x, y), lockup_scaled)
-
-    # OG image goes at /assets/images/og-image.png — same path as
-    # before so no HTML change. PIL saves PNG-32 by default; RGB is
-    # smaller and lossless enough for this content. Flatten alpha
-    # against the background.
-    card_rgb = Image.new("RGB", OG_SIZE, OG_BACKGROUND[:3])
-    card_rgb.paste(card, mask=card)
-    out_path = ROOT / "assets" / "images" / "og-image.png"
-    card_rgb.save(out_path, "PNG", optimize=True)
-    print(f"  wrote {out_path.relative_to(ROOT)} ({out_path.stat().st_size:,} bytes, 2400×1260)")
+# build_og_card() was removed. The OG / social cards are now
+# hand-designed marketing graphics, not auto-generated from the lockup:
+# assets/images/og-image.png (the general card, used on every page) and
+# assets/images/og-image-people.png (the directory card, used on
+# /people.html). They are maintained as design assets, so this script no
+# longer touches them and a brand rebuild cannot clobber them.
+# scripts/inject-seo.py selects which card each page advertises.
 
 
 def main() -> int:
@@ -190,7 +162,6 @@ def main() -> int:
 
     process_lockups(args.source)
     build_favicons(args.source)
-    build_og_card(args.source)
 
     print("\nDone.")
     return 0
