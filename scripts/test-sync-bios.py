@@ -32,6 +32,7 @@ load_keyword_aliases = sync_bios.load_keyword_aliases
 normalise_keyword = sync_bios.normalise_keyword
 normalise_affiliation = sync_bios.normalise_affiliation
 parse_mentorship = sync_bios.parse_mentorship
+resolve_prior_entry = sync_bios.resolve_prior_entry
 
 
 def expect(label: str, got, want) -> None:
@@ -216,6 +217,45 @@ def test_merge_mentorship_propagates() -> None:
     expect("one entry", len(merged), 1)
     expect("mentorship carried from form", merged[0].get("mentorship"), ["mentor"])
     expect("role preserved", merged[0]["roles"], ["Science Communication Coordinator"])
+
+
+def test_resolve_prior_entry() -> None:
+    """The photo-churn fix: a name-collapse submission must resolve to
+    its canonical prior entry (by name+country) so the photo writes to
+    that slug, not the form slug. Mirrors merge()'s signal order."""
+    print("\nresolve_prior_entry():")
+    prior = [
+        {"id": "john-helferich", "name": "Dr John Helferich",
+         "country": "United Kingdom", "email": "",
+         "photo_source_sha256": "abc123"},
+        {"id": "maria-garcia", "name": "Dr Maria Garcia", "country": "Spain",
+         "email": "maria@uni.es", "photo_source_sha256": "def456"},
+    ]
+    by_id = {m["id"]: m for m in prior}
+    by_email = {m["email"].lower(): m for m in prior if m.get("email")}
+    by_namekey = {}
+    for m in prior:
+        nk = name_key(m["name"])
+        if nk:
+            by_namekey[(nk[0], nk[1], country_key(m["country"]))] = m
+
+    # Name-collapse: form slug differs, bridged by name+country.
+    hit = resolve_prior_entry("john-n-t-helferich", "", "Dr John N.T. Helferich",
+                              "United Kingdom", by_id, by_email, by_namekey)
+    expect("name-collapse resolves to canonical slug", (hit or {}).get("id"), "john-helferich")
+    expect("…carrying the stored hash", (hit or {}).get("photo_source_sha256"), "abc123")
+    # Email match wins first.
+    hit = resolve_prior_entry("someone-else", "maria@uni.es", "Maria Garcia",
+                              "Spain", by_id, by_email, by_namekey)
+    expect("email match resolves", (hit or {}).get("id"), "maria-garcia")
+    # Plain slug match.
+    hit = resolve_prior_entry("maria-garcia", "", "Maria Garcia", "Spain",
+                              by_id, by_email, by_namekey)
+    expect("slug match resolves", (hit or {}).get("id"), "maria-garcia")
+    # Genuinely new member → None.
+    hit = resolve_prior_entry("nora-newcomer", "nora@x.org", "Nora Newcomer",
+                              "Finland", by_id, by_email, by_namekey)
+    expect("new member resolves to None", hit, None)
 
 
 def test_download_photo_idempotent_on_unchanged_upstream() -> None:
@@ -693,6 +733,7 @@ def main() -> None:
     test_merge_name_match_different_country_does_not_collapse()
     test_merge_name_match_same_country_collapses()
     test_merge_mentorship_propagates()
+    test_resolve_prior_entry()
     test_download_photo_idempotent_on_unchanged_upstream()
     test_substance_check_catches_photo_only_change()
     test_pr_title_and_overview()

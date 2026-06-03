@@ -640,19 +640,57 @@ def download_photo(
     )
 
 
+def resolve_prior_entry(
+    slug: str,
+    email: str,
+    name: str,
+    country: str,
+    old_by_id: dict[str, dict] | None = None,
+    old_by_email: dict[str, dict] | None = None,
+    old_by_namekey: dict[tuple[str, str, str], dict] | None = None,
+) -> dict | None:
+    """Find the prior bios.json entry a form submission will collapse
+    onto, using the same three signals merge() uses, in the same order:
+    the form-collected account email, then the slug, then name+country.
+    Returns the prior member dict, or None for a genuinely new member.
+
+    Called before the photo download so the image writes to — and its
+    de-dup hash is read from — the entry's *canonical* slug, even when
+    the submission's own slug differs. That is the name-collapse case
+    (e.g. "Dr John N.T. Helferich" submitting against the seed "Dr John
+    Helferich"): without it the photo re-encodes every run under the
+    form slug and merge then renames it onto the canonical file, so the
+    canonical file's bytes churn each sync (libjpeg is not bit-stable)
+    and the workflow opens an auto-PR with a lone binary diff."""
+    if email and old_by_email:
+        hit = old_by_email.get(email.lower())
+        if hit:
+            return hit
+    if old_by_id and slug in old_by_id:
+        return old_by_id[slug]
+    if old_by_namekey:
+        nk = name_key(name)
+        if nk:
+            return old_by_namekey.get((nk[0], nk[1], country_key(country)))
+    return None
+
+
 def row_to_member(
     row: dict,
     cols: dict,
     old_by_id: dict[str, dict] | None = None,
+    old_by_email: dict[str, dict] | None = None,
+    old_by_namekey: dict[tuple[str, str, str], dict] | None = None,
 ) -> dict | None:
     """Convert one CSV row dict to a bios.json member entry, or None if
     the row should be skipped.
 
-    `old_by_id` is the prior bios.json members keyed by slug — passed
-    in so download_photo can look up the prior photo_source_sha256
-    and short-circuit the PIL re-encode when the upstream bytes
-    haven't changed. Pass None and the photo will always be re-encoded
-    (only relevant for tests / one-off scripted runs).
+    The three `old_by_*` indexes are the prior bios.json members keyed by
+    slug, account email, and (first, last, country) name key. They let
+    the photo download resolve the entry this row will collapse onto, so
+    an unchanged photo is neither re-encoded nor written under the wrong
+    slug. Pass them all None (tests / one-off scripted runs) and the
+    photo will always be re-encoded under the row's own slug.
     """
     name = (row.get(cols["name"], "") or "").strip()
     consent = (row.get(cols["consent"], "") or "").strip().lower()
@@ -666,24 +704,28 @@ def row_to_member(
 
     slug = slugify(name)
     email = norm_email(row.get(cols.get("email", ""), ""))
+    country = (row.get(cols.get("country", ""), "") or "").strip()
     photo_url = (row.get(cols.get("photo", ""), "") or "").strip()
     photo_path: str | None = None
     photo_hash: str | None = None
     if photo_url:
-        # Save under assets/images/people/<slug>. Look up the prior
-        # hash so an unchanged photo doesn't get re-encoded.
-        prior_hash = None
-        if old_by_id is not None:
-            prior = old_by_id.get(slug) or {}
-            prior_hash = prior.get("photo_source_sha256") or None
+        # Resolve the entry this row collapses onto so the photo writes
+        # to its canonical slug and compares against the stored hash,
+        # even when this row's own slug differs (the name-collapse case).
+        target_prior = resolve_prior_entry(
+            slug, email, name, country,
+            old_by_id, old_by_email, old_by_namekey,
+        )
+        dest_slug = target_prior["id"] if target_prior else slug
+        prior_hash = (target_prior or {}).get("photo_source_sha256") or None
         photo_path, photo_hash = download_photo(
-            photo_url, PHOTO_DIR / slug, prior_hash=prior_hash,
+            photo_url, PHOTO_DIR / dest_slug, prior_hash=prior_hash,
         )
 
     out = {
         "id": slug,
         "name": name,
-        "country": (row.get(cols.get("country", ""), "") or "").strip(),
+        "country": country,
         "country_code": "",  # filled by post-processing
         "affiliation": (row.get(cols.get("affiliation", ""), "") or "").strip(),
         "position": (row.get(cols.get("position", ""), "") or "").strip(),
@@ -1437,6 +1479,18 @@ def main() -> None:
     # unchanged. See download_photo's docstring for the empty-PR
     # failure mode this guards against.
     old_by_id = {m["id"]: m for m in old_members}
+    # Two more indexes, mirroring merge()'s email and name+country
+    # collapse signals, so a name-collapse submitter's photo resolves to
+    # its canonical slug + stored hash before download (see
+    # resolve_prior_entry).
+    old_by_email = {
+        m["email"].lower(): m for m in old_members if m.get("email")
+    }
+    old_by_namekey: dict[tuple[str, str, str], dict] = {}
+    for m in old_members:
+        nk = name_key(m.get("name", ""))
+        if nk:
+            old_by_namekey[(nk[0], nk[1], country_key(m.get("country", "")))] = m
 
     # Fetch the sheet CSV
     print(f"Fetching {csv_url}")
