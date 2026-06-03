@@ -386,7 +386,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=4702a863" defer></script>
+<script src="assets/js/site.js?v=08edac26" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
 <script>
@@ -818,8 +818,8 @@
       const mentorWrap = node.querySelector('.member-mentorship');
       const mentorship = Array.isArray(m.mentorship) ? m.mentorship : [];
       const MENTOR_BADGES = [
-        { tag: 'mentor', cls: 'is-offering', label: 'Mentor' },
-        { tag: 'mentee', cls: 'is-seeking', label: 'Seeking a mentor' },
+        { tag: 'mentor', cls: 'is-offering', label: 'Available to mentor' },
+        { tag: 'mentee', cls: 'is-seeking', label: 'Seeking mentorship' },
       ];
       let mentorAdded = false;
       MENTOR_BADGES.forEach(badge => {
