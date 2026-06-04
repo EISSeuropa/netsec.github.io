@@ -87,14 +87,14 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "1bf10a70521fa133d0f6da6c4be782d60f966a7c",
+        "source_sha1": "a0b0e67264650857f3194e87b6d29a345147e8f2",
         "translated_on": "2026-06-04",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "1bf10a70521fa133d0f6da6c4be782d60f966a7c",
+        "source_sha1": "a0b0e67264650857f3194e87b6d29a345147e8f2",
         "translated_on": "2026-06-04",
         "status": "beta",
         "reviewed_by": null
@@ -151,14 +151,14 @@
     "faq.html": {
       "fr": {
         "file": "faq.fr.html",
-        "source_sha1": "261723de6d1a953c32aeca07dd3e4c3b17a51465",
+        "source_sha1": "fbc5bd923fcb8fbb15dffbac7663016e4aaf9cd8",
         "translated_on": "2026-06-04",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "faq.de.html",
-        "source_sha1": "261723de6d1a953c32aeca07dd3e4c3b17a51465",
+        "source_sha1": "fbc5bd923fcb8fbb15dffbac7663016e4aaf9cd8",
         "translated_on": "2026-06-04",
         "status": "beta",
         "reviewed_by": null
