@@ -63,6 +63,10 @@
   --accent-2:#0a84ff;        /* Apple blue */
   --accent-glow:rgba(10,132,255,.35);
   --gold:#ffcc00;            /* EU stars */
+  --wg-1:#0a84ff;            /* Working Group accents (source: data/brand.json) */
+  --wg-2:#10b981;
+  --wg-3:#8b5cf6;
+  --wg-4:#f59e0b;
   --radius:22px;
   --radius-sm:14px;
   --maxw:1180px;
@@ -535,10 +539,10 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   white-space:nowrap;
 }
 /* Per-WG colour for at-a-glance distinction */
-.wg-chip.wg-1{background:linear-gradient(135deg,#0a84ff,#5b8def)}
-.wg-chip.wg-2{background:linear-gradient(135deg,#10b981,#34d399)}
-.wg-chip.wg-3{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
-.wg-chip.wg-4{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#3b2a00}
+.wg-chip.wg-1{background:linear-gradient(135deg,var(--wg-1),#5b8def)}
+.wg-chip.wg-2{background:linear-gradient(135deg,var(--wg-2),#34d399)}
+.wg-chip.wg-3{background:linear-gradient(135deg,var(--wg-3),#a78bfa)}
+.wg-chip.wg-4{background:linear-gradient(135deg,var(--wg-4),#fbbf24);color:#3b2a00}
 
 /* ── Working Groups page (working-groups.html) ─────────────────────── */
 .wg-page .wg-page-head{padding:48px 0 8px}
@@ -550,10 +554,10 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .wg-stat-n{font-family:'Lexend','Inter',sans-serif;font-size:1.8rem;font-weight:700;line-height:1;color:var(--ink)}
 .wg-stat-l{font-size:.82rem;color:var(--muted)}
 .wg-page .wg-tag{display:inline-flex;align-items:center;margin:0;font-size:.74rem;font-weight:700;padding:.25rem .55rem;border-radius:7px;color:#fff;letter-spacing:.02em;line-height:1}
-.wg-page .wg-tag.wg-1{background:#0a84ff}
-.wg-page .wg-tag.wg-2{background:#10b981}
-.wg-page .wg-tag.wg-3{background:#8b5cf6}
-.wg-page .wg-tag.wg-4{background:#f59e0b;color:#3b2a00}
+.wg-page .wg-tag.wg-1{background:var(--wg-1)}
+.wg-page .wg-tag.wg-2{background:var(--wg-2)}
+.wg-page .wg-tag.wg-3{background:var(--wg-3)}
+.wg-page .wg-tag.wg-4{background:var(--wg-4);color:#3b2a00}
 .wg-jump{display:flex;flex-wrap:wrap;gap:10px;margin-top:1.6rem}
 /* Scoped under .wg-page so `text-decoration:none` out-specifies the
    `.prose-page a` underline (same tie-break trap as the member cards). */
@@ -718,10 +722,10 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .event-wgs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
 .event-wg-pill{font-family:'Inter',sans-serif;font-size:.66rem;font-weight:700;letter-spacing:.03em;padding:2px 7px;border-radius:6px;color:#fff;text-decoration:none;line-height:1.55;transition:opacity .15s var(--ease)}
 .event-wg-pill:hover{opacity:.85}
-.event-wg-pill.wg-1{background:#0a84ff}
-.event-wg-pill.wg-2{background:#10b981}
-.event-wg-pill.wg-3{background:#8b5cf6}
-.event-wg-pill.wg-4{background:#f59e0b;color:#3b2a00}
+.event-wg-pill.wg-1{background:var(--wg-1)}
+.event-wg-pill.wg-2{background:var(--wg-2)}
+.event-wg-pill.wg-3{background:var(--wg-3)}
+.event-wg-pill.wg-4{background:var(--wg-4);color:#3b2a00}
 .event-card h3,.output-card h3,.news-card h3{font-size:1.1rem;margin:0}
 .event-card p,.output-card p,.news-card p{font-size:.92rem;color:var(--muted);margin:0;flex-grow:1}
 .event-loc{font-size:.85rem;color:var(--ink-2);display:flex;align-items:center;gap:6px}
