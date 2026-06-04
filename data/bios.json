@@ -52,9 +52,9 @@
         "Power"
       ],
       "themes": [
-        "Economic security and statecraft",
-        "International security",
-        "Technology and cyber"
+        "Cyber and emerging technology",
+        "Economic security and geoeconomics",
+        "Security and defence"
       ]
     },
     {
@@ -121,7 +121,7 @@
         "Industrial policy"
       ],
       "themes": [
-        "Economic security and statecraft"
+        "Economic security and geoeconomics"
       ]
     },
     {
@@ -217,9 +217,9 @@
         "Research methods"
       ],
       "themes": [
-        "European and transatlantic relations",
-        "Foreign and security policy",
-        "Research methods and behaviour"
+        "European and transatlantic security order",
+        "Foreign policy and diplomacy",
+        "Theory and methods"
       ]
     },
     {
@@ -444,7 +444,7 @@
         "mentor"
       ],
       "themes": [
-        "Information and influence"
+        "Intelligence, information and influence"
       ]
     },
     {
@@ -478,8 +478,8 @@
         "Grand strategy"
       ],
       "themes": [
-        "Foreign and security policy",
-        "Strategy and defence"
+        "Foreign policy and diplomacy",
+        "Security and defence"
       ]
     },
     {
@@ -517,8 +517,8 @@
         "mentee"
       ],
       "themes": [
-        "Foreign and security policy",
-        "Research methods and behaviour"
+        "Foreign policy and diplomacy",
+        "Theory and methods"
       ]
     }
   ],
@@ -602,57 +602,53 @@
   ],
   "theme_aggregate": [
     {
-      "theme": "Foreign and security policy",
+      "theme": "Foreign policy and diplomacy",
       "count": 3
     },
     {
-      "theme": "Economic security and statecraft",
+      "theme": "Economic security and geoeconomics",
       "count": 2
     },
     {
-      "theme": "Research methods and behaviour",
+      "theme": "Security and defence",
       "count": 2
     },
     {
-      "theme": "European and transatlantic relations",
+      "theme": "Theory and methods",
+      "count": 2
+    },
+    {
+      "theme": "Cyber and emerging technology",
       "count": 1
     },
     {
-      "theme": "Information and influence",
+      "theme": "European and transatlantic security order",
       "count": 1
     },
     {
-      "theme": "International security",
-      "count": 1
-    },
-    {
-      "theme": "Strategy and defence",
-      "count": 1
-    },
-    {
-      "theme": "Technology and cyber",
+      "theme": "Intelligence, information and influence",
       "count": 1
     }
   ],
   "keyword_theme_map": {
-    "Defence": "Strategy and defence",
-    "Digital governance": "Technology and cyber",
-    "Disinformation": "Information and influence",
-    "EU foreign policy": "Foreign and security policy",
-    "EU–NATO relations": "European and transatlantic relations",
-    "Economic security": "Economic security and statecraft",
-    "Economic statecraft": "Economic security and statecraft",
-    "Election interference": "Information and influence",
-    "Foreign policy analysis": "Foreign and security policy",
-    "German security policy": "Foreign and security policy",
-    "Grand strategy": "Strategy and defence",
-    "Industrial policy": "Economic security and statecraft",
-    "International security": "International security",
-    "Policy evaluation": "Research methods and behaviour",
-    "Political economy": "Economic security and statecraft",
-    "Political psychology": "Research methods and behaviour",
-    "Power": "International security",
-    "Research methods": "Research methods and behaviour",
-    "Subversion": "Information and influence"
+    "Defence": "Security and defence",
+    "Digital governance": "Cyber and emerging technology",
+    "Disinformation": "Intelligence, information and influence",
+    "EU foreign policy": "Foreign policy and diplomacy",
+    "EU–NATO relations": "European and transatlantic security order",
+    "Economic security": "Economic security and geoeconomics",
+    "Economic statecraft": "Economic security and geoeconomics",
+    "Election interference": "Intelligence, information and influence",
+    "Foreign policy analysis": "Foreign policy and diplomacy",
+    "German security policy": "Foreign policy and diplomacy",
+    "Grand strategy": "Security and defence",
+    "Industrial policy": "Economic security and geoeconomics",
+    "International security": "Security and defence",
+    "Policy evaluation": "Theory and methods",
+    "Political economy": "Economic security and geoeconomics",
+    "Political psychology": "Theory and methods",
+    "Power": "Security and defence",
+    "Research methods": "Theory and methods",
+    "Subversion": "Intelligence, information and influence"
   }
 }
