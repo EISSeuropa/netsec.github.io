@@ -130,6 +130,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The roadmap timeline markers (the status dots and milestone diamonds) now sit centred on the vertical connector line rather than a few pixels to its left. The markers were vertically aligned to the status pill but their horizontal position never accounted for the line, so each one drifted left by 3px on desktop and 6px on mobile. Each marker's centre is now pinned to the line at every breakpoint.
 - Directory research keywords now keep country and region names capitalised wherever they sit in a phrase, not only as the first word. Previously the canonicaliser lowercased a proper noun in the middle of a keyword, so *Policy evaluation & lessons learned (Afghanistan)* rendered with a lowercase *afghanistan* and *Russia-Ukraine war* lost the capital on *Ukraine*. A curated list of countries and regions is now preserved through normalisation.
 - Directory affiliations now read uniformly. The same employer was being written several ways depending on punctuation, so an institution and its named centre now use a comma (*ETH Zurich, Center for Security Studies*) and two separate affiliations use a slash (*Ghent University / Egmont Institute*), applied automatically on every sync.
 - The Early Access Preview banner on the directory now keeps its white text readable in light mode. A global paragraph-colour rule was overriding the banner's intended white with a dark slate, which happened to read fine on the blue gradient in dark mode (where the same colour variable is light) but left dark-on-blue text in light mode.
