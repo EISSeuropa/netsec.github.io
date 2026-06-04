@@ -232,7 +232,7 @@ def test_stamp_assets_strips_stale_version_on_unknown_asset_is_noop():
 def test_stamp_assets_does_not_touch_fonts_or_images():
     html = (
         '<link href="assets/fonts/x.woff2">'
-        '<img src="assets/images/logo.png">'
+        '<img src="assets/images/og-image.png">'
     )
     new, changed = seo.stamp_assets(html, {"assets/fonts/x.woff2": "zzzzzzzz"})
     assert new == html

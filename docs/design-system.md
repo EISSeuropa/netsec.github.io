@@ -64,8 +64,9 @@ flowchart LR
 - **Inter** for body and UI — battle-tested at small sizes, full
   weight range.
 
-Both are loaded once from Google Fonts via a `<link rel="preconnect">`
-+ stylesheet pair in every page's `<head>`.
+Both are self-hosted as `assets/fonts/*.woff2` and preloaded in every
+page's `<head>` (since v1.4.x, issue #121). There is no external Google
+Fonts request.
 
 Heading hierarchy across the site is currently:
 
