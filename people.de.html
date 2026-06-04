@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=dfb6c890">
+<link rel="stylesheet" href="assets/css/site.css?v=1d5a8db9">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -244,9 +244,9 @@
     <!-- Filter nach Forschungsschwerpunkt (Phase 3). Vollständige
          Dokumentation der Pillen-Reihe und URL-Hash-Persistenz in
          people.html (EN). -->
-    <div class="members-keyword-filter" id="members-keyword-filter" role="group" aria-label="Nach Forschungsschwerpunkt filtern" hidden>
+    <div class="members-keyword-filter" id="members-keyword-filter" role="group" aria-label="Nach Forschungsthema filtern" hidden>
       <div class="members-keyword-filter-head">
-        <span class="members-keyword-filter-label">Forschungsschwerpunkte</span>
+        <span class="members-keyword-filter-label">Forschungsthemen</span>
         <button type="button" class="members-keyword-filter-clear" id="members-keyword-filter-clear" hidden>Zurücksetzen</button>
       </div>
       <div class="members-keyword-filter-chips" id="members-keyword-filter-chips"></div>
@@ -350,7 +350,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=19b89989" defer></script>
+<script src="assets/js/site.js?v=ca080967" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json.
      This script is identical to the English version; translatable
@@ -397,8 +397,8 @@
         title: 'Nach Land filtern',
         body:  'Die Länderliste wird automatisch aus der aktuellen Mitgliedschaft erzeugt, es erscheinen nur Länder mit Mitgliedern.' },
       { target: '.members-keyword-filter',
-        title: 'Nach Forschungsschwerpunkt filtern',
-        body:  'Die Pillen in dieser Reihe zeigen die häufigsten Forschungsschwerpunkte im Verzeichnis mit der Anzahl der zugehörigen Bios. Klicken Sie auf eine Pille, um das Verzeichnis auf passende Bios einzugrenzen; klicken Sie auf eine zweite, um die Auswahl zu erweitern (Bios werden angezeigt, sobald ein Schwerpunkt aus der Auswahl vorkommt). Die Schlüsselwort-Pillen auf jeder Karte sind ebenfalls klickbar. Die aktive Auswahl steht in der URL: zum Teilen einer gefilterten Ansicht reicht es, die Adresse zu kopieren.' },
+        title: 'Nach Forschungsthema filtern',
+        body:  'Die Pillen in dieser Reihe gruppieren das Verzeichnis in breite Forschungsthemen, mit der Zahl der Mitglieder je Thema. Klicken Sie auf eine Pille, um das Verzeichnis auf Mitglieder dieses Themas einzugrenzen; klicken Sie auf eine zweite, um die Auswahl zu erweitern (Mitglieder erscheinen, sobald ein Thema aus der Auswahl vorkommt). Die Schlüsselwort-Pillen auf jeder Karte sind ebenfalls klickbar und wählen das Thema des Schlüsselworts. Die aktive Auswahl steht in der URL: zum Teilen einer gefilterten Ansicht reicht es, die Adresse zu kopieren.' },
       { target: '.members-mentorship-filter',
         title: 'Nach Mentoring filtern',
         body:  'Mitglieder können angeben, dass sie als Mentor für Nachwuchsforschende verfügbar sind oder selbst Mentoring suchen. Mit diesen Chips finden Sie sie. Diese Reihe erscheint, sobald mindestens ein Mitglied teilnimmt.' },
@@ -525,7 +525,8 @@
   // Forschungsschwerpunkt-Filter (Phase 3). Siehe people.html (EN)
   // für die vollständige Dokumentation. Slug-Format für URL-Hash.
   const activeKeywords = new Set();
-  let KEYWORD_AGGREGATE = [];
+  let KEYWORD_AGGREGATE = []; // { keyword: <Themenname>, count }
+  let KEYWORD_THEME_MAP = {}; // kanonisches Schlüsselwort → Thema
   let keywordFilterExpanded = false;
   const KEYWORD_FILTER_VISIBLE_TOP_N = 8;
 
@@ -609,13 +610,10 @@
         const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
       }
-      // Schlüsselwort-Filter mit ODER-Semantik. Siehe people.html (EN).
+      // Themenfilter mit ODER-Semantik. Siehe people.html (EN).
       if (activeKeywords.size > 0) {
-        const bioSlugs = (m.canonical_keywords && m.canonical_keywords.length
-          ? m.canonical_keywords
-          : (m.keywords || []))
-          .map(keywordSlug);
-        if (!bioSlugs.some(s => activeKeywords.has(s))) return false;
+        const bioThemeSlugs = (m.themes || []).map(keywordSlug);
+        if (!bioThemeSlugs.some(s => activeKeywords.has(s))) return false;
       }
       return true;
     });
@@ -734,15 +732,24 @@
           const dedupKey = display.toLowerCase();
           if (seen.has(dedupKey)) return;
           seen.add(dedupKey);
-          // Pille als Button. Klick fügt zum aktiven Filter hinzu.
+          // Die Pille zeigt das Schlüsselwort des Mitglieds; der Filter
+          // wirkt auf dessen Thema. Siehe people.html (EN).
+          const theme = KEYWORD_THEME_MAP[display] || null;
+          if (!theme) {
+            const span = document.createElement('span');
+            span.className = 'member-keyword-chip is-static';
+            span.textContent = display;
+            kwWrap.appendChild(span);
+            return;
+          }
           const chip = document.createElement('button');
           chip.type = 'button';
           chip.className = 'member-keyword-chip';
           chip.textContent = display;
-          const slug = keywordSlug(display);
-          chip.setAttribute('data-keyword-slug', slug);
+          const slug = keywordSlug(theme);
+          chip.setAttribute('data-theme-slug', slug);
           chip.setAttribute('aria-label',
-            window.netsecT('Filter by research interest') + ': ' + display);
+            window.netsecT('Filter by research theme') + ': ' + window.netsecT(theme));
           chip.addEventListener('click', (e) => {
             e.stopPropagation();
             toggleKeywordFilter(slug);
@@ -900,18 +907,18 @@
     const raw = (location.hash || '').replace(/^#/, '');
     if (!raw) return;
     const params = new URLSearchParams(raw.includes('&') || raw.includes('=') ? raw : '');
-    const csv = params.get('keywords');
+    const csv = params.get('themes');
     if (!csv) return;
     csv.split(',').map(s => s.trim()).filter(Boolean).forEach(s => activeKeywords.add(s));
   }
   function writeHashKeywords() {
     const slugs = Array.from(activeKeywords);
     const rawHash = (location.hash || '').replace(/^#/, '');
-    const hasKeywordsKey = /(^|&)keywords=/.test(rawHash);
+    const hasKeywordsKey = /(^|&)themes=/.test(rawHash);
     let rest = '';
     if (rawHash && hasKeywordsKey) {
       const params = new URLSearchParams(rawHash);
-      params.delete('keywords');
+      params.delete('themes');
       rest = params.toString();
     } else if (rawHash && !hasKeywordsKey && !rawHash.includes('=')) {
       rest = '';
@@ -919,7 +926,7 @@
       rest = rawHash;
     }
     const parts = [];
-    if (slugs.length) parts.push('keywords=' + slugs.join(','));
+    if (slugs.length) parts.push('themes=' + slugs.join(','));
     if (rest) parts.push(rest);
     const next = parts.join('&');
     if (next) {
@@ -953,7 +960,7 @@
       btn.dataset.canonical = entry.keyword;
       const label = document.createElement('span');
       label.className = 'lbl';
-      label.textContent = entry.keyword;
+      label.textContent = window.netsecT(entry.keyword);
       btn.appendChild(label);
       const count = document.createElement('span');
       count.className = 'count';
@@ -1013,7 +1020,12 @@
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     MEMBERS = data.members || [];
-    KEYWORD_AGGREGATE = Array.isArray(data.keyword_aggregate) ? data.keyword_aggregate : [];
+    // Der Filter gruppiert Mitglieder nach breitem Forschungsthema
+    // (data/keyword-aliases.json `themes`); die Karten behalten ihre
+    // spezifischen Schlüsselwörter. Siehe people.html (EN).
+    KEYWORD_AGGREGATE = (Array.isArray(data.theme_aggregate) ? data.theme_aggregate : [])
+      .map(function (e) { return { keyword: e.theme, count: e.count }; });
+    KEYWORD_THEME_MAP = (data && typeof data.keyword_theme_map === 'object' && data.keyword_theme_map) || {};
     parseHashKeywords();
     populateCountryFilter();
     setupMentorshipFilter();

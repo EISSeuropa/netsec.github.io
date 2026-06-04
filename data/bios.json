@@ -50,6 +50,11 @@
         "International security",
         "Political economy",
         "Power"
+      ],
+      "themes": [
+        "Economic security and statecraft",
+        "International security",
+        "Technology and cyber"
       ]
     },
     {
@@ -114,6 +119,9 @@
         "Economic security",
         "Economic statecraft",
         "Industrial policy"
+      ],
+      "themes": [
+        "Economic security and statecraft"
       ]
     },
     {
@@ -207,6 +215,11 @@
         "Foreign policy analysis",
         "Political psychology",
         "Research methods"
+      ],
+      "themes": [
+        "European and transatlantic relations",
+        "Foreign and security policy",
+        "Research methods and behaviour"
       ]
     },
     {
@@ -429,6 +442,9 @@
       ],
       "mentorship": [
         "mentor"
+      ],
+      "themes": [
+        "Information and influence"
       ]
     },
     {
@@ -460,6 +476,10 @@
         "Defence",
         "EU foreign policy",
         "Grand strategy"
+      ],
+      "themes": [
+        "Foreign and security policy",
+        "Strategy and defence"
       ]
     },
     {
@@ -495,6 +515,10 @@
       ],
       "mentorship": [
         "mentee"
+      ],
+      "themes": [
+        "Foreign and security policy",
+        "Research methods and behaviour"
       ]
     }
   ],
@@ -575,5 +599,60 @@
       "keyword": "Subversion",
       "count": 1
     }
-  ]
+  ],
+  "theme_aggregate": [
+    {
+      "theme": "Foreign and security policy",
+      "count": 3
+    },
+    {
+      "theme": "Economic security and statecraft",
+      "count": 2
+    },
+    {
+      "theme": "Research methods and behaviour",
+      "count": 2
+    },
+    {
+      "theme": "European and transatlantic relations",
+      "count": 1
+    },
+    {
+      "theme": "Information and influence",
+      "count": 1
+    },
+    {
+      "theme": "International security",
+      "count": 1
+    },
+    {
+      "theme": "Strategy and defence",
+      "count": 1
+    },
+    {
+      "theme": "Technology and cyber",
+      "count": 1
+    }
+  ],
+  "keyword_theme_map": {
+    "Defence": "Strategy and defence",
+    "Digital governance": "Technology and cyber",
+    "Disinformation": "Information and influence",
+    "EU foreign policy": "Foreign and security policy",
+    "EU–NATO relations": "European and transatlantic relations",
+    "Economic security": "Economic security and statecraft",
+    "Economic statecraft": "Economic security and statecraft",
+    "Election interference": "Information and influence",
+    "Foreign policy analysis": "Foreign and security policy",
+    "German security policy": "Foreign and security policy",
+    "Grand strategy": "Strategy and defence",
+    "Industrial policy": "Economic security and statecraft",
+    "International security": "International security",
+    "Policy evaluation": "Research methods and behaviour",
+    "Political economy": "Economic security and statecraft",
+    "Political psychology": "Research methods and behaviour",
+    "Power": "International security",
+    "Research methods": "Research methods and behaviour",
+    "Subversion": "Information and influence"
+  }
 }

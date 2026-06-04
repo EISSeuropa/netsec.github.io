@@ -33,6 +33,7 @@ normalise_keyword = sync_bios.normalise_keyword
 normalise_affiliation = sync_bios.normalise_affiliation
 parse_mentorship = sync_bios.parse_mentorship
 ensure_people_webp = sync_bios.ensure_people_webp
+load_keyword_themes = sync_bios.load_keyword_themes
 resolve_prior_entry = sync_bios.resolve_prior_entry
 
 
@@ -788,9 +789,39 @@ def test_ensure_people_webp() -> None:
         shutil.rmtree(photo_dir, ignore_errors=True)
 
 
+def test_load_keyword_themes() -> None:
+    """The `themes` section of data/keyword-aliases.json resolves each
+    canonical keyword (lowercased) to exactly one broad research theme,
+    which drives the directory's cluster filter."""
+    print("\nload_keyword_themes():")
+    theme_of = load_keyword_themes()
+    expect("disinformation → Information and influence",
+           theme_of.get("disinformation"), "Information and influence")
+    expect("eu foreign policy → Foreign and security policy",
+           theme_of.get("eu foreign policy"), "Foreign and security policy")
+    expect("policy evaluation → Research methods and behaviour",
+           theme_of.get("policy evaluation"), "Research methods and behaviour")
+    expect("economic statecraft → Economic security and statecraft",
+           theme_of.get("economic statecraft"), "Economic security and statecraft")
+    # Every keyword maps to at most one theme (the loader keeps the last
+    # write, but the curated file must not list a keyword under two themes).
+    from collections import Counter
+    import json as _json
+    from pathlib import Path as _Path
+    doc = _json.loads((_Path(sync_bios.__file__).resolve().parent.parent
+                       / "data" / "keyword-aliases.json").read_text(encoding="utf-8"))
+    counts = Counter()
+    for kws in (doc.get("themes") or {}).values():
+        for kw in kws:
+            counts[kw.lower()] += 1
+    dupes = [k for k, n in counts.items() if n > 1]
+    expect("no keyword listed under two themes", dupes, [])
+
+
 def main() -> None:
     test_name_key()
     test_normalise_keyword()
+    test_load_keyword_themes()
     test_normalise_affiliation()
     test_parse_mentorship()
     test_country_key()

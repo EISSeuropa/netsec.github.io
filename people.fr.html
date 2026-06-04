@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=dfb6c890">
+<link rel="stylesheet" href="assets/css/site.css?v=1d5a8db9">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -245,9 +245,9 @@
     <!-- Filtre par domaine de recherche (Phase 3). Voir people.html
          (EN) pour la documentation détaillée de la grille de pastilles
          + persistance dans le hash d'URL. -->
-    <div class="members-keyword-filter" id="members-keyword-filter" role="group" aria-label="Filtrer par domaine de recherche" hidden>
+    <div class="members-keyword-filter" id="members-keyword-filter" role="group" aria-label="Filtrer par thème de recherche" hidden>
       <div class="members-keyword-filter-head">
-        <span class="members-keyword-filter-label">Domaines de recherche</span>
+        <span class="members-keyword-filter-label">Thèmes de recherche</span>
         <button type="button" class="members-keyword-filter-clear" id="members-keyword-filter-clear" hidden>Effacer</button>
       </div>
       <div class="members-keyword-filter-chips" id="members-keyword-filter-chips"></div>
@@ -351,7 +351,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=19b89989" defer></script>
+<script src="assets/js/site.js?v=ca080967" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json.
      This script is identical to the English version; translatable
@@ -398,8 +398,8 @@
           title: 'Filtre par pays',
           body:  'La liste des pays est générée automatiquement à partir des membres présents, seuls les pays représentés y figurent.' },
         { target: '.members-keyword-filter',
-          title: 'Filtrer par domaine de recherche',
-          body:  "Les pastilles affichent les domaines de recherche les plus présents dans l'annuaire, avec le nombre de bios concernées. Cliquez sur une pastille pour restreindre l'annuaire aux bios qui la partagent ; cliquez sur une seconde pour élargir la recherche (la correspondance reste valide tant qu'au moins un domaine de la sélection est présent). Les pastilles de mot-clé sur chaque fiche fonctionnent de la même façon. La sélection active vit dans l'URL : pour partager une vue filtrée, il suffit de copier l'adresse." },
+          title: 'Filtrer par thème de recherche',
+          body:  "Les pastilles regroupent l'annuaire en grands thèmes de recherche, avec le nombre de membres par thème. Cliquez sur une pastille pour restreindre l'annuaire aux membres de ce thème ; cliquez sur une seconde pour élargir (la correspondance reste valide tant qu'au moins un thème de la sélection est présent). Les pastilles de mot-clé sur chaque fiche sont cliquables aussi, et sélectionnent le thème du mot-clé. La sélection active vit dans l'URL : pour partager une vue filtrée, il suffit de copier l'adresse." },
         { target: '.members-mentorship-filter',
           title: 'Filtrer par mentorat',
           body:  "Les membres peuvent indiquer qu'ils sont disponibles comme mentor pour les chercheur·euses en début de carrière, ou en recherche de mentorat. Utilisez ces pastilles pour les trouver. Cette rangée apparaît dès qu'au moins un membre s'est inscrit." },
@@ -526,7 +526,8 @@
   // Filtre domaines de recherche (Phase 3). Voir people.html (EN) pour
   // la documentation complète. Slugs au format URL-safe pour le hash.
   const activeKeywords = new Set();
-  let KEYWORD_AGGREGATE = [];
+  let KEYWORD_AGGREGATE = []; // { keyword: <nom de thème>, count }
+  let KEYWORD_THEME_MAP = {}; // mot-clé canonique → thème
   let keywordFilterExpanded = false;
   const KEYWORD_FILTER_VISIBLE_TOP_N = 8;
 
@@ -610,13 +611,10 @@
         const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
       }
-      // Filtre mots-clés OU. Voir people.html (EN).
+      // Filtre par thème de recherche (OU). Voir people.html (EN).
       if (activeKeywords.size > 0) {
-        const bioSlugs = (m.canonical_keywords && m.canonical_keywords.length
-          ? m.canonical_keywords
-          : (m.keywords || []))
-          .map(keywordSlug);
-        if (!bioSlugs.some(s => activeKeywords.has(s))) return false;
+        const bioThemeSlugs = (m.themes || []).map(keywordSlug);
+        if (!bioThemeSlugs.some(s => activeKeywords.has(s))) return false;
       }
       return true;
     });
@@ -735,15 +733,24 @@
           const dedupKey = display.toLowerCase();
           if (seen.has(dedupKey)) return;
           seen.add(dedupKey);
-          // Pastille cliquable. Ajoute au filtre actif au clic.
+          // La pastille affiche le mot-clé du membre ; le filtre agit sur
+          // son thème. Voir people.html (EN).
+          const theme = KEYWORD_THEME_MAP[display] || null;
+          if (!theme) {
+            const span = document.createElement('span');
+            span.className = 'member-keyword-chip is-static';
+            span.textContent = display;
+            kwWrap.appendChild(span);
+            return;
+          }
           const chip = document.createElement('button');
           chip.type = 'button';
           chip.className = 'member-keyword-chip';
           chip.textContent = display;
-          const slug = keywordSlug(display);
-          chip.setAttribute('data-keyword-slug', slug);
+          const slug = keywordSlug(theme);
+          chip.setAttribute('data-theme-slug', slug);
           chip.setAttribute('aria-label',
-            window.netsecT('Filter by research interest') + ' : ' + display);
+            window.netsecT('Filter by research theme') + ' : ' + window.netsecT(theme));
           chip.addEventListener('click', (e) => {
             e.stopPropagation();
             toggleKeywordFilter(slug);
@@ -901,18 +908,18 @@
     const raw = (location.hash || '').replace(/^#/, '');
     if (!raw) return;
     const params = new URLSearchParams(raw.includes('&') || raw.includes('=') ? raw : '');
-    const csv = params.get('keywords');
+    const csv = params.get('themes');
     if (!csv) return;
     csv.split(',').map(s => s.trim()).filter(Boolean).forEach(s => activeKeywords.add(s));
   }
   function writeHashKeywords() {
     const slugs = Array.from(activeKeywords);
     const rawHash = (location.hash || '').replace(/^#/, '');
-    const hasKeywordsKey = /(^|&)keywords=/.test(rawHash);
+    const hasKeywordsKey = /(^|&)themes=/.test(rawHash);
     let rest = '';
     if (rawHash && hasKeywordsKey) {
       const params = new URLSearchParams(rawHash);
-      params.delete('keywords');
+      params.delete('themes');
       rest = params.toString();
     } else if (rawHash && !hasKeywordsKey && !rawHash.includes('=')) {
       rest = '';
@@ -920,7 +927,7 @@
       rest = rawHash;
     }
     const parts = [];
-    if (slugs.length) parts.push('keywords=' + slugs.join(','));
+    if (slugs.length) parts.push('themes=' + slugs.join(','));
     if (rest) parts.push(rest);
     const next = parts.join('&');
     if (next) {
@@ -954,7 +961,7 @@
       btn.dataset.canonical = entry.keyword;
       const label = document.createElement('span');
       label.className = 'lbl';
-      label.textContent = entry.keyword;
+      label.textContent = window.netsecT(entry.keyword);
       btn.appendChild(label);
       const count = document.createElement('span');
       count.className = 'count';
@@ -1014,7 +1021,12 @@
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     MEMBERS = data.members || [];
-    KEYWORD_AGGREGATE = Array.isArray(data.keyword_aggregate) ? data.keyword_aggregate : [];
+    // Le filtre regroupe les membres par thème de recherche large
+    // (data/keyword-aliases.json `themes`) ; les fiches gardent leurs
+    // mots-clés précis. Voir people.html (EN).
+    KEYWORD_AGGREGATE = (Array.isArray(data.theme_aggregate) ? data.theme_aggregate : [])
+      .map(function (e) { return { keyword: e.theme, count: e.count }; });
+    KEYWORD_THEME_MAP = (data && typeof data.keyword_theme_map === 'object' && data.keyword_theme_map) || {};
     parseHashKeywords();
     populateCountryFilter();
     setupMentorshipFilter();
