@@ -76,13 +76,13 @@
   },
 
   "themes": {
-    "Foreign and security policy": ["EU foreign policy", "German security policy", "Foreign policy analysis"],
-    "Strategy and defence": ["Grand strategy", "Defence"],
-    "International security": ["International security", "Power"],
-    "European and transatlantic relations": ["EU–NATO relations"],
-    "Information and influence": ["Disinformation", "Election interference", "Subversion"],
-    "Technology and cyber": ["Digital governance"],
-    "Economic security and statecraft": ["Economic security", "Economic statecraft", "Industrial policy", "Political economy"],
-    "Research methods and behaviour": ["Research methods", "Political psychology", "Policy evaluation"]
+    "Foreign policy and diplomacy": ["EU foreign policy", "German security policy", "Foreign policy analysis"],
+    "Security and defence": ["Grand strategy", "Defence", "International security", "Power"],
+    "European and transatlantic security order": ["EU–NATO relations"],
+    "Intelligence, information and influence": ["Disinformation", "Election interference", "Subversion"],
+    "Cyber and emerging technology": ["Digital governance"],
+    "Economic security and geoeconomics": ["Economic security", "Economic statecraft", "Industrial policy", "Political economy"],
+    "Transnational and human security": [],
+    "Theory and methods": ["Research methods", "Political psychology", "Policy evaluation"]
   }
 }

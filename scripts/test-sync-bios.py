@@ -795,14 +795,14 @@ def test_load_keyword_themes() -> None:
     which drives the directory's cluster filter."""
     print("\nload_keyword_themes():")
     theme_of = load_keyword_themes()
-    expect("disinformation → Information and influence",
-           theme_of.get("disinformation"), "Information and influence")
-    expect("eu foreign policy → Foreign and security policy",
-           theme_of.get("eu foreign policy"), "Foreign and security policy")
-    expect("policy evaluation → Research methods and behaviour",
-           theme_of.get("policy evaluation"), "Research methods and behaviour")
-    expect("economic statecraft → Economic security and statecraft",
-           theme_of.get("economic statecraft"), "Economic security and statecraft")
+    expect("disinformation → Intelligence, information and influence",
+           theme_of.get("disinformation"), "Intelligence, information and influence")
+    expect("eu foreign policy → Foreign policy and diplomacy",
+           theme_of.get("eu foreign policy"), "Foreign policy and diplomacy")
+    expect("policy evaluation → Theory and methods",
+           theme_of.get("policy evaluation"), "Theory and methods")
+    expect("economic statecraft → Economic security and geoeconomics",
+           theme_of.get("economic statecraft"), "Economic security and geoeconomics")
     # Every keyword maps to at most one theme (the loader keeps the last
     # write, but the curated file must not list a keyword under two themes).
     from collections import Counter
