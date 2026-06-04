@@ -31,20 +31,23 @@ Google Form ──► Google Sheet ──► sync-bios.yml (weekly) ──► PR
 | 7 | **Research keywords (comma-separated, 3–5 suggested)** | Short answer | ⬜ |
 | 8 | **Working Group involvement (tick all that apply)** | Checkboxes: *WG1 · Building the Network · WG2 · Transfer of Knowledge · WG3 · Fostering the Next Generation · WG4 · Ensuring Inclusion · None yet* | ⬜ |
 | 9 | **Mentorship (optional)** | Checkboxes: *Open to mentoring early-career researchers · Looking for a mentor* | ⬜ |
-| 10 | **Personal or institutional website (optional)** | Short answer | ⬜ |
-| 11 | **ORCID iD (optional)** | Short answer | ⬜ |
-| 12 | **LinkedIn URL (optional)** | Short answer | ⬜ |
-| 13 | **X / Twitter URL (optional)** | Short answer | ⬜ |
-| 14 | **Bluesky URL (optional)** | Short answer | ⬜ |
-| 15 | **Mastodon URL (optional)** | Short answer | ⬜ |
-| 16 | **Headshot photo (optional)** | File upload — image only — max 5 MB | ⬜ |
-| 17 | **I consent to publication of my bio on netsec-cost.eu** | Checkboxes — single option | ✅ |
+| 10 | **Research regions (optional)** | Checkboxes: *Europe · Western Balkans · Eastern neighbours and Russia · Middle East and North Africa · Africa · Asia · The Americas · Global and cross-regional* | ⬜ |
+| 11 | **Personal or institutional website (optional)** | Short answer | ⬜ |
+| 12 | **ORCID iD (optional)** | Short answer | ⬜ |
+| 13 | **LinkedIn URL (optional)** | Short answer | ⬜ |
+| 14 | **X / Twitter URL (optional)** | Short answer | ⬜ |
+| 15 | **Bluesky URL (optional)** | Short answer | ⬜ |
+| 16 | **Mastodon URL (optional)** | Short answer | ⬜ |
+| 17 | **Headshot photo (optional)** | File upload — image only — max 5 MB | ⬜ |
+| 18 | **I consent to publication of my bio on netsec-cost.eu** | Checkboxes — single option | ✅ |
 
 > **WG-checkboxes parsing.** The script extracts the digits 1–4 from whatever the checkbox column contains, so the precise wording of each option doesn't matter as long as it includes the WG number. *"WG2 · Transfer of Knowledge"* parses to `2`; *"None yet"* parses to no WG. You can rename the WGs freely later.
 
 > **Affiliation punctuation.** The sync standardises the separator inside the *Institution or organisation* answer so the directory reads uniformly: a spaced hyphen or dash between an institution and its named centre becomes a comma (*ETH Zurich - Center for Security Studies* → *ETH Zurich, Center for Security Studies*), and a semicolon between two separate affiliations becomes a slash (*Ghent University; Egmont Institute* → *Ghent University / Egmont Institute*). It does not merge differently-spelled names for the same institution, so keep the institution name itself consistent across submissions.
 
 > **Mentorship parsing.** The script reads the two checkbox options into a `mentorship` list of role tags. *"Open to mentoring …"* parses to `mentor`; *"Looking for a mentor"* parses to `mentee`; a member can tick both, or neither. The match is a tolerant substring check on the cell text, so light rewording is safe as long as an offering option still says *mentoring* / *as a mentor* and a seeking option still says *looking for* / *seeking a mentor*. The directory badge labels are recognised too (*"Available to mentor"* → `mentor`, *"Seeking mentorship"* → `mentee`), so if you edit the Sheet by hand you can type the status as it appears on the card rather than the exact Form option. Put the senior / mid-level framing (mentors are typically senior or mid-level scholars) in the question's **description** text, not in the option labels: it stays guidance for respondents and never reaches the parser. The field is dormant until the question is live and members resubmit; an absent column parses to an empty list and renders nothing.
+
+> **Research-regions parsing.** Question 10 is a second, geographic filter axis for the directory, independent of the topical research keywords and combined with them by AND (so a visitor can narrow to "cyber **and** Russia"). The script reads the ticked checkbox values into a `regions` list, matching each against the controlled vocabulary in `data/keyword-aliases.json` (`regions` section): *Europe · Western Balkans · Eastern neighbours and Russia · Middle East and North Africa · Africa · Asia · The Americas · Global and cross-regional*. The match is case-insensitive and the cell may be comma- or semicolon-separated; anything not in the vocabulary is dropped, so a stray free-text answer never leaks into the filter. The eight regions follow the EU Institute for Security Studies' lean regional taxonomy, kept short on purpose so members cluster rather than fragment. To change the list, edit the `regions` array in `keyword-aliases.json` **and** the checkbox options on the form so they stay in step. Like mentorship, the field is dormant until you add the question and members resubmit: until at least one member opts in, `region_aggregate` is empty and the directory's region-filter row stays hidden, so shipping the code ahead of the data is harmless. The translated region names live in the `netsecT` catalogues in `assets/js/site.js` (FR + DE), hand-translated per CLAUDE.md §1.
 
 In *Settings → Responses*, configure as follows:
 
@@ -64,7 +67,7 @@ A natural worry, given the workaround above: if a respondent submits a "minimum-
 
 **No.** `scripts/sync-bios.py` does a truthy-merge per field, not a full-record replacement:
 
-- Optional fields (`email`, `website`, `orcid`, `linkedin`, `twitter`, `bluesky`, `mastodon`, `keywords`, `position`, `affiliation`, `bio`, `country`, etc.) only overwrite the prior value when the new submission carries a non-empty value for that field. Blanks are skipped.
+- Optional fields (`email`, `website`, `orcid`, `linkedin`, `twitter`, `bluesky`, `mastodon`, `keywords`, `mentorship`, `regions`, `position`, `affiliation`, `bio`, `country`, etc.) only overwrite the prior value when the new submission carries a non-empty value for that field. Blanks are skipped.
 - The headshot follows the same rule. A submission with no upload doesn't wipe the previous photo.
 - Working-group memberships use **union** semantics on the Google Form sync, so a sparse resubmission can never drop a WG via the form alone. See the next subsection for the cost.eu-side reconciliation that runs weekly on top of this.
 

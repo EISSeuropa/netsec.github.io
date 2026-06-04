@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=1d5a8db9">
+<link rel="stylesheet" href="assets/css/site.css?v=dd284cb1">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -254,6 +254,22 @@
       <button type="button" class="members-keyword-filter-toggle" id="members-keyword-filter-toggle" aria-expanded="false" hidden>Tout afficher</button>
     </div>
 
+    <!-- Filtre par région de recherche (#555). Second axe géographique,
+         indépendant des thèmes et combiné en ET. Multi-sélection avec
+         compteurs (calqué sur la ligne des thèmes). Issu du champ
+         facultatif « Régions de recherche » ; masqué tant qu'aucun
+         membre n'a renseigné de région. Transitoire (pas de hash URL).
+         Réutilise les classes CSS de la ligne thèmes/mots-clés (DRY) ;
+         des identifiants distincts portent les accroches JS. -->
+    <div class="members-keyword-filter members-region-filter" id="members-region-filter" role="group" aria-label="Filtrer par région de recherche" hidden>
+      <div class="members-keyword-filter-head">
+        <span class="members-keyword-filter-label">Régions de recherche</span>
+        <button type="button" class="members-keyword-filter-clear" id="members-region-filter-clear" hidden>Effacer</button>
+      </div>
+      <div class="members-keyword-filter-chips" id="members-region-filter-chips"></div>
+      <button type="button" class="members-keyword-filter-toggle" id="members-region-filter-toggle" aria-expanded="false" hidden>Tout afficher</button>
+    </div>
+
     <!-- Filtre mentorat. Dimension AND distincte, sélection unique
          (Tous / Mentors / En recherche de mentor), sans persistance
          dans le hash. Masqué tant qu'aucun membre ne porte de facette
@@ -306,6 +322,7 @@
       <div class="member-mentorship" aria-label="Mentorat" hidden></div>
       <p class="member-bio"></p>
       <div class="member-keywords" aria-label="Domaines de recherche" hidden></div>
+      <div class="member-regions" aria-label="Régions de recherche" hidden></div>
       <div class="member-contact" aria-label="Contact"></div>
     </div>
     <span class="member-toggle-chevron" aria-hidden="true">
@@ -351,7 +368,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=b8256ee4" defer></script>
+<script src="assets/js/site.js?v=6930ce1b" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json.
      This script is identical to the English version; translatable
@@ -528,6 +545,13 @@
   const activeKeywords = new Set();
   let KEYWORD_AGGREGATE = []; // { keyword: <nom de thème>, count }
   let KEYWORD_THEME_MAP = {}; // mot-clé canonique → thème
+  // Filtre par région de recherche (#555) : second axe, indépendant des
+  // thèmes et combiné en ET. La ligne reste masquée tant qu'aucune donnée
+  // ne porte de région (champ facultatif du formulaire). Pas de
+  // persistance via l'URL dans cette version (cf. mentorat).
+  let REGION_AGGREGATE = []; // [{ region: string, count: number }, …]
+  const activeRegions = new Set(); // identifiants de région (slugs)
+  let regionFilterExpanded = false;
   let keywordFilterExpanded = false;
   const KEYWORD_FILTER_VISIBLE_TOP_N = 8;
 
@@ -615,6 +639,11 @@
       if (activeKeywords.size > 0) {
         const bioThemeSlugs = (m.themes || []).map(keywordSlug);
         if (!bioThemeSlugs.some(s => activeKeywords.has(s))) return false;
+      }
+      // Filtre région (#555) : axe indépendant, combiné en ET avec les thèmes.
+      if (activeRegions.size > 0) {
+        const bioRegionSlugs = (m.regions || []).map(keywordSlug);
+        if (!bioRegionSlugs.some(s => activeRegions.has(s))) return false;
       }
       return true;
     });
@@ -762,6 +791,33 @@
           kwWrap.appendChild(chip);
         });
         kwWrap.removeAttribute('hidden');
+      }
+      // Pastilles de région de recherche (#555) : régions d'expertise du
+      // membre (champ facultatif). Cliquables — sélectionnent la région
+      // dans le filtre et y font défiler. Masqué si le membre n'en a aucune.
+      const rgWrap = node.querySelector('.member-regions');
+      const memberRegions = Array.isArray(m.regions) ? m.regions.filter(Boolean) : [];
+      if (rgWrap && memberRegions.length) {
+        memberRegions.forEach(region => {
+          const slug = keywordSlug(region);
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'member-keyword-chip member-region-chip';
+          chip.textContent = window.netsecT(region);
+          chip.setAttribute('data-region-slug', slug);
+          chip.setAttribute('aria-label',
+            window.netsecT('Filter by research region') + ' : ' + window.netsecT(region));
+          chip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleRegionFilter(slug);
+            const filterRow = document.getElementById('members-region-filter');
+            if (filterRow && !filterRow.hidden) {
+              filterRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          });
+          rgWrap.appendChild(chip);
+        });
+        rgWrap.removeAttribute('hidden');
       }
       // Defensive ORCID normaliser — see people.html for the rationale.
       const orcidId = (raw => {
@@ -1006,6 +1062,69 @@
   if (kwClearBtn) {
     kwClearBtn.addEventListener('click', clearKeywordFilter);
   }
+  function renderRegionFilter() {
+    const root = document.getElementById('members-region-filter');
+    const chipsWrap = document.getElementById('members-region-filter-chips');
+    const toggleBtn = document.getElementById('members-region-filter-toggle');
+    const clearBtn = document.getElementById('members-region-filter-clear');
+    if (!root || !chipsWrap) return;
+    if (!REGION_AGGREGATE.length) { root.hidden = true; return; }
+    root.hidden = false;
+    chipsWrap.replaceChildren();
+    const total = REGION_AGGREGATE.length;
+    const limit = regionFilterExpanded ? total : Math.min(KEYWORD_FILTER_VISIBLE_TOP_N, total);
+    REGION_AGGREGATE.slice(0, limit).forEach(entry => {
+      const slug = keywordSlug(entry.region);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'members-keyword-filter-chip members-region-filter-chip';
+      btn.setAttribute('aria-pressed', activeRegions.has(slug) ? 'true' : 'false');
+      btn.dataset.slug = slug;
+      const label = document.createElement('span');
+      label.className = 'lbl';
+      label.textContent = window.netsecT(entry.region);
+      btn.appendChild(label);
+      const count = document.createElement('span');
+      count.className = 'count';
+      count.textContent = entry.count;
+      btn.appendChild(count);
+      btn.addEventListener('click', () => toggleRegionFilter(slug));
+      chipsWrap.appendChild(btn);
+    });
+    if (total > KEYWORD_FILTER_VISIBLE_TOP_N) {
+      toggleBtn.hidden = false;
+      toggleBtn.setAttribute('aria-expanded', regionFilterExpanded ? 'true' : 'false');
+      toggleBtn.textContent = regionFilterExpanded
+        ? window.netsecT('Show fewer')
+        : (window.netsecT('Show all') + ' (' + total + ')');
+    } else {
+      toggleBtn.hidden = true;
+    }
+    clearBtn.hidden = activeRegions.size === 0;
+  }
+  function toggleRegionFilter(slug) {
+    if (activeRegions.has(slug)) activeRegions.delete(slug);
+    else activeRegions.add(slug);
+    renderRegionFilter();
+    render();
+  }
+  function clearRegionFilter() {
+    if (activeRegions.size === 0) return;
+    activeRegions.clear();
+    renderRegionFilter();
+    render();
+  }
+  const rgToggleBtn = document.getElementById('members-region-filter-toggle');
+  if (rgToggleBtn) {
+    rgToggleBtn.addEventListener('click', () => {
+      regionFilterExpanded = !regionFilterExpanded;
+      renderRegionFilter();
+    });
+  }
+  const rgClearBtn = document.getElementById('members-region-filter-clear');
+  if (rgClearBtn) {
+    rgClearBtn.addEventListener('click', clearRegionFilter);
+  }
   window.addEventListener('hashchange', () => {
     const before = Array.from(activeKeywords).sort().join(',');
     parseHashKeywords();
@@ -1027,10 +1146,12 @@
     KEYWORD_AGGREGATE = (Array.isArray(data.theme_aggregate) ? data.theme_aggregate : [])
       .map(function (e) { return { keyword: e.theme, count: e.count }; });
     KEYWORD_THEME_MAP = (data && typeof data.keyword_theme_map === 'object' && data.keyword_theme_map) || {};
+    REGION_AGGREGATE = Array.isArray(data.region_aggregate) ? data.region_aggregate : [];
     parseHashKeywords();
     populateCountryFilter();
     setupMentorshipFilter();
     renderKeywordFilter();
+    renderRegionFilter();
     render();
     // Indique la fraîcheur de l'annuaire à partir de `generated_at`
     // de bios.json (#271). Masqué tant qu'aucune date valide n'est lue.
