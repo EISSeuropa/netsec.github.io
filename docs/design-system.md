@@ -95,6 +95,45 @@ lift on hover. Used by news cards, member cards, country cards,
 grant cards, MC cards, resource cards, the timeline cards, the
 join-the-network CTA, the contact form, the search toolbar.
 
+### `.card-clickable` / `.card-stretch` — whole-card click target
+
+```html
+<article class="news-card glass card-clickable">
+  <h3>…</h3>
+  <p>…</p>
+  <a class="card-stretch" href="grants.html">View grants &amp; apply →</a>
+</article>
+```
+
+Stretched-link pattern: add `.card-clickable` to a card and
+`.card-stretch` to its single primary link. The link's `::before`
+overlays the whole card (`position:absolute;inset:0`) so a click
+anywhere on the card follows that one link, while the accessibility
+tree still exposes one concise link (the CTA text), not the card's
+whole body. Reach for this instead of wrapping the card in an `<a>`
+whenever the card carries more than a line or two of text, since a
+whole-card anchor would announce the entire paragraph as the link
+name.
+
+Notes and constraints:
+- The overlay uses `::before`, not `::after`: the global external-link
+  arrow marker already owns `::after` on `target="_blank"` links.
+- Any other interactive element in the card (a second link, a button)
+  must stay clickable; the utility lifts `.card-clickable a:not(.card-stretch)`
+  and `button` above the overlay with `z-index:2`. A card with a
+  nested in-body link is fine; a card whose only link sits inside body
+  prose is not a good fit (no clear single CTA).
+- Apply only to cards with one navigation destination. Do **not** apply
+  to cards that are already interactive (directory `.member-card`
+  expand, ESSC popover cards) or that have no destination — those get
+  no hover affordance, so a hover lift only ever appears where a click
+  leads somewhere.
+- Tradeoff: the overlay sits above the card text, so click-drag text
+  selection of the card body is impeded (same as any stretched-link or
+  whole-anchor card). Acceptable for promo-style cards.
+- In use on: homepage event + news cards, and the grant cards on
+  `/grants.html` (all three locales).
+
 ### `.btn`, `.btn-primary`, `.btn-ghost`
 
 ```html

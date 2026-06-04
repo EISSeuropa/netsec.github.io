@@ -67,7 +67,7 @@
     } catch (e) { /* localStorage / matchMedia may be unavailable */ }
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=9d97c61a">
+<link rel="stylesheet" href="assets/css/site.css?v=dfb6c890">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -252,23 +252,23 @@
       <p>Announcements, calls, and milestones from the NetSec community.</p>
     </div>
     <div class="news-list">
-      <article class="news-card glass">
+      <article class="news-card glass card-clickable">
         <span class="news-date">Now open</span>
         <h3>NetSec Grants: Applications now open</h3>
         <p>Applications are now open for all five NetSec grant categories: Short-Term Scientific Missions, Virtual Mobility Grants, and three Conference Grants (Young Researcher &amp; Innovator, Inclusiveness Target Country, Dissemination). Open to the wider research community, not just Action participants. Submissions go through e-COST. See eligibility and amounts on the Grants page.</p>
-        <a href="grants.html">View grants &amp; apply →</a>
+        <a class="card-stretch" href="grants.html">View grants &amp; apply →</a>
       </article>
-      <article class="news-card glass">
+      <article class="news-card glass card-clickable">
         <span class="news-date">Applications closed</span>
         <h3>NetSec Summer School: applications closed</h3>
         <p>The call for the 2026 NetSec Early-Career Scholars Summer School in Stockholm (9–11 June 2026) closed on 1 March 2026. Selected participants will be contacted by the scientific coordinators in due course. A new call for the next training school will be announced when the 2027 cohort opens.</p>
-        <a href="https://eiss-europa.com/NetSecSchool.html" target="_blank" rel="noopener">View the school</a>
+        <a class="card-stretch" href="https://eiss-europa.com/NetSecSchool.html" target="_blank" rel="noopener">View the school</a>
       </article>
-      <article class="news-card glass">
+      <article class="news-card glass card-clickable">
         <span class="news-date">10 October 2025</span>
         <h3>NetSec officially launched</h3>
         <p>COST Action CA24154 (MoU 063/25) is live, with leadership and Working Group structure now in place across 30 participating countries. The inaugural Management Committee plenary will be announced shortly.</p>
-        <a href="about.html#leadership">Meet the team →</a>
+        <a class="card-stretch" href="about.html#leadership">Meet the team →</a>
       </article>
     </div>
 
@@ -421,7 +421,7 @@
     <div class="event-list">
 
       <!-- Summer School -->
-      <article class="event-card glass featured">
+      <article class="event-card glass featured card-clickable">
         <span class="event-date">9–11 June 2026</span>
         <span class="event-type">Training School</span>
         <h3>NetSec Early-Career Scholars Summer School</h3>
@@ -440,13 +440,13 @@
             <span><strong>Applications closed</strong> on 1 March 2026. Selected participants will be contacted by the scientific coordinators.</span>
           </div>
         </div>
-        <a class="event-link" href="https://eiss-europa.com/NetSecSchool.html" target="_blank" rel="noopener">
+        <a class="event-link card-stretch" href="https://eiss-europa.com/NetSecSchool.html" target="_blank" rel="noopener">
           Full details
         </a>
       </article>
 
       <!-- Annual Conference -->
-      <article class="event-card glass featured">
+      <article class="event-card glass featured card-clickable">
         <span class="event-date">11–12 June 2026</span>
         <span class="event-type">Annual Conference</span>
         <h3>European Security Conference</h3>
@@ -465,7 +465,7 @@
             <span><strong>Chairpersons:</strong> Dr Julia Carver · Dr Sanne Verschuren</span>
           </div>
         </div>
-        <a class="event-link" href="essc-2026.html">
+        <a class="event-link card-stretch" href="essc-2026.html">
           View live programme →
         </a>
       </article>
@@ -732,12 +732,12 @@
      the hand-coded HTML survives as fail-soft fallback if the fetch
      or parse fails. Each rebuilt card carries the per-card Add to
      calendar dropdown wired against /calendar/<slug>.ics. -->
-<script src="assets/js/home-events.js?v=99c686d0" defer></script>
+<script src="assets/js/home-events.js?v=1a464000" defer></script>
 <!-- Home-page news renderer + RSS feed (v1.9.0). Same shape as the
      events renderer — hand-coded news cards above survive as fail-
      soft fallback if data/news.json fails to load. The RSS feed at
      /news.xml is the public, machine-readable mirror. -->
-<script src="assets/js/home-news.js?v=c7999643" defer></script>
+<script src="assets/js/home-news.js?v=2314ffac" defer></script>
 <script src="assets/js/home-spotlight.js?v=363512cc" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {

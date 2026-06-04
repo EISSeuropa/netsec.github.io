@@ -39,7 +39,13 @@
   }
 
   function buildCard(item, locale) {
-    const card = el('article', { class: 'news-card glass', 'data-news-id': item.id });
+    // Whole-card click target (stretched-link) when the item has a CTA;
+    // CTA-less news items stay non-clickable with no hover affordance.
+    const hasCta = !!(item.cta && item.cta.href);
+    const card = el('article', {
+      class: 'news-card glass' + (hasCta ? ' card-clickable' : ''),
+      'data-news-id': item.id,
+    });
     const dateLabel = pickLocale(item.displayDate, locale, '');
     if (dateLabel) {
       card.appendChild(el('span', { class: 'news-date' }, [dateLabel]));
@@ -53,7 +59,9 @@
         ? item.cta.href
         : pickLocale(item.cta.href, locale, '');
       const label = pickLocale(item.cta.i18n, locale, '');
-      const attrs = { href };
+      // card-stretch: overlay this CTA over the whole card (see the
+      // .card-clickable utility in site.css).
+      const attrs = { class: 'card-stretch', href };
       if (item.cta.external) {
         attrs.target = '_blank';
         attrs.rel = 'noopener';

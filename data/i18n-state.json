@@ -103,15 +103,15 @@
     "grants.html": {
       "fr": {
         "file": "grants.fr.html",
-        "source_sha1": "11b2a964150e02ad17669d0889ca7b85313a7ca8",
-        "translated_on": "2026-06-03",
+        "source_sha1": "7aea4d078d87f3e37e2c6a5314d52e7d810618e2",
+        "translated_on": "2026-06-04",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "grants.de.html",
-        "source_sha1": "11b2a964150e02ad17669d0889ca7b85313a7ca8",
-        "translated_on": "2026-06-03",
+        "source_sha1": "7aea4d078d87f3e37e2c6a5314d52e7d810618e2",
+        "translated_on": "2026-06-04",
         "status": "beta",
         "reviewed_by": null
       }
@@ -119,15 +119,15 @@
     "index.html": {
       "fr": {
         "file": "index.fr.html",
-        "source_sha1": "6e0eee14468022a4b2074a53dcbbfed7a6fe6475",
-        "translated_on": "2026-06-03",
+        "source_sha1": "2860198c4d9f7ac3fb58cf92f7802c2ee83a4ced",
+        "translated_on": "2026-06-04",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "index.de.html",
-        "source_sha1": "6e0eee14468022a4b2074a53dcbbfed7a6fe6475",
-        "translated_on": "2026-06-03",
+        "source_sha1": "2860198c4d9f7ac3fb58cf92f7802c2ee83a4ced",
+        "translated_on": "2026-06-04",
         "status": "beta",
         "reviewed_by": null
       }
