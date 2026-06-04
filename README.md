@@ -31,6 +31,7 @@ directory) and is maintained by [Dr Arthur Laudrain](https://netsec-cost.eu/peop
 - [Security](#security)
 - [Privacy & GDPR](#privacy--gdpr)
 - [Licensing](#licensing)
+- [Brand and press kit](#brand-and-press-kit)
 - [Acknowledgements](#acknowledgements)
 
 > 📚 **For maintainers**: see [`docs/`](./docs/) for deep
@@ -334,6 +335,16 @@ If you reuse the site content under CC BY, please attribute it as:
 
 > *Based on content from COST Action NetSec (CA24154),
 > https://netsec-cost.eu, CC BY 4.0.*
+
+## Brand and press kit
+
+The visual identity (the logo lockups, the four-petal mark, the colour
+palette, and the typography) lives under `assets/images/brand/`. For
+ready-to-use assets and copy-paste boilerplate, see the public press
+kit at [`press-kit.html`](press-kit.html). For the developer reference
+(which asset goes where, the colour tokens, the component library), see
+[`docs/design-system.md`](docs/design-system.md), and for the
+maintenance procedure see [`docs/admin-guide.md`](docs/admin-guide.md).
 
 ## Acknowledgements
 

@@ -74,6 +74,10 @@ Then a few house rules:
 
 - **No emojis in source files** unless explicitly asked. The site
   has its own visual language; emoji noise undermines it.
+- **Visual changes** should follow
+  [`docs/design-system.md`](docs/design-system.md), which documents the
+  colour tokens, typography, components, brand assets, and accessibility
+  requirements. Reference the tokens, never a raw hex.
 - **British English** in all user-facing copy. The maintainer is
   Swiss-based and the audience is European (COST evaluators,
   journalists, MC representatives, members across 30+ countries).

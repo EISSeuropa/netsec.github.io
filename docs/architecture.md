@@ -337,6 +337,8 @@ EISS repository's `docs/indico-programme-integration.md`.
 │   ├── sync-bios.py                 # Pulls Google Form submissions
 │   ├── bios-source.json             # CSV URL + form URL + column mapping
 │   ├── inject-seo.py                # Idempotent canonical/OG/JSON-LD generator + asset cache-bust stamper (?v=hash)
+│   ├── build-brand-assets.py        # One-shot: crop designer lockups + rasterise the favicon family into assets/images/brand/ (not in CI)
+│   ├── update-brand-html.py         # One-shot: migrate favicon/logo markup across all HTML to the brand set (not in CI)
 │   ├── check-i18n-drift.py          # Reports stale translations vs. EN source (ignores cache-bust query)
 │   ├── build-calendar.py            # Generates /calendar.ics + /calendar/<slug>.ics from data/events.json
 │   ├── build-news-rss.py            # Generates /news.xml (RSS 2.0) from data/news.json
@@ -440,6 +442,21 @@ If you're adding a new field to `bios.json`:
    `index.html` if leadership, `grants.html` if grant manager).
 5. Update `docs/bios-setup.md` so the next admin doesn't have to
    reverse-engineer the change.
+
+If you're changing the brand assets (logo, mark, favicon, colours):
+
+1. Brand updates run **outside CI**, with one-shot local scripts. For a
+   new mark or lockup, drop the designer PNGs into the source folder and
+   run `scripts/build-brand-assets.py` (crops the lockups, regenerates
+   the favicon family), then `scripts/update-brand-html.py` if markup
+   paths change.
+2. Run `scripts/inject-seo.py` afterwards so the structured-data
+   `Organization.logo` (`assets/images/brand/android-chrome-512.png`)
+   and the cache-bust hashes stay in sync.
+3. For a colour change, edit `--accent` / `--accent-2` in `site.css` and
+   `theme_color` in `manifest.webmanifest`, then re-run `inject-seo.py`.
+4. See `docs/design-system.md` for which asset goes where and
+   `docs/admin-guide.md` for the full maintenance procedure.
 
 If you're adding a new event to the Events section:
 
