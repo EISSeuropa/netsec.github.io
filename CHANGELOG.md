@@ -115,6 +115,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The directory's research-themes filter now carries a one-line explanation under its heading, in all three locales: themes automatically group people working in the same area based on their individual keywords, which stay visible on each card. It removes the apparent mismatch between the broad theme chips and the specific keyword pills on the cards.
 - Tidied the directory's research-interest keywords. A standalone `&` in a keyword now reads as "and" (R&D and other acronyms are left intact), and two phrase-like entries were curated into tighter tags: *Policy evaluation & lessons learned (Afghanistan)* became *Policy evaluation*, and *Germany security policy* became the grammatical *German security policy*. The sync now also flags over-long or parenthetical keywords so they get curated rather than shipped as one-off tags.
 - The directory's Join-the-Network card (and the matching guided-tour step) now say the bio form takes about 3 minutes rather than 5, in all three locales, to better reflect how long it actually takes.
 - The directory's "First time here?" orientation card now includes the mentorship dimension, in all three locales: a new tip explains that a member's card can carry an *Available to mentor* or *Seeking mentorship* badge once they opt in, and that the directory can be filtered to either.
