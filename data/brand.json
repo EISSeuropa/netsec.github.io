@@ -1,0 +1,18 @@
+{
+  "_documentation": "Single source of truth for NetSec brand primitives. scripts/inject-seo.py reads colours.primary (the structured-data theme-color) and assets.org_logo (the JSON-LD Organization.logo) from here, so those can no longer drift. The static mirrors that a browser reads directly (manifest.webmanifest theme_color, the :root --accent / --accent-2 tokens in assets/css/site.css) cannot read this file at runtime, so scripts/check-brand.py asserts they match it on every brand-touching PR. When a brand value changes: change it here AND in the static mirrors in the same PR; the brand-lint gate enforces the match. The working_groups palette is recorded here as the canonical source for when the WG colours are tokenised (currently still inline in site.css / working-groups.html, tracked as a follow-up); it is not yet enforced by the lint.",
+  "colours": {
+    "primary": "#003399",
+    "secondary": "#0a84ff",
+    "gold": "#ffcc00"
+  },
+  "assets": {
+    "org_logo": "assets/images/brand/android-chrome-512.png",
+    "mark": "assets/images/brand/netsec-mark.png"
+  },
+  "working_groups": [
+    { "id": 1, "colour": "#0a84ff" },
+    { "id": 2, "colour": "#10b981" },
+    { "id": 3, "colour": "#8b5cf6" },
+    { "id": 4, "colour": "#f59e0b" }
+  ]
+}

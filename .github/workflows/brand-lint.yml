@@ -1,0 +1,29 @@
+name: Lint brand consistency
+
+# Guards the visual identity against drift. data/brand.json is the single
+# source of truth; this fails a PR if manifest.webmanifest theme_color or
+# the :root --accent / --accent-2 tokens in site.css no longer match it,
+# or if any page's JSON-LD still emits the pre-brand placeholder logo.
+# See scripts/check-brand.py.
+
+on:
+  pull_request:
+    paths:
+      - "**/*.html"
+      - "assets/css/site.css"
+      - "manifest.webmanifest"
+      - "data/brand.json"
+      - "scripts/inject-seo.py"
+      - "scripts/check-brand.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  brand-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v4 (sha-pinned)
+      - name: Check brand consistency
+        run: python3 scripts/check-brand.py
