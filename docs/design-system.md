@@ -127,12 +127,13 @@ Notes and constraints:
   to cards that are already interactive (directory `.member-card`
   expand, ESSC popover cards) or that have no destination — those get
   no hover affordance, so a hover lift only ever appears where a click
-  leads somewhere.
+  leads somewhere. Also skip it on large cards that already carry a
+  single prominent CTA button (the `/grants.html` grant cards): a
+  whole-card target adds little there and is easy to mis-click.
 - Tradeoff: the overlay sits above the card text, so click-drag text
   selection of the card body is impeded (same as any stretched-link or
   whole-anchor card). Acceptable for promo-style cards.
-- In use on: homepage event + news cards, and the grant cards on
-  `/grants.html` (all three locales).
+- In use on: the homepage event and news cards (all three locales).
 
 ### `.btn`, `.btn-primary`, `.btn-ghost`
 
