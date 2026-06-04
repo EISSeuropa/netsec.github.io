@@ -198,6 +198,8 @@ The file has two sections:
 
 The maintainer extends the file by hand when a submission lands. The sync also logs `· possible alias candidate (3× 'foreign policy') ↔ (1× 'foreign policy analysis'); distance=9, substring` for pairs that look close enough to be worth a manual merge. Distance ≤ 2 Levenshtein and word-boundary substring containment both trigger the hint; already-paired canonicals are suppressed.
 
+Two hygiene behaviours run during normalisation. A standalone `&` between words is rewritten to `and` (so `Security & defence` becomes `Security and defence`); `&`-bearing acronyms like `R&D` are matched whole and stay intact. And the sync prints a non-fatal warning when a canonical keyword is over 40 characters or contains parentheses, so a phrase-like submission (`Policy evaluation & lessons learned (Afghanistan)`) gets curated into a tighter tag, or an alias that collapses it, rather than shipping as a sentence-length singleton.
+
 If `data/keyword-aliases.json` is missing or malformed, the sync falls back to identity normalisation (sentence-case the whole string, no acronym preservation) and prints a warning. The renderer's own inline fallback covers the same case for visitors who land before the next sync runs.
 
 ## Freshness timestamp

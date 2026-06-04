@@ -490,8 +490,8 @@
       "photo_source_sha256": "8c73d65e4a5c41ee4a1861935d7f425b8cc090ffb857e09cad75c2d96b8dbc8d",
       "canonical_keywords": [
         "EU foreign policy",
-        "Germany security policy",
-        "Policy evaluation & lessons learned (Afghanistan)"
+        "German security policy",
+        "Policy evaluation"
       ],
       "mentorship": [
         "mentee"
@@ -536,7 +536,7 @@
       "count": 1
     },
     {
-      "keyword": "Germany security policy",
+      "keyword": "German security policy",
       "count": 1
     },
     {
@@ -552,7 +552,7 @@
       "count": 1
     },
     {
-      "keyword": "Policy evaluation & lessons learned (Afghanistan)",
+      "keyword": "Policy evaluation",
       "count": 1
     },
     {

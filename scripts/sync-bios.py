@@ -383,6 +383,12 @@ def normalise_keyword(
 
     def _replace(match: "re.Match[str]") -> str:
         word = match.group(0)
+        # A standalone "&" reads as the conjunction "and" in canonical
+        # form ("Policy evaluation & lessons learned" → "… and …").
+        # &-bearing acronyms like "R&D" are matched whole (the token is
+        # "R&D", not "&"), so they are untouched.
+        if word == "&":
+            word = "and"
         lower = word.lower()
         if lower in acronyms:
             state["first_alpha"] = False
@@ -1594,6 +1600,17 @@ def main() -> None:
             m.pop("canonical_keywords", None)
         for c in canonicals:
             aggregate[c] = aggregate.get(c, 0) + 1
+            # Surface keywords that read as a phrase rather than a tag, so
+            # the maintainer can curate them into a tighter form (or an
+            # alias) instead of shipping a sentence-length singleton. Non-
+            # fatal hint only; nothing is auto-edited.
+            if len(c) > 40 or "(" in c or ")" in c:
+                print(
+                    f"  ! long/parenthetical keyword on {m.get('name', '?')}: "
+                    f"{c!r} — consider tightening it or adding an alias in "
+                    "data/keyword-aliases.json.",
+                    file=sys.stderr,
+                )
     print(f"  {len(aggregate)} unique canonical keywords across "
           f"{sum(aggregate.values())} bio mentions.")
     flag_alias_candidates(aggregate, alias_map)
