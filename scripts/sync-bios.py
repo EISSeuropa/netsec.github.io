@@ -236,9 +236,12 @@ def parse_mentorship(raw: str) -> list[str]:
     light edits to the Form wording keep working. Distinct phrases keep
     the two directions apart even though both contain "mentor":
     "open to mentoring" / "as a mentor" -> mentor;
-    "looking for a mentor" / "seeking a mentor" -> mentee. An empty or
-    absent cell (the question is optional, and unconfigured columns read
-    as "") yields []."""
+    "looking for a mentor" / "seeking a mentor" -> mentee. The directory
+    badge labels are also recognised ("available to mentor" -> mentor,
+    "seeking mentorship" -> mentee), so a maintainer editing the Sheet
+    by hand can type the displayed status rather than the exact Form
+    option. An empty or absent cell (the question is optional, and
+    unconfigured columns read as "") yields []."""
     if not raw:
         return []
     s = str(raw).lower()
@@ -246,12 +249,14 @@ def parse_mentorship(raw: str) -> list[str]:
     if any(p in s for p in (
         "open to mentoring", "offer mentor", "offering mentor",
         "happy to mentor", "as a mentor", "provide mentor",
-        "mentoring early",
+        "mentoring early", "available to mentor", "available as a mentor",
     )):
         out.append("mentor")
     if any(p in s for p in (
         "looking for a mentor", "seeking a mentor", "find a mentor",
         "want a mentor", "need a mentor", "be mentored", "as a mentee",
+        "seeking mentorship", "seeking mentoring", "looking for mentorship",
+        "want mentorship", "need mentorship", "find mentorship",
     )):
         out.append("mentee")
     return out
@@ -727,7 +732,13 @@ def row_to_member(
         "name": name,
         "country": country,
         "country_code": "",  # filled by post-processing
-        "affiliation": (row.get(cols.get("affiliation", ""), "") or "").strip(),
+        # Normalise here (not only in the later whole-list pass) so a
+        # form entry carries the same punctuation the stored bio does.
+        # Otherwise merge() overwrites the stored, normalised affiliation
+        # with the raw Sheet value, and diff_summary (which runs before
+        # the whole-list normalisation) reports a phantom "updated" every
+        # sync even when nothing changed.
+        "affiliation": normalise_affiliation(row.get(cols.get("affiliation", ""), "") or ""),
         "position": (row.get(cols.get("position", ""), "") or "").strip(),
         "roles": [],
         "wgs": parse_wgs(row.get(cols.get("wgs", ""), "")),
