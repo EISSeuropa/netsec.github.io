@@ -347,6 +347,31 @@ def load_keyword_aliases() -> tuple[set[str], dict[str, str], dict[str, str]]:
     return acronym_set, alias_map, spelling_map
 
 
+def load_keyword_themes() -> dict[str, str]:
+    """Return a lowercased-canonical-keyword → theme-name map from the
+    `themes` section of data/keyword-aliases.json.
+
+    Each canonical keyword belongs to at most one broad research theme.
+    The directory's filter clusters members by theme (so people working
+    in the same area surface together) while their cards keep the specific
+    keyword pills. Empty if the file or the `themes` section is missing,
+    in which case the renderer's theme filter simply stays hidden."""
+    theme_of: dict[str, str] = {}
+    if not ALIAS_FILE.exists():
+        return theme_of
+    try:
+        doc = json.loads(ALIAS_FILE.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return theme_of
+    for theme, kws in (doc.get("themes") or {}).items():
+        if not isinstance(theme, str):
+            continue
+        for kw in kws or []:
+            if isinstance(kw, str) and kw.strip():
+                theme_of[kw.strip().lower()] = theme
+    return theme_of
+
+
 _WORD_RE = re.compile(r"[\w&]+", re.UNICODE)
 
 
@@ -1580,7 +1605,11 @@ def main() -> None:
     print()
     print("Normalising keywords against data/keyword-aliases.json …")
     acronyms, alias_map, spelling_map = load_keyword_aliases()
+    theme_of = load_keyword_themes()
     aggregate: dict[str, int] = {}
+    theme_member_counts: dict[str, int] = {}  # theme → distinct members
+    keyword_theme_map: dict[str, str] = {}    # canonical keyword → theme
+    uncategorised: set[str] = set()
     for m in merged:
         raw_kws = m.get("keywords") or []
         seen: dict[str, str] = {}  # lowercase canonical → canonical
@@ -1600,6 +1629,11 @@ def main() -> None:
             m.pop("canonical_keywords", None)
         for c in canonicals:
             aggregate[c] = aggregate.get(c, 0) + 1
+            theme = theme_of.get(c.lower())
+            if theme:
+                keyword_theme_map[c] = theme
+            else:
+                uncategorised.add(c)
             # Surface keywords that read as a phrase rather than a tag, so
             # the maintainer can curate them into a tighter form (or an
             # alias) instead of shipping a sentence-length singleton. Non-
@@ -1611,13 +1645,38 @@ def main() -> None:
                     "data/keyword-aliases.json.",
                     file=sys.stderr,
                 )
+        # Per-bio research themes (distinct, alphabetical). Drives the
+        # cluster filter on /people.html; cards keep the specific keywords.
+        member_themes = sorted({theme_of[c.lower()] for c in canonicals if c.lower() in theme_of})
+        if member_themes:
+            m["themes"] = member_themes
+            for t in member_themes:
+                theme_member_counts[t] = theme_member_counts.get(t, 0) + 1
+        else:
+            m.pop("themes", None)
     print(f"  {len(aggregate)} unique canonical keywords across "
           f"{sum(aggregate.values())} bio mentions.")
+    if uncategorised:
+        # Keep the taxonomy complete: any canonical keyword without a theme
+        # won't cluster and its card pill renders as display-only.
+        print(
+            "  ! keywords with no theme (add under `themes` in "
+            "data/keyword-aliases.json): " + ", ".join(sorted(uncategorised)),
+            file=sys.stderr,
+        )
     flag_alias_candidates(aggregate, alias_map)
     bios_data["keyword_aggregate"] = sorted(
         ({"keyword": k, "count": v} for k, v in aggregate.items()),
         key=lambda e: (-e["count"], e["keyword"].lower()),
     )
+    # Theme aggregate (distinct-member count per theme, sorted desc) drives
+    # the research-theme filter chip row; keyword_theme_map lets the card
+    # pills resolve their theme for the click-to-filter affordance.
+    bios_data["theme_aggregate"] = sorted(
+        ({"theme": t, "count": n} for t, n in theme_member_counts.items()),
+        key=lambda e: (-e["count"], e["theme"].lower()),
+    )
+    bios_data["keyword_theme_map"] = {k: keyword_theme_map[k] for k in sorted(keyword_theme_map)}
 
     # Standardise affiliation punctuation so the same employer doesn't read
     # three different ways across cards. Runs over every member (seed and

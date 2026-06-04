@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=dfb6c890">
+<link rel="stylesheet" href="assets/css/site.css?v=1d5a8db9">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -245,17 +245,18 @@
       <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Jump to the join form" aria-label="Jump to the join form">+</button>
     </div>
 
-    <!-- Research-interest filter chips. Populated from
-         `bios.json#keyword_aggregate` (sorted by use count). Top 8
-         visible by default; "Show all" expands to the full list.
-         Multi-select with OR semantics. State persists in the URL
-         hash (`#keywords=a-slug,another-slug`) so it's bookmarkable
-         and chip-on-card clicks (member-keyword-chip in detailed
-         view) can deep-link visitors here. Hidden when no keywords
-         exist at all. -->
-    <div class="members-keyword-filter" id="members-keyword-filter" role="group" aria-label="Filter by research interest" hidden>
+    <!-- Research-theme filter chips. Populated from
+         `bios.json#theme_aggregate` (broad themes, sorted by member
+         count). Top 8 visible by default; "Show all" expands to the
+         full list. Multi-select with OR semantics. State persists in
+         the URL hash (`#themes=a-slug,another-slug`) so it's bookmarkable
+         and chip-on-card clicks (member-keyword-chip in detailed view)
+         select that keyword's theme. Cards still show the specific
+         keyword pills; the filter clusters by theme. Hidden when no
+         themes exist at all. -->
+    <div class="members-keyword-filter" id="members-keyword-filter" role="group" aria-label="Filter by research theme" hidden>
       <div class="members-keyword-filter-head">
-        <span class="members-keyword-filter-label">Research interests</span>
+        <span class="members-keyword-filter-label">Research themes</span>
         <button type="button" class="members-keyword-filter-clear" id="members-keyword-filter-clear" hidden>Clear</button>
       </div>
       <div class="members-keyword-filter-chips" id="members-keyword-filter-chips"></div>
@@ -387,7 +388,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=19b89989" defer></script>
+<script src="assets/js/site.js?v=ca080967" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
 <script>
@@ -443,8 +444,8 @@
           title: 'Filter by country',
           body:  'The country dropdown is populated automatically from the current membership, only countries that have members appear.' },
         { target: '.members-keyword-filter',
-          title: 'Filter by research interest',
-          body:  'Chips along this row show the most common research interests in the directory, with submission counts. Tap one to narrow to bios that share it; tap a second to widen the match (any interest in the set passes). The keyword pills on each member card are clickable too. The active selection lives in the URL, so a filtered view is shareable just by copying the address.' },
+          title: 'Filter by research theme',
+          body:  'Chips along this row group the directory into broad research themes, with the number of members in each. Tap one to narrow to members working in that theme; tap a second to widen the match (any theme in the set passes). The keyword pills on each member card are clickable too, and select that keyword\'s theme. The active selection lives in the URL, so a filtered view is shareable just by copying the address.' },
         { target: '.members-mentorship-filter',
           title: 'Filter by mentorship',
           body:  'Members can flag that they are available to mentor early-career researchers, or seeking mentorship themselves. Use these chips to find them. This row appears once at least one member has opted in.' },
@@ -610,7 +611,8 @@
   // OR semantics across selected entries (any match keeps the bio).
   // Empty Set = no keyword filter applied.
   const activeKeywords = new Set();
-  let KEYWORD_AGGREGATE = []; // [{ keyword: string, count: number }, …]
+  let KEYWORD_AGGREGATE = []; // [{ keyword: <theme name>, count: number }, …]
+  let KEYWORD_THEME_MAP = {}; // canonical keyword → theme name (card pills)
   let keywordFilterExpanded = false;
   const KEYWORD_FILTER_VISIBLE_TOP_N = 8;
 
@@ -716,11 +718,10 @@
       // present in the active set. An empty active set = no
       // filter applied.
       if (activeKeywords.size > 0) {
-        const bioSlugs = (m.canonical_keywords && m.canonical_keywords.length
-          ? m.canonical_keywords
-          : (m.keywords || []))
-          .map(keywordSlug);
-        if (!bioSlugs.some(s => activeKeywords.has(s))) return false;
+        // activeKeywords holds theme slugs; a bio passes when one of its
+        // research themes is in the active set.
+        const bioThemeSlugs = (m.themes || []).map(keywordSlug);
+        if (!bioThemeSlugs.some(s => activeKeywords.has(s))) return false;
       }
       return true;
     });
@@ -870,20 +871,27 @@
           const dedupKey = display.toLowerCase();
           if (seen.has(dedupKey)) return;
           seen.add(dedupKey);
-          // Render as a button so it's clickable: tapping a chip on a
-          // bio card adds that keyword to the directory filter and
-          // scrolls the visitor up to the filter row so they can see
-          // the result land. Multi-select OR semantics, so clicking a
-          // chip when the same keyword is already active toggles it
-          // off (handled inside toggleKeywordFilter).
+          // The pill shows the member's specific keyword; the directory
+          // filter operates on its broader *theme*. When the keyword maps
+          // to a theme, render a clickable button that selects that theme
+          // (and scrolls up to the filter row); otherwise a static pill so
+          // an unthemed keyword still displays without a dead control.
+          const theme = KEYWORD_THEME_MAP[display] || null;
+          if (!theme) {
+            const span = document.createElement('span');
+            span.className = 'member-keyword-chip is-static';
+            span.textContent = display;
+            kwWrap.appendChild(span);
+            return;
+          }
           const chip = document.createElement('button');
           chip.type = 'button';
           chip.className = 'member-keyword-chip';
           chip.textContent = display;
-          const slug = keywordSlug(display);
-          chip.setAttribute('data-keyword-slug', slug);
+          const slug = keywordSlug(theme);
+          chip.setAttribute('data-theme-slug', slug);
           chip.setAttribute('aria-label',
-            window.netsecT('Filter by research interest') + ': ' + display);
+            window.netsecT('Filter by research theme') + ': ' + window.netsecT(theme));
           chip.addEventListener('click', (e) => {
             e.stopPropagation();
             toggleKeywordFilter(slug);
@@ -1118,7 +1126,7 @@
     // Try query-string-style first: `keywords=a,b,c` or
     // `keywords=a,b&other=…`.
     const params = new URLSearchParams(raw.includes('&') || raw.includes('=') ? raw : '');
-    const csv = params.get('keywords');
+    const csv = params.get('themes');
     if (!csv) return;
     csv.split(',').map(s => s.trim()).filter(Boolean).forEach(s => activeKeywords.add(s));
   }
@@ -1127,11 +1135,11 @@
     const rawHash = (location.hash || '').replace(/^#/, '');
     // Preserve any non-`keywords=` portion of the hash (e.g. a
     // member-card deep-link slug stays intact).
-    const hasKeywordsKey = /(^|&)keywords=/.test(rawHash);
+    const hasKeywordsKey = /(^|&)themes=/.test(rawHash);
     let rest = '';
     if (rawHash && hasKeywordsKey) {
       const params = new URLSearchParams(rawHash);
-      params.delete('keywords');
+      params.delete('themes');
       rest = params.toString();
     } else if (rawHash && !hasKeywordsKey && !rawHash.includes('=')) {
       // A bare member-id-style hash; keep it as a separate fragment.
@@ -1140,7 +1148,7 @@
       rest = rawHash;
     }
     const parts = [];
-    if (slugs.length) parts.push('keywords=' + slugs.join(','));
+    if (slugs.length) parts.push('themes=' + slugs.join(','));
     if (rest) parts.push(rest);
     const next = parts.join('&');
     // Use replaceState rather than assigning location.hash so that
@@ -1182,7 +1190,7 @@
       btn.dataset.canonical = entry.keyword;
       const label = document.createElement('span');
       label.className = 'lbl';
-      label.textContent = entry.keyword;
+      label.textContent = window.netsecT(entry.keyword);
       btn.appendChild(label);
       const count = document.createElement('span');
       count.className = 'count';
@@ -1259,7 +1267,14 @@
     // every canonical keyword in use across the directory. Drives the
     // filter chip row. Missing on older snapshots → empty array,
     // which hides the filter cleanly.
-    KEYWORD_AGGREGATE = Array.isArray(data.keyword_aggregate) ? data.keyword_aggregate : [];
+    // The research-interest filter clusters members by broad *theme*
+    // (data/keyword-aliases.json `themes`) so people in the same area
+    // surface together; cards still show their specific keyword pills.
+    // theme_aggregate is reshaped to the {keyword,count} shape the chip
+    // row already expects (here `keyword` carries the theme name).
+    KEYWORD_AGGREGATE = (Array.isArray(data.theme_aggregate) ? data.theme_aggregate : [])
+      .map(function (e) { return { keyword: e.theme, count: e.count }; });
+    KEYWORD_THEME_MAP = (data && typeof data.keyword_theme_map === 'object' && data.keyword_theme_map) || {};
     // Seed activeKeywords from the URL hash so a deep-link like
     //   /people.html#keywords=ai-governance,foreign-policy-analysis
     // lands with those filters already applied.
