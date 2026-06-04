@@ -84,6 +84,11 @@ NEW_BRAND = (
 )
 
 # ── Replacement 3: JSON-LD logo URL ──
+# Historical: this one-shot v1.8.0 migration is complete and the OLD
+# placeholder files (favicon.svg, logo.png) have since been removed from
+# the repo. The OLD_* strings below are retained only as the record of
+# what was migrated; inject-seo.py now owns the JSON-LD logo and reads it
+# from data/brand.json.
 OLD_LOGO_URL = '"logo": "https://netsec-cost.eu/assets/images/logo.png"'
 NEW_LOGO_URL = '"logo": "https://netsec-cost.eu/assets/images/brand/android-chrome-512.png"'
 
