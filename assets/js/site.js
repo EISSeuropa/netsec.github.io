@@ -105,6 +105,20 @@
     return dict[s] || s;
   };
 
+  /* Headshot WebP helper (#269). The directory cards, the ESSC member
+     popover, and the About / Working-Group avatars all serve
+     <picture><source type="image/webp"><img original></picture>, so a
+     modern browser fetches the ~50%-smaller WebP and the original JPEG /
+     PNG stays as the fallback. sync-bios.py writes a `<slug>.webp`
+     sibling for every headshot. Returns the WebP path, or null when the
+     source is absent or already WebP (nothing to add). */
+  window.netsecWebp = function (path) {
+    if (typeof path !== 'string') return null;
+    return /\.(jpe?g|png)$/i.test(path)
+      ? path.replace(/\.(jpe?g|png)$/i, '.webp')
+      : null;
+  };
+
   /* Beta-translation ribbon: keep the layout offset in step with the
      ribbon's real measured height.
 
@@ -432,9 +446,27 @@
           // Photo
           if (m.photo) {
             const img = card.querySelector('.mc-avatar img');
-            if (img && img.getAttribute('src') !== m.photo) {
-              img.setAttribute('src', m.photo);
+            if (img) {
+              if (img.getAttribute('src') !== m.photo) img.setAttribute('src', m.photo);
               if (m.name) img.setAttribute('alt', m.name);
+              // Wrap the avatar in <picture> with a WebP source (#269);
+              // the original <img> stays as the fallback. Idempotent.
+              const webp = window.netsecWebp && window.netsecWebp(m.photo);
+              if (webp) {
+                let pic = img.closest('picture');
+                if (!pic) {
+                  pic = document.createElement('picture');
+                  const src = document.createElement('source');
+                  src.type = 'image/webp';
+                  src.srcset = webp;
+                  img.parentNode.insertBefore(pic, img);
+                  pic.appendChild(src);
+                  pic.appendChild(img);
+                } else {
+                  const src = pic.querySelector('source');
+                  if (src) src.srcset = webp;
+                }
+              }
             }
           }
           // Display name (honorifics sometimes change between

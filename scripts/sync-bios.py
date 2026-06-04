@@ -645,6 +645,44 @@ def download_photo(
     )
 
 
+def ensure_people_webp() -> int:
+    """Make sure every headshot in assets/images/people/ has a sibling
+    .webp (the smaller format the directory serves first, with the
+    original as the <picture> fallback). Idempotent: skips a slug whose
+    .webp is already newer than its source. Returns the count written.
+
+    Runs over .jpg / .jpeg / .png sources, keyed by basename, so it
+    covers both the form-synced .jpg files and the hand-added seed /
+    leadership photos (which use mixed extensions). Encoding failures
+    are non-fatal (the original still serves via the fallback)."""
+    if not HAS_PIL:
+        return 0
+    written = 0
+    for src in sorted(PHOTO_DIR.iterdir()):
+        if src.suffix.lower() not in (".jpg", ".jpeg", ".png"):
+            continue
+        dest = src.with_suffix(".webp")
+        if dest.exists() and dest.stat().st_mtime >= src.stat().st_mtime:
+            continue
+        try:
+            img = Image.open(src)
+            if img.mode in ("RGBA", "P", "LA"):
+                # WebP keeps alpha, but the headshots are opaque circles;
+                # flatten to RGB for the smallest, most predictable output.
+                img = img.convert("RGB")
+            if img.width > MAX_PHOTO_WIDTH:
+                ratio = MAX_PHOTO_WIDTH / img.width
+                img = img.resize(
+                    (MAX_PHOTO_WIDTH, int(img.height * ratio)), Image.LANCZOS,
+                )
+            img.save(dest, format="WEBP", quality=80, method=6)
+            written += 1
+            PHOTOS_CHANGED.append(str(dest.relative_to(ROOT)).replace(os.sep, "/"))
+        except Exception as e:
+            print(f"  ! webp encode failed for {src.name}: {e}", file=sys.stderr)
+    return written
+
+
 def resolve_prior_entry(
     slug: str,
     email: str,
@@ -1521,6 +1559,12 @@ def main() -> None:
 
     merged = merge(old_members, form_entries)
     print(diff_summary(old_members, merged))
+
+    # Make sure every headshot has a .webp sibling for the directory's
+    # <picture> serving (#269). Idempotent; only writes missing/stale ones.
+    _webp_n = ensure_people_webp()
+    if _webp_n:
+        print(f"Generated {_webp_n} new .webp headshot(s).")
 
     # Resolve raw keywords through the alias map + sentence-case +
     # acronym word-walk normaliser. Emits a `canonical_keywords` field

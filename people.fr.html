@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=6b591ff7">
+<link rel="stylesheet" href="assets/css/site.css?v=9d97c61a">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -294,7 +294,7 @@
 <template id="member-card-template">
   <article class="member-card glass">
     <div class="member-photo">
-      <img alt="" loading="lazy">
+      <picture><source class="member-photo-webp" type="image/webp"><img alt="" loading="lazy"></picture>
       <span class="member-photo-fallback" aria-hidden="true"></span>
     </div>
     <div class="member-body">
@@ -350,7 +350,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=1e56233c" defer></script>
+<script src="assets/js/site.js?v=19b89989" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json.
      This script is identical to the English version; translatable
@@ -630,13 +630,18 @@
         node.setAttribute('tabindex', '0');
       }
       const img = node.querySelector('img');
+      const webpSource = node.querySelector('.member-photo-webp');
       const fallback = node.querySelector('.member-photo-fallback');
       if (m.photo) {
         img.src = m.photo;
         img.alt = m.name || '';
+        const w = window.netsecWebp && window.netsecWebp(m.photo);
+        if (w && webpSource) webpSource.srcset = w;
+        else if (webpSource) webpSource.remove();
         fallback.style.display = 'none';
       } else {
-        img.remove();
+        const pic = img.closest('picture');
+        (pic || img).remove();
         fallback.textContent = initials(m.name);
       }
       node.querySelector('.member-name').textContent = m.name || '';

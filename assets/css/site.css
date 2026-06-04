@@ -508,6 +508,9 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .mc-avatar img{
   width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;
 }
+/* <picture> wrapper (WebP source + JPEG/PNG fallback img) is layout-neutral:
+   the sizing lives on the inner <img>. */
+.mc-avatar picture{display:contents}
 .mc-card h3{font-size:1rem;margin:0 0 4px}
 .mc-card .role{font-size:.82rem;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
 .mc-card .org{font-size:.85rem;color:var(--muted);margin:0 0 10px}
@@ -2028,6 +2031,7 @@ body{padding-top:var(--whats-new-h, 0px)}
 .member-card .member-photo img{
   width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;
 }
+.member-card .member-photo picture{display:contents}
 .member-photo-fallback{
   position:absolute;inset:0;display:grid;place-items:center;
   color:var(--accent);font-weight:700;font-size:1.4rem;font-family:'Lexend','Inter',sans-serif;
@@ -4084,6 +4088,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   background:var(--line);
   display:block;
 }
+.essc-member-card-picture{display:contents}
 .essc-member-card-photo-placeholder{
   /* Same dimensions as the photo so the grid doesn't reflow when the
      member has no photo yet. */
