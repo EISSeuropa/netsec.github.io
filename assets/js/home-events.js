@@ -378,8 +378,12 @@
 
   function buildCard(ev, locale, t) {
     const isFeatured = !!ev.featured;
+    // Whole-card click target (stretched-link) only when the event has a
+    // single primary destination; events with no CTA (e.g. "venue to be
+    // confirmed") stay non-clickable and get no hover affordance.
+    const hasCta = !!(ev.cta && ev.cta.href);
     const card = el('article', {
-      class: 'event-card glass' + (isFeatured ? ' featured' : ''),
+      class: 'event-card glass' + (isFeatured ? ' featured' : '') + (hasCta ? ' card-clickable' : ''),
       'data-event-uid': ev.uid,
     });
 
@@ -465,12 +469,15 @@
     // CTAs row: optional event-link + ATC dropdown
     const ctasRow = el('div', { class: 'event-card-ctas' });
 
-    if (ev.cta && ev.cta.href) {
+    if (hasCta) {
       const href = typeof ev.cta.href === 'string'
         ? ev.cta.href
         : pickLocale(ev.cta.href, locale, '');
       const label = pickLocale(ev.cta.i18n, locale, '');
-      const attrs = { class: 'event-link', href };
+      // card-stretch: this CTA's ::before overlays the whole card so a
+      // click anywhere on the card follows it (the Add-to-calendar
+      // button and WG pills sit above the overlay and stay clickable).
+      const attrs = { class: 'event-link card-stretch', href };
       if (ev.cta.external) {
         attrs.target = '_blank';
         attrs.rel = 'noopener';

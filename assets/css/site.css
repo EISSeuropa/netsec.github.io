@@ -678,6 +678,33 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 /* -------- Events / Outputs / News timeline + cards -------- */
 .event-list,.output-list,.news-list{display:grid;gap:20px}
 .event-list{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+/* -------- Clickable-card (stretched-link) utility --------
+   Makes a whole content card act as one click target while keeping a
+   single real link in the accessibility tree. The card's primary CTA
+   carries `.card-stretch`; its ::before overlays the entire card so a
+   click anywhere on the card follows that link. We use ::before (not
+   ::after) on purpose: the global external-link arrow marker already
+   owns ::after on target=_blank links (see the ::after block near the
+   top of this file), so reusing ::after here would clobber the arrow.
+   Applied only to cards with a single navigation destination; cards
+   with no destination or with their own click behaviour (directory
+   expand, ESSC popovers) deliberately do not get this. */
+.card-clickable{position:relative}
+.card-clickable .card-stretch::before{content:'';position:absolute;inset:0;z-index:1}
+/* Keep any other interactive element inside the card clickable in its
+   own right by lifting it above the overlay. */
+.card-clickable a:not(.card-stretch),
+.card-clickable button{position:relative;z-index:2}
+/* Hover/focus affordance, matched to a.wg-card (lift + accent border).
+   focus-within mirrors the border when the inner CTA is keyboard-
+   focused, so the whole card reads as the active target. */
+.card-clickable{transition:transform .2s var(--ease),border-color .2s var(--ease),box-shadow .2s var(--ease)}
+.card-clickable:hover{transform:translateY(-3px);border-color:var(--accent)}
+.card-clickable:focus-within{border-color:var(--accent)}
+@media (prefers-reduced-motion: reduce){
+  .card-clickable:hover{transform:none}
+}
+
 .event-card,.output-card,.news-card{padding:28px;display:flex;flex-direction:column;gap:10px}
 .event-date{
   display:inline-flex;align-items:baseline;gap:6px;
