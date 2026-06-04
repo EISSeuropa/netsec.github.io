@@ -234,6 +234,34 @@ marks inherit `currentColor` so they pick up theme.
 Same-concept-same-icon rule: every conference grant uses the same
 microphone icon; every contact-item uses the same envelope.
 
+## Brand assets
+
+The official marks shipped in v1.8.0 and live under
+`assets/images/brand/`. Four lockup variants plus one standalone mark
+cover every placement:
+
+| Asset | Use |
+| --- | --- |
+| `netsec-lockup-primary.png` | Default lockup, for light backgrounds. |
+| `netsec-lockup-white.png` | Lockup for dark backgrounds. |
+| `netsec-lockup-mono.png` | Single-colour lockup for print. |
+| `netsec-mark.png` (595×599) | The four-petal mark on its own, for avatars, favicons, and tight spaces. |
+
+The page header uses the `*-nav` crops of the lockups (the light and
+dark variants are swapped by the `.dark` theme class) and falls back to
+`netsec-mark-nav.png` below 700px. The favicon family (`favicon.ico`,
+`favicon-16/32.png`, `apple-touch-icon.png`, `android-chrome-192/512.png`)
+and the PWA `manifest.webmanifest` are all derived from the mark, and
+`android-chrome-512.png` doubles as the `Organization.logo` in every
+page's structured data (written by `scripts/inject-seo.py`). The
+pre-brand `assets/images/logo.png` is a placeholder and must not be
+reintroduced.
+
+This is only the developer index of which file goes where. The
+authority for the contractual rules (the COST and EU emblem pairing,
+clear-space, minimum sizes, the colour swatches and type specimens) is
+the public press kit at [`press-kit.html`](../press-kit.html).
+
 ## Responsive breakpoints
 
 | Breakpoint        | What changes                                                                  |

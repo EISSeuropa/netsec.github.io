@@ -84,9 +84,32 @@ For the rationale, see the PDF documentation pack, Section 07
 | ----------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | COST logo         | `assets/images/cost-logo.jpg`                         | © COST Association — used per COST visual-identity guidance for funded Actions       |
 | EU emblem         | Inlined SVG in every page footer                      | Used per the [EU visual identity manual](https://commission.europa.eu/communication/visual-identity-and-branding_en) for *Funded by the EU* communication |
-| NetSec wordmark   | `NS` letter-mark — pure CSS, no asset                 | © COST Action NetSec                                                                 |
+| NetSec logo       | Lockups + mark in `assets/images/brand/` (favicon family derived from the mark) | © COST Action NetSec                                              |
 | Member headshots  | `assets/images/people/<slug>.{jpg,png,jpeg,webp}`     | © the individual member, displayed with their consent                                |
 | Country flags     | <https://flagcdn.com> (loaded at runtime)             | Flags themselves public domain; CDN MIT                                              |
+
+#### Maintaining brand assets
+
+The visual identity is PNG assets, not CSS, since v1.8.0. Three update
+paths, by what changes:
+
+- **A brand colour.** Edit `--accent` / `--accent-2` in
+  `assets/css/site.css` and `theme_color` in `manifest.webmanifest`,
+  then run `python3 scripts/inject-seo.py` to refresh the cache-bust
+  hashes. The structured-data `theme-color` reads the same value.
+- **The mark or a lockup.** Drop the designer's new PNGs into the
+  source folder, run `python3 scripts/build-brand-assets.py` (crops the
+  lockups and regenerates the favicon family), then
+  `python3 scripts/update-brand-html.py` if any markup paths change,
+  then `python3 scripts/inject-seo.py`, and spot-check all three
+  locales. Both brand scripts are one-shot and run locally, not in CI.
+- **A social card.** Replace `assets/images/og-image.png` (general) or
+  `assets/images/og-image-people.png` (directory) in place. These are
+  hand-designed and deliberately not auto-generated.
+
+The developer-facing index of which asset goes where is in
+[`docs/design-system.md`](design-system.md); the public-facing rules
+live in the press kit.
 
 ### Third-party CDNs loaded at runtime
 
