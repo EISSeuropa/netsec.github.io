@@ -340,6 +340,16 @@ be ideal; the firm deadline is **end of June**.
       / Bluesky preview images still render correctly with the
       new mark. *Blocker: receive the approved final-form logos
       from the Action Chair / WG4 lead.*
+  - *Post-launch consistency pass (4 Jun 2026).* The identity shipped
+    in v1.8.0; a follow-up pass then pointed the structured-data
+    `Organization.logo` at the official mark sitewide (it had still
+    been the placeholder), documented the identity in the design
+    system, admin guide, and architecture docs, removed dead asset
+    files, and added a `data/brand.json` source of truth plus a
+    `brand-lint` CI gate (PRs #577, #579, #580). Residual items are
+    tracked: ESSC JSON-LD restructure (#581), colour tokenisation
+    (#582), PDF cover mark (#583), repo social-preview upload (#585),
+    retiring `logo.png` (#586).
 - [ ] **Issue #63 — social media presence**. Channels live,
       handles registered (consistent across networks), profile
       art using the new logos, biographies in EN/FR/DE.
