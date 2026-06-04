@@ -1168,7 +1168,7 @@ form button:disabled{opacity:.65;cursor:wait}
 }
 .eu-flag{width:78px;height:52px;flex-shrink:0;display:block}
 .eu-mark .eu-text{
-  font-family:'Inter',sans-serif;font-weight:700;color:#003399;font-size:1.05rem;line-height:1.15;letter-spacing:-.01em;
+  font-family:'Inter',sans-serif;font-weight:700;color:var(--accent);font-size:1.05rem;line-height:1.15;letter-spacing:-.01em;
 }
 .footer-text{
   max-width:780px;margin:0 auto;text-align:center;font-size:.9rem;color:var(--muted);
@@ -1649,7 +1649,7 @@ form button:disabled{opacity:.65;cursor:wait}
 .dark .objective,.dark .country-card ul{background:rgba(255,255,255,.03)}
 .dark .footer{background:linear-gradient(180deg,transparent 0%,rgba(20,30,55,.65) 30%)}
 .dark .cost-mark,.dark .eu-mark{background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.4)}
-.dark .eu-mark .eu-text{color:#003399}
+.dark .eu-mark .eu-text{color:var(--accent)}
 .dark .g-q{background:rgba(255,255,255,.03)}
 .dark .g-year{background:linear-gradient(180deg,rgba(110,161,255,.10),rgba(110,161,255,.04))}
 .dark .g-row-d > .g-cell:nth-child(n+6):nth-child(-n+9),

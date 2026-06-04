@@ -179,7 +179,7 @@ def build_jsonld_block(base: str, lang: str, title: str, desc: str) -> str:
         "name": "COST Action CA24154 (NetSec)",
         "alternateName": "Networking European Security Knowledge",
         "url": SITE,
-        "logo": f"{SITE}/assets/images/logo.png",
+        "logo": f"{SITE}/assets/images/brand/android-chrome-512.png",
         "image": OG_IMAGE,
         "description": (
             "An inclusive, multidisciplinary network integrating diverse "
