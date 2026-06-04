@@ -42,13 +42,13 @@
 # never runs, scheduled syncs that ran via `gh pr merge --auto`
 # leave the live site behind main.
 #
-# Fix: push any commit to main from a human-authenticated token
-# (your personal access token, not GITHUB_TOKEN). An empty commit
-# works:
-#     git commit --allow-empty -m "ops: wake deploy workflow"
-#     git push origin main
-# A comment-only edit on any file in the repo leaves a more useful
-# audit trail than an empty commit.
+# Self-heal: the `schedule:` trigger below runs the deploy every six
+# hours, so a suppressed deploy converges on its own within the interval
+# with no manual action (#515). For an immediate publish, either fire
+# the `workflow_dispatch` trigger (Actions tab, or `gh workflow run
+# pages-deploy.yml`) or push any commit to main from a human-
+# authenticated token (your PAT, not GITHUB_TOKEN), e.g. an empty commit
+# `git commit --allow-empty -m "ops: wake deploy" && git push`.
 #
 # The same pattern can suppress PR checks (i18n-drift, css-class-
 # collisions, external-link-arrows, launch-qa-link-check) on the PR
@@ -60,6 +60,15 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # Heartbeat self-heal (#515). Auto-merged PRs (the weekly bios / cost /
+  # roadmap syncs, and any `gh pr merge --auto`) push to main signed by
+  # github-actions[bot], which suppresses the push trigger above, leaving
+  # the live site behind main until someone nudges it. This scheduled run
+  # converges the site to main within the interval with no manual action.
+  # Idempotent: a no-op deploy just rebuilds the same content. The
+  # maintainer can still fire workflow_dispatch for an immediate publish.
+  schedule:
+    - cron: '0 */6 * * *'   # every 6 hours
   workflow_dispatch:
 
 permissions:
