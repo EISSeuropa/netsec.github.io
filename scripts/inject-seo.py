@@ -43,6 +43,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
+# Brand primitives come from data/brand.json (the single source of truth)
+# so the theme-color and the Organization.logo can't drift from the rest
+# of the site. scripts/check-brand.py guards the static mirrors.
+_BRAND = json.loads((ROOT / "data" / "brand.json").read_text(encoding="utf-8"))
+
 SITE = "https://netsec-cost.eu"
 SITE_NAME = "NetSec, COST Action CA24154"
 OG_IMAGE = f"{SITE}/assets/images/og-image.png"
@@ -52,7 +57,8 @@ OG_IMAGE_ALT = "NetSec: Networking European Security Knowledge. COST Action CA24
 OG_IMAGE_PEOPLE = f"{SITE}/assets/images/og-image-people.png"
 OG_IMAGE_PEOPLE_ALT = "The NetSec directory: an open, searchable directory of the network's members, filterable by working group, role, and country."
 AUTHOR = "Dr Arthur Laudrain"
-THEME_COLOR = "#003399"
+THEME_COLOR = _BRAND["colours"]["primary"]
+ORG_LOGO = f"{SITE}/{_BRAND['assets']['org_logo']}"
 
 # Locale codes for og:locale per <html lang>. Use the regional variant
 # expected by Facebook / OpenGraph consumers.
@@ -179,7 +185,7 @@ def build_jsonld_block(base: str, lang: str, title: str, desc: str) -> str:
         "name": "COST Action CA24154 (NetSec)",
         "alternateName": "Networking European Security Knowledge",
         "url": SITE,
-        "logo": f"{SITE}/assets/images/brand/android-chrome-512.png",
+        "logo": ORG_LOGO,
         "image": OG_IMAGE,
         "description": (
             "An inclusive, multidisciplinary network integrating diverse "
