@@ -2205,6 +2205,13 @@ body{padding-top:var(--whats-new-h, 0px)}
   font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
   color:var(--muted);
 }
+.members-keyword-filter-hint{
+  font-family:'Inter',sans-serif;
+  font-size:.82rem;line-height:1.45;
+  color:var(--muted);
+  margin:-4px 0 12px;
+  max-width:66ch;
+}
 .members-keyword-filter-clear{
   font-family:'Inter',sans-serif;
   font-size:.78rem;font-weight:500;
