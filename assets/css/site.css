@@ -3254,11 +3254,18 @@ body.search-open{overflow:hidden}
      circle (18×18)   → top:19px  → centre 28px
      diamond (14×14)  → top:21px  → geometric centre 28px (rotated 45°)
    Horizontally, the marker's centre must land on the connector line,
-   whose centre is at x=14px (line is left:13px, width:2px). With the
-   timeline's padding-left:36px, that means left = 14 - 36 - width/2:
-     circle (w18)  → -31px ; diamond (w14) → -29px. */
+   whose centre is at x=14px (line is left:13px, width:2px). The marker
+   is content-box: the global `*{box-sizing:border-box}` rule does NOT
+   match pseudo-elements, so the 3px / 2px border sits OUTSIDE `width`.
+   The rendered (border-box) centre is left + (width + 2*border)/2 from
+   the timeline's content edge, so with padding-left:36px:
+     left = 14 - 36 - width/2 - border
+     circle (w18, b3) → -34px ; diamond (w14, b2) → -31px.
+   (Forgetting the border is the bug fixed in the second alignment pass:
+   measuring centre off `getComputedStyle().width` alone is short by the
+   border and over-corrects.) */
 .rm-entry::before{
-  content:'';position:absolute;left:-31px;top:19px;
+  content:'';position:absolute;left:-34px;top:19px;
   width:18px;height:18px;border-radius:50%;
   background:var(--accent);
   border:3px solid var(--bg-0);
@@ -3273,7 +3280,7 @@ body.search-open{overflow:hidden}
 .rm-entry.planned::before{background:#8b8fe8}
 .rm-entry.deferred::before{background:#f59e0b}
 .rm-entry.rm-milestone::before{
-  width:14px;height:14px;left:-29px;top:21px;
+  width:14px;height:14px;left:-31px;top:21px;
   background:var(--ink);border-radius:3px;transform:rotate(45deg);
   border-width:2px;
 }
@@ -3550,11 +3557,13 @@ body.search-open{overflow:hidden}
   .rm-timeline{padding-left:30px}
   /* Smaller card padding-top on mobile (14px) shifts the pill centre
      to ~26px; mirror that in marker top so centres still line up.
-     Line centre is still x=14px; padding-left is 30px here, so
-     left = 14 - 30 - width/2: circle (w16) → -24px, diamond (w12) → -22px. */
-  .rm-entry::before{left:-24px;width:16px;height:16px;top:18px}
+     Line centre is still x=14px; padding-left is 30px here, and the
+     border sits outside `width` (content-box, see the note above), so
+     left = 14 - 30 - width/2 - border:
+       circle (w16, b3) → -27px, diamond (w12, b2) → -24px. */
+  .rm-entry::before{left:-27px;width:16px;height:16px;top:18px}
   .rm-entry.in-progress::before{box-shadow:0 0 0 1px var(--line),0 0 0 4px rgba(10,132,255,.18)}
-  .rm-entry.rm-milestone::before{left:-22px;width:12px;height:12px;top:20px}
+  .rm-entry.rm-milestone::before{left:-24px;width:12px;height:12px;top:20px}
   .rm-card{padding:14px 16px}
   .rm-card h3{font-size:.98rem}
   .rm-legend{padding:12px 14px;gap:8px}
