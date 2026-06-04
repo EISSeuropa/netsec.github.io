@@ -666,13 +666,25 @@ def test_normalise_keyword() -> None:
     # British spelling already correct is left untouched.
     expect("british spelling unchanged", norm("Defence policy"), "Defence policy")
     # Proper nouns (countries / regions) keep their capital mid-phrase,
-    # not just as the first word (regression for #505).
-    expect("proper noun in parens", norm("Policy evaluation & lessons learned (Afghanistan)"),
-           "Policy evaluation & lessons learned (Afghanistan)")
+    # not just as the first word (regression for #505). Examples chosen
+    # to avoid the curated aliases tested below.
+    expect("proper noun mid-phrase parens", norm("Counterinsurgency (Afghanistan)"),
+           "Counterinsurgency (Afghanistan)")
     expect("proper noun mid-phrase", norm("Russia-Ukraine war"), "Russia-Ukraine war")
     expect("region mid-phrase", norm("NATO enlargement in Europe"), "NATO enlargement in Europe")
-    expect("proper noun first word still capitalised", norm("Germany security policy"),
-           "Germany security policy")
+    expect("proper noun first word still capitalised", norm("Ukraine reconstruction"),
+           "Ukraine reconstruction")
+    # A standalone "&" reads as the conjunction "and"; &-bearing acronyms
+    # (R&D) are matched whole and stay intact (Layer A hygiene).
+    expect("ampersand → and", norm("Security & defence"), "Security and defence")
+    expect("R&D acronym kept intact", norm("R&D policy"), "R&D policy")
+    # Curated aliases for the current outliers (Layer A hygiene pass).
+    expect("germany → german adjective alias", norm("Germany Security Policy"),
+           "German security policy")
+    expect("long parenthetical phrase aliased to a tag",
+           norm("Policy Evaluation & Lessons Learned (Afghanistan)"), "Policy evaluation")
+    expect("and-spelling of that phrase aliased too",
+           norm("Policy evaluation and lessons learned (Afghanistan)"), "Policy evaluation")
 
 
 def test_normalise_affiliation() -> None:
