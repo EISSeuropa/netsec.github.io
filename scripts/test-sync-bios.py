@@ -720,6 +720,15 @@ def test_parse_mentorship() -> None:
            ["mentor", "mentee"])
     expect("unrelated text -> []",
            parse_mentorship("Maybe later"), [])
+    # Directory badge labels (what a maintainer might type into the Sheet
+    # by hand) are recognised too, not only the Form-option wording.
+    expect("badge 'Available to mentor' -> mentor",
+           parse_mentorship("Available to mentor"), ["mentor"])
+    expect("badge 'Seeking mentorship' -> mentee",
+           parse_mentorship("Seeking mentorship"), ["mentee"])
+    expect("both badge labels",
+           parse_mentorship("Available to mentor, Seeking mentorship"),
+           ["mentor", "mentee"])
 
 
 def main() -> None:
