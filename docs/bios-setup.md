@@ -193,6 +193,12 @@ The Google Form accepts free-text research keywords. To keep the directory's pil
 
 The sync also groups canonical keywords into a small set of broad **themes** (the `themes` section of the aliases file) and emits `theme_aggregate` (distinct-member count per theme) + `keyword_theme_map`. `theme_aggregate` drives the **research-theme filter chip row** above the directory grid on `/people.html`: the top eight themes by member count appear as toggle pills, so people working in the same area cluster together rather than fragmenting across one-off keywords. Visitors can multi-select (OR semantics), expand to the full list, and persist their selection through the URL hash (`#themes=slug-one,slug-two`). Member cards keep their specific keyword pills; clicking one selects that keyword's theme. Exact-keyword lookup stays available through the search box. Nothing for the maintainer to wire: the row appears automatically as soon as any bio carries a themed keyword, and hides cleanly when the aggregate is empty. A canonical keyword with no theme is logged at sync time so the taxonomy stays complete.
 
+> **Form-description copy (themes).** Set the **description** of the *Research keywords* question to this exact sentence so submitters understand the grouping before they answer:
+>
+> > Your keywords appear in full on your directory profile, and we also group them under a broader research theme so visitors can find everyone working in the same area.
+>
+> The directory mirrors this on the visitor side: a one-line hint under the *Research themes* filter heading reads *"Themes automatically group people working in the same area based on their individual keywords, which remain visible on their card."* (hand-translated FR/DE). The two lines exist so neither the submitter nor the visitor reads the broad theme chips as a mismatch with the specific keyword pills on each card.
+
 The file has two sections:
 
 - **`acronyms`** is a flat list of preferred display forms (`UN`, `NATO`, `EU`, `IoT`, `R&D`, …). When one of these words appears in any position in a submitted keyword, the sentence-case normaliser preserves its canonical capitalisation. So `eu foreign policy` becomes `EU foreign policy`, not `Eu foreign policy`.
