@@ -32,6 +32,7 @@ load_keyword_aliases = sync_bios.load_keyword_aliases
 normalise_keyword = sync_bios.normalise_keyword
 normalise_affiliation = sync_bios.normalise_affiliation
 parse_mentorship = sync_bios.parse_mentorship
+ensure_people_webp = sync_bios.ensure_people_webp
 resolve_prior_entry = sync_bios.resolve_prior_entry
 
 
@@ -731,6 +732,50 @@ def test_parse_mentorship() -> None:
            ["mentor", "mentee"])
 
 
+def test_ensure_people_webp() -> None:
+    """ensure_people_webp() writes a sibling .webp per .jpg/.jpeg/.png
+    headshot, is idempotent, and ignores sources that are already .webp."""
+    print("\nensure_people_webp():")
+    if not sync_bios.HAS_PIL:
+        print("  ok  skipped (Pillow not installed)")
+        return
+    import shutil
+    import tempfile
+    from PIL import Image
+
+    # The dir lives under ROOT because ensure_people_webp() records each
+    # write as a path relative to ROOT (the real folder always is).
+    photo_dir = Path(tempfile.mkdtemp(dir=sync_bios.ROOT, prefix=".webp-test-"))
+    try:
+        # Three source headshots in the mixed extensions the real folder
+        # carries, plus one that is already webp (must be left alone).
+        Image.new("RGB", (120, 120), (90, 110, 160)).save(photo_dir / "alpha-one.jpg")
+        Image.new("RGBA", (120, 120), (90, 110, 160, 255)).save(photo_dir / "beta-two.png")
+        Image.new("RGB", (120, 120), (90, 110, 160)).save(photo_dir / "gamma-three.webp", format="WEBP")
+
+        orig_dir, orig_changed = sync_bios.PHOTO_DIR, sync_bios.PHOTOS_CHANGED
+        sync_bios.PHOTO_DIR = photo_dir
+        sync_bios.PHOTOS_CHANGED = []
+        try:
+            first = ensure_people_webp()
+            expect("first pass writes one webp per non-webp source", first, 2)
+            expect("alpha-one.webp created", (photo_dir / "alpha-one.webp").exists(), True)
+            expect("beta-two.webp created (RGBA flattened)", (photo_dir / "beta-two.webp").exists(), True)
+            expect("PHOTOS_CHANGED recorded both", len(sync_bios.PHOTOS_CHANGED), 2)
+
+            # Second pass: nothing newer, so no re-encode.
+            sync_bios.PHOTOS_CHANGED = []
+            second = ensure_people_webp()
+            expect("idempotent second pass writes nothing", second, 0)
+            expect("the already-webp source spawned no gamma-three.webp.webp",
+                   (photo_dir / "gamma-three.webp.webp").exists(), False)
+        finally:
+            sync_bios.PHOTO_DIR = orig_dir
+            sync_bios.PHOTOS_CHANGED = orig_changed
+    finally:
+        shutil.rmtree(photo_dir, ignore_errors=True)
+
+
 def main() -> None:
     test_name_key()
     test_normalise_keyword()
@@ -744,6 +789,7 @@ def main() -> None:
     test_merge_mentorship_propagates()
     test_resolve_prior_entry()
     test_download_photo_idempotent_on_unchanged_upstream()
+    test_ensure_people_webp()
     test_substance_check_catches_photo_only_change()
     test_pr_title_and_overview()
     print("\nAll tests passed.")

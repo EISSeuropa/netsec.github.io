@@ -198,8 +198,8 @@ sequenceDiagram
     W->>P: Run sync-bios.py
     P->>S: GET published CSV
     P->>P: Parse rows, dedupe by email→slug,<br/>auto-tag MC role from mc-members.json
-    P->>P: Download + resize photos<br/>via Pillow
-    P->>R: git diff data/bios.json<br/>+ assets/images/people/*.jpg
+    P->>P: Download + resize photos<br/>via Pillow, write .webp siblings
+    P->>R: git diff data/bios.json<br/>+ assets/images/people/*.{jpg,webp}
     alt Diff non-empty
         P->>R: peter-evans/create-pull-request@v7
         Note over R,A: PR opens against main<br/>with a human-readable diff
@@ -315,7 +315,7 @@ EISS repository's `docs/indico-programme-integration.md`.
 ├── assets/
 │   ├── css/site.css                 # Single shared stylesheet
 │   ├── js/site.js                   # Nav, theme, reveal-on-scroll, accordions, directory
-│   ├── images/people/*.{jpg,png}    # Member headshots (downloaded by sync-bios)
+│   ├── images/people/*.{jpg,png,webp} # Member headshots + WebP siblings (sync-bios)
 │   ├── images/cost-logo.jpg         # COST logotype
 │   ├── images/og-image.png          # Open Graph card (1200 × 630)
 │   └── images/logo.png              # Favicon / NS mark
