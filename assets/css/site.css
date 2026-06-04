@@ -67,6 +67,7 @@
   --wg-2:#10b981;
   --wg-3:#8b5cf6;
   --wg-4:#f59e0b;
+  --rm-shipped-check:#2e9e6a;  /* roadmap "N tasks done" tick (dark variant below) */
   --radius:22px;
   --radius-sm:14px;
   --maxw:1180px;
@@ -1633,6 +1634,7 @@ form button:disabled{opacity:.65;cursor:wait}
   --glass-border:rgba(255,255,255,.10);
   --glass-shadow:0 10px 40px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.30);
   --accent:#6ea1ff;
+  --rm-shipped-check:#5fcf94;
   --accent-2:#82b7ff;
   --accent-glow:rgba(110,161,255,.30);
   color-scheme:dark;
@@ -3407,9 +3409,8 @@ body.search-open{overflow:hidden}
   font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;
 }
 .rm-card .rm-shipped-count::before{
-  content:"\2713\00a0";color:#2e9e6a;font-weight:700;
+  content:"\2713\00a0";color:var(--rm-shipped-check);font-weight:700;
 }
-.dark .rm-card .rm-shipped-count::before{color:#5fcf94}
 
 /* Considering-for-later — deferred / under-watch items */
 .rm-later{
