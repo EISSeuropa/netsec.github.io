@@ -372,6 +372,50 @@ def load_keyword_themes() -> dict[str, str]:
     return theme_of
 
 
+_REGION_VOCAB_CACHE: "dict[str, str] | None" = None
+
+
+def load_region_vocab() -> dict[str, str]:
+    """Return a lowercased-region → canonical-display map from the
+    `regions` section of data/keyword-aliases.json.
+
+    A controlled vocabulary of research-region names (modelled on the EU
+    Institute for Security Studies' regions). Drives the directory's
+    research-region filter — a geographic axis independent of the topical
+    themes. Cached after first read; empty if the file or section is
+    missing, in which case the region filter simply stays hidden."""
+    global _REGION_VOCAB_CACHE
+    if _REGION_VOCAB_CACHE is not None:
+        return _REGION_VOCAB_CACHE
+    vocab: dict[str, str] = {}
+    if ALIAS_FILE.exists():
+        try:
+            doc = json.loads(ALIAS_FILE.read_text(encoding="utf-8"))
+            for r in doc.get("regions", []):
+                if isinstance(r, str) and r.strip():
+                    vocab[r.strip().lower()] = r.strip()
+        except (json.JSONDecodeError, OSError):
+            pass
+    _REGION_VOCAB_CACHE = vocab
+    return vocab
+
+
+def parse_regions(raw: str) -> list[str]:
+    """Map a Research-regions form cell (comma- or semicolon-separated
+    checkbox values) to a sorted list of canonical region names from the
+    controlled vocabulary. Unknown values are dropped, so a stray free-text
+    entry never leaks into the filter."""
+    vocab = load_region_vocab()
+    out: list[str] = []
+    seen: set[str] = set()
+    for part in re.split(r"[,;]", raw or ""):
+        canon = vocab.get(part.strip().lower())
+        if canon and canon not in seen:
+            seen.add(canon)
+            out.append(canon)
+    return sorted(out)
+
+
 _WORD_RE = re.compile(r"[\w&]+", re.UNICODE)
 
 
@@ -812,6 +856,7 @@ def row_to_member(
         "roles": [],
         "wgs": parse_wgs(row.get(cols.get("wgs", ""), "")),
         "mentorship": parse_mentorship(row.get(cols.get("mentorship", ""), "")),
+        "regions": parse_regions(row.get(cols.get("regions", ""), "")),
         "wg_leadership": {},
         "bio": (row.get(cols.get("bio", ""), "") or "").strip(),
         "keywords": parse_keywords(row.get(cols.get("keywords", ""), "")),
@@ -1272,7 +1317,7 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
             # the form has no way to set them, so an empty form value
             # would only ever wipe a real role.
             for k in ("name", "country", "country_code", "affiliation", "position", "bio",
-                       "keywords", "mentorship", "email", "website", "orcid",
+                       "keywords", "mentorship", "regions", "email", "website", "orcid",
                        "linkedin", "twitter", "bluesky", "mastodon"):
                 if entry.get(k):
                     existing[k] = entry[k]
@@ -1364,6 +1409,7 @@ _FIELD_LABELS = {
     "mastodon": "Mastodon",
     "wgs": "Working Group memberships",
     "mentorship": "mentorship",
+    "regions": "research regions",
 }
 
 
@@ -1677,6 +1723,24 @@ def main() -> None:
         key=lambda e: (-e["count"], e["theme"].lower()),
     )
     bios_data["keyword_theme_map"] = {k: keyword_theme_map[k] for k in sorted(keyword_theme_map)}
+
+    # Research-region aggregate (distinct-member count per region). The
+    # per-bio `regions` come from the optional Research-regions form field
+    # (controlled vocabulary); this drives the region filter chip row,
+    # which stays hidden until at least one member has opted in. Empty
+    # region lists are dropped so the field stays absent for non-opt-ins.
+    region_counts: dict[str, int] = {}
+    for m in merged:
+        regs = m.get("regions") or []
+        if regs:
+            for r in regs:
+                region_counts[r] = region_counts.get(r, 0) + 1
+        else:
+            m.pop("regions", None)
+    bios_data["region_aggregate"] = sorted(
+        ({"region": r, "count": n} for r, n in region_counts.items()),
+        key=lambda e: (-e["count"], e["region"].lower()),
+    )
 
     # Standardise affiliation punctuation so the same employer doesn't read
     # three different ways across cards. Runs over every member (seed and

@@ -32,6 +32,8 @@ load_keyword_aliases = sync_bios.load_keyword_aliases
 normalise_keyword = sync_bios.normalise_keyword
 normalise_affiliation = sync_bios.normalise_affiliation
 parse_mentorship = sync_bios.parse_mentorship
+parse_regions = sync_bios.parse_regions
+load_region_vocab = sync_bios.load_region_vocab
 ensure_people_webp = sync_bios.ensure_people_webp
 load_keyword_themes = sync_bios.load_keyword_themes
 resolve_prior_entry = sync_bios.resolve_prior_entry
@@ -745,6 +747,46 @@ def test_parse_mentorship() -> None:
            ["mentor", "mentee"])
 
 
+def test_load_region_vocab() -> None:
+    """The `regions` section of data/keyword-aliases.json yields a
+    lowercased → canonical-display map, the controlled vocabulary the
+    directory's research-region filter draws on."""
+    print("\nload_region_vocab():")
+    vocab = load_region_vocab()
+    expect("europe → Europe", vocab.get("europe"), "Europe")
+    expect("eastern neighbours and russia (lowercased key)",
+           vocab.get("eastern neighbours and russia"),
+           "Eastern neighbours and Russia")
+    expect("the americas → The Americas", vocab.get("the americas"), "The Americas")
+    expect("unknown region absent", vocab.get("atlantis"), None)
+
+
+def test_parse_regions() -> None:
+    """Research-regions form cell -> sorted list of canonical region names.
+    Case-insensitive match against the controlled vocabulary; comma- or
+    semicolon-separated; unknown values dropped; deduplicated."""
+    print("\nparse_regions():")
+    expect("empty -> []", parse_regions(""), [])
+    expect("none -> []", parse_regions(None), [])
+    expect("single canonical",
+           parse_regions("Europe"), ["Europe"])
+    expect("case-insensitive match",
+           parse_regions("europe"), ["Europe"])
+    expect("comma-separated, sorted",
+           parse_regions("Europe, Africa"), ["Africa", "Europe"])
+    expect("semicolon separator too",
+           parse_regions("Asia; Africa"), ["Africa", "Asia"])
+    expect("multi-word region with mixed case",
+           parse_regions("middle east and north africa"),
+           ["Middle East and North Africa"])
+    expect("unknown value dropped, known kept",
+           parse_regions("Europe, Narnia"), ["Europe"])
+    expect("all-unknown -> []",
+           parse_regions("Narnia; Atlantis"), [])
+    expect("duplicates collapsed (case-insensitive)",
+           parse_regions("Europe, europe, EUROPE"), ["Europe"])
+
+
 def test_ensure_people_webp() -> None:
     """ensure_people_webp() writes a sibling .webp per .jpg/.jpeg/.png
     headshot, is idempotent, and ignores sources that are already .webp."""
@@ -824,6 +866,8 @@ def main() -> None:
     test_load_keyword_themes()
     test_normalise_affiliation()
     test_parse_mentorship()
+    test_load_region_vocab()
+    test_parse_regions()
     test_country_key()
     test_merge_helferich()
     test_merge_country_guards_false_positive()

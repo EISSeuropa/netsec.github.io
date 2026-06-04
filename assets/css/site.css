@@ -2134,9 +2134,23 @@ body{padding-top:var(--whats-new-h, 0px)}
    subdued outlined pills tied to a member's own research interests.
    Compact view hides them entirely (handled below) since the small
    card is already dense with photo + name + WGs + chevron. */
-.member-card .member-keywords{
+.member-card .member-keywords,
+.member-card .member-regions{
   display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start;
   margin:6px 0 14px;
+}
+.member-card .member-regions{ margin-top:-6px; }
+/* Region pills (#555) reuse the keyword-pill shape but carry a small
+   map-pin glyph and a neutral tint, so a geographic tag reads as
+   distinct from a topical keyword. */
+.member-region-chip::before{ content:"\1F4CD\00a0"; font-size:.7em; opacity:.85; }
+.member-card .member-region-chip{
+  background:color-mix(in oklab, var(--ink-2) 7%, transparent);
+  border-color:color-mix(in oklab, var(--ink-2) 20%, transparent);
+}
+.member-card .member-region-chip:hover{
+  background:color-mix(in oklab, var(--ink-2) 13%, transparent);
+  border-color:color-mix(in oklab, var(--ink-2) 32%, transparent);
 }
 .member-keyword-chip{
   font-family:'Inter',sans-serif;
@@ -2302,7 +2316,8 @@ body{padding-top:var(--whats-new-h, 0px)}
    expand. The matcher (line 1885-ish, .is-compact .member-card:not
    (.is-expanded) …) is the canonical rule for "this card is in
    compact-collapsed state"; we mirror it here. */
-.members-grid.is-compact .member-card:not(.is-expanded) .member-keywords{
+.members-grid.is-compact .member-card:not(.is-expanded) .member-keywords,
+.members-grid.is-compact .member-card:not(.is-expanded) .member-regions{
   display:none;
 }
 .member-card .member-bio{
