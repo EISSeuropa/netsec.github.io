@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=5b50131e">
+<link rel="stylesheet" href="assets/css/site.css?v=7137e3c5">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -166,10 +166,6 @@
       <span class="eyebrow">Directory</span>
       <h1>The Network</h1>
       <p class="lede">An open directory of researchers, policy-makers, and practitioners working in or alongside European security studies, Action leadership, Working Group participants, and a wider community. Anyone engaged with the field is welcome to <a href="#join">add their bio</a>.</p>
-      <!-- Populated from bios.json `generated_at` by the page script
-           after the directory renders (#271). Stays hidden until a
-           valid stamp is read, so a fetch failure shows nothing. -->
-      <p class="directory-freshness" data-directory-freshness hidden></p>
     </div>
 
     <!-- One-time orientation strip for first-time visitors. The
@@ -222,17 +218,11 @@
           <option value="all">All countries</option>
         </select>
       </label>
-      <!-- Secondary facets (themes, regions, mentorship) sit behind a
-           collapsed disclosure inside the filter card, so the directory
-           leads with people, not filter chrome. A deep-link (#themes=…)
-           or a card-pill click opens it; the badge counts active ones. -->
-      <details class="members-refine" id="members-refine">
-        <summary class="members-refine-summary">
-          <svg class="members-refine-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-          <span>More filters</span>
-          <span class="members-refine-badge" id="members-refine-badge" hidden></span>
-        </summary>
-        <div class="members-refine-body">
+      <!-- Secondary facets (themes, regions, mentorship) render directly in
+           the filter card as a divided group; each row is retracted to its
+           top pills with a "Show all". A deep-link (#themes=…) or a card-pill
+           click selects a theme; the rows stay visible. -->
+      <div class="members-facets">
 
     <!-- Research-theme filter chips. Populated from
          `bios.json#theme_aggregate` (broad themes, sorted by member
@@ -287,13 +277,17 @@
       </div>
     </div>
       </div>
-      </details>
     </div>
 
-    <!-- Result count + global reset, after all the filters so the number
-         reflects what the grid is currently showing. -->
+    <!-- Result count + freshness on the left, global reset on the right.
+         Sits after all the filters so the number reflects the grid. -->
     <div class="members-resultbar">
-      <p class="members-count" id="members-count" aria-live="polite"></p>
+      <div class="members-resultmeta">
+        <p class="members-count" id="members-count" aria-live="polite"></p>
+        <!-- Populated from bios.json `generated_at` after the directory
+             renders (#271); hidden until a valid stamp is read. -->
+        <p class="directory-freshness" data-directory-freshness hidden></p>
+      </div>
       <button type="button" class="members-clear-all" id="members-clear-all" hidden>Clear all filters</button>
     </div>
 
@@ -484,8 +478,8 @@
           title: 'Filter by country',
           body:  'The country dropdown is populated automatically from the current membership, only countries that have members appear.' },
         { target: '.members-keyword-filter',
-          title: 'Filter by research theme',
-          body:  'Chips along this row group the directory into broad research themes, with the number of members in each. Tap one to narrow to members working in that theme; tap a second to widen the match (any theme in the set passes). The keyword pills on each member card are clickable too, and select that keyword\'s theme. The active selection lives in the URL, so a filtered view is shareable just by copying the address.' },
+          title: 'Filter by theme and region',
+          body:  'Chips group the directory by research theme, and the row below by research region. Tap to narrow the list; tap more to widen the match. The keyword pills on each card are clickable too, and your selection lives in the URL so a filtered view is shareable.' },
         { target: '.members-mentorship-filter',
           title: 'Filter by mentorship',
           body:  'Members can flag that they are available to mentor early-career researchers, or seeking mentorship themselves. Use these chips to find them. This row appears once at least one member has opted in.' },
@@ -1155,24 +1149,15 @@
     searchTimeout = setTimeout(render, 120);
   });
 
-  // Results bar: a global "Clear all filters" control plus the "More
-  // filters" disclosure badge. The badge counts the secondary facets
-  // (themes, regions, mentorship) that are hidden inside the collapsed
-  // <details>, so a visitor knows filters are active without opening it.
+  // Results bar: a global "Clear all filters" control, shown whenever any
+  // filter is active.
   const clearAllBtn = document.getElementById('members-clear-all');
-  const refineEl = document.getElementById('members-refine');
-  const refineBadge = document.getElementById('members-refine-badge');
   function anyFilterActive() {
     return search.value.trim() !== '' || activeWG !== 'all' || activeCountry !== 'all'
       || activeMentorship !== 'all' || activeKeywords.size > 0 || activeRegions.size > 0;
   }
   function updateFilterChrome() {
     if (clearAllBtn) clearAllBtn.hidden = !anyFilterActive();
-    if (refineBadge) {
-      const n = activeKeywords.size + activeRegions.size + (activeMentorship !== 'all' ? 1 : 0);
-      refineBadge.hidden = n === 0;
-      refineBadge.textContent = n;
-    }
   }
   function clearAllFilters() {
     search.value = '';
@@ -1335,9 +1320,6 @@
   function toggleKeywordFilter(slug) {
     if (activeKeywords.has(slug)) activeKeywords.delete(slug);
     else activeKeywords.add(slug);
-    // A card-pill click can land a theme filter while the "More filters"
-    // disclosure is collapsed; open it so the active chip is visible.
-    if (refineEl && activeKeywords.has(slug)) refineEl.open = true;
     writeHashKeywords();
     renderKeywordFilter();
     render();
@@ -1414,7 +1396,6 @@
   function toggleRegionFilter(slug) {
     if (activeRegions.has(slug)) activeRegions.delete(slug);
     else activeRegions.add(slug);
-    if (refineEl && activeRegions.has(slug)) refineEl.open = true;
     renderRegionFilter();
     render();
   }
@@ -1472,9 +1453,6 @@
     //   /people.html#keywords=ai-governance,foreign-policy-analysis
     // lands with those filters already applied.
     parseHashKeywords();
-    // A deep-link with themes pre-applied (#themes=…) should arrive with
-    // the "More filters" disclosure already open so the chips are visible.
-    if (refineEl && activeKeywords.size > 0) refineEl.open = true;
     populateCountryFilter();
     setupMentorshipFilter();
     renderKeywordFilter();
