@@ -1804,6 +1804,9 @@ form button:disabled{opacity:.65;cursor:wait}
    mode where --ink-2 is a dark slate). */
 .page-banner-text{flex:1;min-width:200px;margin:0;font-weight:500;color:#fff}
 .page-banner-text strong{font-weight:700}
+/* Two wordings: the full lede on desktop, a tighter one on phones (set in
+   the ≤640px block). Only one is ever shown. */
+.page-banner-short{display:none}
 .page-banner-link{
   color:#fff;text-decoration:underline;text-underline-offset:3px;
   text-decoration-thickness:1.5px;text-decoration-color:rgba(255,255,255,.7);
@@ -1813,6 +1816,12 @@ form button:disabled{opacity:.65;cursor:wait}
 /* Deeper gradient in dark mode so white text keeps contrast: the
    light-mode --accent lifts to a pale blue under .dark. */
 .dark .page-banner{background:linear-gradient(135deg,#1b3f80,#2f6fd0)}
+/* Phones (matching the directory's mobile-sheet breakpoint): swap the full
+   banner lede for the tighter one. */
+@media (max-width:640px){
+  .page-banner-full{display:none}
+  .page-banner-short{display:inline}
+}
 
 .i18n-beta-ribbon{display:none}
 [data-i18n-status="beta"] .i18n-beta-ribbon{
@@ -1967,7 +1976,7 @@ body{padding-top:var(--whats-new-h, 0px)}
 }
 
 /* -------- Members directory (/people.html) -------- */
-.people-page{padding:140px 0 80px}
+.people-page{padding:120px 0 80px}
 .people-page .container{max-width:1100px}
 .people-page h1{font-size:clamp(2.4rem,5vw,3.6rem);margin:0 0 1rem;text-align:center;background:linear-gradient(180deg,var(--ink) 0%,#3a4a6b 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .dark .people-page h1{background:linear-gradient(180deg,#f4f8ff 0%,#aeb7d6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -2963,7 +2972,7 @@ body{padding-top:var(--whats-new-h, 0px)}
 .view-toggle button svg{width:16px;height:16px}
 
 @media (max-width:540px){
-  .people-page{padding:120px 0 60px}
+  .people-page{padding:100px 0 60px}
   .members-toolbar{padding:12px 14px}
   .members-grid{grid-template-columns:1fr}
   .member-card{padding:20px}

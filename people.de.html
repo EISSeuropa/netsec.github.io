@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=1d46f436">
+<link rel="stylesheet" href="assets/css/site.css?v=260c2a80">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -162,7 +162,7 @@
   <div class="container reveal">
     <div class="page-banner" role="note" aria-label="Vorschau im Frühzugang">
       <span class="page-banner-icon" aria-hidden="true">✨</span>
-      <p class="page-banner-text"><strong>Vorschau im Frühzugang:</strong> Das Verzeichnis befindet sich im Frühzugang. Tragen Sie bei, indem Sie <a class="page-banner-link" href="#join">Ihre Biografie hinzufügen</a>.</p>
+      <p class="page-banner-text"><span class="page-banner-full"><strong>Vorschau im Frühzugang:</strong> Das Verzeichnis befindet sich im Frühzugang. Tragen Sie bei, indem Sie <a class="page-banner-link" href="#join">Ihre Biografie hinzufügen</a>.</span><span class="page-banner-short">Das Verzeichnis ist eine Vorschau im Frühzugang. Tragen Sie bei, indem Sie <a class="page-banner-link" href="#join">Ihre Biografie hinzufügen</a>.</span></p>
     </div>
     <div class="section-head">
       <span class="eyebrow">Verzeichnis</span>
@@ -233,7 +233,6 @@
       <div class="members-mentorship-filter" id="members-mentorship-filter" role="group" aria-label="Nach Mentoring filtern" hidden>
         <span class="members-mentorship-filter-label">Mentoring</span>
         <div class="members-mentorship-filter-chips">
-          <button type="button" class="members-mentorship-chip" data-mentorship="all" aria-pressed="true">Alle</button>
           <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Als Mentor verfügbar</button>
           <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Sucht Mentoring</button>
         </div>
@@ -551,13 +550,14 @@
   let MEMBERS = [];
   let activeWG = 'all';
   let activeCountry = 'all';
-  // Mentorship filter: a separate AND dimension.
-  //   'all'    — no mentorship filter
+  // Mentorship filter: a separate AND dimension, multi-select OR (like the
+  // theme and region chip rows). A Set of opted-in role tags:
   //   'mentor' — members open to mentoring (m.mentorship includes "mentor")
   //   'mentee' — members seeking a mentor (m.mentorship includes "mentee")
-  // Single-select, transient (no URL hash). The chip row stays hidden
-  // until the data carries at least one mentorship facet.
-  let activeMentorship = 'all';
+  // Each chip toggles its tag; an empty Set means no mentorship filter (the
+  // old "All" state, now implicit). Transient (no URL hash). The chip row
+  // stays hidden until the data carries at least one mentorship facet.
+  const activeMentorship = new Set();
   // Forschungsschwerpunkt-Filter (Phase 3). Siehe people.html (EN)
   // für die vollständige Dokumentation. Slug-Format für URL-Hash.
   const activeKeywords = new Set();
@@ -646,8 +646,8 @@
       if (activeCountry !== 'all') {
         if ((m.country || '') !== activeCountry) return false;
       }
-      if (activeMentorship !== 'all') {
-        if (!(m.mentorship || []).includes(activeMentorship)) return false;
+      if (activeMentorship.size > 0) {
+        if (!(m.mentorship || []).some(t => activeMentorship.has(t))) return false;
       }
       if (q) {
         const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
@@ -927,8 +927,10 @@
   });
   mentorshipChips.forEach(b => {
     b.addEventListener('click', () => {
-      activeMentorship = b.dataset.mentorship;
-      mentorshipChips.forEach(o => o.setAttribute('aria-pressed', o === b));
+      const v = b.dataset.mentorship;
+      if (activeMentorship.has(v)) activeMentorship.delete(v);
+      else activeMentorship.add(v);
+      b.setAttribute('aria-pressed', activeMentorship.has(v));
       render();
     });
   });
@@ -954,7 +956,7 @@
   const regionDetails = document.getElementById('members-region-filter');
   function anyFilterActive() {
     return search.value.trim() !== '' || activeWG !== 'all' || activeCountry !== 'all'
-      || activeMentorship !== 'all' || activeKeywords.size > 0 || activeRegions.size > 0;
+      || activeMentorship.size > 0 || activeKeywords.size > 0 || activeRegions.size > 0;
   }
   function updateFilterChrome() {
     if (clearAllBtn) clearAllBtn.disabled = !anyFilterActive();
@@ -976,8 +978,8 @@
     filterChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.wg === 'all'));
     activeCountry = 'all';
     if (countrySelect) countrySelect.value = 'all';
-    activeMentorship = 'all';
-    mentorshipChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.mentorship === 'all'));
+    activeMentorship.clear();
+    mentorshipChips.forEach(o => o.setAttribute('aria-pressed', 'false'));
     activeKeywords.clear();
     activeRegions.clear();
     writeHashKeywords();
@@ -1008,7 +1010,7 @@
   // nicht zum Badge).
   function sheetFilterCount() {
     return (activeWG !== 'all' ? 1 : 0) + (activeCountry !== 'all' ? 1 : 0)
-      + (activeMentorship !== 'all' ? 1 : 0) + activeKeywords.size + activeRegions.size;
+      + activeMentorship.size + activeKeywords.size + activeRegions.size;
   }
   // Beim Öffnen wird das Fenster nach <body> verschoben, damit sein
   // position:fixed der Leiste entkommt (deren Stacking-/Containing-Kontext
@@ -1081,12 +1083,13 @@
     activeRegions.forEach(region => {
       out.push({ label: window.netsecT(region), remove: () => toggleRegionFilter(region) });
     });
-    if (activeMentorship !== 'all') {
-      const chip = Array.from(mentorshipChips).find(c => c.dataset.mentorship === activeMentorship);
-      out.push({ label: chip ? chip.textContent.trim() : activeMentorship, remove: () => {
-        activeMentorship = 'all'; mentorshipChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.mentorship === 'all')); render();
+    mentorshipChips.forEach(c => {
+      const v = c.dataset.mentorship;
+      if (!activeMentorship.has(v)) return;
+      out.push({ label: c.textContent.trim(), remove: () => {
+        activeMentorship.delete(v); c.setAttribute('aria-pressed', 'false'); render();
       }});
-    }
+    });
     return out;
   }
   const XMARK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
