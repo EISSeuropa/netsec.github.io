@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=42be03b6">
+<link rel="stylesheet" href="assets/css/site.css?v=bf9bf632">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -205,7 +205,7 @@
     <div class="members-toolbar glass">
       <label class="members-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input id="member-search" type="search" placeholder="Suche nach Name, Einrichtung oder Land…" aria-label="Mitglieder suchen">
+        <input id="member-search" type="search" placeholder="Suche nach Name, Einrichtung, Land…" aria-label="Mitglieder suchen">
       </label>
       <div class="members-filter" role="group" aria-label="Nach Arbeitsgruppe oder Rolle filtern">
         <button class="members-filter-chip" data-wg="all" aria-pressed="true">Alle</button>
@@ -241,6 +241,27 @@
       <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Zum Anmeldeformular" aria-label="Zum Anmeldeformular">+</button>
     </div>
 
+    <!-- Ergebniszähler + globales Zurücksetzen, stets oberhalb der
+         Facetten sichtbar, damit das Mitgliederraster näher am
+         Seitenanfang liegt. -->
+    <div class="members-resultbar">
+      <p class="members-count" id="members-count" aria-live="polite"></p>
+      <button type="button" class="members-clear-all" id="members-clear-all" hidden>Alle zurücksetzen</button>
+    </div>
+
+    <!-- Sekundäre Facetten (Themen, Regionen, Mentoring) hinter einem
+         eingeklappten Ausklappbereich, damit das Verzeichnis mit den
+         Personen beginnt statt mit Filtern. Ein Deep-Link (#themes=…)
+         oder ein Klick auf eine Karten-Pille öffnet ihn; das Badge
+         zählt die aktiven sekundären Filter. -->
+    <details class="members-refine" id="members-refine">
+      <summary class="members-refine-summary">
+        <svg class="members-refine-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        <span>Weitere Filter</span>
+        <span class="members-refine-badge" id="members-refine-badge" hidden></span>
+      </summary>
+      <div class="members-refine-body">
+
     <!-- Filter nach Forschungsschwerpunkt (Phase 3). Vollständige
          Dokumentation der Pillen-Reihe und URL-Hash-Persistenz in
          people.html (EN). -->
@@ -266,6 +287,7 @@
         <span class="members-keyword-filter-label">Forschungsregionen</span>
         <button type="button" class="members-keyword-filter-clear" id="members-region-filter-clear" hidden>Zurücksetzen</button>
       </div>
+      <p class="members-keyword-filter-hint">Worauf Mitglieder ihre Forschung richten, nicht wo sie ansässig sind.</p>
       <div class="members-keyword-filter-chips" id="members-region-filter-chips"></div>
       <button type="button" class="members-keyword-filter-toggle" id="members-region-filter-toggle" aria-expanded="false" hidden>Alle anzeigen</button>
     </div>
@@ -282,8 +304,8 @@
         <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Sucht Mentoring</button>
       </div>
     </div>
-
-    <p class="members-count" id="members-count" aria-live="polite"></p>
+      </div>
+    </details>
 
     <div id="members-empty" hidden class="members-empty glass">
       <h3>Noch keine Mitglieder</h3>
@@ -863,8 +885,11 @@
       grid.appendChild(node);
     });
 
-    countEl.textContent = filtered.length + ' ' + window.netsecT(filtered.length === 1 ? 'member' : 'members');
+    countEl.textContent = (filtered.length === MEMBERS.length)
+      ? filtered.length + ' ' + window.netsecT(filtered.length === 1 ? 'member' : 'members')
+      : filtered.length + ' / ' + MEMBERS.length + ' ' + window.netsecT('members');
     empty.hidden = filtered.length > 0;
+    updateFilterChrome();
 
     // See people.html for the explanation of why this is no longer
     // wrapped in requestAnimationFrame.
@@ -921,6 +946,40 @@
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(render, 120);
   });
+
+  // Ergebnisleiste: globales „Alle zurücksetzen“ plus das Badge des
+  // Ausklappbereichs „Weitere Filter“ (zählt aktive sekundäre Facetten).
+  const clearAllBtn = document.getElementById('members-clear-all');
+  const refineEl = document.getElementById('members-refine');
+  const refineBadge = document.getElementById('members-refine-badge');
+  function anyFilterActive() {
+    return search.value.trim() !== '' || activeWG !== 'all' || activeCountry !== 'all'
+      || activeMentorship !== 'all' || activeKeywords.size > 0 || activeRegions.size > 0;
+  }
+  function updateFilterChrome() {
+    if (clearAllBtn) clearAllBtn.hidden = !anyFilterActive();
+    if (refineBadge) {
+      const n = activeKeywords.size + activeRegions.size + (activeMentorship !== 'all' ? 1 : 0);
+      refineBadge.hidden = n === 0;
+      refineBadge.textContent = n;
+    }
+  }
+  function clearAllFilters() {
+    search.value = '';
+    activeWG = 'all';
+    filterChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.wg === 'all'));
+    activeCountry = 'all';
+    if (countrySelect) countrySelect.value = 'all';
+    activeMentorship = 'all';
+    mentorshipChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.mentorship === 'all'));
+    activeKeywords.clear();
+    activeRegions.clear();
+    writeHashKeywords();
+    renderKeywordFilter();
+    renderRegionFilter();
+    render();
+  }
+  if (clearAllBtn) clearAllBtn.addEventListener('click', clearAllFilters);
 
   function populateCountryFilter() {
     if (!countrySelect) return;
@@ -1040,6 +1099,10 @@
   function toggleKeywordFilter(slug) {
     if (activeKeywords.has(slug)) activeKeywords.delete(slug);
     else activeKeywords.add(slug);
+    // Ein Klick auf eine Karten-Pille kann ein Thema setzen, während der
+    // Ausklappbereich „Weitere Filter“ eingeklappt ist; dann öffnen wir
+    // ihn, damit die aktive Pille sichtbar wird.
+    if (refineEl && activeKeywords.has(slug)) refineEl.open = true;
     writeHashKeywords();
     renderKeywordFilter();
     render();
@@ -1105,6 +1168,7 @@
   function toggleRegionFilter(slug) {
     if (activeRegions.has(slug)) activeRegions.delete(slug);
     else activeRegions.add(slug);
+    if (refineEl && activeRegions.has(slug)) refineEl.open = true;
     renderRegionFilter();
     render();
   }
@@ -1148,6 +1212,9 @@
     KEYWORD_THEME_MAP = (data && typeof data.keyword_theme_map === 'object' && data.keyword_theme_map) || {};
     REGION_AGGREGATE = Array.isArray(data.region_aggregate) ? data.region_aggregate : [];
     parseHashKeywords();
+    // Ein Deep-Link mit vorab gesetzten Themen (#themes=…) soll mit
+    // bereits geöffnetem Ausklappbereich „Weitere Filter“ ankommen.
+    if (refineEl && activeKeywords.size > 0) refineEl.open = true;
     populateCountryFilter();
     setupMentorshipFilter();
     renderKeywordFilter();

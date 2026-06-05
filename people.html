@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=42be03b6">
+<link rel="stylesheet" href="assets/css/site.css?v=bf9bf632">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -203,7 +203,7 @@
     <div class="members-toolbar glass">
       <label class="members-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input id="member-search" type="search" placeholder="Search by name, affiliation, or country…" aria-label="Search members">
+        <input id="member-search" type="search" placeholder="Search name, affiliation, country…" aria-label="Search members">
       </label>
       <div class="members-filter" role="group" aria-label="Filter by Working Group or role">
         <button class="members-filter-chip" data-wg="all" aria-pressed="true">All</button>
@@ -245,6 +245,25 @@
       <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Jump to the join form" aria-label="Jump to the join form">+</button>
     </div>
 
+    <!-- Result count + global reset, always visible above the facets so
+         the member grid sits closer to the top of the page. -->
+    <div class="members-resultbar">
+      <p class="members-count" id="members-count" aria-live="polite"></p>
+      <button type="button" class="members-clear-all" id="members-clear-all" hidden>Clear all filters</button>
+    </div>
+
+    <!-- Secondary facets (themes, regions, mentorship) sit behind a
+         collapsed disclosure so the directory leads with people, not
+         filter chrome. A deep-link (#themes=…) or a card-pill click
+         opens it; the badge counts how many secondary filters are on. -->
+    <details class="members-refine" id="members-refine">
+      <summary class="members-refine-summary">
+        <svg class="members-refine-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        <span>More filters</span>
+        <span class="members-refine-badge" id="members-refine-badge" hidden></span>
+      </summary>
+      <div class="members-refine-body">
+
     <!-- Research-theme filter chips. Populated from
          `bios.json#theme_aggregate` (broad themes, sorted by member
          count). Top 8 visible by default; "Show all" expands to the
@@ -277,6 +296,7 @@
         <span class="members-keyword-filter-label">Research regions</span>
         <button type="button" class="members-keyword-filter-clear" id="members-region-filter-clear" hidden>Clear</button>
       </div>
+      <p class="members-keyword-filter-hint">Where members focus their research, not where they are based.</p>
       <div class="members-keyword-filter-chips" id="members-region-filter-chips"></div>
       <button type="button" class="members-keyword-filter-toggle" id="members-region-filter-toggle" aria-expanded="false" hidden>Show all</button>
     </div>
@@ -296,8 +316,8 @@
         <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Seeking mentorship</button>
       </div>
     </div>
-
-    <p class="members-count" id="members-count" aria-live="polite"></p>
+      </div>
+    </details>
 
     <div id="members-empty" hidden class="members-empty glass">
       <h3>No members yet</h3>
@@ -1050,8 +1070,11 @@
       grid.appendChild(node);
     });
 
-    countEl.textContent = filtered.length + ' ' + window.netsecT(filtered.length === 1 ? 'member' : 'members');
+    countEl.textContent = (filtered.length === MEMBERS.length)
+      ? filtered.length + ' ' + window.netsecT(filtered.length === 1 ? 'member' : 'members')
+      : filtered.length + ' / ' + MEMBERS.length + ' ' + window.netsecT('members');
     empty.hidden = filtered.length > 0;
+    updateFilterChrome();
 
     // After the cards are in the DOM, detect which bios overflow the
     // four-line clamp and add a "Show more"/"Show less" toggle to those.
@@ -1130,6 +1153,42 @@
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(render, 120);
   });
+
+  // Results bar: a global "Clear all filters" control plus the "More
+  // filters" disclosure badge. The badge counts the secondary facets
+  // (themes, regions, mentorship) that are hidden inside the collapsed
+  // <details>, so a visitor knows filters are active without opening it.
+  const clearAllBtn = document.getElementById('members-clear-all');
+  const refineEl = document.getElementById('members-refine');
+  const refineBadge = document.getElementById('members-refine-badge');
+  function anyFilterActive() {
+    return search.value.trim() !== '' || activeWG !== 'all' || activeCountry !== 'all'
+      || activeMentorship !== 'all' || activeKeywords.size > 0 || activeRegions.size > 0;
+  }
+  function updateFilterChrome() {
+    if (clearAllBtn) clearAllBtn.hidden = !anyFilterActive();
+    if (refineBadge) {
+      const n = activeKeywords.size + activeRegions.size + (activeMentorship !== 'all' ? 1 : 0);
+      refineBadge.hidden = n === 0;
+      refineBadge.textContent = n;
+    }
+  }
+  function clearAllFilters() {
+    search.value = '';
+    activeWG = 'all';
+    filterChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.wg === 'all'));
+    activeCountry = 'all';
+    if (countrySelect) countrySelect.value = 'all';
+    activeMentorship = 'all';
+    mentorshipChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.mentorship === 'all'));
+    activeKeywords.clear();
+    activeRegions.clear();
+    writeHashKeywords();
+    renderKeywordFilter();
+    renderRegionFilter();
+    render();
+  }
+  if (clearAllBtn) clearAllBtn.addEventListener('click', clearAllFilters);
 
   // Populate the country dropdown from the loaded MEMBERS. Builds an
   // alphabetised, deduplicated list of every country that has at least
@@ -1275,6 +1334,9 @@
   function toggleKeywordFilter(slug) {
     if (activeKeywords.has(slug)) activeKeywords.delete(slug);
     else activeKeywords.add(slug);
+    // A card-pill click can land a theme filter while the "More filters"
+    // disclosure is collapsed; open it so the active chip is visible.
+    if (refineEl && activeKeywords.has(slug)) refineEl.open = true;
     writeHashKeywords();
     renderKeywordFilter();
     render();
@@ -1351,6 +1413,7 @@
   function toggleRegionFilter(slug) {
     if (activeRegions.has(slug)) activeRegions.delete(slug);
     else activeRegions.add(slug);
+    if (refineEl && activeRegions.has(slug)) refineEl.open = true;
     renderRegionFilter();
     render();
   }
@@ -1408,6 +1471,9 @@
     //   /people.html#keywords=ai-governance,foreign-policy-analysis
     // lands with those filters already applied.
     parseHashKeywords();
+    // A deep-link with themes pre-applied (#themes=…) should arrive with
+    // the "More filters" disclosure already open so the chips are visible.
+    if (refineEl && activeKeywords.size > 0) refineEl.open = true;
     populateCountryFilter();
     setupMentorshipFilter();
     renderKeywordFilter();
