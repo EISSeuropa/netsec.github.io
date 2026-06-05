@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=bf9bf632">
+<link rel="stylesheet" href="assets/css/site.css?v=5b50131e">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -223,44 +223,18 @@
           <option value="all">Tous les pays</option>
         </select>
       </label>
-      <!-- Bascule d'affichage : détaillé (par défaut, photo + bio)
-           vs compact (initiales + nom + affiliation + chips WG).
-           La préférence est conservée via localStorage('netsec-directory-view'). -->
-      <div class="view-toggle" role="group" aria-label="Densité des cartes">
-        <button type="button" data-view="detailed" aria-pressed="true" title="Vue détaillée" aria-label="Vue détaillée">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
-        </button>
-        <button type="button" data-view="compact" aria-pressed="false" title="Vue compacte" aria-label="Vue compacte">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
-        </button>
-      </div>
-      <!-- Déclencheur de la visite guidée — rouvre l'orientation
-           sous forme de visite en 5 étapes, quel que soit l'état
-           de la bannière. Le moteur est dans assets/js/site.js. -->
-      <button class="tour-trigger" type="button" id="tour-trigger" title="Faire la visite" aria-label="Faire la visite">?</button>
-      <!-- Raccourci vers la carte « Rejoindre le réseau » en pied de page. -->
-      <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Aller au formulaire d'inscription" aria-label="Aller au formulaire d'inscription">+</button>
-    </div>
-
-    <!-- Compteur de résultats + réinitialisation globale, toujours
-         visibles au-dessus des facettes pour rapprocher la grille du
-         haut de page. -->
-    <div class="members-resultbar">
-      <p class="members-count" id="members-count" aria-live="polite"></p>
-      <button type="button" class="members-clear-all" id="members-clear-all" hidden>Tout effacer</button>
-    </div>
-
-    <!-- Facettes secondaires (thèmes, régions, mentorat) repliées
-         derrière un volet pour mener avec les personnes plutôt qu'avec
-         les filtres. Un lien profond (#themes=…) ou un clic sur une
-         pastille de fiche l'ouvre ; le badge compte les filtres actifs. -->
-    <details class="members-refine" id="members-refine">
-      <summary class="members-refine-summary">
-        <svg class="members-refine-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-        <span>Plus de filtres</span>
-        <span class="members-refine-badge" id="members-refine-badge" hidden></span>
-      </summary>
-      <div class="members-refine-body">
+      <!-- Facettes secondaires (thèmes, régions, mentorat) repliées
+           dans un volet à l'intérieur de la carte de filtres, pour mener
+           avec les personnes plutôt qu'avec les filtres. Un lien profond
+           (#themes=…) ou un clic sur une pastille l'ouvre ; le badge
+           compte les filtres actifs. -->
+      <details class="members-refine" id="members-refine">
+        <summary class="members-refine-summary">
+          <svg class="members-refine-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <span>Plus de filtres</span>
+          <span class="members-refine-badge" id="members-refine-badge" hidden></span>
+        </summary>
+        <div class="members-refine-body">
 
     <!-- Filtre par domaine de recherche (Phase 3). Voir people.html
          (EN) pour la documentation détaillée de la grille de pastilles
@@ -305,7 +279,35 @@
       </div>
     </div>
       </div>
-    </details>
+      </details>
+    </div>
+
+    <!-- Compteur de résultats + réinitialisation globale, après tous les
+         filtres pour que le nombre reflète ce que la grille affiche. -->
+    <div class="members-resultbar">
+      <p class="members-count" id="members-count" aria-live="polite"></p>
+      <button type="button" class="members-clear-all" id="members-clear-all" hidden>Tout effacer</button>
+    </div>
+
+    <!-- Outils de l'annuaire, sortis de la carte de filtres dans une barre
+         épinglée pour que la bascule d'affichage, la visite guidée et le
+         bouton « Ajouter votre bio » restent accessibles au défilement. -->
+    <div class="members-utilitybar" role="group" aria-label="Outils de l'annuaire">
+      <!-- Bascule d'affichage : détaillé (par défaut) vs compact.
+           Préférence conservée via localStorage('netsec-directory-view'). -->
+      <div class="view-toggle" role="group" aria-label="Densité des cartes">
+        <button type="button" data-view="detailed" aria-pressed="true" title="Vue détaillée" aria-label="Vue détaillée">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+        </button>
+        <button type="button" data-view="compact" aria-pressed="false" title="Vue compacte" aria-label="Vue compacte">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+        </button>
+      </div>
+      <!-- Déclencheur de la visite guidée. Moteur dans assets/js/site.js. -->
+      <button class="tour-trigger" type="button" id="tour-trigger" title="Faire la visite" aria-label="Faire la visite">?</button>
+      <!-- Raccourci vers la carte « Rejoindre le réseau » en pied de page. -->
+      <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Aller au formulaire d'inscription" aria-label="Aller au formulaire d'inscription">+</button>
+    </div>
 
     <div id="members-empty" hidden class="members-empty glass">
       <h3>Aucun membre pour l'instant</h3>

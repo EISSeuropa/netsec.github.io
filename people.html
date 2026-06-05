@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=bf9bf632">
+<link rel="stylesheet" href="assets/css/site.css?v=5b50131e">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -222,47 +222,17 @@
           <option value="all">All countries</option>
         </select>
       </label>
-      <!-- View-mode toggle: detailed (default, photo + bio) vs
-           compact (initials + name + affiliation + WG chips only).
-           Preference persists via localStorage('netsec-directory-view'). -->
-      <div class="view-toggle" role="group" aria-label="Card density">
-        <button type="button" data-view="detailed" aria-pressed="true" title="Detailed view" aria-label="Detailed view">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
-        </button>
-        <button type="button" data-view="compact" aria-pressed="false" title="Compact view" aria-label="Compact view">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
-        </button>
-      </div>
-      <!-- Tour trigger — re-opens the orientation as a guided
-           5-step walkthrough at any time, regardless of whether the
-           welcome strip has been dismissed. The engine lives in
-           assets/js/site.js (window.netsecTour); the steps and
-           localised labels are configured inline below. -->
-      <button class="tour-trigger" type="button" id="tour-trigger" title="Take a tour" aria-label="Take a tour">?</button>
-      <!-- Quick-jump to the join card at the foot of the page. The
-           click handler smooth-scrolls to #join and focuses the
-           CTA so a keyboard user can submit immediately. -->
-      <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Jump to the join form" aria-label="Jump to the join form">+</button>
-    </div>
-
-    <!-- Result count + global reset, always visible above the facets so
-         the member grid sits closer to the top of the page. -->
-    <div class="members-resultbar">
-      <p class="members-count" id="members-count" aria-live="polite"></p>
-      <button type="button" class="members-clear-all" id="members-clear-all" hidden>Clear all filters</button>
-    </div>
-
-    <!-- Secondary facets (themes, regions, mentorship) sit behind a
-         collapsed disclosure so the directory leads with people, not
-         filter chrome. A deep-link (#themes=…) or a card-pill click
-         opens it; the badge counts how many secondary filters are on. -->
-    <details class="members-refine" id="members-refine">
-      <summary class="members-refine-summary">
-        <svg class="members-refine-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-        <span>More filters</span>
-        <span class="members-refine-badge" id="members-refine-badge" hidden></span>
-      </summary>
-      <div class="members-refine-body">
+      <!-- Secondary facets (themes, regions, mentorship) sit behind a
+           collapsed disclosure inside the filter card, so the directory
+           leads with people, not filter chrome. A deep-link (#themes=…)
+           or a card-pill click opens it; the badge counts active ones. -->
+      <details class="members-refine" id="members-refine">
+        <summary class="members-refine-summary">
+          <svg class="members-refine-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <span>More filters</span>
+          <span class="members-refine-badge" id="members-refine-badge" hidden></span>
+        </summary>
+        <div class="members-refine-body">
 
     <!-- Research-theme filter chips. Populated from
          `bios.json#theme_aggregate` (broad themes, sorted by member
@@ -317,7 +287,38 @@
       </div>
     </div>
       </div>
-    </details>
+      </details>
+    </div>
+
+    <!-- Result count + global reset, after all the filters so the number
+         reflects what the grid is currently showing. -->
+    <div class="members-resultbar">
+      <p class="members-count" id="members-count" aria-live="polite"></p>
+      <button type="button" class="members-clear-all" id="members-clear-all" hidden>Clear all filters</button>
+    </div>
+
+    <!-- Directory tools, pulled out of the filter card into a pinned bar
+         so the density toggle, guided tour and add-your-bio CTA stay
+         reachable while scrolling the directory. -->
+    <div class="members-utilitybar" role="group" aria-label="Directory tools">
+      <!-- View-mode toggle: detailed (default, photo + bio) vs compact
+           (initials + name + affiliation + WG chips only). Persists via
+           localStorage('netsec-directory-view'). -->
+      <div class="view-toggle" role="group" aria-label="Card density">
+        <button type="button" data-view="detailed" aria-pressed="true" title="Detailed view" aria-label="Detailed view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+        </button>
+        <button type="button" data-view="compact" aria-pressed="false" title="Compact view" aria-label="Compact view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+        </button>
+      </div>
+      <!-- Tour trigger — re-opens the orientation as a guided walkthrough
+           at any time. Engine in assets/js/site.js (window.netsecTour). -->
+      <button class="tour-trigger" type="button" id="tour-trigger" title="Take a tour" aria-label="Take a tour">?</button>
+      <!-- Quick-jump to the join card; smooth-scrolls to #join and focuses
+           the CTA so a keyboard user can submit immediately. -->
+      <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Jump to the join form" aria-label="Jump to the join form">+</button>
+    </div>
 
     <div id="members-empty" hidden class="members-empty glass">
       <h3>No members yet</h3>
