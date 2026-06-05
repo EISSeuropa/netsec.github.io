@@ -410,7 +410,7 @@ section{padding:80px 0;position:relative}
 .section-head p{max-width:60ch;margin:0 auto;color:var(--muted)}
 /* Discreet "Directory last updated …" line under the people-page
    lede (#271): smaller, lighter, with a touch of top space. */
-.directory-freshness{margin-top:14px;font-size:.82rem;letter-spacing:.01em;opacity:.85}
+.directory-freshness{margin-top:22px;font-size:.82rem;letter-spacing:.01em;opacity:.85}
 
 /* -------- Glass cards --------
    `.glass` is a deliberately cross-cutting utility class (used on
@@ -1980,10 +1980,11 @@ body{padding-top:var(--whats-new-h, 0px)}
 .members-search{
   display:flex;align-items:center;gap:8px;flex:1 1 280px;min-width:0;
   padding:8px 14px;border-radius:12px;
-  background:rgba(255,255,255,.55);border:1px solid var(--glass-border);
+  background:rgba(255,255,255,.92);border:1px solid rgba(11,18,32,.14);
+  box-shadow:inset 0 1px 2px rgba(11,18,32,.05);
   color:var(--muted);
 }
-.dark .members-search{background:rgba(255,255,255,.06)}
+.dark .members-search{background:rgba(255,255,255,.06);border-color:var(--glass-border);box-shadow:none}
 .members-search svg{flex-shrink:0}
 .members-search input{
   flex:1;border:0;background:transparent;outline:none;
@@ -2046,7 +2047,7 @@ body{padding-top:var(--whats-new-h, 0px)}
    the collapsed "More filters" disclosure so the grid leads with people. */
 .members-resultbar{
   display:flex;align-items:baseline;justify-content:space-between;gap:12px;
-  margin:0 0 12px;
+  margin:2px 2px 14px;
 }
 .members-clear-all{
   font-family:'Inter',sans-serif;
@@ -2061,14 +2062,16 @@ body{padding-top:var(--whats-new-h, 0px)}
 
 /* "More filters" disclosure: collapses the three secondary facets so the
    directory leads with people rather than filter chrome. */
-.members-refine{ margin:0 0 24px; }
+/* The disclosure sits as a full-width row at the foot of the filter card,
+   divided from the chips above it. */
+.members-refine{ flex:1 0 100%;margin:4px 0 0;padding-top:14px;border-top:1px solid var(--glass-border); }
 .members-refine-summary{
   display:inline-flex;align-items:center;gap:8px;
   font-family:'Lexend',sans-serif;
   font-size:.82rem;font-weight:600;letter-spacing:.02em;
   color:var(--ink-2);
   cursor:pointer;list-style:none;
-  padding:8px 12px;border-radius:8px;
+  padding:6px 2px;border-radius:8px;
   user-select:none;
 }
 .members-refine-summary::-webkit-details-marker{ display:none; }
@@ -2087,6 +2090,24 @@ body{padding-top:var(--whats-new-h, 0px)}
 }
 .members-refine-badge[hidden]{ display:none; }
 .members-refine-body{ padding-top:12px; }
+
+/* Pinned directory tools: density toggle, guided tour, and the add-your-bio
+   CTA. Fixed to the bottom-right so they stay reachable while the grid
+   scrolls, pulled out of the filter card where they read as stray controls
+   among the filters. Sits below the nav (z:100) and the guided tour. */
+.members-utilitybar{
+  position:fixed;right:24px;bottom:24px;z-index:90;
+  display:flex;align-items:center;gap:8px;
+  padding:7px 9px;border-radius:999px;
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:saturate(160%) blur(18px);
+  backdrop-filter:saturate(160%) blur(18px);
+  border:1px solid var(--glass-border);
+  box-shadow:0 10px 30px rgba(11,18,32,.16);
+}
+@media (max-width:540px){
+  .members-utilitybar{right:14px;bottom:14px;gap:6px;padding:6px 8px}
+}
 
 .members-empty{padding:36px;text-align:center;margin:24px 0}
 .members-empty h3{margin:0 0 8px}
@@ -4552,6 +4573,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   #search-overlay,
   .rm-shipped-toggle,
   .members-toolbar,
+  .members-utilitybar,
   .essc-member-card,
   .member-bio-toggle { display:none !important; }
 

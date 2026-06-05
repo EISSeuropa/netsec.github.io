@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=bf9bf632">
+<link rel="stylesheet" href="assets/css/site.css?v=5b50131e">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -222,45 +222,18 @@
           <option value="all">Alle Länder</option>
         </select>
       </label>
-      <!-- Ansichtsumschalter: detailliert (Standard, Foto + Bio)
-           vs kompakt (Initialen + Name + Affiliation + AG-Chips).
-           Die Einstellung wird via localStorage('netsec-directory-view') gespeichert. -->
-      <div class="view-toggle" role="group" aria-label="Kartendichte">
-        <button type="button" data-view="detailed" aria-pressed="true" title="Detailansicht" aria-label="Detailansicht">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
-        </button>
-        <button type="button" data-view="compact" aria-pressed="false" title="Kompaktansicht" aria-label="Kompaktansicht">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
-        </button>
-      </div>
-      <!-- Tour-Auslöser — öffnet die Orientierung jederzeit als
-           geführte fünfschrittige Tour, unabhängig vom Status
-           der Begrüßungsbanner. Engine in assets/js/site.js. -->
-      <button class="tour-trigger" type="button" id="tour-trigger" title="Tour starten" aria-label="Tour starten">?</button>
-      <!-- Direktsprung zur Anmeldekarte am Seitenende. -->
-      <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Zum Anmeldeformular" aria-label="Zum Anmeldeformular">+</button>
-    </div>
-
-    <!-- Ergebniszähler + globales Zurücksetzen, stets oberhalb der
-         Facetten sichtbar, damit das Mitgliederraster näher am
-         Seitenanfang liegt. -->
-    <div class="members-resultbar">
-      <p class="members-count" id="members-count" aria-live="polite"></p>
-      <button type="button" class="members-clear-all" id="members-clear-all" hidden>Alle zurücksetzen</button>
-    </div>
-
-    <!-- Sekundäre Facetten (Themen, Regionen, Mentoring) hinter einem
-         eingeklappten Ausklappbereich, damit das Verzeichnis mit den
-         Personen beginnt statt mit Filtern. Ein Deep-Link (#themes=…)
-         oder ein Klick auf eine Karten-Pille öffnet ihn; das Badge
-         zählt die aktiven sekundären Filter. -->
-    <details class="members-refine" id="members-refine">
-      <summary class="members-refine-summary">
-        <svg class="members-refine-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-        <span>Weitere Filter</span>
-        <span class="members-refine-badge" id="members-refine-badge" hidden></span>
-      </summary>
-      <div class="members-refine-body">
+      <!-- Sekundäre Facetten (Themen, Regionen, Mentoring) in einem
+           eingeklappten Ausklappbereich innerhalb der Filterkarte, damit
+           das Verzeichnis mit den Personen beginnt statt mit Filtern. Ein
+           Deep-Link (#themes=…) oder ein Klick auf eine Karten-Pille
+           öffnet ihn; das Badge zählt die aktiven Filter. -->
+      <details class="members-refine" id="members-refine">
+        <summary class="members-refine-summary">
+          <svg class="members-refine-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <span>Weitere Filter</span>
+          <span class="members-refine-badge" id="members-refine-badge" hidden></span>
+        </summary>
+        <div class="members-refine-body">
 
     <!-- Filter nach Forschungsschwerpunkt (Phase 3). Vollständige
          Dokumentation der Pillen-Reihe und URL-Hash-Persistenz in
@@ -305,7 +278,35 @@
       </div>
     </div>
       </div>
-    </details>
+      </details>
+    </div>
+
+    <!-- Ergebniszähler + globales Zurücksetzen, nach allen Filtern, damit
+         die Zahl widerspiegelt, was das Raster gerade anzeigt. -->
+    <div class="members-resultbar">
+      <p class="members-count" id="members-count" aria-live="polite"></p>
+      <button type="button" class="members-clear-all" id="members-clear-all" hidden>Alle zurücksetzen</button>
+    </div>
+
+    <!-- Verzeichnis-Werkzeuge, aus der Filterkarte in eine angeheftete
+         Leiste ausgelagert, damit Ansichtsumschalter, geführte Tour und
+         die Bio-hinzufügen-Schaltfläche beim Scrollen erreichbar bleiben. -->
+    <div class="members-utilitybar" role="group" aria-label="Verzeichnis-Werkzeuge">
+      <!-- Ansichtsumschalter: detailliert (Standard) vs kompakt.
+           Einstellung via localStorage('netsec-directory-view'). -->
+      <div class="view-toggle" role="group" aria-label="Kartendichte">
+        <button type="button" data-view="detailed" aria-pressed="true" title="Detailansicht" aria-label="Detailansicht">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+        </button>
+        <button type="button" data-view="compact" aria-pressed="false" title="Kompaktansicht" aria-label="Kompaktansicht">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+        </button>
+      </div>
+      <!-- Tour-Auslöser. Engine in assets/js/site.js. -->
+      <button class="tour-trigger" type="button" id="tour-trigger" title="Tour starten" aria-label="Tour starten">?</button>
+      <!-- Direktsprung zur Anmeldekarte am Seitenende. -->
+      <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Zum Anmeldeformular" aria-label="Zum Anmeldeformular">+</button>
+    </div>
 
     <div id="members-empty" hidden class="members-empty glass">
       <h3>Noch keine Mitglieder</h3>
