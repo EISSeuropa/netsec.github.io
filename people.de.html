@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=7137e3c5">
+<link rel="stylesheet" href="assets/css/site.css?v=2c4e79d2">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -228,15 +228,18 @@
     <!-- Filter nach Forschungsschwerpunkt (Phase 3). Vollständige
          Dokumentation der Pillen-Reihe und URL-Hash-Persistenz in
          people.html (EN). -->
-    <div class="members-keyword-filter" id="members-keyword-filter" role="group" aria-label="Nach Forschungsthema filtern" hidden>
-      <div class="members-keyword-filter-head">
-        <span class="members-keyword-filter-label">Forschungsthemen</span>
+    <details class="members-keyword-filter" id="members-keyword-filter" aria-label="Nach Forschungsthema filtern" hidden>
+      <summary class="members-keyword-filter-head">
+        <span class="members-keyword-filter-titlegroup">
+          <svg class="members-facet-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <span class="members-keyword-filter-label">Forschungsthemen</span>
+        </span>
         <button type="button" class="members-keyword-filter-clear" id="members-keyword-filter-clear" hidden>Zurücksetzen</button>
-      </div>
+      </summary>
       <p class="members-keyword-filter-hint">Themen gruppieren automatisch Personen, die im selben Bereich arbeiten, anhand ihrer einzelnen Schlagwörter, die auf ihrer Karte sichtbar bleiben.</p>
       <div class="members-keyword-filter-chips" id="members-keyword-filter-chips"></div>
       <button type="button" class="members-keyword-filter-toggle" id="members-keyword-filter-toggle" aria-expanded="false" hidden>Alle anzeigen</button>
-    </div>
+    </details>
 
     <!-- Filter nach Forschungsregion (#555). Zweite, geografische Achse,
          unabhängig von den Themen und mit UND verknüpft. Mehrfachauswahl
@@ -245,15 +248,18 @@
          Region angegeben hat. Flüchtig (kein URL-Hash). Nutzt die
          CSS-Klassen der Themen-/Schlagwortzeile (DRY); eigene IDs tragen
          die JS-Hooks. -->
-    <div class="members-keyword-filter members-region-filter" id="members-region-filter" role="group" aria-label="Nach Forschungsregion filtern" hidden>
-      <div class="members-keyword-filter-head">
-        <span class="members-keyword-filter-label">Forschungsregionen</span>
+    <details class="members-keyword-filter members-region-filter" id="members-region-filter" aria-label="Nach Forschungsregion filtern" hidden>
+      <summary class="members-keyword-filter-head">
+        <span class="members-keyword-filter-titlegroup">
+          <svg class="members-facet-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <span class="members-keyword-filter-label">Forschungsregionen</span>
+        </span>
         <button type="button" class="members-keyword-filter-clear" id="members-region-filter-clear" hidden>Zurücksetzen</button>
-      </div>
+      </summary>
       <p class="members-keyword-filter-hint">Worauf Mitglieder ihre Forschung richten, nicht wo sie ansässig sind.</p>
       <div class="members-keyword-filter-chips" id="members-region-filter-chips"></div>
       <button type="button" class="members-keyword-filter-toggle" id="members-region-filter-toggle" aria-expanded="false" hidden>Alle anzeigen</button>
-    </div>
+    </details>
 
     <!-- Mentoring-Filter. Eigene UND-kombinierte Dimension, Einfach-
          auswahl (Alle / Mentor:innen / Sucht Mentor), ohne URL-Hash-
@@ -945,6 +951,11 @@
   // Ergebnisleiste: globales „Alle zurücksetzen“, sichtbar sobald ein
   // Filter aktiv ist.
   const clearAllBtn = document.getElementById('members-clear-all');
+  // Die Facetten Themen + Regionen sind standardmäßig eingeklappte
+  // Ausklappbereiche; der jeweilige wird geöffnet, wenn darin ein Filter
+  // aktiv wird.
+  const keywordDetails = document.getElementById('members-keyword-filter');
+  const regionDetails = document.getElementById('members-region-filter');
   function anyFilterActive() {
     return search.value.trim() !== '' || activeWG !== 'all' || activeCountry !== 'all'
       || activeMentorship !== 'all' || activeKeywords.size > 0 || activeRegions.size > 0;
@@ -1087,6 +1098,7 @@
   function toggleKeywordFilter(slug) {
     if (activeKeywords.has(slug)) activeKeywords.delete(slug);
     else activeKeywords.add(slug);
+    if (keywordDetails && activeKeywords.has(slug)) keywordDetails.open = true;
     writeHashKeywords();
     renderKeywordFilter();
     render();
@@ -1107,7 +1119,9 @@
   }
   const kwClearBtn = document.getElementById('members-keyword-filter-clear');
   if (kwClearBtn) {
-    kwClearBtn.addEventListener('click', clearKeywordFilter);
+    // Der „Zurücksetzen“-Button liegt im <summary>; sein Klick soll den
+    // Ausklappbereich nicht auf- oder zuklappen.
+    kwClearBtn.addEventListener('click', (e) => { e.stopPropagation(); clearKeywordFilter(); });
   }
   function renderRegionFilter() {
     const root = document.getElementById('members-region-filter');
@@ -1152,6 +1166,7 @@
   function toggleRegionFilter(slug) {
     if (activeRegions.has(slug)) activeRegions.delete(slug);
     else activeRegions.add(slug);
+    if (regionDetails && activeRegions.has(slug)) regionDetails.open = true;
     renderRegionFilter();
     render();
   }
@@ -1170,7 +1185,7 @@
   }
   const rgClearBtn = document.getElementById('members-region-filter-clear');
   if (rgClearBtn) {
-    rgClearBtn.addEventListener('click', clearRegionFilter);
+    rgClearBtn.addEventListener('click', (e) => { e.stopPropagation(); clearRegionFilter(); });
   }
   window.addEventListener('hashchange', () => {
     const before = Array.from(activeKeywords).sort().join(',');
@@ -1195,6 +1210,7 @@
     KEYWORD_THEME_MAP = (data && typeof data.keyword_theme_map === 'object' && data.keyword_theme_map) || {};
     REGION_AGGREGATE = Array.isArray(data.region_aggregate) ? data.region_aggregate : [];
     parseHashKeywords();
+    if (keywordDetails && activeKeywords.size > 0) keywordDetails.open = true;
     populateCountryFilter();
     setupMentorshipFilter();
     renderKeywordFilter();
