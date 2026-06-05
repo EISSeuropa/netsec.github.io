@@ -102,6 +102,28 @@ SKIP_HOSTS = {
                                 # a real DID; confirmed 2026-06-03.
 }
 
+# Domains skipped together with every subdomain (suffix match, not exact
+# hostname). Use this when a whole institution rate-limits or bot-blocks the
+# Actions-runner IP across many hosts rather than one fixed URL.
+SKIP_DOMAIN_SUFFIXES = {
+    "su.se",                    # Stockholm University. Member-affiliation
+                                # links (synced into bios.json) spread across
+                                # www.su.se and department subdomains, which
+                                # intermittently return 403 / time out for the
+                                # Actions-runner IP while resolving fine in a
+                                # real browser. Confirmed reachable 2026-06-05.
+}
+
+def host_skipped(hostname):
+    """True when a hostname is on the exact skip list or under a skipped
+    domain (so su.se covers www.su.se and every department subdomain)."""
+    if not hostname:
+        return False
+    if hostname in SKIP_HOSTS:
+        return True
+    return any(hostname == d or hostname.endswith("." + d)
+               for d in SKIP_DOMAIN_SUFFIXES)
+
 internal_links = {}  # (file, target) — for de-dupe display
 external_links = {}  # (url) → first-seen source file
 broken_internal = []
@@ -205,7 +227,7 @@ def _make_ssl_ctx(verify=True):
 
 def check_external(url):
     parsed = urllib.parse.urlparse(url)
-    if parsed.hostname in SKIP_HOSTS:
+    if host_skipped(parsed.hostname):
         return (url, "skip")
     method = "GET" if parsed.hostname in GET_HOSTS else "HEAD"
     headers = {
