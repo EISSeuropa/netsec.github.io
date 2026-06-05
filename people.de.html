@@ -312,6 +312,17 @@
          Leiste ausgelagert, damit geführte Tour und die Bio-hinzufügen-
          Schaltfläche beim Scrollen erreichbar bleiben. -->
     <div class="members-utilitybar" role="group" aria-label="Verzeichnis-Werkzeuge">
+      <!-- Kartendichte-Umschalter. Nur Desktop: CSS blendet ihn bei ≤640px aus,
+           wo das einspaltige Raster immer kompakt ist. Detailliert vs kompakt;
+           die Wahl wird via localStorage('netsec-directory-view') gespeichert. -->
+      <div class="view-toggle" role="group" aria-label="Kartendichte">
+        <button type="button" data-view="detailed" aria-pressed="true" title="Detailansicht" aria-label="Detailansicht">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+        </button>
+        <button type="button" data-view="compact" aria-pressed="false" title="Kompaktansicht" aria-label="Kompaktansicht">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+        </button>
+      </div>
       <!-- Tour-Auslöser. Engine in assets/js/site.js. -->
       <button class="tour-trigger" type="button" id="tour-trigger" title="Tour starten" aria-label="Tour starten">?</button>
       <!-- Direktsprung zur Anmeldekarte am Seitenende. -->
@@ -417,6 +428,7 @@
   const mentorshipChips = document.querySelectorAll('.members-mentorship-chip');
   const countrySelect = document.getElementById('member-country');
   const tpl = document.getElementById('member-card-template');
+  const viewToggle = document.querySelectorAll('.view-toggle button[data-view]');
 
   /* Begrüßungsbanner + geführte Tour — gemeinsamer Schlüssel.
      Siehe people.html für Details. */
@@ -431,15 +443,27 @@
     if (welcome) welcome.hidden = true;
   }
 
-  // Tour wird verzögert aufgebaut — siehe Kommentar in people.html
+  // Tour wird verzögert aufgebaut — siehe Kommentar in people.html.
+  // Die Tour richtet sich nach der Breite: auf dem Desktop stehen die Filter
+  // inline (eine Stufe je Facette); auf dem Telefon liegen sie in einer unteren
+  // Lade, die zur Tour-Zeit geschlossen (und außerhalb des Sichtbereichs) ist,
+  // daher zeigt dort eine einzige Stufe auf den „Filter“-Button, der sie öffnet.
   function startTour() {
     if (!window.netsecTour) return;
     if (welcome) welcome.hidden = true;
-    window.netsecTour({
-    steps: [
-      { target: '#member-search',
-        title: 'Suche',
-        body:  'Freitext-Suche über Namen, Affiliationen und Länder. Lässt sich mit den Filtern rechts kombinieren.' },
+    const isPhone = window.matchMedia('(max-width: 640px)').matches;
+    const searchStep = { target: '#member-search',
+      title: 'Suche',
+      body:  'Freitext-Suche über Namen, Affiliationen und Länder. Lässt sich mit den Filtern kombinieren.' };
+    const joinTriggerStep = { target: '#join-trigger',
+      title: 'Zum Formular springen',
+      body:  'Der +-Button bringt Sie direkt zur „Beitreten"-Karte am Seitenende.' };
+    const joinStep = { target: '#join',
+      title: 'Beitritt offen für alle',
+      body:  'Tragen Sie sich über das Formular unten ein. Etwa drei Minuten. Die Karte erscheint binnen einer Woche nach Einreichung auf dieser Seite.',
+      scroll: true };
+    const desktopSteps = [
+      searchStep,
       { target: '.members-filter',
         title: 'Nach Arbeitsgruppe oder MC-Rolle filtern',
         body:  'WG1–WG4 filtern nach Arbeitsgruppe; „MC-Mitglieder“ blendet nur Vertreter·innen des Management-Komitees ein.' },
@@ -449,14 +473,22 @@
       { target: '.members-mentorship-filter',
         title: 'Nach Mentoring filtern',
         body:  'Mitglieder können angeben, dass sie als Mentor für Nachwuchsforschende verfügbar sind oder selbst Mentoring suchen. Mit diesen Chips finden Sie sie. Diese Reihe erscheint, sobald mindestens ein Mitglied teilnimmt.' },
-      { target: '#join-trigger',
-        title: 'Zum Formular springen',
-        body:  'Der +-Button bringt Sie direkt zur „Beitreten"-Karte am Seitenende.' },
-      { target: '#join',
-        title: 'Beitritt offen für alle',
-        body:  'Tragen Sie sich über das Formular unten ein. Etwa drei Minuten. Die Karte erscheint binnen einer Woche nach Einreichung auf dieser Seite.',
-        scroll: true },
-    ],
+      { target: '.view-toggle',
+        title: 'Kartendichte wechseln',
+        body:  'Die Detailansicht zeigt Fotos und Biografien; die Kompaktansicht zeigt Initialen, Name, Affiliation und Arbeitsgruppen-Chips, drei pro Reihe. Ihre Wahl wird gespeichert. Telefone nutzen immer die Kompaktansicht.' },
+      joinTriggerStep,
+      joinStep,
+    ];
+    const mobileSteps = [
+      searchStep,
+      { target: '.members-filter-toggle-btn',
+        title: 'Filter',
+        body:  'Tippen Sie auf „Filter“, um das Verzeichnis nach Arbeitsgruppe, Forschungsthema, Forschungsregion oder Mentoring einzugrenzen. Das Abzeichen zeigt die Anzahl aktiver Filter.' },
+      joinTriggerStep,
+      joinStep,
+    ];
+    window.netsecTour({
+    steps: isPhone ? mobileSteps : desktopSteps,
     labels: {
       next: 'Weiter', prev: 'Zurück', done: 'Fertig', skip: 'Überspringen',
       stepOf: 'Schritt %1 von %2', closeLabel: 'Tour schließen',
@@ -477,19 +509,39 @@
   function applyView(mode) {
     const compact = (mode === 'compact');
     grid.classList.toggle('is-compact', compact);
+    viewToggle.forEach(btn => {
+      btn.setAttribute('aria-pressed', btn.dataset.view === mode ? 'true' : 'false');
+    });
     grid.querySelectorAll('.member-card').forEach(card => {
       if (compact) card.setAttribute('tabindex', '0');
       else { card.removeAttribute('tabindex'); card.classList.remove('is-expanded'); }
     });
   }
-  // Kein Dichteumschalter mehr: detailliert auf großen Bildschirmen, kompakt
-  // auf dem Telefon (eine Spalte aus Foto- und Bio-Karten wird dort zu lang).
-  // Von der Breite gesteuert, damit die richtige Dichte beim Laden und beim
-  // Größenwechsel greift.
+  // Dichte auf dem Desktop wählbar, auf dem Telefon erzwungen. Auf dem Telefon
+  // (≤640px) ist das Raster einspaltig, wo Foto- und Bio-Karten zu lang werden:
+  // kompakt wird erzwungen und der Umschalter ausgeblendet (CSS). Auf dem
+  // Desktop wählt die besuchende Person, und die Wahl wird in localStorage
+  // gespeichert. syncDirectoryView wendet die richtige Dichte beim Laden und bei
+  // jedem Überschreiten des Breakpoints an.
   const _mqCompact = window.matchMedia('(max-width: 640px)');
-  function syncDirectoryView() { applyView(_mqCompact.matches ? 'compact' : 'detailed'); }
+  function savedView() {
+    try {
+      const s = localStorage.getItem('netsec-directory-view');
+      return (s === 'compact' || s === 'detailed') ? s : 'detailed';
+    } catch (e) { return 'detailed'; }
+  }
+  function syncDirectoryView() {
+    applyView(_mqCompact.matches ? 'compact' : savedView());
+  }
   syncDirectoryView();
   _mqCompact.addEventListener('change', syncDirectoryView);
+  viewToggle.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.view;
+      applyView(mode);
+      try { localStorage.setItem('netsec-directory-view', mode); } catch (e) {}
+    });
+  });
 
   /* Inline-Erweiterung — siehe people.html für Details. */
   function clearHashIfFocus() {

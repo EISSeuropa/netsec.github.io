@@ -112,6 +112,11 @@ SKIP_DOMAIN_SUFFIXES = {
                                 # intermittently return 403 / time out for the
                                 # Actions-runner IP while resolving fine in a
                                 # real browser. Confirmed reachable 2026-06-05.
+    "sl.se",                    # Stockholm public transport (linked from the
+                                # ESSC practical-info travel section, e.g.
+                                # sl.se/en/in-english). Returns HTTP 403 to the
+                                # Actions-runner IP on HEAD and GET, but loads in
+                                # a real browser. Confirmed reachable 2026-06-05.
 }
 
 def host_skipped(hostname):
