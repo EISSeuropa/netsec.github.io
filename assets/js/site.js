@@ -666,6 +666,16 @@
       }
     }
 
+    // True when the element sits comfortably within the viewport, below
+    // the fixed nav and above the fold, so the tour need not scroll to it.
+    function isTargetInView(el) {
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 && r.height === 0) return false;
+      const nav = document.querySelector('.nav');
+      const navBottom = nav ? Math.max(0, nav.getBoundingClientRect().bottom) : 0;
+      return r.top >= navBottom + 8 && r.bottom <= window.innerHeight - 8;
+    }
+
     function render() {
       const step = steps[idx];
       if (!step) return done();
@@ -677,12 +687,21 @@
         if (idx < steps.length - 1) return next();
         return done();
       }
-      if (step.scroll) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        // Wait briefly for the scroll to settle before positioning.
-        setTimeout(() => positionForStep(step), 360);
-      } else {
+      // If the target sits inside a collapsed disclosure (the "More
+      // filters" panel now holds the theme + mentorship facets), open it
+      // so the step has a real, measurable rectangle.
+      const host = target.closest('details');
+      if (host && !host.open) host.open = true;
+      // The tour can be launched from any scroll position — the "?" lives
+      // in a pinned tools bar — so always bring the target into view before
+      // positioning. A step whose target is off-screen would otherwise
+      // anchor its spotlight and tooltip to an off-screen rectangle.
+      if (isTargetInView(target)) {
         positionForStep(step);
+      } else {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Wait briefly for the smooth scroll to settle before positioning.
+        setTimeout(() => positionForStep(step), 360);
       }
       // Render the tooltip content. Buttons in DOM order: Prev → Skip → Next/Done.
       const showPrev = idx > 0;
