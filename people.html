@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=c84564b4">
+<link rel="stylesheet" href="assets/css/site.css?v=6ee49ab6">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -201,6 +201,24 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <input id="member-search" type="search" placeholder="Search name, affiliation, country…" aria-label="Search members">
       </label>
+      <!-- Mobile-only: opens the filter bottom sheet. Hidden on desktop,
+           where the filters render inline in the toolbar below. -->
+      <button type="button" class="members-filter-toggle-btn" id="members-filter-toggle" aria-haspopup="dialog" aria-expanded="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+        <span>Filters</span>
+        <span class="members-filter-toggle-count" id="members-filter-toggle-count" hidden></span>
+      </button>
+      <!-- On desktop this is display:contents, so the Working-Group, country
+           and theme/region/mentorship controls flow inline in the toolbar.
+           On mobile (≤640px) it becomes a bottom sheet opened by the button
+           above. -->
+      <div class="members-filterset" id="members-filterset">
+        <div class="members-sheet-head">
+          <span class="members-sheet-title">Filters</span>
+          <button type="button" class="members-sheet-close" id="members-sheet-close" aria-label="Close filters">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
       <div class="members-filter" role="group" aria-label="Filter by Working Group or role">
         <button class="members-filter-chip" data-wg="all" aria-pressed="true">All</button>
         <button class="members-filter-chip" data-wg="1" aria-pressed="false">WG1</button>
@@ -283,7 +301,21 @@
       </div>
     </div>
       </div>
+        <!-- Sheet footer (mobile only): reset + a primary button that shows
+             the live result count and closes the sheet. -->
+        <div class="members-sheet-foot">
+          <button type="button" class="members-sheet-reset" id="members-sheet-reset">Reset</button>
+          <button type="button" class="members-sheet-apply" id="members-sheet-apply">Show results</button>
+        </div>
+      </div>
     </div>
+
+    <!-- Mobile-only: dims the page behind the open filter sheet. -->
+    <div class="members-sheet-backdrop" id="members-sheet-backdrop" hidden></div>
+
+    <!-- Mobile-only: horizontally-scrollable row of active filters, each
+         removable, shown under the toolbar while the sheet is closed. -->
+    <div class="members-active-filters" id="members-active-filters" hidden></div>
 
     <!-- Result count + freshness on the left, global reset on the right.
          Sits after all the filters so the number reflects the grid. -->
@@ -428,7 +460,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=1883a760" defer></script>
+<script src="assets/js/site.js?v=7c4fc39c" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
 <script>
@@ -1075,6 +1107,7 @@
       ? filtered.length + ' ' + window.netsecT(filtered.length === 1 ? 'member' : 'members')
       : filtered.length + ' / ' + MEMBERS.length + ' ' + window.netsecT('members');
     empty.hidden = filtered.length > 0;
+    _lastCount = filtered.length;
     updateFilterChrome();
 
     // After the cards are in the DOM, detect which bios overflow the
@@ -1168,6 +1201,17 @@
   }
   function updateFilterChrome() {
     if (clearAllBtn) clearAllBtn.disabled = !anyFilterActive();
+    // Mobile filter-sheet chrome: the "Filters • N" badge, the apply
+    // button's live count, and the removable active-filter chip row.
+    if (filterToggleCount) {
+      const n = sheetFilterCount();
+      filterToggleCount.hidden = n === 0;
+      filterToggleCount.textContent = n;
+    }
+    if (sheetApplyBtn) {
+      sheetApplyBtn.textContent = window.netsecT('Show {0} members').replace('{0}', _lastCount);
+    }
+    renderActiveFilters();
   }
   function clearAllFilters() {
     search.value = '';
@@ -1185,6 +1229,105 @@
     render();
   }
   if (clearAllBtn) clearAllBtn.addEventListener('click', clearAllFilters);
+
+  // ──────────────────────────────────────────────────────────────────
+  // Mobile filter sheet (≤640px). The same filter controls (Working
+  // Group, country, themes, regions, mentorship) live in a bottom sheet
+  // opened by the "Filters" button; on desktop they render inline and
+  // this chrome is hidden. Filters apply live, so the sheet's primary
+  // button just shows the current count and closes the sheet.
+  let _lastCount = 0;
+  const filterToggleBtn = document.getElementById('members-filter-toggle');
+  const filterToggleCount = document.getElementById('members-filter-toggle-count');
+  const filterSet = document.getElementById('members-filterset');
+  const sheetBackdrop = document.getElementById('members-sheet-backdrop');
+  const sheetCloseBtn = document.getElementById('members-sheet-close');
+  const sheetResetBtn = document.getElementById('members-sheet-reset');
+  const sheetApplyBtn = document.getElementById('members-sheet-apply');
+  const activeFiltersEl = document.getElementById('members-active-filters');
+
+  // Filters held inside the sheet (the free-text search has its own field
+  // and is excluded from the badge count).
+  function sheetFilterCount() {
+    return (activeWG !== 'all' ? 1 : 0) + (activeCountry !== 'all' ? 1 : 0)
+      + (activeMentorship !== 'all' ? 1 : 0) + activeKeywords.size + activeRegions.size;
+  }
+  function openFilterSheet() {
+    if (!filterSet) return;
+    filterSet.classList.add('is-open');
+    if (sheetBackdrop) sheetBackdrop.hidden = false;
+    if (filterToggleBtn) filterToggleBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    if (sheetCloseBtn) sheetCloseBtn.focus();
+  }
+  function closeFilterSheet() {
+    if (!filterSet || !filterSet.classList.contains('is-open')) return;
+    filterSet.classList.remove('is-open');
+    if (sheetBackdrop) sheetBackdrop.hidden = true;
+    document.body.style.overflow = '';
+    if (filterToggleBtn) { filterToggleBtn.setAttribute('aria-expanded', 'false'); filterToggleBtn.focus(); }
+  }
+  if (filterToggleBtn) filterToggleBtn.addEventListener('click', openFilterSheet);
+  if (sheetCloseBtn) sheetCloseBtn.addEventListener('click', closeFilterSheet);
+  if (sheetBackdrop) sheetBackdrop.addEventListener('click', closeFilterSheet);
+  if (sheetApplyBtn) sheetApplyBtn.addEventListener('click', closeFilterSheet);
+  if (sheetResetBtn) sheetResetBtn.addEventListener('click', clearAllFilters);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeFilterSheet(); });
+
+  // Map a theme slug back to its display name via the aggregate.
+  function themeNameForSlug(slug) {
+    const e = KEYWORD_AGGREGATE.find(x => keywordSlug(x.keyword) === slug);
+    return e ? e.keyword : slug;
+  }
+  // The list of currently-active filters, each with a remover, for the
+  // removable chip row shown under the toolbar on mobile.
+  function activeFilterPills() {
+    const out = [];
+    if (search.value.trim() !== '') {
+      out.push({ label: '“' + search.value.trim() + '”', remove: () => { search.value = ''; render(); } });
+    }
+    if (activeWG !== 'all') {
+      const chip = Array.from(filterChips).find(c => c.dataset.wg === activeWG);
+      out.push({ label: chip ? chip.textContent.trim() : ('WG' + activeWG), remove: () => {
+        activeWG = 'all'; filterChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.wg === 'all')); render();
+      }});
+    }
+    if (activeCountry !== 'all') {
+      out.push({ label: activeCountry, remove: () => { activeCountry = 'all'; if (countrySelect) countrySelect.value = 'all'; render(); } });
+    }
+    activeKeywords.forEach(slug => {
+      out.push({ label: window.netsecT(themeNameForSlug(slug)), remove: () => toggleKeywordFilter(slug) });
+    });
+    activeRegions.forEach(region => {
+      out.push({ label: window.netsecT(region), remove: () => toggleRegionFilter(region) });
+    });
+    if (activeMentorship !== 'all') {
+      const chip = Array.from(mentorshipChips).find(c => c.dataset.mentorship === activeMentorship);
+      out.push({ label: chip ? chip.textContent.trim() : activeMentorship, remove: () => {
+        activeMentorship = 'all'; mentorshipChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.mentorship === 'all')); render();
+      }});
+    }
+    return out;
+  }
+  const XMARK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  function renderActiveFilters() {
+    if (!activeFiltersEl) return;
+    const pills = activeFilterPills();
+    activeFiltersEl.textContent = '';
+    activeFiltersEl.hidden = pills.length === 0;
+    pills.forEach(p => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'members-active-filter';
+      const span = document.createElement('span');
+      span.textContent = p.label;
+      b.appendChild(span);
+      b.insertAdjacentHTML('beforeend', XMARK);
+      b.setAttribute('aria-label', window.netsecT('Remove filter') + ': ' + p.label);
+      b.addEventListener('click', p.remove);
+      activeFiltersEl.appendChild(b);
+    });
+  }
 
   // Populate the country dropdown from the loaded MEMBERS. Builds an
   // alphabetised, deduplicated list of every country that has at least

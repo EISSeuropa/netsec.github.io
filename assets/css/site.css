@@ -2389,6 +2389,120 @@ body{padding-top:var(--whats-new-h, 0px)}
 @media (max-width: 640px){
   .members-mentorship-filter{ padding:7px 12px; margin:0; gap:8px; }
 }
+
+/* ── Mobile filter bottom sheet ──────────────────────────────────────
+   On desktop the filter controls flow inline in the toolbar, so the
+   wrapper is transparent (display:contents) and the sheet chrome is
+   hidden. Below 640px the wrapper becomes a bottom sheet opened by the
+   "Filters" button; see people.html for the behaviour. */
+.members-filterset{ display:contents; }
+.members-filter-toggle-btn,
+.members-sheet-head,
+.members-sheet-foot{ display:none; }
+.members-sheet-backdrop,
+.members-active-filters{ display:none; }
+
+@media (max-width:640px){
+  /* Compact toolbar: free-text search + a Filters button. */
+  .members-toolbar{ gap:10px; align-items:center; }
+  .members-search{ flex:1 1 auto; min-width:0; }
+  .members-filter-toggle-btn{
+    display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;
+    font:inherit;font-size:.85rem;font-weight:600;
+    padding:9px 13px;border-radius:12px;
+    background:rgba(255,255,255,.92);border:1px solid rgba(11,18,32,.14);
+    color:var(--ink);cursor:pointer;
+  }
+  .dark .members-filter-toggle-btn{ background:rgba(255,255,255,.06);border-color:var(--glass-border); }
+  .members-filter-toggle-count{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:18px;height:18px;padding:0 5px;border-radius:9px;
+    font-size:.72rem;font-weight:700;color:#fff;background:var(--accent);
+  }
+  .members-filter-toggle-count[hidden]{ display:none; }
+
+  /* The wrapper becomes a bottom sheet that scrolls between a sticky
+     header and a sticky footer. */
+  .members-filterset{
+    display:flex;flex-direction:column;
+    position:fixed;left:0;right:0;bottom:0;z-index:200;
+    max-height:85vh;overflow-y:auto;overscroll-behavior:contain;
+    background:var(--bg-0);
+    border-radius:18px 18px 0 0;
+    box-shadow:0 -12px 40px rgba(11,18,32,.24);
+    transform:translateY(101%);
+    transition:transform .28s var(--ease);
+  }
+  .members-filterset.is-open{ transform:translateY(0); }
+
+  .members-sheet-head{
+    display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:2;background:var(--bg-0);
+    padding:16px 18px 10px;
+  }
+  .members-sheet-title{ font-family:'Lexend',sans-serif;font-size:1.05rem;font-weight:600;color:var(--ink); }
+  .members-sheet-close{
+    appearance:none;border:0;background:transparent;cursor:pointer;color:var(--muted);
+    width:36px;height:36px;display:grid;place-items:center;border-radius:50%;
+  }
+  .members-sheet-close:hover{ background:rgba(11,18,32,.06);color:var(--ink); }
+
+  /* Sheet body: each control full-width, stacked. Override the desktop
+     flex bases that would otherwise set the height in a column. */
+  .members-filterset > .members-filter{ padding:0 18px;margin-bottom:4px;flex:0 0 auto; }
+  .members-filterset > .members-country{ margin:6px 18px 2px;flex:0 0 auto;width:auto; }
+  .members-filterset > .members-facets{ padding:12px 18px 16px;margin:0;flex:0 0 auto; }
+
+  .members-sheet-foot{
+    display:flex;align-items:center;gap:10px;
+    position:sticky;bottom:0;z-index:2;background:var(--bg-0);
+    padding:12px 18px calc(14px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--glass-border);
+  }
+  .members-sheet-reset{
+    flex:0 0 auto;font:inherit;font-size:.9rem;font-weight:500;
+    background:transparent;border:0;color:var(--ink-2);padding:10px 6px;cursor:pointer;
+  }
+  .members-sheet-reset:hover{ color:var(--ink);text-decoration:underline; }
+  .members-sheet-apply{
+    flex:1 1 auto;font:inherit;font-size:.95rem;font-weight:600;
+    color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    border:0;border-radius:12px;padding:13px 18px;cursor:pointer;
+    box-shadow:0 4px 12px var(--accent-glow);
+  }
+
+  .members-sheet-backdrop{
+    display:block;position:fixed;inset:0;z-index:199;
+    background:rgba(11,18,32,.5);
+    -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
+  }
+  .members-sheet-backdrop[hidden]{ display:none; }
+
+  /* Active-filter chips: one horizontally-scrollable line under the bar. */
+  .members-active-filters{
+    display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;
+    margin:10px 0 0;padding:1px;-webkit-overflow-scrolling:touch;
+  }
+  .members-active-filters::-webkit-scrollbar{ display:none; }
+  .members-active-filters[hidden]{ display:none; }
+  .members-active-filter{
+    flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;
+    font:inherit;font-size:.78rem;font-weight:500;
+    padding:5px 6px 5px 11px;border-radius:999px;
+    background:color-mix(in oklab, var(--accent) 12%, transparent);
+    border:1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+    color:var(--ink);cursor:pointer;white-space:nowrap;
+  }
+  .members-active-filter svg{ width:13px;height:13px;opacity:.65;flex:0 0 auto; }
+
+  /* Density toggle is meaningless on a single-column grid. */
+  .members-utilitybar .view-toggle{ display:none; }
+  /* Lighter hero on small screens. */
+  .people-page .section-head .lede{ font-size:.95rem;line-height:1.5; }
+}
+@media (prefers-reduced-motion: reduce){
+  .members-filterset{ transition:none; }
+}
 /* Compact (grid) view: keyword block hidden. Full keywords show on
    expand. The matcher (line 1885-ish, .is-compact .member-card:not
    (.is-expanded) …) is the canonical rule for "this card is in

@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=c84564b4">
+<link rel="stylesheet" href="assets/css/site.css?v=6ee49ab6">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -204,6 +204,22 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <input id="member-search" type="search" placeholder="Rechercher nom, affiliation, pays…" aria-label="Rechercher dans l'annuaire">
       </label>
+      <!-- Mobile uniquement : ouvre le volet de filtres. Masqué sur grand
+           écran, où les filtres s'affichent dans la barre ci-dessous. -->
+      <button type="button" class="members-filter-toggle-btn" id="members-filter-toggle" aria-haspopup="dialog" aria-expanded="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+        <span>Filtres</span>
+        <span class="members-filter-toggle-count" id="members-filter-toggle-count" hidden></span>
+      </button>
+      <!-- Sur grand écran : display:contents (les filtres s'affichent dans
+           la barre). Sous 640 px : volet inférieur ouvert par le bouton. -->
+      <div class="members-filterset" id="members-filterset">
+        <div class="members-sheet-head">
+          <span class="members-sheet-title">Filtres</span>
+          <button type="button" class="members-sheet-close" id="members-sheet-close" aria-label="Fermer les filtres">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
       <div class="members-filter" role="group" aria-label="Filtrer par groupe de travail ou rôle">
         <button class="members-filter-chip" data-wg="all" aria-pressed="true">Tous</button>
         <button class="members-filter-chip" data-wg="1" aria-pressed="false">WG1</button>
@@ -275,7 +291,21 @@
       </div>
     </div>
       </div>
+        <!-- Pied du volet (mobile) : réinitialiser + un bouton principal qui
+             affiche le nombre de résultats et ferme le volet. -->
+        <div class="members-sheet-foot">
+          <button type="button" class="members-sheet-reset" id="members-sheet-reset">Réinitialiser</button>
+          <button type="button" class="members-sheet-apply" id="members-sheet-apply">Voir les résultats</button>
+        </div>
+      </div>
     </div>
+
+    <!-- Mobile uniquement : assombrit la page derrière le volet ouvert. -->
+    <div class="members-sheet-backdrop" id="members-sheet-backdrop" hidden></div>
+
+    <!-- Mobile uniquement : rangée défilante des filtres actifs, chacun
+         retirable, affichée sous la barre lorsque le volet est fermé. -->
+    <div class="members-active-filters" id="members-active-filters" hidden></div>
 
     <!-- Compteur + fraîcheur à gauche, réinitialisation globale à droite.
          Après tous les filtres, pour que le nombre reflète la grille. -->
@@ -392,7 +422,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=1883a760" defer></script>
+<script src="assets/js/site.js?v=7c4fc39c" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json.
      This script is identical to the English version; translatable
@@ -891,6 +921,7 @@
       ? filtered.length + ' ' + window.netsecT(filtered.length === 1 ? 'member' : 'members')
       : filtered.length + ' / ' + MEMBERS.length + ' ' + window.netsecT('members');
     empty.hidden = filtered.length > 0;
+    _lastCount = filtered.length;
     updateFilterChrome();
 
     // See people.html for the explanation of why this is no longer
@@ -962,6 +993,17 @@
   }
   function updateFilterChrome() {
     if (clearAllBtn) clearAllBtn.disabled = !anyFilterActive();
+    // Chrome du volet mobile : le badge « Filtres • N », le compteur du
+    // bouton et la rangée des filtres actifs retirables.
+    if (filterToggleCount) {
+      const n = sheetFilterCount();
+      filterToggleCount.hidden = n === 0;
+      filterToggleCount.textContent = n;
+    }
+    if (sheetApplyBtn) {
+      sheetApplyBtn.textContent = window.netsecT('Show {0} members').replace('{0}', _lastCount);
+    }
+    renderActiveFilters();
   }
   function clearAllFilters() {
     search.value = '';
@@ -979,6 +1021,106 @@
     render();
   }
   if (clearAllBtn) clearAllBtn.addEventListener('click', clearAllFilters);
+
+  // ──────────────────────────────────────────────────────────────────
+  // Volet de filtres mobile (≤640 px). Les mêmes contrôles (groupe de
+  // travail, pays, thèmes, régions, mentorat) vivent dans un volet
+  // inférieur ouvert par le bouton « Filtres » ; sur grand écran ils
+  // s'affichent dans la barre et ce chrome est masqué. Les filtres
+  // s'appliquent en direct : le bouton principal affiche le compte et
+  // ferme le volet.
+  let _lastCount = 0;
+  const filterToggleBtn = document.getElementById('members-filter-toggle');
+  const filterToggleCount = document.getElementById('members-filter-toggle-count');
+  const filterSet = document.getElementById('members-filterset');
+  const sheetBackdrop = document.getElementById('members-sheet-backdrop');
+  const sheetCloseBtn = document.getElementById('members-sheet-close');
+  const sheetResetBtn = document.getElementById('members-sheet-reset');
+  const sheetApplyBtn = document.getElementById('members-sheet-apply');
+  const activeFiltersEl = document.getElementById('members-active-filters');
+
+  // Filtres contenus dans le volet (la recherche libre a son propre champ
+  // et n'entre pas dans le compte du badge).
+  function sheetFilterCount() {
+    return (activeWG !== 'all' ? 1 : 0) + (activeCountry !== 'all' ? 1 : 0)
+      + (activeMentorship !== 'all' ? 1 : 0) + activeKeywords.size + activeRegions.size;
+  }
+  function openFilterSheet() {
+    if (!filterSet) return;
+    filterSet.classList.add('is-open');
+    if (sheetBackdrop) sheetBackdrop.hidden = false;
+    if (filterToggleBtn) filterToggleBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    if (sheetCloseBtn) sheetCloseBtn.focus();
+  }
+  function closeFilterSheet() {
+    if (!filterSet || !filterSet.classList.contains('is-open')) return;
+    filterSet.classList.remove('is-open');
+    if (sheetBackdrop) sheetBackdrop.hidden = true;
+    document.body.style.overflow = '';
+    if (filterToggleBtn) { filterToggleBtn.setAttribute('aria-expanded', 'false'); filterToggleBtn.focus(); }
+  }
+  if (filterToggleBtn) filterToggleBtn.addEventListener('click', openFilterSheet);
+  if (sheetCloseBtn) sheetCloseBtn.addEventListener('click', closeFilterSheet);
+  if (sheetBackdrop) sheetBackdrop.addEventListener('click', closeFilterSheet);
+  if (sheetApplyBtn) sheetApplyBtn.addEventListener('click', closeFilterSheet);
+  if (sheetResetBtn) sheetResetBtn.addEventListener('click', clearAllFilters);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeFilterSheet(); });
+
+  // Retrouve le nom affiché d'un thème à partir de son slug.
+  function themeNameForSlug(slug) {
+    const e = KEYWORD_AGGREGATE.find(x => keywordSlug(x.keyword) === slug);
+    return e ? e.keyword : slug;
+  }
+  // Les filtres actuellement actifs, chacun avec sa fonction de retrait,
+  // pour la rangée de pastilles retirables sous la barre (mobile).
+  function activeFilterPills() {
+    const out = [];
+    if (search.value.trim() !== '') {
+      out.push({ label: '“' + search.value.trim() + '”', remove: () => { search.value = ''; render(); } });
+    }
+    if (activeWG !== 'all') {
+      const chip = Array.from(filterChips).find(c => c.dataset.wg === activeWG);
+      out.push({ label: chip ? chip.textContent.trim() : ('WG' + activeWG), remove: () => {
+        activeWG = 'all'; filterChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.wg === 'all')); render();
+      }});
+    }
+    if (activeCountry !== 'all') {
+      out.push({ label: activeCountry, remove: () => { activeCountry = 'all'; if (countrySelect) countrySelect.value = 'all'; render(); } });
+    }
+    activeKeywords.forEach(slug => {
+      out.push({ label: window.netsecT(themeNameForSlug(slug)), remove: () => toggleKeywordFilter(slug) });
+    });
+    activeRegions.forEach(region => {
+      out.push({ label: window.netsecT(region), remove: () => toggleRegionFilter(region) });
+    });
+    if (activeMentorship !== 'all') {
+      const chip = Array.from(mentorshipChips).find(c => c.dataset.mentorship === activeMentorship);
+      out.push({ label: chip ? chip.textContent.trim() : activeMentorship, remove: () => {
+        activeMentorship = 'all'; mentorshipChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.mentorship === 'all')); render();
+      }});
+    }
+    return out;
+  }
+  const XMARK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  function renderActiveFilters() {
+    if (!activeFiltersEl) return;
+    const pills = activeFilterPills();
+    activeFiltersEl.textContent = '';
+    activeFiltersEl.hidden = pills.length === 0;
+    pills.forEach(p => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'members-active-filter';
+      const span = document.createElement('span');
+      span.textContent = p.label;
+      b.appendChild(span);
+      b.insertAdjacentHTML('beforeend', XMARK);
+      b.setAttribute('aria-label', window.netsecT('Remove filter') + ': ' + p.label);
+      b.addEventListener('click', p.remove);
+      activeFiltersEl.appendChild(b);
+    });
+  }
 
   function populateCountryFilter() {
     if (!countrySelect) return;
