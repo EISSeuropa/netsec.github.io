@@ -2062,15 +2062,16 @@ body{padding-top:var(--whats-new-h, 0px)}
   background:transparent;border:0;padding:2px 6px;border-radius:6px;
   cursor:pointer;flex:0 0 auto;
 }
-.members-clear-all:hover{ color:var(--ink); text-decoration:underline; }
+.members-clear-all:not(:disabled):hover{ color:var(--ink); text-decoration:underline; }
 .members-clear-all:focus-visible{ outline:2px solid var(--accent);outline-offset:2px; }
-.members-clear-all[hidden]{ display:none; }
+/* Always present, but muted + non-interactive until a filter is active. */
+.members-clear-all:disabled{ color:var(--muted);opacity:.55;cursor:default; }
 
 /* Secondary facets render directly in the filter card as a full-width,
    divided group below the primary search / WG / country row. Each facet
    row keeps its own "Show all" retraction. */
 .members-facets{
-  flex:1 0 100%;margin:2px 0 0;padding-top:12px;
+  flex:1 0 100%;margin:0;padding-top:8px;
   border-top:1px solid var(--glass-border);
   display:flex;flex-direction:column;gap:10px;
 }
@@ -2358,7 +2359,7 @@ body{padding-top:var(--whats-new-h, 0px)}
    matching facet (handled in people.html). */
 .members-mentorship-filter{
   display:flex;flex-wrap:wrap;align-items:center;gap:12px;
-  margin:0;padding:11px 14px;border-radius:14px;
+  margin:0;padding:7px 14px;border-radius:14px;
   background:color-mix(in oklab, var(--accent) 4%, transparent);
   border:1px solid color-mix(in oklab, var(--accent) 14%, transparent);
 }
@@ -2369,8 +2370,8 @@ body{padding-top:var(--whats-new-h, 0px)}
 }
 .members-mentorship-filter-chips{display:flex;flex-wrap:wrap;gap:6px}
 .members-mentorship-chip{
-  font:inherit;font-size:.82rem;font-weight:600;
-  padding:7px 14px;border-radius:999px;border:1px solid var(--glass-border);
+  font:inherit;font-size:.8rem;font-weight:600;
+  padding:5px 13px;border-radius:999px;border:1px solid var(--glass-border);
   background:transparent;color:var(--ink-2);cursor:pointer;
   transition:background .2s var(--ease),color .2s var(--ease);
 }
@@ -2386,7 +2387,7 @@ body{padding-top:var(--whats-new-h, 0px)}
   outline:2px solid var(--accent);outline-offset:2px;
 }
 @media (max-width: 640px){
-  .members-mentorship-filter{ padding:10px 12px; margin:0; gap:8px; }
+  .members-mentorship-filter{ padding:7px 12px; margin:0; gap:8px; }
 }
 /* Compact (grid) view: keyword block hidden. Full keywords show on
    expand. The matcher (line 1885-ish, .is-compact .member-card:not
