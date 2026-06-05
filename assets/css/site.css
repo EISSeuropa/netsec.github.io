@@ -2403,8 +2403,12 @@ body{padding-top:var(--whats-new-h, 0px)}
 .members-active-filters{ display:none; }
 
 @media (max-width:640px){
-  /* Compact toolbar: free-text search + a Filters button. */
-  .members-toolbar{ gap:10px; align-items:center; }
+  /* Compact toolbar: free-text search + a Filters button. The toolbar's
+     backdrop-filter would otherwise establish a containing block + stacking
+     context that traps the position:fixed filter sheet inside it — anchoring
+     it to the toolbar and rendering it beneath the cards. Drop the blur on
+     mobile so the sheet escapes to the viewport. */
+  .members-toolbar{ gap:10px; align-items:center; -webkit-backdrop-filter:none; backdrop-filter:none; }
   .members-search{ flex:1 1 auto; min-width:0; }
   .members-filter-toggle-btn{
     display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;
