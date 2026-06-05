@@ -2071,7 +2071,7 @@ body{padding-top:var(--whats-new-h, 0px)}
    divided group below the primary search / WG / country row. Each facet
    row keeps its own "Show all" retraction. */
 .members-facets{
-  flex:1 0 100%;margin:0;padding-top:8px;
+  flex:1 0 100%;margin:0;padding-top:4px;
   border-top:1px solid var(--glass-border);
   display:flex;flex-direction:column;gap:10px;
 }
@@ -2357,11 +2357,11 @@ body{padding-top:var(--whats-new-h, 0px)}
    pressed-state of the WG chips since this is a primary filter. The
    whole row + each chip are hidden until the data carries the
    matching facet (handled in people.html). */
+/* Mentorship sits inline in the primary toolbar row (alongside the search
+   and WG chips), so it reads as a plain control group with no tinted band. */
 .members-mentorship-filter{
-  display:flex;flex-wrap:wrap;align-items:center;gap:12px;
-  margin:0;padding:7px 14px;border-radius:14px;
-  background:color-mix(in oklab, var(--accent) 4%, transparent);
-  border:1px solid color-mix(in oklab, var(--accent) 14%, transparent);
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  margin:0;
 }
 .members-mentorship-filter-label{
   font-family:'Lexend',sans-serif;
@@ -2450,7 +2450,7 @@ body{padding-top:var(--whats-new-h, 0px)}
   /* Sheet body: each control full-width, stacked. Override the desktop
      flex bases that would otherwise set the height in a column. */
   .members-filterset > .members-filter{ padding:0 18px;margin-bottom:4px;flex:0 0 auto; }
-  .members-filterset > .members-country{ margin:6px 18px 2px;flex:0 0 auto;width:auto; }
+  .members-filterset > .members-mentorship-filter{ padding:0 18px;margin:6px 0 2px;flex:0 0 auto; }
   .members-filterset > .members-facets{ padding:12px 18px 16px;margin:0;flex:0 0 auto; }
 
   .members-sheet-foot{

@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=6ee49ab6">
+<link rel="stylesheet" href="assets/css/site.css?v=0ea84bdd">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -228,13 +228,17 @@
         <button class="members-filter-chip" data-wg="4" aria-pressed="false">WG4</button>
         <button class="members-filter-chip is-mc" data-wg="mc" aria-pressed="false" title="Afficher uniquement les représentant·es du Comité de gestion">Membres&nbsp;du&nbsp;CG</button>
       </div>
-      <label class="members-country">
-        <span class="visually-hidden">Filtrer par pays</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
-        <select id="member-country" aria-label="Filtrer par pays">
-          <option value="all">Tous les pays</option>
-        </select>
-      </label>
+      <!-- Filtre mentorat. Remonté dans la barre principale à la place de
+           l'ancienne liste de pays (le pays est couvert par la recherche
+           texte). Sélection unique ; masqué tant qu'aucun membre n'opte. -->
+      <div class="members-mentorship-filter" id="members-mentorship-filter" role="group" aria-label="Filtrer par mentorat" hidden>
+        <span class="members-mentorship-filter-label">Mentorat</span>
+        <div class="members-mentorship-filter-chips">
+          <button type="button" class="members-mentorship-chip" data-mentorship="all" aria-pressed="true">Tous</button>
+          <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Disponible comme mentor</button>
+          <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">En recherche de mentorat</button>
+        </div>
+      </div>
       <!-- Facettes secondaires (thèmes, régions, mentorat) affichées
            directement dans la carte de filtres comme un groupe séparé ;
            chaque ligne est rétractée à ses premières pastilles avec un
@@ -277,19 +281,6 @@
       <div class="members-keyword-filter-chips" id="members-region-filter-chips"></div>
       <button type="button" class="members-keyword-filter-toggle" id="members-region-filter-toggle" aria-expanded="false" hidden>Tout afficher</button>
     </details>
-
-    <!-- Filtre mentorat. Dimension AND distincte, sélection unique
-         (Tous / Mentors / En recherche de mentor), sans persistance
-         dans le hash. Masqué tant qu'aucun membre ne porte de facette
-         mentorat. Voir people.html (EN). -->
-    <div class="members-mentorship-filter" id="members-mentorship-filter" role="group" aria-label="Filtrer par mentorat" hidden>
-      <span class="members-mentorship-filter-label">Mentorat</span>
-      <div class="members-mentorship-filter-chips">
-        <button type="button" class="members-mentorship-chip" data-mentorship="all" aria-pressed="true">Tous</button>
-        <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Disponible comme mentor</button>
-        <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">En recherche de mentorat</button>
-      </div>
-    </div>
       </div>
         <!-- Pied du volet (mobile) : réinitialiser + un bouton principal qui
              affiche le nombre de résultats et ferme le volet. -->
@@ -465,9 +456,6 @@
         { target: '.members-filter',
           title: 'Filtres par groupe de travail ou rôle CG',
           body:  'WG1–WG4 filtrent par groupe de travail ; « Membres du CG » n\'affiche que les représentant·es du Comité de gestion.' },
-        { target: '.members-country',
-          title: 'Filtre par pays',
-          body:  'La liste des pays est générée automatiquement à partir des membres présents, seuls les pays représentés y figurent.' },
         { target: '.members-keyword-filter',
           title: 'Filtrer par thème et région',
           body:  "Les pastilles regroupent l'annuaire par thème de recherche, et la ligne en dessous par région de recherche. Cliquez pour restreindre la liste ; cliquez davantage pour élargir la correspondance. Les pastilles de mot-clé sur chaque fiche sont cliquables aussi, et votre sélection vit dans l'URL : une vue filtrée se partage en copiant l'adresse." },
