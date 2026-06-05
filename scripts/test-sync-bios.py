@@ -754,9 +754,9 @@ def test_load_region_vocab() -> None:
     print("\nload_region_vocab():")
     vocab = load_region_vocab()
     expect("europe → Europe", vocab.get("europe"), "Europe")
-    expect("eastern neighbours and russia (lowercased key)",
-           vocab.get("eastern neighbours and russia"),
-           "Eastern neighbours and Russia")
+    expect("eastern neighbours / russia (lowercased key)",
+           vocab.get("europe - eastern neighbours / russia"),
+           "Europe - Eastern neighbours / Russia")
     expect("the americas → The Americas", vocab.get("the americas"), "The Americas")
     expect("unknown region absent", vocab.get("atlantis"), None)
 
