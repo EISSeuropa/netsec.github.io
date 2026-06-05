@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=0ea84bdd">
+<link rel="stylesheet" href="assets/css/site.css?v=1d46f436">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -310,19 +310,9 @@
     </div>
 
     <!-- Verzeichnis-Werkzeuge, aus der Filterkarte in eine angeheftete
-         Leiste ausgelagert, damit Ansichtsumschalter, geführte Tour und
-         die Bio-hinzufügen-Schaltfläche beim Scrollen erreichbar bleiben. -->
+         Leiste ausgelagert, damit geführte Tour und die Bio-hinzufügen-
+         Schaltfläche beim Scrollen erreichbar bleiben. -->
     <div class="members-utilitybar" role="group" aria-label="Verzeichnis-Werkzeuge">
-      <!-- Ansichtsumschalter: detailliert (Standard) vs kompakt.
-           Einstellung via localStorage('netsec-directory-view'). -->
-      <div class="view-toggle" role="group" aria-label="Kartendichte">
-        <button type="button" data-view="detailed" aria-pressed="true" title="Detailansicht" aria-label="Detailansicht">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
-        </button>
-        <button type="button" data-view="compact" aria-pressed="false" title="Kompaktansicht" aria-label="Kompaktansicht">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
-        </button>
-      </div>
       <!-- Tour-Auslöser. Engine in assets/js/site.js. -->
       <button class="tour-trigger" type="button" id="tour-trigger" title="Tour starten" aria-label="Tour starten">?</button>
       <!-- Direktsprung zur Anmeldekarte am Seitenende. -->
@@ -428,7 +418,6 @@
   const mentorshipChips = document.querySelectorAll('.members-mentorship-chip');
   const countrySelect = document.getElementById('member-country');
   const tpl = document.getElementById('member-card-template');
-  const viewToggle = document.querySelectorAll('.view-toggle button[data-view]');
 
   /* Begrüßungsbanner + geführte Tour — gemeinsamer Schlüssel.
      Siehe people.html für Details. */
@@ -461,9 +450,6 @@
       { target: '.members-mentorship-filter',
         title: 'Nach Mentoring filtern',
         body:  'Mitglieder können angeben, dass sie als Mentor für Nachwuchsforschende verfügbar sind oder selbst Mentoring suchen. Mit diesen Chips finden Sie sie. Diese Reihe erscheint, sobald mindestens ein Mitglied teilnimmt.' },
-      { target: '.view-toggle',
-        title: 'Kartendichte wechseln',
-        body:  'Detailansicht: Fotos und Bios. Kompaktansicht: Initialen, Name, Affiliation und WG-Chips, drei Karten pro Reihe auf dem Desktop. Klicken Sie eine kompakte Karte an, um sie an Ort und Stelle aufzuklappen.' },
       { target: '#join-trigger',
         title: 'Zum Formular springen',
         body:  'Der +-Button bringt Sie direkt zur „Beitreten"-Karte am Seitenende.' },
@@ -492,28 +478,19 @@
   function applyView(mode) {
     const compact = (mode === 'compact');
     grid.classList.toggle('is-compact', compact);
-    viewToggle.forEach(btn => {
-      btn.setAttribute('aria-pressed', btn.dataset.view === mode ? 'true' : 'false');
-    });
     grid.querySelectorAll('.member-card').forEach(card => {
       if (compact) card.setAttribute('tabindex', '0');
       else { card.removeAttribute('tabindex'); card.classList.remove('is-expanded'); }
     });
-    if (!compact && location.hash) {
-      history.replaceState(null, '', location.pathname + location.search);
-    }
   }
-  try {
-    const saved = localStorage.getItem('netsec-directory-view');
-    if (saved === 'compact' || saved === 'detailed') applyView(saved);
-  } catch (e) {}
-  viewToggle.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const mode = btn.dataset.view;
-      applyView(mode);
-      try { localStorage.setItem('netsec-directory-view', mode); } catch (e) {}
-    });
-  });
+  // Kein Dichteumschalter mehr: detailliert auf großen Bildschirmen, kompakt
+  // auf dem Telefon (eine Spalte aus Foto- und Bio-Karten wird dort zu lang).
+  // Von der Breite gesteuert, damit die richtige Dichte beim Laden und beim
+  // Größenwechsel greift.
+  const _mqCompact = window.matchMedia('(max-width: 640px)');
+  function syncDirectoryView() { applyView(_mqCompact.matches ? 'compact' : 'detailed'); }
+  syncDirectoryView();
+  _mqCompact.addEventListener('change', syncDirectoryView);
 
   /* Inline-Erweiterung — siehe people.html für Details. */
   function clearHashIfFocus() {
@@ -1033,8 +1010,27 @@
     return (activeWG !== 'all' ? 1 : 0) + (activeCountry !== 'all' ? 1 : 0)
       + (activeMentorship !== 'all' ? 1 : 0) + activeKeywords.size + activeRegions.size;
   }
+  // Beim Öffnen wird das Fenster nach <body> verschoben, damit sein
+  // position:fixed der Leiste entkommt (deren Stacking-/Containing-Kontext
+  // es sonst an die Leiste bindet und unter die Karten legt). Beim Schließen
+  // kehrt es in die Leiste zurück, damit das Inline-Layout (display:contents)
+  // auf großen Bildschirmen erhalten bleibt.
+  let _sheetRestoreTimer = null;
+  function restoreSheetHome() {
+    if (filterSet && filterSet._origParent) {
+      filterSet._origParent.insertBefore(filterSet, filterSet._origNext);
+      filterSet._origParent = null; filterSet._origNext = null;
+    }
+  }
   function openFilterSheet() {
     if (!filterSet) return;
+    if (_sheetRestoreTimer) { clearTimeout(_sheetRestoreTimer); _sheetRestoreTimer = null; }
+    if (filterSet.parentNode !== document.body) {
+      filterSet._origParent = filterSet.parentNode;
+      filterSet._origNext = filterSet.nextSibling;
+      document.body.appendChild(filterSet);
+      void filterSet.offsetHeight;
+    }
     filterSet.classList.add('is-open');
     if (sheetBackdrop) sheetBackdrop.hidden = false;
     if (filterToggleBtn) filterToggleBtn.setAttribute('aria-expanded', 'true');
@@ -1047,6 +1043,8 @@
     if (sheetBackdrop) sheetBackdrop.hidden = true;
     document.body.style.overflow = '';
     if (filterToggleBtn) { filterToggleBtn.setAttribute('aria-expanded', 'false'); filterToggleBtn.focus(); }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) restoreSheetHome();
+    else _sheetRestoreTimer = setTimeout(restoreSheetHome, 320);
   }
   if (filterToggleBtn) filterToggleBtn.addEventListener('click', openFilterSheet);
   if (sheetCloseBtn) sheetCloseBtn.addEventListener('click', closeFilterSheet);
@@ -1054,6 +1052,7 @@
   if (sheetApplyBtn) sheetApplyBtn.addEventListener('click', closeFilterSheet);
   if (sheetResetBtn) sheetResetBtn.addEventListener('click', clearAllFilters);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeFilterSheet(); });
+  window.matchMedia('(min-width: 641px)').addEventListener('change', (e) => { if (e.matches) closeFilterSheet(); });
 
   // Findet den Anzeigenamen eines Themas anhand seines Slugs.
   function themeNameForSlug(slug) {
