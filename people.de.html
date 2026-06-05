@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=5b50131e">
+<link rel="stylesheet" href="assets/css/site.css?v=7137e3c5">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -168,10 +168,6 @@
       <span class="eyebrow">Verzeichnis</span>
       <h1>Das Netzwerk</h1>
       <p class="lede">Ein offenes Verzeichnis von Forschenden, politischen Entscheidungsträger·innen und Praktiker·innen, die in oder an der Schnittstelle der europäischen Sicherheitsforschung tätig sind, Aktionsleitung, Arbeitsgruppen-Mitglieder und die weitere Community. Wer im Feld engagiert ist, kann gerne <a href="#join">die eigene Biografie hinzufügen</a>.</p>
-      <!-- Wird aus dem Feld `generated_at` in bios.json durch das
-           Seitenskript nach dem Rendern des Verzeichnisses befüllt
-           (#271). Bleibt verborgen, bis ein gültiges Datum gelesen wird. -->
-      <p class="directory-freshness" data-directory-freshness hidden></p>
     </div>
 
     <!-- Einmaliger Begrüßungsstreifen für Erstbesucher:innen. Das
@@ -222,18 +218,12 @@
           <option value="all">Alle Länder</option>
         </select>
       </label>
-      <!-- Sekundäre Facetten (Themen, Regionen, Mentoring) in einem
-           eingeklappten Ausklappbereich innerhalb der Filterkarte, damit
-           das Verzeichnis mit den Personen beginnt statt mit Filtern. Ein
-           Deep-Link (#themes=…) oder ein Klick auf eine Karten-Pille
-           öffnet ihn; das Badge zählt die aktiven Filter. -->
-      <details class="members-refine" id="members-refine">
-        <summary class="members-refine-summary">
-          <svg class="members-refine-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-          <span>Weitere Filter</span>
-          <span class="members-refine-badge" id="members-refine-badge" hidden></span>
-        </summary>
-        <div class="members-refine-body">
+      <!-- Sekundäre Facetten (Themen, Regionen, Mentoring) erscheinen
+           direkt in der Filterkarte als abgeteilte Gruppe; jede Reihe ist
+           auf ihre obersten Pillen mit einem „Alle anzeigen“ eingekürzt.
+           Ein Deep-Link (#themes=…) oder ein Klick auf eine Karten-Pille
+           wählt ein Thema; die Reihen bleiben sichtbar. -->
+      <div class="members-facets">
 
     <!-- Filter nach Forschungsschwerpunkt (Phase 3). Vollständige
          Dokumentation der Pillen-Reihe und URL-Hash-Persistenz in
@@ -278,13 +268,17 @@
       </div>
     </div>
       </div>
-      </details>
     </div>
 
-    <!-- Ergebniszähler + globales Zurücksetzen, nach allen Filtern, damit
-         die Zahl widerspiegelt, was das Raster gerade anzeigt. -->
+    <!-- Zähler + Aktualität links, globales Zurücksetzen rechts. Nach allen
+         Filtern, damit die Zahl widerspiegelt, was das Raster anzeigt. -->
     <div class="members-resultbar">
-      <p class="members-count" id="members-count" aria-live="polite"></p>
+      <div class="members-resultmeta">
+        <p class="members-count" id="members-count" aria-live="polite"></p>
+        <!-- Aus `generated_at` in bios.json nach dem Rendern (#271);
+             verborgen, bis ein gültiges Datum gelesen wird. -->
+        <p class="directory-freshness" data-directory-freshness hidden></p>
+      </div>
       <button type="button" class="members-clear-all" id="members-clear-all" hidden>Alle zurücksetzen</button>
     </div>
 
@@ -438,8 +432,8 @@
         title: 'Nach Land filtern',
         body:  'Die Länderliste wird automatisch aus der aktuellen Mitgliedschaft erzeugt, es erscheinen nur Länder mit Mitgliedern.' },
       { target: '.members-keyword-filter',
-        title: 'Nach Forschungsthema filtern',
-        body:  'Die Pillen in dieser Reihe gruppieren das Verzeichnis in breite Forschungsthemen, mit der Zahl der Mitglieder je Thema. Klicken Sie auf eine Pille, um das Verzeichnis auf Mitglieder dieses Themas einzugrenzen; klicken Sie auf eine zweite, um die Auswahl zu erweitern (Mitglieder erscheinen, sobald ein Thema aus der Auswahl vorkommt). Die Schlüsselwort-Pillen auf jeder Karte sind ebenfalls klickbar und wählen das Thema des Schlüsselworts. Die aktive Auswahl steht in der URL: zum Teilen einer gefilterten Ansicht reicht es, die Adresse zu kopieren.' },
+        title: 'Nach Thema und Region filtern',
+        body:  'Die Pillen gruppieren das Verzeichnis nach Forschungsthema, die Reihe darunter nach Forschungsregion. Klicken Sie, um die Liste einzugrenzen; klicken Sie weitere, um die Auswahl zu erweitern. Die Schlüsselwort-Pillen auf jeder Karte sind ebenfalls klickbar, und Ihre Auswahl steht in der URL, sodass sich eine gefilterte Ansicht teilen lässt.' },
       { target: '.members-mentorship-filter',
         title: 'Nach Mentoring filtern',
         body:  'Mitglieder können angeben, dass sie als Mentor für Nachwuchsforschende verfügbar sind oder selbst Mentoring suchen. Mit diesen Chips finden Sie sie. Diese Reihe erscheint, sobald mindestens ein Mitglied teilnimmt.' },
@@ -948,22 +942,15 @@
     searchTimeout = setTimeout(render, 120);
   });
 
-  // Ergebnisleiste: globales „Alle zurücksetzen“ plus das Badge des
-  // Ausklappbereichs „Weitere Filter“ (zählt aktive sekundäre Facetten).
+  // Ergebnisleiste: globales „Alle zurücksetzen“, sichtbar sobald ein
+  // Filter aktiv ist.
   const clearAllBtn = document.getElementById('members-clear-all');
-  const refineEl = document.getElementById('members-refine');
-  const refineBadge = document.getElementById('members-refine-badge');
   function anyFilterActive() {
     return search.value.trim() !== '' || activeWG !== 'all' || activeCountry !== 'all'
       || activeMentorship !== 'all' || activeKeywords.size > 0 || activeRegions.size > 0;
   }
   function updateFilterChrome() {
     if (clearAllBtn) clearAllBtn.hidden = !anyFilterActive();
-    if (refineBadge) {
-      const n = activeKeywords.size + activeRegions.size + (activeMentorship !== 'all' ? 1 : 0);
-      refineBadge.hidden = n === 0;
-      refineBadge.textContent = n;
-    }
   }
   function clearAllFilters() {
     search.value = '';
@@ -1100,10 +1087,6 @@
   function toggleKeywordFilter(slug) {
     if (activeKeywords.has(slug)) activeKeywords.delete(slug);
     else activeKeywords.add(slug);
-    // Ein Klick auf eine Karten-Pille kann ein Thema setzen, während der
-    // Ausklappbereich „Weitere Filter“ eingeklappt ist; dann öffnen wir
-    // ihn, damit die aktive Pille sichtbar wird.
-    if (refineEl && activeKeywords.has(slug)) refineEl.open = true;
     writeHashKeywords();
     renderKeywordFilter();
     render();
@@ -1169,7 +1152,6 @@
   function toggleRegionFilter(slug) {
     if (activeRegions.has(slug)) activeRegions.delete(slug);
     else activeRegions.add(slug);
-    if (refineEl && activeRegions.has(slug)) refineEl.open = true;
     renderRegionFilter();
     render();
   }
@@ -1213,9 +1195,6 @@
     KEYWORD_THEME_MAP = (data && typeof data.keyword_theme_map === 'object' && data.keyword_theme_map) || {};
     REGION_AGGREGATE = Array.isArray(data.region_aggregate) ? data.region_aggregate : [];
     parseHashKeywords();
-    // Ein Deep-Link mit vorab gesetzten Themen (#themes=…) soll mit
-    // bereits geöffnetem Ausklappbereich „Weitere Filter“ ankommen.
-    if (refineEl && activeKeywords.size > 0) refineEl.open = true;
     populateCountryFilter();
     setupMentorshipFilter();
     renderKeywordFilter();

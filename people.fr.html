@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=5b50131e">
+<link rel="stylesheet" href="assets/css/site.css?v=7137e3c5">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -168,10 +168,6 @@
       <span class="eyebrow">Annuaire</span>
       <h1>Le Réseau</h1>
       <p class="lede">Un annuaire ouvert de chercheur·euses, décideur·ses politiques et praticien·nes travaillant dans ou aux côtés des études de sécurité européennes, direction de l'Action, participant·es des groupes de travail et communauté élargie. Toute personne engagée dans le domaine est invitée à <a href="#join">ajouter sa biographie</a>.</p>
-      <!-- Renseigné depuis le champ `generated_at` de bios.json par le
-           script de la page après le rendu de l'annuaire (#271). Masqué
-           tant qu'aucune date valide n'est lue. -->
-      <p class="directory-freshness" data-directory-freshness hidden></p>
     </div>
 
     <!-- Bandeau d'orientation à usage unique pour les nouveaux
@@ -223,18 +219,12 @@
           <option value="all">Tous les pays</option>
         </select>
       </label>
-      <!-- Facettes secondaires (thèmes, régions, mentorat) repliées
-           dans un volet à l'intérieur de la carte de filtres, pour mener
-           avec les personnes plutôt qu'avec les filtres. Un lien profond
-           (#themes=…) ou un clic sur une pastille l'ouvre ; le badge
-           compte les filtres actifs. -->
-      <details class="members-refine" id="members-refine">
-        <summary class="members-refine-summary">
-          <svg class="members-refine-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-          <span>Plus de filtres</span>
-          <span class="members-refine-badge" id="members-refine-badge" hidden></span>
-        </summary>
-        <div class="members-refine-body">
+      <!-- Facettes secondaires (thèmes, régions, mentorat) affichées
+           directement dans la carte de filtres comme un groupe séparé ;
+           chaque ligne est rétractée à ses premières pastilles avec un
+           « Tout afficher ». Un lien profond (#themes=…) ou un clic sur une
+           pastille sélectionne un thème ; les lignes restent visibles. -->
+      <div class="members-facets">
 
     <!-- Filtre par domaine de recherche (Phase 3). Voir people.html
          (EN) pour la documentation détaillée de la grille de pastilles
@@ -279,13 +269,17 @@
       </div>
     </div>
       </div>
-      </details>
     </div>
 
-    <!-- Compteur de résultats + réinitialisation globale, après tous les
-         filtres pour que le nombre reflète ce que la grille affiche. -->
+    <!-- Compteur + fraîcheur à gauche, réinitialisation globale à droite.
+         Après tous les filtres, pour que le nombre reflète la grille. -->
     <div class="members-resultbar">
-      <p class="members-count" id="members-count" aria-live="polite"></p>
+      <div class="members-resultmeta">
+        <p class="members-count" id="members-count" aria-live="polite"></p>
+        <!-- Renseigné depuis `generated_at` de bios.json après le rendu
+             (#271) ; masqué tant qu'aucune date valide n'est lue. -->
+        <p class="directory-freshness" data-directory-freshness hidden></p>
+      </div>
       <button type="button" class="members-clear-all" id="members-clear-all" hidden>Tout effacer</button>
     </div>
 
@@ -439,8 +433,8 @@
           title: 'Filtre par pays',
           body:  'La liste des pays est générée automatiquement à partir des membres présents, seuls les pays représentés y figurent.' },
         { target: '.members-keyword-filter',
-          title: 'Filtrer par thème de recherche',
-          body:  "Les pastilles regroupent l'annuaire en grands thèmes de recherche, avec le nombre de membres par thème. Cliquez sur une pastille pour restreindre l'annuaire aux membres de ce thème ; cliquez sur une seconde pour élargir (la correspondance reste valide tant qu'au moins un thème de la sélection est présent). Les pastilles de mot-clé sur chaque fiche sont cliquables aussi, et sélectionnent le thème du mot-clé. La sélection active vit dans l'URL : pour partager une vue filtrée, il suffit de copier l'adresse." },
+          title: 'Filtrer par thème et région',
+          body:  "Les pastilles regroupent l'annuaire par thème de recherche, et la ligne en dessous par région de recherche. Cliquez pour restreindre la liste ; cliquez davantage pour élargir la correspondance. Les pastilles de mot-clé sur chaque fiche sont cliquables aussi, et votre sélection vit dans l'URL : une vue filtrée se partage en copiant l'adresse." },
         { target: '.members-mentorship-filter',
           title: 'Filtrer par mentorat',
           body:  "Les membres peuvent indiquer qu'ils sont disponibles comme mentor pour les chercheur·euses en début de carrière, ou en recherche de mentorat. Utilisez ces pastilles pour les trouver. Cette rangée apparaît dès qu'au moins un membre s'est inscrit." },
@@ -949,22 +943,15 @@
     searchTimeout = setTimeout(render, 120);
   });
 
-  // Barre de résultats : « Tout effacer » global + le badge du volet
-  // « Plus de filtres » (compte les facettes secondaires actives).
+  // Barre de résultats : « Tout effacer » global, affiché dès qu'un filtre
+  // est actif.
   const clearAllBtn = document.getElementById('members-clear-all');
-  const refineEl = document.getElementById('members-refine');
-  const refineBadge = document.getElementById('members-refine-badge');
   function anyFilterActive() {
     return search.value.trim() !== '' || activeWG !== 'all' || activeCountry !== 'all'
       || activeMentorship !== 'all' || activeKeywords.size > 0 || activeRegions.size > 0;
   }
   function updateFilterChrome() {
     if (clearAllBtn) clearAllBtn.hidden = !anyFilterActive();
-    if (refineBadge) {
-      const n = activeKeywords.size + activeRegions.size + (activeMentorship !== 'all' ? 1 : 0);
-      refineBadge.hidden = n === 0;
-      refineBadge.textContent = n;
-    }
   }
   function clearAllFilters() {
     search.value = '';
@@ -1101,10 +1088,6 @@
   function toggleKeywordFilter(slug) {
     if (activeKeywords.has(slug)) activeKeywords.delete(slug);
     else activeKeywords.add(slug);
-    // Un clic sur une pastille de fiche peut activer un thème alors que
-    // le volet « Plus de filtres » est replié ; on l'ouvre pour montrer
-    // la pastille active.
-    if (refineEl && activeKeywords.has(slug)) refineEl.open = true;
     writeHashKeywords();
     renderKeywordFilter();
     render();
@@ -1170,7 +1153,6 @@
   function toggleRegionFilter(slug) {
     if (activeRegions.has(slug)) activeRegions.delete(slug);
     else activeRegions.add(slug);
-    if (refineEl && activeRegions.has(slug)) refineEl.open = true;
     renderRegionFilter();
     render();
   }
@@ -1214,9 +1196,6 @@
     KEYWORD_THEME_MAP = (data && typeof data.keyword_theme_map === 'object' && data.keyword_theme_map) || {};
     REGION_AGGREGATE = Array.isArray(data.region_aggregate) ? data.region_aggregate : [];
     parseHashKeywords();
-    // Un lien profond avec des thèmes pré-appliqués (#themes=…) doit
-    // arriver avec le volet « Plus de filtres » déjà ouvert.
-    if (refineEl && activeKeywords.size > 0) refineEl.open = true;
     populateCountryFilter();
     setupMentorshipFilter();
     renderKeywordFilter();

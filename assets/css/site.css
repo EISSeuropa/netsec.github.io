@@ -410,7 +410,7 @@ section{padding:80px 0;position:relative}
 .section-head p{max-width:60ch;margin:0 auto;color:var(--muted)}
 /* Discreet "Directory last updated …" line under the people-page
    lede (#271): smaller, lighter, with a touch of top space. */
-.directory-freshness{margin-top:22px;font-size:.82rem;letter-spacing:.01em;opacity:.85}
+.directory-freshness{margin:0;font-size:.82rem;letter-spacing:.01em;opacity:.85}
 
 /* -------- Glass cards --------
    `.glass` is a deliberately cross-cutting utility class (used on
@@ -1993,12 +1993,13 @@ body{padding-top:var(--whats-new-h, 0px)}
 .members-filter{display:flex;flex-wrap:wrap;gap:6px}
 .members-filter-chip{
   font:inherit;font-size:.82rem;font-weight:600;
-  padding:7px 14px;border-radius:999px;border:1px solid var(--glass-border);
-  background:transparent;color:var(--ink-2);cursor:pointer;
-  transition:background .2s var(--ease),color .2s var(--ease);
+  padding:7px 14px;border-radius:999px;border:1px solid rgba(11,18,32,.14);
+  background:rgba(255,255,255,.7);color:var(--ink-2);cursor:pointer;
+  transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease);
 }
-.members-filter-chip:hover{background:rgba(11,18,32,.04);color:var(--ink)}
-.dark .members-filter-chip:hover{background:rgba(255,255,255,.06)}
+.members-filter-chip:hover{background:#fff;color:var(--ink)}
+.dark .members-filter-chip{background:rgba(255,255,255,.06);border-color:var(--glass-border)}
+.dark .members-filter-chip:hover{background:rgba(255,255,255,.10);color:#fff}
 .members-filter-chip[aria-pressed="true"]{
   background:linear-gradient(135deg,var(--accent),var(--accent-2));
   color:#fff;border-color:transparent;
@@ -2018,10 +2019,11 @@ body{padding-top:var(--whats-new-h, 0px)}
 .members-country{
   display:flex;align-items:center;gap:8px;flex:0 1 220px;min-width:0;
   padding:6px 12px 6px 14px;border-radius:12px;
-  background:rgba(255,255,255,.55);border:1px solid var(--glass-border);
+  background:rgba(255,255,255,.92);border:1px solid rgba(11,18,32,.14);
+  box-shadow:inset 0 1px 2px rgba(11,18,32,.05);
   color:var(--muted);
 }
-.dark .members-country{background:rgba(255,255,255,.06)}
+.dark .members-country{background:rgba(255,255,255,.06);border-color:var(--glass-border);box-shadow:none}
 .members-country svg{flex-shrink:0}
 .members-country select{
   flex:1;border:0;background:transparent;outline:none;
@@ -2049,6 +2051,10 @@ body{padding-top:var(--whats-new-h, 0px)}
   display:flex;align-items:baseline;justify-content:space-between;gap:12px;
   margin:2px 2px 14px;
 }
+/* Count + freshness sit together on the left; the freshness carries a
+   middot separator that only shows once its stamp is populated. */
+.members-resultmeta{ display:flex;align-items:baseline;flex-wrap:wrap;min-width:0; }
+.members-resultmeta .directory-freshness::before{ content:'·';margin:0 8px;opacity:.55; }
 .members-clear-all{
   font-family:'Inter',sans-serif;
   font-size:.82rem;font-weight:500;
@@ -2060,36 +2066,14 @@ body{padding-top:var(--whats-new-h, 0px)}
 .members-clear-all:focus-visible{ outline:2px solid var(--accent);outline-offset:2px; }
 .members-clear-all[hidden]{ display:none; }
 
-/* "More filters" disclosure: collapses the three secondary facets so the
-   directory leads with people rather than filter chrome. */
-/* The disclosure sits as a full-width row at the foot of the filter card,
-   divided from the chips above it. */
-.members-refine{ flex:1 0 100%;margin:4px 0 0;padding-top:14px;border-top:1px solid var(--glass-border); }
-.members-refine-summary{
-  display:inline-flex;align-items:center;gap:8px;
-  font-family:'Lexend',sans-serif;
-  font-size:.82rem;font-weight:600;letter-spacing:.02em;
-  color:var(--ink-2);
-  cursor:pointer;list-style:none;
-  padding:6px 2px;border-radius:8px;
-  user-select:none;
+/* Secondary facets render directly in the filter card as a full-width,
+   divided group below the primary search / WG / country row. Each facet
+   row keeps its own "Show all" retraction. */
+.members-facets{
+  flex:1 0 100%;margin:4px 0 0;padding-top:16px;
+  border-top:1px solid var(--glass-border);
+  display:flex;flex-direction:column;gap:18px;
 }
-.members-refine-summary::-webkit-details-marker{ display:none; }
-.members-refine-summary:hover{ color:var(--ink); }
-.members-refine-summary:focus-visible{ outline:2px solid var(--accent);outline-offset:2px; }
-.members-refine-chevron{ flex:0 0 auto;transition:transform .18s ease; }
-.members-refine[open] .members-refine-chevron{ transform:rotate(180deg); }
-@media (prefers-reduced-motion: reduce){
-  .members-refine-chevron{ transition:none; }
-}
-.members-refine-badge{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:18px;height:18px;padding:0 5px;
-  font-family:'Inter',sans-serif;font-size:.72rem;font-weight:600;line-height:1;
-  color:#fff;background:var(--accent);border-radius:9px;
-}
-.members-refine-badge[hidden]{ display:none; }
-.members-refine-body{ padding-top:12px; }
 
 /* Pinned directory tools: density toggle, guided tour, and the add-your-bio
    CTA. Fixed to the bottom-right so they stay reachable while the grid
