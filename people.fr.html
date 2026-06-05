@@ -313,6 +313,18 @@
          épinglée pour que la visite guidée et le bouton « Ajouter votre bio »
          restent accessibles au défilement. -->
     <div class="members-utilitybar" role="group" aria-label="Outils de l'annuaire">
+      <!-- Bascule de densité des cartes. Ordinateur uniquement : le CSS la
+           masque à ≤640px, où la grille à une colonne est toujours compacte.
+           Détaillé vs compact ; le choix est conservé via
+           localStorage('netsec-directory-view'). -->
+      <div class="view-toggle" role="group" aria-label="Densité des cartes">
+        <button type="button" data-view="detailed" aria-pressed="true" title="Vue détaillée" aria-label="Vue détaillée">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+        </button>
+        <button type="button" data-view="compact" aria-pressed="false" title="Vue compacte" aria-label="Vue compacte">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+        </button>
+      </div>
       <!-- Déclencheur de la visite guidée. Moteur dans assets/js/site.js. -->
       <button class="tour-trigger" type="button" id="tour-trigger" title="Faire la visite" aria-label="Faire la visite">?</button>
       <!-- Raccourci vers la carte « Rejoindre le réseau » en pied de page. -->
@@ -418,6 +430,7 @@
   const mentorshipChips = document.querySelectorAll('.members-mentorship-chip');
   const countrySelect = document.getElementById('member-country');
   const tpl = document.getElementById('member-card-template');
+  const viewToggle = document.querySelectorAll('.view-toggle button[data-view]');
 
   /* Bannière d'orientation + visite guidée — clé partagée.
      Voir people.html pour les détails. */
@@ -432,32 +445,52 @@
     if (welcome) welcome.hidden = true;
   }
 
-  // Tour construit paresseusement — voir le commentaire dans people.html
+  // Tour construit paresseusement — voir le commentaire dans people.html.
+  // La visite s'adapte à la largeur : sur ordinateur les filtres sont en ligne
+  // (une étape par facette) ; sur téléphone ils vivent dans une feuille
+  // inférieure fermée au moment de la visite, donc une seule étape pointe vers
+  // le bouton « Filtres » qui l'ouvre.
   function startTour() {
     if (!window.netsecTour) return;
     if (welcome) welcome.hidden = true;
+    const isPhone = window.matchMedia('(max-width: 640px)').matches;
+    const searchStep = { target: '#member-search',
+      title: 'Recherche',
+      body:  'Recherche en texte libre sur les noms, affiliations et pays. Se combine avec les filtres.' };
+    const joinTriggerStep = { target: '#join-trigger',
+      title: 'Aller au formulaire',
+      body:  'Le bouton + vous amène directement à la carte « Rejoindre le réseau » au pied de la page.' };
+    const joinStep = { target: '#join',
+      title: 'Tout le monde peut rejoindre',
+      body:  'Inscrivez-vous via le formulaire ci-dessous. Environ trois minutes. Les cartes apparaissent sur cette page sous une semaine après soumission.',
+      scroll: true };
+    const desktopSteps = [
+      searchStep,
+      { target: '.members-filter',
+        title: 'Filtres par groupe de travail ou rôle CG',
+        body:  'WG1–WG4 filtrent par groupe de travail ; « Membres du CG » n\'affiche que les représentant·es du Comité de gestion.' },
+      { target: '.members-keyword-filter',
+        title: 'Filtrer par thème et région',
+        body:  "Les pastilles regroupent l'annuaire par thème de recherche, et la ligne en dessous par région de recherche. Cliquez pour restreindre la liste ; cliquez davantage pour élargir la correspondance. Les pastilles de mot-clé sur chaque fiche sont cliquables aussi, et votre sélection vit dans l'URL : une vue filtrée se partage en copiant l'adresse." },
+      { target: '.members-mentorship-filter',
+        title: 'Filtrer par mentorat',
+        body:  "Les membres peuvent indiquer qu'ils sont disponibles comme mentor pour les chercheur·euses en début de carrière, ou en recherche de mentorat. Utilisez ces pastilles pour les trouver. Cette rangée apparaît dès qu'au moins un membre s'est inscrit." },
+      { target: '.view-toggle',
+        title: 'Changer la densité des cartes',
+        body:  'La vue détaillée montre photos et bios ; la vue compacte montre initiales, nom, affiliation et pastilles de groupe, trois par ligne. Votre choix est conservé. Les téléphones utilisent toujours les cartes compactes.' },
+      joinTriggerStep,
+      joinStep,
+    ];
+    const mobileSteps = [
+      searchStep,
+      { target: '.members-filter-toggle-btn',
+        title: 'Filtres',
+        body:  'Touchez « Filtres » pour restreindre l\'annuaire par groupe de travail, thème de recherche, région de recherche ou mentorat. Le badge indique le nombre de filtres actifs.' },
+      joinTriggerStep,
+      joinStep,
+    ];
     window.netsecTour({
-      steps: [
-        { target: '#member-search',
-          title: 'Recherche',
-          body:  'Recherche en texte libre sur les noms, affiliations et pays. Se combine avec les filtres à droite.' },
-        { target: '.members-filter',
-          title: 'Filtres par groupe de travail ou rôle CG',
-          body:  'WG1–WG4 filtrent par groupe de travail ; « Membres du CG » n\'affiche que les représentant·es du Comité de gestion.' },
-        { target: '.members-keyword-filter',
-          title: 'Filtrer par thème et région',
-          body:  "Les pastilles regroupent l'annuaire par thème de recherche, et la ligne en dessous par région de recherche. Cliquez pour restreindre la liste ; cliquez davantage pour élargir la correspondance. Les pastilles de mot-clé sur chaque fiche sont cliquables aussi, et votre sélection vit dans l'URL : une vue filtrée se partage en copiant l'adresse." },
-        { target: '.members-mentorship-filter',
-          title: 'Filtrer par mentorat',
-          body:  "Les membres peuvent indiquer qu'ils sont disponibles comme mentor pour les chercheur·euses en début de carrière, ou en recherche de mentorat. Utilisez ces pastilles pour les trouver. Cette rangée apparaît dès qu'au moins un membre s'est inscrit." },
-        { target: '#join-trigger',
-          title: 'Aller au formulaire',
-          body:  'Le bouton + vous amène directement à la carte « Rejoindre le réseau » au pied de la page.' },
-        { target: '#join',
-          title: 'Tout le monde peut rejoindre',
-          body:  'Inscrivez-vous via le formulaire ci-dessous. Environ trois minutes. Les cartes apparaissent sur cette page sous une semaine après soumission.',
-          scroll: true },
-      ],
+      steps: isPhone ? mobileSteps : desktopSteps,
       labels: {
         next: 'Suivant', prev: 'Précédent', done: 'Terminer', skip: 'Ignorer',
         stepOf: 'Étape %1 sur %2', closeLabel: 'Fermer la visite',
@@ -478,19 +511,39 @@
   function applyView(mode) {
     const compact = (mode === 'compact');
     grid.classList.toggle('is-compact', compact);
+    viewToggle.forEach(btn => {
+      btn.setAttribute('aria-pressed', btn.dataset.view === mode ? 'true' : 'false');
+    });
     grid.querySelectorAll('.member-card').forEach(card => {
       if (compact) card.setAttribute('tabindex', '0');
       else { card.removeAttribute('tabindex'); card.classList.remove('is-expanded'); }
     });
   }
-  // Plus de bascule de densité : détaillé sur grand écran, compact sur
-  // téléphone (une colonne de fiches photo + bio y est trop longue). Piloté
-  // par la largeur, pour appliquer la bonne densité au chargement et au
-  // redimensionnement.
+  // Densité choisie sur ordinateur, imposée sur téléphone. Sur téléphone
+  // (≤640px) la grille est à une colonne où les fiches photo + bio sont trop
+  // longues : compact est imposé et la bascule masquée (CSS). Sur ordinateur
+  // le visiteur choisit, et le choix est conservé via localStorage.
+  // syncDirectoryView applique la bonne densité au chargement et à chaque
+  // franchissement du point de rupture.
   const _mqCompact = window.matchMedia('(max-width: 640px)');
-  function syncDirectoryView() { applyView(_mqCompact.matches ? 'compact' : 'detailed'); }
+  function savedView() {
+    try {
+      const s = localStorage.getItem('netsec-directory-view');
+      return (s === 'compact' || s === 'detailed') ? s : 'detailed';
+    } catch (e) { return 'detailed'; }
+  }
+  function syncDirectoryView() {
+    applyView(_mqCompact.matches ? 'compact' : savedView());
+  }
   syncDirectoryView();
   _mqCompact.addEventListener('change', syncDirectoryView);
+  viewToggle.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.view;
+      applyView(mode);
+      try { localStorage.setItem('netsec-directory-view', mode); } catch (e) {}
+    });
+  });
 
   /* Développement sur place — voir people.html pour le détail. */
   function clearHashIfFocus() {

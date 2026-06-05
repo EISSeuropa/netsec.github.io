@@ -319,6 +319,17 @@
          so the guided tour and add-your-bio CTA stay reachable while
          scrolling the directory. -->
     <div class="members-utilitybar" role="group" aria-label="Directory tools">
+      <!-- Card-density toggle. Desktop only: CSS hides it at ≤640px, where the
+           single-column grid is always compact. Detailed vs compact; the choice
+           persists in localStorage('netsec-directory-view'). -->
+      <div class="view-toggle" role="group" aria-label="Card density">
+        <button type="button" data-view="detailed" aria-pressed="true" title="Detailed view" aria-label="Detailed view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+        </button>
+        <button type="button" data-view="compact" aria-pressed="false" title="Compact view" aria-label="Compact view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+        </button>
+      </div>
       <!-- Tour trigger — re-opens the orientation as a guided walkthrough
            at any time. Engine in assets/js/site.js (window.netsecTour). -->
       <button class="tour-trigger" type="button" id="tour-trigger" title="Take a tour" aria-label="Take a tour">?</button>
@@ -449,6 +460,7 @@
   const mentorshipChips = document.querySelectorAll('.members-mentorship-chip');
   const countrySelect = document.getElementById('member-country');
   const tpl = document.getElementById('member-card-template');
+  const viewToggle = document.querySelectorAll('.view-toggle button[data-view]');
 
   /* Welcome strip + guided tour.
      Both share localStorage('netsec-directory-tour-seen'). On first
@@ -478,28 +490,49 @@
   function startTour() {
     if (!window.netsecTour) return;  // engine missing — fail gracefully
     if (welcome) welcome.hidden = true;
+    // The tour is viewport-aware. On desktop the filters render inline, so each
+    // facet gets its own step. On phones they live in a bottom sheet that is
+    // closed (and off-screen) at tour time, so a step pointing at an in-sheet
+    // facet would spotlight an off-screen rectangle. There, a single step
+    // points at the Filters button that opens the sheet instead.
+    const isPhone = window.matchMedia('(max-width: 640px)').matches;
+    const searchStep = { target: '#member-search',
+      title: 'Search',
+      body:  'Free-text search across names, affiliations, and countries. Combines with the filters.' };
+    const joinTriggerStep = { target: '#join-trigger',
+      title: 'Jump to the join form',
+      body:  'The + button takes you straight to the join card at the foot of this page.' };
+    const joinStep = { target: '#join',
+      title: 'Anyone can join',
+      body:  'Add yourself via the form here. About three minutes to fill in. Cards appear on this page within a week of submission.',
+      scroll: true };
+    const desktopSteps = [
+      searchStep,
+      { target: '.members-filter',
+        title: 'Filter by working group or MC role',
+        body:  'WG1–WG4 filter by Working Group; MC members surfaces only Management Committee representatives.' },
+      { target: '.members-keyword-filter',
+        title: 'Filter by theme and region',
+        body:  'Chips group the directory by research theme, and the row below by research region. Tap to narrow the list; tap more to widen the match. The keyword pills on each card are clickable too, and your selection lives in the URL so a filtered view is shareable.' },
+      { target: '.members-mentorship-filter',
+        title: 'Filter by mentorship',
+        body:  'Members can flag that they are available to mentor early-career researchers, or seeking mentorship themselves. Use these chips to find them. This row appears once at least one member has opted in.' },
+      { target: '.view-toggle',
+        title: 'Switch card density',
+        body:  'Detailed shows photos and bios; compact shows initials, name, affiliation and Working-Group chips, three to a row. Your choice is remembered. Phones always use compact cards.' },
+      joinTriggerStep,
+      joinStep,
+    ];
+    const mobileSteps = [
+      searchStep,
+      { target: '.members-filter-toggle-btn',
+        title: 'Filters',
+        body:  'Tap Filters to narrow the directory by working group, research theme, research region, or mentorship. The badge shows how many filters are active.' },
+      joinTriggerStep,
+      joinStep,
+    ];
     window.netsecTour({
-      steps: [
-        { target: '#member-search',
-          title: 'Search',
-          body:  'Free-text search across names, affiliations, and countries. Combines with the filters on the right.' },
-        { target: '.members-filter',
-          title: 'Filter by working group or MC role',
-          body:  'WG1–WG4 filter by Working Group; MC members surfaces only Management Committee representatives.' },
-        { target: '.members-keyword-filter',
-          title: 'Filter by theme and region',
-          body:  'Chips group the directory by research theme, and the row below by research region. Tap to narrow the list; tap more to widen the match. The keyword pills on each card are clickable too, and your selection lives in the URL so a filtered view is shareable.' },
-        { target: '.members-mentorship-filter',
-          title: 'Filter by mentorship',
-          body:  'Members can flag that they are available to mentor early-career researchers, or seeking mentorship themselves. Use these chips to find them. This row appears once at least one member has opted in.' },
-        { target: '#join-trigger',
-          title: 'Jump to the join form',
-          body:  'The + button takes you straight to the join card at the foot of this page.' },
-        { target: '#join',
-          title: 'Anyone can join',
-          body:  'Add yourself via the form here. About three minutes to fill in. Cards appear on this page within a week of submission.',
-          scroll: true },
-      ],
+      steps: isPhone ? mobileSteps : desktopSteps,
       labels: {
         next: 'Next', prev: 'Back', done: 'Done', skip: 'Skip',
         stepOf: 'Step %1 of %2', closeLabel: 'Close tour',
@@ -526,6 +559,9 @@
   function applyView(mode) {
     const compact = (mode === 'compact');
     grid.classList.toggle('is-compact', compact);
+    viewToggle.forEach(btn => {
+      btn.setAttribute('aria-pressed', btn.dataset.view === mode ? 'true' : 'false');
+    });
     // Manage tabindex + collapse any expanded card when leaving
     // compact mode — there's nothing left to expand into in detailed.
     grid.querySelectorAll('.member-card').forEach(card => {
@@ -533,13 +569,30 @@
       else { card.removeAttribute('tabindex'); card.classList.remove('is-expanded'); }
     });
   }
-  // No card-density switch any more: detailed on desktop, compact on phones
-  // (a single column of full photo + bio cards runs too long there). Driven
-  // by the viewport so the right density applies on load and on resize.
+  // Density is desktop-choosable, phone-forced. On phones (≤640px) the grid is
+  // a single column where full photo + bio cards run too long, so compact is
+  // forced and the toggle is hidden (CSS). On desktop the visitor picks, and
+  // the choice persists in localStorage. syncDirectoryView applies the right
+  // density on load and whenever the viewport crosses the breakpoint.
   const _mqCompact = window.matchMedia('(max-width: 640px)');
-  function syncDirectoryView() { applyView(_mqCompact.matches ? 'compact' : 'detailed'); }
+  function savedView() {
+    try {
+      const s = localStorage.getItem('netsec-directory-view');
+      return (s === 'compact' || s === 'detailed') ? s : 'detailed';
+    } catch (e) { return 'detailed'; }
+  }
+  function syncDirectoryView() {
+    applyView(_mqCompact.matches ? 'compact' : savedView());
+  }
   syncDirectoryView();
   _mqCompact.addEventListener('change', syncDirectoryView);
+  viewToggle.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.view;
+      applyView(mode);
+      try { localStorage.setItem('netsec-directory-view', mode); } catch (e) {}
+    });
+  });
 
   /* Expand-in-place on the compact directory.
      ─────────────────────────────────────────
