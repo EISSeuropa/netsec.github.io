@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=6ee49ab6">
+<link rel="stylesheet" href="assets/css/site.css?v=0ea84bdd">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -227,13 +227,17 @@
         <button class="members-filter-chip" data-wg="4" aria-pressed="false">WG4</button>
         <button class="members-filter-chip is-mc" data-wg="mc" aria-pressed="false" title="Nur Vertreter·innen des Management-Ausschusses anzeigen">MC-Mitglieder</button>
       </div>
-      <label class="members-country">
-        <span class="visually-hidden">Nach Land filtern</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
-        <select id="member-country" aria-label="Nach Land filtern">
-          <option value="all">Alle Länder</option>
-        </select>
-      </label>
+      <!-- Mentoring-Filter. In die Hauptleiste hochgezogen, an die Stelle der
+           früheren Länderliste (das Land deckt die Textsuche ab). Einfach-
+           auswahl; verborgen, solange kein Mitglied teilnimmt. -->
+      <div class="members-mentorship-filter" id="members-mentorship-filter" role="group" aria-label="Nach Mentoring filtern" hidden>
+        <span class="members-mentorship-filter-label">Mentoring</span>
+        <div class="members-mentorship-filter-chips">
+          <button type="button" class="members-mentorship-chip" data-mentorship="all" aria-pressed="true">Alle</button>
+          <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Als Mentor verfügbar</button>
+          <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Sucht Mentoring</button>
+        </div>
+      </div>
       <!-- Sekundäre Facetten (Themen, Regionen, Mentoring) erscheinen
            direkt in der Filterkarte als abgeteilte Gruppe; jede Reihe ist
            auf ihre obersten Pillen mit einem „Alle anzeigen“ eingekürzt.
@@ -276,19 +280,6 @@
       <div class="members-keyword-filter-chips" id="members-region-filter-chips"></div>
       <button type="button" class="members-keyword-filter-toggle" id="members-region-filter-toggle" aria-expanded="false" hidden>Alle anzeigen</button>
     </details>
-
-    <!-- Mentoring-Filter. Eigene UND-kombinierte Dimension, Einfach-
-         auswahl (Alle / Mentor:innen / Sucht Mentor), ohne URL-Hash-
-         Persistenz. Bleibt verborgen, solange kein Mitglied eine
-         Mentoring-Facette trägt. Siehe people.html (EN). -->
-    <div class="members-mentorship-filter" id="members-mentorship-filter" role="group" aria-label="Nach Mentoring filtern" hidden>
-      <span class="members-mentorship-filter-label">Mentoring</span>
-      <div class="members-mentorship-filter-chips">
-        <button type="button" class="members-mentorship-chip" data-mentorship="all" aria-pressed="true">Alle</button>
-        <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Als Mentor verfügbar</button>
-        <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Sucht Mentoring</button>
-      </div>
-    </div>
       </div>
         <!-- Fußzeile des Ausklappfensters (mobil): Zurücksetzen + eine
              Hauptschaltfläche, die die Trefferzahl zeigt und es schließt. -->
@@ -464,9 +455,6 @@
       { target: '.members-filter',
         title: 'Nach Arbeitsgruppe oder MC-Rolle filtern',
         body:  'WG1–WG4 filtern nach Arbeitsgruppe; „MC-Mitglieder“ blendet nur Vertreter·innen des Management-Komitees ein.' },
-      { target: '.members-country',
-        title: 'Nach Land filtern',
-        body:  'Die Länderliste wird automatisch aus der aktuellen Mitgliedschaft erzeugt, es erscheinen nur Länder mit Mitgliedern.' },
       { target: '.members-keyword-filter',
         title: 'Nach Thema und Region filtern',
         body:  'Die Pillen gruppieren das Verzeichnis nach Forschungsthema, die Reihe darunter nach Forschungsregion. Klicken Sie, um die Liste einzugrenzen; klicken Sie weitere, um die Auswahl zu erweitern. Die Schlüsselwort-Pillen auf jeder Karte sind ebenfalls klickbar, und Ihre Auswahl steht in der URL, sodass sich eine gefilterte Ansicht teilen lässt.' },

@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=6ee49ab6">
+<link rel="stylesheet" href="assets/css/site.css?v=0ea84bdd">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -227,15 +227,18 @@
         <button class="members-filter-chip" data-wg="4" aria-pressed="false">WG4</button>
         <button class="members-filter-chip is-mc" data-wg="mc" aria-pressed="false" title="Show Management Committee representatives only">MC&nbsp;members</button>
       </div>
-      <!-- Country dropdown is populated from the unique set of m.country
-           values at render time. Defaults to "All countries". -->
-      <label class="members-country">
-        <span class="visually-hidden">Filter by country</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
-        <select id="member-country" aria-label="Filter by country">
-          <option value="all">All countries</option>
-        </select>
-      </label>
+      <!-- Mentorship filter. Moved up into the primary toolbar row, in place
+           of the old country dropdown (country is covered by the free-text
+           search). Single-select AND dimension; hidden until a member opts
+           in. -->
+      <div class="members-mentorship-filter" id="members-mentorship-filter" role="group" aria-label="Filter by mentorship" hidden>
+        <span class="members-mentorship-filter-label">Mentorship</span>
+        <div class="members-mentorship-filter-chips">
+          <button type="button" class="members-mentorship-chip" data-mentorship="all" aria-pressed="true">All</button>
+          <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Available to mentor</button>
+          <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Seeking mentorship</button>
+        </div>
+      </div>
       <!-- Secondary facets (themes, regions, mentorship) render directly in
            the filter card as a divided group; each row is retracted to its
            top pills with a "Show all". A deep-link (#themes=…) or a card-pill
@@ -284,22 +287,6 @@
       <div class="members-keyword-filter-chips" id="members-region-filter-chips"></div>
       <button type="button" class="members-keyword-filter-toggle" id="members-region-filter-toggle" aria-expanded="false" hidden>Show all</button>
     </details>
-
-    <!-- Mentorship filter. A separate AND-combined dimension: members
-         can offer mentoring, seek a mentor, both, or neither. Single-
-         select (All / Mentors / Seeking a mentor), transient (no URL
-         hash). Hidden entirely until at least one member carries a
-         mentorship facet; each chip is hidden individually if no
-         member has that side. Mirrors the data-driven reveal of the
-         keyword filter above. -->
-    <div class="members-mentorship-filter" id="members-mentorship-filter" role="group" aria-label="Filter by mentorship" hidden>
-      <span class="members-mentorship-filter-label">Mentorship</span>
-      <div class="members-mentorship-filter-chips">
-        <button type="button" class="members-mentorship-chip" data-mentorship="all" aria-pressed="true">All</button>
-        <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Available to mentor</button>
-        <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Seeking mentorship</button>
-      </div>
-    </div>
       </div>
         <!-- Sheet footer (mobile only): reset + a primary button that shows
              the live result count and closes the sheet. -->
@@ -512,9 +499,6 @@
         { target: '.members-filter',
           title: 'Filter by working group or MC role',
           body:  'WG1–WG4 filter by Working Group; MC members surfaces only Management Committee representatives.' },
-        { target: '.members-country',
-          title: 'Filter by country',
-          body:  'The country dropdown is populated automatically from the current membership, only countries that have members appear.' },
         { target: '.members-keyword-filter',
           title: 'Filter by theme and region',
           body:  'Chips group the directory by research theme, and the row below by research region. Tap to narrow the list; tap more to widen the match. The keyword pills on each card are clickable too, and your selection lives in the URL so a filtered view is shareable.' },
