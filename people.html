@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=7137e3c5">
+<link rel="stylesheet" href="assets/css/site.css?v=2c4e79d2">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -233,15 +233,18 @@
          select that keyword's theme. Cards still show the specific
          keyword pills; the filter clusters by theme. Hidden when no
          themes exist at all. -->
-    <div class="members-keyword-filter" id="members-keyword-filter" role="group" aria-label="Filter by research theme" hidden>
-      <div class="members-keyword-filter-head">
-        <span class="members-keyword-filter-label">Research themes</span>
+    <details class="members-keyword-filter" id="members-keyword-filter" aria-label="Filter by research theme" hidden>
+      <summary class="members-keyword-filter-head">
+        <span class="members-keyword-filter-titlegroup">
+          <svg class="members-facet-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <span class="members-keyword-filter-label">Research themes</span>
+        </span>
         <button type="button" class="members-keyword-filter-clear" id="members-keyword-filter-clear" hidden>Clear</button>
-      </div>
+      </summary>
       <p class="members-keyword-filter-hint">Themes automatically group people working in the same area based on their individual keywords, which remain visible on their card.</p>
       <div class="members-keyword-filter-chips" id="members-keyword-filter-chips"></div>
       <button type="button" class="members-keyword-filter-toggle" id="members-keyword-filter-toggle" aria-expanded="false" hidden>Show all</button>
-    </div>
+    </details>
 
     <!-- Research-region filter (#555). A second, geographic axis,
          independent of the topical themes and AND-combined with them.
@@ -251,15 +254,18 @@
     <!-- Reuses the theme/keyword filter row's CSS classes for styling
          (DRY — it's the same visual component); unique IDs carry the
          distinct JS hooks. -->
-    <div class="members-keyword-filter members-region-filter" id="members-region-filter" role="group" aria-label="Filter by research region" hidden>
-      <div class="members-keyword-filter-head">
-        <span class="members-keyword-filter-label">Research regions</span>
+    <details class="members-keyword-filter members-region-filter" id="members-region-filter" aria-label="Filter by research region" hidden>
+      <summary class="members-keyword-filter-head">
+        <span class="members-keyword-filter-titlegroup">
+          <svg class="members-facet-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <span class="members-keyword-filter-label">Research regions</span>
+        </span>
         <button type="button" class="members-keyword-filter-clear" id="members-region-filter-clear" hidden>Clear</button>
-      </div>
+      </summary>
       <p class="members-keyword-filter-hint">Where members focus their research, not where they are based.</p>
       <div class="members-keyword-filter-chips" id="members-region-filter-chips"></div>
       <button type="button" class="members-keyword-filter-toggle" id="members-region-filter-toggle" aria-expanded="false" hidden>Show all</button>
-    </div>
+    </details>
 
     <!-- Mentorship filter. A separate AND-combined dimension: members
          can offer mentoring, seek a mentor, both, or neither. Single-
@@ -1152,6 +1158,10 @@
   // Results bar: a global "Clear all filters" control, shown whenever any
   // filter is active.
   const clearAllBtn = document.getElementById('members-clear-all');
+  // The theme + region facets are collapsible disclosures (collapsed by
+  // default); open the relevant one when a filter inside it becomes active.
+  const keywordDetails = document.getElementById('members-keyword-filter');
+  const regionDetails = document.getElementById('members-region-filter');
   function anyFilterActive() {
     return search.value.trim() !== '' || activeWG !== 'all' || activeCountry !== 'all'
       || activeMentorship !== 'all' || activeKeywords.size > 0 || activeRegions.size > 0;
@@ -1320,6 +1330,7 @@
   function toggleKeywordFilter(slug) {
     if (activeKeywords.has(slug)) activeKeywords.delete(slug);
     else activeKeywords.add(slug);
+    if (keywordDetails && activeKeywords.has(slug)) keywordDetails.open = true;
     writeHashKeywords();
     renderKeywordFilter();
     render();
@@ -1345,7 +1356,9 @@
   }
   const kwClearBtn = document.getElementById('members-keyword-filter-clear');
   if (kwClearBtn) {
-    kwClearBtn.addEventListener('click', clearKeywordFilter);
+    // The clear button lives inside the <summary>; stop its click from
+    // toggling the disclosure open/closed.
+    kwClearBtn.addEventListener('click', (e) => { e.stopPropagation(); clearKeywordFilter(); });
   }
 
   // ── Research-region filter (#555) ─────────────────────────────────
@@ -1396,6 +1409,7 @@
   function toggleRegionFilter(slug) {
     if (activeRegions.has(slug)) activeRegions.delete(slug);
     else activeRegions.add(slug);
+    if (regionDetails && activeRegions.has(slug)) regionDetails.open = true;
     renderRegionFilter();
     render();
   }
@@ -1414,7 +1428,7 @@
   }
   const rgClearBtn = document.getElementById('members-region-filter-clear');
   if (rgClearBtn) {
-    rgClearBtn.addEventListener('click', clearRegionFilter);
+    rgClearBtn.addEventListener('click', (e) => { e.stopPropagation(); clearRegionFilter(); });
   }
   // Keep the keyword filter in sync with the URL hash on back/forward
   // navigation. The existing hashchange listener for #<slug> deep-links
@@ -1453,6 +1467,7 @@
     //   /people.html#keywords=ai-governance,foreign-policy-analysis
     // lands with those filters already applied.
     parseHashKeywords();
+    if (keywordDetails && activeKeywords.size > 0) keywordDetails.open = true;
     populateCountryFilter();
     setupMentorshipFilter();
     renderKeywordFilter();
