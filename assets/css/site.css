@@ -2486,7 +2486,7 @@ body{padding-top:var(--whats-new-h, 0px)}
   .members-filterset{
     display:flex;flex-direction:column;
     position:fixed;left:0;right:0;bottom:0;z-index:200;
-    max-height:85vh;overflow-y:auto;overscroll-behavior:contain;
+    max-height:85vh;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;
     background:var(--bg-0);
     border-radius:18px 18px 0 0;
     box-shadow:0 -12px 40px rgba(11,18,32,.24);
@@ -2537,6 +2537,7 @@ body{padding-top:var(--whats-new-h, 0px)}
     display:block;position:fixed;inset:0;z-index:199;
     background:rgba(11,18,32,.5);
     -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
+    touch-action:none;
   }
   .members-sheet-backdrop[hidden]{ display:none; }
 

@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=e5098511">
+<link rel="stylesheet" href="assets/css/site.css?v=3c2f3fed">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -1077,30 +1077,22 @@
       filterSet._origParent = null; filterSet._origNext = null;
     }
   }
-  // Verrou de défilement compatible iOS. Deux approches qui ne fonctionnent
-  // pas sur tous les moteurs :
-  // (a) body{overflow:hidden} fait du body un conteneur de défilement, ce qui
-  //     sur iOS Safari déloge les descendants position:fixed hors du viewport.
-  // (b) body{position:fixed} corrige (a) sur Safari mais sur Chrome iOS
-  //     transforme le body en bloc de contenance pour ses enfants
-  //     position:fixed : bottom:0 de la feuille se résout alors au bas de la
-  //     boîte body (décalée de -scrollY) et non au bas du viewport.
-  // On intercepte plutôt touchmove : preventDefault() sur tout toucher hors
-  // de la feuille gèle le défilement sans modifier la mise en page.
+  // Verrou de défilement pendant l'ouverture de la feuille. Les approches JS
+  // échouent sur l'un ou l'autre moteur : body{overflow:hidden} fait du body
+  // un conteneur de défilement (iOS Safari déloge alors les position:fixed) ;
+  // body{position:fixed} corrige ça sur Safari mais crée un bloc de contenance
+  // sur Chrome iOS et place la feuille au milieu de la page.
+  // Le CSS prend en charge : le fond plein-écran porte touch-action:none
+  // (bloque le défilement dans la zone du fond) et la feuille a
+  // touch-action:pan-y + overscroll-behavior:contain (contient le défilement
+  // à la feuille elle-même). Sans écouteur passive:false, il n'y a pas de
+  // délai de toucher sur Safari. La position de défilement est sauvegardée
+  // et restaurée au cas où le clavier virtuel déplacerait la page.
   let _lockedScrollY = 0;
-  let _scrollLockHandler = null;
   function lockBodyScroll() {
     _lockedScrollY = window.scrollY || window.pageYOffset || 0;
-    _scrollLockHandler = function(e) {
-      if (!e.target.closest('.members-filterset')) e.preventDefault();
-    };
-    document.addEventListener('touchmove', _scrollLockHandler, { passive: false });
   }
   function unlockBodyScroll() {
-    if (_scrollLockHandler) {
-      document.removeEventListener('touchmove', _scrollLockHandler);
-      _scrollLockHandler = null;
-    }
     window.scrollTo(0, _lockedScrollY);
   }
   function openFilterSheet() {
