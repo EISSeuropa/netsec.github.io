@@ -1999,15 +1999,15 @@ body{padding-top:var(--whats-new-h, 0px)}
   flex:1;border:0;background:transparent;outline:none;
   font:inherit;font-size:.95rem;color:var(--ink);min-width:0;
 }
-.members-filter{display:flex;flex-wrap:wrap;gap:6px}
+.members-filter{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .members-filter-chip{
   font:inherit;font-size:.82rem;font-weight:600;
-  padding:7px 14px;border-radius:999px;border:1px solid rgba(11,18,32,.14);
+  padding:7px 14px;border-radius:999px;border:1px solid rgba(11,18,32,.22);
   background:rgba(255,255,255,.7);color:var(--ink-2);cursor:pointer;
   transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease);
 }
 .members-filter-chip:hover{background:#fff;color:var(--ink)}
-.dark .members-filter-chip{background:rgba(255,255,255,.06);border-color:var(--glass-border)}
+.dark .members-filter-chip{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.28)}
 .dark .members-filter-chip:hover{background:rgba(255,255,255,.10);color:#fff}
 .members-filter-chip[aria-pressed="true"]{
   background:linear-gradient(135deg,var(--accent),var(--accent-2));
@@ -2071,7 +2071,10 @@ body{padding-top:var(--whats-new-h, 0px)}
   background:transparent;border:0;padding:2px 6px;border-radius:6px;
   cursor:pointer;flex:0 0 auto;
 }
-.members-clear-all:not(:disabled):hover{ color:var(--ink); text-decoration:underline; }
+/* Enabled state reads as an actionable link, not static text: a soft
+   underline that firms up on hover. Disabled stays plain + muted. */
+.members-clear-all:not(:disabled){ text-decoration:underline;text-decoration-color:color-mix(in oklab, currentColor 45%, transparent);text-underline-offset:3px; }
+.members-clear-all:not(:disabled):hover{ color:var(--ink); text-decoration-color:currentColor; }
 .members-clear-all:focus-visible{ outline:2px solid var(--accent);outline-offset:2px; }
 /* Always present, but muted + non-interactive until a filter is active. */
 .members-clear-all:disabled{ color:var(--muted);opacity:.55;cursor:default; }
@@ -2264,6 +2267,12 @@ body{padding-top:var(--whats-new-h, 0px)}
   background:color-mix(in oklab, var(--accent-2) 4%, transparent);
   border:1px solid color-mix(in oklab, var(--accent-2) 14%, transparent);
 }
+/* Dark mode: the accent-tinted border is too faint against the dark card.
+   Lift it to a visible edge so the collapsed facet reads as a panel. */
+.dark .members-keyword-filter{
+  background:rgba(255,255,255,.04);
+  border-color:rgba(255,255,255,.18);
+}
 /* The head is the disclosure <summary>: a clickable row with a chevron
    that rotates when the facet is open. Collapsed by default. */
 .members-keyword-filter-head{
@@ -2372,6 +2381,7 @@ body{padding-top:var(--whats-new-h, 0px)}
   display:flex;flex-wrap:wrap;align-items:center;gap:8px;
   margin:0;
 }
+.members-filter-label,
 .members-mentorship-filter-label{
   font-family:'Lexend',sans-serif;
   font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
@@ -2380,11 +2390,12 @@ body{padding-top:var(--whats-new-h, 0px)}
 .members-mentorship-filter-chips{display:flex;flex-wrap:wrap;gap:6px}
 .members-mentorship-chip{
   font:inherit;font-size:.8rem;font-weight:600;
-  padding:5px 13px;border-radius:999px;border:1px solid var(--glass-border);
+  padding:5px 13px;border-radius:999px;border:1px solid rgba(11,18,32,.22);
   background:transparent;color:var(--ink-2);cursor:pointer;
-  transition:background .2s var(--ease),color .2s var(--ease);
+  transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease);
 }
 .members-mentorship-chip:hover{background:rgba(11,18,32,.04);color:var(--ink)}
+.dark .members-mentorship-chip{border-color:rgba(255,255,255,.28)}
 .dark .members-mentorship-chip:hover{background:rgba(255,255,255,.06)}
 .members-mentorship-chip[aria-pressed="true"]{
   background:linear-gradient(135deg,var(--accent),var(--accent-2));
@@ -2396,7 +2407,7 @@ body{padding-top:var(--whats-new-h, 0px)}
   outline:2px solid var(--accent);outline-offset:2px;
 }
 @media (max-width: 640px){
-  .members-mentorship-filter{ padding:7px 12px; margin:0; gap:8px; }
+  .members-mentorship-filter{ padding:0; margin:0; gap:8px; }
 }
 
 /* ── Mobile filter bottom sheet ──────────────────────────────────────
@@ -2408,8 +2419,35 @@ body{padding-top:var(--whats-new-h, 0px)}
 .members-filter-toggle-btn,
 .members-sheet-head,
 .members-sheet-foot{ display:none; }
-.members-sheet-backdrop,
-.members-active-filters{ display:none; }
+.members-sheet-backdrop{ display:none; }
+
+/* Active-filter chips: removable pills summarising what's currently applied,
+   shown below the filter card once any filter is on, so current state and the
+   per-filter remove live together (the "Clear all" in the result bar handles
+   the bulk reset). Desktop wraps; the ≤640px block switches it to a single
+   horizontally-scrollable line. Populated by renderActiveFilters() in
+   people.html, which toggles the [hidden] attribute when the set is empty. */
+.members-active-filters{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin:0 2px 16px;padding:1px;
+}
+.members-active-filters[hidden]{ display:none; }
+.members-active-filter{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;
+  font:inherit;font-size:.78rem;font-weight:500;
+  padding:5px 6px 5px 11px;border-radius:999px;
+  background:color-mix(in oklab, var(--accent) 12%, transparent);
+  border:1px solid color-mix(in oklab, var(--accent) 32%, transparent);
+  color:var(--ink);cursor:pointer;white-space:nowrap;
+  transition:background .2s var(--ease),border-color .2s var(--ease);
+}
+.members-active-filter:hover{ background:color-mix(in oklab, var(--accent) 20%, transparent); }
+.members-active-filter:focus-visible{ outline:2px solid var(--accent);outline-offset:2px; }
+.members-active-filter svg{ width:13px;height:13px;opacity:.7;flex:0 0 auto; }
+.dark .members-active-filter{
+  background:color-mix(in oklab, var(--accent) 22%, transparent);
+  border-color:color-mix(in oklab, var(--accent) 50%, transparent);
+}
 
 @media (max-width:640px){
   /* Compact toolbar: free-text search + a Filters button. The toolbar's
@@ -2463,8 +2501,10 @@ body{padding-top:var(--whats-new-h, 0px)}
   /* Sheet body: each control full-width, stacked. Override the desktop
      flex bases that would otherwise set the height in a column. */
   .members-filterset > .members-filter{ padding:0 18px;margin-bottom:4px;flex:0 0 auto; }
-  .members-filterset > .members-mentorship-filter{ padding:0 18px;margin:6px 0 2px;flex:0 0 auto; }
   .members-filterset > .members-facets{ padding:12px 18px 16px;margin:0;flex:0 0 auto; }
+  /* Mentorship now lives inside .members-facets (which supplies the 18px
+     gutter), so it sits flush like the theme / region rows. */
+  .members-facets > .members-mentorship-filter{ margin:0 0 2px; }
 
   .members-sheet-foot{
     display:flex;align-items:center;gap:10px;
@@ -2491,22 +2531,13 @@ body{padding-top:var(--whats-new-h, 0px)}
   }
   .members-sheet-backdrop[hidden]{ display:none; }
 
-  /* Active-filter chips: one horizontally-scrollable line under the bar. */
+  /* On phones the active filters become one horizontally-scrollable line
+     under the toolbar; the chip styling inherits from the base rule. */
   .members-active-filters{
-    display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;
-    margin:10px 0 0;padding:1px;-webkit-overflow-scrolling:touch;
+    flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+    margin:10px 0 0;-webkit-overflow-scrolling:touch;
   }
   .members-active-filters::-webkit-scrollbar{ display:none; }
-  .members-active-filters[hidden]{ display:none; }
-  .members-active-filter{
-    flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;
-    font:inherit;font-size:.78rem;font-weight:500;
-    padding:5px 6px 5px 11px;border-radius:999px;
-    background:color-mix(in oklab, var(--accent) 12%, transparent);
-    border:1px solid color-mix(in oklab, var(--accent) 30%, transparent);
-    color:var(--ink);cursor:pointer;white-space:nowrap;
-  }
-  .members-active-filter svg{ width:13px;height:13px;opacity:.65;flex:0 0 auto; }
 
   /* Density toggle is meaningless on a single-column grid. */
   .members-utilitybar .view-toggle{ display:none; }
