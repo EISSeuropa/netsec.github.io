@@ -1076,27 +1076,31 @@
       filterSet._origParent = null; filterSet._origNext = null;
     }
   }
-  // iOS-sichere Scroll-Sperre. `body{overflow:hidden}` macht den Body zu einem
-  // Scroll-Container, was auf iOS Safari `position:fixed`-Nachfahren (die Lade
-  // und ihren Hintergrund) aus dem Viewport wirft — sie heften sich an das
-  // gescrollte Dokument. Den Body mit `position:fixed` und negativem Top-Offset
-  // einzufrieren sperrt die Seite ohne diesen Nebeneffekt; der Scroll wird beim
-  // Entsperren wiederhergestellt.
+  // iOS-sichere Scroll-Sperre. Zwei Ansätze, die nicht browserübergreifend
+  // funktionieren:
+  // (a) body{overflow:hidden} macht den Body zu einem Scroll-Container, was
+  //     auf iOS Safari position:fixed-Nachfahren aus dem Viewport wirft.
+  // (b) body{position:fixed} behebt (a) in Safari, erzeugt aber auf Chrome
+  //     iOS einen neuen Containing Block für position:fixed-Kinder: bottom:0
+  //     der Lade löst sich dann am unteren Rand der Body-Box auf (versetzt um
+  //     -scrollY), nicht am Viewport-Boden.
+  // Stattdessen werden touchmove-Ereignisse abgefangen: preventDefault() für
+  // jeden Berührungspunkt außerhalb der Lade friert den Seitenscroll ein,
+  // ohne das Layout zu verändern.
   let _lockedScrollY = 0;
+  let _scrollLockHandler = null;
   function lockBodyScroll() {
     _lockedScrollY = window.scrollY || window.pageYOffset || 0;
-    document.body.style.position = 'fixed';
-    document.body.style.top = (-_lockedScrollY) + 'px';
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
+    _scrollLockHandler = function(e) {
+      if (!e.target.closest('.members-filterset')) e.preventDefault();
+    };
+    document.addEventListener('touchmove', _scrollLockHandler, { passive: false });
   }
   function unlockBodyScroll() {
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.left = '';
-    document.body.style.right = '';
-    document.body.style.width = '';
+    if (_scrollLockHandler) {
+      document.removeEventListener('touchmove', _scrollLockHandler);
+      _scrollLockHandler = null;
+    }
     window.scrollTo(0, _lockedScrollY);
   }
   function openFilterSheet() {

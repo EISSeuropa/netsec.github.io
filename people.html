@@ -1274,27 +1274,30 @@
       filterSet._origParent = null; filterSet._origNext = null;
     }
   }
-  // iOS-safe scroll lock. Setting `body{overflow:hidden}` makes the body a
-  // scroll container, which on iOS Safari knocks `position:fixed` descendants
-  // (the sheet and its backdrop) off the viewport — they pin to the scrolled
-  // document instead. Freezing the body with `position:fixed` and a negative
-  // top offset locks the page without that side effect; scroll is restored on
+  // iOS-safe scroll lock. Two approaches that don't work cross-browser:
+  // (a) body{overflow:hidden} makes the body a scroll container, which on iOS
+  //     Safari knocks position:fixed descendants off the viewport.
+  // (b) body{position:fixed} fixes (a) on Safari but on Chrome iOS promotes
+  //     the body as a containing block for position:fixed children, so the
+  //     sheet's bottom:0 resolves to the bottom of the body box (offset by
+  //     -scrollY) instead of the viewport bottom, placing the sheet mid-page.
+  // Intercept touchmove instead: preventDefault() on any touch outside the
+  // sheet freezes page scroll without touching layout. Scroll is restored on
   // unlock.
   let _lockedScrollY = 0;
+  let _scrollLockHandler = null;
   function lockBodyScroll() {
     _lockedScrollY = window.scrollY || window.pageYOffset || 0;
-    document.body.style.position = 'fixed';
-    document.body.style.top = (-_lockedScrollY) + 'px';
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
+    _scrollLockHandler = function(e) {
+      if (!e.target.closest('.members-filterset')) e.preventDefault();
+    };
+    document.addEventListener('touchmove', _scrollLockHandler, { passive: false });
   }
   function unlockBodyScroll() {
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.left = '';
-    document.body.style.right = '';
-    document.body.style.width = '';
+    if (_scrollLockHandler) {
+      document.removeEventListener('touchmove', _scrollLockHandler);
+      _scrollLockHandler = null;
+    }
     window.scrollTo(0, _lockedScrollY);
   }
   function openFilterSheet() {
