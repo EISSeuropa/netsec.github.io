@@ -2381,6 +2381,10 @@ body{padding-top:var(--whats-new-h, 0px)}
   display:flex;flex-wrap:wrap;align-items:center;gap:8px;
   margin:0;
 }
+/* Shared facet-caption style. `.members-filter-label` is a child of
+   `.members-filter` but lives here, beside the sibling label it shares
+   styling with, rather than next to its block. Intentional, not a collision. */
+/* css-collision-allow: .members-filter-label */
 .members-filter-label,
 .members-mentorship-filter-label{
   font-family:'Lexend',sans-serif;
