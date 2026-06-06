@@ -168,7 +168,12 @@ body{
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
   line-height:1.55;
+  /* `clip`, not `hidden`: `overflow-x:hidden` forces the cross axis to compute
+     as a scroll container, which on iOS Safari breaks `position:fixed`
+     descendants (they scroll with the page). `clip` curbs horizontal overflow
+     without that side effect. `hidden` kept as a fallback for pre-clip engines. */
   overflow-x:hidden;
+  overflow-x:clip;
 }
 h1,h2,h3,h4{font-family:'Lexend','Inter',sans-serif;font-weight:600;letter-spacing:-.02em;line-height:1.15;color:var(--ink)}
 h1{font-size:clamp(2.4rem,5.2vw,4.4rem);font-weight:700;letter-spacing:-.035em}
@@ -2542,6 +2547,11 @@ body{padding-top:var(--whats-new-h, 0px)}
     margin:10px 0 0;-webkit-overflow-scrolling:touch;
   }
   .members-active-filters::-webkit-scrollbar{ display:none; }
+
+  /* Stack the count over the freshness line rather than wrapping them inline,
+     which left the middot separator orphaned at the start of the second line. */
+  .members-resultmeta{ flex-direction:column; gap:1px; }
+  .members-resultmeta .directory-freshness::before{ content:none; }
 
   /* Density toggle is meaningless on a single-column grid. */
   .members-utilitybar .view-toggle{ display:none; }

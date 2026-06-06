@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=54ac82a8">
+<link rel="stylesheet" href="assets/css/site.css?v=e5098511">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -1077,6 +1077,28 @@
       filterSet._origParent = null; filterSet._origNext = null;
     }
   }
+  // Verrou de défilement compatible iOS. Mettre `body{overflow:hidden}` fait du
+  // body un conteneur de défilement, ce qui sur iOS Safari déloge les
+  // descendants `position:fixed` (la feuille et son fond) hors du viewport. Geler
+  // le body avec `position:fixed` et un décalage négatif verrouille la page sans
+  // cet effet ; le défilement est rétabli au déverrouillage.
+  let _lockedScrollY = 0;
+  function lockBodyScroll() {
+    _lockedScrollY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-_lockedScrollY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  function unlockBodyScroll() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    window.scrollTo(0, _lockedScrollY);
+  }
   function openFilterSheet() {
     if (!filterSet) return;
     if (_sheetRestoreTimer) { clearTimeout(_sheetRestoreTimer); _sheetRestoreTimer = null; }
@@ -1089,14 +1111,14 @@
     filterSet.classList.add('is-open');
     if (sheetBackdrop) sheetBackdrop.hidden = false;
     if (filterToggleBtn) filterToggleBtn.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
+    lockBodyScroll();
     if (sheetCloseBtn) sheetCloseBtn.focus();
   }
   function closeFilterSheet() {
     if (!filterSet || !filterSet.classList.contains('is-open')) return;
     filterSet.classList.remove('is-open');
     if (sheetBackdrop) sheetBackdrop.hidden = true;
-    document.body.style.overflow = '';
+    unlockBodyScroll();
     if (filterToggleBtn) { filterToggleBtn.setAttribute('aria-expanded', 'false'); filterToggleBtn.focus(); }
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) restoreSheetHome();
     else _sheetRestoreTimer = setTimeout(restoreSheetHome, 320);
