@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=260c2a80">
+<link rel="stylesheet" href="assets/css/site.css?v=862a0e8e">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -221,6 +221,7 @@
           </button>
         </div>
       <div class="members-filter" role="group" aria-label="Filtrer par groupe de travail ou rôle">
+        <span class="members-filter-label">Groupe de travail</span>
         <button class="members-filter-chip" data-wg="all" aria-pressed="true">Tous</button>
         <button class="members-filter-chip" data-wg="1" aria-pressed="false">WG1</button>
         <button class="members-filter-chip" data-wg="2" aria-pressed="false">WG2</button>
@@ -228,22 +229,21 @@
         <button class="members-filter-chip" data-wg="4" aria-pressed="false">WG4</button>
         <button class="members-filter-chip is-mc" data-wg="mc" aria-pressed="false" title="Afficher uniquement les représentant·es du Comité de gestion">Membres&nbsp;du&nbsp;CG</button>
       </div>
-      <!-- Filtre mentorat. Remonté dans la barre principale à la place de
-           l'ancienne liste de pays (le pays est couvert par la recherche
-           texte). Sélection unique ; masqué tant qu'aucun membre n'opte. -->
-      <div class="members-mentorship-filter" id="members-mentorship-filter" role="group" aria-label="Filtrer par mentorat" hidden>
-        <span class="members-mentorship-filter-label">Mentorat</span>
-        <div class="members-mentorship-filter-chips">
-          <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Disponible comme mentor</button>
-          <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">En recherche de mentorat</button>
-        </div>
-      </div>
-      <!-- Facettes secondaires (thèmes, régions, mentorat) affichées
-           directement dans la carte de filtres comme un groupe séparé ;
-           chaque ligne est rétractée à ses premières pastilles avec un
-           « Tout afficher ». Un lien profond (#themes=…) ou un clic sur une
+      <!-- Facettes secondaires, sous un séparateur : le mentorat (pastilles en
+           ligne) plus les lignes repliables thèmes et régions de recherche.
+           Regroupées en second niveau sous la ligne principale recherche +
+           groupe de travail. Un lien profond (#themes=…) ou un clic sur une
            pastille sélectionne un thème ; les lignes restent visibles. -->
       <div class="members-facets">
+        <!-- Filtre mentorat. Deux pastilles d'adhésion ; masqué tant qu'aucun
+             membre n'opte. -->
+        <div class="members-mentorship-filter" id="members-mentorship-filter" role="group" aria-label="Filtrer par mentorat" hidden>
+          <span class="members-mentorship-filter-label">Mentorat</span>
+          <div class="members-mentorship-filter-chips">
+            <button type="button" class="members-mentorship-chip" data-mentorship="mentor" aria-pressed="false">Disponible comme mentor</button>
+            <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">En recherche de mentorat</button>
+          </div>
+        </div>
 
     <!-- Filtre par domaine de recherche (Phase 3). Voir people.html
          (EN) pour la documentation détaillée de la grille de pastilles
