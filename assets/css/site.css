@@ -2452,15 +2452,16 @@ body{padding-top:var(--whats-new-h, 0px)}
 }
 
 /* ── Mobile filter bottom sheet ──────────────────────────────────────
-   On desktop the filter controls flow inline in the toolbar, so the
-   wrapper is transparent (display:contents) and the sheet chrome is
-   hidden. Below 640px the wrapper becomes a bottom sheet opened by the
-   "Filters" button; see people.html for the behaviour. */
+   The wrapper is a native <dialog>. On desktop it is never opened modally,
+   so display:contents lets the Working-Group, theme, region and mentorship
+   controls flow inline in the toolbar (the UA dialog box, border, padding
+   and ::backdrop are never seen). Below 640px the Filters button opens it
+   with showModal(), which puts it in the top layer as a bottom sheet; see
+   people.html for the behaviour. */
 .members-filterset{ display:contents; }
 .members-filter-toggle-btn,
 .members-sheet-head,
 .members-sheet-foot{ display:none; }
-.members-sheet-backdrop{ display:none; }
 
 /* Active-filter chips: removable pills summarising what's currently applied,
    shown below the filter card once any filter is on, so current state and the
@@ -2515,22 +2516,41 @@ body{padding-top:var(--whats-new-h, 0px)}
   }
   .members-filter-toggle-count[hidden]{ display:none; }
 
-  /* The wrapper becomes a bottom sheet that scrolls between a sticky
-     header and a sticky footer. */
-  .members-filterset{
+  /* Opened modally (showModal), the dialog sits in the top layer and is a
+     bottom sheet scrolling between a sticky header and footer. Top-layer
+     placement is what makes it immune to the toolbar's containing block, to
+     page scroll, and to the iOS keyboard viewport offset. */
+  .members-filterset[open]{
     display:flex;flex-direction:column;
-    position:fixed;left:0;right:0;bottom:0;z-index:200;
+    position:fixed;inset:auto 0 0 0;width:auto;max-width:100%;
     /* dvh resolves against the *current* (small) viewport on iOS Safari, so the
        sheet footer + Apply button stay above the browser toolbar; vh first as a
        fallback for engines without dvh. */
-    max-height:85vh;max-height:85dvh;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;
+    max-height:85vh;max-height:85dvh;
+    margin:0;border:0;padding:0;             /* reset the UA dialog box */
+    overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;
     background:var(--bg-0);
     border-radius:18px 18px 0 0;
     box-shadow:0 -12px 40px rgba(11,18,32,.24);
-    transform:translateY(101%);
-    transition:transform .28s var(--ease);
+    /* A keyframe animation (not a transition) runs the moment the dialog is
+       rendered by showModal, so the slide-up needs no @starting-style dance. */
+    animation:members-sheet-rise .28s var(--ease);
   }
-  .members-filterset.is-open{ transform:translateY(0); }
+  /* Closed on mobile: hidden. (The desktop base is display:contents, which
+     would otherwise spill the controls inline on phones too.) */
+  .members-filterset:not([open]){ display:none; }
+  @keyframes members-sheet-rise{ from{ transform:translateY(100%); } }
+  /* The native backdrop replaces the old manual dimming div. */
+  .members-filterset::backdrop{
+    background:rgba(11,18,32,.5);
+    -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
+    animation:members-sheet-backdrop-in .28s var(--ease);
+  }
+  @keyframes members-sheet-backdrop-in{ from{ opacity:0; } }
+  /* With the sheet in the top layer, freezing the page scroll no longer risks
+     knocking it off-position (the old position:fixed hazard), so the background
+     can be locked safely while the modal is open. */
+  html:has(.members-filterset[open]){ overflow:hidden; }
 
   .members-sheet-head{
     display:flex;align-items:center;justify-content:space-between;
@@ -2570,14 +2590,6 @@ body{padding-top:var(--whats-new-h, 0px)}
     box-shadow:0 4px 12px var(--accent-glow);
   }
 
-  .members-sheet-backdrop{
-    display:block;position:fixed;inset:0;z-index:199;
-    background:rgba(11,18,32,.5);
-    -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
-    touch-action:none;
-  }
-  .members-sheet-backdrop[hidden]{ display:none; }
-
   /* On phones the active filters become one horizontally-scrollable line
      under the toolbar; the chip styling inherits from the base rule. */
   .members-active-filters{
@@ -2597,7 +2609,8 @@ body{padding-top:var(--whats-new-h, 0px)}
   .people-page .section-head .lede{ font-size:.95rem;line-height:1.5; }
 }
 @media (prefers-reduced-motion: reduce){
-  .members-filterset{ transition:none; }
+  .members-filterset[open],
+  .members-filterset::backdrop{ animation:none; }
 }
 /* Compact (grid) view: keyword block hidden. Full keywords show on
    expand. The matcher (line 1885-ish, .is-compact .member-card:not
