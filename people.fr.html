@@ -213,9 +213,9 @@
       </button>
       <!-- Sur grand écran : display:contents (les filtres s'affichent dans
            la barre). Sous 640 px : volet inférieur ouvert par le bouton. -->
-      <div class="members-filterset" id="members-filterset">
+      <div class="members-filterset" id="members-filterset" aria-labelledby="members-sheet-title" tabindex="-1">
         <div class="members-sheet-head">
-          <span class="members-sheet-title">Filtres</span>
+          <span class="members-sheet-title" id="members-sheet-title">Filtres</span>
           <button type="button" class="members-sheet-close" id="members-sheet-close" aria-label="Fermer les filtres">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
@@ -1095,6 +1095,25 @@
   function unlockBodyScroll() {
     window.scrollTo(0, _lockedScrollY);
   }
+  // Comportement modal pendant l'ouverture : le reste de la page passe en
+  // `inert` pour que le focus clavier et VoiceOver restent dans la feuille
+  // (inert fournit aussi le piège à focus). role/aria-modal sont posés
+  // dynamiquement car le conteneur est display:contents en ligne sur grand
+  // écran, où un rôle de dialogue serait incorrect. On ne retire `inert` que
+  // de ce qu'on a posé, sans toucher à un inert préexistant.
+  let _inertedEls = [];
+  function setBackgroundInert(on) {
+    if (on) {
+      _inertedEls = [];
+      Array.from(document.body.children).forEach(el => {
+        if (el === filterSet || el === sheetBackdrop) return;
+        if (!el.inert) { el.inert = true; _inertedEls.push(el); }
+      });
+    } else {
+      _inertedEls.forEach(el => { el.inert = false; });
+      _inertedEls = [];
+    }
+  }
   function openFilterSheet() {
     if (!filterSet) return;
     if (_sheetRestoreTimer) { clearTimeout(_sheetRestoreTimer); _sheetRestoreTimer = null; }
@@ -1104,8 +1123,14 @@
       document.body.appendChild(filterSet);
       void filterSet.offsetHeight;
     }
+    // Le fond doit rester interactif (toucher pour fermer) et hors de la zone
+    // inerte, il vit donc aussi au niveau de <body> pendant l'ouverture.
+    if (sheetBackdrop && sheetBackdrop.parentNode !== document.body) document.body.appendChild(sheetBackdrop);
     filterSet.classList.add('is-open');
     if (sheetBackdrop) sheetBackdrop.hidden = false;
+    filterSet.setAttribute('role', 'dialog');
+    filterSet.setAttribute('aria-modal', 'true');
+    setBackgroundInert(true);
     if (filterToggleBtn) filterToggleBtn.setAttribute('aria-expanded', 'true');
     lockBodyScroll();
     if (sheetCloseBtn) sheetCloseBtn.focus({ preventScroll: true });
@@ -1114,6 +1139,9 @@
     if (!filterSet || !filterSet.classList.contains('is-open')) return;
     filterSet.classList.remove('is-open');
     if (sheetBackdrop) sheetBackdrop.hidden = true;
+    setBackgroundInert(false);
+    filterSet.removeAttribute('role');
+    filterSet.removeAttribute('aria-modal');
     unlockBodyScroll();
     if (filterToggleBtn) { filterToggleBtn.setAttribute('aria-expanded', 'false'); filterToggleBtn.focus({ preventScroll: true }); }
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) restoreSheetHome();
