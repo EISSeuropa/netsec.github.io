@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=9c357da0">
+<link rel="stylesheet" href="assets/css/site.css?v=2b687423">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -213,7 +213,7 @@
       </button>
       <!-- Sur grand écran : display:contents (les filtres s'affichent dans
            la barre). Sous 640 px : volet inférieur ouvert par le bouton. -->
-      <div class="members-filterset" id="members-filterset" aria-labelledby="members-sheet-title" tabindex="-1">
+      <dialog class="members-filterset" id="members-filterset" aria-labelledby="members-sheet-title">
         <div class="members-sheet-head">
           <span class="members-sheet-title" id="members-sheet-title">Filtres</span>
           <button type="button" class="members-sheet-close" id="members-sheet-close" aria-label="Fermer les filtres">
@@ -287,11 +287,8 @@
           <button type="button" class="members-sheet-reset" id="members-sheet-reset">Réinitialiser</button>
           <button type="button" class="members-sheet-apply" id="members-sheet-apply">Voir les résultats</button>
         </div>
-      </div>
+      </dialog>
     </div>
-
-    <!-- Mobile uniquement : assombrit la page derrière le volet ouvert. -->
-    <div class="members-sheet-backdrop" id="members-sheet-backdrop" hidden></div>
 
     <!-- Mobile uniquement : rangée défilante des filtres actifs, chacun
          retirable, affichée sous la barre lorsque le volet est fermé. -->
@@ -1053,7 +1050,6 @@
   const filterToggleBtn = document.getElementById('members-filter-toggle');
   const filterToggleCount = document.getElementById('members-filter-toggle-count');
   const filterSet = document.getElementById('members-filterset');
-  const sheetBackdrop = document.getElementById('members-sheet-backdrop');
   const sheetCloseBtn = document.getElementById('members-sheet-close');
   const sheetResetBtn = document.getElementById('members-sheet-reset');
   const sheetApplyBtn = document.getElementById('members-sheet-apply');
@@ -1065,94 +1061,47 @@
     return (activeWG !== 'all' ? 1 : 0) + (activeCountry !== 'all' ? 1 : 0)
       + activeMentorship.size + activeKeywords.size + activeRegions.size;
   }
-  // Pendant l'ouverture, le volet est déplacé dans <body> pour que son
-  // position:fixed échappe à la barre (dont le contexte d'empilement /
-  // bloc englobant l'ancrerait à la barre et le placerait sous les fiches).
-  // Il revient dans la barre à la fermeture, pour préserver la mise en page
-  // en ligne (display:contents) sur grand écran.
-  let _sheetRestoreTimer = null;
-  function restoreSheetHome() {
-    if (filterSet && filterSet._origParent) {
-      filterSet._origParent.insertBefore(filterSet, filterSet._origNext);
-      filterSet._origParent = null; filterSet._origNext = null;
-    }
-  }
-  // Verrou de défilement pendant l'ouverture de la feuille. Les approches JS
-  // échouent sur l'un ou l'autre moteur : body{overflow:hidden} fait du body
-  // un conteneur de défilement (iOS Safari déloge alors les position:fixed) ;
-  // body{position:fixed} corrige ça sur Safari mais crée un bloc de contenance
-  // sur Chrome iOS et place la feuille au milieu de la page.
-  // Le CSS prend en charge : le fond plein-écran porte touch-action:none
-  // (bloque le défilement dans la zone du fond) et la feuille a
-  // touch-action:pan-y + overscroll-behavior:contain (contient le défilement
-  // à la feuille elle-même). Sans écouteur passive:false, il n'y a pas de
-  // délai de toucher sur Safari. La position de défilement est sauvegardée
-  // et restaurée au cas où le clavier virtuel déplacerait la page.
-  let _lockedScrollY = 0;
-  function lockBodyScroll() {
-    _lockedScrollY = window.scrollY || window.pageYOffset || 0;
-  }
-  function unlockBodyScroll() {
-    window.scrollTo(0, _lockedScrollY);
-  }
-  // Comportement modal pendant l'ouverture : le reste de la page passe en
-  // `inert` pour que le focus clavier et VoiceOver restent dans la feuille
-  // (inert fournit aussi le piège à focus). role/aria-modal sont posés
-  // dynamiquement car le conteneur est display:contents en ligne sur grand
-  // écran, où un rôle de dialogue serait incorrect. On ne retire `inert` que
-  // de ce qu'on a posé, sans toucher à un inert préexistant.
-  let _inertedEls = [];
-  function setBackgroundInert(on) {
-    if (on) {
-      _inertedEls = [];
-      Array.from(document.body.children).forEach(el => {
-        if (el === filterSet || el === sheetBackdrop) return;
-        if (!el.inert) { el.inert = true; _inertedEls.push(el); }
-      });
-    } else {
-      _inertedEls.forEach(el => { el.inert = false; });
-      _inertedEls = [];
-    }
-  }
+  // Le volet de filtres est un <dialog> natif. Sur mobile, le bouton Filtres
+  // l'ouvre avec showModal(), ce qui le promeut dans la couche supérieure du
+  // navigateur (top layer) : positionné par rapport à la fenêtre, à l'abri des
+  // blocs de contenance ancêtres (le backdrop-filter de la barre), du
+  // défilement de la page et du décalage de fenêtre dû au clavier iOS qui
+  // laissait auparavant un volet position:fixed bloqué au milieu de la page.
+  // Le dialogue fournit aussi nativement le piège à focus, la fermeture par
+  // Échap et l'assombrissement ::backdrop, d'où la disparition de l'ancienne
+  // mécanique inert / déplacement vers body / verrou de défilement. Sur grand
+  // écran, le conteneur est display:contents et n'est jamais ouvert en modale,
+  // donc les contrôles s'affichent en ligne dans la barre.
   function openFilterSheet() {
-    if (!filterSet) return;
-    if (_sheetRestoreTimer) { clearTimeout(_sheetRestoreTimer); _sheetRestoreTimer = null; }
-    if (filterSet.parentNode !== document.body) {
-      filterSet._origParent = filterSet.parentNode;
-      filterSet._origNext = filterSet.nextSibling;
-      document.body.appendChild(filterSet);
-      void filterSet.offsetHeight;
-    }
-    // Le fond doit rester interactif (toucher pour fermer) et hors de la zone
-    // inerte, il vit donc aussi au niveau de <body> pendant l'ouverture.
-    if (sheetBackdrop && sheetBackdrop.parentNode !== document.body) document.body.appendChild(sheetBackdrop);
-    filterSet.classList.add('is-open');
-    if (sheetBackdrop) sheetBackdrop.hidden = false;
-    filterSet.setAttribute('role', 'dialog');
-    filterSet.setAttribute('aria-modal', 'true');
-    setBackgroundInert(true);
+    if (!filterSet || typeof filterSet.showModal !== 'function' || filterSet.open) return;
+    filterSet.showModal();
     if (filterToggleBtn) filterToggleBtn.setAttribute('aria-expanded', 'true');
-    lockBodyScroll();
-    if (sheetCloseBtn) sheetCloseBtn.focus({ preventScroll: true });
+  }
+  function syncToggleClosed() {
+    if (filterToggleBtn) { filterToggleBtn.setAttribute('aria-expanded', 'false'); filterToggleBtn.focus({ preventScroll: true }); }
   }
   function closeFilterSheet() {
-    if (!filterSet || !filterSet.classList.contains('is-open')) return;
-    filterSet.classList.remove('is-open');
-    if (sheetBackdrop) sheetBackdrop.hidden = true;
-    setBackgroundInert(false);
-    filterSet.removeAttribute('role');
-    filterSet.removeAttribute('aria-modal');
-    unlockBodyScroll();
-    if (filterToggleBtn) { filterToggleBtn.setAttribute('aria-expanded', 'false'); filterToggleBtn.focus({ preventScroll: true }); }
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) restoreSheetHome();
-    else _sheetRestoreTimer = setTimeout(restoreSheetHome, 320);
+    if (filterSet && filterSet.open) filterSet.close();
+    syncToggleClosed();
   }
+  // Échap ferme le dialogue nativement, sans passer par closeFilterSheet, d'où
+  // le rappel de la réinitialisation du bouton + restauration du focus sur
+  // l'évènement close du dialogue. Les chemins explicites (X / Voir / fond)
+  // exécutent syncToggleClosed via closeFilterSheet, sans dépendre de cet
+  // évènement.
+  if (filterSet) filterSet.addEventListener('close', syncToggleClosed);
+  // Un appui dans la zone assombrie au-dessus du volet (la boîte du dialogue ;
+  // le clic atteint l'élément dialogue à des coordonnées situées au-dessus de
+  // sa zone) le ferme. Le test sur Y évite la fermeture sur les fines marges
+  // entre les contrôles empilés.
+  if (filterSet) filterSet.addEventListener('click', (e) => {
+    if (e.target !== filterSet) return;
+    if (e.clientY < filterSet.getBoundingClientRect().top) closeFilterSheet();
+  });
   if (filterToggleBtn) filterToggleBtn.addEventListener('click', openFilterSheet);
   if (sheetCloseBtn) sheetCloseBtn.addEventListener('click', closeFilterSheet);
-  if (sheetBackdrop) sheetBackdrop.addEventListener('click', closeFilterSheet);
   if (sheetApplyBtn) sheetApplyBtn.addEventListener('click', closeFilterSheet);
   if (sheetResetBtn) sheetResetBtn.addEventListener('click', clearAllFilters);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeFilterSheet(); });
   window.matchMedia('(min-width: 641px)').addEventListener('change', (e) => { if (e.matches) closeFilterSheet(); });
 
   // Retrouve le nom affiché d'un thème à partir de son slug.
