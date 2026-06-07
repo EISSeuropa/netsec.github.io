@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=83d4bb7d">
+<link rel="stylesheet" href="assets/css/site.css?v=fe2b8267">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -1197,12 +1197,16 @@
     return out;
   }
   const XMARK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  // Index de la puce de filtre actif dont la croix vient d'être actionnée, pour
+  // pouvoir replacer le focus après la reconstruction de la rangée plutôt que de
+  // le laisser retomber sur <body>.
+  let _refocusActiveFilterIdx = -1;
   function renderActiveFilters() {
     if (!activeFiltersEl) return;
     const pills = activeFilterPills();
     activeFiltersEl.textContent = '';
     activeFiltersEl.hidden = pills.length === 0;
-    pills.forEach(p => {
+    pills.forEach((p, i) => {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'members-active-filter';
@@ -1211,9 +1215,19 @@
       b.appendChild(span);
       b.insertAdjacentHTML('beforeend', XMARK);
       b.setAttribute('aria-label', window.netsecT('Remove filter') + ': ' + p.label);
-      b.addEventListener('click', p.remove);
+      b.addEventListener('click', () => { _refocusActiveFilterIdx = i; p.remove(); });
       activeFiltersEl.appendChild(b);
     });
+    // Clavier / VoiceOver : après une suppression, le bouton actionné n'existe
+    // plus, donc on déplace le focus vers la puce qui a pris sa place (ou la
+    // dernière), et vers le bouton Filtres quand la rangée est vide, plutôt que
+    // de perdre le focus.
+    if (_refocusActiveFilterIdx >= 0) {
+      const btns = activeFiltersEl.querySelectorAll('.members-active-filter');
+      const tgt = btns.length ? btns[Math.min(_refocusActiveFilterIdx, btns.length - 1)] : filterToggleBtn;
+      if (tgt) tgt.focus({ preventScroll: true });
+      _refocusActiveFilterIdx = -1;
+    }
   }
 
   function populateCountryFilter() {
