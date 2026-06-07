@@ -2031,9 +2031,15 @@ body{padding-top:var(--whats-new-h, 0px)}
   background:rgba(255,255,255,.7);color:var(--ink-2);cursor:pointer;
   transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease);
 }
-.members-filter-chip:hover{background:#fff;color:var(--ink)}
+/* Hover styling is gated to real pointers so a tap on iOS WebKit does not
+   leave a chip stuck in its hover state until the next tap elsewhere. */
+@media (hover: hover){
+  .members-filter-chip:hover{background:#fff;color:var(--ink)}
+}
 .dark .members-filter-chip{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.28)}
-.dark .members-filter-chip:hover{background:rgba(255,255,255,.10);color:#fff}
+@media (hover: hover){
+  .dark .members-filter-chip:hover{background:rgba(255,255,255,.10);color:#fff}
+}
 .members-filter-chip[aria-pressed="true"]{
   background:linear-gradient(135deg,var(--accent),var(--accent-2));
   color:#fff;border-color:transparent;
@@ -2350,9 +2356,11 @@ body{padding-top:var(--whats-new-h, 0px)}
   cursor:pointer;
   transition:background-color .15s ease, border-color .15s ease, color .15s ease, transform .12s ease;
 }
-.members-keyword-filter-chip:hover{
-  background:color-mix(in oklab, var(--accent-2) 12%, transparent);
-  border-color:color-mix(in oklab, var(--accent-2) 42%, transparent);
+@media (hover: hover){
+  .members-keyword-filter-chip:hover{
+    background:color-mix(in oklab, var(--accent-2) 12%, transparent);
+    border-color:color-mix(in oklab, var(--accent-2) 42%, transparent);
+  }
 }
 .members-keyword-filter-chip:active{ transform:translateY(1px); }
 .members-keyword-filter-chip:focus-visible{
@@ -2423,9 +2431,13 @@ body{padding-top:var(--whats-new-h, 0px)}
   background:transparent;color:var(--ink-2);cursor:pointer;
   transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease);
 }
-.members-mentorship-chip:hover{background:rgba(11,18,32,.04);color:var(--ink)}
+@media (hover: hover){
+  .members-mentorship-chip:hover{background:rgba(11,18,32,.04);color:var(--ink)}
+}
 .dark .members-mentorship-chip{border-color:rgba(255,255,255,.28)}
-.dark .members-mentorship-chip:hover{background:rgba(255,255,255,.06)}
+@media (hover: hover){
+  .dark .members-mentorship-chip:hover{background:rgba(255,255,255,.06)}
+}
 .members-mentorship-chip[aria-pressed="true"]{
   background:linear-gradient(135deg,var(--accent),var(--accent-2));
   color:#fff;border-color:transparent;
@@ -2470,7 +2482,9 @@ body{padding-top:var(--whats-new-h, 0px)}
   color:var(--ink);cursor:pointer;white-space:nowrap;
   transition:background .2s var(--ease),border-color .2s var(--ease);
 }
-.members-active-filter:hover{ background:color-mix(in oklab, var(--accent) 20%, transparent); }
+@media (hover: hover){
+  .members-active-filter:hover{ background:color-mix(in oklab, var(--accent) 20%, transparent); }
+}
 .members-active-filter:focus-visible{ outline:2px solid var(--accent);outline-offset:2px; }
 .members-active-filter svg{ width:13px;height:13px;opacity:.7;flex:0 0 auto; }
 .dark .members-active-filter{
@@ -2992,13 +3006,15 @@ body{padding-top:var(--whats-new-h, 0px)}
   background:rgba(28,32,46,.55);
 }
 .members-grid.is-compact .member-toggle-chevron svg{width:14px;height:14px;display:block}
-.members-grid.is-compact .member-card:hover .member-toggle-chevron{
-  color:var(--accent);
-  border-color:rgba(0,51,153,.30);
-}
-.dark .members-grid.is-compact .member-card:hover .member-toggle-chevron{
-  color:#a9c2ff;
-  border-color:rgba(110,161,255,.36);
+@media (hover: hover){
+  .members-grid.is-compact .member-card:hover .member-toggle-chevron{
+    color:var(--accent);
+    border-color:rgba(0,51,153,.30);
+  }
+  .dark .members-grid.is-compact .member-card:hover .member-toggle-chevron{
+    color:#a9c2ff;
+    border-color:rgba(110,161,255,.36);
+  }
 }
 .members-grid.is-compact .member-card.is-expanded .member-toggle-chevron{
   transform:rotate(180deg);
