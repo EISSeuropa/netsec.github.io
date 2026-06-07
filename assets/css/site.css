@@ -2005,6 +2005,26 @@ body{padding-top:var(--whats-new-h, 0px)}
   font:inherit;font-size:.95rem;color:var(--ink);min-width:0;
 }
 .members-filter{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+/* Tap responsiveness on the directory's tap-only controls. `manipulation`
+   drops the iOS double-tap-zoom wait (the ~300ms delay that reads as a sticky
+   tap), and a transparent tap highlight removes the grey flash on every press.
+   `manipulation` still allows panning, so scrolling over a chip or card is
+   unaffected. */
+.members-filter-chip,
+.members-keyword-filter-chip,
+.members-mentorship-chip,
+.members-active-filter,
+.members-filter-toggle-btn,
+.members-sheet-close,
+.members-sheet-reset,
+.members-sheet-apply,
+.members-keyword-filter-toggle,
+.members-keyword-filter-clear,
+.members-clear-all,
+.members-grid.is-compact .member-card{
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
 .members-filter-chip{
   font:inherit;font-size:.82rem;font-weight:600;
   padding:7px 14px;border-radius:999px;border:1px solid rgba(11,18,32,.22);

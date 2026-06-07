@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=3c2f3fed">
+<link rel="stylesheet" href="assets/css/site.css?v=83d4bb7d">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -1108,14 +1108,14 @@
     if (sheetBackdrop) sheetBackdrop.hidden = false;
     if (filterToggleBtn) filterToggleBtn.setAttribute('aria-expanded', 'true');
     lockBodyScroll();
-    if (sheetCloseBtn) sheetCloseBtn.focus();
+    if (sheetCloseBtn) sheetCloseBtn.focus({ preventScroll: true });
   }
   function closeFilterSheet() {
     if (!filterSet || !filterSet.classList.contains('is-open')) return;
     filterSet.classList.remove('is-open');
     if (sheetBackdrop) sheetBackdrop.hidden = true;
     unlockBodyScroll();
-    if (filterToggleBtn) { filterToggleBtn.setAttribute('aria-expanded', 'false'); filterToggleBtn.focus(); }
+    if (filterToggleBtn) { filterToggleBtn.setAttribute('aria-expanded', 'false'); filterToggleBtn.focus({ preventScroll: true }); }
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) restoreSheetHome();
     else _sheetRestoreTimer = setTimeout(restoreSheetHome, 320);
   }
@@ -1131,6 +1131,11 @@
   function themeNameForSlug(slug) {
     const e = KEYWORD_AGGREGATE.find(x => keywordSlug(x.keyword) === slug);
     return e ? e.keyword : slug;
+  }
+  // Idem pour un slug de région (activeRegions contient des slugs, pas des noms).
+  function regionNameForSlug(slug) {
+    const e = REGION_AGGREGATE.find(x => keywordSlug(x.region) === slug);
+    return e ? e.region : slug;
   }
   // Les filtres actuellement actifs, chacun avec sa fonction de retrait,
   // pour la rangée de pastilles retirables sous la barre (mobile).
@@ -1152,7 +1157,7 @@
       out.push({ label: window.netsecT(themeNameForSlug(slug)), remove: () => toggleKeywordFilter(slug) });
     });
     activeRegions.forEach(region => {
-      out.push({ label: window.netsecT(region), remove: () => toggleRegionFilter(region) });
+      out.push({ label: window.netsecT(regionNameForSlug(region)), remove: () => toggleRegionFilter(region) });
     });
     mentorshipChips.forEach(c => {
       const v = c.dataset.mentorship;
