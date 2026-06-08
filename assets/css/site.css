@@ -2545,6 +2545,11 @@ body{padding-top:var(--whats-new-h, 0px)}
     background:rgba(11,18,32,.5);
     -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
     animation:members-sheet-backdrop-in .28s var(--ease);
+    /* Without this the backdrop's default touch-action makes a tap-to-dismiss
+       read as a scroll gesture, so the click is suppressed on the slightest
+       finger drift and the tap appears to do nothing until the 2nd or 3rd try.
+       `none` makes the tap land immediately. */
+    touch-action:none;
   }
   @keyframes members-sheet-backdrop-in{ from{ opacity:0; } }
   /* With the sheet in the top layer, freezing the page scroll no longer risks
@@ -2560,7 +2565,10 @@ body{padding-top:var(--whats-new-h, 0px)}
   .members-sheet-title{ font-family:'Lexend',sans-serif;font-size:1.05rem;font-weight:600;color:var(--ink); }
   .members-sheet-close{
     appearance:none;border:0;background:transparent;cursor:pointer;color:var(--muted);
-    width:36px;height:36px;display:grid;place-items:center;border-radius:50%;
+    /* 44px hit target (Apple's minimum): the old 36px sat right at the backdrop
+       edge, so a slightly-high tap missed the button and landed on the dim. */
+    width:44px;height:44px;display:grid;place-items:center;border-radius:50%;
+    margin:-4px -8px -4px 0;
   }
   .members-sheet-close:hover{ background:rgba(11,18,32,.06);color:var(--ink); }
 
