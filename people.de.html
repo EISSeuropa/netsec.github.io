@@ -447,6 +447,10 @@
   // daher zeigt dort eine einzige Stufe auf den „Filter“-Button, der sie öffnet.
   function startTour() {
     if (!window.netsecTour) return;
+    // Die Lade ist eine Modale in der obersten Ebene; ein Tour-Overlay würde
+    // dahinter aufgebaut, daher zuerst schließen (nur wenn offen, um sonst nicht
+    // den Fokus zu stehlen).
+    if (filterSet && filterSet.open) closeFilterSheet();
     if (welcome) welcome.hidden = true;
     const isPhone = window.matchMedia('(max-width: 640px)').matches;
     const searchStep = { target: '#member-search',
@@ -566,6 +570,12 @@
   });
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
+    // Das oberste Overlay soll Escape zuerst bekommen: die Filterlade schließt
+    // über das native Escape des Dialogs, und die geführte Tour hat ihr eigenes,
+    // daher tritt das Einklappen der Karten zurück, solange eines von beiden
+    // offen ist, damit nicht zwei Overlays auf einen Tastendruck schließen.
+    if (filterSet && filterSet.open) return;
+    if (document.querySelector('.tour-backdrop, .tour-tooltip')) return;
     const expanded = grid.querySelector('.member-card.is-expanded');
     if (expanded) {
       expanded.classList.remove('is-expanded');
@@ -1102,6 +1112,15 @@
   if (sheetApplyBtn) sheetApplyBtn.addEventListener('click', closeFilterSheet);
   if (sheetResetBtn) sheetResetBtn.addEventListener('click', clearAllFilters);
   window.matchMedia('(min-width: 641px)').addEventListener('change', (e) => { if (e.matches) closeFilterSheet(); });
+  // bfcache: die Seite nie mit offener Modale einfrieren, sonst zeigte eine
+  // Vor-/Zurück-Wiederherstellung eine im Scrollen gesperrte Seite unter einer
+  // hängengebliebenen offenen Lade.
+  window.addEventListener('pagehide', () => {
+    if (filterSet && filterSet.open) {
+      filterSet.close();
+      if (filterToggleBtn) filterToggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
 
   // Findet den Anzeigenamen eines Themas anhand seines Slugs.
   function themeNameForSlug(slug) {
