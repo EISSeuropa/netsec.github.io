@@ -2555,10 +2555,11 @@ body{padding-top:var(--whats-new-h, 0px)}
     touch-action:none;
   }
   @keyframes members-sheet-backdrop-in{ from{ opacity:0; } }
-  /* With the sheet in the top layer, freezing the page scroll no longer risks
-     knocking it off-position (the old position:fixed hazard), so the background
-     can be locked safely while the modal is open. */
-  html:has(.members-filterset[open]){ overflow:hidden; }
+  /* No html{overflow:hidden} scroll lock: toggling it forces a reflow + scroll
+     reconciliation on iOS Safari that made closing the sheet feel laggy. The
+     background is held instead by the modal dialog's own inertness plus the
+     backdrop's touch-action:none and the sheet's overscroll-behavior:contain,
+     which is what keeps scroll from leaking behind the open sheet. */
 
   .members-sheet-head{
     display:flex;align-items:center;justify-content:space-between;
