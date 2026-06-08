@@ -99,6 +99,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.11.0] · 2026-06-08 — Directory filters, mentorship, and a smoother mobile directory
+
 > This is the big pre-conference directory release, gathering everything merged since v1.10.0. Visitors can now narrow *The Network* by research theme, by research region and by mentorship, and the mobile filter experience that drives those choices was rebuilt so it behaves properly on a phone. Around it sit lighter photos, new ways to reach the Action, and the usual housekeeping. Three themes follow, then a single canonical index at the bottom.
 
 ### Finding people by what they work on
@@ -825,7 +829,8 @@ Open Graph, Twitter Card, JSON-LD (Organization + WebSite + WebPage), canonical 
 - Members' Wiki seeded with glossary, FAQ, onboarding, meeting-notes convention, decisions log.
 - Dual licensing — MIT for code, CC BY 4.0 for content + docs.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.10.0...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.8.1...v1.9.0
 [1.8.1]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.8.0...v1.8.1
