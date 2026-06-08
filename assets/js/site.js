@@ -32,6 +32,8 @@
       'Network member': 'Membre du réseau',
       'Working Group participant': 'Participant·e au groupe de travail',
       'Bio coming soon.': 'Biographie à venir.',
+      'View full profile': 'Voir le profil complet',
+      'Member profile': 'Profil du membre',
       'Show more': 'Voir plus',
       'Show less': 'Voir moins',
       'member': 'membre',
@@ -91,6 +93,8 @@
       'Network member': 'Netzwerkmitglied',
       'Working Group participant': 'Arbeitsgruppen-Mitglied',
       'Bio coming soon.': 'Biografie folgt.',
+      'View full profile': 'Vollständiges Profil ansehen',
+      'Member profile': 'Mitgliedsprofil',
       'Show more': 'Mehr anzeigen',
       'Show less': 'Weniger anzeigen',
       'member': 'Mitglied',
@@ -1421,4 +1425,222 @@
       try { new ResizeObserver(syncBannerHeight).observe(banner); } catch (e) {}
     }
   }
+})();
+
+/* ── Member-card popover: a reusable, site-wide component ──────────────
+   Any page can turn a person's name into a hover/focus/click profile card
+   by marking it up as:
+
+       <a class="member-link" href="people.html#<id>" data-member="<id>">Name</a>
+
+   On load this module looks for `[data-member]` anchors. If it finds any,
+   it fetches data/bios.json once, builds an id → member map, and wires a
+   single shared `<div popover="auto">` (top-layer, light-dismiss, Escape)
+   that follows whichever anchor the pointer or keyboard focus is on. The
+   authored `href` is the graceful fallback: with JS off, an unknown id,
+   or a browser without the Popover API, the anchor is just a deep link
+   into the directory, so nothing is ever a dead end.
+
+   The popover markup and the `.essc-member-card*` styling are shared with
+   the ESSC programme renderer (essc-2026.html), which grew this pattern
+   first for fuzzy speaker-name matching. That renderer keeps its own inline
+   copy for now; deduplicating the two onto this module is tracked as
+   follow-up work. The class names keep their `essc-` prefix so both code
+   paths render through one stylesheet block. */
+(function () {
+  const anchors = Array.from(document.querySelectorAll('a.member-link[data-member]'));
+  if (!anchors.length) return;
+
+  const T = (s) => (window.netsecT && window.netsecT(s)) || s;
+  const peopleUrl = 'people.html';
+
+  function el(tag, attrs, ...kids) {
+    const n = document.createElement(tag);
+    if (attrs) for (const k in attrs) {
+      if (attrs[k] == null) continue;
+      if (k === 'class') n.className = attrs[k];
+      else n.setAttribute(k, attrs[k]);
+    }
+    for (const c of kids) if (c != null) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    return n;
+  }
+
+  // Brand glyphs, mirrored from the ESSC card / people.html. `style`
+  // says whether the path is stroked or filled.
+  const CONTACT_GLYPHS = {
+    email:   { style: 'stroke', path: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>' },
+    website: { style: 'stroke', path: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/>' },
+    orcid:   { style: 'fill',   path: '<path fill-rule="evenodd" d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947 0 .525-.422.947-.947.947a.95.95 0 01-.947-.947c0-.516.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.025-5.325 5.025h-3.919V7.416zm1.444 1.303v7.444h2.297c3.272 0 4.022-2.484 4.022-3.722 0-2.016-1.284-3.722-4.094-3.722H12.8z"/>' },
+    linkedin:{ style: 'fill',   path: '<path fill-rule="evenodd" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>' },
+    bluesky: { style: 'fill',   path: '<path d="M5.8 4.4C4.1 3 1 1.3 1 5.7c0 .9.5 7.4.8 8.5.8 3.4 4.3 4.3 7.5 3.7-5.4.9-10.2 3.3-3.9 11.1l.1-.1c1.4 1.7 4 3.5 5.5-1l-.1.1c.3-1 .4-2.1.4-3.3 0 1.2.1 2.3.4 3.3l-.1-.1c1.4 4.5 4 2.7 5.5 1l.1.1c6.3-7.8 1.4-10.2-3.9-11.1 3.1.5 6.6-.3 7.5-3.7.3-1.1.8-7.6.8-8.5 0-4.4-3.1-2.7-4.8-1.3C15.6 6 13.1 9.3 12 11.5 10.9 9.3 8.4 6 5.8 4.4z" transform="translate(0,-2.5) scale(1,1.1)"/>' },
+  };
+
+  function normaliseOrcid(raw) {
+    if (!raw) return null;
+    let s = String(raw).trim().replace(/^(?:https?:\/\/)?(?:sandbox\.)?orcid\.org\//i, '');
+    s = s.split('?')[0].split('#')[0].replace(/\/+$/, '').trim();
+    if (/^\d{15}[\dX]$/i.test(s)) s = `${s.slice(0,4)}-${s.slice(4,8)}-${s.slice(8,12)}-${s.slice(12,16)}`;
+    return /^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/i.test(s) ? s.toUpperCase() : null;
+  }
+
+  function contactIcon(kind, href, label) {
+    const a = el('a', { class: 'essc-member-card-contact', href, 'aria-label': label, title: label });
+    if (href.startsWith('http')) { a.target = '_blank'; a.rel = 'noopener'; }
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    const g = CONTACT_GLYPHS[kind];
+    if (g.style === 'stroke') {
+      svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor');
+      svg.setAttribute('stroke-width', '1.9'); svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
+    } else { svg.setAttribute('fill', 'currentColor'); }
+    svg.innerHTML = g.path;
+    a.appendChild(svg);
+    return a;
+  }
+
+  // ── shared popover element ──────────────────────────────────────
+  let cardEl = null, hideTimer = null, currentMember = null, openScrollY = 0;
+  const HIDE_DELAY_MS = 180;
+
+  function cancelHide() { if (hideTimer != null) { clearTimeout(hideTimer); hideTimer = null; } }
+  function scheduleHide() {
+    cancelHide();
+    hideTimer = setTimeout(() => { if (cardEl && cardEl.matches(':popover-open')) cardEl.hidePopover(); }, HIDE_DELAY_MS);
+  }
+
+  function ensureCard() {
+    if (cardEl) return cardEl;
+    if (typeof HTMLElement.prototype.showPopover !== 'function') return null;
+    cardEl = el('div', {
+      id: 'netsec-member-card', class: 'essc-member-card', popover: 'auto',
+      role: 'dialog', 'aria-labelledby': 'netsec-member-card-name', 'aria-label': T('Member profile'),
+    });
+    cardEl.addEventListener('mouseenter', cancelHide);
+    cardEl.addEventListener('mouseleave', scheduleHide);
+    cardEl.addEventListener('toggle', (e) => { if (e.newState === 'closed') { currentMember = null; cancelHide(); } });
+    // Dismiss on a meaningful scroll (24px threshold ignores iOS rubber-band).
+    window.addEventListener('scroll', () => {
+      if (!cardEl || !cardEl.matches(':popover-open')) return;
+      if (Math.abs(window.scrollY - openScrollY) < 24) return;
+      cancelHide(); cardEl.hidePopover();
+    }, { passive: true });
+    document.body.appendChild(cardEl);
+    return cardEl;
+  }
+
+  function populate(card, m, ctaHref) {
+    card.innerHTML = '';
+    const inner = el('div', { class: 'essc-member-card-inner' });
+    if (m.photo) {
+      const img = el('img', { class: 'essc-member-card-photo', src: m.photo, alt: '', loading: 'lazy', decoding: 'async' });
+      const webp = window.netsecWebp && window.netsecWebp(m.photo);
+      inner.appendChild(webp
+        ? el('picture', { class: 'essc-member-card-picture' }, el('source', { type: 'image/webp', srcset: webp }), img)
+        : img);
+    } else {
+      inner.appendChild(el('div', { class: 'essc-member-card-photo essc-member-card-photo-placeholder', 'aria-hidden': 'true' }));
+    }
+    const text = el('div', { class: 'essc-member-card-text' });
+    text.appendChild(el('p', { class: 'essc-member-card-name', id: 'netsec-member-card-name' }, m.name || ''));
+    if (m.position)    text.appendChild(el('p', { class: 'essc-member-card-role' }, m.position));
+    if (m.affiliation) text.appendChild(el('p', { class: 'essc-member-card-aff' }, m.affiliation));
+
+    // Role badges only (each string flows through netsecT so FR/DE pages
+    // localise them). The bare WG-number chips the ESSC card adds are
+    // skipped here to avoid a prefix the static pages don't translate.
+    if (m.roles && m.roles.length) {
+      const row = el('div', { class: 'essc-member-card-badges' });
+      for (const r of m.roles) row.appendChild(el('span', { class: 'essc-member-card-badge' }, T(r)));
+      text.appendChild(row);
+    }
+    if (m.country) {
+      const c = el('p', { class: 'essc-member-card-country' });
+      if (m.country_code) c.appendChild(el('img', { src: `https://flagcdn.com/h20/${m.country_code}.png`, alt: '', width: '18', height: '12', loading: 'lazy' }));
+      c.appendChild(document.createTextNode(m.country));
+      text.appendChild(c);
+    }
+    if (m.bio) text.appendChild(el('p', { class: 'essc-member-card-bio' }, m.bio));
+
+    const orcidId = normaliseOrcid(m.orcid);
+    const contacts = [
+      m.email    && ['email',    'mailto:' + m.email, 'Email'],
+      m.website  && ['website',  m.website,           'Website'],
+      orcidId    && ['orcid',    'https://orcid.org/' + orcidId, 'ORCID'],
+      m.linkedin && ['linkedin', m.linkedin,          'LinkedIn'],
+      m.bluesky  && ['bluesky',  m.bluesky,           'Bluesky'],
+    ].filter(Boolean);
+    if (contacts.length) {
+      const row = el('div', { class: 'essc-member-card-contacts' });
+      for (const [k, h, l] of contacts) row.appendChild(contactIcon(k, h, l));
+      text.appendChild(row);
+    }
+    inner.appendChild(text);
+    card.appendChild(inner);
+
+    const footer = el('div', { class: 'essc-member-card-footer' });
+    // The CTA reuses the triggering anchor's own href, so the locale of
+    // the directory page (people.html / people.fr.html / people.de.html)
+    // is whatever the author linked to. Fall back to the EN directory.
+    if (!ctaHref) ctaHref = peopleUrl + '#' + m.id;
+    const cta = el('a', { class: 'essc-member-card-cta', href: ctaHref }, T('View full profile'));
+    cta.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      e.preventDefault();
+      if (cardEl && cardEl.matches(':popover-open')) cardEl.hidePopover();
+      setTimeout(() => { window.location.assign(ctaHref); }, 0);
+    });
+    footer.appendChild(cta);
+    card.appendChild(footer);
+  }
+
+  function showCard(anchor, m) {
+    const card = ensureCard();
+    if (!card) return null;
+    cancelHide();
+    if (currentMember === m && card.matches(':popover-open')) return card;
+    currentMember = m;
+    populate(card, m, anchor.getAttribute('href'));
+    const ar = anchor.getBoundingClientRect();
+    card.style.left = ar.left + 'px';
+    card.style.top  = (ar.bottom + 6) + 'px';
+    if (!card.matches(':popover-open')) card.showPopover();
+    openScrollY = window.scrollY;
+    const cr = card.getBoundingClientRect();
+    const margin = 8, vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;
+    let left = ar.left + ar.width / 2 - cr.width / 2;
+    left = Math.max(margin, Math.min(left, vw - cr.width - margin));
+    let top = ar.bottom + 6;
+    if (top + cr.height > vh - margin && ar.top - cr.height - 6 >= margin) top = ar.top - cr.height - 6;
+    card.style.left = left + 'px';
+    card.style.top  = top  + 'px';
+    return card;
+  }
+
+  // ── fetch bios once, then wire every anchor ─────────────────────
+  fetch('data/bios.json', { cache: 'no-cache' })
+    .then((r) => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+    .then((bios) => {
+      const byId = new Map();
+      for (const m of (bios && bios.members) || []) if (m && m.id) byId.set(m.id, m);
+      for (const a of anchors) {
+        const m = byId.get(a.dataset.member);
+        if (!m) continue;                 // unknown id → plain directory link
+        a.classList.add('is-wired');
+        const open = (e) => {
+          if (e.type === 'click') {
+            if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            if (!showCard(a, m)) return;   // popover unsupported → let the link navigate
+            e.preventDefault();
+          } else { showCard(a, m); }
+        };
+        a.addEventListener('mouseenter', open);
+        a.addEventListener('focus', open);
+        a.addEventListener('click', open);
+        a.addEventListener('mouseleave', scheduleHide);
+        a.addEventListener('blur', scheduleHide);
+      }
+    })
+    .catch((err) => { console.warn('member-card: bios.json fetch failed; links stay as plain directory links:', err); });
 })();
