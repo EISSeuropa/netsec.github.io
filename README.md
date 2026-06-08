@@ -73,7 +73,7 @@ Design principles:
 
 ## Repository layout
 
-Fifteen public pages, each with an authoritative EN version and
+Sixteen public pages, each with an authoritative EN version and
 manually-translated FR + DE siblings (e.g. `about.html` /
 `about.fr.html` / `about.de.html`). The listing below shows only
 the EN page; the FR/DE variants sit alongside.
@@ -84,6 +84,7 @@ the EN page; the FR/DE variants sit alongside.
 ├── about.html              # Action narrative, audiences, deliverables
 ├── people.html             # The Network — open directory, runtime-rendered from data/bios.json
 ├── essc-2026.html          # Live ESSC programme (rebuilt daily from indico.eiss-europa.com)
+├── summer-school.html      # NetSec Summer School (ECS³) — faculty roster, EISS partner block, application contact
 ├── grants.html             # Grants & Calls — five NetSec grant schemes + e-COST workflow
 ├── news.html               # News archive (curated entries from data/news.json)
 ├── outputs.html            # Publications listing (placeholder until D6 lands)

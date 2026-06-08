@@ -291,6 +291,45 @@ The design rationale lives at
 [`docs/indico-sync.md`](indico-sync.md) and (canonically) in the
 EISS repository's `docs/indico-programme-integration.md`.
 
+### The member-card popover and directory name matching
+
+Several pages turn a person's name into a profile card without
+duplicating the directory. One shared component lives in
+`assets/js/site.js`, exposed as `window.netsecMemberCard` with
+`show(anchorEl, member, opts)` and `hide()`. It builds a single
+top-layer `<div popover>`, positions it against the anchor, and
+renders the member's photo, affiliation, role badges, and a link
+through to the full directory entry. The ESSC programme renderer
+calls this shared component rather than carrying the ~250-line inline
+copy it used to hold.
+
+Pages resolve a name to a `data/bios.json` record with a normalised
+first-and-last key: salutations (Dr, Prof) and nobiliary particles
+(von, de, van) are dropped, diacritics are folded, and apostrophes
+are stripped, so "Dr Silvia D'Amato" and "Silvia D'Amato" key the
+same. The matcher is mirrored in `scripts/sync-bios.py` and
+`assets/js/site.js`, and drives three surfaces: ESSC speaker links,
+the Summer School faculty roster, and the About-page and
+Working-Group leadership cards. Each resolves by name when no
+explicit id or `data-slug` is present, so a card gains the person's
+live headshot and profile link the first time they appear in the
+directory, with no hand-editing. A `name_aliases` array on a bios
+record covers the cases the key cannot reach, such as a nickname,
+reversed name order, or a transliteration variant.
+
+### The Summer School page
+
+`/summer-school.html` (and FR / DE variants) is the NetSec
+Early-Career Scholars Summer School (ECS³), run jointly with EISS.
+It is a hand-authored page that reuses the hero, glass-card, and
+`.mc-avatar` patterns. Its faculty roster renders a monogram per
+scholar from static markup, then the `ecs-faculty` block in
+`site.js` replaces the monogram with a live headshot for any faculty
+member who resolves against the directory by name (the matcher
+above). The EISS lockup is an inline SVG at
+`assets/images/eiss-logo.svg`, kept inline so its `currentColor`
+wordmark adapts to light and dark themes.
+
 ## Repository layout
 
 ```
