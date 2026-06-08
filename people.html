@@ -486,6 +486,9 @@
   // the deferred script finished executing.
   function startTour() {
     if (!window.netsecTour) return;  // engine missing — fail gracefully
+    // The sheet is a top-layer modal; a tour overlay would mount behind it, so
+    // close it first (only when open, to avoid stealing focus otherwise).
+    if (filterSet && filterSet.open) closeFilterSheet();
     if (welcome) welcome.hidden = true;
     // The tour is viewport-aware. On desktop the filters render inline, so each
     // facet gets its own step. On phones they live in a bottom sheet that is
@@ -635,6 +638,12 @@
   // Esc anywhere collapses; click outside any card also collapses.
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
+    // Let whichever overlay sits on top own Escape: the filter sheet closes via
+    // the dialog's native Escape, and the guided tour has its own, so the card
+    // collapse stands down while either is open rather than both reacting to one
+    // keypress.
+    if (filterSet && filterSet.open) return;
+    if (document.querySelector('.tour-backdrop, .tour-tooltip')) return;
     const expanded = grid.querySelector('.member-card.is-expanded');
     if (expanded) {
       expanded.classList.remove('is-expanded');
@@ -1299,6 +1308,14 @@
   // Back to desktop while the sheet is open: close it so the filterset returns
   // to its inline layout in the toolbar.
   window.matchMedia('(min-width: 641px)').addEventListener('change', (e) => { if (e.matches) closeFilterSheet(); });
+  // bfcache: never freeze the page with the modal open, or a back-forward
+  // restore would show a scroll-locked page under a stranded open sheet.
+  window.addEventListener('pagehide', () => {
+    if (filterSet && filterSet.open) {
+      filterSet.close();
+      if (filterToggleBtn) filterToggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
 
   // Map a theme slug back to its display name via the aggregate.
   function themeNameForSlug(slug) {

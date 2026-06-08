@@ -449,6 +449,10 @@
   // le bouton « Filtres » qui l'ouvre.
   function startTour() {
     if (!window.netsecTour) return;
+    // Le volet est une modale en couche supérieure ; un overlay de visite se
+    // monterait derrière, donc on le ferme d'abord (seulement s'il est ouvert,
+    // pour ne pas voler le focus autrement).
+    if (filterSet && filterSet.open) closeFilterSheet();
     if (welcome) welcome.hidden = true;
     const isPhone = window.matchMedia('(max-width: 640px)').matches;
     const searchStep = { target: '#member-search',
@@ -568,6 +572,12 @@
   });
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
+    // On laisse l'overlay le plus haut prendre Échap : le volet de filtres se
+    // ferme via l'Échap natif du dialogue, et la visite guidée a le sien, donc
+    // le repli des fiches s'efface tant que l'un ou l'autre est ouvert, pour
+    // éviter que deux overlays se ferment d'une seule touche.
+    if (filterSet && filterSet.open) return;
+    if (document.querySelector('.tour-backdrop, .tour-tooltip')) return;
     const expanded = grid.querySelector('.member-card.is-expanded');
     if (expanded) {
       expanded.classList.remove('is-expanded');
@@ -1103,6 +1113,15 @@
   if (sheetApplyBtn) sheetApplyBtn.addEventListener('click', closeFilterSheet);
   if (sheetResetBtn) sheetResetBtn.addEventListener('click', clearAllFilters);
   window.matchMedia('(min-width: 641px)').addEventListener('change', (e) => { if (e.matches) closeFilterSheet(); });
+  // bfcache : ne jamais figer la page avec la modale ouverte, sinon un retour
+  // avant/arrière afficherait une page au défilement verrouillé sous un volet
+  // resté ouvert.
+  window.addEventListener('pagehide', () => {
+    if (filterSet && filterSet.open) {
+      filterSet.close();
+      if (filterToggleBtn) filterToggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
 
   // Retrouve le nom affiché d'un thème à partir de son slug.
   function themeNameForSlug(slug) {
