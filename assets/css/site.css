@@ -2542,8 +2542,11 @@ body{padding-top:var(--whats-new-h, 0px)}
   @keyframes members-sheet-rise{ from{ transform:translateY(100%); } }
   /* The native backdrop replaces the old manual dimming div. */
   .members-filterset::backdrop{
+    /* A plain dim, no backdrop-filter: blurring a full viewport of the grid is
+       GPU-expensive on iOS Safari, and tearing it down on close forced a ~0.5s
+       recomposite that read as a laggy dismiss. The 50% dim alone carries the
+       modal weight; a 2px blur under it was imperceptible anyway. */
     background:rgba(11,18,32,.5);
-    -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
     animation:members-sheet-backdrop-in .28s var(--ease);
     /* Without this the backdrop's default touch-action makes a tap-to-dismiss
        read as a scroll gesture, so the click is suppressed on the slightest
