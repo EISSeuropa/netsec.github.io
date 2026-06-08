@@ -15,11 +15,17 @@
 
   var locale = (document.documentElement.lang || 'en').slice(0, 2);
 
+  // `done` labels an in-flight (open-milestone) card, so the total is a
+  // moving target: more issues can be tagged into the milestone before the
+  // release is cut, and not everything is always milestoned. It therefore
+  // ends in "so far" so a card at 5 of 5 does not read as a finished release.
+  // `doneCount` labels a shipped (closed-milestone) card, where the count is
+  // final, so it carries no such qualifier.
   var I18N = {
     en: {
       aria: 'Milestone progress',
       pct: function (n) { return n + '%'; },
-      done: function (c, t) { return c + ' of ' + t + ' task' + (t === 1 ? '' : 's') + ' done'; },
+      done: function (c, t) { return c + ' of ' + t + ' task' + (t === 1 ? '' : 's') + ' done so far'; },
       doneCount: function (c) { return c + ' task' + (c === 1 ? '' : 's') + ' done'; },
     },
     fr: {
@@ -27,7 +33,7 @@
       pct: function (n) { return n + ' %'; },
       done: function (c, t) {
         return c + ' tâche' + (c > 1 ? 's' : '') + ' sur ' + t
-          + ' terminée' + (c > 1 ? 's' : '');
+          + ' terminée' + (c > 1 ? 's' : '') + ' à ce jour';
       },
       doneCount: function (c) {
         return c + ' tâche' + (c > 1 ? 's' : '') + ' terminée' + (c > 1 ? 's' : '');
@@ -36,7 +42,7 @@
     de: {
       aria: 'Meilenstein-Fortschritt',
       pct: function (n) { return n + ' %'; },
-      done: function (c, t) { return c + ' von ' + t + ' Aufgaben erledigt'; },
+      done: function (c, t) { return 'bisher ' + c + ' von ' + t + ' Aufgaben erledigt'; },
       doneCount: function (c) { return (c === 1 ? '1 Aufgabe' : c + ' Aufgaben') + ' erledigt'; },
     },
   };
