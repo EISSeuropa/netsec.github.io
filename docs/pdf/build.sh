@@ -32,10 +32,24 @@ if [[ ! -x "$CHROME" ]]; then
   exit 1
 fi
 
+# Resolve a python3 that actually runs. Some machines have a stale x86
+# framework python3 first on PATH, which fails with "Bad CPU type in
+# executable" on Apple Silicon and would leave the screenshot server dead.
+PY3="$(command -v python3 || true)"
+if [[ -z "$PY3" ]] || ! "$PY3" -c 'pass' >/dev/null 2>&1; then
+  for cand in /usr/bin/python3 /opt/homebrew/bin/python3 /usr/local/bin/python3; do
+    if [[ -x "$cand" ]] && "$cand" -c 'pass' >/dev/null 2>&1; then PY3="$cand"; break; fi
+  done
+fi
+if [[ -z "$PY3" ]] || ! "$PY3" -c 'pass' >/dev/null 2>&1; then
+  echo "No working python3 found (needed for the local screenshot server)." >&2
+  exit 1
+fi
+
 # Optional: refresh screenshots ------------------------------------------
 if [[ "${1-}" == "--shots" ]]; then
   echo "→ Refreshing screenshots from worktree at $REPO_ROOT"
-  ( cd "$REPO_ROOT" && python3 -m http.server $PORT --bind 127.0.0.1 ) >/tmp/netsec-pdf-srv.log 2>&1 &
+  ( cd "$REPO_ROOT" && "$PY3" -m http.server $PORT --bind 127.0.0.1 ) >/tmp/netsec-pdf-srv.log 2>&1 &
   SRV=$!
   trap 'kill $SRV 2>/dev/null || true' EXIT
   sleep 1
