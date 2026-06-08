@@ -1185,6 +1185,52 @@ def apply_mc_role(member: dict, mc_lookup: dict[str, dict]) -> None:
     member["roles"] = [f"MC member · {hit['country']}"]
 
 
+# ─── Founding-contributor cross-reference ─────────────────────────
+# data/founding-proposers.json lists the 52 researchers named in the
+# COST Open Call proposal OC-2024-1-27931. When a directory member's
+# name matches one of those names, the member is flagged
+# `founding_contributor: true` so /people.html can surface a subdued
+# "Founding contributor" pill next to the WG chips. The flag is a soft
+# acknowledgement, not a role: it never affects the leadership-first
+# ordering or the role pill.
+FOUNDING_FILE = ROOT / "data" / "founding-proposers.json"
+
+
+def load_founding_slugs() -> set[str]:
+    """Return the set of slugified founding-proposer names. Uses the same
+    slugify() the directory keys members by, so the comparison absorbs
+    titles, diacritics, and apostrophes consistently. The proposer file
+    carries `_documentation` / `_source` metadata keys alongside the
+    `proposers` list; only the list is read. Returns an empty set when
+    the file is missing or unreadable, in which case no member is flagged
+    (the badge simply never renders)."""
+    if not FOUNDING_FILE.exists():
+        return set()
+    try:
+        doc = json.loads(FOUNDING_FILE.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as exc:
+        print(f"  ! cannot read {FOUNDING_FILE.name}: {exc}; no founding "
+              f"flags applied.", file=sys.stderr)
+        return set()
+    slugs: set[str] = set()
+    for p in doc.get("proposers", []):
+        name = (p or {}).get("name", "")
+        if name:
+            slugs.add(slugify(name))
+    return slugs
+
+
+def apply_founding_flag(member: dict, founding_slugs: set[str]) -> None:
+    """Set `founding_contributor: true` on a member whose slug matches a
+    founding proposer; otherwise ensure the flag is absent. Idempotent —
+    re-running the sync neither adds a duplicate flag nor leaves a stale
+    one if the proposer list changes."""
+    if member.get("id", "") in founding_slugs:
+        member["founding_contributor"] = True
+    else:
+        member.pop("founding_contributor", None)
+
+
 def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
     """Merge the prior directory state with the latest form submissions.
 
@@ -1343,8 +1389,10 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
     result = list(by_slug.values())
     result.sort(key=lambda m: (prior_order.get(m["id"], 10_000), m.get("name", "").lower()))
 
-    # Drop internal fields, fill country_code, attach MC role if applicable
+    # Drop internal fields, fill country_code, attach MC role if applicable,
+    # then cross-reference the founding-proposer list for the soft badge.
     mc_lookup = load_mc_lookup()
+    founding_slugs = load_founding_slugs()
     out = []
     for m in result:
         for k in list(m.keys()):
@@ -1352,6 +1400,7 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
                 del m[k]
         fill_country_code(m)
         apply_mc_role(m, mc_lookup)
+        apply_founding_flag(m, founding_slugs)
         out.append(m)
     return out
 
@@ -1388,7 +1437,7 @@ def diff_summary(old: list[dict], new: list[dict]) -> str:
 # value?". `canonical_keywords` is derived from `keywords` by this
 # script; `country_code` is auto-filled from `country`; `_*` fields
 # are internal anyway and stripped by merge().
-_DERIVED_FIELDS = {"canonical_keywords", "country_code", "roles", "wg_leadership"}
+_DERIVED_FIELDS = {"canonical_keywords", "country_code", "roles", "wg_leadership", "founding_contributor"}
 _PHOTO_FIELDS = {"photo", "photo_source_sha256"}
 
 # Pretty labels for fields, used in the per-member "what changed"

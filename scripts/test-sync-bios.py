@@ -37,6 +37,8 @@ load_region_vocab = sync_bios.load_region_vocab
 ensure_people_webp = sync_bios.ensure_people_webp
 load_keyword_themes = sync_bios.load_keyword_themes
 resolve_prior_entry = sync_bios.resolve_prior_entry
+load_founding_slugs = sync_bios.load_founding_slugs
+apply_founding_flag = sync_bios.apply_founding_flag
 
 
 def expect(label: str, got, want) -> None:
@@ -860,6 +862,49 @@ def test_load_keyword_themes() -> None:
     expect("no keyword listed under two themes", dupes, [])
 
 
+def test_founding_contributor_flag() -> None:
+    """A bio whose name matches a founding proposer is flagged
+    `founding_contributor: true` at merge time; a non-matching bio is
+    not. The match runs through slugify(), so a title-prefixed or
+    diacritic-bearing proposer name still resolves against the bio slug.
+    Reads the real data/founding-proposers.json so the test also guards
+    against the file shape drifting away from a `proposers` list."""
+    print("\nfounding-contributor flag:")
+    founding_slugs = load_founding_slugs()
+    expect("proposer list loaded (52 names)", len(founding_slugs), 52)
+    # "Dr Hugo Meijer" → "hugo-meijer" is the proposer; a synthetic bio
+    # under that name must pick up the flag.
+    expect("Hugo Meijer slug present", "hugo-meijer" in founding_slugs, True)
+
+    matching = {"id": "hugo-meijer", "name": "Dr Hugo Meijer", "country": "France"}
+    apply_founding_flag(matching, founding_slugs)
+    expect("matching bio flagged", matching.get("founding_contributor"), True)
+
+    non_matching = {"id": "nora-newcomer", "name": "Dr Nora Newcomer", "country": "Finland"}
+    apply_founding_flag(non_matching, founding_slugs)
+    expect("non-matching bio not flagged", "founding_contributor" in non_matching, False)
+
+    # Idempotent: a stale flag on a now-non-matching entry is cleared.
+    stale = {"id": "nora-newcomer", "name": "Dr Nora Newcomer",
+             "country": "Finland", "founding_contributor": True}
+    apply_founding_flag(stale, founding_slugs)
+    expect("stale flag cleared", "founding_contributor" in stale, False)
+
+    # End-to-end through merge(): a seed entry matching a proposer name
+    # comes out flagged, a non-matching one does not.
+    prior = [
+        {"id": "hugo-meijer", "name": "Dr Hugo Meijer", "country": "France",
+         "roles": [], "wgs": [], "source": "seed"},
+        {"id": "nora-newcomer", "name": "Dr Nora Newcomer", "country": "Finland",
+         "roles": [], "wgs": [], "source": "seed"},
+    ]
+    merged = merge(prior, [])
+    by_id = {m["id"]: m for m in merged}
+    expect("merge flags the proposer", by_id["hugo-meijer"].get("founding_contributor"), True)
+    expect("merge leaves the newcomer unflagged",
+           "founding_contributor" in by_id["nora-newcomer"], False)
+
+
 def main() -> None:
     test_name_key()
     test_normalise_keyword()
@@ -875,6 +920,7 @@ def main() -> None:
     test_merge_name_match_same_country_collapses()
     test_merge_mentorship_propagates()
     test_resolve_prior_entry()
+    test_founding_contributor_flag()
     test_download_photo_idempotent_on_unchanged_upstream()
     test_ensure_people_webp()
     test_substance_check_catches_photo_only_change()

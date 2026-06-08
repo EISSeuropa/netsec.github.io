@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=132273a0">
+<link rel="stylesheet" href="assets/css/site.css?v=829853af">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -372,6 +372,7 @@
       <p class="member-role"></p>
       <p class="member-affiliation"></p>
       <div class="member-wgs" role="group" aria-label="Working-group membership"></div>
+      <div class="member-founding" hidden></div>
       <div class="member-mentorship" aria-label="Mentorship" hidden></div>
       <p class="member-bio"></p>
       <div class="member-keywords" aria-label="Research interests" hidden></div>
@@ -443,7 +444,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=2ed9ce38" defer></script>
+<script src="assets/js/site.js?v=dee9543d" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
 <script>
@@ -919,6 +920,23 @@
         });
       } else {
         wgWrap.remove();
+      }
+      // Founding-contributor badge. A subdued outlined pill, visually
+      // distinct from the bright-gradient WG chips, set on members whose
+      // name matches the COST Open Call proposer list (the
+      // founding_contributor flag is written by sync-bios.py). It reads
+      // as a soft acknowledgement, not a role, so it sits below the WG
+      // chips rather than in the role line.
+      const foundingWrap = node.querySelector('.member-founding');
+      if (m.founding_contributor) {
+        const pill = document.createElement('span');
+        pill.className = 'founding-badge';
+        pill.textContent = window.netsecT('Founding contributor');
+        pill.title = window.netsecT('Listed in the COST Open Call proposal OC-2024-1-27931');
+        foundingWrap.appendChild(pill);
+        foundingWrap.removeAttribute('hidden');
+      } else {
+        foundingWrap.remove();
       }
       // Mentorship badges. Offering ("mentor") and/or seeking
       // ("mentee"), read from m.mentorship (a list of role tags
