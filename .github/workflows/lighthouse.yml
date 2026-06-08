@@ -26,7 +26,7 @@ jobs:
     # Never block a merge on this. It is a signal, not a gate.
     continue-on-error: true
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v4 (sha-pinned)
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v4 (sha-pinned)
       - name: Serve the static site
         # Backgrounded; the runner VM keeps it alive for the next step.
         run: |
