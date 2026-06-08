@@ -472,7 +472,10 @@
      old photo file. This block reconciles the two on page load.
 
      Contract:
-       - Card opts in by carrying data-slug="…" matching its bios.json id.
+       - Card opts in by carrying data-slug="…" matching its bios.json id,
+         or, when no slug is present, by its name matching a directory
+         entry (same first|last matcher the ESSC programme and Summer
+         School roster use). The slug wins when both could resolve.
        - Photo + heading are always refreshed when the slug resolves.
        - The .org line is only refreshed when the card carries
          data-org-from-bio="affiliation" (currently the five Co-Leader
@@ -482,7 +485,28 @@
        - On any error (no JS, fetch fails, slug absent), the static
          HTML stays exactly as written. Nothing is hidden, nothing is
          blanked. */
-  const leaderCards = document.querySelectorAll('.mc-card[data-slug]');
+  // First|last name key for the no-slug fallback below. Drops titles and
+  // nobiliary particles, folds diacritics, strips apostrophes, the same
+  // scheme the ESSC programme and Summer School roster use. Kept local so
+  // this block stays self-contained.
+  const LEADER_POSTNOMINALS = new Set(['phd', 'jr', 'sr', 'ii', 'iii', 'iv', 'esq']);
+  const LEADER_PARTICLES = new Set([
+    'de', 'del', 'della', 'di', 'da', 'das', 'dos',
+    'van', 'von', 'vom', 'der', 'den', 'ter', 'ten',
+    'la', 'le', 'el', 'al', 'ibn', 'bin', 'bint', 'zu', 'auf', 'af',
+  ]);
+  function leaderNameKey(name) {
+    if (!name) return null;
+    let s = name.normalize('NFKD').replace(/[̀-ͯ]/g, '');
+    s = s.replace(/^(Dr|Prof|Mr|Ms|Mrs)\.?\s+/i, '').replace(/[‘’ʼ'`]/g, '');
+    const t = s.split(/[^A-Za-z]+/).filter(Boolean).map(x => x.toLowerCase())
+      .filter(x => !LEADER_POSTNOMINALS.has(x) && !LEADER_PARTICLES.has(x));
+    if (t.length < 2) return null;
+    return t[0] + '|' + t[t.length - 1];
+  }
+  // Cards may carry data-slug, data-person (the authored name), or both.
+  // Selecting on either lets a card resolve by name even without a slug.
+  const leaderCards = document.querySelectorAll('.mc-card[data-slug], .mc-card[data-person]');
   if (leaderCards.length) {
     (async () => {
       try {
@@ -490,11 +514,25 @@
         if (!res.ok) return;
         const data = await res.json();
         const bySlug = Object.create(null);
-        (data.members || []).forEach(m => { if (m.id) bySlug[m.id] = m; });
+        const byName = new Map();
+        (data.members || []).forEach(m => {
+          if (m.id) bySlug[m.id] = m;
+          const add = (nm) => { const k = leaderNameKey(nm); if (k && !byName.has(k)) byName.set(k, m); };
+          add(m.name);
+          (m.name_aliases || []).forEach(add);
+        });
 
         leaderCards.forEach(card => {
           const slug = card.getAttribute('data-slug');
-          const m = bySlug[slug];
+          let m = slug ? bySlug[slug] : null;
+          if (!m) {
+            // No slug, or a slug that no longer resolves: fall back to the
+            // card's name. A new leader is reconciled without anyone
+            // hand-writing a data-slug, and the card self-heals as the
+            // directory fills in.
+            const nm = card.getAttribute('data-person') || ((card.querySelector('h4') || {}).textContent);
+            m = byName.get(leaderNameKey(nm));
+          }
           if (!m) return;
 
           // Photo
