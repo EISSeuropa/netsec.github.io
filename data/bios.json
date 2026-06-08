@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-04T16:34:15+00:00",
+  "generated_at": "2026-06-08T19:09:06+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-04T16:34:15+00:00"
+    "last_synced": "2026-06-08T19:09:06+00:00"
   },
   "members": [
     {
@@ -58,7 +58,8 @@
       ],
       "regions": [
         "Europe"
-      ]
+      ],
+      "founding_contributor": true
     },
     {
       "id": "marie-robin",
@@ -86,7 +87,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/marie-robin.png",
-      "source": "seed"
+      "source": "seed",
+      "founding_contributor": true
     },
     {
       "id": "eugenio-sanchez",
@@ -128,7 +130,8 @@
       ],
       "regions": [
         "Europe"
-      ]
+      ],
+      "founding_contributor": true
     },
     {
       "id": "eliza-gheorghe",
@@ -152,7 +155,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/eliza-gheorghe.jpg",
-      "source": "seed"
+      "source": "seed",
+      "founding_contributor": true
     },
     {
       "id": "chiara-libiseller",
@@ -229,7 +233,8 @@
       ],
       "regions": [
         "Europe"
-      ]
+      ],
+      "founding_contributor": true
     },
     {
       "id": "chiara-ruffa",
@@ -257,7 +262,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/chiara-ruffa.jpg",
-      "source": "seed"
+      "source": "seed",
+      "founding_contributor": true
     },
     {
       "id": "revecca-pedi",
@@ -288,7 +294,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/revecca-pedi.jpg",
-      "source": "seed"
+      "source": "seed",
+      "founding_contributor": true
     },
     {
       "id": "filip-ejdus",
@@ -321,7 +328,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/filip-ejdus.jpg",
-      "source": "seed"
+      "source": "seed",
+      "founding_contributor": true
     },
     {
       "id": "alisa-kerschbaum",
@@ -349,7 +357,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/alisa-kerschbaum.jpeg",
-      "source": "seed"
+      "source": "seed",
+      "founding_contributor": true
     },
     {
       "id": "silvia-damato",
@@ -377,7 +386,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/silvia-damato.jpeg",
-      "source": "seed"
+      "source": "seed",
+      "founding_contributor": true
     },
     {
       "id": "sarka-kolmasova",
@@ -410,7 +420,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/sarka-kolmasova.jpeg",
-      "source": "seed"
+      "source": "seed",
+      "founding_contributor": true
     },
     {
       "id": "arthur-laudrain",

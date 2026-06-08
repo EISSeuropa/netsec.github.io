@@ -1492,6 +1492,36 @@ form button:disabled{opacity:.65;cursor:wait}
   .mc-stats{grid-template-columns:1fr;max-width:360px}
   .mc-stat-num{font-size:1.7rem}
 }
+/* Founding-cohort two-part stat. A single full-width row under the
+   live MC snapshot, holding the founding numbers (contributors ·
+   countries) with a quiet call-through to the Founding contributors
+   section. Rendered as a link so the whole banner is one target. */
+.mc-stat-founding{
+  display:flex;align-items:center;justify-content:center;
+  flex-wrap:wrap;gap:10px 22px;
+  max-width:760px;margin:8px auto 0;padding:16px 20px;
+  text-decoration:none;color:inherit;
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.mc-stat-founding:hover{transform:translateY(-2px)}
+.mc-stat-founding-pair{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+}
+.mc-stat-founding .mc-stat-num{font-size:1.6rem}
+.mc-stat-founding-sep{
+  font-size:1.4rem;color:var(--muted);font-weight:700;line-height:1;
+  align-self:center;
+}
+.mc-stat-founding-cta{
+  flex-basis:100%;text-align:center;
+  font-size:.82rem;font-weight:600;color:var(--accent);
+  letter-spacing:.005em;
+}
+.mc-stat-founding:hover .mc-stat-founding-cta{text-decoration:underline}
+@media (max-width:600px){
+  .mc-stat-founding-sep{display:none}
+  .mc-stat-founding{gap:8px}
+}
 
 /* -------- MC by Country: collapsible <details> -------- */
 .mc-collapse{
@@ -2229,6 +2259,31 @@ body{padding-top:var(--whats-new-h, 0px)}
   color:color-mix(in oklab, var(--accent) 72%, #fff);
   background:color-mix(in oklab, var(--accent) 20%, transparent);
   border-color:color-mix(in oklab, var(--accent) 46%, transparent);
+}
+/* Founding-contributor badge. A deliberately quiet, outlined pill set
+   on members who appear in the COST Open Call proposer list. It reads
+   as a soft acknowledgement, not a role, so it carries no gradient and
+   no colour fill: a thin muted border and muted text keep it well below
+   the bright WG chips in the visual hierarchy. A small star glyph marks
+   it without leaning on colour. Shown in both detailed and compact view
+   alongside the WG chips. */
+.member-card .member-founding{
+  display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-4px 0 14px;
+}
+.founding-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'Inter',sans-serif;
+  font-size:.7rem;font-weight:600;letter-spacing:.02em;line-height:1.3;
+  padding:3px 10px;border-radius:999px;white-space:nowrap;cursor:default;
+  color:var(--muted);
+  background:transparent;
+  border:1px solid color-mix(in oklab, var(--muted) 40%, transparent);
+}
+.founding-badge::before{
+  content:"\2726";font-size:.78em;line-height:1;opacity:.7;flex-shrink:0;
+}
+.dark .founding-badge{
+  border-color:color-mix(in oklab, var(--muted) 52%, transparent);
 }
 /* Research-interest keywords. Distinct from `.wg-chip` so visitors
    parse the two layers at a glance: WG chips are bright + bold
@@ -2976,6 +3031,9 @@ body{padding-top:var(--whats-new-h, 0px)}
    that makes a member's compact card noticeably taller than its
    neighbours. */
 .members-grid.is-compact .member-card:not(.is-expanded) .member-mentorship{
+  margin:4px 0 0;justify-content:flex-start;
+}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-founding{
   margin:4px 0 0;justify-content:flex-start;
 }
 .members-grid.is-compact .member-card:not(.is-expanded) .member-bio,
