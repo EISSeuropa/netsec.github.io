@@ -4143,17 +4143,35 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   max-width:64ch;color:var(--ink-2);font-size:1rem;line-height:1.65;margin:0 0 1rem;
 }
 .ecs-prose p:last-child{margin-bottom:0}
-.ecs-faculty-list{
+/* Faculty roster: one card per scholar, always visible. Members get a photo
+   pulled live from the directory (site.js swaps the monogram for their
+   headshot on load); non-directory faculty keep a monogram avatar. Reuses
+   the .mc-avatar component. */
+.ecs-faculty-grid{
   margin:0;padding:0;list-style:none;
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px;
+  display:grid;gap:16px;
+  grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));
 }
-.ecs-faculty-list li{
-  padding:14px 18px;border-radius:10px;
-  background:var(--glass-bg);border:1px solid var(--line);
-  font-size:.96rem;color:var(--ink);
+.ecs-faculty-card{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:22px 18px;border-radius:16px;
 }
-.ecs-faculty-name{display:block;font-weight:600;font-family:'Lexend','Inter',sans-serif}
-.ecs-faculty-aff{display:block;font-size:.85rem;color:var(--muted);margin-top:2px}
+.ecs-faculty-card .mc-avatar{margin:0 0 12px}
+.ecs-faculty-card-name{font-weight:600;font-family:'Lexend','Inter',sans-serif;color:var(--ink)}
+.ecs-faculty-card-aff{font-size:.85rem;color:var(--muted);margin-top:3px;line-height:1.4}
+.ecs-faculty-card-tag{
+  margin-top:9px;font-size:.7rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--accent-2);
+  background:color-mix(in srgb,var(--accent-2) 12%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent-2) 24%,transparent);
+  padding:.22rem .62rem;border-radius:999px;
+}
+.ecs-faculty-card-link{
+  margin-top:11px;font-size:.82rem;font-weight:600;color:var(--accent-2);
+  text-decoration:none;border-bottom:1px solid transparent;
+}
+.ecs-faculty-card-link:hover,
+.ecs-faculty-card-link:focus-visible{border-bottom-color:var(--accent-2)}
 .ecs-cta-row{
   display:flex;flex-wrap:wrap;gap:12px;margin:0 0 1.2rem;
 }

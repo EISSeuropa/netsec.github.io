@@ -101,7 +101,8 @@ maintainer-facing audience.
 
 #### Added
 
-- A reusable member-card popover, available across the site. Any page can now turn a person's name into a hover or focus profile card by marking the link with `data-member="<id>"`. The card fetches the directory data once, then shows the member's photo, affiliation, role badges, and a link through to their full directory entry, with that link following the page's own locale. It first appears on the Summer School page, where the faculty who are NetSec members open a card on hover. The pattern began life inside the ESSC programme renderer and is now a shared component in `assets/js/site.js`.
+- A reusable member-card popover, available across the site. Any page can now turn a person's name into a hover or focus profile card by marking the link with `data-member="<id>"`. The card fetches the directory data once, then shows the member's photo, affiliation, role badges, and a link through to their full directory entry, with that link following the page's own locale. On the Summer School page it surfaces a directory member named in the prose. The pattern began life inside the ESSC programme renderer and is now a shared component in `assets/js/site.js`.
+- The Summer School faculty roster (`/summer-school.html`, all three locales) now renders as a card per scholar, with the headshot for faculty who are NetSec members pulled live from the directory rather than shown only on hover. Each member card carries the photo, affiliation, a coordinator tag where it applies, and a link through to the full profile, and the photo updates by itself as the directory does. Faculty who are not in the directory keep a monogram avatar, so the grid stays uniform. The roster needs no JavaScript to be complete: the monograms render first, and the member headshots replace them on load.
 
 #### Changed
 
