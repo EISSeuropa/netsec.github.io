@@ -1644,3 +1644,43 @@
     })
     .catch((err) => { console.warn('member-card: bios.json fetch failed; links stay as plain directory links:', err); });
 })();
+
+/* ── ECS³ faculty roster: live headshots from the directory ───────────
+   The Summer School faculty cards render a monogram avatar by default, so
+   the roster is complete with no JavaScript and no network. For the faculty
+   who are NetSec members (marked with data-member="<id>"), this swaps the
+   monogram for their actual headshot pulled from data/bios.json, so the
+   photo stays current as the directory updates. A failed fetch or an
+   unknown id leaves the monogram in place. */
+(function () {
+  const cards = Array.from(document.querySelectorAll('.ecs-faculty-card[data-member]'));
+  if (!cards.length) return;
+
+  fetch('data/bios.json', { cache: 'no-cache' })
+    .then((r) => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+    .then((bios) => {
+      const byId = new Map();
+      for (const m of (bios && bios.members) || []) if (m && m.id) byId.set(m.id, m);
+      for (const card of cards) {
+        const m = byId.get(card.dataset.member);
+        if (!m || !m.photo) continue;
+        const avatar = card.querySelector('.mc-avatar');
+        if (!avatar) continue;
+        avatar.classList.remove('mc-avatar--initials');
+        avatar.textContent = '';
+        const img = document.createElement('img');
+        img.src = m.photo; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+        const webp = window.netsecWebp && window.netsecWebp(m.photo);
+        if (webp) {
+          const pic = document.createElement('picture');
+          const src = document.createElement('source');
+          src.type = 'image/webp'; src.srcset = webp;
+          pic.appendChild(src); pic.appendChild(img);
+          avatar.appendChild(pic);
+        } else {
+          avatar.appendChild(img);
+        }
+      }
+    })
+    .catch((err) => { console.warn('ecs-faculty: bios.json fetch failed; monograms kept:', err); });
+})();
