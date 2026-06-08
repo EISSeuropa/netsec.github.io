@@ -85,6 +85,12 @@ The Google Form's *Working Group involvement* checkboxes seed each bio's `wgs` f
 
 When the maintainer (or COST admin) updates a member's WG list on cost.eu, the change reaches the directory on the next sync run. No respondent action required.
 
+### The `founding_contributor` flag
+
+`scripts/sync-bios.py` cross-references each bio's name against `data/founding-proposers.json`, the hand-curated list of the 52 researchers named in the COST Open Call proposal that established the Action. A match sets `"founding_contributor": true` on that member's `bios.json` record. The flag is computed at sync time using the same first-and-last name key the directory uses elsewhere, so it is not a form field a respondent can set, and it is rebuilt (cleared then re-applied) on every run so a stale flag never lingers. It is listed in the sync's `_DERIVED_FIELDS`, which keeps the weekly auto-PR from reading it as a respondent edit.
+
+The flag drives the quiet "Founding contributor" badge on `/people.html` directory cards and feeds the founding-cohort figures on `/about.html` and `/press-kit.html`. To correct a miss, edit `data/founding-proposers.json` (add or remove the name) and re-run the sync. A member whose form name does not match the proposal name can be reconciled with a `name_aliases` entry, the same mechanism the speaker matcher uses.
+
 ## Step 2 · Link the form to a Sheet
 
 In the form's *Responses* tab, click the green Sheets icon → *Link to Sheets* → *Create a new spreadsheet*. Each response will land as a row in the linked Sheet, with the form questions as column headers.

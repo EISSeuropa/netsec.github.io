@@ -206,6 +206,37 @@ any card collapse. URL hash mirrors the expanded card's
 `data-slug`. Long-term plan is to replace this with a sticky
 side-panel pattern — see Issue #72.
 
+### `.essc-member-card` — the shared member popover
+
+A floating profile card built once in `assets/js/site.js` and exposed
+as `window.netsecMemberCard` (`show(anchorEl, member, opts)` and
+`hide()`). It is a top-layer `<div popover>` holding a member's photo,
+name, role and Working-Group badges, country, and a link through to the
+full directory entry. Hover or focus a wired name to open it, it stays
+open while the pointer is on either the anchor or the card, and it
+light-dismisses on Esc, an outside click, or a meaningful scroll. The
+ESSC programme speaker links and the Summer School page both call this
+one component, so there is a single copy of the machinery (the class
+keeps its `essc-` prefix from where it began). The card flips above the
+anchor when it would overflow the viewport foot.
+
+### `.founding-badge`
+
+A quiet outlined pill on `/people.html` directory cards reading
+"Founding contributor". It is set apart from the bright gradient
+`.wg-chip` by a transparent fill, a muted border, and a small star
+glyph, reading as a soft acknowledgement rather than a role. It marks
+members carrying the `founding_contributor` flag that
+`scripts/sync-bios.py` sets from `data/founding-proposers.json` (see
+[`bios-setup.md`](bios-setup.md)).
+
+### `.ecs-faculty-grid` / `.ecs-faculty-card` (Summer School)
+
+The Summer School faculty roster: a card per scholar with a `.mc-avatar`
+monogram, name, affiliation, and an optional coordinator tag. For
+faculty who are NetSec members, `site.js` swaps the monogram for the
+live directory headshot and adds a profile link, resolved by name.
+
 ## Animations
 
 - `.reveal` — fades in + slides up 12 px when intersecting viewport.
@@ -257,6 +288,12 @@ and the PWA `manifest.webmanifest` are all derived from the mark, and
 page's structured data (written by `scripts/inject-seo.py`). The
 pre-brand `assets/images/logo.png` is a placeholder and must not be
 reintroduced.
+
+One partner mark ships outside the NetSec brand set:
+`assets/images/eiss-logo.svg` is the EISS network-mark-and-wordmark
+lockup, embedded inline on `/summer-school.html` so its `currentColor`
+wordmark follows the page theme. It belongs to EISS, the co-organiser
+of the Summer School, and should not be recoloured or redrawn.
 
 This is only the developer index of which file goes where. The
 authority for the contractual rules (the COST and EU emblem pairing,
