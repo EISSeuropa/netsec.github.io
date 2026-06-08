@@ -387,6 +387,16 @@ reuse it across consecutive sentences. Writing "the script" then
 sentences is an AI tell, even when each label is technically
 accurate.
 
+**No semicolons.** Use a full stop and a fresh sentence when both
+halves stand alone, or a comma or a small rewrite when they do
+not. Colons stay fine for "X: the reason." A semicolon reads as
+careful machine prose to this maintainer, the same tell as an em
+dash.
+
+**No very short sentences.** Avoid two- or three-word fragments
+standing on their own. Fold them into a fuller sentence so the
+prose flows rather than clipping to a halt.
+
 The rules are forward-looking. They apply to prose authored from
 the PR that introduces them onwards; pre-existing em dashes in
 the repo aren't retroactively scrubbed unless the surrounding
