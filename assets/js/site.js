@@ -33,6 +33,7 @@
       'Working Group participant': 'Participant·e au groupe de travail',
       'Bio coming soon.': 'Biographie à venir.',
       'View full profile': 'Voir le profil complet',
+      'View profile': 'Voir le profil',
       'Member profile': 'Profil du membre',
       'Show more': 'Voir plus',
       'Show less': 'Voir moins',
@@ -94,6 +95,7 @@
       'Working Group participant': 'Arbeitsgruppen-Mitglied',
       'Bio coming soon.': 'Biografie folgt.',
       'View full profile': 'Vollständiges Profil ansehen',
+      'View profile': 'Profil ansehen',
       'Member profile': 'Mitgliedsprofil',
       'Show more': 'Mehr anzeigen',
       'Show less': 'Weniger anzeigen',
@@ -1645,40 +1647,83 @@
     .catch((err) => { console.warn('member-card: bios.json fetch failed; links stay as plain directory links:', err); });
 })();
 
-/* ── ECS³ faculty roster: live headshots from the directory ───────────
-   The Summer School faculty cards render a monogram avatar by default, so
-   the roster is complete with no JavaScript and no network. For the faculty
-   who are NetSec members (marked with data-member="<id>"), this swaps the
-   monogram for their actual headshot pulled from data/bios.json, so the
-   photo stays current as the directory updates. A failed fetch or an
-   unknown id leaves the monogram in place. */
+/* ── ECS³ faculty roster: self-healing headshots from the directory ────
+   Every faculty card renders a monogram avatar from static markup, so the
+   roster is complete with no JavaScript and no network. On load this matches
+   each card's name against the NetSec directory (data/bios.json) by a
+   normalised first|last key (titles and nobiliary particles stripped, the
+   same scheme the ESSC programme uses to link speakers). When a name
+   resolves, the card gains that person's live headshot and a link through to
+   their profile. Nothing is hand-tagged: a scholar who is not in the
+   directory today simply keeps the monogram, and starts showing a photo the
+   first time they appear in the directory, with no edit to this page. A
+   failed fetch or an unresolved name leaves the monogram untouched. */
 (function () {
-  const cards = Array.from(document.querySelectorAll('.ecs-faculty-card[data-member]'));
+  const cards = Array.from(document.querySelectorAll('.ecs-faculty-card'));
   if (!cards.length) return;
+
+  // Postnominals and nobiliary/patronymic particles dropped before keying,
+  // so "Dr Silvia D'Amato" and "Silvia D'Amato" resolve to the same key.
+  const POSTNOMINALS = new Set(['phd', 'jr', 'sr', 'ii', 'iii', 'iv', 'esq']);
+  const PARTICLES = new Set([
+    'de', 'del', 'della', 'di', 'da', 'das', 'dos',
+    'van', 'von', 'vom', 'der', 'den', 'ter', 'ten',
+    'la', 'le', 'el', 'al', 'ibn', 'bin', 'bint', 'zu', 'auf', 'af',
+  ]);
+  function nameKey(name) {
+    if (!name) return null;
+    let s = name.normalize('NFKD').replace(/[̀-ͯ]/g, '');
+    s = s.replace(/^(Dr|Prof|Mr|Ms|Mrs)\.?\s+/i, '');
+    s = s.replace(/[‘’ʼ'`]/g, '');
+    const tokens = s.split(/[^A-Za-z]+/).filter(Boolean).map((t) => t.toLowerCase());
+    const real = tokens.filter((t) => !POSTNOMINALS.has(t) && !PARTICLES.has(t));
+    if (real.length < 2) return null;
+    return real[0] + '|' + real[real.length - 1];
+  }
+
+  const lang = (document.documentElement.lang || 'en').slice(0, 2);
+  const peopleUrl = lang === 'fr' ? 'people.fr.html' : lang === 'de' ? 'people.de.html' : 'people.html';
+  const T = (s) => (window.netsecT && window.netsecT(s)) || s;
 
   fetch('data/bios.json', { cache: 'no-cache' })
     .then((r) => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
     .then((bios) => {
-      const byId = new Map();
-      for (const m of (bios && bios.members) || []) if (m && m.id) byId.set(m.id, m);
+      const byKey = new Map();
+      const add = (rawName, m) => {
+        const k = nameKey(rawName);
+        if (k && m && m.id && !byKey.has(k)) byKey.set(k, m);
+      };
+      for (const m of (bios && bios.members) || []) {
+        add(m.name, m);
+        for (const alias of (m.name_aliases || [])) add(alias, m);
+      }
       for (const card of cards) {
-        const m = byId.get(card.dataset.member);
-        if (!m || !m.photo) continue;
+        const nameEl = card.querySelector('.ecs-faculty-card-name');
+        const m = nameEl && byKey.get(nameKey(nameEl.textContent));
+        if (!m) continue;                       // not in the directory yet → keep monogram
         const avatar = card.querySelector('.mc-avatar');
-        if (!avatar) continue;
-        avatar.classList.remove('mc-avatar--initials');
-        avatar.textContent = '';
-        const img = document.createElement('img');
-        img.src = m.photo; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
-        const webp = window.netsecWebp && window.netsecWebp(m.photo);
-        if (webp) {
-          const pic = document.createElement('picture');
-          const src = document.createElement('source');
-          src.type = 'image/webp'; src.srcset = webp;
-          pic.appendChild(src); pic.appendChild(img);
-          avatar.appendChild(pic);
-        } else {
-          avatar.appendChild(img);
+        if (avatar && m.photo) {
+          avatar.classList.remove('mc-avatar--initials');
+          avatar.textContent = '';
+          const img = document.createElement('img');
+          img.src = m.photo; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+          const webp = window.netsecWebp && window.netsecWebp(m.photo);
+          if (webp) {
+            const pic = document.createElement('picture');
+            const src = document.createElement('source');
+            src.type = 'image/webp'; src.srcset = webp;
+            pic.appendChild(src); pic.appendChild(img);
+            avatar.appendChild(pic);
+          } else {
+            avatar.appendChild(img);
+          }
+        }
+        if (!card.querySelector('.ecs-faculty-card-link')) {
+          const a = document.createElement('a');
+          a.className = 'ecs-faculty-card-link';
+          a.href = peopleUrl + '#' + m.id;
+          a.textContent = T('View profile');
+          card.appendChild(a);
         }
       }
     })
