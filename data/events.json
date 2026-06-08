@@ -4,14 +4,14 @@
   "caldesc": "Events from the NetSec COST Action (CA24154): annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
   "tzid": "Europe/Stockholm",
   "refresh_days": 7,
-  "dtstamp": "20260528T120000Z",
+  "dtstamp": "20260608T120000Z",
   "events": [
     {
       "uid": "summer-school-2026@netsec-cost.eu",
       "summary": "NetSec Early-Career Scholars Summer School",
-      "description": "Three days of training and mentoring for early-career researchers in European security: research presentations, individualised feedback from senior scholars, and structured mentorship. Open to PhD candidates and post-docs (within one year of defence) in strategic studies and international security, as well as SWAMOS / Euro-SWAMOS alumni.\n\nScientific Coordinators: Dr Silvia D'Amato, Prof Chiara Ruffa.\n\nFull details: https://eiss-europa.com/NetSecSchool.html",
+      "description": "Three days of training and mentoring for early-career researchers in European security: research presentations, individualised feedback from senior scholars, and structured mentorship. Open to PhD candidates and post-docs (within one year of defence) in strategic studies and international security, as well as SWAMOS / Euro-SWAMOS alumni.\n\nScientific Coordinators: Dr Silvia D'Amato, Prof Chiara Ruffa.\n\nFull details: https://netsec-cost.eu/summer-school.html",
       "location": "Stockholm University, Frescativägen 114 18, Sweden",
-      "url": "https://eiss-europa.com/NetSecSchool.html",
+      "url": "https://netsec-cost.eu/summer-school.html",
       "start": "2026-06-09T09:00",
       "end": "2026-06-11T18:00",
       "organizer": {
@@ -72,8 +72,8 @@
         }
       ],
       "cta": {
-        "href": "https://eiss-europa.com/NetSecSchool.html",
-        "external": true,
+        "href": "https://netsec-cost.eu/summer-school.html",
+        "external": false,
         "i18n": {
           "en": "Full details",
           "fr": "Détails complets",

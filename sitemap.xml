@@ -193,4 +193,15 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/essc-2026.html"/>
   </url>
 
+  <url>
+    <loc>https://netsec-cost.eu/summer-school.html</loc>
+    <lastmod>2026-06-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://netsec-cost.eu/summer-school.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/summer-school.fr.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://netsec-cost.eu/summer-school.de.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/summer-school.html"/>
+  </url>
+
 </urlset>
