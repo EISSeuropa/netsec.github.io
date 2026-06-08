@@ -99,7 +99,13 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+#### Added
+
+- A reusable member-card popover, available across the site. Any page can now turn a person's name into a hover or focus profile card by marking the link with `data-member="<id>"`. The card fetches the directory data once, then shows the member's photo, affiliation, role badges, and a link through to their full directory entry, with that link following the page's own locale. It first appears on the Summer School page, where the faculty who are NetSec members open a card on hover. The pattern began life inside the ESSC programme renderer and is now a shared component in `assets/js/site.js`.
+
+#### Changed
+
+- Redesigned the Summer School page (`/summer-school.html`, all three locales) to match the rest of the site rather than reading as a plain stack of paragraphs. The hero gains an at-a-glance strip (dates, location, format, funded places, and the run-on to the conference) alongside two clear calls to action. The body is now glass cards: a two-up About block, a three-card "Taking part" set with accent icons, and the practical and heritage notes as cards. The faculty roster lists each scholar in its own tile. A new "Organised by" block shows the NetSec and EISS lockups side by side as equal partners, with the EISS network-mark and wordmark added as an inline asset that adapts to light and dark themes.
 
 ## [1.11.0] · 2026-06-08 — Directory filters, mentorship, and a smoother mobile directory
 
