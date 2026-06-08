@@ -4596,7 +4596,13 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   background:var(--line);
   display:block;
 }
-.essc-member-card-picture{display:contents}
+/* The photo's <picture> wrapper is a single grid item (column 1). It must
+   NOT be display:contents. That promotes the wrapper's children (both the
+   <img> and the resource-selection <source>) into grid items, and the
+   stray <source> then takes the photo column and pushes the text into the
+   narrow 64px column, collapsing it to one word per line. Keeping the
+   <picture> as its own block keeps the grid at two cells (photo, text). */
+.essc-member-card-picture{display:block;width:64px;height:64px}
 .essc-member-card-photo-placeholder{
   /* Same dimensions as the photo so the grid doesn't reflow when the
      member has no photo yet. */

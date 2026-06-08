@@ -107,6 +107,10 @@ maintainer-facing audience.
 
 - Redesigned the Summer School page (`/summer-school.html`, all three locales) to match the rest of the site rather than reading as a plain stack of paragraphs. The hero gains an at-a-glance strip (dates, location, format, funded places, and the run-on to the conference) alongside two clear calls to action. The body is now glass cards: a two-up About block, a three-card "Taking part" set with accent icons, and the practical and heritage notes as cards. The faculty roster lists each scholar in its own tile. A new "Organised by" block shows the NetSec and EISS lockups side by side as equal partners, with the EISS network-mark and wordmark added as an inline asset that adapts to light and dark themes.
 
+#### Fixed
+
+- Fixed the member-card popover collapsing to a one-word-per-line column for any member whose headshot is a JPEG or PNG. The card lays its photo and text out in a two-column grid, and the photo's `<picture>` wrapper was `display:contents`, which promoted both the image and its WebP `<source>` into grid cells. The stray `<source>` took the photo column and pushed the text into the narrow photo-width column. Members whose headshot was already a WebP rendered correctly (no `<picture>` is emitted for them), which is why only some cards were affected. The same fix also corrects the equivalent speaker cards on the ESSC programme page.
+
 ## [1.11.0] · 2026-06-08 — Directory filters, mentorship, and a smoother mobile directory
 
 > This is the big pre-conference directory release, gathering everything merged since v1.10.0. Visitors can now narrow *The Network* by research theme, by research region and by mentorship, and the mobile filter experience that drives those choices was rebuilt so it behaves properly on a phone. Around it sit lighter photos, new ways to reach the Action, and the usual housekeeping. Three themes follow, then a single canonical index at the bottom.
