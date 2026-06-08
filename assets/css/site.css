@@ -4118,6 +4118,48 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   background:#d71920; /* SL red line */
 }
 
+/* ── Summer School page (summer-school.html + FR/DE) ──────────────
+   Reuses .essc-hero, .essc-quickfacts, .about-section, .glass, and the
+   .btn family. The handful of rules below cover the bits with no donor:
+   the hero status pill, the faculty roster, and the CTA row. */
+.ecs-status-pill{
+  display:inline-flex;align-items:center;gap:.5rem;
+  margin:0 0 1.2rem;
+  padding:.4rem .9rem;border-radius:999px;
+  font-size:.82rem;font-weight:600;letter-spacing:.01em;
+  color:var(--ink-2);
+  background:var(--glass-bg);
+  border:1px solid var(--line);
+}
+.ecs-status-pill::before{
+  content:'';width:8px;height:8px;border-radius:50%;
+  background:var(--muted);
+}
+.dark .ecs-status-pill{background:rgba(22,32,55,.6)}
+.ecs-section-lede{
+  max-width:62ch;color:var(--ink-2);font-size:1rem;line-height:1.6;margin:0 0 1.6rem;
+}
+.ecs-prose p{
+  max-width:64ch;color:var(--ink-2);font-size:1rem;line-height:1.65;margin:0 0 1rem;
+}
+.ecs-prose p:last-child{margin-bottom:0}
+.ecs-faculty-list{
+  margin:0;padding:0;list-style:none;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px;
+}
+.ecs-faculty-list li{
+  padding:14px 18px;border-radius:10px;
+  background:var(--glass-bg);border:1px solid var(--line);
+  font-size:.96rem;color:var(--ink);
+}
+.ecs-faculty-name{display:block;font-weight:600;font-family:'Lexend','Inter',sans-serif}
+.ecs-faculty-aff{display:block;font-size:.85rem;color:var(--muted);margin-top:2px}
+.ecs-cta-row{
+  display:flex;flex-wrap:wrap;gap:12px;margin:0 0 1.2rem;
+}
+.ecs-contact-line{font-size:.95rem;color:var(--ink-2);margin:0}
+.ecs-contact-line a{color:var(--accent-2);word-break:break-word}
+
 /* Programme section */
 .essc-programme{padding-top:24px}
 .essc-programme h2{
