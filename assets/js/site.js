@@ -1430,29 +1430,47 @@
 })();
 
 /* ── Member-card popover: a reusable, site-wide component ──────────────
-   Any page can turn a person's name into a hover/focus/click profile card
-   by marking it up as:
+   The floating profile card (photo, name, role / WG badges, country,
+   contacts, "View full profile" CTA) that appears on hover / focus over
+   a person's name. Two surfaces use it: this module wires plain
+   `data-member` anchors (Summer School faculty, any static page), and
+   the ESSC programme renderer (essc-2026.html) calls the same core after
+   its own fuzzy speaker-name matcher has resolved a name to a bios
+   record. To keep one copy of the popover machinery, the card core is
+   exposed on the global below and both surfaces drive it:
 
-       <a class="member-link" href="people.html#<id>" data-member="<id>">Name</a>
+       window.netsecMemberCard = {
+         show(anchorEl, memberObj, opts),   // build / populate / position / open
+         hide(),                            // close the shared popover now
+       };
 
-   On load this module looks for `[data-member]` anchors. If it finds any,
-   it fetches data/bios.json once, builds an id → member map, and wires a
-   single shared `<div popover="auto">` (top-layer, light-dismiss, Escape)
-   that follows whichever anchor the pointer or keyboard focus is on. The
-   authored `href` is the graceful fallback: with JS off, an unknown id,
-   or a browser without the Popover API, the anchor is just a deep link
-   into the directory, so nothing is ever a dead end.
+   `memberObj` is a bios.json member record. `opts` is optional and lets a
+   caller tune the few locale / feature differences without forking the
+   card:
 
-   The popover markup and the `.essc-member-card*` styling are shared with
-   the ESSC programme renderer (essc-2026.html), which grew this pattern
-   first for fuzzy speaker-name matching. That renderer keeps its own inline
-   copy for now; deduplicating the two onto this module is tracked as
-   follow-up work. The class names keep their `essc-` prefix so both code
-   paths render through one stylesheet block. */
-(function () {
-  const anchors = Array.from(document.querySelectorAll('a.member-link[data-member]'));
-  if (!anchors.length) return;
+       opts.ctaHref        explicit "View full profile" href. Default: the
+                           anchor's own href, falling back to people.html#id.
+       opts.ariaLabel      already-localised popover aria-label string.
+                           Default: netsecT('Member profile').
+       opts.roleLabel      maps a role string to display text. Default:
+                           netsecT (this module's anchors translate role
+                           chips). The ESSC renderer passes identity so its
+                           raw Indico-sourced role strings stay verbatim.
+       opts.wgPrefix       when set, append bare WG-number chips ("WG3"
+                           localised to "GT3" / "AG3") for member.wgs not
+                           already named by a role. Default: omitted (this
+                           module skips the prefix the static pages don't
+                           translate).
+       opts.contactLabels  per-kind aria-label overrides for the contact
+                           icons. Default: netsecT over the English label.
 
+   The popover markup and the `.essc-member-card*` styling are shared, so
+   both surfaces render through one stylesheet block. The class names keep
+   their `essc-` prefix for now (CSS rename is tracked separately). The
+   authored `href` on every anchor is the graceful fallback: with JS off,
+   an unknown id, or a browser without the Popover API, the anchor is just
+   a deep link into the directory, so nothing is ever a dead end. */
+window.netsecMemberCard = (function () {
   const T = (s) => (window.netsecT && window.netsecT(s)) || s;
   const peopleUrl = 'people.html';
 
@@ -1467,14 +1485,25 @@
     return n;
   }
 
-  // Brand glyphs, mirrored from the ESSC card / people.html. `style`
-  // says whether the path is stroked or filled.
+  // Brand glyphs, mirrored from people.html. `style` says whether the
+  // path is stroked or filled. The full set (including twitter /
+  // mastodon) lives here so the ESSC programme, which surfaces those two,
+  // shares one glyph table; a member without the field never renders the
+  // icon, so the extra entries are inert on surfaces that don't use them.
   const CONTACT_GLYPHS = {
     email:   { style: 'stroke', path: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>' },
     website: { style: 'stroke', path: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/>' },
     orcid:   { style: 'fill',   path: '<path fill-rule="evenodd" d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947 0 .525-.422.947-.947.947a.95.95 0 01-.947-.947c0-.516.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.025-5.325 5.025h-3.919V7.416zm1.444 1.303v7.444h2.297c3.272 0 4.022-2.484 4.022-3.722 0-2.016-1.284-3.722-4.094-3.722H12.8z"/>' },
     linkedin:{ style: 'fill',   path: '<path fill-rule="evenodd" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>' },
+    twitter: { style: 'fill',   path: '<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>' },
     bluesky: { style: 'fill',   path: '<path d="M5.8 4.4C4.1 3 1 1.3 1 5.7c0 .9.5 7.4.8 8.5.8 3.4 4.3 4.3 7.5 3.7-5.4.9-10.2 3.3-3.9 11.1l.1-.1c1.4 1.7 4 3.5 5.5-1l-.1.1c.3-1 .4-2.1.4-3.3 0 1.2.1 2.3.4 3.3l-.1-.1c1.4 4.5 4 2.7 5.5 1l.1.1c6.3-7.8 1.4-10.2-3.9-11.1 3.1.5 6.6-.3 7.5-3.7.3-1.1.8-7.6.8-8.5 0-4.4-3.1-2.7-4.8-1.3C15.6 6 13.1 9.3 12 11.5 10.9 9.3 8.4 6 5.8 4.4z" transform="translate(0,-2.5) scale(1,1.1)"/>' },
+    mastodon:{ style: 'fill',   path: '<path fill-rule="evenodd" d="M23.27 5.31c-.35-2.58-2.62-4.61-5.31-5C17.51.25 15.79 0 11.81 0h-.03c-3.98 0-4.83.25-5.29.31C3.88.7 1.5 2.52.92 5.13.64 6.41.61 7.84.66 9.14c.07 1.88.09 3.74.26 5.61.12 1.24.32 2.47.62 3.68.55 2.24 2.78 4.1 4.96 4.86 2.34.79 4.85.92 7.26.38.26-.06.53-.13.79-.21.59-.18 1.27-.39 1.77-.75v-1.85a20.28 20.28 0 01-4.71.54c-2.73 0-3.46-1.28-3.67-1.82a5.6 5.6 0 01-.32-1.43c1.51.36 3.07.55 4.63.55l1.13-.01c1.57-.04 3.22-.12 4.77-.42l.11-.02c2.43-.46 4.75-1.92 4.99-5.6.01-.15.03-1.52.03-1.67 0-.51.17-3.63-.02-5.55zm-3.75 9.19h-2.56V8.29c0-1.31-.55-1.98-1.67-1.98-1.23 0-1.85.79-1.85 2.35v3.4h-2.55V8.66c0-1.56-.62-2.35-1.85-2.35-1.11 0-1.67.67-1.67 1.98v6.22H4.82V8.1c0-1.31.34-2.35 1.01-3.12.7-.77 1.61-1.16 2.74-1.16 1.31 0 2.3.5 2.96 1.5l.64 1.06.64-1.06c.66-1 1.65-1.5 2.96-1.5 1.13 0 2.04.39 2.74 1.16.68.77 1.01 1.81 1.01 3.12v6.4z"/>' },
+  };
+  // Default contact aria-labels. A caller can override any of these via
+  // opts.contactLabels (the ESSC renderer passes its localised set).
+  const DEFAULT_CONTACT_LABELS = {
+    email: 'Email', website: 'Website', orcid: 'ORCID iD',
+    linkedin: 'LinkedIn', twitter: 'X', bluesky: 'Bluesky', mastodon: 'Mastodon',
   };
 
   function normaliseOrcid(raw) {
@@ -1487,6 +1516,7 @@
 
   function contactIcon(kind, href, label) {
     const a = el('a', { class: 'essc-member-card-contact', href, 'aria-label': label, title: label });
+    if (kind === 'orcid') a.classList.add('is-orcid');
     if (href.startsWith('http')) { a.target = '_blank'; a.rel = 'noopener'; }
     const ns = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(ns, 'svg');
@@ -1503,7 +1533,14 @@
   }
 
   // ── shared popover element ──────────────────────────────────────
+  // One <div popover="auto"> appended to <body>, reused across every
+  // member-linked name on the page. The Popover API gives light-dismiss
+  // (click outside) and Escape-to-close for free, plus top-layer
+  // rendering so the card escapes any clipped ancestor. We position it
+  // ourselves with getBoundingClientRect so it works in every browser
+  // that ships popover, with no dependency on CSS anchor positioning.
   let cardEl = null, hideTimer = null, currentMember = null, openScrollY = 0;
+  let cardAriaLabel = null;   // the aria-label requested by the most recent show()
   const HIDE_DELAY_MS = 180;
 
   function cancelHide() { if (hideTimer != null) { clearTimeout(hideTimer); hideTimer = null; } }
@@ -1519,10 +1556,17 @@
       id: 'netsec-member-card', class: 'essc-member-card', popover: 'auto',
       role: 'dialog', 'aria-labelledby': 'netsec-member-card-name', 'aria-label': T('Member profile'),
     });
+    // Hovering the card itself keeps it open even after the pointer
+    // leaves the originating anchor, so moving onto the card to click a
+    // contact icon doesn't trip the hide timer.
     cardEl.addEventListener('mouseenter', cancelHide);
     cardEl.addEventListener('mouseleave', scheduleHide);
     cardEl.addEventListener('toggle', (e) => { if (e.newState === 'closed') { currentMember = null; cancelHide(); } });
-    // Dismiss on a meaningful scroll (24px threshold ignores iOS rubber-band).
+    // The card is position:fixed, so it stays put while the page scrolls
+    // and the anchor scrolls away underneath. Dismiss on a meaningful
+    // scroll only: the 24px threshold ignores iOS rubber-band bounces and
+    // stray sub-pixel scrolls that can fire right after a tap. The
+    // reference scrollY is reset each time a new popover open completes.
     window.addEventListener('scroll', () => {
       if (!cardEl || !cardEl.matches(':popover-open')) return;
       if (Math.abs(window.scrollY - openScrollY) < 24) return;
@@ -1532,7 +1576,9 @@
     return cardEl;
   }
 
-  function populate(card, m, ctaHref) {
+  function populate(card, m, opts) {
+    const roleLabel = opts.roleLabel || T;
+    const contactLabels = opts.contactLabels || {};
     card.innerHTML = '';
     const inner = el('div', { class: 'essc-member-card-inner' });
     if (m.photo) {
@@ -1549,12 +1595,28 @@
     if (m.position)    text.appendChild(el('p', { class: 'essc-member-card-role' }, m.position));
     if (m.affiliation) text.appendChild(el('p', { class: 'essc-member-card-aff' }, m.affiliation));
 
-    // Role badges only (each string flows through netsecT so FR/DE pages
-    // localise them). The bare WG-number chips the ESSC card adds are
-    // skipped here to avoid a prefix the static pages don't translate.
-    if (m.roles && m.roles.length) {
+    // Role badges. Each role string flows through opts.roleLabel (this
+    // module's default translates; the ESSC renderer passes identity so
+    // its raw role strings stay verbatim). When opts.wgPrefix is set, bare
+    // WG-number chips ("WG3" → localised prefix) are appended for any
+    // member.wgs not already named by a role, deduplicated so a "WG1
+    // Leader" role suppresses a separate "WG1" chip.
+    const badges = [];
+    const knownWgs = new Set();
+    for (const r of (m.roles || [])) {
+      badges.push({ text: roleLabel(r), kind: 'role' });
+      const mm = /WG\s*([1-4])/i.exec(r);
+      if (mm) knownWgs.add(Number(mm[1]));
+    }
+    if (opts.wgPrefix) {
+      for (const n of (m.wgs || [])) {
+        if (knownWgs.has(n)) continue;
+        badges.push({ text: `${opts.wgPrefix}${n}`, kind: 'wg' });
+      }
+    }
+    if (badges.length) {
       const row = el('div', { class: 'essc-member-card-badges' });
-      for (const r of m.roles) row.appendChild(el('span', { class: 'essc-member-card-badge' }, T(r)));
+      for (const b of badges) row.appendChild(el('span', { class: 'essc-member-card-badge' + (b.kind === 'wg' ? ' is-wg' : '') }, b.text));
       text.appendChild(row);
     }
     if (m.country) {
@@ -1565,13 +1627,20 @@
     }
     if (m.bio) text.appendChild(el('p', { class: 'essc-member-card-bio' }, m.bio));
 
+    // Social-link icons, order mirroring people.html. Each entry lands
+    // only if the member has a non-empty value; the row is omitted when
+    // none do. Labels resolve from opts.contactLabels, then the English
+    // default routed through netsecT.
+    const label = (kind) => contactLabels[kind] || T(DEFAULT_CONTACT_LABELS[kind]);
     const orcidId = normaliseOrcid(m.orcid);
     const contacts = [
-      m.email    && ['email',    'mailto:' + m.email, 'Email'],
-      m.website  && ['website',  m.website,           'Website'],
-      orcidId    && ['orcid',    'https://orcid.org/' + orcidId, 'ORCID'],
-      m.linkedin && ['linkedin', m.linkedin,          'LinkedIn'],
-      m.bluesky  && ['bluesky',  m.bluesky,           'Bluesky'],
+      m.email    && ['email',    'mailto:' + m.email, label('email')],
+      m.website  && ['website',  m.website,           label('website')],
+      orcidId    && ['orcid',    'https://orcid.org/' + orcidId, label('orcid')],
+      m.linkedin && ['linkedin', m.linkedin,          label('linkedin')],
+      m.twitter  && ['twitter',  m.twitter,           label('twitter')],
+      m.bluesky  && ['bluesky',  m.bluesky,           label('bluesky')],
+      m.mastodon && ['mastodon', m.mastodon,          label('mastodon')],
     ].filter(Boolean);
     if (contacts.length) {
       const row = el('div', { class: 'essc-member-card-contacts' });
@@ -1582,28 +1651,47 @@
     card.appendChild(inner);
 
     const footer = el('div', { class: 'essc-member-card-footer' });
-    // The CTA reuses the triggering anchor's own href, so the locale of
-    // the directory page (people.html / people.fr.html / people.de.html)
-    // is whatever the author linked to. Fall back to the EN directory.
-    if (!ctaHref) ctaHref = peopleUrl + '#' + m.id;
-    const cta = el('a', { class: 'essc-member-card-cta', href: ctaHref }, T('View full profile'));
+    const ctaHref = opts.ctaHref || (peopleUrl + '#' + m.id);
+    const cta = el('a', { class: 'essc-member-card-cta', href: ctaHref }, opts.ctaLabel || T('View full profile'));
+    // Safari Technology Preview (as of May 2026) has a bug where clicks on
+    // an <a href> inside an open popover="auto" fire the click event but
+    // the default navigation gets silently swallowed by the top-layer
+    // machinery, leaving the visitor still on the current page with no
+    // error. The workaround is harmless elsewhere (preventDefault +
+    // JS-driven nav is functionally identical to letting the <a> default
+    // fire), so it ships unconditionally rather than gated on a UA sniff.
+    // Cmd / Ctrl / middle-click pass through so "open in new tab" works.
     cta.addEventListener('click', (e) => {
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
       e.preventDefault();
       if (cardEl && cardEl.matches(':popover-open')) cardEl.hidePopover();
+      // Defer one tick so Safari can settle the popover-close before
+      // assigning location; without it the nav can be rolled back by the
+      // still-in-flight top-layer teardown.
       setTimeout(() => { window.location.assign(ctaHref); }, 0);
     });
     footer.appendChild(cta);
     card.appendChild(footer);
   }
 
-  function showCard(anchor, m) {
+  // Show the card for `m`, attached to `anchor`. If the card already shows
+  // this exact member, just cancel any pending hide. If it shows a
+  // different one, swap content and reposition without close-then-reopen
+  // (which would blink). Returns the card element, or null when the
+  // Popover API is unavailable (caller should let the link navigate).
+  function show(anchor, m, opts) {
+    opts = opts || {};
     const card = ensureCard();
     if (!card) return null;
     cancelHide();
+    // Keep the popover's aria-label in step with the caller's locale.
+    const wantLabel = opts.ariaLabel || T('Member profile');
+    if (wantLabel !== cardAriaLabel) { card.setAttribute('aria-label', wantLabel); cardAriaLabel = wantLabel; }
     if (currentMember === m && card.matches(':popover-open')) return card;
     currentMember = m;
-    populate(card, m, anchor.getAttribute('href'));
+    populate(card, m, opts);
+    // Pre-position near the anchor so the first paint after showPopover is
+    // close, then measure and refine.
     const ar = anchor.getBoundingClientRect();
     card.style.left = ar.left + 'px';
     card.style.top  = (ar.bottom + 6) + 'px';
@@ -1620,7 +1708,26 @@
     return card;
   }
 
-  // ── fetch bios once, then wire every anchor ─────────────────────
+  function hide() { if (cardEl && cardEl.matches(':popover-open')) { cancelHide(); cardEl.hidePopover(); } }
+
+  return { show, hide, scheduleHide, cancelHide };
+})();
+
+/* Auto-wire static `data-member` anchors to the shared card core.
+   Any page can turn a name into a hover / focus / click profile card with:
+
+       <a class="member-link" href="people.html#<id>" data-member="<id>">Name</a>
+
+   This block fetches data/bios.json once, builds an id → member map, and
+   delegates open / close to window.netsecMemberCard. Role chips translate
+   via the card's default (netsecT); the CTA reuses each anchor's own href
+   so the directory locale follows what the author linked. */
+(function () {
+  const anchors = Array.from(document.querySelectorAll('a.member-link[data-member]'));
+  if (!anchors.length) return;
+  const card = window.netsecMemberCard;
+  if (!card) return;
+
   fetch('data/bios.json', { cache: 'no-cache' })
     .then((r) => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
     .then((bios) => {
@@ -1630,18 +1737,19 @@
         const m = byId.get(a.dataset.member);
         if (!m) continue;                 // unknown id → plain directory link
         a.classList.add('is-wired');
+        const opts = { ctaHref: a.getAttribute('href') };
         const open = (e) => {
           if (e.type === 'click') {
             if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-            if (!showCard(a, m)) return;   // popover unsupported → let the link navigate
+            if (!card.show(a, m, opts)) return;   // popover unsupported → let the link navigate
             e.preventDefault();
-          } else { showCard(a, m); }
+          } else { card.show(a, m, opts); }
         };
         a.addEventListener('mouseenter', open);
         a.addEventListener('focus', open);
         a.addEventListener('click', open);
-        a.addEventListener('mouseleave', scheduleHide);
-        a.addEventListener('blur', scheduleHide);
+        a.addEventListener('mouseleave', card.scheduleHide);
+        a.addEventListener('blur', card.scheduleHide);
       }
     })
     .catch((err) => { console.warn('member-card: bios.json fetch failed; links stay as plain directory links:', err); });
