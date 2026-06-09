@@ -1,0 +1,58 @@
+# Data-shape + render smoke gate for synced data PRs.
+#
+# The sync workflows (Indico daily, bios + COST weekly, roadmap-progress
+# on issue events) open auto-merged PRs that rewrite files under data/.
+# The pages consuming those files render at runtime in the browser, so
+# a malformed upstream shape change would ship a blank page with every
+# other check green. This workflow closes that gap in two steps:
+#
+#   1. scripts/check-data-shape.py — structural invariants per synced
+#      file (the "would this blank a page?" set).
+#   2. scripts/check-render-smoke.sh — headless Chrome renders
+#      /essc-2026.html, /people.html and /index.html off a local
+#      server and asserts the runtime renderers produced cards.
+#
+# When this fails: the shape lint prints the exact violated invariant
+# and file; the smoke step prints which page rendered zero cards. For
+# an upstream contract change that is legitimate, update the consuming
+# renderer and the validator in the same PR as the data refresh.
+#
+# Zero cost: no third-party services, no API keys. Chrome ships on the
+# ubuntu runners.
+name: data shape + render smoke
+
+on:
+  pull_request:
+    paths:
+      - 'data/indico.json'
+      - 'data/bios.json'
+      - 'data/wg.json'
+      - 'data/mc-members.json'
+      - 'data/events.json'
+      - 'data/roadmap-progress.json'
+      - 'scripts/check-data-shape.py'
+      - 'scripts/check-render-smoke.sh'
+      - '.github/workflows/data-shape-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: Validate data shape and smoke-render consuming pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v4 (sha-pinned)
+
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+
+      - name: Validate synced data shapes
+        run: python3 scripts/check-data-shape.py
+
+      - name: Smoke-render the consuming pages
+        run: bash scripts/check-render-smoke.sh
