@@ -396,7 +396,8 @@ wordmark adapts to light and dark themes.
 │   ├── news-drift.yml               # Drift checker for /news.xml vs. data/news.json
 │   ├── roadmap-progress.yml         # Refreshes data/roadmap-progress.json on issue/milestone events
 │   ├── external-link-arrows.yml    # Lint: trailing → on external links
-│   └── search-drift.yml             # Build sanity check on PRs (per-locale page count > 0)
+│   ├── search-drift.yml             # Build sanity check on PRs (per-locale page count > 0)
+│   └── data-shape-check.yml         # Shape lint + headless render smoke on data/** PRs (#724)
 │
 ├── docs/                            # ← you are here
 │   ├── README.md                    # ToC for this folder
