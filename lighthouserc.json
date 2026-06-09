@@ -1,0 +1,14 @@
+{
+  "_documentation": "Lighthouse CI assertion config for .github/workflows/lighthouse.yml (#270). Category thresholds sit below the day-to-day scores on purpose: the gate exists to catch collapses (a 1 MB image landing on a page, a render-blocking regression), not to flake on shared-runner variance. resource-summary:image:size warns when any audited page ships more than 500 KB of images, the exact class of regression the June 2026 press-kit fix removed. The workflow is not a required check, so a red run signals without blocking auto-merge.",
+  "ci": {
+    "assert": {
+      "assertions": {
+        "categories:performance": ["error", { "minScore": 0.75 }],
+        "categories:accessibility": ["error", { "minScore": 0.9 }],
+        "categories:best-practices": ["warn", { "minScore": 0.9 }],
+        "categories:seo": ["warn", { "minScore": 0.9 }],
+        "resource-summary:image:size": ["warn", { "maxNumericValue": 500000 }]
+      }
+    }
+  }
+}
