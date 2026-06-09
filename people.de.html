@@ -546,7 +546,11 @@
 
   /* Inline-Erweiterung — siehe people.html für Details. */
   function clearHashIfFocus() {
-    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    // Only strip bare member-slug hashes. A key=value hash (the
+    // shareable #themes= filter) is owned by the filter code and must
+    // survive card expand/collapse (issue #647).
+    const raw = (location.hash || '').replace(/^#/, '');
+    if (raw && !raw.includes('=')) history.replaceState(null, '', location.pathname + location.search);
   }
   grid.addEventListener('click', (e) => {
     if (!grid.classList.contains('is-compact')) return;
@@ -557,8 +561,9 @@
     grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
     if (!wasExpanded) {
       card.classList.add('is-expanded');
-      const slug = card.getAttribute('data-slug');
-      if (slug) history.replaceState(null, '', '#' + slug);
+      // Expansion is transient UI and no longer mirrors the slug to
+      // location.hash: writing it clobbered a shared #themes= filter
+      // (issue #647). Incoming #slug deep-links still auto-expand.
     } else { clearHashIfFocus(); }
   });
   grid.addEventListener('keydown', (e) => {

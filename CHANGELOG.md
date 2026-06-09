@@ -119,6 +119,7 @@ maintainer-facing audience.
 - The About-page and Working-Group leadership cards now also resolve against the directory by name, not only by a hand-written `data-slug`, reusing the first-and-last matcher the ESSC programme and Summer School roster use. The slug stays the primary key and still wins where present, so nothing changes for the current cards, and the addition means a leader can be reconciled and a card heal itself as the directory fills in, with no one tagging a slug by hand.
 
 #### Fixed
+- Expanding a directory card in compact view no longer overwrites a shared `#themes=` filter in the URL: card expansion stays out of the address bar, so a filtered link survives tapping through profiles. Incoming member deep-links still auto-expand their card. ([#647](https://github.com/EISSeuropa/netsec.github.io/issues/647))
 - The Formspree privacy-policy link on the privacy notice (all three locales) now points at the canonical URL instead of a redirecting one, closing the last of the five stale-URL findings from the May launch audit.
 - Corrected the order of the public roadmap (`/roadmap.html`, all three locales): the v1.11.0 release card (8 June) had been sitting after the 9 to 11 June Summer School and conference card, so the shipped release read as if it came after the event. The shipped release now precedes the planned event, matching the chronology and the internal roadmap timeline.
 
