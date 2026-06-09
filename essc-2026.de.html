@@ -57,7 +57,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=829853af">
+<link rel="stylesheet" href="assets/css/site.css?v=d75e9df8">
 <!-- Page-specific Event schema for the conference. Hand-maintained;
      NOT managed by inject-seo (which owns the Organization/WebPage
      block in the seo:jsonld sentinels below). -->
@@ -512,6 +512,10 @@
       showLess: 'Show less',
       livestream: 'Livestream',
       livestreamAria: 'This session will be livestreamed',
+      watchLive: 'Watch live on Zoom',
+      watchSession: 'Watch live',
+      liveNow: 'Live now',
+      livestreamNote: 'View-only webinar, no sign-in needed.',
       errLoad:   'Couldn’t load the live programme.',
       errFetch:  'Couldn’t fetch the programme data.',
       errAbsent: 'ESSC 2026 isn’t published yet.',
@@ -539,6 +543,10 @@
       showLess: 'Réduire',
       livestream: 'Diffusion directe',
       livestreamAria: 'Session diffusée en direct',
+      watchLive: 'Regarder en direct sur Zoom',
+      watchSession: 'Regarder en direct',
+      liveNow: 'En direct',
+      livestreamNote: 'Webinaire en lecture seule, sans inscription.',
       errLoad:   'Impossible de charger le programme en direct.',
       errFetch:  'Impossible de récupérer les données du programme.',
       errAbsent: 'L’ESSC 2026 n’est pas encore publiée.',
@@ -566,6 +574,10 @@
       showLess: 'Weniger anzeigen',
       livestream: 'Livestream',
       livestreamAria: 'Diese Sitzung wird per Livestream übertragen',
+      watchLive: 'Live auf Zoom ansehen',
+      watchSession: 'Live ansehen',
+      liveNow: 'Jetzt live',
+      livestreamNote: 'Nur-Ansicht-Webinar, keine Anmeldung nötig.',
       errLoad:   'Das Live-Programm konnte nicht geladen werden.',
       errFetch:  'Die Programmdaten konnten nicht abgerufen werden.',
       errAbsent: 'ESSC 2026 ist noch nicht veröffentlicht.',
@@ -760,6 +772,35 @@
   // candidates and would just create noise.
   const unmatchedSpeakers = new Set();
 
+  // Livestream link for the conference, hand-maintained in
+  // data/essc-livestream.json so it survives the daily Indico sync and can
+  // be taken down by blanking the url. Best-effort: absent, malformed, or
+  // outside [start, end] all mean no link renders.
+  let liveStream = null;
+  try {
+    const lsRes = await fetch('data/essc-livestream.json', { cache: 'no-cache' });
+    if (lsRes.ok) {
+      const cfg = await lsRes.json();
+      if (cfg && cfg.url) {
+        const now = Date.now();
+        const okStart = !cfg.start || new Date(cfg.start).getTime() <= now;
+        const okEnd   = !cfg.end   || now <= new Date(cfg.end).getTime();
+        if (okStart && okEnd) liveStream = cfg;
+      }
+    }
+  } catch (lsErr) {
+    console.warn('essc-livestream.json fetch failed; no livestream link:', lsErr);
+  }
+  // A session is "live now" when the wall clock sits inside its slot. Indico
+  // times are naive Stockholm-local (CEST in June), so pin +02:00 to compare
+  // correctly from any visitor timezone.
+  function isLiveNow(slot) {
+    if (!liveStream || !slot || !slot.start || !slot.end) return false;
+    const now = Date.now();
+    return new Date(slot.start + '+02:00').getTime() <= now
+        && now < new Date(slot.end + '+02:00').getTime();
+  }
+
   const conf = indico.annualConferences && indico.annualConferences['2026'];
   if (!conf) {
     setError(t.errAbsent);
@@ -802,6 +843,23 @@
         lang === 'de' ? ('Programm aktualisiert am ' + when + '; täglich über Nacht aus Indico erneuert.') :
                         ('Programme updated ' + when + '; refreshed from Indico daily, overnight.');
       syncNode.hidden = false;
+    }
+  }
+
+  // ── livestream call-to-action ─────────────────────────────────
+  // A single "Watch live" button, shown only inside the conference window
+  // (the liveStream gate above). Sits just above the day-chip nav.
+  if (liveStream) {
+    const cta = el('a', {
+      class: 'programme-livestream-cta',
+      href: liveStream.url, target: '_blank', rel: 'noopener',
+    }, livestreamIcon(), el('span', { class: 'lbl' }, t.watchLive));
+    const note = el('p', { class: 'programme-livestream-note' }, t.livestreamNote);
+    if (chips && chips.parentNode) {
+      chips.parentNode.insertBefore(note, chips);
+      chips.parentNode.insertBefore(cta, note);
+    } else if (root && root.parentNode) {
+      root.parentNode.insertBefore(cta, root);
     }
   }
 
@@ -963,13 +1021,25 @@
       class: 'programme-slot-kind' + (isRoundtable ? ' is-roundtable' : isPlenary ? ' is-plenary' : ''),
     }, subtypeLabel(subtype)));
     if (isLive) {
-      const badge = el('span', {
-        class: 'programme-slot-livestream',
-        title: t.livestreamAria,
-        'aria-label': t.livestreamAria,
-      });
-      badge.appendChild(livestreamIcon());
-      badge.appendChild(el('span', { class: 'lbl' }, t.livestream));
+      // With a live link in window, the badge becomes a "Watch live" link
+      // (the same Zoom URL for every session); the session currently on air
+      // is marked "Live now". Outside the window it stays the plain badge.
+      let badge;
+      if (liveStream) {
+        const liveNow = isLiveNow(slot);
+        badge = el('a', {
+          class: 'programme-slot-livestream is-link' + (liveNow ? ' is-live-now' : ''),
+          href: liveStream.url, target: '_blank', rel: 'noopener',
+          title: liveNow ? t.liveNow : t.watchSession,
+          'aria-label': (liveNow ? t.liveNow + ', ' : '') + t.watchSession,
+        }, livestreamIcon(), el('span', { class: 'lbl' }, liveNow ? t.liveNow : t.watchSession));
+      } else {
+        badge = el('span', {
+          class: 'programme-slot-livestream',
+          title: t.livestreamAria,
+          'aria-label': t.livestreamAria,
+        }, livestreamIcon(), el('span', { class: 'lbl' }, t.livestream));
+      }
       head.appendChild(badge);
     }
     const room = roomBadge(slot);

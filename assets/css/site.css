@@ -4992,6 +4992,69 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   border-color:rgba(52,215,117,.32);
 }
 
+/* Livestream link states (essc-2026.html). The plain green badge above is
+   the out-of-window indicator; during the conference the renderer turns it
+   into a "Watch live" link, and the session whose slot contains the current
+   time gets the red "Live now" treatment. */
+.programme-slot-livestream.is-link{
+  text-decoration:none;
+  cursor:pointer;
+  transition:background .15s ease, border-color .15s ease;
+}
+.programme-slot-livestream.is-link:hover,
+.programme-slot-livestream.is-link:focus-visible{
+  background:rgba(34,197,94,.22);
+  border-color:rgba(34,197,94,.5);
+}
+/* These carry their own broadcast glyph, so suppress the global
+   external-link icon to avoid a double affordance. */
+.programme-slot-livestream.is-link::after,
+.programme-livestream-cta::after{content:none !important}
+.programme-slot-livestream.is-live-now{
+  color:#fff;
+  background:#dc2626;
+  border-color:#dc2626;
+}
+.programme-slot-livestream.is-live-now::before{
+  content:'';
+  width:.5em;height:.5em;border-radius:50%;
+  background:#fff;flex:none;
+  animation:essc-live-pulse 1.6s ease-in-out infinite;
+}
+.dark .programme-slot-livestream.is-live-now{
+  color:#fff;background:#ef4444;border-color:#ef4444;
+}
+@keyframes essc-live-pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.4;transform:scale(.7)}
+}
+@media (prefers-reduced-motion: reduce){
+  .programme-slot-livestream.is-live-now::before{animation:none}
+}
+
+/* Prominent "Watch live on Zoom" button, shown above the day-chip nav only
+   while the conference is on air. Red reads as the live/on-air affordance,
+   matching the "Live now" session badge. */
+.programme-livestream-cta{
+  display:inline-flex;align-items:center;gap:.5em;
+  margin-top:1.1rem;
+  padding:.62rem 1.15rem;border-radius:12px;
+  font-weight:700;text-decoration:none;line-height:1.2;
+  color:#fff;background:#dc2626;border:1px solid #dc2626;
+  box-shadow:0 6px 18px rgba(220,38,38,.28);
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.programme-livestream-cta:hover,
+.programme-livestream-cta:focus-visible{
+  background:#b91c1c;
+  transform:translateY(-1px);
+  box-shadow:0 8px 22px rgba(220,38,38,.34);
+}
+.programme-livestream-cta svg{width:1.15em;height:1.15em;flex:none}
+.programme-livestream-note{
+  margin:.5rem 0 0;font-size:.86rem;color:var(--muted);
+}
+
 /* ──────────────────────────────────────────────────────────────
    Print stylesheet (#123).
    ──────────────────────────────────────────────────────────────
