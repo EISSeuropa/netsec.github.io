@@ -11,16 +11,16 @@ Five things kept in step with cost.eu:
      names throughout the site.
 
   2. Per-bio `wgs` field in data/bios.json
-     Same Membership-table parse: for each bio entry whose name
-     matches a row on cost.eu, the `wgs` list is overwritten with
-     cost.eu's value. cost.eu is the authoritative source for
-     FORMAL WG membership; the Google Form's "Working Group
-     memberships" field is the seed when a bio first lands, and on
-     subsequent weekly syncs cost.eu wins. Entries not present on
-     cost.eu (community members in the directory who aren't on
-     the MC, or seed entries for leaders who haven't appeared
-     in the Membership table yet) are left untouched. The rule
-     is restated in docs/bios-setup.md for respondents.
+     Same Membership-table parse, reconciled per WG rather than
+     overwritten (#236): a WG added on cost.eu after the member's
+     last form change is applied; a WG the member's newer form
+     submission dropped is held and flagged; a WG on the form that
+     cost.eu has not published yet is kept and flagged as pending
+     catch-up. Observation clocks live in data/cost-wg-state.json.
+     The home-page WG_MAP and data/wg.json consume the reconciled
+     result, so every chip surface shows the same sets. Entries not
+     present on cost.eu are left untouched. The respondent-facing
+     rule is restated in docs/bios-setup.md.
 
   3. Leadership roles in data/bios.json
      Parsed from cost.eu's Leadership and Additional-Roles tables —
@@ -143,58 +143,128 @@ def report_wg(old: dict, new: dict) -> list[str]:
 
 # ─── Per-bio WG sync (cost.eu Membership → data/bios.json) ─────────
 
-def apply_wgs_to_bios(new_map: dict[str, list[int]]) -> list[str]:
-    """Propagate cost.eu's per-member WG list into data/bios.json.
+WG_STATE = ROOT / "data" / "cost-wg-state.json"
 
-    For each bio entry whose `name` normalises to a key in `new_map`,
-    overwrite `wgs` with cost.eu's list. Entries not present on
-    cost.eu (a non-MC community member listed in the directory, or a
-    seed entry for a leader who hasn't appeared in the Membership
-    table yet) are left untouched.
 
-    The rule, documented in docs/bios-setup.md: cost.eu is the
-    authoritative source for FORMAL WG membership. The Google Form's
-    "Working Group memberships" field is the seed when a bio first
-    lands; on subsequent weekly syncs, cost.eu wins. Respondents who
-    want to surface an informal WG affiliation that cost.eu hasn't
-    recorded should write it into their bio prose rather than the
-    structured field.
+def _load_wg_state() -> dict:
+    if WG_STATE.exists():
+        return json.loads(WG_STATE.read_text(encoding="utf-8"))
+    return {"_documentation": (
+        "Observation clocks for the per-bio Working Group reconciliation "
+        "in scripts/sync-cost.py. Per member (normalised name): the WG "
+        "set last seen on cost.eu with the date each WG first appeared "
+        "there, and the member's form-side WG set with the date it last "
+        "changed. Neither source carries decision dates, so recency is "
+        "judged on when each change was OBSERVED by the weekly sync. "
+        "Generated file, do not edit by hand; deleting it resets the "
+        "clocks to the next sync run (additions then win, the safe "
+        "direction)."), "members": {}}
 
-    Returns diff lines for the sync report. No-ops idempotently when
-    every entry already matches cost.eu."""
+
+def reconcile_wgs(new_map: dict[str, list[int]], today: str) -> tuple:
+    """Per-WG additive reconciliation between the Google Form's WG sets
+    (data/bios.json `wgs`) and cost.eu's formal record (`new_map`).
+
+    Members add WGs far more often than they remove them, and cost.eu
+    can lag a member's form submission by weeks, so neither source
+    simply wins (issue #236, Gap A). Per matched member and per WG:
+
+      * on cost.eu but not the form: applied when cost.eu's entry was
+        observed AFTER the member's last form change (a formal addition
+        the member never re-submitted about); held and flagged when the
+        member's NEWER form submission omitted it (a deliberate removal
+        only a human should overrule).
+      * on the form but not cost.eu: kept and flagged as pending
+        catch-up. Under the additive prior this is almost always a real
+        addition the formal record has not published yet.
+
+    Returns (report lines, effective {norm-name: wgs} map). The
+    effective map carries each matched member's post-merge set so the
+    home-page WG_MAP and data/wg.json can render the same chips the
+    directory shows. Entries not on cost.eu are left untouched, same
+    as before."""
     if not BIOS.exists():
-        return ["Per-bio WGs: data/bios.json not present, skipped."]
+        return (["Per-bio WGs: data/bios.json not present, skipped."],
+                dict(new_map))
 
     data = json.loads(BIOS.read_text(encoding="utf-8"))
     members: list[dict] = data.get("members", [])
+    state = _load_wg_state()
+    s_members: dict = state.setdefault("members", {})
 
     diffs: list[str] = []
+    flags: list[str] = []
+    effective = dict(new_map)
     matched = 0
+    bios_changed = False
+
     for m in members:
         name = m.get("name") or ""
         key = norm(name)
         if not key or key not in new_map:
             continue
         matched += 1
-        current = sorted(m.get("wgs") or [])
-        target = sorted(new_map[key])
-        if current == target:
-            continue
-        m["wgs"] = target
-        diffs.append(f"  ~ {name}: {current} -> {target}")
+        form = sorted(m.get("wgs") or [])
+        cost = sorted(new_map[key])
+        s = s_members.setdefault(key, {})
 
-    out_lines = [
-        f"Per-bio WGs: {matched} bios matched on cost.eu's Membership table"
-    ]
+        # cost.eu observation clock: stamp each WG when first seen
+        # there; a WG that leaves and returns is re-stamped.
+        first_seen = {int(k): v for k, v in (s.get("cost_first_seen") or {}).items()}
+        first_seen = {wg: d for wg, d in first_seen.items() if wg in cost}
+        for wg in cost:
+            first_seen.setdefault(wg, today)
+
+        # form observation clock: stamp when the member's set changed
+        # relative to what the last sync recorded. First sight of a
+        # member initialises the clock without counting as a change.
+        prev_form = s.get("form_wgs")
+        form_changed_on = s.get("form_changed_on") or today
+        if prev_form is not None and sorted(prev_form) != form:
+            form_changed_on = today
+
+        final = set(form)
+        for wg in (set(cost) - set(form)):
+            if first_seen[wg] >= form_changed_on:
+                final.add(wg)
+                diffs.append(f"  + {name}: WG{wg} added (formal record moved "
+                             f"after the last form change)")
+            else:
+                flags.append(f"  ? {name}: WG{wg} stands on cost.eu but their "
+                             f"newer form submission omits it. Holding the "
+                             f"form's version; overrule by editing the bio "
+                             f"if the removal was accidental.")
+        for wg in (set(form) - set(cost)):
+            flags.append(f"  ~ {name}: WG{wg} from the form is not on "
+                         f"cost.eu yet (pending formal catch-up).")
+
+        final_sorted = sorted(final)
+        if final_sorted != form:
+            m["wgs"] = final_sorted
+            bios_changed = True
+        effective[key] = final_sorted
+
+        s["cost_first_seen"] = {str(k): v for k, v in sorted(first_seen.items())}
+        s["form_wgs"] = final_sorted
+        s["form_changed_on"] = form_changed_on
+
+    out = [f"Per-bio WGs: {matched} bios matched on cost.eu's Membership table"]
     if diffs:
-        out_lines.extend(diffs)
-        BIOS.write_text(
-            json.dumps(data, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
-    else:
-        out_lines.append("  (no changes)")
-    return out_lines
+        out.extend(diffs)
+    if flags:
+        out.append("  Discrepancies under watch (no action taken):")
+        out.extend(flags)
+    if not diffs and not flags:
+        out.append("  (no changes)")
+
+    if bios_changed:
+        BIOS.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n",
+                        encoding="utf-8")
+    new_state = json.dumps(state, indent=2, ensure_ascii=False) + "\n"
+    old_state = WG_STATE.read_text(encoding="utf-8") if WG_STATE.exists() else ""
+    if new_state != old_state:
+        WG_STATE.write_text(new_state, encoding="utf-8")
+    return out, effective
 
 
 # ─── Leadership sync (Leadership + Additional Roles tables) ────────
@@ -739,17 +809,22 @@ def main() -> None:
     r.raise_for_status()
     bs = BeautifulSoup(r.text, "html.parser")
 
-    # 1) WG_MAP — uses the parsed DOM (Membership table is well-formed).
-    new_map = fetch_wg_map(bs)
-    old_map = rewrite_wg_map(new_map)
-    for line in report_wg(old_map, new_map):
-        print(line)
+    from datetime import date
+    today = date.today().isoformat()
 
-    # 2) Per-bio WGs → data/bios.json. Uses the same `new_map` that
-    #    drove the home-page WG_MAP refresh, so the two surfaces stay
-    #    in lockstep against cost.eu's formal record.
+    # 1) Per-bio WGs → data/bios.json: per-WG additive reconciliation
+    #    between the form's sets and cost.eu's formal record (#236).
+    #    Runs first because every other WG surface consumes its result.
+    new_map = fetch_wg_map(bs)
+    wg_report, effective_map = reconcile_wgs(new_map, today)
+
+    # 2) WG_MAP — the reconciled union, so the home-page chips show
+    #    exactly what the directory shows.
+    old_map = rewrite_wg_map(effective_map)
+    for line in report_wg(old_map, effective_map):
+        print(line)
     print()
-    for line in apply_wgs_to_bios(new_map):
+    for line in wg_report:
         print(line)
 
     # 3) Leadership → data/bios.json — uses raw HTML because cost.eu's
@@ -765,6 +840,10 @@ def main() -> None:
     #    the leadership it records matches, and the same `new_map` that
     #    drove steps 1 and 2, so all surfaces stay in lockstep.
     members = fetch_members(bs)
+    for m in members:
+        k = norm(m["name"])
+        if k in effective_map:
+            m["wgs"] = list(effective_map[k])
     print()
     for line in build_wg_json(members):
         print(line)
