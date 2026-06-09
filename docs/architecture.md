@@ -125,9 +125,11 @@ flowchart TD
   persists in `localStorage('netsec-directory-view')`.
 - **Click-to-expand in compact mode** — clicking a compact card
   flips it to its detailed form in place while the rest of the
-  grid stays compact. URL hash `#slug` mirrors the expanded card
-  for shareable deep-links; Esc / click-outside collapses. Tracked
-  upgrade path to a sticky side panel in Issue #72.
+  grid stays compact. Incoming `#slug` deep-links auto-expand the
+  matching card; expansion itself stays out of the URL so a shared
+  `#themes=` filter survives tapping through profiles (#647). Esc or
+  click-outside collapses. Tracked upgrade path to a sticky side
+  panel in Issue #72.
 - **First-visit orientation** — a dismissible welcome strip above
   the directory toolbar, plus a `?` button that re-opens an
   opt-in six-step guided tour (search → filter chips → country
@@ -362,7 +364,7 @@ wordmark adapts to light and dark themes.
 │
 ├── data/
 │   ├── bios.json                    # The directory (members, roles, WGs, contacts)
-│   ├── mc-members.json              # MC roster per country (used to auto-tag MC role)
+│   ├── mc-members.json              # MC roster per country (sync-cost generated; auto-tags MC role)
 │   ├── i18n-state.json              # SHA-1 stamps for translation-drift tracking
 │   ├── events.json                  # Source of truth for /calendar.ics + /calendar/<slug>.ics + Events cards
 │   └── publications.json            # Action outputs, WG-tagged. Drives WG-page "Related publications" (and, later, /outputs.html)

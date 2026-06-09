@@ -364,6 +364,90 @@ def test_build_wg_json_resolves_leaders_and_members() -> None:
                any("(no changes)" in line for line in second), True)
 
 
+
+# ─── MC roster + statistics sync ───────────────────────────────────
+
+# Mirrors cost.eu's real (malformed) markup: the country <td> is
+# closed with a stray </div>, names arrive as title/first/SURNAME
+# spans, and one upstream name has its space collapsed.
+MC_FIXTURE = """
+<h2 class="x">Management Committee</h2>
+<table><thead><tr><th>Country</th><th>MC Member</th></tr></thead><tbody>
+<tr><td class="text-gray-900 align-top w-5/12">Albania</div>
+  <td class="w-7/12">
+    <h4><span>Dr</span> <span>Noela</span> <span class="uppercase">MAHMUTAJ</span></h4>
+    <h4><span>Dr</span> <span>Edlira</span> <span class="uppercase">TITINI</span></h4>
+  </td></tr>
+<tr><td class="text-gray-900 align-top w-5/12">Cyprus</div>
+  <td class="w-7/12">
+    <h4><span>Prof</span> <span>PAVLOSIOANNIS</span> <span class="uppercase">KOKTSIDIS</span></h4>
+  </td></tr>
+</tbody></table>
+<h2>Working Groups and Membership</h2>
+"""
+
+
+def test_fetch_mc_parses_malformed_table() -> None:
+    print("\nfetch_mc() — malformed cost.eu MC table:")
+    mc = sync_cost.fetch_mc(MC_FIXTURE)
+    expect("rep count", len(mc), 3)
+    expect("countries", sorted({m["country"] for m in mc}), ["Albania", "Cyprus"])
+    expect("title-cased name", mc[0]["name"], "Dr Edlira Titini")
+    expect("iso code", mc[0]["country_code"], "al")
+    expect("upstream name fix applied",
+           next(m["name"] for m in mc if m["country"] == "Cyprus"),
+           "Prof Pavlos Ioannis Koktsidis")
+    expect("no section means empty roster", sync_cost.fetch_mc("<p>nothing</p>"), [])
+
+
+def test_build_mc_json_reports_and_idempotent() -> None:
+    print("\nbuild_mc_json() — roster diff + idempotency:")
+    mc = sync_cost.fetch_mc(MC_FIXTURE)
+    with tempfile.TemporaryDirectory() as td:
+        old_mc_json = sync_cost.MC_JSON
+        sync_cost.MC_JSON = Path(td) / "mc-members.json"
+        try:
+            sync_cost.MC_JSON.write_text(json.dumps({"members": [
+                {"name": "Dr Noela Mahmutaj", "country": "Albania", "country_code": "al"},
+                {"name": "Dr Gone Person", "country": "Albania", "country_code": "al"},
+            ]}), encoding="utf-8")
+            first = sync_cost.build_mc_json(mc)
+            expect("addition reported", any("+ edlira titini" in l for l in first), True)
+            expect("removal reported", any("- gone person" in l for l in first), True)
+            second = sync_cost.build_mc_json(mc)
+            expect("second run no-op", any("(no changes)" in l for l in second), True)
+            expect("empty roster leaves file alone",
+                   "untouched" in sync_cost.build_mc_json([])[0], True)
+        finally:
+            sync_cost.MC_JSON = old_mc_json
+
+
+def test_apply_stats_rewrites_markers() -> None:
+    print("\napply_stats() — data-cost-stat literal rewrite:")
+    mc = sync_cost.fetch_mc(MC_FIXTURE)   # 3 reps, 2 countries
+    with tempfile.TemporaryDirectory() as td:
+        old_root, old_pages = sync_cost.ROOT, sync_cost.STAT_PAGES
+        sync_cost.ROOT = Path(td)
+        sync_cost.STAT_PAGES = ["about.html"]
+        try:
+            page = Path(td) / "about.html"
+            page.write_text(
+                '<span class="mc-stat-num" data-cost-stat="mc-count">49</span>'
+                '<span data-cost-stat="country-count">30</span>'
+                '<span class="mc-stat-num">52</span>', encoding="utf-8")
+            first = sync_cost.apply_stats(mc)
+            out = page.read_text(encoding="utf-8")
+            expect("mc-count rewritten", 'data-cost-stat="mc-count">3<' in out, True)
+            expect("country-count rewritten", 'data-cost-stat="country-count">2<' in out, True)
+            expect("unmarked founding stat untouched",
+                   '<span class="mc-stat-num">52</span>' in out, True)
+            expect("change reported", any("updated" in l for l in first), True)
+            second = sync_cost.apply_stats(mc)
+            expect("second run no-op", any("(no changes)" in l for l in second), True)
+        finally:
+            sync_cost.ROOT, sync_cost.STAT_PAGES = old_root, old_pages
+
+
 # ─── main ──────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -378,6 +462,9 @@ def main() -> None:
     test_apply_leadership_reconciles_form_entries()
     test_apply_leadership_reconciles_wg_leadership()
     test_build_wg_json_resolves_leaders_and_members()
+    test_fetch_mc_parses_malformed_table()
+    test_build_mc_json_reports_and_idempotent()
+    test_apply_stats_rewrites_markers()
     print("\nAll smoke tests passed.")
 
 

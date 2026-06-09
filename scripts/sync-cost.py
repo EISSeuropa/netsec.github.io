@@ -3,7 +3,7 @@
 Sync helper: refresh data sourced from
 https://www.cost.eu/actions/CA24154/
 
-Four things kept in step with cost.eu:
+Five things kept in step with cost.eu:
 
   1. WG_MAP in index.html
      Parsed from cost.eu's Membership table — the {normalised-name → [WGs]}
@@ -36,6 +36,14 @@ Four things kept in step with cost.eu:
      count of members with no bio yet. Titles and the colour palette
      are config (WG_META). The Working Groups page renders from this.
      Regenerated every run, never hand-edited.
+
+  5. data/mc-members.json + visible statistics
+     The Management Committee roster (name, country, ISO code per rep),
+     regenerated from cost.eu's MC table, plus the MC-count and
+     country-count literals on the About page and press kit (marked
+     with data-cost-stat spans, all locales). The hand-authored MC
+     country grid on about.html is drift-CHECKED against the roster
+     but never rewritten (curated markup, human applies the fix).
 
 Usage:
     python3 scripts/sync-cost.py
@@ -506,6 +514,224 @@ def build_wg_json(members: list[dict]) -> list[str]:
     return lines
 
 
+
+# ─── MC roster + statistics sync (Management Committee table) ───────
+
+# COST member countries → ISO 3166-1 alpha-2 (flagcdn codes). Covers
+# the full + cooperating member list so a country joining the Action
+# resolves without a code change. A parsed country missing from this
+# map is reported and skipped rather than guessed.
+COUNTRY_CODES = {
+    "Albania": "al", "Austria": "at", "Belgium": "be",
+    "Bosnia and Herzegovina": "ba", "Bulgaria": "bg", "Croatia": "hr",
+    "Cyprus": "cy", "Czech Republic": "cz", "Czechia": "cz",
+    "Denmark": "dk", "Estonia": "ee", "Finland": "fi", "France": "fr",
+    "Georgia": "ge", "Germany": "de", "Greece": "gr", "Hungary": "hu",
+    "Iceland": "is", "Ireland": "ie", "Israel": "il", "Italy": "it",
+    "Latvia": "lv", "Lithuania": "lt", "Luxembourg": "lu", "Malta": "mt",
+    "Moldova": "md", "Republic of Moldova": "md", "Montenegro": "me",
+    "Netherlands": "nl", "The Netherlands": "nl",
+    "North Macedonia": "mk", "Norway": "no", "Poland": "pl",
+    "Portugal": "pt", "Romania": "ro", "Serbia": "rs", "Slovakia": "sk",
+    "Slovenia": "si", "Spain": "es", "Sweden": "se", "Switzerland": "ch",
+    "Türkiye": "tr", "Turkey": "tr", "Ukraine": "ua",
+    "United Kingdom": "gb",
+}
+
+# Display-name corrections for upstream data-entry defects in cost.eu's
+# MC table (e.g. a collapsed "PAVLOSIOANNIS"). Keyed on the normalised
+# parsed name; the value is the full corrected display name. Remove an
+# entry once cost.eu fixes the source.
+MC_NAME_FIXES = {
+    "pavlosioannis koktsidis": "Prof Pavlos Ioannis Koktsidis",
+    # cost.eu publishes these without their diacritics; norm() strips
+    # diacritics for keying, so the corrected forms match either way.
+    "danilo kalezic": "Mr Danilo Kalezić",
+    "miha dvojmoc": "Mr Miha Dvojmoč",
+}
+
+MC_JSON = ROOT / "data" / "mc-members.json"
+
+# Pages carrying <span data-cost-stat="mc-count|country-count"> markers
+# whose text content is rewritten from the parsed roster. The founding
+# numbers (52 contributors, 21 countries) are historical record and
+# deliberately carry no marker.
+STAT_PAGES = [
+    "about.html", "about.fr.html", "about.de.html",
+    "press-kit.html", "press-kit.fr.html", "press-kit.de.html",
+]
+
+
+_MC_SECTION_RE = re.compile(
+    r"Management Committee</h2>(.*?)</table>", re.S)
+_MC_COUNTRY_RE = re.compile(
+    # cost.eu closes the country <td> with a stray </div> (the same
+    # malformation that forces extract_leadership onto raw HTML), so
+    # the whole MC table is parsed here with regex rather than bs4.
+    r"<td[^>]*align-top[^>]*>([^<]+)</(?:div|td)>")
+
+
+def fetch_mc(html: str) -> list[dict]:
+    """Parse cost.eu's Management Committee table into
+    [{name, country, country_code}].
+
+    Works on the raw HTML because the country cells are closed with a
+    stray </div> that fools BeautifulSoup's table parser (same defect
+    extract_leadership works around). The section between the
+    "Management Committee" heading and its </table> is split on the
+    country cells; each country's segment carries one <h4> per
+    representative holding the title/first/SURNAME spans. A country
+    missing from COUNTRY_CODES is reported by the caller via the
+    roster diff (its reps vanish), so keep the map covering the full
+    COST membership."""
+    m = _MC_SECTION_RE.search(html)
+    if not m:
+        return []
+    seg = m.group(1)
+    hits = list(_MC_COUNTRY_RE.finditer(seg))
+    out: list[dict] = []
+    seen: set = set()
+    for i, cm in enumerate(hits):
+        country = _unescape_html(cm.group(1).strip())
+        if country not in COUNTRY_CODES:
+            continue
+        chunk = seg[cm.end(): hits[i + 1].start() if i + 1 < len(hits) else len(seg)]
+        for h4 in _H4_RE.findall(chunk):
+            name = " ".join(_SPAN_RE.findall(h4)).strip() or re.sub(r"<[^>]+>", " ", h4)
+            name = titlecase_name(_unescape_html(re.sub(r"\s+", " ", name).strip()))
+            name = MC_NAME_FIXES.get(norm(name), name)
+            key = (country, norm(name))
+            if not norm(name) or key in seen:
+                continue
+            seen.add(key)
+            out.append({
+                "name": name,
+                "country": country,
+                "country_code": COUNTRY_CODES[country],
+            })
+    out.sort(key=lambda m: (m["country"], norm(m["name"])))
+    return out
+
+
+def build_mc_json(mc: list[dict]) -> list[str]:
+    """Write data/mc-members.json from the parsed MC table. Reports
+    adds/removals against the previous roster so a representative
+    change is visible in the weekly sync PR. Idempotent: deterministic
+    sorted output, written only on change."""
+    if not mc:
+        return ["MC roster: cost.eu returned no parseable MC rows, "
+                "leaving data/mc-members.json untouched."]
+    old_names: set = set()
+    if MC_JSON.exists():
+        old = json.loads(MC_JSON.read_text(encoding="utf-8"))
+        old_names = {norm(m.get("name") or "") for m in old.get("members", [])}
+    payload = {
+        "_documentation": (
+            "Management Committee roster: one entry per MC representative "
+            "with their country and ISO code (drives the flag images via "
+            "flagcdn). Generated by scripts/sync-cost.py from cost.eu's "
+            "Management Committee table. DO NOT EDIT BY HAND: the next "
+            "weekly sync overwrites it. The same parse feeds the "
+            "data-cost-stat literals on the About page and press kit."
+        ),
+        "source": URL,
+        "members": mc,
+    }
+    new_text = json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
+    old_text = MC_JSON.read_text(encoding="utf-8") if MC_JSON.exists() else ""
+    countries = len({m["country"] for m in mc})
+    lines = [f"MC roster: {len(mc)} representatives, {countries} countries"]
+    if new_text == old_text:
+        lines.append("  (no changes)")
+        return lines
+    new_names = {norm(m["name"]) for m in mc}
+    for n in sorted(new_names - old_names):
+        lines.append(f"  + {n}")
+    for n in sorted(old_names - new_names):
+        lines.append(f"  - {n}")
+    MC_JSON.write_text(new_text, encoding="utf-8")
+    return lines
+
+
+_STAT_SPAN_RE = {
+    "mc-count": re.compile(
+        r'(<span[^>]*data-cost-stat="mc-count"[^>]*>)[^<]*(</span>)'),
+    "country-count": re.compile(
+        r'(<span[^>]*data-cost-stat="country-count"[^>]*>)[^<]*(</span>)'),
+}
+
+
+def apply_stats(mc: list[dict]) -> list[str]:
+    """Rewrite the data-cost-stat="mc-count|country-count" span contents
+    on the About page and press kit (all locales) from the parsed
+    roster, so the visible statistics can never drift from cost.eu.
+    Reports per-file changes; no-ops idempotently."""
+    if not mc:
+        return ["Stat literals: skipped (no roster parsed)."]
+    values = {
+        "mc-count": str(len(mc)),
+        "country-count": str(len({m["country"] for m in mc})),
+    }
+    lines = [f"Stat literals: MC {values['mc-count']} · "
+             f"countries {values['country-count']}"]
+    changed_any = False
+    for page in STAT_PAGES:
+        path = ROOT / page
+        if not path.exists():
+            continue
+        html = path.read_text(encoding="utf-8")
+        new_html = html
+        for key, rx in _STAT_SPAN_RE.items():
+            new_html = rx.sub(lambda m: m.group(1) + values[key] + m.group(2),
+                              new_html)
+        if new_html != html:
+            path.write_text(new_html, encoding="utf-8")
+            lines.append(f"  ~ {page} updated")
+            changed_any = True
+    if not changed_any:
+        lines.append("  (no changes)")
+    return lines
+
+
+def check_country_grid(mc: list[dict]) -> list[str]:
+    """Compare the hand-authored MC country grid on about.html against
+    the parsed roster and report mismatches. Report-only: the grid
+    carries curated markup (flags, deep-link ids), so a human applies
+    the fix; this check makes sure the drift is visible in the weekly
+    sync PR rather than silent."""
+    if not mc:
+        return []
+    path = ROOT / "about.html"
+    html = path.read_text(encoding="utf-8")
+    # Scope to the MC countries block: the founding-contributors grid
+    # further down the page reuses the same classes and data-person
+    # attributes, and an inline JS template carries ${...} placeholders.
+    m = re.search(r'id="mc-countries".*?</details>', html, re.S)
+    block = m.group(0) if m else ""
+    grid_countries = {c for c in re.findall(r'class="country-name">([^<]+)<', block)
+                      if "${" not in c}
+    grid_people = {norm(p) for p in re.findall(r'data-person="([^"]+)"', block)
+                   if "${" not in p}
+    roster_countries = {m["country"] for m in mc}
+    roster_people = {norm(m["name"]) for m in mc}
+    lines: list[str] = []
+    for c in sorted(roster_countries - grid_countries):
+        lines.append(f"  ! country on cost.eu missing from the about-page grid: {c}")
+    for c in sorted(grid_countries - roster_countries):
+        lines.append(f"  ! country in the about-page grid no longer on cost.eu: {c}")
+    for p in sorted(roster_people - grid_people):
+        lines.append(f"  ! MC rep on cost.eu missing from the grid: {p}")
+    for p in sorted(grid_people - roster_people):
+        lines.append(f"  ! grid entry no longer an MC rep on cost.eu: {p}")
+    if lines:
+        lines.insert(0, "Country-grid check (about.html, hand-maintained):")
+        lines.append("  Apply grid edits by hand in all three locales, "
+                     "or accept the drift knowingly.")
+    else:
+        lines = ["Country-grid check: about.html grid matches the roster."]
+    return lines
+
+
 # ─── main ───────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -541,6 +767,20 @@ def main() -> None:
     members = fetch_members(bs)
     print()
     for line in build_wg_json(members):
+        print(line)
+
+    # 5) MC roster → data/mc-members.json, plus the visible statistics
+    #    (MC count, country count) on the About page and press kit, and
+    #    a report-only drift check of the hand-authored country grid.
+    mc = fetch_mc(r.text)
+    print()
+    for line in build_mc_json(mc):
+        print(line)
+    print()
+    for line in apply_stats(mc):
+        print(line)
+    print()
+    for line in check_country_grid(mc):
         print(line)
 
 
