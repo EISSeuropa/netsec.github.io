@@ -173,12 +173,31 @@ node automatically.
 
 ### `.mc-stats`
 
-Three-up snapshot grid used on the home page (49 MC reps,
-30 countries, ~51 % women). One-column on phones.
+Three-up snapshot grid on the About page (MC representatives,
+countries represented, ~51 % women). One-column on phones. The first
+two numbers carry `data-cost-stat="mc-count"` / `"country-count"` and
+are rewritten by `sync-cost.py` from the cost.eu roster, so don't
+hand-edit them; only the approximate gender figure is manual.
 
 ### `.country-grid` / `.country-card`
 
-Responsive card grid showing the 30 MC countries with FlagCDN flags.
+Responsive card grid showing the MC countries with FlagCDN flags. The
+grid markup is hand-authored (curated flags + deep-link ids) and
+drift-checked against the synced roster, so it is not auto-generated.
+
+### Deliverables Gantt (`.gantt` / `.g-row` / `.milestone`)
+
+The About-page deliverables chart. One CSS grid owns the 17 column
+tracks (label + 16 quarters) and every `.g-row` inherits them via
+`grid-template-columns:subgrid`, so milestone markers line up across
+rows at any zoom (an `@supports` fallback keeps per-row grids on
+browsers without subgrid). Milestone pills read as `.milestone`
+(planned), `.is-shipped` (delivered — the class name is retained
+though the visible label is "Delivered"), `.is-early` (delivered
+ahead of plan, the only green), and `.is-ghost` (the original planned
+month when a deliverable shipped early). The roadmap's "show earlier
+releases" collapse is a separate component driven by
+`assets/js/roadmap-shipped-toggle.js`.
 
 ### `.members-toolbar`, `.members-filter-chip`, `.members-country`
 
