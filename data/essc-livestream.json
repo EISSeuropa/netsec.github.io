@@ -1,0 +1,7 @@
+{
+  "_documentation": "Livestream link for the ESSC conference, surfaced on essc-2026.html (+ FR + DE) by the programme renderer. One Zoom webinar link is used for every session. The renderer shows it only while the current time is within [start, end], so nothing stale appears before or after the conference. To take it down, blank `url` (or delete this file): the page fails soft. Times carry an explicit +02:00 (CEST) offset so the gate is correct in any visitor's timezone. This file is hand-maintained and is NOT touched by the daily Indico sync.",
+  "url": "https://stockholmuniversity.zoom.us/j/62445444403",
+  "platform": "Zoom webinar",
+  "start": "2026-06-11T08:00:00+02:00",
+  "end": "2026-06-12T20:00:00+02:00"
+}
