@@ -47,3 +47,10 @@ jobs:
 
       - name: Run link check
         run: ./scripts/check-links.sh --quiet
+
+      - name: Check the accessibility statement's review date
+        # Fails when the "next scheduled review" date in the statement's
+        # version footer has passed, warns inside the 60-day window.
+        # Piggybacks on this weekly run so an overdue review surfaces
+        # as a red Monday run rather than going unnoticed.
+        run: python3 scripts/check-a11y-statement-date.py
