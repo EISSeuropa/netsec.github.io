@@ -282,8 +282,9 @@ which is mirrored daily from the shared EISS Indico instance at
    clean and the workflow is a no-op. (Direct push to `main` was the
    previous design; the v1.6.1 ruleset tightening made it
    incompatible. See the 2026-05-24 entry in the Wiki Decisions log.)
-4. On every visit to `/essc-2026.html`, the inline JS at the foot
-   of the page fetches `data/indico.json`, picks the right year
+4. On every visit to `/essc-2026.html`, the shared renderer
+   (`assets/js/essc-programme.js`, one file serving all three locale
+   pages) fetches `data/indico.json`, picks the right year
    under `annualConferences`, and renders the day chips, time
    blocks, parallel sessions, and contributions.
 
