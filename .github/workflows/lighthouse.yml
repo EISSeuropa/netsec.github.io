@@ -1,12 +1,17 @@
-name: Lighthouse (informational)
+name: Lighthouse (budgets)
 
-# Non-blocking performance / accessibility / SEO visibility. Serves the
-# static site, runs Lighthouse against a handful of key pages, and posts
-# a temporary public report link on the run. It NEVER fails the build:
-# the job is continue-on-error and there are no pass/fail assertions, so
-# it gives a trend signal without the flaky red CI that perf-score
-# budgets produce in shared runners. Promote to a gating budget later if
-# wanted (#270).
+# Performance / accessibility / SEO budget gate (#270). Serves the
+# static site, runs Lighthouse against the key pages, and asserts the
+# thresholds in lighthouserc.json. Three runs per URL keep shared-
+# runner variance from flaking the result, and the thresholds sit
+# below the day-to-day scores on purpose: the gate catches collapses
+# (a megabyte image landing on a page, a render-blocking regression),
+# not noise.
+#
+# This check is NOT in the required set, so a red run signals without
+# blocking auto-merge. If it goes red on your PR, open the uploaded
+# report artifact, find the failed assertion, and fix it (or record
+# why it is acceptable) before merging anyway.
 
 on:
   pull_request:
@@ -14,6 +19,7 @@ on:
       - '**.html'
       - 'assets/css/**'
       - 'assets/js/**'
+      - 'lighthouserc.json'
       - '.github/workflows/lighthouse.yml'
   workflow_dispatch:
 
@@ -23,8 +29,6 @@ permissions:
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
-    # Never block a merge on this. It is a signal, not a gate.
-    continue-on-error: true
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v4 (sha-pinned)
       - name: Serve the static site
@@ -32,7 +36,7 @@ jobs:
         run: |
           python3 -m http.server 8080 --directory . &
           sleep 3
-      - name: Run Lighthouse
+      - name: Run Lighthouse with budget assertions
         uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18  # v12 (sha-pinned)
         with:
           urls: |
@@ -40,5 +44,8 @@ jobs:
             http://localhost:8080/people.html
             http://localhost:8080/about.html
             http://localhost:8080/essc-2026.html
+            http://localhost:8080/press-kit.html
+          runs: 3
+          configPath: './lighthouserc.json'
           uploadArtifacts: true
           temporaryPublicStorage: true
