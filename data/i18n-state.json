@@ -215,15 +215,15 @@
     "outputs.html": {
       "fr": {
         "file": "outputs.fr.html",
-        "source_sha1": "bf43ec34451c2789ad39d9e3fb414440fb7d39b7",
-        "translated_on": "2026-06-04",
+        "source_sha1": "44b546a285a6e9cef88440f35a728bd4963625cd",
+        "translated_on": "2026-06-09",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "outputs.de.html",
-        "source_sha1": "bf43ec34451c2789ad39d9e3fb414440fb7d39b7",
-        "translated_on": "2026-06-04",
+        "source_sha1": "44b546a285a6e9cef88440f35a728bd4963625cd",
+        "translated_on": "2026-06-09",
         "status": "beta",
         "reviewed_by": null
       }
