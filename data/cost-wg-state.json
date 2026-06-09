@@ -1,0 +1,90 @@
+{
+  "_documentation": "Observation clocks for the per-bio Working Group reconciliation in scripts/sync-cost.py. Per member (normalised name): the WG set last seen on cost.eu with the date each WG first appeared there, and the member's form-side WG set with the date it last changed. Neither source carries decision dates, so recency is judged on when each change was OBSERVED by the weekly sync. Generated file, do not edit by hand; deleting it resets the clocks to the next sync run (additions then win, the safe direction).",
+  "members": {
+    "moritz weiss": {
+      "cost_first_seen": {
+        "1": "2026-06-10",
+        "3": "2026-06-10"
+      },
+      "form_wgs": [
+        1,
+        3
+      ],
+      "form_changed_on": "2026-06-10"
+    },
+    "marie robin": {
+      "cost_first_seen": {
+        "2": "2026-06-10",
+        "3": "2026-06-10"
+      },
+      "form_wgs": [
+        2,
+        3
+      ],
+      "form_changed_on": "2026-06-10"
+    },
+    "chiara libiseller": {
+      "cost_first_seen": {
+        "3": "2026-06-10"
+      },
+      "form_wgs": [
+        3
+      ],
+      "form_changed_on": "2026-06-10"
+    },
+    "revecca pedi": {
+      "cost_first_seen": {
+        "1": "2026-06-10",
+        "4": "2026-06-10"
+      },
+      "form_wgs": [
+        1,
+        4
+      ],
+      "form_changed_on": "2026-06-10"
+    },
+    "filip ejdus": {
+      "cost_first_seen": {
+        "1": "2026-06-10",
+        "2": "2026-06-10",
+        "3": "2026-06-10",
+        "4": "2026-06-10"
+      },
+      "form_wgs": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "form_changed_on": "2026-06-10"
+    },
+    "sarka kolmasova": {
+      "cost_first_seen": {
+        "1": "2026-06-10",
+        "2": "2026-06-10",
+        "3": "2026-06-10",
+        "4": "2026-06-10"
+      },
+      "form_wgs": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "form_changed_on": "2026-06-10"
+    },
+    "arthur laudrain": {
+      "cost_first_seen": {
+        "1": "2026-06-10",
+        "2": "2026-06-10",
+        "3": "2026-06-10"
+      },
+      "form_wgs": [
+        1,
+        2,
+        3
+      ],
+      "form_changed_on": "2026-06-10"
+    }
+  }
+}

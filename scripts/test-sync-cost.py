@@ -26,7 +26,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 sync_cost = __import__("sync-cost")
 norm = sync_cost.norm
 slugify = sync_cost.slugify
-apply_wgs_to_bios = sync_cost.apply_wgs_to_bios
 extract_leadership = sync_cost.extract_leadership
 apply_leadership = sync_cost.apply_leadership
 
@@ -69,111 +68,166 @@ def _read_bios(path: Path) -> list[dict]:
     return json.loads(path.read_text(encoding="utf-8"))["members"]
 
 
-def test_apply_wgs_overwrites_matched() -> None:
-    """The headline case: a bio entry whose name matches cost.eu's
-    Membership table gets its `wgs` overwritten with cost.eu's list."""
-    print("\napply_wgs_to_bios() — overwrites a matched entry:")
+def _with_paths(td: Path, members: list):
+    """Point sync_cost.BIOS and WG_STATE into the tempdir."""
+    path = _seed_bios(td, members)
+    return path, td / "cost-wg-state.json"
+
+
+def _run(new_map, today="2026-06-10"):
+    return sync_cost.reconcile_wgs(new_map, today)
+
+
+def test_reconcile_applies_cost_addition() -> None:
+    """A WG on cost.eu that the form set lacks, observed no earlier
+    than the form's last change, is applied (additions are safe)."""
+    print("\nreconcile_wgs() — cost.eu addition applies:")
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
-        path = _seed_bios(tmp, [
+        path, state = _with_paths(tmp, [
             {"id": "arthur-laudrain", "name": "Dr Arthur Laudrain",
              "wgs": [2, 3], "source": "form"},
         ])
-        saved = sync_cost.BIOS
-        sync_cost.BIOS = path
+        saved = sync_cost.BIOS, sync_cost.WG_STATE
+        sync_cost.BIOS, sync_cost.WG_STATE = path, state
         try:
-            lines = apply_wgs_to_bios({"arthur laudrain": [1, 2, 3]})
+            lines, eff = _run({"arthur laudrain": [1, 2, 3]})
         finally:
-            sync_cost.BIOS = saved
-        bios = _read_bios(path)
-        expect("wgs overwritten", bios[0]["wgs"], [1, 2, 3])
-        expect("matched 1 bio",
-               any("1 bios matched" in line for line in lines), True)
-        expect("diff line emitted",
-               any("Arthur Laudrain" in line for line in lines), True)
+            sync_cost.BIOS, sync_cost.WG_STATE = saved
+        expect("WG1 applied", _read_bios(path)[0]["wgs"], [1, 2, 3])
+        expect("effective map carries the merge", eff["arthur laudrain"], [1, 2, 3])
+        expect("addition reported",
+               any("WG1 added" in line for line in lines), True)
+        expect("state file written", state.exists(), True)
 
 
-def test_apply_wgs_idempotent_when_already_matches() -> None:
-    """A bio entry whose `wgs` already matches cost.eu produces no
-    diff and the file is not rewritten."""
-    print("\napply_wgs_to_bios() — idempotent when bios already matches:")
+def test_reconcile_keeps_form_extra_as_pending() -> None:
+    """A WG on the form that cost.eu has not published yet is kept on
+    the card and flagged as pending catch-up, never stripped."""
+    print("\nreconcile_wgs() — form-side WG pending cost.eu catch-up:")
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
-        path = _seed_bios(tmp, [
+        path, state = _with_paths(tmp, [
+            {"id": "maria-fresh", "name": "Dr Maria Fresh",
+             "wgs": [1, 3], "source": "form"},
+        ])
+        saved = sync_cost.BIOS, sync_cost.WG_STATE
+        sync_cost.BIOS, sync_cost.WG_STATE = path, state
+        try:
+            lines, eff = _run({"maria fresh": [1]})
+        finally:
+            sync_cost.BIOS, sync_cost.WG_STATE = saved
+        expect("form WG kept", _read_bios(path)[0]["wgs"], [1, 3])
+        expect("effective map keeps it too", eff["maria fresh"], [1, 3])
+        expect("flagged as pending",
+               any("pending formal catch-up" in line for line in lines), True)
+
+
+def test_reconcile_holds_deliberate_removal() -> None:
+    """A WG long-standing on cost.eu that the member's NEWER form
+    submission dropped is held (not re-added) and flagged for a human."""
+    print("\nreconcile_wgs() — newer form removal is held, not re-added:")
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        path, state = _with_paths(tmp, [
+            {"id": "joe-dropper", "name": "Dr Joe Dropper",
+             "wgs": [1], "source": "form"},
+        ])
+        # snapshot: WG2 first seen on cost.eu long ago; form set then
+        # still carried it. The bio above (without WG2) is a NEWER edit.
+        state.write_text(json.dumps({"members": {"joe dropper": {
+            "cost_first_seen": {"1": "2026-05-01", "2": "2026-05-01"},
+            "form_wgs": [1, 2],
+            "form_changed_on": "2026-05-01",
+        }}}), encoding="utf-8")
+        saved = sync_cost.BIOS, sync_cost.WG_STATE
+        sync_cost.BIOS, sync_cost.WG_STATE = path, state
+        try:
+            lines, eff = _run({"joe dropper": [1, 2]}, today="2026-06-10")
+        finally:
+            sync_cost.BIOS, sync_cost.WG_STATE = saved
+        expect("removal held", _read_bios(path)[0]["wgs"], [1])
+        expect("effective map honours the hold", eff["joe dropper"], [1])
+        expect("hold flagged for a human",
+               any("newer form submission omits it" in line for line in lines), True)
+
+
+def test_reconcile_cost_newer_readds_after_form_change() -> None:
+    """The recency tie-break in the other direction: cost.eu adds a WG
+    AFTER the member's last form change, so it applies even though the
+    form set lacks it."""
+    print("\nreconcile_wgs() — later cost.eu addition wins over older form:")
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        path, state = _with_paths(tmp, [
+            {"id": "ann-promoted", "name": "Dr Ann Promoted",
+             "wgs": [1], "source": "form"},
+        ])
+        state.write_text(json.dumps({"members": {"ann promoted": {
+            "cost_first_seen": {"1": "2026-05-01"},
+            "form_wgs": [1],
+            "form_changed_on": "2026-05-01",
+        }}}), encoding="utf-8")
+        saved = sync_cost.BIOS, sync_cost.WG_STATE
+        sync_cost.BIOS, sync_cost.WG_STATE = path, state
+        try:
+            lines, eff = _run({"ann promoted": [1, 4]}, today="2026-06-10")
+        finally:
+            sync_cost.BIOS, sync_cost.WG_STATE = saved
+        expect("new formal WG applied", _read_bios(path)[0]["wgs"], [1, 4])
+        expect("addition reported",
+               any("WG4 added" in line for line in lines), True)
+
+
+def test_reconcile_idempotent_when_in_agreement() -> None:
+    """Sources agree: no diff, bios file untouched, second state write
+    is a no-op."""
+    print("\nreconcile_wgs() — idempotent when sources agree:")
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        path, state = _with_paths(tmp, [
             {"id": "moritz-weiss", "name": "Dr. Moritz Weiss",
              "wgs": [1], "source": "seed"},
         ])
-        before_mtime = path.stat().st_mtime_ns
-
-        saved = sync_cost.BIOS
-        sync_cost.BIOS = path
+        saved = sync_cost.BIOS, sync_cost.WG_STATE
+        sync_cost.BIOS, sync_cost.WG_STATE = path, state
         try:
-            lines = apply_wgs_to_bios({"moritz weiss": [1]})
+            _run({"moritz weiss": [1]})
+            before_mtime = path.stat().st_mtime_ns
+            state_before = state.read_text(encoding="utf-8")
+            lines, _ = _run({"moritz weiss": [1]})
         finally:
-            sync_cost.BIOS = saved
-        after_mtime = path.stat().st_mtime_ns
-
+            sync_cost.BIOS, sync_cost.WG_STATE = saved
         expect("no changes reported",
                any("(no changes)" in line for line in lines), True)
-        expect("file not rewritten", after_mtime, before_mtime)
-
-
-def test_apply_wgs_leaves_unmatched_entries_alone() -> None:
-    """A bio entry whose name is not in cost.eu's Membership table
-    (community member, or a leader seeded ahead of cost.eu publishing
-    them) is left untouched."""
-    print("\napply_wgs_to_bios() — leaves unmatched entries untouched:")
-    with tempfile.TemporaryDirectory() as td:
-        tmp = Path(td)
-        path = _seed_bios(tmp, [
-            {"id": "community-member", "name": "Dr External Collaborator",
-             "wgs": [4], "source": "form"},
-        ])
-        saved = sync_cost.BIOS
-        sync_cost.BIOS = path
-        try:
-            apply_wgs_to_bios({"moritz weiss": [1], "arthur laudrain": [2, 3]})
-        finally:
-            sync_cost.BIOS = saved
-        bios = _read_bios(path)
-        expect("unmatched entry preserved", bios[0]["wgs"], [4])
-
-
-def test_apply_wgs_handles_salutation_variants() -> None:
-    """Names with and without a trailing-period salutation normalise
-    to the same key, so cost.eu's `Dr Arthur Laudrain` matches a bio
-    saved as `Dr. Arthur Laudrain`."""
-    print("\napply_wgs_to_bios() — salutation variants normalise alike:")
-    with tempfile.TemporaryDirectory() as td:
-        tmp = Path(td)
-        path = _seed_bios(tmp, [
-            {"id": "filip-ejdus", "name": "Prof. Filip Ejdus",
-             "wgs": [], "source": "form"},
-        ])
-        saved = sync_cost.BIOS
-        sync_cost.BIOS = path
-        try:
-            apply_wgs_to_bios({"filip ejdus": [1]})
-        finally:
-            sync_cost.BIOS = saved
-        expect("salutation variant matched",
+        expect("bios not rewritten", path.stat().st_mtime_ns, before_mtime)
+        expect("state stable", state.read_text(encoding="utf-8"), state_before)
+        expect("salutation variant matched (Dr. vs Dr)",
                _read_bios(path)[0]["wgs"], [1])
 
 
-def test_apply_wgs_no_bios_file() -> None:
-    """When bios.json does not exist, the function returns a single
-    'not present, skipped' line and does not crash."""
-    print("\napply_wgs_to_bios() — missing bios.json is non-fatal:")
+def test_reconcile_leaves_unmatched_and_missing_file() -> None:
+    """Entries not on cost.eu stay untouched; a missing bios.json is
+    non-fatal and returns the raw map as effective."""
+    print("\nreconcile_wgs() — unmatched entries + missing file:")
     with tempfile.TemporaryDirectory() as td:
-        path = Path(td) / "bios.json"   # does not exist
-        saved = sync_cost.BIOS
-        sync_cost.BIOS = path
+        tmp = Path(td)
+        path, state = _with_paths(tmp, [
+            {"id": "community-member", "name": "Dr External Collaborator",
+             "wgs": [4], "source": "form"},
+        ])
+        saved = sync_cost.BIOS, sync_cost.WG_STATE
+        sync_cost.BIOS, sync_cost.WG_STATE = path, state
         try:
-            lines = apply_wgs_to_bios({"anyone": [1]})
+            _run({"moritz weiss": [1]})
+            expect("unmatched entry preserved", _read_bios(path)[0]["wgs"], [4])
+            sync_cost.BIOS = tmp / "missing.json"
+            lines, eff = _run({"anyone": [1]})
+            expect("missing file skipped cleanly",
+                   any("not present" in line for line in lines), True)
+            expect("raw map returned", eff, {"anyone": [1]})
         finally:
-            sync_cost.BIOS = saved
-        expect("skipped cleanly",
-               any("not present" in line for line in lines), True)
+            sync_cost.BIOS, sync_cost.WG_STATE = saved
 
 
 # ─── extract_leadership() regression coverage ──────────────────────
@@ -452,11 +506,12 @@ def test_apply_stats_rewrites_markers() -> None:
 
 def main() -> None:
     test_norm()
-    test_apply_wgs_overwrites_matched()
-    test_apply_wgs_idempotent_when_already_matches()
-    test_apply_wgs_leaves_unmatched_entries_alone()
-    test_apply_wgs_handles_salutation_variants()
-    test_apply_wgs_no_bios_file()
+    test_reconcile_applies_cost_addition()
+    test_reconcile_keeps_form_extra_as_pending()
+    test_reconcile_holds_deliberate_removal()
+    test_reconcile_cost_newer_readds_after_form_change()
+    test_reconcile_idempotent_when_in_agreement()
+    test_reconcile_leaves_unmatched_and_missing_file()
     test_extract_leadership_matches_known_role_suffixes()
     test_extract_leadership_matches_standalone_lead()
     test_apply_leadership_reconciles_form_entries()

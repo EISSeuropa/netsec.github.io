@@ -79,9 +79,9 @@ This makes the photo-replacement workaround safe to recommend in practice: respo
 
 The Google Form's *Working Group involvement* checkboxes seed each bio's `wgs` field on first submission. From then on, `scripts/sync-cost.py` (weekly Monday 05:00 UTC, plus manual `workflow_dispatch`) reconciles `wgs` against the Membership table on <https://www.cost.eu/actions/CA24154/>:
 
-- **cost.eu is the authoritative source for formal WG membership.** If a member's WG list on cost.eu differs from `bios.json.members[].wgs`, the sync overwrites with cost.eu's list. The auto-PR opened by the workflow surfaces the diff in its body.
+- **Per-WG reconciliation, biased towards additions.** Members add WGs far more often than they remove them, and cost.eu can lag a fresh form submission by weeks, so neither source simply wins. A WG newly published on cost.eu is applied to the bio; a WG declared on the form that cost.eu has not recorded yet stays on the card and is flagged in the sync PR as pending formal catch-up; a WG a member's newer form submission deliberately dropped is held rather than re-added, with a flag asking the maintainer to confirm. The observation clocks behind the recency comparison live in `data/cost-wg-state.json` (generated, never hand-edited).
 - **Entries not on cost.eu are left untouched.** Wider-community researchers in the directory who aren't on the MC, plus seed entries for new leaders who haven't yet appeared in cost.eu's Membership table, keep whatever `wgs` value the form (or the maintainer) last set.
-- **Informal affiliations belong in the bio prose, not the structured field.** A member who participates in WG discussions without formal cost.eu membership can describe that in their bio text. The structured `wgs` field is reserved for what cost.eu records.
+- **Every chip surface shows the same sets.** The home-page `WG_MAP` and `data/wg.json` consume the reconciled result, so the home page, the directory, and the Working Groups page can never tell different stories about a member's WGs.
 
 When the maintainer (or COST admin) updates a member's WG list on cost.eu, the change reaches the directory on the next sync run. No respondent action required.
 
