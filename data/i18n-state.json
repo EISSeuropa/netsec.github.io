@@ -151,15 +151,15 @@
     "press-kit.html": {
       "fr": {
         "file": "press-kit.fr.html",
-        "source_sha1": "d5f9ccd638f6d85d1ad1684aacd91299caf3c929",
-        "translated_on": "2026-06-09",
+        "source_sha1": "41e0e457bee087c52b790a362265be212bc07f54",
+        "translated_on": "2026-06-10",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "press-kit.de.html",
-        "source_sha1": "d5f9ccd638f6d85d1ad1684aacd91299caf3c929",
-        "translated_on": "2026-06-09",
+        "source_sha1": "41e0e457bee087c52b790a362265be212bc07f54",
+        "translated_on": "2026-06-10",
         "status": "beta",
         "reviewed_by": null
       }
@@ -199,15 +199,15 @@
     "about.html": {
       "fr": {
         "file": "about.fr.html",
-        "source_sha1": "3d67ce0787c4b106ce12f5585a57a4077cbf5567",
-        "translated_on": "2026-06-08",
+        "source_sha1": "432c19ccdfa4a4ead92ca4ea33006c57d9a74131",
+        "translated_on": "2026-06-10",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "about.de.html",
-        "source_sha1": "3d67ce0787c4b106ce12f5585a57a4077cbf5567",
-        "translated_on": "2026-06-08",
+        "source_sha1": "432c19ccdfa4a4ead92ca4ea33006c57d9a74131",
+        "translated_on": "2026-06-10",
         "status": "beta",
         "reviewed_by": null
       }
