@@ -199,14 +199,14 @@
     "about.html": {
       "fr": {
         "file": "about.fr.html",
-        "source_sha1": "432c19ccdfa4a4ead92ca4ea33006c57d9a74131",
+        "source_sha1": "788d492b218cb25f26531207dfb7fc2a5bac54aa",
         "translated_on": "2026-06-10",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "about.de.html",
-        "source_sha1": "432c19ccdfa4a4ead92ca4ea33006c57d9a74131",
+        "source_sha1": "788d492b218cb25f26531207dfb7fc2a5bac54aa",
         "translated_on": "2026-06-10",
         "status": "beta",
         "reviewed_by": null
