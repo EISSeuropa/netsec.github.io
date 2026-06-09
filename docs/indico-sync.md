@@ -21,7 +21,7 @@ indico.eiss-europa.com  ← single Indico, shared with EISS
        ▼   (daily cron, scripts/sync-indico.py via .github/workflows/sync-indico.yml)
 data/indico.json        ← NetSec's mirror of programme + event metadata
        │
-       ▼   (runtime JS renderer, inline at the foot of essc-2026.html)
+       ▼   (runtime JS renderer, assets/js/essc-programme.js, shared by all three locale pages)
 /essc-2026.html (+ .fr.html + .de.html)
 ```
 
@@ -33,13 +33,14 @@ data/indico.json        ← NetSec's mirror of programme + event metadata
 | `scripts/test-sync-indico.py` | Standalone runnable. Mocks `requests.get` with a JPEG fixture; asserts on the normalised output. No live network. Covers `summarise_changes()`. |
 | `.github/workflows/sync-indico.yml` | Daily cron at 03:45 UTC, manual `workflow_dispatch`. Opens/updates a PR on `indico-sync/auto` (auto-merge, squash) when `data/indico.json` changes substantively; the PR body renders the script's stdout change summary so the maintainer sees precisely what moved. |
 | `data/indico.json` | Synced snapshot, year-keyed under `annualConferences`. Schema mirrors EISS's `indico.json` exactly so the renderer is portable. |
-| `essc-2026.html` (+ FR + DE) | The page that consumes the data. Inline JS at the foot fetches `data/indico.json`, looks up `annualConferences["2026"]`, and renders the grid. Locale-aware chrome labels via a small `I18N` lookup keyed on `document.documentElement.lang`. |
+| `essc-2026.html` (+ FR + DE) | The pages that consume the data. Each carries a single `<script src>` tag pointing at the shared renderer. |
+| `assets/js/essc-programme.js` | The runtime renderer, one file serving all three locale pages (extracted from the per-locale inline copies in #725). Fetches `data/indico.json`, looks up `annualConferences["2026"]`, and renders the grid. Locale-aware chrome labels via a small `I18N` lookup keyed on `document.documentElement.lang`. |
 
 ## Where NetSec differs from EISS
 
 | Topic | EISS | NetSec |
 |---|---|---|
-| Stack | Eleventy + Nunjucks templates (`programme-grid.njk`) | Plain HTML + inline JS renderer ([Wiki decision, 22 May 2026](https://github.com/EISSeuropa/netsec.github.io/wiki/Decisions#2026-05-22--stay-on-plain-html-defer-eleventy-adoption)) |
+| Stack | Eleventy + Nunjucks templates (`programme-grid.njk`) | Plain HTML + shared runtime JS renderer in `assets/js/essc-programme.js` ([Wiki decision, 22 May 2026](https://github.com/EISSeuropa/netsec.github.io/wiki/Decisions#2026-05-22--stay-on-plain-html-defer-eleventy-adoption)) |
 | Scope | All EISS categories surfaced; livestream session block classified by `INTRO/KEY/RT/CONC` codes | ESSC editions only (category 1). Livestream classification stripped for now; can be re-added when NetSec wants a livestreamed-sessions block |
 | Auth | Same shared `INDICO_API_TOKEN` Actions secret | Same shared `INDICO_API_TOKEN` Actions secret. `/export/*` works anonymously, so the token is only needed once a future call site reaches for `/api/*` |
 | Render | Build-time via Nunjucks include | Runtime via `fetch()` + DOM. Pagefind doesn't index the rendered grid; full abstracts are one click away on Indico in any case |
