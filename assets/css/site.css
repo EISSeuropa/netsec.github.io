@@ -1273,10 +1273,22 @@ form button:disabled{opacity:.65;cursor:wait}
   /* iOS rubber-band */
   -webkit-overflow-scrolling:touch;
 }
-.gantt{min-width:920px}
-.g-row{display:grid;align-items:stretch}
-.g-row-y{grid-template-columns:240px 1fr 1fr 1fr 1fr}
-.g-row-q,.g-row-d{grid-template-columns:240px repeat(16,1fr)}
+/* One shared column system via subgrid. The gantt owns the 17 tracks
+   (label + 16 quarters); every row inherits them exactly, so cells
+   line up across rows at any zoom. Previously each .g-row was its own
+   grid resolving `1fr` independently, which let a milestone round into
+   the neighbouring column on a wide or zoomed viewport even though the
+   markup placed it correctly. The @supports fallback keeps the old
+   per-row behaviour on browsers without subgrid (graceful, pre-2024). */
+.gantt{min-width:920px;display:grid;grid-template-columns:240px repeat(16,1fr)}
+.g-row{display:grid;grid-column:1 / -1;grid-template-columns:subgrid;align-items:stretch}
+.g-row-y .g-year{grid-column:span 4}
+@supports not (grid-template-columns:subgrid){
+  .gantt{display:block}
+  .g-row{grid-template-columns:240px repeat(16,1fr)}
+  .g-row-y{grid-template-columns:240px 1fr 1fr 1fr 1fr}
+  .g-row-y .g-year{grid-column:auto}
+}
 
 .g-label{
   padding:14px 16px;
@@ -1357,11 +1369,12 @@ form button:disabled{opacity:.65;cursor:wait}
 }
 .milestone:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(0,51,153,.40)}
 
-/* -------- Deliverable status: planned / shipped / shipped-early --------
+/* -------- Deliverable status: planned / delivered / delivered-early ----
    Base .milestone reads as "planned". A check glyph (not colour alone,
-   WCAG 1.4.1) marks a shipped milestone. Green is reserved for
+   WCAG 1.4.1) marks a delivered milestone. Green is reserved for
    ahead-of-plan only; on-time and late both read as the neutral
-   "shipped" state by design. */
+   "delivered" state by design. The .is-shipped class name is retained
+   to avoid churning the markup; only the visible label is "Delivered". */
 .gantt{--g-label:240px}
 .milestone{position:relative;z-index:1}
 .milestone .ms-check{font-weight:800;margin-right:3px}
@@ -1630,9 +1643,11 @@ form button:disabled{opacity:.65;cursor:wait}
      the quarter row enforced its minmax(46, 1fr) — Year 1 Q4 would
      visibly bleed into the Year 2 column at narrow widths. */
   .scroll-hint{display:block}
-  .g-row-y{grid-template-columns:180px repeat(4,minmax(184px,1fr))}
-  .g-row-q,.g-row-d{grid-template-columns:180px repeat(16,minmax(46px,1fr))}
-  .gantt{--g-label:180px}
+  .gantt{--g-label:180px;grid-template-columns:180px repeat(16,minmax(46px,1fr))}
+  @supports not (grid-template-columns:subgrid){
+    .g-row-y{grid-template-columns:180px repeat(4,minmax(184px,1fr))}
+    .g-row-q,.g-row-d{grid-template-columns:180px repeat(16,minmax(46px,1fr))}
+  }
   .ms-track{--ms-inset-start:22px;--ms-inset-end:20px}
   .g-label{padding:10px 12px}
   .g-label .d-name{font-size:.78rem}
