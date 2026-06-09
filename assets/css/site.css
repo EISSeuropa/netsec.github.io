@@ -5006,10 +5006,11 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   background:rgba(34,197,94,.22);
   border-color:rgba(34,197,94,.5);
 }
-/* These carry their own broadcast glyph, so suppress the global
-   external-link icon to avoid a double affordance. */
-.programme-slot-livestream.is-link::after,
-.programme-livestream-cta::after{content:none !important}
+/* The pill is an external link, so it keeps the global external-link icon.
+   The two glyphs read distinctly: the broadcast mark is the pill's identity,
+   the arrow signals that it opens externally. Let the flex gap handle the
+   spacing rather than the icon's own left margin. */
+.programme-slot-livestream.is-link::after{margin-left:0}
 .programme-slot-livestream.is-live-now{
   color:#fff;
   background:#dc2626;
@@ -5030,29 +5031,6 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 }
 @media (prefers-reduced-motion: reduce){
   .programme-slot-livestream.is-live-now::before{animation:none}
-}
-
-/* Prominent "Watch live on Zoom" button, shown above the day-chip nav only
-   while the conference is on air. Red reads as the live/on-air affordance,
-   matching the "Live now" session badge. */
-.programme-livestream-cta{
-  display:inline-flex;align-items:center;gap:.5em;
-  margin-top:1.1rem;
-  padding:.62rem 1.15rem;border-radius:12px;
-  font-weight:700;text-decoration:none;line-height:1.2;
-  color:#fff;background:#dc2626;border:1px solid #dc2626;
-  box-shadow:0 6px 18px rgba(220,38,38,.28);
-  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
-}
-.programme-livestream-cta:hover,
-.programme-livestream-cta:focus-visible{
-  background:#b91c1c;
-  transform:translateY(-1px);
-  box-shadow:0 8px 22px rgba(220,38,38,.34);
-}
-.programme-livestream-cta svg{width:1.15em;height:1.15em;flex:none}
-.programme-livestream-note{
-  margin:.5rem 0 0;font-size:.86rem;color:var(--muted);
 }
 
 /* ──────────────────────────────────────────────────────────────

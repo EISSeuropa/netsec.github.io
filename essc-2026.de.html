@@ -57,7 +57,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=d75e9df8">
+<link rel="stylesheet" href="assets/css/site.css?v=0e4299d0">
 <!-- Page-specific Event schema for the conference. Hand-maintained;
      NOT managed by inject-seo (which owns the Organization/WebPage
      block in the seo:jsonld sentinels below). -->
@@ -512,10 +512,8 @@
       showLess: 'Show less',
       livestream: 'Livestream',
       livestreamAria: 'This session will be livestreamed',
-      watchLive: 'Watch live on Zoom',
-      watchSession: 'Watch live',
+      watchAria: 'Watch the livestream on Zoom (opens in a new tab)',
       liveNow: 'Live now',
-      livestreamNote: 'View-only webinar, no sign-in needed.',
       errLoad:   'Couldn’t load the live programme.',
       errFetch:  'Couldn’t fetch the programme data.',
       errAbsent: 'ESSC 2026 isn’t published yet.',
@@ -543,10 +541,8 @@
       showLess: 'Réduire',
       livestream: 'Diffusion directe',
       livestreamAria: 'Session diffusée en direct',
-      watchLive: 'Regarder en direct sur Zoom',
-      watchSession: 'Regarder en direct',
+      watchAria: 'Regarder la diffusion en direct sur Zoom (nouvel onglet)',
       liveNow: 'En direct',
-      livestreamNote: 'Webinaire en lecture seule, sans inscription.',
       errLoad:   'Impossible de charger le programme en direct.',
       errFetch:  'Impossible de récupérer les données du programme.',
       errAbsent: 'L’ESSC 2026 n’est pas encore publiée.',
@@ -574,10 +570,8 @@
       showLess: 'Weniger anzeigen',
       livestream: 'Livestream',
       livestreamAria: 'Diese Sitzung wird per Livestream übertragen',
-      watchLive: 'Live auf Zoom ansehen',
-      watchSession: 'Live ansehen',
+      watchAria: 'Den Livestream auf Zoom ansehen (neuer Tab)',
       liveNow: 'Jetzt live',
-      livestreamNote: 'Nur-Ansicht-Webinar, keine Anmeldung nötig.',
       errLoad:   'Das Live-Programm konnte nicht geladen werden.',
       errFetch:  'Die Programmdaten konnten nicht abgerufen werden.',
       errAbsent: 'ESSC 2026 ist noch nicht veröffentlicht.',
@@ -846,23 +840,6 @@
     }
   }
 
-  // ── livestream call-to-action ─────────────────────────────────
-  // A single "Watch live" button, shown only inside the conference window
-  // (the liveStream gate above). Sits just above the day-chip nav.
-  if (liveStream) {
-    const cta = el('a', {
-      class: 'programme-livestream-cta',
-      href: liveStream.url, target: '_blank', rel: 'noopener',
-    }, livestreamIcon(), el('span', { class: 'lbl' }, t.watchLive));
-    const note = el('p', { class: 'programme-livestream-note' }, t.livestreamNote);
-    if (chips && chips.parentNode) {
-      chips.parentNode.insertBefore(note, chips);
-      chips.parentNode.insertBefore(cta, note);
-    } else if (root && root.parentNode) {
-      root.parentNode.insertBefore(cta, root);
-    }
-  }
-
   // ── programme grid ────────────────────────────────────────────
   const days = (conf.programme && conf.programme.days) || [];
   if (!days.length) {
@@ -1021,18 +998,20 @@
       class: 'programme-slot-kind' + (isRoundtable ? ' is-roundtable' : isPlenary ? ' is-plenary' : ''),
     }, subtypeLabel(subtype)));
     if (isLive) {
-      // With a live link in window, the badge becomes a "Watch live" link
-      // (the same Zoom URL for every session); the session currently on air
-      // is marked "Live now". Outside the window it stays the plain badge.
+      // The Livestream pill is itself the link to the stream while the
+      // conference is on air (the same Zoom URL for every session), and falls
+      // back to a plain indicator outside the window. It keeps its
+      // "Livestream" label throughout and carries the external-link icon; the
+      // session on air now adds the is-live-now state (a red pulse).
       let badge;
       if (liveStream) {
         const liveNow = isLiveNow(slot);
         badge = el('a', {
           class: 'programme-slot-livestream is-link' + (liveNow ? ' is-live-now' : ''),
           href: liveStream.url, target: '_blank', rel: 'noopener',
-          title: liveNow ? t.liveNow : t.watchSession,
-          'aria-label': (liveNow ? t.liveNow + ', ' : '') + t.watchSession,
-        }, livestreamIcon(), el('span', { class: 'lbl' }, liveNow ? t.liveNow : t.watchSession));
+          title: t.watchAria,
+          'aria-label': (liveNow ? t.liveNow + ' · ' : '') + t.watchAria,
+        }, livestreamIcon(), el('span', { class: 'lbl' }, t.livestream));
       } else {
         badge = el('span', {
           class: 'programme-slot-livestream',
