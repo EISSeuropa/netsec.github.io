@@ -3788,6 +3788,39 @@ body.search-open{overflow:hidden}
   content:"\2713\00a0";color:var(--rm-shipped-check);font-weight:700;
 }
 
+/* Feature chips (issue #767). A row of small glass mini-pills below the
+   card prose, each pairing an rmi-* stroke icon with a short label, so
+   a headline release reads its big features at a glance. Lives as a
+   sibling <ul> after the <p>, never inside it, because promote-roadmap.py
+   rewrites the <h3> + first <p> at release time. Patch releases carry no
+   chips, which is itself the visual minor/patch signal. The mini-pills
+   reuse the .rm-pill glass language at a smaller scale. No animation, so
+   prefers-reduced-motion needs no override. */
+.rm-features{
+  list-style:none;margin:12px 0 0;padding:0;
+  display:flex;flex-wrap:wrap;gap:7px;
+}
+.rm-features li{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 10px;border-radius:999px;
+  font-size:.78rem;font-weight:600;line-height:1.25;
+  color:var(--ink-2);
+  background:rgba(0,51,153,.05);
+  border:1px solid rgba(0,51,153,.14);
+  font-family:'Lexend','Inter',sans-serif;
+}
+.rm-features .rmi{
+  width:1em;height:1em;flex-shrink:0;
+  fill:none;stroke:currentColor;
+  color:var(--accent-2);
+}
+.dark .rm-features li{
+  color:var(--ink-2);
+  background:rgba(110,161,255,.10);
+  border-color:rgba(110,161,255,.22);
+}
+.dark .rm-features .rmi{color:#7dd3fc}
+
 /* Considering-for-later — deferred / under-watch items */
 .rm-later{
   margin-top:56px;padding:24px 26px;border-radius:16px;
@@ -5095,6 +5128,19 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
     backdrop-filter:none !important;
     -webkit-backdrop-filter:none !important;
   }
+
+  /* Roadmap feature chips (issue #767): print as plain text + glyph.
+     Drop the glass mini-pill chrome so a paper reader sees a clean
+     icon-plus-label list rather than ink-heavy filled pills. The
+     stroke icon prints in the surrounding text colour. */
+  .rm-features li {
+    background:none !important;
+    border:none !important;
+    padding:0 !important;
+    margin-right:14px;
+    color:#000 !important;
+  }
+  .rm-features .rmi { color:#000 !important; }
 
   /* Links: keep them legible. Spell out external URLs after the
      link text so a paper reader can still resolve where it points. */

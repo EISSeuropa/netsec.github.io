@@ -285,6 +285,43 @@ marks inherit `currentColor` so they pick up theme.
 Same-concept-same-icon rule: every conference grant uses the same
 microphone icon; every contact-item uses the same envelope.
 
+### Roadmap feature chips (`rmi-*`)
+
+The public roadmap (`roadmap.html` + FR + DE) badges its headline
+release cards with a small row of icon chips (`.rm-features`, see
+issue #767). The icons are defined once per page as a hidden inline
+`<svg><defs>` sprite of `<symbol id="rmi-*">` elements near the top of
+the roadmap content, and referenced from the cards with same-document
+`<use href="#rmi-…">` so there is no extra request and no JavaScript.
+The sprite is identical across the three locales because icons are
+language-invariant; only the chip labels are translated.
+
+When a new card needs a chip, reuse one of these before inventing a
+new glyph. New `rmi-*` symbols follow the Lucide stroke style
+(`stroke="currentColor"`, `stroke-width="1.8"`, `fill="none"`).
+
+| Symbol id | Concept |
+| --- | --- |
+| `rmi-people` | Directory, people, membership |
+| `rmi-search` | Search |
+| `rmi-calendar` | Events, calendars, conference pages |
+| `rmi-broadcast` | Livestream, live programme, RSS, recaps |
+| `rmi-globe` | Internationalisation, the three locales |
+| `rmi-palette` | Brand, visual identity, Open Graph imagery |
+| `rmi-gauge` | Performance |
+| `rmi-a11y` | Accessibility |
+| `rmi-document` | Outputs, PDFs, FAQ, About, deliverables |
+| `rmi-filter` | Directory facets, filter chips |
+| `rmi-graph` | Atlas, statistics, retrospectives, milestone tracking |
+| `rmi-school` | Summer School, mentorship, glossary |
+
+Chip rules: at most three chips per card, headline minor releases and
+planned cards only, never on a patch release (the chip-less patch card
+is itself the visual minor/patch signal). The chip markup lives in a
+sibling `<ul class="rm-features">` after the card `<p>`, never inside
+the `<h3>` or `<p>`, because `scripts/promote-roadmap.py` rewrites
+those two elements at release time.
+
 ## Brand assets
 
 The official marks shipped in v1.8.0 and live under

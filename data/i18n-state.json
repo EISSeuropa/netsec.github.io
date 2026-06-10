@@ -167,15 +167,15 @@
     "faq.html": {
       "fr": {
         "file": "faq.fr.html",
-        "source_sha1": "93093b0b3d2c5b96dcbb014d090eb557deb14703",
-        "translated_on": "2026-06-04",
+        "source_sha1": "a72be9b6780fd429070a2a176a6cdb5f4df15754",
+        "translated_on": "2026-06-10",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "faq.de.html",
-        "source_sha1": "93093b0b3d2c5b96dcbb014d090eb557deb14703",
-        "translated_on": "2026-06-04",
+        "source_sha1": "a72be9b6780fd429070a2a176a6cdb5f4df15754",
+        "translated_on": "2026-06-10",
         "status": "beta",
         "reviewed_by": null
       }
@@ -183,15 +183,15 @@
     "glossary.html": {
       "fr": {
         "file": "glossary.fr.html",
-        "source_sha1": "d62d6f1035d92e6f43e16d0ce26ea8f645d9d0b5",
-        "translated_on": "2026-06-04",
+        "source_sha1": "ddb5158f729c5d8aeb06cf2fbb0b5450e9691419",
+        "translated_on": "2026-06-10",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "glossary.de.html",
-        "source_sha1": "d62d6f1035d92e6f43e16d0ce26ea8f645d9d0b5",
-        "translated_on": "2026-06-04",
+        "source_sha1": "ddb5158f729c5d8aeb06cf2fbb0b5450e9691419",
+        "translated_on": "2026-06-10",
         "status": "beta",
         "reviewed_by": null
       }
@@ -247,15 +247,15 @@
     "roadmap.html": {
       "fr": {
         "file": "roadmap.fr.html",
-        "source_sha1": "12dc836d7664cf060bd1aa629512e5ccf7c09de6",
-        "translated_on": "2026-06-09",
+        "source_sha1": "f976568e42e55fb0c0d86a538e03c00b09549835",
+        "translated_on": "2026-06-10",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "roadmap.de.html",
-        "source_sha1": "12dc836d7664cf060bd1aa629512e5ccf7c09de6",
-        "translated_on": "2026-06-09",
+        "source_sha1": "f976568e42e55fb0c0d86a538e03c00b09549835",
+        "translated_on": "2026-06-10",
         "status": "beta",
         "reviewed_by": null
       }

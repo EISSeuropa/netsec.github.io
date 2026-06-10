@@ -129,6 +129,92 @@ def probe(html: str) -> tuple[str, str, str]:
     return lang, title, desc
 
 
+# ─── FAQ / glossary content extraction ────────────────────────────
+#
+# The FAQ and glossary pages carry structured-data JSON-LD (FAQPage,
+# DefinedTermSet) built from their EXISTING visible markup. We never
+# author the questions or terms here; we read what the page already
+# shows. The selectors below track the hand-written structure:
+#
+#   FAQ:      <h3 class="faq-q" id="...">Question?</h3>
+#             <p  class="faq-a">Answer prose, possibly with <a> etc.</p>
+#   Glossary: <dt id="...">Term</dt>
+#             <dd>Definition prose, possibly with <a> etc.</dd>
+#
+# If either page's markup is ever restructured, these patterns (and the
+# tests that pin them) are the thing to revisit.
+
+_FAQ_ITEM_RE = re.compile(
+    r'<h3\s+class="faq-q"\s+id="(?P<id>[^"]+)"[^>]*>(?P<q>.*?)</h3>'
+    r'\s*<p\s+class="faq-a"[^>]*>(?P<a>.*?)</p>',
+    re.S | re.I,
+)
+_GLOSSARY_ITEM_RE = re.compile(
+    r'<dt\s+id="(?P<id>[^"]+)"[^>]*>(?P<term>.*?)</dt>'
+    r'\s*<dd[^>]*>(?P<def>.*?)</dd>',
+    re.S | re.I,
+)
+_TAG_RE = re.compile(r"<[^>]+>")
+_WS_RE = re.compile(r"\s+")
+
+# Plain-text definitions/answers are truncated to keep the JSON-LD
+# payload modest. Search engines index the first sentences; the full
+# answer lives in the visible page. 320 chars lands a few sentences in
+# without bloating every page's <head>.
+_TEXT_CAP = 320
+
+
+# Only an ordinary ASCII space is removed before sentence punctuation,
+# never the narrow / non-breaking spaces French typography puts before
+# ? : ; ! — those are intentional in the FR copy and must survive into
+# the machine text.
+_SPACE_BEFORE_PUNCT_RE = re.compile(r" +([.,;:!?])")
+
+
+def _plain_text(fragment: str) -> str:
+    """Strip tags, unescape entities, collapse whitespace to a single
+    line. Used for the machine-readable answer/definition text. Tags are
+    replaced with a space so adjacent words don't fuse, then a tidy-up
+    pass removes the stray space that leaves before sentence
+    punctuation (e.g. '...link .' -> '...link.')."""
+    import html as _html
+
+    text = _TAG_RE.sub(" ", fragment)
+    text = _html.unescape(text)
+    text = _WS_RE.sub(" ", text).strip()
+    return _SPACE_BEFORE_PUNCT_RE.sub(r"\1", text)
+
+
+def _truncate(text: str, cap: int = _TEXT_CAP) -> str:
+    """Truncate on a word boundary with an ellipsis if longer than cap."""
+    if len(text) <= cap:
+        return text
+    cut = text[:cap].rsplit(" ", 1)[0].rstrip(",;:")
+    return cut + "…"
+
+
+def parse_faq_items(html: str) -> list[tuple[str, str, str]]:
+    """Return [(anchor_id, question, answer_text), ...] from FAQ markup."""
+    items = []
+    for m in _FAQ_ITEM_RE.finditer(html):
+        question = _plain_text(m.group("q"))
+        answer = _truncate(_plain_text(m.group("a")))
+        if question and answer:
+            items.append((m.group("id"), question, answer))
+    return items
+
+
+def parse_glossary_items(html: str) -> list[tuple[str, str, str]]:
+    """Return [(anchor_id, term, definition_text), ...] from glossary markup."""
+    items = []
+    for m in _GLOSSARY_ITEM_RE.finditer(html):
+        term = _plain_text(m.group("term"))
+        definition = _truncate(_plain_text(m.group("def")))
+        if term and definition:
+            items.append((m.group("id"), term, definition))
+    return items
+
+
 # ─── Block builders ───────────────────────────────────────────────
 
 def build_seo_block(base: str, lang: str, title: str, desc: str) -> str:
@@ -176,8 +262,67 @@ def build_seo_block(base: str, lang: str, title: str, desc: str) -> str:
     return "\n".join(lines)
 
 
-def build_jsonld_block(base: str, lang: str, title: str, desc: str) -> str:
-    """Organization schema on every page; WebSite on index only."""
+def build_faqpage_node(base: str, lang: str, html: str) -> dict | None:
+    """A FAQPage node whose mainEntity is the page's Question list, parsed
+    from the existing faq-q / faq-a markup. None if no questions found."""
+    items = parse_faq_items(html)
+    if not items:
+        return None
+    canonical = canonical_url(base, lang)
+    return {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "url": canonical,
+        "inLanguage": OG_LOCALES.get(lang, "en_GB").replace("_", "-"),
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": question,
+                "url": f"{canonical}#{anchor}",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": answer,
+                },
+            }
+            for anchor, question, answer in items
+        ],
+    }
+
+
+def build_definedtermset_node(base: str, lang: str, title: str, html: str) -> dict | None:
+    """A DefinedTermSet node holding DefinedTerm members, parsed from the
+    existing glossary dt / dd markup. None if no terms found."""
+    items = parse_glossary_items(html)
+    if not items:
+        return None
+    canonical = canonical_url(base, lang)
+    in_language = OG_LOCALES.get(lang, "en_GB").replace("_", "-")
+    return {
+        "@context": "https://schema.org",
+        "@type": "DefinedTermSet",
+        "name": title,
+        "url": canonical,
+        "inLanguage": in_language,
+        "hasDefinedTerm": [
+            {
+                "@type": "DefinedTerm",
+                "name": term,
+                "description": definition,
+                "url": f"{canonical}#{anchor}",
+                "inLanguage": in_language,
+                "inDefinedTermSet": canonical,
+            }
+            for anchor, term, definition in items
+        ],
+    }
+
+
+def build_jsonld_block(base: str, lang: str, title: str, desc: str, html: str = "") -> str:
+    """Organization schema on every page; WebSite on index only.
+
+    The faq / glossary pages additionally carry a FAQPage or
+    DefinedTermSet node built from their existing visible markup, which
+    is why the caller passes the full page HTML through."""
     canonical = canonical_url(base, lang)
     org = {
         "@context": "https://schema.org",
@@ -229,6 +374,18 @@ def build_jsonld_block(base: str, lang: str, title: str, desc: str) -> str:
         "inLanguage": OG_LOCALES.get(lang, "en_GB").replace("_", "-"),
         "isPartOf": {"@type": "WebSite", "url": SITE, "name": "NetSec"},
     })
+
+    # Page-type structured data: FAQPage on faq*, DefinedTermSet on
+    # glossary*. Parsed from the page's existing markup (no new content).
+    if base == "faq":
+        faq_node = build_faqpage_node(base, lang, html)
+        if faq_node is not None:
+            nodes.append(faq_node)
+    elif base == "glossary":
+        glossary_node = build_definedtermset_node(base, lang, title, html)
+        if glossary_node is not None:
+            nodes.append(glossary_node)
+
     body = json.dumps(nodes if len(nodes) > 1 else nodes[0], ensure_ascii=False, indent=2)
     return f'{JSONLD_BEGIN}\n<script type="application/ld+json">\n{body}\n</script>\n{JSONLD_END}'
 
@@ -256,7 +413,7 @@ def inject(html: str, base: str) -> tuple[str, bool]:
     """Returns (new_html, changed)."""
     lang, title, desc = probe(html)
     seo_block = build_seo_block(base, lang, title, desc)
-    jsonld_block = build_jsonld_block(base, lang, title, desc)
+    jsonld_block = build_jsonld_block(base, lang, title, desc, html)
 
     new = html
     changed = False
