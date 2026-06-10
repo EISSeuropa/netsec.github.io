@@ -1,0 +1,74 @@
+{
+  "_documentation": {
+    "purpose": "Field guide for newcomers to European security studies. Editable source of truth for the 'Concepts in European security studies' section of glossary.html (+ FR + DE). Rendered into static HTML by scripts/build-field-guide.py, which replaces only the region between the <!-- field-guide:start --> and <!-- field-guide:end --> sentinels. The static output inherits DefinedTerm JSON-LD (via scripts/inject-seo.py), Pagefind indexing, and the i18n drift checker for free.",
+    "schema": {
+      "term": "string. The headword. Rendered as <dt id=\"fg-<slug>\">.",
+      "definition": "object {en, fr, de}. EN is authoritative; FR and DE are hand-translated (no machine translation, CLAUDE.md §1).",
+      "theme": "optional string. Must match a theme name from data/bios.json theme_aggregate exactly. Renders a build-time 'see N members working on this' link into /people.html#themes=<slug>, with N counted from members whose themes array contains it. Omit if no clean match.",
+      "sources": "optional array of {label, url}. Authoritative external links rendered as a small 'Sources' list.",
+      "seeAlso": "optional array of other term strings (cross-references). Not yet rendered; reserved for a later pass.",
+      "contributor": "optional slug. Not used by the four Phase 1 entries (they are unattributed institutional facts). Reserved for the contested entries that will be added after WG sign-off (issue #766)."
+    },
+    "phase": "Phase 1 (issue #766). Four low-risk factual entries. Contested concepts (strategic autonomy, deterrence, hybrid threats, grey zone, resilience, human security, securitisation, FIMI) stay gated until a WG lead vouches for each definition."
+  },
+  "concepts": [
+    {
+      "term": "CSDP",
+      "definition": {
+        "en": "The European Union's Common Security and Defence Policy: its framework for civilian and military crisis-management operations and the gradual building of a common defence, under the Common Foreign and Security Policy.",
+        "fr": "La politique de sécurité et de défense commune de l'Union européenne : son cadre pour les opérations civiles et militaires de gestion de crise et la construction progressive d'une défense commune, au sein de la politique étrangère et de sécurité commune.",
+        "de": "Die Gemeinsame Sicherheits- und Verteidigungspolitik der Europäischen Union: ihr Rahmen für zivile und militärische Operationen der Krisenbewältigung und den schrittweisen Aufbau einer gemeinsamen Verteidigung, im Rahmen der Gemeinsamen Außen- und Sicherheitspolitik."
+      },
+      "theme": "Foreign policy and diplomacy",
+      "sources": [
+        {
+          "label": "Common Security and Defence Policy (European External Action Service)",
+          "url": "https://www.eeas.europa.eu/eeas/common-security-and-defence-policy_en"
+        }
+      ]
+    },
+    {
+      "term": "PESCO and the EDF",
+      "definition": {
+        "en": "Permanent Structured Cooperation and the European Defence Fund: the European Union's instruments for jointly developing and funding defence capabilities among participating member states.",
+        "fr": "La coopération structurée permanente et le Fonds européen de la défense : les instruments de l'Union européenne pour développer et financer conjointement des capacités de défense entre les États membres participants.",
+        "de": "Die Ständige Strukturierte Zusammenarbeit und der Europäische Verteidigungsfonds: die Instrumente der Europäischen Union zur gemeinsamen Entwicklung und Finanzierung von Verteidigungsfähigkeiten unter den teilnehmenden Mitgliedstaaten."
+      },
+      "theme": "Security and defence",
+      "sources": [
+        {
+          "label": "Permanent Structured Cooperation (PESCO)",
+          "url": "https://www.pesco.europa.eu/"
+        },
+        {
+          "label": "European Defence Fund (European Commission)",
+          "url": "https://defence-industry-space.ec.europa.eu/eu-defence-industry/european-defence-fund-edf_en"
+        }
+      ]
+    },
+    {
+      "term": "Transatlantic burden-sharing",
+      "definition": {
+        "en": "The long-running debate over how the costs and responsibilities of European security are distributed between European states and the United States within NATO.",
+        "fr": "Le débat de longue date sur la répartition des coûts et des responsabilités de la sécurité européenne entre les États européens et les États-Unis au sein de l'OTAN.",
+        "de": "Die seit Langem geführte Debatte darüber, wie die Kosten und Verantwortlichkeiten der europäischen Sicherheit zwischen den europäischen Staaten und den Vereinigten Staaten innerhalb der NATO verteilt werden."
+      },
+      "theme": "European and transatlantic security order"
+    },
+    {
+      "term": "Emerging and disruptive technologies (EDTs)",
+      "definition": {
+        "en": "A cluster of technologies (artificial intelligence, autonomy, quantum, biotechnology, space) expected to reshape how security and defence are organised, with effects that remain uncertain and contested.",
+        "fr": "Un ensemble de technologies (intelligence artificielle, autonomie, quantique, biotechnologie, espace) qui devraient transformer l'organisation de la sécurité et de la défense, avec des effets qui restent incertains et contestés.",
+        "de": "Eine Gruppe von Technologien (künstliche Intelligenz, Autonomie, Quantentechnik, Biotechnologie, Weltraum), die voraussichtlich die Organisation von Sicherheit und Verteidigung verändern werden, mit Auswirkungen, die ungewiss und umstritten bleiben."
+      },
+      "theme": "Cyber and emerging technology",
+      "sources": [
+        {
+          "label": "Emerging and disruptive technologies (NATO)",
+          "url": "https://www.nato.int/cps/en/natohq/topics_184303.htm"
+        }
+      ]
+    }
+  ]
+}
