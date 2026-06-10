@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=e9d31bd3">
+<link rel="stylesheet" href="assets/css/site.css?v=a3581e40">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -161,6 +161,31 @@
 <main id="main" data-pagefind-body>
 <section class="roadmap-page">
   <div class="container reveal">
+    <!-- ──────────────────────────────────────────────────────────────
+         Feature-chip icon sprite (issue #767). One hidden inline SVG
+         defs block holds the rmi-* stroke symbols (Lucide style). Cards
+         reference them with same-document <use href="#rmi-…">, so no
+         extra request and no JS. The vocabulary is documented in
+         docs/design-system.md → Iconography → Roadmap feature chips.
+         Icons are language-invariant: this block is identical in EN,
+         FR, and DE. The chip LABELS are translated per locale.
+         ────────────────────────────────────────────────────────────── -->
+    <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+      <defs>
+        <symbol id="rmi-people" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 19v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1"/><circle cx="9" cy="7" r="3.2"/><path d="M22 19v-1a4 4 0 0 0-3-3.85"/><path d="M16 4.15A4 4 0 0 1 16 11.7"/></symbol>
+        <symbol id="rmi-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="20" y1="20" x2="15.1" y2="15.1"/></symbol>
+        <symbol id="rmi-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2.5" x2="8" y2="6"/><line x1="16" y1="2.5" x2="16" y2="6"/></symbol>
+        <symbol id="rmi-broadcast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.2"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4"/><path d="M17.7 17.7a8 8 0 0 0 0-11.4"/><path d="M3.5 3.5a12 12 0 0 0 0 17"/><path d="M20.5 20.5a12 12 0 0 0 0-17"/></symbol>
+        <symbol id="rmi-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></symbol>
+        <symbol id="rmi-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.2 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-6.7-9-6.7Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="11" cy="7.5" r="1"/><circle cx="15.5" cy="8.5" r="1"/></symbol>
+        <symbol id="rmi-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 18a9 9 0 1 1 17 0"/><line x1="12" y1="15" x2="16" y2="9.5"/><circle cx="12" cy="15" r="1.3" fill="currentColor" stroke="none"/></symbol>
+        <symbol id="rmi-a11y" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.6"/><path d="M4 8.5c2.5 1.2 5 1.8 8 1.8s5.5-.6 8-1.8"/><path d="M12 8.5V15"/><path d="M9 21l3-6 3 6"/></symbol>
+        <symbol id="rmi-document" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/><line x1="8.5" y1="13" x2="15.5" y2="13"/><line x1="8.5" y1="16.5" x2="13" y2="16.5"/></symbol>
+        <symbol id="rmi-filter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v5l-4 2v-7Z"/></symbol>
+        <symbol id="rmi-graph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><polyline points="7 14 11 10 14 13 19 7"/></symbol>
+        <symbol id="rmi-school" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2.5 8.5 12 13l9.5-4.5L12 4Z"/><path d="M6 10.5V15c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/><line x1="21.5" y1="8.5" x2="21.5" y2="13.5"/></symbol>
+      </defs>
+    </svg>
     <span class="eyebrow">Plan</span>
     <h1>Feuille de route</h1>
     <p class="lede">Ce qui est livré, ce qui est en cours et ce qui arrive ensuite pour le site web NetSec et le répertoire communautaire ouvert, sur l'année 2026. Les jalons de l'Action (conférence, plénière, anniversaire) sont entrelacés avec les jalons de version pour que la cadence du site se lise au rythme du calendrier de l'Action.</p>
@@ -190,6 +215,11 @@
           </div>
           <h3>Première version publique</h3>
           <p>Premier site web public à netsec-cost.eu. Dix pages, interface verre clair + sombre, identité visuelle UE + COST, et le répertoire communautaire ouvert (Livrable D1, première version) acceptant les bios via un formulaire public.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-people"/></svg>Annuaire communautaire</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-palette"/></svg>Interface verre, clair + sombre</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-globe"/></svg>Anglais, français, allemand</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.0.0" target="_blank" rel="noopener">Notes de version</a>
         </article>
       </li>
@@ -226,6 +256,10 @@
           </div>
           <h3>Pages FAQ et Glossaire</h3>
           <p>FAQ publique (21 questions-réponses réparties en six thèmes) et Glossaire (~35 termes COST et NetSec), avec ancres profondes. Grille <em>En savoir plus</em> ajoutée sur la page d'accueil. Wiki signalisé pour les membres.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-document"/></svg>FAQ</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-school"/></svg>Glossaire</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.3.0" target="_blank" rel="noopener">Notes de version</a>
         </article>
       </li>
@@ -238,6 +272,11 @@
           </div>
           <h3>Recherche sur tout le site et passe d'architecture de l'information (Phase&nbsp;1)</h3>
           <p>Couche de recherche sur tout le site (avec cartes bio enrichies et surlignage des résultats), flux iCalendar, en-tête épuré et nouvelle page <em>À propos</em> consolidant le récit de l'Action, le calendrier des livrables, la direction et le contenu de référence.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-search"/></svg>Recherche sur tout le site</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-calendar"/></svg>Flux iCalendar</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-document"/></svg>Page À propos</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.4.0" target="_blank" rel="noopener">Notes de version</a>
         </article>
       </li>
@@ -262,6 +301,11 @@
           </div>
           <h3>Programme ESSC 2026 en direct et aperçus de membres</h3>
           <p>La conférence dispose désormais de sa propre page à <code>/essc-2026.fr.html</code> avec une grille de programme alimentée par une synchronisation quotidienne depuis Indico, sélecteurs de jours, cartes de sessions parallèles, contributions, présidences, résumés, mention « diffusion en direct » sur les plénières et tables rondes. Survoler le nom d'une intervenante qui correspond à un membre NetSec ouvre une carte d'aperçu en verre : photo, fonction, pays, extrait de bio, et un lien profond vers son profil complet. Livrée en EN, FR et DE. La page est l'URL canonique de la conférence dans le plan du site et le flux iCalendar.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-broadcast"/></svg>Programme en direct</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-people"/></svg>Aperçus des intervenants</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-calendar"/></svg>Page de la conférence</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.6.0" target="_blank" rel="noopener">Notes de version</a>
         </article>
       </li>
@@ -298,6 +342,11 @@
           </div>
           <h3>Lancement de la marque, écritures Indico, PDF du programme, passe de style</h3>
           <p>Version pré-Stockholm. L'identité de marque s'installe enfin sur l'ensemble du site, trois outils opérationnels Indico arrivent pour rendre programmatique le cycle de préparation de l'ESSC 2027, la page du programme exporte un PDF auto-identifiant soigné, et les règles d'écriture du &sect;7 de CLAUDE.md sont appliquées rétroactivement à la prose anglaise de l'ère du lancement.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-palette"/></svg>Lancement de la marque</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-document"/></svg>PDF du programme</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-calendar"/></svg>Outils Indico</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.8.0" target="_blank" rel="noopener">Notes de version</a>
         </article>
       </li>
@@ -322,6 +371,10 @@
           </div>
           <h3>Plomberie calendrier pré-Stockholm</h3>
           <p>Version pré-conférence, quatre jours avant l'ouverture de l'École d'été et de l'ESSC à Stockholm. Refonte de la plomberie calendrier sur l'ensemble du site : téléchargements <code>.ics</code> par événement + un menu déroulant <em>Ajouter au calendrier</em> sur chaque carte (Google&nbsp;/ Outlook&nbsp;/ Apple webcal&nbsp;/ <code>.ics</code> direct), flux RSS d'actualités à <code>/news.xml</code> pour les publics académiques et politiques qui lisent les fils (alimenté par un nouveau <code>data/news.json</code>), et refactorisation structurelle pour que les cartes d'événements et d'actualités de la page d'accueil soient dérivées de JSON au lieu d'HTML rédigé à la main dans trois langues, avec un seuil de cinq lignes et un bouton <em>Lire la suite</em> pour les descriptions plus longues. D10 (stratégie de gestion des risques) hébergé si le document est prêt.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-calendar"/></svg>Calendriers par événement</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-broadcast"/></svg>Flux RSS d'actualités</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.9.0" target="_blank" rel="noopener">Notes de version</a>
         </article>
       </li>
@@ -334,6 +387,10 @@
           </div>
           <h3>Page des groupes de travail et feuille de route adossée aux jalons</h3>
           <p>Une page dédiée aux groupes de travail : chaque groupe a sa propre section avec son objectif, sa direction et une grille des membres en direct tirée du répertoire COST, et les intitulés du protocole d'accord sont repris sur tout le site. La feuille de route publique sait désormais lire ses propres jalons GitHub : une barre de progression apparaît sur chaque version active et la prochaine passe d'elle-même au statut « en cours ». S'y ajoutent la préparation de la Conférence européenne de sécurité et l'entretien courant du répertoire.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-people"/></svg>Page des groupes de travail</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-graph"/></svg>Feuille de route reliée aux jalons</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.10.0" target="_blank" rel="noopener">Notes de version</a>
         </article>
       </li>
@@ -346,6 +403,11 @@
           </div>
           <h3>Directory filters, mentorship, and a smoother mobile directory</h3>
           <p>This is the big pre-conference directory release, gathering everything merged since v1.10.0. Visitors can now narrow <em>The Network</em> by research theme, by research region and by mentorship, and the mobile filter experience that drives those choices was rebuilt so it behaves properly on a phone. Around it sit lighter photos, new ways to reach the Action, and the usual housekeeping. Three themes follow, then a single canonical index at the bottom. [à traduire]</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-filter"/></svg>Filtres de l'annuaire</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-school"/></svg>Mentorat</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-people"/></svg>Annuaire mobile plus fluide</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.11.0" target="_blank" rel="noopener">Notes de version</a>
         </article>
       </li>
@@ -377,6 +439,11 @@
           </div>
           <h3>Bilan d'après-conférence et refonte Publications</h3>
           <p>La première version après Stockholm. Le bilan de l'École d'été et de la Conférence européenne sur la sécurité arrive sur le bloc Actualités (une galerie et un court résumé des retours, avec un lien vers les enregistrements lorsqu'ils sont disponibles). La section <em>Publications</em> gagne une vraie maquette de carte pour les notes politiques D6 avec des métadonnées <code>schema.org/ScholarlyArticle</code>, l'audit d'architecture de l'information atteint la phase&nbsp;2 (une passe approfondie sur la page d'accueil et l'en-tête, les parcours par public, les patrons mobiles et le cycle de vie du contenu), et les suivis de la cohorte fondatrice (Items C et D de <a href="https://github.com/EISSeuropa/netsec.github.io/issues/245">#245</a>) ajoutent un badge <em>contributeur fondateur</em> et des statistiques dans le kit presse. D8 (lignes directrices pour les STSM) est hébergé sur la page Bourses une fois approuvé, l'outillage d'écriture Indico est corrigé pour que les plans de correction s'appliquent sur l'instance en production (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/323">#323</a>), et le pack PDF de documentation reçoit son rattrapage au niveau des sections (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>).</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-broadcast"/></svg>Bilan de la conférence</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-document"/></svg>Fiches des productions (D6)</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-graph"/></svg>Audit d'architecture, phase 2</li>
+          </ul>
         </article>
       </li>
 
@@ -418,6 +485,11 @@
           </div>
           <h3>Rétrospective de l'an 1 et préparation de l'an 2</h3>
           <p>Rétrospective de l'an 1 sur le bloc Actualités. Déclaration sur l'inclusion et la diversité (D11) et lignes directrices sur la durabilité environnementale (D12) hébergées dès leur approbation. Images Open Graph par page. Feuille de style impression pour la <em>FAQ</em> et le <em>Glossaire</em>. Refactorisation des photos des membres hors du dépôt git (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/119">#119</a>) pour que la taille du dépôt reste linéaire au texte plutôt qu'aux portraits. Toutes les finitions qui s'accumulent au T4.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-graph"/></svg>Rétrospective de l'an 1</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-document"/></svg>Livrables D11, D12</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-palette"/></svg>Images Open Graph</li>
+          </ul>
         </article>
       </li>
     </ol>
