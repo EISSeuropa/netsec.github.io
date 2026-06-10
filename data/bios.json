@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-08T19:09:06+00:00",
+  "generated_at": "2026-06-10T11:42:27+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-08T19:09:06+00:00"
+    "last_synced": "2026-06-10T11:42:27+00:00"
   },
   "members": [
     {
@@ -546,12 +546,53 @@
       "regions": [
         "Middle East and North Africa"
       ]
+    },
+    {
+      "id": "anna-pagnacco",
+      "name": "Anna Pagnacco",
+      "country": "Switzerland",
+      "country_code": "ch",
+      "affiliation": "ETH Center for Security Studies",
+      "position": "Researcher",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "wg_leadership": {},
+      "bio": "Anna Pagnacco is a Researcher with the Cyber Security Team at the Center for Security Studies (CSS) at ETH Zurich.\n\nPreviously part of NATO HQ’s Cyber Strategy and Policy team, Anna has worked in military and civilian cyber defence at the NATO Digital Staff and Cyber and Digital Transformation Division; tracked cyber regulation with a focus on China at Digital Policy Alert; and led research on data localisation and Internet standardisation at Oxford Information Labs. Their research interests include the protection of cyber infrastructure, supply chain security, non-traditional cyber effects, and the use of cyber in military operations.\n\nAnna holds an Honours Master’s in Political Science from Sant’Anna School of Advanced Studies (Pisa) with a focus on international security and the Law of Armed Conflict; a Master’s in International Relations from the Cesare Alfieri faculty of Political Science (Florence) including a semester-long visiting period at University College London; and a Bachelor’s in Political Science from the University of Pisa.",
+      "keywords": [
+        "cyber defence",
+        "cyber security",
+        "infrastructure"
+      ],
+      "email": "",
+      "website": "itsallcyber.baby",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/annapagnacco",
+      "twitter": "",
+      "bluesky": "@annapagnacco.com",
+      "mastodon": "",
+      "photo": "assets/images/people/anna-pagnacco.jpg",
+      "source": "form",
+      "photo_source_sha256": "b3ed6a3020f3ffbf645c41c66957eef549d93ed0f00226632913171b6dfa5387",
+      "canonical_keywords": [
+        "Cyber defence",
+        "Cyber security",
+        "Infrastructure"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "EU foreign policy",
       "count": 2
+    },
+    {
+      "keyword": "Cyber defence",
+      "count": 1
+    },
+    {
+      "keyword": "Cyber security",
+      "count": 1
     },
     {
       "keyword": "Defence",
@@ -595,6 +636,10 @@
     },
     {
       "keyword": "Industrial policy",
+      "count": 1
+    },
+    {
+      "keyword": "Infrastructure",
       "count": 1
     },
     {
