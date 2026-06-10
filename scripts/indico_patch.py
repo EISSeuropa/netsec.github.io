@@ -92,6 +92,7 @@ import datetime as dt
 import json
 import os
 import sys
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -149,17 +150,28 @@ class IndicoClient:
 
     # ── reads ──
 
-    def get_json(self, path: str, *, params: dict | None = None) -> dict:
+    def get_json(self, path: str, *, params: dict | None = None,
+                 fresh: bool = False) -> dict:
         """GET against any Indico endpoint, return parsed JSON.
 
         Uses Bearer auth on `/api/*` and on `/event/<id>/manage/*`;
         leaves `/export/*` anonymous (it rejects Bearer with 400 on
         some Indico versions).
+
+        `fresh=True` defeats any HTTP caching between a write and the
+        read-back that confirms it: no-cache headers plus a unique query
+        param so an intermediary cannot serve a stale copy of the state
+        we just changed (#323).
         """
         url = path if path.startswith("http") else INDICO_BASE + path
         headers = {"Accept": "application/json"}
         if self.read_token and not path.startswith("/export"):
             headers["Authorization"] = f"Bearer {self.read_token}"
+        if fresh:
+            headers["Cache-Control"] = "no-cache"
+            headers["Pragma"] = "no-cache"
+            params = dict(params or {})
+            params["_nocache"] = str(time.time_ns())
         r = requests.get(url, headers=headers, params=params, timeout=30)
         r.raise_for_status()
         return r.json()
@@ -593,6 +605,194 @@ DISPATCH = {
 }
 
 
+# ─────────────────────── write verification (#323) ───────────────────────
+#
+# A 2xx from Indico does not mean the write took: some management routes
+# return 200 while no-opping (a contribution "move" that only toggles
+# schedule state, a wtforms POST rejected for a missing CSRF token). So
+# after every apply we read the authoritative state back from the
+# `/export/*` JSON the resolver already trusts, on a cache-busted GET, and
+# confirm the intended value actually landed. A patch is reported OK only
+# when a verifier returns `verified`; a field we cannot read back returns
+# `unverifiable`, never a false OK. Verifiers return (status, detail) with
+# status in {"verified", "mismatch", "unverifiable"}.
+
+VERIFIED = "verified"
+MISMATCH = "mismatch"
+UNVERIFIABLE = "unverifiable"
+
+
+def _iter_timetable_entries(tt: dict):
+    """Yield every timetable entry, descending one level into a session's
+    own `entries` so contributions scheduled inside a session are seen."""
+    for day in tt.values():
+        if not isinstance(day, dict):
+            continue
+        for entry in day.values():
+            if not isinstance(entry, dict):
+                continue
+            yield entry
+            for sub in (entry.get("entries") or {}).values():
+                if isinstance(sub, dict):
+                    yield sub
+
+
+def _fresh_timetable(client, event_id: int) -> dict:
+    doc = client.get_json(f"/export/timetable/{event_id}.json", fresh=True)
+    return doc["results"][str(event_id)]
+
+
+def _fresh_contributions(client, event_id: int) -> list:
+    doc = client.get_json(
+        f"/export/event/{event_id}.json",
+        params={"detail": "contributions"}, fresh=True,
+    )
+    return doc["results"][0].get("contributions", [])
+
+
+def verify_session_patch(client, event_id: int, patch: Patch) -> tuple[str, str]:
+    sid = patch.resolved.get("session_id")
+    if not sid:
+        return UNVERIFIABLE, "no resolved session_id to read back"
+    entry = next(
+        (e for e in _iter_timetable_entries(_fresh_timetable(client, event_id))
+         if e.get("entryType") == "Session" and e.get("sessionId") == sid),
+        None,
+    )
+    if entry is None:
+        return MISMATCH, f"session {sid} absent from timetable read-back"
+    bad, unsure = [], []
+    if "title" in patch.set:
+        cur = entry.get("title", "")
+        if cur != patch.set["title"]:
+            bad.append(f"title is {cur!r}, expected {patch.set['title']!r}")
+    if "room_name" in patch.set:
+        cur = entry.get("room")
+        if cur is None:
+            unsure.append("room not exposed by the timetable export")
+        elif cur != patch.set["room_name"]:
+            bad.append(f"room is {cur!r}, expected {patch.set['room_name']!r}")
+    if "venue_name" in patch.set:
+        cur = entry.get("location")
+        if cur is None:
+            unsure.append("venue not exposed by the timetable export")
+        elif cur != patch.set["venue_name"]:
+            bad.append(f"venue is {cur!r}, expected {patch.set['venue_name']!r}")
+    if bad:
+        return MISMATCH, "; ".join(bad)
+    if unsure:
+        return UNVERIFIABLE, "; ".join(unsure)
+    return VERIFIED, "session fields match the read-back"
+
+
+def verify_contribution_patch(client, event_id: int, patch: Patch) -> tuple[str, str]:
+    cid = patch.resolved.get("contribution_id")
+    if not cid:
+        return UNVERIFIABLE, "no resolved contribution_id to read back"
+    bad, unsure = [], []
+    if "session" in patch.set:
+        target = patch.resolved.get("target_session_id")
+        entry = next(
+            (e for e in _iter_timetable_entries(_fresh_timetable(client, event_id))
+             if e.get("entryType") == "Contribution"
+             and (e.get("contributionId") == cid or e.get("contribution_id") == cid)),
+            None,
+        )
+        if entry is None:
+            bad.append(f"contribution {cid} is not scheduled under any session "
+                       "(the move did not take)")
+        elif entry.get("sessionId") != target:
+            bad.append(f"contribution session is {entry.get('sessionId')}, "
+                       f"expected {target}")
+    if "title" in patch.set:
+        contribs = _fresh_contributions(client, event_id)
+        match = next(
+            (c for c in contribs
+             if int(c.get("id") or c.get("db_id") or 0) == int(cid)),
+            None,
+        )
+        if match is None:
+            unsure.append(f"contribution {cid} absent from contributions export")
+        elif match.get("title", "") != patch.set["title"]:
+            bad.append(f"title is {match.get('title')!r}, "
+                       f"expected {patch.set['title']!r}")
+    if bad:
+        return MISMATCH, "; ".join(bad)
+    if unsure:
+        return UNVERIFIABLE, "; ".join(unsure)
+    return VERIFIED, "contribution fields match the read-back"
+
+
+def _entry_dt(node: dict | None) -> str | None:
+    """Normalise an Indico `{date, time, tz}` block to 'YYYY-MM-DD HH:MM'."""
+    if not isinstance(node, dict) or "date" not in node or "time" not in node:
+        return None
+    return f"{node['date']} {str(node['time'])[:5]}"
+
+
+def _norm_dt(value: str) -> str:
+    """Normalise a patch datetime to 'YYYY-MM-DD HH:MM' for comparison,
+    tolerating the 'T' separator and trailing seconds."""
+    s = str(value).replace("T", " ").strip()
+    return s[:16]
+
+
+def verify_block_time_patch(client, event_id: int, patch: Patch) -> tuple[str, str]:
+    sid = patch.resolved.get("session_id")
+    entry = None
+    for e in _iter_timetable_entries(_fresh_timetable(client, event_id)):
+        if e.get("entryType") == "Session" and (
+            (sid and e.get("sessionId") == sid)
+            or e.get("id") == patch.resolved.get("entry_id")
+        ):
+            entry = e
+            break
+    if entry is None:
+        return MISMATCH, "session block absent from timetable read-back"
+    bad, unsure = [], []
+    for key, node_key in (("start_dt", "startDate"), ("end_dt", "endDate")):
+        if key in patch.set:
+            cur = _entry_dt(entry.get(node_key))
+            if cur is None:
+                unsure.append(f"{node_key} not exposed by the timetable export")
+            elif cur != _norm_dt(patch.set[key]):
+                bad.append(f"{key} is {cur!r}, expected {_norm_dt(patch.set[key])!r}")
+    if bad:
+        return MISMATCH, "; ".join(bad)
+    if unsure:
+        return UNVERIFIABLE, "; ".join(unsure)
+    return VERIFIED, "block time matches the read-back"
+
+
+def verify_person_patch(client, event_id: int, patch: Patch) -> tuple[str, str]:
+    # Event-person fields (name, affiliation, title) are not carried by the
+    # public export, so there is no read-back to confirm them against. Honest
+    # default: report unverifiable rather than a false OK. A real verifier
+    # arrives with the person-write reverse-engineering (#323 slice B).
+    return UNVERIFIABLE, ("event-person fields are not exposed by the export "
+                          "API; confirm this change in the Indico UI")
+
+
+VERIFY = {
+    "session": verify_session_patch,
+    "person": verify_person_patch,
+    "contribution": verify_contribution_patch,
+    "block_time": verify_block_time_patch,
+}
+
+
+def verify_patch(client, event_id: int, patch: Patch) -> tuple[str, str]:
+    """Read the authoritative state back and confirm the patch landed.
+    Never trusts the write's HTTP status."""
+    verifier = VERIFY.get(patch.kind)
+    if not verifier:
+        return UNVERIFIABLE, f"no verifier for patch kind {patch.kind!r}"
+    try:
+        return verifier(client, event_id, patch)
+    except Exception as e:  # a failed read-back is itself an unconfirmed write
+        return UNVERIFIABLE, f"read-back failed ({type(e).__name__}: {e})"
+
+
 # ──────────────────────────── CLI ────────────────────────────
 
 def main(argv: list[str] | None = None) -> int:
@@ -631,6 +831,8 @@ def main(argv: list[str] | None = None) -> int:
     client.validate_token()
 
     failed = 0
+    verified = 0
+    unconfirmed = 0
     for i, patch in enumerate(plan.patches, 1):
         print(f"\n[{i}/{len(plan.patches)}] {patch.kind} · "
               f"by={patch.by} ref={patch.ref!r}"
@@ -645,13 +847,37 @@ def main(argv: list[str] | None = None) -> int:
         except Exception as e:
             print(f"  FAIL — {type(e).__name__}: {e}")
             failed += 1
+            continue
+        # A write only counts once the change is read back from Indico.
+        # Dry-run made no write, so there is nothing to confirm.
+        if not args.apply:
+            continue
+        status, detail = verify_patch(client, plan.event_id, patch)
+        if status == VERIFIED:
+            verified += 1
+            if not args.quiet:
+                print(f"  OK (verified) — {detail}")
+        elif status == MISMATCH:
+            failed += 1
+            print(f"  FAIL (write did not take) — {detail}")
+        else:
+            unconfirmed += 1
+            print(f"  UNCONFIRMED (could not read back) — {detail}")
 
     # Persist resolved IDs to the JSON sidecar so a re-run skips
     # the lookup step. Sidecar is gitignored; the YAML stays clean.
     plan.write_cache(args.plan)
 
-    print(f"\n{'Applied' if args.apply else 'Dry-run'} "
-          f"complete: {len(plan.patches) - failed}/{len(plan.patches)} OK, "
+    total = len(plan.patches)
+    if args.apply:
+        print(f"\nApply complete: {verified} verified, {failed} failed, "
+              f"{unconfirmed} unconfirmed (of {total}).")
+        # Honest exit: success only when every write was positively read
+        # back. An unconfirmed write is not a success, so it fails the run
+        # rather than printing a green "OK" the maintainer cannot trust.
+        return 0 if (failed == 0 and unconfirmed == 0) else 1
+
+    print(f"\nDry-run complete: {total - failed}/{total} resolved, "
           f"{failed} failed.")
     return 1 if failed else 0
 
