@@ -155,6 +155,16 @@ def _is_known_bio_slug(repo_root, frag):
     bare = re.sub(r"^(?:dr|prof|mr|ms|mrs)-", "", frag, flags=re.IGNORECASE)
     return frag in _bio_slugs_cache or bare in _bio_slugs_cache
 
+
+# Directory filter deep-links (people.{lang}.html#themes=…, #mentorship=…,
+# #region=…, #stsm=…, #keywords=…) are key=value filter state read by the
+# /people.html JS on load, not DOM anchors, so they never appear as a
+# static id=. Any page may link to a pre-filtered directory view (the
+# field guide does, the grants page will), so treat these as valid.
+_DIR_FILTER_KEYS = ("themes=", "mentorship=", "region=", "stsm=", "keywords=")
+def _is_directory_filter_hash(frag):
+    return frag.startswith(_DIR_FILTER_KEYS)
+
 html_files = sorted(p for p in repo_root.glob("*.html") if p.is_file())
 print(f"→ scanning {len(html_files)} HTML files at the repo root...")
 
@@ -210,6 +220,10 @@ for (src, href), (url, frag) in internal_links.items():
             # corresponds to a member id in data/bios.json. Validate against that.
             or (target_path.name.startswith("people")
                 and _is_known_bio_slug(repo_root, frag))
+            # Directory filter deep-links (people.{lang}.html#themes=… etc.)
+            # are JS-consumed filter state, not anchors.
+            or (target_path.name.startswith("people")
+                and _is_directory_filter_hash(frag))
         )
         if not ok:
             broken_internal.append(
