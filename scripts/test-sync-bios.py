@@ -31,6 +31,8 @@ render_pr_body_overview = sync_bios.render_pr_body_overview
 load_keyword_aliases = sync_bios.load_keyword_aliases
 normalise_keyword = sync_bios.normalise_keyword
 normalise_affiliation = sync_bios.normalise_affiliation
+normalise_url = sync_bios.normalise_url
+normalise_bluesky = sync_bios.normalise_bluesky
 parse_mentorship = sync_bios.parse_mentorship
 parse_regions = sync_bios.parse_regions
 load_region_vocab = sync_bios.load_region_vocab
@@ -54,6 +56,7 @@ def test_name_key() -> None:
     expect("title prefix dropped", name_key("Dr John Helferich"), ("john", "helferich"))
     expect("middle initial dropped", name_key("Dr John N.T. Helferich"), ("john", "helferich"))
     expect("title with period", name_key("Dr. Moritz Weiss"), ("moritz", "weiss"))
+    expect("gender-neutral Mx dropped", name_key("Mx Sam Smith"), ("sam", "smith"))
     expect("diacritics stripped", name_key("Andreas Müller"), ("andreas", "muller"))
     expect("apostrophe stripped", name_key("Silvia D'Amato"), ("silvia", "damato"))
     expect("post-nominal stripped", name_key("Jane Doe PhD"), ("jane", "doe"))
@@ -717,6 +720,62 @@ def test_normalise_affiliation() -> None:
     expect("idempotent",
            normalise_affiliation(normalise_affiliation("ETH Zurich - Center for Security Studies")),
            "ETH Zurich, Center for Security Studies")
+    # The hand-curated affiliation_aliases map folds a differently-worded
+    # spelling of one institution onto its canonical name (punctuation
+    # normalisation alone cannot do this). Seeded with the ETH CSS case.
+    expect("alias variant folds to canonical",
+           normalise_affiliation("ETH Center for Security Studies"),
+           "ETH Zurich, Center for Security Studies")
+    expect("canonical name is idempotent under the alias map",
+           normalise_affiliation("ETH Zurich, Center for Security Studies"),
+           "ETH Zurich, Center for Security Studies")
+
+
+def test_normalise_url() -> None:
+    """Website / profile fields become absolute URLs so the card's link
+    icon never resolves to a broken relative path."""
+    print("\nnormalise_url():")
+    expect("empty stays empty", normalise_url(""), "")
+    expect("None safe", normalise_url(None), "")  # type: ignore[arg-type]
+    expect("bare domain gets https",
+           normalise_url("itsallcyber.baby"), "https://itsallcyber.baby")
+    expect("www prefix gets https",
+           normalise_url("www.example.org/path"), "https://www.example.org/path")
+    expect("https passes through",
+           normalise_url("https://example.org"), "https://example.org")
+    expect("http passes through",
+           normalise_url("http://example.org"), "http://example.org")
+    expect("leading slashes stripped before scheme",
+           normalise_url("//example.org"), "https://example.org")
+    expect("explicit non-web scheme left alone",
+           normalise_url("mailto:a@b.eu"), "mailto:a@b.eu")
+    expect("whitespace trimmed",
+           normalise_url("  example.org  "), "https://example.org")
+    expect("idempotent",
+           normalise_url(normalise_url("itsallcyber.baby")), "https://itsallcyber.baby")
+
+
+def test_normalise_bluesky() -> None:
+    """A Bluesky handle in any of its three submitted forms becomes a
+    profile URL the card can link to."""
+    print("\nnormalise_bluesky():")
+    expect("empty stays empty", normalise_bluesky(""), "")
+    expect("None safe", normalise_bluesky(None), "")  # type: ignore[arg-type]
+    expect("@handle -> profile URL",
+           normalise_bluesky("@annapagnacco.com"),
+           "https://bsky.app/profile/annapagnacco.com")
+    expect("bare handle -> profile URL",
+           normalise_bluesky("annapagnacco.com"),
+           "https://bsky.app/profile/annapagnacco.com")
+    expect("scheme-less bsky.app path -> profile URL",
+           normalise_bluesky("bsky.app/profile/annapagnacco.com"),
+           "https://bsky.app/profile/annapagnacco.com")
+    expect("full profile URL passes through",
+           normalise_bluesky("https://bsky.app/profile/annapagnacco.com"),
+           "https://bsky.app/profile/annapagnacco.com")
+    expect("idempotent",
+           normalise_bluesky(normalise_bluesky("@annapagnacco.com")),
+           "https://bsky.app/profile/annapagnacco.com")
 
 
 def test_parse_mentorship() -> None:
@@ -910,6 +969,8 @@ def main() -> None:
     test_normalise_keyword()
     test_load_keyword_themes()
     test_normalise_affiliation()
+    test_normalise_url()
+    test_normalise_bluesky()
     test_parse_mentorship()
     test_load_region_vocab()
     test_parse_regions()

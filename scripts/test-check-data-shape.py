@@ -120,6 +120,26 @@ def test_bios_member_blank_id():
     assert any("'id' is empty" in e for e in errs)
 
 
+def test_bios_member_bare_handle_website_rejected():
+    errs = mod.check_bios({"members": [{"id": "x", "name": "X", "website": "itsallcyber.baby"}]})
+    assert any("'website' must be an absolute" in e for e in errs)
+
+
+def test_bios_member_bare_bluesky_handle_rejected():
+    errs = mod.check_bios({"members": [{"id": "x", "name": "X", "bluesky": "@handle.com"}]})
+    assert any("'bluesky' must be an absolute" in e for e in errs)
+
+
+def test_bios_member_absolute_links_pass():
+    errs = mod.check_bios({"members": [{
+        "id": "x", "name": "X",
+        "website": "https://example.org",
+        "bluesky": "https://bsky.app/profile/x.com",
+        "linkedin": "", "mastodon": "",
+    }]})
+    assert errs == []
+
+
 # ── wg / mc-members ─────────────────────────────────────────────────
 
 def test_wg_valid():

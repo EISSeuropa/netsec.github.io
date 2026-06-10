@@ -105,7 +105,7 @@ def slugify(name: str) -> str:
     seed id) rather than "silvia-d-amato"."""
     s = unicodedata.normalize("NFKD", name or "")
     s = "".join(c for c in s if not unicodedata.combining(c))
-    s = re.sub(r"^(Dr|Prof|Mr|Ms|Mrs)\.?\s+", "", s)
+    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+", "", s)
     s = s.lower()
     # Drop apostrophes / curly quotes / similar marks first — they
     # shouldn't introduce a hyphen between adjacent letters.
@@ -138,7 +138,7 @@ def name_key(name: str) -> tuple[str, str] | None:
     """
     s = unicodedata.normalize("NFKD", name or "")
     s = "".join(c for c in s if not unicodedata.combining(c))
-    s = re.sub(r"^(Dr|Prof|Mr|Ms|Mrs)\.?\s+", "", s, flags=re.I)
+    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+", "", s, flags=re.I)
     s = re.sub(r"[‘’ʼ'`]", "", s)
     # Tokenise on any non-letter so "N.T." becomes ["N", "T"] (and the
     # initials get dropped by the first/last selection below).
@@ -372,6 +372,44 @@ def load_keyword_themes() -> dict[str, str]:
     return theme_of
 
 
+_AFFILIATION_ALIASES_CACHE: "dict[str, str] | None" = None
+
+
+def load_affiliation_aliases() -> dict[str, str]:
+    """Return a lowercased-variant → canonical-affiliation map from the
+    `affiliation_aliases` section of data/keyword-aliases.json.
+
+    Free-text employer fields fragment the same institution across
+    several spellings ("ETH Center for Security Studies" vs "ETH Zurich,
+    Center for Security Studies"), so the directory shows two employers
+    where there is one. This is a hand-curated map: each canonical name
+    keys a list of the variants that should fold into it. Punctuation
+    normalisation alone cannot do this (the words themselves differ), so
+    the map is the only mechanism that merges them. Cached after first
+    read; empty if the file or section is missing, in which case
+    affiliations pass through punctuation-normalisation only."""
+    global _AFFILIATION_ALIASES_CACHE
+    if _AFFILIATION_ALIASES_CACHE is not None:
+        return _AFFILIATION_ALIASES_CACHE
+    aliases: dict[str, str] = {}
+    if ALIAS_FILE.exists():
+        try:
+            doc = json.loads(ALIAS_FILE.read_text(encoding="utf-8"))
+            for canonical, variants in (doc.get("affiliation_aliases") or {}).items():
+                if not isinstance(canonical, str) or not canonical.strip():
+                    continue
+                # The canonical name resolves to itself, so an already-clean
+                # value is idempotent under the lookup.
+                aliases[canonical.strip().lower()] = canonical.strip()
+                for v in variants or []:
+                    if isinstance(v, str) and v.strip():
+                        aliases[v.strip().lower()] = canonical.strip()
+        except (json.JSONDecodeError, OSError):
+            pass
+    _AFFILIATION_ALIASES_CACHE = aliases
+    return aliases
+
+
 _REGION_VOCAB_CACHE: "dict[str, str] | None" = None
 
 
@@ -499,7 +537,11 @@ def normalise_affiliation(raw: str) -> str:
     # The surrounding spaces are required, so hyphenated names with no
     # spaces ("Aix-Marseille", "Friedrich-Alexander") are left untouched.
     s = re.sub(r"\s+[-–—]\s+", ", ", s)
-    return s
+    # Fold a known spelling variant onto its canonical institution name.
+    # Looked up after punctuation normalisation so the curated map can key
+    # on the cleaned form. Punctuation-only normalisation cannot merge
+    # differently-worded names for one place; this map is what does.
+    return load_affiliation_aliases().get(s.lower(), s)
 
 
 def _levenshtein(a: str, b: str) -> int:
@@ -604,6 +646,50 @@ def normalize_orcid(raw: str) -> str:
     # Final validation against the canonical pattern (uppercase X).
     m = re.fullmatch(r"(\d{4}-\d{4}-\d{4}-\d{3}[\dX])", s.upper())
     return m.group(1) if m else ""
+
+
+def normalise_url(raw: str) -> str:
+    """Return a clickable absolute URL given whatever a submitter typed
+    into a website / profile field.
+
+    The form's link fields are free text. People paste a full URL, but
+    they also type a bare domain ("itsallcyber.baby") or a scheme-less
+    "www." prefix. A scheme-less value rendered straight into an <a href>
+    is a *relative* link, so the card's link icon resolves to
+    netsec-cost.eu/itsallcyber.baby and 404s. Prefix "https://" whenever
+    no scheme is present, while leaving an explicit scheme (http, https,
+    and the odd mailto / tel someone might paste) untouched. Idempotent:
+    an already-absolute URL comes back unchanged."""
+    s = (raw or "").strip()
+    if not s:
+        return ""
+    if re.match(r"(?i)^https?://", s):
+        return s
+    # Some other explicit scheme (mailto:, tel:, ftp:) — leave it alone.
+    if re.match(r"(?i)^[a-z][a-z0-9+.\-]*:", s):
+        return s
+    return "https://" + s.lstrip("/")
+
+
+def normalise_bluesky(raw: str) -> str:
+    """Return a Bluesky profile URL given any of the three forms a
+    submitter uses for their account: the "@handle" they see in the app
+    ("@annapagnacco.com"), the bare handle ("annapagnacco.com"), or a
+    full profile URL. The card links the value straight into an <a href>,
+    so a handle becomes a broken relative link and the brand icon points
+    nowhere. Normalise the first two to
+    https://bsky.app/profile/<handle>; pass an explicit http(s) URL
+    through unchanged. Idempotent."""
+    s = (raw or "").strip()
+    if not s:
+        return ""
+    if re.match(r"(?i)^https?://", s):
+        return s
+    # Tolerate a leading "@" and a scheme-less "bsky.app/profile/" prefix.
+    s = re.sub(r"(?i)^bsky\.app/profile/", "", s.lstrip("@")).strip().strip("/")
+    if not s:
+        return ""
+    return "https://bsky.app/profile/" + s
 
 
 def drive_file_id(url: str) -> str | None:
@@ -861,12 +947,12 @@ def row_to_member(
         "bio": (row.get(cols.get("bio", ""), "") or "").strip(),
         "keywords": parse_keywords(row.get(cols.get("keywords", ""), "")),
         "email": (row.get(cols.get("public_email", ""), "") or "").strip(),
-        "website": (row.get(cols.get("website", ""), "") or "").strip(),
+        "website": normalise_url(row.get(cols.get("website", ""), "")),
         "orcid": normalize_orcid(row.get(cols.get("orcid", ""), "")),
-        "linkedin": (row.get(cols.get("linkedin", ""), "") or "").strip(),
-        "twitter": (row.get(cols.get("twitter", ""), "") or "").strip(),
-        "bluesky": (row.get(cols.get("bluesky", ""), "") or "").strip(),
-        "mastodon": (row.get(cols.get("mastodon", ""), "") or "").strip(),
+        "linkedin": normalise_url(row.get(cols.get("linkedin", ""), "")),
+        "twitter": normalise_url(row.get(cols.get("twitter", ""), "")),
+        "bluesky": normalise_bluesky(row.get(cols.get("bluesky", ""), "")),
+        "mastodon": normalise_url(row.get(cols.get("mastodon", ""), "")),
         "photo": photo_path or "",
         "source": "form",
         "_email_key": email,  # internal, stripped before write

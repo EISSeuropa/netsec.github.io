@@ -211,7 +211,7 @@
         "Research Methods"
       ],
       "email": "john.helferich@hertford.ox.ac.uk",
-      "website": "johnhelferich.com",
+      "website": "https://johnhelferich.com",
       "orcid": "0000-0002-9085-846X",
       "linkedin": "https://www.linkedin.com/in/john-h-990850158",
       "twitter": "",
@@ -552,7 +552,7 @@
       "name": "Anna Pagnacco",
       "country": "Switzerland",
       "country_code": "ch",
-      "affiliation": "ETH Center for Security Studies",
+      "affiliation": "ETH Zurich, Center for Security Studies",
       "position": "Researcher",
       "roles": [],
       "wgs": [],
@@ -565,11 +565,11 @@
         "infrastructure"
       ],
       "email": "",
-      "website": "itsallcyber.baby",
+      "website": "https://itsallcyber.baby",
       "orcid": "",
       "linkedin": "https://www.linkedin.com/in/annapagnacco",
       "twitter": "",
-      "bluesky": "@annapagnacco.com",
+      "bluesky": "https://bsky.app/profile/annapagnacco.com",
       "mastodon": "",
       "photo": "assets/images/people/anna-pagnacco.jpg",
       "source": "form",
@@ -578,6 +578,9 @@
         "Cyber defence",
         "Cyber security",
         "Infrastructure"
+      ],
+      "themes": [
+        "Cyber and emerging technology"
       ]
     }
   ],
@@ -677,6 +680,10 @@
       "count": 3
     },
     {
+      "theme": "Cyber and emerging technology",
+      "count": 2
+    },
+    {
       "theme": "Economic security and geoeconomics",
       "count": 2
     },
@@ -689,10 +696,6 @@
       "count": 2
     },
     {
-      "theme": "Cyber and emerging technology",
-      "count": 1
-    },
-    {
       "theme": "European and transatlantic security order",
       "count": 1
     },
@@ -702,6 +705,8 @@
     }
   ],
   "keyword_theme_map": {
+    "Cyber defence": "Cyber and emerging technology",
+    "Cyber security": "Cyber and emerging technology",
     "Defence": "Security and defence",
     "Digital governance": "Cyber and emerging technology",
     "Disinformation": "Intelligence, information and influence",
@@ -714,6 +719,7 @@
     "German security policy": "Foreign policy and diplomacy",
     "Grand strategy": "Security and defence",
     "Industrial policy": "Economic security and geoeconomics",
+    "Infrastructure": "Cyber and emerging technology",
     "International security": "Security and defence",
     "Policy evaluation": "Theory and methods",
     "Political economy": "Economic security and geoeconomics",

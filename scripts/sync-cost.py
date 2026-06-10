@@ -71,7 +71,7 @@ def norm(name: str) -> str:
     """Normalised display name (no salutation, no diacritics, lower case)."""
     s = unicodedata.normalize("NFKD", name)
     s = "".join(c for c in s if not unicodedata.combining(c))
-    s = re.sub(r"^(Dr|Prof|Mr|Ms|Mrs)\.?\s+", "", s)
+    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+", "", s)
     return re.sub(r"\s+", " ", s).strip().lower()
 
 
@@ -79,7 +79,7 @@ def slugify(name: str) -> str:
     """Stable slug from a person's name — must match scripts/sync-bios.py."""
     s = unicodedata.normalize("NFKD", name or "")
     s = "".join(c for c in s if not unicodedata.combining(c))
-    s = re.sub(r"^(Dr|Prof|Mr|Ms|Mrs)\.?\s+", "", s)
+    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+", "", s)
     s = s.lower()
     s = re.sub(r"[‘’ʼ'`]", "", s)
     s = re.sub(r"[^a-z0-9]+", "-", s).strip("-")
