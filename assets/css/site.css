@@ -1342,13 +1342,9 @@ form button:disabled{opacity:.65;cursor:wait}
 .g-cell:last-child{border-right:0}
 .g-row-d:last-child .g-cell,.g-row-d:last-child .g-label{border-bottom:0}
 
-/* Year tint: Y2 and Y4 columns get a subtle wash so the eye groups them */
-.g-row-d > .g-cell:nth-child(n+6):nth-child(-n+9),
-.g-row-d > .g-cell:nth-child(n+14):nth-child(-n+17),
-.g-row-q > .g-q:nth-child(n+6):nth-child(-n+9),
-.g-row-q > .g-q:nth-child(n+14):nth-child(-n+17){
-  background-color:rgba(0,51,153,.025);
-}
+/* Years are grouped by the bolder vertical dividers below; no column
+   tint. An earlier per-year wash tinted Y2 + Y4 only, which read as a
+   meaningless dark/light/dark/light stripe across the rows. */
 /* Bolder vertical between years */
 .g-row-d > .g-cell:nth-child(5),
 .g-row-d > .g-cell:nth-child(9),
@@ -1710,10 +1706,6 @@ form button:disabled{opacity:.65;cursor:wait}
 .dark .eu-mark .eu-text{color:var(--accent)}
 .dark .g-q{background:rgba(255,255,255,.03)}
 .dark .g-year{background:linear-gradient(180deg,rgba(110,161,255,.10),rgba(110,161,255,.04))}
-.dark .g-row-d > .g-cell:nth-child(n+6):nth-child(-n+9),
-.dark .g-row-d > .g-cell:nth-child(n+14):nth-child(-n+17),
-.dark .g-row-q > .g-q:nth-child(n+6):nth-child(-n+9),
-.dark .g-row-q > .g-q:nth-child(n+14):nth-child(-n+17){background-color:rgba(110,161,255,.06)}
 .dark .milestone{background:linear-gradient(135deg,#3b6fe0,#82b7ff);color:#0b1220;box-shadow:0 4px 12px rgba(60,110,230,.45)}
 .dark .milestone.is-shipped{background:linear-gradient(135deg,#2f6fe0,#79b4ff);color:#0b1220}
 .dark .milestone.is-early{background:linear-gradient(135deg,#33c47a,#7ef0ad);color:#06200f}
