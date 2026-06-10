@@ -3401,7 +3401,10 @@ body.search-open{overflow:hidden}
 .search-input::placeholder{color:var(--muted)}
 .search-close{
   flex-shrink:0;
-  width:32px;height:32px;border-radius:8px;
+  /* 44px square meets the 44px touch-target guidance; the icon stays
+     16px, centred. The visible hover chip reads at the glyph, the hit
+     area extends to the full square (#457). */
+  width:44px;height:44px;border-radius:8px;
   border:0;background:transparent;
   color:var(--muted);cursor:pointer;
   display:grid;place-items:center;
