@@ -793,6 +793,54 @@ def verify_patch(client, event_id: int, patch: Patch) -> tuple[str, str]:
         return UNVERIFIABLE, f"read-back failed ({type(e).__name__}: {e})"
 
 
+# ─────────────────────── pre-flight scope report (#323 slice E) ───────────────────────
+#
+# An audit of data/indico-fix-plans/ shows the real corrections are
+# dominated by contribution->session moves and session renames; room,
+# venue, person, and block-time edits did not appear in the one genuine
+# reconcile plan. And only some fields can be read back from the export to
+# confirm a write (slice A): a session or contribution title, a
+# contribution's session, a block's start/end. A session's room/venue and
+# an event-person's fields are not in the export, so a write to them can
+# never be auto-confirmed and is better done in the Indico UI. The
+# pre-flight surfaces this before any write, so the operator knows which
+# patches the tool can vouch for and which to eyeball by hand.
+
+# Fields whose post-write value the export read-back can confirm, per kind.
+# Mirror of the verify_* coverage above.
+CONFIRMABLE_FIELDS = {
+    "session": {"title"},                  # room_name / venue_name aren't in the export
+    "contribution": {"session", "title"},
+    "block_time": {"start_dt", "end_dt"},
+    "person": set(),                       # event-person fields aren't in the export
+}
+
+
+def unconfirmable_fields(patch: Patch) -> list[str]:
+    """The patch's set-fields that the export read-back cannot confirm.
+    Empty when every field is auto-confirmable."""
+    confirmable = CONFIRMABLE_FIELDS.get(patch.kind, set())
+    return sorted(f for f in (patch.set or {}) if f not in confirmable)
+
+
+def preflight_report(patches: list[Patch]) -> str:
+    """A short scope summary printed before any write: how many patches the
+    tool can auto-confirm via read-back, and which carry fields the export
+    cannot confirm and so must be eyeballed in the Indico UI."""
+    confirmable, manual = [], []
+    for i, p in enumerate(patches, 1):
+        miss = unconfirmable_fields(p)
+        (manual if miss else confirmable).append((i, p, miss))
+    lines = [f"Pre-flight: {len(patches)} patch(es)",
+             f"  {len(confirmable)} auto-confirmable by read-back"]
+    if manual:
+        lines.append(f"  {len(manual)} with fields the export can't confirm "
+                     "(verify these in the Indico UI):")
+        for i, p, miss in manual:
+            lines.append(f"    [{i}] {p.kind} {p.ref!r} — {', '.join(miss)}")
+    return "\n".join(lines)
+
+
 # ──────────────────────────── CLI ────────────────────────────
 
 def main(argv: list[str] | None = None) -> int:
@@ -829,6 +877,7 @@ def main(argv: list[str] | None = None) -> int:
           f"{len(plan.patches)} patch(es), "
           f"mode={'apply' if args.apply else 'dry-run'}")
     client.validate_token()
+    print("\n" + preflight_report(plan.patches))
 
     failed = 0
     verified = 0

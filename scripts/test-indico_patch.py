@@ -986,3 +986,52 @@ def test_verify_reads_are_cache_busted():
     mod.verify_session_patch(client, 42, p)
     assert any(path == "/export/timetable/42.json" and fresh
                for path, _params, fresh in client.gets)
+
+
+# ──────────────────────────── pre-flight scope report (#323 slice E) ────────────────────────────
+
+def test_unconfirmable_fields_session_title_is_confirmable():
+    assert mod.unconfirmable_fields(_patch("session", set={"title": "X"})) == []
+
+
+def test_unconfirmable_fields_session_room_is_not():
+    assert mod.unconfirmable_fields(_patch("session", set={"room_name": "Hall B"})) == ["room_name"]
+
+
+def test_unconfirmable_fields_contribution_move_and_title_are_confirmable():
+    assert mod.unconfirmable_fields(_patch("contribution", set={"session": 7})) == []
+    assert mod.unconfirmable_fields(_patch("contribution", set={"title": "X"})) == []
+
+
+def test_unconfirmable_fields_block_time_is_confirmable():
+    assert mod.unconfirmable_fields(_patch("block_time", set={"end_dt": "2026-06-11T17:00"})) == []
+
+
+def test_unconfirmable_fields_person_is_not():
+    assert mod.unconfirmable_fields(_patch("person", set={"affiliation": "Oxford"})) == ["affiliation"]
+
+
+def test_unconfirmable_fields_mixed_session_flags_only_room():
+    miss = mod.unconfirmable_fields(_patch("session", set={"title": "X", "room_name": "B"}))
+    assert miss == ["room_name"]
+
+
+def test_preflight_report_counts_and_names_manual():
+    patches = [
+        _patch("contribution", ref=1, set={"session": 7}),   # confirmable
+        _patch("session", ref=2, set={"title": "X"}),        # confirmable
+        _patch("person", ref="Julia Carver", set={"affiliation": "Oxford"}),  # manual
+    ]
+    out = mod.preflight_report(patches)
+    assert "3 patch(es)" in out
+    assert "2 auto-confirmable" in out
+    assert "1 with fields the export can't confirm" in out
+    assert "affiliation" in out
+    assert "Julia Carver" in out
+
+
+def test_preflight_report_all_confirmable_omits_manual_block():
+    patches = [_patch("contribution", set={"session": 7}), _patch("session", set={"title": "X"})]
+    out = mod.preflight_report(patches)
+    assert "2 auto-confirmable" in out
+    assert "Indico UI" not in out

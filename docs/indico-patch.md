@@ -134,6 +134,31 @@ now means the change is provably live, not merely that an HTTP call
 returned 200. The per-kind read-back sources and field mappings live in
 the `verify_*` functions in `scripts/indico_patch.py`.
 
+## Pre-flight scope + the real worklist (#323 slice E)
+
+An audit of the committed fix-plans shows the corrections that actually
+recur are narrow: the one genuine reconcile plan
+(`2026-05-29-essc-programme-reconcile.yaml`) is **four contribution to
+session moves and two session renames**, nothing else. Room, venue,
+event-person, and block-time edits appear only in the `EXAMPLE` template,
+not in real use. So the endpoint reverse-engineering (slices B and C of
+#323) should prioritise **contribution to session** and **session
+rename** and leave the rest to the read-back verifier or a manual UI fix.
+
+Before any write, the tool now prints a one-line **pre-flight** that
+splits the plan's patches into two buckets:
+
+- **auto-confirmable by read-back** — a session or contribution title, a
+  contribution's session, a block's start/end. The tool will tell you
+  definitively whether these landed.
+- **not confirmable via the export** — a session's room/venue, an
+  event-person's fields. These have no read-back, so the pre-flight names
+  them and the operator should confirm them in the Indico UI rather than
+  trust a silent "OK".
+
+The confirmable-field map (`CONFIRMABLE_FIELDS`) mirrors the `verify_*`
+coverage, so the pre-flight and the post-write verdict never disagree.
+
 ## Fix-plan schema
 
 See `data/indico-fix-plans/EXAMPLE.yaml` for the canonical reference.
