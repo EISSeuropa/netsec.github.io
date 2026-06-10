@@ -543,6 +543,37 @@ def test_parse_glossary_items_empty_when_no_markup():
     assert seo.parse_glossary_items("<p>nothing</p>") == []
 
 
+# A field-guide <dd> wraps the definition in a leading <p>, then carries
+# interface chrome (the members link, a Sources list). The DefinedTerm
+# description must be the definition only, never the trailing chrome.
+_FIELD_GUIDE_HTML = (
+    '<dl class="glossary-dl">'
+    '<dt id="fg-csdp">CSDP</dt>'
+    '<dd><p>The Union\'s Common Security and Defence Policy.</p>'
+    '<p class="fg-theme-link"><a href="people.html#themes=x">'
+    '→ See 3 members working on this</a></p>'
+    '<div class="fg-sources"><span class="fg-sources-label">Sources</span>'
+    '<ul><li><a href="z">EEAS</a></li></ul></div></dd>'
+    '</dl>'
+)
+
+
+def test_parse_glossary_items_scopes_definition_to_first_paragraph():
+    items = seo.parse_glossary_items(_FIELD_GUIDE_HTML)
+    assert items == [
+        ("fg-csdp", "CSDP", "The Union's Common Security and Defence Policy."),
+    ]
+    definition = items[0][2]
+    assert "members working on this" not in definition
+    assert "Sources" not in definition
+
+
+def test_parse_glossary_items_bare_dd_keeps_full_text():
+    # COST-admin entries have no <p>; the whole <dd> stays the definition.
+    items = seo.parse_glossary_items(_GLOSSARY_HTML)
+    assert items[0] == ("action", "Action", "A four-year network. See the MoU.")
+
+
 # ── FAQPage / DefinedTermSet JSON-LD nodes ───────────────────────────
 
 def _ld_nodes(block: str):

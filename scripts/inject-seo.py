@@ -156,6 +156,7 @@ _GLOSSARY_ITEM_RE = re.compile(
 )
 _TAG_RE = re.compile(r"<[^>]+>")
 _WS_RE = re.compile(r"\s+")
+_FIRST_P_RE = re.compile(r"<p\b[^>]*>(?P<p>.*?)</p>", re.S | re.I)
 
 # Plain-text definitions/answers are truncated to keep the JSON-LD
 # payload modest. Search engines index the first sentences; the full
@@ -204,12 +205,25 @@ def parse_faq_items(html: str) -> list[tuple[str, str, str]]:
     return items
 
 
+def _definition_fragment(dd_inner: str) -> str:
+    """The DefinedTerm description is the term's definition only, not the
+    interface chrome the <dd> may also hold (the 'members working on this'
+    link, the Sources list, a member facepile). The field guide renders the
+    definition as the leading <p> of the <dd> (build-field-guide.py), so
+    when a <p> is present its first one is the definition and everything
+    after it is excluded. The COST-admin glossary entries above the field
+    guide write a bare-text <dd> with no <p>; those have no <p> to find and
+    fall back to the whole fragment, preserving their existing behaviour."""
+    m = _FIRST_P_RE.search(dd_inner)
+    return m.group("p") if m else dd_inner
+
+
 def parse_glossary_items(html: str) -> list[tuple[str, str, str]]:
     """Return [(anchor_id, term, definition_text), ...] from glossary markup."""
     items = []
     for m in _GLOSSARY_ITEM_RE.finditer(html):
         term = _plain_text(m.group("term"))
-        definition = _truncate(_plain_text(m.group("def")))
+        definition = _truncate(_plain_text(_definition_fragment(m.group("def"))))
         if term and definition:
             items.append((m.group("id"), term, definition))
     return items
