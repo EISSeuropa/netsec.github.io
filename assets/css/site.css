@@ -5424,3 +5424,30 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   .programme-slot-title a::after,
   .programme-contrib-title a::after { content: none !important; }
 }
+
+/* ─── Field guide (glossary "Concepts in European security studies") ───
+   Rendered by scripts/build-field-guide.py from data/field-guide.json.
+   The entries reuse the .glossary-dl dt/dd styles; these rules only cover
+   the section intro, the "see members" link, and the small sources list.
+   All selectors carry an fg- prefix to stay out of the global namespace. */
+.prose-page .fg-intro{
+  color:var(--ink-2);font-size:.97rem;line-height:1.6;
+  margin:.2rem 0 1.2rem;max-width:62ch;
+}
+.prose-page .glossary-dl dd .fg-theme-link{
+  margin:.45rem 0 0;font-size:.9rem;
+}
+.prose-page .glossary-dl dd .fg-theme-link a{
+  color:var(--accent-2);font-weight:500;
+}
+.prose-page .glossary-dl dd .fg-sources{
+  margin:.55rem 0 0;font-size:.86rem;color:var(--muted);
+}
+.prose-page .glossary-dl dd .fg-sources-label{
+  text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;
+  color:var(--muted);display:block;margin-bottom:.2rem;
+}
+.prose-page .glossary-dl dd .fg-sources ul{
+  margin:0;padding-left:1.1rem;list-style:disc;
+}
+.prose-page .glossary-dl dd .fg-sources li{margin:.1rem 0;}

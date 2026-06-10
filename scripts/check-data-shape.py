@@ -189,6 +189,23 @@ def check_roadmap_progress(data) -> list:
     return errs
 
 
+def check_field_guide(data) -> list:
+    errs: list = []
+    if not isinstance(data, dict):
+        return ["field-guide: top level must be an object"]
+    if not _req(data, "concepts", list, errs, "field-guide", non_empty=True):
+        return errs
+    for i, c in enumerate(data["concepts"]):
+        ctx = f"field-guide.concepts[{i}]"
+        if not isinstance(c, dict):
+            errs.append(f"{ctx}: must be an object")
+            continue
+        _req(c, "term", str, errs, ctx, non_empty=True)
+        if _req(c, "definition", dict, errs, ctx):
+            _req(c["definition"], "en", str, errs, f"{ctx}.definition", non_empty=True)
+    return errs
+
+
 CHECKS = {
     "data/indico.json": check_indico,
     "data/bios.json": check_bios,
@@ -196,6 +213,7 @@ CHECKS = {
     "data/mc-members.json": check_mc_members,
     "data/events.json": check_events,
     "data/roadmap-progress.json": check_roadmap_progress,
+    "data/field-guide.json": check_field_guide,
 }
 
 
