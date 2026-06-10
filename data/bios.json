@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-10T11:42:27+00:00",
+  "generated_at": "2026-06-10T17:04:30+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-10T11:42:27+00:00"
+    "last_synced": "2026-06-10T17:04:30+00:00"
   },
   "members": [
     {
@@ -457,6 +457,7 @@
       "source": "form",
       "photo_source_sha256": "d6927b276ccffbbb2bc5bccf38502563a079862a500fbde9e79941f4851cae6a",
       "canonical_keywords": [
+        "Cyber security",
         "Disinformation",
         "Election interference",
         "Subversion"
@@ -465,6 +466,7 @@
         "mentor"
       ],
       "themes": [
+        "Cyber and emerging technology",
         "Intelligence, information and influence"
       ],
       "regions": [
@@ -587,15 +589,15 @@
   ],
   "keyword_aggregate": [
     {
+      "keyword": "Cyber security",
+      "count": 2
+    },
+    {
       "keyword": "EU foreign policy",
       "count": 2
     },
     {
       "keyword": "Cyber defence",
-      "count": 1
-    },
-    {
-      "keyword": "Cyber security",
       "count": 1
     },
     {
@@ -677,12 +679,12 @@
   ],
   "theme_aggregate": [
     {
-      "theme": "Foreign policy and diplomacy",
+      "theme": "Cyber and emerging technology",
       "count": 3
     },
     {
-      "theme": "Cyber and emerging technology",
-      "count": 2
+      "theme": "Foreign policy and diplomacy",
+      "count": 3
     },
     {
       "theme": "Economic security and geoeconomics",
