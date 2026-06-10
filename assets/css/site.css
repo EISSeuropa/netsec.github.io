@@ -1346,11 +1346,15 @@ form button:disabled{opacity:.65;cursor:wait}
    the eye groups each year. Y2 + Y4 are washed, Y1 + Y3 sit on the
    base, which reads as a two-tone year banding. This is the primary
    year-separation cue; the bolder divider line below reinforces the
-   boundary. Dark-mode counterparts live in the .dark block. */
-.g-row-d > .g-cell:nth-of-type(n+6):nth-child(-n+9),
-.g-row-d > .g-cell:nth-of-type(n+14):nth-child(-n+17),
-.g-row-q > .g-q:nth-of-type(n+6):nth-child(-n+9),
-.g-row-q > .g-q:nth-of-type(n+14):nth-child(-n+17){
+   boundary. Dark-mode counterparts live in the .dark block.
+   Both range bounds use :nth-of-type, not :nth-child — the D1 row
+   carries an extra .ms-track span, so a :nth-child upper bound would
+   count that span and truncate the band one cell early (Y2 Q4, Y4 Q4).
+   Keep both ends on :nth-of-type. */
+.g-row-d > .g-cell:nth-of-type(n+6):nth-of-type(-n+9),
+.g-row-d > .g-cell:nth-of-type(n+14):nth-of-type(-n+17),
+.g-row-q > .g-q:nth-of-type(n+6):nth-of-type(-n+9),
+.g-row-q > .g-q:nth-of-type(n+14):nth-of-type(-n+17){
   background-color:rgba(0,51,153,.045);
 }
 /* Bolder vertical between years (the right edge of each year's Q4) */
@@ -1719,10 +1723,10 @@ form button:disabled{opacity:.65;cursor:wait}
    divider needs a light colour (its light-mode near-black is invisible
    on the dark grid). */
 .dark .g-cell,.dark .g-q{border-right-color:rgba(255,255,255,.16);border-bottom-color:rgba(255,255,255,.16)}
-.dark .g-row-d > .g-cell:nth-of-type(n+6):nth-child(-n+9),
-.dark .g-row-d > .g-cell:nth-of-type(n+14):nth-child(-n+17),
-.dark .g-row-q > .g-q:nth-of-type(n+6):nth-child(-n+9),
-.dark .g-row-q > .g-q:nth-of-type(n+14):nth-child(-n+17){background-color:rgba(110,161,255,.085)}
+.dark .g-row-d > .g-cell:nth-of-type(n+6):nth-of-type(-n+9),
+.dark .g-row-d > .g-cell:nth-of-type(n+14):nth-of-type(-n+17),
+.dark .g-row-q > .g-q:nth-of-type(n+6):nth-of-type(-n+9),
+.dark .g-row-q > .g-q:nth-of-type(n+14):nth-of-type(-n+17){background-color:rgba(110,161,255,.085)}
 .dark .g-row-d > .g-cell:nth-of-type(5),
 .dark .g-row-d > .g-cell:nth-of-type(9),
 .dark .g-row-d > .g-cell:nth-of-type(13),

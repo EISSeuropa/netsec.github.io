@@ -115,6 +115,18 @@ def check_bios(data) -> list:
             continue
         _req(m, "id", str, errs, ctx, non_empty=True)
         _req(m, "name", str, errs, ctx, non_empty=True)
+        # Link fields are dropped straight into an <a href> by the directory
+        # renderers, so a bare handle ("@x") or scheme-less domain ("x.eu")
+        # becomes a broken *relative* link. sync-bios.py normalises these to
+        # absolute URLs; this gate stops a non-absolute value reaching the
+        # site if that normalisation is ever bypassed. (email is excluded:
+        # the renderer builds its mailto: itself from a bare address.)
+        for field in ("website", "linkedin", "twitter", "bluesky", "mastodon"):
+            val = m.get(field)
+            if isinstance(val, str) and val and not val.lower().startswith(("http://", "https://")):
+                errs.append(
+                    f"{ctx}: '{field}' must be an absolute http(s) URL, got {val!r}"
+                )
     return errs
 
 
