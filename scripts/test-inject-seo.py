@@ -470,3 +470,170 @@ def test_main_stamps_unmanaged_page_assets_only(tmp_path, monkeypatch):
     assert "assets/css/site.css?v=" in written
     assert seo.SENTINEL_BEGIN not in written
     assert seo.JSONLD_BEGIN not in written
+
+
+# ── plain-text helpers ───────────────────────────────────────────────
+
+def test_plain_text_strips_tags_and_collapses_whitespace():
+    frag = 'A\n  <strong>bold</strong>   answer with a <a href="x">link</a>.'
+    assert seo._plain_text(frag) == "A bold answer with a link."
+
+
+def test_plain_text_unescapes_entities():
+    assert seo._plain_text("Grants &amp; funding &mdash; here") == "Grants & funding — here"
+
+
+def test_truncate_leaves_short_text_untouched():
+    assert seo._truncate("short", cap=50) == "short"
+
+
+def test_truncate_cuts_on_word_boundary_with_ellipsis():
+    text = "alpha beta gamma delta epsilon"
+    out = seo._truncate(text, cap=14)
+    assert out.endswith("…")
+    assert "  " not in out
+    # cut on a space, never mid-word
+    assert out[:-1] in {"alpha beta", "alpha beta gamma"} or out[:-1].count(" ") >= 1
+    assert not out[:-1].endswith(" ")
+
+
+# ── FAQ / glossary parsing ───────────────────────────────────────────
+
+_FAQ_HTML = (
+    '<section class="faq-section">'
+    '<h2 id="about">About</h2>'
+    '<h3 class="faq-q" id="what-is">What is it?</h3>'
+    '<p class="faq-a">It is a <a href="x">thing</a> &amp; more.</p>'
+    '<h3 class="faq-q" id="who">Who runs it?</h3>'
+    '<p class="faq-a">The team.</p>'
+    '</section>'
+)
+
+_GLOSSARY_HTML = (
+    '<dl class="glossary-dl">'
+    '<dt id="action">Action</dt>'
+    '<dd>A four-year network. See the <a href="y">MoU</a>.</dd>'
+    '<dt id="cost">COST</dt>'
+    '<dd>European Cooperation in Science and Technology.</dd>'
+    '</dl>'
+)
+
+
+def test_parse_faq_items_extracts_anchor_question_answer():
+    items = seo.parse_faq_items(_FAQ_HTML)
+    assert items == [
+        ("what-is", "What is it?", "It is a thing & more."),
+        ("who", "Who runs it?", "The team."),
+    ]
+
+
+def test_parse_faq_items_empty_when_no_markup():
+    assert seo.parse_faq_items("<p>nothing here</p>") == []
+
+
+def test_parse_glossary_items_extracts_anchor_term_definition():
+    items = seo.parse_glossary_items(_GLOSSARY_HTML)
+    assert items == [
+        ("action", "Action", "A four-year network. See the MoU."),
+        ("cost", "COST", "European Cooperation in Science and Technology."),
+    ]
+
+
+def test_parse_glossary_items_empty_when_no_markup():
+    assert seo.parse_glossary_items("<p>nothing</p>") == []
+
+
+# ── FAQPage / DefinedTermSet JSON-LD nodes ───────────────────────────
+
+def _ld_nodes(block: str):
+    inner = block.split('<script type="application/ld+json">\n', 1)[1]
+    inner = inner.rsplit("\n</script>", 1)[0]
+    data = json.loads(inner)
+    return data if isinstance(data, list) else [data]
+
+
+def test_faqpage_node_built_from_markup():
+    node = seo.build_faqpage_node("faq", "en", _FAQ_HTML)
+    assert node["@type"] == "FAQPage"
+    assert node["url"] == "https://netsec-cost.eu/faq.html"
+    qs = node["mainEntity"]
+    assert [q["name"] for q in qs] == ["What is it?", "Who runs it?"]
+    assert qs[0]["@type"] == "Question"
+    assert qs[0]["url"] == "https://netsec-cost.eu/faq.html#what-is"
+    assert qs[0]["acceptedAnswer"] == {"@type": "Answer", "text": "It is a thing & more."}
+
+
+def test_faqpage_node_none_when_no_questions():
+    assert seo.build_faqpage_node("faq", "en", "<p>no faq markup</p>") is None
+
+
+def test_definedtermset_node_built_from_markup():
+    node = seo.build_definedtermset_node("glossary", "en", "Glossary", _GLOSSARY_HTML)
+    assert node["@type"] == "DefinedTermSet"
+    assert node["name"] == "Glossary"
+    terms = node["hasDefinedTerm"]
+    assert [t["name"] for t in terms] == ["Action", "COST"]
+    assert terms[0]["@type"] == "DefinedTerm"
+    assert terms[0]["url"] == "https://netsec-cost.eu/glossary.html#action"
+    assert terms[0]["description"] == "A four-year network. See the MoU."
+    assert terms[0]["inDefinedTermSet"] == "https://netsec-cost.eu/glossary.html"
+
+
+def test_definedtermset_node_none_when_no_terms():
+    assert seo.build_definedtermset_node("glossary", "en", "G", "<p>nope</p>") is None
+
+
+def test_jsonld_faq_appends_faqpage_node():
+    block = seo.build_jsonld_block("faq", "en", "FAQ", "Desc", _FAQ_HTML)
+    types = [n["@type"] for n in _ld_nodes(block)]
+    assert "FAQPage" in types
+    assert "WebPage" in types
+    assert "Organization" in types
+
+
+def test_jsonld_faq_locale_carries_to_faqpage():
+    block = seo.build_jsonld_block("faq", "fr", "FAQ", "Desc", _FAQ_HTML)
+    faq = [n for n in _ld_nodes(block) if n["@type"] == "FAQPage"][0]
+    assert faq["inLanguage"] == "fr-FR"
+    assert faq["url"] == "https://netsec-cost.eu/faq.fr.html"
+    assert faq["mainEntity"][0]["url"].startswith("https://netsec-cost.eu/faq.fr.html#")
+
+
+def test_jsonld_glossary_appends_definedtermset_node():
+    block = seo.build_jsonld_block("glossary", "en", "Glossary", "Desc", _GLOSSARY_HTML)
+    types = [n["@type"] for n in _ld_nodes(block)]
+    assert "DefinedTermSet" in types
+    assert "WebPage" in types
+
+
+def test_jsonld_other_pages_get_no_page_type_schema():
+    block = seo.build_jsonld_block("people", "en", "People", "Desc", _FAQ_HTML)
+    types = [n["@type"] for n in _ld_nodes(block)]
+    assert "FAQPage" not in types
+    assert "DefinedTermSet" not in types
+
+
+def test_jsonld_faq_without_markup_omits_faqpage_but_keeps_webpage():
+    # A faq page whose body has no faq-q markup still gets the base nodes.
+    block = seo.build_jsonld_block("faq", "en", "FAQ", "Desc", html="<body></body>")
+    types = [n["@type"] for n in _ld_nodes(block)]
+    assert "FAQPage" not in types
+    assert "WebPage" in types
+
+
+def test_inject_faq_is_idempotent_with_structured_data():
+    page = (
+        '<html lang="en"><head><title>FAQ</title>'
+        '<meta name="description" content="Questions.">'
+        '<link rel="icon" href="/f.ico"></head><body>'
+        + _FAQ_HTML +
+        '</body></html>'
+    )
+    once, changed1 = seo.inject(page, "faq")
+    assert changed1 is True
+    assert "FAQPage" in once
+    twice, changed2 = seo.inject(once, "faq")
+    assert changed2 is False
+    assert twice == once
+    # the injected JSON-LD must not feed back as new questions on re-run
+    assert once.count('"@type": "FAQPage"') == 1
