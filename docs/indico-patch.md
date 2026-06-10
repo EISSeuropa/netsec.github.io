@@ -113,6 +113,27 @@ The resolved internal IDs are cached in a sidecar
 `fix-plan.yaml.resolved.json` (gitignored) so re-runs skip the lookup
 step. The YAML itself stays pristine and comment-friendly.
 
+## Read-back verification (#323)
+
+A 2xx from Indico does not mean a write took: some management routes
+return 200 while no-opping (a contribution "move" that only toggles
+schedule state, a wtforms POST rejected for a missing CSRF token). So in
+`--apply` mode, after every write the tool reads the authoritative state
+back from the `/export/*` JSON, on a cache-busted GET, and confirms the
+intended value actually landed. Each patch reports one of:
+
+- **verified** — the read-back shows the intended value. The only OK.
+- **mismatch** — the read-back shows a different value, so the write did
+  not take (the silent no-op the tool used to hide).
+- **unconfirmed** — the field cannot be read back from the export (today:
+  session room/venue and event-person fields), so the tool will not claim
+  a success it cannot confirm.
+
+The run exits non-zero unless every patch is **verified**. A green "OK"
+now means the change is provably live, not merely that an HTTP call
+returned 200. The per-kind read-back sources and field mappings live in
+the `verify_*` functions in `scripts/indico_patch.py`.
+
 ## Fix-plan schema
 
 See `data/indico-fix-plans/EXAMPLE.yaml` for the canonical reference.

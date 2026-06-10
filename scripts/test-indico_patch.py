@@ -62,8 +62,8 @@ class RecordingClient:
         self.patches = []
         self.posts = []
 
-    def get_json(self, path, *, params=None):
-        self.gets.append((path, params))
+    def get_json(self, path, *, params=None, fresh=False):
+        self.gets.append((path, params, fresh))
         if path in self._get_map:
             val = self._get_map[path]
             if isinstance(val, Exception):
@@ -485,7 +485,7 @@ def test_timetable_data_cached_single_fetch():
     r, client = _make_resolver(42, {"/export/timetable/42.json": tt})
     r.session_id(by="friendlyId", ref=43)
     r.session_id(by="friendlyId", ref=43)
-    assert sum(1 for path, _ in client.gets if path == "/export/timetable/42.json") == 1
+    assert sum(1 for path, *_ in client.gets if path == "/export/timetable/42.json") == 1
 
 
 # ──────────────────────────── Resolver.contribution_id ────────────────────────────
@@ -645,7 +645,7 @@ def test_apply_session_patch_uses_resolved_cache_skips_lookup():
                       set={"title": "New"}, resolved={"session_id": 117})
     mod.apply_session_patch(client, 42, patch, r)
     # timetable export never fetched because session_id came from cache
-    assert all(p != "/export/timetable/42.json" for p, _ in client.gets)
+    assert all(p != "/export/timetable/42.json" for p, *_ in client.gets)
 
 
 # ──────────────────────────── apply_person_patch ────────────────────────────
@@ -863,3 +863,126 @@ def test_main_handler_exception_counts_as_failure(tmp_path, monkeypatch, capsys)
     out = capsys.readouterr().out
     assert "FAIL" in out
     assert rc == 1
+
+
+# ──────────────────────────── write verification (#323) ────────────────────────────
+
+def _patch(kind, **kw):
+    return mod.Patch(
+        kind=kind,
+        by=kw.pop("by", "friendlyId"),
+        ref=kw.pop("ref", 1),
+        set=kw.pop("set", {}),
+        resolved=kw.pop("resolved", {}),
+        **kw,
+    )
+
+
+def test_verify_session_title_verified():
+    tt = _timetable_doc(42, {"e1": {"entryType": "Session", "sessionId": 117, "title": "New Name"}})
+    client = RecordingClient(get_map={"/export/timetable/42.json": tt})
+    p = _patch("session", set={"title": "New Name"}, resolved={"session_id": 117})
+    status, _ = mod.verify_session_patch(client, 42, p)
+    assert status == mod.VERIFIED
+
+
+def test_verify_session_title_mismatch_reports_current():
+    tt = _timetable_doc(42, {"e1": {"entryType": "Session", "sessionId": 117, "title": "Old Name"}})
+    client = RecordingClient(get_map={"/export/timetable/42.json": tt})
+    p = _patch("session", set={"title": "New Name"}, resolved={"session_id": 117})
+    status, msg = mod.verify_session_patch(client, 42, p)
+    assert status == mod.MISMATCH
+    assert "Old Name" in msg
+
+
+def test_verify_session_absent_is_mismatch():
+    tt = _timetable_doc(42, {"e1": {"entryType": "Session", "sessionId": 999, "title": "X"}})
+    client = RecordingClient(get_map={"/export/timetable/42.json": tt})
+    p = _patch("session", set={"title": "New"}, resolved={"session_id": 117})
+    status, _ = mod.verify_session_patch(client, 42, p)
+    assert status == mod.MISMATCH
+
+
+def test_verify_session_room_unverifiable_when_export_omits_it():
+    tt = _timetable_doc(42, {"e1": {"entryType": "Session", "sessionId": 117, "title": "X"}})
+    client = RecordingClient(get_map={"/export/timetable/42.json": tt})
+    p = _patch("session", set={"room_name": "Hall B"}, resolved={"session_id": 117})
+    status, _ = mod.verify_session_patch(client, 42, p)
+    assert status == mod.UNVERIFIABLE
+
+
+def test_verify_contribution_move_verified():
+    tt = _timetable_doc(42, {
+        "s1": {"entryType": "Session", "sessionId": 7,
+               "entries": {"c1": {"entryType": "Contribution", "contributionId": 501, "sessionId": 7}}},
+    })
+    client = RecordingClient(get_map={"/export/timetable/42.json": tt})
+    p = _patch("contribution", set={"session": 7},
+               resolved={"contribution_id": 501, "target_session_id": 7})
+    status, _ = mod.verify_contribution_patch(client, 42, p)
+    assert status == mod.VERIFIED
+
+
+def test_verify_contribution_move_not_taken_is_mismatch():
+    # The silent no-op: the contribution is scheduled under no session.
+    tt = _timetable_doc(42, {"s1": {"entryType": "Session", "sessionId": 7, "entries": {}}})
+    client = RecordingClient(get_map={"/export/timetable/42.json": tt})
+    p = _patch("contribution", set={"session": 7},
+               resolved={"contribution_id": 501, "target_session_id": 7})
+    status, msg = mod.verify_contribution_patch(client, 42, p)
+    assert status == mod.MISMATCH
+    assert "did not take" in msg
+
+
+def test_verify_contribution_move_wrong_session_is_mismatch():
+    tt = _timetable_doc(42, {
+        "s1": {"entryType": "Session", "sessionId": 9,
+               "entries": {"c1": {"entryType": "Contribution", "contributionId": 501, "sessionId": 9}}},
+    })
+    client = RecordingClient(get_map={"/export/timetable/42.json": tt})
+    p = _patch("contribution", set={"session": 7},
+               resolved={"contribution_id": 501, "target_session_id": 7})
+    status, _ = mod.verify_contribution_patch(client, 42, p)
+    assert status == mod.MISMATCH
+
+
+def test_verify_block_time_verified():
+    tt = _timetable_doc(42, {"e1": {"entryType": "Session", "sessionId": 117,
+        "startDate": {"date": "2026-06-11", "time": "09:00:00", "tz": "Europe/Stockholm"}}})
+    client = RecordingClient(get_map={"/export/timetable/42.json": tt})
+    p = _patch("block_time", set={"start_dt": "2026-06-11T09:00"}, resolved={"session_id": 117})
+    status, _ = mod.verify_block_time_patch(client, 42, p)
+    assert status == mod.VERIFIED
+
+
+def test_verify_block_time_mismatch():
+    tt = _timetable_doc(42, {"e1": {"entryType": "Session", "sessionId": 117,
+        "startDate": {"date": "2026-06-11", "time": "10:30:00"}}})
+    client = RecordingClient(get_map={"/export/timetable/42.json": tt})
+    p = _patch("block_time", set={"start_dt": "2026-06-11T09:00"}, resolved={"session_id": 117})
+    status, _ = mod.verify_block_time_patch(client, 42, p)
+    assert status == mod.MISMATCH
+
+
+def test_verify_person_is_unverifiable():
+    client = RecordingClient(get_map={})
+    p = _patch("person", set={"affiliation": "Oxford"}, resolved={"person_id": 5})
+    status, _ = mod.verify_person_patch(client, 42, p)
+    assert status == mod.UNVERIFIABLE
+
+
+def test_verify_patch_read_back_failure_is_unverifiable():
+    client = RecordingClient(get_map={"/export/timetable/42.json": RuntimeError("boom")})
+    p = _patch("session", set={"title": "X"}, resolved={"session_id": 117})
+    status, msg = mod.verify_patch(client, 42, p)
+    assert status == mod.UNVERIFIABLE
+    assert "read-back failed" in msg
+
+
+def test_verify_reads_are_cache_busted():
+    tt = _timetable_doc(42, {"e1": {"entryType": "Session", "sessionId": 117, "title": "N"}})
+    client = RecordingClient(get_map={"/export/timetable/42.json": tt})
+    p = _patch("session", set={"title": "N"}, resolved={"session_id": 117})
+    mod.verify_session_patch(client, 42, p)
+    assert any(path == "/export/timetable/42.json" and fresh
+               for path, _params, fresh in client.gets)
