@@ -4,7 +4,8 @@
     "schema": {
       "term": "string. The headword. Rendered as <dt id=\"fg-<slug>\">.",
       "definition": "object {en, fr, de}. EN is authoritative; FR and DE are hand-translated (no machine translation, CLAUDE.md §1).",
-      "theme": "optional string. Must match a theme name from data/bios.json theme_aggregate exactly. Renders a build-time 'see N members working on this' link into /people.html#themes=<slug>, with N counted from members whose themes array contains it. Omit if no clean match.",
+      "theme": "optional string. Must match a theme name from data/bios.json theme_aggregate exactly. Used for the facepile's 'see all in the directory' link, which targets /people.html#themes=<slug> (the directory filters by theme, not by individual keyword). Omit if no clean match.",
+      "match_keywords": "optional array of canonical keyword strings (matching data/bios.json canonical_keywords, case-insensitive). build-field-guide.py renders a facepile of the directory members whose chosen keywords overlap any of these, ordered leadership-first then by match strength, capped at FACEPILE_MAX with a '+N' overflow disc. A keyword matching no current member is warned (stderr) as a likely typo. Omit to render no facepile.",
       "sources": "optional array of {label, url}. Authoritative external links rendered as a small 'Sources' list.",
       "seeAlso": "optional array of other term strings (cross-references). Not yet rendered; reserved for a later pass.",
       "contributor": "optional slug. Not used by the four Phase 1 entries (they are unattributed institutional facts). Reserved for the contested entries that will be added after WG sign-off (issue #766)."
@@ -20,6 +21,11 @@
         "de": "Die Gemeinsame Sicherheits- und Verteidigungspolitik der Europäischen Union: ihr Rahmen für zivile und militärische Operationen der Krisenbewältigung und den schrittweisen Aufbau einer gemeinsamen Verteidigung, im Rahmen der Gemeinsamen Außen- und Sicherheitspolitik."
       },
       "theme": "Foreign policy and diplomacy",
+      "match_keywords": [
+        "EU foreign policy",
+        "Defence",
+        "EU–NATO relations"
+      ],
       "sources": [
         {
           "label": "Common Security and Defence Policy (European External Action Service)",
@@ -35,6 +41,11 @@
         "de": "Die Ständige Strukturierte Zusammenarbeit und der Europäische Verteidigungsfonds: die Instrumente der Europäischen Union zur gemeinsamen Entwicklung und Finanzierung von Verteidigungsfähigkeiten unter den teilnehmenden Mitgliedstaaten."
       },
       "theme": "Security and defence",
+      "match_keywords": [
+        "Defence",
+        "Industrial policy",
+        "EU–NATO relations"
+      ],
       "sources": [
         {
           "label": "Permanent Structured Cooperation (PESCO)",
@@ -53,7 +64,12 @@
         "fr": "Le débat de longue date sur la répartition des coûts et des responsabilités de la sécurité européenne entre les États européens et les États-Unis au sein de l'OTAN.",
         "de": "Die seit Langem geführte Debatte darüber, wie die Kosten und Verantwortlichkeiten der europäischen Sicherheit zwischen den europäischen Staaten und den Vereinigten Staaten innerhalb der NATO verteilt werden."
       },
-      "theme": "European and transatlantic security order"
+      "theme": "European and transatlantic security order",
+      "match_keywords": [
+        "EU–NATO relations",
+        "Grand strategy",
+        "Defence"
+      ]
     },
     {
       "term": "Emerging and disruptive technologies (EDTs)",
@@ -63,6 +79,12 @@
         "de": "Eine Gruppe von Technologien (künstliche Intelligenz, Autonomie, Quantentechnik, Biotechnologie, Weltraum), die voraussichtlich die Organisation von Sicherheit und Verteidigung verändern werden, mit Auswirkungen, die ungewiss und umstritten bleiben."
       },
       "theme": "Cyber and emerging technology",
+      "match_keywords": [
+        "Cyber security",
+        "Cyber defence",
+        "Infrastructure",
+        "Digital governance"
+      ],
       "sources": [
         {
           "label": "Emerging and disruptive technologies (NATO)",

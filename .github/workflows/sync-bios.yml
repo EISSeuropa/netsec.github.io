@@ -91,6 +91,17 @@ jobs:
             echo "_Workflow: **Sync member bios from Google Form**, run_id \`${{ github.run_id }}\`, trigger \`${{ github.event_name }}\`._"
           } > /tmp/bios-pr-body.md
 
+      - name: Rebuild the glossary field guide from the refreshed bios
+        run: |
+          # The field-guide facepile (#801) is baked from data/bios.json at
+          # build time, so a member's new keywords or headshot only reach the
+          # glossary once this reruns. Bundling it into the sync PR keeps the
+          # faces at most one weekly cycle behind the directory data. The
+          # build is idempotent, so it adds nothing when the facepiles are
+          # unchanged. It rewrites only the field-guide region of the
+          # glossary pages, leaving the ?v= asset hashes untouched.
+          python3 scripts/build-field-guide.py
+
       - name: Compose PR title (dynamic if available, fallback otherwise)
         id: pr-title
         run: |

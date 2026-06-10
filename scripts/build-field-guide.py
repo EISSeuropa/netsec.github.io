@@ -63,10 +63,11 @@ LOCALES = {
             "directory members who work on them."
         ),
         "people": "people.html",
-        # {n} is the member count, {slug} the theme slug.
+        # {n} is the matched-member count, {name} a member's name.
         "members_link": "See {n} members working on this",
         "members_link_one": "See 1 member working on this",
-        "members_link_nocount": "See members working on this",
+        "face_aria": "Open the profile of {name}",
+        "facepile_more": "{n} more",
         "sources_label": "Sources",
     },
     "fr": {
@@ -81,7 +82,8 @@ LOCALES = {
         "people": "people.fr.html",
         "members_link": "Voir {n} membres qui y travaillent",
         "members_link_one": "Voir 1 membre qui y travaille",
-        "members_link_nocount": "Voir les membres qui y travaillent",
+        "face_aria": "Ouvrir le profil de {name}",
+        "facepile_more": "{n} de plus",
         "sources_label": "Sources",
     },
     "de": {
@@ -96,7 +98,8 @@ LOCALES = {
         "people": "people.de.html",
         "members_link": "{n} Mitglieder anzeigen, die daran arbeiten",
         "members_link_one": "1 Mitglied anzeigen, das daran arbeitet",
-        "members_link_nocount": "Mitglieder anzeigen, die daran arbeiten",
+        "face_aria": "Profil von {name} öffnen",
+        "facepile_more": "{n} weitere",
         "sources_label": "Quellen",
     },
 }
@@ -115,36 +118,112 @@ def keyword_slug(value: str) -> str:
     return s.strip("-")
 
 
-def theme_counts(bios: dict) -> dict:
-    """Map each theme name to the number of directory members who list it
-    in their `themes` array. Mirrors how data/bios.json's theme_aggregate
-    is built, but recomputed so the link never trusts a stale aggregate."""
-    counts: dict = {}
-    for member in bios.get("members", []):
-        for theme in member.get("themes", []) or []:
-            counts[theme] = counts.get(theme, 0) + 1
-    return counts
+FACEPILE_MAX = 5
 
 
-def render_members_link(loc: dict, theme: str, counts: dict) -> str:
-    """Build the '→ See N members working on this' link for a theme, or
-    return '' when the concept has no theme. Falls back to a count-free
-    label when the theme is absent from the taxonomy."""
-    if not theme:
-        return ""
-    slug = keyword_slug(theme)
-    href = f"{loc['people']}#themes={slug}"
-    n = counts.get(theme)
-    if n is None or n <= 0:
-        text = loc["members_link_nocount"]
-    elif n == 1:
-        text = loc["members_link_one"]
+def _strip_salutation(name: str) -> str:
+    return re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+", "", (name or "").strip(), flags=re.I)
+
+
+def _surname_key(name: str) -> str:
+    """Lower-cased last-name token, salutation stripped, for stable
+    alphabetical ordering within the facepile."""
+    tokens = _strip_salutation(name).split()
+    return (tokens[-1] if tokens else (name or "")).lower()
+
+
+def _initials(name: str) -> str:
+    """First + last initial, salutation stripped. The fallback avatar for a
+    member with no headshot, mirroring the directory's own monogram."""
+    tokens = [t for t in re.split(r"\s+", _strip_salutation(name)) if t]
+    if not tokens:
+        return "?"
+    if len(tokens) == 1:
+        return tokens[0][:1].upper()
+    return (tokens[0][:1] + tokens[-1][:1]).upper()
+
+
+def _is_leader(member: dict) -> bool:
+    """A member with a named role or a WG lead / co-lead seat sorts to the
+    front of the facepile, so the most recognisable faces survive the cap."""
+    return bool(member.get("roles") or (member.get("wg_leadership") or {}))
+
+
+def members_for(concept: dict, members: list) -> list:
+    """Directory members whose chosen keywords overlap the concept's
+    match_keywords, ordered leadership-first, then by overlap strength (so
+    the closest match survives the cap), then by surname. Empty when the
+    concept has no match_keywords or nothing overlaps. The match is on the
+    member's canonical_keywords, case-insensitive."""
+    wanted = {k.strip().lower() for k in (concept.get("match_keywords") or []) if k.strip()}
+    if not wanted:
+        return []
+    ranked = []
+    for m in members:
+        kws = {k.lower() for k in (m.get("canonical_keywords") or [])}
+        strength = len(wanted & kws)
+        if strength:
+            ranked.append((m, strength))
+    ranked.sort(key=lambda t: (not _is_leader(t[0]), -t[1], _surname_key(t[0].get("name", ""))))
+    return [m for m, _ in ranked]
+
+
+def _render_face(loc: dict, member: dict) -> str:
+    """One overlapping avatar: a `member-link` anchor (auto-wired to the
+    shared popover by assets/js/site.js) wrapping the headshot, or a
+    monogram when the member has none. The image carries an empty alt so
+    the member's name reaches assistive tech once, through the anchor's
+    aria-label, and never leaks into the DefinedTerm description (#803)."""
+    mid = member.get("id", "")
+    name = member.get("name", "")
+    href = f"{loc['people']}#{mid}"
+    aria = loc["face_aria"].format(name=name)
+    photo = member.get("photo") or ""
+    if photo:
+        inner = (
+            f'<img src="{html.escape(photo, quote=True)}" alt="" '
+            f'width="36" height="36" loading="lazy" decoding="async">'
+        )
     else:
-        text = loc["members_link"].format(n=n)
+        inner = f'<span class="fg-initials" aria-hidden="true">{html.escape(_initials(name))}</span>'
     return (
-        f'<p class="fg-theme-link">'
-        f'<a href="{html.escape(href, quote=True)}">'
-        f'→ {html.escape(text)}</a></p>'
+        f'<a class="member-link fg-face" data-member="{html.escape(mid, quote=True)}" '
+        f'href="{html.escape(href, quote=True)}" aria-label="{html.escape(aria, quote=True)}">'
+        f"{inner}</a>"
+    )
+
+
+def render_facepile(loc_key: str, concept: dict, members: list) -> str:
+    """Build the inline member facepile for a concept, or '' when nothing
+    matches. The faces open the shared directory popover; the trailing
+    link and any '+N' overflow disc point at the concept's theme view on
+    the directory, since the directory filters by theme, not by a single
+    keyword, so the theme is the closest deep-linkable set."""
+    loc = LOCALES[loc_key]
+    matched = members_for(concept, members)
+    if not matched:
+        return ""
+    shown = matched[:FACEPILE_MAX]
+    overflow = len(matched) - len(shown)
+    theme = concept.get("theme", "")
+    href = f"{loc['people']}#themes={keyword_slug(theme)}" if theme else loc["people"]
+    href_esc = html.escape(href, quote=True)
+
+    faces = [_render_face(loc, m) for m in shown]
+    if overflow > 0:
+        more_aria = loc["facepile_more"].format(n=overflow)
+        faces.append(
+            f'<a class="fg-face fg-face-more" href="{href_esc}" '
+            f'aria-label="{html.escape(more_aria, quote=True)}">+{overflow}</a>'
+        )
+
+    n = len(matched)
+    link_text = loc["members_link_one"] if n == 1 else loc["members_link"].format(n=n)
+    return (
+        f'<div class="fg-people">'
+        f'<span class="fg-facepile">{"".join(faces)}</span>'
+        f'<a class="fg-people-link" href="{href_esc}">→ {html.escape(link_text)}</a>'
+        f"</div>"
     )
 
 
@@ -173,21 +252,21 @@ def render_sources(loc: dict, sources: list) -> str:
     )
 
 
-def render_concept(loc: str, concept: dict, counts: dict) -> str:
+def render_concept(loc: str, concept: dict, members: list) -> str:
     """Render one concept as a <dt>/<dd> pair matching the glossary's
-    existing markup. The locale-appropriate definition leads the <dd>;
-    the optional theme link and sources list follow inside it so the
-    DefinedTerm extractor (which reads <dt> then the next <dd>) still
-    sees a clean term + definition."""
+    existing markup. The locale-appropriate definition leads the <dd> as
+    its first <p>, so the DefinedTerm extractor (which reads the leading
+    paragraph, #803) sees a clean term + definition; the member facepile
+    and sources list follow it."""
     l = LOCALES[loc]
     term = concept["term"]
     slug = keyword_slug(term)
     definition = concept["definition"][loc]
 
     parts = [f"<p>{html.escape(definition)}</p>"]
-    theme_link = render_members_link(l, concept.get("theme", ""), counts)
-    if theme_link:
-        parts.append(theme_link)
+    facepile = render_facepile(loc, concept, members)
+    if facepile:
+        parts.append(facepile)
     sources_html = render_sources(l, concept.get("sources") or [])
     if sources_html:
         parts.append(sources_html)
@@ -199,11 +278,11 @@ def render_concept(loc: str, concept: dict, counts: dict) -> str:
     )
 
 
-def render_section(loc: str, concepts: list, counts: dict) -> str:
+def render_section(loc: str, concepts: list, members: list) -> str:
     """Render the full 'Concepts in European security studies' section for
     one locale, sentinels included, ready to drop between them."""
     l = LOCALES[loc]
-    entries = "\n\n".join(render_concept(loc, c, counts) for c in concepts)
+    entries = "\n\n".join(render_concept(loc, c, members) for c in concepts)
     return (
         f"{START}\n"
         f'    <section class="glossary-section">\n'
@@ -230,13 +309,29 @@ def replace_region(page: str, new_region: str) -> str:
     return pattern.sub(lambda _m: new_region, page, count=1)
 
 
-def build(loc: str, concepts: list, counts: dict) -> str:
+def build(loc: str, concepts: list, members: list) -> str:
     """Read the locale's glossary page and return its content with the
     field-guide region rebuilt. Does not write."""
     path = ROOT / LOCALES[loc]["file"]
     page = path.read_text(encoding="utf-8")
-    region = render_section(loc, concepts, counts)
+    region = render_section(loc, concepts, members)
     return replace_region(page, region)
+
+
+def warn_unmatched_keywords(concepts: list, members: list) -> None:
+    """Surface match_keywords that overlap no directory member, to stderr.
+    A miss is a likely typo, or a valid keyword nobody has chosen yet;
+    either way the maintainer wants to see it. Non-fatal, mirroring the
+    uncategorised-keyword warning in sync-bios.py."""
+    have = {k.lower() for m in members for k in (m.get("canonical_keywords") or [])}
+    for c in concepts:
+        for kw in c.get("match_keywords") or []:
+            if kw.strip() and kw.strip().lower() not in have:
+                print(
+                    f"  ! match_keyword '{kw}' on '{c.get('term', '?')}' "
+                    "matches no directory member (typo, or unused keyword).",
+                    file=sys.stderr,
+                )
 
 
 def main() -> int:
@@ -251,12 +346,13 @@ def main() -> int:
     data = json.loads(DATA.read_text(encoding="utf-8"))
     concepts = data.get("concepts", [])
     bios = json.loads(BIOS.read_text(encoding="utf-8")) if BIOS.exists() else {}
-    counts = theme_counts(bios)
+    members = bios.get("members", [])
+    warn_unmatched_keywords(concepts, members)
 
     drift = False
     for loc in LOCALES:
         path = ROOT / LOCALES[loc]["file"]
-        rendered = build(loc, concepts, counts)
+        rendered = build(loc, concepts, members)
         existing = path.read_text(encoding="utf-8")
         if args.check:
             if rendered != existing:

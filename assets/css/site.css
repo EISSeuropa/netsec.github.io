@@ -5461,11 +5461,50 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   color:var(--ink-2);font-size:.97rem;line-height:1.6;
   margin:.2rem 0 1.2rem;max-width:62ch;
 }
-.prose-page .glossary-dl dd .fg-theme-link{
-  margin:.45rem 0 0;font-size:.9rem;
+/* Member facepile (#801): overlapping directory avatars under a concept,
+   matched by the members' chosen keywords. Each face is a member-link
+   anchor auto-wired to the shared popover; the trailing link points at the
+   concept's theme view on the directory. */
+.prose-page .glossary-dl dd .fg-people{
+  display:flex;align-items:center;flex-wrap:wrap;gap:.35rem .8rem;
+  margin:.55rem 0 0;
 }
-.prose-page .glossary-dl dd .fg-theme-link a{
-  color:var(--accent-2);font-weight:500;
+.prose-page .glossary-dl dd .fg-facepile{display:flex;align-items:center;}
+.prose-page .glossary-dl dd .fg-face{
+  width:36px;height:36px;flex:0 0 auto;margin-left:-9px;
+  border-radius:50%;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--bg-0);
+  background:color-mix(in srgb,var(--accent) 12%,var(--bg-0));
+  text-decoration:none;
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.prose-page .glossary-dl dd .fg-face:first-child{margin-left:0;}
+.prose-page .glossary-dl dd .fg-face img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.prose-page .glossary-dl dd .fg-face .fg-initials{
+  font-family:'Lexend','Inter',sans-serif;font-weight:600;
+  font-size:.78rem;letter-spacing:.02em;color:var(--accent);
+}
+.prose-page .glossary-dl dd .fg-face:hover,
+.prose-page .glossary-dl dd .fg-face:focus-visible{
+  transform:translateY(-2px);box-shadow:0 2px 9px rgba(11,18,32,.22);z-index:2;
+}
+.prose-page .glossary-dl dd .fg-face:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px;
+}
+.prose-page .glossary-dl dd .fg-face-more{
+  font-family:'Lexend','Inter',sans-serif;font-weight:600;font-size:.74rem;
+  color:var(--muted);background:color-mix(in srgb,var(--muted) 18%,var(--bg-0));
+}
+.prose-page .glossary-dl dd .fg-people-link{
+  color:var(--accent-2);font-weight:500;font-size:.9rem;
+}
+@media (prefers-reduced-motion: reduce){
+  .prose-page .glossary-dl dd .fg-face{transition:none;}
+  .prose-page .glossary-dl dd .fg-face:hover,
+  .prose-page .glossary-dl dd .fg-face:focus-visible{transform:none;}
 }
 .prose-page .glossary-dl dd .fg-sources{
   margin:.55rem 0 0;font-size:.86rem;color:var(--muted);
