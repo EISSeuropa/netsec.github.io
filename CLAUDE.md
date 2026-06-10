@@ -42,6 +42,19 @@ and costs context.
   arm auto-merge with `gh pr merge --auto --squash`. CI checks (the
   link checker on every HTML-touching PR + CodeQL) will hold the
   merge if anything is wrong.
+- **Parallel PRs that touch `site.css` (or anything `inject-seo.py`
+  stamps a `?v=` hash into) must merge one at a time.** Each one
+  regenerates the cache-bust hashes across every page, so two open at
+  once collide on the `?v=` lines, and a careless merge can silently
+  drop unrelated content baked into the regenerated pages (another
+  PR's JSON-LD, a built section). Develop them in parallel if you
+  like, but integrate sequentially: after each lands on `main`, merge
+  `main` into the next branch, keep all the `site.css` and CHANGELOG
+  additions, take `main`'s copy of the generated HTML, then re-run
+  `scripts/inject-seo.py` (plus any page builder, e.g.
+  `build-field-guide.py`) once to recompute every `?v=` against the
+  combined tree. A bounded wait for a merge the next step genuinely
+  depends on is fine.
 - **Carve-out: release notes.** When cutting a release via
   `scripts/release.sh`, eyeball the lede + themes + index before
   confirming the publish prompt. The maintainer expects to see the
