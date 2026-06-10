@@ -13,6 +13,7 @@
   var I18N = {
     en: { lead: 'Lead', coLead: 'Co-lead',
           people: 'people', countries: 'countries', groups: 'Working Groups',
+          claim: 'Is this you? Add your profile',
           events: 'Related events',
           pubs: 'Related publications',
           pubsEmpty: 'First publications expected October 2026.',
@@ -24,6 +25,7 @@
                    'report': 'Report', 'training-material': 'Training material', 'dataset': 'Dataset' } },
     fr: { lead: 'Responsable', coLead: 'Co-responsable',
           people: 'personnes', countries: 'pays représentés', groups: 'groupes de travail',
+          claim: 'Est-ce vous ? Ajoutez votre profil',
           events: 'Événements liés',
           pubs: 'Publications liées',
           pubsEmpty: 'Premières publications attendues en octobre 2026.',
@@ -35,6 +37,7 @@
                    'report': 'Rapport', 'training-material': 'Matériel de formation', 'dataset': 'Jeu de données' } },
     de: { lead: 'Leitung', coLead: 'Co-Leitung',
           people: 'Personen', countries: 'vertretene Länder', groups: 'Arbeitsgruppen',
+          claim: 'Sind das Sie? Profil hinzufügen',
           events: 'Verwandte Veranstaltungen',
           pubs: 'Verwandte Veröffentlichungen',
           pubsEmpty: 'Erste Veröffentlichungen werden für Oktober 2026 erwartet.',
@@ -47,6 +50,12 @@
   };
   var locale = (document.documentElement.lang || 'en').slice(0, 2);
   var t = I18N[locale] || I18N.en;
+
+  // The join-form URL, read from bios.json's source block once the data
+  // loads. Held at module scope so memberCard() can append the
+  // claim-your-profile CTA to bio-less cards without threading the URL
+  // through every call site.
+  var formUrl = '';
 
   function el(tag, attrs) {
     var n = document.createElement(tag);
@@ -100,6 +109,20 @@
         class: 'mc-card glass wg-member-card',
         href: 'people.' + (locale === 'en' ? '' : locale + '.') + 'html#' + slug,
       }].concat(kids));
+    }
+    // A bio-less card is the directory's highest-intent conversion
+    // surface: the person is named on the site but has no profile yet.
+    // Offer a quiet link to the join form so they can claim their card.
+    // Leadership cards (roleLabel set) are skipped: a lead or co-lead
+    // without a bio is a sync gap, not a recruitment prospect.
+    if (formUrl && !roleLabel) {
+      kids.push(el('a', {
+        class: 'wg-claim-cta',
+        href: formUrl,
+        target: '_blank',
+        rel: 'noopener',
+        text: t.claim,
+      }));
     }
     return el.apply(null, ['div', {
       class: 'mc-card glass wg-member-card wg-member-card--plain',
@@ -177,6 +200,7 @@
     var wg = res[0], bios = res[1];
     var allEvents = (res[2] && res[2].events) || [];
     var allPubs = (res[3] && res[3].publications) || [];
+    formUrl = (bios.source && bios.source.form_url) || '';
     var bySlug = {};
     (bios.members || []).forEach(function (m) { bySlug[m.id] = m; });
 

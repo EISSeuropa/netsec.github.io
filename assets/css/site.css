@@ -589,6 +589,8 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .wg-member-card .role{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--wg-accent);font-weight:700;margin-bottom:4px}
 .wg-member-card .org{font-size:.8rem;color:var(--muted);margin:0;line-height:1.4}
 .wg-member-card--plain{cursor:default}
+.wg-claim-cta{display:inline-block;margin-top:9px;font-size:.76rem;font-weight:600;color:var(--wg-accent,var(--accent-2));text-decoration:none;opacity:.85;transition:opacity .2s var(--ease)}
+.wg-claim-cta:hover,.wg-claim-cta:focus-visible{opacity:1;text-decoration:underline}
 .mc-avatar--initials{display:flex;align-items:center;justify-content:center;font-family:'Lexend','Inter',sans-serif;font-weight:600;font-size:1.1rem;letter-spacing:.02em;color:var(--wg-accent,var(--accent-2));background:color-mix(in srgb,var(--wg-accent,var(--accent-2)) 14%,transparent);border-color:color-mix(in srgb,var(--wg-accent,var(--accent-2)) 30%,#fff)}
 .wg-members{margin-top:1rem;border-top:1px solid var(--line);padding-top:.4rem}
 .wg-members > summary{cursor:pointer;font-size:.95rem;font-weight:500;color:var(--accent-2);list-style:none;padding:11px 2px;user-select:none}
