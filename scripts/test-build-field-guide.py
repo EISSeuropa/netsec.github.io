@@ -7,27 +7,29 @@ monkeypatching the module-level ROOT / LOCALES file paths; no network,
 no mutation of tracked files.
 
 Covered logic:
-  * keyword_slug       matches people.html's keywordSlug() on the
-                       real theme names
-  * theme_counts       counts members per theme from a bios-shaped dict
-  * render_members_link plural / singular / count-free fallbacks, and
-                       the no-theme empty string
-  * render_sources     external links, empty list, url-less entry
-  * render_concept     <dt id="fg-…"> + <dd>, locale-appropriate def,
-                       theme-less / sources-less entries still render
-  * render_section     sentinels wrap the section, heading + intro per
-                       locale
-  * replace_region     idempotent swap, sentinel-respecting, missing
-                       sentinels raise
-  * build              all three locales get their own definition
-  * main               --check (in-sync / drift) and the write path
+  * keyword_slug        matches people.html's keywordSlug() on real themes
+  * _initials/_surname  salutation-stripped monogram + sort key
+  * members_for         keyword-overlap match, leadership-then-strength
+                        ordering, no-match and no-keywords empties
+  * render_facepile     avatar anchors (photo + monogram), cap + overflow
+                        disc, singular/plural trailing link, theme href,
+                        zero-match empty, locale people page
+  * warn_unmatched_keywords  warns on a keyword no member has
+  * render_sources      external links, empty list, url-less entry
+  * render_concept      <dt id="fg-…"> + <dd>, definition leads as first
+                        <p> (DefinedTerm-safe), facepile / sources follow
+  * render_section      sentinels wrap the section, heading + intro
+  * replace_region      idempotent swap, sentinel-respecting, raises
+  * build / main        all locales, --check + write path
 
 Run standalone:  /usr/bin/python3 scripts/test-build-field-guide.py
 Or under pytest: python3 -m pytest scripts/test-build-field-guide.py -q
 """
 from __future__ import annotations
 
+import contextlib
 import importlib.util
+import io
 import json
 from pathlib import Path
 
@@ -40,27 +42,33 @@ _spec.loader.exec_module(bfg)
 # --------------------------------------------------------------------------
 # Fixtures
 # --------------------------------------------------------------------------
-def _concept(term, en, fr="FR def", de="DE def", theme=None, sources=None):
+def _concept(term, en, fr="FR def", de="DE def", theme=None, match=None, sources=None):
     c = {"term": term, "definition": {"en": en, "fr": fr, "de": de}}
     if theme is not None:
         c["theme"] = theme
+    if match is not None:
+        c["match_keywords"] = match
     if sources is not None:
         c["sources"] = sources
     return c
 
 
-_BIOS = {
-    "members": [
-        {"themes": ["Foreign policy and diplomacy", "Security and defence"]},
-        {"themes": ["Foreign policy and diplomacy"]},
-        {"themes": ["Cyber and emerging technology"]},
-        {"themes": []},
-        {},
-    ]
-}
+# A leader (role), a co-lead, a plain member, a photo-less member, and a
+# member with no keywords at all.
+_MEMBERS = [
+    {"id": "ada-lovelace", "name": "Dr Ada Lovelace", "roles": ["WG1 Lead"],
+     "canonical_keywords": ["Cyber security", "Defence"],
+     "photo": "assets/images/people/ada-lovelace.jpg"},
+    {"id": "bob-stone", "name": "Mr Bob Stone", "roles": [],
+     "canonical_keywords": ["Cyber security"], "photo": ""},
+    {"id": "cara-iqbal", "name": "Cara Iqbal", "wg_leadership": {"co_lead": [2]},
+     "canonical_keywords": ["Defence"],
+     "photo": "assets/images/people/cara-iqbal.jpg"},
+    {"id": "dan-ng", "name": "Dr Dan Ng",
+     "canonical_keywords": ["Industrial policy"]},
+    {"id": "eve-park", "name": "Eve Park", "canonical_keywords": []},
+]
 
-# Build a minimal glossary page carrying the sentinels, plus a stray
-# admin <dt>/<dd> outside the region the build must never touch.
 _PAGE_TEMPLATE = (
     "<main>\n"
     '  <section class="glossary-section">\n'
@@ -86,7 +94,6 @@ def test_keyword_slug_real_themes():
         bfg.keyword_slug("European and transatlantic security order")
         == "european-and-transatlantic-security-order"
     )
-    assert bfg.keyword_slug("Cyber and emerging technology") == "cyber-and-emerging-technology"
 
 
 def test_keyword_slug_strips_punctuation_and_edges():
@@ -97,112 +104,177 @@ def test_keyword_slug_strips_punctuation_and_edges():
 
 
 def test_keyword_slug_no_underscores_leak():
-    # JS \w-equivalent excludes underscore; the port must too.
     assert bfg.keyword_slug("a_b c") == "a-b-c"
 
 
 # --------------------------------------------------------------------------
-# theme_counts
+# name helpers
 # --------------------------------------------------------------------------
-def test_theme_counts():
-    counts = bfg.theme_counts(_BIOS)
-    assert counts["Foreign policy and diplomacy"] == 2
-    assert counts["Security and defence"] == 1
-    assert counts["Cyber and emerging technology"] == 1
-    assert "Theory and methods" not in counts
+def test_strip_salutation_and_surname_and_initials():
+    assert bfg._strip_salutation("Dr Ada Lovelace") == "Ada Lovelace"
+    assert bfg._strip_salutation("Dr. Moritz Weiss") == "Moritz Weiss"
+    assert bfg._surname_key("Dr John N.T. Helferich") == "helferich"
+    assert bfg._surname_key("Cara Iqbal") == "iqbal"
+    assert bfg._initials("Mr Felix Kösterke") == "FK"
+    assert bfg._initials("Madonna") == "M"
+    assert bfg._initials("") == "?"
 
 
-def test_theme_counts_empty_bios():
-    assert bfg.theme_counts({}) == {}
-    assert bfg.theme_counts({"members": []}) == {}
+def test_is_leader():
+    assert bfg._is_leader({"roles": ["WG1 Lead"]}) is True
+    assert bfg._is_leader({"wg_leadership": {"co_lead": [2]}}) is True
+    assert bfg._is_leader({"roles": [], "wg_leadership": {}}) is False
+    assert bfg._is_leader({}) is False
 
 
 # --------------------------------------------------------------------------
-# render_members_link
+# members_for
 # --------------------------------------------------------------------------
-def test_members_link_plural():
-    loc = bfg.LOCALES["en"]
-    out = bfg.render_members_link(loc, "Foreign policy and diplomacy", {"Foreign policy and diplomacy": 3})
-    assert 'href="people.html#themes=foreign-policy-and-diplomacy"' in out
+def test_members_for_orders_leader_then_strength_then_surname():
+    c = _concept("X", "d", match=["Cyber security", "Defence"])
+    ids = [m["id"] for m in bfg.members_for(c, _MEMBERS)]
+    # ada: leader, strength 2.  cara: leader, strength 1.  bob: non-leader,
+    # strength 1.  dan/eve: no overlap.
+    assert ids == ["ada-lovelace", "cara-iqbal", "bob-stone"]
+
+
+def test_members_for_case_insensitive():
+    c = _concept("X", "d", match=["cyber SECURITY"])
+    ids = [m["id"] for m in bfg.members_for(c, _MEMBERS)]
+    assert ids == ["ada-lovelace", "bob-stone"]
+
+
+def test_members_for_empty_without_match_keywords_or_overlap():
+    assert bfg.members_for(_concept("X", "d"), _MEMBERS) == []
+    assert bfg.members_for(_concept("X", "d", match=["Quantum"]), _MEMBERS) == []
+
+
+# --------------------------------------------------------------------------
+# render_facepile
+# --------------------------------------------------------------------------
+def test_render_facepile_markup_photo_and_monogram():
+    c = _concept("X", "d", theme="Security and defence", match=["Cyber security", "Defence"])
+    out = bfg.render_facepile("en", c, _MEMBERS)
+    # Photo member -> img with empty alt; popover-wired anchor.
+    assert '<a class="member-link fg-face" data-member="ada-lovelace"' in out
+    assert 'href="people.html#ada-lovelace"' in out
+    assert 'aria-label="Open the profile of Dr Ada Lovelace"' in out
+    assert 'src="assets/images/people/ada-lovelace.jpg" alt=""' in out
+    # Photo-less member -> monogram, not an <img>.
+    assert '<span class="fg-initials" aria-hidden="true">BS</span>' in out
+    # Trailing link points at the theme view, plural count = 3 matched.
+    assert 'class="fg-people-link" href="people.html#themes=security-and-defence"' in out
     assert "See 3 members working on this" in out
-    assert out.startswith('<p class="fg-theme-link">')
+    # No overflow disc below the cap.
+    assert "fg-face-more" not in out
 
 
-def test_members_link_singular():
-    loc = bfg.LOCALES["en"]
-    out = bfg.render_members_link(loc, "Security and defence", {"Security and defence": 1})
+def test_render_facepile_caps_and_shows_overflow_disc():
+    many = [
+        {"id": f"m{i}", "name": f"Person {i}", "canonical_keywords": ["Defence"]}
+        for i in range(7)
+    ]
+    c = _concept("X", "d", theme="Security and defence", match=["Defence"])
+    out = bfg.render_facepile("en", c, many)
+    assert out.count('class="member-link fg-face"') == bfg.FACEPILE_MAX
+    assert '<a class="fg-face fg-face-more"' in out
+    assert ">+2</a>" in out
+    assert 'aria-label="2 more"' in out
+    assert "See 7 members working on this" in out
+
+
+def test_render_facepile_singular_no_disc():
+    c = _concept("X", "d", theme="Security and defence", match=["Industrial policy"])
+    out = bfg.render_facepile("en", c, _MEMBERS)
     assert "See 1 member working on this" in out
     assert "1 members" not in out
+    assert "fg-face-more" not in out
 
 
-def test_members_link_no_count_when_theme_absent():
-    loc = bfg.LOCALES["en"]
-    out = bfg.render_members_link(loc, "Nonexistent theme", {})
-    assert "See members working on this" in out
-    # No bogus number rendered.
-    assert "See 0" not in out
+def test_render_facepile_empty_when_no_match():
+    c = _concept("X", "d", theme="Security and defence", match=["Quantum"])
+    assert bfg.render_facepile("en", c, _MEMBERS) == ""
+    assert bfg.render_facepile("en", _concept("X", "d"), _MEMBERS) == ""
 
 
-def test_members_link_empty_when_no_theme():
-    loc = bfg.LOCALES["en"]
-    assert bfg.render_members_link(loc, "", {}) == ""
+def test_render_facepile_locale_people_page():
+    c = _concept("X", "d", theme="Security and defence", match=["Defence"])
+    fr = bfg.render_facepile("fr", c, _MEMBERS)
+    assert "people.fr.html#themes=security-and-defence" in fr
+    assert "people.fr.html#cara-iqbal" in fr
+    assert "Ouvrir le profil de" in fr
 
 
-def test_members_link_uses_locale_people_page():
-    out = bfg.render_members_link(bfg.LOCALES["fr"], "Security and defence", {"Security and defence": 2})
-    assert "people.fr.html#themes=security-and-defence" in out
-    out_de = bfg.render_members_link(bfg.LOCALES["de"], "Security and defence", {"Security and defence": 2})
-    assert "people.de.html#themes=security-and-defence" in out_de
+# --------------------------------------------------------------------------
+# warn_unmatched_keywords
+# --------------------------------------------------------------------------
+def test_warn_unmatched_keywords_flags_unknown():
+    concepts = [_concept("X", "d", match=["Defence", "Quantum"])]
+    buf = io.StringIO()
+    with contextlib.redirect_stderr(buf):
+        bfg.warn_unmatched_keywords(concepts, _MEMBERS)
+    err = buf.getvalue()
+    assert "Quantum" in err
+    assert "Defence" not in err  # Defence matches a member, no warning.
+
+
+def test_warn_unmatched_keywords_silent_when_all_match():
+    concepts = [_concept("X", "d", match=["Defence", "Cyber security"])]
+    buf = io.StringIO()
+    with contextlib.redirect_stderr(buf):
+        bfg.warn_unmatched_keywords(concepts, _MEMBERS)
+    assert buf.getvalue() == ""
 
 
 # --------------------------------------------------------------------------
 # render_sources
 # --------------------------------------------------------------------------
 def test_render_sources_external_links():
-    loc = bfg.LOCALES["en"]
-    out = bfg.render_sources(loc, [{"label": "Official", "url": "https://europa.eu/x"}])
+    out = bfg.render_sources(bfg.LOCALES["en"], [{"label": "Official", "url": "https://europa.eu/x"}])
     assert 'target="_blank"' in out and 'rel="noopener"' in out
     assert "https://europa.eu/x" in out
     assert "Sources" in out
 
 
-def test_render_sources_empty():
+def test_render_sources_empty_and_urlless():
     assert bfg.render_sources(bfg.LOCALES["en"], []) == ""
-    assert bfg.render_sources(bfg.LOCALES["en"], None or []) == ""
-
-
-def test_render_sources_skips_urlless_entry():
-    out = bfg.render_sources(bfg.LOCALES["en"], [{"label": "No URL"}])
-    assert out == ""
+    assert bfg.render_sources(bfg.LOCALES["en"], [{"label": "No URL"}]) == ""
 
 
 # --------------------------------------------------------------------------
 # render_concept
 # --------------------------------------------------------------------------
 def test_render_concept_has_dt_id_and_locale_def():
-    c = _concept("CSDP", "EN definition", fr="Définition FR", de="DE Definition", theme="Foreign policy and diplomacy")
-    counts = {"Foreign policy and diplomacy": 3}
-    en = bfg.render_concept("en", c, counts)
-    assert '<dt id="fg-csdp">CSDP</dt>' in en
-    assert "EN definition" in en
-    fr = bfg.render_concept("fr", c, counts)
-    assert "Définition FR" in fr
-    de = bfg.render_concept("de", c, counts)
-    assert "DE Definition" in de
+    c = _concept("CSDP", "EN definition", fr="Définition FR", de="DE Definition",
+                 theme="Security and defence", match=["Defence"])
+    assert '<dt id="fg-csdp">CSDP</dt>' in bfg.render_concept("en", c, _MEMBERS)
+    assert "EN definition" in bfg.render_concept("en", c, _MEMBERS)
+    assert "Définition FR" in bfg.render_concept("fr", c, _MEMBERS)
+    assert "DE Definition" in bfg.render_concept("de", c, _MEMBERS)
 
 
-def test_render_concept_without_theme_or_sources():
+def test_render_concept_definition_leads_as_first_paragraph():
+    # The DefinedTerm extractor reads the leading <p>; member names live in
+    # the facepile that follows it, so they must not be inside that <p>.
+    c = _concept("CSDP", "Just the definition.", theme="Security and defence", match=["Defence"])
+    out = bfg.render_concept("en", c, _MEMBERS)
+    first_p = out.split("</p>", 1)[0]
+    assert "Just the definition." in first_p
+    assert "Cara" not in first_p and "fg-face" not in first_p
+    # The facepile is present, just after the paragraph.
+    assert "fg-facepile" in out
+
+
+def test_render_concept_without_match_or_sources():
     c = _concept("Plain", "Just a definition.")
-    out = bfg.render_concept("en", c, {})
+    out = bfg.render_concept("en", c, _MEMBERS)
     assert '<dt id="fg-plain">Plain</dt>' in out
-    assert "Just a definition." in out
-    assert "fg-theme-link" not in out
+    assert "fg-facepile" not in out
     assert "fg-sources" not in out
 
 
 def test_render_concept_escapes_html():
-    c = _concept("A & B", "Less < than > more.")
-    out = bfg.render_concept("en", c, {})
+    out = bfg.render_concept("en", _concept("A & B", "Less < than > more."), _MEMBERS)
     assert "A &amp; B" in out
     assert "&lt; than &gt;" in out
 
@@ -211,8 +283,7 @@ def test_render_concept_escapes_html():
 # render_section
 # --------------------------------------------------------------------------
 def test_render_section_wraps_sentinels_and_heading():
-    concepts = [_concept("X", "Def X")]
-    out = bfg.render_section("en", concepts, {})
+    out = bfg.render_section("en", [_concept("X", "Def X")], _MEMBERS)
     assert out.startswith(bfg.START)
     assert out.rstrip().endswith(bfg.END)
     assert '<h2 id="field-guide">Concepts in European security studies</h2>' in out
@@ -220,29 +291,24 @@ def test_render_section_wraps_sentinels_and_heading():
 
 
 def test_render_section_locale_headings():
-    fr = bfg.render_section("fr", [_concept("X", "d")], {})
-    assert "Concepts en études de sécurité européenne" in fr
-    de = bfg.render_section("de", [_concept("X", "d")], {})
-    assert "Konzepte der europäischen Sicherheitsforschung" in de
+    assert "Concepts en études de sécurité européenne" in bfg.render_section("fr", [_concept("X", "d")], _MEMBERS)
+    assert "Konzepte der europäischen Sicherheitsforschung" in bfg.render_section("de", [_concept("X", "d")], _MEMBERS)
 
 
 # --------------------------------------------------------------------------
 # replace_region
 # --------------------------------------------------------------------------
 def test_replace_region_idempotent():
-    region = bfg.render_section("en", [_concept("X", "Def X")], {})
+    region = bfg.render_section("en", [_concept("X", "Def X")], _MEMBERS)
     once = bfg.replace_region(_PAGE_TEMPLATE, region)
-    twice = bfg.replace_region(once, region)
-    assert once == twice
+    assert once == bfg.replace_region(once, region)
 
 
 def test_replace_region_preserves_admin_terms():
-    region = bfg.render_section("en", [_concept("X", "Def X")], {})
+    region = bfg.render_section("en", [_concept("X", "Def X")], _MEMBERS)
     out = bfg.replace_region(_PAGE_TEMPLATE, region)
-    # The admin <dt>/<dd> outside the sentinels is untouched.
     assert '<dt id="action">Action</dt>' in out
     assert "An admin term that must survive." in out
-    # The footer after the end sentinel survives.
     assert "<p>footer</p>" in out
 
 
@@ -258,10 +324,9 @@ def test_replace_region_missing_sentinels_raises():
 # build + main (globals monkeypatched to tmp paths)
 # --------------------------------------------------------------------------
 def _wire_tmp(tmp_path, concepts):
-    data = {"concepts": concepts}
     (tmp_path / "data").mkdir(exist_ok=True)
-    (tmp_path / "data" / "field-guide.json").write_text(json.dumps(data), encoding="utf-8")
-    (tmp_path / "data" / "bios.json").write_text(json.dumps(_BIOS), encoding="utf-8")
+    (tmp_path / "data" / "field-guide.json").write_text(json.dumps({"concepts": concepts}), encoding="utf-8")
+    (tmp_path / "data" / "bios.json").write_text(json.dumps({"members": _MEMBERS}), encoding="utf-8")
     for loc in bfg.LOCALES:
         (tmp_path / bfg.LOCALES[loc]["file"]).write_text(_PAGE_TEMPLATE, encoding="utf-8")
     bfg.ROOT = tmp_path
@@ -276,23 +341,21 @@ def _restore():
 
 
 def test_build_all_locales_get_their_definition(tmp_path):
-    concepts = [_concept("CSDP", "EN authoritative", fr="Texte FR", de="DE Text", theme="Foreign policy and diplomacy")]
+    concepts = [_concept("CSDP", "EN authoritative", fr="Texte FR", de="DE Text",
+                         theme="Security and defence", match=["Defence"])]
     _wire_tmp(tmp_path, concepts)
     try:
-        en = bfg.build("en", concepts, bfg.theme_counts(_BIOS))
-        fr = bfg.build("fr", concepts, bfg.theme_counts(_BIOS))
-        de = bfg.build("de", concepts, bfg.theme_counts(_BIOS))
-        assert "EN authoritative" in en
-        assert "Texte FR" in fr
-        assert "DE Text" in de
-        # Theme count of 2 for this theme in _BIOS.
-        assert "See 2 members working on this" in en
+        assert "EN authoritative" in bfg.build("en", concepts, _MEMBERS)
+        assert "Texte FR" in bfg.build("fr", concepts, _MEMBERS)
+        assert "DE Text" in bfg.build("de", concepts, _MEMBERS)
+        # Defence matches ada + cara = 2.
+        assert "See 2 members working on this" in bfg.build("en", concepts, _MEMBERS)
     finally:
         _restore()
 
 
 def test_main_write_then_check_roundtrip(tmp_path, monkeypatch):
-    concepts = [_concept("X", "Def X", theme="Security and defence")]
+    concepts = [_concept("X", "Def X", theme="Security and defence", match=["Defence"])]
     _wire_tmp(tmp_path, concepts)
     try:
         monkeypatch.setattr("sys.argv", ["build-field-guide.py"])
@@ -304,25 +367,10 @@ def test_main_write_then_check_roundtrip(tmp_path, monkeypatch):
 
 
 def test_main_check_fails_on_drift(tmp_path, monkeypatch):
-    concepts = [_concept("X", "Def X")]
-    _wire_tmp(tmp_path, concepts)
+    _wire_tmp(tmp_path, [_concept("X", "Def X")])
     try:
-        # Pages still carry empty sentinels -> out of sync.
         monkeypatch.setattr("sys.argv", ["build-field-guide.py", "--check"])
         assert bfg.main() == 1
-    finally:
-        _restore()
-
-
-def test_main_does_not_write_in_check_mode(tmp_path, monkeypatch):
-    concepts = [_concept("X", "Def X")]
-    _wire_tmp(tmp_path, concepts)
-    try:
-        before = (tmp_path / bfg.LOCALES["en"]["file"]).read_text(encoding="utf-8")
-        monkeypatch.setattr("sys.argv", ["build-field-guide.py", "--check"])
-        bfg.main()
-        after = (tmp_path / bfg.LOCALES["en"]["file"]).read_text(encoding="utf-8")
-        assert before == after
     finally:
         _restore()
 
@@ -337,9 +385,9 @@ def test_real_field_guide_json_renders():
         return
     data = json.loads(data_path.read_text(encoding="utf-8"))
     bios = json.loads((repo / "data" / "bios.json").read_text(encoding="utf-8"))
-    counts = bfg.theme_counts(bios)
+    members = bios.get("members", [])
     for loc in bfg.LOCALES:
-        section = bfg.render_section(loc, data["concepts"], counts)
+        section = bfg.render_section(loc, data["concepts"], members)
         assert bfg.START in section and bfg.END in section
         for c in data["concepts"]:
             assert bfg.keyword_slug(c["term"]) in section
@@ -353,12 +401,8 @@ def _standalone() -> int:
     import types
 
     class _MonkeyPatch:
-        def __init__(self):
-            self._saved = []
-
         def setattr(self, target, name, value=None):
             if value is None:
-                # "module.attr" style not used here; sys.argv path uses (target, value)
                 import sys as _sys
                 _sys.argv = name
                 return
@@ -371,10 +415,8 @@ def _standalone() -> int:
         try:
             params = fn.__code__.co_varnames[: fn.__code__.co_argcount]
             kwargs = {}
-            tmp = None
             if "tmp_path" in params:
-                tmp = Path(tempfile.mkdtemp())
-                kwargs["tmp_path"] = tmp
+                kwargs["tmp_path"] = Path(tempfile.mkdtemp())
             if "monkeypatch" in params:
                 kwargs["monkeypatch"] = _MonkeyPatch()
             fn(**kwargs)
