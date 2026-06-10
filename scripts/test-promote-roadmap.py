@@ -376,6 +376,69 @@ def test_body_replacement_en() -> None:
            "Pre-written description" not in out, True)
 
 
+def test_feature_chips_survive_promotion() -> None:
+    # Issue #767: a planned card may carry a feature-chip block
+    # (<ul class="rm-features">) as a sibling after the <p>. Promotion
+    # rewrites the <h3> + first <p> from the CHANGELOG, but the chip
+    # block sits outside both elements and must come through untouched.
+    print("\npromote_planned_card() — rm-features chips survive (issue #767):")
+    locale = LOCALES["en"]
+    chips = (
+        '          <ul class="rm-features" role="list">\n'
+        '            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-broadcast"/></svg>Conference recap</li>\n'
+        '            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-document"/></svg>Outputs cards (D6)</li>\n'
+        '            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-graph"/></svg>IA audit, Phase 2</li>\n'
+        '          </ul>\n'
+    )
+    # Build a planned card whose body is followed by the chip block,
+    # mirroring the real roadmap markup (chips after <p>, no notes-link).
+    html = (
+        '<!DOCTYPE html><html lang="en"><body>\n'
+        '  <ol class="rm-timeline">\n'
+        '    <li class="rm-entry planned">\n'
+        '      <article class="rm-card">\n'
+        '        <div class="rm-head">\n'
+        '          <span class="rm-pill planned"><span class="dot" aria-hidden="true"></span>Planned</span>\n'
+        '          <span class="when">July 2026 &middot; v1.12.0</span>\n'
+        '        </div>\n'
+        '        <h3>Planned heading written months ago</h3>\n'
+        '        <p>Planned lede the script should overwrite.</p>\n'
+        + chips +
+        '      </article>\n'
+        '    </li>\n'
+        '  </ol>\n'
+        '</body></html>\n'
+    )
+    body = ("Post-conference recap and outputs refresh",
+            "The first cut after Stockholm with a real <code>D6</code> card design.")
+    out, changed = promote_planned_card(
+        html, "1.12.0", "2026-07-20", locale, card_body=body,
+    )
+    expect("changed flag is True", changed, True)
+    expect("class flipped to shipped",
+           '<li class="rm-entry shipped">' in out, True)
+    expect("h3 rewritten from CHANGELOG",
+           "<h3>Post-conference recap and outputs refresh</h3>" in out, True)
+    expect("first <p> rewritten from CHANGELOG",
+           "<p>The first cut after Stockholm" in out, True)
+    expect("planned lede is gone",
+           "Planned lede the script should overwrite" not in out, True)
+    # The whole chip block survives byte-for-byte.
+    expect("rm-features block preserved verbatim", chips in out, True)
+    expect("all three chip labels survive",
+           ("Conference recap" in out and "Outputs cards (D6)" in out
+            and "IA audit, Phase 2" in out), True)
+    expect("all three rmi use-refs survive",
+           (out.count('href="#rmi-broadcast"') == 1
+            and out.count('href="#rmi-document"') == 1
+            and out.count('href="#rmi-graph"') == 1), True)
+    # Regression guard: the <p>-rewrite regex must not have eaten into
+    # the chip block (which contains no <p>, but a greedy match could
+    # in principle run past </article>). Exactly one <p> remains.
+    expect("exactly one <p> in the card after rewrite",
+           out.count("<p>"), 1)
+
+
 def test_body_untouched_without_card_body() -> None:
     print("\npromote_planned_card() — body untouched when card_body=None:")
     locale = LOCALES["en"]
@@ -515,6 +578,7 @@ def main() -> None:
     test_parse_changelog_patch_fallback()
     test_parse_changelog_paragraph_lede()
     test_body_replacement_en()
+    test_feature_chips_survive_promotion()
     test_body_untouched_without_card_body()
     test_relocate_across_quarters()
     test_relocate_same_quarter_noop()

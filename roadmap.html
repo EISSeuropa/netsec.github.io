@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=e9d31bd3">
+<link rel="stylesheet" href="assets/css/site.css?v=a3581e40">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -155,6 +155,31 @@
 <main id="main" data-pagefind-body>
 <section class="roadmap-page">
   <div class="container reveal">
+    <!-- ──────────────────────────────────────────────────────────────
+         Feature-chip icon sprite (issue #767). One hidden inline SVG
+         defs block holds the rmi-* stroke symbols (Lucide style). Cards
+         reference them with same-document <use href="#rmi-…">, so no
+         extra request and no JS. The vocabulary is documented in
+         docs/design-system.md → Iconography → Roadmap feature chips.
+         Icons are language-invariant: this block is identical in EN,
+         FR, and DE. The chip LABELS are translated per locale.
+         ────────────────────────────────────────────────────────────── -->
+    <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+      <defs>
+        <symbol id="rmi-people" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 19v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1"/><circle cx="9" cy="7" r="3.2"/><path d="M22 19v-1a4 4 0 0 0-3-3.85"/><path d="M16 4.15A4 4 0 0 1 16 11.7"/></symbol>
+        <symbol id="rmi-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="20" y1="20" x2="15.1" y2="15.1"/></symbol>
+        <symbol id="rmi-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2.5" x2="8" y2="6"/><line x1="16" y1="2.5" x2="16" y2="6"/></symbol>
+        <symbol id="rmi-broadcast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.2"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4"/><path d="M17.7 17.7a8 8 0 0 0 0-11.4"/><path d="M3.5 3.5a12 12 0 0 0 0 17"/><path d="M20.5 20.5a12 12 0 0 0 0-17"/></symbol>
+        <symbol id="rmi-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></symbol>
+        <symbol id="rmi-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.2 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-6.7-9-6.7Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="11" cy="7.5" r="1"/><circle cx="15.5" cy="8.5" r="1"/></symbol>
+        <symbol id="rmi-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 18a9 9 0 1 1 17 0"/><line x1="12" y1="15" x2="16" y2="9.5"/><circle cx="12" cy="15" r="1.3" fill="currentColor" stroke="none"/></symbol>
+        <symbol id="rmi-a11y" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.6"/><path d="M4 8.5c2.5 1.2 5 1.8 8 1.8s5.5-.6 8-1.8"/><path d="M12 8.5V15"/><path d="M9 21l3-6 3 6"/></symbol>
+        <symbol id="rmi-document" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/><line x1="8.5" y1="13" x2="15.5" y2="13"/><line x1="8.5" y1="16.5" x2="13" y2="16.5"/></symbol>
+        <symbol id="rmi-filter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v5l-4 2v-7Z"/></symbol>
+        <symbol id="rmi-graph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><polyline points="7 14 11 10 14 13 19 7"/></symbol>
+        <symbol id="rmi-school" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2.5 8.5 12 13l9.5-4.5L12 4Z"/><path d="M6 10.5V15c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/><line x1="21.5" y1="8.5" x2="21.5" y2="13.5"/></symbol>
+      </defs>
+    </svg>
     <span class="eyebrow">Plan</span>
     <h1>Roadmap</h1>
     <p class="lede">What we've shipped, what's underway, and what comes next for the NetSec website and the open community directory across 2026. Action milestones (conference, plenary, anniversary) are interleaved with release milestones so the website cadence reads alongside the Action's own calendar.</p>
@@ -184,6 +209,11 @@
           </div>
           <h3>Initial public release</h3>
           <p>First public website at netsec-cost.eu. Ten pages, glass UI in light + dark, EU + COST branding, and the open community directory (Deliverable D1, first version) accepting bios via a public form.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-people"/></svg>Community directory</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-palette"/></svg>Glass UI, light + dark</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-globe"/></svg>English, French, German</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.0.0" target="_blank" rel="noopener">Release notes</a>
         </article>
       </li>
@@ -220,6 +250,10 @@
           </div>
           <h3>FAQ and Glossary pages</h3>
           <p>Public FAQ (21 Q&amp;As across six themes) and Glossary (~35 COST and NetSec terms), with deep-link anchors. <em>Find out more</em> grid added to the home page. Wiki signposted for members.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-document"/></svg>FAQ</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-school"/></svg>Glossary</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.3.0" target="_blank" rel="noopener">Release notes</a>
         </article>
       </li>
@@ -232,6 +266,11 @@
           </div>
           <h3>Site-wide search and Phase&nbsp;1 information-architecture pass</h3>
           <p>Site-wide search overlay (with rich bio cards and deep-link highlighting), iCalendar feed, streamlined header, and a new <em>About</em> page consolidating the Action narrative, deliverables timeline, leadership, and reference content.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-search"/></svg>Site-wide search</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-calendar"/></svg>iCalendar feed</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-document"/></svg>About page</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.4.0" target="_blank" rel="noopener">Release notes</a>
         </article>
       </li>
@@ -256,6 +295,11 @@
           </div>
           <h3>Live ESSC 2026 programme and member previews</h3>
           <p>The conference now has its own page at <code>/essc-2026.html</code> with a programme grid rendered from a daily Indico sync, day chips, parallel session cards, contributions, chairs, abstracts, livestream badges on plenaries and roundtables. Hovering a speaker name that resolves to a NetSec member opens a glass preview card with photo, role, country, bio excerpt, and a deep-link to their full profile. Shipped translations in EN, FR, and DE. Landing page is the canonical URL for the conference in the sitemap and calendar feed.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-broadcast"/></svg>Live programme</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-people"/></svg>Speaker previews</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-calendar"/></svg>Conference page</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.6.0" target="_blank" rel="noopener">Release notes</a>
         </article>
       </li>
@@ -292,6 +336,11 @@
           </div>
           <h3>Brand launch, Indico writes, programme PDF, voice sweep</h3>
           <p>Pre-Stockholm release. The brand identity finally lands across the site, three Indico operational tools ship to make the ESSC 2027 prep cycle programmatic, the programme page exports a polished self-identifying PDF, and the CLAUDE.md &sect;7 writing-voice rules get applied retroactively across the EN launch-era prose.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-palette"/></svg>Brand launch</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-document"/></svg>Programme PDF</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-calendar"/></svg>Indico tooling</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.8.0" target="_blank" rel="noopener">Release notes</a>
         </article>
       </li>
@@ -316,6 +365,10 @@
           </div>
           <h3>Pre-Stockholm calendar plumbing</h3>
           <p>Pre-conference cut, four days before the Summer School and ESSC open in Stockholm. Calendar plumbing refresh across the board: per-event <code>.ics</code> downloads + an <em>Add&nbsp;to&nbsp;calendar</em> dropdown on each event card (Google&nbsp;/ Outlook&nbsp;/ Apple webcal&nbsp;/ direct <code>.ics</code>), a news RSS feed at <code>/news.xml</code> for academic and policy audiences who read feeds (sourced from a new <code>data/news.json</code>), and a structural refactor so the home-page event and news cards derive from JSON instead of hand-coded HTML across three locales, including a five-line clamp with <em>Read more</em> for longer descriptions. D10 (risk management strategy) hosted if the document is ready.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-calendar"/></svg>Per-event calendars</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-broadcast"/></svg>News RSS feed</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.9.0" target="_blank" rel="noopener">Release notes</a>
         </article>
       </li>
@@ -328,6 +381,10 @@
           </div>
           <h3>Working Groups page and milestone-aware roadmap</h3>
           <p>A dedicated Working Groups page, with a section per group for its objective, leadership, and a live membership grid drawn straight from the COST directory, and the Memorandum-of-Understanding titles adopted across the whole site. The public roadmap also learns to read its own GitHub milestones, showing a progress bar on every in-flight release and marking the next one as in progress on its own. Around those sit the European Security Conference run-up and the usual directory housekeeping.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-people"/></svg>Working Groups page</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-graph"/></svg>Milestone-aware roadmap</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.10.0" target="_blank" rel="noopener">Release notes</a>
         </article>
       </li>
@@ -340,6 +397,11 @@
           </div>
           <h3>Directory filters, mentorship, and a smoother mobile directory</h3>
           <p>This is the big pre-conference directory release, gathering everything merged since v1.10.0. Visitors can now narrow <em>The Network</em> by research theme, by research region and by mentorship, and the mobile filter experience that drives those choices was rebuilt so it behaves properly on a phone. Around it sit lighter photos, new ways to reach the Action, and the usual housekeeping. Three themes follow, then a single canonical index at the bottom.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-filter"/></svg>Directory filters</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-school"/></svg>Mentorship</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-people"/></svg>Smoother mobile directory</li>
+          </ul>
           <a class="notes-link" href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.11.0" target="_blank" rel="noopener">Release notes</a>
         </article>
       </li>
@@ -371,6 +433,11 @@
           </div>
           <h3>Post-conference recap and outputs refresh</h3>
           <p>The first cut after Stockholm. The Summer School and European Security Conference recap lands on the news block (a gallery plus a short feedback summary, with a recordings link where available). The <em>Outputs</em> section gains a real card design for the D6 policy briefs with <code>schema.org/ScholarlyArticle</code> metadata, the information-architecture audit reaches Phase&nbsp;2 (a deeper pass on the home page and header, audience tracks, mobile patterns, and content lifecycle), and founding-cohort follow-ups (Items C and D of <a href="https://github.com/EISSeuropa/netsec.github.io/issues/245">#245</a>) add a <em>founding contributor</em> badge and press-kit statistics. D8 (STSM planning guidelines) is hosted on the Grants page once approved, the Indico write tooling is fixed so fix-plans apply against the live instance (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/323">#323</a>), and the PDF documentation pack gets its section-level catch-up (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>).</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-broadcast"/></svg>Conference recap</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-document"/></svg>Outputs cards (D6)</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-graph"/></svg>IA audit, Phase 2</li>
+          </ul>
         </article>
       </li>
 
@@ -412,6 +479,11 @@
           </div>
           <h3>Year 1 retrospective + Year 2 readiness</h3>
           <p>Year-1 retrospective on the news block. Inclusion &amp; diversity declaration (D11) and environmental sustainability guidelines (D12) hosted as they reach approval. Per-page Open Graph images. Print stylesheet for the <em>FAQ</em> and <em>Glossary</em>. Member-photos-out-of-git refactor (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/119">#119</a>) to keep repo size linear-in-text rather than linear-in-headshots. Whatever Q4 polish accumulates.</p>
+          <ul class="rm-features" role="list">
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-graph"/></svg>Year 1 retrospective</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-document"/></svg>Deliverables D11, D12</li>
+            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-palette"/></svg>Open Graph images</li>
+          </ul>
         </article>
       </li>
     </ol>
