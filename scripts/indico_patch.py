@@ -110,6 +110,14 @@ except ImportError as e:
 
 INDICO_BASE = "https://indico.eiss-europa.com"
 
+# The Indico version the management endpoints below were last validated
+# against. Indico disclaims backwards compatibility for the undocumented
+# management routes this tool uses, so a version bump on the live instance
+# is exactly when they can shift under us. Re-check the write paths (and
+# the read-back field maps) after an upgrade, then bump this. Surfaced in
+# the startup banner. See docs/indico-integration.md (Phase 0, #323).
+VALIDATED_INDICO_VERSION = "3.3.12"
+
 # Write-scope token. Generated via Indico UI → My Profile → API Tokens,
 # scope `full:everything`. Stored as GitHub Actions secret
 # `INDICO_WRITE_TOKEN`. Separate from `INDICO_API_TOKEN` (read-only)
@@ -876,6 +884,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Indico patch — event {plan.event_id}, "
           f"{len(plan.patches)} patch(es), "
           f"mode={'apply' if args.apply else 'dry-run'}")
+    print(f"  endpoints validated against Indico {VALIDATED_INDICO_VERSION} "
+          "— re-check after an upgrade (docs/indico-integration.md).")
     client.validate_token()
     print("\n" + preflight_report(plan.patches))
 
