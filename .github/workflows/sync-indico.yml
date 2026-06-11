@@ -1,9 +1,10 @@
 # Daily sync of data/indico.json from the EISS Indico instance.
 #
 # What this does
-#   1. Every day at 03:45 UTC (and on manual dispatch), runs
-#      scripts/sync-indico.py which hits the public Indico export API
-#      and writes data/indico.json.
+#   1. Every day at 03:45 UTC (on manual dispatch, and on a
+#      repository_dispatch fired by the netsec-dispatch Indico plugin
+#      when the programme changes), runs scripts/sync-indico.py which
+#      hits the public Indico export API and writes data/indico.json.
 #   2. If anything changed substantively (the script's own idempotency
 #      guard suppresses no-op writes), opens or updates a pull request
 #      on the branch `indico-sync/auto`.
@@ -47,6 +48,14 @@ on:
     # makes its own ~2 HTTP calls so the instance load is trivial).
     - cron: "45 3 * * *"
   workflow_dispatch:      # Manual run from the Actions tab
+  repository_dispatch:
+    # Push path (Phase 1 of docs/indico-integration.md, #823). The
+    # netsec-dispatch Indico plugin POSTs a repository_dispatch when the
+    # watched programme changes, so the site refreshes within ~1 min
+    # instead of waiting for the daily cron. The cron stays as the
+    # safety-net. `types` must equal the plugin's `event_type` setting.
+    # Harmless before the plugin is deployed: nothing fires this yet.
+    types: [indico-changed]
 
 permissions:
   contents: write
