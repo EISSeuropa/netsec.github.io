@@ -39,6 +39,7 @@
       livestreamAria: 'This session will be livestreamed',
       watchAria: 'Watch the livestream on Zoom (opens in a new tab)',
       liveNow: 'Live now',
+      nowHappening: 'Now happening',
       errLoad:   'Couldn’t load the live programme.',
       errFetch:  'Couldn’t fetch the programme data.',
       errAbsent: 'ESSC 2026 isn’t published yet.',
@@ -69,6 +70,7 @@
       livestreamAria: 'Session diffusée en direct',
       watchAria: 'Regarder la diffusion en direct sur Zoom (nouvel onglet)',
       liveNow: 'En direct',
+      nowHappening: 'En ce moment',
       errLoad:   'Impossible de charger le programme en direct.',
       errFetch:  'Impossible de récupérer les données du programme.',
       errAbsent: 'L’ESSC 2026 n’est pas encore publiée.',
@@ -99,6 +101,7 @@
       livestreamAria: 'Diese Sitzung wird per Livestream übertragen',
       watchAria: 'Den Livestream auf Zoom ansehen (neuer Tab)',
       liveNow: 'Jetzt live',
+      nowHappening: 'Jetzt im Programm',
       errLoad:   'Das Live-Programm konnte nicht geladen werden.',
       errFetch:  'Die Programmdaten konnten nicht abgerufen werden.',
       errAbsent: 'ESSC 2026 ist noch nicht veröffentlicht.',
@@ -428,11 +431,98 @@
     root.appendChild(dayNode);
   });
 
+  // ── "Now happening" banner (issue #832) ───────────────────────
+  // During the conference, surface the session(s) in progress now as a
+  // banner above the day chips, each linking to its card. Liveness is the
+  // row's HH:MM window on the day's date, compared to the current wall
+  // clock in the conference timezone (Europe/Stockholm) — correct from any
+  // visitor timezone and DST-safe, since both sides are conference-local
+  // wall-clock and no offset arithmetic is involved. The grid data itself
+  // refreshes via the daily sync (and, once the dispatch plugin lands,
+  // within ~1 min), so a last-minute change surfaces here too. Hidden
+  // whenever nothing is live, so it self-limits to the conference window.
+  // A `?now=YYYY-MM-DDTHH:MM` query param overrides "now" for QA outside a
+  // live conference.
+  const confTz = conf.startTz || 'Europe/Stockholm';
+  const nowOverride = (function () {
+    const m = /[?&]now=(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})/.exec(location.search);
+    return m ? { date: m[1], minutes: (+m[2]) * 60 + (+m[3]) } : null;
+  })();
+  function confNow() {
+    if (nowOverride) return nowOverride;
+    try {
+      const p = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {
+        timeZone: confTz, year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', hour12: false,
+      }).formatToParts(new Date()).map(x => [x.type, x.value]));
+      const hour = p.hour === '24' ? 0 : (+p.hour);  // some engines emit 24 at midnight
+      return { date: `${p.year}-${p.month}-${p.day}`, minutes: hour * 60 + (+p.minute) };
+    } catch (_) {
+      return null;  // no Intl tz support → never show the banner
+    }
+  }
+  function toMin(hhmm) { const a = String(hhmm || '').split(':'); return (+a[0] || 0) * 60 + (+a[1] || 0); }
+  function liveItemsAt(now) {
+    if (!now) return [];
+    const found = [];
+    for (const day of days) {
+      if (day.date !== now.date) continue;
+      for (const row of (day.rows || [])) {
+        if (!row.startTime || !row.endTime) continue;
+        if (toMin(row.startTime) <= now.minutes && now.minutes < toMin(row.endTime)) {
+          for (const item of (row.items || [])) found.push({ item, row });
+        }
+      }
+    }
+    return found;
+  }
+
+  const nowBanner = el('div', {
+    class: 'programme-now', id: 'programme-now',
+    role: 'status', 'aria-live': 'polite', hidden: '',
+  });
+  if (chips && chips.parentNode) chips.parentNode.insertBefore(nowBanner, chips);
+
+  function renderNow() {
+    const found = liveItemsAt(confNow());
+    // Prefer sessions/contributions; show a break only if nothing else is live.
+    const sessions = found.filter(f => f.item.kind !== 'break');
+    const show = sessions.length ? sessions : found;
+    if (!show.length) { nowBanner.hidden = true; nowBanner.textContent = ''; return; }
+    const list = el('ul', { class: 'programme-now-list' },
+      show.map(({ item, row }) => {
+        const label = item.title || t.session;
+        const link =
+          item.id != null ? el('a', { href: '#prog-slot-' + item.id, class: 'programme-now-link' }, label)
+          : item.url      ? el('a', { href: item.url, target: '_blank', rel: 'noopener', class: 'programme-now-link' }, label)
+          :                 el('span', { class: 'programme-now-link' }, label);
+        return el('li', { class: 'programme-now-item' },
+          link,
+          item.room ? el('span', { class: 'programme-now-room' }, item.room) : null,
+          el('span', { class: 'programme-now-time' }, `${row.startTime} – ${row.endTime}`),
+        );
+      }),
+    );
+    nowBanner.textContent = '';
+    nowBanner.appendChild(el('span', { class: 'programme-now-dot', 'aria-hidden': 'true' }));
+    nowBanner.appendChild(el('span', { class: 'programme-now-label' }, t.nowHappening));
+    nowBanner.appendChild(list);
+    nowBanner.hidden = false;
+  }
+  renderNow();
+  // Advance as time passes; re-check on refocus so a backgrounded tab catches up.
+  setInterval(renderNow, 30000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) renderNow(); });
+
   // ── slot renderers ────────────────────────────────────────────
   function renderSlot(slot) {
-    if (slot.kind === 'break') return renderBreak(slot);
-    if (slot.kind === 'contribution') return renderContribution(slot);
-    return renderSession(slot);
+    const node =
+      slot.kind === 'break'        ? renderBreak(slot) :
+      slot.kind === 'contribution' ? renderContribution(slot) :
+                                     renderSession(slot);
+    // A stable anchor so the "Now happening" banner can link to the card.
+    if (node && slot && slot.id != null && !node.id) node.id = 'prog-slot-' + slot.id;
+    return node;
   }
 
   // Small map-pin SVG used by the room badge. Inline so the badge
