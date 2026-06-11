@@ -85,6 +85,15 @@
         3
       ],
       "form_changed_on": "2026-06-10"
+    },
+    "eugenio sanchez": {
+      "cost_first_seen": {
+        "3": "2026-06-11"
+      },
+      "form_wgs": [
+        3
+      ],
+      "form_changed_on": "2026-06-11"
     }
   }
 }
