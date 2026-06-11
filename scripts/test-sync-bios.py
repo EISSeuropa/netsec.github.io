@@ -964,6 +964,101 @@ def test_founding_contributor_flag() -> None:
            "founding_contributor" in by_id["nora-newcomer"], False)
 
 
+def test_pr_overview_review_flags() -> None:
+    """#796: the two signals the sync used to bury in stderr (keywords
+    with no theme, and link fields it rewrote) surface in the auto-PR
+    body's 'Review flags' section, and only when non-empty."""
+    print("\nPR overview review-flags section (#796):")
+
+    def _bio(mid: str, name: str) -> dict:
+        return {"id": mid, "name": name, "country": "Germany",
+                "country_code": "de", "affiliation": "TU Berlin",
+                "position": "Postdoc", "roles": [], "wgs": [],
+                "wg_leadership": {}, "bio": "Bio text.", "keywords": [],
+                "email": "", "website": "", "orcid": "", "linkedin": "",
+                "twitter": "", "bluesky": "", "mastodon": "", "photo": "",
+                "source": "form"}
+
+    diff = classify_diff([], [_bio("alex", "Alex")], [])
+
+    # Both signals empty: the section is absent entirely.
+    clean = render_pr_body_overview(diff, set(), [])
+    expect("clean sync omits the Review flags section",
+           "## Review flags" in clean, False)
+
+    # Both signals present.
+    uncategorised = {"Cyber security", "Cyber defence"}
+    rewrites = [
+        {"name": "Anna Pagnacco", "field": "website",
+         "before": "itsallcyber.baby", "after": "https://itsallcyber.baby"},
+        {"name": "Anna Pagnacco", "field": "bluesky",
+         "before": "@annapagnacco.com",
+         "after": "https://bsky.app/profile/annapagnacco.com"},
+    ]
+    body = render_pr_body_overview(diff, uncategorised, rewrites)
+    expect("flagged overview has the Review flags header",
+           "## Review flags" in body, True)
+    expect("uncategorised block counts the keywords",
+           "### Keywords with no theme (won't cluster) (2)" in body, True)
+    expect("uncategorised block lists a keyword (sorted)",
+           "- Cyber defence" in body, True)
+    expect("rewrite block counts the rewrites",
+           "### Link fields rewritten (2)" in body, True)
+    expect("rewrite block shows before → after with the field label",
+           "**Anna Pagnacco** · website: `itsallcyber.baby` → "
+           "`https://itsallcyber.baby`" in body, True)
+    expect("rewrite block uses the Bluesky display label",
+           "Bluesky: `@annapagnacco.com`" in body, True)
+
+    # A duplicate rewrite (same submitter processed by two rows) collapses.
+    deduped = render_pr_body_overview(diff, set(), rewrites + rewrites[:1])
+    expect("duplicate rewrites are de-duplicated",
+           "### Link fields rewritten (2)" in deduped, True)
+
+    # Flags with no member-level change still render (the PR exists because
+    # something opened it; the flags must not be silently dropped).
+    empty_diff = classify_diff([], [], [])
+    flags_only = render_pr_body_overview(empty_diff, {"Power"}, [])
+    expect("flags render even with no member changes",
+           "### Keywords with no theme (won't cluster) (1)" in flags_only, True)
+    expect("flags-only overview omits the What changed header",
+           "## What changed" in flags_only, False)
+    # Truly nothing to say: still empty so the workflow can skip the block.
+    expect("empty diff + empty flags stays empty",
+           render_pr_body_overview(empty_diff, set(), []), "")
+
+
+def test_link_rewrites_captured() -> None:
+    """#796: row_to_member records every link field the normaliser
+    rewrote into LINK_REWRITES (raw → normalised), and leaves an
+    already-canonical value uncaptured."""
+    print("\nLINK_REWRITES capture in row_to_member (#796):")
+    cols = {"name": "name", "consent": "consent", "website": "website",
+            "bluesky": "bluesky", "linkedin": "linkedin"}
+    row = {"name": "Test Person", "consent": "yes",
+           "website": "itsallcyber.baby",
+           "bluesky": "@handle.bsky.social",
+           "linkedin": "https://www.linkedin.com/in/x"}
+    sync_bios.LINK_REWRITES.clear()
+    try:
+        member = sync_bios.row_to_member(row, cols)
+        expect("website normalised on the member entry",
+               member["website"], "https://itsallcyber.baby")
+        by_field = {r["field"]: r for r in sync_bios.LINK_REWRITES}
+        expect("website rewrite captured", "website" in by_field, True)
+        expect("website before is the raw input",
+               by_field["website"]["before"], "itsallcyber.baby")
+        expect("website after is the normalised URL",
+               by_field["website"]["after"], "https://itsallcyber.baby")
+        expect("bluesky rewrite captured", "bluesky" in by_field, True)
+        expect("already-absolute linkedin is NOT captured",
+               "linkedin" in by_field, False)
+        expect("capture carries the member name",
+               by_field["website"]["name"], "Test Person")
+    finally:
+        sync_bios.LINK_REWRITES.clear()
+
+
 def main() -> None:
     test_name_key()
     test_normalise_keyword()
@@ -986,6 +1081,8 @@ def main() -> None:
     test_ensure_people_webp()
     test_substance_check_catches_photo_only_change()
     test_pr_title_and_overview()
+    test_pr_overview_review_flags()
+    test_link_rewrites_captured()
     print("\nAll tests passed.")
 
 
