@@ -5032,6 +5032,40 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   .programme-live-dot{animation:none}
 }
 
+/* "Now happening" banner — appears above the day chips while a session is
+   in progress (essc-programme.js, #832). Reuses the green live cue and the
+   programmeLivePulse animation so it reads as the same liveness family as
+   the page-level "Live programme" dot. Hidden when nothing is live. */
+.programme-now{
+  display:flex;flex-wrap:wrap;align-items:center;gap:.45rem .85rem;
+  margin:0 0 1rem;padding:.7rem 1rem;
+  background:var(--glass-bg);border:1px solid var(--glass-border);
+  border-left:3px solid #22c55e;border-radius:12px;
+}
+.programme-now[hidden]{display:none}
+.programme-now-dot{
+  display:inline-block;width:.55em;height:.55em;border-radius:50%;
+  background:#22c55e;flex:0 0 auto;
+  box-shadow:0 0 0 0 rgba(34,197,94,.7);
+  animation:programmeLivePulse 2.4s ease-out infinite;
+}
+.programme-now-label{
+  font-weight:600;color:var(--ink);
+  text-transform:uppercase;letter-spacing:.04em;font-size:.78rem;
+}
+.programme-now-list{
+  list-style:none;margin:0;padding:0;flex:1 1 auto;
+  display:flex;flex-wrap:wrap;gap:.25rem 1rem;
+}
+.programme-now-item{display:flex;flex-wrap:wrap;align-items:baseline;gap:.15rem .6rem}
+.programme-now-link{font-weight:500;color:var(--accent-2);text-decoration:none}
+.programme-now-link:hover,.programme-now-link:focus-visible{text-decoration:underline}
+.programme-now-room,.programme-now-time{color:var(--muted);font-size:.85rem}
+.dark .programme-now-dot{background:#34d775}
+@media (prefers-reduced-motion: reduce){
+  .programme-now-dot{animation:none}
+}
+
 /* Livestream badge — appears on session cards whose subtype is
    "plenary" or "roundtable" (matches EISS's INTRO / KEY / RT /
    CONC livestream classification). Same green as the
