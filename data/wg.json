@@ -6,7 +6,7 @@
       "number": 1,
       "name": "Building the Network",
       "colour": "wg-1",
-      "memberCount": 63,
+      "memberCount": 64,
       "lead": {
         "slug": "moritz-weiss",
         "name": "Dr. Moritz Weiss"
@@ -142,6 +142,10 @@
           "country": "Ireland"
         },
         {
+          "name": "Mr Lorenz Sommer",
+          "country": "Germany"
+        },
+        {
           "name": "Dr Ludovica Castelli",
           "country": "Italy"
         },
@@ -269,7 +273,7 @@
       "number": 2,
       "name": "Transfer of Knowledge",
       "colour": "wg-2",
-      "memberCount": 49,
+      "memberCount": 50,
       "lead": {
         "slug": "john-helferich",
         "name": "Dr John N.T. Helferich"
@@ -478,6 +482,10 @@
         {
           "name": "Mr Walid Blila",
           "country": "Lithuania"
+        },
+        {
+          "name": "Ms Yagnyashri Kodaru",
+          "country": "Germany"
         }
       ]
     },
@@ -485,7 +493,7 @@
       "number": 3,
       "name": "Fostering the Next Generation of Scholars",
       "colour": "wg-3",
-      "memberCount": 65,
+      "memberCount": 66,
       "lead": {
         "slug": "chiara-ruffa",
         "name": "Dr Chiara Ruffa"
@@ -568,6 +576,11 @@
         {
           "name": "Dr Esra Merve Boztosun Caliskan",
           "country": "Türkiye"
+        },
+        {
+          "name": "Mr Eugenio Sánchez",
+          "country": "France",
+          "slug": "eugenio-sanchez"
         },
         {
           "name": "Dr Fatiha Djebbar",
