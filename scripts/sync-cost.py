@@ -61,7 +61,12 @@ except ImportError:
 
 URL = "https://www.cost.eu/actions/CA24154/"
 ROOT = Path(__file__).resolve().parent.parent
+# The home-page WG_MAP is locale-independent data (lowercased name →
+# group numbers), embedded in every locale's index so each renders the
+# same WG chips. All three must be rewritten together, or the FR/DE
+# copies drift behind cost.eu every sync (the bug fixed in this commit).
 INDEX = ROOT / "index.html"
+INDEX_LOCALES = [ROOT / "index.html", ROOT / "index.fr.html", ROOT / "index.de.html"]
 BIOS = ROOT / "data" / "bios.json"
 
 
@@ -117,14 +122,22 @@ def fetch_wg_map(bs: BeautifulSoup) -> dict:
 
 
 def rewrite_wg_map(new_map: dict) -> dict:
-    html = INDEX.read_text(encoding="utf-8")
-    m = re.search(r"const WG_MAP = (\{.*?\});", html, re.S)
-    if not m:
-        raise SystemExit("Could not find WG_MAP literal in index.html")
-    old_map = json.loads(m.group(1))
+    """Rewrite the WG_MAP literal in every locale's index. The map is
+    locale-independent data, so all three carry the same value; writing
+    only index.html (the old behaviour) left index.fr/de.html drifting
+    behind cost.eu. Returns the previous map from the EN copy for the
+    change report."""
     new_json = json.dumps(new_map, ensure_ascii=False)
-    new_html = html[:m.start()] + f"const WG_MAP = {new_json};" + html[m.end():]
-    INDEX.write_text(new_html, encoding="utf-8")
+    old_map: dict = {}
+    for path in INDEX_LOCALES:
+        html = path.read_text(encoding="utf-8")
+        m = re.search(r"const WG_MAP = (\{.*?\});", html, re.S)
+        if not m:
+            raise SystemExit(f"Could not find WG_MAP literal in {path.name}")
+        if path == INDEX:  # report against the authoritative EN copy
+            old_map = json.loads(m.group(1))
+        new_html = html[:m.start()] + f"const WG_MAP = {new_json};" + html[m.end():]
+        path.write_text(new_html, encoding="utf-8")
     return old_map
 
 
