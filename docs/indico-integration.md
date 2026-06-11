@@ -104,12 +104,15 @@ Immediate, pure risk-reduction, no new moving parts.
 
 The cleanest "impossible in isolation" win, with zero write risk.
 
-- Write a plugin, `netsec-dispatch`, that subscribes to the EISS
-  category's lifecycle signals (`times_changed`, `contribution_created`,
-  session edits) and `POST`s a GitHub `repository_dispatch`. Store the
-  GitHub token in Indico's admin settings, not in code.
-- Add `on: repository_dispatch` to `sync-indico.yml`. Keep the daily
-  cron as a fallback.
+- The plugin, `netsec-dispatch`, lives in its own repo:
+  <https://github.com/EISSeuropa/netsec-indico-dispatch>. It subscribes
+  to the EISS category's lifecycle signals (`times_changed`,
+  `contribution_created`, session edits) and `POST`s a GitHub
+  `repository_dispatch`, with the GitHub token in Indico's admin
+  settings, not in code.
+- The `repository_dispatch` trigger is already on `sync-indico.yml`
+  (`types: [indico-changed]`, merged in #828). The daily cron stays as
+  the fallback.
 - Result: an Indico edit refreshes the live programme within about a
   minute.
 
@@ -183,7 +186,7 @@ programme token is used by Actions.
 | Phase | Issue | Milestone |
 | --- | --- | --- |
 | 0 | folded into this doc + the #323 version pin | v1.12.0 |
-| 1 | push pipeline plugin + `repository_dispatch` | v1.12.0 |
+| 1 | push pipeline plugin ([netsec-indico-dispatch](https://github.com/EISSeuropa/netsec-indico-dispatch)) + `repository_dispatch` (#828, merged) | v1.12.0 |
 | 2 | plugin-CLI write path (supersedes #323 B/C/D) | v1.13.0 |
 | 3 | registrant + visa-letter pipeline (with #374) | Backlog |
 | 4 | VPS upgrade/backup automation | Backlog |
