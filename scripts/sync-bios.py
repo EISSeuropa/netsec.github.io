@@ -91,6 +91,13 @@ MAX_PHOTO_WIDTH = 600
 # with a lone binary diff.
 PHOTOS_CHANGED: list[str] = []
 
+# Link fields the sync rewrote this run (raw → normalised), accumulated
+# across row_to_member calls the same way PHOTOS_CHANGED is. The auto-PR
+# body lists them under "Review flags" so a normalisation a reviewer
+# might want to sanity-check is visible at review time, not buried in the
+# scheduled job's stderr (#796). Each entry: {name, field, before, after}.
+LINK_REWRITES: list[dict] = []
+
 # ──────────────────────────── helpers ────────────────────────────
 
 
@@ -926,6 +933,18 @@ def row_to_member(
             photo_url, PHOTO_DIR / dest_slug, prior_hash=prior_hash,
         )
 
+    # Normalise the free-text link fields, recording any value the
+    # normaliser actually rewrote so the weekly sync PR body can surface
+    # it for review (#796) instead of leaving it in the job's stderr.
+    def _link(field: str, normaliser) -> str:
+        raw = (row.get(cols.get(field, ""), "") or "").strip()
+        norm = normaliser(raw)
+        if raw and norm != raw:
+            LINK_REWRITES.append(
+                {"name": name, "field": field, "before": raw, "after": norm}
+            )
+        return norm
+
     out = {
         "id": slug,
         "name": name,
@@ -947,12 +966,12 @@ def row_to_member(
         "bio": (row.get(cols.get("bio", ""), "") or "").strip(),
         "keywords": parse_keywords(row.get(cols.get("keywords", ""), "")),
         "email": (row.get(cols.get("public_email", ""), "") or "").strip(),
-        "website": normalise_url(row.get(cols.get("website", ""), "")),
+        "website": _link("website", normalise_url),
         "orcid": normalize_orcid(row.get(cols.get("orcid", ""), "")),
-        "linkedin": normalise_url(row.get(cols.get("linkedin", ""), "")),
-        "twitter": normalise_url(row.get(cols.get("twitter", ""), "")),
-        "bluesky": normalise_bluesky(row.get(cols.get("bluesky", ""), "")),
-        "mastodon": normalise_url(row.get(cols.get("mastodon", ""), "")),
+        "linkedin": _link("linkedin", normalise_url),
+        "twitter": _link("twitter", normalise_url),
+        "bluesky": _link("bluesky", normalise_bluesky),
+        "mastodon": _link("mastodon", normalise_url),
         "photo": photo_path or "",
         "source": "form",
         "_email_key": email,  # internal, stripped before write
@@ -1648,21 +1667,48 @@ def render_pr_title(diff: dict) -> str:
     return "data: " + " + ".join(parts)
 
 
-def render_pr_body_overview(diff: dict) -> str:
+def render_pr_body_overview(
+    diff: dict,
+    uncategorised: set[str] | list[str] | None = None,
+    link_rewrites: list[dict] | None = None,
+) -> str:
     """Markdown overview block to embed in the auto-PR body, ahead
     of the raw run log. Returns an empty string when there's nothing
-    to surface (caller can skip emitting the section)."""
+    to surface (caller can skip emitting the section).
+
+    `uncategorised` (canonical keywords mapping to no research theme) and
+    `link_rewrites` (the link fields the sync normalised this run) are the
+    two signals #796 lifts out of the scheduled job's stderr into a
+    "Review flags" section, each rendered only when non-empty."""
     new = diff["new"]
     upd = diff["updates"]
     rm = diff["removed"]
     photos = diff["photos_changed_paths"]
-    if not (new or upd or rm or photos):
-        return ""
 
     def _label(field: str) -> str:
         return _FIELD_LABELS.get(field, field)
 
-    lines: list[str] = ["## What changed", ""]
+    flag_keywords = sorted(uncategorised or [], key=str.lower)
+    # A returning submitter's response can be processed by more than one
+    # row, so the same rewrite can land in LINK_REWRITES twice. Dedupe
+    # while keeping first-seen order.
+    flag_rewrites: list[dict] = []
+    seen_rw: set[tuple] = set()
+    for r in link_rewrites or []:
+        key = (r["name"], r["field"], r["before"], r["after"])
+        if key in seen_rw:
+            continue
+        seen_rw.add(key)
+        flag_rewrites.append(r)
+
+    has_changes = bool(new or upd or rm or photos)
+    has_flags = bool(flag_keywords or flag_rewrites)
+    if not (has_changes or has_flags):
+        return ""
+
+    lines: list[str] = []
+    if has_changes:
+        lines += ["## What changed", ""]
 
     if new:
         lines.append(f"### New members ({len(new)})")
@@ -1710,6 +1756,38 @@ def render_pr_body_overview(diff: dict) -> str:
         for p in photos:
             lines.append(f"- `{p}`")
         lines.append("")
+
+    if has_flags:
+        lines.append("## Review flags")
+        lines.append("")
+        if flag_keywords:
+            lines.append(
+                f"### Keywords with no theme (won't cluster) ({len(flag_keywords)})"
+            )
+            lines.append("")
+            lines.append(
+                "These canonical keywords map to no research theme, so the members "
+                "carrying them fall out of the theme filter chips on the directory. "
+                "Add each under `themes` in `data/keyword-aliases.json` to fix it."
+            )
+            lines.append("")
+            for k in flag_keywords:
+                lines.append(f"- {k}")
+            lines.append("")
+        if flag_rewrites:
+            lines.append(f"### Link fields rewritten ({len(flag_rewrites)})")
+            lines.append("")
+            lines.append(
+                "The sync normalised these link fields. Confirm each rewrite points "
+                "at the destination the member intended."
+            )
+            lines.append("")
+            for r in flag_rewrites:
+                lines.append(
+                    f"- **{r['name']}** · {_label(r['field'])}: "
+                    f"`{r['before']}` → `{r['after']}`"
+                )
+            lines.append("")
 
     return "\n".join(lines).rstrip() + "\n"
 
@@ -1948,7 +2026,7 @@ def main() -> None:
         # the photo paths, and render_pr_title routes that to the
         # "investigate" title.
         alarm_diff = classify_diff(old_members, merged, PHOTOS_CHANGED)
-        _emit_pr_summary(alarm_diff)
+        _emit_pr_summary(alarm_diff, uncategorised, LINK_REWRITES)
         # Keep bios.json untouched: data genuinely didn't change. The
         # photo files on disk are already updated; the PR will reflect
         # them. We just want the log to scream rather than mislead.
@@ -1977,10 +2055,14 @@ def main() -> None:
     # can pick up via env-pointed files. Skipped silently when the
     # env vars aren't set (local runs).
     diff = classify_diff(old_members, merged, PHOTOS_CHANGED)
-    _emit_pr_summary(diff)
+    _emit_pr_summary(diff, uncategorised, LINK_REWRITES)
 
 
-def _emit_pr_summary(diff: dict) -> None:
+def _emit_pr_summary(
+    diff: dict,
+    uncategorised: set[str] | list[str] | None = None,
+    link_rewrites: list[dict] | None = None,
+) -> None:
     """Write the dynamic PR title + structured overview to the paths
     pointed at by `SYNC_BIOS_PR_TITLE_PATH` + `SYNC_BIOS_PR_OVERVIEW_PATH`
     when those env vars are set. The workflow sets them; a local
@@ -1990,7 +2072,10 @@ def _emit_pr_summary(diff: dict) -> None:
     if title_path:
         Path(title_path).write_text(render_pr_title(diff) + "\n", encoding="utf-8")
     if overview_path:
-        Path(overview_path).write_text(render_pr_body_overview(diff), encoding="utf-8")
+        Path(overview_path).write_text(
+            render_pr_body_overview(diff, uncategorised, link_rewrites),
+            encoding="utf-8",
+        )
 
 
 if __name__ == "__main__":
