@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-10T17:04:30+00:00",
+  "generated_at": "2026-06-12T12:20:53+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-10T17:04:30+00:00"
+    "last_synced": "2026-06-12T12:20:53+00:00"
   },
   "members": [
     {
@@ -443,21 +443,19 @@
       "keywords": [
         "election interference",
         "disinformation",
-        "subversion",
-        "cyber security"
+        "subversion"
       ],
       "email": "arthur.laudrain@sipo.gess.ethz.ch",
       "website": "https://gess.ethz.ch/en/the-department/people/person-detail.apb-laudrain.html",
       "orcid": "0000-0002-8642-2671",
       "linkedin": "https://www.linkedin.com/in/apb-ldn/",
       "twitter": "",
-      "bluesky": "",
+      "bluesky": "https://bsky.app/profile/apb-ldn.org",
       "mastodon": "",
       "photo": "assets/images/people/arthur-laudrain.jpg",
       "source": "form",
       "photo_source_sha256": "d6927b276ccffbbb2bc5bccf38502563a079862a500fbde9e79941f4851cae6a",
       "canonical_keywords": [
-        "Cyber security",
         "Disinformation",
         "Election interference",
         "Subversion"
@@ -466,11 +464,10 @@
         "mentor"
       ],
       "themes": [
-        "Cyber and emerging technology",
         "Intelligence, information and influence"
       ],
       "regions": [
-        "Europe"
+        "Global and cross-regional"
       ]
     },
     {
@@ -585,19 +582,73 @@
       "themes": [
         "Cyber and emerging technology"
       ]
+    },
+    {
+      "id": "rusudan-zabakhidze",
+      "name": "Ms Rusudan Zabakhidze",
+      "country": "Sweden",
+      "country_code": "se",
+      "affiliation": "Swedish Defence University",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [
+        1,
+        3
+      ],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Rusudan Zabakhidze is a PhD Candidate in the Department of War Studies at the Swedish Defence University. Her research focuses on war preparedness and civilian voluntary defence mobilisations in Georgia. Alongside her doctoral work, she teaches courses on civil-military relations, war and conflict, and urban warfare.\nRusudan has strong analytical, project management, and outreach skills, demonstrated through her experience working in large-scale international research projects funded by programmes such as Jean Monnet and the European Research Council. Prior to her doctoral studies, she worked at the Council for European Studies at Columbia University on the issues of securitisation of ethnic minorities and migrants and the rise of xenophobia in the European Union. She also served as a research assistant on the ETHNICGOODs project, contributing to the construction of a dataset on nation-building strategies and collecting qualitative data on public goods provision and political violence in Armenia, Azerbaijan, Georgia, Hungary, North Macedonia, and Kosovo. In addition, she has worked on the Black Sea security and European integration issues through various research fellowships.\nRusudan holds an MSc in International Security, Intelligence, and Strategic Studies from the University of Glasgow, Dublin City University, and Charles University in Prague, and a BA in International Relations from Tbilisi State University.",
+      "keywords": [
+        "non-state actors",
+        "militarisation",
+        "civil defence",
+        "civil-military relations"
+      ],
+      "email": "rusudan.zabakhidze@fhs.se",
+      "website": "https://www.fhs.se/sc/profile-page.html?identity=400.52939f818db60117ae7a6",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/rusudan-zabakhidze-87666061/",
+      "twitter": "https://x.com/rusozabakhidze",
+      "bluesky": "https://bsky.app/profile/rusozabakhidze.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/rusudan-zabakhidze.jpg",
+      "source": "form",
+      "photo_source_sha256": "697038881be94978774c704535e1f31b44b28a7335e865846c12208377f3f8b7",
+      "canonical_keywords": [
+        "Civil defence",
+        "Civil-military relations",
+        "Militarisation",
+        "Non-state actors"
+      ]
     }
   ],
   "keyword_aggregate": [
-    {
-      "keyword": "Cyber security",
-      "count": 2
-    },
     {
       "keyword": "EU foreign policy",
       "count": 2
     },
     {
+      "keyword": "Civil defence",
+      "count": 1
+    },
+    {
+      "keyword": "Civil-military relations",
+      "count": 1
+    },
+    {
       "keyword": "Cyber defence",
+      "count": 1
+    },
+    {
+      "keyword": "Cyber security",
       "count": 1
     },
     {
@@ -653,6 +704,14 @@
       "count": 1
     },
     {
+      "keyword": "Militarisation",
+      "count": 1
+    },
+    {
+      "keyword": "Non-state actors",
+      "count": 1
+    },
+    {
       "keyword": "Policy evaluation",
       "count": 1
     },
@@ -679,12 +738,12 @@
   ],
   "theme_aggregate": [
     {
-      "theme": "Cyber and emerging technology",
+      "theme": "Foreign policy and diplomacy",
       "count": 3
     },
     {
-      "theme": "Foreign policy and diplomacy",
-      "count": 3
+      "theme": "Cyber and emerging technology",
+      "count": 2
     },
     {
       "theme": "Economic security and geoeconomics",
@@ -735,6 +794,14 @@
     {
       "region": "Europe",
       "count": 4
+    },
+    {
+      "region": "Global and cross-regional",
+      "count": 2
+    },
+    {
+      "region": "Europe - Eastern neighbours / Russia",
+      "count": 1
     },
     {
       "region": "Middle East and North Africa",
