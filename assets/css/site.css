@@ -2459,6 +2459,16 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   transition:opacity .25s var(--ease);
 }
 .mentorship-panel-cross:hover{ opacity:.75; }
+
+/* Member profile pages (#762): a single directory card centred on its own
+   page. Reuses the .member-card styling; this just frames it. */
+.profile-page{ padding:120px 0 80px; }
+.profile-container{ max-width:760px; }
+.profile-page .member-card.is-profile{ width:100%; }
+.profile-page .member-name{ font-size:1.5rem; }
+.profile-back{ margin:22px 2px 0; font-size:.92rem; }
+.profile-back a{ color:var(--accent-2); }
+.profile-back a:hover{ text-decoration:underline; }
 /* Region pills (#555) reuse the keyword-pill shape but carry a small
    map-pin glyph and a neutral tint, so a geographic tag reads as
    distinct from a topical keyword. */
