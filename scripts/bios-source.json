@@ -10,7 +10,7 @@
   "columns": {
     "timestamp": "Horodateur",
     "email": "Adresse e-mail",
-    "name": "Full name (with title — Dr / Prof / Mr / Ms)",
+    "name": "Full name (with title — Dr / Prof / Mr / Ms / Mx)",
     "position": "Position or current role (e.g. PhD candidate, Associate Professor, Policy analyst)",
     "affiliation": "Institution or organisation",
     "country": "Country",
@@ -28,6 +28,6 @@
     "bluesky": "Bluesky URL (optional)",
     "mastodon": "Mastodon URL (optional)",
     "photo": "Headshot photo (optional)",
-    "consent": "I consent to publication of my bio on netsec-cost.eu"
+    "consent": "I consent to the publication of my bio on netsec-cost.eu and the potential use of my profile card on our social media:"
   }
 }
