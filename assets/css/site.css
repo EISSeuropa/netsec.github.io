@@ -2333,6 +2333,35 @@ body{padding-top:var(--whats-new-h, 0px)}
   margin:6px 0 14px;
 }
 .member-card .member-regions{ margin-top:-6px; }
+/* Recent publications (#761): a compact, lazily-loaded list of a
+   member's three most recent ORCID works. Detailed view only, like the
+   keyword pills; hidden in compact-collapsed cards (rule further down). */
+.member-card .member-pubs{
+  margin:2px 0 14px;
+  font-size:.82rem;
+  line-height:1.4;
+}
+.member-pubs-title{
+  margin:0 0 4px;
+  font-weight:600;
+  font-size:.72rem;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  color:var(--text-muted, #6b7280);
+}
+.member-pubs-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.member-pubs-list li{ margin:0; }
+.member-pubs-link{ color:var(--text, inherit); text-decoration:none; }
+a.member-pubs-link:hover,
+a.member-pubs-link:focus-visible{ text-decoration:underline; }
+.member-pubs-meta{ color:var(--text-muted, #6b7280); }
 /* Region pills (#555) reuse the keyword-pill shape but carry a small
    map-pin glyph and a neutral tint, so a geographic tag reads as
    distinct from a topical keyword. */
@@ -3074,6 +3103,7 @@ body{padding-top:var(--whats-new-h, 0px)}
 }
 .members-grid.is-compact .member-card:not(.is-expanded) .member-bio,
 .members-grid.is-compact .member-card:not(.is-expanded) .member-bio-toggle,
+.members-grid.is-compact .member-card:not(.is-expanded) .member-pubs,
 .members-grid.is-compact .member-card:not(.is-expanded) .member-contact{
   display:none !important;
 }
