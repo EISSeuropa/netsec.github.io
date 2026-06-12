@@ -198,10 +198,11 @@ When you can't wait for Monday morning:
 1. Open `data/bios.json` (or the PR if a sync just added them).
 2. Delete the relevant `members[]` entry.
 3. Delete the headshot at `assets/images/people/<slug>.jpg` if present.
-4. **Lock the source.** Open the Google Sheet and either:
+4. Run `python3 scripts/build-profile-pages.py` to drop their generated profile pages at `people/<slug>{,.fr,.de}.html` (#762). The script removes the orphaned pages automatically; the next weekly sync would do this too, but doing it now keeps the removal clean.
+5. **Lock the source.** Open the Google Sheet and either:
    - delete the row (cleanest), or
    - clear the consent column → next sync drops them anyway.
-5. Commit with message `bios: remove <slug> on request`.
+6. Commit with message `bios: remove <slug> on request`.
 
 ### Updating the MC roster
 

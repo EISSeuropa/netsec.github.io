@@ -101,6 +101,16 @@ jobs:
           # file rides this same auto-PR. Idempotent: no change, no diff.
           python3 scripts/sync-orcid.py
 
+      - name: Rebuild member profile pages from the refreshed bios
+        run: |
+          # The /people/<slug> profile pages (#762) are generated from
+          # data/bios.json + data/orcid-works.json + the people.* shells.
+          # Regenerate so a new member, headshot, or works list reaches
+          # their page in the same weekly auto-PR. Idempotent: unchanged
+          # pages produce no diff. A drift gate (data-shape-check.yml)
+          # blocks a stale set from merging.
+          python3 scripts/build-profile-pages.py
+
       - name: Rebuild the glossary field guide from the refreshed bios
         run: |
           # The field-guide facepile (#801) is baked from data/bios.json at
