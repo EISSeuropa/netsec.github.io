@@ -918,6 +918,40 @@ def resolve_prior_entry(
     return None
 
 
+# Website navigation chrome that submitters sometimes paste in front of
+# their bio when they copy it straight off a university staff page. Each
+# entry is matched case-insensitively against a whole leading line, so a
+# stray "Till startsidan" / "Search" header (Uppsala University's site
+# chrome, seen on Alexandra Brankova's first sync) is dropped while real
+# prose, which never appears as one of these bare labels, is untouched.
+# Lowercased; extend with new offenders as they surface (one line each).
+_BIO_CHROME_LINES = {
+    "search", "menu", "meny", "suche", "recherche", "buscar",
+    "skip to main content", "skip to content",
+    "till startsidan", "hoppa till innehållet", "hoppa till innehåll",
+    "zur startseite", "zum inhalt springen", "aller au contenu",
+    "home", "homepage", "startseite", "accueil",
+}
+
+
+def strip_bio_chrome(bio: str) -> str:
+    """Drop leading website-navigation lines pasted ahead of a bio.
+
+    Submitters who copy their bio off a university profile page can carry
+    the page's nav header along with it (the canonical case is the Swedish
+    "Till startsidan" / "Search" pair from Uppsala's staff site). Only a
+    leading run of lines that exactly match a known chrome label (after
+    trimming) is removed, so the body text is never trimmed by accident.
+    Runs each sync, so the fix survives a re-read of the raw Sheet value
+    without anyone having to edit the form response."""
+    if not bio:
+        return bio
+    lines = bio.split("\n")
+    while lines and lines[0].strip().lower() in _BIO_CHROME_LINES:
+        lines.pop(0)
+    return "\n".join(lines).strip()
+
+
 def row_to_member(
     row: dict,
     cols: dict,
@@ -996,7 +1030,7 @@ def row_to_member(
         "regions": parse_regions(row.get(cols.get("regions", ""), "")),
         "stsm_hosting": parse_stsm_hosting(row.get(cols.get("stsm_hosting", ""), "")),
         "wg_leadership": {},
-        "bio": (row.get(cols.get("bio", ""), "") or "").strip(),
+        "bio": strip_bio_chrome((row.get(cols.get("bio", ""), "") or "").strip()),
         "keywords": parse_keywords(row.get(cols.get("keywords", ""), "")),
         "email": (row.get(cols.get("public_email", ""), "") or "").strip(),
         "website": _link("website", normalise_url),
