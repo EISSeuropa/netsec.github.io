@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=a7faa538">
+<link rel="stylesheet" href="assets/css/site.css?v=afda8df8">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -236,6 +236,9 @@
       <div class="members-facets">
         <!-- Mentoring-Filter. Zwei Opt-in-Pillen; verborgen, solange kein
              Mitglied teilnimmt. -->
+        <!-- Mentorship + STSM hosting share one row to keep the
+             filter card compact; they stack on the mobile sheet. -->
+        <div class="members-facet-row">
         <div class="members-mentorship-filter" id="members-mentorship-filter" role="group" aria-label="Nach Mentoring filtern" hidden>
           <span class="members-mentorship-filter-label">Mentoring</span>
           <div class="members-mentorship-filter-chips">
@@ -250,6 +253,7 @@
           <div class="members-mentorship-filter-chips">
             <button type="button" class="members-mentorship-chip" data-stsm="1" aria-pressed="false">Kann STSM-Gäste aufnehmen</button>
           </div>
+        </div>
         </div>
 
     <!-- Filter nach Forschungsschwerpunkt (Phase 3). Vollständige
@@ -321,10 +325,10 @@
            wo das einspaltige Raster immer kompakt ist. Detailliert vs kompakt;
            die Wahl wird via localStorage('netsec-directory-view') gespeichert. -->
       <div class="view-toggle" role="group" aria-label="Kartendichte">
-        <button type="button" data-view="detailed" aria-pressed="true" title="Detailansicht" aria-label="Detailansicht">
+        <button type="button" data-view="detailed" aria-pressed="false" title="Detailansicht" aria-label="Detailansicht">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
         </button>
-        <button type="button" data-view="compact" aria-pressed="false" title="Kompaktansicht" aria-label="Kompaktansicht">
+        <button type="button" data-view="compact" aria-pressed="true" title="Kompaktansicht" aria-label="Kompaktansicht">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
         </button>
       </div>
@@ -350,7 +354,7 @@
     <aside id="members-mentorship-panel" class="mentorship-panel glass" hidden aria-label="Mentoring-Vermittlung"></aside>
 
 
-    <div id="members-grid" class="members-grid" aria-label="Mitgliederverzeichnis"></div>
+    <div id="members-grid" class="members-grid is-compact" aria-label="Mitgliederverzeichnis"></div>
 
     <aside id="join" class="join-card glass">
       <div class="join-card-body">
@@ -443,7 +447,7 @@
   const countEl = document.getElementById('members-count');
   const search = document.getElementById('member-search');
   const filterChips = document.querySelectorAll('.members-filter-chip');
-  const mentorshipChips = document.querySelectorAll('.members-mentorship-chip');
+  const mentorshipChips = document.querySelectorAll('.members-mentorship-chip[data-mentorship]');
   const stsmChip = document.querySelector('[data-stsm]');
   const countrySelect = document.getElementById('member-country');
   const tpl = document.getElementById('member-card-template');
@@ -550,7 +554,7 @@
   function savedView() {
     try {
       const s = localStorage.getItem('netsec-directory-view');
-      return (s === 'compact' || s === 'detailed') ? s : 'detailed';
+      return (s === 'compact' || s === 'detailed') ? s : 'compact';
     } catch (e) { return 'detailed'; }
   }
   function syncDirectoryView() {

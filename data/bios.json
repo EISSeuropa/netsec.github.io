@@ -627,6 +627,10 @@
         "Civil-military relations",
         "Militarisation",
         "Non-state actors"
+      ],
+      "themes": [
+        "Security and defence",
+        "Transnational and human security"
       ]
     }
   ],
@@ -742,15 +746,15 @@
       "count": 3
     },
     {
+      "theme": "Security and defence",
+      "count": 3
+    },
+    {
       "theme": "Cyber and emerging technology",
       "count": 2
     },
     {
       "theme": "Economic security and geoeconomics",
-      "count": 2
-    },
-    {
-      "theme": "Security and defence",
       "count": 2
     },
     {
@@ -764,9 +768,15 @@
     {
       "theme": "Intelligence, information and influence",
       "count": 1
+    },
+    {
+      "theme": "Transnational and human security",
+      "count": 1
     }
   ],
   "keyword_theme_map": {
+    "Civil defence": "Security and defence",
+    "Civil-military relations": "Security and defence",
     "Cyber defence": "Cyber and emerging technology",
     "Cyber security": "Cyber and emerging technology",
     "Defence": "Security and defence",
@@ -783,6 +793,8 @@
     "Industrial policy": "Economic security and geoeconomics",
     "Infrastructure": "Cyber and emerging technology",
     "International security": "Security and defence",
+    "Militarisation": "Security and defence",
+    "Non-state actors": "Transnational and human security",
     "Policy evaluation": "Theory and methods",
     "Political economy": "Economic security and geoeconomics",
     "Political psychology": "Theory and methods",
