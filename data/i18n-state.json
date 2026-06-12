@@ -103,14 +103,14 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "faf34e16d9bcd1a40f08e78094c3cfadb44951be",
+        "source_sha1": "c0e812609e4c71a9395bc17f244cd06b4c325c15",
         "translated_on": "2026-06-12",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "faf34e16d9bcd1a40f08e78094c3cfadb44951be",
+        "source_sha1": "c0e812609e4c71a9395bc17f244cd06b4c325c15",
         "translated_on": "2026-06-12",
         "status": "beta",
         "reviewed_by": null
@@ -119,15 +119,15 @@
     "grants.html": {
       "fr": {
         "file": "grants.fr.html",
-        "source_sha1": "fdbac821696fca0199a2898706a2a50470a7485b",
-        "translated_on": "2026-06-04",
+        "source_sha1": "2f7307a9efc62797deff319227547b35c1fbefbd",
+        "translated_on": "2026-06-12",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "grants.de.html",
-        "source_sha1": "fdbac821696fca0199a2898706a2a50470a7485b",
-        "translated_on": "2026-06-04",
+        "source_sha1": "2f7307a9efc62797deff319227547b35c1fbefbd",
+        "translated_on": "2026-06-12",
         "status": "beta",
         "reviewed_by": null
       }

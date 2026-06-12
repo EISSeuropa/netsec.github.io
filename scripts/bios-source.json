@@ -20,6 +20,7 @@
     "wgs": "Working Group involvement (tick all that apply)",
     "mentorship": "Mentorship (optional)",
     "regions": "Research regions (optional)",
+    "stsm_hosting": "Could your institution host STSM visitors?",
     "website": "Personal or institutional website (optional)",
     "orcid": "ORCID iD (optional)",
     "linkedin": "LinkedIn URL (optional)",

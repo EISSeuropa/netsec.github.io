@@ -127,6 +127,14 @@ def check_bios(data) -> list:
                 errs.append(
                     f"{ctx}: '{field}' must be an absolute http(s) URL, got {val!r}"
                 )
+        # STSM hosting (#760) is a tri-state scalar; the renderer keys the
+        # badge + filter off the exact values, so a stray value would
+        # render an empty or mislabelled badge.
+        sh = m.get("stsm_hosting")
+        if sh is not None and sh not in ("yes", "ask"):
+            errs.append(
+                f"{ctx}: 'stsm_hosting' must be 'yes' or 'ask' (or absent), got {sh!r}"
+            )
     return errs
 
 
