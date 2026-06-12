@@ -253,6 +253,31 @@ def test_merge_stsm_propagates() -> None:
     expect("role preserved", merged[0]["roles"], ["Science Communication Coordinator"])
 
 
+def test_merge_allowlist_covers_every_form_field() -> None:
+    """Structural guard against the whole class of bug behind #874: every
+    field row_to_member emits from a form row must be either overwritten by
+    merge() (sync_bios._FORM_OVERWRITE_FIELDS) or deliberately excluded
+    (sync_bios._MERGE_EXCLUDED_FIELDS). When a new Form question is parsed
+    into a new field but added to neither, this fails — so it can never
+    again be silently dropped the way `mentorship` and `stsm_hosting` were
+    when a returning member resubmitted. The fix when it fails is named in
+    the assertion: add the new field to one of the two sets in sync-bios.py."""
+    print("\nmerge() — overwrite allow-list covers every form-sourced field:")
+    # A minimal row that clears the consent gate; every other column is
+    # absent, so there is no photo download and the entry carries empty
+    # values — but all the keys row_to_member emits are present, which is
+    # what we check.
+    entry = sync_bios.row_to_member(
+        {"name": "Test Person", "consent": "yes"},
+        {"name": "name", "consent": "consent"},
+    )
+    expect("row_to_member returns an entry", entry is not None, True)
+    content = {k for k in entry if not k.startswith("_")}
+    covered = set(sync_bios._FORM_OVERWRITE_FIELDS) | set(sync_bios._MERGE_EXCLUDED_FIELDS)
+    expect("every form field is overwritten or explicitly excluded by merge()",
+           sorted(content - covered), [])
+
+
 def test_resolve_prior_entry() -> None:
     """The photo-churn fix: a name-collapse submission must resolve to
     its canonical prior entry (by name+country) so the photo writes to
@@ -1146,6 +1171,7 @@ def main() -> None:
     test_merge_name_match_same_country_collapses()
     test_merge_mentorship_propagates()
     test_merge_stsm_propagates()
+    test_merge_allowlist_covers_every_form_field()
     test_resolve_prior_entry()
     test_founding_contributor_flag()
     test_download_photo_idempotent_on_unchanged_upstream()

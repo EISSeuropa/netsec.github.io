@@ -1403,6 +1403,33 @@ def apply_founding_flag(member: dict, founding_slugs: set[str]) -> None:
         member.pop("founding_contributor", None)
 
 
+# The form-sourced content fields merge() overwrites onto a returning
+# member's stored entry. Every field row_to_member emits from a form row
+# must appear here OR in _MERGE_EXCLUDED_FIELDS below — test-sync-bios.py's
+# test_merge_allowlist_covers_every_form_field fails otherwise, so a new
+# Form question can never again be parsed but silently dropped on merge
+# (the gap that lost `mentorship`, then `stsm_hosting`). When you add a
+# field to row_to_member, add it here too (or, if it is deliberately not
+# form-owned, to the excluded set with a reason).
+_FORM_OVERWRITE_FIELDS = (
+    "name", "country", "country_code", "affiliation", "position", "bio",
+    "keywords", "mentorship", "regions", "stsm_hosting", "email",
+    "website", "orcid", "linkedin", "twitter", "bluesky", "mastodon",
+)
+
+# Fields row_to_member emits that merge() deliberately does NOT overwrite,
+# each for a stated reason. The completeness test treats these as accounted
+# for, so adding one here is an explicit decision, not an oversight.
+_MERGE_EXCLUDED_FIELDS = frozenset({
+    "id",             # the merge key itself; the prior slug is preserved
+    "source",         # set to "form" explicitly, not copied
+    "photo",          # carried separately so the file move stays in step
+    "wgs",            # union-merged (members add WGs, never remove them)
+    "roles",          # seed / leadership-directory owned; form cannot set
+    "wg_leadership",  # seed / leadership-directory owned; form cannot set
+})
+
+
 def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
     """Merge the prior directory state with the latest form submissions.
 
@@ -1534,9 +1561,7 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
             # list — they come from the seed/leadership directory and
             # the form has no way to set them, so an empty form value
             # would only ever wipe a real role.
-            for k in ("name", "country", "country_code", "affiliation", "position", "bio",
-                       "keywords", "mentorship", "regions", "stsm_hosting", "email",
-                       "website", "orcid", "linkedin", "twitter", "bluesky", "mastodon"):
+            for k in _FORM_OVERWRITE_FIELDS:
                 if entry.get(k):
                     existing[k] = entry[k]
             if entry.get("photo"):
