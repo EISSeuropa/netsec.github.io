@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=5d0fb72a">
+<link rel="stylesheet" href="assets/css/site.css?v=9d3b3da4">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -333,6 +333,17 @@
       <p>Les biographies apparaîtront ici lorsque les membres soumettront le formulaire. En attendant, cet annuaire affiche la direction et les coordinateur·rices des groupes de travail.</p>
     </div>
 
+    <!-- Mentorship matching panel (#763). Hidden until a mentorship
+
+         facet is active; then it orients the visitor, links across to the
+
+         opposite side, and carries the how-to-approach guidance. The grid
+
+         below shows the matching members. -->
+
+    <aside id="members-mentorship-panel" class="mentorship-panel glass" hidden aria-label="Mise en relation pour le mentorat"></aside>
+
+
     <div id="members-grid" class="members-grid" aria-label="Annuaire des membres"></div>
 
     <aside id="join" class="join-card glass">
@@ -412,7 +423,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=cb5175d8" defer></script>
+<script src="assets/js/site.js?v=98e55f49" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json.
      This script is identical to the English version; translatable
@@ -1017,6 +1028,7 @@
     empty.hidden = filtered.length > 0;
     _lastCount = filtered.length;
     updateFilterChrome();
+    renderMentorshipPanel();
 
     // Kick the deferred publications load exactly once, off the critical
     // path. Cards are already painted from bios.json; the works arrive in a
@@ -1071,6 +1083,7 @@
       if (activeMentorship.has(v)) activeMentorship.delete(v);
       else activeMentorship.add(v);
       b.setAttribute('aria-pressed', activeMentorship.has(v));
+      writeHashKeywords();
       render();
     });
   });
@@ -1311,26 +1324,148 @@
     });
   }
 
+  // Mentorship matching view (#763). The facet shipped as data plumbing;
+  // this connects the two sides. When a mentorship chip is active, a panel
+  // above the grid splits the matching members into "Offering" and
+  // "Seeking", carries the how-to-approach guidance, and (when only one
+  // side is active) offers a one-click jump to the opposite side. The grid
+  // below still shows the filtered members.
+  function syncMentorshipChips() {
+    mentorshipChips.forEach(c => {
+      c.setAttribute('aria-pressed', activeMentorship.has(c.dataset.mentorship) ? 'true' : 'false');
+    });
+  }
+  function mentorshipMembers(tag) {
+    return MEMBERS.filter(m => (m.mentorship || []).includes(tag))
+      .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  }
+  function mentorshipPersonLink(m) {
+    const a = document.createElement('a');
+    a.href = '#' + m.id;
+    a.className = 'mentorship-person';
+    const av = document.createElement('span');
+    av.className = 'mentorship-person-avatar';
+    if (m.photo) {
+      const img = document.createElement('img');
+      img.src = m.photo;
+      img.alt = '';
+      img.loading = 'lazy';
+      av.appendChild(img);
+    } else {
+      av.classList.add('is-fallback');
+      av.textContent = initials(m.name);
+    }
+    a.appendChild(av);
+    const nm = document.createElement('span');
+    nm.className = 'mentorship-person-name';
+    nm.textContent = m.name || '';
+    a.appendChild(nm);
+    // Keep the active mentorship filter: scroll to and expand the card in
+    // place rather than navigating to #slug (which would clobber the hash
+    // and drop the filter). Detailed view already shows the full card.
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const card = grid.querySelector('.member-card[data-slug="' + m.id + '"]');
+      if (!card) return;
+      if (grid.classList.contains('is-compact')) card.classList.add('is-expanded');
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    return a;
+  }
+  function renderMentorshipPanel() {
+    const panel = document.getElementById('members-mentorship-panel');
+    if (!panel) return;
+    if (activeMentorship.size === 0) { panel.hidden = true; panel.replaceChildren(); return; }
+    panel.replaceChildren();
+    panel.hidden = false;
+    const h = document.createElement('h2');
+    h.className = 'mentorship-panel-title';
+    h.textContent = window.netsecT('Mentorship matching');
+    panel.appendChild(h);
+    const guide = document.createElement('p');
+    guide.className = 'mentorship-panel-guide';
+    guide.textContent = window.netsecT('Mentoring in the network is informal. Introduce yourself directly and say what you are looking for. If you are unsure where to start, your Working Group lead can help make an introduction.');
+    panel.appendChild(guide);
+    const sides = [];
+    if (activeMentorship.has('mentor')) sides.push({ tag: 'mentor', label: 'Offering mentorship', other: 'mentee' });
+    if (activeMentorship.has('mentee')) sides.push({ tag: 'mentee', label: 'Seeking mentorship', other: 'mentor' });
+    const cols = document.createElement('div');
+    cols.className = 'mentorship-panel-cols';
+    sides.forEach(side => {
+      const col = document.createElement('section');
+      col.className = 'mentorship-panel-col';
+      const people = mentorshipMembers(side.tag);
+      const sh = document.createElement('h3');
+      sh.className = 'mentorship-panel-col-title';
+      sh.textContent = window.netsecT(side.label) + ' (' + people.length + ')';
+      col.appendChild(sh);
+      if (people.length) {
+        const ul = document.createElement('ul');
+        ul.className = 'mentorship-panel-people';
+        people.forEach(m => {
+          const li = document.createElement('li');
+          li.appendChild(mentorshipPersonLink(m));
+          ul.appendChild(li);
+        });
+        col.appendChild(ul);
+      } else {
+        const none = document.createElement('p');
+        none.className = 'mentorship-panel-none';
+        none.textContent = window.netsecT('No one here yet.');
+        col.appendChild(none);
+      }
+      cols.appendChild(col);
+    });
+    panel.appendChild(cols);
+    // When only one side is active, offer the opposite side in one click.
+    if (sides.length === 1) {
+      const other = sides[0].other;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mentorship-panel-cross';
+      btn.textContent = other === 'mentor'
+        ? window.netsecT('Also show members offering mentorship')
+        : window.netsecT('Also show members seeking mentorship');
+      btn.addEventListener('click', () => {
+        activeMentorship.add(other);
+        syncMentorshipChips();
+        writeHashKeywords();
+        render();
+      });
+      panel.appendChild(btn);
+    }
+  }
+
   // ─────────── Filtre domaines de recherche (Phase 3) ───────────
   // Voir people.html (EN) pour le schéma de hash et la justification
   // détaillée. Cette section reflète le code EN à l'identique.
   function parseHashKeywords() {
     activeKeywords.clear();
+    activeMentorship.clear();
     const raw = (location.hash || '').replace(/^#/, '');
     if (!raw) return;
     const params = new URLSearchParams(raw.includes('&') || raw.includes('=') ? raw : '');
     const csv = params.get('themes');
-    if (!csv) return;
-    csv.split(',').map(s => s.trim()).filter(Boolean).forEach(s => activeKeywords.add(s));
+    if (csv) {
+      csv.split(',').map(s => s.trim()).filter(Boolean).forEach(s => activeKeywords.add(s));
+    }
+    // Mentorship facet (#763): mentorship=mentor / mentee, for deep links.
+    const ment = params.get('mentorship');
+    if (ment) {
+      ment.split(',').map(s => s.trim()).filter(s => s === 'mentor' || s === 'mentee')
+        .forEach(s => activeMentorship.add(s));
+    }
   }
   function writeHashKeywords() {
     const slugs = Array.from(activeKeywords);
+    const mentors = Array.from(activeMentorship);
     const rawHash = (location.hash || '').replace(/^#/, '');
-    const hasKeywordsKey = /(^|&)themes=/.test(rawHash);
+    const hasKeywordsKey = /(^|&)(themes|mentorship)=/.test(rawHash);
     let rest = '';
     if (rawHash && hasKeywordsKey) {
       const params = new URLSearchParams(rawHash);
       params.delete('themes');
+      params.delete('mentorship');
       rest = params.toString();
     } else if (rawHash && !hasKeywordsKey && !rawHash.includes('=')) {
       rest = '';
@@ -1339,6 +1474,7 @@
     }
     const parts = [];
     if (slugs.length) parts.push('themes=' + slugs.join(','));
+    if (mentors.length) parts.push('mentorship=' + mentors.join(','));
     if (rest) parts.push(rest);
     const next = parts.join('&');
     if (next) {
@@ -1485,11 +1621,14 @@
     rgClearBtn.addEventListener('click', (e) => { e.stopPropagation(); clearRegionFilter(); });
   }
   window.addEventListener('hashchange', () => {
-    const before = Array.from(activeKeywords).sort().join(',');
+    const snap = () => Array.from(activeKeywords).sort().join(',') + '|'
+      + Array.from(activeMentorship).sort().join(',');
+    const before = snap();
     parseHashKeywords();
-    const after = Array.from(activeKeywords).sort().join(',');
+    const after = snap();
     if (before !== after) {
       renderKeywordFilter();
+      syncMentorshipChips();
       render();
     }
   });
@@ -1510,6 +1649,7 @@
     if (keywordDetails && activeKeywords.size > 0) keywordDetails.open = true;
     populateCountryFilter();
     setupMentorshipFilter();
+    syncMentorshipChips();
     renderKeywordFilter();
     renderRegionFilter();
     render();

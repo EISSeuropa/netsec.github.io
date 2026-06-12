@@ -2362,6 +2362,77 @@ body{padding-top:var(--whats-new-h, 0px)}
 a.member-pubs-link:hover,
 a.member-pubs-link:focus-visible{ text-decoration:underline; }
 .member-pubs-meta{ color:var(--text-muted, #6b7280); }
+
+/* Mentorship matching panel (#763): shown above the grid when a
+   mentorship facet is active. Orients the visitor, splits the matching
+   members into Offering / Seeking, and links across to the other side. */
+.mentorship-panel{
+  margin:0 0 22px;
+  padding:18px 20px;
+  border-radius:16px;
+}
+.mentorship-panel-title{
+  margin:0 0 6px;
+  font-size:1.05rem;
+}
+.mentorship-panel-guide{
+  margin:0 0 16px;
+  font-size:.9rem;
+  color:var(--text-muted, #6b7280);
+  max-width:62ch;
+}
+.mentorship-panel-cols{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+  gap:18px;
+}
+.mentorship-panel-col-title{
+  margin:0 0 10px;
+  font-size:.74rem;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--text-muted, #6b7280);
+}
+.mentorship-panel-people{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.mentorship-person{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--text, inherit);
+}
+.mentorship-person:hover .mentorship-person-name{ text-decoration:underline; }
+.mentorship-person-avatar{
+  width:34px;height:34px;flex:0 0 34px;
+  border-radius:50%;
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:#fff;font-size:.74rem;font-weight:600;
+}
+.mentorship-person-avatar img{ width:100%;height:100%;object-fit:cover; }
+.mentorship-person-name{ font-size:.92rem; }
+.mentorship-panel-none{
+  margin:0;font-size:.88rem;color:var(--text-muted, #6b7280);font-style:italic;
+}
+.mentorship-panel-cross{
+  margin-top:16px;
+  background:none;
+  border:1px solid var(--glass-border, rgba(255,255,255,.18));
+  border-radius:999px;
+  padding:7px 16px;
+  font-size:.85rem;
+  color:var(--accent-2);
+  cursor:pointer;
+  transition:opacity .25s var(--ease);
+}
+.mentorship-panel-cross:hover{ opacity:.75; }
 /* Region pills (#555) reuse the keyword-pill shape but carry a small
    map-pin glyph and a neutral tint, so a geographic tag reads as
    distinct from a topical keyword. */
