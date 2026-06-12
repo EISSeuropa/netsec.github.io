@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=afda8df8">
+<link rel="stylesheet" href="assets/css/site.css?v=35457ab7">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -465,7 +465,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=729c2b5d" defer></script>
+<script src="assets/js/site.js?v=3bf439fb" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
 <script>
@@ -881,48 +881,68 @@
       .forEach(card => fillMemberPubs(card, card.getAttribute('data-slug')));
   }
 
+  // Mentorship matching panel state (#869). When true, the panel relaxes its
+  // research-theme / research-region scoping and shows mentors and mentees
+  // from across the network, so a member who tagged themselves narrowly is
+  // never hidden from a mentee browsing by area. Reset on every render() (so
+  // any filter change collapses it back); the relax button re-renders the
+  // panel only, so it persists until the next filter change.
+  let mentorshipShowOutsideScope = false;
+  // The search query in force at the last render(), so renderMentorshipPanel()
+  // can rebuild its (separately scoped) member pool without re-reading the
+  // input element.
+  let _lastQuery = '';
+
+  // Single source of truth for the directory filter predicate, shared by the
+  // grid and the mentorship matching panel (#869). `skipMentorship` lets the
+  // panel pool everyone who passes the *other* facets, then split that pool
+  // into Offering / Seeking. `skipAreas` additionally drops the theme and
+  // region filters, powering the panel's "show people outside your selected
+  // areas" escape hatch.
+  function memberPassesFilters(m, q, opts) {
+    opts = opts || {};
+    if (activeWG === 'mc') {
+      if (!isMC(m)) return false;
+    } else if (activeWG !== 'all') {
+      const wgs = (m.wgs || []).concat((m.wg_leadership && (m.wg_leadership.lead || [])) || [], (m.wg_leadership && (m.wg_leadership.co_lead || [])) || []);
+      if (!wgs.includes(Number(activeWG))) return false;
+    }
+    if (activeCountry !== 'all') {
+      if ((m.country || '') !== activeCountry) return false;
+    }
+    if (!opts.skipMentorship && activeMentorship.size > 0) {
+      if (!(m.mentorship || []).some(t => activeMentorship.has(t))) return false;
+    }
+    if (activeStsm) {
+      if (m.stsm_hosting !== 'yes' && m.stsm_hosting !== 'ask') return false;
+    }
+    if (q) {
+      const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    // Theme filter (OR semantics): a bio passes when one of its research
+    // themes is in the active set. Empty set = no filter. Skipped for the
+    // panel's relaxed pool.
+    if (!opts.skipAreas && activeKeywords.size > 0) {
+      const bioThemeSlugs = (m.themes || []).map(keywordSlug);
+      if (!bioThemeSlugs.some(s => activeKeywords.has(s))) return false;
+    }
+    // Research-region filter (#555): a second, independent axis, AND-combined
+    // with the theme filter (so "cyber AND Russia" narrows). Also skipped for
+    // the relaxed pool.
+    if (!opts.skipAreas && activeRegions.size > 0) {
+      const bioRegionSlugs = (m.regions || []).map(keywordSlug);
+      if (!bioRegionSlugs.some(s => activeRegions.has(s))) return false;
+    }
+    return true;
+  }
+
   function render() {
     grid.replaceChildren();
     const q = (search.value || '').trim().toLowerCase();
-    const filtered = MEMBERS.filter(m => {
-      if (activeWG === 'mc') {
-        if (!isMC(m)) return false;
-      } else if (activeWG !== 'all') {
-        const wgs = (m.wgs || []).concat((m.wg_leadership && (m.wg_leadership.lead || [])) || [], (m.wg_leadership && (m.wg_leadership.co_lead || [])) || []);
-        if (!wgs.includes(Number(activeWG))) return false;
-      }
-      if (activeCountry !== 'all') {
-        if ((m.country || '') !== activeCountry) return false;
-      }
-      if (activeMentorship.size > 0) {
-        if (!(m.mentorship || []).some(t => activeMentorship.has(t))) return false;
-      }
-      if (activeStsm) {
-        if (m.stsm_hosting !== 'yes' && m.stsm_hosting !== 'ask') return false;
-      }
-      if (q) {
-        const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
-      // Keyword filter: OR semantics. A bio passes when at least
-      // one of its canonical keywords (or, as a fallback for
-      // not-yet-resynced data, raw keywords) slugifies to a slug
-      // present in the active set. An empty active set = no
-      // filter applied.
-      if (activeKeywords.size > 0) {
-        // activeKeywords holds theme slugs; a bio passes when one of its
-        // research themes is in the active set.
-        const bioThemeSlugs = (m.themes || []).map(keywordSlug);
-        if (!bioThemeSlugs.some(s => activeKeywords.has(s))) return false;
-      }
-      // Research-region filter (#555): a second, independent axis, AND-
-      // combined with the theme filter (so "cyber AND Russia" narrows).
-      if (activeRegions.size > 0) {
-        const bioRegionSlugs = (m.regions || []).map(keywordSlug);
-        if (!bioRegionSlugs.some(s => activeRegions.has(s))) return false;
-      }
-      return true;
-    });
+    _lastQuery = q;
+    mentorshipShowOutsideScope = false;
+    const filtered = MEMBERS.filter(m => memberPassesFilters(m, q, {}));
 
     filtered.sort((a, b) => leadershipOrder(a).localeCompare(leadershipOrder(b)) || (a.name||'').localeCompare(b.name||''));
 
@@ -1612,9 +1632,40 @@
       c.setAttribute('aria-pressed', activeMentorship.has(c.dataset.mentorship) ? 'true' : 'false');
     });
   }
-  function mentorshipMembers(tag) {
-    return MEMBERS.filter(m => (m.mentorship || []).includes(tag))
-      .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  // How many of a member's themes are in the currently-selected set. Drives
+  // the panel's best-match-first ordering so the closest fits sit at the top
+  // of a long column. Zero when no theme filter is active (every member ties).
+  function mentorshipThemeOverlap(m) {
+    if (activeKeywords.size === 0) return 0;
+    return (m.themes || []).map(keywordSlug).filter(s => activeKeywords.has(s)).length;
+  }
+  // Members of one mentorship side, drawn from a pre-scoped pool and ordered
+  // best-match first, then leadership, then name (#869). The pool already
+  // honours the active facets, so the panel agrees with the grid.
+  function mentorshipMembers(tag, pool) {
+    return (pool || MEMBERS).filter(m => (m.mentorship || []).includes(tag))
+      .sort((a, b) =>
+        mentorshipThemeOverlap(b) - mentorshipThemeOverlap(a)
+        || leadershipOrder(a).localeCompare(leadershipOrder(b))
+        || (a.name || '').localeCompare(b.name || ''));
+  }
+  // Localised display names of the active theme + region filters, for the
+  // panel's scope caption. Read from the aggregates (which carry every theme /
+  // region) rather than the chip DOM, so an active-but-collapsed chip still
+  // shows. Themes lead, regions follow.
+  function activeAreaNames() {
+    const names = [];
+    if (activeKeywords.size) {
+      const map = {};
+      KEYWORD_AGGREGATE.forEach(e => { map[keywordSlug(e.keyword)] = window.netsecT(e.keyword); });
+      activeKeywords.forEach(s => { if (map[s]) names.push(map[s]); });
+    }
+    if (activeRegions.size) {
+      const map = {};
+      REGION_AGGREGATE.forEach(e => { map[keywordSlug(e.region)] = window.netsecT(e.region); });
+      activeRegions.forEach(s => { if (map[s]) names.push(map[s]); });
+    }
+    return names;
   }
   function mentorshipPersonLink(m) {
     const a = document.createElement('a');
@@ -1666,12 +1717,31 @@
     const sides = [];
     if (activeMentorship.has('mentor')) sides.push({ tag: 'mentor', label: 'Offering mentorship', other: 'mentee' });
     if (activeMentorship.has('mentee')) sides.push({ tag: 'mentee', label: 'Seeking mentorship', other: 'mentor' });
+
+    // The panel agrees with the grid: it draws from members who pass every
+    // active facet except mentorship itself (#869). When a theme or region is
+    // selected, a caption names the slice, and a relaxed pool (areas dropped)
+    // backs the "show people outside your selected areas" escape hatch.
+    const areasActive = activeKeywords.size > 0 || activeRegions.size > 0;
+    const scopedPool = MEMBERS.filter(m => memberPassesFilters(m, _lastQuery, { skipMentorship: true }));
+    const relaxedPool = areasActive
+      ? MEMBERS.filter(m => memberPassesFilters(m, _lastQuery, { skipMentorship: true, skipAreas: true }))
+      : scopedPool;
+    const pool = (areasActive && mentorshipShowOutsideScope) ? relaxedPool : scopedPool;
+
+    if (areasActive) {
+      const scope = document.createElement('p');
+      scope.className = 'mentorship-panel-scope';
+      scope.textContent = window.netsecT('In your selected areas') + ': ' + activeAreaNames().join(', ');
+      panel.appendChild(scope);
+    }
+
     const cols = document.createElement('div');
     cols.className = 'mentorship-panel-cols';
     sides.forEach(side => {
       const col = document.createElement('section');
       col.className = 'mentorship-panel-col';
-      const people = mentorshipMembers(side.tag);
+      const people = mentorshipMembers(side.tag, pool);
       const sh = document.createElement('h3');
       sh.className = 'mentorship-panel-col-title';
       sh.textContent = window.netsecT(side.label) + ' (' + people.length + ')';
@@ -1694,6 +1764,32 @@
       cols.appendChild(col);
     });
     panel.appendChild(cols);
+
+    // Escape hatch: with a theme / region filter on, let the visitor widen the
+    // panel to people outside their selected areas, so a mentor who tagged
+    // themselves narrowly is never hidden from a mentee browsing by area. The
+    // toggle re-renders the panel only, leaving the grid and the filters as is.
+    if (areasActive) {
+      const sideTags = sides.map(s => s.tag);
+      const inScope = scopedPool.filter(m => (m.mentorship || []).some(t => sideTags.includes(t))).length;
+      const inNetwork = relaxedPool.filter(m => (m.mentorship || []).some(t => sideTags.includes(t))).length;
+      const extra = inNetwork - inScope;
+      if (mentorshipShowOutsideScope || extra > 0) {
+        const relax = document.createElement('button');
+        relax.type = 'button';
+        relax.className = 'mentorship-panel-relax';
+        relax.setAttribute('aria-pressed', mentorshipShowOutsideScope ? 'true' : 'false');
+        relax.textContent = mentorshipShowOutsideScope
+          ? window.netsecT('Show only your selected areas')
+          : window.netsecT('Show people outside your selected areas') + ' (' + extra + ')';
+        relax.addEventListener('click', () => {
+          mentorshipShowOutsideScope = !mentorshipShowOutsideScope;
+          renderMentorshipPanel();
+        });
+        panel.appendChild(relax);
+      }
+    }
+
     // When only one side is active, offer the opposite side in one click.
     if (sides.length === 1) {
       const other = sides[0].other;
