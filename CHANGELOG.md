@@ -46,6 +46,7 @@ audit trail. Same content, terser.
 - (one-line pointer bullets — what, not why)
 
 #### Changed
+- The directory's research-theme filter gains an "Identity, narratives and ideational security" theme (all three locales). The constructivist cluster (identity, ontological security, and geopolitical narratives) now reads as the distinct research area it is, rather than scattering across the broader information and theory themes. Hand-translated for FR and DE.
 - The ESSC programme renderer and the roadmap's earlier-releases toggle now load from shared scripts (`assets/js/essc-programme.js` and `assets/js/roadmap-shipped-toggle.js`) instead of inline copies repeated in each locale page. The three programme copies had already drifted apart; one shared file ends that class of bug and trims roughly 33 KB from every programme page load. ([#725](https://github.com/EISSeuropa/netsec.github.io/issues/725))
 - Refreshed the public roadmap in all three locales to match the current milestones: v1.10.0 now reads as shipped, and the v1.10.1 card is dated 9 June and described by what it actually carries (the accessibility refresh, the social-media footer links, the directory Early Access banner, the About-page deliverable statuses, the Working Groups page sections, the FR/DE FAQ clarification, and the remaining cost.eu sync work) rather than a post-conference recap. The recap itself now sits under v1.11.0.
 - (…)

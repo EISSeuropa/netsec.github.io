@@ -679,6 +679,7 @@
         "Ontological security"
       ],
       "themes": [
+        "Identity, narratives and ideational security",
         "Intelligence, information and influence",
         "Theory and methods"
       ]
@@ -902,6 +903,10 @@
       "count": 1
     },
     {
+      "theme": "Identity, narratives and ideational security",
+      "count": 1
+    },
+    {
       "theme": "Transnational and human security",
       "count": 1
     }
@@ -925,16 +930,16 @@
     "Foreign policy analysis": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
     "Grand strategy": "Security and defence",
-    "Identity": "Theory and methods",
+    "Identity": "Identity, narratives and ideational security",
     "Industrial policy": "Economic security and geoeconomics",
     "Infrastructure": "Cyber and emerging technology",
     "International relations": "Theory and methods",
     "International security": "Security and defence",
     "Militarisation": "Security and defence",
-    "Narratives": "Intelligence, information and influence",
+    "Narratives": "Identity, narratives and ideational security",
     "Non-state actors": "Transnational and human security",
     "Nuclear strategy": "Security and defence",
-    "Ontological security": "Theory and methods",
+    "Ontological security": "Identity, narratives and ideational security",
     "Policy evaluation": "Theory and methods",
     "Political economy": "Economic security and geoeconomics",
     "Political psychology": "Theory and methods",
