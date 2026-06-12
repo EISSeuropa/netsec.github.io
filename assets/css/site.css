@@ -2641,6 +2641,13 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   display:flex;flex-wrap:wrap;align-items:center;gap:8px;
   margin:0;
 }
+/* Mentorship + STSM-hosting filters share one row so the secondary-facet
+   stack stays short (they were two full-width rows). Wraps to two rows
+   only if there isn't horizontal room; the mobile sheet stacks them. */
+.members-facet-row{
+  display:flex;flex-wrap:wrap;align-items:flex-start;
+  gap:10px 32px;
+}
 /* Shared facet-caption style. `.members-filter-label` is a child of
    `.members-filter` but lives here, beside the sibling label it shares
    styling with, rather than next to its block. Intentional, not a collision. */
@@ -2807,9 +2814,12 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
      flex bases that would otherwise set the height in a column. */
   .members-filterset > .members-filter{ padding:0 18px;margin-bottom:4px;flex:0 0 auto; }
   .members-filterset > .members-facets{ padding:12px 18px 16px;margin:0;flex:0 0 auto; }
-  /* Mentorship now lives inside .members-facets (which supplies the 18px
-     gutter), so it sits flush like the theme / region rows. */
-  .members-facets > .members-mentorship-filter{ margin:0 0 2px; }
+  /* Mentorship + STSM live inside .members-facets (which supplies the
+     18px gutter), so they sit flush like the theme / region rows. The
+     descendant combinator reaches them through the desktop .members-facet-row
+     wrapper, which the sheet stacks back into a column. */
+  .members-facets .members-mentorship-filter{ margin:0 0 2px; }
+  .members-facet-row{ display:flex;flex-direction:column;gap:2px; }
 
   .members-sheet-foot{
     display:flex;align-items:center;gap:10px;

@@ -77,12 +77,12 @@
 
   "themes": {
     "Foreign policy and diplomacy": ["EU foreign policy", "German security policy", "Foreign policy analysis"],
-    "Security and defence": ["Grand strategy", "Defence", "International security", "Power"],
+    "Security and defence": ["Grand strategy", "Defence", "International security", "Power", "Civil defence", "Civil-military relations", "Militarisation"],
     "European and transatlantic security order": ["EU–NATO relations"],
     "Intelligence, information and influence": ["Disinformation", "Election interference", "Subversion"],
     "Cyber and emerging technology": ["Digital governance", "Cyber security", "Cyber defence", "Cyber", "Infrastructure", "Critical infrastructure", "Supply chain security", "Emerging technology", "Artificial intelligence"],
     "Economic security and geoeconomics": ["Economic security", "Economic statecraft", "Industrial policy", "Political economy"],
-    "Transnational and human security": [],
+    "Transnational and human security": ["Non-state actors"],
     "Theory and methods": ["Research methods", "Political psychology", "Policy evaluation"]
   },
 
