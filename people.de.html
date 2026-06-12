@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=f9cce08f">
+<link rel="stylesheet" href="assets/css/site.css?v=5d0fb72a">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -364,6 +364,7 @@
       <p class="member-bio"></p>
       <div class="member-keywords" aria-label="Forschungsschwerpunkte" hidden></div>
       <div class="member-regions" aria-label="Forschungsregionen" hidden></div>
+      <div class="member-pubs" aria-label="Neueste Veröffentlichungen" hidden></div>
       <div class="member-contact" aria-label="Kontakt"></div>
     </div>
     <span class="member-toggle-chevron" aria-hidden="true">
@@ -409,7 +410,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=28ca3bc2" defer></script>
+<script src="assets/js/site.js?v=cb5175d8" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json.
      This script is identical to the English version; translatable
@@ -697,6 +698,65 @@
     return '99' + (m.name || '').toLowerCase();
   }
 
+  // Recent publications (#761). data/orcid-works.json is fetched once,
+  // lazily, after the directory has gone idle — never on the critical
+  // path — then backfilled into the rendered cards. Member cards carry
+  // none of its weight at load. Keyed by member slug, up to three works.
+  let ORCID_WORKS = null;       // slug -> [ {title, year, journal, doi} ]
+  let orcidWorksPromise = null;
+  let orcidKicked = false;
+  function loadOrcidWorks() {
+    if (orcidWorksPromise) return orcidWorksPromise;
+    orcidWorksPromise = fetch('data/orcid-works.json', { cache: 'no-cache' })
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => { ORCID_WORKS = (d && d.works) || {}; return ORCID_WORKS; })
+      .catch(() => { ORCID_WORKS = {}; return ORCID_WORKS; });
+    return orcidWorksPromise;
+  }
+  function fillMemberPubs(node, slug) {
+    if (!ORCID_WORKS) return;
+    const wrap = node.querySelector('.member-pubs');
+    if (!wrap) return;
+    const works = (slug && ORCID_WORKS[slug]) || [];
+    wrap.textContent = '';
+    if (!works.length) { wrap.setAttribute('hidden', ''); return; }
+    const title = document.createElement('p');
+    title.className = 'member-pubs-title';
+    title.textContent = window.netsecT('Recent publications');
+    wrap.appendChild(title);
+    const ul = document.createElement('ul');
+    ul.className = 'member-pubs-list';
+    works.forEach(w => {
+      const li = document.createElement('li');
+      let head;
+      if (w.doi) {
+        head = document.createElement('a');
+        head.href = 'https://doi.org/' + w.doi;
+        head.target = '_blank';
+        head.rel = 'noopener';
+      } else {
+        head = document.createElement('span');
+      }
+      head.className = 'member-pubs-link';
+      head.textContent = w.title;
+      li.appendChild(head);
+      const bits = [w.year, w.journal].filter(Boolean);
+      if (bits.length) {
+        const meta = document.createElement('span');
+        meta.className = 'member-pubs-meta';
+        meta.textContent = ' (' + bits.join(', ') + ')';
+        li.appendChild(meta);
+      }
+      ul.appendChild(li);
+    });
+    wrap.appendChild(ul);
+    wrap.removeAttribute('hidden');
+  }
+  function backfillPubs() {
+    document.querySelectorAll('#members-grid .member-card[data-slug]')
+      .forEach(card => fillMemberPubs(card, card.getAttribute('data-slug')));
+  }
+
   function render() {
     grid.replaceChildren();
     const q = (search.value || '').trim().toLowerCase();
@@ -941,6 +1001,10 @@
         contact.appendChild(a);
       });
       if (!contact.children.length) contact.remove();
+      // Recent publications (lazy): fills from the in-memory cache if the
+      // deferred ORCID fetch has already resolved, otherwise backfillPubs()
+      // populates it once the fetch lands.
+      fillMemberPubs(node, m.id);
       node.id = m.id;
       grid.appendChild(node);
     });
@@ -951,6 +1015,16 @@
     empty.hidden = filtered.length > 0;
     _lastCount = filtered.length;
     updateFilterChrome();
+
+    // Kick the deferred publications load exactly once, off the critical
+    // path. Cards are already painted from bios.json; the works arrive in a
+    // single follow-up fetch (#761) and backfill into place when idle.
+    if (!orcidKicked) {
+      orcidKicked = true;
+      (window.requestIdleCallback || function (cb) { return setTimeout(cb, 1200); })(
+        function () { loadOrcidWorks().then(backfillPubs); }
+      );
+    }
 
     // See people.html for the explanation of why this is no longer
     // wrapped in requestAnimationFrame.
