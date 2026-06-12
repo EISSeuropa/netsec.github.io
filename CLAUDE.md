@@ -906,6 +906,30 @@ prompt named the repo by its absolute path. Pair it with the
 scratch-file rule above: when a run is killed, prune its leftover
 worktrees with `git worktree remove -f -f` before continuing.
 
+### Bind JS to `data-*` hooks, never to a styling class
+
+When JavaScript needs to find an element (a `querySelector`, an event
+listener, a filter target), key it off a dedicated `data-*` attribute,
+not off a class that also carries styling. A styling class gets reused
+the moment another element wants the same look, and that second element
+is then silently swept into the first one's handler. Reach for the
+attribute selector even when there is only one match today, because the
+collision arrives with the next feature that clones the markup.
+
+The STSM-hosting filter chip reused `class="members-mentorship-chip"` to
+borrow the pill styling, so the mentorship click handler
+(`querySelectorAll('.members-mentorship-chip')`) also fired on it and
+pushed `undefined` into the mentorship set, which then filtered out every
+member. The deep link worked because it never runs the click handlers, so
+the bug read as data-related when it was a selector collision. Fixed in
+[#862](https://github.com/EISSeuropa/netsec.github.io/pull/862) by scoping
+the handler to `.members-mentorship-chip[data-mentorship]`.
+
+The `Lint CSS for class-name collisions` CI check guards the CSS side of
+this (two rules claiming one name). It does not see a JS selector reaching
+an element that only wanted the class for looks. This convention is that
+blind spot's counterpart.
+
 *This file is short on purpose. If you need to add a rule, add it
 here; if you need to add an example, prefer linking a PR / commit /
 issue so this file stays a reference rather than a tutorial.*
