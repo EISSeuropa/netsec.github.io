@@ -229,6 +229,30 @@ def test_merge_mentorship_propagates() -> None:
     expect("role preserved", merged[0]["roles"], ["Science Communication Coordinator"])
 
 
+def test_merge_stsm_propagates() -> None:
+    """A form submission carrying an STSM-hosting answer must overwrite the
+    matched prior entry's `stsm_hosting`, the same way mentorship does.
+    Regression for the merge field allow-list omitting `stsm_hosting` (added
+    by #760 but never added to the overwrite loop), which silently dropped a
+    member's changed answer for anyone who already had a directory entry."""
+    print("\nmerge() — STSM hosting propagates onto a prior entry:")
+    prior = [
+        {"id": "arthur-laudrain", "name": "Dr Arthur Laudrain", "country": "Switzerland",
+         "roles": ["Science Communication Coordinator"], "wgs": [], "source": "seed"},
+    ]
+    form_entries = [
+        {
+            "id": "arthur-laudrain", "name": "Dr Arthur Laudrain", "country": "Switzerland",
+            "country_code": "", "stsm_hosting": "yes", "wgs": [],
+            "source": "form", "_email_key": "", "_timestamp": "2026-06-13 09:00:00",
+        },
+    ]
+    merged = merge(prior, form_entries)
+    expect("one entry", len(merged), 1)
+    expect("stsm_hosting carried from form", merged[0].get("stsm_hosting"), "yes")
+    expect("role preserved", merged[0]["roles"], ["Science Communication Coordinator"])
+
+
 def test_resolve_prior_entry() -> None:
     """The photo-churn fix: a name-collapse submission must resolve to
     its canonical prior entry (by name+country) so the photo writes to
@@ -1121,6 +1145,7 @@ def main() -> None:
     test_merge_name_match_different_country_does_not_collapse()
     test_merge_name_match_same_country_collapses()
     test_merge_mentorship_propagates()
+    test_merge_stsm_propagates()
     test_resolve_prior_entry()
     test_founding_contributor_flag()
     test_download_photo_idempotent_on_unchanged_upstream()
