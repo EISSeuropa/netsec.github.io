@@ -48,14 +48,29 @@ _CACHE_BUST_RE = re.compile(
     r'(assets/(?:css|js)/[A-Za-z0-9._-]+\.(?:css|js))\?v=[0-9a-f]+'
 )
 
+# Field-guide facepiles (#801) are rows of directory member headshots baked
+# into the Glossary's concept entries by scripts/build-field-guide.py. They
+# are data-driven and language-agnostic (the same faces in all three
+# locales), and the weekly bios sync refreshes them whenever a member's
+# keywords or headshot change. That moved the English glossary.html markup
+# and falsely flagged the FR/DE glossary as stale (#860), even though no
+# prose needs re-translating. So, like the cache-bust queries above, the
+# facepile block is normalised out before hashing. The translatable parts
+# of each entry (the definition paragraph, the Sources list) are left in,
+# so a real definition change is still caught.
+_FACEPILE_RE = re.compile(r'<div class="fg-people">.*?</div>', re.S)
+
 
 def sha1(path: Path) -> str:
-    """SHA-1 of a file's content, with asset cache-bust queries
-    normalised out. We hash the markup (not a parsed DOM) because we
-    want any meaningful edit — markup or attribute changes — flagged for
-    review; the cache-bust hash is the one deliberate exception."""
+    """SHA-1 of a file's content, with asset cache-bust queries and
+    data-driven field-guide facepiles normalised out. We hash the markup
+    (not a parsed DOM) because we want any meaningful edit — markup or
+    attribute changes — flagged for review; the cache-bust hash and the
+    facepile are the deliberate exceptions, both being language-agnostic
+    data the directory regenerates rather than translatable prose."""
     text = path.read_text(encoding="utf-8")
     text = _CACHE_BUST_RE.sub(r"\1", text)
+    text = _FACEPILE_RE.sub('<div class="fg-people"></div>', text)
     return hashlib.sha1(text.encode("utf-8")).hexdigest()
 
 

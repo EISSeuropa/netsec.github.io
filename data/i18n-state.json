@@ -183,15 +183,15 @@
     "glossary.html": {
       "fr": {
         "file": "glossary.fr.html",
-        "source_sha1": "2e523e6a5687fc8976cfaf4290a6d3d985cfef99",
-        "translated_on": "2026-06-10",
+        "source_sha1": "b2a62c817479030d96fdb3748c0428778f7a7c28",
+        "translated_on": "2026-06-12",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "glossary.de.html",
-        "source_sha1": "2e523e6a5687fc8976cfaf4290a6d3d985cfef99",
-        "translated_on": "2026-06-10",
+        "source_sha1": "b2a62c817479030d96fdb3748c0428778f7a7c28",
+        "translated_on": "2026-06-12",
         "status": "beta",
         "reviewed_by": null
       }
