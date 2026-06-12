@@ -1535,8 +1535,8 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
             # the form has no way to set them, so an empty form value
             # would only ever wipe a real role.
             for k in ("name", "country", "country_code", "affiliation", "position", "bio",
-                       "keywords", "mentorship", "regions", "email", "website", "orcid",
-                       "linkedin", "twitter", "bluesky", "mastodon"):
+                       "keywords", "mentorship", "regions", "stsm_hosting", "email",
+                       "website", "orcid", "linkedin", "twitter", "bluesky", "mastodon"):
                 if entry.get(k):
                     existing[k] = entry[k]
             if entry.get("photo"):
