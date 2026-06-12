@@ -32,14 +32,17 @@ Google Form ──► Google Sheet ──► sync-bios.yml (weekly) ──► PR
 | 8 | **Working Group involvement (tick all that apply)** | Checkboxes: *WG1 · Building the Network · WG2 · Transfer of Knowledge · WG3 · Fostering the Next Generation · WG4 · Ensuring Inclusion · None yet* | ⬜ |
 | 9 | **Mentorship (optional)** | Checkboxes: *Open to mentoring early-career researchers · Looking for a mentor* | ⬜ |
 | 10 | **Research regions (optional)** | Checkboxes: *Europe · Europe - Western Balkans · Europe - Eastern neighbours / Russia · Middle East and North Africa · Africa · Asia · The Americas · Global and cross-regional* | ⬜ |
-| 11 | **Personal or institutional website (optional)** | Short answer | ⬜ |
-| 12 | **ORCID iD (optional)** | Short answer | ⬜ |
-| 13 | **LinkedIn URL (optional)** | Short answer | ⬜ |
-| 14 | **X / Twitter URL (optional)** | Short answer | ⬜ |
-| 15 | **Bluesky URL (optional)** | Short answer | ⬜ |
-| 16 | **Mastodon URL (optional)** | Short answer | ⬜ |
-| 17 | **Headshot photo (optional)** | File upload — image only — max 5 MB | ⬜ |
-| 18 | **I consent to publication of my bio on netsec-cost.eu** | Checkboxes — single option | ✅ |
+| 11 | **Could your institution host STSM visitors?** | Multiple choice: *Yes · No · Ask me* | ⬜ |
+| 12 | **Personal or institutional website (optional)** | Short answer | ⬜ |
+| 13 | **ORCID iD (optional)** | Short answer | ⬜ |
+| 14 | **LinkedIn URL (optional)** | Short answer | ⬜ |
+| 15 | **X / Twitter URL (optional)** | Short answer | ⬜ |
+| 16 | **Bluesky URL (optional)** | Short answer | ⬜ |
+| 17 | **Mastodon URL (optional)** | Short answer | ⬜ |
+| 18 | **Headshot photo (optional)** | File upload — image only — max 5 MB | ⬜ |
+| 19 | **I consent to publication of my bio on netsec-cost.eu** | Checkboxes — single option | ✅ |
+
+> **STSM-hosting parsing (#760).** Question 11 maps to a tri-state `stsm_hosting` field: *Yes* → `yes`, *Ask me* → `ask`, *No* (or blank) → the field is dropped. Matching is tolerant substring matching and the conditional ("ask") signal wins over a co-occurring "yes", so a hand-typed *"Yes, but ask me first"* lands on `ask`. The directory shows a quiet hosting badge on a member's card and a "STSM hosting" filter chip, both of which stay invisible until at least one member answers, and the grants page deep-links to the pre-filtered directory (`/people.html#stsm=1`). The exact question text must match the column name in `scripts/bios-source.json`.
 
 > **WG-checkboxes parsing.** The script extracts the digits 1–4 from whatever the checkbox column contains, so the precise wording of each option doesn't matter as long as it includes the WG number. *"WG2 · Transfer of Knowledge"* parses to `2`; *"None yet"* parses to no WG. You can rename the WGs freely later.
 

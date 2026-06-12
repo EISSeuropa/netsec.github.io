@@ -34,6 +34,7 @@ normalise_affiliation = sync_bios.normalise_affiliation
 normalise_url = sync_bios.normalise_url
 normalise_bluesky = sync_bios.normalise_bluesky
 parse_mentorship = sync_bios.parse_mentorship
+parse_stsm_hosting = sync_bios.parse_stsm_hosting
 parse_regions = sync_bios.parse_regions
 load_region_vocab = sync_bios.load_region_vocab
 ensure_people_webp = sync_bios.ensure_people_webp
@@ -808,6 +809,27 @@ def test_parse_mentorship() -> None:
            ["mentor", "mentee"])
 
 
+def test_parse_stsm_hosting() -> None:
+    """STSM-hosting cell -> tri-state scalar 'yes' / 'ask' / '' (#760)."""
+    print("\nparse_stsm_hosting():")
+    expect("empty -> ''", parse_stsm_hosting(""), "")
+    expect("none -> ''", parse_stsm_hosting(None), "")
+    expect("whitespace -> ''", parse_stsm_hosting("   "), "")
+    expect("Yes -> yes", parse_stsm_hosting("Yes"), "yes")
+    expect("No -> ''", parse_stsm_hosting("No"), "")
+    expect("Ask me -> ask", parse_stsm_hosting("Ask me"), "ask")
+    expect("case-insensitive yes", parse_stsm_hosting("YES"), "yes")
+    expect("phrase 'We can host visitors' -> yes",
+           parse_stsm_hosting("We can host visitors"), "yes")
+    expect("'maybe, depends on the year' -> ask",
+           parse_stsm_hosting("Maybe, depends on the year"), "ask")
+    # The 'ask' signal wins over a co-occurring 'yes' so a conditional
+    # answer is never overstated as a firm yes.
+    expect("'yes, but ask me first' -> ask",
+           parse_stsm_hosting("Yes, but ask me first"), "ask")
+    expect("unrelated text -> ''", parse_stsm_hosting("Not sure what this is"), "")
+
+
 def test_load_region_vocab() -> None:
     """The `regions` section of data/keyword-aliases.json yields a
     lowercased → canonical-display map, the controlled vocabulary the
@@ -1067,6 +1089,7 @@ def main() -> None:
     test_normalise_url()
     test_normalise_bluesky()
     test_parse_mentorship()
+    test_parse_stsm_hosting()
     test_load_region_vocab()
     test_parse_regions()
     test_country_key()

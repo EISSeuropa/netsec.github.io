@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=9d3b3da4">
+<link rel="stylesheet" href="assets/css/site.css?v=9ec5dbf9">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -243,6 +243,15 @@
             <button type="button" class="members-mentorship-chip" data-mentorship="mentee" aria-pressed="false">Seeking mentorship</button>
           </div>
         </div>
+        <!-- STSM hosting filter (#760). Reuses the mentorship-filter
+             styling. Stays hidden until at least one member opts in via
+             the Form, like the mentorship and region rows. -->
+        <div class="members-mentorship-filter" id="members-stsm-filter" role="group" aria-label="Filter by STSM hosting" hidden>
+          <span class="members-mentorship-filter-label">STSM hosting</span>
+          <div class="members-mentorship-filter-chips">
+            <button type="button" class="members-mentorship-chip" data-stsm="1" aria-pressed="false">Can host STSM visitors</button>
+          </div>
+        </div>
 
     <!-- Research-theme filter chips. Populated from
          `bios.json#theme_aggregate` (broad themes, sorted by member
@@ -380,6 +389,7 @@
       <div class="member-wgs" role="group" aria-label="Working-group membership"></div>
       <div class="member-founding" hidden></div>
       <div class="member-mentorship" aria-label="Mentorship" hidden></div>
+      <div class="member-stsm" aria-label="STSM hosting" hidden></div>
       <p class="member-bio"></p>
       <div class="member-keywords" aria-label="Research interests" hidden></div>
       <div class="member-regions" aria-label="Research regions" hidden></div>
@@ -451,7 +461,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=98e55f49" defer></script>
+<script src="assets/js/site.js?v=480ed813" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
 <script>
@@ -463,6 +473,7 @@
   const search = document.getElementById('member-search');
   const filterChips = document.querySelectorAll('.members-filter-chip');
   const mentorshipChips = document.querySelectorAll('.members-mentorship-chip');
+  const stsmChip = document.querySelector('[data-stsm]');
   const countrySelect = document.getElementById('member-country');
   const tpl = document.getElementById('member-card-template');
   const viewToggle = document.querySelectorAll('.view-toggle button[data-view]');
@@ -705,6 +716,11 @@
   // old "All" state, now implicit). Transient (no URL hash). The chip row
   // stays hidden until the data carries at least one mentorship facet.
   const activeMentorship = new Set();
+  // STSM-hosting filter (#760): a single boolean facet. When true, the
+  // grid is narrowed to members whose institution can host STSM visitors
+  // ("yes" or "ask"). Bookmarkable via `#stsm=1` so the grants page can
+  // deep-link to the pre-filtered directory.
+  let activeStsm = false;
   // Research-interest filter: a Set of canonical-keyword *slugs*
   // (lowercase, non-word → hyphen). Kept as slugs so URL hash
   // round-trips are stable and chip-on-card clicks resolve cleanly.
@@ -877,6 +893,9 @@
       if (activeMentorship.size > 0) {
         if (!(m.mentorship || []).some(t => activeMentorship.has(t))) return false;
       }
+      if (activeStsm) {
+        if (m.stsm_hosting !== 'yes' && m.stsm_hosting !== 'ask') return false;
+      }
       if (q) {
         const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
@@ -1034,6 +1053,20 @@
       });
       if (mentorAdded) mentorWrap.removeAttribute('hidden');
       else mentorWrap.remove();
+      // STSM hosting badge (#760): a quiet pill on hosts. "yes" reads as a
+      // firm offer, "ask" as a conditional one. Absent for everyone else,
+      // so it costs nothing while the Form question is still gathering data.
+      const stsmWrap = node.querySelector('.member-stsm');
+      if (stsmWrap && (m.stsm_hosting === 'yes' || m.stsm_hosting === 'ask')) {
+        const span = document.createElement('span');
+        span.className = 'stsm-badge' + (m.stsm_hosting === 'ask' ? ' is-ask' : '');
+        span.textContent = window.netsecT(
+          m.stsm_hosting === 'ask' ? 'Open to hosting STSM visitors' : 'Can host STSM visitors');
+        stsmWrap.appendChild(span);
+        stsmWrap.removeAttribute('hidden');
+      } else if (stsmWrap) {
+        stsmWrap.remove();
+      }
       // Bio (or pending notice)
       const bio = node.querySelector('.member-bio');
       if (m.bio) {
@@ -1302,6 +1335,14 @@
       render();
     });
   });
+  if (stsmChip) {
+    stsmChip.addEventListener('click', () => {
+      activeStsm = !activeStsm;
+      stsmChip.setAttribute('aria-pressed', activeStsm ? 'true' : 'false');
+      writeHashKeywords();
+      render();
+    });
+  }
   if (countrySelect) {
     countrySelect.addEventListener('change', () => {
       activeCountry = countrySelect.value;
@@ -1323,7 +1364,7 @@
   const regionDetails = document.getElementById('members-region-filter');
   function anyFilterActive() {
     return search.value.trim() !== '' || activeWG !== 'all' || activeCountry !== 'all'
-      || activeMentorship.size > 0 || activeKeywords.size > 0 || activeRegions.size > 0;
+      || activeMentorship.size > 0 || activeStsm || activeKeywords.size > 0 || activeRegions.size > 0;
   }
   function updateFilterChrome() {
     if (clearAllBtn) clearAllBtn.disabled = !anyFilterActive();
@@ -1347,6 +1388,8 @@
     if (countrySelect) countrySelect.value = 'all';
     activeMentorship.clear();
     mentorshipChips.forEach(o => o.setAttribute('aria-pressed', 'false'));
+    activeStsm = false;
+    syncStsmChip();
     activeKeywords.clear();
     activeRegions.clear();
     writeHashKeywords();
@@ -1537,6 +1580,23 @@
     });
   }
 
+  // STSM-hosting filter (#760): reveal the chip only once at least one
+  // member can host, so the row stays invisible while the Form question
+  // is still gathering answers. Same data-driven posture as mentorship.
+  function setupStsmFilter() {
+    const root = document.getElementById('members-stsm-filter');
+    if (!root) return;
+    const hasHost = MEMBERS.some(m => m.stsm_hosting === 'yes' || m.stsm_hosting === 'ask');
+    root.hidden = !hasHost;
+    // If a deep link set the filter but no member hosts yet, neutralise it
+    // so the visitor sees the full directory rather than an empty grid with
+    // no visible chip to clear.
+    if (!hasHost) activeStsm = false;
+  }
+  function syncStsmChip() {
+    if (stsmChip) stsmChip.setAttribute('aria-pressed', activeStsm ? 'true' : 'false');
+  }
+
   // Mentorship matching view (#763). The facet shipped as data plumbing;
   // this connects the two sides. When a mentorship chip is active, a panel
   // above the grid splits the matching members into "Offering" and
@@ -1661,6 +1721,7 @@
   function parseHashKeywords() {
     activeKeywords.clear();
     activeMentorship.clear();
+    activeStsm = false;
     const raw = (location.hash || '').replace(/^#/, '');
     if (!raw) return;
     // Try query-string-style first: `themes=a,b,c` or
@@ -1677,6 +1738,12 @@
       ment.split(',').map(s => s.trim()).filter(s => s === 'mentor' || s === 'mentee')
         .forEach(s => activeMentorship.add(s));
     }
+    // STSM-hosting facet (#760): `stsm=1`, so the grants page can deep-link
+    // to the hosts. Any truthy value other than "0"/"false" turns it on.
+    const stsm = params.get('stsm');
+    if (stsm && stsm !== '0' && stsm.toLowerCase() !== 'false') {
+      activeStsm = true;
+    }
   }
   function writeHashKeywords() {
     const slugs = Array.from(activeKeywords);
@@ -1685,12 +1752,13 @@
     // Preserve any portion of the hash this function does not own (e.g. a
     // member-card deep-link slug stays intact). Both the theme and the
     // mentorship keys are owned here so they coexist in one hash.
-    const hasKeywordsKey = /(^|&)(themes|mentorship)=/.test(rawHash);
+    const hasKeywordsKey = /(^|&)(themes|mentorship|stsm)=/.test(rawHash);
     let rest = '';
     if (rawHash && hasKeywordsKey) {
       const params = new URLSearchParams(rawHash);
       params.delete('themes');
       params.delete('mentorship');
+      params.delete('stsm');
       rest = params.toString();
     } else if (rawHash && !hasKeywordsKey && !rawHash.includes('=')) {
       // A bare member-id-style hash; keep it as a separate fragment.
@@ -1701,6 +1769,7 @@
     const parts = [];
     if (slugs.length) parts.push('themes=' + slugs.join(','));
     if (mentors.length) parts.push('mentorship=' + mentors.join(','));
+    if (activeStsm) parts.push('stsm=1');
     if (rest) parts.push(rest);
     const next = parts.join('&');
     // Use replaceState rather than assigning location.hash so that
@@ -1874,13 +1943,14 @@
   // listens specifically for the keywords= portion and re-renders.
   window.addEventListener('hashchange', () => {
     const snap = () => Array.from(activeKeywords).sort().join(',') + '|'
-      + Array.from(activeMentorship).sort().join(',');
+      + Array.from(activeMentorship).sort().join(',') + '|' + (activeStsm ? '1' : '');
     const before = snap();
     parseHashKeywords();
     const after = snap();
     if (before !== after) {
       renderKeywordFilter();
       syncMentorshipChips();
+      syncStsmChip();
       render();
     }
   });
@@ -1912,6 +1982,8 @@
     populateCountryFilter();
     setupMentorshipFilter();
     syncMentorshipChips();
+    setupStsmFilter();
+    syncStsmChip();
     renderKeywordFilter();
     renderRegionFilter();
     render();

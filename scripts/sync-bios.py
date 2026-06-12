@@ -269,6 +269,38 @@ def parse_mentorship(raw: str) -> list[str]:
     return out
 
 
+def parse_stsm_hosting(raw: str) -> str:
+    """Map the "Could your institution host STSM visitors?" cell to a
+    tri-state hosting signal for the directory (#760). The Form offers
+    Yes / No / Ask me; we emit:
+
+      - "yes"  the institution can host STSM visitors.
+      - "ask"  conditional ("Ask me" / "maybe" / "depends").
+      - ""     declined, blank, or an unconfigured column.
+
+    A scalar, not a list (unlike mentorship), since the question is
+    single-select. Tolerant substring matching keeps light Form edits
+    working, and the "ask" check runs first so a hand-typed "yes, but ask
+    me first" lands on the softer, conditional signal. An empty string is
+    dropped before write, so the field stays absent for non-hosts."""
+    if not raw:
+        return ""
+    s = str(raw).strip().lower()
+    if not s:
+        return ""
+    if any(p in s for p in (
+        "ask", "maybe", "depends", "enquire", "inquire",
+        "get in touch", "contact", "case by case", "case-by-case",
+    )):
+        return "ask"
+    if any(p in s for p in (
+        "yes", "can host", "happy to host", "able to host",
+        "willing to host", "would host", "open to host",
+    )):
+        return "yes"
+    return ""
+
+
 def parse_keywords(raw: str) -> list[str]:
     if not raw:
         return []
@@ -962,6 +994,7 @@ def row_to_member(
         "wgs": parse_wgs(row.get(cols.get("wgs", ""), "")),
         "mentorship": parse_mentorship(row.get(cols.get("mentorship", ""), "")),
         "regions": parse_regions(row.get(cols.get("regions", ""), "")),
+        "stsm_hosting": parse_stsm_hosting(row.get(cols.get("stsm_hosting", ""), "")),
         "wg_leadership": {},
         "bio": (row.get(cols.get("bio", ""), "") or "").strip(),
         "keywords": parse_keywords(row.get(cols.get("keywords", ""), "")),
@@ -1950,6 +1983,11 @@ def main() -> None:
                 region_counts[r] = region_counts.get(r, 0) + 1
         else:
             m.pop("regions", None)
+        # STSM hosting (#760): a tri-state scalar from the optional Form
+        # question. Drop the empty case so the field stays absent for
+        # members who declined or never answered, like the region list.
+        if not m.get("stsm_hosting"):
+            m.pop("stsm_hosting", None)
     bios_data["region_aggregate"] = sorted(
         ({"region": r, "count": n} for r, n in region_counts.items()),
         key=lambda e: (-e["count"], e["region"].lower()),
