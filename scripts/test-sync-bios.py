@@ -696,6 +696,28 @@ def test_normalise_keyword() -> None:
            norm("Policy evaluation and lessons learned (Afghanistan)"), "Policy evaluation")
 
 
+def test_strip_bio_chrome() -> None:
+    """Leading website-nav chrome pasted ahead of a bio is dropped, but
+    real prose is never trimmed (regression for Alexandra Brankova's first
+    sync, where Uppsala's "Till startsidan" / "Search" header came along)."""
+    print("\nstrip_bio_chrome():")
+    strip = sync_bios.strip_bio_chrome
+    expect("uppsala header dropped, body kept",
+           strip("Till startsidan\nSearch\n\nAlexandra is a postdoctoral fellow."),
+           "Alexandra is a postdoctoral fellow.")
+    expect("case-insensitive label match",
+           strip("MENU\nSearch\nReal bio starts here."),
+           "Real bio starts here.")
+    expect("clean bio untouched",
+           strip("A normal bio with no chrome at all."),
+           "A normal bio with no chrome at all.")
+    expect("a real sentence is never treated as chrome",
+           strip("Search and rescue is my research focus."),
+           "Search and rescue is my research focus.")
+    expect("empty stays empty", strip(""), "")
+    expect("only a chrome label collapses to empty", strip("Search"), "")
+
+
 def test_normalise_affiliation() -> None:
     """Affiliation punctuation is standardised: spaced hyphen/dash -> comma
     (institution + sub-unit), semicolon -> slash (two affiliations).
@@ -1084,6 +1106,7 @@ def test_link_rewrites_captured() -> None:
 def main() -> None:
     test_name_key()
     test_normalise_keyword()
+    test_strip_bio_chrome()
     test_load_keyword_themes()
     test_normalise_affiliation()
     test_normalise_url()

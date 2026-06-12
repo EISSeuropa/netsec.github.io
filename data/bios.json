@@ -654,7 +654,7 @@
         "Europe - Western Balkans"
       ],
       "wg_leadership": {},
-      "bio": "Till startsidan\nSearch\n\nAlexandra Brankova is a postdoctoral fellow at the Department of Political Science working on a project about Geopolitical Narratives. Alexandra is also an affiliated researcher at the Institute for Russian and Eurasian studies, Uppsala University. She holds a PhD degree in Media and Communications from Uppsala University.\n\nHer research interests include geopolitical narratives, identity construction, international relations, digital media, nationalism studies, great power politics, and ontological security.",
+      "bio": "Alexandra Brankova is a postdoctoral fellow at the Department of Political Science working on a project about Geopolitical Narratives. Alexandra is also an affiliated researcher at the Institute for Russian and Eurasian studies, Uppsala University. She holds a PhD degree in Media and Communications from Uppsala University.\n\nHer research interests include geopolitical narratives, identity construction, international relations, digital media, nationalism studies, great power politics, and ontological security.",
       "keywords": [
         "Narratives",
         "ontological security",
@@ -677,6 +677,10 @@
         "International relations",
         "Narratives",
         "Ontological security"
+      ],
+      "themes": [
+        "Intelligence, information and influence",
+        "Theory and methods"
       ]
     },
     {
@@ -719,6 +723,10 @@
         "Deterrence",
         "Nuclear strategy",
         "Russian foreign policy"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Security and defence"
       ]
     }
   ],
@@ -867,10 +875,14 @@
   "theme_aggregate": [
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 3
+      "count": 4
     },
     {
       "theme": "Security and defence",
+      "count": 4
+    },
+    {
+      "theme": "Theory and methods",
       "count": 3
     },
     {
@@ -882,15 +894,11 @@
       "count": 2
     },
     {
-      "theme": "Theory and methods",
+      "theme": "Intelligence, information and influence",
       "count": 2
     },
     {
       "theme": "European and transatlantic security order",
-      "count": 1
-    },
-    {
-      "theme": "Intelligence, information and influence",
       "count": 1
     },
     {
@@ -899,12 +907,15 @@
     }
   ],
   "keyword_theme_map": {
+    "Arms control": "Security and defence",
     "Civil defence": "Security and defence",
     "Civil-military relations": "Security and defence",
     "Cyber defence": "Cyber and emerging technology",
     "Cyber security": "Cyber and emerging technology",
     "Defence": "Security and defence",
+    "Deterrence": "Security and defence",
     "Digital governance": "Cyber and emerging technology",
+    "Digital media": "Intelligence, information and influence",
     "Disinformation": "Intelligence, information and influence",
     "EU foreign policy": "Foreign policy and diplomacy",
     "EU–NATO relations": "European and transatlantic security order",
@@ -914,16 +925,22 @@
     "Foreign policy analysis": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
     "Grand strategy": "Security and defence",
+    "Identity": "Theory and methods",
     "Industrial policy": "Economic security and geoeconomics",
     "Infrastructure": "Cyber and emerging technology",
+    "International relations": "Theory and methods",
     "International security": "Security and defence",
     "Militarisation": "Security and defence",
+    "Narratives": "Intelligence, information and influence",
     "Non-state actors": "Transnational and human security",
+    "Nuclear strategy": "Security and defence",
+    "Ontological security": "Theory and methods",
     "Policy evaluation": "Theory and methods",
     "Political economy": "Economic security and geoeconomics",
     "Political psychology": "Theory and methods",
     "Power": "Security and defence",
     "Research methods": "Theory and methods",
+    "Russian foreign policy": "Foreign policy and diplomacy",
     "Subversion": "Intelligence, information and influence"
   },
   "region_aggregate": [
