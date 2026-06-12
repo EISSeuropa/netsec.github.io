@@ -223,6 +223,14 @@ If `data/keyword-aliases.json` is missing or malformed, the sync falls back to i
 
 The directory page reads `generated_at` to render a discreet "Directory last updated" line under the page lede, so visitors can see how current the listing is without opening the repo. Because the stamp only moves when the data actually changes, that line stays honest: a week with no new submissions shows the same date as the week before.
 
+## ORCID publications (`data/orcid-works.json`)
+
+A member's profile is otherwise static: nothing on the card moves unless they re-submit the form. To give cards a living-CV layer with no member effort, `scripts/sync-orcid.py` runs as a step on the same weekly bios-sync workflow, right after `sync-bios.py`. For each member carrying an `orcid` iD it fetches their public works from the ORCID API (`https://pub.orcid.org/v3.0/<iD>/works`, no authentication) and writes the three most recent, by publication year, to `data/orcid-works.json`, keyed by directory slug.
+
+The script is built to be safe to run unattended. It fails soft per member, so one malformed record skips that member and keeps the rest, and a failed fetch carries the member's previous works over rather than dropping them, so a transient ORCID outage cannot wipe the file. It is idempotent like the other syncs: when the trimmed works are unchanged it leaves the file alone, so a quiet week opens no auto-PR. The shape of the file is gated by `scripts/check-data-shape.py`, and `scripts/test-sync-orcid.py` covers the parsing and the fail-soft paths.
+
+The directory loads this file lazily: `/people.html` fetches it only when a visitor expands a card, so member cards at rest carry none of its weight. ORCID works are public records the member chose to publish under their public iD, the same posture the site takes for cost.eu data.
+
 ## Exporting the data
 
 `data/bios.json` is the canonical export, version-controlled in this repo. To dump it to CSV one-off:

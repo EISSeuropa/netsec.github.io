@@ -91,6 +91,16 @@ jobs:
             echo "_Workflow: **Sync member bios from Google Form**, run_id \`${{ github.run_id }}\`, trigger \`${{ github.event_name }}\`._"
           } > /tmp/bios-pr-body.md
 
+      - name: Refresh ORCID works from the updated roster
+        run: |
+          # For each member carrying an ORCID iD, fetch their most recent
+          # works into data/orcid-works.json (#761). Reads the bios.json
+          # just written above. Fails soft per member, so an ORCID outage
+          # loses at most that member's publications for the week and a
+          # total outage carries the previous file over untouched. The
+          # file rides this same auto-PR. Idempotent: no change, no diff.
+          python3 scripts/sync-orcid.py
+
       - name: Rebuild the glossary field guide from the refreshed bios
         run: |
           # The field-guide facepile (#801) is baked from data/bios.json at
