@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=35457ab7">
+<link rel="stylesheet" href="assets/css/site.css?v=be95c77f">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -465,7 +465,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=3bf439fb" defer></script>
+<script src="assets/js/site.js?v=dbaa805d" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
 <script>
@@ -1752,13 +1752,43 @@
         people.forEach(m => {
           const li = document.createElement('li');
           li.appendChild(mentorshipPersonLink(m));
+          // Match-strength chips (#869 Phase 2): show which of the active
+          // themes this person works on, so a mentee can read the overlap at
+          // a glance. Only shown when it adds information — more than one
+          // theme selected (which matched?), or the relaxed view is on (so
+          // in-area people carry a chip and out-of-area people, who match no
+          // active theme, visibly do not). Capped at two with a "+N".
+          const matchThemes = (m.themes || []).filter(t => activeKeywords.has(keywordSlug(t)));
+          if (areasActive && matchThemes.length
+              && (activeKeywords.size > 1 || mentorshipShowOutsideScope)) {
+            const chips = document.createElement('div');
+            chips.className = 'mentorship-person-themes';
+            matchThemes.slice(0, 2).forEach(t => {
+              const c = document.createElement('span');
+              c.className = 'mentorship-person-theme is-match';
+              c.textContent = window.netsecT(t);
+              chips.appendChild(c);
+            });
+            if (matchThemes.length > 2) {
+              const more = document.createElement('span');
+              more.className = 'mentorship-person-theme is-more';
+              more.textContent = '+' + (matchThemes.length - 2);
+              chips.appendChild(more);
+            }
+            li.appendChild(chips);
+          }
           ul.appendChild(li);
         });
         col.appendChild(ul);
       } else {
         const none = document.createElement('p');
         none.className = 'mentorship-panel-none';
-        none.textContent = window.netsecT('No one here yet.');
+        // Context-aware empty state (#869 Phase 2): name the gap as a scoped
+        // one when a theme / region is active, so the relax control below
+        // reads as the obvious next step rather than a dead end.
+        none.textContent = areasActive
+          ? window.netsecT('No one in your selected areas yet.')
+          : window.netsecT('No one here yet.');
         col.appendChild(none);
       }
       cols.appendChild(col);
