@@ -2459,6 +2459,30 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   transition:opacity .25s var(--ease);
 }
 .mentorship-panel-cross:hover{ opacity:.75; }
+.mentorship-panel-scope{
+  margin:0 0 16px;
+  padding:6px 12px;
+  border-left:3px solid var(--accent-2);
+  border-radius:0 6px 6px 0;
+  background:var(--glass-bg, rgba(255,255,255,.04));
+  font-size:.85rem;
+  color:var(--text-muted, #6b7280);
+}
+.mentorship-panel-relax{
+  display:block;
+  margin-top:14px;
+  background:none;
+  border:none;
+  padding:4px 0;
+  font-size:.82rem;
+  color:var(--text-muted, #6b7280);
+  text-decoration:underline;
+  text-underline-offset:3px;
+  cursor:pointer;
+  transition:color .25s var(--ease);
+}
+.mentorship-panel-relax:hover{ color:var(--accent-2); }
+.mentorship-panel-relax[aria-pressed="true"]{ color:var(--accent-2); }
 
 /* Member profile pages (#762): a single directory card centred on its own
    page. Reuses the .member-card styling; this just frames it. */
