@@ -20,6 +20,16 @@
   const quickfacts = document.getElementById('essc-quickfacts');
   const tzNode     = document.getElementById('programme-tz');
 
+  // Per-page configuration, read from #programme-root, so one renderer
+  // serves every ESSC edition. `data-year` picks the conference inside
+  // annualConferences; `data-src` points at a frozen snapshot instead of
+  // the live data/indico.json (used to archive a past edition against
+  // future Indico changes); `data-archived` hides the "synced" freshness
+  // cue. Defaults keep the live 2026 behaviour for an un-attributed page.
+  const PROG_YEAR     = (root && root.dataset.year) || '2026';
+  const PROG_SRC      = (root && root.dataset.src) || 'data/indico.json';
+  const PROG_ARCHIVED = !!(root && root.dataset.archived);
+
   // Chrome strings keyed by document.documentElement.lang. Content
   // from Indico (session titles, speaker names, abstracts) stays in
   // whatever language the submitter wrote it in (typically English
@@ -143,7 +153,7 @@
   // available even if the live render fails.
   (function injectProgrammeDownload() {
     if (!chips || !chips.parentNode) return;
-    const link = el('a', { class: 'programme-download', href: t.pdfFile, download: '' });
+    const link = el('a', { class: 'programme-download', href: t.pdfFile.replace('2026', PROG_YEAR), download: '' });
     const ns = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(ns, 'svg');
     svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none');
@@ -271,7 +281,7 @@
   // ── fetch ─────────────────────────────────────────────────────
   let indico;
   try {
-    const res = await fetch('data/indico.json', { cache: 'no-cache' });
+    const res = await fetch(PROG_SRC, { cache: 'no-cache' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     indico = await res.json();
   } catch (err) {
@@ -325,9 +335,9 @@
         && now < new Date(slot.end + '+02:00').getTime();
   }
 
-  const conf = indico.annualConferences && indico.annualConferences['2026'];
+  const conf = indico.annualConferences && indico.annualConferences[PROG_YEAR];
   if (!conf) {
-    setError(t.errAbsent);
+    setError(t.errAbsent.replace('2026', PROG_YEAR));
     return;
   }
 
@@ -355,7 +365,7 @@
   // Last-synced cue: reassures a panelist who just edited Indico that
   // the grid is dated and refreshes overnight, heading off "I edited
   // it, why is the site still wrong?" emails.
-  if (indico.syncedAt) {
+  if (indico.syncedAt && !PROG_ARCHIVED) {
     const syncNode = document.getElementById('programme-synced');
     if (syncNode) {
       let when = indico.syncedAt;
