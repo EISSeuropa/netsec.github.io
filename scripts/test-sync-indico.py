@@ -24,6 +24,7 @@ _normalise_contribution = sync_indico._normalise_contribution
 _absolutize_indico_url = sync_indico._absolutize_indico_url
 _looks_like_break = sync_indico._looks_like_break
 summarise_changes = sync_indico.summarise_changes
+should_carry_over = sync_indico.should_carry_over
 
 
 def expect(label: str, got, want) -> None:
@@ -310,6 +311,24 @@ def test_summarise_changes() -> None:
     expect("no-change yields empty list", summarise_changes(old, old), [])
 
 
+def test_should_carry_over() -> None:
+    """Post-conference carry-over: when a finished edition drops out of
+    Indico the sync must keep the snapshot, not overwrite the programme
+    with an empty map. Regression for the daily empty-data PR that the
+    data-shape guard (annualConferences non-empty) rejected once ESSC
+    2026 ended."""
+    print("\nshould_carry_over() — keep the snapshot when a finished conference drops out:")
+    existing = {"annualConferences": {"2026": {"title": "ESSC 2026"}}}
+    expect("empty fetch + existing programme -> carry over",
+           should_carry_over({}, existing), True)
+    expect("non-empty fetch -> write it, no carry-over",
+           should_carry_over({"2026": {"title": "x"}}, existing), False)
+    expect("empty fetch + no prior data -> no carry-over (first run)",
+           should_carry_over({}, None), False)
+    expect("empty fetch + empty prior -> no carry-over",
+           should_carry_over({}, {"annualConferences": {}}), False)
+
+
 def main() -> None:
     test_normalise_person_drops_email_hash()
     test_absolutize_indico_url()
@@ -320,6 +339,7 @@ def main() -> None:
     test_extract_programme_parallel_rows()
     test_extract_programme_empty_timetable()
     test_summarise_changes()
+    test_should_carry_over()
     print("\nAll tests passed.")
 
 
