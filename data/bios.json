@@ -779,6 +779,8 @@
         "Non-state actors"
       ],
       "themes": [
+        "Security and defence",
+        "Theory and methods",
         "Transnational and human security"
       ]
     }
@@ -943,16 +945,16 @@
   ],
   "theme_aggregate": [
     {
+      "theme": "Security and defence",
+      "count": 5
+    },
+    {
       "theme": "Foreign policy and diplomacy",
       "count": 4
     },
     {
-      "theme": "Security and defence",
-      "count": 4
-    },
-    {
       "theme": "Theory and methods",
-      "count": 3
+      "count": 4
     },
     {
       "theme": "Cyber and emerging technology",
@@ -998,11 +1000,15 @@
     "Foreign policy analysis": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
     "Grand strategy": "Security and defence",
+    "History": "Theory and methods",
     "Identity": "Identity, narratives and ideational security",
     "Industrial policy": "Economic security and geoeconomics",
     "Infrastructure": "Cyber and emerging technology",
     "International relations": "Theory and methods",
     "International security": "Security and defence",
+    "Irregular warfare": "Security and defence",
+    "Maritime security": "Transnational and human security",
+    "Maritime strategy": "Security and defence",
     "Militarisation": "Security and defence",
     "Narratives": "Identity, narratives and ideational security",
     "Non-state actors": "Transnational and human security",
