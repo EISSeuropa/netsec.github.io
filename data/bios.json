@@ -827,6 +827,12 @@
         "Indian foreign policy",
         "Intelligence studies",
         "National security"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Foreign policy and diplomacy",
+        "Intelligence, information and influence",
+        "Security and defence"
       ]
     },
     {
@@ -875,6 +881,10 @@
         "Peacekeeping",
         "Transnational and human security",
         "UN"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Transnational and human security"
       ]
     },
     {
@@ -1123,12 +1133,12 @@
   ],
   "theme_aggregate": [
     {
-      "theme": "Security and defence",
-      "count": 5
+      "theme": "Foreign policy and diplomacy",
+      "count": 6
     },
     {
-      "theme": "Foreign policy and diplomacy",
-      "count": 4
+      "theme": "Security and defence",
+      "count": 6
     },
     {
       "theme": "Theory and methods",
@@ -1136,18 +1146,18 @@
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 2
-    },
-    {
-      "theme": "Economic security and geoeconomics",
-      "count": 2
+      "count": 3
     },
     {
       "theme": "Intelligence, information and influence",
-      "count": 2
+      "count": 3
     },
     {
       "theme": "Transnational and human security",
+      "count": 3
+    },
+    {
+      "theme": "Economic security and geoeconomics",
       "count": 2
     },
     {
@@ -1163,6 +1173,7 @@
     "Arms control": "Security and defence",
     "Civil defence": "Security and defence",
     "Civil-military relations": "Security and defence",
+    "Counterterrorism": "Transnational and human security",
     "Cyber defence": "Cyber and emerging technology",
     "Cyber security": "Cyber and emerging technology",
     "Defence": "Security and defence",
@@ -1175,30 +1186,39 @@
     "Economic security": "Economic security and geoeconomics",
     "Economic statecraft": "Economic security and geoeconomics",
     "Election interference": "Intelligence, information and influence",
+    "Emerging and disruptive technologies": "Cyber and emerging technology",
     "Foreign policy analysis": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
     "Grand strategy": "Security and defence",
     "History": "Theory and methods",
     "Identity": "Identity, narratives and ideational security",
+    "India": "Foreign policy and diplomacy",
+    "Indian foreign policy": "Foreign policy and diplomacy",
     "Industrial policy": "Economic security and geoeconomics",
     "Infrastructure": "Cyber and emerging technology",
+    "Intelligence studies": "Intelligence, information and influence",
     "International relations": "Theory and methods",
     "International security": "Security and defence",
     "Irregular warfare": "Security and defence",
     "Maritime security": "Transnational and human security",
     "Maritime strategy": "Security and defence",
     "Militarisation": "Security and defence",
+    "Multilateralism": "Foreign policy and diplomacy",
     "Narratives": "Identity, narratives and ideational security",
+    "National security": "Security and defence",
     "Non-state actors": "Transnational and human security",
     "Nuclear strategy": "Security and defence",
     "Ontological security": "Identity, narratives and ideational security",
+    "Peacekeeping": "Transnational and human security",
     "Policy evaluation": "Theory and methods",
     "Political economy": "Economic security and geoeconomics",
     "Political psychology": "Theory and methods",
     "Power": "Security and defence",
     "Research methods": "Theory and methods",
     "Russian foreign policy": "Foreign policy and diplomacy",
-    "Subversion": "Intelligence, information and influence"
+    "Subversion": "Intelligence, information and influence",
+    "Transnational and human security": "Transnational and human security",
+    "UN": "Foreign policy and diplomacy"
   },
   "region_aggregate": [
     {
