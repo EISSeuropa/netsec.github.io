@@ -2,11 +2,17 @@
   "_documentation": "Rotation state for the weekly member spotlight on the home page (issue #341). Written weekly by scripts/rotate-spotlight.py and read at runtime by assets/js/home-spotlight.js. The block stays DORMANT (hidden) until at least `minEligible` members are eligible (a member is eligible when they have both a photo and a written bio). `current` is the member id featured this week (null when dormant); `history` is the recent rotation, newest first; `pinned` is an optional member id the maintainer can set to feature next run regardless of the score (the script consumes it). `weights` tunes the balanced-rotation score: early-career boost, senior (professor) penalty, ITC-country boost, Working-Group-balance boost, and how many recent features to hold out. Gender is deliberately not scored: the maintainer corrects any imbalance via `pinned`. Do not hand-edit `current`/`history`/`active`; let the script manage them. Setting `pinned` by hand is the supported manual override.",
   "version": 1,
   "minEligible": 10,
-  "active": false,
-  "current": null,
-  "featuredSince": null,
+  "active": true,
+  "current": "saurav-narain",
+  "featuredSince": "2026-06-13",
   "pinned": null,
-  "history": [],
+  "history": [
+    {
+      "id": "saurav-narain",
+      "week": "2026-W24",
+      "date": "2026-06-13"
+    }
+  ],
   "weights": {
     "earlyCareer": 2.0,
     "seniorPenalty": 1.5,
