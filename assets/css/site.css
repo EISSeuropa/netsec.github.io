@@ -2059,7 +2059,7 @@ body{padding-top:var(--whats-new-h, 0px)}
 }
 .members-search{
   display:flex;align-items:center;gap:8px;flex:1 1 280px;min-width:0;
-  padding:8px 14px;border-radius:12px;
+  padding:6px 14px;border-radius:12px;
   background:rgba(255,255,255,.92);border:1px solid rgba(11,18,32,.14);
   box-shadow:inset 0 1px 2px rgba(11,18,32,.05);
   color:var(--muted);
@@ -2093,7 +2093,7 @@ body{padding-top:var(--whats-new-h, 0px)}
 }
 .members-filter-chip{
   font:inherit;font-size:.82rem;font-weight:600;
-  padding:7px 14px;border-radius:999px;border:1px solid rgba(11,18,32,.22);
+  padding:6px 14px;border-radius:999px;border:1px solid rgba(11,18,32,.22);
   background:rgba(255,255,255,.7);color:var(--ink-2);cursor:pointer;
   transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease);
 }
@@ -2393,8 +2393,8 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
    mentorship facet is active. Orients the visitor, splits the matching
    members into Offering / Seeking, and links across to the other side. */
 .mentorship-panel{
-  margin:0 0 22px;
-  padding:18px 20px;
+  margin:0 0 18px;
+  padding:14px 18px;
   border-radius:16px;
 }
 .mentorship-panel-title{
@@ -2402,15 +2402,25 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   font-size:1.05rem;
 }
 .mentorship-panel-guide{
-  margin:0 0 16px;
+  margin:0 0 12px;
   font-size:.9rem;
   color:var(--text-muted, #6b7280);
   max-width:62ch;
 }
 .mentorship-panel-cols{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
-  gap:18px;
+  /* Flex (not grid) so each column sizes to its own content height and the
+     two lists pack left rather than stretching across a wide screen. */
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  gap:14px 28px;
+}
+.mentorship-panel-col{
+  flex:0 1 300px;
+  min-width:200px;
+  /* It is a <section>, which the global `section{padding:80px 0}` rule would
+     give 160px of vertical padding — the source of the panel's empty space. */
+  padding:0;
 }
 .mentorship-panel-col-title{
   margin:0 0 10px;
@@ -2460,7 +2470,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 }
 .mentorship-panel-cross:hover{ opacity:.75; }
 .mentorship-panel-scope{
-  margin:0 0 16px;
+  margin:0 0 12px;
   padding:6px 12px;
   border-left:3px solid var(--accent-2);
   border-radius:0 6px 6px 0;
