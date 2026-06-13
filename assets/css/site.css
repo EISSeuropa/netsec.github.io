@@ -2469,6 +2469,14 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   transition:opacity .25s var(--ease);
 }
 .mentorship-panel-cross:hover{ opacity:.75; }
+.mentorship-panel-tip{
+  margin:0 0 12px;
+  padding:6px 12px;
+  border-left:3px dashed var(--glass-border, rgba(255,255,255,.25));
+  border-radius:0 6px 6px 0;
+  font-size:.85rem;
+  color:var(--text-muted, #6b7280);
+}
 .mentorship-panel-scope{
   margin:0 0 12px;
   padding:6px 12px;

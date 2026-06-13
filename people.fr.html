@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=cdd823a3">
+<link rel="stylesheet" href="assets/css/site.css?v=1c98ab44">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -189,7 +189,7 @@
         <li>🔍 <strong>Recherchez</strong> par nom, affiliation ou pays.</li>
         <li>🎚️ <strong>Filtrez</strong> par groupe de travail, rôle CG ou statut de mentorat.</li>
         <li>🏷️ <strong>Filtrez par domaine de recherche</strong> : cliquez sur une pastille au-dessus de l'annuaire, ou sur n'importe quelle pastille de mot-clé d'une fiche, pour cibler les résultats.</li>
-        <li>🤝 <strong>Mentorat</strong> : lorsqu'un membre s'est inscrit, sa fiche affiche une pastille <em>Disponible comme mentor</em> ou <em>En recherche de mentorat</em>, pour proposer ou trouver un appui, et filtrer sur l'une ou l'autre.</li>
+        <li>🤝 <strong>Mentorat</strong> : les membres s'inscrivent comme <em>Disponible comme mentor</em> ou <em>En recherche de mentorat</em>. Filtrez sur l'une ou l'autre et un panneau de mise en relation associe les offres et les demandes. Affinez par thème de recherche pour trouver quelqu'un dans votre domaine.</li>
         <li>🪪 <strong>Changez la densité</strong> dans la barre d'outils pour afficher plus.</li>
         <li>👤 <strong>Tout le monde peut rejoindre</strong>, le formulaire est en pied de page.</li>
       </ul>
@@ -436,7 +436,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=dbaa805d" defer></script>
+<script src="assets/js/site.js?v=1bdc2aa7" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json.
      This script is identical to the English version; translatable
@@ -1525,6 +1525,13 @@
       scope.className = 'mentorship-panel-scope';
       scope.textContent = window.netsecT('In your selected areas') + ': ' + activeAreaNames().join(', ');
       panel.appendChild(scope);
+    } else {
+      // Signpost the theme / region filters: someone browsing all mentors or
+      // mentees may not realise the lists can be narrowed to their own area.
+      const tip = document.createElement('p');
+      tip.className = 'mentorship-panel-tip';
+      tip.textContent = window.netsecT('Tip: add a research-theme or region filter above to narrow these lists to your own area.');
+      panel.appendChild(tip);
     }
 
     const cols = document.createElement('div');

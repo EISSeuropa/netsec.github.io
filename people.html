@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=cdd823a3">
+<link rel="stylesheet" href="assets/css/site.css?v=1c98ab44">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -186,7 +186,7 @@
         <li>🔍 <strong>Search</strong> by name, affiliation, or country.</li>
         <li>🎚️ <strong>Filter</strong> by working group, MC role, or mentorship status.</li>
         <li>🏷️ <strong>Drill in by research interest</strong>: tap a chip above the directory, or any keyword pill on a member card, to narrow the results.</li>
-        <li>🤝 <strong>Mentorship</strong>: where a member has opted in, their card shows an <em>Available to mentor</em> or <em>Seeking mentorship</em> badge, so you can offer or find support and filter to either.</li>
+        <li>🤝 <strong>Mentorship</strong>: members opt in as <em>Available to mentor</em> or <em>Seeking mentorship</em>. Filter to either and a matching panel pairs offers with requests. Narrow it by research theme to find someone in your area.</li>
         <li>🪪 <strong>Switch density</strong> in the toolbar to fit more on screen.</li>
         <li>👤 <strong>Anyone can join</strong>, see the form at the foot of the page.</li>
       </ul>
@@ -465,7 +465,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=dbaa805d" defer></script>
+<script src="assets/js/site.js?v=1bdc2aa7" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
 <script>
@@ -1734,6 +1734,13 @@
       scope.className = 'mentorship-panel-scope';
       scope.textContent = window.netsecT('In your selected areas') + ': ' + activeAreaNames().join(', ');
       panel.appendChild(scope);
+    } else {
+      // Signpost the theme / region filters: someone browsing all mentors or
+      // mentees may not realise the lists can be narrowed to their own area.
+      const tip = document.createElement('p');
+      tip.className = 'mentorship-panel-tip';
+      tip.textContent = window.netsecT('Tip: add a research-theme or region filter above to narrow these lists to your own area.');
+      panel.appendChild(tip);
     }
 
     const cols = document.createElement('div');
