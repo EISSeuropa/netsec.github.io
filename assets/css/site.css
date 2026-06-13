@@ -4364,9 +4364,13 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .essc-recap-grid{display:flex;flex-wrap:wrap;align-items:flex-start;gap:28px 48px}
 .essc-recap-copy{flex:1 1 320px;min-width:280px}
 .essc-recap-copy p{max-width:42rem}
-.essc-recap-media{flex:0 0 340px;max-width:100%;margin:0}
+/* width + min-width:0 are load-bearing: without them a flex item takes its
+   min-content width, and a <video> reports its intrinsic 1080px there, so
+   Safari ignores the 340px basis and the reel blows out to full width (then
+   9:16-tall). The explicit width caps it; max-width lets it shrink on narrow. */
+.essc-recap-media{flex:0 1 340px;min-width:0;width:340px;max-width:100%;margin:0}
 .essc-recap-video{
-  display:block;width:100%;
+  display:block;width:100%;height:auto;
   aspect-ratio:9 / 16;
   border-radius:18px;
   background:#000;
