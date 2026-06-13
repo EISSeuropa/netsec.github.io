@@ -411,54 +411,6 @@
     </div>
     <div class="event-list">
 
-      <article class="event-card glass featured card-clickable">
-        <span class="event-date">9.–11. Juni 2026</span>
-        <span class="event-type">Ausbildungsschule</span>
-        <h3>NetSec-Summer-School für Nachwuchsforschende</h3>
-        <p>Drei Tage Ausbildung und Mentoring für Nachwuchsforschende in der europäischen Sicherheitsforschung, Forschungspräsentationen, individuelles Feedback von Senior-Forschenden und strukturiertes Mentoring. Offen für Promovierende und Post-Docs (innerhalb eines Jahres nach Verteidigung) in Strategischen Studien und Internationaler Sicherheit sowie SWAMOS- / Euro-SWAMOS-Alumni. Reise- und Hotelkostenerstattung für 15 Promovierende, und ausgewählte Teilnehmer·innen erhalten freien Zugang zur anschließenden European Security Conference.</p>
-        <div class="event-meta">
-          <div class="event-meta-row">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span><strong>Universität Stockholm</strong> · Frescativägen 114 18, Schweden</span>
-          </div>
-          <div class="event-meta-row">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-3-3.87M4 21v-2a4 4 0 013-3.87M16 3.13a4 4 0 010 7.75M8 3.13a4 4 0 000 7.75"/></svg>
-            <span><strong>Wissenschaftliche Koordination:</strong> Dr Silvia D'Amato · Prof Chiara Ruffa</span>
-          </div>
-          <div class="event-meta-row">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-            <span><strong>Bewerbungen geschlossen</strong> seit dem 1. März 2026. Ausgewählte Teilnehmer·innen werden von den wissenschaftlichen Koordinator·innen kontaktiert.</span>
-          </div>
-        </div>
-        <a class="event-link card-stretch" href="summer-school.de.html">
-          Vollständige Details →
-        </a>
-      </article>
-
-      <article class="event-card glass featured card-clickable">
-        <span class="event-date">11.–12. Juni 2026</span>
-        <span class="event-type">Jahreskonferenz</span>
-        <h3>European Security Conference</h3>
-        <p>Das jährliche Flaggschiff-Treffen der NetSec-Community: eine interdisziplinäre Konferenz zu europäischer Verteidigung und Sicherheit, offen für Wissenschaft, Politik und Praxis. Findet im Anschluss an die Summer School statt, damit Nachwuchsforschende am breiteren Austausch teilnehmen können.</p>
-        <div class="event-meta">
-          <div class="event-meta-row">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-            <span><strong>11. Juni 08:00, 12. Juni 20:00</strong> (Europe/Stockholm)</span>
-          </div>
-          <div class="event-meta-row">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span><strong>Universität Stockholm</strong> · Frescativägen, 114 19 Stockholm, Schweden</span>
-          </div>
-          <div class="event-meta-row">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-3-3.87M4 21v-2a4 4 0 013-3.87M16 3.13a4 4 0 010 7.75M8 3.13a4 4 0 000 7.75"/></svg>
-            <span><strong>Vorsitz:</strong> Dr Julia Carver · Dr Sanne Verschuren</span>
-          </div>
-        </div>
-        <a class="event-link card-stretch" href="essc-2026.de.html">
-          Live-Programm ansehen →
-        </a>
-      </article>
-
       <!-- Politik-Workshop -->
       <article class="event-card glass">
         <span class="event-date">4. September 2026</span>
@@ -665,7 +617,7 @@
 <!-- Veranstaltungs-Renderer der Startseite (#249). Ersetzt die
      handgepflegten Karten oben aus data/events.json; das HTML
      bleibt als Fallback erhalten, falls das Laden fehlschlägt. -->
-<script src="assets/js/home-events.js?v=1a464000" defer></script>
+<script src="assets/js/home-events.js?v=02a20260" defer></script>
 <!-- News-Renderer + RSS-Feed (v1.9.0). Gleiche Struktur wie der
      Veranstaltungs-Renderer; die handgepflegten News-Karten bleiben
      als Fallback, falls data/news.json nicht geladen werden kann. -->
@@ -849,12 +801,15 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .filter(e => !isNaN(e._start) && !isNaN(e._end))
     .filter(e => e._end >= now - 35 * DAY && e._start <= now + 60 * DAY)
-    // Sort: live first, then nearest upcoming, then most-recently concluded
+    // Sort: live first, then nearest upcoming, then most-recently concluded.
+    // Ranking the three states explicitly keeps an upcoming event ahead of a
+    // past one, and orders several just-concluded events newest-first (so the
+    // ESSC archive shows before the Summer School in the days after both end).
     .sort((a, b) => {
-      const aLive = a._start <= now && now <= a._end;
-      const bLive = b._start <= now && now <= b._end;
-      if (aLive && !bLive) return -1;
-      if (bLive && !aLive) return  1;
+      const rank = (e) => (e._start <= now && now <= e._end) ? 0 : (e._start > now ? 1 : 2);
+      const ra = rank(a), rb = rank(b);
+      if (ra !== rb) return ra - rb;
+      if (ra === 2) return b._end - a._end;
       return a._start - b._start;
     });
 

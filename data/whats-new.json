@@ -1,6 +1,6 @@
 {
   "_documentation": "What's New banner — the rare site-wide announcement, used sparingly per CLAUDE.md §14. When this file has `active: true`, every page on the site renders a small dismissible banner under the beta-translation ribbon (if any) and above the page nav, until the visitor dismisses it or until the maintainer flips active back to false. Visitors who dismiss don't see it again unless `version` changes. Used for things a returning visitor would want to know about without having to read the changelog: a new section (founding contributors landed, members directory rebooted), a major new feature visible without scrolling (live ESSC programme, brand launch), or a content milestone (D1 ships, D6 ships). NOT used for: quality patches, structural refactors that don't change what visitors see, release-infrastructure changes, copy edits. The maintainer flips active true → false at most 3-4 times a year. The on-state should run no longer than 4-6 weeks before it goes back off so the banner doesn't decay into furniture.",
-  "active": true,
+  "active": false,
   "version": "v1.6.0",
   "_active_since": "2026-05-28",
   "_active_until": "2026-06-13",
