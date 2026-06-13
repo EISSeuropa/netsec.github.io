@@ -810,6 +810,23 @@ def summarise_changes(old: dict | None, new: dict) -> list[str]:
     return lines
 
 
+def should_carry_over(annual_by_year: dict, existing_data: "dict | None") -> bool:
+    """Decide whether to keep the snapshot on disk instead of writing the
+    freshly-fetched data.
+
+    True only when the fetch returned no conferences AND the existing
+    snapshot still has some: the conference has ended and dropped out of
+    Indico's window, so writing the empty result would erase the
+    programme. False on a normal first run (no prior data) and whenever
+    the fetch actually returned conferences. A network failure never
+    reaches here (fetch_events exits first)."""
+    return bool(
+        not annual_by_year
+        and existing_data
+        and existing_data.get("annualConferences")
+    )
+
+
 def main() -> None:
     mode = "authenticated" if INDICO_API_TOKEN else "anonymous"
     print(f"Indico sync running in {mode} mode", file=sys.stderr)
@@ -872,6 +889,25 @@ def main() -> None:
             }
         except (json.JSONDecodeError, OSError):
             existing_data = None  # malformed → treat as no prior state
+
+    # Post-conference carry-over. A network failure already exits early
+    # (fetch_events), but a *successful* fetch that returns no events —
+    # the ESSC edition has ended and dropped out of Indico's category
+    # window — yields an empty annualConferences. Writing that would
+    # erase the programme from the conference page and open a daily PR
+    # that the data-shape guard (annualConferences must be non-empty)
+    # correctly rejects. So when the fetch is empty but the snapshot on
+    # disk still has the programme, keep the snapshot: the same posture
+    # as an API outage. It preserves the programme as a post-conference
+    # archive and self-heals when next year's edition appears on Indico.
+    if should_carry_over(annual_by_year, existing_data):
+        print(
+            "Indico returned no conferences, but data/indico.json holds "
+            f"{len(existing_data['annualConferences'])}; keeping the existing "
+            "snapshot (post-conference carry-over).",
+            file=sys.stderr,
+        )
+        return
 
     # Patch hand-curated companion files (events.json + calendar.ics)
     # BEFORE the early-return below: a quiet Indico day doesn't mean
