@@ -2054,8 +2054,8 @@ body{padding-top:var(--whats-new-h, 0px)}
 .people-page .lede{max-width:62ch;margin:0 auto;font-size:1.05rem;text-align:center;color:var(--ink-2)}
 
 .members-toolbar{
-  display:flex;flex-wrap:wrap;align-items:center;gap:14px;
-  padding:14px 18px;margin:32px 0 18px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:12px;
+  padding:12px 18px;margin:32px 0 18px;
 }
 .members-search{
   display:flex;align-items:center;gap:8px;flex:1 1 280px;min-width:0;
@@ -2182,7 +2182,7 @@ body{padding-top:var(--whats-new-h, 0px)}
 .members-facets{
   flex:1 0 100%;margin:0;padding-top:4px;
   border-top:1px solid var(--glass-border);
-  display:flex;flex-direction:column;gap:10px;
+  display:flex;flex-direction:column;gap:8px;
 }
 
 /* Pinned directory tools: density toggle, guided tour, and the add-your-bio
@@ -2299,7 +2299,7 @@ body{padding-top:var(--whats-new-h, 0px)}
 /* STSM hosting badge (#760): reuses the mentorship-badge pill shape in a
    distinct teal so a hosting signal reads apart from the mentorship pair.
    "ask" (conditional) is rendered with a dashed border + a hollow dot. */
-.member-stsm{ display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0; }
+.member-stsm{ display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:-4px 0 14px; }
 .stsm-badge{
   display:inline-flex;align-items:center;gap:5px;
   font-family:'Inter',sans-serif;
@@ -2567,7 +2567,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
    handle the row itself + chip toggle state + the show-all toggle. */
 .members-keyword-filter{
   margin:0;
-  padding:11px 14px;
+  padding:9px 14px;
   border-radius:14px;
   background:color-mix(in oklab, var(--accent-2) 4%, transparent);
   border:1px solid color-mix(in oklab, var(--accent-2) 14%, transparent);
@@ -3260,6 +3260,9 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
    that makes a member's compact card noticeably taller than its
    neighbours. */
 .members-grid.is-compact .member-card:not(.is-expanded) .member-mentorship{
+  margin:4px 0 0;justify-content:flex-start;
+}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-stsm{
   margin:4px 0 0;justify-content:flex-start;
 }
 .members-grid.is-compact .member-card:not(.is-expanded) .member-founding{
