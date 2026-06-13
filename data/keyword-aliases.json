@@ -76,14 +76,14 @@
   },
 
   "themes": {
-    "Foreign policy and diplomacy": ["EU foreign policy", "German security policy", "Foreign policy analysis", "Russian foreign policy"],
-    "Security and defence": ["Grand strategy", "Defence", "International security", "Power", "Civil defence", "Civil-military relations", "Militarisation", "Arms control", "Deterrence", "Nuclear strategy", "Irregular warfare", "Maritime strategy"],
+    "Foreign policy and diplomacy": ["EU foreign policy", "German security policy", "Foreign policy analysis", "Russian foreign policy", "Indian foreign policy", "India", "Multilateralism", "UN"],
+    "Security and defence": ["Grand strategy", "Defence", "International security", "Power", "Civil defence", "Civil-military relations", "Militarisation", "Arms control", "Deterrence", "Nuclear strategy", "Irregular warfare", "Maritime strategy", "National security"],
     "European and transatlantic security order": ["EU–NATO relations"],
-    "Intelligence, information and influence": ["Disinformation", "Election interference", "Subversion", "Digital media"],
+    "Intelligence, information and influence": ["Disinformation", "Election interference", "Subversion", "Digital media", "Intelligence studies"],
     "Identity, narratives and ideational security": ["Identity", "Narratives", "Ontological security"],
-    "Cyber and emerging technology": ["Digital governance", "Cyber security", "Cyber defence", "Cyber", "Infrastructure", "Critical infrastructure", "Supply chain security", "Emerging technology", "Artificial intelligence"],
+    "Cyber and emerging technology": ["Digital governance", "Cyber security", "Cyber defence", "Cyber", "Infrastructure", "Critical infrastructure", "Supply chain security", "Emerging technology", "Emerging and disruptive technologies", "Artificial intelligence"],
     "Economic security and geoeconomics": ["Economic security", "Economic statecraft", "Industrial policy", "Political economy"],
-    "Transnational and human security": ["Non-state actors", "Maritime security"],
+    "Transnational and human security": ["Non-state actors", "Maritime security", "Counterterrorism", "Peacekeeping", "Transnational and human security"],
     "Theory and methods": ["Research methods", "Political psychology", "Policy evaluation", "International relations", "History"]
   },
 
