@@ -517,7 +517,21 @@
     // time (#260). Per-event `ev.tzid` still overrides this in buildATCUrls.
     TZID = (data && data.tzid) || DEFAULT_TZID;
 
-    const events = Array.isArray(data && data.events) ? data.events : [];
+    // The home Events block is "what's coming up", so a finished event drops
+    // off on its own: keep only events whose end is still ahead (or happening
+    // now), soonest first. Past events stay in events.json for the calendar
+    // feed; they simply stop rendering here once concluded.
+    const nowMs = Date.now();
+    const events = (Array.isArray(data && data.events) ? data.events : [])
+      .filter(ev => {
+        const endD = zonedTimeToUTC(ev.end || ev.start, ev.tzid || TZID);
+        return !endD || endD.getTime() >= nowMs;
+      })
+      .sort((a, b) => {
+        const ad = zonedTimeToUTC(a.start, a.tzid || TZID);
+        const bd = zonedTimeToUTC(b.start, b.tzid || TZID);
+        return (ad ? ad.getTime() : 0) - (bd ? bd.getTime() : 0);
+      });
     if (!events.length) return;
 
     // Render off-DOM first, then swap to avoid a flash.
