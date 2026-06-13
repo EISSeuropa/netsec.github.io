@@ -75,6 +75,22 @@ def test_country_key() -> None:
     expect("None safely empty", country_key(None), "")  # type: ignore[arg-type]
 
 
+def test_title_only_name_skipped() -> None:
+    """A form row whose name is only a title ("Mr") with nothing after it is
+    an incomplete submission. row_to_member must drop it: slugify/name_key
+    strip the title to nothing, so it can never collapse onto the real entry
+    and would otherwise surface as a duplicate "Mr" card."""
+    print("\nrow_to_member() title-only name:")
+    cols = {"name": "name", "consent": "consent"}
+    for n in ("Mr", "Dr.", "Ms", "Prof", "Mx", "  Mrs  "):
+        expect(f"{n!r} dropped",
+               sync_bios.row_to_member({"name": n, "consent": "yes"}, cols), None)
+    kept = sync_bios.row_to_member(
+        {"name": "Mr Archishman Goswami", "consent": "yes"}, cols)
+    expect("real name after title kept", kept is not None and kept.get("name"),
+           "Mr Archishman Goswami")
+
+
 def test_merge_helferich() -> None:
     """The canonical regression: seed entry for Dr John Helferich +
     form submission as Dr John N.T. Helferich → ONE merged entry on
@@ -1165,6 +1181,7 @@ def main() -> None:
     test_load_region_vocab()
     test_parse_regions()
     test_country_key()
+    test_title_only_name_skipped()
     test_merge_helferich()
     test_merge_country_guards_false_positive()
     test_merge_name_match_different_country_does_not_collapse()
