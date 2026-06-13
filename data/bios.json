@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-13T11:17:38+00:00",
+  "generated_at": "2026-06-13T17:05:04+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-13T11:17:38+00:00"
+    "last_synced": "2026-06-13T17:05:04+00:00"
   },
   "members": [
     {
@@ -886,9 +886,61 @@
         "Intelligence, information and influence",
         "Security and defence"
       ]
+    },
+    {
+      "id": "mattia-sguazzini",
+      "name": "Dr Mattia Sguazzini",
+      "country": "Italy",
+      "country_code": "it",
+      "affiliation": "University of Genoa",
+      "position": "Postdoctoral Research Fellow",
+      "roles": [],
+      "wgs": [
+        1
+      ],
+      "mentorship": [],
+      "regions": [
+        "Europe",
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Mattia Sguazzini is a Postdoctoral Research Fellow at the University of Genoa and a 2026–2027 Virtual Routes European Cybersecurity Fellow. He is also an Adjunct Lecturer at Sciences Po’s Menton campus and at the University of Pavia. He was previously a Visiting Research Fellow at the Centre for Security, Diplomacy and Strategy (CSDS) at the Brussels School of Governance, Vrije Universiteit Brussel (VUB). He holds a PhD in Security and Strategic Studies from the interdisciplinary doctoral programme in Security, Risk and Vulnerability at the University of Genoa, where his dissertation examined the cybersecurity policy design space of EU member states. His research sits at the intersection of cybersecurity governance, digital sovereignty, and the political economy of security in Europe. He also has a strong methodological interest in text-as-data approaches in the social sciences, particularly in the use and fine-tuning of large language models for policy analysis.",
+      "keywords": [
+        "cybersecurity governance",
+        "digital sovereignty",
+        "European security",
+        "economic security",
+        "text as data"
+      ],
+      "email": "mattia.sguazzini@edu.unige.it",
+      "website": "",
+      "orcid": "0000-0001-9751-8508",
+      "linkedin": "https://www.linkedin.com/in/mattiasguazzini/",
+      "twitter": "https://x.com/MattiaSguazzini",
+      "bluesky": "https://bsky.app/profile/mattiasguazzini.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/mattia-sguazzini.jpg",
+      "source": "form",
+      "photo_source_sha256": "253c313c5c108e771be55dbc56a21c68f88503aac9555f7978eee4c9d1636b27",
+      "canonical_keywords": [
+        "Cybersecurity governance",
+        "Digital sovereignty",
+        "Economic security",
+        "European security",
+        "Text as data"
+      ],
+      "themes": [
+        "Economic security and geoeconomics"
+      ]
     }
   ],
   "keyword_aggregate": [
+    {
+      "keyword": "Economic security",
+      "count": 2
+    },
     {
       "keyword": "EU foreign policy",
       "count": 2
@@ -922,6 +974,10 @@
       "count": 1
     },
     {
+      "keyword": "Cybersecurity governance",
+      "count": 1
+    },
+    {
       "keyword": "Defence",
       "count": 1
     },
@@ -938,11 +994,11 @@
       "count": 1
     },
     {
-      "keyword": "Disinformation",
+      "keyword": "Digital sovereignty",
       "count": 1
     },
     {
-      "keyword": "Economic security",
+      "keyword": "Disinformation",
       "count": 1
     },
     {
@@ -955,6 +1011,10 @@
     },
     {
       "keyword": "Emerging and disruptive technologies",
+      "count": 1
+    },
+    {
+      "keyword": "European security",
       "count": 1
     },
     {
@@ -1078,6 +1138,10 @@
       "count": 1
     },
     {
+      "keyword": "Text as data",
+      "count": 1
+    },
+    {
       "keyword": "Transnational and human security",
       "count": 1
     },
@@ -1104,16 +1168,16 @@
       "count": 3
     },
     {
+      "theme": "Economic security and geoeconomics",
+      "count": 3
+    },
+    {
       "theme": "Intelligence, information and influence",
       "count": 3
     },
     {
       "theme": "Transnational and human security",
       "count": 3
-    },
-    {
-      "theme": "Economic security and geoeconomics",
-      "count": 2
     },
     {
       "theme": "European and transatlantic security order",
@@ -1178,11 +1242,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 8
+      "count": 9
     },
     {
       "region": "Global and cross-regional",
-      "count": 4
+      "count": 5
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -1202,6 +1266,10 @@
     },
     {
       "region": "Europe - Western Balkans",
+      "count": 1
+    },
+    {
+      "region": "The Americas",
       "count": 1
     }
   ]
