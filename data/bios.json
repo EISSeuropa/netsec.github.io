@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-12T23:22:08+00:00",
+  "generated_at": "2026-06-13T09:44:55+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-12T23:22:08+00:00"
+    "last_synced": "2026-06-13T09:44:55+00:00"
   },
   "members": [
     {
@@ -730,11 +730,66 @@
         "Foreign policy and diplomacy",
         "Security and defence"
       ]
+    },
+    {
+      "id": "pieter-zhao",
+      "name": "Mr. Pieter Zhao",
+      "country": "Netherlands",
+      "country_code": "nl",
+      "affiliation": "Erasmus University Rotterdam",
+      "position": "PhD Researcher",
+      "roles": [],
+      "wgs": [
+        2,
+        3
+      ],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Asia",
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Pieter W.G. Zhao is a PhD candidate and junior lecturer at the Department of History at Erasmus University Rotterdam, where his doctoral research is funded by the competitive NWO PhD in the Humanities Grant (2024). His project examines how nonmilitary and irregular actors have shaped maritime warfare and security throughout history, and how these historical dynamics can inform contemporary debates on maritime strategy and security. In 2026, he was a Visiting PhD Fellow at the Department of War Studies, King's College London, hosted by Prof. Christopher Kinsey and the Forum for Private Security Research. Pieter holds a BA and an MA in History from Erasmus University Rotterdam, specialising in the history of international relations and maritime history, as well as a second Master's degree in International Security from Sciences Po, with concentrations in Strategic Studies, Asian Studies, and Intelligence Studies. He completed part of his coursework at Johns Hopkins SAIS in Washington, DC, focusing on US-China relations, maritime security, and nuclear proliferation. Alongside his academic work, Pieter has served as a Nonresident Fellow at the Irregular Warfare Initiative and a Maritime Leadership Fellow at the Council on Geostrategy. His work has appeared in the Naval War College Review, Comparative Strategy, the European Journal of East Asian Studies, Small Wars Journal, Militaire Spectator, and The Strategy Bridge, and he has provided historical and strategic commentary for Dutch outlets including NOS, BNR Nieuwsradio, and de Volkskrant. Happy to connect with scholars interested in historical approaches to contemporary security challenges, applied history, the maritime domain, and the Indo-Pacific region, with a particular focus on China.",
+      "keywords": [
+        "History",
+        "Maritime Security",
+        "Irregular Warfare",
+        "Non-state actors",
+        "Maritime Strategy"
+      ],
+      "email": "zhao@eshcc.eur.nl",
+      "website": "https://www.eur.nl/people/pieter-zhao",
+      "orcid": "0000-0003-2830-2433",
+      "linkedin": "https://www.linkedin.com/in/pieter-zhao/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/pieter-zhao.jpg",
+      "source": "form",
+      "photo_source_sha256": "b00f46a6f652ded1c45da842c8a1ae7c1e0e524914415e6f551616329d72f9e6",
+      "canonical_keywords": [
+        "History",
+        "Irregular warfare",
+        "Maritime security",
+        "Maritime strategy",
+        "Non-state actors"
+      ],
+      "themes": [
+        "Transnational and human security"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "EU foreign policy",
+      "count": 2
+    },
+    {
+      "keyword": "Non-state actors",
       "count": 2
     },
     {
@@ -806,6 +861,10 @@
       "count": 1
     },
     {
+      "keyword": "History",
+      "count": 1
+    },
+    {
       "keyword": "Identity",
       "count": 1
     },
@@ -826,15 +885,23 @@
       "count": 1
     },
     {
+      "keyword": "Irregular warfare",
+      "count": 1
+    },
+    {
+      "keyword": "Maritime security",
+      "count": 1
+    },
+    {
+      "keyword": "Maritime strategy",
+      "count": 1
+    },
+    {
       "keyword": "Militarisation",
       "count": 1
     },
     {
       "keyword": "Narratives",
-      "count": 1
-    },
-    {
-      "keyword": "Non-state actors",
       "count": 1
     },
     {
@@ -900,15 +967,15 @@
       "count": 2
     },
     {
+      "theme": "Transnational and human security",
+      "count": 2
+    },
+    {
       "theme": "European and transatlantic security order",
       "count": 1
     },
     {
       "theme": "Identity, narratives and ideational security",
-      "count": 1
-    },
-    {
-      "theme": "Transnational and human security",
       "count": 1
     }
   ],
@@ -952,7 +1019,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 6
+      "count": 7
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -960,7 +1027,11 @@
     },
     {
       "region": "Global and cross-regional",
-      "count": 2
+      "count": 3
+    },
+    {
+      "region": "Asia",
+      "count": 1
     },
     {
       "region": "Europe - Western Balkans",
