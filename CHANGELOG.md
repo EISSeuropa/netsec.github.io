@@ -44,6 +44,7 @@ audit trail. Same content, terser.
 
 #### Added
 - (one-line pointer bullets — what, not why)
+- A conference recap video on the ESSC 2026 page (all three locales). An "In review" block above the programme pairs a short retrospective with a self-hosted portrait reel of the two days in Stockholm, in the two-column layout used on eiss-europa.com. The reel is column-constrained rather than full width, stacks under the prose on narrow screens, and is played on demand (`preload="metadata"`) so the page stays light until a visitor presses play. The copy is hand-translated for FR and DE.
 
 #### Changed
 - The mentorship matching panel now narrows with the directory's filters (all three locales). Selecting a research theme or region alongside a mentorship filter scopes the Offering and Seeking columns to the mentors and mentees working in that area, with a caption naming the slice and a best-match-first order. A senior who tagged themselves narrowly is never lost: a "Show people outside your selected areas" control widens the panel back to the whole network in one click. The panel used to list every mentor and mentee regardless of the active filters, so it disagreed with the grid above it and would not have scaled as the directory grows. ([#869](https://github.com/EISSeuropa/netsec.github.io/issues/869))

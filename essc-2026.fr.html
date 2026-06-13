@@ -57,7 +57,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=1c98ab44">
+<link rel="stylesheet" href="assets/css/site.css?v=af3ff72b">
 <!-- Page-specific Event schema for the conference. Hand-maintained;
      NOT managed by inject-seo (which owns the Organization/WebPage
      block in the seo:jsonld sentinels below). -->
@@ -289,6 +289,32 @@
     </div>
   </div>
 </aside>
+
+<!-- Conference recap. Two-column "in review" block: a short
+     retrospective beside the self-hosted portrait reel from the 2026
+     edition, mirroring the layout on eiss-europa.com. The reel is
+     column-constrained (not full width); preload="metadata" shows the
+     opening frame without pulling the whole file until play. -->
+<section class="essc-recap" aria-labelledby="recap-title">
+  <div class="container">
+    <div class="essc-recap-grid">
+      <div class="essc-recap-copy">
+        <span class="eyebrow">En rétrospective</span>
+        <h2 id="recap-title">Deux jours à Stockholm</h2>
+        <p>La European Security Studies Conference 2026 a réuni la communauté à l'Université de Stockholm pour deux jours de panels et de tables rondes, co-organisés par l'Action COST NetSec, l'European Initiative for Security Studies (EISS) et l'Université de Stockholm.</p>
+        <p>Il s'agissait de la première édition à porter le nom de European Security Studies Conference (ESSC), à mesure que le réseau s'élargissait en un partenariat européen plus large.</p>
+        <p class="muted">Un court film, tourné et monté sur place, restitue l'atmosphère des deux journées.</p>
+      </div>
+      <figure class="essc-recap-media">
+        <video class="essc-recap-video" controls preload="metadata" playsinline width="1080" height="1920">
+          <source src="assets/video/essc-2026-recap.mp4#t=0.5" type="video/mp4">
+          <p>Votre navigateur ne peut pas lire la vidéo intégrée. <a href="assets/video/essc-2026-recap.mp4">Télécharger la rétrospective (MP4)</a>.</p>
+        </video>
+        <figcaption class="muted">ESSC 2026, Stockholm.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
 
 <section class="essc-programme" id="programme" aria-labelledby="programme-title">
   <div class="container">
