@@ -495,16 +495,22 @@
       searchStep,
       { target: '.members-filter',
         title: 'Filtres par groupe de travail ou rôle CG',
-        body:  'WG1–WG4 filtrent par groupe de travail ; « Membres du CG » n\'affiche que les représentant·es du Comité de gestion.' },
-      { target: '.members-keyword-filter',
-        title: 'Filtrer par thème et région',
-        body:  "Les pastilles regroupent l'annuaire par thème de recherche, et la ligne en dessous par région de recherche. Cliquez pour restreindre la liste ; cliquez davantage pour élargir la correspondance. Les pastilles de mot-clé sur chaque fiche sont cliquables aussi, et votre sélection vit dans l'URL : une vue filtrée se partage en copiant l'adresse." },
-      { target: '.members-mentorship-filter',
+        body:  'WG1–WG4 filtrent par groupe de travail. « Membres du CG » n\'affiche que les représentant·es du Comité de gestion.' },
+      { target: '#members-keyword-filter',
+        title: 'Filtrer par thème de recherche',
+        body:  "Ces pastilles regroupent l'annuaire par grand thème de recherche, en rassemblant les personnes qui travaillent dans le même domaine. Cliquez pour restreindre la liste, cliquez davantage pour élargir la correspondance. Les pastilles de mot-clé sur chaque fiche sont cliquables aussi, et votre sélection vit dans l'URL : une vue filtrée se partage en copiant l'adresse." },
+      { target: '#members-region-filter',
+        title: 'Filtrer par région de recherche',
+        body:  "Un second axe, géographique : les régions du monde sur lesquelles les membres concentrent leurs recherches, et non là où elles et ils sont basés. Combinez-le avec les thèmes ci-dessus pour restreindre selon les deux." },
+      { target: '#members-mentorship-filter',
         title: 'Filtrer par mentorat',
         body:  "Les membres peuvent indiquer qu'ils sont disponibles comme mentor pour les chercheur·euses en début de carrière, ou en recherche de mentorat. Utilisez ces pastilles pour les trouver. Cette rangée apparaît dès qu'au moins un membre s'est inscrit." },
+      { target: '#members-stsm-filter',
+        title: 'Filtrer par accueil STSM',
+        body:  "Une mission scientifique de courte durée (STSM) est une visite de recherche financée dans l'institution d'un autre membre. Cette pastille fait ressortir les membres qui ont proposé d'accueillir des visiteur·euses STSM." },
       { target: '.view-toggle',
         title: 'Changer la densité des cartes',
-        body:  'La vue détaillée montre photos et bios ; la vue compacte montre initiales, nom, affiliation et pastilles de groupe, trois par ligne. Votre choix est conservé. Les téléphones utilisent toujours les cartes compactes.' },
+        body:  'La vue détaillée montre photos et bios. La vue compacte montre initiales, nom, affiliation et pastilles de groupe, trois par ligne. Votre choix est conservé. Les téléphones utilisent toujours les cartes compactes.' },
       joinTriggerStep,
       joinStep,
     ];
@@ -512,12 +518,22 @@
       searchStep,
       { target: '.members-filter-toggle-btn',
         title: 'Filtres',
-        body:  'Touchez « Filtres » pour restreindre l\'annuaire par groupe de travail, thème de recherche, région de recherche ou mentorat. Le badge indique le nombre de filtres actifs.' },
+        body:  'Touchez « Filtres » pour restreindre l\'annuaire par groupe de travail, thème de recherche, région de recherche, mentorat ou accueil STSM. Le badge indique le nombre de filtres actifs.' },
       joinTriggerStep,
       joinStep,
     ];
+    // Drop steps whose target is absent or not rendered (the theme, region,
+    // mentorship and STSM rows stay hidden until at least one member opts in),
+    // so the "Step X of N" count matches what the visitor actually sees.
+    const rawSteps = isPhone ? mobileSteps : desktopSteps;
+    const tourSteps = rawSteps.filter(function (s) {
+      const t = document.querySelector(s.target);
+      if (!t || t.hidden) return false;
+      const r = t.getBoundingClientRect();
+      return r.width > 0 || r.height > 0;
+    });
     window.netsecTour({
-      steps: isPhone ? mobileSteps : desktopSteps,
+      steps: tourSteps.length ? tourSteps : rawSteps,
       labels: {
         next: 'Suivant', prev: 'Précédent', done: 'Terminer', skip: 'Ignorer',
         stepOf: 'Étape %1 sur %2', closeLabel: 'Fermer la visite',

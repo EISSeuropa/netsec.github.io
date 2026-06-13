@@ -493,16 +493,22 @@
       searchStep,
       { target: '.members-filter',
         title: 'Nach Arbeitsgruppe oder MC-Rolle filtern',
-        body:  'WG1–WG4 filtern nach Arbeitsgruppe; „MC-Mitglieder“ blendet nur Vertreter·innen des Management-Komitees ein.' },
-      { target: '.members-keyword-filter',
-        title: 'Nach Thema und Region filtern',
-        body:  'Die Pillen gruppieren das Verzeichnis nach Forschungsthema, die Reihe darunter nach Forschungsregion. Klicken Sie, um die Liste einzugrenzen; klicken Sie weitere, um die Auswahl zu erweitern. Die Schlüsselwort-Pillen auf jeder Karte sind ebenfalls klickbar, und Ihre Auswahl steht in der URL, sodass sich eine gefilterte Ansicht teilen lässt.' },
-      { target: '.members-mentorship-filter',
+        body:  'WG1–WG4 filtern nach Arbeitsgruppe. „MC-Mitglieder“ blendet nur Vertreter·innen des Management-Komitees ein.' },
+      { target: '#members-keyword-filter',
+        title: 'Nach Forschungsthema filtern',
+        body:  'Diese Pillen gruppieren das Verzeichnis nach grobem Forschungsthema und bündeln Personen, die im selben Bereich arbeiten. Klicken Sie, um die Liste einzugrenzen, klicken Sie weitere, um die Auswahl zu erweitern. Die Schlüsselwort-Pillen auf jeder Karte sind ebenfalls klickbar, und Ihre Auswahl steht in der URL, sodass sich eine gefilterte Ansicht teilen lässt.' },
+      { target: '#members-region-filter',
+        title: 'Nach Forschungsregion filtern',
+        body:  'Eine zweite, geografische Achse: die Weltregionen, auf die Mitglieder ihre Forschung richten, nicht wo sie ansässig sind. Kombinieren Sie sie mit den Themen oben, um nach beidem einzugrenzen.' },
+      { target: '#members-mentorship-filter',
         title: 'Nach Mentoring filtern',
         body:  'Mitglieder können angeben, dass sie als Mentor für Nachwuchsforschende verfügbar sind oder selbst Mentoring suchen. Mit diesen Chips finden Sie sie. Diese Reihe erscheint, sobald mindestens ein Mitglied teilnimmt.' },
+      { target: '#members-stsm-filter',
+        title: 'Nach STSM-Gastgeberschaft filtern',
+        body:  'Eine Short-Term Scientific Mission (STSM) ist ein finanzierter Forschungsaufenthalt an der Einrichtung eines anderen Mitglieds. Dieser Chip hebt die Mitglieder hervor, die angeboten haben, STSM-Gäste aufzunehmen.' },
       { target: '.view-toggle',
         title: 'Kartendichte wechseln',
-        body:  'Die Detailansicht zeigt Fotos und Biografien; die Kompaktansicht zeigt Initialen, Name, Affiliation und Arbeitsgruppen-Chips, drei pro Reihe. Ihre Wahl wird gespeichert. Telefone nutzen immer die Kompaktansicht.' },
+        body:  'Die Detailansicht zeigt Fotos und Biografien. Die Kompaktansicht zeigt Initialen, Name, Affiliation und Arbeitsgruppen-Chips, drei pro Reihe. Ihre Wahl wird gespeichert. Telefone nutzen immer die Kompaktansicht.' },
       joinTriggerStep,
       joinStep,
     ];
@@ -510,12 +516,22 @@
       searchStep,
       { target: '.members-filter-toggle-btn',
         title: 'Filter',
-        body:  'Tippen Sie auf „Filter“, um das Verzeichnis nach Arbeitsgruppe, Forschungsthema, Forschungsregion oder Mentoring einzugrenzen. Das Abzeichen zeigt die Anzahl aktiver Filter.' },
+        body:  'Tippen Sie auf „Filter“, um das Verzeichnis nach Arbeitsgruppe, Forschungsthema, Forschungsregion, Mentoring oder STSM-Gastgeberschaft einzugrenzen. Das Abzeichen zeigt die Anzahl aktiver Filter.' },
       joinTriggerStep,
       joinStep,
     ];
+    // Drop steps whose target is absent or not rendered (the theme, region,
+    // mentorship and STSM rows stay hidden until at least one member opts in),
+    // so the "Step X of N" count matches what the visitor actually sees.
+    const rawSteps = isPhone ? mobileSteps : desktopSteps;
+    const tourSteps = rawSteps.filter(function (s) {
+      const t = document.querySelector(s.target);
+      if (!t || t.hidden) return false;
+      const r = t.getBoundingClientRect();
+      return r.width > 0 || r.height > 0;
+    });
     window.netsecTour({
-    steps: isPhone ? mobileSteps : desktopSteps,
+    steps: tourSteps.length ? tourSteps : rawSteps,
     labels: {
       next: 'Weiter', prev: 'Zurück', done: 'Fertig', skip: 'Überspringen',
       stepOf: 'Schritt %1 von %2', closeLabel: 'Tour schließen',
