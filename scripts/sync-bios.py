@@ -973,6 +973,14 @@ def row_to_member(
     consent = (row.get(cols["consent"], "") or "").strip().lower()
     if not name:
         return None
+    # A row whose name is only a title ("Mr", "Dr", …) with nothing after it
+    # is an incomplete submission: the person left the name blank. slugify and
+    # name_key both strip the title to nothing, so such a row can never
+    # collapse onto the real entry and instead surfaces as a duplicate "Mr"
+    # card next to the complete one. Drop it.
+    if not re.sub(r"(?i)^(Prof|Mrs|Mr|Ms|Mx|Dr)\.?(?:\s+|$)", "", name).strip():
+        print(f"  · skipping {name!r}: title only, no name", file=sys.stderr)
+        return None
     # Strict: only publish if consent recorded
     if consent and not any(t in consent for t in ("yes", "agree", "✓", "consent", "true")):
         # Explicit non-consent — skip
