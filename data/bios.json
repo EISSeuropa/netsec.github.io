@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-13T09:44:55+00:00",
+  "generated_at": "2026-06-13T11:10:41+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-13T09:44:55+00:00"
+    "last_synced": "2026-06-13T11:10:41+00:00"
   },
   "members": [
     {
@@ -783,6 +783,99 @@
         "Theory and methods",
         "Transnational and human security"
       ]
+    },
+    {
+      "id": "mr",
+      "name": "Mr",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "affiliation": "University of Oxford",
+      "position": "DPhil candidate",
+      "roles": [],
+      "wgs": [
+        1,
+        2,
+        3
+      ],
+      "mentorship": [],
+      "regions": [
+        "Asia",
+        "Global and cross-regional"
+      ],
+      "wg_leadership": {},
+      "bio": "Archishman is a DPhil International Relations candidate at the University of Oxford. His research interests lie in the field of security and strategic studies, with a particular focus on emerging technologies and intelligence in international politics. He also specialises in Indian foreign policy and national security posture in a changing world order.\n\nArchishman's doctoral research at Oxford examines intelligence diplomacy and its use as a device of modern statecraft. In particular, he investigates how normative conventions and the pursuit of material outcomes animates the pursuit of clandestine diplomacy and intelligence liaison, shaping how and why they are used by states as a policy option.\n\nAt present, Archishman is a Non-Resident Associate Fellow at the Observer Research Foundation, India's premier think tank focused on geopolitics and geoeconomics. Prior to his time in Oxford, he studied at King’s College London, being awarded First-Class (Hons) for both his BA in International Relations and MA in National Security Studies. He conducted research on Israel’s role in the Second Libyan Civil War (2014-2019), and ISIS’ practice of counterintelligence for his undergraduate and Master's theses respectively.",
+      "keywords": [
+        "Intelligence Studies",
+        "India",
+        "Indian Foreign Policy",
+        "National Security",
+        "Emerging and Disruptive Technologies"
+      ],
+      "email": "archishman.goswami@politics.ox.ac.uk",
+      "website": "https://www.politics.ox.ac.uk/person/archishman-ray-goswami",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/archishman-ray-g-7880ab20a/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/mr.jpg",
+      "source": "form",
+      "photo_source_sha256": "c19d3afd34647e19c92bf1e9a7a381b01328135776bb78ffb72f7994309a9ac1",
+      "canonical_keywords": [
+        "Emerging and disruptive technologies",
+        "India",
+        "Indian foreign policy",
+        "Intelligence studies",
+        "National security"
+      ]
+    },
+    {
+      "id": "saurav-narain",
+      "name": "Mr Saurav Narain",
+      "country": "Netherlands",
+      "country_code": "nl",
+      "affiliation": "Leiden University",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [
+        3,
+        4
+      ],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Africa",
+        "Europe",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Saurav Narain is a Marie-Curie PhD Candidate with the war, peace and justice research group at ISGA. His research interests are in the fields of EU Counterterrorism, United Nations and Local Peacekeeping. He is funded by Horizon Europe’s MSCA EU-GLOCTER project. \n\nHe has completed Erasmus Mundus International Master in Security, Intelligence and Security Studies (IMSISS) degree from University of Glasgow, Dublin City University and Charles University, Prague and additionally an MA in International Relation from Leiden University.",
+      "keywords": [
+        "Peacekeeping",
+        "Counterterrorism",
+        "Transnational and human security",
+        "multilateralism",
+        "United Nations"
+      ],
+      "email": "s.narain@fgga.leidenuniv.nl",
+      "website": "",
+      "orcid": "0000-0002-6049-9777",
+      "linkedin": "https://www.linkedin.com/in/saurav-narain-741b3b112/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/saurav-narain.jpg",
+      "source": "form",
+      "photo_source_sha256": "47f6c69bd9940762542e7da9bf9a1bf2fb160a002071c1a11bf7bedc555f97c6",
+      "canonical_keywords": [
+        "Counterterrorism",
+        "Multilateralism",
+        "Peacekeeping",
+        "Transnational and human security",
+        "UN"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -804,6 +897,10 @@
     },
     {
       "keyword": "Civil-military relations",
+      "count": 1
+    },
+    {
+      "keyword": "Counterterrorism",
       "count": 1
     },
     {
@@ -847,6 +944,10 @@
       "count": 1
     },
     {
+      "keyword": "Emerging and disruptive technologies",
+      "count": 1
+    },
+    {
       "keyword": "EU–NATO relations",
       "count": 1
     },
@@ -871,11 +972,23 @@
       "count": 1
     },
     {
+      "keyword": "India",
+      "count": 1
+    },
+    {
+      "keyword": "Indian foreign policy",
+      "count": 1
+    },
+    {
       "keyword": "Industrial policy",
       "count": 1
     },
     {
       "keyword": "Infrastructure",
+      "count": 1
+    },
+    {
+      "keyword": "Intelligence studies",
       "count": 1
     },
     {
@@ -903,7 +1016,15 @@
       "count": 1
     },
     {
+      "keyword": "Multilateralism",
+      "count": 1
+    },
+    {
       "keyword": "Narratives",
+      "count": 1
+    },
+    {
+      "keyword": "National security",
       "count": 1
     },
     {
@@ -912,6 +1033,10 @@
     },
     {
       "keyword": "Ontological security",
+      "count": 1
+    },
+    {
+      "keyword": "Peacekeeping",
       "count": 1
     },
     {
@@ -940,6 +1065,14 @@
     },
     {
       "keyword": "Subversion",
+      "count": 1
+    },
+    {
+      "keyword": "Transnational and human security",
+      "count": 1
+    },
+    {
+      "keyword": "UN",
       "count": 1
     }
   ],
@@ -1025,26 +1158,30 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 7
+      "count": 8
+    },
+    {
+      "region": "Global and cross-regional",
+      "count": 4
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
       "count": 3
     },
     {
-      "region": "Global and cross-regional",
-      "count": 3
+      "region": "Asia",
+      "count": 2
     },
     {
-      "region": "Asia",
+      "region": "Middle East and North Africa",
+      "count": 2
+    },
+    {
+      "region": "Africa",
       "count": 1
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 1
-    },
-    {
-      "region": "Middle East and North Africa",
       "count": 1
     }
   ]
