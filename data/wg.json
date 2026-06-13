@@ -273,7 +273,7 @@
       "number": 2,
       "name": "Transfer of Knowledge",
       "colour": "wg-2",
-      "memberCount": 50,
+      "memberCount": 51,
       "lead": {
         "slug": "john-helferich",
         "name": "Dr John N.T. Helferich"
@@ -417,6 +417,11 @@
         {
           "name": "Prof Pavlosioannis Koktsidis",
           "country": "Greece"
+        },
+        {
+          "name": "Mr Pieter Zhao",
+          "country": "Netherlands",
+          "slug": "pieter-zhao"
         },
         {
           "name": "Dr Pinar Akgül",
@@ -715,7 +720,8 @@
         },
         {
           "name": "Mr Pieter Zhao",
-          "country": "Netherlands"
+          "country": "Netherlands",
+          "slug": "pieter-zhao"
         },
         {
           "name": "Dr Samuel Zilincik",
