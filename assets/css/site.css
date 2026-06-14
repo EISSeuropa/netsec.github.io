@@ -2217,6 +2217,24 @@ body{padding-top:var(--whats-new-h, 0px)}
   display:flex;flex-direction:column;padding:24px;
   scroll-margin-top:100px;  /* for deep-link landing */
 }
+/* Member spotlight (#921): the weekly-featured member is pinned to the front
+   of the default directory view with a gold star, using the brand's EU-flag
+   yellow so it reads as a highlight rather than another status pill. */
+.member-card.is-featured{
+  position:relative;
+  box-shadow:inset 0 0 0 1.5px color-mix(in srgb,#FFCC00 70%,transparent), 0 10px 34px rgba(0,0,0,.20);
+}
+.member-spotlight-pin{
+  position:absolute;top:10px;left:10px;z-index:2;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 9px 3px 7px;border-radius:999px;
+  font-size:.7rem;font-weight:700;letter-spacing:.02em;line-height:1;
+  color:#FFCC00;
+  background:color-mix(in srgb,#FFCC00 18%,transparent);
+  border:1px solid color-mix(in srgb,#FFCC00 55%,transparent);
+}
+.member-spotlight-pin svg{flex-shrink:0}
+.members-grid.is-compact .member-card.is-featured .member-spotlight-pin{top:8px;left:8px}
 .member-card .member-photo{
   position:relative;width:84px;height:84px;border-radius:50%;
   margin:0 auto 14px;overflow:hidden;

@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=9eab8c6d">
+<link rel="stylesheet" href="assets/css/site.css?v=63a9e2b3">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -721,6 +721,8 @@
   }
 
   let MEMBERS = [];
+  let featuredId = null;            // weekly member-spotlight id (data/spotlight.json, #921)
+  const SPOTLIGHT_LABEL = 'Member spotlight';
   // activeWG values:
   //   'all'                — no WG/role filter
   //   '1' | '2' | '3' | '4' — that working group (lead, co-lead, or member)
@@ -961,6 +963,13 @@
     const filtered = MEMBERS.filter(m => memberPassesFilters(m, q, {}));
 
     filtered.sort((a, b) => leadershipOrder(a).localeCompare(leadershipOrder(b)) || (a.name||'').localeCompare(b.name||''));
+    // Member spotlight (#921): in the default, unfiltered view, pin the
+    // weekly-featured member to the front so they read first.
+    const featuredView = !!(featuredId && q === '' && filtered.length === MEMBERS.length);
+    if (featuredView) {
+      const _fi = filtered.findIndex(m => m.id === featuredId);
+      if (_fi > 0) { const _fm = filtered.splice(_fi, 1)[0]; filtered.unshift(_fm); }
+    }
 
     filtered.forEach(m => {
       const node = tpl.content.firstElementChild.cloneNode(true);
@@ -968,6 +977,13 @@
       // and gives the existing leadership-card live-refresh anywhere
       // else on the site a consistent hook to find members by id.
       if (m.id) node.setAttribute('data-slug', m.id);
+      if (featuredView && m.id === featuredId) {
+        node.classList.add('is-featured');
+        const _pin = document.createElement('span');
+        _pin.className = 'member-spotlight-pin';
+        _pin.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 20.5l-5.4 2.9 1-6.1L3.2 9l6.1-.9z"/></svg><span>' + SPOTLIGHT_LABEL + '</span>';
+        node.insertBefore(_pin, node.firstChild);
+      }
       // Keyboard focusability is mode-dependent: in compact mode
       // cards are interactive (click expands), in detailed mode the
       // card itself doesn't do anything (contact icons inside it do).
@@ -2139,6 +2155,15 @@
     syncStsmChip();
     renderKeywordFilter();
     renderRegionFilter();
+    // Member spotlight: read the weekly rotation so render() can pin the
+    // featured member. Optional; the directory renders fine without it.
+    try {
+      const _sres = await fetch('data/spotlight.json', { cache: 'no-cache' });
+      if (_sres.ok) {
+        const _sp = await _sres.json();
+        if (_sp && _sp.active && _sp.current && MEMBERS.some(m => m.id === _sp.current)) featuredId = _sp.current;
+      }
+    } catch (e) { /* spotlight optional */ }
     render();
     // Surface how current the directory is, driven by bios.json's
     // `generated_at` stamp (#271). The stamp only moves when the sync
