@@ -932,7 +932,10 @@
         "Text as data"
       ],
       "themes": [
-        "Economic security and geoeconomics"
+        "Cyber and emerging technology",
+        "Economic security and geoeconomics",
+        "Security and defence",
+        "Theory and methods"
       ]
     }
   ],
@@ -1152,20 +1155,20 @@
   ],
   "theme_aggregate": [
     {
+      "theme": "Security and defence",
+      "count": 7
+    },
+    {
       "theme": "Foreign policy and diplomacy",
       "count": 6
     },
     {
-      "theme": "Security and defence",
-      "count": 6
-    },
-    {
       "theme": "Theory and methods",
-      "count": 4
+      "count": 5
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 3
+      "count": 4
     },
     {
       "theme": "Economic security and geoeconomics",
@@ -1195,10 +1198,12 @@
     "Counterterrorism": "Transnational and human security",
     "Cyber defence": "Cyber and emerging technology",
     "Cyber security": "Cyber and emerging technology",
+    "Cybersecurity governance": "Cyber and emerging technology",
     "Defence": "Security and defence",
     "Deterrence": "Security and defence",
     "Digital governance": "Cyber and emerging technology",
     "Digital media": "Intelligence, information and influence",
+    "Digital sovereignty": "Cyber and emerging technology",
     "Disinformation": "Intelligence, information and influence",
     "EU foreign policy": "Foreign policy and diplomacy",
     "EU–NATO relations": "European and transatlantic security order",
@@ -1206,6 +1211,7 @@
     "Economic statecraft": "Economic security and geoeconomics",
     "Election interference": "Intelligence, information and influence",
     "Emerging and disruptive technologies": "Cyber and emerging technology",
+    "European security": "Security and defence",
     "Foreign policy analysis": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
     "Grand strategy": "Security and defence",
@@ -1236,6 +1242,7 @@
     "Research methods": "Theory and methods",
     "Russian foreign policy": "Foreign policy and diplomacy",
     "Subversion": "Intelligence, information and influence",
+    "Text as data": "Theory and methods",
     "Transnational and human security": "Transnational and human security",
     "UN": "Foreign policy and diplomacy"
   },
