@@ -44,6 +44,7 @@ audit trail. Same content, terser.
 
 #### Added
 - (one-line pointer bullets — what, not why)
+- Person mentions across the whole site now show a profile card on hover. Any element marked `data-person`, plus any unmarked full-name mention of a directory member in page prose, resolves against `data/bios.json` at runtime and gains the same hover / focus / click card the conference programme uses. Because the match is by name against the live directory, a name written today that only joins the directory later (a new Board or support-team member) lights up automatically on the next visit, with no edit to the page; a name not in the directory stays plain text. The leadership cards keep their own presentation.
 - A conference recap video on the ESSC 2026 page (all three locales). An "In review" block above the programme pairs a short retrospective with a self-hosted portrait reel of the two days in Stockholm, in the two-column layout used on eiss-europa.com. The reel is column-constrained rather than full width, stacks under the prose on narrow screens, and is played on demand (`preload="metadata"`) so the page stays light until a visitor presses play. The copy is hand-translated for FR and DE.
 
 #### Changed
