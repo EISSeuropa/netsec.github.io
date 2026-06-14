@@ -616,11 +616,18 @@
 
       if (past.length) {
         const ps = el('section', { class: 'events-group' }, [el('h2', null, [p.past])]);
-        let year = null, wrap = null;
+        let year = null, grid = null;
         past.forEach((ev) => {
           const y = new Date(startMs(ev)).getUTCFullYear();
-          if (y !== year) { year = y; wrap = el('div', { class: 'events-year' }, [el('h3', null, [String(y)])]); ps.appendChild(wrap); }
-          wrap.appendChild(buildCard(ev, locale, t));
+          if (y !== year) {
+            year = y;
+            grid = el('div', { class: 'events-grid' });
+            ps.appendChild(el('div', { class: 'events-year' }, [el('h3', null, [String(y)]), grid]));
+          }
+          // Past events share the same grid as Upcoming so the two
+          // sections read consistently rather than the archive stacking
+          // full-width.
+          grid.appendChild(buildCard(ev, locale, t));
         });
         sections.appendChild(ps);
       }
