@@ -56,6 +56,7 @@ audit trail. Same content, terser.
 - (…)
 
 #### Fixed
+- Two finishing touches on the Events page (all three locales). The past-events archive now lays out in the same card grid as the upcoming list rather than stacking each card full-width, so the two sections read as one page. And the Working-Group pills, the card call-to-action, and the "Add to calendar" menu items no longer pick up an underline: the cards render inside a `.prose-page`, whose link styling was overriding them, so the pills and controls now read as controls while genuine inline links (the grants.html mention) keep their underline.
 - The Member Spotlight badge on the directory no longer overlaps the featured member's name (all three locales). The gold "Member spotlight" pill was absolutely positioned in the card's top-left corner and sat on top of the centred name. It now renders as a centred banner on its own row at the top of the card, clearing the name in both the compact and detailed card layouts.
 - (…)
 - The ESSC 2026 recap video rendered far too large in Safari and overflowed on mobile. The reel sits in a flex column that lacked `min-width:0`, so Safari took the video's 1080px intrinsic width as the column's minimum and ignored the 340px basis, blowing the player up to full width (then portrait-tall). The column now carries an explicit width plus `min-width:0`, and stays capped at 340px and centred on narrow viewports.
