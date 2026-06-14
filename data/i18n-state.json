@@ -103,14 +103,14 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "7edc2a1b6fa4e9a22cdf21176305d0d10ea9301b",
+        "source_sha1": "2da12fb880e8eeacd6eb22b6d2df717404dec9a1",
         "translated_on": "2026-06-14",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "7edc2a1b6fa4e9a22cdf21176305d0d10ea9301b",
+        "source_sha1": "2da12fb880e8eeacd6eb22b6d2df717404dec9a1",
         "translated_on": "2026-06-14",
         "status": "beta",
         "reviewed_by": null

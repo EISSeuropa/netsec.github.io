@@ -56,7 +56,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=6adfc6c4">
+<link rel="stylesheet" href="assets/css/site.css?v=0f3f85bd">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -883,9 +883,9 @@
       if (m.id) node.setAttribute('data-slug', m.id);
       if (featuredView && m.id === featuredId) {
         node.classList.add('is-featured');
-        const _pin = document.createElement('span');
+        const _pin = document.createElement('div');
         _pin.className = 'member-spotlight-pin';
-        _pin.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 20.5l-5.4 2.9 1-6.1L3.2 9l6.1-.9z"/></svg><span>' + SPOTLIGHT_LABEL + '</span>';
+        _pin.innerHTML = '<span class="member-spotlight-badge"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 20.5l-5.4 2.9 1-6.1L3.2 9l6.1-.9z"/></svg><span>' + SPOTLIGHT_LABEL + '</span></span>';
         node.insertBefore(_pin, node.firstChild);
       }
       if (grid.classList.contains('is-compact')) {

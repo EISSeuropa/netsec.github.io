@@ -56,6 +56,7 @@ audit trail. Same content, terser.
 - (…)
 
 #### Fixed
+- The Member Spotlight badge on the directory no longer overlaps the featured member's name (all three locales). The gold "Member spotlight" pill was absolutely positioned in the card's top-left corner and sat on top of the centred name. It now renders as a centred banner on its own row at the top of the card, clearing the name in both the compact and detailed card layouts.
 - (…)
 - The ESSC 2026 recap video rendered far too large in Safari and overflowed on mobile. The reel sits in a flex column that lacked `min-width:0`, so Safari took the video's 1080px intrinsic width as the column's minimum and ignored the 340px basis, blowing the player up to full width (then portrait-tall). The column now carries an explicit width plus `min-width:0`, and stays capped at 340px and centred on narrow viewports.
 ```
