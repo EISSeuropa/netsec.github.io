@@ -690,6 +690,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 /* -------- Events / Outputs / News timeline + cards -------- */
 .event-list,.output-list,.news-list{display:grid;gap:20px}
 .event-list{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.output-list,.news-list{grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
 /* -------- Clickable-card (stretched-link) utility --------
    Makes a whole content card act as one click target while keeping a
    single real link in the accessibility tree. The card's primary CTA
@@ -894,7 +895,6 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .event-subscribe-hint code{font-size:.85em;background:rgba(0,0,0,.04);padding:1px 5px;border-radius:4px}
 .dark .event-subscribe-hint code{background:rgba(255,255,255,.06)}
 
-.output-list,.news-list{grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
 .output-kind{font-size:.75rem;font-weight:700;color:var(--accent-2);text-transform:uppercase;letter-spacing:.1em}
 .news-date{font-size:.82rem;color:var(--muted)}
 .news-card a{font-size:.9rem;font-weight:600;margin-top:auto}
