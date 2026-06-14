@@ -893,3 +893,42 @@
     else if (printMq.addListener) printMq.addListener(onPrintChange);
   }
 })();
+
+/* Conference recap reel: muted autoplay loop with a minimal UI.
+   The static markup ships with `controls` as a no-JS fallback (a visitor
+   without scripting still gets a playable, paused video and the 24 MB file
+   loads only on their press). When scripting is on and the visitor has not
+   asked for reduced motion, we drop the controls for a clean ambient reel
+   and play it muted in a loop while it sits in the viewport, pausing when it
+   scrolls away so the page is not decoding video off-screen. A click toggles
+   sound, the one control the bare reel still needs. Honouring
+   prefers-reduced-motion, we leave the controls on and never autoplay. */
+(function () {
+  const v = document.querySelector('.essc-recap-video');
+  if (!v) return;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;                 // keep controls, no autoplay
+  v.muted = true;
+  v.loop = true;
+  v.setAttribute('playsinline', '');
+  v.removeAttribute('controls');      // minimal UI once we can drive it
+  v.classList.add('is-ambient');
+  function play() {
+    const p = v.play();
+    if (p && p.catch) p.catch(() => { v.setAttribute('controls', ''); });
+  }
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) play(); else v.pause(); });
+    }, { threshold: 0.25 });
+    io.observe(v);
+  } else {
+    play();
+  }
+  // The reel has no control bar now, so a click is the sound toggle.
+  v.addEventListener('click', () => {
+    v.muted = !v.muted;
+    if (v.paused) play();
+  });
+})();
+
