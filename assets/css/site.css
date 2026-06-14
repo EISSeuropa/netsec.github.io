@@ -736,6 +736,17 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .event-wg-pill.wg-4{background:var(--wg-4);color:#3b2a00}
 .event-card h3,.output-card h3,.news-card h3{font-size:1.1rem;margin:0}
 .event-card p,.output-card p,.news-card p{font-size:.92rem;color:var(--muted);margin:0;flex-grow:1}
+/* Dedicated Events page (events.html) — reuses .event-card; adds the type
+   filter row plus the Upcoming / Past sections, the Past list grouped by year. */
+.events-filter{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 30px}
+.events-group{margin:0 0 44px}
+.events-group > h2{margin:0 0 18px}
+.events-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.events-year{margin:0 0 26px}
+.events-year > h3{margin:0 0 12px;font-size:1rem;font-weight:600;color:var(--muted)}
+.events-empty{margin:0}
+.events-seeall{margin:22px 0 0;text-align:right}
+.events-seeall a{font-weight:600}
 .event-loc{font-size:.85rem;color:var(--ink-2);display:flex;align-items:center;gap:6px}
 .event-meta{display:flex;flex-direction:column;gap:8px;margin-top:6px;padding-top:14px;border-top:1px solid var(--line)}
 .event-meta-row{display:flex;align-items:flex-start;gap:10px;font-size:.86rem;color:var(--ink-2)}

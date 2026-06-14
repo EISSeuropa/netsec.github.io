@@ -542,6 +542,98 @@
     container.dataset.renderedFromJson = '1';
   }
 
+  // Page-level chrome strings for the dedicated /events page. Kept separate
+  // from the per-event I18N table above so the home block is untouched.
+  const PAGE_I18N = {
+    en: { upcoming: 'Upcoming', past: 'Past', all: 'All',
+          empty: 'No upcoming events right now. The archive is below.',
+          filterAria: 'Filter events by type' },
+    fr: { upcoming: 'À venir', past: 'Passés', all: 'Tous',
+          empty: 'Aucun événement à venir pour le moment. Les éditions passées sont ci-dessous.',
+          filterAria: 'Filtrer les événements par type' },
+    de: { upcoming: 'Bevorstehend', past: 'Vergangen', all: 'Alle',
+          empty: 'Derzeit keine bevorstehenden Veranstaltungen. Das Archiv steht unten.',
+          filterAria: 'Veranstaltungen nach Typ filtern' },
+  };
+
+  /* Dedicated Events page renderer. Same events.json + buildCard as the home
+     block, but shows the whole catalogue: an Upcoming section (soonest first)
+     and a Past section (most recent first, grouped by year), with a type
+     filter. Past / upcoming is derived from each event's end against now, so
+     an event moves from one section to the other on its own. */
+  async function renderEventsPage(opts) {
+    const container = typeof opts.container === 'string'
+      ? document.querySelector(opts.container) : opts.container;
+    if (!container) return;
+    const locale = (opts.locale || 'en').toLowerCase();
+    const t = I18N[locale] || I18N.en;
+    const p = PAGE_I18N[locale] || PAGE_I18N.en;
+    let data;
+    try {
+      const res = await fetch(opts.source || 'data/events.json', { cache: 'no-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      data = await res.json();
+    } catch (e) {
+      console.debug('events-page: fetch failed, keeping fallback HTML.', e);
+      return;
+    }
+    TZID = (data && data.tzid) || DEFAULT_TZID;
+    const all = Array.isArray(data && data.events) ? data.events : [];
+    if (!all.length) return;
+    const startMs = (ev) => { const d = zonedTimeToUTC(ev.start, ev.tzid || TZID); return d ? d.getTime() : 0; };
+    const endMs = (ev) => { const d = zonedTimeToUTC(ev.end || ev.start, ev.tzid || TZID); return d ? d.getTime() : 0; };
+    const nowMs = Date.now();
+    const types = [];
+    all.forEach((ev) => { if (ev.eventType && types.indexOf(ev.eventType) === -1) types.push(ev.eventType); });
+
+    let active = null;
+    const chipRow = el('div', { class: 'events-filter', role: 'group', 'aria-label': p.filterAria });
+    const sections = el('div', { class: 'events-sections' });
+
+    function chip(type, label) {
+      const b = el('button', { type: 'button', class: 'members-filter-chip',
+        'aria-pressed': String(active === type) }, [label]);
+      b.addEventListener('click', () => { active = (active === type ? null : type); rerender(); });
+      return b;
+    }
+    function gridOf(list) {
+      const g = el('div', { class: 'events-grid' });
+      list.forEach((ev) => g.appendChild(buildCard(ev, locale, t)));
+      return g;
+    }
+    function rerender() {
+      chipRow.innerHTML = '';
+      chipRow.appendChild(chip(null, p.all));
+      types.forEach((ty) => chipRow.appendChild(chip(ty, (t.type && t.type[ty]) || ty)));
+      sections.innerHTML = '';
+      const matches = (ev) => !active || ev.eventType === active;
+      const upcoming = all.filter((ev) => endMs(ev) >= nowMs && matches(ev)).sort((a, b) => startMs(a) - startMs(b));
+      const past = all.filter((ev) => endMs(ev) < nowMs && matches(ev)).sort((a, b) => startMs(b) - startMs(a));
+
+      const up = el('section', { class: 'events-group' }, [el('h2', null, [p.upcoming])]);
+      up.appendChild(upcoming.length ? gridOf(upcoming) : el('p', { class: 'events-empty muted' }, [p.empty]));
+      sections.appendChild(up);
+
+      if (past.length) {
+        const ps = el('section', { class: 'events-group' }, [el('h2', null, [p.past])]);
+        let year = null, wrap = null;
+        past.forEach((ev) => {
+          const y = new Date(startMs(ev)).getUTCFullYear();
+          if (y !== year) { year = y; wrap = el('div', { class: 'events-year' }, [el('h3', null, [String(y)])]); ps.appendChild(wrap); }
+          wrap.appendChild(buildCard(ev, locale, t));
+        });
+        sections.appendChild(ps);
+      }
+    }
+
+    container.innerHTML = '';
+    container.appendChild(chipRow);
+    container.appendChild(sections);
+    rerender();
+    container.dataset.renderedFromJson = '1';
+  }
+
   window.NetSec = window.NetSec || {};
   window.NetSec.renderHomeEvents = renderHomeEvents;
+  window.NetSec.renderEventsPage = renderEventsPage;
 })();
