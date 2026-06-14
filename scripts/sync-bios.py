@@ -1547,17 +1547,32 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
                 # <new-slug>.<ext>. Rebase it to the prior slug so the
                 # existing entry's photo field stays valid and we don't
                 # leave an orphan file under the abandoned slug.
+                #
+                # When row_to_member resolved the collapse before the
+                # download (the normal path now that all three prior
+                # indexes are wired in), the photo already sits at the
+                # canonical slug, so src == dest and there is nothing to
+                # move. Skipping the block in that case is not just an
+                # optimisation: the unlink sweep below would otherwise
+                # delete the canonical .webp derivative every sync, which
+                # ensure_people_webp then regenerates, churning a lone
+                # binary diff even though the source bytes never changed.
                 new_photo = entry.get("photo") or ""
                 if new_photo:
                     src = ROOT / new_photo
-                    if src.exists():
-                        dest_ext = src.suffix
-                        dest = PHOTO_DIR / f"{target_id}{dest_ext}"
-                        # If the previous entry had a photo at a
-                        # different extension, drop it — the form
-                        # submission is authoritative for the visual.
+                    dest = PHOTO_DIR / f"{target_id}{src.suffix}"
+                    if src.exists() and src != dest:
+                        # If the previous entry had a photo at a different
+                        # source extension, drop it — the form submission
+                        # is authoritative for the visual. Leave the .webp
+                        # derivative alone; ensure_people_webp owns it and
+                        # regenerates it from whichever source survives.
                         for stale in PHOTO_DIR.glob(f"{target_id}.*"):
-                            if stale != dest and stale.is_file():
+                            if (
+                                stale != dest
+                                and stale.is_file()
+                                and stale.suffix.lower() != ".webp"
+                            ):
                                 stale.unlink()
                         src.replace(dest)
                         entry["photo"] = str(dest.relative_to(ROOT)).replace(os.sep, "/")
@@ -1943,7 +1958,9 @@ def main() -> None:
         # The CSV from Google Sheets uses the form question text as the
         # header. Trim whitespace from header keys.
         row = {(k or "").strip(): v for k, v in raw_row.items()}
-        entry = row_to_member(row, cols, old_by_id)
+        entry = row_to_member(
+            row, cols, old_by_id, old_by_email, old_by_namekey,
+        )
         if entry:
             form_entries.append(entry)
 

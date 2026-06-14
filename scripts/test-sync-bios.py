@@ -435,6 +435,99 @@ def test_download_photo_idempotent_on_unchanged_upstream() -> None:
             dest_jpg.unlink()
 
 
+def test_row_to_member_resolves_photo_to_canonical_slug() -> None:
+    """Regression for the photo re-encode churn: main() must pass all
+    three prior indexes into row_to_member so a name-collapse submission
+    (form slug != canonical slug) downloads its photo to the canonical
+    slug and compares against the stored hash. With only old_by_id wired
+    in (the bug), resolve_prior_entry returned None, the photo wrote under
+    the form slug, re-encoded every run, and merge then churned the
+    canonical .webp. Captures the dest path download_photo is called with
+    rather than touching the network."""
+    print("\nrow_to_member() resolves photo to canonical slug:")
+    prior = [
+        {"id": "john-helferich", "name": "Dr John Helferich",
+         "country": "United Kingdom", "email": "",
+         "photo_source_sha256": "abc123"},
+    ]
+    by_id = {m["id"]: m for m in prior}
+    by_email = {m["email"].lower(): m for m in prior if m.get("email")}
+    by_namekey = {}
+    for m in prior:
+        nk = name_key(m["name"])
+        if nk:
+            by_namekey[(nk[0], nk[1], country_key(m["country"]))] = m
+
+    captured: dict = {}
+
+    def fake_download(url, dest_no_ext, *, prior_hash=None):
+        captured["dest"] = str(dest_no_ext)
+        captured["prior_hash"] = prior_hash
+        return ("assets/images/people/john-helferich.jpg", "abc123")
+
+    cols = {"name": "name", "consent": "consent", "email": "email",
+            "country": "country", "photo": "photo"}
+    row = {"name": "Dr John N.T. Helferich", "consent": "yes",
+           "email": "", "country": "United Kingdom",
+           "photo": "https://drive.example/abc"}
+    saved_dl = sync_bios.download_photo
+    sync_bios.download_photo = fake_download
+    try:
+        entry = sync_bios.row_to_member(row, cols, by_id, by_email, by_namekey)
+    finally:
+        sync_bios.download_photo = saved_dl
+    expect("entry built", entry is not None, True)
+    expect("photo writes to canonical slug",
+           captured.get("dest", "").endswith("john-helferich"), True)
+    expect("…not under the form slug",
+           captured.get("dest", "").endswith("n-t-helferich"), False)
+    expect("…comparing against the stored hash",
+           captured.get("prior_hash"), "abc123")
+
+
+def test_merge_keeps_webp_when_photo_already_canonical() -> None:
+    """Regression: when row_to_member has already resolved a name-collapse
+    photo to its canonical slug, merge()'s rebase is a no-op (src == dest)
+    and must NOT delete the canonical .webp derivative. The old code
+    globbed `<slug>.*` and unlinked everything but the .jpg dest, nuking
+    the .webp every sync for ensure_people_webp to regenerate, churning a
+    lone binary diff."""
+    print("\nmerge() keeps .webp on canonical-slug collapse:")
+    slug = "zztest-webp-canon"
+    jpg = sync_bios.PHOTO_DIR / f"{slug}.jpg"
+    webp = sync_bios.PHOTO_DIR / f"{slug}.webp"
+    jpg.write_bytes(b"jpgbytes")
+    webp.write_bytes(b"webpbytes")
+    try:
+        prior = [{
+            "id": slug, "name": "Dr Test Canon", "country": "Sweden",
+            "country_code": "se", "roles": [], "wgs": [], "wg_leadership": {},
+            "email": "", "photo": f"assets/images/people/{slug}.jpg",
+            "photo_source_sha256": "h1", "source": "seed",
+        }]
+        # Form entry: different slug, but photo already at canonical slug
+        # (the path row_to_member now produces pre-download).
+        form = [{
+            "id": "test-c-canon", "name": "Dr Test C. Canon",
+            "country": "Sweden", "country_code": "", "affiliation": "Lund",
+            "position": "", "roles": [], "wgs": [], "wg_leadership": {},
+            "bio": "", "keywords": [], "email": "", "website": "",
+            "orcid": "", "linkedin": "", "twitter": "", "bluesky": "",
+            "mastodon": "", "photo": f"assets/images/people/{slug}.jpg",
+            "photo_source_sha256": "h1", "source": "form",
+            "_email_key": "", "_timestamp": "2026-06-01 09:00:00",
+        }]
+        merged = sync_bios.merge(prior, form)
+        expect("collapsed to one entry", len(merged), 1)
+        expect("canonical .jpg preserved", jpg.exists(), True)
+        expect("canonical .webp NOT deleted", webp.exists(), True)
+        expect("…and its bytes untouched", webp.read_bytes(), b"webpbytes")
+    finally:
+        for f in (jpg, webp):
+            if f.exists():
+                f.unlink()
+
+
 def test_substance_check_catches_photo_only_change() -> None:
     """Regression: the "no substantive changes" guard in main()
     compares `merged != old_members`. A respondent submitting a fresh
@@ -1190,6 +1283,8 @@ def main() -> None:
     test_merge_stsm_propagates()
     test_merge_allowlist_covers_every_form_field()
     test_resolve_prior_entry()
+    test_row_to_member_resolves_photo_to_canonical_slug()
+    test_merge_keeps_webp_when_photo_already_canonical()
     test_founding_contributor_flag()
     test_download_photo_idempotent_on_unchanged_upstream()
     test_ensure_people_webp()
