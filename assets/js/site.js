@@ -1827,6 +1827,203 @@ window.netsecMemberCard = (function () {
     .catch((err) => { console.warn('member-card: bios.json fetch failed; links stay as plain directory links:', err); });
 })();
 
+/* Site-wide person mentions → hover / focus / click profile card.
+   The member-link block above needs an explicit data-member id. This block
+   is the general case: any element carrying data-person="<authored name>",
+   anywhere on any page, plus any unmarked full-name mention of a directory
+   member found in <main> prose, is wired to the shared card. Resolution is
+   by a normalised first|last name key (titles, particles and post-nominals
+   stripped, the same scheme the ESSC programme and the leadership cards use)
+   against data/bios.json. A name that is mentioned today but only joins the
+   directory later therefore lights up automatically on the next visit, with
+   no edit to the page; a name that is not in the directory stays plain text.
+   The .mc-card leadership cards already render the person from the same data,
+   so they keep their own presentation and are left alone here. */
+(function () {
+  const card = window.netsecMemberCard;
+  if (!card) return;
+
+  const POSTNOMINALS = new Set(['phd', 'jr', 'sr', 'ii', 'iii', 'iv', 'esq']);
+  const PARTICLES = new Set([
+    'de', 'del', 'della', 'di', 'da', 'das', 'dos',
+    'van', 'von', 'vom', 'der', 'den', 'ter', 'ten',
+    'la', 'le', 'el', 'al', 'ibn', 'bin', 'bint', 'zu', 'auf', 'af',
+  ]);
+  function tokens(name) {
+    let s = String(name || '').normalize('NFKD').replace(/[̀-ͯ]/g, '');
+    s = s.replace(/^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+/i, '').replace(/[‘’ʼ'`]/g, '');
+    return s.split(/[^A-Za-z]+/).filter(Boolean).map((x) => x.toLowerCase())
+      .filter((x) => !POSTNOMINALS.has(x) && !PARTICLES.has(x));
+  }
+  function nameKey(name) {
+    const t = tokens(name);
+    return t.length < 2 ? null : t[0] + '|' + t[t.length - 1];
+  }
+  const escRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // A member's directory display names (title stripped), longest first, for
+  // matching a full name inside arbitrary text. Bare single tokens and very
+  // short strings are dropped so only first+last mentions ever match.
+  function displayNames(m) {
+    const out = [];
+    for (const nm of [m.name, ...(m.name_aliases || [])]) {
+      const disp = String(nm || '').replace(/^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+/i, '').trim();
+      if (nameKey(disp) && disp.length >= 5 && out.indexOf(disp) === -1) out.push(disp);
+    }
+    return out.sort((a, b) => b.length - a.length);
+  }
+  // Wrap the first occurrence of any of `names` inside `root`'s text in a
+  // wired <span>, so only the name (not, say, an affiliation line in the same
+  // <li>) carries the dotted affordance and the card. Returns true on a wrap.
+  function wrapNameIn(root, member, names, hrefOverride) {
+    if (!names.length) return false;
+    const r = new RegExp('(?<![\\p{L}])(' + names.map(escRe).join('|') + ')(?![\\p{L}])', 'u');
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(n) {
+        if (!n.nodeValue || !r.test(n.nodeValue)) return NodeFilter.FILTER_REJECT;
+        if (n.parentElement && n.parentElement.closest('a, button')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+    const node = w.nextNode();
+    if (!node) return false;
+    const text = node.nodeValue, match = r.exec(text), frag = document.createDocumentFragment();
+    if (match.index > 0) frag.appendChild(document.createTextNode(text.slice(0, match.index)));
+    const span = document.createElement('span');
+    span.textContent = match[1];
+    wire(span, member, hrefOverride);
+    frag.appendChild(span);
+    const end = match.index + match[1].length;
+    if (end < text.length) frag.appendChild(document.createTextNode(text.slice(end)));
+    node.parentNode.replaceChild(frag, node);
+    return true;
+  }
+
+  // Ancestors whose text must never be auto-scanned: interactive controls,
+  // chrome, forms, code, the directory / programme blocks that render their
+  // own member links, and anything already marked or opted out.
+  const SKIP_CLOSEST =
+    'a, button, nav, footer, label, code, pre, script, style, textarea, ' +
+    'option, .member-card, .mc-card, .essc-member-card, .essc-programme, ' +
+    '#members-grid, [data-person], [data-no-person], .nav, .site-footer';
+
+  function wire(el, member, hrefOverride) {
+    if (el.dataset.personWired) return;
+    el.dataset.personWired = '1';
+    el.classList.add('has-person-card');
+    const opts = { ctaHref: hrefOverride || ('people.html#' + member.id) };
+    const open = (e) => {
+      if (e.type === 'click') {
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        if (!card.show(el, member, opts)) return;   // popover unsupported → noop
+        e.preventDefault();
+      } else { card.show(el, member, opts); }
+    };
+    el.addEventListener('mouseenter', open);
+    el.addEventListener('focus', open);
+    el.addEventListener('click', open);
+    el.addEventListener('mouseleave', card.scheduleHide);
+    el.addEventListener('blur', card.scheduleHide);
+    // Make non-interactive mentions (span / li / td) keyboard-reachable so
+    // the card is not mouse-only.
+    if (!/^(A|BUTTON)$/.test(el.tagName) && !el.hasAttribute('tabindex')) {
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('role', 'button');
+    }
+  }
+
+  fetch('data/bios.json', { cache: 'no-cache' })
+    .then((r) => (r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status))))
+    .then((bios) => {
+      const byKey = new Map();
+      for (const m of (bios && bios.members) || []) {
+        if (!m) continue;
+        const add = (nm) => { const k = nameKey(nm); if (k && !byKey.has(k)) byKey.set(k, m); };
+        add(m.name);
+        (m.name_aliases || []).forEach(add);
+      }
+      if (!byKey.size) return;
+
+      // 1) Explicitly marked mentions, on any page. Skip the leadership cards
+      //    (they render the person already) and anything inside a block that
+      //    owns its own member links.
+      document.querySelectorAll('[data-person]').forEach((el) => {
+        if (el.closest('.mc-card, .member-card, .essc-member-card, .essc-programme, #members-grid')) return;
+        const authored = String(el.getAttribute('data-person') || '')
+          .replace(/^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+/i, '').trim();
+        const m = byKey.get(nameKey(el.getAttribute('data-person')));
+        if (!m) return;
+        const href = el.tagName === 'A' ? el.getAttribute('href') : null;
+        // Match the name as the page actually wrote it (the data-person value)
+        // first, then the directory display names: the two can differ (an
+        // initial dropped, a different honorific), and we want to wrap exactly
+        // the visible name, not an affiliation line in the same <li>. Fall back
+        // to wiring the whole element if no name text is found.
+        const names = [authored, ...displayNames(m)]
+          .filter((v) => v && nameKey(v))
+          .filter((v, i, a) => a.indexOf(v) === i)
+          .sort((a, b) => b.length - a.length);
+        if (!wrapNameIn(el, m, names, href)) wire(el, m, href);
+      });
+
+      // 2) Auto-scan <main> prose for unmarked full-name mentions, so a name
+      //    written in a paragraph cards itself without being hand-tagged, and
+      //    keeps doing so as the directory grows. Full first+last only, on a
+      //    word boundary, longest names first; each match becomes a wrapped
+      //    span. Conservative by construction: a bare first name or surname
+      //    never matches, and the SKIP_CLOSEST list keeps it out of chrome,
+      //    links, forms, code, and the directory / programme blocks.
+      const main = document.querySelector('main');
+      if (!main) return;
+      const names = [];
+      const keyByName = new Map();
+      for (const m of (bios.members || [])) {
+        for (const disp of displayNames(m)) {
+          if (!keyByName.has(disp.toLowerCase())) {
+            names.push(disp);
+            keyByName.set(disp.toLowerCase(), m);
+          }
+        }
+      }
+      if (!names.length) return;
+      names.sort((a, b) => b.length - a.length);
+      const re = new RegExp('(?<![\\p{L}])(' + names.map(escRe).join('|') + ')(?![\\p{L}])', 'u');
+
+      const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement && node.parentElement.closest(SKIP_CLOSEST)) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return re.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        },
+      });
+      const targets = [];
+      for (let n = walker.nextNode(); n; n = walker.nextNode()) targets.push(n);
+      const reG = new RegExp(re.source, 'gu');
+      targets.forEach((node) => {
+        const text = node.nodeValue;
+        reG.lastIndex = 0;
+        let last = 0, match, frag = null;
+        while ((match = reG.exec(text))) {
+          const m = keyByName.get(match[1].toLowerCase());
+          if (!m) continue;
+          frag = frag || document.createDocumentFragment();
+          if (match.index > last) frag.appendChild(document.createTextNode(text.slice(last, match.index)));
+          const span = document.createElement('span');
+          span.textContent = match[1];
+          wire(span, m);
+          frag.appendChild(span);
+          last = match.index + match[1].length;
+        }
+        if (frag) {
+          if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+          node.parentNode.replaceChild(frag, node);
+        }
+      });
+    })
+    .catch(() => { /* silent: plain text stays a correct fallback */ });
+})();
+
 /* ── ECS³ faculty roster: self-healing headshots from the directory ────
    Every faculty card renders a monogram avatar from static markup, so the
    roster is complete with no JavaScript and no network. On load this matches

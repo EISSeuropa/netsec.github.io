@@ -4603,6 +4603,22 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   border-bottom-color:var(--accent-2);
 }
 .ecs-faculty-name.member-link{font-weight:600}
+/* Site-wide person mentions wired to the hover card (assets/js/site.js).
+   Uses text-decoration rather than a border so the dotted affordance hugs
+   the name text whether the mention is an inline span or a block <li>. */
+.has-person-card{
+  cursor:pointer;
+  text-decoration:underline;
+  text-decoration-style:dotted;
+  text-decoration-color:color-mix(in srgb,var(--accent-2) 55%,transparent);
+  text-underline-offset:2px;
+  transition:color .15s ease,text-decoration-color .15s ease;
+}
+.has-person-card:hover,
+.has-person-card:focus-visible{
+  color:var(--accent-2);
+  text-decoration-color:var(--accent-2);
+}
 
 /* Organisers: NetSec + EISS, sized and weighted equally. */
 .ecs-partners{
