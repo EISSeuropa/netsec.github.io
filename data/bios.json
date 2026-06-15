@@ -195,8 +195,7 @@
         "WG2 Leader"
       ],
       "wgs": [
-        1,
-        2
+        1
       ],
       "wg_leadership": {
         "lead": [
@@ -740,7 +739,6 @@
       "position": "PhD Researcher",
       "roles": [],
       "wgs": [
-        2,
         3
       ],
       "mentorship": [
