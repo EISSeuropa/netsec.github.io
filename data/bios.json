@@ -1,16 +1,16 @@
 {
   "version": 1,
-  "generated_at": "2026-06-13T17:05:04+00:00",
+  "generated_at": "2026-06-15T11:22:30+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-13T17:05:04+00:00"
+    "last_synced": "2026-06-15T11:22:30+00:00"
   },
   "members": [
     {
       "id": "moritz-weiss",
-      "name": "Dr. Moritz Weiss",
+      "name": "Dr Moritz Weiss",
       "country": "Germany",
       "country_code": "de",
       "affiliation": "LMU Munich",
@@ -733,7 +733,7 @@
     },
     {
       "id": "pieter-zhao",
-      "name": "Mr. Pieter Zhao",
+      "name": "Mr Pieter Zhao",
       "country": "Netherlands",
       "country_code": "nl",
       "affiliation": "Erasmus University Rotterdam",
@@ -937,6 +937,146 @@
         "Security and defence",
         "Theory and methods"
       ]
+    },
+    {
+      "id": "francesco-canossi",
+      "name": "Francesco Canossi",
+      "country": "Italy",
+      "country_code": "it",
+      "affiliation": "Independent",
+      "position": "Advisor / Consultant",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional",
+        "Middle East and North Africa"
+      ],
+      "wg_leadership": {},
+      "bio": "Francesco Canossi is a Franco-Italian defence strategist and industrial engineer working at the intersection of security policy, technology, and defence-industrial strategy.\nTrained as a mechanical and industrial engineer at the Università di Bologna and Politecnico di Milano, he subsequently worked as a strategy consultant at Kearney's Aerospace and Defence practice, advising governments and multinational prime contractors across Europe, the Middle East, and the United States on defence localization, industrial cooperation, and emerging technology. He holds a minority equity stake and advisory role in MIRAI Robotics, a European maritime autonomy startup.\nHis research and writing focus on European defence industrial policy, maritime security, and the governance of emerging technologies within alliance contexts. His essay on undersea cable vulnerability and hybrid threats was awarded second prize in the First Sea Lord's Essay Competition at the Sea Power Conference 2025, presented by Admiral Sir Gwyn Jenkins. He publishes through the Council on Geostrategy's The Broadside, among others.\nFrancesco holds fellowships and affiliations with the Institut des Hautes Études de Défense Nationale, the Centre d'Études Stratégiques de la Marine, the NATO Defence College Next Generation Futures programme, the Council on Geostrategy Maritime Leaders Programme, and RUSI NextGen. He serves as a mentor and panel evaluator for NATO DIANA and is a participant in the Spinelli Forum 2026. He holds dual French and Italian citizenship and is a native speaker of both languages, alongside fluent English.",
+      "keywords": [
+        "Defence industrial policy",
+        "maritime security",
+        "emerging and disruptive technologies",
+        "European strategic autonomy",
+        "capability planning"
+      ],
+      "email": "francesco.canossi@gmail.com",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/francescocanossi/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/francesco-canossi.jpg",
+      "source": "form",
+      "photo_source_sha256": "2654145a5623b760e59c79afea9c28926f533cb57771387266c61f466b1b825e",
+      "canonical_keywords": [
+        "Capability planning",
+        "Defence industrial policy",
+        "Emerging and disruptive technologies",
+        "European strategic autonomy",
+        "Maritime security"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Transnational and human security"
+      ]
+    },
+    {
+      "id": "mba",
+      "name": "MBA",
+      "country": "Italy",
+      "country_code": "it",
+      "affiliation": "CASD",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [
+        2
+      ],
+      "mentorship": [],
+      "regions": [
+        "Europe",
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Sara Russo is a Ph.D. candidate in Defence and Security Studies at the Centre for Higher Defence Studies (CASD) and the University of Turin, where her research focuses on cognitive warfare, strategic communication, influence dynamics, leadership, and organizational resilience. Her work explores how influence operates across social, organizational, and technological systems, with particular attention to the evolving challenges posed by hybrid threats, information environments, and emerging forms of conflict.",
+      "keywords": [
+        "cognitive warfare",
+        "influence",
+        "organization studies",
+        "hybrid threats"
+      ],
+      "email": "sara.russo@unicasd.it",
+      "website": "https://www.difesa.it/smd/casd/index/26451.html",
+      "orcid": "0009-0004-8176-8712",
+      "linkedin": "https://www.linkedin.com/newsletters/cognitive-warfare-research-7413905826274463744/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/mba.jpg",
+      "source": "form",
+      "photo_source_sha256": "40fcd594d60176c21651e8ed5f7a5bb37404284afb7d5aa3e3927c472b2f92fe",
+      "canonical_keywords": [
+        "Cognitive warfare",
+        "Hybrid threats",
+        "Influence",
+        "Organisation studies"
+      ]
+    },
+    {
+      "id": "mrs-yanina-shved-dogrul",
+      "name": "Mrs.Yanina Shved-Dogrul",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Bogazici University",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Europe - Western Balkans"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "I am a Teaching Assistant, researcher, and Ph.D. candidate in International Relations at Istanbul Nişantaşı University. Born in Ukraine to a family of Ukrainian and Polish heritage, I hold Bachelor's and Master's degrees in Philology and a Master's degree in Polish Studies from Istanbul University. My thesis, Istanbul Reflected by the Poles from the 18th to the 21st Centuries, explored the historical and cultural connections between Türkiye, Poland, and Ukraine.\nMy research interests include European security, regional cooperation, international relations, and the Black Sea region. I have presented papers on Turkish-Polish-Ukrainian relations at academic conferences and am actively engaged in interdisciplinary research on Europe and its neighbourhood.\nAlongside my academic work, I teach at Boğaziçi University and the Turkish National Defence University. Through my research and teaching, I seek to contribute to dialogue and cooperation across European and regional contexts.",
+      "keywords": [
+        "European Security",
+        "Black Sea Security",
+        "Regional Cooperation",
+        "International Relations",
+        "Eastern Europe"
+      ],
+      "email": "yanina.dogrul@bogazici.edu.tr",
+      "website": "https://mlu.bogazici.edu.tr/en/personel/yanina-dogrul/6558",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/yanina-shved-dogrul-36642a2a7?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/mrs-yanina-shved-dogrul.jpg",
+      "source": "form",
+      "photo_source_sha256": "7f1f281ec6845afbcfcf5c5feb6a8240ff87ec3c1c7d326e07d62cb2462e1506",
+      "canonical_keywords": [
+        "Black sea security",
+        "Eastern Europe",
+        "European security",
+        "International relations",
+        "Regional cooperation"
+      ],
+      "themes": [
+        "Security and defence",
+        "Theory and methods"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -945,7 +1085,23 @@
       "count": 2
     },
     {
+      "keyword": "Emerging and disruptive technologies",
+      "count": 2
+    },
+    {
       "keyword": "EU foreign policy",
+      "count": 2
+    },
+    {
+      "keyword": "European security",
+      "count": 2
+    },
+    {
+      "keyword": "International relations",
+      "count": 2
+    },
+    {
+      "keyword": "Maritime security",
       "count": 2
     },
     {
@@ -957,11 +1113,23 @@
       "count": 1
     },
     {
+      "keyword": "Black sea security",
+      "count": 1
+    },
+    {
+      "keyword": "Capability planning",
+      "count": 1
+    },
+    {
       "keyword": "Civil defence",
       "count": 1
     },
     {
       "keyword": "Civil-military relations",
+      "count": 1
+    },
+    {
+      "keyword": "Cognitive warfare",
       "count": 1
     },
     {
@@ -985,6 +1153,10 @@
       "count": 1
     },
     {
+      "keyword": "Defence industrial policy",
+      "count": 1
+    },
+    {
       "keyword": "Deterrence",
       "count": 1
     },
@@ -1005,6 +1177,10 @@
       "count": 1
     },
     {
+      "keyword": "Eastern Europe",
+      "count": 1
+    },
+    {
       "keyword": "Economic statecraft",
       "count": 1
     },
@@ -1013,11 +1189,7 @@
       "count": 1
     },
     {
-      "keyword": "Emerging and disruptive technologies",
-      "count": 1
-    },
-    {
-      "keyword": "European security",
+      "keyword": "European strategic autonomy",
       "count": 1
     },
     {
@@ -1041,6 +1213,10 @@
       "count": 1
     },
     {
+      "keyword": "Hybrid threats",
+      "count": 1
+    },
+    {
       "keyword": "Identity",
       "count": 1
     },
@@ -1057,6 +1233,10 @@
       "count": 1
     },
     {
+      "keyword": "Influence",
+      "count": 1
+    },
+    {
       "keyword": "Infrastructure",
       "count": 1
     },
@@ -1065,19 +1245,11 @@
       "count": 1
     },
     {
-      "keyword": "International relations",
-      "count": 1
-    },
-    {
       "keyword": "International security",
       "count": 1
     },
     {
       "keyword": "Irregular warfare",
-      "count": 1
-    },
-    {
-      "keyword": "Maritime security",
       "count": 1
     },
     {
@@ -1109,6 +1281,10 @@
       "count": 1
     },
     {
+      "keyword": "Organisation studies",
+      "count": 1
+    },
+    {
       "keyword": "Peacekeeping",
       "count": 1
     },
@@ -1126,6 +1302,10 @@
     },
     {
       "keyword": "Power",
+      "count": 1
+    },
+    {
+      "keyword": "Regional cooperation",
       "count": 1
     },
     {
@@ -1156,7 +1336,7 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 7
+      "count": 8
     },
     {
       "theme": "Foreign policy and diplomacy",
@@ -1164,10 +1344,14 @@
     },
     {
       "theme": "Theory and methods",
-      "count": 5
+      "count": 6
     },
     {
       "theme": "Cyber and emerging technology",
+      "count": 5
+    },
+    {
+      "theme": "Transnational and human security",
       "count": 4
     },
     {
@@ -1176,10 +1360,6 @@
     },
     {
       "theme": "Intelligence, information and influence",
-      "count": 3
-    },
-    {
-      "theme": "Transnational and human security",
       "count": 3
     },
     {
@@ -1249,14 +1429,18 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 9
+      "count": 12
     },
     {
       "region": "Global and cross-regional",
-      "count": 5
+      "count": 7
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
+      "count": 4
+    },
+    {
+      "region": "Middle East and North Africa",
       "count": 3
     },
     {
@@ -1264,19 +1448,15 @@
       "count": 2
     },
     {
-      "region": "Middle East and North Africa",
+      "region": "Europe - Western Balkans",
+      "count": 2
+    },
+    {
+      "region": "The Americas",
       "count": 2
     },
     {
       "region": "Africa",
-      "count": 1
-    },
-    {
-      "region": "Europe - Western Balkans",
-      "count": 1
-    },
-    {
-      "region": "The Americas",
       "count": 1
     }
   ]
