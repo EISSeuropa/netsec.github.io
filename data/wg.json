@@ -9,7 +9,7 @@
       "memberCount": 64,
       "lead": {
         "slug": "moritz-weiss",
-        "name": "Dr. Moritz Weiss"
+        "name": "Dr Moritz Weiss"
       },
       "coLead": {
         "slug": "filip-ejdus",
@@ -167,7 +167,8 @@
         },
         {
           "name": "Mr Mattia Sguazzini",
-          "country": "Italy"
+          "country": "Italy",
+          "slug": "mattia-sguazzini"
         },
         {
           "name": "Prof Mehmet Gokay Ozerim",
@@ -441,7 +442,8 @@
         },
         {
           "name": "Ms sara russo",
-          "country": "Italy"
+          "country": "Italy",
+          "slug": "sara-russo"
         },
         {
           "name": "Dr Sarka Kolmasova",
