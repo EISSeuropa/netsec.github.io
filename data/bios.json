@@ -591,10 +591,7 @@
       "affiliation": "Swedish Defence University",
       "position": "PhD Candidate",
       "roles": [],
-      "wgs": [
-        1,
-        3
-      ],
+      "wgs": [],
       "mentorship": [
         "mentee"
       ],
@@ -641,10 +638,7 @@
       "affiliation": "Swedish Defence University",
       "position": "Postdoctoral Fellow",
       "roles": [],
-      "wgs": [
-        1,
-        3
-      ],
+      "wgs": [],
       "mentorship": [
         "mentor"
       ],
@@ -790,10 +784,7 @@
       "affiliation": "Leiden University",
       "position": "PhD Candidate",
       "roles": [],
-      "wgs": [
-        3,
-        4
-      ],
+      "wgs": [],
       "mentorship": [
         "mentee"
       ],
@@ -842,11 +833,7 @@
       "affiliation": "University of Oxford",
       "position": "DPhil candidate",
       "roles": [],
-      "wgs": [
-        1,
-        2,
-        3
-      ],
+      "wgs": [],
       "mentorship": [],
       "regions": [
         "Asia",
@@ -985,53 +972,6 @@
         "European and transatlantic security order",
         "Security and defence",
         "Transnational and human security"
-      ]
-    },
-    {
-      "id": "mba",
-      "name": "MBA",
-      "country": "Italy",
-      "country_code": "it",
-      "affiliation": "CASD",
-      "position": "PhD Candidate",
-      "roles": [],
-      "wgs": [
-        2
-      ],
-      "mentorship": [],
-      "regions": [
-        "Europe",
-        "Global and cross-regional",
-        "The Americas"
-      ],
-      "stsm_hosting": "ask",
-      "wg_leadership": {},
-      "bio": "Sara Russo is a Ph.D. candidate in Defence and Security Studies at the Centre for Higher Defence Studies (CASD) and the University of Turin, where her research focuses on cognitive warfare, strategic communication, influence dynamics, leadership, and organizational resilience. Her work explores how influence operates across social, organizational, and technological systems, with particular attention to the evolving challenges posed by hybrid threats, information environments, and emerging forms of conflict.",
-      "keywords": [
-        "cognitive warfare",
-        "influence",
-        "organization studies",
-        "hybrid threats"
-      ],
-      "email": "sara.russo@unicasd.it",
-      "website": "https://www.difesa.it/smd/casd/index/26451.html",
-      "orcid": "0009-0004-8176-8712",
-      "linkedin": "https://www.linkedin.com/newsletters/cognitive-warfare-research-7413905826274463744/",
-      "twitter": "",
-      "bluesky": "",
-      "mastodon": "",
-      "photo": "assets/images/people/mba.jpg",
-      "source": "form",
-      "photo_source_sha256": "40fcd594d60176c21651e8ed5f7a5bb37404284afb7d5aa3e3927c472b2f92fe",
-      "canonical_keywords": [
-        "Cognitive warfare",
-        "Hybrid threats",
-        "Influence",
-        "Organisation studies"
-      ],
-      "themes": [
-        "Intelligence, information and influence",
-        "Theory and methods"
       ]
     },
     {
@@ -1185,10 +1125,6 @@
   ],
   "keyword_aggregate": [
     {
-      "keyword": "Cognitive warfare",
-      "count": 2
-    },
-    {
       "keyword": "Economic security",
       "count": 2
     },
@@ -1205,14 +1141,6 @@
       "count": 2
     },
     {
-      "keyword": "Hybrid threats",
-      "count": 2
-    },
-    {
-      "keyword": "Influence",
-      "count": 2
-    },
-    {
       "keyword": "International relations",
       "count": 2
     },
@@ -1222,10 +1150,6 @@
     },
     {
       "keyword": "Non-state actors",
-      "count": 2
-    },
-    {
-      "keyword": "Organisation studies",
       "count": 2
     },
     {
@@ -1250,6 +1174,10 @@
     },
     {
       "keyword": "Civil-military relations",
+      "count": 1
+    },
+    {
+      "keyword": "Cognitive warfare",
       "count": 1
     },
     {
@@ -1345,6 +1273,10 @@
       "count": 1
     },
     {
+      "keyword": "Hybrid threats",
+      "count": 1
+    },
+    {
       "keyword": "Identity",
       "count": 1
     },
@@ -1358,6 +1290,10 @@
     },
     {
       "keyword": "Industrial policy",
+      "count": 1
+    },
+    {
+      "keyword": "Influence",
       "count": 1
     },
     {
@@ -1402,6 +1338,10 @@
     },
     {
       "keyword": "Ontological security",
+      "count": 1
+    },
+    {
+      "keyword": "Organisation studies",
       "count": 1
     },
     {
@@ -1468,18 +1408,18 @@
     },
     {
       "theme": "Theory and methods",
-      "count": 8
+      "count": 7
     },
     {
       "theme": "Cyber and emerging technology",
       "count": 6
     },
     {
-      "theme": "Intelligence, information and influence",
-      "count": 5
+      "theme": "Economic security and geoeconomics",
+      "count": 4
     },
     {
-      "theme": "Economic security and geoeconomics",
+      "theme": "Intelligence, information and influence",
       "count": 4
     },
     {
@@ -1568,18 +1508,14 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 14
+      "count": 13
     },
     {
       "region": "Global and cross-regional",
-      "count": 9
+      "count": 8
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 4
-    },
-    {
-      "region": "The Americas",
       "count": 4
     },
     {
@@ -1588,6 +1524,10 @@
     },
     {
       "region": "Middle East and North Africa",
+      "count": 3
+    },
+    {
+      "region": "The Americas",
       "count": 3
     },
     {
