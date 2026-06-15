@@ -29,7 +29,7 @@ Google Form ──► Google Sheet ──► sync-bios.yml (weekly) ──► PR
 | 5 | **Public email (optional, will be shown on the site)** | Short answer | ⬜ |
 | 6 | **Short bio (max 300 words)** | Paragraph | ✅ |
 | 7 | **Research keywords (comma-separated, 3–5 suggested)** | Short answer | ⬜ |
-| 8 | **Working Group involvement (tick all that apply)** | Checkboxes: *WG1 · Building the Network · WG2 · Transfer of Knowledge · WG3 · Fostering the Next Generation · WG4 · Ensuring Inclusion · None yet* | ⬜ |
+| — | **Working Group involvement** *(retired)* | Was a checkbox question; removed from the form because members were often unsure which WG they belonged to. Working-Group chips are now sourced solely from cost.eu's Membership table (see below), not self-declared. | — |
 | 9 | **Mentorship (optional)** | Checkboxes: *Open to mentoring early-career researchers · Looking for a mentor* | ⬜ |
 | 10 | **Research regions (optional)** | Checkboxes: *Europe · Europe - Western Balkans · Europe - Eastern neighbours / Russia · Middle East and North Africa · Africa · Asia · The Americas · Global and cross-regional* | ⬜ |
 | 11 | **Could your institution host STSM visitors?** | Multiple choice: *Yes · No · Ask me* | ⬜ |
@@ -82,7 +82,7 @@ This makes the photo-replacement workaround safe to recommend in practice: respo
 
 ### How Working Group memberships stay in sync with cost.eu
 
-The Google Form's *Working Group involvement* checkboxes seed each bio's `wgs` field on first submission. From then on, `scripts/sync-cost.py` (weekly Monday 05:00 UTC, plus manual `workflow_dispatch`) reconciles `wgs` against the Membership table on <https://www.cost.eu/actions/CA24154/>:
+Each bio's `wgs` field is sourced from cost.eu's authoritative Membership table, not from the form. The form's *Working Group involvement* question was retired (members were often unsure which WG they belonged to, and a guessed answer was union-merged and then sticky), so `scripts/sync-bios.py` no longer reads any self-declared WG (there is deliberately no `wgs` column mapping in `scripts/bios-source.json`). `scripts/sync-cost.py` (weekly Monday 05:00 UTC, plus manual `workflow_dispatch`) owns `wgs`, reconciling it against the Membership table on <https://www.cost.eu/actions/CA24154/>:
 
 - **Per-WG reconciliation, biased towards additions.** Members add WGs far more often than they remove them, and cost.eu can lag a fresh form submission by weeks, so neither source simply wins. A WG newly published on cost.eu is applied to the bio; a WG declared on the form that cost.eu has not recorded yet stays on the card and is flagged in the sync PR as pending formal catch-up; a WG a member's newer form submission deliberately dropped is held rather than re-added, with a flag asking the maintainer to confirm. The observation clocks behind the recency comparison live in `data/cost-wg-state.json` (generated, never hand-edited).
 - **Entries not on cost.eu are left untouched.** Wider-community researchers in the directory who aren't on the MC, plus seed entries for new leaders who haven't yet appeared in cost.eu's Membership table, keep whatever `wgs` value the form (or the maintainer) last set.
