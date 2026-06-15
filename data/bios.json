@@ -983,6 +983,9 @@
       ],
       "themes": [
         "Cyber and emerging technology",
+        "Economic security and geoeconomics",
+        "European and transatlantic security order",
+        "Security and defence",
         "Transnational and human security"
       ]
     },
@@ -1027,6 +1030,10 @@
         "Hybrid threats",
         "Influence",
         "Organisation studies"
+      ],
+      "themes": [
+        "Intelligence, information and influence",
+        "Theory and methods"
       ]
     },
     {
@@ -1074,6 +1081,7 @@
         "Regional cooperation"
       ],
       "themes": [
+        "Foreign policy and diplomacy",
         "Security and defence",
         "Theory and methods"
       ]
@@ -1122,6 +1130,11 @@
         "Cybersecurity",
         "Geopolitics",
         "Strategy"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Foreign policy and diplomacy",
+        "Security and defence"
       ]
     },
     {
@@ -1165,6 +1178,10 @@
         "Hybrid threats",
         "Influence",
         "Organisation studies"
+      ],
+      "themes": [
+        "Intelligence, information and influence",
+        "Theory and methods"
       ]
     },
     {
@@ -1212,6 +1229,7 @@
         "Regional cooperation"
       ],
       "themes": [
+        "Foreign policy and diplomacy",
         "Security and defence",
         "Theory and methods"
       ]
@@ -1494,35 +1512,35 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
+      "count": 11
+    },
+    {
+      "theme": "Foreign policy and diplomacy",
       "count": 9
     },
     {
       "theme": "Theory and methods",
-      "count": 7
-    },
-    {
-      "theme": "Foreign policy and diplomacy",
-      "count": 6
+      "count": 9
     },
     {
       "theme": "Cyber and emerging technology",
+      "count": 6
+    },
+    {
+      "theme": "Intelligence, information and influence",
       "count": 5
+    },
+    {
+      "theme": "Economic security and geoeconomics",
+      "count": 4
     },
     {
       "theme": "Transnational and human security",
       "count": 4
     },
     {
-      "theme": "Economic security and geoeconomics",
-      "count": 3
-    },
-    {
-      "theme": "Intelligence, information and influence",
-      "count": 3
-    },
-    {
       "theme": "European and transatlantic security order",
-      "count": 1
+      "count": 2
     },
     {
       "theme": "Identity, narratives and ideational security",
@@ -1530,14 +1548,21 @@
     }
   ],
   "keyword_theme_map": {
+    "AI": "Cyber and emerging technology",
     "Arms control": "Security and defence",
+    "Black sea security": "Security and defence",
+    "Capability planning": "Security and defence",
     "Civil defence": "Security and defence",
     "Civil-military relations": "Security and defence",
+    "Cognitive warfare": "Intelligence, information and influence",
     "Counterterrorism": "Transnational and human security",
     "Cyber defence": "Cyber and emerging technology",
     "Cyber security": "Cyber and emerging technology",
+    "Cybercrime": "Cyber and emerging technology",
+    "Cybersecurity": "Cyber and emerging technology",
     "Cybersecurity governance": "Cyber and emerging technology",
     "Defence": "Security and defence",
+    "Defence industrial policy": "Economic security and geoeconomics",
     "Deterrence": "Security and defence",
     "Digital governance": "Cyber and emerging technology",
     "Digital media": "Intelligence, information and influence",
@@ -1545,19 +1570,24 @@
     "Disinformation": "Intelligence, information and influence",
     "EU foreign policy": "Foreign policy and diplomacy",
     "EU–NATO relations": "European and transatlantic security order",
+    "Eastern Europe": "Foreign policy and diplomacy",
     "Economic security": "Economic security and geoeconomics",
     "Economic statecraft": "Economic security and geoeconomics",
     "Election interference": "Intelligence, information and influence",
     "Emerging and disruptive technologies": "Cyber and emerging technology",
     "European security": "Security and defence",
+    "European strategic autonomy": "European and transatlantic security order",
     "Foreign policy analysis": "Foreign policy and diplomacy",
+    "Geopolitics": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
     "Grand strategy": "Security and defence",
     "History": "Theory and methods",
+    "Hybrid threats": "Intelligence, information and influence",
     "Identity": "Identity, narratives and ideational security",
     "India": "Foreign policy and diplomacy",
     "Indian foreign policy": "Foreign policy and diplomacy",
     "Industrial policy": "Economic security and geoeconomics",
+    "Influence": "Intelligence, information and influence",
     "Infrastructure": "Cyber and emerging technology",
     "Intelligence studies": "Intelligence, information and influence",
     "International relations": "Theory and methods",
@@ -1572,13 +1602,16 @@
     "Non-state actors": "Transnational and human security",
     "Nuclear strategy": "Security and defence",
     "Ontological security": "Identity, narratives and ideational security",
+    "Organisation studies": "Theory and methods",
     "Peacekeeping": "Transnational and human security",
     "Policy evaluation": "Theory and methods",
     "Political economy": "Economic security and geoeconomics",
     "Political psychology": "Theory and methods",
     "Power": "Security and defence",
+    "Regional cooperation": "Foreign policy and diplomacy",
     "Research methods": "Theory and methods",
     "Russian foreign policy": "Foreign policy and diplomacy",
+    "Strategy": "Security and defence",
     "Subversion": "Intelligence, information and influence",
     "Text as data": "Theory and methods",
     "Transnational and human security": "Transnational and human security",
