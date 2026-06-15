@@ -29,7 +29,7 @@ Google Form ──► Google Sheet ──► sync-bios.yml (weekly) ──► PR
 | 5 | **Public email (optional, will be shown on the site)** | Short answer | ⬜ |
 | 6 | **Short bio (max 300 words)** | Paragraph | ✅ |
 | 7 | **Research keywords (comma-separated, 3–5 suggested)** | Short answer | ⬜ |
-| 8 | **Working Group involvement (tick all that apply)** | Checkboxes: *WG1 · Building the Network · WG2 · Transfer of Knowledge · WG3 · Fostering the Next Generation · WG4 · Ensuring Inclusion · None yet* | ⬜ |
+| — | **Working Group involvement** *(retired)* | Was a checkbox question; removed from the form because members were often unsure which WG they belonged to. Working-Group chips are now sourced solely from cost.eu's Membership table (see below), not self-declared. | — |
 | 9 | **Mentorship (optional)** | Checkboxes: *Open to mentoring early-career researchers · Looking for a mentor* | ⬜ |
 | 10 | **Research regions (optional)** | Checkboxes: *Europe · Europe - Western Balkans · Europe - Eastern neighbours / Russia · Middle East and North Africa · Africa · Asia · The Americas · Global and cross-regional* | ⬜ |
 | 11 | **Could your institution host STSM visitors?** | Multiple choice: *Yes · No · Ask me* | ⬜ |
@@ -44,7 +44,7 @@ Google Form ──► Google Sheet ──► sync-bios.yml (weekly) ──► PR
 
 > **STSM-hosting parsing (#760).** Question 11 maps to a tri-state `stsm_hosting` field: *Yes* → `yes`, *Ask me* → `ask`, *No* (or blank) → the field is dropped. Matching is tolerant substring matching and the conditional ("ask") signal wins over a co-occurring "yes", so a hand-typed *"Yes, but ask me first"* lands on `ask`. The directory shows a quiet hosting badge on a member's card and a "STSM hosting" filter chip, both of which stay invisible until at least one member answers, and the grants page deep-links to the pre-filtered directory (`/people.html#stsm=1`). The exact question text must match the column name in `scripts/bios-source.json`.
 
-> **WG-checkboxes parsing.** The script extracts the digits 1–4 from whatever the checkbox column contains, so the precise wording of each option doesn't matter as long as it includes the WG number. *"WG2 · Transfer of Knowledge"* parses to `2`; *"None yet"* parses to no WG. You can rename the WGs freely later.
+> **WG-checkboxes parsing (retired).** The Working-Group question is no longer on the form, and `scripts/bios-source.json` maps no `wgs` column, so this no longer runs. The `parse_wgs` helper (which extracted the digits 1–4 from a checkbox cell) stays in `scripts/sync-bios.py` as a dormant no-op in case the question is ever reinstated. WG chips are sourced from cost.eu (see below).
 
 > **Affiliation punctuation.** The sync standardises the separator inside the *Institution or organisation* answer so the directory reads uniformly: a spaced hyphen or dash between an institution and its named centre becomes a comma (*ETH Zurich - Center for Security Studies* → *ETH Zurich, Center for Security Studies*), and a semicolon between two separate affiliations becomes a slash (*Ghent University; Egmont Institute* → *Ghent University / Egmont Institute*). It does not merge differently-spelled names for the same institution, so keep the institution name itself consistent across submissions.
 
@@ -82,7 +82,7 @@ This makes the photo-replacement workaround safe to recommend in practice: respo
 
 ### How Working Group memberships stay in sync with cost.eu
 
-The Google Form's *Working Group involvement* checkboxes seed each bio's `wgs` field on first submission. From then on, `scripts/sync-cost.py` (weekly Monday 05:00 UTC, plus manual `workflow_dispatch`) reconciles `wgs` against the Membership table on <https://www.cost.eu/actions/CA24154/>:
+Each bio's `wgs` field is sourced from cost.eu's authoritative Membership table, not from the form. The form's *Working Group involvement* question was retired (members were often unsure which WG they belonged to, and a guessed answer was union-merged and then sticky), so `scripts/sync-bios.py` no longer reads any self-declared WG (there is deliberately no `wgs` column mapping in `scripts/bios-source.json`). `scripts/sync-cost.py` (weekly Monday 05:00 UTC, plus manual `workflow_dispatch`) owns `wgs`, reconciling it against the Membership table on <https://www.cost.eu/actions/CA24154/>:
 
 - **Per-WG reconciliation, biased towards additions.** Members add WGs far more often than they remove them, and cost.eu can lag a fresh form submission by weeks, so neither source simply wins. A WG newly published on cost.eu is applied to the bio; a WG declared on the form that cost.eu has not recorded yet stays on the card and is flagged in the sync PR as pending formal catch-up; a WG a member's newer form submission deliberately dropped is held rather than re-added, with a flag asking the maintainer to confirm. The observation clocks behind the recency comparison live in `data/cost-wg-state.json` (generated, never hand-edited).
 - **Entries not on cost.eu are left untouched.** Wider-community researchers in the directory who aren't on the MC, plus seed entries for new leaders who haven't yet appeared in cost.eu's Membership table, keep whatever `wgs` value the form (or the maintainer) last set.
