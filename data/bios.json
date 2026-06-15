@@ -1037,56 +1037,6 @@
       ]
     },
     {
-      "id": "mrs-yanina-shved-dogrul",
-      "name": "Mrs.Yanina Shved-Dogrul",
-      "country": "Türkiye",
-      "country_code": "tr",
-      "affiliation": "Bogazici University",
-      "position": "PhD candidate",
-      "roles": [],
-      "wgs": [],
-      "mentorship": [
-        "mentee"
-      ],
-      "regions": [
-        "Europe",
-        "Europe - Eastern neighbours / Russia",
-        "Europe - Western Balkans"
-      ],
-      "stsm_hosting": "yes",
-      "wg_leadership": {},
-      "bio": "I am a Teaching Assistant, researcher, and Ph.D. candidate in International Relations at Istanbul Nişantaşı University. Born in Ukraine to a family of Ukrainian and Polish heritage, I hold Bachelor's and Master's degrees in Philology and a Master's degree in Polish Studies from Istanbul University. My thesis, Istanbul Reflected by the Poles from the 18th to the 21st Centuries, explored the historical and cultural connections between Türkiye, Poland, and Ukraine.\nMy research interests include European security, regional cooperation, international relations, and the Black Sea region. I have presented papers on Turkish-Polish-Ukrainian relations at academic conferences and am actively engaged in interdisciplinary research on Europe and its neighbourhood.\nAlongside my academic work, I teach at Boğaziçi University and the Turkish National Defence University. Through my research and teaching, I seek to contribute to dialogue and cooperation across European and regional contexts.",
-      "keywords": [
-        "European Security",
-        "Black Sea Security",
-        "Regional Cooperation",
-        "International Relations",
-        "Eastern Europe"
-      ],
-      "email": "yanina.dogrul@bogazici.edu.tr",
-      "website": "https://mlu.bogazici.edu.tr/en/personel/yanina-dogrul/6558",
-      "orcid": "",
-      "linkedin": "https://www.linkedin.com/in/yanina-shved-dogrul-36642a2a7?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
-      "twitter": "",
-      "bluesky": "",
-      "mastodon": "",
-      "photo": "assets/images/people/mrs-yanina-shved-dogrul.jpg",
-      "source": "form",
-      "photo_source_sha256": "7f1f281ec6845afbcfcf5c5feb6a8240ff87ec3c1c7d326e07d62cb2462e1506",
-      "canonical_keywords": [
-        "Black sea security",
-        "Eastern Europe",
-        "European security",
-        "International relations",
-        "Regional cooperation"
-      ],
-      "themes": [
-        "Foreign policy and diplomacy",
-        "Security and defence",
-        "Theory and methods"
-      ]
-    },
-    {
       "id": "gil-baram",
       "name": "Dr Gil Baram",
       "country": "United States",
@@ -1237,23 +1187,7 @@
   ],
   "keyword_aggregate": [
     {
-      "keyword": "European security",
-      "count": 3
-    },
-    {
-      "keyword": "International relations",
-      "count": 3
-    },
-    {
-      "keyword": "Black sea security",
-      "count": 2
-    },
-    {
       "keyword": "Cognitive warfare",
-      "count": 2
-    },
-    {
-      "keyword": "Eastern Europe",
       "count": 2
     },
     {
@@ -1269,11 +1203,19 @@
       "count": 2
     },
     {
+      "keyword": "European security",
+      "count": 2
+    },
+    {
       "keyword": "Hybrid threats",
       "count": 2
     },
     {
       "keyword": "Influence",
+      "count": 2
+    },
+    {
+      "keyword": "International relations",
       "count": 2
     },
     {
@@ -1289,15 +1231,15 @@
       "count": 2
     },
     {
-      "keyword": "Regional cooperation",
-      "count": 2
-    },
-    {
       "keyword": "AI",
       "count": 1
     },
     {
       "keyword": "Arms control",
+      "count": 1
+    },
+    {
+      "keyword": "Black sea security",
       "count": 1
     },
     {
@@ -1362,6 +1304,10 @@
     },
     {
       "keyword": "Disinformation",
+      "count": 1
+    },
+    {
+      "keyword": "Eastern Europe",
       "count": 1
     },
     {
@@ -1481,6 +1427,10 @@
       "count": 1
     },
     {
+      "keyword": "Regional cooperation",
+      "count": 1
+    },
+    {
       "keyword": "Research methods",
       "count": 1
     },
@@ -1512,15 +1462,15 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 11
+      "count": 10
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 9
+      "count": 8
     },
     {
       "theme": "Theory and methods",
-      "count": 9
+      "count": 8
     },
     {
       "theme": "Cyber and emerging technology",
@@ -1620,7 +1570,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 15
+      "count": 14
     },
     {
       "region": "Global and cross-regional",
@@ -1628,7 +1578,7 @@
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 5
+      "count": 4
     },
     {
       "region": "The Americas",
@@ -1639,12 +1589,12 @@
       "count": 3
     },
     {
-      "region": "Europe - Western Balkans",
+      "region": "Middle East and North Africa",
       "count": 3
     },
     {
-      "region": "Middle East and North Africa",
-      "count": 3
+      "region": "Europe - Western Balkans",
+      "count": 2
     },
     {
       "region": "Africa",

@@ -57,6 +57,11 @@ def test_name_key() -> None:
     expect("title prefix dropped", name_key("Dr John Helferich"), ("john", "helferich"))
     expect("middle initial dropped", name_key("Dr John N.T. Helferich"), ("john", "helferich"))
     expect("title with period", name_key("Dr. Moritz Weiss"), ("moritz", "weiss"))
+    # Title glued to the name by a dot with no space (the Yanina Shved-Dogrul
+    # duplicate): must strip so it collapses onto the "Ms Yanina" twin.
+    expect("dotted title, no space", name_key("Mrs.Yanina Shved-Dogrul"), ("yanina", "dogrul"))
+    expect("…matches the spaced-title twin", name_key("Ms Yanina Shved-Dogrul"), ("yanina", "dogrul"))
+    expect("real name starting Dr- preserved", name_key("Drew Barry"), ("drew", "barry"))
     expect("gender-neutral Mx dropped", name_key("Mx Sam Smith"), ("sam", "smith"))
     expect("diacritics stripped", name_key("Andreas Müller"), ("andreas", "muller"))
     expect("apostrophe stripped", name_key("Silvia D'Amato"), ("silvia", "damato"))
@@ -65,6 +70,17 @@ def test_name_key() -> None:
     expect("single-token returns None", name_key("Madonna"), None)
     expect("empty string returns None", name_key(""), None)
     expect("title only returns None", name_key("Dr"), None)
+
+
+def test_slugify_titles() -> None:
+    """A title glued to the name by a dot with no space ("Mrs.Yanina") must
+    strip to the same slug as the spaced-title spelling, so a member who
+    submits both ways collapses to one card rather than two."""
+    print("\nslugify() title handling:")
+    expect("spaced title", slugify("Ms Yanina Shved-Dogrul"), "yanina-shved-dogrul")
+    expect("dotted title, no space", slugify("Mrs.Yanina Shved-Dogrul"), "yanina-shved-dogrul")
+    expect("dotted title with space", slugify("Dr. John Smith"), "john-smith")
+    expect("real name starting Dr- preserved", slugify("Drew Barry"), "drew-barry")
 
 
 def test_country_key() -> None:
@@ -1273,6 +1289,7 @@ def main() -> None:
     test_parse_stsm_hosting()
     test_load_region_vocab()
     test_parse_regions()
+    test_slugify_titles()
     test_country_key()
     test_title_only_name_skipped()
     test_merge_helferich()
