@@ -112,7 +112,13 @@ def slugify(name: str) -> str:
     seed id) rather than "silvia-d-amato"."""
     s = unicodedata.normalize("NFKD", name or "")
     s = "".join(c for c in s if not unicodedata.combining(c))
-    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+", "", s)
+    # Strip a leading honorific. The trailing group accepts either a dot
+    # (optionally followed by spaces) or whitespace, so a title glued to
+    # the name with a dot and no space ("Mrs.Yanina") strips too — that
+    # form otherwise kept the title in the slug and split the person into
+    # a second card. A bare "Drew" is safe: the title must be followed by
+    # a dot or a space, never a letter.
+    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)(?:\.\s*|\s+)", "", s)
     s = s.lower()
     # Drop apostrophes / curly quotes / similar marks first — they
     # shouldn't introduce a hyphen between adjacent letters.
@@ -145,7 +151,10 @@ def name_key(name: str) -> tuple[str, str] | None:
     """
     s = unicodedata.normalize("NFKD", name or "")
     s = "".join(c for c in s if not unicodedata.combining(c))
-    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+", "", s, flags=re.I)
+    # Same honorific strip as slugify(): the trailing group also catches a
+    # title glued to the name by a dot with no space ("Mrs.Yanina"), so the
+    # name+country fallback can still bridge such a submission to its twin.
+    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)(?:\.\s*|\s+)", "", s, flags=re.I)
     s = re.sub(r"[‘’ʼ'`]", "", s)
     # Tokenise on any non-letter so "N.T." becomes ["N", "T"] (and the
     # initials get dropped by the first/last selection below).
