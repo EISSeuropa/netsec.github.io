@@ -298,7 +298,7 @@
     },
     {
       "id": "filip-ejdus",
-      "name": "Prof Filip Ejdus",
+      "name": "Prof. Filip Ejdus",
       "country": "Serbia",
       "country_code": "rs",
       "affiliation": "University of Belgrade",
@@ -1136,7 +1136,10 @@
       "wg_leadership": {},
       "bio": "Marco Cifra is a Ph.D. student in Defence and Security Studies at the Centre for Higher Defence Studies (CASD) in Rome, specializing in international law with a focus on space law, international humanitarian law, and the regulation of artificial intelligence in military contexts. His research examines the legal implications of AI-driven decision support systems in warfare, with particular attention to targeting processes, the principles of proportionality and precaution, and the concept of meaningful human control.",
       "keywords": [
-        "international law - international humanitarian law - international human rights law - security and defence"
+        "international law",
+        "international humanitarian law",
+        "international human rights law",
+        "security and defence"
       ],
       "email": "marco.cifra@unicasd.it",
       "website": "",
@@ -1148,7 +1151,15 @@
       "photo": "",
       "source": "form",
       "canonical_keywords": [
-        "International law - international humanitarian law - international human rights law - security and defence"
+        "International human rights law",
+        "International humanitarian law",
+        "International law",
+        "Security and defence"
+      ],
+      "themes": [
+        "Security and defence",
+        "Theory and methods",
+        "Transnational and human security"
       ]
     },
     {
@@ -1192,6 +1203,10 @@
         "Defence industry",
         "Dual use technologies",
         "Technology spillovers"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Economic security and geoeconomics"
       ]
     }
   ],
@@ -1389,7 +1404,15 @@
       "count": 1
     },
     {
-      "keyword": "International law - international humanitarian law - international human rights law - security and defence",
+      "keyword": "International human rights law",
+      "count": 1
+    },
+    {
+      "keyword": "International humanitarian law",
+      "count": 1
+    },
+    {
+      "keyword": "International law",
       "count": 1
     },
     {
@@ -1465,6 +1488,10 @@
       "count": 1
     },
     {
+      "keyword": "Security and defence",
+      "count": 1
+    },
+    {
       "keyword": "Strategy",
       "count": 1
     },
@@ -1492,7 +1519,7 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 10
+      "count": 11
     },
     {
       "theme": "Foreign policy and diplomacy",
@@ -1500,22 +1527,22 @@
     },
     {
       "theme": "Theory and methods",
-      "count": 7
+      "count": 8
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 6
+      "count": 7
     },
     {
       "theme": "Economic security and geoeconomics",
-      "count": 4
-    },
-    {
-      "theme": "Intelligence, information and influence",
-      "count": 4
+      "count": 5
     },
     {
       "theme": "Transnational and human security",
+      "count": 5
+    },
+    {
+      "theme": "Intelligence, information and influence",
       "count": 4
     },
     {
@@ -1542,12 +1569,15 @@
     "Cybersecurity": "Cyber and emerging technology",
     "Cybersecurity governance": "Cyber and emerging technology",
     "Defence": "Security and defence",
+    "Defence economics": "Economic security and geoeconomics",
     "Defence industrial policy": "Economic security and geoeconomics",
+    "Defence industry": "Economic security and geoeconomics",
     "Deterrence": "Security and defence",
     "Digital governance": "Cyber and emerging technology",
     "Digital media": "Intelligence, information and influence",
     "Digital sovereignty": "Cyber and emerging technology",
     "Disinformation": "Intelligence, information and influence",
+    "Dual use technologies": "Cyber and emerging technology",
     "EU foreign policy": "Foreign policy and diplomacy",
     "EU–NATO relations": "European and transatlantic security order",
     "Eastern Europe": "Foreign policy and diplomacy",
@@ -1570,6 +1600,9 @@
     "Influence": "Intelligence, information and influence",
     "Infrastructure": "Cyber and emerging technology",
     "Intelligence studies": "Intelligence, information and influence",
+    "International human rights law": "Transnational and human security",
+    "International humanitarian law": "Transnational and human security",
+    "International law": "Theory and methods",
     "International relations": "Theory and methods",
     "International security": "Security and defence",
     "Irregular warfare": "Security and defence",
@@ -1591,8 +1624,10 @@
     "Regional cooperation": "Foreign policy and diplomacy",
     "Research methods": "Theory and methods",
     "Russian foreign policy": "Foreign policy and diplomacy",
+    "Security and defence": "Security and defence",
     "Strategy": "Security and defence",
     "Subversion": "Intelligence, information and influence",
+    "Technology spillovers": "Cyber and emerging technology",
     "Text as data": "Theory and methods",
     "Transnational and human security": "Transnational and human security",
     "UN": "Foreign policy and diplomacy"

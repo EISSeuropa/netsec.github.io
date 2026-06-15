@@ -77,14 +77,14 @@
 
   "themes": {
     "Foreign policy and diplomacy": ["EU foreign policy", "German security policy", "Foreign policy analysis", "Russian foreign policy", "Indian foreign policy", "India", "Multilateralism", "UN", "Geopolitics", "Eastern Europe", "Regional cooperation"],
-    "Security and defence": ["European security", "Grand strategy", "Defence", "International security", "Power", "Civil defence", "Civil-military relations", "Militarisation", "Arms control", "Deterrence", "Nuclear strategy", "Irregular warfare", "Maritime strategy", "National security", "Strategy", "Capability planning", "Black sea security"],
+    "Security and defence": ["European security", "Grand strategy", "Defence", "International security", "Power", "Civil defence", "Civil-military relations", "Militarisation", "Arms control", "Deterrence", "Nuclear strategy", "Irregular warfare", "Maritime strategy", "National security", "Strategy", "Capability planning", "Black sea security", "Security and defence"],
     "European and transatlantic security order": ["EU–NATO relations", "European strategic autonomy"],
     "Intelligence, information and influence": ["Disinformation", "Election interference", "Subversion", "Digital media", "Intelligence studies", "Influence", "Cognitive warfare", "Hybrid threats"],
     "Identity, narratives and ideational security": ["Identity", "Narratives", "Ontological security"],
-    "Cyber and emerging technology": ["Cybersecurity governance", "Digital sovereignty", "Digital governance", "Cyber security", "Cyber defence", "Cyber", "Infrastructure", "Critical infrastructure", "Supply chain security", "Emerging technology", "Emerging and disruptive technologies", "Artificial intelligence", "AI", "Cybersecurity", "Cybercrime"],
-    "Economic security and geoeconomics": ["Economic security", "Economic statecraft", "Industrial policy", "Political economy", "Defence industrial policy"],
-    "Transnational and human security": ["Non-state actors", "Maritime security", "Counterterrorism", "Peacekeeping", "Transnational and human security"],
-    "Theory and methods": ["Text as data", "Research methods", "Political psychology", "Policy evaluation", "International relations", "History", "Organisation studies"]
+    "Cyber and emerging technology": ["Cybersecurity governance", "Digital sovereignty", "Digital governance", "Cyber security", "Cyber defence", "Cyber", "Infrastructure", "Critical infrastructure", "Supply chain security", "Emerging technology", "Emerging and disruptive technologies", "Artificial intelligence", "AI", "Cybersecurity", "Cybercrime", "Dual use technologies", "Technology spillovers"],
+    "Economic security and geoeconomics": ["Economic security", "Economic statecraft", "Industrial policy", "Political economy", "Defence industrial policy", "Defence economics", "Defence industry"],
+    "Transnational and human security": ["Non-state actors", "Maritime security", "Counterterrorism", "Peacekeeping", "Transnational and human security", "International humanitarian law", "International human rights law"],
+    "Theory and methods": ["Text as data", "Research methods", "Political psychology", "Policy evaluation", "International relations", "History", "Organisation studies", "International law"]
   },
 
   "affiliation_aliases": {

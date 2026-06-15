@@ -43,6 +43,7 @@ available; if not, photos are saved as-is.
 from __future__ import annotations
 
 import csv
+import difflib
 import hashlib
 import io
 import json
@@ -311,9 +312,61 @@ def parse_stsm_hosting(raw: str) -> str:
 
 
 def parse_keywords(raw: str) -> list[str]:
+    """Split a free-text keyword cell into individual keywords.
+
+    The form asks for a comma-separated list, but submitters reach for
+    whatever separator is at hand: semicolons, newlines, bullet points, or
+    a dash / slash typed in place of a comma. Split on all of those, while
+    leaving an intra-keyword hyphen intact so "Civil-military relations" and
+    "EU-NATO relations" stay whole: a dash or slash only separates when it
+    is padded by spaces (or starts a bulleted line), never when it sits
+    between two letters. Leading list markers ("- ", "• ") are trimmed."""
     if not raw:
         return []
-    return [k.strip() for k in re.split(r"[,;]", raw) if k.strip()]
+    # , ; newlines  |  spaced - – — /  |  bullets (with optional spaces)
+    parts = re.split(r"[,;\n\r]+|\s+[/–—-]\s+|\s*[•·]\s*", raw)
+    out: list[str] = []
+    for p in parts:
+        p = p.strip().strip("-–—•·").strip()
+        if p:
+            out.append(p)
+    return out
+
+
+# Canonical honorific forms for the leading title in a member's name. The
+# house style: the short courtesy titles carry no full stop (Mr, Mrs, Ms,
+# Mx, Dr), while the abbreviation Prof keeps one (Prof.). Keyed by the
+# lowercased title with any dot stripped.
+_TITLE_FORMS = {
+    "mr": "Mr", "mrs": "Mrs", "ms": "Ms", "mx": "Mx",
+    "dr": "Dr", "prof": "Prof.",
+}
+
+
+def normalise_title(name: str) -> str:
+    """Standardise the leading honorific(s) on a name to house style.
+
+    Mr / Mrs / Ms / Mx / Dr lose any full stop; Prof gains one ("Prof.").
+    Works whether the title is spaced ("Dr Jane"), dotted ("Dr. Jane"), or
+    glued by a dot ("Dr.Jane"), and consumes a stacked run of titles
+    ("Prof. Dr. Hans" -> "Prof. Dr Hans") as some continental academics
+    write them. The rest of the name is left exactly as submitted, and a
+    real name that merely starts with a title's letters ("Drew", "Misha")
+    is untouched because the title must be followed by a dot, a space, or
+    the end of the string, never another letter."""
+    if not name:
+        return name
+    rest = name.strip()
+    titles: list[str] = []
+    while True:
+        m = re.match(r"(?i)^(prof|mrs|mr|ms|mx|dr)\b\.?\s*", rest)
+        if not m:
+            break
+        titles.append(_TITLE_FORMS[m.group(1).lower()])
+        rest = rest[m.end():]
+    if not titles:
+        return name.strip()
+    return " ".join(titles) + (" " + rest if rest else "")
 
 
 # ─────────────────── keyword normalisation (Phase 2) ───────────────────
@@ -978,7 +1031,7 @@ def row_to_member(
     slug. Pass them all None (tests / one-off scripted runs) and the
     photo will always be re-encoded under the row's own slug.
     """
-    name = (row.get(cols["name"], "") or "").strip()
+    name = normalise_title((row.get(cols["name"], "") or "").strip())
     consent = (row.get(cols["consent"], "") or "").strip().lower()
     if not name:
         return None
@@ -1791,6 +1844,34 @@ def render_pr_title(diff: dict) -> str:
     return "data: " + " + ".join(parts)
 
 
+def suggest_theme(keyword: str, theme_of: dict[str, str]) -> tuple[str, str] | None:
+    """Best-guess research theme for an unthemed keyword.
+
+    Compares the keyword against every keyword already mapped to a theme and
+    returns ``(theme, nearest_keyword)`` for the closest match, or ``None``
+    when nothing is close. A shared significant word ("cyber", "maritime")
+    counts for a lot; otherwise it falls back to overall string similarity.
+
+    This automates the *review* of the no-theme flags, not the taxonomy: the
+    sync prints the suggestion in the PR body so the maintainer confirms or
+    overrides it, but never edits ``keyword-aliases.json`` automatically (a
+    wrong auto-assignment would be invisible and sticky)."""
+    kw = (keyword or "").lower().strip()
+    if not kw or not theme_of:
+        return None
+    kw_tokens = set(re.findall(r"[a-z]{4,}", kw))  # skip short words like "of"
+    best_score = 0.0
+    best: tuple[str, str] | None = None
+    for themed, theme in theme_of.items():
+        score = difflib.SequenceMatcher(None, kw, themed).ratio()
+        shared = kw_tokens & set(re.findall(r"[a-z]{4,}", themed))
+        if shared:
+            score = max(score, 0.55 + 0.12 * len(shared))
+        if score > best_score:
+            best_score, best = score, (theme, themed)
+    return best if best_score >= 0.5 else None
+
+
 def render_pr_body_overview(
     diff: dict,
     uncategorised: set[str] | list[str] | None = None,
@@ -1892,11 +1973,21 @@ def render_pr_body_overview(
             lines.append(
                 "These canonical keywords map to no research theme, so the members "
                 "carrying them fall out of the theme filter chips on the directory. "
-                "Add each under `themes` in `data/keyword-aliases.json` to fix it."
+                "Add each under `themes` in `data/keyword-aliases.json` to fix it. "
+                "A suggested theme (the closest already-mapped keyword) is shown "
+                "where one is near enough; confirm or override it."
             )
             lines.append("")
+            theme_of_now = load_keyword_themes()
             for k in flag_keywords:
-                lines.append(f"- {k}")
+                hint = suggest_theme(k, theme_of_now)
+                if hint:
+                    lines.append(
+                        f"- {k} → suggested theme: **{hint[0]}** "
+                        f"(nearest: _{hint[1]}_)"
+                    )
+                else:
+                    lines.append(f"- {k} → no close theme; pick one")
             lines.append("")
         if flag_rewrites:
             lines.append(f"### Link fields rewritten ({len(flag_rewrites)})")
