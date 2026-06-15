@@ -22,7 +22,7 @@ Google Form ──► Google Sheet ──► sync-bios.yml (weekly) ──► PR
 
 | # | Question text | Type | Required? |
 |---|---|---|---|
-| 1 | **Full name (with title — Dr / Prof / Mr / Ms)** | Short answer | ✅ |
+| 1 | **Full name (with title — Dr / Prof / Mr / Ms)** | Short answer · response validation: minimum 5 characters, with a custom error message | ✅ |
 | 2 | **Position or current role (e.g. PhD candidate, Associate Professor, Policy analyst)** | Short answer | ✅ |
 | 3 | **Institution or organisation** | Short answer | ✅ |
 | 4 | **Country** | Dropdown — paste the full list of COST member countries plus an "Other / outside Europe" option | ✅ |
@@ -41,6 +41,8 @@ Google Form ──► Google Sheet ──► sync-bios.yml (weekly) ──► PR
 | 17 | **Mastodon URL (optional)** | Short answer | ⬜ |
 | 18 | **Headshot photo (optional)** | File upload — image only — max 5 MB | ⬜ |
 | 19 | **I consent to publication of my bio on netsec-cost.eu** | Checkboxes — single option | ✅ |
+
+> **Name validation + sync-side guards.** The *Full name* question (Q1) carries a Google Forms response-validation rule: **minimum 5 characters**, with a custom error message, so a bare degree suffix or stray token (the "MBA" card that once slipped through was three characters) is rejected at submission. That is the first line of defence. Two backstops run in `scripts/sync-bios.py` for anything the form lets through: a row whose name is **only a title** ("Mr", "Dr.") is dropped (#908), and a title **glued to the name by a dot with no space** ("Mrs.Yanina") is stripped in `slugify` and `name_key` so the submission collapses onto its twin rather than forming a second card. If you change the minimum or the error text on the form, note it in the table above so the form can be recreated faithfully.
 
 > **STSM-hosting parsing (#760).** Question 11 maps to a tri-state `stsm_hosting` field: *Yes* → `yes`, *Ask me* → `ask`, *No* (or blank) → the field is dropped. Matching is tolerant substring matching and the conditional ("ask") signal wins over a co-occurring "yes", so a hand-typed *"Yes, but ask me first"* lands on `ask`. The directory shows a quiet hosting badge on a member's card and a "STSM hosting" filter chip, both of which stay invisible until at least one member answers, and the grants page deep-links to the pre-filtered directory (`/people.html#stsm=1`). The exact question text must match the column name in `scripts/bios-source.json`.
 
