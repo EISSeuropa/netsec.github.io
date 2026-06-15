@@ -83,6 +83,52 @@ def test_slugify_titles() -> None:
     expect("real name starting Dr- preserved", slugify("Drew Barry"), "drew-barry")
 
 
+def test_normalise_title() -> None:
+    """House style: Mr/Mrs/Ms/Mx/Dr carry no full stop; Prof carries one."""
+    print("\nnormalise_title():")
+    nt = sync_bios.normalise_title
+    expect("Dr. -> Dr",            nt("Dr. John Smith"), "Dr John Smith")
+    expect("Mr. -> Mr",            nt("Mr. Jane Doe"), "Mr Jane Doe")
+    expect("Prof -> Prof.",        nt("Prof Filip Ejdus"), "Prof. Filip Ejdus")
+    expect("Prof. stays Prof.",    nt("Prof. Filip Ejdus"), "Prof. Filip Ejdus")
+    expect("glued dotted title",   nt("Mrs.Yanina Shved-Dogrul"), "Mrs Yanina Shved-Dogrul")
+    expect("stacked titles",       nt("Prof. Dr. Hans Müller"), "Prof. Dr Hans Müller")
+    expect("real name preserved",  nt("Drew Barry"), "Drew Barry")
+    expect("no title untouched",   nt("Sara Russo"), "Sara Russo")
+    expect("empty safe",           nt(""), "")
+
+
+def test_parse_keywords() -> None:
+    """Resilient to whatever separator a submitter reaches for, while never
+    splitting an intra-keyword hyphen."""
+    print("\nparse_keywords():")
+    pk = sync_bios.parse_keywords
+    expect("commas",          pk("a, b, c"), ["a", "b", "c"])
+    expect("semicolons",      pk("a; b"), ["a", "b"])
+    expect("spaced dash",     pk("cyber - AI - defence"), ["cyber", "AI", "defence"])
+    expect("slash separator", pk("Foreign policy / Security"), ["Foreign policy", "Security"])
+    expect("newline bullets", pk("- cyber\n- AI"), ["cyber", "AI"])
+    expect("intra-word hyphen kept", pk("Civil-military relations, Deterrence"),
+           ["Civil-military relations", "Deterrence"])
+    expect("acronym hyphen kept", pk("EU-NATO relations"), ["EU-NATO relations"])
+    expect("empty", pk(""), [])
+
+
+def test_suggest_theme() -> None:
+    """Suggests the theme of the nearest already-mapped keyword, or None."""
+    print("\nsuggest_theme():")
+    theme_of = {
+        "cyber security": "Cyber and emerging technology",
+        "maritime security": "Transnational and human security",
+        "national security": "Security and defence",
+    }
+    st = sync_bios.suggest_theme
+    expect("shared word -> theme", (st("Cyber resilience", theme_of) or [None])[0],
+           "Cyber and emerging technology")
+    expect("nothing close -> None", st("Banana bread", theme_of), None)
+    expect("empty -> None", st("", theme_of), None)
+
+
 def test_country_key() -> None:
     print("\ncountry_key():")
     expect("lowercased", country_key("United Kingdom"), "united kingdom")
@@ -1290,6 +1336,9 @@ def main() -> None:
     test_load_region_vocab()
     test_parse_regions()
     test_slugify_titles()
+    test_normalise_title()
+    test_parse_keywords()
+    test_suggest_theme()
     test_country_key()
     test_title_only_name_skipped()
     test_merge_helferich()
