@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-15T11:47:12+00:00",
+  "generated_at": "2026-06-15T14:32:54+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-15T11:47:12+00:00"
+    "last_synced": "2026-06-15T14:32:54+00:00"
   },
   "members": [
     {
@@ -1121,6 +1121,78 @@
         "Security and defence",
         "Theory and methods"
       ]
+    },
+    {
+      "id": "marco-cifra",
+      "name": "Mr Marco Cifra",
+      "country": "Italy",
+      "country_code": "it",
+      "affiliation": "CASD",
+      "position": "PhD Student",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Marco Cifra is a Ph.D. student in Defence and Security Studies at the Centre for Higher Defence Studies (CASD) in Rome, specializing in international law with a focus on space law, international humanitarian law, and the regulation of artificial intelligence in military contexts. His research examines the legal implications of AI-driven decision support systems in warfare, with particular attention to targeting processes, the principles of proportionality and precaution, and the concept of meaningful human control.",
+      "keywords": [
+        "international law - international humanitarian law - international human rights law - security and defence"
+      ],
+      "email": "marco.cifra@unicasd.it",
+      "website": "",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "International law - international humanitarian law - international human rights law - security and defence"
+      ]
+    },
+    {
+      "id": "seyithan-ahmet-ates",
+      "name": "Prof. Seyithan Ahmet Ates",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Ankara University of Social Sciences",
+      "position": "Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Asia",
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Dr. Ates is a Full Professor of Economics at the Ankara University of Social Sciences (ASBU). As an academic and practitioner, his research examines the intersection of innovation, structural competitiveness, and socio-technical transformation, with a primary focus on defense economics and the global defense industry.\n\nDr. Ates’s current research centers on the diffusion and synergy between the defense and civilian sectors, particularly the evolution and integration of dual-use technologies. He extensively analyzes the transition of defense ecosystems from buyer-client models to competitor-exporter paradigms, specifically within NATO countries and emerging defense markets. His work explores sovereign defense capabilities, military-civil fusion, and NATO interoperability, addressing the shifting geopolitical power dynamics that shape modern security. \n\nHe holds a PhD in Social and Economic Sciences from the Vienna University of Technology (TU Wien) and earned his undergraduate and graduate degrees from the Vienna University of Economics and Business (WU). His academic journey includes a postdoctoral fellowship at Harvard University, Oxford University, International Institute for Advanced System Analysis, Austria (IIASA) and National Taiwan University.",
+      "keywords": [
+        "Dual Use Technologies",
+        "Technology Spillovers",
+        "Defence Economics",
+        "Defence Industry"
+      ],
+      "email": "seyithan.ates@asbu.edu.tr",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/seyithan-ahmet-ate%C5%9F-a55424a7/?skipRedirect=true",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/seyithan-ahmet-ates.jpg",
+      "source": "form",
+      "photo_source_sha256": "cab5363ad75bee93c634bd03809076e12119a2d97348ec97f947be9f865664e8",
+      "canonical_keywords": [
+        "Defence economics",
+        "Defence industry",
+        "Dual use technologies",
+        "Technology spillovers"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -1209,7 +1281,15 @@
       "count": 1
     },
     {
+      "keyword": "Defence economics",
+      "count": 1
+    },
+    {
       "keyword": "Defence industrial policy",
+      "count": 1
+    },
+    {
+      "keyword": "Defence industry",
       "count": 1
     },
     {
@@ -1230,6 +1310,10 @@
     },
     {
       "keyword": "Disinformation",
+      "count": 1
+    },
+    {
+      "keyword": "Dual use technologies",
       "count": 1
     },
     {
@@ -1302,6 +1386,10 @@
     },
     {
       "keyword": "Intelligence studies",
+      "count": 1
+    },
+    {
+      "keyword": "International law - international humanitarian law - international human rights law - security and defence",
       "count": 1
     },
     {
@@ -1382,6 +1470,10 @@
     },
     {
       "keyword": "Subversion",
+      "count": 1
+    },
+    {
+      "keyword": "Technology spillovers",
       "count": 1
     },
     {
@@ -1508,19 +1600,19 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 13
+      "count": 14
     },
     {
       "region": "Global and cross-regional",
-      "count": 8
+      "count": 9
+    },
+    {
+      "region": "Asia",
+      "count": 4
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
       "count": 4
-    },
-    {
-      "region": "Asia",
-      "count": 3
     },
     {
       "region": "Middle East and North Africa",
