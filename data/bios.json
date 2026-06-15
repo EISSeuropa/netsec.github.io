@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-15T11:22:30+00:00",
+  "generated_at": "2026-06-15T11:47:12+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-15T11:22:30+00:00"
+    "last_synced": "2026-06-15T11:47:12+00:00"
   },
   "members": [
     {
@@ -940,7 +940,7 @@
     },
     {
       "id": "francesco-canossi",
-      "name": "Francesco Canossi",
+      "name": "Mr Francesco Canossi",
       "country": "Italy",
       "country_code": "it",
       "affiliation": "Independent",
@@ -1077,9 +1077,167 @@
         "Security and defence",
         "Theory and methods"
       ]
+    },
+    {
+      "id": "gil-baram",
+      "name": "Dr Gil Baram",
+      "country": "United States",
+      "country_code": "us",
+      "affiliation": "Bar Ilan and UC Berkeley",
+      "position": "Associate Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Asia",
+        "Europe",
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Dr. Gil Baram researches how AI is reshaping the cybercrime and cyber conflict landscape, focusing on what the shift means for incident response, attribution, and cross-sector coordination. Over the past two years, she has led tabletop exercises in Berkeley, Singapore, and Tel Aviv, bringing together senior practitioners from government, law enforcement, critical infrastructure, and the technology sector to stress-test how existing playbooks hold up against AI-accelerated operations. \nShe is a Senior Lecturer (Associate Professor) at Bar-Ilan University and a non-resident research scholar at UC Berkeley’s Center for Long-Term Cybersecurity (CLTC). \nShe advises industry, government, and international organizations on AI-enabled cyber threats, cyber diplomacy and policy.",
+      "keywords": [
+        "cybersecurity",
+        "strategy",
+        "geopolitics",
+        "AI",
+        "cybercrime"
+      ],
+      "email": "gilbaram@berkeley.edu",
+      "website": "https://gilbaram.com/",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/dr-gil-baram-cyber/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/gil-baram.jpg",
+      "source": "form",
+      "photo_source_sha256": "ff22d86f3ba0756e09e17d65f85ffb97b9537be7d0d5b6b0ea50d7700abb5294",
+      "canonical_keywords": [
+        "AI",
+        "Cybercrime",
+        "Cybersecurity",
+        "Geopolitics",
+        "Strategy"
+      ]
+    },
+    {
+      "id": "sara-russo",
+      "name": "Ms Sara Russo",
+      "country": "Italy",
+      "country_code": "it",
+      "affiliation": "CASD",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [
+        2
+      ],
+      "mentorship": [],
+      "regions": [
+        "Europe",
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Sara Russo is a Ph.D. candidate in Defence and Security Studies at the Centre for Higher Defence Studies (CASD) and the University of Turin, where her research focuses on cognitive warfare, strategic communication, influence dynamics, leadership, and organizational resilience. Her work explores how influence operates across social, organizational, and technological systems, with particular attention to the evolving challenges posed by hybrid threats, information environments, and emerging forms of conflict.",
+      "keywords": [
+        "cognitive warfare",
+        "influence",
+        "organization studies",
+        "hybrid threats"
+      ],
+      "email": "sara.russo@unicasd.it",
+      "website": "https://www.difesa.it/smd/casd/index/26451.html",
+      "orcid": "0009-0004-8176-8712",
+      "linkedin": "https://www.linkedin.com/newsletters/cognitive-warfare-research-7413905826274463744/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/sara-russo.jpg",
+      "source": "form",
+      "photo_source_sha256": "40fcd594d60176c21651e8ed5f7a5bb37404284afb7d5aa3e3927c472b2f92fe",
+      "canonical_keywords": [
+        "Cognitive warfare",
+        "Hybrid threats",
+        "Influence",
+        "Organisation studies"
+      ]
+    },
+    {
+      "id": "yanina-shved-dogrul",
+      "name": "Ms Yanina Shved-Dogrul",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Bogazici University",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Europe - Western Balkans"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "I am a Teaching Assistant, researcher, and Ph.D. candidate in International Relations at Istanbul Nişantaşı University. Born in Ukraine to a family of Ukrainian and Polish heritage, I hold Bachelor's and Master's degrees in Philology and a Master's degree in Polish Studies from Istanbul University. My thesis, Istanbul Reflected by the Poles from the 18th to the 21st Centuries, explored the historical and cultural connections between Türkiye, Poland, and Ukraine.\nMy research interests include European security, regional cooperation, international relations, and the Black Sea region. I have presented papers on Turkish-Polish-Ukrainian relations at academic conferences and am actively engaged in interdisciplinary research on Europe and its neighbourhood.\nAlongside my academic work, I teach at Boğaziçi University and the Turkish National Defence University. Through my research and teaching, I seek to contribute to dialogue and cooperation across European and regional contexts.",
+      "keywords": [
+        "European Security",
+        "Black Sea Security",
+        "Regional Cooperation",
+        "International Relations",
+        "Eastern Europe"
+      ],
+      "email": "yanina.dogrul@bogazici.edu.tr",
+      "website": "https://mlu.bogazici.edu.tr/en/personel/yanina-dogrul/6558",
+      "orcid": "0000-0001-8631-5908",
+      "linkedin": "https://www.linkedin.com/in/yanina-shved-dogrul-36642a2a7?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/yanina-shved-dogrul.jpg",
+      "source": "form",
+      "photo_source_sha256": "7f1f281ec6845afbcfcf5c5feb6a8240ff87ec3c1c7d326e07d62cb2462e1506",
+      "canonical_keywords": [
+        "Black sea security",
+        "Eastern Europe",
+        "European security",
+        "International relations",
+        "Regional cooperation"
+      ],
+      "themes": [
+        "Security and defence",
+        "Theory and methods"
+      ]
     }
   ],
   "keyword_aggregate": [
+    {
+      "keyword": "European security",
+      "count": 3
+    },
+    {
+      "keyword": "International relations",
+      "count": 3
+    },
+    {
+      "keyword": "Black sea security",
+      "count": 2
+    },
+    {
+      "keyword": "Cognitive warfare",
+      "count": 2
+    },
+    {
+      "keyword": "Eastern Europe",
+      "count": 2
+    },
     {
       "keyword": "Economic security",
       "count": 2
@@ -1093,11 +1251,11 @@
       "count": 2
     },
     {
-      "keyword": "European security",
+      "keyword": "Hybrid threats",
       "count": 2
     },
     {
-      "keyword": "International relations",
+      "keyword": "Influence",
       "count": 2
     },
     {
@@ -1109,11 +1267,19 @@
       "count": 2
     },
     {
-      "keyword": "Arms control",
+      "keyword": "Organisation studies",
+      "count": 2
+    },
+    {
+      "keyword": "Regional cooperation",
+      "count": 2
+    },
+    {
+      "keyword": "AI",
       "count": 1
     },
     {
-      "keyword": "Black sea security",
+      "keyword": "Arms control",
       "count": 1
     },
     {
@@ -1129,10 +1295,6 @@
       "count": 1
     },
     {
-      "keyword": "Cognitive warfare",
-      "count": 1
-    },
-    {
       "keyword": "Counterterrorism",
       "count": 1
     },
@@ -1142,6 +1304,14 @@
     },
     {
       "keyword": "Cyber security",
+      "count": 1
+    },
+    {
+      "keyword": "Cybercrime",
+      "count": 1
+    },
+    {
+      "keyword": "Cybersecurity",
       "count": 1
     },
     {
@@ -1177,10 +1347,6 @@
       "count": 1
     },
     {
-      "keyword": "Eastern Europe",
-      "count": 1
-    },
-    {
       "keyword": "Economic statecraft",
       "count": 1
     },
@@ -1201,6 +1367,10 @@
       "count": 1
     },
     {
+      "keyword": "Geopolitics",
+      "count": 1
+    },
+    {
       "keyword": "German security policy",
       "count": 1
     },
@@ -1210,10 +1380,6 @@
     },
     {
       "keyword": "History",
-      "count": 1
-    },
-    {
-      "keyword": "Hybrid threats",
       "count": 1
     },
     {
@@ -1230,10 +1396,6 @@
     },
     {
       "keyword": "Industrial policy",
-      "count": 1
-    },
-    {
-      "keyword": "Influence",
       "count": 1
     },
     {
@@ -1281,10 +1443,6 @@
       "count": 1
     },
     {
-      "keyword": "Organisation studies",
-      "count": 1
-    },
-    {
       "keyword": "Peacekeeping",
       "count": 1
     },
@@ -1305,15 +1463,15 @@
       "count": 1
     },
     {
-      "keyword": "Regional cooperation",
-      "count": 1
-    },
-    {
       "keyword": "Research methods",
       "count": 1
     },
     {
       "keyword": "Russian foreign policy",
+      "count": 1
+    },
+    {
+      "keyword": "Strategy",
       "count": 1
     },
     {
@@ -1336,14 +1494,14 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 8
-    },
-    {
-      "theme": "Foreign policy and diplomacy",
-      "count": 6
+      "count": 9
     },
     {
       "theme": "Theory and methods",
+      "count": 7
+    },
+    {
+      "theme": "Foreign policy and diplomacy",
       "count": 6
     },
     {
@@ -1429,31 +1587,31 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 12
+      "count": 15
     },
     {
       "region": "Global and cross-regional",
-      "count": 7
+      "count": 9
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
+      "count": 5
+    },
+    {
+      "region": "The Americas",
       "count": 4
+    },
+    {
+      "region": "Asia",
+      "count": 3
+    },
+    {
+      "region": "Europe - Western Balkans",
+      "count": 3
     },
     {
       "region": "Middle East and North Africa",
       "count": 3
-    },
-    {
-      "region": "Asia",
-      "count": 2
-    },
-    {
-      "region": "Europe - Western Balkans",
-      "count": 2
-    },
-    {
-      "region": "The Americas",
-      "count": 2
     },
     {
       "region": "Africa",
