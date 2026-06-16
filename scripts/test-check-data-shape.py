@@ -197,6 +197,17 @@ def test_roadmap_progress_bad_total_type():
     assert any("'total' should be int" in e for e in mod.check_roadmap_progress(data))
 
 
+def test_spotlight_current_must_exist_in_bios():
+    errs = mod.check_spotlight({"active": True, "current": "ghost-member", "history": []})
+    assert any("not a member id" in e for e in errs)
+
+
+def test_spotlight_valid_current_passes():
+    # arthur-laudrain is a stable seed member id in the real bios.json.
+    assert mod.check_spotlight(
+        {"active": True, "current": "arthur-laudrain", "history": []}) == []
+
+
 # ── main() against the real repo data ───────────────────────────────
 
 def test_main_real_data_files_all_valid(capsys):
