@@ -3,10 +3,9 @@
 Sync helper: refresh data/indico.json from the EISS Indico instance.
 
 NetSec uses the same Indico as EISS (https://indico.eiss-europa.com) for
-hosting jointly-organised conferences (ESSC 26 onwards) and, in time,
-NetSec's own Summer School, training schools, and MC plenaries.
-
-Initial scope: ESSC 26 (event id 22, category 1 "Annual Conferences").
+hosting jointly-organised conferences (ESSC 26 onwards) and NetSec's own
+standalone events (Summer School, training schools, MC plenaries) via a
+dedicated NetSec category (#8).
 
 Usage:
     python3 scripts/sync-indico.py
@@ -15,18 +14,26 @@ What it does:
   1. GETs https://indico.eiss-europa.com/export/categ/1.json
      (the Annual Conferences category) with `from=today` and
      `to=today+LOOK_AHEAD_DAYS`. Returns the list of upcoming ESSC
-     events.
-  2. For each event, GETs /export/timetable/{event_id}.json and
+     events. Also fetches category #8 (NetSec's own events, best-effort)
+     for standalone events.
+  2. Classifies events as standalone (category #8), joint (EISS category
+     + NetSec keyword), or EISS-only (excluded). See `classify_netsec`.
+  3. For each event, GETs /export/timetable/{event_id}.json and
      normalises the timetable into a `programme.days[].rows[]`
      structure: day → time-blocks → session cards. Parallel sessions
      (same startTime, different rooms) get grouped into a single
      `parallel` row.
-  3. Strips PII surface: Indico publishes emailHashes (Gravatar
+  4. Strips PII surface: Indico publishes emailHashes (Gravatar
      lookups) for every person — we drop them. Internal db_ids /
      person_ids are also dropped. Names + affiliations remain (those
      are already public on Indico's event page; we don't widen
      exposure, we mirror it).
-  4. Writes data/indico.json. Idempotent: if the new payload is
+  5. Patches `data/events.json`: refreshes allow-listed fields on linked
+     entries (those with `indicoEventId`), sets a `coHost` field
+     (`"joint"` or `"standalone"`), and appends newly-discovered NetSec
+     events as `autoDiscovered: true` entries (EN copy only, pending
+     hand-translation, no machine translation per CLAUDE.md §1).
+  6. Writes data/indico.json. Idempotent: if the new payload is
      byte-identical to what's on disk, the file isn't touched.
 
 The schema mirrors EISS's exactly (annualConferences[year].programme
