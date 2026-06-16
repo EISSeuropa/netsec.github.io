@@ -60,18 +60,28 @@ if ! kill -0 "$server_pid" 2>/dev/null; then
 fi
 
 render_count() {
-  # $1 page path, $2 marker string. Prints the marker count in the
-  # post-JS DOM. virtual-time-budget lets the fetch+render settle.
+  # $1 page path, $2 marker string, $3 optional extra virtual-time-budget
+  # (default 10000). Pages whose renderers are in external <script defer>
+  # files need a larger budget: two chained network fetches (the script
+  # itself plus the data file) must both complete before the budget expires.
+  local budget="${3:-10000}"
   "$chrome" --headless --no-sandbox --disable-gpu --dump-dom \
-    --virtual-time-budget=10000 "http://127.0.0.1:${PORT}/$1" 2>/dev/null \
+    "--virtual-time-budget=$budget" "http://127.0.0.1:${PORT}/$1" 2>/dev/null \
     | grep -o "$2" | wc -l | tr -d ' '
+}
+
+render_count_slow() {
+  # Like render_count but with a 60 s virtual-time-budget for pages that
+  # load their renderer from an external <script defer> and then make a
+  # second async fetch for data (two-hop network chain).
+  render_count "$1" "$2" 60000
 }
 
 fail=0
 check() {
-  # $1 page, $2 marker, $3 minimum count
-  local n
-  n="$(render_count "$1" "$2")"
+  # $1 page, $2 marker, $3 minimum count, $4 optional render function
+  local n fn="${4:-render_count}"
+  n="$($fn "$1" "$2")"
   if [ "$n" -ge "$3" ]; then
     echo "✓ $1: $n × '$2' (need >= $3)"
   else
@@ -81,7 +91,9 @@ check() {
 }
 
 check "essc-2026.html" 'class="programme-slot' 1
-check "people.html" 'class="member-card' 2
+# people-directory.js is an external <script defer> that then fetches
+# data/bios.json — two chained network hops need the extended budget.
+check "people.html" 'class="member-card' 2 render_count_slow
 check "index.html" 'class="event-atc' 1
 
 exit "$fail"
