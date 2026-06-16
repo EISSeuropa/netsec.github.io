@@ -42,8 +42,8 @@
       session: 'Session', plenary: 'Plenary', roundtable: 'Roundtable',
       contribution: 'contribution', contributions: 'contributions',
       readOnIndico: 'Read on Indico →',
-      readFullAbstract: 'Read full abstract',
-      showLess: 'Show less',
+      readAbstract: 'Read abstract',
+      hideAbstract: 'Hide abstract',
       livestream: 'Livestream',
       breakFallback: 'Break',
       livestreamAria: 'This session will be livestreamed',
@@ -73,8 +73,8 @@
       session: 'Session', plenary: 'Plénière', roundtable: 'Table ronde',
       contribution: 'communication', contributions: 'communications',
       readOnIndico: 'Lire sur Indico →',
-      readFullAbstract: 'Lire le résumé complet',
-      showLess: 'Réduire',
+      readAbstract: 'Lire le résumé',
+      hideAbstract: 'Masquer le résumé',
       livestream: 'Diffusion directe',
       breakFallback: 'Pause',
       livestreamAria: 'Session diffusée en direct',
@@ -104,8 +104,8 @@
       session: 'Sitzung', plenary: 'Plenum', roundtable: 'Podiumsdiskussion',
       contribution: 'Beitrag', contributions: 'Beiträge',
       readOnIndico: 'Auf Indico lesen →',
-      readFullAbstract: 'Vollständige Zusammenfassung lesen',
-      showLess: 'Weniger anzeigen',
+      readAbstract: 'Zusammenfassung lesen',
+      hideAbstract: 'Zusammenfassung ausblenden',
       livestream: 'Livestream',
       breakFallback: 'Pause',
       livestreamAria: 'Diese Sitzung wird per Livestream übertragen',
@@ -587,7 +587,10 @@
       ) : null,
       roomBadge(slot),
       slot.speakers && slot.speakers.length ? renderPeople(slot.speakers, t.speakers) : null,
-      slot.abstract ? el('p', { class: 'programme-slot-abstract' }, slot.abstract) : null,
+      // Same collapsed-toggle treatment as a paper inside a session, so a
+      // standalone contribution reads identically (forward-safe: the
+      // current programme has no top-level contribution slots).
+      slot.abstract ? renderAbstract(slot) : null,
     );
   }
 
@@ -702,39 +705,42 @@
     return card;
   }
 
-  // Per-contribution abstract block with inline expand toggle.
+  // Per-contribution abstract, collapsed behind a single toggle.
   //
-  // Indico stores arbitrarily long abstracts; the sync truncates to
-  // a teaser (~360 chars) so the initial render stays light. When a
-  // `fullAbstract` is also present, we add a "Read full abstract"
-  // button that swaps the teaser for the full text in place, with
-  // a "Show less" toggle back. The contribution title remains an
-  // anchor to the Indico page for the canonical record.
+  // Every paper reads the same way: by default only a "Read abstract"
+  // button shows, and clicking it reveals the full text in place
+  // ("Hide abstract" toggles back). Showing the abstract by default
+  // used to leave the panel looking half-expanded and was uneven
+  // across papers — a long paper showed a ~360-char teaser with a
+  // toggle, while a short one (no separate `fullAbstract`) showed its
+  // whole abstract with no toggle. Hiding it until asked makes the
+  // line-up scannable and identical for every paper.
   //
-  // No motion is added: the abstract is just text, and animating its
-  // height would either fight `prefers-reduced-motion` or risk
-  // janky reflows on long abstracts inside long sessions.
+  // `fullAbstract` is the complete text; `abstract` is the teaser the
+  // sync stores, which equals the full text when it was short enough
+  // not to truncate, so it is the right fallback. The contribution
+  // title remains an anchor to the Indico page for the canonical
+  // record. No motion is added: animating the height would fight
+  // `prefers-reduced-motion` or risk janky reflows on long abstracts.
   function renderAbstract(c) {
+    const full = c.fullAbstract || c.abstract;
     const node = el('p', { class: 'programme-contrib-abstract' });
-    const text = el('span', { class: 'programme-contrib-abstract-text' }, c.abstract);
+    const btn = el('button', {
+      type: 'button',
+      class: 'programme-contrib-more',
+      'aria-expanded': 'false',
+    }, t.readAbstract);
+    const text = el('span', { class: 'programme-contrib-abstract-text' }, full);
+    let expanded = false;
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      expanded = !expanded;
+      node.classList.toggle('is-open', expanded);
+      btn.textContent = expanded ? t.hideAbstract : t.readAbstract;
+      btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    });
+    node.appendChild(btn);
     node.appendChild(text);
-    if (c.fullAbstract) {
-      let expanded = false;
-      const btn = el('button', {
-        type: 'button',
-        class: 'programme-contrib-more',
-        'aria-expanded': 'false',
-      }, t.readFullAbstract);
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        expanded = !expanded;
-        text.textContent = expanded ? c.fullAbstract : c.abstract;
-        btn.textContent = expanded ? t.showLess : t.readFullAbstract;
-        btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-      });
-      node.appendChild(document.createTextNode(' '));
-      node.appendChild(btn);
-    }
     return node;
   }
 

@@ -5291,6 +5291,14 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   color:var(--ink-2);
   line-height:1.5;
 }
+/* The abstract text is collapsed by default and revealed in place when
+   the reader presses the toggle, so the paper line-up stays scannable
+   and every paper reads the same way. */
+.programme-contrib-abstract-text{ display:none; }
+.programme-contrib-abstract.is-open .programme-contrib-abstract-text{
+  display:block;
+  margin-top:.35rem;
+}
 /* The expand-toggle is now a <button>, not an <a>: clicking swaps
    the teaser for the full abstract in place rather than sending the
    reader off to Indico. We override the native button chrome so it
@@ -5313,6 +5321,9 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   text-underline-offset:2px;
   white-space:nowrap;
 }
+/* The toggle now leads the abstract block (the text follows it when
+   open), so it sits flush with the rest of the contribution. */
+.programme-contrib-abstract .programme-contrib-more{ margin-left:0; }
 .programme-contrib-more:hover{
   opacity:.85;
 }
