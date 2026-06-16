@@ -1170,7 +1170,9 @@
       "affiliation": "Ankara University of Social Sciences",
       "position": "Professor of Economics",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1
+      ],
       "mentorship": [
         "mentor"
       ],
@@ -1298,7 +1300,9 @@
       "affiliation": "University of the Peloponnese",
       "position": "Professor of International Relations",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1
+      ],
       "mentorship": [
         "mentor"
       ],
