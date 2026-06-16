@@ -502,7 +502,8 @@
       ],
       "themes": [
         "Foreign policy and diplomacy",
-        "Security and defence"
+        "Security and defence",
+        "Strategy and deterrence"
       ]
     },
     {
@@ -721,7 +722,7 @@
       ],
       "themes": [
         "Foreign policy and diplomacy",
-        "Security and defence"
+        "Strategy and deterrence"
       ]
     },
     {
@@ -772,6 +773,7 @@
       ],
       "themes": [
         "Security and defence",
+        "Strategy and deterrence",
         "Theory and methods",
         "Transnational and human security"
       ]
@@ -1022,7 +1024,7 @@
       "themes": [
         "Cyber and emerging technology",
         "Foreign policy and diplomacy",
-        "Security and defence"
+        "Strategy and deterrence"
       ]
     },
     {
@@ -1428,7 +1430,8 @@
       ],
       "themes": [
         "European and transatlantic security order",
-        "Security and defence"
+        "Security and defence",
+        "Strategy and deterrence"
       ]
     },
     {
@@ -1471,7 +1474,8 @@
         "NATO"
       ],
       "themes": [
-        "European and transatlantic security order"
+        "European and transatlantic security order",
+        "Foreign policy and diplomacy"
       ]
     }
   ],
@@ -1832,11 +1836,11 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 15
+      "count": 13
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 11
+      "count": 12
     },
     {
       "theme": "Theory and methods",
@@ -1855,6 +1859,10 @@
       "count": 5
     },
     {
+      "theme": "Strategy and deterrence",
+      "count": 5
+    },
+    {
       "theme": "European and transatlantic security order",
       "count": 4
     },
@@ -1870,7 +1878,7 @@
   "keyword_theme_map": {
     "AI": "Cyber and emerging technology",
     "Alliance politics": "European and transatlantic security order",
-    "Arms control": "Security and defence",
+    "Arms control": "Strategy and deterrence",
     "Black sea security": "Security and defence",
     "Capability planning": "Security and defence",
     "Civil defence": "Security and defence",
@@ -1888,7 +1896,7 @@
     "Defence economics": "Economic security and geoeconomics",
     "Defence industrial policy": "Economic security and geoeconomics",
     "Defence industry": "Economic security and geoeconomics",
-    "Deterrence": "Security and defence",
+    "Deterrence": "Strategy and deterrence",
     "Digital governance": "Cyber and emerging technology",
     "Digital media": "Intelligence, information and influence",
     "Digital sovereignty": "Cyber and emerging technology",
@@ -1897,6 +1905,7 @@
     "Dual use technologies": "Cyber and emerging technology",
     "EU foreign policy": "Foreign policy and diplomacy",
     "EU–NATO relations": "European and transatlantic security order",
+    "East central Europe": "Foreign policy and diplomacy",
     "Eastern Europe": "Foreign policy and diplomacy",
     "Economic security": "Economic security and geoeconomics",
     "Economic statecraft": "Economic security and geoeconomics",
@@ -1907,7 +1916,7 @@
     "Foreign policy analysis": "Foreign policy and diplomacy",
     "Geopolitics": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
-    "Grand strategy": "Security and defence",
+    "Grand strategy": "Strategy and deterrence",
     "History": "Theory and methods",
     "Hybrid threats": "Intelligence, information and influence",
     "Identity": "Identity, narratives and ideational security",
@@ -1925,14 +1934,15 @@
     "Irregular warfare": "Security and defence",
     "Judgment and decision-making": "Theory and methods",
     "Maritime security": "Transnational and human security",
-    "Maritime strategy": "Security and defence",
+    "Maritime strategy": "Strategy and deterrence",
     "Militarisation": "Security and defence",
     "Multilateralism": "Foreign policy and diplomacy",
+    "NATO": "European and transatlantic security order",
     "Narratives": "Identity, narratives and ideational security",
     "National security": "Security and defence",
     "Non-state actors": "Transnational and human security",
-    "Nuclear politics": "Security and defence",
-    "Nuclear strategy": "Security and defence",
+    "Nuclear politics": "Strategy and deterrence",
+    "Nuclear strategy": "Strategy and deterrence",
     "Ontological security": "Identity, narratives and ideational security",
     "Organisation studies": "Theory and methods",
     "Peacekeeping": "Transnational and human security",
@@ -1945,7 +1955,7 @@
     "Russian foreign policy": "Foreign policy and diplomacy",
     "Security and defence": "Security and defence",
     "Security studies": "Security and defence",
-    "Strategy": "Security and defence",
+    "Strategy": "Strategy and deterrence",
     "Subversion": "Intelligence, information and influence",
     "Technology spillovers": "Cyber and emerging technology",
     "Text as data": "Theory and methods",

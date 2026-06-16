@@ -80,9 +80,10 @@
   },
 
   "themes": {
-    "Foreign policy and diplomacy": ["EU foreign policy", "German security policy", "Foreign policy analysis", "Russian foreign policy", "Indian foreign policy", "India", "Multilateralism", "UN", "Geopolitics", "Eastern Europe", "Western Balkans", "Regional cooperation", "US-China relations", "Diplomacy"],
-    "Security and defence": ["European security", "Grand strategy", "Defence", "International security", "Power", "Civil defence", "Civil-military relations", "Militarisation", "Arms control", "Deterrence", "Nuclear strategy", "Irregular warfare", "Maritime strategy", "National security", "Strategy", "Capability planning", "Black sea security", "Security and defence", "Security studies", "Crisis management", "Crises", "Nuclear politics"],
-    "European and transatlantic security order": ["EU–NATO relations", "European strategic autonomy", "Transatlantic relations", "Alliance politics"],
+    "Foreign policy and diplomacy": ["EU foreign policy", "German security policy", "Foreign policy analysis", "Russian foreign policy", "Indian foreign policy", "India", "Multilateralism", "UN", "Geopolitics", "Eastern Europe", "Western Balkans", "Regional cooperation", "US-China relations", "Diplomacy", "East central Europe"],
+    "Security and defence": ["European security", "Defence", "International security", "Power", "Civil defence", "Civil-military relations", "Militarisation", "Irregular warfare", "National security", "Capability planning", "Black sea security", "Security and defence", "Security studies", "Crisis management", "Crises"],
+    "Strategy and deterrence": ["Grand strategy", "Strategy", "Maritime strategy", "Nuclear strategy", "Nuclear politics", "Arms control", "Deterrence"],
+    "European and transatlantic security order": ["EU–NATO relations", "European strategic autonomy", "Transatlantic relations", "Alliance politics", "NATO"],
     "Intelligence, information and influence": ["Disinformation", "Election interference", "Subversion", "Digital media", "Intelligence studies", "Influence", "Cognitive warfare", "Hybrid threats"],
     "Identity, narratives and ideational security": ["Identity", "Narratives", "Ontological security"],
     "Cyber and emerging technology": ["Cybersecurity governance", "Digital sovereignty", "Digital governance", "Cyber defence", "Cyber", "Infrastructure", "Critical infrastructure", "Supply chain security", "Emerging technology", "Emerging and disruptive technologies", "Artificial intelligence", "AI", "Cybersecurity", "Cybercrime", "Dual use technologies", "Technology spillovers"],
