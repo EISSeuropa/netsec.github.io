@@ -50,6 +50,8 @@ Usage:
 
 Run from the repo root. Requires: requests, beautifulsoup4.
 """
+from __future__ import annotations
+
 import json, re, sys, unicodedata
 from pathlib import Path
 
@@ -78,6 +80,22 @@ def norm(name: str) -> str:
     s = "".join(c for c in s if not unicodedata.combining(c))
     s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+", "", s)
     return re.sub(r"\s+", " ", s).strip().lower()
+
+
+def name_key(name: str) -> tuple[str, str] | None:
+    """(first, last) tokens of a name, lowercased and de-titled, for a
+    fallback match when the full normalised string differs only by a
+    middle name or initials ("John N.T. Helferich" on our side vs the
+    "John Helferich" cost.eu publishes). Returns None when fewer than two
+    name tokens survive, so a single-token name never matches by accident."""
+    s = unicodedata.normalize("NFKD", name or "")
+    s = "".join(c for c in s if not unicodedata.combining(c))
+    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+", "", s, flags=re.I)
+    post = {"phd", "jr", "sr", "ii", "iii", "iv", "esq"}
+    toks = [t for t in re.split(r"[^A-Za-z]+", s) if t and t.lower() not in post]
+    if len(toks) < 2:
+        return None
+    return (toks[0].lower(), toks[-1].lower())
 
 
 def slugify(name: str) -> str:
@@ -211,15 +229,34 @@ def reconcile_wgs(new_map: dict[str, list[int]], today: str) -> tuple:
     matched = 0
     bios_changed = False
 
+    # First+last fallback index over the cost.eu roster, used only when a
+    # member's full normalised name has no exact match — and only when the
+    # first+last key is unique on cost.eu, so two genuinely different people
+    # who share a first and last name never collapse (#916: "John N.T.
+    # Helferich" on our side resolves to cost.eu's "John Helferich").
+    nk_index: dict[tuple[str, str], list[str]] = {}
+    for ck in new_map:
+        nk = name_key(ck)
+        if nk:
+            nk_index.setdefault(nk, []).append(ck)
+
     for m in members:
         name = m.get("name") or ""
         key = norm(name)
-        if not key or key not in new_map:
+        cost_key = key if key in new_map else None
+        if cost_key is None:
+            nk = name_key(name)
+            cands = nk_index.get(nk, []) if nk else []
+            if len(cands) == 1:
+                cost_key = cands[0]
+                flags.append(f"  · {name}: matched cost.eu's {cost_key!r} on "
+                             f"first+last name (full name differs).")
+        if not cost_key:
             continue
         matched += 1
         form = sorted(m.get("wgs") or [])
-        cost = sorted(new_map[key])
-        s = s_members.setdefault(key, {})
+        cost = sorted(new_map[cost_key])
+        s = s_members.setdefault(cost_key, {})
 
         # cost.eu observation clock: stamp each WG when first seen
         # there; a WG that leaves and returns is re-stamped.
@@ -255,7 +292,7 @@ def reconcile_wgs(new_map: dict[str, list[int]], today: str) -> tuple:
         if final_sorted != form:
             m["wgs"] = final_sorted
             bios_changed = True
-        effective[key] = final_sorted
+        effective[cost_key] = final_sorted
 
         s["cost_first_seen"] = {str(k): v for k, v in sorted(first_seen.items())}
         s["form_wgs"] = final_sorted
@@ -817,6 +854,29 @@ def check_country_grid(mc: list[dict]) -> list[str]:
 
 # ─── main ───────────────────────────────────────────────────────────
 
+def restamp_index_i18n() -> list[str]:
+    """Re-mark index.fr/de as i18n-fresh after WG_MAP is rewritten (#916).
+
+    `WG_MAP` is a locale-neutral data blob written identically into all
+    three index files. The translation-drift gate hashes the EN source, so
+    a WG_MAP change makes index.fr/de read as stale even though the FR/DE
+    copies carry the same new blob and need no human translation. Re-stamp
+    their freshness here so the weekly cost-sync auto-PR stops tripping the
+    gate. Reuses check-i18n-drift.py's own sha1 + state writer so the stamp
+    matches exactly what the checker computes."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "check_i18n_drift", ROOT / "scripts" / "check-i18n-drift.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    state = mod.load_state()
+    out: list[str] = []
+    for lang in ("fr", "de"):
+        if mod.mark_fresh(state, "index.html", lang) == 0:
+            out.append(f"  re-stamped index.{lang}.html i18n freshness")
+    return out
+
+
 def main() -> None:
     r = requests.get(URL, headers={"User-Agent": "netsec-sync/1.0"}, timeout=30)
     r.raise_for_status()
@@ -836,6 +896,11 @@ def main() -> None:
     old_map = rewrite_wg_map(effective_map)
     for line in report_wg(old_map, effective_map):
         print(line)
+    # WG_MAP just changed the three index files identically; keep their
+    # i18n freshness stamps current so the auto-PR clears the drift gate.
+    if old_map != effective_map:
+        for line in restamp_index_i18n():
+            print(line)
     print()
     for line in wg_report:
         print(line)

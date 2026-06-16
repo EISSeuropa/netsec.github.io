@@ -101,6 +101,38 @@ def test_reconcile_applies_cost_addition() -> None:
         expect("state file written", state.exists(), True)
 
 
+def test_name_key() -> None:
+    print("\nname_key():")
+    expect("middle initials dropped",
+           sync_cost.name_key("Dr John N.T. Helferich"), ("john", "helferich"))
+    expect("plain two-token", sync_cost.name_key("John Helferich"), ("john", "helferich"))
+    expect("single token -> None", sync_cost.name_key("Madonna"), None)
+
+
+def test_reconcile_name_fallback() -> None:
+    """A member whose full name differs from cost.eu only by middle initials
+    ("John N.T. Helferich" vs "John Helferich") matches on a unique first+last
+    key, and the effective map stays keyed by cost.eu's name (#916)."""
+    print("\nreconcile_wgs() — first+last name fallback:")
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        path, state = _with_paths(tmp, [
+            {"id": "john-helferich", "name": "Dr John N.T. Helferich",
+             "wgs": [1, 2], "source": "form"},
+        ])
+        saved = sync_cost.BIOS, sync_cost.WG_STATE
+        sync_cost.BIOS, sync_cost.WG_STATE = path, state
+        try:
+            lines, eff = _run({"john helferich": [1]})
+        finally:
+            sync_cost.BIOS, sync_cost.WG_STATE = saved
+        expect("matched, effective keyed by cost.eu name",
+               eff.get("john helferich"), [1, 2])
+        expect("no phantom bios-name key", "john n.t. helferich" not in eff, True)
+        expect("fallback match reported",
+               any("first+last name" in line for line in lines), True)
+
+
 def test_reconcile_keeps_form_extra_as_pending() -> None:
     """A WG on the form that cost.eu has not published yet is kept on
     the card and flagged as pending catch-up, never stripped."""
@@ -506,7 +538,9 @@ def test_apply_stats_rewrites_markers() -> None:
 
 def main() -> None:
     test_norm()
+    test_name_key()
     test_reconcile_applies_cost_addition()
+    test_reconcile_name_fallback()
     test_reconcile_keeps_form_extra_as_pending()
     test_reconcile_holds_deliberate_removal()
     test_reconcile_cost_newer_readds_after_form_change()
