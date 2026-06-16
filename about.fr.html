@@ -265,9 +265,32 @@
   <div class="container reveal">
     <h2>L'Action</h2>
     <div class="container-inner">
+
+    <!-- En chiffres. Les nombres de représentant·es au CG et de pays sont
+         les littéraux data-cost-stat que la synchronisation cost.eu tient
+         à jour ; les nombres de membres des groupes de travail et du
+         réseau sont remplis au chargement depuis data/wg.json +
+         data/bios.json par le script en bas de page, les valeurs
+         statiques ici servant de repli sans JS. -->
+    <h3 class="mc-subhead">En chiffres</h3>
+    <div class="mc-stats" role="list" aria-label="L'Action en chiffres">
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" data-cost-stat="mc-count">51</span>
+        <span class="mc-stat-label">membres du CG dans <span data-cost-stat="country-count">31</span> pays</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" id="stat-wg-members">145</span>
+        <span class="mc-stat-label">membres des groupes de travail</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" id="stat-network-members">33</span>
+        <span class="mc-stat-label">ont rejoint le réseau</span>
+      </div>
+    </div>
+
     <div class="about-grid">
       <div class="about-card glass">
-        <p>L'Action favorise les synergies entre les communautés épistémiques nationales et locales, comble le fossé entre académie et politique et s'attaque aux déséquilibres de genre et de génération dans le domaine. À travers la recherche interdisciplinaire, des conférences annuelles, des ateliers politiques, un programme de mentorat et une école d'été, NetSec contribue à une communauté européenne cohérente d'études de sécurité.</p>
+        <p>L'Action favorise les synergies entre les communautés épistémiques nationales et locales, comble le fossé entre académie et politique et s'attaque aux déséquilibres de genre et de génération dans le domaine. À travers la recherche interdisciplinaire, des conférences annuelles, des ateliers politiques, un programme de mentorat et une école d'été, NetSec contribue à une communauté européenne cohérente d'études de sécurité. Son travail s'organise autour de quatre <a href="working-groups.fr.html">groupes de travail</a>, de la construction du réseau à la formation de la prochaine génération de chercheur·euses.</p>
         <p style="margin-bottom:0">En reliant les communautés académiques, politiques et professionnelles à travers le continent, NetSec fait avancer l'autonomie stratégique de l'Europe dans un environnement de sécurité mondial de plus en plus complexe.</p>
       </div>
       <div class="objectives">
@@ -936,6 +959,36 @@
     </div>
   </div>
 </footer>
+
+<!-- Compteurs « En chiffres ». Membres des groupes de travail (personnes
+     uniques sur les quatre groupes de data/wg.json) et personnes ayant
+     rejoint le réseau (membres de data/bios.json). Les nombres du CG et
+     des pays sont les littéraux data-cost-stat que la synchronisation
+     cost.eu tient à jour ; les valeurs statiques du balisage servent de
+     repli sans JS pour ces deux compteurs. -->
+<script>
+(function () {
+  var wgEl = document.getElementById('stat-wg-members');
+  var netEl = document.getElementById('stat-network-members');
+  if (netEl) {
+    fetch('data/bios.json').then(function (r) { return r.json(); }).then(function (d) {
+      if (Array.isArray(d.members) && d.members.length) netEl.textContent = d.members.length;
+    }).catch(function () {});
+  }
+  if (wgEl) {
+    fetch('data/wg.json').then(function (r) { return r.json(); }).then(function (d) {
+      var seen = {}, n = 0;
+      (d.groups || []).forEach(function (g) {
+        (g.members || []).forEach(function (m) {
+          var key = (m && m.name) ? m.name : m;
+          if (key && !seen[key]) { seen[key] = 1; n++; }
+        });
+      });
+      if (n) wgEl.textContent = n;
+    }).catch(function () {});
+  }
+})();
+</script>
 
 <script src="assets/js/site.js?v=7dbc3f59" defer></script>
 

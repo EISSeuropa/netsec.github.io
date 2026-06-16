@@ -259,9 +259,31 @@
   <div class="container reveal">
     <h2>The Action</h2>
     <div class="container-inner">
+
+    <!-- In numbers. MC + country counts are the data-cost-stat literals
+         the cost.eu sync keeps current; the Working Group and Network
+         counts are filled at runtime from data/wg.json + data/bios.json
+         by the inline script at the foot of the page, with the static
+         values here as the no-JS fallback. -->
+    <h3 class="mc-subhead">In numbers</h3>
+    <div class="mc-stats" role="list" aria-label="The Action in numbers">
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" data-cost-stat="mc-count">51</span>
+        <span class="mc-stat-label">MC members across <span data-cost-stat="country-count">31</span> countries</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" id="stat-wg-members">145</span>
+        <span class="mc-stat-label">Working Group members</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" id="stat-network-members">33</span>
+        <span class="mc-stat-label">have joined the Network</span>
+      </div>
+    </div>
+
     <div class="about-grid">
       <div class="about-card glass">
-        <p>The Action fosters synergies across national and local epistemic communities, bridges the academia–policy divide, and addresses gender and generational imbalances in the field. Through interdisciplinary research, annual conferences, policy workshops, a mentorship programme, and a summer school, NetSec contributes to a cohesive European security studies community.</p>
+        <p>The Action fosters synergies across national and local epistemic communities, bridges the academia–policy divide, and addresses gender and generational imbalances in the field. Through interdisciplinary research, annual conferences, policy workshops, a mentorship programme, and a summer school, NetSec contributes to a cohesive European security studies community. Its work is organised across four <a href="working-groups.html">Working Groups</a>, from building the network to fostering the next generation of scholars.</p>
         <p style="margin-bottom:0">By connecting academic, policy, and practitioner communities across the continent, NetSec advances Europe's strategic autonomy in an increasingly complex global security environment.</p>
       </div>
       <div class="objectives">
@@ -969,6 +991,35 @@
     </div>
   </div>
 </footer>
+
+<!-- "In numbers" live counts. Working Group members (unique people
+     across the four groups in data/wg.json) and people who have joined
+     the Network (members in data/bios.json). The MC and country counts
+     are the data-cost-stat literals the cost.eu sync keeps current; the
+     static values in the markup are the no-JS fallback for these two. -->
+<script>
+(function () {
+  var wgEl = document.getElementById('stat-wg-members');
+  var netEl = document.getElementById('stat-network-members');
+  if (netEl) {
+    fetch('data/bios.json').then(function (r) { return r.json(); }).then(function (d) {
+      if (Array.isArray(d.members) && d.members.length) netEl.textContent = d.members.length;
+    }).catch(function () {});
+  }
+  if (wgEl) {
+    fetch('data/wg.json').then(function (r) { return r.json(); }).then(function (d) {
+      var seen = {}, n = 0;
+      (d.groups || []).forEach(function (g) {
+        (g.members || []).forEach(function (m) {
+          var key = (m && m.name) ? m.name : m;
+          if (key && !seen[key]) { seen[key] = 1; n++; }
+        });
+      });
+      if (n) wgEl.textContent = n;
+    }).catch(function () {});
+  }
+})();
+</script>
 
 <script src="assets/js/site.js?v=7dbc3f59" defer></script>
 
