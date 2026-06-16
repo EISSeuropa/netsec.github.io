@@ -121,6 +121,15 @@
         2
       ],
       "form_changed_on": "2026-06-15"
+    },
+    "john helferich": {
+      "cost_first_seen": {
+        "1": "2026-06-16"
+      },
+      "form_wgs": [
+        1
+      ],
+      "form_changed_on": "2026-06-16"
     }
   }
 }
