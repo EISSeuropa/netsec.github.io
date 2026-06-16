@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-16T19:03:19+00:00",
+  "generated_at": "2026-06-16T20:24:23+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-16T19:03:19+00:00"
+    "last_synced": "2026-06-16T20:24:23+00:00"
   },
   "members": [
     {
@@ -1430,6 +1430,49 @@
         "European and transatlantic security order",
         "Security and defence"
       ]
+    },
+    {
+      "id": "alexander-lanoszka",
+      "name": "Dr Alexander Lanoszka",
+      "country": "Canada",
+      "country_code": "ca",
+      "affiliation": "University of Waterloo",
+      "position": "Associate Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Global and cross-regional"
+      ],
+      "wg_leadership": {},
+      "bio": "Alexander Lanoszka is Associate Professor in the Department of Political Science and the Balsillie School of International Affairs at the University of Waterloo in Canada. He is also a visiting professor at the College of Europe in Natolin, Poland. His research addresses alliance politics and military strategy, with a focus on East-Central Europe. He has published in leading peer-reviewed journals such as International Affairs, International Security, International Studies Quarterly, and Security Studies. His books include Atomic Assurance: The Alliance Politics of Nuclear Proliferation (Cornell, 2018) and Military Alliances in the Twenty-First Century (Polity, 2022). He received his Ph.D. from Princeton University.",
+      "keywords": [
+        "NATO",
+        "alliance politics",
+        "East Central Europe"
+      ],
+      "email": "alexander.lanoszka@uwaterloo.ca",
+      "website": "https://www.alexlanoszka.com",
+      "orcid": "0000-0001-6812-3873",
+      "linkedin": "https://www.linkedin.com/in/alexanderlanoszka/",
+      "twitter": "",
+      "bluesky": "https://bsky.app/profile/lanoszka.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/alexander-lanoszka.jpg",
+      "source": "form",
+      "photo_source_sha256": "f9178c49424a158e6015d89c744468a51599686bff9cf2aee66ddd0999318e8a",
+      "canonical_keywords": [
+        "Alliance politics",
+        "East central Europe",
+        "NATO"
+      ],
+      "themes": [
+        "European and transatlantic security order"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -1444,6 +1487,10 @@
     {
       "keyword": "International relations",
       "count": 3
+    },
+    {
+      "keyword": "Alliance politics",
+      "count": 2
     },
     {
       "keyword": "Cybersecurity",
@@ -1479,10 +1526,6 @@
     },
     {
       "keyword": "AI",
-      "count": 1
-    },
-    {
-      "keyword": "Alliance politics",
       "count": 1
     },
     {
@@ -1579,6 +1622,10 @@
     },
     {
       "keyword": "Dual use technologies",
+      "count": 1
+    },
+    {
+      "keyword": "East central Europe",
       "count": 1
     },
     {
@@ -1687,6 +1734,10 @@
     },
     {
       "keyword": "National security",
+      "count": 1
+    },
+    {
+      "keyword": "NATO",
       "count": 1
     },
     {
@@ -1804,12 +1855,12 @@
       "count": 5
     },
     {
-      "theme": "Intelligence, information and influence",
+      "theme": "European and transatlantic security order",
       "count": 4
     },
     {
-      "theme": "European and transatlantic security order",
-      "count": 3
+      "theme": "Intelligence, information and influence",
+      "count": 4
     },
     {
       "theme": "Identity, narratives and ideational security",
@@ -1907,11 +1958,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 18
+      "count": 19
     },
     {
       "region": "Global and cross-regional",
-      "count": 10
+      "count": 11
     },
     {
       "region": "The Americas",
@@ -1923,7 +1974,7 @@
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 4
+      "count": 5
     },
     {
       "region": "Europe - Western Balkans",
