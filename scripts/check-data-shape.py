@@ -189,6 +189,14 @@ def check_events(data) -> list:
         # back to 'en', so that key is the load-bearing one.
         if _req(ev, "cardTitle", dict, errs, ctx, non_empty=True):
             _req(ev["cardTitle"], "en", str, errs, f"{ctx}.cardTitle", non_empty=True)
+        # coHost is the optional Indico NetSec distinction the renderer
+        # keys the joint badge off; a stray value would silently render
+        # no badge, so pin it to the two known states.
+        ch = ev.get("coHost")
+        if ch is not None and ch not in ("joint", "standalone"):
+            errs.append(
+                f"{ctx}: 'coHost' must be 'joint' or 'standalone' (or absent), got {ch!r}"
+            )
     return errs
 
 

@@ -3,10 +3,9 @@
 Sync helper: refresh data/indico.json from the EISS Indico instance.
 
 NetSec uses the same Indico as EISS (https://indico.eiss-europa.com) for
-hosting jointly-organised conferences (ESSC 26 onwards) and, in time,
-NetSec's own Summer School, training schools, and MC plenaries.
-
-Initial scope: ESSC 26 (event id 22, category 1 "Annual Conferences").
+hosting jointly-organised conferences (ESSC 26 onwards) and NetSec's own
+standalone events (Summer School, training schools, MC plenaries) via a
+dedicated NetSec category (#8).
 
 Usage:
     python3 scripts/sync-indico.py
@@ -15,18 +14,26 @@ What it does:
   1. GETs https://indico.eiss-europa.com/export/categ/1.json
      (the Annual Conferences category) with `from=today` and
      `to=today+LOOK_AHEAD_DAYS`. Returns the list of upcoming ESSC
-     events.
-  2. For each event, GETs /export/timetable/{event_id}.json and
+     events. Also fetches category #8 (NetSec's own events, best-effort)
+     for standalone events.
+  2. Classifies events as standalone (category #8), joint (EISS category
+     + NetSec keyword), or EISS-only (excluded). See `classify_netsec`.
+  3. For each event, GETs /export/timetable/{event_id}.json and
      normalises the timetable into a `programme.days[].rows[]`
      structure: day → time-blocks → session cards. Parallel sessions
      (same startTime, different rooms) get grouped into a single
      `parallel` row.
-  3. Strips PII surface: Indico publishes emailHashes (Gravatar
+  4. Strips PII surface: Indico publishes emailHashes (Gravatar
      lookups) for every person — we drop them. Internal db_ids /
      person_ids are also dropped. Names + affiliations remain (those
      are already public on Indico's event page; we don't widen
      exposure, we mirror it).
-  4. Writes data/indico.json. Idempotent: if the new payload is
+  5. Patches `data/events.json`: refreshes allow-listed fields on linked
+     entries (those with `indicoEventId`), sets a `coHost` field
+     (`"joint"` or `"standalone"`), and appends newly-discovered NetSec
+     events as `autoDiscovered: true` entries (EN copy only, pending
+     hand-translation, no machine translation per CLAUDE.md §1).
+  6. Writes data/indico.json. Idempotent: if the new payload is
      byte-identical to what's on disk, the file isn't touched.
 
 The schema mirrors EISS's exactly (annualConferences[year].programme
@@ -90,6 +97,18 @@ INDICO_BASE = "https://indico.eiss-europa.com"
 # by categoryId. Kept narrow on purpose: fewer events fetched, fewer
 # moving parts during the initial port.
 SYNC_CATEGORY_IDS = {1}
+
+# NetSec's own Indico category. Standalone NetSec events (training
+# schools, policy workshops, MC plenaries, the Summer School) live
+# here. Jointly-run EISS × NetSec events (the ESSC) instead live in an
+# EISS category, e.g. Annual Conferences (#1), and signal their NetSec
+# co-hosting with the `NetSec` keyword — Indico allows only one
+# category label per event, so a conference that already carries the
+# "Annual Conference" label uses the keyword to opt onto the NetSec
+# calendar. The two signals together let the site advertise standalone
+# and joint events while excluding EISS-only ones.
+NETSEC_CATEGORY_ID = 8
+NETSEC_KEYWORD = "netsec"
 
 LOOK_AHEAD_DAYS = 540  # ~18 months — long enough to capture ESSC N+1
 
@@ -296,7 +315,34 @@ def normalise_event(event: dict) -> dict:
         "room": event.get("room", ""),
         "url": event.get("url", ""),
         "type": event.get("type", ""),
+        # Lower-cased keyword list, used to spot the "NetSec" co-host
+        # marker on EISS-category events. Indico returns these as a flat
+        # list of strings; absent → [].
+        "keywords": [
+            str(k).strip().lower() for k in (event.get("keywords") or []) if str(k).strip()
+        ],
     }
+
+
+def classify_netsec(norm: dict) -> "str | None":
+    """Decide whether a normalised Indico event belongs on the NetSec
+    calendar, and how.
+
+      - "standalone" — the event lives in NetSec's own category (#8):
+        a training school, policy workshop, MC plenary, etc.
+      - "joint" — the event lives in another (EISS) category but carries
+        the "NetSec" keyword: a jointly-run event such as the ESSC.
+      - None — an EISS-only event that NetSec does not advertise.
+
+    The NetSec category wins over the keyword: an event physically in
+    #8 is standalone even if someone also tagged it, so the badge
+    reflects where the event actually lives.
+    """
+    if norm.get("categoryId") == NETSEC_CATEGORY_ID:
+        return "standalone"
+    if NETSEC_KEYWORD in (norm.get("keywords") or []):
+        return "joint"
+    return None
 
 
 def _normalise_contribution(c: dict) -> dict:
@@ -344,15 +390,14 @@ def _normalise_contribution(c: dict) -> dict:
 # ──────────────────────────── fetch + extract ────────────────────────────
 
 
-def fetch_events() -> list[dict]:
-    """Hit the Annual Conferences category and return the raw event
-    list. Defensive: lookahead is ~18 months, ordering is by start
-    time, detail=events gives us the full event shape."""
+def fetch_category_events(cat_id: int) -> list[dict]:
+    """GET one Indico category's event list. Lookahead is ~18 months,
+    ordering by start time, detail=events gives the full event shape.
+    Raises on a non-200 or an unexpected payload shape — the caller
+    decides whether that is fatal (the Annual-Conference fetch) or a
+    soft miss (the NetSec-category fetch)."""
     today = dt.date.today()
     to_date = today + dt.timedelta(days=LOOK_AHEAD_DAYS)
-    # If we ever sync multiple categories, repeat this fetch and
-    # concatenate. One category for now → one HTTP call.
-    cat_id = next(iter(SYNC_CATEGORY_IDS))
     url = (
         f"{INDICO_BASE}/export/categ/{cat_id}.json"
         f"?from={today.isoformat()}&to={to_date.isoformat()}"
@@ -368,6 +413,51 @@ def fetch_events() -> list[dict]:
             f"{payload.get('_type')!r}, expected 'HTTPAPIResult'"
         )
     return payload.get("results", []) or []
+
+
+def fetch_events() -> list[dict]:
+    """Hit the Annual Conferences category and return the raw event
+    list. A network failure or non-200 here aborts the sync (the
+    workflow treats it as a soft fail and keeps the last good data)."""
+    return fetch_category_events(next(iter(SYNC_CATEGORY_IDS)))
+
+
+def build_netsec_index(annual_raw: list[dict]) -> dict:
+    """Build the id-keyed map of NetSec-relevant events feeding
+    events.json. Combines the already-fetched Annual-Conference events
+    (where joint events are detected by the NetSec keyword) with a
+    fresh fetch of NetSec's own category (#8, the standalone events).
+
+    The NetSec-category fetch is best-effort: if it errors, joint
+    events are still detected from the Annual-Conference set, so a
+    co-host badge never disappears just because #8 was briefly
+    unreachable. Each kept value is the normalised event with a
+    `coHost` field ('standalone' | 'joint') already attached."""
+    raw = list(annual_raw)
+    try:
+        netsec_raw = fetch_category_events(NETSEC_CATEGORY_ID)
+        print(
+            f"Fetched {len(netsec_raw)} event(s) from NetSec category "
+            f"#{NETSEC_CATEGORY_ID}",
+            file=sys.stderr,
+        )
+        raw += netsec_raw
+    except Exception as exc:  # noqa: BLE001 — discovery is best-effort
+        print(
+            f"  ! NetSec category #{NETSEC_CATEGORY_ID} fetch failed: {exc}. "
+            "Joint events are still detected from the Annual-Conference set.",
+            file=sys.stderr,
+        )
+
+    index: dict = {}
+    for ev in raw:
+        norm = normalise_event(ev)
+        cls = classify_netsec(norm)
+        if cls is None or not norm.get("id"):
+            continue
+        norm["coHost"] = cls
+        index[str(norm["id"])] = norm
+    return index
 
 
 def fetch_timetable(event_id: str) -> dict:
@@ -594,30 +684,138 @@ def extract_programme(timetable_results: dict, event_id: str) -> dict:
 # ──────────────────────────── main ────────────────────────────
 
 
-def _patch_events_json(annual_by_year: dict[str, dict]) -> bool:
-    """Refresh Indico-linked entries in data/events.json.
+_MONTHS_EN = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+]
+
+
+def _en_display_date(start: str, end: str) -> str:
+    """Human-readable EN date range from two ISO stamps. Mirrors the
+    hand-written `displayDate.en` style already in events.json
+    ('9–11 June 2026', '4 September 2026', '30 June – 2 July 2026').
+    Returns '' if start can't be parsed. FR/DE are left to the
+    maintainer (no machine translation, CLAUDE.md §1) — the renderer
+    falls back to the EN string until they are filled in."""
+    def parse(s: str):
+        m = re.match(r"^(\d{4})-(\d{2})-(\d{2})", s or "")
+        return (int(m.group(1)), int(m.group(2)), int(m.group(3))) if m else None
+
+    a = parse(start)
+    if not a:
+        return ""
+    b = parse(end) or a
+    ay, am, ad = a
+    by, bm, bd = b
+    if (ay, am, ad) == (by, bm, bd):
+        return f"{ad} {_MONTHS_EN[am - 1]} {ay}"
+    if ay == by and am == bm:
+        return f"{ad}–{bd} {_MONTHS_EN[am - 1]} {ay}"
+    if ay == by:
+        return f"{ad} {_MONTHS_EN[am - 1]} – {bd} {_MONTHS_EN[bm - 1]} {ay}"
+    return (
+        f"{ad} {_MONTHS_EN[am - 1]} {ay} – "
+        f"{bd} {_MONTHS_EN[bm - 1]} {by}"
+    )
+
+
+def _event_type_for(title: str) -> str:
+    """Best-effort eventType for a discovered NetSec event, keyed off
+    its title so the renderer's type filter + pill land on a known
+    label where possible. Falls back to the generic 'event' (which the
+    renderers localise via their I18N `type` maps)."""
+    t = (title or "").lower()
+    if "summer school" in t or "training school" in t or "training" in t:
+        return "training-school"
+    if "workshop" in t:
+        return "policy-workshop"
+    if "itc" in t:
+        return "itc-conference"
+    if "plenary" in t or "management committee" in t:
+        return "mc-plenary"
+    if "conference" in t:
+        return "annual-conference"
+    return "event"
+
+
+def _discovered_entry(norm: dict) -> dict:
+    """Build a minimal but schema-valid events.json entry from a
+    normalised Indico event newly discovered on the NetSec calendar.
+
+    Only EN copy is synthesised (from the Indico title + URL); the
+    renderers fall back to EN for FR/DE, and the `autoDiscovered` flag
+    flags the entry for a maintainer to enrich by hand (richer
+    description, hand-translated FR/DE, working groups). The entry
+    carries `indicoEventId` so subsequent syncs keep its summary/dates
+    in step, exactly like the hand-authored ESSC entry."""
+    eid = norm.get("id")
+    title = norm.get("title") or "(untitled)"
+    start = (norm.get("start") or "")[:16]
+    end = (norm.get("end") or "")[:16] or start
+    url = norm.get("url") or "https://netsec-cost.eu/events.html"
+    cats = ["NetSec"]
+    cat_name = (norm.get("category") or "").strip()
+    if cat_name and cat_name not in cats and cat_name.lower() != "netsec":
+        cats.insert(0, cat_name)
+    return {
+        "uid": f"indico-{eid}@netsec-cost.eu",
+        "indicoEventId": int(eid) if str(eid).isdigit() else eid,
+        "summary": title,
+        "description": f"{title}. Details and registration on Indico: {url}",
+        "location": norm.get("location") or "To be confirmed",
+        "url": url,
+        "start": start,
+        "end": end,
+        "categories": cats,
+        "status": "CONFIRMED",
+        "eventType": _event_type_for(title),
+        "coHost": norm.get("coHost", "standalone"),
+        "autoDiscovered": True,
+        "featured": False,
+        "displayDate": {"en": _en_display_date(start, end)},
+        "cardTitle": {"en": title},
+        "cardDescription": {
+            "en": f"{title}. Full details and registration are on Indico."
+        },
+        "cta": {
+            "href": url,
+            "external": True,
+            "i18n": {
+                "en": "Details on Indico →",
+                "fr": "Détails sur Indico →",
+                "de": "Details auf Indico →",
+            },
+        },
+    }
+
+
+def _patch_events_json(netsec_by_id: dict) -> bool:
+    """Refresh and grow data/events.json from the NetSec Indico feed.
 
     `data/events.json` is the authoritative source for calendar.ics and
-    the home-page upcoming-event banner. Most of its fields are
-    hand-curated (richer descriptions, full postal addresses, etc.) and
-    must stay that way. A handful of fields, though, are duplicated
-    from Indico: the title, the start, the end. When those drift, the
-    banner and the .ics feed silently disagree with the live programme.
+    the home-page + Events-page cards. Most of its fields are
+    hand-curated (richer descriptions, full postal addresses, FR/DE
+    copy) and must stay that way. This step does three things against
+    the freshly-built NetSec index (`netsec_by_id`, keyed by Indico
+    event id, each value carrying a `coHost` classification):
 
-    To close that drift without trampling the curated copy, entries
-    can opt into a partial auto-sync by carrying an `indicoEventId`
-    field. For each such entry, this step looks up the matching event
-    in the freshly-fetched Indico payload and overwrites only the
-    allow-listed fields in `EVENTS_JSON_SYNCED_FIELDS`. Returns True
-    when at least one entry was actually changed (so the caller knows
-    whether to invoke build-calendar.py).
+      1. For every entry that opts in via `indicoEventId`, overwrite the
+         allow-listed fields in `EVENTS_JSON_SYNCED_FIELDS` (summary,
+         start, end) and refresh the derived `coHost` marker. Curated
+         fields (location, descriptions, working groups) are untouched.
+      2. Append any NetSec-relevant Indico event not already present, as
+         a minimal `autoDiscovered` entry, so a new standalone event on
+         category #8 shows up without hand-editing. Hand-authored events
+         with no `indicoEventId` (e.g. the ITC conference) are left
+         exactly as they are.
+      3. Returns True when anything changed, so the caller knows whether
+         to rebuild calendar.ics.
 
     Why `location` is NOT in the allow-list: events.json carries the
     full street address (`Stockholm University, Frescativägen,
     114 19 Stockholm, Sweden`) while Indico returns the short venue
     name (`Stockholm University`). Auto-overwriting would lose the
-    curated postal detail; a future drift check could surface the
-    mismatch without clobbering."""
+    curated postal detail."""
     if not EVENTS_OUT.exists():
         return False
     try:
@@ -626,17 +824,15 @@ def _patch_events_json(annual_by_year: dict[str, dict]) -> bool:
         print(f"  ! cannot read {EVENTS_OUT.name}: {exc}", file=sys.stderr)
         return False
 
-    # Flatten the year-keyed Indico map into id-keyed lookup so we can
-    # find any Indico event by its numeric id regardless of year.
-    by_id: dict[str, dict] = {
-        str(ev.get("id")): ev for ev in annual_by_year.values() if ev.get("id")
-    }
+    by_id = {str(k): v for k, v in netsec_by_id.items()}
 
     changed = False
+    linked_ids: set = set()
     for entry in events_doc.get("events", []):
         indico_id = entry.get("indicoEventId")
         if indico_id is None:
             continue
+        linked_ids.add(str(indico_id))
         source = by_id.get(str(indico_id))
         if source is None:
             print(
@@ -666,6 +862,31 @@ def _patch_events_json(annual_by_year: dict[str, dict]) -> bool:
                 )
                 entry[field] = new
                 changed = True
+
+        # Refresh the derived co-host marker (joint vs standalone) from
+        # the live keyword/category signal, so toggling the NetSec
+        # keyword on Indico flips the badge on the next sync.
+        new_cohost = source.get("coHost")
+        if new_cohost and entry.get("coHost") != new_cohost:
+            print(
+                f"  • events.json[{entry.get('uid')}] coHost: "
+                f"{entry.get('coHost')!r} → {new_cohost!r}",
+                file=sys.stderr,
+            )
+            entry["coHost"] = new_cohost
+            changed = True
+
+    # Append newly-discovered NetSec events (present in the feed, absent
+    # from events.json). Sorted by id for a deterministic diff.
+    for eid in sorted(set(by_id) - linked_ids, key=lambda s: (len(s), s)):
+        entry = _discovered_entry(by_id[eid])
+        events_doc.setdefault("events", []).append(entry)
+        print(
+            f"  + events.json: discovered {entry['coHost']} event "
+            f"{entry['summary']!r} (Indico #{eid}) — added as autoDiscovered.",
+            file=sys.stderr,
+        )
+        changed = True
 
     if not changed:
         return False
@@ -914,7 +1135,12 @@ def main() -> None:
     # events.json is in sync. If a maintainer edited events.json by
     # hand last week, this is the run that catches them up. The patch
     # is a no-op when nothing changed, so quiet days stay quiet.
-    if _patch_events_json(annual_by_year):
+    # Build the NetSec-calendar index (standalone events from category
+    # #8 + joint events detected by the NetSec keyword on the
+    # Annual-Conference set) and reconcile events.json against it:
+    # refresh linked entries, append newly-discovered ones.
+    netsec_by_id = build_netsec_index(raw_events)
+    if _patch_events_json(netsec_by_id):
         _regenerate_calendar()
 
     if existing_data == data_payload:

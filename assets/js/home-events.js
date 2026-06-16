@@ -13,6 +13,10 @@
  *    that's only rendered when the text actually overflows
  *  - an optional CTA link (the existing per-event link, e.g.
  *    Summer School → eiss-europa or ESSC → /essc-2026.html)
+ *  - an optional "Joint EISS × NetSec" provenance badge when the event
+ *    carries `coHost: "joint"` (jointly-run events with EISS, e.g. the
+ *    ESSC). Standalone NetSec events and hand-authored entries get no
+ *    badge. The field is set automatically by scripts/sync-indico.py.
  *  - an Add to calendar dropdown with four destinations:
  *      • Google Calendar (prefilled template URL)
  *      • Outlook (web) compose deep-link
@@ -35,6 +39,7 @@
         'policy-workshop':    'Policy Workshop',
         'itc-conference':     'ITC Conference',
         'mc-plenary':         'MC Plenary',
+        'event':              'Event',
       },
       readMore:        'Read more',
       readLess:        'Show less',
@@ -44,6 +49,8 @@
       atcApple:        'Apple Calendar (webcal)',
       atcDownload:     'Download .ics',
       wgAria:          'Working Groups served',
+      jointBadge:      'Joint EISS × NetSec',
+      jointTitle:      'Jointly organised by EISS and NetSec',
     },
     fr: {
       type: {
@@ -52,6 +59,7 @@
         'policy-workshop':    'Atelier politique',
         'itc-conference':     'Conférence ITC',
         'mc-plenary':         'Plénière du CG',
+        'event':              'Événement',
       },
       readMore:        'Lire la suite',
       readLess:        'Réduire',
@@ -61,6 +69,8 @@
       atcApple:        'Apple Calendar (webcal)',
       atcDownload:     'Télécharger le .ics',
       wgAria:          'Groupes de travail concernés',
+      jointBadge:      'Conjoint EISS × NetSec',
+      jointTitle:      'Organisé conjointement par EISS et NetSec',
     },
     de: {
       type: {
@@ -69,6 +79,7 @@
         'policy-workshop':    'Politik-Workshop',
         'itc-conference':     'ITC-Konferenz',
         'mc-plenary':         'MC-Plenum',
+        'event':              'Veranstaltung',
       },
       readMore:        'Mehr anzeigen',
       readLess:        'Weniger anzeigen',
@@ -78,6 +89,8 @@
       atcApple:        'Apple Kalender (webcal)',
       atcDownload:     '.ics herunterladen',
       wgAria:          'Beteiligte Arbeitsgruppen',
+      jointBadge:      'Gemeinsam EISS × NetSec',
+      jointTitle:      'Gemeinsam von EISS und NetSec organisiert',
     },
   };
 
@@ -395,6 +408,17 @@
     const typeLabel = (t.type && t.type[ev.eventType]) || ev.eventType || '';
     if (typeLabel) {
       card.appendChild(el('span', { class: 'event-type' }, [typeLabel]));
+    }
+
+    // Co-host badge: jointly-run EISS × NetSec events (e.g. the ESSC)
+    // carry coHost: 'joint' so a reader can tell them from NetSec's own
+    // events. Standalone NetSec events get no badge (the default on
+    // this site), keeping the pill row quiet.
+    if (ev.coHost === 'joint') {
+      card.appendChild(el('span', {
+        class: 'event-cohost',
+        title: t.jointTitle,
+      }, [t.jointBadge]));
     }
 
     // Working-Group pills (the reverse of the WG page's Related events
