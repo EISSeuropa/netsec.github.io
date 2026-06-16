@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-16T15:03:02+00:00",
+  "generated_at": "2026-06-16T19:03:19+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-16T15:03:02+00:00"
+    "last_synced": "2026-06-16T19:03:19+00:00"
   },
   "members": [
     {
@@ -14,7 +14,7 @@
       "country": "Germany",
       "country_code": "de",
       "affiliation": "LMU Munich",
-      "position": "Senior lecturer",
+      "position": "Senior Lecturer of International Relations and European Studies",
       "roles": [
         "Action Chair",
         "WG1 Leader"
@@ -1382,15 +1382,60 @@
       "themes": [
         "Security and defence"
       ]
+    },
+    {
+      "id": "linde-desmaele",
+      "name": "Dr Linde Desmaele",
+      "country": "Netherlands",
+      "country_code": "nl",
+      "affiliation": "Leiden University",
+      "position": "Assistant Professor of Intelligence and Security",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "The Americas"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Linde Desmaele is an Assistant Professor of Intelligence and Security at Leiden University. \nHer work sits at the intersection of international relations and security studies, with a focus on nuclear politics, US alliances and European security. Previously, Linde was a Stanton Nuclear Security Fellow in the MIT Security Studies Program and a Belgian American Educational Foundation Postdoctoral Fellow at Columbia University. She holds a PhD from the Free University of Brussels, for which she received the 2022 Global Strategy PhD Prize, jointly awarded by the European Security and Defence College (European External Action Service) and the Egmont Royal Institute for International Relations. She also holds an MA from Seoul National University’s Graduate School of International Studies and another MA from KU Leuven.",
+      "keywords": [
+        "Nuclear politics",
+        "alliance politics",
+        "transatlantic relations",
+        "European security"
+      ],
+      "email": "l.desmaele@fgga.leidenuniv.nl",
+      "website": "https://www.universiteitleiden.nl/en/staffmembers/linde-desmaele#tab-1",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/linde-desmaele-4b8341a2/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/linde-desmaele.jpg",
+      "source": "form",
+      "photo_source_sha256": "57944044ce89ba5a53e43144ac8d2698a1dc985cb0ba77188118b96dd9c95162",
+      "canonical_keywords": [
+        "Alliance politics",
+        "European security",
+        "Nuclear politics",
+        "Transatlantic relations"
+      ],
+      "themes": [
+        "Security and defence"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
-      "keyword": "EU foreign policy",
-      "count": 3
+      "keyword": "European security",
+      "count": 4
     },
     {
-      "keyword": "European security",
+      "keyword": "EU foreign policy",
       "count": 3
     },
     {
@@ -1427,6 +1472,10 @@
     },
     {
       "keyword": "AI",
+      "count": 1
+    },
+    {
+      "keyword": "Alliance politics",
       "count": 1
     },
     {
@@ -1642,6 +1691,10 @@
       "count": 1
     },
     {
+      "keyword": "Nuclear politics",
+      "count": 1
+    },
+    {
       "keyword": "Nuclear strategy",
       "count": 1
     },
@@ -1706,6 +1759,10 @@
       "count": 1
     },
     {
+      "keyword": "Transatlantic relations",
+      "count": 1
+    },
+    {
       "keyword": "Transnational and human security",
       "count": 1
     },
@@ -1725,7 +1782,7 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 14
+      "count": 15
     },
     {
       "theme": "Foreign policy and diplomacy",
@@ -1845,18 +1902,18 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 17
+      "count": 18
     },
     {
       "region": "Global and cross-regional",
       "count": 10
     },
     {
-      "region": "Asia",
-      "count": 5
+      "region": "The Americas",
+      "count": 6
     },
     {
-      "region": "The Americas",
+      "region": "Asia",
       "count": 5
     },
     {
