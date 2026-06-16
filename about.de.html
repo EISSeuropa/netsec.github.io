@@ -265,9 +265,31 @@
   <div class="container reveal">
     <h2>Die Aktion</h2>
     <div class="container-inner">
+
+    <!-- In Zahlen. Die Zahlen der MC-Mitglieder und Länder sind die
+         data-cost-stat-Literale, die der cost.eu-Sync aktuell hält; die
+         Zahlen der Arbeitsgruppen- und Netzwerk-Mitglieder werden beim
+         Laden aus data/wg.json + data/bios.json vom Skript am Seitenende
+         gefüllt, die statischen Werte hier dienen als Rückfall ohne JS. -->
+    <h3 class="mc-subhead">In Zahlen</h3>
+    <div class="mc-stats" role="list" aria-label="Die Aktion in Zahlen">
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" data-cost-stat="mc-count">51</span>
+        <span class="mc-stat-label">MC-Mitglieder in <span data-cost-stat="country-count">31</span> Ländern</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" id="stat-wg-members">145</span>
+        <span class="mc-stat-label">Arbeitsgruppen-Mitglieder</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" id="stat-network-members">33</span>
+        <span class="mc-stat-label">sind dem Netzwerk beigetreten</span>
+      </div>
+    </div>
+
     <div class="about-grid">
       <div class="about-card glass">
-        <p>Die Aktion fördert Synergien zwischen nationalen und lokalen epistemischen Communities, überbrückt die Kluft zwischen Wissenschaft und Politik und adressiert Geschlechter- und Generationen-Ungleichgewichte im Feld. Durch interdisziplinäre Forschung, jährliche Konferenzen, Politik-Workshops, ein Mentoring-Programm und eine Summer School trägt NetSec zu einer kohärenten europäischen Sicherheitsforschungs-Community bei.</p>
+        <p>Die Aktion fördert Synergien zwischen nationalen und lokalen epistemischen Communities, überbrückt die Kluft zwischen Wissenschaft und Politik und adressiert Geschlechter- und Generationen-Ungleichgewichte im Feld. Durch interdisziplinäre Forschung, jährliche Konferenzen, Politik-Workshops, ein Mentoring-Programm und eine Summer School trägt NetSec zu einer kohärenten europäischen Sicherheitsforschungs-Community bei. Ihre Arbeit ist in vier <a href="working-groups.de.html">Arbeitsgruppen</a> organisiert, vom Aufbau des Netzwerks bis zur Förderung der nächsten Generation von Forschenden.</p>
         <p style="margin-bottom:0">Durch die Verbindung akademischer, politischer und praktischer Communities auf dem gesamten Kontinent stärkt NetSec Europas strategische Autonomie in einem zunehmend komplexen globalen Sicherheitsumfeld.</p>
       </div>
       <div class="objectives">
@@ -937,6 +959,36 @@
     </div>
   </div>
 </footer>
+
+<!-- „In Zahlen“-Zähler. Arbeitsgruppen-Mitglieder (eindeutige Personen
+     über die vier Gruppen in data/wg.json) und Personen, die dem Netzwerk
+     beigetreten sind (Mitglieder in data/bios.json). Die Zahlen der MC-
+     und Länder-Werte sind die data-cost-stat-Literale, die der cost.eu-
+     Sync aktuell hält; die statischen Werte im Markup dienen als Rückfall
+     ohne JS für diese beiden Zähler. -->
+<script>
+(function () {
+  var wgEl = document.getElementById('stat-wg-members');
+  var netEl = document.getElementById('stat-network-members');
+  if (netEl) {
+    fetch('data/bios.json').then(function (r) { return r.json(); }).then(function (d) {
+      if (Array.isArray(d.members) && d.members.length) netEl.textContent = d.members.length;
+    }).catch(function () {});
+  }
+  if (wgEl) {
+    fetch('data/wg.json').then(function (r) { return r.json(); }).then(function (d) {
+      var seen = {}, n = 0;
+      (d.groups || []).forEach(function (g) {
+        (g.members || []).forEach(function (m) {
+          var key = (m && m.name) ? m.name : m;
+          if (key && !seen[key]) { seen[key] = 1; n++; }
+        });
+      });
+      if (n) wgEl.textContent = n;
+    }).catch(function () {});
+  }
+})();
+</script>
 
 <script src="assets/js/site.js?v=7dbc3f59" defer></script>
 
