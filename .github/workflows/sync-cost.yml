@@ -5,8 +5,10 @@
 #      manual dispatch from the Actions tab, fetch the COST Action
 #      page and re-parse the Membership table.
 #   2. If the embedded WG_MAP changed (members added / removed /
-#      changed WGs), open or update a pull request on the branch
-#      `cost-sync/auto` with the human-readable diff in the body.
+#      changed WGs), rebuild the /people/<slug> profile pages from
+#      the synced data (a member's reconciled WGs and leadership feed
+#      their profile page), then open or update a pull request on the
+#      branch `cost-sync/auto` with the human-readable diff in the body.
 #   3. If nothing changed, the action exits without opening a PR —
 #      no inbox noise.
 #
@@ -91,6 +93,19 @@ jobs:
             echo "_Triggered: \`${{ github.event_name }}\` · run_id: \`${{ github.run_id }}\`_"
           } > /tmp/pr-body.md
 
+      - name: Rebuild member profile pages from the synced data
+        run: |
+          # sync-cost.py writes a member's reconciled `wgs`, `wg_leadership`
+          # and leadership `roles` into data/bios.json, which the
+          # /people/<slug> profile pages (#762) render their WG chips and
+          # role line from. Regenerate so a WG move or leadership change
+          # reaches the profile page in the same auto-PR; otherwise the
+          # "Profile pages are current (#762)" gate in data-shape-check.yml
+          # fails on every sync that touches a member with a profile page
+          # (#989). Idempotent: unchanged pages produce no diff. inject-seo
+          # is not needed here, the sync touches no ?v= asset hashes.
+          python3 scripts/build-profile-pages.py
+
       - name: Open or update PR if WG_MAP changed
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)
         with:
@@ -108,6 +123,7 @@ jobs:
               - per-bio `wgs` + `wg_leadership` in data/bios.json (directory)
               - leadership `roles` array on seed entries in data/bios.json
               - data/wg.json (per-WG membership + leadership)
+              - /people/<slug> profile pages rebuilt from the above
             See the PR body for the exact diffs.
           body-path: /tmp/pr-body.md
           labels: |
