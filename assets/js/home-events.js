@@ -610,12 +610,18 @@
       const upcoming = all.filter((ev) => endMs(ev) >= nowMs && matches(ev)).sort((a, b) => startMs(a) - startMs(b));
       const past = all.filter((ev) => endMs(ev) < nowMs && matches(ev)).sort((a, b) => startMs(b) - startMs(a));
 
-      const up = el('section', { class: 'events-group' }, [el('h2', null, [p.upcoming])]);
+      const heading = (label, n) => el('h2', null, [
+        label, el('span', { class: 'events-count' }, [String(n)]),
+      ]);
+
+      const up = el('section', { class: 'events-group events-group--upcoming' },
+        [heading(p.upcoming, upcoming.length)]);
       up.appendChild(upcoming.length ? gridOf(upcoming) : el('p', { class: 'events-empty muted' }, [p.empty]));
       sections.appendChild(up);
 
       if (past.length) {
-        const ps = el('section', { class: 'events-group' }, [el('h2', null, [p.past])]);
+        const ps = el('section', { class: 'events-group events-group--past' },
+          [heading(p.past, past.length)]);
         let year = null, grid = null;
         past.forEach((ev) => {
           const y = new Date(startMs(ev)).getUTCFullYear();
