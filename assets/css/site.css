@@ -725,6 +725,11 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   background:rgba(0,51,153,.08);padding:5px 12px;border-radius:8px;align-self:flex-start;
 }
 .event-type{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+/* Co-host badge: marks a jointly-run EISS × NetSec event (e.g. the
+   ESSC) apart from NetSec's own events. Outlined accent pill so it
+   reads as a provenance tag, not a status. */
+.event-cohost{display:inline-flex;align-self:flex-start;align-items:center;font-size:.7rem;font-weight:700;letter-spacing:.02em;color:var(--accent);background:rgba(0,51,153,.07);border:1px solid rgba(0,51,153,.25);padding:3px 9px;border-radius:999px;line-height:1.4}
+@media (prefers-color-scheme:dark){.event-cohost{color:#9db8ff;background:rgba(120,150,255,.12);border-color:rgba(120,150,255,.35)}}
 /* Working-Group pills on an event card (rendered by home-events.js from
    the event's `workingGroups`). Each links to its section on the
    Working Groups page; colours follow the WG palette. */
