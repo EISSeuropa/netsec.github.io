@@ -927,6 +927,10 @@ def test_normalise_keyword() -> None:
     expect("acronym first word", norm("eu foreign policy"), "EU foreign policy")
     expect("acronym mid-phrase", norm("nato enlargement"), "NATO enlargement")
     expect("whole-keyword alias", norm("european union"), "EU")
+    # "Cyber security" (two words) folds onto the one-word canonical, while
+    # the distinct "Cyber defence" is left alone.
+    expect("cyber security → Cybersecurity", norm("Cyber security"), "Cybersecurity")
+    expect("cyber defence stays distinct", norm("Cyber defence"), "Cyber defence")
     expect("sentence-case fallback", norm("Grand Strategy"), "Grand strategy")
     # British spelling already correct is left untouched.
     expect("british spelling unchanged", norm("Defence policy"), "Defence policy")

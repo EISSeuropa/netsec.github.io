@@ -30,6 +30,7 @@
   ],
 
   "aliases": {
+    "Cybersecurity": ["cyber security"],
     "EU": ["european union"],
     "NATO": ["north atlantic treaty organization", "north atlantic treaty organisation"],
     "UN": ["united nations"],
@@ -79,14 +80,14 @@
   },
 
   "themes": {
-    "Foreign policy and diplomacy": ["EU foreign policy", "German security policy", "Foreign policy analysis", "Russian foreign policy", "Indian foreign policy", "India", "Multilateralism", "UN", "Geopolitics", "Eastern Europe", "Western Balkans", "Regional cooperation", "US-China relations"],
-    "Security and defence": ["European security", "Grand strategy", "Defence", "International security", "Power", "Civil defence", "Civil-military relations", "Militarisation", "Arms control", "Deterrence", "Nuclear strategy", "Irregular warfare", "Maritime strategy", "National security", "Strategy", "Capability planning", "Black sea security", "Security and defence", "Security studies"],
-    "European and transatlantic security order": ["EU–NATO relations", "European strategic autonomy"],
+    "Foreign policy and diplomacy": ["EU foreign policy", "German security policy", "Foreign policy analysis", "Russian foreign policy", "Indian foreign policy", "India", "Multilateralism", "UN", "Geopolitics", "Eastern Europe", "Western Balkans", "Regional cooperation", "US-China relations", "Diplomacy"],
+    "Security and defence": ["European security", "Grand strategy", "Defence", "International security", "Power", "Civil defence", "Civil-military relations", "Militarisation", "Arms control", "Deterrence", "Nuclear strategy", "Irregular warfare", "Maritime strategy", "National security", "Strategy", "Capability planning", "Black sea security", "Security and defence", "Security studies", "Crisis management", "Crises", "Nuclear politics"],
+    "European and transatlantic security order": ["EU–NATO relations", "European strategic autonomy", "Transatlantic relations", "Alliance politics"],
     "Intelligence, information and influence": ["Disinformation", "Election interference", "Subversion", "Digital media", "Intelligence studies", "Influence", "Cognitive warfare", "Hybrid threats"],
     "Identity, narratives and ideational security": ["Identity", "Narratives", "Ontological security"],
-    "Cyber and emerging technology": ["Cybersecurity governance", "Digital sovereignty", "Digital governance", "Cyber security", "Cyber defence", "Cyber", "Infrastructure", "Critical infrastructure", "Supply chain security", "Emerging technology", "Emerging and disruptive technologies", "Artificial intelligence", "AI", "Cybersecurity", "Cybercrime", "Dual use technologies", "Technology spillovers"],
+    "Cyber and emerging technology": ["Cybersecurity governance", "Digital sovereignty", "Digital governance", "Cyber defence", "Cyber", "Infrastructure", "Critical infrastructure", "Supply chain security", "Emerging technology", "Emerging and disruptive technologies", "Artificial intelligence", "AI", "Cybersecurity", "Cybercrime", "Dual use technologies", "Technology spillovers"],
     "Economic security and geoeconomics": ["Economic security", "Economic statecraft", "Industrial policy", "Political economy", "Defence industrial policy", "Defence economics", "Defence industry"],
-    "Transnational and human security": ["Non-state actors", "Maritime security", "Counterterrorism", "Peacekeeping", "Transnational and human security", "International humanitarian law", "International human rights law"],
+    "Transnational and human security": ["Non-state actors", "Maritime security", "Counterterrorism", "Peacekeeping", "Transnational and human security", "International humanitarian law", "International human rights law", "Civil protection"],
     "Theory and methods": ["Text as data", "Research methods", "Political psychology", "Policy evaluation", "Judgment and decision-making", "International relations", "History", "Organisation studies", "International law"]
   },
 
