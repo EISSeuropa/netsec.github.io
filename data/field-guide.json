@@ -10,8 +10,10 @@
       "seeAlso": "optional array of other term strings (cross-references). Not yet rendered; reserved for a later pass.",
       "contributor": "optional slug. Not used by the four Phase 1 entries (they are unattributed institutional facts). Reserved for the contested entries that will be added after WG sign-off (issue #766)."
     },
-    "phase": "Phase 1 (issue #766). Four low-risk factual entries. Contested concepts (strategic autonomy, deterrence, hybrid threats, grey zone, resilience, human security, securitisation, FIMI) stay gated until a WG lead vouches for each definition."
+    "phase": "Phase 1 (issue #766). Four low-risk factual entries. Contested concepts (strategic autonomy, deterrence, hybrid threats, grey zone, resilience, human security, securitisation, FIMI) stay gated until a WG lead vouches for each definition.",
+    "published": "boolean. When false, build-field-guide.py blanks the field-guide region (the section is held off the live Glossary) but the concept data below is preserved. Held false while the concept set matures for v1.13.0 (issue #998). To republish: flip to true, run build-field-guide.py, restore the '#field-guide' link in each glossary page's jump-to list, then re-run inject-seo.py."
   },
+  "published": false,
   "concepts": [
     {
       "term": "CSDP",
