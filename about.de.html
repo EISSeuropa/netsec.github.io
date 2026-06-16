@@ -286,6 +286,29 @@
       </div>
     </div>
 
+    <!-- In Zahlen. Am Fuß von Die Aktion, oberhalb des Trenners „Zeitplan
+         und Liefergegenstände“, da diese Zahlen die Aktion beschreiben. Die
+         Zahlen der MC-Mitglieder und Länder sind die data-cost-stat-
+         Literale, die der cost.eu-Sync aktuell hält; die Zahlen der
+         Arbeitsgruppen- und Netzwerk-Mitglieder werden beim Laden aus
+         data/wg.json + data/bios.json vom Skript am Seitenende gefüllt, die
+         statischen Werte hier dienen als Rückfall ohne JS. -->
+    <h3 class="mc-subhead">In Zahlen</h3>
+    <div class="mc-stats" role="list" aria-label="Die Aktion in Zahlen">
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" data-cost-stat="mc-count">51</span>
+        <span class="mc-stat-label">Management-Ausschuss-Mitglieder in <span data-cost-stat="country-count">31</span> Ländern</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" id="stat-wg-members">145</span>
+        <span class="mc-stat-label">Arbeitsgruppen-Mitglieder</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" id="stat-network-members">33</span>
+        <span class="mc-stat-label">sind dem Netzwerk beigetreten</span>
+      </div>
+    </div>
+
     <!-- Mehr erfahren — Verweise auf die Referenzseiten. -->
     <div class="find-out-more">
       <p class="find-out-more-head">Mehr erfahren</p>
@@ -329,28 +352,6 @@
   <div class="container reveal">
 
     <h2>Zeitplan und Liefergegenstände</h2>
-
-    <!-- In Zahlen (von Die Aktion hierher verschoben). Die Zahlen der
-         MC-Mitglieder und Länder sind die data-cost-stat-Literale, die der
-         cost.eu-Sync aktuell hält; die Zahlen der Arbeitsgruppen- und
-         Netzwerk-Mitglieder werden beim Laden aus data/wg.json +
-         data/bios.json vom Skript am Seitenende gefüllt, die statischen
-         Werte hier dienen als Rückfall ohne JS. -->
-    <h3 class="mc-subhead">In Zahlen</h3>
-    <div class="mc-stats" role="list" aria-label="Die Aktion in Zahlen">
-      <div class="mc-stat glass" role="listitem">
-        <span class="mc-stat-num" data-cost-stat="mc-count">51</span>
-        <span class="mc-stat-label">Management-Ausschuss-Mitglieder in <span data-cost-stat="country-count">31</span> Ländern</span>
-      </div>
-      <div class="mc-stat glass" role="listitem">
-        <span class="mc-stat-num" id="stat-wg-members">145</span>
-        <span class="mc-stat-label">Arbeitsgruppen-Mitglieder</span>
-      </div>
-      <div class="mc-stat glass" role="listitem">
-        <span class="mc-stat-num" id="stat-network-members">33</span>
-        <span class="mc-stat-label">sind dem Netzwerk beigetreten</span>
-      </div>
-    </div>
 
     <div class="gantt-intro">
       <span class="gantt-key"><span class="milestone gantt-key-pill">M</span> Geplant</span>

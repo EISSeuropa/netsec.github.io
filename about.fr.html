@@ -287,6 +287,29 @@
       </div>
     </div>
 
+    <!-- En chiffres. Au pied de L'Action, au-dessus du séparateur
+         « Échéancier et livrables », car ces chiffres décrivent l'Action.
+         Les nombres de représentant·es au CG et de pays sont les littéraux
+         data-cost-stat que la synchronisation cost.eu tient à jour ; les
+         nombres de membres des groupes de travail et du réseau sont remplis
+         au chargement depuis data/wg.json + data/bios.json par le script en
+         bas de page, les valeurs statiques ici servant de repli sans JS. -->
+    <h3 class="mc-subhead">En chiffres</h3>
+    <div class="mc-stats" role="list" aria-label="L'Action en chiffres">
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" data-cost-stat="mc-count">51</span>
+        <span class="mc-stat-label">membres du Comité de gestion dans <span data-cost-stat="country-count">31</span> pays</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" id="stat-wg-members">145</span>
+        <span class="mc-stat-label">membres des groupes de travail</span>
+      </div>
+      <div class="mc-stat glass" role="listitem">
+        <span class="mc-stat-num" id="stat-network-members">33</span>
+        <span class="mc-stat-label">ont rejoint le réseau</span>
+      </div>
+    </div>
+
     <!-- Pour en savoir plus — raccourcis vers les pages de référence. -->
     <div class="find-out-more">
       <p class="find-out-more-head">Pour en savoir plus</p>
@@ -330,28 +353,6 @@
   <div class="container reveal">
 
     <h2>Échéancier et livrables</h2>
-
-    <!-- En chiffres (déplacé ici depuis L'Action). Les nombres de
-         représentant·es au CG et de pays sont les littéraux data-cost-stat
-         que la synchronisation cost.eu tient à jour ; les nombres de
-         membres des groupes de travail et du réseau sont remplis au
-         chargement depuis data/wg.json + data/bios.json par le script en
-         bas de page, les valeurs statiques ici servant de repli sans JS. -->
-    <h3 class="mc-subhead">En chiffres</h3>
-    <div class="mc-stats" role="list" aria-label="L'Action en chiffres">
-      <div class="mc-stat glass" role="listitem">
-        <span class="mc-stat-num" data-cost-stat="mc-count">51</span>
-        <span class="mc-stat-label">membres du Comité de gestion dans <span data-cost-stat="country-count">31</span> pays</span>
-      </div>
-      <div class="mc-stat glass" role="listitem">
-        <span class="mc-stat-num" id="stat-wg-members">145</span>
-        <span class="mc-stat-label">membres des groupes de travail</span>
-      </div>
-      <div class="mc-stat glass" role="listitem">
-        <span class="mc-stat-num" id="stat-network-members">33</span>
-        <span class="mc-stat-label">ont rejoint le réseau</span>
-      </div>
-    </div>
 
     <div class="gantt-intro">
       <span class="gantt-key"><span class="milestone gantt-key-pill">M</span> Prévu</span>
