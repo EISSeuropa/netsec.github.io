@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-16T13:14:34+00:00",
+  "generated_at": "2026-06-16T15:03:02+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-16T13:14:34+00:00"
+    "last_synced": "2026-06-16T15:03:02+00:00"
   },
   "members": [
     {
@@ -1296,7 +1296,7 @@
       "country": "Greece",
       "country_code": "gr",
       "affiliation": "University of the Peloponnese",
-      "position": "Professor",
+      "position": "Professor of International Relations",
       "roles": [],
       "wgs": [],
       "mentorship": [
@@ -1334,11 +1334,59 @@
         "Foreign policy and diplomacy",
         "Security and defence"
       ]
+    },
+    {
+      "id": "professor-mark-rhinard",
+      "name": "Professor Mark Rhinard",
+      "country": "Sweden",
+      "country_code": "se",
+      "affiliation": "Stockholm University",
+      "position": "Professor of International Relations",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Europe"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Mark Rhinard is Professor of International Relations at Stockholm University. He earned his MPhil and PhD degrees from Cambridge University and taught at Oxford University before being awarded a postdoctoral fellowship at Leiden University. His research focuses on the institutional contexts of international cooperation, with particular attention to governance resilience in the face of transboundary security threats such as terrorism, pandemics, and climate-related disasters. He serves as Research Director at the Swedish Institute of International Affairs (UI) and is an external advisor to the European Policy Centre in Brussels.",
+      "keywords": [
+        "European Security",
+        "Crisis Management",
+        "Civil Protection",
+        "Crises",
+        "Diplomacy"
+      ],
+      "email": "mark.rhinard@su.se",
+      "website": "https://www.su.se/english/profiles/m/mrhin",
+      "orcid": "0000-0002-1903-4257",
+      "linkedin": "https://www.linkedin.com/in/mark-rhinard-31760a2/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/professor-mark-rhinard.jpg",
+      "source": "form",
+      "photo_source_sha256": "c4cdf93beade370824a84b5640c245ec11efe3205fb4309b47f50f44b8d38a2f",
+      "canonical_keywords": [
+        "Civil protection",
+        "Crises",
+        "Crisis management",
+        "Diplomacy",
+        "European security"
+      ],
+      "themes": [
+        "Security and defence"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "EU foreign policy",
+      "count": 3
+    },
+    {
+      "keyword": "European security",
       "count": 3
     },
     {
@@ -1351,10 +1399,6 @@
     },
     {
       "keyword": "Emerging and disruptive technologies",
-      "count": 2
-    },
-    {
-      "keyword": "European security",
       "count": 2
     },
     {
@@ -1398,6 +1442,10 @@
       "count": 1
     },
     {
+      "keyword": "Civil protection",
+      "count": 1
+    },
+    {
       "keyword": "Civil-military relations",
       "count": 1
     },
@@ -1407,6 +1455,14 @@
     },
     {
       "keyword": "Counterterrorism",
+      "count": 1
+    },
+    {
+      "keyword": "Crises",
+      "count": 1
+    },
+    {
+      "keyword": "Crisis management",
       "count": 1
     },
     {
@@ -1459,6 +1515,10 @@
     },
     {
       "keyword": "Digital sovereignty",
+      "count": 1
+    },
+    {
+      "keyword": "Diplomacy",
       "count": 1
     },
     {
@@ -1661,7 +1721,7 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 13
+      "count": 14
     },
     {
       "theme": "Foreign policy and diplomacy",
@@ -1781,7 +1841,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 16
+      "count": 17
     },
     {
       "region": "Global and cross-regional",
