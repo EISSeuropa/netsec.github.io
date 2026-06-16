@@ -253,6 +253,35 @@ def check_orcid_works(data) -> list:
     return errs
 
 
+def check_spotlight(data) -> list:
+    """data/spotlight.json: the weekly member-spotlight rotation state
+    (#341). `current` (and each `history[].id`) must point at a member id
+    that still exists in data/bios.json — otherwise the home-page and
+    directory spotlights silently render nothing, which is exactly what
+    happens when a member is removed or re-slugged without updating this
+    file. Cross-references bios.json so that gap is caught in CI, not on
+    the live site."""
+    errs: list = []
+    if not isinstance(data, dict):
+        return ["spotlight: top level must be an object"]
+    if "active" in data and not isinstance(data["active"], bool):
+        errs.append("spotlight: 'active' must be a boolean")
+    try:
+        bios = json.loads((REPO / "data/bios.json").read_text(encoding="utf-8"))
+        ids = {m.get("id") for m in bios.get("members", [])}
+    except Exception as exc:  # bios.json checked separately; don't double-fail
+        errs.append(f"spotlight: could not read bios.json to validate ids ({exc})")
+        return errs
+    cur = data.get("current")
+    if cur and cur not in ids:
+        errs.append(f"spotlight: 'current' = {cur!r} is not a member id in bios.json")
+    for i, h in enumerate(data.get("history") or []):
+        hid = h.get("id") if isinstance(h, dict) else None
+        if hid and hid not in ids:
+            errs.append(f"spotlight.history[{i}]: id {hid!r} is not a member id in bios.json")
+    return errs
+
+
 CHECKS = {
     "data/indico.json": check_indico,
     "data/bios.json": check_bios,
@@ -262,6 +291,7 @@ CHECKS = {
     "data/roadmap-progress.json": check_roadmap_progress,
     "data/field-guide.json": check_field_guide,
     "data/orcid-works.json": check_orcid_works,
+    "data/spotlight.json": check_spotlight,
 }
 
 

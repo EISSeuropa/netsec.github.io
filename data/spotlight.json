@@ -3,12 +3,12 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "mrs-yanina-shved-dogrul",
+  "current": "yanina-shved-dogrul",
   "featuredSince": "2026-06-15",
   "pinned": null,
   "history": [
     {
-      "id": "mrs-yanina-shved-dogrul",
+      "id": "yanina-shved-dogrul",
       "week": "2026-W25",
       "date": "2026-06-15"
     },
