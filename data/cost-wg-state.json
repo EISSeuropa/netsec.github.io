@@ -130,6 +130,24 @@
         1
       ],
       "form_changed_on": "2026-06-16"
+    },
+    "seyithan ahmet ates": {
+      "cost_first_seen": {
+        "1": "2026-06-16"
+      },
+      "form_wgs": [
+        1
+      ],
+      "form_changed_on": "2026-06-16"
+    },
+    "nikolaos tzifakis": {
+      "cost_first_seen": {
+        "1": "2026-06-16"
+      },
+      "form_wgs": [
+        1
+      ],
+      "form_changed_on": "2026-06-16"
     }
   }
 }

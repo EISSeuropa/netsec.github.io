@@ -6,7 +6,7 @@
       "number": 1,
       "name": "Building the Network",
       "colour": "wg-1",
-      "memberCount": 64,
+      "memberCount": 78,
       "lead": {
         "slug": "moritz-weiss",
         "name": "Dr Moritz Weiss"
@@ -62,8 +62,16 @@
           "country": "Montenegro"
         },
         {
+          "name": "Dr David Curran",
+          "country": "United Kingdom"
+        },
+        {
           "name": "Dr David Matsaberidze",
           "country": "Georgia"
+        },
+        {
+          "name": "Dr Eda Kuşku Sönmez",
+          "country": "Türkiye"
         },
         {
           "name": "Dr Eleni Christodoulou",
@@ -86,8 +94,16 @@
           "country": "Portugal"
         },
         {
+          "name": "Mr Furkan Sarper Koseoglu",
+          "country": "Türkiye"
+        },
+        {
           "name": "Dr Georgian Marius Ghincea",
           "country": "Switzerland"
+        },
+        {
+          "name": "Ms Giulia Biselli",
+          "country": "Italy"
         },
         {
           "name": "Dr Grigor Vardanyan",
@@ -134,8 +150,16 @@
           "country": "United Kingdom"
         },
         {
+          "name": "Dr Keara Barrett",
+          "country": "Ireland"
+        },
+        {
           "name": "Dr Kire Babanoski",
           "country": "North Macedonia"
+        },
+        {
+          "name": "Ms Laurena Kalaja",
+          "country": "Albania"
         },
         {
           "name": "Dr Liliana Pasquale",
@@ -163,6 +187,10 @@
         },
         {
           "name": "Dr Martin Chovancik",
+          "country": "Czechia"
+        },
+        {
+          "name": "Mr Martin Haváček",
           "country": "Czechia"
         },
         {
@@ -204,7 +232,8 @@
         },
         {
           "name": "Dr Nikolaos Tzifakis",
-          "country": "Greece"
+          "country": "Greece",
+          "slug": "nikolaos-tzifakis"
         },
         {
           "name": "Dr Noela Mahmutaj",
@@ -219,9 +248,17 @@
           "country": "Türkiye"
         },
         {
+          "name": "Dr Pinar Caglayan",
+          "country": "Türkiye"
+        },
+        {
           "name": "Dr Revecca Pedi",
           "country": "Greece",
           "slug": "revecca-pedi"
+        },
+        {
+          "name": "Dr Ruzica Cubela Bajramovic",
+          "country": "Bosnia & Herzegovina"
         },
         {
           "name": "Dr Samuel Zilincik",
@@ -237,12 +274,29 @@
           "slug": "sarka-kolmasova"
         },
         {
+          "name": "Dr Seyithan Ahmet Ateş",
+          "country": "Türkiye",
+          "slug": "seyithan-ahmet-ates"
+        },
+        {
           "name": "Mr Tamer Kasikci",
           "country": "Türkiye"
         },
         {
+          "name": "Prof Tănase Tasențe",
+          "country": "Romania"
+        },
+        {
           "name": "Dr Tanja Pavleska",
           "country": "Slovenia"
+        },
+        {
+          "name": "Dr Teemu Häkkinen",
+          "country": "Finland"
+        },
+        {
+          "name": "Mr Theo Zacharis",
+          "country": "Greece"
         },
         {
           "name": "Dr Tijana Karić",
@@ -261,6 +315,10 @@
           "country": "Netherlands"
         },
         {
+          "name": "Prof Violeta Vasiliauskienė",
+          "country": "Lithuania"
+        },
+        {
           "name": "Dr Vladimir Sterpu",
           "country": "Moldova"
         },
@@ -274,7 +332,7 @@
       "number": 2,
       "name": "Transfer of Knowledge",
       "colour": "wg-2",
-      "memberCount": 50,
+      "memberCount": 66,
       "lead": {
         "slug": "john-helferich",
         "name": "Dr John N.T. Helferich"
@@ -302,12 +360,20 @@
           "slug": "arthur-laudrain"
         },
         {
+          "name": "Ms Aurelija Pūraitė",
+          "country": "Lithuania"
+        },
+        {
           "name": "Mr Bora İyiat",
           "country": "Türkiye"
         },
         {
           "name": "Mr Brynjolfur Stefansson",
           "country": "Iceland"
+        },
+        {
+          "name": "Mr Burak Toraman",
+          "country": "Türkiye"
         },
         {
           "name": "Prof Carmen Márquez Carrasco",
@@ -334,8 +400,16 @@
           "country": "Montenegro"
         },
         {
+          "name": "Dr David Curran",
+          "country": "United Kingdom"
+        },
+        {
           "name": "Mr Dimitar Atanasov",
           "country": "Portugal"
+        },
+        {
+          "name": "Ms Draga Gajic",
+          "country": "Bosnia & Herzegovina"
         },
         {
           "name": "Dr Edlira Titini",
@@ -351,6 +425,10 @@
           "slug": "filip-ejdus"
         },
         {
+          "name": "Mr Furkan Sarper Koseoglu",
+          "country": "Türkiye"
+        },
+        {
           "name": "Dr Gayane Harutyunyan",
           "country": "Armenia"
         },
@@ -359,8 +437,16 @@
           "country": "Switzerland"
         },
         {
+          "name": "Ms Giulia Biselli",
+          "country": "Italy"
+        },
+        {
           "name": "Dr Grigor Vardanyan",
           "country": "Armenia"
+        },
+        {
+          "name": "Prof Ice Ilijevski",
+          "country": "North Macedonia"
         },
         {
           "name": "Prof Islam Jusufi",
@@ -377,6 +463,10 @@
         {
           "name": "Dr Kalina Lubas",
           "country": "Poland"
+        },
+        {
+          "name": "Dr Keara Barrett",
+          "country": "Ireland"
         },
         {
           "name": "Dr Marie Robin",
@@ -396,12 +486,20 @@
           "country": "Czechia"
         },
         {
+          "name": "Dr Mehmet Babacan",
+          "country": "Türkiye"
+        },
+        {
           "name": "Dr Mehmet Recai Uygur",
           "country": "Lithuania"
         },
         {
           "name": "Dr Mentor Beqa",
           "country": "Albania"
+        },
+        {
+          "name": "Ms Miranda Tedeshvili",
+          "country": "Georgia"
         },
         {
           "name": "Prof Monika Gabriela Bartoszewicz",
@@ -422,6 +520,10 @@
         {
           "name": "Dr Pinar Akgül",
           "country": "Türkiye"
+        },
+        {
+          "name": "Dr Ruzica Cubela Bajramovic",
+          "country": "Bosnia & Herzegovina"
         },
         {
           "name": "Dr Samuel Zilincik",
@@ -446,12 +548,28 @@
           "slug": "sarka-kolmasova"
         },
         {
+          "name": "Prof Savas Bicer",
+          "country": "Türkiye"
+        },
+        {
           "name": "Dr Senada Šelo Šabić",
           "country": "Croatia"
         },
         {
           "name": "Prof Serghei Sprincean",
           "country": "Moldova"
+        },
+        {
+          "name": "Dr Tahir Azad",
+          "country": "United Kingdom"
+        },
+        {
+          "name": "Prof Tănase Tasențe",
+          "country": "Romania"
+        },
+        {
+          "name": "Dr Teemu Häkkinen",
+          "country": "Finland"
         },
         {
           "name": "Dr Tijana Karić",
@@ -488,6 +606,10 @@
         {
           "name": "Ms Yagnyashri Kodaru",
           "country": "Germany"
+        },
+        {
+          "name": "Dr Yusuf Özer",
+          "country": "Türkiye"
         }
       ]
     },
@@ -495,7 +617,7 @@
       "number": 3,
       "name": "Fostering the Next Generation of Scholars",
       "colour": "wg-3",
-      "memberCount": 66,
+      "memberCount": 81,
       "lead": {
         "slug": "chiara-ruffa",
         "name": "Dr Chiara Ruffa"
@@ -505,6 +627,10 @@
         "name": "Dr Silvia D'Amato"
       },
       "members": [
+        {
+          "name": "Ms Ajsela Toci",
+          "country": "Albania"
+        },
         {
           "name": "Dr Alessandro Indelicato",
           "country": "Spain"
@@ -535,6 +661,10 @@
           "slug": "arthur-laudrain"
         },
         {
+          "name": "Ms Aurelija Pūraitė",
+          "country": "Lithuania"
+        },
+        {
           "name": "Prof Benoît Pelopidas",
           "country": "France"
         },
@@ -556,8 +686,20 @@
           "country": "North Macedonia"
         },
         {
+          "name": "Dr David Curran",
+          "country": "United Kingdom"
+        },
+        {
           "name": "Dr David Matsaberidze",
           "country": "Georgia"
+        },
+        {
+          "name": "Ms Draga Gajic",
+          "country": "Bosnia & Herzegovina"
+        },
+        {
+          "name": "Dr Eda Kuşku Sönmez",
+          "country": "Türkiye"
         },
         {
           "name": "Dr Edlira Titini",
@@ -598,6 +740,10 @@
           "slug": "filip-ejdus"
         },
         {
+          "name": "Mr Furkan Sarper Koseoglu",
+          "country": "Türkiye"
+        },
+        {
           "name": "Dr Gayane Harutyunyan",
           "country": "Armenia"
         },
@@ -606,12 +752,20 @@
           "country": "Switzerland"
         },
         {
+          "name": "Ms Giulia Biselli",
+          "country": "Italy"
+        },
+        {
           "name": "Dr Grigor Vardanyan",
           "country": "Armenia"
         },
         {
           "name": "Dr I. Aytac Kadioglu",
           "country": "Türkiye"
+        },
+        {
+          "name": "Prof Ice Ilijevski",
+          "country": "North Macedonia"
         },
         {
           "name": "Dr Ilyas Ferhat Demirbas",
@@ -630,6 +784,10 @@
           "country": "Portugal"
         },
         {
+          "name": "Dr Keara Barrett",
+          "country": "Ireland"
+        },
+        {
           "name": "Dr Kenan Hodžić",
           "country": "Bosnia & Herzegovina"
         },
@@ -644,6 +802,10 @@
         {
           "name": "Dr Laura Íñigo Álvarez",
           "country": "Portugal"
+        },
+        {
+          "name": "Ms Laurena Kalaja",
+          "country": "Albania"
         },
         {
           "name": "Dr Lindita Licaj",
@@ -671,6 +833,10 @@
           "country": "Czechia"
         },
         {
+          "name": "Mr Martin Haváček",
+          "country": "Czechia"
+        },
+        {
           "name": "Dr Mehmet Recai Uygur",
           "country": "Lithuania"
         },
@@ -687,6 +853,10 @@
           "country": "Serbia"
         },
         {
+          "name": "Ms Miranda Tedeshvili",
+          "country": "Georgia"
+        },
+        {
           "name": "Dr Mirela Imsirovic",
           "country": "Bosnia & Herzegovina"
         },
@@ -698,6 +868,10 @@
           "name": "Dr Moritz Weiss",
           "country": "Germany",
           "slug": "moritz-weiss"
+        },
+        {
+          "name": "Dr Muammer Öztürk",
+          "country": "Türkiye"
         },
         {
           "name": "Mr Muhammet Ozcan",
@@ -742,6 +916,10 @@
           "country": "Türkiye"
         },
         {
+          "name": "Prof Tănase Tasențe",
+          "country": "Romania"
+        },
+        {
           "name": "Dr Tanja Pavleska",
           "country": "Slovenia"
         },
@@ -776,6 +954,10 @@
         {
           "name": "Ms Yijun Xu",
           "country": "Germany"
+        },
+        {
+          "name": "Dr Yusuf Özer",
+          "country": "Türkiye"
         }
       ]
     },
@@ -783,7 +965,7 @@
       "number": 4,
       "name": "Inclusion, Representativeness & Ethics",
       "colour": "wg-4",
-      "memberCount": 32,
+      "memberCount": 44,
       "lead": {
         "slug": "revecca-pedi",
         "name": "Dr Revecca Pedi"
@@ -793,6 +975,10 @@
         "name": "Dr Šárka Kolmašová"
       },
       "members": [
+        {
+          "name": "Prof Abdelouahid Ezzarfi",
+          "country": "Morocco"
+        },
         {
           "name": "Dr Alena Lochmannová",
           "country": "Czechia"
@@ -810,8 +996,24 @@
           "country": "Türkiye"
         },
         {
+          "name": "Prof Daniela Castilhos",
+          "country": "Portugal"
+        },
+        {
+          "name": "Dr David Curran",
+          "country": "United Kingdom"
+        },
+        {
+          "name": "Ms Draga Gajic",
+          "country": "Bosnia & Herzegovina"
+        },
+        {
           "name": "Dr Edlira Titini",
           "country": "Albania"
+        },
+        {
+          "name": "Dr Elif Kara",
+          "country": "Türkiye"
         },
         {
           "name": "Prof Filip Ejdus",
@@ -819,8 +1021,16 @@
           "slug": "filip-ejdus"
         },
         {
+          "name": "Dr Fitim Kastrati",
+          "country": "Kosovo*"
+        },
+        {
           "name": "Dr Georgian Marius Ghincea",
           "country": "Switzerland"
+        },
+        {
+          "name": "Ms Giulia Biselli",
+          "country": "Italy"
         },
         {
           "name": "Dr Grigor Vardanyan",
@@ -841,6 +1051,10 @@
         {
           "name": "Dr Julia Carver",
           "country": "United Kingdom"
+        },
+        {
+          "name": "Dr Keara Barrett",
+          "country": "Ireland"
         },
         {
           "name": "Dr Kenan Hodžić",
@@ -875,6 +1089,10 @@
           "country": "Serbia"
         },
         {
+          "name": "Ms Monica Grau Sarabia",
+          "country": "Spain"
+        },
+        {
           "name": "Mr Muhammet Ozcan",
           "country": "Türkiye"
         },
@@ -883,12 +1101,24 @@
           "country": "Serbia"
         },
         {
+          "name": "Prof Njazi Bytyqi",
+          "country": "Kosovo*"
+        },
+        {
+          "name": "Dr Pinar Caglayan",
+          "country": "Türkiye"
+        },
+        {
           "name": "Dr Senada Šelo Šabić",
           "country": "Croatia"
         },
         {
           "name": "Mr Tamer Kasikci",
           "country": "Türkiye"
+        },
+        {
+          "name": "Prof Tănase Tasențe",
+          "country": "Romania"
         },
         {
           "name": "Dr Tanja Pavleska",
