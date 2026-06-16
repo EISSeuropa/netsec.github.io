@@ -183,15 +183,15 @@
     "glossary.html": {
       "fr": {
         "file": "glossary.fr.html",
-        "source_sha1": "21fa27ae27883f3bab074a6c531baa19a2d51828",
-        "translated_on": "2026-06-16",
+        "source_sha1": "6b3d1b1ed423ca36fc011eba22008d38b3bfbacb",
+        "translated_on": "2026-06-17",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "glossary.de.html",
-        "source_sha1": "21fa27ae27883f3bab074a6c531baa19a2d51828",
-        "translated_on": "2026-06-16",
+        "source_sha1": "6b3d1b1ed423ca36fc011eba22008d38b3bfbacb",
+        "translated_on": "2026-06-17",
         "status": "beta",
         "reviewed_by": null
       }
@@ -247,15 +247,15 @@
     "roadmap.html": {
       "fr": {
         "file": "roadmap.fr.html",
-        "source_sha1": "194bdecf5158d76cc7802bd6dfdb53a1b4c15899",
-        "translated_on": "2026-06-16",
+        "source_sha1": "55f62d8a41cabad2d8a3a4c3d430d7d0c687e919",
+        "translated_on": "2026-06-17",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "roadmap.de.html",
-        "source_sha1": "194bdecf5158d76cc7802bd6dfdb53a1b4c15899",
-        "translated_on": "2026-06-16",
+        "source_sha1": "55f62d8a41cabad2d8a3a4c3d430d7d0c687e919",
+        "translated_on": "2026-06-17",
         "status": "beta",
         "reviewed_by": null
       }

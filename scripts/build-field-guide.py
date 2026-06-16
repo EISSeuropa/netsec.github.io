@@ -278,6 +278,21 @@ def render_concept(loc: str, concept: dict, members: list) -> str:
     )
 
 
+def render_empty_region() -> str:
+    """The field-guide region when the section is unpublished: just the
+    sentinels around a holding comment, so the section is off the live
+    Glossary while the concept data is preserved in field-guide.json. The
+    jump-to link in each page is removed separately (this script owns only
+    the region between the sentinels). See the `published` note in
+    field-guide.json and issue #998."""
+    return (
+        f"{START}\n"
+        f"    <!-- Field guide held for a future release (issue #998); "
+        f'set "published": true in data/field-guide.json to restore. -->\n'
+        f"    {END}"
+    )
+
+
 def render_section(loc: str, concepts: list, members: list) -> str:
     """Render the full 'Concepts in European security studies' section for
     one locale, sentinels included, ready to drop between them."""
@@ -309,12 +324,13 @@ def replace_region(page: str, new_region: str) -> str:
     return pattern.sub(lambda _m: new_region, page, count=1)
 
 
-def build(loc: str, concepts: list, members: list) -> str:
+def build(loc: str, concepts: list, members: list, published: bool = True) -> str:
     """Read the locale's glossary page and return its content with the
-    field-guide region rebuilt. Does not write."""
+    field-guide region rebuilt. Does not write. When unpublished the region
+    is blanked rather than rendered, holding the section off the live page."""
     path = ROOT / LOCALES[loc]["file"]
     page = path.read_text(encoding="utf-8")
-    region = render_section(loc, concepts, members)
+    region = render_section(loc, concepts, members) if published else render_empty_region()
     return replace_region(page, region)
 
 
@@ -345,14 +361,22 @@ def main() -> int:
 
     data = json.loads(DATA.read_text(encoding="utf-8"))
     concepts = data.get("concepts", [])
+    published = bool(data.get("published", True))
     bios = json.loads(BIOS.read_text(encoding="utf-8")) if BIOS.exists() else {}
     members = bios.get("members", [])
-    warn_unmatched_keywords(concepts, members)
+    if published:
+        warn_unmatched_keywords(concepts, members)
+    else:
+        print(
+            "  Field guide is unpublished (published:false); the section is "
+            "held off the live Glossary. See issue #998.",
+            file=sys.stderr,
+        )
 
     drift = False
     for loc in LOCALES:
         path = ROOT / LOCALES[loc]["file"]
-        rendered = build(loc, concepts, members)
+        rendered = build(loc, concepts, members, published)
         existing = path.read_text(encoding="utf-8")
         if args.check:
             if rendered != existing:
@@ -380,7 +404,10 @@ def main() -> int:
         print("✓ Glossary pages match data/field-guide.json.")
         return 0
 
-    print(f"✓ Rendered {len(concepts)} concepts into 3 locales.")
+    if published:
+        print(f"✓ Rendered {len(concepts)} concepts into 3 locales.")
+    else:
+        print("✓ Blanked the field-guide region in 3 locales (unpublished).")
     return 0
 
 
