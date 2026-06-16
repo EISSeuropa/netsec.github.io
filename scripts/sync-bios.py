@@ -373,6 +373,43 @@ def normalise_title(name: str) -> str:
     return " ".join(titles) + (" " + rest if rest else "")
 
 
+# The "Title" dropdown's no-honorific option (and any blank) — the
+# submitter explicitly wants no title in front of their name.
+_NO_TITLE = {"", "none please", "none", "no title", "none.", "n/a", "-"}
+
+# Leading-honorific strip for the name field, so a title a submitter still
+# typed into "Full name" is removed before the dropdown title is prepended
+# (never "Prof. Prof. Jane"). Covers the written-out forms too.
+_LEADING_TITLE_RE = re.compile(
+    r"(?i)^(Professor|Prof|Doctor|Dr|Mrs|Mr|Ms|Mx)\.?(?:\s+|$)")
+
+
+def build_name(row: dict, cols: dict) -> str:
+    """Assemble a member's display name from the form row, in house style.
+
+    The form carries the honorific in its own "Title" dropdown (Prof. / Dr
+    / Ms / Mr / Mx / None please), kept separate from "Full name" so a
+    submitter never types the title into the name field, which used to leak
+    it into the slug ("Professor Mark Rhinard" -> professor-mark-rhinard).
+    The chosen title is prepended to the name and the whole thing is run
+    through normalise_title(); "None please" (or a blank) means no title.
+
+    The name is read from cols["name"], falling back to cols["name_legacy"]
+    (the old single-field "Full name (with title …)" header) for responses
+    captured before the question was split, so a renamed question never
+    blanks an existing member. normalise_title() still folds any honorific
+    that slipped into the name field, so a legacy row with the title inline
+    keeps working untouched."""
+    full = (row.get(cols.get("name", ""), "") or "").strip()
+    if not full and cols.get("name_legacy"):
+        full = (row.get(cols["name_legacy"], "") or "").strip()
+    title_raw = (row.get(cols.get("title", ""), "") or "").strip()
+    if title_raw.lower() not in _NO_TITLE:
+        bare = _LEADING_TITLE_RE.sub("", full).strip() or full
+        return normalise_title(f"{title_raw} {bare}")
+    return normalise_title(full)
+
+
 # ─────────────────── keyword normalisation (Phase 2) ───────────────────
 #
 # The directory renders each bio's `keywords` as small pills. Submitters
@@ -1035,7 +1072,7 @@ def row_to_member(
     slug. Pass them all None (tests / one-off scripted runs) and the
     photo will always be re-encoded under the row's own slug.
     """
-    name = normalise_title((row.get(cols["name"], "") or "").strip())
+    name = build_name(row, cols)
     consent = (row.get(cols["consent"], "") or "").strip().lower()
     if not name:
         return None

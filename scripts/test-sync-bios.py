@@ -107,6 +107,33 @@ def test_normalise_title() -> None:
            ("mark", "rhinard"))
 
 
+def test_build_name() -> None:
+    """The Title dropdown and Full name combine into a house-styled name,
+    with a fallback to the legacy single-field header."""
+    print("\nbuild_name():")
+    cols = {"title": "Title", "name": "Full name",
+            "name_legacy": "Full name (with title — Dr / Prof / Mr / Ms / Mx)"}
+    bn = lambda row: sync_bios.build_name(row, cols)
+    expect("title + name",
+           bn({"Title": "Prof.", "Full name": "Mark Rhinard"}), "Prof. Mark Rhinard")
+    expect("Dr keeps no dot",
+           bn({"Title": "Dr", "Full name": "Jane Roe"}), "Dr Jane Roe")
+    expect("None please -> no title",
+           bn({"Title": "None please", "Full name": "Mark Rhinard"}), "Mark Rhinard")
+    expect("blank title -> no title",
+           bn({"Title": "", "Full name": "Mark Rhinard"}), "Mark Rhinard")
+    expect("typed title not duplicated",
+           bn({"Title": "Prof.", "Full name": "Prof. Mark Rhinard"}), "Prof. Mark Rhinard")
+    expect("dropdown overrides typed title",
+           bn({"Title": "Dr", "Full name": "Prof. Mark"}), "Dr Mark")
+    expect("legacy single-field fallback",
+           bn({"Full name (with title — Dr / Prof / Mr / Ms / Mx)": "Dr Silvia D'Amato"}),
+           "Dr Silvia D'Amato")
+    expect("legacy written-out title folds",
+           bn({"Full name (with title — Dr / Prof / Mr / Ms / Mx)": "Professor Mark Rhinard"}),
+           "Prof. Mark Rhinard")
+
+
 def test_parse_keywords() -> None:
     """Resilient to whatever separator a submitter reaches for, while never
     splitting an intra-keyword hyphen."""
@@ -1346,6 +1373,7 @@ def main() -> None:
     test_parse_regions()
     test_slugify_titles()
     test_normalise_title()
+    test_build_name()
     test_parse_keywords()
     test_suggest_theme()
     test_country_key()
