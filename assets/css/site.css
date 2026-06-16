@@ -729,22 +729,50 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
    the event's `workingGroups`). Each links to its section on the
    Working Groups page; colours follow the WG palette. */
 .event-wgs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
-.event-wg-pill{font-family:'Inter',sans-serif;font-size:.66rem;font-weight:700;letter-spacing:.03em;padding:2px 7px;border-radius:6px;color:#fff;text-decoration:none;line-height:1.55;transition:opacity .15s var(--ease)}
+/* Solid WG colour with the readable text colour for each hue: the two
+   light pills (green WG2, amber WG4) carry dark text, the two darker
+   pills (blue WG1, purple WG3) carry white. Slightly larger + heavier
+   than before so the small label stays legible. */
+.event-wg-pill{font-family:'Inter',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.02em;padding:3px 9px;border-radius:7px;color:#fff;text-decoration:none;line-height:1.4;transition:opacity .15s var(--ease)}
 .event-wg-pill:hover{opacity:.85}
 .event-wg-pill.wg-1{background:var(--wg-1)}
-.event-wg-pill.wg-2{background:var(--wg-2)}
+.event-wg-pill.wg-2{background:var(--wg-2);color:#04321f}
 .event-wg-pill.wg-3{background:var(--wg-3)}
 .event-wg-pill.wg-4{background:var(--wg-4);color:#3b2a00}
 .event-card h3,.output-card h3,.news-card h3{font-size:1.1rem;margin:0}
 .event-card p,.output-card p,.news-card p{font-size:.92rem;color:var(--muted);margin:0;flex-grow:1}
 /* Dedicated Events page (events.html) — reuses .event-card; adds the type
    filter row plus the Upcoming / Past sections, the Past list grouped by year. */
-.events-filter{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 30px}
-.events-group{margin:0 0 44px}
-.events-group > h2{margin:0 0 18px}
+.events-filter{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 36px}
+/* Each section (Upcoming / Past) is a clearly delineated block: a ruled
+   heading with an accent bar and a count, so the two never blur together. */
+.events-group{margin:0 0 56px}
+.events-group:last-child{margin-bottom:0}
+.events-group > h2{
+  display:flex;align-items:center;gap:12px;
+  margin:0 0 26px;padding-bottom:14px;
+  font-size:1.4rem;font-weight:700;letter-spacing:-.01em;
+  border-bottom:1px solid var(--line);
+}
+.events-group > h2::before{
+  content:"";flex:none;width:4px;height:1.05em;border-radius:3px;
+  background:linear-gradient(180deg,var(--accent),var(--accent-2));
+}
+/* The archive reads as secondary: a muted bar + heading colour. */
+.events-group--past > h2{color:var(--ink-2)}
+.events-group--past > h2::before{background:var(--line)}
+.events-count{
+  font-size:.78rem;font-weight:700;line-height:1.7;color:var(--muted);
+  background:var(--glass-bg);border:1px solid var(--line);
+  border-radius:999px;padding:0 9px;
+}
 .events-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
-.events-year{margin:0 0 26px}
-.events-year > h3{margin:0 0 12px;font-size:1rem;font-weight:600;color:var(--muted)}
+.events-year{margin:0 0 30px}
+.events-year:last-child{margin-bottom:0}
+.events-year > h3{
+  margin:0 0 14px;font-size:.78rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
+}
 .events-empty{margin:0}
 /* The event cards render inside .prose-page on /events.html, where
    `.prose-page a` (0,1,1) would underline + recolour them. Scope a reset
