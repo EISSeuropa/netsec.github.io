@@ -102,6 +102,51 @@ quiet Indico day, so a maintainer who hand-edited `events.json`
 with stale values gets caught up on the next nightly sync even if
 Indico itself did not change.
 
+### Which events count as NetSec's, and which are joint
+
+NetSec shares the EISS Indico, so the sync has to tell three kinds
+of event apart and act on only two of them:
+
+- **Standalone NetSec** — events in NetSec's own Indico category,
+  `NETSEC_CATEGORY_ID` (#8): training schools, policy workshops, MC
+  plenaries, the Summer School.
+- **Joint EISS × NetSec** — events that live in an EISS category
+  (e.g. Annual Conferences, #1) but carry the `NetSec` keyword. An
+  Indico event can hold only one category label, so a conference
+  that already carries the "Annual Conference" label opts onto the
+  NetSec calendar with the keyword instead. The ESSC is the case in
+  point.
+- **EISS-only** — everything else; NetSec does not advertise it.
+
+`classify_netsec()` encodes this (category #8 → `standalone`;
+`NetSec` keyword elsewhere → `joint`; otherwise excluded), and
+`build_netsec_index()` fetches both category #8 and the
+Annual-Conference set, keeping only the first two kinds. The
+NetSec-category fetch is best-effort: if #8 is briefly unreachable,
+joint events are still detected from the Annual-Conference set, so
+a co-host badge never silently disappears.
+
+`_patch_events_json` then reconciles `events.json` against that
+index:
+
+1. Linked entries (those with `indicoEventId`) get their
+   allow-listed fields refreshed as above, **plus** a derived
+   `coHost` field (`"joint"` | `"standalone"`). Toggling the
+   `NetSec` keyword on Indico therefore flips the card's co-host
+   badge on the next sync, no hand-edit required.
+2. A NetSec-relevant Indico event with no matching `events.json`
+   entry is **appended** as a minimal `autoDiscovered: true` entry
+   (EN copy synthesised from the Indico title + URL; the renderers
+   fall back to EN for FR/DE until a maintainer fills them in, no
+   machine translation, CLAUDE.md §1). It carries `indicoEventId`,
+   so subsequent syncs keep its dates in step like any other linked
+   entry. Hand-authored events with no `indicoEventId` (e.g. the
+   ITC conference, hosted off-Indico) are never touched.
+
+The renderer (`assets/js/home-events.js`) shows a "Joint EISS ×
+NetSec" pill only on `coHost: "joint"` cards. Standalone events
+get no badge, which is the quiet default on a NetSec-branded site.
+
 ### Why not delete `events.json` entirely
 
 A cleaner architecture would derive Indico-tracked entries
@@ -136,16 +181,29 @@ Concretely:
   speaker who withdraws is removed from Indico, which propagates
   to the site at the next daily sync (24-hour lag at most).
 
-## How to add another event
+## How to add a NetSec event on Indico
 
-Today the script is scoped to category 1 (Annual Conferences).
-For other NetSec events on the same Indico instance — Summer
-School, training schools, MC plenaries — extend
-`SYNC_CATEGORY_IDS` in `scripts/sync-indico.py` with the
-appropriate category ids and bucket the result accordingly in
-`main()`. The data shape and the rendering logic are generic over
-event id; the only EISS-specific bit was the base URL, which
-stays the same.
+For **standalone NetSec events** (Summer School, training schools, MC
+plenaries, workshops), create the event in Indico under category #8
+(the dedicated NetSec category). The nightly sync auto-discovers it
+and appends a minimal `autoDiscovered: true` entry to `data/events.json`
+(EN title + display date derived from Indico, plus `coHost: "standalone"`).
+No code change needed. The maintainer then enriches the entry at leisure:
+add FR/DE `cardTitle`/`cardDescription`, richer `description`, `meta`
+rows, working-group list, CTA. The `autoDiscovered: true` flag signals
+where hand-enrichment is still pending.
+
+For **jointly-run EISS × NetSec events** (the ESSC), create the event
+under the relevant EISS category (e.g. Annual Conferences, #1) and add
+`NetSec` as a keyword on Indico. The sync picks up the keyword,
+classifies the event as `joint`, and sets `coHost: "joint"` on the linked
+`events.json` entry. The renderer shows a "Joint EISS × NetSec" badge on
+that card.
+
+For **events not hosted on this Indico instance** (e.g. the ITC
+conference on a different platform), hand-author an entry in
+`data/events.json` as before. These entries carry no `indicoEventId` and
+are never touched by the sync.
 
 ## Adding a new annual edition (ESSC 2027 onwards)
 

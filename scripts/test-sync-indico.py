@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import sys
+import tempfile
 from pathlib import Path
 
 # Import the module under test as a sibling.
@@ -25,6 +26,12 @@ _absolutize_indico_url = sync_indico._absolutize_indico_url
 _looks_like_break = sync_indico._looks_like_break
 summarise_changes = sync_indico.summarise_changes
 should_carry_over = sync_indico.should_carry_over
+normalise_event = sync_indico.normalise_event
+classify_netsec = sync_indico.classify_netsec
+_en_display_date = sync_indico._en_display_date
+_event_type_for = sync_indico._event_type_for
+_discovered_entry = sync_indico._discovered_entry
+_patch_events_json = sync_indico._patch_events_json
 
 
 def expect(label: str, got, want) -> None:
@@ -329,6 +336,126 @@ def test_should_carry_over() -> None:
            should_carry_over({}, {"annualConferences": {}}), False)
 
 
+def test_classify_netsec() -> None:
+    """NetSec-calendar classification: standalone (category #8), joint
+    (NetSec keyword on an EISS category), or excluded (EISS-only)."""
+    print("\nclassify_netsec() — standalone / joint / excluded:")
+    standalone = normalise_event({"id": "30", "categoryId": 8, "keywords": []})
+    joint = normalise_event({"id": "22", "categoryId": 1, "keywords": ["NetSec", "Europe"]})
+    eiss_only = normalise_event({"id": "21", "categoryId": 1, "keywords": ["Europe"]})
+    cat8_and_kw = normalise_event({"id": "31", "categoryId": 8, "keywords": ["NetSec"]})
+    expect("category #8 -> standalone",      classify_netsec(standalone), "standalone")
+    expect("NetSec keyword elsewhere -> joint", classify_netsec(joint),    "joint")
+    expect("EISS-only -> excluded (None)",   classify_netsec(eiss_only),   None)
+    expect("category #8 wins over keyword",  classify_netsec(cat8_and_kw), "standalone")
+    expect("keywords lower-cased on normalise", joint["keywords"], ["netsec", "europe"])
+
+
+def test_en_display_date() -> None:
+    print("\n_en_display_date() — humanised EN ranges:")
+    expect("single day",        _en_display_date("2026-09-04T09:00", "2026-09-04T18:00"), "4 September 2026")
+    expect("same-month range",  _en_display_date("2026-06-09T09:00", "2026-06-11T18:00"), "9–11 June 2026")
+    expect("cross-month range", _en_display_date("2026-06-30T09:00", "2026-07-02T18:00"), "30 June – 2 July 2026")
+    expect("cross-year range",  _en_display_date("2026-12-30T09:00", "2027-01-02T18:00"), "30 December 2026 – 2 January 2027")
+    expect("unparseable -> ''", _en_display_date("", ""), "")
+
+
+def test_event_type_for() -> None:
+    print("\n_event_type_for() — title heuristic:")
+    expect("summer school", _event_type_for("NetSec Summer School"),      "training-school")
+    expect("workshop",      _event_type_for("Policy Workshop on X"),      "policy-workshop")
+    expect("itc",           _event_type_for("NetSec ITC Conference"),     "itc-conference")
+    expect("plenary",       _event_type_for("MC Plenary"),                "mc-plenary")
+    expect("conference",    _event_type_for("Some Conference"),           "annual-conference")
+    expect("generic",       _event_type_for("NetSec Networking Evening"), "event")
+
+
+def test_patch_events_json_marks_and_appends() -> None:
+    """End-to-end events.json reconciliation against a NetSec index:
+    a linked entry gets its allow-listed fields + coHost refreshed, a
+    hand-authored entry with no indicoEventId is left alone, and a
+    newly-discovered standalone event is appended as autoDiscovered."""
+    print("\n_patch_events_json() — refresh linked + append discovered:")
+    doc = {
+        "tzid": "Europe/Stockholm",
+        "dtstamp": "20260101T000000Z",
+        "events": [
+            {  # linked: should get summary + coHost refreshed
+                "uid": "essc@x", "indicoEventId": 22,
+                "summary": "OLD TITLE", "start": "2026-06-11T08:00",
+                "end": "2026-06-12T20:00", "status": "CONFIRMED",
+                "eventType": "annual-conference", "location": "Curated addr",
+                "cardTitle": {"en": "ESSC"},
+            },
+            {  # hand-authored, no indicoEventId: must be untouched
+                "uid": "itc@x", "summary": "ITC", "start": "2026-09-08T09:00",
+                "end": "2026-09-11T18:00", "status": "CONFIRMED",
+                "eventType": "itc-conference", "cardTitle": {"en": "ITC"},
+            },
+        ],
+    }
+    index = {
+        "22": {"id": "22", "title": "2026 European Security Studies Conference",
+               "start": "2026-06-11T08:00:00", "end": "2026-06-12T20:00:00",
+               "category": "Annual Conferences", "location": "Stockholm University",
+               "url": "https://indico.eiss-europa.com/event/22/", "coHost": "joint"},
+        "99": {"id": "99", "title": "NetSec Training School",
+               "start": "2027-03-02T09:00:00", "end": "2027-03-04T18:00:00",
+               "category": "NetSec", "location": "Berlin",
+               "url": "https://indico.eiss-europa.com/event/99/", "coHost": "standalone"},
+    }
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td) / "events.json"
+        tmp.write_text(json.dumps(doc), encoding="utf-8")
+        orig = sync_indico.EVENTS_OUT
+        sync_indico.EVENTS_OUT = tmp
+        try:
+            changed = _patch_events_json(index)
+            out = json.loads(tmp.read_text(encoding="utf-8"))
+        finally:
+            sync_indico.EVENTS_OUT = orig
+
+    expect("returns changed", changed, True)
+    by_uid = {e["uid"]: e for e in out["events"]}
+    expect("linked summary refreshed", by_uid["essc@x"]["summary"],
+           "2026 European Security Studies Conference")
+    expect("linked coHost set joint", by_uid["essc@x"]["coHost"], "joint")
+    expect("curated location untouched", by_uid["essc@x"]["location"], "Curated addr")
+    expect("manual entry untouched", by_uid["itc@x"]["summary"], "ITC")
+    expect("manual entry has no coHost", "coHost" in by_uid["itc@x"], False)
+    disc = by_uid["indico-99@netsec-cost.eu"]
+    expect("discovered appended", disc["summary"], "NetSec Training School")
+    expect("discovered autoDiscovered", disc["autoDiscovered"], True)
+    expect("discovered coHost standalone", disc["coHost"], "standalone")
+    expect("discovered eventType from title", disc["eventType"], "training-school")
+    expect("discovered EN displayDate", disc["displayDate"]["en"], "2–4 March 2027")
+    expect("discovered categories carry NetSec", "NetSec" in disc["categories"], True)
+    expect("discovered cardTitle.en present", bool(disc["cardTitle"]["en"]), True)
+
+
+def test_patch_events_json_noop_when_in_step() -> None:
+    """No spurious write when events.json already matches the feed."""
+    print("\n_patch_events_json() — no-op when already in step:")
+    doc = {"tzid": "Europe/Stockholm", "events": [
+        {"uid": "essc@x", "indicoEventId": 22, "summary": "ESSC",
+         "start": "2026-06-11T08:00", "end": "2026-06-12T20:00",
+         "status": "CONFIRMED", "eventType": "annual-conference",
+         "coHost": "joint", "cardTitle": {"en": "ESSC"}},
+    ]}
+    index = {"22": {"id": "22", "title": "ESSC", "start": "2026-06-11T08:00:00",
+                    "end": "2026-06-12T20:00:00", "coHost": "joint"}}
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td) / "events.json"
+        tmp.write_text(json.dumps(doc), encoding="utf-8")
+        orig = sync_indico.EVENTS_OUT
+        sync_indico.EVENTS_OUT = tmp
+        try:
+            changed = _patch_events_json(index)
+        finally:
+            sync_indico.EVENTS_OUT = orig
+    expect("no change -> False", changed, False)
+
+
 def main() -> None:
     test_normalise_person_drops_email_hash()
     test_absolutize_indico_url()
@@ -340,6 +467,11 @@ def main() -> None:
     test_extract_programme_empty_timetable()
     test_summarise_changes()
     test_should_carry_over()
+    test_classify_netsec()
+    test_en_display_date()
+    test_event_type_for()
+    test_patch_events_json_marks_and_appends()
+    test_patch_events_json_noop_when_in_step()
     print("\nAll tests passed.")
 
 

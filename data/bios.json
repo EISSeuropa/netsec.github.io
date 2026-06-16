@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-15T14:32:54+00:00",
+  "generated_at": "2026-06-16T13:14:34+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-15T14:32:54+00:00"
+    "last_synced": "2026-06-16T13:14:34+00:00"
   },
   "members": [
     {
@@ -1168,7 +1168,7 @@
       "country": "Türkiye",
       "country_code": "tr",
       "affiliation": "Ankara University of Social Sciences",
-      "position": "Professor",
+      "position": "Professor of Economics",
       "roles": [],
       "wgs": [],
       "mentorship": [
@@ -1208,9 +1208,143 @@
         "Cyber and emerging technology",
         "Economic security and geoeconomics"
       ]
+    },
+    {
+      "id": "wendy-he",
+      "name": "Dr Wendy He",
+      "country": "Germany",
+      "country_code": "de",
+      "affiliation": "College of Fellows, University of Tübingen",
+      "position": "Post-doctoral Fellow",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Asia",
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Wendy He is an interdisciplinary scholar of international relations, specialising in U.S.-China relations, strategic studies, and political psychology. She holds a PhD in International Relations from the S. Rajaratnam School of International Studies, Nanyang Technological University, Singapore. She is currently a Global Encounters Fellow at the University of Tübingen’s College of Fellows and a Research Fellow with the Military Studies Programme at RSIS. Previously, she was a Hans J. Morgenthau Fellow in Grand Strategy at the Notre Dame International Security Center, University of Notre Dame, and a visiting researcher at National Taiwan University and the University of Washington. Her research examines how cognitive and social psychological dynamics shape strategic judgment in war and crisis decision-making. Her book project, The Confidence Trap, develops a theory of how leaders and advisers assess the credibility of military threats, showing how confidence can enable decisive leadership while also distorting advice-seeking, threat assessment, and strategic judgment. This research agenda has been recognised by the International Studies Association’s Carl Beck Award in 2026 and the Inter-University Seminar on Armed Forces and Society Graduate Student Paper Award in 2025.",
+      "keywords": [
+        "International Relations",
+        "International Security",
+        "Political Psychology",
+        "US-China Relations",
+        "Foreign Policy Analysis",
+        "Judgment and Decision-Making"
+      ],
+      "email": "wendyheqingli@gmail.com",
+      "website": "https://www.wendyhe.com",
+      "orcid": "0009-0004-8098-4093",
+      "linkedin": "https://www.linkedin.com/in/wendy-he-qingli",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/wendy-he.jpg",
+      "source": "form",
+      "photo_source_sha256": "84b1df3d19a23bc8524de37b755d231aff1622a42714811ece8c6246ca143ffb",
+      "canonical_keywords": [
+        "Foreign policy analysis",
+        "International relations",
+        "International security",
+        "Judgment and decision-making",
+        "Political psychology",
+        "US-China relations"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Security and defence",
+        "Theory and methods"
+      ]
+    },
+    {
+      "id": "laura-lisboa",
+      "name": "Ms Laura Lisboa",
+      "country": "France",
+      "country_code": "fr",
+      "affiliation": "Sciences Po",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "The Americas"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "",
+      "keywords": [],
+      "email": "",
+      "website": "",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/laura-lisboa.jpg",
+      "source": "form",
+      "photo_source_sha256": "3eee85016dbf2254ccd742af2447f9f449088549347d43c70b6addf0e4c75a82"
+    },
+    {
+      "id": "nikolaos-tzifakis",
+      "name": "Prof. Nikolaos Tzifakis",
+      "country": "Greece",
+      "country_code": "gr",
+      "affiliation": "University of the Peloponnese",
+      "position": "Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Western Balkans"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Nikolaos Tzifakis holds a Jean Monnet Chair in EU Foreign Policy and the Western Balkans and is a Professor of International Relations at the Department of Political Science and International Relations of the University of the Peloponnese. He is the Coordinator of the “Empowering the Geopolitical EU in the Eastern Neighborhood and the Western Balkans (GEO-POWER-EU)” Horizon Europe Project (2024–2027). He is also a Visiting Professor at the College of Europe (in Tirana) and at the European Regional Master (ERMA) in “Democracy and Human Rights in South-East Europe” (University of Bologna/University of Sarajevo), and a member of Balkans in Europe Policy Advisory Group (BiEPAG). His research interests include EU enlargement policy and geopolitical competition in the Western Balkans.",
+      "keywords": [
+        "EU Foreign Polcy",
+        "Geopolitical Competition in the Western Balkans",
+        "Security Studies"
+      ],
+      "email": "tzifakis@uop.gr",
+      "website": "https://pedis.uop.gr/en/staff-memberen/tzifakis",
+      "orcid": "0000-0003-4653-6882",
+      "linkedin": "https://www.linkedin.com/in/nikolaostzifakis/",
+      "twitter": "https://x.com/NTzifakis",
+      "bluesky": "https://bsky.app/profile/tzifakis.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/nikolaos-tzifakis.jpg",
+      "source": "form",
+      "photo_source_sha256": "be49c7f358eba97ebefae2753771a21d26ab639d607c486c8733d7695338d775",
+      "founding_contributor": true,
+      "canonical_keywords": [
+        "EU foreign policy",
+        "Security studies",
+        "Western Balkans"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Security and defence"
+      ]
     }
   ],
   "keyword_aggregate": [
+    {
+      "keyword": "EU foreign policy",
+      "count": 3
+    },
+    {
+      "keyword": "International relations",
+      "count": 3
+    },
     {
       "keyword": "Economic security",
       "count": 2
@@ -1220,15 +1354,15 @@
       "count": 2
     },
     {
-      "keyword": "EU foreign policy",
-      "count": 2
-    },
-    {
       "keyword": "European security",
       "count": 2
     },
     {
-      "keyword": "International relations",
+      "keyword": "Foreign policy analysis",
+      "count": 2
+    },
+    {
+      "keyword": "International security",
       "count": 2
     },
     {
@@ -1237,6 +1371,10 @@
     },
     {
       "keyword": "Non-state actors",
+      "count": 2
+    },
+    {
+      "keyword": "Political psychology",
       "count": 2
     },
     {
@@ -1352,10 +1490,6 @@
       "count": 1
     },
     {
-      "keyword": "Foreign policy analysis",
-      "count": 1
-    },
-    {
       "keyword": "Geopolitics",
       "count": 1
     },
@@ -1416,11 +1550,11 @@
       "count": 1
     },
     {
-      "keyword": "International security",
+      "keyword": "Irregular warfare",
       "count": 1
     },
     {
-      "keyword": "Irregular warfare",
+      "keyword": "Judgment and decision-making",
       "count": 1
     },
     {
@@ -1468,10 +1602,6 @@
       "count": 1
     },
     {
-      "keyword": "Political psychology",
-      "count": 1
-    },
-    {
       "keyword": "Power",
       "count": 1
     },
@@ -1489,6 +1619,10 @@
     },
     {
       "keyword": "Security and defence",
+      "count": 1
+    },
+    {
+      "keyword": "Security studies",
       "count": 1
     },
     {
@@ -1514,20 +1648,28 @@
     {
       "keyword": "UN",
       "count": 1
+    },
+    {
+      "keyword": "US-China relations",
+      "count": 1
+    },
+    {
+      "keyword": "Western Balkans",
+      "count": 1
     }
   ],
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 11
+      "count": 13
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 8
+      "count": 10
     },
     {
       "theme": "Theory and methods",
-      "count": 8
+      "count": 9
     },
     {
       "theme": "Cyber and emerging technology",
@@ -1606,6 +1748,7 @@
     "International relations": "Theory and methods",
     "International security": "Security and defence",
     "Irregular warfare": "Security and defence",
+    "Judgment and decision-making": "Theory and methods",
     "Maritime security": "Transnational and human security",
     "Maritime strategy": "Security and defence",
     "Militarisation": "Security and defence",
@@ -1625,41 +1768,44 @@
     "Research methods": "Theory and methods",
     "Russian foreign policy": "Foreign policy and diplomacy",
     "Security and defence": "Security and defence",
+    "Security studies": "Security and defence",
     "Strategy": "Security and defence",
     "Subversion": "Intelligence, information and influence",
     "Technology spillovers": "Cyber and emerging technology",
     "Text as data": "Theory and methods",
     "Transnational and human security": "Transnational and human security",
-    "UN": "Foreign policy and diplomacy"
+    "UN": "Foreign policy and diplomacy",
+    "US-China relations": "Foreign policy and diplomacy",
+    "Western Balkans": "Foreign policy and diplomacy"
   },
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 14
+      "count": 16
     },
     {
       "region": "Global and cross-regional",
-      "count": 9
+      "count": 10
     },
     {
       "region": "Asia",
-      "count": 4
+      "count": 5
+    },
+    {
+      "region": "The Americas",
+      "count": 5
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
       "count": 4
     },
     {
+      "region": "Europe - Western Balkans",
+      "count": 3
+    },
+    {
       "region": "Middle East and North Africa",
       "count": 3
-    },
-    {
-      "region": "The Americas",
-      "count": 3
-    },
-    {
-      "region": "Europe - Western Balkans",
-      "count": 2
     },
     {
       "region": "Africa",
