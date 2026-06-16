@@ -1340,8 +1340,8 @@
       ]
     },
     {
-      "id": "professor-mark-rhinard",
-      "name": "Professor Mark Rhinard",
+      "id": "mark-rhinard",
+      "name": "Prof. Mark Rhinard",
       "country": "Sweden",
       "country_code": "se",
       "affiliation": "Stockholm University",
@@ -1369,7 +1369,7 @@
       "twitter": "",
       "bluesky": "",
       "mastodon": "",
-      "photo": "assets/images/people/professor-mark-rhinard.jpg",
+      "photo": "assets/images/people/mark-rhinard.jpg",
       "source": "form",
       "photo_source_sha256": "c4cdf93beade370824a84b5640c245ec11efe3205fb4309b47f50f44b8d38a2f",
       "canonical_keywords": [

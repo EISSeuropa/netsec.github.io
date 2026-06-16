@@ -64,7 +64,7 @@
     const desktopSteps = [
       searchStep,
       { target: '.members-filter',
-        title: window.netsecT('Filter by working group or MC role'),
+        title: window.netsecT('Filter by working group or Management Committee role'),
         body:  window.netsecT('WG1–WG4 filter by Working Group. MC members surfaces only Management Committee representatives.') },
       { target: '#members-keyword-filter',
         title: window.netsecT('Filter by research theme'),
