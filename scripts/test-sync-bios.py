@@ -91,11 +91,20 @@ def test_normalise_title() -> None:
     expect("Mr. -> Mr",            nt("Mr. Jane Doe"), "Mr Jane Doe")
     expect("Prof -> Prof.",        nt("Prof Filip Ejdus"), "Prof. Filip Ejdus")
     expect("Prof. stays Prof.",    nt("Prof. Filip Ejdus"), "Prof. Filip Ejdus")
+    expect("Professor -> Prof.",   nt("Professor Mark Rhinard"), "Prof. Mark Rhinard")
+    expect("Doctor -> Dr",         nt("Doctor Jane Roe"), "Dr Jane Roe")
     expect("glued dotted title",   nt("Mrs.Yanina Shved-Dogrul"), "Mrs Yanina Shved-Dogrul")
     expect("stacked titles",       nt("Prof. Dr. Hans Müller"), "Prof. Dr Hans Müller")
     expect("real name preserved",  nt("Drew Barry"), "Drew Barry")
     expect("no title untouched",   nt("Sara Russo"), "Sara Russo")
     expect("empty safe",           nt(""), "")
+    # The written-out title must not leak into the slug or the match key,
+    # which is what split "Professor Mark Rhinard" onto its own card with a
+    # "professor-..." id before the full-word forms were recognised.
+    expect("Professor not in slug", sync_bios.slugify("Professor Mark Rhinard"),
+           "mark-rhinard")
+    expect("Professor not in key",  sync_bios.name_key("Professor Mark Rhinard"),
+           ("mark", "rhinard"))
 
 
 def test_parse_keywords() -> None:

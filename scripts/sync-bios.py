@@ -118,8 +118,9 @@ def slugify(name: str) -> str:
     # the name with a dot and no space ("Mrs.Yanina") strips too — that
     # form otherwise kept the title in the slug and split the person into
     # a second card. A bare "Drew" is safe: the title must be followed by
-    # a dot or a space, never a letter.
-    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)(?:\.\s*|\s+)", "", s)
+    # a dot or a space, never a letter. The written-out forms (Professor,
+    # Doctor) strip too, so they don't leak into the slug.
+    s = re.sub(r"^(Professor|Prof|Doctor|Dr|Mr|Mrs|Ms|Mx)(?:\.\s*|\s+)", "", s)
     s = s.lower()
     # Drop apostrophes / curly quotes / similar marks first — they
     # shouldn't introduce a hyphen between adjacent letters.
@@ -155,7 +156,7 @@ def name_key(name: str) -> tuple[str, str] | None:
     # Same honorific strip as slugify(): the trailing group also catches a
     # title glued to the name by a dot with no space ("Mrs.Yanina"), so the
     # name+country fallback can still bridge such a submission to its twin.
-    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)(?:\.\s*|\s+)", "", s, flags=re.I)
+    s = re.sub(r"^(Professor|Prof|Doctor|Dr|Mr|Mrs|Ms|Mx)(?:\.\s*|\s+)", "", s, flags=re.I)
     s = re.sub(r"[‘’ʼ'`]", "", s)
     # Tokenise on any non-letter so "N.T." becomes ["N", "T"] (and the
     # initials get dropped by the first/last selection below).
@@ -339,7 +340,7 @@ def parse_keywords(raw: str) -> list[str]:
 # lowercased title with any dot stripped.
 _TITLE_FORMS = {
     "mr": "Mr", "mrs": "Mrs", "ms": "Ms", "mx": "Mx",
-    "dr": "Dr", "prof": "Prof.",
+    "dr": "Dr", "doctor": "Dr", "prof": "Prof.", "professor": "Prof.",
 }
 
 
@@ -347,19 +348,22 @@ def normalise_title(name: str) -> str:
     """Standardise the leading honorific(s) on a name to house style.
 
     Mr / Mrs / Ms / Mx / Dr lose any full stop; Prof gains one ("Prof.").
-    Works whether the title is spaced ("Dr Jane"), dotted ("Dr. Jane"), or
-    glued by a dot ("Dr.Jane"), and consumes a stacked run of titles
-    ("Prof. Dr. Hans" -> "Prof. Dr Hans") as some continental academics
-    write them. The rest of the name is left exactly as submitted, and a
-    real name that merely starts with a title's letters ("Drew", "Misha")
-    is untouched because the title must be followed by a dot, a space, or
-    the end of the string, never another letter."""
+    The written-out forms fold to the abbreviation too ("Professor" ->
+    "Prof.", "Doctor" -> "Dr"), so a submission that spells the title in
+    full is uniformised like the rest. Works whether the title is spaced
+    ("Dr Jane"), dotted ("Dr. Jane"), or glued by a dot ("Dr.Jane"), and
+    consumes a stacked run of titles ("Prof. Dr. Hans" -> "Prof. Dr Hans")
+    as some continental academics write them. The rest of the name is left
+    exactly as submitted, and a real name that merely starts with a title's
+    letters ("Drew", "Misha") is untouched because the title must be
+    followed by a dot, a space, or the end of the string, never another
+    letter."""
     if not name:
         return name
     rest = name.strip()
     titles: list[str] = []
     while True:
-        m = re.match(r"(?i)^(prof|mrs|mr|ms|mx|dr)\b\.?\s*", rest)
+        m = re.match(r"(?i)^(professor|prof|doctor|mrs|mr|ms|mx|dr)\b\.?\s*", rest)
         if not m:
             break
         titles.append(_TITLE_FORMS[m.group(1).lower()])
