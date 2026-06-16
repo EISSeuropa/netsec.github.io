@@ -2110,6 +2110,18 @@ body{padding-top:var(--whats-new-h, 0px)}
   touch-action:manipulation;
   -webkit-tap-highlight-color:transparent;
 }
+/* The directory grows with the membership, so the compact grid can hold
+   dozens of cards. Skip rendering (layout + paint + style) the ones below
+   the fold until they scroll near, which keeps the page's load cost flat
+   as the directory grows. Scoped to compact, non-expanded cards only: the
+   detailed view measures bio height for its "show more" affordance and an
+   expanded card is on screen, so neither is affected. The intrinsic-size
+   `auto` keyword lets the browser remember each card's real height after
+   its first render, so the scrollbar doesn't jump. */
+.members-grid.is-compact .member-card:not(.is-expanded){
+  content-visibility:auto;
+  contain-intrinsic-size:auto 88px;
+}
 .members-filter-chip{
   font:inherit;font-size:.82rem;font-weight:600;
   padding:6px 14px;border-radius:999px;border:1px solid rgba(11,18,32,.22);
