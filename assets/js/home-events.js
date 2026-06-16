@@ -13,6 +13,10 @@
  *    that's only rendered when the text actually overflows
  *  - an optional CTA link (the existing per-event link, e.g.
  *    Summer School → eiss-europa or ESSC → /essc-2026.html)
+ *  - an optional "Joint EISS × NetSec" provenance badge when the event
+ *    carries `coHost: "joint"` (jointly-run events with EISS, e.g. the
+ *    ESSC). Standalone NetSec events and hand-authored entries get no
+ *    badge. The field is set automatically by scripts/sync-indico.py.
  *  - an Add to calendar dropdown with four destinations:
  *      • Google Calendar (prefilled template URL)
  *      • Outlook (web) compose deep-link

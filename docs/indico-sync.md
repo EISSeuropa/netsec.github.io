@@ -181,16 +181,29 @@ Concretely:
   speaker who withdraws is removed from Indico, which propagates
   to the site at the next daily sync (24-hour lag at most).
 
-## How to add another event
+## How to add a NetSec event on Indico
 
-Today the script is scoped to category 1 (Annual Conferences).
-For other NetSec events on the same Indico instance — Summer
-School, training schools, MC plenaries — extend
-`SYNC_CATEGORY_IDS` in `scripts/sync-indico.py` with the
-appropriate category ids and bucket the result accordingly in
-`main()`. The data shape and the rendering logic are generic over
-event id; the only EISS-specific bit was the base URL, which
-stays the same.
+For **standalone NetSec events** (Summer School, training schools, MC
+plenaries, workshops), create the event in Indico under category #8
+(the dedicated NetSec category). The nightly sync auto-discovers it
+and appends a minimal `autoDiscovered: true` entry to `data/events.json`
+(EN title + display date derived from Indico, plus `coHost: "standalone"`).
+No code change needed. The maintainer then enriches the entry at leisure:
+add FR/DE `cardTitle`/`cardDescription`, richer `description`, `meta`
+rows, working-group list, CTA. The `autoDiscovered: true` flag signals
+where hand-enrichment is still pending.
+
+For **jointly-run EISS × NetSec events** (the ESSC), create the event
+under the relevant EISS category (e.g. Annual Conferences, #1) and add
+`NetSec` as a keyword on Indico. The sync picks up the keyword,
+classifies the event as `joint`, and sets `coHost: "joint"` on the linked
+`events.json` entry. The renderer shows a "Joint EISS × NetSec" badge on
+that card.
+
+For **events not hosted on this Indico instance** (e.g. the ITC
+conference on a different platform), hand-author an entry in
+`data/events.json` as before. These entries carry no `indicoEventId` and
+are never touched by the sync.
 
 ## Adding a new annual edition (ESSC 2027 onwards)
 
