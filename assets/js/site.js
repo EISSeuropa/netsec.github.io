@@ -28,7 +28,7 @@
       'WG2 Co-Leader': 'Co-responsable WG2',
       'WG3 Co-Leader': 'Co-responsable WG3',
       'WG4 Co-Leader': 'Co-responsable WG4',
-      'MC member': 'Membre du CG',
+      'Management Committee': 'Comité de gestion',
       'Network member': 'Membre du réseau',
       'Working Group participant': 'Participant·e au groupe de travail',
       'Bio coming soon.': 'Biographie à venir.',
@@ -132,7 +132,7 @@
       'WG2 Co-Leader': 'Co-Leitung WG2',
       'WG3 Co-Leader': 'Co-Leitung WG3',
       'WG4 Co-Leader': 'Co-Leitung WG4',
-      'MC member': 'MC-Mitglied',
+      'Management Committee': 'Management-Ausschuss',
       'Network member': 'Netzwerkmitglied',
       'Working Group participant': 'Arbeitsgruppen-Mitglied',
       'Bio coming soon.': 'Biografie folgt.',
@@ -224,7 +224,7 @@
   };
   /** Translate a known string for the current page's language.
    *  Falls back to the original if no translation is registered.
-   *  Strings of the form "MC member · Switzerland" translate only
+   *  Strings of the form "Management Committee · Switzerland" translate only
    *  the prefix before " · " so the country name stays intact. */
   window.netsecT = function (s) {
     if (typeof s !== 'string') return s;
@@ -1242,7 +1242,7 @@
     //   meta.photo       — relative path to the headshot
     //   meta.country     — ISO 3166-1 alpha-2 country code (lowercase)
     //   meta.affiliation — text
-    //   meta.role        — "MC member · Switzerland", or "" for non-MC
+    //   meta.role        — "Management Committee · Switzerland", or "" for non-MC
     //   meta.wgs         — comma-separated WG numbers, e.g. "2,3"
     const rawTitle = (hit.meta.title || '').replace(/\s+—\s+NetSec directory$/, '');
     const name = escapeHtml(rawTitle);

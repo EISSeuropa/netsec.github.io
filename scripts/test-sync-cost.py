@@ -329,7 +329,7 @@ def test_apply_leadership_reconciles_form_entries() -> None:
             # Form-submitted member, now promoted to WG1 Leader on
             # cost.eu, carrying a custom non-leadership role.
             {"id": "moritz-weiss", "name": "Dr Moritz Weiss",
-             "roles": ["MC member · Germany"], "source": "form"},
+             "roles": ["Management Committee · Germany"], "source": "form"},
             # Form-submitted member who used to be WG1 Leader but isn't
             # any more — the stale role must be stripped.
             {"id": "filip-ejdus", "name": "Prof Filip Ejdus",
@@ -345,7 +345,7 @@ def test_apply_leadership_reconciles_form_entries() -> None:
         expect("promoted form member gains WG1 Leader",
                "WG1 Leader" in bios["moritz-weiss"]["roles"], True)
         expect("custom form role preserved",
-               "MC member · Germany" in bios["moritz-weiss"]["roles"], True)
+               "Management Committee · Germany" in bios["moritz-weiss"]["roles"], True)
         expect("stale leadership role stripped from form entry",
                "WG1 Leader" not in bios["filip-ejdus"]["roles"], True)
 
@@ -368,7 +368,7 @@ def test_apply_leadership_reconciles_wg_leadership() -> None:
              "source": "form"},
             # The new co-lead cost.eu now lists, not yet carrying it.
             {"id": "new-colead", "name": "Dr New Colead",
-             "roles": ["MC member · France"], "wg_leadership": {},
+             "roles": ["Management Committee · France"], "wg_leadership": {},
              "source": "form"},
         ])
         saved = sync_cost.BIOS
