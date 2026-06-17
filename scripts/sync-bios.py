@@ -1427,7 +1427,7 @@ def fill_country_code(member: dict) -> None:
 # data/mc-members.json is the canonical list of MC representatives per
 # country, extracted from the index.html country grid (hand-entered
 # from cost.eu). When a form submission's slugified name matches an
-# entry here, we auto-assign a "MC member · <Country>" role and fill
+# entry here, we auto-assign a "Management Committee · <Country>" role and fill
 # country / country_code if the form didn't.
 MC_FILE = ROOT / "data" / "mc-members.json"
 
@@ -1447,7 +1447,7 @@ def load_mc_lookup() -> dict[str, dict]:
 def apply_mc_role(member: dict, mc_lookup: dict[str, dict]) -> None:
     """If this member matches an MC list entry, ensure their country
     fields are correct, and — *only if they don't already have a more
-    specific role* — set the role to "MC member · <Country>".
+    specific role* — set the role to "Management Committee · <Country>".
 
     Reasoning: leaders such as the Action Chair or a WG Co-Leader are
     typically also their country's MC representative, but their
@@ -1465,7 +1465,7 @@ def apply_mc_role(member: dict, mc_lookup: dict[str, dict]) -> None:
         member["country_code"] = hit.get("country_code", "")
     if member.get("roles"):
         return  # leadership role already present — keep it
-    member["roles"] = [f"MC member · {hit['country']}"]
+    member["roles"] = [f"Management Committee · {hit['country']}"]
 
 
 # ─── Founding-contributor cross-reference ─────────────────────────

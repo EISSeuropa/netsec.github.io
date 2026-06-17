@@ -436,7 +436,7 @@ def apply_leadership(leadership: list[tuple[str, str]]) -> list[str]:
     the role level, not the entry level — only roles that look like a
     cost.eu-tracked leadership label (i.e. appear in `leadership_roles`)
     are ever removed, so a form-provided custom role such as
-    "MC member · Switzerland" is always kept. Returns diff lines."""
+    "Management Committee · Switzerland" is always kept. Returns diff lines."""
     if not BIOS.exists():
         return ["Leadership: data/bios.json not present, skipped."]
 

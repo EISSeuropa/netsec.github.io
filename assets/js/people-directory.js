@@ -259,7 +259,7 @@
   //   'all'                — no WG/role filter
   //   '1' | '2' | '3' | '4' — that working group (lead, co-lead, or member)
   //   'mc'                 — MC member role (sync-bios.py auto-tags
-  //                          these as "MC member · <Country>")
+  //                          these as "Management Committee · <Country>")
   let activeWG = 'all';
   let activeCountry = 'all';
   // Mentorship filter: a separate AND dimension, multi-select OR (like the
@@ -294,7 +294,7 @@
   const KEYWORD_FILTER_VISIBLE_TOP_N = 8;
 
   function isMC(m) {
-    return (m.roles || []).some(r => /^MC member\b/i.test(r));
+    return (m.roles || []).some(r => /^Management Committee\b/i.test(r));
   }
 
   // Slugify a canonical keyword for URL hash use. Lowercase the
@@ -543,7 +543,7 @@
       const roleEl = node.querySelector('.member-role');
       if ((m.roles || []).length) {
         // Translate each role label via the catalog while preserving
-        // the " · Country" suffix for roles like "MC member · Switzerland".
+        // the " · Country" suffix for roles like "Management Committee · Switzerland".
         roleEl.textContent = m.roles.map(r => window.netsecT(r)).join(' · ');
       } else {
         const hasWGs = (m.wgs || []).length || ((m.wg_leadership || {}).lead || []).length || ((m.wg_leadership || {}).co_lead || []).length;
