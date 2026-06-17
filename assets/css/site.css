@@ -5978,3 +5978,9 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .ts-gallery{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:.7rem; }
 .ts-gallery-item{ margin:0; }
 .ts-gallery-img{ width:100%; height:200px; object-fit:cover; border-radius:12px; display:block; }
+
+/* ── ESSC archive "In pictures" gallery (essc-2026.html) ─────────────── */
+.essc-photos-section{ padding:1.5rem 0; }
+.essc-photos{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:.7rem; }
+.essc-photos-item{ margin:0; }
+.essc-photos-img{ width:100%; height:240px; object-fit:cover; border-radius:12px; display:block; }

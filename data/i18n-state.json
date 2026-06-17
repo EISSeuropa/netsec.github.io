@@ -55,15 +55,15 @@
     "sitemap.html": {
       "fr": {
         "file": "sitemap.fr.html",
-        "source_sha1": "93bb5ba2fded6efa7ce731879f7ac8874ad5ed8a",
-        "translated_on": "2026-06-16",
+        "source_sha1": "dedbcc5842b0d500c5d433e10887064180729089",
+        "translated_on": "2026-06-17",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "sitemap.de.html",
-        "source_sha1": "93bb5ba2fded6efa7ce731879f7ac8874ad5ed8a",
-        "translated_on": "2026-06-16",
+        "source_sha1": "dedbcc5842b0d500c5d433e10887064180729089",
+        "translated_on": "2026-06-17",
         "status": "beta",
         "reviewed_by": null
       }
@@ -119,15 +119,15 @@
     "grants.html": {
       "fr": {
         "file": "grants.fr.html",
-        "source_sha1": "4040a7249c9ff132f653eacced5271de80190d00",
-        "translated_on": "2026-06-16",
+        "source_sha1": "5ccea8c80c53a4eddd7b1a2ef771a349ec67a1e6",
+        "translated_on": "2026-06-17",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "grants.de.html",
-        "source_sha1": "4040a7249c9ff132f653eacced5271de80190d00",
-        "translated_on": "2026-06-16",
+        "source_sha1": "5ccea8c80c53a4eddd7b1a2ef771a349ec67a1e6",
+        "translated_on": "2026-06-17",
         "status": "beta",
         "reviewed_by": null
       }
@@ -135,15 +135,15 @@
     "index.html": {
       "fr": {
         "file": "index.fr.html",
-        "source_sha1": "0fe7842542aa480d7e34d902ca1f8d91235c9b20",
-        "translated_on": "2026-06-16",
+        "source_sha1": "a657f05cc40f59b6d51d273b8eec6e92c2687408",
+        "translated_on": "2026-06-17",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "index.de.html",
-        "source_sha1": "0fe7842542aa480d7e34d902ca1f8d91235c9b20",
-        "translated_on": "2026-06-16",
+        "source_sha1": "a657f05cc40f59b6d51d273b8eec6e92c2687408",
+        "translated_on": "2026-06-17",
         "status": "beta",
         "reviewed_by": null
       }
