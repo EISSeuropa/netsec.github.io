@@ -1,0 +1,57 @@
+{
+  "_documentation": {
+    "purpose": "Editions of the NetSec Training School (the COST Training School deliverable, run as the Early-Career Scholars Summer School / ECS³). Drives two modules on summer-school.html (+ FR + DE) via assets/js/training-school.js, renderer-light: the forward-looking 'Next call' module and the 'Editions' archive. The rich prose sections (About, Taking part, heritage) stay hand-authored in the page.",
+    "schema": {
+      "year": "number. The edition year.",
+      "status": "'past' | 'announced' | 'call-open'. 'past' renders in the archive with no calendar. 'announced'/'call-open' render the Next-call module; the Add-to-calendar affordance shows only when a real start date is present (an announced-but-undated edition shows 'To be announced' and no calendar).",
+      "city": "string, or 'To be announced'.",
+      "host": "string host institution, or 'To be announced'.",
+      "dates": "human dates string, or 'To be announced'.",
+      "start": "optional ISO date (YYYY-MM-DD). Presence gates the calendar affordance + links the events.json .ics.",
+      "ics": "optional calendar slug under /calendar/<slug>.ics (only meaningful with a start date).",
+      "deadline": "optional human application-deadline string.",
+      "cohort": "optional number of funded participants.",
+      "coordinators": "optional array of { name, affiliation, member_id? } — member_id deep-links to the directory.",
+      "topics": "optional array of strings (themes covered).",
+      "photos": "optional array of { src, alt } for the edition gallery; the renderer omits any src that 404s.",
+      "summary": "optional one-paragraph blurb for the edition card."
+    },
+    "note": "Photos for 2026 live under assets/images/summer-school/2026/. Add new editions by appending a record; flip an upcoming edition's status + fill start/ics when it is announced."
+  },
+  "editions": [
+    {
+      "year": 2027,
+      "status": "announced",
+      "city": "To be announced",
+      "host": "To be announced",
+      "dates": "To be announced",
+      "summary": "The next edition of the NetSec Training School. Location and dates will be announced here; sign up below to hear when the call for applications opens."
+    },
+    {
+      "year": 2026,
+      "status": "past",
+      "city": "Stockholm",
+      "host": "Stockholm University",
+      "dates": "9 to 11 June 2026",
+      "start": "2026-06-09",
+      "ics": "summer-school-2026",
+      "cohort": 15,
+      "coordinators": [
+        { "name": "Dr Silvia D'Amato", "affiliation": "James Madison University", "member_id": "silvia-damato" },
+        { "name": "Prof Chiara Ruffa", "affiliation": "Sciences Po", "member_id": "chiara-ruffa" }
+      ],
+      "topics": [
+        "Research design in strategic and security studies",
+        "Military operations and strategy",
+        "Methods and fieldwork",
+        "Publishing and the academic career"
+      ],
+      "photos": [
+        { "src": "assets/images/summer-school/2026/summer-school-1.jpg", "alt": "The 2026 cohort and faculty outside Stockholm University." },
+        { "src": "assets/images/summer-school/2026/summer-school-3.jpg", "alt": "A teaching session during the 2026 Training School." },
+        { "src": "assets/images/summer-school/2026/summer-school-6.jpg", "alt": "Participants on a campus tour during the 2026 Training School." }
+      ],
+      "summary": "The first NetSec Training School ran over three days at Stockholm University, immediately before the European Security Studies Conference, with fifteen funded PhD students joining a faculty of senior scholars for individualised feedback and mentorship."
+    }
+  ]
+}

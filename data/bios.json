@@ -1479,6 +1479,33 @@
         "European and transatlantic security order",
         "Foreign policy and diplomacy"
       ]
+    },
+    {
+      "id": "julia-carver",
+      "name": "Dr Julia Carver",
+      "country": "Netherlands",
+      "country_code": "nl",
+      "affiliation": "Leiden University",
+      "position": "Assistant Professor",
+      "roles": [],
+      "wgs": [
+        1,
+        2,
+        4
+      ],
+      "wg_leadership": {},
+      "bio": "",
+      "keywords": [],
+      "email": "",
+      "website": "",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/julia-carver.jpg",
+      "source": "seed",
+      "founding_contributor": false
     }
   ],
   "keyword_aggregate": [

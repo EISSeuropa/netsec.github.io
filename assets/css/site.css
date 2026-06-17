@@ -5947,3 +5947,34 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   margin:0;padding-left:1.1rem;list-style:disc;
 }
 .prose-page .glossary-dl dd .fg-sources li{margin:.1rem 0;}
+
+/* ── NetSec Training School: editions modules (#training-school) ───────
+   New, single-use classes for the data-driven Next-call + Editions blocks
+   on summer-school.html. Kept together so the class-collision lint stays
+   happy. */
+.ts-next-card{ padding:1.4rem 1.5rem; }
+.ts-next-eyebrow{ margin:0 0 .2rem; font-size:.8rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--accent-2); }
+.ts-next-year{ margin:0 0 .8rem; font-size:1.9rem; line-height:1.1; }
+.ts-deflist{ display:flex; flex-direction:column; gap:.45rem; margin:0 0 1rem; }
+.ts-deflist-row{ display:flex; gap:.6rem; font-size:.95rem; }
+.ts-deflist-label{ flex:0 0 8.5rem; color:var(--ink-2); }
+.ts-deflist-value{ font-weight:500; }
+.ts-next-summary{ margin:0 0 1rem; color:var(--ink-2); }
+.ts-next-notify{ margin:0; font-size:.92rem; color:var(--ink-2); }
+.ts-next-cal{ margin-top:.2rem; }
+
+#ts-editions > h2{ margin-bottom:1rem; }
+.ts-edition{ padding:1.4rem 1.5rem; margin:0 0 1.2rem; }
+.ts-edition-head{ display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap; }
+.ts-edition-year{ margin:0; font-size:1.5rem; }
+.ts-edition-where{ color:var(--ink-2); font-size:.95rem; }
+.ts-edition-meta{ margin:.2rem 0 .8rem; font-size:.9rem; color:var(--accent-2); font-weight:500; }
+.ts-edition-summary{ margin:0 0 .8rem; }
+.ts-edition-coords{ margin:0 0 .8rem; font-size:.92rem; }
+.ts-edition-coords-label{ color:var(--ink-2); }
+.ts-edition-topics-label{ margin:0 0 .25rem; font-size:.9rem; color:var(--ink-2); }
+.ts-edition-topics{ margin:0 0 1rem; padding-left:1.1rem; font-size:.92rem; }
+.ts-edition-topics li{ margin:0 0 .2rem; }
+.ts-gallery{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:.7rem; }
+.ts-gallery-item{ margin:0; }
+.ts-gallery-img{ width:100%; height:200px; object-fit:cover; border-radius:12px; display:block; }
