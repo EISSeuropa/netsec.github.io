@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-17T13:59:26+00:00",
+  "generated_at": "2026-06-17T15:59:39+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-17T13:59:26+00:00"
+    "last_synced": "2026-06-17T15:59:39+00:00"
   },
   "members": [
     {
@@ -1505,6 +1505,47 @@
       "mastodon": "",
       "photo": "assets/images/people/julia-carver.jpg",
       "source": "seed"
+    },
+    {
+      "id": "sophie-enos-attali",
+      "name": "Dr Sophie Enos-Attali",
+      "country": "France",
+      "country_code": "fr",
+      "affiliation": "Catholic University of Paris",
+      "position": "Associate Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "After a PhD on the security policies of some European \"neutral\" countries, I've bee working for several years both on the security policies of Nordic countries and on the security policies of European \"neutral\" countries in the framework of the war in Ukraine. \nI teach International Relations and Political Science at the Catholic University of Paris and I am a associate researcher at Centre Thucydide (Université Panthéon-Assas) and editorial coordinator of L'Année des relations internationales, a yearly French-speaking journal dedicated to International Relations.",
+      "keywords": [
+        "Security politices",
+        "Nordic countries",
+        "military neutrality",
+        "small states",
+        "Nordic-Baltic space"
+      ],
+      "email": "",
+      "website": "https://www.icp.fr/recherche/unite-de-recherche/membres-de-lunite-de-recherche/sophie-enos-attali",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Military neutrality",
+        "Nordic countries",
+        "Nordic-Baltic space",
+        "Security politices",
+        "Small states"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -1761,6 +1802,10 @@
       "count": 1
     },
     {
+      "keyword": "Military neutrality",
+      "count": 1
+    },
+    {
       "keyword": "Multilateralism",
       "count": 1
     },
@@ -1774,6 +1819,14 @@
     },
     {
       "keyword": "NATO",
+      "count": 1
+    },
+    {
+      "keyword": "Nordic countries",
+      "count": 1
+    },
+    {
+      "keyword": "Nordic-Baltic space",
       "count": 1
     },
     {
@@ -1825,7 +1878,15 @@
       "count": 1
     },
     {
+      "keyword": "Security politices",
+      "count": 1
+    },
+    {
       "keyword": "Security studies",
+      "count": 1
+    },
+    {
+      "keyword": "Small states",
       "count": 1
     },
     {
@@ -2000,11 +2061,15 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 19
+      "count": 20
     },
     {
       "region": "Global and cross-regional",
       "count": 11
+    },
+    {
+      "region": "Europe - Eastern neighbours / Russia",
+      "count": 6
     },
     {
       "region": "The Americas",
@@ -2012,10 +2077,6 @@
     },
     {
       "region": "Asia",
-      "count": 5
-    },
-    {
-      "region": "Europe - Eastern neighbours / Russia",
       "count": 5
     },
     {
