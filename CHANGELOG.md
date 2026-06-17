@@ -119,7 +119,8 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+#### Added
+- A "Published →" marker on conference-programme papers (the archived `/essc-2026.html` and the parked ESSC 2027 template, all three locales). When a paper's published version has been reviewed into the EISS Anthology, a quiet marker links from the programme straight to that paper's Anthology page, where the publication card lives. The match is made at load against the Anthology's own `anthology-index.json`, which the EISS site publishes from its paper index, so NetSec consumes the result rather than reconstructing the collision-deduped slug. It is scoped to the conference year and shown only for papers flagged published, so it stays a genuine signal and fills in on its own as EISS reviews more publications, with no NetSec rebuild. A quiet line under the programme grid also points at the Anthology's published-papers view. The marker and line are hand-translated for FR and DE, and the whole thing fails soft: a missing or unreachable index just means no markers, with the programme unaffected.
 
 ## [1.12.0] · 2026-06-17 — A working directory and life after Stockholm
 

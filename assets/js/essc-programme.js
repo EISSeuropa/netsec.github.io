@@ -44,6 +44,9 @@
       readOnIndico: 'Read on Indico →',
       readAbstract: 'Read abstract',
       hideAbstract: 'Hide abstract',
+      published: 'Published →',
+      publishedAria: 'Read the published version in the EISS Anthology (opens in a new tab)',
+      anthologyBrowse: 'Browse published EISS papers in the Anthology →',
       livestream: 'Livestream',
       breakFallback: 'Break',
       livestreamAria: 'This session will be livestreamed',
@@ -75,6 +78,9 @@
       readOnIndico: 'Lire sur Indico →',
       readAbstract: 'Lire le résumé',
       hideAbstract: 'Masquer le résumé',
+      published: 'Publié →',
+      publishedAria: 'Lire la version publiée dans l’Anthologie de l’EISS (ouvre dans un nouvel onglet)',
+      anthologyBrowse: 'Parcourir les articles publiés de l’EISS dans l’Anthologie →',
       livestream: 'Diffusion directe',
       breakFallback: 'Pause',
       livestreamAria: 'Session diffusée en direct',
@@ -106,6 +112,9 @@
       readOnIndico: 'Auf Indico lesen →',
       readAbstract: 'Zusammenfassung lesen',
       hideAbstract: 'Zusammenfassung ausblenden',
+      published: 'Veröffentlicht →',
+      publishedAria: 'Die veröffentlichte Fassung in der EISS-Anthologie lesen (öffnet in neuem Tab)',
+      anthologyBrowse: 'Veröffentlichte EISS-Beiträge in der Anthologie durchsuchen →',
       livestream: 'Livestream',
       breakFallback: 'Pause',
       livestreamAria: 'Diese Sitzung wird per Livestream übertragen',
@@ -257,6 +266,49 @@
     return real[0] + '|' + real[real.length - 1];
   }
 
+  // ── EISS Anthology cross-link (published papers only) ─────────
+  // The EISS Anthology (eiss-europa.com) publishes
+  // data/anthology-index.json — one record per paper
+  // { title, year, slug, url, published }, built from its own
+  // paperIndex.js. We consume the result rather than reconstruct the
+  // slug, which is collision-deduped and truncated on their side. A
+  // paper that matches by title AND is flagged `published` gets a quiet
+  // "Published →" link to its Anthology page, where the publication card
+  // lives. Runtime fetch (the artifact is CORS-open), so markers appear
+  // on their own as EISS reviews more publications, with no NetSec
+  // rebuild. Published-only by design: this page already shows the
+  // abstract, so the link only earns its place when it adds the route to
+  // the published version.
+  const ANTHOLOGY_INDEX_URL = 'https://eiss-europa.com/data/anthology-index.json';
+  const ANTHOLOGY_PUBLISHED_VIEW = 'https://eiss-europa.com/anthology.html?view=papers&published=1';
+
+  // Normalise a paper title to a match key: lowercase, fold accents,
+  // collapse every run of non-alphanumerics to one space, trim. Tolerates
+  // the punctuation / whitespace / accent drift between an Indico title and
+  // the Anthology's (e.g. the double space in a real 2026 title).
+  function titleKey(s) {
+    return (s || '')
+      .toLowerCase()
+      .normalize('NFKD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+
+  function buildAnthologyLookup(records, year) {
+    // Published papers for THIS edition only, keyed by normalised title.
+    // Scoping to the page's conference year stops a title that recurs
+    // across years from matching the wrong edition.
+    const map = new Map();
+    const y = Number(year);
+    for (const r of (Array.isArray(records) ? records : [])) {
+      if (Number(r && r.year) === y && r && r.published && r.url) {
+        const k = titleKey(r.title);
+        if (k && !map.has(k)) map.set(k, r.url);
+      }
+    }
+    return map;
+  }
+
   function buildMemberLookup(bios) {
     // One member can be reachable under several keys: the canonical
     // name on the bios entry plus any optional `name_aliases` (covers
@@ -298,6 +350,17 @@
     if (res.ok) memberLookup = buildMemberLookup(await res.json());
   } catch (err) {
     console.warn('bios.json fetch failed; speaker links disabled:', err);
+  }
+
+  // EISS Anthology published-paper lookup (best-effort, runtime). Absent,
+  // malformed, or a fetch error all mean no "Published" markers render and
+  // the programme is unaffected.
+  let anthologyLookup = new Map();
+  try {
+    const res = await fetch(ANTHOLOGY_INDEX_URL, { cache: 'no-cache' });
+    if (res.ok) anthologyLookup = buildAnthologyLookup(await res.json(), PROG_YEAR);
+  } catch (err) {
+    console.warn('anthology-index.json fetch failed; published markers disabled:', err);
   }
   // Names we couldn't match — surfaced via console.debug after render
   // so near-misses (typos, name-order flips, missing aliases) show up
@@ -440,6 +503,14 @@
     }
     root.appendChild(dayNode);
   });
+
+  // EISS Anthology signpost: one quiet line
+  // under the grid pointing at the Anthology's published-papers view, the
+  // cross-conference record of EISS abstracts and their published versions.
+  // Appended only once a programme has rendered, so a not-yet-published
+  // edition (the parked ESSC27 template) shows nothing until its grid lands.
+  root.appendChild(el('p', { class: 'programme-anthology-note' },
+    el('a', { href: ANTHOLOGY_PUBLISHED_VIEW, target: '_blank', rel: 'noopener' }, t.anthologyBrowse)));
 
   // ── "Now happening" banner (issue #832) ───────────────────────
   // During the conference, surface the session(s) in progress now as a
@@ -587,6 +658,7 @@
       ) : null,
       roomBadge(slot),
       slot.speakers && slot.speakers.length ? renderPeople(slot.speakers, t.speakers) : null,
+      publishedMarker(slot),
       // Same collapsed-toggle treatment as a paper inside a session, so a
       // standalone contribution reads identically (forward-safe: the
       // current programme has no top-level contribution slots).
@@ -694,6 +766,7 @@
             ),
           ),
           renderContribPeople(c),
+          publishedMarker(c),
           c.abstract ? renderAbstract(c) : null,
         );
         list.appendChild(ci);
@@ -742,6 +815,21 @@
     node.appendChild(btn);
     node.appendChild(text);
     return node;
+  }
+
+  // "Published →" marker for a paper whose published version EISS has
+  // reviewed into the Anthology (matched by title against the published,
+  // current-year records). Returns null for everything else, so most
+  // papers show nothing. Links to the Anthology paper page, which carries
+  // the publication card.
+  function publishedMarker(c) {
+    const url = c && c.title ? anthologyLookup.get(titleKey(c.title)) : null;
+    if (!url) return null;
+    return el('a', {
+      class: 'programme-contrib-published',
+      href: url, target: '_blank', rel: 'noopener',
+      title: t.publishedAria, 'aria-label': t.publishedAria,
+    }, t.published);
   }
 
   // A small microphone glyph marking who presents a paper. Drawn as
