@@ -60,16 +60,16 @@
       "due": "2026-07-06"
     },
     "v1.12.0": {
-      "closed": 120,
-      "total": 120,
+      "closed": 122,
+      "total": 122,
       "percent": 100,
       "state": "open",
       "due": "2026-07-30"
     },
     "v1.13.0": {
-      "closed": 4,
+      "closed": 5,
       "total": 17,
-      "percent": 24,
+      "percent": 29,
       "state": "open",
       "due": "2026-08-28"
     },
