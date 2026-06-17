@@ -119,14 +119,6 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-<!-- ===========================================================================
-PREPARED v1.12.0 LEDE + THEMES (DRAFT — not yet shipped)
-
-Held here so the release-day prose is not lost. At cut time, lift this block
-out of the comment, set the title + date on the [X.Y.Z] heading, drop the
-field-guide content back in only if it has been republished (it is deferred to
-v1.13.0, see #998), and run the Index of changes from the bullets below.
-
 > The post-conference release, gathering everything merged since v1.11.0 now that the Summer School and the European Security Studies Conference are over. The directory grows from a listing into a working tool: every member gets a shareable profile page at `/people/<slug>`, can offer to host an STSM visitor or to mentor through the join form, and carries a self-updating list of recent publications drawn from ORCID. An Events page gathers everything the Action runs in one place, and the conference pages settle into a fixed archive. Underneath sit consolidated renderers shared across the three locales and the Management Committee figures syncing themselves from the cost.eu roster. Four themes follow, then a single canonical index at the bottom.
 
 ### A directory you can act on
@@ -144,7 +136,8 @@ With the Summer School and the conference over, the ESSC page becomes a fixed ar
 ### Steadier underneath
 
 The 1,850-line directory script that was copied across the English, French, and German pages is now one shared module, and the member-card popover that the conference programme carried its own copy of became a single shared component. The Management Committee statistics on the About page and press kit rewrite themselves from the cost.eu roster each week (the first run caught Ukraine joining the Action), and Working-Group chips reconcile each member's own answer against the formal record instead of being overwritten wholesale. A blank-directory regression that reached the live site was fixed and the render smoke check now exercises all three locales, dozens of stray research keywords were mapped back under theme filters, and "MC" was spelled out as "Management Committee" across the reader-facing copy.
-=========================================================================== -->
+
+### Index of changes
 
 #### Added
 - An "In numbers" strip on the About page (all three locales), giving a visitor the size of the Action at a glance: Management Committee members across the countries they represent, Working Group members, and the people who have joined the Network so far. The Management Committee and country figures are the same cost.eu-synced literals used lower down the page, and the Working Group and Network figures fill at load from `data/wg.json` and `data/bios.json`, so none of the three drift. It sits above the deliverables timeline, which now carries a "Timeline & Deliverables" heading where it previously ran without a title. The Action's text also points to the four Working Groups, linking through to `/working-groups.html`. Stat labels, the section heading, and the linking sentence are hand-translated for FR and DE.
