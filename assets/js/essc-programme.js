@@ -756,6 +756,21 @@
             : `${slot.contributions.length} ${t.contributions}`,
         ),
       );
+      // Parallel panels share a row height, so expanding one paper list on
+      // its own leaves the sibling panel short with a tall empty gap. Keep
+      // the contribution lists in a parallel row in lockstep: toggling one
+      // opens or closes the others. The d.open !== details.open guard makes
+      // the cascade converge (a peer already in the target state fires no
+      // further toggle), so it is safe despite the toggle event being async,
+      // and no recursion flag is needed. Single (non-parallel) rows match no
+      // `.is-parallel` ancestor, so they are unaffected.
+      details.addEventListener('toggle', function () {
+        const row = details.closest('.programme-row.is-parallel');
+        if (!row) return;
+        row.querySelectorAll('details.programme-contribs').forEach(function (d) {
+          if (d !== details && d.open !== details.open) d.open = details.open;
+        });
+      });
       const list = el('ol', { class: 'programme-contribs-list' });
       for (const c of slot.contributions) {
         const ci = el('li', { class: 'programme-contrib' },
