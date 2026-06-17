@@ -678,6 +678,10 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   margin:48px 0 22px;
 }
 .mc-subhead:first-of-type{margin-top:8px}
+/* "In numbers" on the About page is the first subhead of its container, so it
+   would otherwise inherit the tight 8px first-of-type top margin and crowd the
+   objectives grid above it. Restore a clear gap above the figures. */
+.mc-subhead.mc-subhead--spaced{margin-top:56px}
 .mc-subhead::before,.mc-subhead::after{
   content:'';height:1px;background:var(--line);
   flex:0 0 48px;       /* fixed 48 px each; flex item can't wrap */
