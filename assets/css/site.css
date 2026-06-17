@@ -5395,16 +5395,53 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
     color:#e8c869;
   }
 }
-/* Anthology signpost line under the programme grid: a calm caption-style
-   link to the Anthology's published-papers view. */
-.programme-anthology-note{
-  margin:1.5rem 0 0;
-  font-size:.85rem;
+/* Anthology signpost under the programme grid: its own card, with a heading,
+   a line of context, and a button to the Anthology's published-papers view.
+   Text and button sit side by side on wide viewports, stacked on narrow. */
+.programme-anthology-card{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem 1.5rem;
+  margin:2rem 0 0;
+  padding:1.35rem 1.5rem;
+  border-radius:16px;
+}
+.programme-anthology-card-text{flex:1 1 16rem;min-width:0}
+.programme-anthology-card-title{
+  margin:0 0 .3rem;
+  font-family:'Lexend','Inter',sans-serif;
+  font-size:1.15rem;
+  color:var(--ink);
+}
+.programme-anthology-card-body{
+  margin:0;
+  font-size:.92rem;
+  line-height:1.55;
   color:var(--ink-2);
 }
-.programme-anthology-note a{
-  color:var(--accent-2);
-  text-underline-offset:2px;
+.programme-anthology-cta{
+  display:inline-flex;
+  align-items:center;
+  flex:none;
+  padding:.65rem 1.15rem;
+  background:var(--accent);
+  color:#fff;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:600;
+  font-size:.95rem;
+  line-height:1.3;
+  box-shadow:0 6px 18px rgba(0,51,153,.18);
+  transition:transform .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease);
+}
+.programme-anthology-cta:hover,
+.programme-anthology-cta:focus-visible{
+  background:var(--accent-2);
+  color:#fff;
+  transform:translateY(-1px);
+  box-shadow:0 10px 26px rgba(0,51,153,.24);
 }
 /* When expanded, the abstract grows in place. No transition: the
    text just rewrites. Animating a height auto → auto-with-more
