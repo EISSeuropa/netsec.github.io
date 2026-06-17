@@ -151,6 +151,23 @@ step() {
   echo "── $1"
 }
 
+# Resolve a python3 that actually runs. On some macOS setups the first
+# python3 on PATH is an x86 framework build that aborts with "Bad CPU
+# type in executable" on Apple silicon, so test each candidate before
+# committing to it rather than trusting `command -v`. build.sh follows
+# the same idea.
+PY3=""
+for _cand in python3 /usr/bin/python3 /opt/homebrew/bin/python3 python; do
+  if command -v "$_cand" >/dev/null 2>&1 && "$_cand" -c '' >/dev/null 2>&1; then
+    PY3="$_cand"; break
+  fi
+done
+if [[ -z "$PY3" ]]; then
+  echo "✗ No working python3 found (tried python3, /usr/bin/python3, /opt/homebrew/bin/python3, python)."
+  echo "  Install python3 or fix the broken interpreter on PATH, then re-run."
+  exit 1
+fi
+
 # ────────────────────────────────────────────────────────────────────
 # Pre-flight checks
 # ────────────────────────────────────────────────────────────────────
@@ -314,7 +331,7 @@ fi
 # Rewrite the file via Python for safety (BSD sed makes in-place edits
 # of multi-line patterns painful).
 if [[ "$DRY_RUN" != "--dry-run" ]]; then
-  python3 - "$CHANGELOG" "$VERSION" "$TODAY" "$TITLE" <<'PY'
+  "$PY3" - "$CHANGELOG" "$VERSION" "$TODAY" "$TITLE" <<'PY'
 import re
 import sys
 from pathlib import Path
@@ -413,15 +430,15 @@ fi
 step "Promote public roadmap card (EN / FR / DE)"
 
 if [[ "$DRY_RUN" != "--dry-run" ]]; then
-  if python3 "$REPO_ROOT/scripts/promote-roadmap.py" "$VERSION" "$TODAY"; then
+  if "$PY3" "$REPO_ROOT/scripts/promote-roadmap.py" "$VERSION" "$TODAY"; then
     echo "  ✓ roadmap promotion succeeded."
     # Re-mark the FR and DE roadmap entries fresh in i18n-state.json.
     # promote-roadmap.py edits all three locales together (a mechanical
     # card flip, not a translation change), so the FR/DE versions stay in
     # sync with EN. Without this the next PR sees a false-positive drift on
     # roadmap.fr/de (issue #412).
-    python3 "$REPO_ROOT/scripts/check-i18n-drift.py" --mark-fresh roadmap.html fr
-    python3 "$REPO_ROOT/scripts/check-i18n-drift.py" --mark-fresh roadmap.html de
+    "$PY3" "$REPO_ROOT/scripts/check-i18n-drift.py" --mark-fresh roadmap.html fr
+    "$PY3" "$REPO_ROOT/scripts/check-i18n-drift.py" --mark-fresh roadmap.html de
   else
     rc=$?
     if [[ $rc -eq 2 ]]; then
@@ -473,7 +490,7 @@ step "Publish GitHub Release v$VERSION"
 NOTES_FILE="$(mktemp -t "release-v$VERSION-XXXXXX.md")"
 
 if [[ "$DRY_RUN" != "--dry-run" ]]; then
-  python3 - "$CHANGELOG" "$VERSION" >"$NOTES_FILE" <<'PY'
+  "$PY3" - "$CHANGELOG" "$VERSION" >"$NOTES_FILE" <<'PY'
 import re
 import sys
 
