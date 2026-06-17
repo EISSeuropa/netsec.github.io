@@ -4,8 +4,40 @@
   "channelDescription": "Announcements, calls, and milestones from the COST Action CA24154 (NetSec).",
   "channelLink": "https://netsec-cost.eu/#news",
   "channelLanguage": "en-GB",
-  "lastBuildDate": "2026-05-28T12:00:00+02:00",
+  "lastBuildDate": "2026-06-18T12:00:00+02:00",
   "items": [
+    {
+      "id": "essc-2026-concludes-stockholm",
+      "pubDate": "2026-06-12T18:00:00+02:00",
+      "displayDate": {
+        "en": "12 June 2026",
+        "fr": "12 juin 2026",
+        "de": "12. Juni 2026"
+      },
+      "title": {
+        "en": "ESSC 2026 concludes in Stockholm",
+        "fr": "L'ESSC 2026 se clôture à Stockholm",
+        "de": "ESSC 2026 geht in Stockholm zu Ende"
+      },
+      "body": {
+        "en": "The European Security Studies Conference 2026 came to a close on 12 June at Stockholm University, after two days of panels and roundtables jointly hosted by NetSec, the European Initiative for Security Studies (EISS), and Stockholm University. It was the first edition to run under the ESSC name, following the NetSec Early-Career Scholars Summer School earlier that week. The full programme stays online, now joined by a conference film and a photo gallery from the two days.",
+        "fr": "La Conférence européenne des études de sécurité 2026 s'est clôturée le 12 juin à l'Université de Stockholm, après deux jours de panels et de tables rondes organisés conjointement par NetSec, l'Initiative européenne pour les études de sécurité (EISS) et l'Université de Stockholm. Il s'agissait de la première édition sous le nom d'ESSC, à la suite de l'École d'été NetSec des chercheur·euses en début de carrière plus tôt dans la semaine. Le programme complet reste en ligne, désormais accompagné d'un film de la conférence et d'une galerie photos des deux journées.",
+        "de": "Die Europäische Konferenz für Sicherheitsstudien 2026 ging am 12. Juni an der Universität Stockholm zu Ende, nach zwei Tagen mit Panels und Roundtables, die gemeinsam von NetSec, der Europäischen Initiative für Sicherheitsstudien (EISS) und der Universität Stockholm ausgerichtet wurden. Es war die erste Ausgabe unter dem Namen ESSC, im Anschluss an die NetSec-Summer-School für Nachwuchsforschende früher in derselben Woche. Das vollständige Programm bleibt online, nun ergänzt durch einen Konferenzfilm und eine Fotogalerie der beiden Tage."
+      },
+      "cta": {
+        "href": {
+          "en": "essc-2026.html",
+          "fr": "essc-2026.fr.html",
+          "de": "essc-2026.de.html"
+        },
+        "external": false,
+        "i18n": {
+          "en": "Revisit the conference →",
+          "fr": "Revoir la conférence →",
+          "de": "Konferenz noch einmal ansehen →"
+        }
+      }
+    },
     {
       "id": "grants-applications-now-open",
       "pubDate": "2026-05-15T09:00:00+02:00",

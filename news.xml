@@ -5,9 +5,16 @@
     <link>https://netsec-cost.eu/#news</link>
     <description>Announcements, calls, and milestones from the COST Action CA24154 (NetSec).</description>
     <language>en-GB</language>
-    <lastBuildDate>Thu, 28 May 2026 12:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 18 Jun 2026 12:00:00 +0200</lastBuildDate>
     <generator>scripts/build-news-rss.py</generator>
     <atom:link href="https://netsec-cost.eu/news.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>ESSC 2026 concludes in Stockholm</title>
+      <link>https://netsec-cost.eu/essc-2026.html</link>
+      <description><![CDATA[The European Security Studies Conference 2026 came to a close on 12 June at Stockholm University, after two days of panels and roundtables jointly hosted by NetSec, the European Initiative for Security Studies (EISS), and Stockholm University. It was the first edition to run under the ESSC name, following the NetSec Early-Career Scholars Summer School earlier that week. The full programme stays online, now joined by a conference film and a photo gallery from the two days.]]></description>
+      <pubDate>Fri, 12 Jun 2026 18:00:00 +0200</pubDate>
+      <guid isPermaLink="false">essc-2026-concludes-stockholm</guid>
+    </item>
     <item>
       <title>NetSec Grants: Applications now open</title>
       <link>https://netsec-cost.eu/grants.html</link>
