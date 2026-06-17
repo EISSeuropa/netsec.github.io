@@ -118,6 +118,33 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+<!-- ===========================================================================
+PREPARED v1.12.0 LEDE + THEMES (DRAFT — not yet shipped)
+
+Held here so the release-day prose is not lost. At cut time, lift this block
+out of the comment, set the title + date on the [X.Y.Z] heading, drop the
+field-guide content back in only if it has been republished (it is deferred to
+v1.13.0, see #998), and run the Index of changes from the bullets below.
+
+> The post-conference release, gathering everything merged since v1.11.0 now that the Summer School and the European Security Studies Conference are over. The directory grows from a listing into a working tool: every member gets a shareable profile page at `/people/<slug>`, can offer to host an STSM visitor or to mentor through the join form, and carries a self-updating list of recent publications drawn from ORCID. An Events page gathers everything the Action runs in one place, and the conference pages settle into a fixed archive. Underneath sit consolidated renderers shared across the three locales and the Management Committee figures syncing themselves from the cost.eu roster. Four themes follow, then a single canonical index at the bottom.
+
+### A directory you can act on
+
+Every member now has a permanent, shareable profile page at `/people/<slug>`, server-rendered with their own Open Graph card and `Person` structured data, so a link unfurls as that person and search engines can index it. Two new signals tie the directory to COST money and to the Action's mentoring goal: members can say whether their institution will host a Short-Term Scientific Mission, with the grants page linking straight to the pre-filtered list of hosts, and the mentorship facet grows from a pair of badges into a matching panel that splits offers from requests and scopes itself to the research theme or region in view. Cards also carry a "Recent publications" list drawn from each member's ORCID record, fetched lazily so it costs nothing at load. The directory opens in compact cards by default, three to a row, with the photo-and-bio view one click away.
+
+### A fuller front door
+
+A dedicated Events page now gathers the conference, the training schools, the workshops, and the Management Committee meetings in one place, with a dated archive for past editions, and the Publications page renders from data so the first D6 policy brief in October is a data-entry task. The About page opens with an "In numbers" strip giving the size of the Action at a glance. The FAQ and Glossary now emit `FAQPage` and `DefinedTerm` structured data, so search engines can surface their questions and terms as rich results.
+
+### Life after Stockholm
+
+With the Summer School and the conference over, the ESSC page becomes a fixed archive rendered from a frozen snapshot rather than the live Indico feed, its "Live programme" heading now reading "Full programme" and a hidden template parked ready for next year. During the conference itself the programme carried a "Now happening" banner that named the sessions in progress in Stockholm time and advanced on its own through the day. The Summer School page was redesigned to match the rest of the site, the home Events block now shows only what is still ahead, and the deliverables timeline reads "Delivered" where it once read "Shipped".
+
+### Steadier underneath
+
+The 1,850-line directory script that was copied across the English, French, and German pages is now one shared module, and the member-card popover that the conference programme carried its own copy of became a single shared component. The Management Committee statistics on the About page and press kit rewrite themselves from the cost.eu roster each week (the first run caught Ukraine joining the Action), and Working-Group chips reconcile each member's own answer against the formal record instead of being overwritten wholesale. A blank-directory regression that reached the live site was fixed and the render smoke check now exercises all three locales, dozens of stray research keywords were mapped back under theme filters, and "MC" was spelled out as "Management Committee" across the reader-facing copy.
+=========================================================================== -->
+
 #### Added
 - An "In numbers" strip on the About page (all three locales), giving a visitor the size of the Action at a glance: Management Committee members across the countries they represent, Working Group members, and the people who have joined the Network so far. The Management Committee and country figures are the same cost.eu-synced literals used lower down the page, and the Working Group and Network figures fill at load from `data/wg.json` and `data/bios.json`, so none of the three drift. It sits above the deliverables timeline, which now carries a "Timeline & Deliverables" heading where it previously ran without a title. The Action's text also points to the four Working Groups, linking through to `/working-groups.html`. Stat labels, the section heading, and the linking sentence are hand-translated for FR and DE.
 - A dedicated Events page (`/events.html`, all three locales), reached from the main navigation, that gathers everything the Action runs in one place rather than only the next few entries on the home page. Events still ahead sit at the top, soonest first, and past editions fall into a dated archive below, grouped by year and most recent first, so the European Security Studies Conference, the training schools, the workshops, and the Management Committee meetings all keep a lasting home. A filter row narrows the list by type, every card carries its own calendar link, and the page renders from `data/events.json` through the same card builder the home block uses, so a new event stays a data entry task. The home Events block now ends with a link through to the full list. Hero copy and the type labels are hand-translated for FR and DE. ([#927](https://github.com/EISSeuropa/netsec.github.io/issues/927))
