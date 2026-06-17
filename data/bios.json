@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-16T20:24:23+00:00",
+  "generated_at": "2026-06-17T13:17:17+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-16T20:24:23+00:00"
+    "last_synced": "2026-06-17T13:17:17+00:00"
   },
   "members": [
     {
@@ -442,7 +442,8 @@
       "keywords": [
         "election interference",
         "disinformation",
-        "subversion"
+        "subversion",
+        "cyber statecraft"
       ],
       "email": "arthur.laudrain@sipo.gess.ethz.ch",
       "website": "https://gess.ethz.ch/en/the-department/people/person-detail.apb-laudrain.html",
@@ -455,6 +456,7 @@
       "source": "form",
       "photo_source_sha256": "d6927b276ccffbbb2bc5bccf38502563a079862a500fbde9e79941f4851cae6a",
       "canonical_keywords": [
+        "Cyber statecraft",
         "Disinformation",
         "Election interference",
         "Subversion"
@@ -1574,6 +1576,10 @@
     },
     {
       "keyword": "Cyber defence",
+      "count": 1
+    },
+    {
+      "keyword": "Cyber statecraft",
       "count": 1
     },
     {
