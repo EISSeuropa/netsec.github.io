@@ -46,6 +46,8 @@
       hideAbstract: 'Hide abstract',
       published: 'Published →',
       publishedAria: 'Read the published version in the EISS Anthology (opens in a new tab)',
+      prize: 'ERC Best Paper Prize',
+      prizeAria: 'Winner of the Early-Career Researcher Best Paper Prize, an EISS and Journal of Strategic Studies initiative',
       anthologyBrowse: 'Browse published EISS papers in the Anthology →',
       livestream: 'Livestream',
       breakFallback: 'Break',
@@ -80,6 +82,8 @@
       hideAbstract: 'Masquer le résumé',
       published: 'Publié →',
       publishedAria: 'Lire la version publiée dans l’Anthologie de l’EISS (ouvre dans un nouvel onglet)',
+      prize: 'Prix du meilleur article ERC',
+      prizeAria: 'Lauréat du Prix du meilleur article des chercheur·euses en début de carrière, une initiative de l’EISS et du Journal of Strategic Studies',
       anthologyBrowse: 'Parcourir les articles publiés de l’EISS dans l’Anthologie →',
       livestream: 'Diffusion directe',
       breakFallback: 'Pause',
@@ -114,6 +118,8 @@
       hideAbstract: 'Zusammenfassung ausblenden',
       published: 'Veröffentlicht →',
       publishedAria: 'Die veröffentlichte Fassung in der EISS-Anthologie lesen (öffnet in neuem Tab)',
+      prize: 'ERC-Best-Paper-Preis',
+      prizeAria: 'Ausgezeichnet mit dem Best-Paper-Preis für Nachwuchsforschende, einer Initiative von EISS und Journal of Strategic Studies',
       anthologyBrowse: 'Veröffentlichte EISS-Beiträge in der Anthologie durchsuchen →',
       livestream: 'Livestream',
       breakFallback: 'Pause',
@@ -658,6 +664,7 @@
       ) : null,
       roomBadge(slot),
       slot.speakers && slot.speakers.length ? renderPeople(slot.speakers, t.speakers) : null,
+      prizeBadge(slot),
       publishedMarker(slot),
       // Same collapsed-toggle treatment as a paper inside a session, so a
       // standalone contribution reads identically (forward-safe: the
@@ -781,6 +788,7 @@
             ),
           ),
           renderContribPeople(c),
+          prizeBadge(c),
           publishedMarker(c),
           c.abstract ? renderAbstract(c) : null,
         );
@@ -845,6 +853,24 @@
       href: url, target: '_blank', rel: 'noopener',
       title: t.publishedAria, 'aria-label': t.publishedAria,
     }, t.published);
+  }
+
+  // "ERC Best Paper Prize" badge for a paper flagged `prize` in the data
+  // (the EISS × Journal of Strategic Studies Early-Career Researcher Best
+  // Paper Prize). A quiet gold pill with a trophy glyph; null otherwise, so
+  // it shows only on the winners. The full prize name lives in the title /
+  // aria-label.
+  function prizeBadge(c) {
+    if (!c || !c.prize) return null;
+    const badge = el('span', {
+      class: 'programme-contrib-prize',
+      title: t.prizeAria, 'aria-label': t.prizeAria,
+    });
+    const ic = el('span', { class: 'programme-prize-cup', 'aria-hidden': 'true' });
+    ic.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18 2H6v2H2v3a5 5 0 0 0 4.9 5 5 5 0 0 0 4.1 2.9V18H8v2h8v-2h-3v-3.1A5 5 0 0 0 17.1 12 5 5 0 0 0 22 7V4h-4V2zM4 7V6h2v3.7A3 3 0 0 1 4 7zm16 0a3 3 0 0 1-2 2.7V6h2v1z"/></svg>';
+    badge.appendChild(ic);
+    badge.appendChild(el('span', { class: 'lbl' }, t.prize));
+    return badge;
   }
 
   // A small microphone glyph marking who presents a paper. Drawn as
