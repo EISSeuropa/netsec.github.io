@@ -4,7 +4,7 @@
   "channelDescription": "Announcements, calls, and milestones from the COST Action CA24154 (NetSec).",
   "channelLink": "https://netsec-cost.eu/#news",
   "channelLanguage": "en-GB",
-  "lastBuildDate": "2026-06-18T12:00:00+02:00",
+  "lastBuildDate": "2026-06-18T16:00:00+02:00",
   "items": [
     {
       "id": "essc-2026-concludes-stockholm",
@@ -79,9 +79,9 @@
         "de": "Bewerbungsphase beendet"
       },
       "title": {
-        "en": "NetSec Summer School: applications closed",
-        "fr": "École d'été NetSec : candidatures closes",
-        "de": "NetSec-Summer-School: Bewerbungsphase beendet"
+        "en": "NetSec Training School: applications closed",
+        "fr": "École de formation NetSec : candidatures closes",
+        "de": "NetSec-Ausbildungsschule: Bewerbungsphase beendet"
       },
       "body": {
         "en": "The call for the 2026 NetSec Early-Career Scholars Summer School in Stockholm (9–11 June 2026) closed on 1 March 2026. Selected participants will be contacted by the scientific coordinators in due course. A new call for the next training school will be announced when the 2027 cohort opens.",
@@ -94,7 +94,7 @@
         "i18n": {
           "en": "View the school",
           "fr": "Voir l'école",
-          "de": "Zur Summer School"
+          "de": "Zur Ausbildungsschule"
         }
       }
     },

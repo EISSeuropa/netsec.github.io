@@ -5,7 +5,7 @@
     <link>https://netsec-cost.eu/#news</link>
     <description>Announcements, calls, and milestones from the COST Action CA24154 (NetSec).</description>
     <language>en-GB</language>
-    <lastBuildDate>Thu, 18 Jun 2026 12:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 18 Jun 2026 16:00:00 +0200</lastBuildDate>
     <generator>scripts/build-news-rss.py</generator>
     <atom:link href="https://netsec-cost.eu/news.xml" rel="self" type="application/rss+xml"/>
     <item>
@@ -23,7 +23,7 @@
       <guid isPermaLink="false">grants-applications-now-open</guid>
     </item>
     <item>
-      <title>NetSec Summer School: applications closed</title>
+      <title>NetSec Training School: applications closed</title>
       <link>https://eiss-europa.com/NetSecSchool.html</link>
       <description><![CDATA[The call for the 2026 NetSec Early-Career Scholars Summer School in Stockholm (9–11 June 2026) closed on 1 March 2026. Selected participants will be contacted by the scientific coordinators in due course. A new call for the next training school will be announced when the 2027 cohort opens.]]></description>
       <pubDate>Sun, 01 Mar 2026 18:00:00 +0100</pubDate>
