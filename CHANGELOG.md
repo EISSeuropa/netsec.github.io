@@ -119,6 +119,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.12.0] · 2026-06-17 — A working directory and life after Stockholm
+
 > The post-conference release, gathering everything merged since v1.11.0 now that the Summer School and the European Security Studies Conference are over. The directory grows from a listing into a working tool: every member gets a shareable profile page at `/people/<slug>`, can offer to host an STSM visitor or to mentor through the join form, and carries a self-updating list of recent publications drawn from ORCID. An Events page gathers everything the Action runs in one place, and the conference pages settle into a fixed archive. Underneath sit consolidated renderers shared across the three locales and the Management Committee figures syncing themselves from the cost.eu roster. Four themes follow, then a single canonical index at the bottom.
 
 ### A directory you can act on
@@ -944,7 +948,8 @@ Open Graph, Twitter Card, JSON-LD (Organization + WebSite + WebPage), canonical 
 - Members' Wiki seeded with glossary, FAQ, onboarding, meeting-notes convention, decisions log.
 - Dual licensing — MIT for code, CC BY 4.0 for content + docs.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.11.0...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.12.0...HEAD
+[1.12.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.11.0...v1.12.0
 [1.11.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.8.1...v1.9.0
