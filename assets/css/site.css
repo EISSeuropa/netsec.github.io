@@ -5332,6 +5332,41 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   outline-offset:2px;
   border-radius:3px;
 }
+/* "Published →" marker: a paper whose published version EISS has reviewed
+   into the Anthology. A quiet outlined pill, set apart from the
+   abstract toggle, sitting between the byline and the abstract. Only the
+   minority of papers carry it, so it reads as a genuine signal. */
+.programme-contrib-published{
+  display:inline-block;
+  margin:.15rem 0 0;
+  padding:.05rem .45rem;
+  border:1px solid color-mix(in srgb, var(--accent-2) 45%, transparent);
+  border-radius:999px;
+  font-size:.74rem;
+  font-weight:600;
+  line-height:1.6;
+  color:var(--accent-2);
+  text-decoration:none;
+  white-space:nowrap;
+}
+.programme-contrib-published:hover{
+  background:color-mix(in srgb, var(--accent-2) 12%, transparent);
+}
+.programme-contrib-published:focus-visible{
+  outline:2px solid var(--accent-2);
+  outline-offset:2px;
+}
+/* Anthology signpost line under the programme grid: a calm caption-style
+   link to the Anthology's published-papers view. */
+.programme-anthology-note{
+  margin:1.5rem 0 0;
+  font-size:.85rem;
+  color:var(--ink-2);
+}
+.programme-anthology-note a{
+  color:var(--accent-2);
+  text-underline-offset:2px;
+}
 /* When expanded, the abstract grows in place. No transition: the
    text just rewrites. Animating a height auto → auto-with-more
    would either jitter or fight prefers-reduced-motion. Visitors who
