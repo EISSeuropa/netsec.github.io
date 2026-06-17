@@ -48,7 +48,9 @@
       publishedAria: 'Read the published version in the EISS Anthology (opens in a new tab)',
       prize: 'ERC Best Paper Prize',
       prizeAria: 'Winner of the Early-Career Researcher Best Paper Prize, an EISS and Journal of Strategic Studies initiative',
-      anthologyBrowse: 'Browse published EISS papers in the Anthology →',
+      anthologyTitle: 'Published in the EISS Anthology',
+      anthologyBody: 'Papers from this conference and past EISS events, alongside their published versions.',
+      anthologyBrowse: 'Browse published papers →',
       livestream: 'Livestream',
       breakFallback: 'Break',
       livestreamAria: 'This session will be livestreamed',
@@ -84,7 +86,9 @@
       publishedAria: 'Lire la version publiée dans l’Anthologie de l’EISS (ouvre dans un nouvel onglet)',
       prize: 'Prix du meilleur article ERC',
       prizeAria: 'Lauréat du Prix du meilleur article des chercheur·euses en début de carrière, une initiative de l’EISS et du Journal of Strategic Studies',
-      anthologyBrowse: 'Parcourir les articles publiés de l’EISS dans l’Anthologie →',
+      anthologyTitle: 'Publié dans l’Anthologie de l’EISS',
+      anthologyBody: 'Les articles de cette conférence et des éditions passées de l’EISS, avec leurs versions publiées.',
+      anthologyBrowse: 'Parcourir les articles publiés →',
       livestream: 'Diffusion directe',
       breakFallback: 'Pause',
       livestreamAria: 'Session diffusée en direct',
@@ -120,7 +124,9 @@
       publishedAria: 'Die veröffentlichte Fassung in der EISS-Anthologie lesen (öffnet in neuem Tab)',
       prize: 'ERC-Best-Paper-Preis',
       prizeAria: 'Ausgezeichnet mit dem Best-Paper-Preis für Nachwuchsforschende, einer Initiative von EISS und Journal of Strategic Studies',
-      anthologyBrowse: 'Veröffentlichte EISS-Beiträge in der Anthologie durchsuchen →',
+      anthologyTitle: 'Veröffentlicht in der EISS-Anthologie',
+      anthologyBody: 'Beiträge dieser Konferenz und früherer EISS-Veranstaltungen samt ihrer veröffentlichten Fassungen.',
+      anthologyBrowse: 'Veröffentlichte Beiträge durchsuchen →',
       livestream: 'Livestream',
       breakFallback: 'Pause',
       livestreamAria: 'Diese Sitzung wird per Livestream übertragen',
@@ -510,13 +516,24 @@
     root.appendChild(dayNode);
   });
 
-  // EISS Anthology signpost: one quiet line
-  // under the grid pointing at the Anthology's published-papers view, the
-  // cross-conference record of EISS abstracts and their published versions.
-  // Appended only once a programme has rendered, so a not-yet-published
-  // edition (the parked ESSC27 template) shows nothing until its grid lands.
-  root.appendChild(el('p', { class: 'programme-anthology-note' },
-    el('a', { href: ANTHOLOGY_PUBLISHED_VIEW, target: '_blank', rel: 'noopener' }, t.anthologyBrowse)));
+  // EISS Anthology signpost: a card under the grid pointing at the
+  // Anthology's published-papers view, the cross-conference record of EISS
+  // abstracts and their published versions. Appended only once a programme
+  // has rendered, so a not-yet-published edition (the parked ESSC27
+  // template) shows nothing until its grid lands.
+  root.appendChild(
+    el('aside', { class: 'programme-anthology-card glass' },
+      el('div', { class: 'programme-anthology-card-text' },
+        el('h3', { class: 'programme-anthology-card-title' }, t.anthologyTitle),
+        el('p', { class: 'programme-anthology-card-body' }, t.anthologyBody),
+      ),
+      el('a', {
+        class: 'programme-anthology-cta',
+        href: ANTHOLOGY_PUBLISHED_VIEW,
+        target: '_blank',
+        rel: 'noopener',
+      }, t.anthologyBrowse),
+    ));
 
   // ── "Now happening" banner (issue #832) ───────────────────────
   // During the conference, surface the session(s) in progress now as a
