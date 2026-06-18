@@ -6060,3 +6060,54 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .essc-photos{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:.7rem; }
 .essc-photos-item{ margin:0; }
 .essc-photos-img{ width:100%; height:240px; object-fit:cover; border-radius:12px; display:block; }
+
+/* ============================================================
+   Slide-templates gallery (/slides.html)
+   A responsive grid of glass cards. Each card holds the real
+   1920×1080 conference-deck markup, transform-scaled to a crisp
+   16:9 preview, plus a "Save as PDF" control. Scaling + the
+   single-slide print clone are wired by assets/js/slides-gallery.js.
+   The ambience, .glass, dark-mode tokens and reduced-motion
+   handling are all inherited from the shared rules above.
+   ============================================================ */
+.slides-page{ padding:96px 0 80px; }
+.slides-page h1{ font-size:clamp(2rem,4vw,3rem); letter-spacing:-.02em; line-height:1.1; margin:0 0 .5rem; }
+.slides-page .lede{ max-width:64ch; font-size:1.1rem; color:var(--ink-2); line-height:1.6; margin:0 0 2rem; }
+
+.slides-toolbar{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:24px; padding:26px 30px; margin:0 0 22px; }
+.slides-toolbar-text{ max-width:48ch; }
+.slides-toolbar-text h2{ font-family:'Lexend',sans-serif; font-size:1.2rem; letter-spacing:-.01em; margin:0 0 .4rem; }
+.slides-toolbar-text p{ margin:0; color:var(--muted); font-size:.95rem; line-height:1.55; }
+.slides-toolbar-action{ display:flex; flex-direction:column; align-items:flex-start; gap:8px; }
+.slides-meta{ font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:.78rem; letter-spacing:.04em; color:var(--muted); }
+.slides-help{ max-width:70ch; color:var(--ink-2); line-height:1.6; margin:0 0 2.5rem; }
+.slides-note{ max-width:72ch; color:var(--muted); font-size:.9rem; line-height:1.6; margin:2.5rem 0 0; }
+
+.slide-gallery{ display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:28px; }
+.slide-card{ padding:0; overflow:hidden; display:flex; flex-direction:column; }
+.slide-stage{ position:relative; width:100%; aspect-ratio:16 / 9; overflow:hidden; background:#dce6f5; border-bottom:1px solid var(--line); }
+.slide-stage .slide{ transform-origin:top left; transform:scale(var(--scale,.22)); }
+.dark .slide-stage{ background:#16203a; }
+.slide-meta{ padding:20px 22px 22px; display:flex; flex-direction:column; gap:8px; }
+.slide-meta h2{ font-family:'Lexend',sans-serif; font-size:1.12rem; letter-spacing:-.01em; margin:0; }
+.slide-meta p{ margin:0 0 6px; color:var(--muted); font-size:.92rem; line-height:1.5; }
+.slide-save{ align-self:flex-start; }
+
+/* Single-slide PDF export. slides-gallery.js clones the chosen slide into
+   #slide-print-stage and adds .is-printing-slide to <body>; the print sheet
+   below hides everything else and emits exactly one 1920×1080 page. */
+#slide-print-stage{ display:none; }
+@media print{
+  body.is-printing-slide{ margin:0; padding:0; background:#fff; }
+  body.is-printing-slide > *{ display:none !important; }
+  body.is-printing-slide #slide-print-stage{ display:block !important; position:static; }
+  body.is-printing-slide #slide-print-stage .slide{
+    position:relative !important; top:auto !important; left:auto !important;
+    transform:none !important; margin:0;
+  }
+  body.is-printing-slide #slide-print-stage,
+  body.is-printing-slide #slide-print-stage *{
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  @page{ size:1920px 1080px landscape; margin:0; }
+}
