@@ -43,7 +43,7 @@
   }
 
   document.querySelectorAll('ol.rm-timeline').forEach((ol) => {
-    const shipped = ol.querySelectorAll(':scope > .rm-entry.shipped');
+    const shipped = ol.querySelectorAll(":scope > .rm-entry.shipped:not(.rm-milestone)");
     // Keep the most recent shipped card visible and collapse the
     // earlier ones. With one shipped card (or none) there is nothing to
     // collapse, so no toggle is injected.
