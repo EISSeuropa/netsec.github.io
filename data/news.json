@@ -27,15 +27,15 @@
       },
       "cta": {
         "href": {
-          "en": "essc-2026.html",
-          "fr": "essc-2026.fr.html",
-          "de": "essc-2026.de.html"
+          "en": "https://eiss-europa.com/prizes.html",
+          "fr": "https://eiss-europa.com/prizes.html",
+          "de": "https://eiss-europa.com/prizes.html"
         },
-        "external": false,
+        "external": true,
         "i18n": {
-          "en": "See the awarded papers →",
-          "fr": "Voir les articles primés →",
-          "de": "Die prämierten Beiträge ansehen →"
+          "en": "See the awarded papers",
+          "fr": "Voir les articles primés",
+          "de": "Die prämierten Beiträge ansehen"
         }
       }
     },
