@@ -1,0 +1,17 @@
+{
+  "_documentation": "Directory Early-Access announcement (scripts/social-post.py --thread). A single Bluesky post with a clickable link card (app.bsky.embed.external) for /people.html: title + description + the directory OG card as the thumbnail. The URL is NOT in the post text because the card carries it. Dedup key recorded in data/social-posted.json. Compose/verify with --dry-run; publish behind the social environment gate.",
+  "key": "thread::directory-early-access",
+  "channel": "bluesky",
+  "langs": ["en"],
+  "posts": [
+    {
+      "text": "👥 Meet the network.\n\nThe NetSec member directory is now in Early Access: researchers, policy-makers, and practitioners across European security, filterable by working group, research theme, and country.\n\nWorking in the field? Add your bio.",
+      "card": {
+        "uri": "https://netsec-cost.eu/people.html",
+        "title": "The NetSec member directory",
+        "description": "An open, searchable directory of the network. Find a mentor, offer to host an STSM, and filter by working group, research theme, or country.",
+        "thumb": "assets/images/og-image-people.png"
+      }
+    }
+  ]
+}

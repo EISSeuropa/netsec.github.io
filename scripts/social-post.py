@@ -182,6 +182,7 @@ class ThreadPost:
     text: str
     image: Path | None = None
     image_alt: str = ""
+    card: dict | None = None  # external link card: {uri, title, description, thumb: Path}
 
 
 @dataclass
@@ -198,10 +199,16 @@ def read_thread(path: Path) -> Thread:
     posts = []
     for p in data.get("posts", []):
         img = p.get("image")
+        card = p.get("card")
+        if card:
+            card = dict(card)
+            thumb = card.get("thumb")
+            card["thumb"] = (ROOT / thumb) if thumb else None
         posts.append(ThreadPost(
             text=p["text"],
             image=(ROOT / img) if img else None,
             image_alt=p.get("imageAlt", ""),
+            card=card,
         ))
     if not posts:
         raise SystemExit(f"thread {path} has no posts")
@@ -421,6 +428,18 @@ class BlueskyChannel(Channel):
             img["aspectRatio"] = {"width": size[0], "height": size[1]}
         return {"$type": "app.bsky.embed.images", "images": [img]}
 
+    def _external_embed(self, auth: dict, card: dict) -> dict:
+        """A clickable link-preview card (app.bsky.embed.external)."""
+        external = {
+            "uri": card["uri"],
+            "title": card.get("title", ""),
+            "description": card.get("description", ""),
+        }
+        thumb = card.get("thumb")
+        if thumb and Path(thumb).exists():
+            external["thumb"] = self._upload(auth, Path(thumb))
+        return {"$type": "app.bsky.embed.external", "external": external}
+
     def _rich_facets(self, text: str) -> list:
         """Link + mention facets for arbitrary text (resolving each handle)."""
         facets = []
@@ -472,7 +491,9 @@ class BlueskyChannel(Channel):
             facets = self._rich_facets(tp.text)
             if facets:
                 record["facets"] = facets
-            if tp.image and tp.image.exists():
+            if tp.card:
+                record["embed"] = self._external_embed(auth, tp.card)
+            elif tp.image and tp.image.exists():
                 record["embed"] = self._image_embed(auth, tp.image, tp.image_alt)
             if parent:
                 record["reply"] = {"root": root, "parent": parent}
@@ -531,6 +552,14 @@ def run_thread(path: Path, live: bool, ledger: dict) -> int:
             print(f"── post {i}/{len(thread.posts)}  [{g}/{BLUESKY_LIMIT} graphemes · {flag}] ──")
             for line in tp.text.splitlines():
                 print(f"    {line}")
+            if tp.card:
+                thumb = tp.card.get("thumb")
+                tmiss = "" if (thumb and Path(thumb).exists()) else "  (thumb MISSING!)"
+                print(f"    [link card → {tp.card['uri']}{tmiss}]")
+                print(f"      title: {tp.card.get('title', '')}")
+                print(f"      desc:  {tp.card.get('description', '')}")
+                if thumb:
+                    print(f"      thumb: {Path(thumb).relative_to(ROOT)}")
             if tp.image:
                 ok = "" if tp.image.exists() else "  (MISSING!)"
                 print(f"    [image: {tp.image.relative_to(ROOT)}{ok} | alt: {tp.image_alt}]")
