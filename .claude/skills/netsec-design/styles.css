@@ -1,9 +1,0 @@
-/* NetSec design system — global entry point.
-   Consumers link THIS file. It is a manifest of @imports only;
-   never add rules here. Everything reachable from here ships to
-   consumers (tokens + @font-face webfonts). */
-@import "tokens/fonts.css";
-@import "tokens/colors.css";
-@import "tokens/typography.css";
-@import "tokens/spacing.css";
-@import "tokens/effects.css";
