@@ -160,6 +160,26 @@ Environment secrets → Add secret**, and add each of:
 | `LINKEDIN_ACCESS_TOKEN` | step B.4 |
 | `LINKEDIN_REFRESH_TOKEN` | step B.4 |
 
+### E. (Optional) the `social-auto` environment for the auto spotlight
+
+The **weekly member spotlight posts itself**, with no approval — it is
+auto-generated, low-risk content. The rotation workflow (`spotlight-rotate.yml`)
+runs in a second environment, **`social-auto`**, which holds the same Bluesky
+credentials but has **no required reviewer**, so the post goes straight out.
+
+To enable it: **Settings → Environments → New environment → `social-auto`**,
+leave **Required reviewers unchecked** (optionally restrict it to the `main`
+branch), and add the two Bluesky environment secrets there as well:
+
+| Secret | From |
+| --- | --- |
+| `BSKY_HANDLE` | step A — the bare handle |
+| `BSKY_APP_PASSWORD` | step A |
+
+If you skip this, the rotation still runs and the home-page spotlight still
+rotates; the post step simply logs a warning and does nothing (no secrets). News
+and curated threads are unaffected — they stay on the gated `social` environment.
+
 Why environment secrets and not repository secrets: an environment secret is
 only released to a job that targets `environment: social`, and only **after**
 the required-reviewer approval passes. So the posting credentials are

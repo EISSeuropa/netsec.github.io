@@ -37,6 +37,11 @@ jobs:
   rotate:
     name: Rotate the weekly member spotlight
     runs-on: ubuntu-latest
+    # The `social-auto` environment carries the Bluesky credentials WITHOUT a
+    # required reviewer, so the weekly spotlight posts itself. News and curated
+    # threads stay on the gated `social` environment (social-bluesky.yml); only
+    # this low-risk, auto-generated post is ungated.
+    environment: social-auto
     steps:
       - name: Check out repository
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v4 (sha-pinned)
@@ -70,6 +75,22 @@ jobs:
             echo "_Workflow: **Rotate member spotlight**, run_id \`${{ github.run_id }}\`, trigger \`${{ github.event_name }}\`._"
           } > /tmp/spotlight-pr-body.md
 
+      - name: Post the spotlight to Bluesky (ungated, idempotent)
+        # Posts the current week's spotlight. Idempotent: the dedup key carries
+        # the ISO week, so a re-run (or a no-rotation week) posts nothing. Kept
+        # non-blocking so a Bluesky hiccup never holds up the home-page rotation;
+        # if it fails, the ledger stays unchanged and the next run retries.
+        continue-on-error: true
+        env:
+          BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
+          BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+        run: |
+          if [ -z "$BSKY_HANDLE" ] || [ -z "$BSKY_APP_PASSWORD" ]; then
+            echo "::warning::Bluesky secrets not set on the social-auto environment; skipping the spotlight post."
+            exit 0
+          fi
+          python3 scripts/social-post.py --live --channel bluesky --kind spotlight
+
       - name: Compose PR title
         id: pr-title
         run: |
@@ -89,7 +110,9 @@ jobs:
           branch: spotlight/auto
           base: main
           delete-branch: true
-          add-paths: data/spotlight.json
+          add-paths: |
+            data/spotlight.json
+            data/social-posted.json
           title: ${{ steps.pr-title.outputs.title }}
           commit-message: |
             ${{ steps.pr-title.outputs.title }}
