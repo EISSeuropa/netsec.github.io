@@ -1299,6 +1299,68 @@ sequenceDiagram
     <div class="diagram-caption">Figure 8 &middot; Roadmap autostamp. Added v1.7.0. The script never edits CHANGELOG.md or the planned / in-progress / shipped cards on the public <code>roadmap.html</code> directly: it only refreshes the markdown autostamp block read by Action evaluators.</div>
   </div>
 
+  <h2>Data flow: news to social media</h2>
+  <p>News on the site (and the weekly member spotlight) can be reposted to Bluesky, with a human approval step before anything goes public. The pipeline is a <em>consumer</em> of surfaces that are already published, so it never invents content: it reposts the RSS feed and the rotated spotlight. Two posting paths run side by side, with different risk profiles.</p>
+  <p>The <strong>news / curated-thread path</strong> is approval-gated: a job pauses inside the <code>social</code> environment until a required reviewer reads the exact post and approves it. A news item can opt out, or hand itself to a hand-written multi-post thread, through a <code>social</code> field in <code>data/news.json</code>. The <strong>weekly spotlight path</strong> is treated as low-risk and posts ungated from the rotation workflow inside a separate <code>social-auto</code> environment. Both paths share one dedup ledger (<code>data/social-posted.json</code>), so nothing is ever posted twice.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+    participant Ed as Editor / news label
+    participant N as news.xml + data/news.json
+    participant SB as social-bluesky.yml
+    participant A as Reviewer
+    participant SR as spotlight-rotate.yml<br/>(Mon 06:00)
+    participant L as data/social-posted.json
+    participant B as Bluesky
+
+    Note over Ed,A: News + curated threads (gated)
+    Ed->>N: Add item (honours the `social` field)
+    N->>SB: Fire on news.xml change
+    SB->>SB: preview (dry-run + count)
+    alt Something pending
+        SB->>A: Pause at the `social` gate
+        A->>B: Approve, then post
+        B->>L: Record keys via auto-merge PR
+    else Nothing new
+        SB-->>SB: Skip the publish job
+    end
+    Note over SR,B: Weekly spotlight (ungated, low risk)
+    SR->>B: Post the week's member (social-auto)
+    SR->>L: Record the ISO-week key
+    </div>
+    <div class="diagram-caption">Figure 13 &middot; Social pipeline. Added v1.12.0. The <code>social</code> gate protects both the action (posting) and the access: the Bluesky credentials are environment secrets, released only after a reviewer approves. The dedup key is the news item id (its <code>&lt;guid&gt;</code>), not the link, so two items pointing at the same page never collide.</div>
+  </div>
+
+  <h2>Data flow: per-member share cards</h2>
+  <p>Every directory member has a personal Open Graph image at <code>assets/og/people/&lt;slug&gt;.png</code>, so sharing their profile unfurls as <em>that person</em> rather than the generic site card. These are never hand-drawn: member data flows in from the weekly bios sync, and <code>scripts/build-og-cards.py</code> derives and commits the cards.</p>
+  <p>A card is keyed by a hash of exactly the fields it shows (name, role, affiliation, country and flag, headshot path plus the photo's SHA-256, working-group pills, mentorship, STSM hosting). The builder re-renders only the members whose hash changed or whose PNG is missing, recorded in <code>_manifest.json</code>, so the weekly auto-PR stays churn-free instead of rewriting dozens of binaries. Editing research keywords alone does not re-render a card, because keywords are not on it.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+    participant F as Google Form
+    participant Bi as data/bios.json
+    participant Sy as sync-bios.yml<br/>(weekly)
+    participant OG as build-og-cards.py
+    participant Mf as _manifest.json
+    participant Png as assets/og/people/&lt;slug&gt;.png
+    participant Pp as build-profile-pages.py
+
+    F->>Bi: New / edited member (weekly sync)
+    Sy->>OG: Run after the bios write
+    OG->>Mf: Compare each member's input hash
+    alt Hash changed or PNG missing
+        OG->>Png: Re-render the card (headless Chrome / CDP)
+        OG->>Mf: Update the stored hash
+    else Unchanged
+        OG-->>OG: Skip (churn-free)
+    end
+    Sy->>Pp: Rebuild profiles → og:image points at the card
+    </div>
+    <div class="diagram-caption">Figure 14 &middot; Per-member OG cards. Added v1.12.0. Cards render over the Chrome DevTools Protocol with an exact 1200&times;630 clip, not the <code>--screenshot</code> CLI flag, which on macOS subtracts the window chrome and clips the footer. A <code>--check</code> gate in CI fails any PR whose data changed without its card, so a card can never drift behind the data.</div>
+  </div>
+
   <h2>The ESSC live programme in practice</h2>
   <div class="snapshot cropped">
     <div class="clip"><img src="snap-essc-2026.png" alt="The ESSC 2026 live programme page showing day chips, parallel session cards, and member-aware speaker links."></div>
