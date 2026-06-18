@@ -6,7 +6,7 @@
       "number": 1,
       "name": "Building the Network",
       "colour": "wg-1",
-      "memberCount": 78,
+      "memberCount": 79,
       "lead": {
         "slug": "moritz-weiss",
         "name": "Dr Moritz Weiss"
@@ -147,7 +147,8 @@
         },
         {
           "name": "Dr Julia Carver",
-          "country": "United Kingdom"
+          "country": "United Kingdom",
+          "slug": "julia-carver"
         },
         {
           "name": "Dr Keara Barrett",
@@ -272,6 +273,11 @@
           "name": "Dr Sarka Kolmasova",
           "country": "Czechia",
           "slug": "sarka-kolmasova"
+        },
+        {
+          "name": "Mr Saurav Narain",
+          "country": "Netherlands",
+          "slug": "saurav-narain"
         },
         {
           "name": "Dr Seyithan Ahmet Ateş",
@@ -458,7 +464,8 @@
         },
         {
           "name": "Dr Julia Carver",
-          "country": "United Kingdom"
+          "country": "United Kingdom",
+          "slug": "julia-carver"
         },
         {
           "name": "Dr Kalina Lubas",
@@ -965,7 +972,7 @@
       "number": 4,
       "name": "Inclusion, Representativeness & Ethics",
       "colour": "wg-4",
-      "memberCount": 44,
+      "memberCount": 45,
       "lead": {
         "slug": "revecca-pedi",
         "name": "Dr Revecca Pedi"
@@ -1050,7 +1057,8 @@
         },
         {
           "name": "Dr Julia Carver",
-          "country": "United Kingdom"
+          "country": "United Kingdom",
+          "slug": "julia-carver"
         },
         {
           "name": "Dr Keara Barrett",
@@ -1107,6 +1115,11 @@
         {
           "name": "Dr Pinar Caglayan",
           "country": "Türkiye"
+        },
+        {
+          "name": "Mr Saurav Narain",
+          "country": "Netherlands",
+          "slug": "saurav-narain"
         },
         {
           "name": "Dr Senada Šelo Šabić",

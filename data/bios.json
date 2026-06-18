@@ -789,7 +789,10 @@
       "affiliation": "Leiden University",
       "position": "PhD Candidate",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        4
+      ],
       "mentorship": [
         "mentee"
       ],
