@@ -4,8 +4,14 @@ Generate per-member Open Graph card images for the profile pages (#1023).
 
 Each member's /people/<slug> page should unfurl on social media as that
 person, not the generic site card. This renders a 1200x630 PNG per member
-(name, position, affiliation, country flag, NetSec branding) by screenshotting
-an HTML template with headless Chrome, the same technique as docs/pdf/build.sh.
+(rounded headshot, name, role, working-group / mentorship / STSM pills,
+country flag, NetSec branding) by screenshotting an HTML template with headless
+Chrome, the same technique as docs/pdf/build.sh.
+
+A member with no committed headshot falls back to an initials tile, so every
+card renders. The pills mirror the language of the live profile pages
+(scripts/build-profile-pages.py): WG1..WG4 with a lead / co-lead suffix,
+Mentor / Mentee, and an STSM-hosting badge.
 
   - Cards are written to assets/og/people/<slug>.png (committed; see #119 for
     the eventual move to deploy-time build).
@@ -35,6 +41,7 @@ import html as html_mod
 import http.server
 import json
 import os
+import re
 import shutil
 import socket
 import subprocess
@@ -74,21 +81,34 @@ CARD_HTML = """<!DOCTYPE html>
      gradients: keeps the colour count low so the PNG stays small. */
   .accent {{ position:absolute; left:0; top:0; bottom:0; width:14px;
     background:#003399; }}
-  .frame {{ position:absolute; inset:0; padding:64px 84px 76px; display:flex; flex-direction:column; gap:18px; }}
+  .frame {{ position:absolute; inset:0; padding:52px 78px 56px; display:flex; flex-direction:column; }}
   .brand {{ display:flex; align-items:center; gap:18px; }}
-  .brand img {{ height:46px; }}
-  .brand .ca {{ font-size:22px; letter-spacing:.04em; color:#aeb7d6; }}
-  .body {{ flex:1; display:flex; flex-direction:column; justify-content:center; }}
-  .name {{ font-family:'Lexend', sans-serif; font-weight:700; font-size:84px; line-height:1.04;
-    letter-spacing:-.02em; max-width:1000px; color:#f4f8ff; }}
-  .role {{ margin-top:24px; font-size:38px; line-height:1.3; color:#d7def2; max-width:1000px; font-weight:500; }}
-  .foot {{ display:flex; align-items:center; gap:20px; }}
-  .foot .flag {{ width:64px; height:43px; border-radius:6px; box-shadow:0 2px 10px rgba(0,0,0,.4); object-fit:cover; }}
-  .foot .country {{ font-size:30px; color:#d7def2; font-weight:500; }}
+  .brand img {{ height:42px; }}
+  .brand .ca {{ font-size:21px; letter-spacing:.04em; color:#aeb7d6; }}
+  .main {{ flex:1; min-height:0; display:flex; align-items:center; gap:50px; }}
+  .shot {{ flex:0 0 290px; width:290px; height:290px; border-radius:30px; overflow:hidden;
+    background:#152138; border:1px solid rgba(255,255,255,.14); }}
+  .shot img {{ width:100%; height:100%; object-fit:cover; display:block; }}
+  .shot .initials {{ width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    font-family:'Lexend', sans-serif; font-weight:700; font-size:108px; color:#9fb3e0;
+    letter-spacing:.01em; }}
+  .text {{ flex:1; min-width:0; display:flex; flex-direction:column; }}
+  .name {{ font-family:'Lexend', sans-serif; font-weight:700; font-size:60px; line-height:1.06;
+    letter-spacing:-.02em; color:#f4f8ff;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }}
+  .role {{ margin-top:16px; font-size:27px; line-height:1.32; color:#d7def2; font-weight:500;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }}
+  .pills {{ margin-top:26px; display:flex; flex-wrap:wrap; gap:12px; }}
+  .pill {{ font-size:21px; font-weight:600; line-height:1; padding:10px 18px; border-radius:999px;
+    background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.16); color:#e7ecfb; white-space:nowrap; }}
+  .pill.wg {{ background:rgba(10,132,255,.16); border-color:rgba(10,132,255,.42); color:#cfe2ff; }}
+  .pill.stsm {{ background:rgba(255,204,0,.15); border-color:rgba(255,204,0,.40); color:#ffe79a; }}
+  .foot {{ display:flex; align-items:center; gap:18px; }}
+  .foot .flag {{ width:58px; height:39px; border-radius:6px; object-fit:cover;
+    border:1px solid rgba(255,255,255,.15); }}
+  .foot .country {{ font-size:27px; color:#d7def2; font-weight:500; }}
   .foot .sep {{ flex:1; }}
-  .foot .url {{ font-size:28px; color:#7f8cb0; letter-spacing:.02em; }}
-  .rule {{ height:6px; width:120px; border-radius:3px; margin-bottom:30px;
-    background:linear-gradient(90deg,#003399 0%,#0a84ff 60%,#ffcc00 100%); }}
+  .foot .url {{ font-size:26px; color:#7f8cb0; letter-spacing:.02em; }}
 </style></head>
 <body>
   <div class="accent"></div>
@@ -97,10 +117,13 @@ CARD_HTML = """<!DOCTYPE html>
       <img src="/assets/images/brand/netsec-lockup-white.png" alt="">
       <span class="ca">COST Action CA24154</span>
     </div>
-    <div class="body">
-      <div class="rule"></div>
-      <div class="name">{name}</div>
-      {role_html}
+    <div class="main">
+      <div class="shot">{shot_html}</div>
+      <div class="text">
+        <div class="name">{name}</div>
+        {role_html}
+        {pills_html}
+      </div>
     </div>
     <div class="foot">
       {flag_html}
@@ -112,40 +135,132 @@ CARD_HTML = """<!DOCTYPE html>
 </body></html>
 """
 
+# Honorifics dropped before deriving the initials tile, so "Dr Arthur
+# Laudrain" reads as "AL", not "DA".
+_TITLES = {"dr", "prof", "professor", "mr", "mrs", "ms", "mx", "miss", "sir", "dame"}
+WG_LABELS = {"1": "WG1", "2": "WG2", "3": "WG3", "4": "WG4"}
+
 
 def members() -> list[dict]:
     data = json.loads(BIOS.read_text(encoding="utf-8"))
     return [m for m in data.get("members", []) if m.get("id")]
 
 
+def initials(name: str) -> str:
+    words = [w for w in re.split(r"[\s.]+", name or "") if w]
+    named = [w for w in words if w.lower().strip(".") not in _TITLES] or words
+    if not named:
+        return "?"
+    first = named[0][0]
+    last = named[-1][0] if len(named) > 1 else ""
+    return (first + last).upper()
+
+
+def wg_pills(m: dict) -> list[str]:
+    """WG1..WG4 with a lead / co-lead suffix, mirroring build-profile-pages.py."""
+    lead = {str(x) for x in (m.get("wg_leadership") or {}).get("lead") or []}
+    colead = {str(x) for x in (m.get("wg_leadership") or {}).get("co_lead") or []}
+    nums = sorted({str(x) for x in (list(m.get("wgs") or []) + list(lead) + list(colead))})
+    pills = []
+    for n in nums:
+        if n not in WG_LABELS:
+            continue
+        label = WG_LABELS[n]
+        if n in lead:
+            label += " · lead"
+        elif n in colead:
+            label += " · co-lead"
+        pills.append(label)
+    return pills
+
+
+def mentor_pills(m: dict) -> list[str]:
+    tags = m.get("mentorship") or []
+    pills = []
+    if "mentor" in tags:
+        pills.append("Mentor")
+    if "mentee" in tags:
+        pills.append("Mentee")
+    return pills
+
+
+def stsm_pill(m: dict) -> str:
+    s = m.get("stsm_hosting")
+    if s == "yes":
+        return "STSM host"
+    if s == "ask":
+        return "STSM on request"
+    return ""
+
+
 def card_inputs(m: dict) -> dict:
     """The fields that determine a card's pixels."""
+    photo = (m.get("photo") or "").strip()
+    has_photo = bool(photo and (ROOT / photo).exists())
+    name = (m.get("name") or "").strip()
     return {
-        "name": (m.get("name") or "").strip(),
+        "name": name,
         "position": (m.get("position") or "").strip(),
         "affiliation": (m.get("affiliation") or "").strip(),
         "country": (m.get("country") or "").strip(),
         "country_code": (m.get("country_code") or "").strip().lower(),
+        "photo": photo if has_photo else "",
+        # Hash the source-photo digest so a re-crop re-renders even when the
+        # path is unchanged; sync-bios.py records it per member.
+        "photo_sha": (m.get("photo_source_sha256") or "")[:16] if has_photo else "",
+        "initials": initials(name),
+        "wg": wg_pills(m),
+        "mentor": mentor_pills(m),
+        "stsm": stsm_pill(m),
     }
 
 
 def card_hash(inputs: dict) -> str:
-    blob = "|".join(inputs[k] for k in ("name", "position", "affiliation", "country", "country_code"))
-    return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
+    parts = [
+        inputs.get("name", ""),
+        inputs.get("position", ""),
+        inputs.get("affiliation", ""),
+        inputs.get("country", ""),
+        inputs.get("country_code", ""),
+        inputs.get("photo", ""),
+        inputs.get("photo_sha", ""),
+        ",".join(inputs.get("wg") or []),
+        ",".join(inputs.get("mentor") or []),
+        inputs.get("stsm", ""),
+    ]
+    return hashlib.sha256("|".join(parts).encode("utf-8")).hexdigest()[:16]
 
 
 def card_markup(inputs: dict) -> str:
-    role_bits = [b for b in (inputs["position"], inputs["affiliation"]) if b]
+    role_bits = [b for b in (inputs.get("position", ""), inputs.get("affiliation", "")) if b]
     role = " · ".join(role_bits)
     role_html = f'<div class="role">{html_mod.escape(role)}</div>' if role else ""
-    cc = inputs["country_code"]
+
+    photo = inputs.get("photo", "")
+    if photo:
+        shot_html = f'<img src="/{photo}" alt="">'
+    else:
+        shot_html = f'<div class="initials">{html_mod.escape(inputs.get("initials") or "?")}</div>'
+
+    pills = []
+    for label in inputs.get("wg") or []:
+        pills.append(f'<span class="pill wg">{html_mod.escape(label)}</span>')
+    for label in inputs.get("mentor") or []:
+        pills.append(f'<span class="pill">{html_mod.escape(label)}</span>')
+    if inputs.get("stsm"):
+        pills.append(f'<span class="pill stsm">{html_mod.escape(inputs["stsm"])}</span>')
+    pills_html = f'<div class="pills">{"".join(pills)}</div>' if pills else ""
+
+    cc = inputs.get("country_code", "")
     flag = FLAGS_DIR / f"{cc}.svg"
     flag_html = f'<img class="flag" src="/assets/og/flags/{cc}.svg" alt="">' if cc and flag.exists() else ""
     return CARD_HTML.format(
-        name=html_mod.escape(inputs["name"]),
+        name=html_mod.escape(inputs.get("name", "")),
         role_html=role_html,
+        pills_html=pills_html,
+        shot_html=shot_html,
         flag_html=flag_html,
-        country=html_mod.escape(inputs["country"]),
+        country=html_mod.escape(inputs.get("country", "")),
     )
 
 

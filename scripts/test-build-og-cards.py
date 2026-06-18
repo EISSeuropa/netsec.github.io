@@ -48,6 +48,47 @@ def test_card_markup_omits_flag_when_missing():
     assert "flags/zz.svg" not in html  # no bundled flag for zz -> omitted
 
 
+def test_initials_drops_honorific():
+    assert boc.initials("Dr Arthur Laudrain") == "AL"
+    assert boc.initials("Prof. Ada Lovelace") == "AL"
+    assert boc.initials("Madonna") == "M"
+    assert boc.initials("") == "?"
+
+
+def test_wg_pills_lead_and_co_lead_suffix():
+    m = {"wgs": [1, 3], "wg_leadership": {"lead": [3], "co_lead": [1]}}
+    assert boc.wg_pills(m) == ["WG1 · co-lead", "WG3 · lead"]
+    assert boc.wg_pills({"wgs": [2]}) == ["WG2"]
+    assert boc.wg_pills({}) == []
+
+
+def test_mentor_and_stsm_pills():
+    assert boc.mentor_pills({"mentorship": ["mentor"]}) == ["Mentor"]
+    assert boc.mentor_pills({"mentorship": ["mentee"]}) == ["Mentee"]
+    assert boc.mentor_pills({}) == []
+    assert boc.stsm_pill({"stsm_hosting": "yes"}) == "STSM host"
+    assert boc.stsm_pill({"stsm_hosting": "ask"}) == "STSM on request"
+    assert boc.stsm_pill({"stsm_hosting": None}) == ""
+
+
+def test_card_markup_renders_pills():
+    inp = {"name": "X", "country_code": "zz",
+           "wg": ["WG1 · lead"], "mentor": ["Mentor"], "stsm": "STSM host"}
+    html = boc.card_markup(inp)
+    assert "WG1 · lead" in html and "Mentor" in html and "STSM host" in html
+    assert 'class="pill wg"' in html and 'class="pill stsm"' in html
+
+
+def test_card_markup_initials_tile_when_no_photo():
+    html = boc.card_markup({"name": "Dr Ada Lovelace", "initials": "AL"})
+    assert '<div class="shot"><div class="initials">AL</div></div>' in html
+
+
+def test_card_markup_headshot_when_photo_present():
+    html = boc.card_markup({"name": "X", "photo": "assets/images/people/x.jpg"})
+    assert '<div class="shot"><img src="/assets/images/people/x.jpg"' in html
+
+
 def test_every_country_code_has_a_bundled_flag():
     for m in boc.members():
         cc = (m.get("country_code") or "").strip().lower()
