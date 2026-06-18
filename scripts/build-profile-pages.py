@@ -12,9 +12,9 @@ them and a shared link unfurls as that person.
 They deliberately carry no `data-pagefind-body`: the site's on-site
 Pagefind search still runs through the existing redirect stubs
 (scripts/build-bio-search-stubs.py), keeping the two pipelines independent
-for now. Pointing Pagefind at these real pages (retiring the stubs),
-listing them in sitemap.xml, and generating per-member OG card images are
-the planned follow-ups (#762).
+for now. Pointing Pagefind at these real pages (retiring the stubs) is the
+remaining #762 follow-up; sitemap listing (#1027) and per-member OG card
+images (#1023) have shipped.
 
 How the chrome stays identical with zero drift: each page reuses the
 exact nav, footer, head assets, and site.js from the matching locale
@@ -31,9 +31,10 @@ Run: `python3 scripts/build-profile-pages.py` writes the pages and a
 `sitemap fragment`. `--check` re-generates in memory and exits non-zero if
 anything on disk has drifted (the CI gate), writing nothing.
 
-Per-member Open Graph *images* are a separate concern (headless Chrome)
-and are not generated here yet; until then the pages unfurl with the site
-default OG image.
+Per-member Open Graph *images* are rendered separately by
+scripts/build-og-cards.py (headless Chrome). This script points each
+profile's og:image at the member's card when one exists, else the generic
+people card, so a profile without a card still unfurls cleanly.
 """
 
 from __future__ import annotations
