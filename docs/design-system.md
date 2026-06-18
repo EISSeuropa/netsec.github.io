@@ -72,7 +72,7 @@ Heading hierarchy across the site is currently:
 
 | Level | Count | Example                                |
 | ----- | ----- | -------------------------------------- |
-| `h1`  | 1 per page | "The Network", "Grants & Calls"   |
+| `h1`  | 1 per page | "The Directory", "Grants & Calls"   |
 | `h2`  | 6–9   | Major sections                         |
 | `h3`  | ~20   | Sub-sections, member names             |
 | `h4`  | ~18   | Card titles, country names             |
@@ -159,7 +159,7 @@ Small pill-shaped labels:
 
 ```html
 <span class="eyebrow">Directory</span>
-<h1>The Network</h1>
+<h1>The Directory</h1>
 ```
 
 Small uppercase letter-spaced label above an `h1` or `h2`. Conveys

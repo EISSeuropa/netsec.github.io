@@ -53,7 +53,7 @@ flowchart LR
 ```mermaid
 flowchart TD
     H["index.html<br/><i>Home</i>"]
-    P["people.html<br/><i>The Network</i>"]
+    P["people.html<br/><i>The Directory</i>"]
     G["grants.html<br/><i>Grants &amp; Calls</i>"]
     S["sitemap.html<br/><i>Site map</i>"]
     A["accessibility.html<br/><i>Accessibility</i>"]
@@ -358,7 +358,7 @@ wordmark adapts to light and dark themes.
 ```
 .
 ├── index.html                       # Home
-├── people.html                      # The Network
+├── people.html                      # The Directory
 ├── grants.html                      # Grants & Calls
 ├── faq.html                         # Public FAQ (21 Q&As, six sections)
 ├── glossary.html                    # COST + NetSec terminology (~35 terms)
