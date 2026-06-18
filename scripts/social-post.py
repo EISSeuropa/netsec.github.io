@@ -168,6 +168,74 @@ def _iso_week(date_str: str) -> str:
     return f"{y}-W{w:02d}"
 
 
+# Small connector words kept lowercase mid-theme (British style, no Oxford comma).
+_TITLE_SMALL = {"a", "an", "and", "the", "of", "for", "in", "on", "to", "with", "vs"}
+
+
+def _join_and(items: list[str]) -> str:
+    """British-style list join: "a", "a and b", "a, b and c" (no Oxford comma)."""
+    items = [i for i in items if i]
+    if not items:
+        return ""
+    if len(items) == 1:
+        return items[0]
+    return ", ".join(items[:-1]) + " and " + items[-1]
+
+
+def titlecase_theme(s: str) -> str:
+    """Title-case a research keyword while preserving acronyms (EU, NATO) and any
+    token that already carries an internal capital (IoT). "Black sea security" ->
+    "Black Sea Security"; "EU foreign policy" -> "EU Foreign Policy"."""
+    out = []
+    for i, w in enumerate(s.split()):
+        if w.isupper() or any(c.isupper() for c in w[1:]):
+            out.append(w)                       # acronym / already-cased token
+            continue
+        lw = w.lower()
+        if i != 0 and lw in _TITLE_SMALL:
+            out.append(lw)
+        else:
+            out.append(lw[:1].upper() + lw[1:])
+    return " ".join(out)
+
+
+def _wg_phrase(m: dict) -> str:
+    """A short Working-Group clause for the spotlight, preferring the strongest
+    role (lead > co-lead > member), mirroring the OG card's WG fields."""
+    valid = {"1", "2", "3", "4"}
+    lead = sorted({str(x) for x in (m.get("wg_leadership") or {}).get("lead") or []} & valid)
+    colead = sorted({str(x) for x in (m.get("wg_leadership") or {}).get("co_lead") or []} & valid)
+    member = sorted({str(x) for x in (m.get("wgs") or [])} & valid)
+    if lead:
+        return "leading " + _join_and([f"WG{n}" for n in lead])
+    if colead:
+        return "co-leading " + _join_and([f"WG{n}" for n in colead])
+    if member:
+        return "in " + _join_and([f"WG{n}" for n in member])
+    return ""
+
+
+def _status_sentence(m: dict) -> str:
+    """One sentence from the member's WG, mentorship and STSM-hosting status, or
+    "" when none apply. Built from the same fields as the per-member OG card."""
+    phrases = []
+    wg = _wg_phrase(m)
+    if wg:
+        phrases.append(wg)
+    tags = m.get("mentorship") or []
+    if "mentor" in tags:
+        phrases.append("offering mentorship")
+    if "mentee" in tags:
+        phrases.append("looking for a mentor")
+    stsm = m.get("stsm_hosting")
+    if stsm == "yes":
+        phrases.append("hosting STSMs")
+    elif stsm == "ask":
+        phrases.append("open to hosting STSMs")
+    sent = _join_and(phrases)
+    return (sent[:1].upper() + sent[1:] + ".") if sent else ""
+
+
 def read_spotlight() -> Post | None:
     """The current weekly spotlight member as a post, or None when the
     spotlight is dormant or the member is missing."""
@@ -184,11 +252,14 @@ def read_spotlight() -> Post | None:
     role = " · ".join(b for b in [(m.get("position") or "").strip(),
                                   (m.get("affiliation") or "").strip()] if b)
     themes = [t for t in (m.get("canonical_keywords") or [])][:3]
-    bits = [f"Meet {m.get('name', slug)}, a member of the NetSec network."]
+    bits = [f"Meet {m.get('name', slug)} in the NetSec Directory."]
     if role:
         bits.append(role + ".")
+    status = _status_sentence(m)
+    if status:
+        bits.append(status)
     if themes:
-        bits.append("Working on " + ", ".join(themes).lower() + ".")
+        bits.append("Working on " + ", ".join(titlecase_theme(t) for t in themes) + ".")
     card = ROOT / "assets" / "og" / "people" / f"{slug}.png"
     week = _iso_week(sp.get("featuredSince", ""))
     return Post(
@@ -198,7 +269,7 @@ def read_spotlight() -> Post | None:
         summary=" ".join(bits),
         link=f"{SITE}/people/{slug}.html",
         image=card if card.exists() else (SITE_OG if SITE_OG.exists() else None),
-        image_alt=f"{m.get('name', slug)} — NetSec member",
+        image_alt=f"Profile card for {m.get('name', slug)} in the NetSec Directory",
     )
 
 
