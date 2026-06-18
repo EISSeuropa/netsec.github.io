@@ -219,11 +219,11 @@ def test_titlecase_theme_preserves_acronyms_and_proper_nouns():
 def test_status_sentence_from_wg_mentorship_stsm():
     # mentee + STSM host, no WG → British join, capitalised, full stop.
     m = {"mentorship": ["mentee"], "stsm_hosting": "yes"}
-    assert sp._status_sentence(m) == "Looking for a mentor and hosting STSMs."
+    assert sp._status_sentence(m) == "Looking for a mentor and willing to host Short Term Scientific Missions."
     # WG leadership wins over plain membership; three phrases use one "and".
     m2 = {"wgs": [3], "wg_leadership": {"lead": [2]}, "mentorship": ["mentor"],
           "stsm_hosting": "ask"}
-    assert sp._status_sentence(m2) == "Leading WG2, offering mentorship and open to hosting STSMs."
+    assert sp._status_sentence(m2) == "Leading WG2, offering mentorship and open to hosting Short Term Scientific Missions."
     # nothing set → empty string (sentence is omitted)
     assert sp._status_sentence({}) == ""
 
@@ -232,7 +232,18 @@ def test_spotlight_uses_directory_not_network():
     post = sp.read_spotlight()
     if post is not None:
         assert "NetSec Directory" in post.summary
+        assert post.title == "NetSec Directory Spotlight"
         assert "member of the NetSec network" not in post.summary
+
+
+def test_spotlight_bluesky_render_fits_without_truncation():
+    # The composer trims whole pieces to fit, so the live post never ends in a
+    # hard-truncated "…" mid-word.
+    post = sp.read_spotlight()
+    if post is not None:
+        text = post.render("bluesky")
+        assert len(text) <= sp.BLUESKY_LIMIT
+        assert "…" not in text
 
 
 def _standalone() -> int:
