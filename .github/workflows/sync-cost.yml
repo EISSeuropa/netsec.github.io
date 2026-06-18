@@ -93,6 +93,20 @@ jobs:
             echo "_Triggered: \`${{ github.event_name }}\` · run_id: \`${{ github.run_id }}\`_"
           } > /tmp/pr-body.md
 
+      - name: Regenerate per-member OG cards from the synced data (#1023)
+        run: |
+          # sync-cost.py can change a member's reconciled `wgs` and
+          # `wg_leadership`, which feed the per-member OG card hash
+          # (build-og-cards.py renders the WG / lead pills onto the card).
+          # Render any card whose inputs changed (manifest-keyed, so
+          # churn-free) BEFORE the profile-page rebuild, so the same auto-PR
+          # carries the refreshed card and the data-shape / pytest
+          # `build-og-cards.py --check` gates pass. Without this, a WG or
+          # leadership move leaves the card stale and the sync PR fails CI
+          # (the bios sync already runs this; the cost sync was missing it).
+          # Chrome is preinstalled on the runner.
+          python3 scripts/build-og-cards.py
+
       - name: Rebuild member profile pages from the synced data
         run: |
           # sync-cost.py writes a member's reconciled `wgs`, `wg_leadership`
