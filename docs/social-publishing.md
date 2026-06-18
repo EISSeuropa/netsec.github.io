@@ -8,13 +8,13 @@ This is being built in phases:
 
 | Phase | What | Status |
 | --- | --- | --- |
-| 1 | Composer + dedup ledger + `--dry-run` preview + tests | **done** (this PR) |
-| 2 | Bluesky adapter, the two workflows, the `social` approval gate | after secrets are set |
-| 3 | LinkedIn adapter | after the LinkedIn app + token exist |
+| 1 | Composer + dedup ledger + `--dry-run` preview + tests | **done** |
+| 2 | Bluesky adapter + the `social-bluesky.yml` workflow + the approval gate | **done** (live once the Bluesky secrets + `social` environment exist) |
+| 3 | LinkedIn adapter | after the LinkedIn app + token clear vetting |
 
-Phase 1 publishes nothing. It builds the post text + picks the image and
-prints exactly what *would* go out, so the wording and images can be reviewed
-before any account is connected.
+`--dry-run` publishes nothing: it builds the post text, picks the image, and
+prints exactly what *would* go out. Live posting only happens inside the
+`social` environment, after a reviewer approves.
 
 ## How it will work
 
@@ -130,11 +130,31 @@ add them at repo level as well.
 Secrets are write-only: once saved, no one (including the maintainer) can read
 them back, only overwrite them.
 
-### E. Go live
+### E. Test it (Bluesky)
 
-Once A–D are done, the maintainer enables the phase-2 workflows. The first
-real post will pause for your approval. To pause everything at any time,
-remove a required secret or set the `social.enabled` switch to `false`.
+Once the Bluesky secrets (A) and the `social` environment (C, D) exist, the
+`Publish to Bluesky (approval-gated)` workflow is live. To do a first, safe
+test:
+
+1. In the repo, go to **Actions → Publish to Bluesky (approval-gated) → Run
+   workflow**. Leave the input as `all` (or pick `spotlight`) and run it.
+2. The **preview** job runs first and writes the exact post(s) + image to the
+   run summary. Open the run and read it.
+3. The **publish** job is then held at the `social` gate — you (the reviewer)
+   get an email "Deployment review pending". Read the preview, then click
+   **Approve and deploy** to post, or **Reject** to cancel.
+4. After approval, the post goes to Bluesky and a small auto-merging PR records
+   it in the ledger so it is never posted twice.
+
+After that first test, it runs on its own: a new news item (a `news.xml`
+change on `main`) or the weekly spotlight rotation (a `data/spotlight.json`
+change) triggers the same preview-then-approve flow. Nothing posts without your
+approval.
+
+The ledger is seeded so the four news items already on the site are not
+re-announced; the **current spotlight** is left unseeded, so your first run
+posts it. To pause everything, remove the `BSKY_APP_PASSWORD` secret (the
+publish step then fails safely and posts nothing).
 
 ---
 
