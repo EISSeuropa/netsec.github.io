@@ -57,7 +57,12 @@ TOP_LEVEL = [
     ("roadmap",        "2026-05-25", "monthly", "0.5"),
     ("essc-2026",      "2026-05-25", "daily",   "0.8"),
     ("summer-school",  "2026-06-08", "monthly", "0.8"),
+    ("slides",         "2026-06-18", "yearly",  "0.4"),
 ]
+
+# Pages that exist in English only (no FR/DE variant), so their <url>
+# block carries just the en + x-default hreflang, not fr/de alternates.
+EN_ONLY = {"slides"}
 
 # Member profile pages share one generous lastmod; the weekly bios sync
 # keeps the member set current, and the date is refined only when a
@@ -121,8 +126,13 @@ def url_block(base: str, lastmod: str, changefreq: str, priority: str, *, people
         f"    <changefreq>{changefreq}</changefreq>",
         f"    <priority>{priority}</priority>",
         f'    <xhtml:link rel="alternate" hreflang="en" href="{v["en"]}"/>',
-        f'    <xhtml:link rel="alternate" hreflang="fr" href="{v["fr"]}"/>',
-        f'    <xhtml:link rel="alternate" hreflang="de" href="{v["de"]}"/>',
+    ]
+    if base not in EN_ONLY:
+        lines += [
+            f'    <xhtml:link rel="alternate" hreflang="fr" href="{v["fr"]}"/>',
+            f'    <xhtml:link rel="alternate" hreflang="de" href="{v["de"]}"/>',
+        ]
+    lines += [
         f'    <xhtml:link rel="alternate" hreflang="x-default" href="{v["en"]}"/>',
         "  </url>",
     ]
