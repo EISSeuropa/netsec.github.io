@@ -6065,8 +6065,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
    Slide-templates gallery (/slides.html)
    A responsive grid of glass cards. Each card holds the real
    1920×1080 conference-deck markup, transform-scaled to a crisp
-   16:9 preview, plus a "Save as PDF" control. Scaling + the
-   single-slide print clone are wired by assets/js/slides-gallery.js.
+   16:9 preview. The scaling is wired by assets/js/slides-gallery.js.
    The ambience, .glass, dark-mode tokens and reduced-motion
    handling are all inherited from the shared rules above.
    ============================================================ */
@@ -6097,24 +6096,4 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .slide :where(h1,h2,h3,h4,h5,h6,p,blockquote,span,div,strong,em,a,li){ color:inherit; }
 .slide-meta{ padding:20px 22px 22px; display:flex; flex-direction:column; gap:8px; }
 .slide-meta h2{ font-family:'Lexend',sans-serif; font-size:1.12rem; letter-spacing:-.01em; margin:0; }
-.slide-meta p{ margin:0 0 6px; color:var(--muted); font-size:.92rem; line-height:1.5; }
-.slide-save{ align-self:flex-start; }
-
-/* Single-slide PDF export. slides-gallery.js clones the chosen slide into
-   #slide-print-stage and adds .is-printing-slide to <body>; the print sheet
-   below hides everything else and emits exactly one 1920×1080 page. */
-#slide-print-stage{ display:none; }
-@media print{
-  body.is-printing-slide{ margin:0; padding:0; background:#fff; }
-  body.is-printing-slide > *{ display:none !important; }
-  body.is-printing-slide #slide-print-stage{ display:block !important; position:static; }
-  body.is-printing-slide #slide-print-stage .slide{
-    position:relative !important; top:auto !important; left:auto !important;
-    transform:none !important; margin:0;
-  }
-  body.is-printing-slide #slide-print-stage,
-  body.is-printing-slide #slide-print-stage *{
-    -webkit-print-color-adjust:exact; print-color-adjust:exact;
-  }
-  @page{ size:1920px 1080px landscape; margin:0; }
-}
+.slide-meta p{ margin:0; color:var(--muted); font-size:.92rem; line-height:1.5; }
