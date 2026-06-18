@@ -13,6 +13,9 @@ reference for maintainers, MC representatives, and admins.
 | [`design-system.md`](./design-system.md)       | Match the existing look-and-feel — colour tokens, typography, components, accessibility.     |
 | [`admin-guide.md`](./admin-guide.md)           | Operate the site: accounts you need, where credentials live, common admin tasks, escalation. |
 | [`bios-setup.md`](./bios-setup.md)             | One-time set-up guide for the Google Form → bios.json pipeline.                              |
+| [`og-cards.md`](./og-cards.md)                 | How each member's personal Open Graph share image is generated and kept current — the hashed inputs that trigger a re-render, the churn-free manifest, and the CI gate. |
+| [`news-publishing.md`](./news-publishing.md)   | How a news item reaches the site and the RSS feed (the trigger the social pipeline consumes). |
+| [`social-publishing.md`](./social-publishing.md) | How news and the weekly spotlight become Bluesky posts — the approval-gated path, the ungated auto-spotlight, curated threads, the dedup ledger, and the one-time account set-up. |
 | [`i18n.md`](./i18n.md)                         | How translations work (FR + DE in beta), what's in scope, how to refresh when English drifts.|
 | [`seo.md`](./seo.md)                           | SEO posture — Open Graph, Twitter Card, JSON-LD, canonical URLs, hreflang, sitemap, 404. |
 | [`search-assessment.md`](./search-assessment.md) | Decide whether to add site-wide search — options compared (Pagefind / Lunr / MiniSearch / DDG / Algolia), constraints, recommendation. *(Status: shipped in v1.4.x — kept as the design history.)* |
