@@ -10,7 +10,7 @@
       "seeAlso": "optional array of other term strings (cross-references). Not yet rendered; reserved for a later pass.",
       "contributor": "optional slug. Not used by the four Phase 1 entries (they are unattributed institutional facts). Reserved for the contested entries that will be added after WG sign-off (issue #766)."
     },
-    "phase": "Phase 1 (issue #766). Four low-risk factual entries. Contested concepts (strategic autonomy, deterrence, hybrid threats, grey zone, resilience, human security, securitisation, FIMI) stay gated until a WG lead vouches for each definition.",
+    "phase": "Phase 1 (issue #766) shipped four low-risk institutional entries; the v1.13.0 batch (issue #998) added EU defence-instrument entries (Strategic Compass, EPF, CARD) and drafted the key contested academic concepts (securitisation, deterrence, hybrid threats, strategic culture, grand strategy, European strategic autonomy, resilience, human security) with neutral, contestation-aware definitions and Oxford Research Encyclopedia / peer-reviewed / official citations. The contested entries are WRITTEN BUT HELD: the section stays published:false until a Working Group lead vouches for each contested definition. Grey zone and FIMI remain to be drafted.",
     "published": "boolean. When false, build-field-guide.py blanks the field-guide region (the section is held off the live Glossary) but the concept data below is preserved. Held false while the concept set matures for v1.13.0 (issue #998). To republish: flip to true, run build-field-guide.py, restore the '#field-guide' link in each glossary page's jump-to list, then re-run inject-seo.py."
   },
   "published": false,
@@ -148,6 +148,163 @@
         {
           "label": "Coordinated Annual Review on Defence (European Defence Agency)",
           "url": "https://eda.europa.eu/what-we-do/EU-defence-initiatives/coordinated-annual-review-on-defence-(card)"
+        }
+      ]
+    },
+    {
+      "term": "Securitisation",
+      "definition": {
+        "en": "A theory from the Copenhagen School holding that an issue becomes a security matter not through objective threat alone but when an actor frames it as an existential danger and a relevant audience accepts that framing, which licenses extraordinary measures. How far the idea travels beyond its European origins is debated.",
+        "fr": "Une théorie de l'École de Copenhague selon laquelle une question devient un enjeu de sécurité non par la seule existence d'une menace objective, mais lorsqu'un acteur la présente comme un danger existentiel et qu'un public pertinent accepte ce cadrage, ce qui autorise des mesures d'exception. La portée de cette idée au-delà de ses origines européennes fait débat.",
+        "de": "Eine Theorie der Kopenhagener Schule, der zufolge ein Thema nicht allein durch eine objektive Bedrohung zu einer Sicherheitsfrage wird, sondern dann, wenn ein Akteur es als existenzielle Gefahr darstellt und ein relevantes Publikum diese Deutung akzeptiert, was außerordentliche Maßnahmen rechtfertigt. Wie weit diese Idee über ihre europäischen Ursprünge hinaus trägt, ist umstritten."
+      },
+      "theme": "Theory and methods",
+      "match_keywords": [
+        "Security studies",
+        "International relations",
+        "Research methods"
+      ],
+      "sources": [
+        {
+          "label": "Balzacq, Léonard and Ruzicka, 'Securitization revisited' (International Relations, 2016)",
+          "url": "https://doi.org/10.1177/0047117815596590"
+        }
+      ]
+    },
+    {
+      "term": "Deterrence",
+      "definition": {
+        "en": "Preventing an adversary from acting by credibly threatening costs, or the denial of gains, that outweigh any expected benefit. Extended deterrence applies the same logic on behalf of an ally rather than oneself. What makes a threat credible, and whether deterrence can be shown to have worked, remain debated.",
+        "fr": "Dissuader un adversaire d'agir en le menaçant de façon crédible de coûts, ou de la privation de gains, supérieurs à tout bénéfice attendu. La dissuasion élargie applique cette logique au profit d'un allié plutôt que de soi-même. Ce qui rend une menace crédible, et la possibilité même de démontrer que la dissuasion a fonctionné, restent débattus.",
+        "de": "Einen Gegner vom Handeln abhalten, indem glaubwürdig Kosten oder die Verwehrung von Gewinnen angedroht werden, die jeden erwarteten Nutzen übersteigen. Erweiterte Abschreckung wendet dieselbe Logik zugunsten eines Verbündeten statt seiner selbst an. Was eine Drohung glaubwürdig macht und ob sich nachweisen lässt, dass Abschreckung gewirkt hat, bleibt umstritten."
+      },
+      "theme": "Strategy and deterrence",
+      "match_keywords": [
+        "Deterrence",
+        "Nuclear strategy",
+        "Strategy"
+      ],
+      "sources": [
+        {
+          "label": "The Concept of Deterrence and Deterrence Theory (Oxford Research Encyclopedia of Politics)",
+          "url": "https://doi.org/10.1093/acrefore/9780190228637.013.572"
+        }
+      ]
+    },
+    {
+      "term": "Hybrid threats",
+      "definition": {
+        "en": "Coordinated pressure that blends conventional and irregular means, cyber operations, disinformation, and economic or political coercion, often kept below the threshold of open war to stay deniable. The term is widely used in policy but criticised by scholars as loosely defined.",
+        "fr": "Une pression coordonnée qui combine moyens conventionnels et irréguliers, opérations cyber, désinformation et coercition économique ou politique, souvent maintenue sous le seuil de la guerre ouverte pour rester contestable. Le terme est très utilisé dans les politiques publiques mais critiqué par les chercheur·euses comme mal défini.",
+        "de": "Ein koordinierter Druck, der konventionelle und irreguläre Mittel, Cyberoperationen, Desinformation sowie wirtschaftlichen oder politischen Zwang verbindet und häufig unterhalb der Schwelle eines offenen Krieges gehalten wird, um bestreitbar zu bleiben. Der Begriff ist in der Politik weit verbreitet, wird in der Forschung aber als unscharf definiert kritisiert."
+      },
+      "theme": "Intelligence, information and influence",
+      "match_keywords": [
+        "Hybrid threats",
+        "Disinformation",
+        "Subversion",
+        "Irregular warfare"
+      ],
+      "sources": [
+        {
+          "label": "Person, Kulalic and Mayle, 'Back to the future: the persistent problems of hybrid war' (International Affairs, 2024)",
+          "url": "https://doi.org/10.1093/ia/iiae131"
+        }
+      ]
+    },
+    {
+      "term": "Strategic culture",
+      "definition": {
+        "en": "The idea that a state's enduring beliefs, historical experience, and assumptions about the use of force shape distinctive and relatively persistent patterns of strategic behaviour. How much culture explains, set against material pressures, is contested.",
+        "fr": "L'idée selon laquelle les croyances durables d'un État, son expérience historique et ses présupposés sur l'usage de la force façonnent des comportements stratégiques distinctifs et relativement persistants. La part explicative de la culture, face aux contraintes matérielles, est contestée.",
+        "de": "Die Vorstellung, dass die dauerhaften Überzeugungen eines Staates, seine historische Erfahrung und seine Annahmen über den Einsatz von Gewalt unverwechselbare und relativ beständige Muster strategischen Verhaltens prägen. Wie viel die Kultur, den materiellen Zwängen gegenübergestellt, erklärt, ist umstritten."
+      },
+      "theme": "Strategy and deterrence",
+      "match_keywords": [
+        "Strategy",
+        "Grand strategy"
+      ],
+      "sources": [
+        {
+          "label": "Strategic Culture Theory: What, Why, and How (Oxford Research Encyclopedia of Politics)",
+          "url": "https://doi.org/10.1093/acrefore/9780190228637.013.320"
+        }
+      ]
+    },
+    {
+      "term": "Grand strategy",
+      "definition": {
+        "en": "A state's overarching, long-term framework for aligning its military, diplomatic, economic, and other instruments of power behind its highest objectives. Scholars disagree over whether grand strategy is a deliberate plan or a pattern read off behaviour after the fact.",
+        "fr": "Le cadre global et de long terme par lequel un État aligne ses instruments militaires, diplomatiques, économiques et autres sur ses objectifs les plus élevés. Les chercheur·euses divergent sur la question de savoir si la grande stratégie est un plan délibéré ou un schéma reconstitué après coup à partir des comportements.",
+        "de": "Der übergreifende, langfristige Rahmen, mit dem ein Staat seine militärischen, diplomatischen, wirtschaftlichen und sonstigen Machtmittel auf seine höchsten Ziele ausrichtet. In der Forschung ist umstritten, ob Großstrategie ein bewusster Plan oder ein nachträglich aus dem Verhalten abgelesenes Muster ist."
+      },
+      "theme": "Strategy and deterrence",
+      "match_keywords": [
+        "Grand strategy",
+        "Strategy"
+      ],
+      "sources": [
+        {
+          "label": "Modern Grand Strategic Studies (Oxford Research Encyclopedia of International Studies)",
+          "url": "https://doi.org/10.1093/acrefore/9780190846626.013.498"
+        }
+      ]
+    },
+    {
+      "term": "European strategic autonomy",
+      "definition": {
+        "en": "The European Union's pursued capacity to set and act on its own priorities in security, defence, and increasingly economic and technological matters, without undue dependence on others, while still cooperating with partners. How far it should extend, and whether it competes with NATO, is politically contested.",
+        "fr": "La capacité que l'Union européenne cherche à acquérir pour définir ses propres priorités et agir en matière de sécurité, de défense et, de plus en plus, dans les domaines économique et technologique, sans dépendance excessive, tout en continuant à coopérer avec ses partenaires. Son étendue souhaitable, et sa concurrence éventuelle avec l'OTAN, sont l'objet de débats politiques.",
+        "de": "Die von der Europäischen Union angestrebte Fähigkeit, in Sicherheit, Verteidigung und zunehmend in wirtschaftlichen und technologischen Fragen eigene Prioritäten zu setzen und danach zu handeln, ohne übermäßige Abhängigkeit, bei fortgesetzter Zusammenarbeit mit Partnern. Wie weit sie reichen soll und ob sie in Konkurrenz zur NATO steht, ist politisch umstritten."
+      },
+      "theme": "European and transatlantic security order",
+      "match_keywords": [
+        "European strategic autonomy",
+        "EU foreign policy",
+        "EU–NATO relations"
+      ],
+      "sources": [
+        {
+          "label": "EU strategic autonomy 2013–2023: From concept to capacity (European Parliamentary Research Service)",
+          "url": "https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2022)733589"
+        }
+      ]
+    },
+    {
+      "term": "Resilience",
+      "definition": {
+        "en": "The capacity of a society or system to absorb, adapt to, and recover from shocks such as disasters, attacks, and crises while keeping its core functions. Critics note that the word is stretched across very different policy fields and can shift responsibility onto those expected to cope.",
+        "fr": "La capacité d'une société ou d'un système à absorber des chocs tels que catastrophes, attaques et crises, à s'y adapter et à s'en remettre tout en préservant ses fonctions essentielles. Des critiques relèvent que le terme est étiré entre des domaines très différents et peut reporter la responsabilité sur celles et ceux censé·es y faire face.",
+        "de": "Die Fähigkeit einer Gesellschaft oder eines Systems, Schocks wie Katastrophen, Angriffe und Krisen aufzufangen, sich an sie anzupassen und sich von ihnen zu erholen, während die Kernfunktionen erhalten bleiben. Kritiker·innen merken an, dass der Begriff über sehr unterschiedliche Politikfelder gedehnt wird und Verantwortung auf jene verschieben kann, von denen Bewältigung erwartet wird."
+      },
+      "theme": "Transnational and human security",
+      "match_keywords": [
+        "Civil defence",
+        "Civil protection",
+        "Crisis management"
+      ],
+      "sources": [
+        {
+          "label": "Bourbeau, 'Resilience and International Politics' (International Studies Review, 2015)",
+          "url": "https://doi.org/10.1111/misr.12226"
+        }
+      ]
+    },
+    {
+      "term": "Human security",
+      "definition": {
+        "en": "An approach that makes the individual, rather than the state, the main referent of security, framing protection from threats such as violence, poverty, and disease, the 'freedom from fear' and 'freedom from want', as the goal. Its breadth is both its appeal and the main line of criticism.",
+        "fr": "Une approche qui fait de l'individu, plutôt que de l'État, le référent principal de la sécurité, posant comme objectif la protection contre des menaces telles que la violence, la pauvreté et la maladie, la « liberté de vivre à l'abri de la peur » et « à l'abri du besoin ». Son ampleur fait à la fois son attrait et le principal angle de critique.",
+        "de": "Ein Ansatz, der das Individuum statt des Staates zum zentralen Bezugspunkt von Sicherheit macht und den Schutz vor Bedrohungen wie Gewalt, Armut und Krankheit, die „Freiheit von Furcht“ und die „Freiheit von Not“, zum Ziel erklärt. Seine Breite ist zugleich sein Reiz und der wichtigste Kritikpunkt."
+      },
+      "theme": "Transnational and human security",
+      "match_keywords": [
+        "Transnational and human security"
+      ],
+      "sources": [
+        {
+          "label": "Human Security (Oxford Research Encyclopedia of International Studies)",
+          "url": "https://doi.org/10.1093/acrefore/9780190846626.013.215"
         }
       ]
     }
