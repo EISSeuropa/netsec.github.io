@@ -6088,6 +6088,13 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .slide-stage{ position:relative; width:100%; aspect-ratio:16 / 9; overflow:hidden; background:#dce6f5; border-bottom:1px solid var(--line); }
 .slide-stage .slide{ transform-origin:top left; transform:scale(var(--scale,.22)); }
 .dark .slide-stage{ background:#16203a; }
+/* The previews are self-contained light-theme slide graphics whose text
+   colours are baked inline. Stop the site's element rules (notably the
+   dark-mode `h1,h2,h3,h4{color:var(--ink)}`, which is light) from overriding
+   slide headings that carry no inline colour, so a preview reads identically
+   in light and dark. `:where()` keeps the specificity at `.slide` alone, so
+   any inline `color` on the slide markup still wins. */
+.slide :where(h1,h2,h3,h4,h5,h6,p,blockquote,span,div,strong,em,a,li){ color:inherit; }
 .slide-meta{ padding:20px 22px 22px; display:flex; flex-direction:column; gap:8px; }
 .slide-meta h2{ font-family:'Lexend',sans-serif; font-size:1.12rem; letter-spacing:-.01em; margin:0; }
 .slide-meta p{ margin:0 0 6px; color:var(--muted); font-size:.92rem; line-height:1.5; }
