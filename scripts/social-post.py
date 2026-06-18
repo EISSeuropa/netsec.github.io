@@ -231,20 +231,100 @@ class DryRunChannel(Channel):
         return "dry-run"
 
 
-# Live adapters (phase 2/3). Implemented behind credential checks so the
-# script is import-safe and runnable in dry-run without any secrets. The
-# concrete API calls are intentionally not exercised until the maintainer
-# has registered the apps, added the secrets, and the `social` environment
-# gate is in place — see docs/social-publishing.md and issue #1072.
+# Live adapters. Bluesky is implemented (phase 2); LinkedIn is a phase-3 stub.
+# Both are guarded by credential checks so the script stays import-safe and
+# runnable in dry-run without any secrets. The live path runs only behind the
+# `social` GitHub environment approval gate. See docs/social-publishing.md.
+def _http_json(url: str, payload: dict | None = None, headers: dict | None = None,
+               raw: bytes | None = None, content_type: str | None = None) -> dict:
+    """Minimal JSON HTTP helper (stdlib urllib). POST when payload/raw given."""
+    import urllib.error
+    import urllib.request
+
+    hdrs = dict(headers or {})
+    data = None
+    if raw is not None:
+        data = raw
+        hdrs["Content-Type"] = content_type or "application/octet-stream"
+    elif payload is not None:
+        data = json.dumps(payload).encode("utf-8")
+        hdrs["Content-Type"] = "application/json"
+    req = urllib.request.Request(url, data=data, headers=hdrs, method="POST" if data else "GET")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            body = resp.read().decode("utf-8")
+            return json.loads(body) if body else {}
+    except urllib.error.HTTPError as e:  # surface the API error body
+        detail = e.read().decode("utf-8", "replace")
+        raise SystemExit(f"HTTP {e.code} from {url}: {detail}") from e
+
+
+def link_facets(text: str, url: str) -> list:
+    """A Bluesky richtext facet making `url` (as it appears in `text`) a
+    clickable link. Byte offsets are over the UTF-8 encoding, per the spec."""
+    if not url or url not in text:
+        return []
+    btext = text.encode("utf-8")
+    burl = url.encode("utf-8")
+    start = btext.find(burl)
+    if start < 0:
+        return []
+    return [{
+        "index": {"byteStart": start, "byteEnd": start + len(burl)},
+        "features": [{"$type": "app.bsky.richtext.facet#link", "uri": url}],
+    }]
+
+
 class BlueskyChannel(Channel):
+    PDS = "https://bsky.social"
+
+    def _handle(self) -> str:
+        return (os.environ.get("BSKY_HANDLE") or "").strip().lstrip("@")
+
     def configured(self) -> bool:
-        return bool(os.environ.get("BSKY_HANDLE") and os.environ.get("BSKY_APP_PASSWORD"))
+        return bool(self._handle() and os.environ.get("BSKY_APP_PASSWORD"))
+
+    def publish(self, post: Post) -> str:
+        handle, app_pw = self._handle(), os.environ["BSKY_APP_PASSWORD"]
+        sess = _http_json(f"{self.PDS}/xrpc/com.atproto.server.createSession",
+                          payload={"identifier": handle, "password": app_pw})
+        auth = {"Authorization": f"Bearer {sess['accessJwt']}"}
+        did = sess["did"]
+
+        text = post.render("bluesky")
+        record = {
+            "$type": "app.bsky.feed.post",
+            "text": text,
+            "langs": ["en"],
+            "createdAt": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z"),
+        }
+        facets = link_facets(text, post.link)
+        if facets:
+            record["facets"] = facets
+        if post.image and post.image.exists():
+            blob = _http_json(f"{self.PDS}/xrpc/com.atproto.repo.uploadBlob",
+                              raw=post.image.read_bytes(), content_type="image/png",
+                              headers=auth)["blob"]
+            record["embed"] = {
+                "$type": "app.bsky.embed.images",
+                "images": [{"alt": post.image_alt or post.title, "image": blob}],
+            }
+        resp = _http_json(f"{self.PDS}/xrpc/com.atproto.repo.createRecord",
+                          payload={"repo": did, "collection": "app.bsky.feed.post", "record": record},
+                          headers=auth)
+        rkey = resp.get("uri", "").rsplit("/", 1)[-1]
+        return f"https://bsky.app/profile/{handle}/post/{rkey}" if rkey else resp.get("uri", "posted")
+
+
+class LinkedInChannel(Channel):
+    def configured(self) -> bool:
+        return bool(os.environ.get("LINKEDIN_ORG_ID") and os.environ.get("LINKEDIN_ACCESS_TOKEN"))
 
     def publish(self, post: Post) -> str:
         raise SystemExit(
-            "BlueskyChannel.publish is a phase-2 stub. Wire the AT Protocol "
-            "calls (createSession → uploadBlob → createRecord) and enable via "
-            "the `social` environment. See docs/social-publishing.md."
+            "LinkedInChannel.publish is a phase-3 stub. Wire the Posts API "
+            "(register image upload → create post) once the LinkedIn app + "
+            "org token exist. See docs/social-publishing.md."
         )
 
 

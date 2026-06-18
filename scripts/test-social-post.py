@@ -81,6 +81,31 @@ def test_strip_tags_and_unescape_in_feed():
         assert "<" not in p.title and "<" not in p.summary
 
 
+def test_link_facets_byte_offsets():
+    # Bluesky facet offsets are over UTF-8 bytes; a multibyte char before the
+    # URL must shift the start. "café " is 6 bytes (é = 2).
+    text = "café https://netsec-cost.eu/x.html"
+    facets = sp.link_facets(text, "https://netsec-cost.eu/x.html")
+    assert len(facets) == 1
+    idx = facets[0]["index"]
+    assert idx["byteStart"] == len("café ".encode("utf-8"))
+    assert text.encode("utf-8")[idx["byteStart"]:idx["byteEnd"]].decode() == "https://netsec-cost.eu/x.html"
+    assert facets[0]["features"][0]["$type"] == "app.bsky.richtext.facet#link"
+
+
+def test_link_facets_empty_when_url_absent():
+    assert sp.link_facets("no link here", "https://x.org") == []
+
+
+def test_bluesky_handle_strips_at(monkeypatch=None):
+    import os
+    os.environ["BSKY_HANDLE"] = "@netsec-cost.eu"
+    try:
+        assert sp.BlueskyChannel("bluesky")._handle() == "netsec-cost.eu"
+    finally:
+        del os.environ["BSKY_HANDLE"]
+
+
 def _standalone() -> int:
     failures = []
     tests = [(n, f) for n, f in sorted(globals().items())

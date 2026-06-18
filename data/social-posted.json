@@ -1,4 +1,9 @@
 {
-  "_documentation": "Ledger for the social-publishing pipeline (scripts/social-post.py, issue #1072). `posted` holds the dedup keys of items already published (news::<guid>, spotlight::<slug>::<isoweek>), so re-runs publish nothing. The pipeline appends here after a successful post; the spotlight key includes the ISO week so a member is posted at most once per week. Do not hand-edit unless re-publishing an item on purpose.",
-  "posted": []
+  "_documentation": "Ledger for the social-publishing pipeline (scripts/social-post.py, issue #1072). `posted` holds the dedup keys of items already published (news::<guid>, spotlight::<slug>::<isoweek>), so re-runs publish nothing. The pipeline appends here after a successful post; the spotlight key includes the ISO week so a member is posted at most once per week. Do not hand-edit unless re-publishing an item on purpose. Seeded 2026-06-18 with the four news items already live, so activation does not re-announce history; the current spotlight is intentionally left unseeded so the first run posts it as a gated test.",
+  "posted": [
+    "news::https://netsec-cost.eu/essc-2026.html",
+    "news::https://netsec-cost.eu/grants.html",
+    "news::https://eiss-europa.com/NetSecSchool.html",
+    "news::https://netsec-cost.eu/about.html#leadership"
+  ]
 }
