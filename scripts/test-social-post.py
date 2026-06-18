@@ -188,6 +188,25 @@ def test_read_thread_parses_link_card():
     assert "http" not in post.text
 
 
+def test_news_feed_keys_on_id_not_link():
+    # The <guid> carries an attribute (isPermaLink="false"); the key must be
+    # the item id, not the link, so same-page items don't collide.
+    posts = sp.read_news_feed()
+    assert posts, "expected the real news.xml to yield items"
+    for p in posts:
+        assert p.key.startswith("news::")
+        assert "http" not in p.key  # id-keyed, not link-keyed
+
+
+def test_news_directives_and_thread_skip():
+    directives = sp.news_directives()
+    # the prize item opts out via a thread directive
+    assert directives.get("essc-2026-best-paper-prize") == "thread:best-paper-prize-2026"
+    # ...so it is absent from the auto-post feed
+    keys = {p.key for p in sp.read_news_feed()}
+    assert "news::essc-2026-best-paper-prize" not in keys
+
+
 def _standalone() -> int:
     failures = []
     tests = [(n, f) for n, f in sorted(globals().items())
