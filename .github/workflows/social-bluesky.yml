@@ -1,18 +1,23 @@
-# Publish NetSec news + the weekly member spotlight to Bluesky, approval-gated.
+# Publish NetSec news to Bluesky, approval-gated.
 # Phase 2 of the social pipeline (#1072).
 #
 # Flow:
-#   1. `preview` runs the composer in --dry-run and writes the exact posts
-#      (text + image) to the run summary. No secrets, no posting.
-#   2. `publish` targets the `social` environment, so GitHub PAUSES it for a
-#      required reviewer. The reviewer reads the preview, approves, and only
-#      then does the post go to Bluesky. The dedup ledger update rides back in
-#      an auto-merging PR.
+#   1. `preview` runs the composer in --dry-run, writes the exact posts to the
+#      run summary, and counts how many would actually post. No secrets.
+#   2. `publish` runs only when that count is non-zero, and targets the `social`
+#      environment, so GitHub PAUSES it for a required reviewer. The reviewer
+#      reads the preview, approves, and only then does the post go to Bluesky.
+#      The dedup ledger update rides back in an auto-merging PR.
 #
-# Triggers: a news.xml or data/spotlight.json change on main (i.e. a news item
-# or the weekly spotlight rotation landed), or a manual run. The manual run can
-# also post a curated multi-post thread (data/social-threads/<slug>.json) by
-# passing the `thread` slug input; the same preview + approval gate applies.
+# Scope: NEWS and curated THREADS (higher-stakes, human-reviewed). The weekly
+# member SPOTLIGHT is auto-posted ungated by spotlight-rotate.yml (low-risk,
+# auto-generated), so it is deliberately NOT triggered here on a spotlight.json
+# change. A manual `--kind spotlight`/`all` run still works as an override.
+#
+# Triggers: a news.xml change on main (a news item landed), or a manual run.
+# The manual run can also post a curated multi-post thread
+# (data/social-threads/<slug>.json) by passing the `thread` slug input; the same
+# preview + approval gate applies.
 #
 # Secrets (Environment secrets on `social`): BSKY_HANDLE, BSKY_APP_PASSWORD.
 # Setup: docs/social-publishing.md.
@@ -24,7 +29,6 @@ on:
     branches: [main]
     paths:
       - 'news.xml'
-      - 'data/spotlight.json'
   workflow_dispatch:
     inputs:
       kind:
