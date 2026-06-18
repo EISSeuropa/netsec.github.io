@@ -172,10 +172,12 @@
   <div class="container reveal">
     <span class="eyebrow">Archives</span>
     <h1>Archives des actualités</h1>
-    <p class="lede">Anciennes actualités du site NetSec. Les quatre actualités les plus récentes restent toujours sur la page d'accueil. Les plus anciennes basculent ici.</p>
-    
-    <div class="empty-state">
-      <p>Les archives sont vides pour le moment, toutes les actualités depuis le lancement (octobre 2025) sont encore sur la page d'accueil. Lorsque le bloc d'actualités dépassera quatre entrées, les plus anciennes seront déplacées ici.</p>
+    <p class="lede">L'ensemble des actualités de NetSec, des plus récentes aux plus anciennes. Les plus récentes figurent aussi sur la page d'accueil ; tout est conservé ici, ainsi que dans le <a href="news.xml" type="application/rss+xml">flux RSS</a>.</p>
+
+    <div class="news-list news-archive-list">
+      <div class="empty-state">
+        <p>Les actualités se chargent ici. Si elles n'apparaissent pas, les plus récentes sont sur la <a href="index.fr.html#news">page d'accueil</a>, ou abonnez-vous au <a href="news.xml" type="application/rss+xml">flux RSS</a>.</p>
+      </div>
     </div>
 
   </div>
@@ -220,6 +222,16 @@
 </footer>
 
 <script src="assets/js/site.js?v=51811275" defer></script>
+<!-- Archives des actualités : liste chronologique complète depuis data/news.json. -->
+<script src="assets/js/home-news.js?v=a20283f6" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.NetSec && window.NetSec.renderNewsArchive) {
+      var lang = (document.documentElement.lang || 'en').slice(0, 2);
+      window.NetSec.renderNewsArchive({ container: '.news-archive-list', locale: lang });
+    }
+  });
+</script>
 
 </body>
 </html>

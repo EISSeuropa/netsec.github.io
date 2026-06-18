@@ -231,15 +231,15 @@
     "news.html": {
       "fr": {
         "file": "news.fr.html",
-        "source_sha1": "37efbf2c14e77d141349a81c2feebab8680db407",
-        "translated_on": "2026-06-16",
+        "source_sha1": "d7829b2281caf30b242849ad977773d785937bee",
+        "translated_on": "2026-06-18",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "news.de.html",
-        "source_sha1": "37efbf2c14e77d141349a81c2feebab8680db407",
-        "translated_on": "2026-06-16",
+        "source_sha1": "d7829b2281caf30b242849ad977773d785937bee",
+        "translated_on": "2026-06-18",
         "status": "beta",
         "reviewed_by": null
       }

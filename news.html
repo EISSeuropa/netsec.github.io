@@ -166,10 +166,12 @@
   <div class="container reveal">
     <span class="eyebrow">Archive</span>
     <h1>News archive</h1>
-    <p class="lede">Older news items from the NetSec website. The latest four news cards always live on the home page. Older entries move here.</p>
-    
-    <div class="empty-state">
-      <p>The archive is empty for now, every news entry from launch (October 2025) is still on the home page. As the news block grows past four entries, the oldest will move to this page.</p>
+    <p class="lede">The full record of NetSec news, newest first. The most recent items also appear on the home page; everything is kept here, and in the <a href="news.xml" type="application/rss+xml">RSS feed</a>.</p>
+
+    <div class="news-list news-archive-list">
+      <div class="empty-state">
+        <p>News items load here. If they do not appear, the latest are on the <a href="index.html#news">home page</a>, or subscribe to the <a href="news.xml" type="application/rss+xml">RSS feed</a>.</p>
+      </div>
     </div>
 
   </div>
@@ -246,6 +248,18 @@
 </footer>
 
 <script src="assets/js/site.js?v=51811275" defer></script>
+<!-- News archive: render the full chronological list from data/news.json,
+     newest first, each card deep-linkable via #news-<id>. The .empty-state
+     above is the no-JS / fetch-failure fallback. -->
+<script src="assets/js/home-news.js?v=a20283f6" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.NetSec && window.NetSec.renderNewsArchive) {
+      var lang = (document.documentElement.lang || 'en').slice(0, 2);
+      window.NetSec.renderNewsArchive({ container: '.news-archive-list', locale: lang });
+    }
+  });
+</script>
 
 </body>
 </html>

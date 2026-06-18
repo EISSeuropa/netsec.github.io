@@ -1,0 +1,87 @@
+# Issue-driven news publishing (#634 parallel from EISS).
+#
+# Label an issue `news` and this workflow turns it into a news item:
+#   1. scripts/publish-news.py reads the issue title + body, prepends an
+#      item to data/news.json (English-authored; the renderers fall back
+#      to EN for FR/DE until a hand translation is added).
+#   2. scripts/build-news-rss.py regenerates news.xml from it.
+#   3. A PR is opened on news-publish/issue-<n> that `Closes #<n>`, with
+#      auto-merge armed. Branch protection (CodeQL, link-check, news drift,
+#      i18n drift) still gates the merge.
+#
+# The issue body may start with optional `Type:` / `URL:` / `Date:` header
+# lines; the rest is the excerpt. See docs/news-publishing.md.
+
+name: Publish news from a labelled issue
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+concurrency:
+  group: news-publish-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    name: Append the labelled issue to the news feed
+    if: github.event.label.name == 'news'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v4 (sha-pinned)
+
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+
+      - name: Append the news item and regenerate the feed
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          python3 scripts/publish-news.py
+          python3 scripts/build-news-rss.py
+
+      - name: Open or update the news PR
+        id: create-pr
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)
+        with:
+          token: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
+          branch: news-publish/issue-${{ github.event.issue.number }}
+          base: main
+          delete-branch: true
+          title: 'content(news): ${{ github.event.issue.title }}'
+          commit-message: |
+            content(news): ${{ github.event.issue.title }}
+
+            Published from issue #${{ github.event.issue.number }} by the
+            news-publish workflow. Closes #${{ github.event.issue.number }}.
+          body: |
+            Auto-generated from issue #${{ github.event.issue.number }} (labelled `news`).
+
+            Closes #${{ github.event.issue.number }}.
+
+            The item is English-authored; add the FR/DE translation to
+            `data/news.json` before or after merge (the renderers fall back to
+            EN meanwhile). See `docs/news-publishing.md`.
+          labels: |
+            automated
+            news
+
+      - name: Arm auto-merge on the news PR
+        if: steps.create-pr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge \
+            "${{ steps.create-pr.outputs.pull-request-number }}" \
+            --squash --auto \
+            --repo "${{ github.repository }}"
