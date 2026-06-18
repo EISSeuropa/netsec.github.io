@@ -37,6 +37,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -45,6 +46,7 @@ NEWS_XML = ROOT / "news.xml"
 SPOTLIGHT = ROOT / "data" / "spotlight.json"
 BIOS = ROOT / "data" / "bios.json"
 LEDGER = ROOT / "data" / "social-posted.json"
+THREADS_DIR = ROOT / "data" / "social-threads"
 SITE = "https://netsec-cost.eu"
 SITE_OG = ROOT / "assets" / "images" / "og-image.png"
 
@@ -173,6 +175,89 @@ def read_spotlight() -> Post | None:
 
 
 # --------------------------------------------------------------------------
+# Curated threads (hand-written multi-post announcements)
+# --------------------------------------------------------------------------
+@dataclass
+class ThreadPost:
+    text: str
+    image: Path | None = None
+    image_alt: str = ""
+
+
+@dataclass
+class Thread:
+    key: str
+    channel: str
+    posts: list
+    langs: list = field(default_factory=lambda: ["en"])
+
+
+def read_thread(path: Path) -> Thread:
+    """Load a curated thread spec (see data/social-threads/*.json)."""
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    posts = []
+    for p in data.get("posts", []):
+        img = p.get("image")
+        posts.append(ThreadPost(
+            text=p["text"],
+            image=(ROOT / img) if img else None,
+            image_alt=p.get("imageAlt", ""),
+        ))
+    if not posts:
+        raise SystemExit(f"thread {path} has no posts")
+    return Thread(key=data["key"], channel=data.get("channel", "bluesky"),
+                  posts=posts, langs=data.get("langs", ["en"]))
+
+
+def graphemes(text: str) -> int:
+    """Approximate grapheme count for the Bluesky 300 limit. A variation
+    selector or combining mark modifies the prior glyph (no count); a
+    zero-width joiner folds the *next* glyph into the current one."""
+    n = 0
+    join_next = False
+    for ch in text:
+        if ch == "‍":  # ZWJ — the next glyph joins this one
+            join_next = True
+            continue
+        if ch == "️" or unicodedata.combining(ch):  # VS16 / combining mark
+            continue
+        if join_next:
+            join_next = False
+            continue
+        n += 1
+    return n
+
+
+MENTION_RE = re.compile(r"@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)+")
+URL_RE = re.compile(r"https?://[^\s\]\)]+")
+
+
+def _byte_span(text: str, start: int, end: int) -> tuple[int, int]:
+    """UTF-8 byte offsets for a [start:end) character slice of `text`."""
+    return len(text[:start].encode("utf-8")), len(text[:end].encode("utf-8"))
+
+
+def find_mentions(text: str) -> list[tuple[str, int, int]]:
+    """(handle, byteStart, byteEnd) for each @handle.tld in the text. The
+    span covers the leading @, per the Bluesky richtext convention."""
+    out = []
+    for m in MENTION_RE.finditer(text):
+        handle = m.group(0)[1:]  # drop the leading @
+        bs, be = _byte_span(text, m.start(), m.end())
+        out.append((handle, bs, be))
+    return out
+
+
+def find_links(text: str) -> list[tuple[str, int, int]]:
+    out = []
+    for m in URL_RE.finditer(text):
+        url = m.group(0).rstrip(").,;")
+        bs, be = _byte_span(text, m.start(), m.start() + len(url))
+        out.append((url, bs, be))
+    return out
+
+
+# --------------------------------------------------------------------------
 # Ledger
 # --------------------------------------------------------------------------
 def load_ledger() -> dict:
@@ -275,6 +360,10 @@ def link_facets(text: str, url: str) -> list:
     }]
 
 
+def _img_mime(path: Path) -> str:
+    return "image/jpeg" if path.suffix.lower() in (".jpg", ".jpeg") else "image/png"
+
+
 class BlueskyChannel(Channel):
     PDS = "https://bsky.social"
 
@@ -284,13 +373,39 @@ class BlueskyChannel(Channel):
     def configured(self) -> bool:
         return bool(self._handle() and os.environ.get("BSKY_APP_PASSWORD"))
 
-    def publish(self, post: Post) -> str:
-        handle, app_pw = self._handle(), os.environ["BSKY_APP_PASSWORD"]
+    def _login(self) -> tuple[dict, str]:
         sess = _http_json(f"{self.PDS}/xrpc/com.atproto.server.createSession",
-                          payload={"identifier": handle, "password": app_pw})
-        auth = {"Authorization": f"Bearer {sess['accessJwt']}"}
-        did = sess["did"]
+                          payload={"identifier": self._handle(), "password": os.environ["BSKY_APP_PASSWORD"]})
+        return {"Authorization": f"Bearer {sess['accessJwt']}"}, sess["did"]
 
+    def _resolve_handle(self, handle: str) -> str | None:
+        try:
+            return _http_json(
+                f"{self.PDS}/xrpc/com.atproto.identity.resolveHandle?handle={handle}").get("did")
+        except SystemExit:
+            return None  # an unknown handle drops to plain text, never blocks the post
+
+    def _upload(self, auth: dict, image: Path) -> dict:
+        return _http_json(f"{self.PDS}/xrpc/com.atproto.repo.uploadBlob",
+                          raw=image.read_bytes(), content_type=_img_mime(image),
+                          headers=auth)["blob"]
+
+    def _rich_facets(self, text: str) -> list:
+        """Link + mention facets for arbitrary text (resolving each handle)."""
+        facets = []
+        for url, bs, be in find_links(text):
+            facets.append({"index": {"byteStart": bs, "byteEnd": be},
+                           "features": [{"$type": "app.bsky.richtext.facet#link", "uri": url}]})
+        for handle, bs, be in find_mentions(text):
+            did = self._resolve_handle(handle)
+            if did:
+                facets.append({"index": {"byteStart": bs, "byteEnd": be},
+                               "features": [{"$type": "app.bsky.richtext.facet#mention", "did": did}]})
+        return facets
+
+    def publish(self, post: Post) -> str:
+        auth, did = self._login()
+        handle = self._handle()
         text = post.render("bluesky")
         record = {
             "$type": "app.bsky.feed.post",
@@ -302,18 +417,50 @@ class BlueskyChannel(Channel):
         if facets:
             record["facets"] = facets
         if post.image and post.image.exists():
-            blob = _http_json(f"{self.PDS}/xrpc/com.atproto.repo.uploadBlob",
-                              raw=post.image.read_bytes(), content_type="image/png",
-                              headers=auth)["blob"]
             record["embed"] = {
                 "$type": "app.bsky.embed.images",
-                "images": [{"alt": post.image_alt or post.title, "image": blob}],
+                "images": [{"alt": post.image_alt or post.title, "image": self._upload(auth, post.image)}],
             }
         resp = _http_json(f"{self.PDS}/xrpc/com.atproto.repo.createRecord",
                           payload={"repo": did, "collection": "app.bsky.feed.post", "record": record},
                           headers=auth)
         rkey = resp.get("uri", "").rsplit("/", 1)[-1]
         return f"https://bsky.app/profile/{handle}/post/{rkey}" if rkey else resp.get("uri", "posted")
+
+    def publish_thread(self, thread: Thread) -> list[str]:
+        """Post each ThreadPost in order, each replying to the previous. Image
+        (if any) rides its own post. Returns the post URLs."""
+        auth, did = self._login()
+        handle = self._handle()
+        root = parent = None
+        urls = []
+        for tp in thread.posts:
+            record = {
+                "$type": "app.bsky.feed.post",
+                "text": tp.text,
+                "langs": thread.langs,
+                "createdAt": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z"),
+            }
+            facets = self._rich_facets(tp.text)
+            if facets:
+                record["facets"] = facets
+            if tp.image and tp.image.exists():
+                record["embed"] = {
+                    "$type": "app.bsky.embed.images",
+                    "images": [{"alt": tp.image_alt, "image": self._upload(auth, tp.image)}],
+                }
+            if parent:
+                record["reply"] = {"root": root, "parent": parent}
+            resp = _http_json(f"{self.PDS}/xrpc/com.atproto.repo.createRecord",
+                              payload={"repo": did, "collection": "app.bsky.feed.post", "record": record},
+                              headers=auth)
+            ref = {"uri": resp["uri"], "cid": resp["cid"]}
+            if root is None:
+                root = ref
+            parent = ref
+            rkey = resp["uri"].rsplit("/", 1)[-1]
+            urls.append(f"https://bsky.app/profile/{handle}/post/{rkey}")
+        return urls
 
 
 class LinkedInChannel(Channel):
@@ -346,13 +493,66 @@ CHANNELS = {"bluesky": BlueskyChannel, "linkedin": LinkedInChannel}
 # --------------------------------------------------------------------------
 # CLI
 # --------------------------------------------------------------------------
+def run_thread(path: Path, live: bool, ledger: dict) -> int:
+    """Compose (dry-run) or publish a curated Bluesky thread."""
+    thread = read_thread(path)
+    over = [i + 1 for i, tp in enumerate(thread.posts) if graphemes(tp.text) > BLUESKY_LIMIT]
+
+    if not live:
+        print(f"DRY RUN — thread {thread.key} ({len(thread.posts)} posts, channel {thread.channel}):\n")
+        for i, tp in enumerate(thread.posts, 1):
+            g = graphemes(tp.text)
+            flag = "OK" if g <= BLUESKY_LIMIT else "OVER LIMIT"
+            print(f"── post {i}/{len(thread.posts)}  [{g}/{BLUESKY_LIMIT} graphemes · {flag}] ──")
+            for line in tp.text.splitlines():
+                print(f"    {line}")
+            if tp.image:
+                ok = "" if tp.image.exists() else "  (MISSING!)"
+                print(f"    [image: {tp.image.relative_to(ROOT)}{ok} | alt: {tp.image_alt}]")
+            mentions = [h for h, _, _ in find_mentions(tp.text)]
+            links = [u for u, _, _ in find_links(tp.text)]
+            if mentions:
+                print(f"    [mentions → resolved live: {', '.join('@' + h for h in mentions)}]")
+            if links:
+                print(f"    [links: {', '.join(links)}]")
+            print()
+        already = thread.key in set(ledger.get("posted", []))
+        print(f"Ledger: {'ALREADY POSTED — a live run would skip it' if already else 'not yet posted'}.")
+        if over:
+            print(f"⚠️  Post(s) {', '.join(map(str, over))} exceed {BLUESKY_LIMIT} graphemes; trim before going live.")
+        print("Nothing was published. Re-run with --live behind the approval gate to post.")
+        return 0
+
+    # Live path — gated by the `social` environment in CI.
+    if over:
+        print(f"Refusing to post: post(s) {', '.join(map(str, over))} exceed {BLUESKY_LIMIT} graphemes.", file=sys.stderr)
+        return 1
+    if thread.key in set(ledger.get("posted", [])):
+        print(f"Thread {thread.key} already posted; nothing to do.")
+        return 0
+    ch = BlueskyChannel("bluesky")
+    if not ch.configured():
+        print("Bluesky is not configured (missing secrets); nothing posted.", file=sys.stderr)
+        return 1
+    urls = ch.publish_thread(thread)
+    for i, u in enumerate(urls, 1):
+        print(f"posted thread {thread.key} [{i}/{len(urls)}]: {u}")
+    ledger.setdefault("posted", []).append(thread.key)
+    save_ledger(ledger)
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Compose/publish NetSec social posts (#1072).")
     ap.add_argument("--dry-run", action="store_true", help="print posts; publish nothing (default)")
     ap.add_argument("--live", action="store_true", help="actually publish (phase 2+; needs secrets)")
     ap.add_argument("--kind", choices=["news", "spotlight", "all"], default="all")
     ap.add_argument("--channel", choices=["bluesky", "linkedin", "all"], default="all")
+    ap.add_argument("--thread", metavar="FILE", help="post a curated thread spec (data/social-threads/*.json)")
     args = ap.parse_args()
+
+    if args.thread:
+        return run_thread(Path(args.thread), live=args.live and not args.dry_run, ledger=load_ledger())
 
     kinds = {"news", "spotlight"} if args.kind == "all" else {args.kind}
     ledger = load_ledger()
