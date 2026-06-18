@@ -207,6 +207,34 @@ def test_news_directives_and_thread_skip():
     assert "news::essc-2026-best-paper-prize" not in keys
 
 
+def test_titlecase_theme_preserves_acronyms_and_proper_nouns():
+    assert sp.titlecase_theme("black sea security") == "Black Sea Security"
+    assert sp.titlecase_theme("EU foreign policy") == "EU Foreign Policy"
+    assert sp.titlecase_theme("Eastern Europe") == "Eastern Europe"
+    # small connector words stay lowercase mid-phrase, but capitalise if first
+    assert sp.titlecase_theme("rule of law") == "Rule of Law"
+    assert sp.titlecase_theme("of mice") == "Of Mice"
+
+
+def test_status_sentence_from_wg_mentorship_stsm():
+    # mentee + STSM host, no WG → British join, capitalised, full stop.
+    m = {"mentorship": ["mentee"], "stsm_hosting": "yes"}
+    assert sp._status_sentence(m) == "Looking for a mentor and hosting STSMs."
+    # WG leadership wins over plain membership; three phrases use one "and".
+    m2 = {"wgs": [3], "wg_leadership": {"lead": [2]}, "mentorship": ["mentor"],
+          "stsm_hosting": "ask"}
+    assert sp._status_sentence(m2) == "Leading WG2, offering mentorship and open to hosting STSMs."
+    # nothing set → empty string (sentence is omitted)
+    assert sp._status_sentence({}) == ""
+
+
+def test_spotlight_uses_directory_not_network():
+    post = sp.read_spotlight()
+    if post is not None:
+        assert "NetSec Directory" in post.summary
+        assert "member of the NetSec network" not in post.summary
+
+
 def _standalone() -> int:
     failures = []
     tests = [(n, f) for n, f in sorted(globals().items())

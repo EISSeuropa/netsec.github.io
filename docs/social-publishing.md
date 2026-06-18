@@ -224,8 +224,13 @@ publish step then fails safely and posts nothing).
 - **News:** `📣 {headline}` + a one-paragraph summary + the article link.
   Bluesky is trimmed to 300 characters; LinkedIn carries the full summary plus
   `#EuropeanSecurity #COSTAction`.
-- **Spotlight:** `🔦 Member spotlight` + "Meet {name}, {role} at {affiliation}.
-  Working on {themes}." + the profile link, with the member's OG card image.
+- **Spotlight:** `🔦 Member spotlight` + "Meet {name} in the NetSec Directory.
+  {role}. {status}. Working on {themes}." + the profile link, with the member's
+  OG card image. The **status** sentence is built from the same fields as the OG
+  card (Working-Group membership or leadership, mentorship, STSM hosting) and is
+  omitted when the member has none of them. **Themes** are title-cased with
+  acronym preservation (so "black sea security" reads "Black Sea Security",
+  "EU foreign policy" reads "EU Foreign Policy").
 
 Posts are **English only**. Edit the templates in `scripts/social-post.py`
 (the `Post.render` method and the `read_spotlight` composer) to adjust tone,
