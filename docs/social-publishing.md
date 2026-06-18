@@ -65,8 +65,9 @@ the workflow only reads the secrets you add.
 3. Click **Add App Password**, name it `netsec-website`, and copy the
    generated password (format `xxxx-xxxx-xxxx-xxxx`). It is shown once.
    - Use an **app password**, never the real account password.
-4. You will add two GitHub secrets in step C: `BSKY_HANDLE` (the handle, e.g.
-   `netsec-cost.eu`) and `BSKY_APP_PASSWORD` (the app password from step 3).
+4. You will add two environment secrets in step D: `BSKY_HANDLE` (the bare
+   handle, e.g. `netsec-cost.eu`, no leading `@`) and `BSKY_APP_PASSWORD`
+   (the app password from step 3).
 
 ### B. LinkedIn (more involved; needs a developer app)
 
@@ -89,26 +90,10 @@ with a page-admin's approval. Plan ~30 minutes.
    - **Important:** LinkedIn access tokens expire after **~60 days**. Save the
      **refresh token** too; the pipeline (phase 3) will use it to renew. Put a
      recurring reminder to re-authorise if refresh ever fails.
-5. You will add these GitHub secrets in step C: `LINKEDIN_ORG_ID` (the number
+5. You will add these environment secrets in step D: `LINKEDIN_ORG_ID` (the number
    from step 1), `LINKEDIN_ACCESS_TOKEN`, and `LINKEDIN_REFRESH_TOKEN`.
 
-### C. Add the secrets to GitHub
-
-In the repository, go to **Settings → Secrets and variables → Actions →
-New repository secret**, and add each of:
-
-| Secret | From |
-| --- | --- |
-| `BSKY_HANDLE` | step A (e.g. `netsec-cost.eu`) |
-| `BSKY_APP_PASSWORD` | step A |
-| `LINKEDIN_ORG_ID` | step B.1 |
-| `LINKEDIN_ACCESS_TOKEN` | step B.4 |
-| `LINKEDIN_REFRESH_TOKEN` | step B.4 |
-
-Secrets are write-only: once saved, no one (including the maintainer) can read
-them back, only overwrite them.
-
-### D. Create the approval gate
+### C. Create the approval gate (do this before adding the secrets)
 
 1. Go to **Settings → Environments → New environment**, name it exactly
    **`social`**.
@@ -119,6 +104,31 @@ them back, only overwrite them.
 From then on, when a post is pending, GitHub emails the reviewer "Deployment
 review pending". Open the run, read the composed post and image in the summary,
 and click **Approve and deploy** to send it, or **Reject** to cancel.
+
+### D. Add the secrets to the `social` environment
+
+Add the credentials as **environment secrets on `social`**, NOT as
+repository secrets. Open **Settings → Environments → `social` →
+Environment secrets → Add secret**, and add each of:
+
+| Secret | From |
+| --- | --- |
+| `BSKY_HANDLE` | step A — the **bare** handle, e.g. `netsec-cost.eu` (no leading `@`) |
+| `BSKY_APP_PASSWORD` | step A |
+| `LINKEDIN_ORG_ID` | step B.1 |
+| `LINKEDIN_ACCESS_TOKEN` | step B.4 |
+| `LINKEDIN_REFRESH_TOKEN` | step B.4 |
+
+Why environment secrets and not repository secrets: an environment secret is
+only released to a job that targets `environment: social`, and only **after**
+the required-reviewer approval passes. So the posting credentials are
+unreadable until you approve — the gate protects both the action (posting) and
+the access (the secret). A repository secret, by contrast, is readable by any
+workflow at any time, which is a wider blast radius for no benefit here. Do not
+add them at repo level as well.
+
+Secrets are write-only: once saved, no one (including the maintainer) can read
+them back, only overwrite them.
 
 ### E. Go live
 
