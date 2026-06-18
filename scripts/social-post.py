@@ -43,6 +43,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 NEWS_XML = ROOT / "news.xml"
+NEWS_JSON = ROOT / "data" / "news.json"
 SPOTLIGHT = ROOT / "data" / "spotlight.json"
 BIOS = ROOT / "data" / "bios.json"
 LEDGER = ROOT / "data" / "social-posted.json"
@@ -100,24 +101,51 @@ def _strip_tags(s: str) -> str:
     return re.sub(r"<[^>]+>", "", s or "").strip()
 
 
+def news_directives() -> dict:
+    """{news item id: directive} from data/news.json. The optional per-item
+    `social` field controls the auto single-post: "skip" (don't post this item)
+    or "thread:<slug>" (announced as a curated thread, so the auto post stands
+    down). Absent / "auto" means the item is eligible."""
+    if not NEWS_JSON.exists():
+        return {}
+    try:
+        data = json.loads(NEWS_JSON.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    out = {}
+    for it in data.get("items", []):
+        d = (it.get("social") or "").strip()
+        if it.get("id") and d:
+            out[it["id"]] = d
+    return out
+
+
 def read_news_feed() -> list[Post]:
     """Parse news.xml into posts (stdlib regex; the feed is our own, small,
-    and well-formed). One post per <item>, keyed on <guid> or the link."""
+    and well-formed). One post per <item>, keyed on the item id (the <guid>),
+    so two items linking the same page do not collide on the dedup key. Items
+    whose news.json `social` directive is "skip" or "thread:*" are dropped."""
     if not NEWS_XML.exists():
         return []
     xml = NEWS_XML.read_text(encoding="utf-8")
+    directives = news_directives()
     posts = []
     for block in re.findall(r"<item>(.*?)</item>", xml, re.S):
-        def grab(tag):
-            m = re.search(rf"<{tag}>(.*?)</{tag}>", block, re.S)
+        def grab(tag, attrs=False):
+            pat = rf"<{tag}\b[^>]*>(.*?)</{tag}>" if attrs else rf"<{tag}>(.*?)</{tag}>"
+            m = re.search(pat, block, re.S)
             return m.group(1).strip() if m else ""
         title = html.unescape(_strip_tags(grab("title")))
         link = html.unescape(_strip_tags(grab("link")))
-        guid = html.unescape(_strip_tags(grab("guid"))) or link
+        # <guid isPermaLink="false">id</guid> — read the id, fall back to link.
+        guid = html.unescape(_strip_tags(grab("guid", attrs=True))) or link
         desc = grab("description")
         desc = re.sub(r"^<!\[CDATA\[|\]\]>$", "", desc).strip()
         summary = html.unescape(_strip_tags(desc))
         if not (title and link):
+            continue
+        directive = directives.get(guid, "auto")
+        if directive == "skip" or directive.startswith("thread:"):
             continue
         posts.append(Post(
             kind="news",
@@ -603,13 +631,27 @@ def main() -> int:
     ap.add_argument("--kind", choices=["news", "spotlight", "all"], default="all")
     ap.add_argument("--channel", choices=["bluesky", "linkedin", "all"], default="all")
     ap.add_argument("--thread", metavar="FILE", help="post a curated thread spec (data/social-threads/*.json)")
+    ap.add_argument("--count", action="store_true",
+                    help="print only the number of items that would post (for CI gating); publish nothing")
     args = ap.parse_args()
 
+    ledger = load_ledger()
+    posted = set(ledger.get("posted", []))
+
+    if args.count:
+        if args.thread:
+            thread = read_thread(Path(args.thread))
+            over = any(graphemes(tp.text) > BLUESKY_LIMIT for tp in thread.posts)
+            print(0 if (thread.key in posted or over) else 1)
+        else:
+            kinds = {"news", "spotlight"} if args.kind == "all" else {args.kind}
+            print(len(pending(kinds, ledger)))
+        return 0
+
     if args.thread:
-        return run_thread(Path(args.thread), live=args.live and not args.dry_run, ledger=load_ledger())
+        return run_thread(Path(args.thread), live=args.live and not args.dry_run, ledger=ledger)
 
     kinds = {"news", "spotlight"} if args.kind == "all" else {args.kind}
-    ledger = load_ledger()
     posts = pending(kinds, ledger)
 
     if not posts:

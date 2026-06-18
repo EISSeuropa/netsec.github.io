@@ -49,31 +49,43 @@ jobs:
   preview:
     name: Preview the pending posts
     runs-on: ubuntu-latest
+    outputs:
+      count: ${{ steps.compose.outputs.count }}
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v4 (sha-pinned)
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v5 (sha-pinned)
         with:
           python-version: '3.12'
       - name: Compose (dry-run) into the run summary
+        id: compose
         env:
           KIND: ${{ github.event.inputs.kind || 'all' }}
           THREAD: ${{ github.event.inputs.thread || '' }}
         run: |
+          if [ -n "$THREAD" ]; then
+            ARGS=(--thread "data/social-threads/${THREAD}.json")
+          else
+            ARGS=(--kind "$KIND")
+          fi
           {
             echo "### Bluesky — pending posts (preview)"
             echo ""
             echo '```'
-            if [ -n "$THREAD" ]; then
-              python3 scripts/social-post.py --dry-run --thread "data/social-threads/${THREAD}.json"
-            else
-              python3 scripts/social-post.py --dry-run --kind "$KIND"
-            fi
+            python3 scripts/social-post.py --dry-run "${ARGS[@]}"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+          N=$(python3 scripts/social-post.py --count "${ARGS[@]}")
+          echo "count=$N" >> "$GITHUB_OUTPUT"
+          if [ "$N" = "0" ]; then
+            echo "::notice::Nothing pending — the publish job is skipped, no approval needed."
+          else
+            echo "::notice::$N post(s) pending — the publish job is waiting for your approval."
+          fi
 
   publish:
     name: Approve, then post to Bluesky
     needs: preview
+    if: needs.preview.outputs.count != '0'   # no waiting approval when nothing is pending
     runs-on: ubuntu-latest
     environment: social          # required-reviewer gate; holds the job until approved
     steps:

@@ -211,12 +211,37 @@ Posts are **English only**. Edit the templates in `scripts/social-post.py`
 (the `Post.render` method and the `read_spotlight` composer) to adjust tone,
 emoji, or hashtags.
 
+## Opting a news item out of the auto-post
+
+A news item can carry an optional **`social`** field in `data/news.json` that
+controls only the Bluesky auto single-post (never the website or the RSS feed):
+
+- absent / `"auto"` — the gated workflow offers the item (default).
+- `"skip"` — never auto-post it.
+- `"thread:<slug>"` — the item is announced as a curated thread
+  (`data/social-threads/<slug>.json`), so the single-post stands down and you
+  post the thread by hand instead.
+
+This is what stops a big announcement from going out twice (once as the plain
+auto-post, once as the thread). The dedup key is the news item **id** (its
+`<guid>`), not the link, so two items pointing at the same page never collide.
+
+## Nothing-pending is skipped, not left waiting
+
+The `preview` job counts what would actually post and the `publish` job only
+runs when that count is non-zero. So an edit to an old item (which re-fires the
+workflow but adds nothing new) no longer leaves a no-op approval sitting in the
+queue — the run finishes with a `Nothing pending` notice. When there *is*
+something to post, the notice says so and the required reviewer is emailed.
+
 ## Notes
 
 - The pipeline is a **consumer** of already-published surfaces (the RSS feed
   and the spotlight state), so it never invents content; it only reposts what
   is already on the site.
 - The ledger (`data/social-posted.json`) is the single source of "already
-  posted". To re-post something deliberately, remove its key.
+  posted". To re-post something deliberately, remove its key. The news key is
+  the item id (`news::<id>`); the spotlight key includes the ISO week; threads
+  use `thread::<slug>`.
 - Account creation, app registration, entering credentials, and granting
   OAuth are done by a person, never by the website code.

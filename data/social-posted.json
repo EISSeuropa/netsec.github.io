@@ -1,10 +1,10 @@
 {
-  "_documentation": "Ledger for the social-publishing pipeline (scripts/social-post.py, issue #1072). `posted` holds the dedup keys of items already published (news::<guid>, spotlight::<slug>::<isoweek>), so re-runs publish nothing. The pipeline appends here after a successful post; the spotlight key includes the ISO week so a member is posted at most once per week. Do not hand-edit unless re-publishing an item on purpose. Seeded 2026-06-18 with the four news items already live, so activation does not re-announce history; the current spotlight is intentionally left unseeded so the first run posts it as a gated test.",
+  "_documentation": "Ledger for the social-publishing pipeline (scripts/social-post.py, issue #1072). `posted` holds the dedup keys of items already published (news::<id>, spotlight::<slug>::<isoweek>, thread::<slug>), so re-runs publish nothing. The news key is the news.json item id (the <guid>), not the link, so two items pointing at the same page do not collide. The pipeline appends here after a successful post; the spotlight key includes the ISO week so a member is posted at most once per week. Do not hand-edit unless re-publishing an item on purpose. Seeded with the four news items already live so activation does not re-announce history; a news item can also opt out via its `social` field (\"skip\" or \"thread:<slug>\") rather than the ledger.",
   "posted": [
-    "news::https://netsec-cost.eu/essc-2026.html",
-    "news::https://netsec-cost.eu/grants.html",
-    "news::https://eiss-europa.com/NetSecSchool.html",
-    "news::https://netsec-cost.eu/about.html#leadership",
+    "news::essc-2026-concludes-stockholm",
+    "news::grants-applications-now-open",
+    "news::summer-school-2026-applications-closed",
+    "news::netsec-officially-launched",
     "thread::best-paper-prize-2026"
   ]
 }

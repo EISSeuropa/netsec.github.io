@@ -1,5 +1,5 @@
 {
-  "_documentation": "Single source of truth for the home-page news cards (#249 parallel for news) AND the public RSS feed at /news.xml (v1.9.0). Two consumers: (a) the inline JS renderer in `index.html` (+ FR + DE) reads this on `DOMContentLoaded`, picks the locale from <html lang>, and rebuilds the `#news .news-list` cards from structured data. The hand-coded HTML in each home page survives as a `<noscript>`-style fail-soft fallback that the renderer empties on success. (b) `scripts/build-news-rss.py` reads this and emits `/news.xml` (RSS 2.0). The feed is single-language (EN) by RSS convention; per-locale feeds (/news.fr.xml, /news.de.xml) are a deferred follow-up if there's reader demand. When you add or edit an item: bump `lastBuildDate`, run `python3 scripts/build-news-rss.py`, confirm the FR / DE i18n blocks track any EN copy changes. CI runs a drift checker on every PR touching this file or news.xml.",
+  "_documentation": "Single source of truth for the home-page news cards (#249 parallel for news) AND the public RSS feed at /news.xml (v1.9.0). Two consumers: (a) the inline JS renderer in `index.html` (+ FR + DE) reads this on `DOMContentLoaded`, picks the locale from <html lang>, and rebuilds the `#news .news-list` cards from structured data. The hand-coded HTML in each home page survives as a `<noscript>`-style fail-soft fallback that the renderer empties on success. (b) `scripts/build-news-rss.py` reads this and emits `/news.xml` (RSS 2.0). The feed is single-language (EN) by RSS convention; per-locale feeds (/news.fr.xml, /news.de.xml) are a deferred follow-up if there's reader demand. When you add or edit an item: bump `lastBuildDate`, run `python3 scripts/build-news-rss.py`, confirm the FR / DE i18n blocks track any EN copy changes. CI runs a drift checker on every PR touching this file or news.xml. Optional per-item `social` field controls the Bluesky auto single-post (scripts/social-post.py): omit it (or `\"auto\"`) to let the gated workflow offer the item; `\"skip\"` to never auto-post it; `\"thread:<slug>\"` when the item is announced as a curated thread (data/social-threads/<slug>.json) so the single-post stands down. It does not affect the website or the RSS feed.",
   "channelTitle": "NetSec — Latest news",
   "channelDescription": "Announcements, calls, and milestones from the COST Action CA24154 (NetSec).",
   "channelLink": "https://netsec-cost.eu/#news",
@@ -8,6 +8,7 @@
   "items": [
     {
       "id": "essc-2026-best-paper-prize",
+      "social": "thread:best-paper-prize-2026",
       "pubDate": "2026-06-17T10:00:00+02:00",
       "displayDate": {
         "en": "17 June 2026",
