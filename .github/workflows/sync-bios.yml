@@ -101,6 +101,15 @@ jobs:
           # file rides this same auto-PR. Idempotent: no change, no diff.
           python3 scripts/sync-orcid.py
 
+      - name: Regenerate per-member OG cards (#1023)
+        run: |
+          # Render the OG card image for any member whose card inputs changed
+          # (manifest-keyed, so unchanged cards are not re-rendered and the PR
+          # stays churn-free). Runs BEFORE the profile-page rebuild so a new
+          # member's og:image points at their freshly built card. Chrome is
+          # preinstalled on the runner (same as the render smoke test).
+          python3 scripts/build-og-cards.py
+
       - name: Rebuild member profile pages from the refreshed bios
         run: |
           # The /people/<slug> profile pages (#762) are generated from

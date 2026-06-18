@@ -12,9 +12,9 @@ them and a shared link unfurls as that person.
 They deliberately carry no `data-pagefind-body`: the site's on-site
 Pagefind search still runs through the existing redirect stubs
 (scripts/build-bio-search-stubs.py), keeping the two pipelines independent
-for now. Pointing Pagefind at these real pages (retiring the stubs),
-listing them in sitemap.xml, and generating per-member OG card images are
-the planned follow-ups (#762).
+for now. Pointing Pagefind at these real pages (retiring the stubs) is the
+remaining #762 follow-up; sitemap listing (#1027) and per-member OG card
+images (#1023) have shipped.
 
 How the chrome stays identical with zero drift: each page reuses the
 exact nav, footer, head assets, and site.js from the matching locale
@@ -31,9 +31,10 @@ Run: `python3 scripts/build-profile-pages.py` writes the pages and a
 `sitemap fragment`. `--check` re-generates in memory and exits non-zero if
 anything on disk has drifted (the CI gate), writing nothing.
 
-Per-member Open Graph *images* are a separate concern (headless Chrome)
-and are not generated here yet; until then the pages unfurl with the site
-default OG image.
+Per-member Open Graph *images* are rendered separately by
+scripts/build-og-cards.py (headless Chrome). This script points each
+profile's og:image at the member's card when one exists, else the generic
+people card, so a profile without a card still unfurls cleanly.
 """
 
 from __future__ import annotations
@@ -275,19 +276,27 @@ def build_page(m: dict, works: list, loc_key: str, chrome: dict) -> str:
     hreflang = "\n".join(
         f'<link rel="alternate" hreflang="{hl}" href="{SITE}/people/{slug}{LOCALES[k]["suffix"]}.html">'
         for hl, k in (("en", "en"), ("fr", "fr"), ("de", "de"), ("x-default", "en")))
+    # Per-member OG card (#1023) when one has been generated for this slug,
+    # else the generic people card. The card is locale-independent (name +
+    # affiliation aren't translated), so all three locale pages share it.
+    if (ROOT / "assets" / "og" / "people" / f"{slug}.png").exists():
+        og_image = f"{SITE}/assets/og/people/{slug}.png"
+    else:
+        og_image = f"{SITE}/assets/images/og-image-people.png"
+
     seo = f"""<link rel="canonical" href="{canonical}">
 <meta property="og:type" content="profile">
 <meta property="og:site_name" content="NetSec, COST Action CA24154">
 <meta property="og:title" content="{esc(name)} · NetSec directory">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{canonical}">
-<meta property="og:image" content="{SITE}/assets/images/og-image-people.png">
+<meta property="og:image" content="{og_image}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(name)} · NetSec directory">
 <meta name="twitter:description" content="{esc(desc)}">
-<meta name="twitter:image" content="{SITE}/assets/images/og-image-people.png">
+<meta name="twitter:image" content="{og_image}">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <script type="application/ld+json">
 {person_jsonld(m, canonical)}
