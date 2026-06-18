@@ -173,6 +173,21 @@ def test_image_size_reads_jpeg_and_png():
         tmp.unlink()
 
 
+def test_read_thread_parses_link_card():
+    spec = _MOD.parent.parent / "data" / "social-threads" / "directory-early-access.json"
+    if not spec.exists():
+        return
+    thread = sp.read_thread(spec)
+    assert thread.key == "thread::directory-early-access"
+    post = thread.posts[0]
+    assert sp.graphemes(post.text) <= sp.BLUESKY_LIMIT
+    assert post.card and post.card["uri"] == "https://netsec-cost.eu/people.html"
+    # thumb resolves to a real file in the repo
+    assert post.card["thumb"].exists()
+    # the card carries the link, so the post text should NOT repeat the URL
+    assert "http" not in post.text
+
+
 def _standalone() -> int:
     failures = []
     tests = [(n, f) for n, f in sorted(globals().items())

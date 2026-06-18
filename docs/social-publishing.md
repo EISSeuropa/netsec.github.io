@@ -70,6 +70,13 @@ verbatim text. Inside the text:
   its DID live, at post time).
 - An `http(s)://` URL becomes a clickable link.
 
+A post can also carry a **`card`** instead of an `image`, which renders as a
+clickable link-preview card (`app.bsky.embed.external`): `{uri, title,
+description, thumb}`, where `thumb` is a repo image path (typically the page's
+own OG card). Put the link in the `card` and leave it out of the post text, so
+the card is the single tap target. See
+`data/social-threads/directory-early-access.json`.
+
 Posts are chained as a reply thread (post 2 replies to post 1, and so on). The
 dry-run prints each post with its grapheme count against the 300 limit, flags
 any post that is over, lists the mentions and links it found, and shows whether
