@@ -1,0 +1,19 @@
+{
+  "_documentation": "A curated Bluesky thread for the social pipeline (scripts/social-post.py --thread FILE). Each post is verbatim text, posted in order, each replying to the previous (root + parent strong refs). @handle.tld tokens in the text become mention facets (the handle is resolved to a DID live, at post time); http(s) URLs become link facets; both use UTF-8 byte offsets. The first post may carry an image (PNG or JPEG). The `key` is recorded in data/social-posted.json after a successful run so an approved workflow cannot double-post the thread. Bluesky only for now; LinkedIn threading is a separate concern. Compose/verify with `--dry-run` (default); publish with `--live` behind the `social` environment approval gate.",
+  "key": "thread::best-paper-prize-2026",
+  "channel": "bluesky",
+  "langs": ["en"],
+  "posts": [
+    {
+      "text": "🏆 Congratulations to the winners of the European Security Studies Best Paper Prize, awarded in partnership with the Journal of Strategic Studies!\n\n▫️Anna Seliverstova (Linnaeus University)\n\n▫️Mattia Sguazzini (University of Genova)\n\nA well-deserved recognition of their outstanding research 🧵",
+      "image": "assets/img/social/best-paper-prize-2026.jpeg",
+      "imageAlt": "European Security Studies Best Paper Prize 2026. Winners: Anna Seliverstova (Linnaeus University) and Mattia Sguazzini (University of Genova). Logos: EISS, Stockholm University, NetSec."
+    },
+    {
+      "text": "📄 Winning papers:\n\n🏆 Anna Seliverstova: \"Telegram in Russia's Information Strategy: Evidence from Serbia\"\n\n🏆 Mattia Sguazzini (@mattiasguazzini.bsky.social): \"Do Parliaments Dream of Cyber Power? Parliamentary Scrutiny in the Strategic Domain of Cyberspace\""
+    },
+    {
+      "text": "The awards were presented during last week's European Security Studies Conference, co-organised by @eissnetwork.bsky.social, NetSec, and @stockholm-uni.bsky.social\n\nCongratulations once again to both winners, and thank you to everyone who helped make the inaugural conference such a success!"
+    }
+  ]
+}

@@ -106,6 +106,58 @@ def test_bluesky_handle_strips_at(monkeypatch=None):
         del os.environ["BSKY_HANDLE"]
 
 
+def test_graphemes_folds_emoji_and_combining():
+    # 🏆 and 🧵 are one grapheme each; ▫️ is base + VS16 (still one).
+    assert sp.graphemes("abc") == 3
+    assert sp.graphemes("🏆 hi 🧵") == 6  # trophy, space, h, i, space, thread
+    assert sp.graphemes("▫️x") == 2
+
+
+def test_find_mentions_byte_offsets_with_multibyte_prefix():
+    text = "café @eissnetwork.bsky.social!"
+    ms = sp.find_mentions(text)
+    assert len(ms) == 1
+    handle, bs, be = ms[0]
+    assert handle == "eissnetwork.bsky.social"
+    # "café " is 6 bytes (é = 2), so the @ starts at byte 6.
+    assert text.encode("utf-8")[bs:be].decode() == "@eissnetwork.bsky.social"
+    assert bs == 6
+
+
+def test_find_mentions_handles_punctuation_and_two_in_one_post():
+    text = "by @eissnetwork.bsky.social, NetSec, and @stockholm-uni.bsky.social"
+    handles = [h for h, _, _ in sp.find_mentions(text)]
+    assert handles == ["eissnetwork.bsky.social", "stockholm-uni.bsky.social"]
+
+
+def test_find_links_byte_offsets():
+    text = "see https://netsec-cost.eu/x.html for more"
+    links = sp.find_links(text)
+    assert links and links[0][0] == "https://netsec-cost.eu/x.html"
+    u, bs, be = links[0]
+    assert text.encode("utf-8")[bs:be].decode() == u
+
+
+def test_img_mime_by_extension():
+    assert sp._img_mime(Path("a.jpeg")) == "image/jpeg"
+    assert sp._img_mime(Path("a.JPG")) == "image/jpeg"
+    assert sp._img_mime(Path("a.png")) == "image/png"
+
+
+def test_read_thread_real_spec_under_limit():
+    spec = _MOD.parent.parent / "data" / "social-threads" / "best-paper-prize-2026.json"
+    if not spec.exists():
+        return
+    thread = sp.read_thread(spec)
+    assert thread.key == "thread::best-paper-prize-2026"
+    assert len(thread.posts) == 3
+    assert all(sp.graphemes(tp.text) <= sp.BLUESKY_LIMIT for tp in thread.posts)
+    # the image rides the first post and exists in the repo
+    assert thread.posts[0].image and thread.posts[0].image.exists()
+    # the spec's @handles are detectable as mentions
+    assert any(sp.find_mentions(tp.text) for tp in thread.posts)
+
+
 def _standalone() -> int:
     failures = []
     tests = [(n, f) for n, f in sorted(globals().items())

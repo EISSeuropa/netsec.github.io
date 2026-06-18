@@ -51,6 +51,40 @@ publishes nothing and writes nothing.
 
 ---
 
+## Curated threads (hand-written multi-post announcements)
+
+Some announcements need more than one auto-composed post: a launch, an award,
+a recap. For those, write a thread spec under `data/social-threads/<slug>.json`
+and post it with `--thread`:
+
+```bash
+python3 scripts/social-post.py --thread data/social-threads/best-paper-prize-2026.json --dry-run
+python3 scripts/social-post.py --thread data/social-threads/best-paper-prize-2026.json --live   # behind the gate
+```
+
+A spec is a `key` (recorded in the ledger so it cannot double-post), an
+ordered list of `posts`, and an optional `image` on any post. Each post is
+verbatim text. Inside the text:
+
+- `@handle.bsky.social` becomes a clickable mention (the handle is resolved to
+  its DID live, at post time).
+- An `http(s)://` URL becomes a clickable link.
+
+Posts are chained as a reply thread (post 2 replies to post 1, and so on). The
+dry-run prints each post with its grapheme count against the 300 limit, flags
+any post that is over, lists the mentions and links it found, and shows whether
+the ledger has already posted the thread. The live path refuses to post if any
+post is over the limit. Images may be PNG or JPEG.
+
+To post a thread **through the approval gate** rather than locally: GitHub
+→ Actions → *Publish to Bluesky (approval-gated)* → **Run workflow**, and set
+the `thread` input to the spec slug (the filename without `.json`, e.g.
+`best-paper-prize-2026`). The `preview` job writes the dry-run to the run
+summary, then the `publish` job waits for a required reviewer before posting.
+Leave `thread` empty for the normal news / spotlight run.
+
+---
+
 ## Setup — for the social media manager
 
 These are the one-time steps to connect the accounts. They need **admin
