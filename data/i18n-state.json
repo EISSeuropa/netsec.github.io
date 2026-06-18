@@ -275,6 +275,22 @@
         "status": "beta",
         "reviewed_by": null
       }
+    },
+    "slides.html": {
+      "de": {
+        "file": "slides.de.html",
+        "reviewed_by": null,
+        "source_sha1": "8acf4811431f4db0f44bf5ad2f98b2fc3e3d8d56",
+        "status": "beta",
+        "translated_on": "2026-06-18"
+      },
+      "fr": {
+        "file": "slides.fr.html",
+        "reviewed_by": null,
+        "source_sha1": "8acf4811431f4db0f44bf5ad2f98b2fc3e3d8d56",
+        "status": "beta",
+        "translated_on": "2026-06-18"
+      }
     }
   }
 }

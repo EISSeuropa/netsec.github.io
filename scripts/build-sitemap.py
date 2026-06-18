@@ -60,9 +60,7 @@ TOP_LEVEL = [
     ("slides",         "2026-06-18", "yearly",  "0.4"),
 ]
 
-# Pages that exist in English only (no FR/DE variant), so their <url>
-# block carries just the en + x-default hreflang, not fr/de alternates.
-EN_ONLY = {"slides"}
+EN_ONLY = set()
 
 # Member profile pages share one generous lastmod; the weekly bios sync
 # keeps the member set current, and the date is refined only when a
