@@ -93,6 +93,63 @@
           "url": "https://www.nato.int/cps/en/natohq/topics_184303.htm"
         }
       ]
+    },
+    {
+      "term": "Strategic Compass",
+      "definition": {
+        "en": "The European Union's 2022 strategy for security and defence: a shared analysis of the threats Europe faces, with concrete actions and targets to 2030 grouped around four strands, to act, to secure, to invest, and to partner.",
+        "fr": "La stratégie de l'Union européenne pour la sécurité et la défense, adoptée en 2022 : une analyse commune des menaces auxquelles l'Europe fait face, assortie d'actions et d'objectifs concrets à l'horizon 2030, organisés autour de quatre axes : agir, sécuriser, investir et nouer des partenariats.",
+        "de": "Die 2022 angenommene Sicherheits- und Verteidigungsstrategie der Europäischen Union: eine gemeinsame Analyse der Bedrohungen, denen Europa gegenübersteht, mit konkreten Maßnahmen und Zielen bis 2030, die sich um vier Stränge gliedern: Handeln, Sichern, Investieren und Partnerschaften eingehen."
+      },
+      "theme": "Security and defence",
+      "match_keywords": [
+        "Defence",
+        "EU foreign policy"
+      ],
+      "sources": [
+        {
+          "label": "A Strategic Compass for Security and Defence (European External Action Service)",
+          "url": "https://www.eeas.europa.eu/eeas/strategic-compass-security-and-defence-1_en"
+        }
+      ]
+    },
+    {
+      "term": "European Peace Facility (EPF)",
+      "definition": {
+        "en": "An off-budget European Union fund that covers the common costs of military Common Security and Defence Policy missions and pays for assistance measures, including the supply of military equipment, to partner countries and organisations.",
+        "fr": "Un fonds de l'Union européenne, hors budget, qui couvre les coûts communs des missions militaires de la politique de sécurité et de défense commune et finance des mesures d'assistance, y compris la fourniture d'équipements militaires, à des pays et organisations partenaires.",
+        "de": "Ein außerhalb des EU-Haushalts angesiedelter Fonds der Europäischen Union, der die gemeinsamen Kosten militärischer Missionen der Gemeinsamen Sicherheits- und Verteidigungspolitik trägt und Unterstützungsmaßnahmen finanziert, einschließlich der Lieferung militärischer Ausrüstung, an Partnerländer und -organisationen."
+      },
+      "theme": "Security and defence",
+      "match_keywords": [
+        "Defence",
+        "EU foreign policy"
+      ],
+      "sources": [
+        {
+          "label": "European Peace Facility (Council of the European Union)",
+          "url": "https://www.consilium.europa.eu/en/policies/european-peace-facility/"
+        }
+      ]
+    },
+    {
+      "term": "Coordinated Annual Review on Defence (CARD)",
+      "definition": {
+        "en": "A European Defence Agency review that maps member states' defence spending and plans to surface opportunities for cooperation and to reduce duplication across national capabilities.",
+        "fr": "Un examen mené par l'Agence européenne de défense qui recense les dépenses et les plans de défense des États membres afin de faire émerger des possibilités de coopération et de réduire les doublons entre capacités nationales.",
+        "de": "Eine von der Europäischen Verteidigungsagentur durchgeführte Überprüfung, die die Verteidigungsausgaben und -planungen der Mitgliedstaaten erfasst, um Kooperationsmöglichkeiten aufzuzeigen und Doppelarbeit zwischen nationalen Fähigkeiten zu verringern."
+      },
+      "theme": "Security and defence",
+      "match_keywords": [
+        "Defence",
+        "Industrial policy"
+      ],
+      "sources": [
+        {
+          "label": "Coordinated Annual Review on Defence (European Defence Agency)",
+          "url": "https://eda.europa.eu/what-we-do/EU-defence-initiatives/coordinated-annual-review-on-defence-(card)"
+        }
+      ]
     }
   ]
 }

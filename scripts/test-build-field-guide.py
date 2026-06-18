@@ -393,6 +393,26 @@ def test_real_field_guide_json_renders():
             assert bfg.keyword_slug(c["term"]) in section
 
 
+def test_real_field_guide_entry_shape():
+    """Every real concept carries a headword and all three locale definitions,
+    and every source is a {label, url} pair with non-empty values. Guards new
+    entries (e.g. the EU defence-instrument batch, issue #998) against a
+    missing FR/DE definition or a malformed citation slipping in."""
+    repo = _MOD_PATH.resolve().parent.parent
+    data_path = repo / "data" / "field-guide.json"
+    if not data_path.exists():
+        return
+    data = json.loads(data_path.read_text(encoding="utf-8"))
+    for c in data["concepts"]:
+        assert c.get("term", "").strip(), f"concept missing term: {c}"
+        defn = c.get("definition") or {}
+        for lang in ("en", "fr", "de"):
+            assert defn.get(lang, "").strip(), f"{c['term']}: missing {lang} definition"
+        for src in c.get("sources") or []:
+            assert src.get("label", "").strip(), f"{c['term']}: source missing label"
+            assert src.get("url", "").strip().startswith("http"), f"{c['term']}: bad source url"
+
+
 # --------------------------------------------------------------------------
 # Standalone runner (no pytest dependency).
 # --------------------------------------------------------------------------
