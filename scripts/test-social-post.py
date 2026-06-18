@@ -42,10 +42,10 @@ def test_linkedin_render_has_summary_and_hashtags():
     assert "https://netsec-cost.eu/x.html" in text
 
 
-def test_spotlight_uses_lamp_prefix():
+def test_spotlight_uses_star_prefix():
     post = sp.Post(kind="spotlight", key="k", title="Member spotlight",
                    summary="Meet X.", link="https://netsec-cost.eu/people/x.html")
-    assert post.render("bluesky").startswith("🔦")
+    assert post.render("bluesky").startswith("⭐")
 
 
 def test_news_feed_parses_real_xml():

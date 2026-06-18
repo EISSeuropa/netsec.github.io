@@ -349,6 +349,25 @@
     });
   }
 
+  // Title-case a research keyword for display on the card pills, mirroring
+  // the spotlight composer (scripts/social-post.py `titlecase_theme`): every
+  // word is capitalised except small connectors mid-phrase, and any token that
+  // is already an acronym (EU, NATO) or carries an internal capital (IoT) is
+  // left as-is. "Black sea security" → "Black Sea Security"; "EU foreign
+  // policy" → "EU Foreign Policy". Applied to display text only — the original
+  // canonical form still drives the theme lookup, slug, and dedup.
+  const TITLE_SMALL = new Set(['a','an','and','the','of','for','in','on','to','with','vs']);
+  function titlecaseTheme(raw) {
+    return String(raw || '').split(/\s+/).map((w, i) => {
+      if (!w) return w;
+      if (w === w.toUpperCase() && /[A-Z]/.test(w)) return w;   // acronym
+      if (/[A-Z]/.test(w.slice(1))) return w;                    // internal cap
+      const lw = w.toLowerCase();
+      if (i !== 0 && TITLE_SMALL.has(lw)) return lw;
+      return lw.charAt(0).toUpperCase() + lw.slice(1);
+    }).join(' ');
+  }
+
   function leadershipOrder(m) {
     // Sort key: leadership first, then country reps alphabetical
     const r = (m.roles || []).join(' ');
@@ -689,18 +708,19 @@
           // to a theme, render a clickable button that selects that theme
           // (and scrolls up to the filter row); otherwise a static pill so
           // an unthemed keyword still displays without a dead control.
+          const label = titlecaseTheme(display);
           const theme = KEYWORD_THEME_MAP[display] || null;
           if (!theme) {
             const span = document.createElement('span');
             span.className = 'member-keyword-chip is-static';
-            span.textContent = display;
+            span.textContent = label;
             kwWrap.appendChild(span);
             return;
           }
           const chip = document.createElement('button');
           chip.type = 'button';
           chip.className = 'member-keyword-chip';
-          chip.textContent = display;
+          chip.textContent = label;
           const slug = keywordSlug(theme);
           chip.setAttribute('data-theme-slug', slug);
           chip.setAttribute('aria-label',

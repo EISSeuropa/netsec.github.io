@@ -73,7 +73,7 @@ class Post:
     def render(self, channel: str) -> str:
         """Channel-appropriate text. Bluesky is trimmed to its limit; the
         link is always kept whole (it is what the post is for)."""
-        head = f"📣 {self.title}" if self.kind == "news" else f"🔦 {self.title}"
+        head = f"📣 {self.title}" if self.kind == "news" else f"⭐ {self.title}"
         tail = f"\n\n{self.link}"
         if channel == "bluesky":
             budget = BLUESKY_LIMIT - len(head) - len(tail) - 2
@@ -249,8 +249,9 @@ def read_spotlight() -> Post | None:
     m = members.get(slug)
     if not m:
         return None
-    role = " · ".join(b for b in [(m.get("position") or "").strip(),
-                                  (m.get("affiliation") or "").strip()] if b)
+    pos = (m.get("position") or "").strip()
+    aff = (m.get("affiliation") or "").strip()
+    role = f"{pos} at {aff}" if pos and aff else (pos or aff)
     themes = [t for t in (m.get("canonical_keywords") or [])][:3]
     bits = [f"Meet {m.get('name', slug)} in the NetSec Directory."]
     if role:
