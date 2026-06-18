@@ -73,7 +73,7 @@ class Post:
     def render(self, channel: str) -> str:
         """Channel-appropriate text. Bluesky is trimmed to its limit; the
         link is always kept whole (it is what the post is for)."""
-        head = f"📣 {self.title}" if self.kind == "news" else f"🔦 {self.title}"
+        head = f"📣 {self.title}" if self.kind == "news" else f"⭐ {self.title}"
         tail = f"\n\n{self.link}"
         if channel == "bluesky":
             budget = BLUESKY_LIMIT - len(head) - len(tail) - 2
@@ -229,9 +229,9 @@ def _status_sentence(m: dict) -> str:
         phrases.append("looking for a mentor")
     stsm = m.get("stsm_hosting")
     if stsm == "yes":
-        phrases.append("hosting STSMs")
+        phrases.append("willing to host Short Term Scientific Missions")
     elif stsm == "ask":
-        phrases.append("open to hosting STSMs")
+        phrases.append("open to hosting Short Term Scientific Missions")
     sent = _join_and(phrases)
     return (sent[:1].upper() + sent[1:] + ".") if sent else ""
 
@@ -249,25 +249,46 @@ def read_spotlight() -> Post | None:
     m = members.get(slug)
     if not m:
         return None
-    role = " · ".join(b for b in [(m.get("position") or "").strip(),
-                                  (m.get("affiliation") or "").strip()] if b)
-    themes = [t for t in (m.get("canonical_keywords") or [])][:3]
-    bits = [f"Meet {m.get('name', slug)} in the NetSec Directory."]
-    if role:
-        bits.append(role + ".")
+    pos = (m.get("position") or "").strip()
+    aff = (m.get("affiliation") or "").strip()
+    role = f"{pos} at {aff}" if pos and aff else (pos or aff)
+    themes = [titlecase_theme(t) for t in (m.get("canonical_keywords") or [])][:3]
+    intro = f"Meet {m.get('name', slug)} in the NetSec Directory"
+    lead = f"{intro}, {role}." if role else f"{intro}."
     status = _status_sentence(m)
-    if status:
-        bits.append(status)
-    if themes:
-        bits.append("Working on " + ", ".join(titlecase_theme(t) for t in themes) + ".")
+    title = "NetSec Directory Spotlight"
+    link = f"{SITE}/people/{slug}.html"
+
+    # Assemble the summary so the Bluesky render never has to hard-truncate
+    # mid-word: the post text is lead + "Working on …" + status, and when it
+    # would overrun the 300 limit we drop whole pieces (a theme at a time,
+    # keeping the mentorship/STSM status line) so it always ends on a full
+    # sentence. The budget mirrors Post.render's head/tail arithmetic.
+    budget = BLUESKY_LIMIT - len(f"⭐ {title}") - len(f"\n\n{link}") - 2
+
+    def _summary(n_themes: int, with_status: bool) -> str:
+        parts = [lead]
+        if themes and n_themes:
+            parts.append("Working on " + ", ".join(themes[:n_themes]) + ".")
+        if with_status and status:
+            parts.append(status)
+        return " ".join(parts)
+
+    summary = _summary(len(themes), bool(status))
+    for n, ws in [(3, True), (2, True), (1, True), (0, True), (0, False)]:
+        cand = _summary(min(n, len(themes)), ws)
+        if len(cand) <= budget:
+            summary = cand
+            break
+
     card = ROOT / "assets" / "og" / "people" / f"{slug}.png"
     week = _iso_week(sp.get("featuredSince", ""))
     return Post(
         kind="spotlight",
         key=f"spotlight::{slug}::{week}",
-        title="Member spotlight",
-        summary=" ".join(bits),
-        link=f"{SITE}/people/{slug}.html",
+        title=title,
+        summary=summary,
+        link=link,
         image=card if card.exists() else (SITE_OG if SITE_OG.exists() else None),
         image_alt=f"Profile card for {m.get('name', slug)} in the NetSec Directory",
     )

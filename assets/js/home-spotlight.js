@@ -49,6 +49,22 @@
     return (first + last).toUpperCase() || '?';
   }
 
+  // Title-case a research keyword for the chip text, matching the directory
+  // (assets/js/people-directory.js) and the spotlight composer: every word
+  // capitalised except small connectors mid-phrase, acronyms and internally-
+  // capitalised tokens left as-is. "Black sea security" → "Black Sea Security".
+  var TITLE_SMALL = ['a','an','and','the','of','for','in','on','to','with','vs'];
+  function titlecaseTheme(raw) {
+    return String(raw || '').split(/\s+/).map(function (w, i) {
+      if (!w) return w;
+      if (w === w.toUpperCase() && /[A-Z]/.test(w)) return w;
+      if (/[A-Z]/.test(w.slice(1))) return w;
+      var lw = w.toLowerCase();
+      if (i !== 0 && TITLE_SMALL.indexOf(lw) !== -1) return lw;
+      return lw.charAt(0).toUpperCase() + lw.slice(1);
+    }).join(' ');
+  }
+
   function flag(cc) {
     cc = (cc || '').toLowerCase();
     if (!/^[a-z]{2}$/.test(cc)) return '';
@@ -77,7 +93,7 @@
 
     var chips = el('div', { class: 'spotlight-keywords' });
     (member.canonical_keywords || []).slice(0, 4).forEach(function (k) {
-      chips.appendChild(el('span', { class: 'spotlight-chip', text: k }));
+      chips.appendChild(el('span', { class: 'spotlight-chip', text: titlecaseTheme(k) }));
     });
 
     var body = el('div', { class: 'spotlight-body' }, [

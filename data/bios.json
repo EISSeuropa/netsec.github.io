@@ -465,6 +465,7 @@
         "mentor"
       ],
       "themes": [
+        "Cyber and emerging technology",
         "Intelligence, information and influence"
       ],
       "regions": [
@@ -1543,8 +1544,13 @@
         "Military neutrality",
         "Nordic countries",
         "Nordic-Baltic space",
-        "Security politices",
+        "Security politics",
         "Small states"
+      ],
+      "themes": [
+        "European and transatlantic security order",
+        "Foreign policy and diplomacy",
+        "Security and defence"
       ]
     }
   ],
@@ -1878,7 +1884,7 @@
       "count": 1
     },
     {
-      "keyword": "Security politices",
+      "keyword": "Security politics",
       "count": 1
     },
     {
@@ -1929,11 +1935,11 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 13
+      "count": 14
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 12
+      "count": 13
     },
     {
       "theme": "Theory and methods",
@@ -1941,7 +1947,7 @@
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 7
+      "count": 8
     },
     {
       "theme": "Transnational and human security",
@@ -1952,12 +1958,12 @@
       "count": 5
     },
     {
-      "theme": "Strategy and deterrence",
+      "theme": "European and transatlantic security order",
       "count": 5
     },
     {
-      "theme": "European and transatlantic security order",
-      "count": 4
+      "theme": "Strategy and deterrence",
+      "count": 5
     },
     {
       "theme": "Intelligence, information and influence",
@@ -1982,6 +1988,7 @@
     "Crises": "Security and defence",
     "Crisis management": "Security and defence",
     "Cyber defence": "Cyber and emerging technology",
+    "Cyber statecraft": "Cyber and emerging technology",
     "Cybercrime": "Cyber and emerging technology",
     "Cybersecurity": "Cyber and emerging technology",
     "Cybersecurity governance": "Cyber and emerging technology",
@@ -2029,11 +2036,14 @@
     "Maritime security": "Transnational and human security",
     "Maritime strategy": "Strategy and deterrence",
     "Militarisation": "Security and defence",
+    "Military neutrality": "European and transatlantic security order",
     "Multilateralism": "Foreign policy and diplomacy",
     "NATO": "European and transatlantic security order",
     "Narratives": "Identity, narratives and ideational security",
     "National security": "Security and defence",
     "Non-state actors": "Transnational and human security",
+    "Nordic countries": "Foreign policy and diplomacy",
+    "Nordic-Baltic space": "Foreign policy and diplomacy",
     "Nuclear politics": "Strategy and deterrence",
     "Nuclear strategy": "Strategy and deterrence",
     "Ontological security": "Identity, narratives and ideational security",
@@ -2047,7 +2057,9 @@
     "Research methods": "Theory and methods",
     "Russian foreign policy": "Foreign policy and diplomacy",
     "Security and defence": "Security and defence",
+    "Security politics": "Security and defence",
     "Security studies": "Security and defence",
+    "Small states": "Foreign policy and diplomacy",
     "Strategy": "Strategy and deterrence",
     "Subversion": "Intelligence, information and influence",
     "Technology spillovers": "Cyber and emerging technology",
