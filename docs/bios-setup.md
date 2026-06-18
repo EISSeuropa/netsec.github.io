@@ -10,7 +10,7 @@ Google Form ──► Google Sheet ──► sync-bios.yml (weekly) ──► PR
 
 - Anyone interested in NetSec — leadership, MC representatives, WG participants, or wider-community researchers and practitioners — fills the form once.
 - Every Monday at 05:15 UTC (and on manual dispatch), the workflow reads the Sheet as CSV, downloads any new headshots, regenerates `data/bios.json`, and opens a PR if anything changed.
-- You merge. The new bio appears on the **The Network** page (`/people.html`).
+- You merge. The new bio appears on the **Directory** page (`/people.html`).
 - Members can update their entries by submitting again — the script dedupes by email, newest submission wins.
 
 ## Step 1 · Create the form

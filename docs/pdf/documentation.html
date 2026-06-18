@@ -954,7 +954,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     </div>
     <div class="card tint">
       <h4>Members &amp; grant applicants</h4>
-      <p style="margin:0">Practical resources: grant calls, the e-COST workflow, deliverables, the roadmap. The Network directory and Grants page are written for them.</p>
+      <p style="margin:0">Practical resources: grant calls, the e-COST workflow, deliverables, the roadmap. The Directory and Grants page are written for them.</p>
     </div>
   </div>
   <div class="card tint">
@@ -1036,7 +1036,7 @@ flowchart LR
 flowchart TB
     H["<b>index.html · Home</b><br/><span style='font-size:11px;color:#5a6679'>anchored sections:</span><br/><span style='font-size:11px'>news · about (incl. Find out more)</span><br/><span style='font-size:11px'>working-groups · committee · events</span><br/><span style='font-size:11px'>for-members · contact</span>"]
 
-    P["<b>people.html</b><br/>The Network"]
+    P["<b>people.html</b><br/>The Directory"]
     G["<b>grants.html</b><br/>Grants &amp; Calls"]
     E["<b>essc-2026.html</b><br/>ESSC 2026 programme"]
     SS["<b>summer-school.html</b><br/>Summer School (ECS³)"]
@@ -1305,10 +1305,10 @@ sequenceDiagram
     <div class="caption">Figure 9 · The European Security Studies Conference 2026 live programme (added v1.6.0, refined through v1.6.1). Day chips at the top; parallel session cards with room badges, livestream pulses on plenaries, and inline-expand abstracts on contributions. Speaker names that resolve to a NetSec member open a glass preview popover on hover. Cropped from the top of the live page; the full programme spans several screen-heights and is best read at <code>netsec-cost.eu/essc-2026.html</code>.</div>
   </div>
 
-  <h2>The Network directory in practice</h2>
+  <h2>The Directory in practice</h2>
   <div class="snapshot cropped">
-    <div class="clip"><img src="snap-network.png" alt="The Network directory page with the research-interest filter row, WG and country filters, and bio cards with keyword chips."></div>
-    <div class="caption">Figure 10 · The Network directory. Four filter axes (free-text search, WG / MC chip, country, research-interest chip row) AND together so they can be stacked. The research-interest filter row above the grid (added v1.7.0) shows the top eight canonical keywords by submission count; clicking a chip narrows the directory and persists the selection in the URL hash for sharing. Cropped from the top of the live page to show the filter chrome above the grid; the full member list continues below.</div>
+    <div class="clip"><img src="snap-network.png" alt="The Directory page with the research-interest filter row, WG and country filters, and bio cards with keyword chips."></div>
+    <div class="caption">Figure 10 · The Directory. Four filter axes (free-text search, WG / MC chip, country, research-interest chip row) AND together so they can be stacked. The research-interest filter row above the grid (added v1.7.0) shows the top eight canonical keywords by submission count; clicking a chip narrows the directory and persists the selection in the URL hash for sharing. Cropped from the top of the live page to show the filter chrome above the grid; the full member list continues below.</div>
   </div>
 
   <h2>Repository layout</h2>
@@ -1319,7 +1319,7 @@ sequenceDiagram
 ├── roadmap.html                     # Public roadmap (v1.4.0)
 ├── outputs.html                     # Outputs placeholder (v1.4.0)
 ├── essc-2026.html                   # ESSC 2026 live programme (v1.6.0)
-├── people.html                      # The Network
+├── people.html                      # The Directory
 ├── grants.html                      # Grants &amp; Calls
 ├── faq.html                         # Public FAQ
 ├── glossary.html                    # COST + NetSec terminology
@@ -1455,7 +1455,7 @@ flowchart LR
   <table>
     <thead><tr><th>Level</th><th>Count</th><th>Example</th></tr></thead>
     <tbody>
-      <tr><td><code>h1</code></td><td>1 per page</td><td>"The Network", "Grants &amp; Calls"</td></tr>
+      <tr><td><code>h1</code></td><td>1 per page</td><td>"The Directory", "Grants &amp; Calls"</td></tr>
       <tr><td><code>h2</code></td><td>6–9</td><td>Major sections</td></tr>
       <tr><td><code>h3</code></td><td>~20</td><td>Sub-sections, member names</td></tr>
       <tr><td><code>h4</code></td><td>~18</td><td>Card titles, country names</td></tr>
@@ -1489,7 +1489,7 @@ flowchart LR
     </div>
     <div class="card">
       <h4><code>.members-toolbar</code></h4>
-      <p style="margin:0">Toolbar at the top of the Network page. Free-text search + WG / MC chip + country dropdown — all AND-combined by the directory's render loop.</p>
+      <p style="margin:0">Toolbar at the top of the Directory page. Free-text search + WG / MC chip + country dropdown — all AND-combined by the directory's render loop.</p>
     </div>
   </div>
 
