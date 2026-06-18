@@ -76,6 +76,13 @@ any post that is over, lists the mentions and links it found, and shows whether
 the ledger has already posted the thread. The live path refuses to post if any
 post is over the limit. Images may be PNG or JPEG.
 
+To post a thread **through the approval gate** rather than locally: GitHub
+→ Actions → *Publish to Bluesky (approval-gated)* → **Run workflow**, and set
+the `thread` input to the spec slug (the filename without `.json`, e.g.
+`best-paper-prize-2026`). The `preview` job writes the dry-run to the run
+summary, then the `publish` job waits for a required reviewer before posting.
+Leave `thread` empty for the normal news / spotlight run.
+
 ---
 
 ## Setup — for the social media manager

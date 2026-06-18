@@ -10,7 +10,9 @@
 #      an auto-merging PR.
 #
 # Triggers: a news.xml or data/spotlight.json change on main (i.e. a news item
-# or the weekly spotlight rotation landed), or a manual run for testing.
+# or the weekly spotlight rotation landed), or a manual run. The manual run can
+# also post a curated multi-post thread (data/social-threads/<slug>.json) by
+# passing the `thread` slug input; the same preview + approval gate applies.
 #
 # Secrets (Environment secrets on `social`): BSKY_HANDLE, BSKY_APP_PASSWORD.
 # Setup: docs/social-publishing.md.
@@ -26,10 +28,14 @@ on:
   workflow_dispatch:
     inputs:
       kind:
-        description: What to post
+        description: What to post (ignored when a thread slug is given)
         type: choice
         options: [all, news, spotlight]
         default: all
+      thread:
+        description: 'Curated thread slug under data/social-threads/ (e.g. best-paper-prize-2026); leave empty for news/spotlight'
+        type: string
+        default: ''
 
 permissions:
   contents: write
@@ -51,12 +57,17 @@ jobs:
       - name: Compose (dry-run) into the run summary
         env:
           KIND: ${{ github.event.inputs.kind || 'all' }}
+          THREAD: ${{ github.event.inputs.thread || '' }}
         run: |
           {
             echo "### Bluesky — pending posts (preview)"
             echo ""
             echo '```'
-            python3 scripts/social-post.py --dry-run --kind "$KIND"
+            if [ -n "$THREAD" ]; then
+              python3 scripts/social-post.py --dry-run --thread "data/social-threads/${THREAD}.json"
+            else
+              python3 scripts/social-post.py --dry-run --kind "$KIND"
+            fi
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -74,10 +85,15 @@ jobs:
       - name: Post to Bluesky and update the ledger
         env:
           KIND: ${{ github.event.inputs.kind || 'all' }}
+          THREAD: ${{ github.event.inputs.thread || '' }}
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
           BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
         run: |
-          python3 scripts/social-post.py --live --channel bluesky --kind "$KIND"
+          if [ -n "$THREAD" ]; then
+            python3 scripts/social-post.py --live --thread "data/social-threads/${THREAD}.json"
+          else
+            python3 scripts/social-post.py --live --channel bluesky --kind "$KIND"
+          fi
 
       - name: Persist the dedup ledger via an auto-merging PR
         id: create-pr
