@@ -158,6 +158,21 @@ def test_read_thread_real_spec_under_limit():
     assert any(sp.find_mentions(tp.text) for tp in thread.posts)
 
 
+def test_image_size_reads_jpeg_and_png():
+    jpeg = _MOD.parent.parent / "assets" / "img" / "social" / "best-paper-prize-2026.jpeg"
+    if jpeg.exists():
+        assert sp.image_size(jpeg) == (1214, 732)
+    # a 1x1 PNG (IHDR width/height = 1,1)
+    png = (b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR"
+           b"\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89")
+    tmp = _MOD.parent.parent / "data" / "_tmp_test.png"
+    tmp.write_bytes(png)
+    try:
+        assert sp.image_size(tmp) == (1, 1)
+    finally:
+        tmp.unlink()
+
+
 def _standalone() -> int:
     failures = []
     tests = [(n, f) for n, f in sorted(globals().items())

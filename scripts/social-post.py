@@ -364,6 +364,30 @@ def _img_mime(path: Path) -> str:
     return "image/jpeg" if path.suffix.lower() in (".jpg", ".jpeg") else "image/png"
 
 
+def image_size(path: Path) -> tuple[int, int] | None:
+    """(width, height) of a PNG or JPEG, stdlib-only. None if unreadable.
+    Bluesky letterboxes an image embed unless it carries the aspect ratio, so
+    the embed sends this so the card renders edge-to-edge at the true ratio."""
+    data = path.read_bytes()
+    if data[:8] == b"\x89PNG\r\n\x1a\n":  # IHDR width/height at bytes 16..24
+        import struct
+        w, h = struct.unpack(">II", data[16:24])
+        return int(w), int(h)
+    if data[:2] == b"\xff\xd8":  # JPEG: walk segments to a Start-Of-Frame marker
+        import struct
+        i = 2
+        while i + 9 < len(data):
+            if data[i] != 0xFF:
+                i += 1
+                continue
+            marker = data[i + 1]
+            if 0xC0 <= marker <= 0xCF and marker not in (0xC4, 0xC8, 0xCC):
+                h, w = struct.unpack(">HH", data[i + 5:i + 9])
+                return int(w), int(h)
+            i += 2 + struct.unpack(">H", data[i + 2:i + 4])[0]
+    return None
+
+
 class BlueskyChannel(Channel):
     PDS = "https://bsky.social"
 
@@ -389,6 +413,13 @@ class BlueskyChannel(Channel):
         return _http_json(f"{self.PDS}/xrpc/com.atproto.repo.uploadBlob",
                           raw=image.read_bytes(), content_type=_img_mime(image),
                           headers=auth)["blob"]
+
+    def _image_embed(self, auth: dict, image: Path, alt: str) -> dict:
+        img = {"alt": alt, "image": self._upload(auth, image)}
+        size = image_size(image)
+        if size:  # declare the ratio so the client renders it edge-to-edge
+            img["aspectRatio"] = {"width": size[0], "height": size[1]}
+        return {"$type": "app.bsky.embed.images", "images": [img]}
 
     def _rich_facets(self, text: str) -> list:
         """Link + mention facets for arbitrary text (resolving each handle)."""
@@ -417,10 +448,7 @@ class BlueskyChannel(Channel):
         if facets:
             record["facets"] = facets
         if post.image and post.image.exists():
-            record["embed"] = {
-                "$type": "app.bsky.embed.images",
-                "images": [{"alt": post.image_alt or post.title, "image": self._upload(auth, post.image)}],
-            }
+            record["embed"] = self._image_embed(auth, post.image, post.image_alt or post.title)
         resp = _http_json(f"{self.PDS}/xrpc/com.atproto.repo.createRecord",
                           payload={"repo": did, "collection": "app.bsky.feed.post", "record": record},
                           headers=auth)
@@ -445,10 +473,7 @@ class BlueskyChannel(Channel):
             if facets:
                 record["facets"] = facets
             if tp.image and tp.image.exists():
-                record["embed"] = {
-                    "$type": "app.bsky.embed.images",
-                    "images": [{"alt": tp.image_alt, "image": self._upload(auth, tp.image)}],
-                }
+                record["embed"] = self._image_embed(auth, tp.image, tp.image_alt)
             if parent:
                 record["reply"] = {"root": root, "parent": parent}
             resp = _http_json(f"{self.PDS}/xrpc/com.atproto.repo.createRecord",
