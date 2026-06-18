@@ -71,30 +71,63 @@
     return card;
   }
 
-  async function renderHomeNews(opts) {
-    const container = typeof opts.container === 'string'
+  // The home block shows at most this many items, and only those still
+  // within the decay window. Older items drop off the home page but stay
+  // on the /news archive, which renders the full list.
+  const HOME_MAX = 4;
+  const DECAY_MONTHS = 18;
+
+  function sortedItems(data) {
+    const items = Array.isArray(data && data.items) ? data.items.slice() : [];
+    // Newest first (descending by ISO pubDate).
+    items.sort((a, b) => (b.pubDate || '').localeCompare(a.pubDate || ''));
+    return items;
+  }
+
+  function withinDecay(item, now) {
+    if (!item.pubDate) return true; // undated items never decay off
+    const t = Date.parse(item.pubDate);
+    if (isNaN(t)) return true;
+    const cutoff = new Date(now);
+    cutoff.setMonth(cutoff.getMonth() - DECAY_MONTHS);
+    return t >= cutoff.getTime();
+  }
+
+  async function fetchNews(source) {
+    const res = await fetch(source || 'data/news.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }
+
+  function resolveContainer(opts) {
+    return typeof opts.container === 'string'
       ? document.querySelector(opts.container)
       : opts.container;
+  }
+
+  // Home "Latest" block: the most recent, non-decayed items, capped.
+  // Hides its whole section when nothing qualifies (e.g. all decayed).
+  async function renderHomeNews(opts) {
+    const container = resolveContainer(opts);
     if (!container) return;
     const locale = (opts.locale || 'en').toLowerCase();
 
     let data;
     try {
-      const res = await fetch(opts.source || 'data/news.json', { cache: 'no-cache' });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      data = await res.json();
+      data = await fetchNews(opts.source);
     } catch (e) {
       // Fail-soft: leave the hand-coded fallback HTML in place.
       console.debug('home-news: fetch failed, keeping fallback HTML.', e);
       return;
     }
 
-    const items = Array.isArray(data && data.items) ? data.items : [];
-    if (!items.length) return;
-
-    // Sort newest first (descending by ISO pubDate).
-    items.sort((a, b) => (b.pubDate || '').localeCompare(a.pubDate || ''));
-
+    const now = Date.now();
+    const items = sortedItems(data).filter(it => withinDecay(it, now)).slice(0, HOME_MAX);
+    const section = container.closest('section');
+    if (!items.length) {
+      if (section) section.hidden = true;
+      return;
+    }
     const frag = document.createDocumentFragment();
     items.forEach(item => frag.appendChild(buildCard(item, locale)));
     container.innerHTML = '';
@@ -102,6 +135,36 @@
     container.dataset.renderedFromJson = '1';
   }
 
+  // /news archive: the full chronological list, newest first, each card
+  // carrying an `id` anchor so an item can be deep-linked. No decay, no
+  // cap. Leaves the no-JS fallback in place on fetch failure.
+  async function renderNewsArchive(opts) {
+    const container = resolveContainer(opts);
+    if (!container) return;
+    const locale = (opts.locale || 'en').toLowerCase();
+
+    let data;
+    try {
+      data = await fetchNews(opts.source);
+    } catch (e) {
+      console.debug('news-archive: fetch failed, keeping fallback HTML.', e);
+      return;
+    }
+
+    const items = sortedItems(data);
+    if (!items.length) return; // keep the "archive is empty" fallback
+    const frag = document.createDocumentFragment();
+    items.forEach(item => {
+      const card = buildCard(item, locale);
+      if (item.id) card.id = 'news-' + item.id;
+      frag.appendChild(card);
+    });
+    container.innerHTML = '';
+    container.appendChild(frag);
+    container.dataset.renderedFromJson = '1';
+  }
+
   window.NetSec = window.NetSec || {};
   window.NetSec.renderHomeNews = renderHomeNews;
+  window.NetSec.renderNewsArchive = renderNewsArchive;
 })();

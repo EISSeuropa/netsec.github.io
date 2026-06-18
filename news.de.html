@@ -172,10 +172,12 @@
   <div class="container reveal">
     <span class="eyebrow">Archiv</span>
     <h1>Aktuelles-Archiv</h1>
-    <p class="lede">Ältere Beiträge der NetSec-Website. Die vier neuesten Meldungen stehen weiterhin auf der Startseite. Ältere Einträge wandern hierher.</p>
-    
-    <div class="empty-state">
-      <p>Das Archiv ist derzeit leer, alle Beiträge seit dem Start (Oktober 2025) stehen noch auf der Startseite. Sobald der Aktuelles-Block über vier Einträge hinauswächst, werden die ältesten hierher verschoben.</p>
+    <p class="lede">Alle NetSec-Beiträge, die neuesten zuerst. Die aktuellsten stehen auch auf der Startseite; hier wird alles aufbewahrt, ebenso im <a href="news.xml" type="application/rss+xml">RSS-Feed</a>.</p>
+
+    <div class="news-list news-archive-list">
+      <div class="empty-state">
+        <p>Die Beiträge werden hier geladen. Falls sie nicht erscheinen, stehen die neuesten auf der <a href="index.de.html#news">Startseite</a>, oder abonnieren Sie den <a href="news.xml" type="application/rss+xml">RSS-Feed</a>.</p>
+      </div>
     </div>
 
   </div>
@@ -220,6 +222,16 @@
 </footer>
 
 <script src="assets/js/site.js?v=51811275" defer></script>
+<!-- Aktuelles-Archiv: vollständige chronologische Liste aus data/news.json. -->
+<script src="assets/js/home-news.js?v=a20283f6" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.NetSec && window.NetSec.renderNewsArchive) {
+      var lang = (document.documentElement.lang || 'en').slice(0, 2);
+      window.NetSec.renderNewsArchive({ container: '.news-archive-list', locale: lang });
+    }
+  });
+</script>
 
 </body>
 </html>
