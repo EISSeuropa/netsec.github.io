@@ -35,6 +35,7 @@ Run from the repo root. Stdlib only. Rendering needs Google Chrome / Chromium
 from __future__ import annotations
 
 import argparse
+import base64
 import functools
 import hashlib
 import html as html_mod
@@ -44,11 +45,13 @@ import os
 import re
 import shutil
 import socket
+import struct
 import subprocess
 import sys
 import tempfile
 import threading
 import time
+import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -266,7 +269,179 @@ def card_markup(inputs: dict) -> str:
 
 # --------------------------------------------------------------------------
 # rendering
+#
+# Cards are captured over the Chrome DevTools Protocol, NOT the `--screenshot`
+# CLI flag. On macOS, headless Chrome subtracts the window title-bar height
+# (~87px) from the layout viewport, so `--window-size=1200,630` renders into a
+# 1200×543 viewport and clips the card footer. CDP's Emulation.setDeviceMetrics
+# Override forces an exact 1200×630 viewport and Page.captureScreenshot returns
+# precisely that, identically on macOS and the Linux CI runner.
 # --------------------------------------------------------------------------
+WIDTH, HEIGHT = 1200, 630
+
+
+def _recvn(sock, n: int) -> bytes:
+    buf = b""
+    while len(buf) < n:
+        d = sock.recv(n - len(buf))
+        if not d:
+            raise IOError("websocket closed mid-frame")
+        buf += d
+    return buf
+
+
+def _ws_connect(host: str, port: int, path: str):
+    sock = socket.create_connection((host, port))
+    key = base64.b64encode(os.urandom(16)).decode()
+    req = (f"GET {path} HTTP/1.1\r\nHost: {host}:{port}\r\n"
+           "Upgrade: websocket\r\nConnection: Upgrade\r\n"
+           f"Sec-WebSocket-Key: {key}\r\nSec-WebSocket-Version: 13\r\n\r\n")
+    sock.sendall(req.encode())
+    buf = b""
+    while b"\r\n\r\n" not in buf:
+        chunk = sock.recv(4096)
+        if not chunk:
+            raise IOError("websocket handshake closed")
+        buf += chunk
+    if b" 101 " not in buf.split(b"\r\n", 1)[0]:
+        raise IOError(f"websocket handshake failed: {buf[:120]!r}")
+    return sock
+
+
+def _ws_send(sock, payload: str) -> None:
+    data = payload.encode("utf-8")
+    header = bytearray([0x81])  # FIN + text frame
+    mask = os.urandom(4)
+    n = len(data)
+    if n < 126:
+        header.append(0x80 | n)
+    elif n < 65536:
+        header.append(0x80 | 126)
+        header += struct.pack(">H", n)
+    else:
+        header.append(0x80 | 127)
+        header += struct.pack(">Q", n)
+    header += mask
+    sock.sendall(bytes(header) + bytes(b ^ mask[i % 4] for i, b in enumerate(data)))
+
+
+def _ws_recv(sock) -> str:
+    chunks = []
+    while True:
+        b0 = _recvn(sock, 1)[0]
+        fin = b0 & 0x80
+        opcode = b0 & 0x0F
+        b1 = _recvn(sock, 1)[0]
+        masked = b1 & 0x80
+        ln = b1 & 0x7F
+        if ln == 126:
+            ln = struct.unpack(">H", _recvn(sock, 2))[0]
+        elif ln == 127:
+            ln = struct.unpack(">Q", _recvn(sock, 8))[0]
+        m = _recvn(sock, 4) if masked else b""
+        data = _recvn(sock, ln)
+        if masked:
+            data = bytes(b ^ m[i % 4] for i, b in enumerate(data))
+        if opcode == 0x8:  # close
+            raise IOError("websocket closed by peer")
+        if opcode in (0x9, 0xA):  # ping / pong
+            continue
+        chunks.append(data)
+        if fin:
+            break
+    return b"".join(chunks).decode("utf-8")
+
+
+class _CDP:
+    """A bare-minimum DevTools Protocol client over a single browser socket."""
+
+    def __init__(self, sock):
+        self.sock = sock
+        self._id = 0
+
+    def cmd(self, method: str, params: dict | None = None, session: str | None = None) -> dict:
+        self._id += 1
+        mid = self._id
+        msg = {"id": mid, "method": method}
+        if params:
+            msg["params"] = params
+        if session:
+            msg["sessionId"] = session
+        _ws_send(self.sock, json.dumps(msg))
+        while True:  # skip events / other sessions until our reply lands
+            resp = json.loads(_ws_recv(self.sock))
+            if resp.get("id") == mid:
+                if "error" in resp:
+                    raise RuntimeError(f"{method}: {resp['error']}")
+                return resp.get("result", {})
+
+    def wait_event(self, method: str, session: str | None = None, timeout: float = 15) -> dict:
+        end = time.time() + timeout
+        while time.time() < end:
+            resp = json.loads(_ws_recv(self.sock))
+            if resp.get("method") == method and (session is None or resp.get("sessionId") == session):
+                return resp
+        raise TimeoutError(f"timed out waiting for {method}")
+
+
+# Resolve when web fonts are ready and every <img> (headshot, flag) has settled,
+# so a card is never captured mid-load.
+_READY_JS = (
+    "Promise.all([document.fonts.ready,"
+    "...[...document.images].map(i=>i.complete?0:new Promise(r=>{i.onload=i.onerror=r}))])"
+    ".then(()=>true)"
+)
+
+
+def _capture_cards(chrome: str, jobs: list[tuple[str, Path]]) -> None:
+    """Render each (url, out_path) job to an exact 1200×630 PNG via CDP."""
+    port = _free_port()
+    proc = subprocess.Popen([
+        chrome, "--headless=new", "--disable-gpu", "--no-sandbox", "--hide-scrollbars",
+        "--force-device-scale-factor=1", f"--remote-debugging-port={port}",
+        "--remote-allow-origins=*", "about:blank",
+    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        version = None
+        for _ in range(100):
+            try:
+                version = json.loads(urllib.request.urlopen(
+                    f"http://127.0.0.1:{port}/json/version", timeout=1).read())
+                break
+            except Exception:
+                time.sleep(0.1)
+        if not version:
+            raise SystemExit("Chrome did not expose the DevTools endpoint.")
+        ws_url = version["webSocketDebuggerUrl"]
+        cdp = _CDP(_ws_connect("127.0.0.1", port, ws_url.split(f":{port}", 1)[1]))
+        for url, out in jobs:
+            tgt = cdp.cmd("Target.createTarget", {"url": "about:blank"})["targetId"]
+            sid = cdp.cmd("Target.attachToTarget", {"targetId": tgt, "flatten": True})["sessionId"]
+            cdp.cmd("Page.enable", session=sid)
+            cdp.cmd("Emulation.setDeviceMetricsOverride",
+                    {"width": WIDTH, "height": HEIGHT, "deviceScaleFactor": 1, "mobile": False},
+                    session=sid)
+            cdp.cmd("Page.navigate", {"url": url}, session=sid)
+            cdp.wait_event("Page.loadEventFired", session=sid)
+            cdp.cmd("Runtime.evaluate",
+                    {"expression": _READY_JS, "awaitPromise": True, "returnByValue": True},
+                    session=sid)
+            time.sleep(0.1)  # let an SVG flag settle its first paint
+            shot = cdp.cmd("Page.captureScreenshot", {
+                "format": "png",
+                "clip": {"x": 0, "y": 0, "width": WIDTH, "height": HEIGHT, "scale": 1},
+                "captureBeyondViewport": True}, session=sid)
+            out.write_bytes(base64.b64decode(shot["data"]))
+            cdp.cmd("Target.closeTarget", {"targetId": tgt}, session=sid)
+            print(f"  ✓ {out.name}")
+    finally:
+        proc.terminate()
+        try:
+            proc.wait(timeout=5)
+        except Exception:
+            proc.kill()
+
+
 def _free_port() -> int:
     s = socket.socket()
     s.bind(("127.0.0.1", 0))
@@ -324,19 +499,13 @@ def render_all(only: str | None = None, force: bool = False) -> int:
         port = _free_port()
         httpd = _serve(ROOT, port)
         try:
+            jobs = []
             for m in todo:
-                inp = card_inputs(m)
                 slug = m["id"]
-                (tmp / f"{slug}.html").write_text(card_markup(inp), encoding="utf-8")
-                out = CARDS_DIR / f"{slug}.png"
+                (tmp / f"{slug}.html").write_text(card_markup(card_inputs(m)), encoding="utf-8")
                 url = f"http://127.0.0.1:{port}/{rel.as_posix()}/{slug}.html"
-                subprocess.run([
-                    chrome, "--headless", "--disable-gpu", "--no-sandbox", "--hide-scrollbars",
-                    "--force-device-scale-factor=1", "--window-size=1200,630",
-                    "--virtual-time-budget=6000", f"--screenshot={out}", url,
-                ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                time.sleep(0.05)
-                print(f"  ✓ {slug}.png")
+                jobs.append((url, CARDS_DIR / f"{slug}.png"))
+            _capture_cards(chrome, jobs)
         finally:
             httpd.shutdown()
             shutil.rmtree(tmp, ignore_errors=True)
