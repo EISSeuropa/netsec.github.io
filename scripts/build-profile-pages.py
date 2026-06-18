@@ -275,19 +275,27 @@ def build_page(m: dict, works: list, loc_key: str, chrome: dict) -> str:
     hreflang = "\n".join(
         f'<link rel="alternate" hreflang="{hl}" href="{SITE}/people/{slug}{LOCALES[k]["suffix"]}.html">'
         for hl, k in (("en", "en"), ("fr", "fr"), ("de", "de"), ("x-default", "en")))
+    # Per-member OG card (#1023) when one has been generated for this slug,
+    # else the generic people card. The card is locale-independent (name +
+    # affiliation aren't translated), so all three locale pages share it.
+    if (ROOT / "assets" / "og" / "people" / f"{slug}.png").exists():
+        og_image = f"{SITE}/assets/og/people/{slug}.png"
+    else:
+        og_image = f"{SITE}/assets/images/og-image-people.png"
+
     seo = f"""<link rel="canonical" href="{canonical}">
 <meta property="og:type" content="profile">
 <meta property="og:site_name" content="NetSec, COST Action CA24154">
 <meta property="og:title" content="{esc(name)} · NetSec directory">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{canonical}">
-<meta property="og:image" content="{SITE}/assets/images/og-image-people.png">
+<meta property="og:image" content="{og_image}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(name)} · NetSec directory">
 <meta name="twitter:description" content="{esc(desc)}">
-<meta name="twitter:image" content="{SITE}/assets/images/og-image-people.png">
+<meta name="twitter:image" content="{og_image}">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <script type="application/ld+json">
 {person_jsonld(m, canonical)}
