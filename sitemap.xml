@@ -219,6 +219,15 @@
   </url>
 
   <url>
+    <loc>https://netsec-cost.eu/slides.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://netsec-cost.eu/slides.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/slides.html"/>
+  </url>
+
+  <url>
     <loc>https://netsec-cost.eu/people/alexander-lanoszka.html</loc>
     <lastmod>2026-06-18</lastmod>
     <changefreq>monthly</changefreq>

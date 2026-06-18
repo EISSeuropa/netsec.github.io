@@ -55,14 +55,14 @@
     "sitemap.html": {
       "fr": {
         "file": "sitemap.fr.html",
-        "source_sha1": "7c6b3a62410a827b28bd4f060d96d2a1056c4005",
+        "source_sha1": "5c1ea474247d22f82503524935995b7af0b9ccfa",
         "translated_on": "2026-06-18",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "sitemap.de.html",
-        "source_sha1": "7c6b3a62410a827b28bd4f060d96d2a1056c4005",
+        "source_sha1": "5c1ea474247d22f82503524935995b7af0b9ccfa",
         "translated_on": "2026-06-18",
         "status": "beta",
         "reviewed_by": null
