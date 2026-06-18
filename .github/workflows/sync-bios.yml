@@ -111,6 +111,14 @@ jobs:
           # blocks a stale set from merging.
           python3 scripts/build-profile-pages.py
 
+      - name: Regenerate sitemap.xml from the refreshed member set
+        run: |
+          # sitemap.xml lists every /people/<slug> profile page (#1027).
+          # Run after the profile pages are rebuilt so a new member's URL
+          # lands in the sitemap in the same weekly auto-PR. Idempotent;
+          # the drift gate (data-shape-check.yml) blocks a stale sitemap.
+          python3 scripts/build-sitemap.py
+
       - name: Rebuild the glossary field guide from the refreshed bios
         run: |
           # The field-guide facepile (#801) is baked from data/bios.json at
