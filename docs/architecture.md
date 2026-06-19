@@ -372,6 +372,7 @@ wordmark adapts to light and dark themes.
 ├── {page}.de.html                   # German beta of every page above (except 404)
 │
 ├── sitemap.xml                      # Machine-readable sitemap with hreflang siblings
+├── directory-index.json             # Public cross-site contract: members keyed by name_key → profile URL (consumed by the EISS Anthology)
 ├── CNAME                            # GitHub Pages → netsec-cost.eu
 ├── lighthouserc.json                # Lighthouse CI budget assertions (perf/a11y/SEO + per-page image weight)
 │

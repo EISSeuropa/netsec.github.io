@@ -1,0 +1,304 @@
+{
+  "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. See scripts/build-directory-index.py.",
+  "generated_at": "2026-06-17T15:59:39+00:00",
+  "source": "https://netsec-cost.eu/data/bios.json",
+  "count": 37,
+  "members": [
+    {
+      "name": "Dr Alexander Lanoszka",
+      "name_key": "alexander lanoszka",
+      "aliases": [],
+      "slug": "alexander-lanoszka",
+      "url": "https://netsec-cost.eu/people/alexander-lanoszka.html",
+      "orcid": "0000-0001-6812-3873"
+    },
+    {
+      "name": "Dr Alexandra Brankova",
+      "name_key": "alexandra brankova",
+      "aliases": [],
+      "slug": "alexandra-brankova",
+      "url": "https://netsec-cost.eu/people/alexandra-brankova.html",
+      "orcid": null
+    },
+    {
+      "name": "Ms Alisa Kerschbaum",
+      "name_key": "alisa kerschbaum",
+      "aliases": [],
+      "slug": "alisa-kerschbaum",
+      "url": "https://netsec-cost.eu/people/alisa-kerschbaum.html",
+      "orcid": null
+    },
+    {
+      "name": "Anna Pagnacco",
+      "name_key": "anna pagnacco",
+      "aliases": [],
+      "slug": "anna-pagnacco",
+      "url": "https://netsec-cost.eu/people/anna-pagnacco.html",
+      "orcid": null
+    },
+    {
+      "name": "Mr Archishman Goswami",
+      "name_key": "archishman goswami",
+      "aliases": [],
+      "slug": "archishman-goswami",
+      "url": "https://netsec-cost.eu/people/archishman-goswami.html",
+      "orcid": null
+    },
+    {
+      "name": "Dr Arthur Laudrain",
+      "name_key": "arthur laudrain",
+      "aliases": [],
+      "slug": "arthur-laudrain",
+      "url": "https://netsec-cost.eu/people/arthur-laudrain.html",
+      "orcid": "0000-0002-8642-2671"
+    },
+    {
+      "name": "Dr Chiara Libiseller",
+      "name_key": "chiara libiseller",
+      "aliases": [],
+      "slug": "chiara-libiseller",
+      "url": "https://netsec-cost.eu/people/chiara-libiseller.html",
+      "orcid": null
+    },
+    {
+      "name": "Dr Chiara Ruffa",
+      "name_key": "chiara ruffa",
+      "aliases": [],
+      "slug": "chiara-ruffa",
+      "url": "https://netsec-cost.eu/people/chiara-ruffa.html",
+      "orcid": null
+    },
+    {
+      "name": "Dr Eliza Gheorghe",
+      "name_key": "eliza gheorghe",
+      "aliases": [],
+      "slug": "eliza-gheorghe",
+      "url": "https://netsec-cost.eu/people/eliza-gheorghe.html",
+      "orcid": null
+    },
+    {
+      "name": "Mr Eugenio Sánchez",
+      "name_key": "eugenio sanchez",
+      "aliases": [],
+      "slug": "eugenio-sanchez",
+      "url": "https://netsec-cost.eu/people/eugenio-sanchez.html",
+      "orcid": null
+    },
+    {
+      "name": "Mr Felix Kösterke",
+      "name_key": "felix kosterke",
+      "aliases": [],
+      "slug": "felix-kosterke",
+      "url": "https://netsec-cost.eu/people/felix-kosterke.html",
+      "orcid": null
+    },
+    {
+      "name": "Prof. Filip Ejdus",
+      "name_key": "filip ejdus",
+      "aliases": [],
+      "slug": "filip-ejdus",
+      "url": "https://netsec-cost.eu/people/filip-ejdus.html",
+      "orcid": null
+    },
+    {
+      "name": "Mr Francesco Canossi",
+      "name_key": "francesco canossi",
+      "aliases": [],
+      "slug": "francesco-canossi",
+      "url": "https://netsec-cost.eu/people/francesco-canossi.html",
+      "orcid": null
+    },
+    {
+      "name": "Dr Gil Baram",
+      "name_key": "gil baram",
+      "aliases": [],
+      "slug": "gil-baram",
+      "url": "https://netsec-cost.eu/people/gil-baram.html",
+      "orcid": null
+    },
+    {
+      "name": "Dr John N.T. Helferich",
+      "name_key": "john helferich",
+      "aliases": [],
+      "slug": "john-helferich",
+      "url": "https://netsec-cost.eu/people/john-helferich.html",
+      "orcid": "0000-0002-9085-846X"
+    },
+    {
+      "name": "Dr Julia Carver",
+      "name_key": "julia carver",
+      "aliases": [],
+      "slug": "julia-carver",
+      "url": "https://netsec-cost.eu/people/julia-carver.html",
+      "orcid": null
+    },
+    {
+      "name": "Ms Laura Lisboa",
+      "name_key": "laura lisboa",
+      "aliases": [],
+      "slug": "laura-lisboa",
+      "url": "https://netsec-cost.eu/people/laura-lisboa.html",
+      "orcid": null
+    },
+    {
+      "name": "Dr Linde Desmaele",
+      "name_key": "linde desmaele",
+      "aliases": [],
+      "slug": "linde-desmaele",
+      "url": "https://netsec-cost.eu/people/linde-desmaele.html",
+      "orcid": null
+    },
+    {
+      "name": "Lucian Bumeder",
+      "name_key": "lucian bumeder",
+      "aliases": [],
+      "slug": "lucian-bumeder",
+      "url": "https://netsec-cost.eu/people/lucian-bumeder.html",
+      "orcid": null
+    },
+    {
+      "name": "Mr Marco Cifra",
+      "name_key": "marco cifra",
+      "aliases": [],
+      "slug": "marco-cifra",
+      "url": "https://netsec-cost.eu/people/marco-cifra.html",
+      "orcid": null
+    },
+    {
+      "name": "Dr Marie Robin",
+      "name_key": "marie robin",
+      "aliases": [],
+      "slug": "marie-robin",
+      "url": "https://netsec-cost.eu/people/marie-robin.html",
+      "orcid": null
+    },
+    {
+      "name": "Prof. Mark Rhinard",
+      "name_key": "mark rhinard",
+      "aliases": [],
+      "slug": "mark-rhinard",
+      "url": "https://netsec-cost.eu/people/mark-rhinard.html",
+      "orcid": "0000-0002-1903-4257"
+    },
+    {
+      "name": "Dr Mattia Sguazzini",
+      "name_key": "mattia sguazzini",
+      "aliases": [],
+      "slug": "mattia-sguazzini",
+      "url": "https://netsec-cost.eu/people/mattia-sguazzini.html",
+      "orcid": "0000-0001-9751-8508"
+    },
+    {
+      "name": "Ms Meret Steybe",
+      "name_key": "meret steybe",
+      "aliases": [],
+      "slug": "meret-steybe",
+      "url": "https://netsec-cost.eu/people/meret-steybe.html",
+      "orcid": null
+    },
+    {
+      "name": "Dr Moritz Weiss",
+      "name_key": "moritz weiss",
+      "aliases": [],
+      "slug": "moritz-weiss",
+      "url": "https://netsec-cost.eu/people/moritz-weiss.html",
+      "orcid": "0000-0001-9311-6480"
+    },
+    {
+      "name": "Prof. Nikolaos Tzifakis",
+      "name_key": "nikolaos tzifakis",
+      "aliases": [],
+      "slug": "nikolaos-tzifakis",
+      "url": "https://netsec-cost.eu/people/nikolaos-tzifakis.html",
+      "orcid": "0000-0003-4653-6882"
+    },
+    {
+      "name": "Mr Pieter Zhao",
+      "name_key": "pieter zhao",
+      "aliases": [],
+      "slug": "pieter-zhao",
+      "url": "https://netsec-cost.eu/people/pieter-zhao.html",
+      "orcid": "0000-0003-2830-2433"
+    },
+    {
+      "name": "Dr Revecca Pedi",
+      "name_key": "revecca pedi",
+      "aliases": [],
+      "slug": "revecca-pedi",
+      "url": "https://netsec-cost.eu/people/revecca-pedi.html",
+      "orcid": null
+    },
+    {
+      "name": "Ms Rusudan Zabakhidze",
+      "name_key": "rusudan zabakhidze",
+      "aliases": [],
+      "slug": "rusudan-zabakhidze",
+      "url": "https://netsec-cost.eu/people/rusudan-zabakhidze.html",
+      "orcid": null
+    },
+    {
+      "name": "Ms Sara Russo",
+      "name_key": "sara russo",
+      "aliases": [],
+      "slug": "sara-russo",
+      "url": "https://netsec-cost.eu/people/sara-russo.html",
+      "orcid": "0009-0004-8176-8712"
+    },
+    {
+      "name": "Dr Šárka Kolmašová",
+      "name_key": "sarka kolmasova",
+      "aliases": [],
+      "slug": "sarka-kolmasova",
+      "url": "https://netsec-cost.eu/people/sarka-kolmasova.html",
+      "orcid": null
+    },
+    {
+      "name": "Mr Saurav Narain",
+      "name_key": "saurav narain",
+      "aliases": [],
+      "slug": "saurav-narain",
+      "url": "https://netsec-cost.eu/people/saurav-narain.html",
+      "orcid": "0000-0002-6049-9777"
+    },
+    {
+      "name": "Prof. Seyithan Ahmet Ates",
+      "name_key": "seyithan ates",
+      "aliases": [],
+      "slug": "seyithan-ahmet-ates",
+      "url": "https://netsec-cost.eu/people/seyithan-ahmet-ates.html",
+      "orcid": null
+    },
+    {
+      "name": "Dr Silvia D'Amato",
+      "name_key": "silvia damato",
+      "aliases": [],
+      "slug": "silvia-damato",
+      "url": "https://netsec-cost.eu/people/silvia-damato.html",
+      "orcid": null
+    },
+    {
+      "name": "Dr Sophie Enos-Attali",
+      "name_key": "sophie attali",
+      "aliases": [],
+      "slug": "sophie-enos-attali",
+      "url": "https://netsec-cost.eu/people/sophie-enos-attali.html",
+      "orcid": null
+    },
+    {
+      "name": "Dr Wendy He",
+      "name_key": "wendy he",
+      "aliases": [],
+      "slug": "wendy-he",
+      "url": "https://netsec-cost.eu/people/wendy-he.html",
+      "orcid": "0009-0004-8098-4093"
+    },
+    {
+      "name": "Ms Yanina Shved-Dogrul",
+      "name_key": "yanina dogrul",
+      "aliases": [],
+      "slug": "yanina-shved-dogrul",
+      "url": "https://netsec-cost.eu/people/yanina-shved-dogrul.html",
+      "orcid": "0000-0001-8631-5908"
+    }
+  ]
+}

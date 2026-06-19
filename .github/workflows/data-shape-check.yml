@@ -79,6 +79,13 @@ jobs:
         # is missing from the sitemap or the committed file has drifted.
         run: python3 scripts/build-sitemap.py --check
 
+      - name: directory-index.json is current
+        # The cross-site member contract (EISSeuropa/EISSeuropa.github.io#966)
+        # is generated from bios.json. Fail if a member change has not been
+        # reflected in the committed index, so a consuming site never matches
+        # against stale data.
+        run: python3 scripts/build-directory-index.py --check
+
       - name: OG cards are current (#1023)
         # Per-member OG card PNGs are generated from bios.json. This check is
         # content-keyed (a manifest of each card's inputs), not a pixel diff,
