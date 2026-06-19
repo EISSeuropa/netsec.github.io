@@ -47,9 +47,15 @@ SITE = "https://netsec-cost.eu"
 # top-level `import requests` with a sys.exit() when the dependency is
 # absent — and this index only reads JSON, so a consumer (CI's data-shape
 # job) running it without the network deps installed would otherwise crash
-# at import. Register a stub `requests` so that guard passes; we never call
-# anything on it, only name_key(). PIL is already optional in sync-bios.py.
-sys.modules.setdefault("requests", types.ModuleType("requests"))
+# at import. Only when `requests` is genuinely unavailable do we register a
+# minimal stub so that guard passes (we never call anything on it, only
+# name_key()). When `requests` IS installed we import the real one, so we
+# never shadow it for anything else sharing this interpreter — notably the
+# combined pytest session, where other tests monkeypatch real requests.
+try:
+    import requests  # noqa: F401  (populate sys.modules with the real module if present)
+except ImportError:
+    sys.modules["requests"] = types.ModuleType("requests")
 _spec = importlib.util.spec_from_file_location("sync_bios", ROOT / "scripts" / "sync-bios.py")
 _sb = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_sb)
