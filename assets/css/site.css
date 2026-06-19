@@ -3542,6 +3542,10 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 }
 .member-profile-cta:hover,
 .member-profile-cta:focus-visible{ text-decoration:underline; text-underline-offset:2px; }
+/* On an expanded compact card the CTA moves to the bottom-right, swapping
+   corners with the collapse chevron (now bottom-left). Detailed-view cards,
+   which have no chevron, keep the CTA at the foot-left. */
+.members-grid.is-compact .member-card.is-expanded .member-profile-cta{ align-self:flex-end; }
 
 /* Click-to-expand: in compact mode, one card at a time can revert
    to the detailed layout in-place. Triggered by a click anywhere
@@ -3601,6 +3605,11 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   }
 }
 .members-grid.is-compact .member-card.is-expanded .member-toggle-chevron{
+  /* On an expanded card the collapse chevron and the "View full profile"
+     link trade corners: the chevron moves to the bottom-left (the bottom-
+     right now carries the right-aligned CTA below). Collapsed cards keep
+     the chevron bottom-right, where their left edge holds the badges. */
+  left:12px;right:auto;
   transform:rotate(180deg);
   color:var(--accent-2);
   border-color:rgba(10,132,255,.36);
