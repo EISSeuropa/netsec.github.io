@@ -3383,9 +3383,24 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 .members-grid.is-compact .member-card:not(.is-expanded) .member-bio,
 .members-grid.is-compact .member-card:not(.is-expanded) .member-bio-toggle,
 .members-grid.is-compact .member-card:not(.is-expanded) .member-pubs,
+.members-grid.is-compact .member-card:not(.is-expanded) .member-profile-cta,
 .members-grid.is-compact .member-card:not(.is-expanded) .member-contact{
   display:none !important;
 }
+/* The member name links to the standalone profile page; the card click
+   still expands (the delegated handler ignores clicks on link children),
+   so the name link is the way to reach the page from the compact grid. */
+.member-name-link{ color:inherit; text-decoration:none; }
+.member-name-link:hover,
+.member-name-link:focus-visible{ text-decoration:underline; text-underline-offset:2px; }
+/* "View full profile" CTA at the foot of a detailed / expanded card. */
+.member-profile-cta{
+  display:inline-flex; align-items:center; gap:6px; margin-top:14px;
+  font-family:var(--font-sans); font-weight:600; font-size:.9rem;
+  color:var(--accent-2); text-decoration:none;
+}
+.member-profile-cta:hover,
+.member-profile-cta:focus-visible{ text-decoration:underline; text-underline-offset:2px; }
 
 /* Click-to-expand: in compact mode, one card at a time can revert
    to the detailed layout in-place. Triggered by a click anywhere
