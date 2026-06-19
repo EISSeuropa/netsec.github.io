@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--accent:#003399;--accent-2:#0a84ff;--ink:#0b1220;--ink-2:#2b3850;--muted:#5a6679;--line:rgba(11,18,32,.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:2560px;height:1440px}
+body{font-family:'Inter',sans-serif;color:var(--ink-2);background:linear-gradient(160deg,#eef3fc 0%,#f6f8fc 46%,#fcfaf5 100%);position:relative;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:.55;mix-blend-mode:multiply}
+.b1{width:1200px;height:1200px;left:-260px;top:-360px;background:radial-gradient(circle,#c4d4ff 0%,rgba(196,212,255,0) 64%)}
+.b2{width:1000px;height:1000px;right:-220px;top:80px;background:radial-gradient(circle,#ffd9c2 0%,rgba(255,217,194,0) 62%)}
+.b3{width:1300px;height:1300px;left:50%;bottom:-540px;transform:translateX(-50%);background:radial-gradient(circle,#d8c9ff 0%,rgba(216,201,255,0) 62%)}
+.grid-bg{position:absolute;inset:0;opacity:.5;background-image:linear-gradient(to right,rgba(11,18,32,.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(11,18,32,.04) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(130% 120% at 50% 42%,#000 55%,transparent 100%)}
+.frame{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 120px}
+.head{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:50px}
+.head img{height:74px;margin-bottom:26px}
+.head h1{font-family:'Lexend';font-weight:600;font-size:60px;letter-spacing:-.02em;color:var(--ink)}
+.head h1 .g{background:linear-gradient(118deg,#003399,#0a84ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head p{font-family:'JetBrains Mono';font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:16px}
+.grid{display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:28px;max-width:2240px}
+.av{width:220px;height:220px;border-radius:50%;overflow:hidden;background:#dde6f5;box-shadow:0 16px 40px rgba(11,18,32,.16),0 0 0 5px #fff,0 0 0 6px var(--line)}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+.foot{margin-top:52px;display:flex;align-items:center;gap:16px;font-family:'JetBrains Mono';font-size:25px;color:var(--ink)}
+.foot .dot{width:11px;height:11px;border-radius:50%;background:#1f8a5b;box-shadow:0 0 0 5px rgba(31,138,91,.16)}
+</style></head><body>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+<div class="grid-bg"></div>
+<div class="frame">
+  <div class="head">
+    <img src="/assets/images/brand/netsec-lockup-primary.png" alt="NetSec">
+    <h1>The NetSec <span class="g">Directory</span></h1>
+    <p>Networking European security knowledge</p>
+  </div>
+  <div class="grid">
+    <div class="av"><img src="/assets/images/people/moritz-weiss.webp" alt="Dr Moritz Weiss" title="Dr Moritz Weiss"></div>
+    <div class="av"><img src="/assets/images/people/marie-robin.webp" alt="Dr Marie Robin" title="Dr Marie Robin"></div>
+    <div class="av"><img src="/assets/images/people/eugenio-sanchez.webp" alt="Mr Eugenio Sánchez" title="Mr Eugenio Sánchez"></div>
+    <div class="av"><img src="/assets/images/people/eliza-gheorghe.webp" alt="Dr Eliza Gheorghe" title="Dr Eliza Gheorghe"></div>
+    <div class="av"><img src="/assets/images/people/chiara-libiseller.webp" alt="Dr Chiara Libiseller" title="Dr Chiara Libiseller"></div>
+    <div class="av"><img src="/assets/images/people/john-helferich.webp" alt="Dr John N.T. Helferich" title="Dr John N.T. Helferich"></div>
+    <div class="av"><img src="/assets/images/people/chiara-ruffa.webp" alt="Dr Chiara Ruffa" title="Dr Chiara Ruffa"></div>
+    <div class="av"><img src="/assets/images/people/revecca-pedi.webp" alt="Dr Revecca Pedi" title="Dr Revecca Pedi"></div>
+    <div class="av"><img src="/assets/images/people/filip-ejdus.webp" alt="Prof. Filip Ejdus" title="Prof. Filip Ejdus"></div>
+    <div class="av"><img src="/assets/images/people/alisa-kerschbaum.webp" alt="Ms Alisa Kerschbaum" title="Ms Alisa Kerschbaum"></div>
+    <div class="av"><img src="/assets/images/people/silvia-damato.webp" alt="Dr Silvia D'Amato" title="Dr Silvia D'Amato"></div>
+    <div class="av"><img src="/assets/images/people/sarka-kolmasova.webp" alt="Dr Šárka Kolmašová" title="Dr Šárka Kolmašová"></div>
+    <div class="av"><img src="/assets/images/people/arthur-laudrain.webp" alt="Dr Arthur Laudrain" title="Dr Arthur Laudrain"></div>
+    <div class="av"><img src="/assets/images/people/meret-steybe.webp" alt="Ms Meret Steybe" title="Ms Meret Steybe"></div>
+    <div class="av"><img src="/assets/images/people/anna-pagnacco.webp" alt="Anna Pagnacco" title="Anna Pagnacco"></div>
+    <div class="av"><img src="/assets/images/people/rusudan-zabakhidze.webp" alt="Ms Rusudan Zabakhidze" title="Ms Rusudan Zabakhidze"></div>
+    <div class="av"><img src="/assets/images/people/lucian-bumeder.webp" alt="Lucian Bumeder" title="Lucian Bumeder"></div>
+    <div class="av"><img src="/assets/images/people/pieter-zhao.webp" alt="Mr Pieter Zhao" title="Mr Pieter Zhao"></div>
+    <div class="av"><img src="/assets/images/people/saurav-narain.webp" alt="Mr Saurav Narain" title="Mr Saurav Narain"></div>
+    <div class="av"><img src="/assets/images/people/archishman-goswami.webp" alt="Mr Archishman Goswami" title="Mr Archishman Goswami"></div>
+    <div class="av"><img src="/assets/images/people/mattia-sguazzini.webp" alt="Dr Mattia Sguazzini" title="Dr Mattia Sguazzini"></div>
+    <div class="av"><img src="/assets/images/people/francesco-canossi.webp" alt="Mr Francesco Canossi" title="Mr Francesco Canossi"></div>
+    <div class="av"><img src="/assets/images/people/gil-baram.webp" alt="Dr Gil Baram" title="Dr Gil Baram"></div>
+    <div class="av"><img src="/assets/images/people/sara-russo.webp" alt="Ms Sara Russo" title="Ms Sara Russo"></div>
+    <div class="av"><img src="/assets/images/people/yanina-shved-dogrul.webp" alt="Ms Yanina Shved-Dogrul" title="Ms Yanina Shved-Dogrul"></div>
+    <div class="av"><img src="/assets/images/people/seyithan-ahmet-ates.webp" alt="Prof. Seyithan Ahmet Ates" title="Prof. Seyithan Ahmet Ates"></div>
+    <div class="av"><img src="/assets/images/people/wendy-he.webp" alt="Dr Wendy He" title="Dr Wendy He"></div>
+    <div class="av"><img src="/assets/images/people/laura-lisboa.webp" alt="Ms Laura Lisboa" title="Ms Laura Lisboa"></div>
+    <div class="av"><img src="/assets/images/people/nikolaos-tzifakis.webp" alt="Prof. Nikolaos Tzifakis" title="Prof. Nikolaos Tzifakis"></div>
+    <div class="av"><img src="/assets/images/people/mark-rhinard.webp" alt="Prof. Mark Rhinard" title="Prof. Mark Rhinard"></div>
+    <div class="av"><img src="/assets/images/people/linde-desmaele.webp" alt="Dr Linde Desmaele" title="Dr Linde Desmaele"></div>
+    <div class="av"><img src="/assets/images/people/alexander-lanoszka.webp" alt="Dr Alexander Lanoszka" title="Dr Alexander Lanoszka"></div>
+    <div class="av"><img src="/assets/images/people/julia-carver.webp" alt="Dr Julia Carver" title="Dr Julia Carver"></div>
+  </div>
+  <div class="foot"><span class="dot"></span>netsec-cost.eu/people</div>
+</div>
+</body></html>
