@@ -7,6 +7,7 @@ Or under pytest: python3 -m pytest scripts/test-social-post.py -q
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 import types
 from pathlib import Path
@@ -173,7 +174,7 @@ def test_image_size_reads_jpeg_and_png():
         tmp.unlink()
 
 
-def test_read_thread_parses_link_card():
+def test_directory_early_access_is_an_image_post():
     spec = _MOD.parent.parent / "data" / "social-threads" / "directory-early-access.json"
     if not spec.exists():
         return
@@ -181,11 +182,31 @@ def test_read_thread_parses_link_card():
     assert thread.key == "thread::directory-early-access"
     post = thread.posts[0]
     assert sp.graphemes(post.text) <= sp.BLUESKY_LIMIT
-    assert post.card and post.card["uri"] == "https://netsec-cost.eu/people.html"
-    # thumb resolves to a real file in the repo
+    # The announcement leads with the directory poster as the image.
+    assert post.image and post.image.exists()
+    assert post.image_alt, "the poster image needs alt text"
+    assert not post.card, "an image embed and a link card are mutually exclusive"
+    # With no link card, the directory URL lives in the text as a clickable facet.
+    assert "https://netsec-cost.eu/people.html" in post.text
+    assert sp.find_links(post.text), "the directory URL should resolve to a link facet"
+
+
+def test_read_thread_parses_a_link_card(tmp_path):
+    # Coverage for the card-parsing branch of read_thread, which no shipped
+    # thread currently uses (the directory post is now image-led).
+    spec = tmp_path / "card-thread.json"
+    spec.write_text(json.dumps({
+        "key": "thread::_card_test",
+        "channel": "bluesky",
+        "posts": [{
+            "text": "A card post.",
+            "card": {"uri": "https://example.org", "title": "T",
+                     "description": "D", "thumb": "assets/images/og-image.png"},
+        }],
+    }), encoding="utf-8")
+    post = sp.read_thread(spec).posts[0]
+    assert post.card and post.card["uri"] == "https://example.org"
     assert post.card["thumb"].exists()
-    # the card carries the link, so the post text should NOT repeat the URL
-    assert "http" not in post.text
 
 
 def test_news_feed_keys_on_id_not_link():

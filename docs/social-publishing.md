@@ -27,9 +27,12 @@ data/spotlight.json (wk) ─┘        composes text + image; records the ledger
 - **News.** Each new entry in the RSS feed (`/news.xml`) becomes one post:
   the headline, a trimmed summary, and the link. The feed is the trigger, so
   this works the same on the sister EISS site.
-- **Spotlight.** Once a week, the member in `data/spotlight.json` (the same
-  one shown on the home page) becomes a post, with their **OG card**
-  (`assets/og/people/<slug>.png`) as the image.
+- **Spotlight.** Every **Tuesday at 10:00 Central European time**, the member
+  in `data/spotlight.json` (the same one shown on the home page) becomes a
+  post, with their **OG card** (`assets/og/people/<slug>.png`) as the image.
+  Cron can't follow DST, so `spotlight-rotate.yml` fires at both 08:00 and
+  09:00 UTC on Tuesdays and a gate job lets through only the one that lands at
+  10:00 Europe/Paris.
 - **No duplicates.** `data/social-posted.json` records what has been posted
   (news by feed GUID; spotlight by member + ISO week), so re-runs post
   nothing and a member is posted at most once per week.
@@ -73,9 +76,13 @@ verbatim text. Inside the text:
 A post can also carry a **`card`** instead of an `image`, which renders as a
 clickable link-preview card (`app.bsky.embed.external`): `{uri, title,
 description, thumb}`, where `thumb` is a repo image path (typically the page's
-own OG card). Put the link in the `card` and leave it out of the post text, so
-the card is the single tap target. See
-`data/social-threads/directory-early-access.json`.
+own OG card). The two are mutually exclusive: a post leads with **either** an
+`image` **or** a `card`. A card suits a landscape link preview where the URL
+should be the single tap target (leave it out of the post text). An `image`
+suits a portrait or hero visual (a poster), with the URL kept in the text as a
+link facet, since a link card would crop a portrait image to a thin strip. The
+Directory Early-Access thread (`data/social-threads/directory-early-access.json`)
+is image-led for exactly that reason.
 
 Posts are chained as a reply thread (post 2 replies to post 1, and so on). The
 dry-run prints each post with its grapheme count against the 300 limit, flags

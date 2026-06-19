@@ -1,17 +1,13 @@
 {
-  "_documentation": "Directory Early-Access announcement (scripts/social-post.py --thread). A single Bluesky post with a clickable link card (app.bsky.embed.external) for /people.html: title + description + the directory OG card as the thumbnail. The URL is NOT in the post text because the card carries it. Dedup key recorded in data/social-posted.json. Compose/verify with --dry-run; publish behind the social environment gate.",
+  "_documentation": "Directory Early-Access announcement (scripts/social-post.py --thread). A single Bluesky post: the 'Find your next…' directory poster as the image, with the directory URL in the text (kept as a real https:// link so it becomes a clickable facet). An image embed and a link card are mutually exclusive on Bluesky, and the poster is portrait, so it leads as the image rather than a cropped link-card thumbnail. Dedup key recorded in data/social-posted.json. Compose/verify with --dry-run; publish behind the social environment gate (workflow_dispatch on social-bluesky.yml with thread=directory-early-access).",
   "key": "thread::directory-early-access",
   "channel": "bluesky",
   "langs": ["en"],
   "posts": [
     {
-      "text": "👥 Meet the network.\n\nThe NetSec Directory is now in Early Access: researchers, policy-makers, and practitioners across European security, filterable by working group, research theme, and country.\n\nWorking in the field? Add your bio.",
-      "card": {
-        "uri": "https://netsec-cost.eu/people.html",
-        "title": "The NetSec Directory",
-        "description": "An open, searchable directory of the network. Find a mentor, offer to host an STSM, and filter by working group, research theme, or country.",
-        "thumb": "assets/images/og-image-people.png"
-      }
+      "text": "👥 Find your next co-author, mentor or host.\n\nThe NetSec Directory is now in Early Access: an open directory of the European security studies community, filterable by working group, research theme and country.\n\nWorking in the field? Add your bio:\nhttps://netsec-cost.eu/people.html",
+      "image": "assets/img/social/directory-find-your-next.png",
+      "imageAlt": "NetSec Directory poster. Heading 'Find your next…' above a dropdown set to co-author, with mentor and host as the other options. Four tiles: filter the directory, mentorship matching, find an STSM host, and a weekly spotlight on early-career researchers. Framed by members' headshots. netsec-cost.eu/people"
     }
   ]
 }
