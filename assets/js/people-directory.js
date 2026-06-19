@@ -1469,6 +1469,7 @@
   // `keywords=` prefix.
   function parseHashKeywords() {
     activeKeywords.clear();
+    activeRegions.clear();
     activeMentorship.clear();
     activeStsm = false;
     const raw = (location.hash || '').replace(/^#/, '');
@@ -1479,6 +1480,12 @@
     const csv = params.get('themes');
     if (csv) {
       csv.split(',').map(s => s.trim()).filter(Boolean).forEach(s => activeKeywords.add(s));
+    }
+    // Research-region facet (#555): `regions=europe,asia`, symmetric to
+    // themes, so a profile page's region chip can deep-link here pre-filtered.
+    const rcsv = params.get('regions');
+    if (rcsv) {
+      rcsv.split(',').map(s => s.trim()).filter(Boolean).forEach(s => activeRegions.add(s));
     }
     // Mentorship facet (#763): `mentorship=mentor`, `mentorship=mentee`, or
     // both, so a "Find a mentor" deep link lands pre-filtered.
@@ -1501,11 +1508,12 @@
     // Preserve any portion of the hash this function does not own (e.g. a
     // member-card deep-link slug stays intact). Both the theme and the
     // mentorship keys are owned here so they coexist in one hash.
-    const hasKeywordsKey = /(^|&)(themes|mentorship|stsm)=/.test(rawHash);
+    const hasKeywordsKey = /(^|&)(themes|regions|mentorship|stsm)=/.test(rawHash);
     let rest = '';
     if (rawHash && hasKeywordsKey) {
       const params = new URLSearchParams(rawHash);
       params.delete('themes');
+      params.delete('regions');
       params.delete('mentorship');
       params.delete('stsm');
       rest = params.toString();
@@ -1515,8 +1523,10 @@
     } else if (rawHash) {
       rest = rawHash;
     }
+    const regions = Array.from(activeRegions);
     const parts = [];
     if (slugs.length) parts.push('themes=' + slugs.join(','));
+    if (regions.length) parts.push('regions=' + regions.join(','));
     if (mentors.length) parts.push('mentorship=' + mentors.join(','));
     if (activeStsm) parts.push('stsm=1');
     if (rest) parts.push(rest);
@@ -1666,12 +1676,14 @@
     if (activeRegions.has(slug)) activeRegions.delete(slug);
     else activeRegions.add(slug);
     if (regionDetails && activeRegions.has(slug)) regionDetails.open = true;
+    writeHashKeywords();
     renderRegionFilter();
     render();
   }
   function clearRegionFilter() {
     if (activeRegions.size === 0) return;
     activeRegions.clear();
+    writeHashKeywords();
     renderRegionFilter();
     render();
   }
@@ -1692,12 +1704,14 @@
   // listens specifically for the keywords= portion and re-renders.
   window.addEventListener('hashchange', () => {
     const snap = () => Array.from(activeKeywords).sort().join(',') + '|'
+      + Array.from(activeRegions).sort().join(',') + '|'
       + Array.from(activeMentorship).sort().join(',') + '|' + (activeStsm ? '1' : '');
     const before = snap();
     parseHashKeywords();
     const after = snap();
     if (before !== after) {
       renderKeywordFilter();
+      renderRegionFilter();
       syncMentorshipChips();
       syncStsmChip();
       render();
@@ -1728,6 +1742,7 @@
     // lands with those filters already applied.
     parseHashKeywords();
     if (keywordDetails && activeKeywords.size > 0) keywordDetails.open = true;
+    if (regionDetails && activeRegions.size > 0) regionDetails.open = true;
     populateCountryFilter();
     setupMentorshipFilter();
     syncMentorshipChips();
