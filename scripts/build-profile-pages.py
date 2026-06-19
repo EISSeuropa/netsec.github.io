@@ -50,6 +50,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 BIOS = ROOT / "data" / "bios.json"
 WORKS = ROOT / "data" / "orcid-works.json"
+PRIZES = ROOT / "data" / "prize-winners.json"
 OUT_DIR = ROOT / "people"
 SITE = "https://netsec-cost.eu"
 
@@ -74,6 +75,7 @@ T_THEMES = "Research themes"
 T_REGIONS = "Research regions"
 T_SIMILAR = "Works on similar topics"
 T_SEE_ALL = "See everyone in these themes"
+T_ANTHOLOGY = "In the EISS Anthology"
 
 WG_NAMES = {"1": "WG1", "2": "WG2", "3": "WG3", "4": "WG4"}
 
@@ -290,6 +292,35 @@ def render_actions(m: dict) -> str:
     return '<div class="profile-actions">' + "".join(bits) + "</div>"
 
 
+# Trophy glyph for the prize pill, matching the EISS Anthology's prize chip.
+_PRIZE_SVG = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+              'stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" '
+              'aria-hidden="true"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47'
+              'l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"/>'
+              '<circle cx="12" cy="8" r="6"/></svg>')
+
+
+def render_prize(prize: dict) -> str:
+    """A gold prize pill, the NetSec counterpart of the EISS Anthology's
+    `.paper-prize-chip`. Shown only here on the full profile page, never on the
+    directory card. The prize name is a proper noun kept in English across
+    locales (lang="en"), matching the EISS chip. Links to where the prize and
+    the winning papers live."""
+    if not prize:
+        return ""
+    award = prize.get("award") or "European Security Studies Prize"
+    partner = prize.get("partner")
+    title = award + (f" — EISS × {partner}" if partner else "")
+    paper = prize.get("paper")
+    if paper:
+        title += f" — {paper}"
+    href = prize.get("url") or "https://eiss-europa.com/prizes.html"
+    return ('<div class="profile-prize">'
+            f'<a class="profile-prize-chip" lang="en" href="{esc(href)}" '
+            f'target="_blank" rel="noopener" title="{esc(title)}">'
+            f'{_PRIZE_SVG}<span>{esc(award)}</span></a></div>')
+
+
 def render_pubs(works: list) -> str:
     if not works:
         return ""
@@ -308,7 +339,7 @@ def render_pubs(works: list) -> str:
             f'<ul class="member-pubs-list">{"".join(items)}</ul></div>')
 
 
-def render_card(m: dict, works: list, similar: list, loc: dict) -> str:
+def render_card(m: dict, works: list, similar: list, loc: dict, prize: dict | None = None) -> str:
     """The static profile card. A hero band (photo + identity + actions) over a
     two-column body: the bio + publications on the left, and a sidebar of
     research themes/regions, similar people, and contacts on the right. Reuses
@@ -363,6 +394,7 @@ def render_card(m: dict, works: list, similar: list, loc: dict) -> str:
     if chips:
         p.append('<div class="member-wgs" role="group" aria-label="Working-group membership">'
                  + "".join(chips) + "</div>")
+    p.append(render_prize(prize))
     p.append(render_actions(m))
     p.append("</div>")  # .profile-hero-id
     p.append("</div>")  # .profile-hero
@@ -381,9 +413,14 @@ def render_card(m: dict, works: list, similar: list, loc: dict) -> str:
     p.append(render_pubs(works))
     p.append("</div>")  # .profile-main
 
-    aside = render_areas(m, loc) + render_similar(m, similar, loc) + render_contacts(m)
-    if aside:
-        p.append(f'<aside class="profile-aside">{aside}</aside>')
+    # The anthology slot is filled at runtime by the inline script below: it
+    # matches this member against the EISS authors-index by name key and, on a
+    # hit, injects an "In the EISS Anthology" link. Always present (hidden) so
+    # the script has a mount point; the aside renders even if nothing else fills
+    # it, because the slot might.
+    anthology_slot = '<div class="profile-anthology-slot" hidden></div>'
+    aside = anthology_slot + render_areas(m, loc) + render_similar(m, similar, loc) + render_contacts(m)
+    p.append(f'<aside class="profile-aside">{aside}</aside>')
     p.append("</div>")  # .profile-cols
 
     p.append("</article>")
@@ -413,7 +450,46 @@ def person_jsonld(m: dict, canonical: str) -> str:
     return json.dumps(node, ensure_ascii=False, indent=2)
 
 
-def build_page(m: dict, works: list, similar: list, loc_key: str, chrome: dict) -> str:
+# Runtime enrichment: match this member against the EISS authors-index by
+# name key and, on a hit, inject an "In the EISS Anthology" link into the
+# sidebar slot. Done at runtime (not baked at build) for the same reason the
+# ESSC programme consumes anthology-index.json live: it keeps the drift-gated
+# static build a pure function of local data, and the link never goes stale.
+# nk() is a faithful port of sync-bios.py::name_key(), the same canonical key
+# EISS publishes in authors-index.json, so the two join cleanly. Raw string so
+# the JS regex escapes (\u…, \., \s) reach the browser intact. Silent no-op on
+# any fetch/parse failure, like the published-paper marker on the programme.
+_ANTHOLOGY_SCRIPT = r'''<script>(function(){
+var nameEl=document.querySelector('.member-name'),slot=document.querySelector('.profile-anthology-slot');
+if(!nameEl||!slot)return;
+function nk(s){
+s=String(s||'').normalize('NFKD').replace(/[̀-ͯ]/g,'');
+s=s.replace(/^(professor|prof|doctor|dr|mr|mrs|ms|mx)(?:\.\s*|\s+)/i,'');
+s=s.replace(/[‘’ʼ'`]/g,'');
+var t=s.split(/[^A-Za-z]+/).filter(Boolean).map(function(x){return x.toLowerCase();});
+var skip={de:1,del:1,della:1,di:1,da:1,das:1,dos:1,van:1,von:1,vom:1,der:1,den:1,ter:1,ten:1,la:1,le:1,el:1,al:1,ibn:1,bin:1,bint:1,zu:1,auf:1,af:1,phd:1,jr:1,sr:1,ii:1,iii:1,iv:1,esq:1};
+t=t.filter(function(x){return !skip[x];});
+return t.length<2?'':t[0]+' '+t[t.length-1];
+}
+var key=nk(nameEl.textContent);
+if(!key)return;
+fetch('https://eiss-europa.com/data/authors-index.json').then(function(r){return r.ok?r.json():null;}).then(function(d){
+if(!d||!d.authors)return;
+var hit=null,i,a;
+for(i=0;i<d.authors.length;i++){a=d.authors[i];if(a.name_key===key||(a.aliases&&a.aliases.indexOf(key)>-1)){hit=a;break;}}
+if(!hit||!hit.url)return;
+var label=(window.netsecT?window.netsecT('In the EISS Anthology'):'In the EISS Anthology');
+var el=document.createElement('a');
+el.className='profile-anthology-link';el.href=hit.url;el.target='_blank';el.rel='noopener';
+el.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span></span>';
+el.querySelector('span').textContent=label;
+slot.appendChild(el);slot.hidden=false;
+}).catch(function(){});
+})();</script>'''
+
+
+def build_page(m: dict, works: list, similar: list, loc_key: str, chrome: dict,
+               prize: dict | None = None) -> str:
     loc = LOCALES[loc_key]
     slug = m["id"]
     rel = f"people/{slug}{loc['suffix']}.html"
@@ -450,7 +526,7 @@ def build_page(m: dict, works: list, similar: list, loc_key: str, chrome: dict) 
 <script type="application/ld+json">
 {person_jsonld(m, canonical)}
 </script>"""
-    card = render_card(m, works, similar, loc)
+    card = render_card(m, works, similar, loc, prize)
     back = (f'<p class="profile-back"><a href="people{loc["suffix"]}.html#{esc(slug)}" '
             f'data-i18n="{esc(T_BACK)}">&larr; {esc(T_BACK)}</a></p>')
     # site.js localises [data-i18n] chrome strings on load from the shared
@@ -488,6 +564,7 @@ def build_page(m: dict, works: list, similar: list, loc_key: str, chrome: dict) 
 {chrome['footer']}
 {chrome['sitejs']}
 {i18n_script}
+{_ANTHOLOGY_SCRIPT}
 </body>
 </html>
 """
@@ -502,6 +579,10 @@ def generate() -> dict[str, str]:
     works_map = {}
     if WORKS.exists():
         works_map = json.loads(WORKS.read_text(encoding="utf-8")).get("works", {})
+    prizes = {}
+    if PRIZES.exists():
+        prizes = {k: v for k, v in json.loads(PRIZES.read_text(encoding="utf-8")).items()
+                  if not k.startswith("_")}
     chromes = {}
     for k, loc in LOCALES.items():
         shell = (ROOT / loc["shell"]).read_text(encoding="utf-8")
@@ -512,9 +593,10 @@ def generate() -> dict[str, str]:
         # Similar-people ranking is locale-independent (names, keywords and
         # themes aren't translated), so compute it once per member.
         similar = similar_members(m, members)
+        prize = prizes.get(m["id"])
         for k, loc in LOCALES.items():
             rel = f"people/{m['id']}{loc['suffix']}.html"
-            pages[rel] = build_page(m, works, similar, k, chromes[k])
+            pages[rel] = build_page(m, works, similar, k, chromes[k], prize)
     return pages
 
 

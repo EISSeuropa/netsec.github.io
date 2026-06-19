@@ -106,6 +106,32 @@ def test_mentor_badge_is_static_without_email():
     assert "mailto:" not in html
 
 
+def test_prize_pill_renders_only_for_listed_winners():
+    prizes = {k: v for k, v in json.loads(
+        (ROOT / "data" / "prize-winners.json").read_text(encoding="utf-8")).items()
+        if not k.startswith("_")}
+    assert prizes, "expected at least one prize winner"
+    # Every key must be a real directory member id.
+    member_ids = {m["id"] for m in MEMBERS}
+    for slug in prizes:
+        assert slug in member_ids, f"prize-winners.json key {slug} is not a directory member"
+    winner = next(iter(prizes))
+    wm = next(m for m in MEMBERS if m["id"] == winner)
+    html = bpp.render_card(wm, [], [], EN, prizes[winner])
+    assert 'class="profile-prize-chip"' in html and 'lang="en"' in html
+    # The pill is absent without prize data.
+    assert "profile-prize-chip" not in bpp.render_card(wm, [], [], EN, None)
+
+
+def test_every_card_has_the_anthology_slot_and_script():
+    target = next(m for m in MEMBERS if m["id"] == "moritz-weiss")
+    html = bpp.render_card(target, [], [], EN)
+    assert 'class="profile-anthology-slot" hidden' in html
+    # The inline runtime script that fills it ships on every built page.
+    page = next(v for k, v in bpp.generate().items() if k.endswith("moritz-weiss.html"))
+    assert "authors-index.json" in page and "profile-anthology-link" in page
+
+
 def test_generate_produces_three_locales_per_member():
     pages = bpp.generate()
     assert len(pages) == len(MEMBERS) * 3

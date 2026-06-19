@@ -55,7 +55,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=65c00152">
+<link rel="stylesheet" href="assets/css/site.css?v=b578992a">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -147,7 +147,7 @@
 </header>
 <main id="main" class="profile-page">
   <div class="container profile-container">
-    <article class="member-card glass is-profile"><div class="profile-hero"><div class="member-photo"><picture><source srcset="assets/images/people/silvia-damato.webp" type="image/webp"><img src="assets/images/people/silvia-damato.jpeg" alt="Dr Silvia D&#x27;Amato" loading="lazy"></picture></div><div class="profile-hero-id"><h1 class="member-name">Dr Silvia D&#x27;Amato</h1><p class="member-role" data-i18n-each>WG3 Co-Leader</p><p class="member-affiliation"><span class="aff-full">James Madison University</span></p><div class="member-wgs" role="group" aria-label="Working-group membership"><span class="wg-chip wg-3">WG3 · co-lead</span></div><div class="profile-actions"><span class="founding-badge" data-i18n="Founding contributor">Founding contributor</span></div></div></div><div class="profile-cols"><div class="profile-main"></div></div></article>
+    <article class="member-card glass is-profile"><div class="profile-hero"><div class="member-photo"><picture><source srcset="assets/images/people/silvia-damato.webp" type="image/webp"><img src="assets/images/people/silvia-damato.jpeg" alt="Dr Silvia D&#x27;Amato" loading="lazy"></picture></div><div class="profile-hero-id"><h1 class="member-name">Dr Silvia D&#x27;Amato</h1><p class="member-role" data-i18n-each>WG3 Co-Leader</p><p class="member-affiliation"><span class="aff-full">James Madison University</span></p><div class="member-wgs" role="group" aria-label="Working-group membership"><span class="wg-chip wg-3">WG3 · co-lead</span></div><div class="profile-actions"><span class="founding-badge" data-i18n="Founding contributor">Founding contributor</span></div></div></div><div class="profile-cols"><div class="profile-main"></div><aside class="profile-aside"><div class="profile-anthology-slot" hidden></div></aside></div></article>
     <p class="profile-back"><a href="people.fr.html#silvia-damato" data-i18n="Back to the directory">&larr; Back to the directory</a></p>
   </div>
 </main>
@@ -187,7 +187,34 @@
     </div>
   </div>
 </footer>
-<script src="assets/js/site.js?v=a2eb02c6" defer></script>
+<script src="assets/js/site.js?v=f156d434" defer></script>
 <script>document.addEventListener("DOMContentLoaded",function(){if(!window.netsecT)return;document.querySelectorAll("[data-i18n]").forEach(function(e){e.textContent=window.netsecT(e.getAttribute("data-i18n"));});});</script>
+<script>(function(){
+var nameEl=document.querySelector('.member-name'),slot=document.querySelector('.profile-anthology-slot');
+if(!nameEl||!slot)return;
+function nk(s){
+s=String(s||'').normalize('NFKD').replace(/[̀-ͯ]/g,'');
+s=s.replace(/^(professor|prof|doctor|dr|mr|mrs|ms|mx)(?:\.\s*|\s+)/i,'');
+s=s.replace(/[‘’ʼ'`]/g,'');
+var t=s.split(/[^A-Za-z]+/).filter(Boolean).map(function(x){return x.toLowerCase();});
+var skip={de:1,del:1,della:1,di:1,da:1,das:1,dos:1,van:1,von:1,vom:1,der:1,den:1,ter:1,ten:1,la:1,le:1,el:1,al:1,ibn:1,bin:1,bint:1,zu:1,auf:1,af:1,phd:1,jr:1,sr:1,ii:1,iii:1,iv:1,esq:1};
+t=t.filter(function(x){return !skip[x];});
+return t.length<2?'':t[0]+' '+t[t.length-1];
+}
+var key=nk(nameEl.textContent);
+if(!key)return;
+fetch('https://eiss-europa.com/data/authors-index.json').then(function(r){return r.ok?r.json():null;}).then(function(d){
+if(!d||!d.authors)return;
+var hit=null,i,a;
+for(i=0;i<d.authors.length;i++){a=d.authors[i];if(a.name_key===key||(a.aliases&&a.aliases.indexOf(key)>-1)){hit=a;break;}}
+if(!hit||!hit.url)return;
+var label=(window.netsecT?window.netsecT('In the EISS Anthology'):'In the EISS Anthology');
+var el=document.createElement('a');
+el.className='profile-anthology-link';el.href=hit.url;el.target='_blank';el.rel='noopener';
+el.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span></span>';
+el.querySelector('span').textContent=label;
+slot.appendChild(el);slot.hidden=false;
+}).catch(function(){});
+})();</script>
 </body>
 </html>

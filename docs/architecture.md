@@ -400,7 +400,8 @@ wordmark adapts to light and dark themes.
 │   ├── i18n-state.json              # SHA-1 stamps for translation-drift tracking
 │   ├── events.json                  # Authoritative source for /calendar.ics + /calendar/<slug>.ics + Events cards
 │   ├── publications.json            # Action outputs, WG-tagged. Drives /outputs.html + WG-page "Related publications"
-│   └── field-guide.json             # Field-guide concept entries; rendered into the glossary's "Concepts in European security studies" section by build-field-guide.py (#766)
+│   ├── field-guide.json             # Field-guide concept entries; rendered into the glossary's "Concepts in European security studies" section by build-field-guide.py (#766)
+│   └── prize-winners.json           # Directory members who won the European Security Studies Prize, keyed by member id; renders the gold prize pill on the full profile page (build-profile-pages.py)
 │
 ├── calendar/                        # Per-event .ics downloads (auto-generated)
 │   └── <slug>.ics                   # One file per event in events.json; powers per-card "Add to calendar" buttons
