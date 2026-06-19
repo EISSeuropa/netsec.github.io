@@ -1,9 +1,11 @@
 # Weekly rotation of the home-page member spotlight (issue #341).
 #
 # What this does
-#   1. Every Monday at 06:00 UTC (after the bios sync at 05:15 so it
-#      sees any new eligible members), and on manual dispatch, run
-#      scripts/rotate-spotlight.py.
+#   1. Every Tuesday at 10:00 Central European time (after Monday's bios
+#      sync so it sees any new eligible members), and on manual dispatch,
+#      run scripts/rotate-spotlight.py. Cron can't follow DST, so two UTC
+#      triggers (08:00 + 09:00) fire and a gate job lets exactly one
+#      through, the one that lands at 10:00 Europe/Paris.
 #   2. The script picks the member to feature this ISO week using a
 #      balanced-rotation score (early-career, ITC, Working-Group
 #      balance) and writes data/spotlight.json.
@@ -22,7 +24,11 @@ name: Rotate member spotlight
 
 on:
   schedule:
-    - cron: '0 6 * * 1'    # Every Monday 06:00 UTC
+    # Tuesday 10:00 Europe/Paris year-round. 08:00 UTC == 10:00 CEST (summer),
+    # 09:00 UTC == 10:00 CET (winter); the gate job below drops whichever one
+    # is not 10:00 local, so the spotlight posts once, at 10:00, every Tuesday.
+    - cron: '0 8 * * 2'
+    - cron: '0 9 * * 2'
   workflow_dispatch:       # Manual run from the Actions tab
 
 permissions:
@@ -34,8 +40,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # DST gate: both scheduled triggers fire, but only the one at 10:00
+  # Europe/Paris proceeds. A manual dispatch always proceeds.
+  gate:
+    name: Proceed only at 10:00 Europe/Paris
+    runs-on: ubuntu-latest
+    outputs:
+      go: ${{ steps.check.outputs.go }}
+    steps:
+      - id: check
+        run: |
+          hour=$(TZ='Europe/Paris' date +%H)
+          if [ "${{ github.event_name }}" != "schedule" ] || [ "$hour" = "10" ]; then
+            echo "go=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Currently ${hour}:00 Europe/Paris, not 10:00; this trigger is skipped."
+          fi
+
   rotate:
     name: Rotate the weekly member spotlight
+    needs: gate
+    if: needs.gate.outputs.go == 'true'
     runs-on: ubuntu-latest
     # The `social-auto` environment carries the Bluesky credentials WITHOUT a
     # required reviewer, so the weekly spotlight posts itself. News and curated
