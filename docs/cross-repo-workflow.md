@@ -25,6 +25,53 @@ one, check whether the parallel needs the same change.
 Not portable: anything visually NetSec-specific (the 404 illustration,
 brand assets, the deliverables Gantt).
 
+## Cross-site member ↔ author linking (the two indexes)
+
+The two sites link people to each other through a pair of mirror-image
+JSON contracts, one published by each side. The join key on both is the
+same canonical name key (`name_key()` in `scripts/sync-bios.py` on the
+NetSec side, ported verbatim into the EISS Anthology build): lowercased,
+diacritics folded, salutations and nobiliary particles and middle initials
+dropped, reduced to first-and-last token. Publishing a slim index rather
+than letting each side read the other's internal data keeps the consumer
+decoupled from the producer's bio schema and URL scheme.
+
+| Direction | Contract | Produced by | Consumed by |
+| --- | --- | --- | --- |
+| Anthology author → NetSec profile | `directory-index.json` (NetSec site root) | `scripts/build-directory-index.py` | the EISS Anthology |
+| NetSec profile → Anthology author | `authors-index.json` (EISS `data/`) | EISS Anthology build | the NetSec profile page |
+
+Both indexes carry, per person: the display name, the `name_key`, an
+`aliases` array, and the absolute `url` to that person's page on the
+producing site. A consumer matches its own people against the index by
+`name_key` (falling back to `aliases`) and links to `url`.
+
+**`directory-index.json`** is generated from `data/bios.json`, regenerated
+by the weekly bios-sync, and drift-gated in CI (`build-directory-index.py
+--check` in `data-shape-check.yml`). It reuses `sync-bios.py`'s `name_key()`
+so the published key can never drift from the directory's own matcher.
+
+**`authors-index.json`** is consumed at runtime by the profile page, not
+baked at build time. A small inline script on `/people/<slug>` fetches it,
+matches the member, and injects the "In the EISS Anthology" link. Runtime
+consumption is the same posture the ESSC programme already uses for
+`anthology-index.json`, and it keeps the static, drift-gated profile pages a
+pure function of local data. See
+[`profile-pages.md`](./profile-pages.md) for the page side.
+
+### The prize-winner mirror
+
+The European Security Studies Prize is a third, one-directional link, and a
+deliberate exception to the contract pattern above. EISS holds the
+authoritative roll in its internal `paperPrizes.json` keyed by paper title
+and does **not** publish it as a consumable artifact. So NetSec keeps a small
+curated `data/prize-winners.json`, keyed by directory member id, listing only
+the winners who also appear in the Directory, and renders the gold prize pill
+on their profile page from it (`build-profile-pages.py`). If EISS ever
+exposes a public prizes JSON, the builder could consume that and the local
+mirror could be retired. Until then, adding a laureate is a one-row edit (see
+[`profile-pages.md`](./profile-pages.md)).
+
 ## The "ported from" convention
 
 When a feature or fix lands on one site and the other needs the same:

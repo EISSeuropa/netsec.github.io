@@ -13,6 +13,7 @@ reference for maintainers, MC representatives, and admins.
 | [`design-system.md`](./design-system.md)       | Match the existing look-and-feel — colour tokens, typography, components, accessibility.     |
 | [`admin-guide.md`](./admin-guide.md)           | Operate the site: accounts you need, where credentials live, common admin tasks, escalation. |
 | [`bios-setup.md`](./bios-setup.md)             | One-time set-up guide for the Google Form → bios.json pipeline.                              |
+| [`profile-pages.md`](./profile-pages.md)       | What the `/people/<slug>` profile pages carry and how `build-profile-pages.py` builds them: the two-column anatomy, the theme/region chips, the similar-people facepile, the actionable CTAs, the prize pill, and the runtime EISS-Anthology link. |
 | [`og-cards.md`](./og-cards.md)                 | How each member's personal Open Graph share image is generated and kept current — the hashed inputs that trigger a re-render, the churn-free manifest, and the CI gate. |
 | [`news-publishing.md`](./news-publishing.md)   | How a news item reaches the site and the RSS feed (the trigger the social pipeline consumes). |
 | [`social-publishing.md`](./social-publishing.md) | How news and the weekly spotlight become Bluesky posts — the approval-gated path, the ungated auto-spotlight, curated threads, the dedup ledger, and the one-time account set-up. |

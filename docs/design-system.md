@@ -256,6 +256,31 @@ monogram, name, affiliation, and an optional coordinator tag. For
 faculty who are NetSec members, `site.js` swaps the monogram for the
 live directory headshot and adds a profile link, resolved by name.
 
+### Profile-page components (`.is-profile` and friends)
+
+The individual profile pages (`/people/<slug>`, built by
+`scripts/build-profile-pages.py`) reuse the directory's `.member-*`
+classes but lay them out as a hero band over a two-column body. The
+layout is scoped to `.member-card.is-profile` so the directory's own
+cards are untouched, and it collapses to a single centred column under
+820px. The page-specific pieces:
+
+- **`.profile-prize-chip`**: a solid-gold pill (`hsl(43 96% 56%)` fill,
+  dark text, gold border) marking a European Security Studies Prize
+  winner. Deliberately matches the EISS Anthology's `.paper-prize-chip`
+  so the two sites read the same. Gold-on-dark-text works in both
+  themes, so it carries no light/dark override. Shown on the full
+  profile page only.
+- **`.pf-face` / `.pf-facepile`**: the "works on similar topics"
+  facepile, the same overlapping circular-headshot pattern as the
+  Glossary field guide (`.fg-face`), re-scoped for the sidebar. 40px,
+  white ring, lift on hover, `prefers-reduced-motion` honoured.
+- **`.profile-area-chip`**: a research-theme or region chip that links
+  to the directory pre-filtered to that facet (`.is-region` variant for
+  regions).
+- **`.profile-anthology-link`**: the sidebar "In the EISS Anthology"
+  link, injected at runtime when the member is an Anthology author.
+
 ## Animations
 
 - `.reveal` — fades in + slides up 12 px when intersecting viewport.

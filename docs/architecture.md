@@ -139,6 +139,23 @@ flowchart TD
   the *Add your bio* CTA.
 - **Bio collapse** — bios over 4 lines auto-detect and add a "Show
   more / Show less" toggle.
+- **Member profile pages** — every member has a permanent,
+  server-rendered page at `/people/<slug>` (+ FR/DE) with its own
+  Open Graph card and `Person` JSON-LD. A hero band over a two-column
+  body: bio + keywords + publications beside a sidebar of
+  research-theme and region chips (each deep-linking to the directory
+  filtered to that facet), a "works on similar topics" facepile of the
+  members on the closest topics, an "In the EISS Anthology" link when
+  the person is an Anthology author, and a gold prize pill for a
+  European Security Studies Prize winner. The mentor and STSM-hosting
+  badges are actionable here (a prefilled `mailto:`). Built by
+  `scripts/build-profile-pages.py`; see
+  [`profile-pages.md`](./profile-pages.md).
+- **Research-theme + region filters are URL-addressable** —
+  `/people.html#themes=a,b` and `#regions=x` open the directory
+  pre-filtered and the active filters round-trip into the address bar,
+  so a filtered view is shareable and a profile chip can deep-link into
+  it.
 - **Awarding-process timeline** on `grants.html` — numbered nodes on
   a gradient rail with Before / During / After pills.
 - **e-COST portal model** spelt out on `grants.html`: the portal is
@@ -353,6 +370,30 @@ above). The EISS lockup is an inline SVG at
 `assets/images/eiss-logo.svg`, kept inline so its `currentColor`
 wordmark adapts to light and dark themes.
 
+### The individual profile pages and cross-site links
+
+`scripts/build-profile-pages.py` renders a static page per member per
+locale into `/people/`, from `data/bios.json`, lifting the chrome from
+the matching `people.*.html` shell so it never drifts. The page enriches
+the member's record into a hero band over a two-column body (themes and
+region chips that deep-link into the directory filter, a similar-people
+facepile, the actionable mentor/STSM buttons, the recent-publications
+list). It owns the `?v=` hashes on `people/*`, so it runs **after**
+`inject-seo.py`, and a CI gate (`build-profile-pages.py --check` in
+`data-shape-check.yml`) fails if the committed pages drift from a fresh
+build.
+
+Two cross-site links surface on the page, both joined on the canonical
+name key (`name_key()`, shared with the EISS Anthology). The "In the
+EISS Anthology" link is resolved at runtime by a small inline script
+that matches the member against EISS's published `authors-index.json`,
+the mirror of the `directory-index.json` NetSec itself publishes for the
+reverse direction (`scripts/build-directory-index.py`). The gold prize
+pill is rendered at build time from a curated `data/prize-winners.json`.
+The full contract is in
+[`cross-repo-workflow.md`](./cross-repo-workflow.md); the page anatomy is
+in [`profile-pages.md`](./profile-pages.md).
+
 ## Repository layout
 
 ```
@@ -412,7 +453,11 @@ wordmark adapts to light and dark themes.
 │   ├── sync-cost.py                 # Weekly cost.eu sync: WG_MAP, leadership, MC roster + stats, per-WG WG reconciliation
 │   ├── sync-bios.py                 # Pulls Google Form submissions
 │   ├── bios-source.json             # CSV URL + form URL + column mapping
-│   ├── inject-seo.py                # Idempotent canonical/OG/JSON-LD generator + asset cache-bust stamper (?v=hash)
+│   ├── inject-seo.py                # Idempotent canonical/OG/JSON-LD generator + asset cache-bust stamper (?v=hash); run before the profile/sitemap builders
+│   ├── build-profile-pages.py       # Server-renders /people/<slug>.{html,fr,de} from bios.json: enriched profile (themes/regions, similar-people facepile, mentor/STSM CTAs, prize pill, runtime anthology link); owns people/* ?v=, run LAST; --check drift gate (#762)
+│   ├── build-directory-index.py     # Generates directory-index.json, the cross-site contract published for the EISS Anthology (members keyed by name_key → profile URL); --check drift gate
+│   ├── build-sitemap.py             # Regenerates sitemap.xml from the top-level page list + the committed profile pages; --check drift gate
+│   ├── build-og-cards.py            # Headless-Chrome per-member OG card PNGs (1200×630) from bios.json; churn-free manifest; --check gate (see og-cards.md, #1023)
 │   ├── build-brand-assets.py        # One-shot: crop designer lockups + rasterise the favicon family into assets/images/brand/ (not in CI)
 │   ├── update-brand-html.py         # One-shot: migrate favicon/logo markup across all HTML to the brand set (not in CI)
 │   ├── check-i18n-drift.py          # Reports stale translations vs. EN source (ignores cache-bust query)
@@ -450,6 +495,8 @@ wordmark adapts to light and dark themes.
 │   ├── admin-guide.md
 │   ├── i18n.md                      # Translation workflow + drift conventions
 │   ├── seo.md                       # SEO injector design, OG/JSON-LD schema
+│   ├── profile-pages.md             # The enriched /people/<slug> pages + the cross-site member/author links
+│   ├── cross-repo-workflow.md       # NetSec ↔ EISS conventions, incl. the directory-index/authors-index contract
 │   ├── bios-setup.md                # One-time Google Form set-up guide
 │   ├── pdf/                         # Source for the documentation pack
 │   │   ├── documentation.html       # Single-file source, rendered to PDF
