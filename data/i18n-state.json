@@ -199,15 +199,15 @@
     "about.html": {
       "fr": {
         "file": "about.fr.html",
-        "source_sha1": "f76284134a183ca15ebef12290bfe3d5c3fe7a25",
-        "translated_on": "2026-06-18",
+        "source_sha1": "0e8e00395dc5860bbff4cadb68cd70f10185848e",
+        "translated_on": "2026-06-19",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "about.de.html",
-        "source_sha1": "f76284134a183ca15ebef12290bfe3d5c3fe7a25",
-        "translated_on": "2026-06-18",
+        "source_sha1": "0e8e00395dc5860bbff4cadb68cd70f10185848e",
+        "translated_on": "2026-06-19",
         "status": "beta",
         "reviewed_by": null
       }
@@ -231,15 +231,15 @@
     "news.html": {
       "fr": {
         "file": "news.fr.html",
-        "source_sha1": "9fa7823dc789846726d8129a4eb10f24caf9fe95",
-        "translated_on": "2026-06-18",
+        "source_sha1": "c278f1ee8660a4f9a4ac23e28a89006077b36442",
+        "translated_on": "2026-06-19",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "news.de.html",
-        "source_sha1": "9fa7823dc789846726d8129a4eb10f24caf9fe95",
-        "translated_on": "2026-06-18",
+        "source_sha1": "c278f1ee8660a4f9a4ac23e28a89006077b36442",
+        "translated_on": "2026-06-19",
         "status": "beta",
         "reviewed_by": null
       }
@@ -263,15 +263,15 @@
     "working-groups.html": {
       "fr": {
         "file": "working-groups.fr.html",
-        "source_sha1": "3d2f389efc5c48913ee9b1d80ffa16ca27eb2f2c",
-        "translated_on": "2026-06-18",
+        "source_sha1": "6169786ae2c69f888deef35ec7f132c76e5d3257",
+        "translated_on": "2026-06-19",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "working-groups.de.html",
-        "source_sha1": "3d2f389efc5c48913ee9b1d80ffa16ca27eb2f2c",
-        "translated_on": "2026-06-18",
+        "source_sha1": "6169786ae2c69f888deef35ec7f132c76e5d3257",
+        "translated_on": "2026-06-19",
         "status": "beta",
         "reviewed_by": null
       }
