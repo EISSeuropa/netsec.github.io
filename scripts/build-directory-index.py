@@ -33,6 +33,7 @@ import importlib.util
 import io
 import json
 import sys
+import types
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -41,9 +42,14 @@ OUT = ROOT / "directory-index.json"
 SITE = "https://netsec-cost.eu"
 
 # Reuse sync-bios.py's canonical name_key() so the published key can never
-# drift from the one the directory itself matches speakers on. sync-bios.py
-# imports only the standard library at module scope, so loading it here is
-# side-effect free (its main() is guarded behind __main__).
+# drift from the one the directory itself matches speakers on. name_key()
+# itself is pure stdlib (re + unicodedata), but sync-bios.py guards a
+# top-level `import requests` with a sys.exit() when the dependency is
+# absent — and this index only reads JSON, so a consumer (CI's data-shape
+# job) running it without the network deps installed would otherwise crash
+# at import. Register a stub `requests` so that guard passes; we never call
+# anything on it, only name_key(). PIL is already optional in sync-bios.py.
+sys.modules.setdefault("requests", types.ModuleType("requests"))
 _spec = importlib.util.spec_from_file_location("sync_bios", ROOT / "scripts" / "sync-bios.py")
 _sb = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_sb)
