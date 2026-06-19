@@ -2720,6 +2720,33 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 .profile-similar-link:hover{ text-decoration:underline; }
 .profile-page .profile-aside .member-contact{ justify-content:flex-start; margin-top:20px; }
 
+/* "In the EISS Anthology" link, injected into the sidebar slot at runtime
+   when this member matches an author in the EISS authors-index. */
+.profile-anthology-slot{ margin:0 0 4px; }
+.profile-anthology-link{
+  display:inline-flex; align-items:center; gap:7px; margin-bottom:14px;
+  font-size:.82rem; color:var(--accent-2); text-decoration:none;
+}
+.profile-anthology-link svg{ width:16px; height:16px; flex:0 0 auto; }
+.profile-anthology-link:hover{ text-decoration:underline; }
+
+/* Gold prize pill, the NetSec counterpart of the EISS Anthology's
+   .paper-prize-chip. Solid gold with dark text reads on both themes; shown
+   only on the full profile page (build-profile-pages.py), never on a card. */
+.profile-prize{ margin:12px 0 0; }
+.profile-prize-chip{
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 11px 3px 9px; border-radius:999px; white-space:nowrap;
+  font-family:'Inter',sans-serif; font-size:.7rem; font-weight:700;
+  letter-spacing:.04em; text-transform:uppercase; line-height:1.4;
+  text-decoration:none;
+  background:hsl(43 96% 56%); color:hsl(222 35% 10%);
+  border:1px solid hsl(40 80% 42%);
+  transition:filter .12s ease;
+}
+.profile-prize-chip svg{ width:1.05em; height:1.05em; flex:0 0 auto; }
+.profile-prize-chip:hover{ filter:brightness(1.05); text-decoration:none; }
+
 /* Stack to one column on narrow viewports; centre the hero like a card. */
 @media (max-width:820px){
   .profile-page .member-card.is-profile{ padding:22px 18px; text-align:center; }

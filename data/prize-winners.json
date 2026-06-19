@@ -1,0 +1,10 @@
+{
+  "_documentation": "Directory members who have won the European Security Studies Prize (awarded by the European Initiative for Security Studies with the Journal of Strategic Studies, for the best paper by an early-career researcher). Keyed by member id (the directory slug). Maintainer-curated: EISS holds the authoritative prize roll in its own paperPrizes.json keyed by paper title, and does not currently publish it as a consumable artifact, so this small list mirrors only the winners who appear in the NetSec Directory. It renders a gold prize pill on the member's full profile page only, never on the directory card. Fields: award (the prize name, kept in English as a proper noun), partner (the co-awarding journal), year, paper (the winning paper title), url (where the prize and the winning papers live). If EISS later publishes a prizes.json, build-profile-pages.py could consume that instead of this file.",
+  "mattia-sguazzini": {
+    "award": "European Security Studies Prize",
+    "partner": "Journal of Strategic Studies",
+    "year": 2026,
+    "paper": "Do Parliaments Dream of Cyber Power? Parliamentary Scrutiny in the Strategic Domain of Cyberspace",
+    "url": "https://eiss-europa.com/prizes.html"
+  }
+}

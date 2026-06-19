@@ -34,6 +34,7 @@ on:
       - 'scripts/check-data-shape.py'
       - 'scripts/check-render-smoke.sh'
       - 'scripts/build-profile-pages.py'
+      - 'data/prize-winners.json'
       - 'people.html'
       - 'people.fr.html'
       - 'people.de.html'
