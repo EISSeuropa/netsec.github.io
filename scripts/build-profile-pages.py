@@ -96,8 +96,14 @@ def extract_chrome(shell_html: str) -> dict:
     nav = grab(r"(<header class=\"nav\".*?</header>)", "nav")
     footer = grab(r"(<footer class=\"footer\".*?</footer>)", "footer")
     sitejs = grab(r"(<script src=\"assets/js/site\.js[^\"]*\"[^>]*></script>)", "site.js tag")
+    # Optional: the manual-translation beta ribbon. Present only in the
+    # FR/DE shells (the EN shell has none). Spliced so a localised profile
+    # page carries the same "manual translation, English authoritative"
+    # cue as every other translated page (CLAUDE.md §1).
+    rib = re.search(r'(<div class="i18n-beta-ribbon".*?</div>)', shell_html, re.S)
     return {"head_assets": head_assets.strip("\n"), "nav": nav,
-            "footer": footer, "sitejs": sitejs}
+            "footer": footer, "sitejs": sitejs,
+            "ribbon": rib.group(1) if rib else ""}
 
 
 # ──────────────────────── card rendering ────────────────────────
@@ -312,6 +318,10 @@ def build_page(m: dict, works: list, loc_key: str, chrome: dict) -> str:
         'document.querySelectorAll("[data-i18n]").forEach(function(e){'
         'e.textContent=window.netsecT(e.getAttribute("data-i18n"));});'
         '});</script>')
+    # Point the ribbon's "see in English" link at this page's own EN
+    # profile rather than the directory it links to in the shell.
+    ribbon = (chrome["ribbon"].replace('href="people.html"', f'href="people/{esc(slug)}.html"') + "\n"
+              if chrome.get("ribbon") else "")
     return f"""<!DOCTYPE html>
 <html lang="{loc['lang']}"{loc['i18n']}>
 <head>
@@ -325,7 +335,7 @@ def build_page(m: dict, works: list, loc_key: str, chrome: dict) -> str:
 {chrome['head_assets']}
 </head>
 <body>
-{chrome['nav']}
+{ribbon}{chrome['nav']}
 <main id="main" class="profile-page">
   <div class="container profile-container">
     {card}
