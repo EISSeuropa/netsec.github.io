@@ -44,6 +44,7 @@ import html
 import json
 import re
 import sys
+import urllib.parse
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -64,15 +65,117 @@ LOCALES = {
 
 # Chrome strings rendered on the card. Marked with data-i18n so site.js's
 # netsecT localises them on load from the shared catalog (the same keys the
-# directory already uses). English is the catalog's identity fallback.
+# directory already uses). English is the catalog's identity fallback. The
+# theme + region *display* names are already in that catalog (the directory
+# filter chips translate them), so chips carry data-i18n for free.
 T_BACK = "Back to the directory"
 T_PUBS = "Recent publications"
+T_THEMES = "Research themes"
+T_REGIONS = "Research regions"
+T_SIMILAR = "Works on similar topics"
+T_SEE_ALL = "See everyone in these themes"
 
 WG_NAMES = {"1": "WG1", "2": "WG2", "3": "WG3", "4": "WG4"}
+
+# Faces shown in the similar-people facepile before the "+N" overflow disc.
+FACEPILE_MAX = 5
 
 
 def esc(s) -> str:
     return html.escape(str(s or ""), quote=True)
+
+
+def area_slug(s: str) -> str:
+    """Slug a theme/region display name to the directory's filter slug.
+
+    Mirrors people-directory.js's keywordSlug(): lowercase, collapse runs of
+    non-alphanumerics to a hyphen, trim. The directory's slug is Unicode-aware
+    (\\p{L}\\p{N}); the current theme + region vocab is ASCII, so this ASCII
+    form produces identical slugs (asserted in the tests). If a non-ASCII
+    theme is ever added, extend both sides together."""
+    return re.sub(r"[^a-z0-9]+", "-", (s or "").lower()).strip("-")
+
+
+def similar_members(target: dict, members: list) -> list:
+    """Members who work on related topics, most-similar first.
+
+    Ranked by shared canonical-keyword count, then shared-theme count, then
+    name. A candidate needs at least one shared keyword or theme to appear, so
+    a member with no topic data simply gets no suggestions (graceful empty)."""
+    t_kw = {k for k in (target.get("canonical_keywords") or []) if k}
+    t_th = {t for t in (target.get("themes") or []) if t}
+    if not t_kw and not t_th:
+        return []
+    scored = []
+    for o in members:
+        if o.get("id") == target.get("id") or not o.get("id"):
+            continue
+        shared_kw = len(t_kw & {k for k in (o.get("canonical_keywords") or []) if k})
+        shared_th = len(t_th & {t for t in (o.get("themes") or []) if t})
+        if not shared_kw and not shared_th:
+            continue
+        scored.append((-shared_kw, -shared_th, (o.get("name") or "").lower(), o))
+    scored.sort(key=lambda x: x[:3])
+    return [o for *_, o in scored]
+
+
+def render_areas(m: dict, loc: dict) -> str:
+    """Research-theme and region chips, each deep-linking to the directory
+    pre-filtered to that facet (#themes= / #regions=)."""
+    out = []
+    people = f'people{loc["suffix"]}.html'
+    for label_key, field, key, extra in (
+        (T_THEMES, "themes", "themes", ""),
+        (T_REGIONS, "regions", "regions", " is-region"),
+    ):
+        vals = [v for v in (m.get(field) or []) if v]
+        if not vals:
+            continue
+        chips = "".join(
+            f'<a class="profile-area-chip{extra}" '
+            f'href="{people}#{key}={esc(area_slug(v))}" '
+            f'data-i18n="{esc(v)}">{esc(v)}</a>'
+            for v in vals)
+        out.append(f'<p class="profile-aside-label" data-i18n="{esc(label_key)}">{esc(label_key)}</p>'
+                   f'<div class="profile-areas">{chips}</div>')
+    return "".join(out)
+
+
+def render_similar(target: dict, similar: list, loc: dict) -> str:
+    """The field-guide-style facepile of people on related topics. Each face
+    links straight to that member's own profile page; the trailing link opens
+    the directory filtered to the target's themes."""
+    if not similar:
+        return ""
+    visible = similar[:FACEPILE_MAX]
+    overflow = len(similar) - len(visible)
+    faces = []
+    for o in visible:
+        href = f'people/{esc(o["id"])}{loc["suffix"]}.html'
+        photo = (o.get("photo") or "").strip()
+        if photo:
+            webp = re.sub(r"\.(jpe?g|png)$", ".webp", photo, flags=re.I)
+            inner = (f'<picture><source srcset="{esc(webp)}" type="image/webp">'
+                     f'<img src="{esc(photo)}" alt="" width="44" height="44" '
+                     f'loading="lazy" decoding="async"></picture>')
+        else:
+            ini = "".join(w[0] for w in (o.get("name") or "?").split()[:2]).upper()
+            inner = f'<span class="pf-initials" aria-hidden="true">{esc(ini)}</span>'
+        # The member name is the accessible label (names aren't translated, so
+        # this stays correct across locales without an aria template).
+        faces.append(f'<a class="pf-face" href="{href}" '
+                     f'aria-label="{esc(o.get("name"))}">{inner}</a>')
+    if overflow > 0:
+        faces.append(f'<span class="pf-face pf-more" aria-hidden="true">+{overflow}</span>')
+    theme_slugs = [area_slug(t) for t in (target.get("themes") or []) if t]
+    href = f'people{loc["suffix"]}.html'
+    if theme_slugs:
+        href += "#themes=" + ",".join(theme_slugs)
+    return (f'<div class="profile-similar">'
+            f'<p class="profile-aside-label" data-i18n="{esc(T_SIMILAR)}">{esc(T_SIMILAR)}</p>'
+            f'<span class="pf-facepile">{"".join(faces)}</span>'
+            f'<a class="profile-similar-link" href="{esc(href)}" '
+            f'data-i18n="{esc(T_SEE_ALL)}">{esc(T_SEE_ALL)}</a></div>')
 
 
 # ──────────────────────── chrome extraction ────────────────────────
@@ -147,12 +250,76 @@ def render_contacts(m: dict) -> str:
     return "".join(out)
 
 
-def render_card(m: dict, works: list) -> str:
-    """The static profile card, reusing the directory's `.member-card`
-    classes so site.css styles it identically. No filter interactivity."""
+def render_actions(m: dict) -> str:
+    """The founding badge plus the actionable mentor / STSM calls-to-action.
+
+    On a full profile the mentorship + hosting badges become buttons: when the
+    member has published an email they are a `mailto:` with a directory-aware
+    subject, turning the passive label into the "find a mentor / host" action
+    from the directory's own framing. Without an email they fall back to the
+    plain badge."""
+    email = (m.get("email") or "").strip()
+
+    def action(label: str, cls: str, subject: str) -> str:
+        if email:
+            href = (f"mailto:{esc(email)}?subject="
+                    + urllib.parse.quote(subject))
+            return (f'<a class="{cls} is-action" href="{href}" '
+                    f'data-i18n="{esc(label)}">{esc(label)}</a>')
+        return f'<span class="{cls}" data-i18n="{esc(label)}">{esc(label)}</span>'
+
+    bits = []
+    if m.get("founding_contributor"):
+        bits.append('<span class="founding-badge" '
+                    'data-i18n="Founding contributor">Founding contributor</span>')
+    for tag, cls, label, subj in (
+        ("mentor", "mentorship-badge is-offering", "Available to mentor",
+         "Mentorship enquiry via the NetSec directory"),
+        ("mentee", "mentorship-badge is-seeking", "Seeking mentorship",
+         "Mentorship via the NetSec directory"),
+    ):
+        if tag in (m.get("mentorship") or []):
+            bits.append(action(label, cls, subj))
+    stsm = m.get("stsm_hosting")
+    if stsm in ("yes", "ask"):
+        label = "Open to hosting STSM visitors" if stsm == "ask" else "Can host STSM visitors"
+        cls = "stsm-badge is-ask" if stsm == "ask" else "stsm-badge"
+        bits.append(action(label, cls, "STSM hosting enquiry via the NetSec directory"))
+    if not bits:
+        return ""
+    return '<div class="profile-actions">' + "".join(bits) + "</div>"
+
+
+def render_pubs(works: list) -> str:
+    if not works:
+        return ""
+    items = []
+    for w in works:
+        title = esc(w.get("title"))
+        if w.get("doi"):
+            head = f'<a class="member-pubs-link" href="https://doi.org/{esc(w["doi"])}" target="_blank" rel="noopener">{title}</a>'
+        else:
+            head = f'<span class="member-pubs-link">{title}</span>'
+        meta_bits = [str(x) for x in (w.get("year"), w.get("journal")) if x]
+        meta = f' <span class="member-pubs-meta">({esc(", ".join(meta_bits))})</span>' if meta_bits else ""
+        items.append(f"<li>{head}{meta}</li>")
+    return ('<div class="member-pubs" aria-label="Recent publications">'
+            f'<p class="member-pubs-title" data-i18n="{esc(T_PUBS)}">{esc(T_PUBS)}</p>'
+            f'<ul class="member-pubs-list">{"".join(items)}</ul></div>')
+
+
+def render_card(m: dict, works: list, similar: list, loc: dict) -> str:
+    """The static profile card. A hero band (photo + identity + actions) over a
+    two-column body: the bio + publications on the left, and a sidebar of
+    research themes/regions, similar people, and contacts on the right. Reuses
+    the directory's `.member-*` classes so chips and badges style identically;
+    the two-column layout is scoped to `.is-profile` in site.css so directory
+    cards are unaffected."""
     p = []
     p.append('<article class="member-card glass is-profile">')
-    # Photo
+
+    # ── Hero: photo + identity + actions ──
+    p.append('<div class="profile-hero">')
     photo = (m.get("photo") or "").strip()
     p.append('<div class="member-photo">')
     if photo:
@@ -163,9 +330,8 @@ def render_card(m: dict, works: list) -> str:
         initials = "".join(w[0] for w in (m.get("name") or "?").split()[:2]).upper()
         p.append(f'<span class="member-photo-fallback" aria-hidden="true">{esc(initials)}</span>')
     p.append("</div>")
-    p.append('<div class="member-body">')
+    p.append('<div class="profile-hero-id">')
     p.append(f'<h1 class="member-name">{esc(m.get("name"))}</h1>')
-    # Role line
     roles = m.get("roles") or []
     if roles:
         p.append(f'<p class="member-role" data-i18n-each>{esc(" · ".join(roles))}</p>')
@@ -173,7 +339,6 @@ def render_card(m: dict, works: list) -> str:
         has_wg = bool(m.get("wgs") or (m.get("wg_leadership") or {}))
         key = "Working Group participant" if has_wg else "Network member"
         p.append(f'<p class="member-role is-soft" data-i18n="{esc(key)}">{esc(key)}</p>')
-    # Affiliation
     aff_parts = [x for x in (m.get("position"), m.get("affiliation"), m.get("country")) if x]
     if aff_parts:
         flag = ""
@@ -182,7 +347,6 @@ def render_card(m: dict, works: list) -> str:
                     f'{esc(m["country_code"])}.png" alt="" loading="lazy"> ')
         p.append(f'<p class="member-affiliation">{flag}'
                  f'<span class="aff-full">{esc(" · ".join(aff_parts))}</span></p>')
-    # WG chips
     wgs = m.get("wgs") or []
     lead = (m.get("wg_leadership") or {}).get("lead") or []
     colead = (m.get("wg_leadership") or {}).get("co_lead") or []
@@ -199,51 +363,30 @@ def render_card(m: dict, works: list) -> str:
     if chips:
         p.append('<div class="member-wgs" role="group" aria-label="Working-group membership">'
                  + "".join(chips) + "</div>")
-    # Founding badge
-    if m.get("founding_contributor"):
-        p.append('<div class="member-founding"><span class="founding-badge" '
-                 'data-i18n="Founding contributor">Founding contributor</span></div>')
-    # Mentorship + STSM badges
-    badges = []
-    for tag, cls, label in (("mentor", "is-offering", "Available to mentor"),
-                            ("mentee", "is-seeking", "Seeking mentorship")):
-        if tag in (m.get("mentorship") or []):
-            badges.append(f'<span class="mentorship-badge {cls}" data-i18n="{esc(label)}">{esc(label)}</span>')
-    if badges:
-        p.append('<div class="member-mentorship" aria-label="Mentorship">' + "".join(badges) + "</div>")
-    stsm = m.get("stsm_hosting")
-    if stsm in ("yes", "ask"):
-        label = "Open to hosting STSM visitors" if stsm == "ask" else "Can host STSM visitors"
-        cls = "stsm-badge is-ask" if stsm == "ask" else "stsm-badge"
-        p.append(f'<div class="member-stsm" aria-label="STSM hosting">'
-                 f'<span class="{cls}" data-i18n="{esc(label)}">{esc(label)}</span></div>')
-    # Bio
+    p.append(render_actions(m))
+    p.append("</div>")  # .profile-hero-id
+    p.append("</div>")  # .profile-hero
+
+    # ── Two-column body ──
+    p.append('<div class="profile-cols">')
+    p.append('<div class="profile-main">')
     bio = (m.get("bio") or "").strip()
     if bio:
         p.append(f'<p class="member-bio is-expanded">{esc(bio)}</p>')
-    # Keywords (static, non-clickable on the profile page)
     kws = m.get("canonical_keywords") or m.get("keywords") or []
     if kws:
         pills = "".join(f'<span class="member-keyword-chip is-static">{esc(k)}</span>'
                         for k in kws if k)
         p.append(f'<div class="member-keywords" aria-label="Research interests">{pills}</div>')
-    # ORCID recent publications (static)
-    if works:
-        items = []
-        for w in works:
-            title = esc(w.get("title"))
-            if w.get("doi"):
-                head = f'<a class="member-pubs-link" href="https://doi.org/{esc(w["doi"])}" target="_blank" rel="noopener">{title}</a>'
-            else:
-                head = f'<span class="member-pubs-link">{title}</span>'
-            meta_bits = [str(x) for x in (w.get("year"), w.get("journal")) if x]
-            meta = f' <span class="member-pubs-meta">({esc(", ".join(meta_bits))})</span>' if meta_bits else ""
-            items.append(f"<li>{head}{meta}</li>")
-        p.append('<div class="member-pubs" aria-label="Recent publications">'
-                 f'<p class="member-pubs-title" data-i18n="{esc(T_PUBS)}">{esc(T_PUBS)}</p>'
-                 f'<ul class="member-pubs-list">{"".join(items)}</ul></div>')
-    p.append(render_contacts(m))
-    p.append("</div></article>")
+    p.append(render_pubs(works))
+    p.append("</div>")  # .profile-main
+
+    aside = render_areas(m, loc) + render_similar(m, similar, loc) + render_contacts(m)
+    if aside:
+        p.append(f'<aside class="profile-aside">{aside}</aside>')
+    p.append("</div>")  # .profile-cols
+
+    p.append("</article>")
     return "".join(p)
 
 
@@ -270,7 +413,7 @@ def person_jsonld(m: dict, canonical: str) -> str:
     return json.dumps(node, ensure_ascii=False, indent=2)
 
 
-def build_page(m: dict, works: list, loc_key: str, chrome: dict) -> str:
+def build_page(m: dict, works: list, similar: list, loc_key: str, chrome: dict) -> str:
     loc = LOCALES[loc_key]
     slug = m["id"]
     rel = f"people/{slug}{loc['suffix']}.html"
@@ -307,7 +450,7 @@ def build_page(m: dict, works: list, loc_key: str, chrome: dict) -> str:
 <script type="application/ld+json">
 {person_jsonld(m, canonical)}
 </script>"""
-    card = render_card(m, works)
+    card = render_card(m, works, similar, loc)
     back = (f'<p class="profile-back"><a href="people{loc["suffix"]}.html#{esc(slug)}" '
             f'data-i18n="{esc(T_BACK)}">&larr; {esc(T_BACK)}</a></p>')
     # site.js localises [data-i18n] chrome strings on load from the shared
@@ -366,9 +509,12 @@ def generate() -> dict[str, str]:
     pages: dict[str, str] = {}
     for m in members:
         works = works_map.get(m["id"], [])
+        # Similar-people ranking is locale-independent (names, keywords and
+        # themes aren't translated), so compute it once per member.
+        similar = similar_members(m, members)
         for k, loc in LOCALES.items():
             rel = f"people/{m['id']}{loc['suffix']}.html"
-            pages[rel] = build_page(m, works, k, chromes[k])
+            pages[rel] = build_page(m, works, similar, k, chromes[k])
     return pages
 
 
