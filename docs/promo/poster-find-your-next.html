@@ -140,6 +140,14 @@ h1.title .l{display:block}
 .qr-band .qr-side .qr-lab{font-family:var(--mono);font-size:13px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);margin-bottom:9px}
 .qr-band .qr-side .qr-h{font-family:var(--serif);font-weight:600;font-size:30px;letter-spacing:-.015em;color:var(--ink);margin-bottom:8px}
 .qr-band .qr-side .qr-u{font-family:var(--mono);font-size:18px;color:var(--muted)}
+
+  /* Floating member heads framing the content (left/right gutters), softly masked */
+  .faces{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;
+    -webkit-mask-image:radial-gradient(122% 100% at 50% 44%, transparent 30%, rgba(0,0,0,.6) 56%, #000 100%);
+            mask-image:radial-gradient(122% 100% at 50% 44%, transparent 30%, rgba(0,0,0,.6) 56%, #000 100%)}
+  .faces .fh{position:absolute;border-radius:50%;overflow:hidden;opacity:.5;
+    box-shadow:0 9px 24px rgba(11,18,32,.12),0 0 0 3px rgba(255,255,255,.82)}
+  .faces .fh img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.94)}
 </style>
 </head>
 <body>
@@ -151,6 +159,38 @@ h1.title .l{display:block}
       <div class="blob b-warm"  style="width:620px;height:620px;right:-160px;top:80px"></div>
       <div class="blob b-violet" style="width:820px;height:820px;left:50%;top:760px;transform:translateX(-50%)"></div>
       <div class="blob b-mint"  style="width:520px;height:520px;right:-90px;bottom:-150px;opacity:.45"></div>
+    </div>
+    <div class="faces">
+      <div class="fh" style="left:53px;top:45px;width:124px;height:124px;transform:rotate(6deg)"><img src="/assets/images/people/revecca-pedi.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:88px;top:808px;width:86px;height:86px;transform:rotate(1deg)"><img src="/assets/images/people/sara-russo.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:-8px;top:1141px;width:124px;height:124px;transform:rotate(3deg)"><img src="/assets/images/people/seyithan-ahmet-ates.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:130px;top:149px;width:124px;height:124px;transform:rotate(4deg)"><img src="/assets/images/people/alexander-lanoszka.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1120px;top:903px;width:124px;height:124px;transform:rotate(7deg)"><img src="/assets/images/people/chiara-libiseller.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1145px;top:563px;width:86px;height:86px;transform:rotate(5deg)"><img src="/assets/images/people/silvia-damato.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:64px;top:117px;width:124px;height:124px;transform:rotate(-3deg)"><img src="/assets/images/people/john-helferich.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1135px;top:1443px;width:110px;height:110px;transform:rotate(-3deg)"><img src="/assets/images/people/rusudan-zabakhidze.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:0px;top:998px;width:110px;height:110px;transform:rotate(-5deg)"><img src="/assets/images/people/linde-desmaele.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1037px;top:951px;width:110px;height:110px;transform:rotate(-7deg)"><img src="/assets/images/people/moritz-weiss.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1134px;top:1373px;width:98px;height:98px;transform:rotate(2deg)"><img src="/assets/images/people/archishman-goswami.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1193px;top:90px;width:152px;height:152px;transform:rotate(-6deg)"><img src="/assets/images/people/filip-ejdus.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1202px;top:1377px;width:138px;height:138px;transform:rotate(-6deg)"><img src="/assets/images/people/anna-pagnacco.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:98px;top:1275px;width:124px;height:124px;transform:rotate(3deg)"><img src="/assets/images/people/yanina-shved-dogrul.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1105px;top:1417px;width:110px;height:110px;transform:rotate(7deg)"><img src="/assets/images/people/gil-baram.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:971px;top:895px;width:98px;height:98px;transform:rotate(-5deg)"><img src="/assets/images/people/mark-rhinard.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:192px;top:70px;width:86px;height:86px;transform:rotate(5deg)"><img src="/assets/images/people/meret-steybe.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1026px;top:1462px;width:86px;height:86px;transform:rotate(-1deg)"><img src="/assets/images/people/laura-lisboa.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1214px;top:115px;width:86px;height:86px;transform:rotate(0deg)"><img src="/assets/images/people/francesco-canossi.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1102px;top:230px;width:152px;height:152px;transform:rotate(-1deg)"><img src="/assets/images/people/chiara-ruffa.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1172px;top:684px;width:138px;height:138px;transform:rotate(7deg)"><img src="/assets/images/people/lucian-bumeder.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1078px;top:259px;width:74px;height:74px;transform:rotate(-5deg)"><img src="/assets/images/people/nikolaos-tzifakis.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:58px;top:1298px;width:86px;height:86px;transform:rotate(-7deg)"><img src="/assets/images/people/saurav-narain.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1053px;top:488px;width:98px;height:98px;transform:rotate(-7deg)"><img src="/assets/images/people/sarka-kolmasova.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:154px;top:1044px;width:98px;height:98px;transform:rotate(2deg)"><img src="/assets/images/people/eliza-gheorghe.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1024px;top:1364px;width:152px;height:152px;transform:rotate(1deg)"><img src="/assets/images/people/pieter-zhao.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1163px;top:767px;width:110px;height:110px;transform:rotate(-6deg)"><img src="/assets/images/people/wendy-he.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:1165px;top:77px;width:86px;height:86px;transform:rotate(-6deg)"><img src="/assets/images/people/eugenio-sanchez.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:165px;top:282px;width:74px;height:74px;transform:rotate(-2deg)"><img src="/assets/images/people/marie-robin.webp" alt="" loading="eager"></div>
+      <div class="fh" style="left:-8px;top:-50px;width:124px;height:124px;transform:rotate(-5deg)"><img src="/assets/images/people/julia-carver.webp" alt="" loading="eager"></div>
     </div>
     <span class="corner tl"></span><span class="corner tr"></span>
     <span class="corner bl"></span><span class="corner br"></span>
