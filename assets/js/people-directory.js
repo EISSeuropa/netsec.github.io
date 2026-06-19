@@ -12,6 +12,13 @@
   const stsmChip = document.querySelector('[data-stsm]');
   const countrySelect = document.getElementById('member-country');
   const tpl = document.getElementById('member-card-template');
+  // Standalone profile-page URL for a member, in the current locale.
+  // The directory cards link to these (name + "View full profile" CTA);
+  // the card click still expands in place (the delegated handler ignores
+  // clicks on link children).
+  const PLANG = (document.documentElement.lang || 'en').slice(0, 2);
+  const PSUF = PLANG === 'fr' ? '.fr' : PLANG === 'de' ? '.de' : '';
+  const profileHref = (slug) => slug ? 'people/' + slug + PSUF + '.html' : null;
   const viewToggle = document.querySelectorAll('.view-toggle button[data-view]');
 
   /* Welcome strip + guided tour.
@@ -556,7 +563,17 @@
         (pic || img).remove();
         fallback.textContent = initials(m.name);
       }
-      node.querySelector('.member-name').textContent = m.name || '';
+      const _phref = profileHref(m.id);
+      const nameEl = node.querySelector('.member-name');
+      if (_phref) {
+        const nameLink = document.createElement('a');
+        nameLink.className = 'member-name-link';
+        nameLink.href = _phref;
+        nameLink.textContent = m.name || '';
+        nameEl.appendChild(nameLink);
+      } else {
+        nameEl.textContent = m.name || '';
+      }
       // Role pill: formal role(s) if any, otherwise WG-participant or
       // a neutral "Network member" fallback so a card never feels empty.
       const roleEl = node.querySelector('.member-role');
@@ -847,6 +864,17 @@
         contact.appendChild(a);
       });
       if (!contact.children.length) contact.remove();
+      // "View full profile" CTA into the standalone profile page. Hidden
+      // on compact-collapsed cards (CSS), shown when expanded / in
+      // detailed view; the linked name above reaches the same page from
+      // the compact grid.
+      if (_phref) {
+        const cta = document.createElement('a');
+        cta.className = 'member-profile-cta';
+        cta.href = _phref;
+        cta.textContent = window.netsecT('View full profile') + ' →';
+        node.querySelector('.member-body').appendChild(cta);
+      }
       // Recent publications (lazy): fills from the in-memory cache if the
       // deferred ORCID fetch has already resolved, otherwise backfillPubs()
       // populates it once the fetch lands.
