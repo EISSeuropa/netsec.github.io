@@ -42,6 +42,8 @@ on:
       - 'sitemap.xml'
       - 'scripts/build-og-cards.py'
       - 'assets/og/people/**'
+      - 'scripts/build-directory-index.py'
+      - 'directory-index.json'
       - '.github/workflows/data-shape-check.yml'
   workflow_dispatch:
 
