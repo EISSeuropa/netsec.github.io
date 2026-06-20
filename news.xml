@@ -9,9 +9,9 @@
     <generator>scripts/build-news-rss.py</generator>
     <atom:link href="https://netsec-cost.eu/news.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>European Security Studies Best Paper Prize awarded</title>
+      <title>European Security Studies Prize awarded</title>
       <link>https://eiss-europa.com/prizes.html</link>
-      <description><![CDATA[The European Security Studies Best Paper Prize 2026 has gone to Anna Seliverstova (Linnaeus University) and Mattia Sguazzini (University of Genova). Awarded in partnership with the Journal of Strategic Studies, the prize marks outstanding research in security studies. Anna Seliverstova won for "Telegram in Russia's Information Strategy: Evidence from Serbia", and Mattia Sguazzini for "Do Parliaments Dream of Cyber Power? Parliamentary Scrutiny in the Strategic Domain of Cyberspace". The awards were presented at the European Security Studies Conference in Stockholm, co-organised by the European Initiative for Security Studies (EISS), NetSec, and Stockholm University.]]></description>
+      <description><![CDATA[The European Security Studies Prize 2026 has gone to Anna Seliverstova (Linnaeus University) and Mattia Sguazzini (University of Genova). Awarded in partnership with the Journal of Strategic Studies, the prize marks outstanding research in security studies. Anna Seliverstova won for "Telegram in Russia's Information Strategy: Evidence from Serbia", and Mattia Sguazzini for "Do Parliaments Dream of Cyber Power? Parliamentary Scrutiny in the Strategic Domain of Cyberspace". The awards were presented at the European Security Studies Conference in Stockholm, co-organised by the European Initiative for Security Studies (EISS), NetSec, and Stockholm University.]]></description>
       <pubDate>Wed, 17 Jun 2026 10:00:00 +0200</pubDate>
       <guid isPermaLink="false">essc-2026-best-paper-prize</guid>
     </item>
