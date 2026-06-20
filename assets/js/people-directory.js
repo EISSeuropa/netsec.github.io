@@ -1342,13 +1342,46 @@
     if (activeKeywords.size === 0) return 0;
     return (m.themes || []).map(keywordSlug).filter(s => activeKeywords.has(s)).length;
   }
+  function mentorshipRegionOverlap(m) {
+    if (activeRegions.size === 0) return 0;
+    return (m.regions || []).map(keywordSlug).filter(s => activeRegions.has(s)).length;
+  }
+  // Behind-the-scenes seniority signal (0 doctoral … 3 senior), inferred from
+  // the academic position (and the name honorific as a fallback). It is never
+  // shown: a reader judges seniority from the visible job title themselves. It
+  // only nudges the order of mentors so that, among equally on-topic people, a
+  // more established mentor surfaces first without burying near-peer mentors.
+  function careerStage(m) {
+    const name = m.name || '';
+    const p = (m.position || '').toLowerCase();
+    // Post-doc first, so "post-doctoral" is never misread as doctoral.
+    if (/postdoc|post-?doctoral/.test(p)) return 1;
+    if ((/\bprofessor\b/.test(p) && !/\b(assistant|associate)\b/.test(p))
+        || /\b(director|head|dean|principal investigator)\b/.test(p)
+        || (/\bprof\.?\b/i.test(name) && !/\b(assistant|associate)\b/.test(p))) return 3;
+    if (/\bassociate professor\b|\breader\b|\bsenior (lecturer|researcher|research fellow|fellow|analyst)\b|\bteam lead\b|\bprincipal\b/.test(p)) return 2;
+    if (/\bphd\b|\bdphil\b|doctoral (candidate|student|researcher|fellow)|\bdoctoral\b|doctorand|pre-?doctoral|\bcandidate\b|\bdoctoral student\b/.test(p)) return 0;
+    if (/\bassistant professor\b|\blecturer\b|research fellow|research associate|\bresearcher\b|\banalyst\b/.test(p)) return 1;
+    if (/\bdr\.?\b/i.test(name)) return 1;  // a doctorate implies at least early-career
+    return 1;                               // unknown: neutral, so it never dominates
+  }
+  // Relevance of a member to the active theme + region filters. Theme overlap
+  // dominates (weight 3), region overlap is secondary (1), and seniority is a
+  // gentle tiebreak for the Offering side only (≤1.5, so it never outweighs a
+  // single shared theme). Applied only when an area filter is on.
+  function mentorshipMatchScore(m, tag, areasActive) {
+    let s = mentorshipThemeOverlap(m) * 3 + mentorshipRegionOverlap(m);
+    if (areasActive && tag === 'mentor') s += careerStage(m) * 0.5;
+    return s;
+  }
   // Members of one mentorship side, drawn from a pre-scoped pool and ordered
   // best-match first, then leadership, then name (#869). The pool already
   // honours the active facets, so the panel agrees with the grid.
   function mentorshipMembers(tag, pool) {
+    const areasActive = activeKeywords.size > 0 || activeRegions.size > 0;
     return (pool || MEMBERS).filter(m => (m.mentorship || []).includes(tag))
       .sort((a, b) =>
-        mentorshipThemeOverlap(b) - mentorshipThemeOverlap(a)
+        mentorshipMatchScore(b, tag, areasActive) - mentorshipMatchScore(a, tag, areasActive)
         || leadershipOrder(a).localeCompare(leadershipOrder(b))
         || (a.name || '').localeCompare(b.name || ''));
   }
