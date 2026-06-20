@@ -179,22 +179,14 @@ jobs:
             automated
             data-sync
           # Assign the maintainer as reviewer so GitHub emails +
-          # mobile push the auto-PR opening. The PR auto-merges
-          # via the next step regardless; the reviewer line is
-          # purely for the change-awareness signal.
+          # mobile push the auto-PR opening. The maintainer reviews and
+          # merges it by hand: a member's bio is their own copy, and a
+          # new member from a new country needs a bundled flag added
+          # before the PR is green, so a human eyeball before merge is
+          # worth the small friction.
           reviewers: APB-LDN
 
-      # Auto-merge so weekly form-submission batches ship without
-      # manual review. Branch protection still requires CodeQL +
-      # link-check + i18n-drift + Pagefind to pass; a failing check
-      # blocks the merge until the maintainer investigates. Skipped
-      # when the previous step found nothing to PR (no diff this run).
-      - name: Arm auto-merge on the auto-PR
-        if: steps.create-pr.outputs.pull-request-number
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh pr merge \
-            "${{ steps.create-pr.outputs.pull-request-number }}" \
-            --squash --auto \
-            --repo "${{ github.repository }}"
+      # The auto-PR is NOT auto-merged. The maintainer merges it by hand
+      # once the checks are green (CodeQL + link-check + i18n-drift +
+      # Pagefind + pytest). Auto-merge was removed deliberately so a
+      # person always signs off on a member-data change.
