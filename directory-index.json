@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-06-20T11:53:08+00:00",
+  "generated_at": "2026-06-20T20:59:56+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 39,
+  "count": 40,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -399,6 +399,17 @@
       "role": null,
       "affiliation": "Catholic University of Paris",
       "photo": null
+    },
+    {
+      "name": "Ms Vasiliki Plessia Aravani",
+      "name_key": "vasiliki aravani",
+      "aliases": [],
+      "slug": "vasiliki-plessia-aravani",
+      "url": "https://netsec-cost.eu/people/vasiliki-plessia-aravani.html",
+      "orcid": null,
+      "role": null,
+      "affiliation": "Vienna School of International Studies, University of Vienna",
+      "photo": "https://netsec-cost.eu/assets/images/people/vasiliki-plessia-aravani.jpg"
     },
     {
       "name": "Dr Wendy He",
