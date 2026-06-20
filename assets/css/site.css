@@ -2676,6 +2676,10 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   color:var(--muted); margin:0 0 8px;
 }
 .profile-aside > * + .profile-aside-label{ margin-top:20px; }
+/* The facepile blocks (Works on / Mentors on similar topics) wrap their own
+   label, so it isn't a direct child of .profile-aside and misses the gap
+   above. Give the block itself the section spacing. */
+.profile-aside > * + .profile-similar{ margin-top:22px; }
 
 /* Theme + region chips, each deep-linking to the filtered directory */
 .profile-areas{ display:flex; flex-wrap:wrap; gap:6px; margin:0 0 4px; }
@@ -3592,15 +3596,17 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
    mobile. The grid never reflows. The content is a clone of the card's
    own detail body (see people-directory.js). */
 .member-preview-scrim{
-  position:fixed;inset:0;z-index:89;background:rgba(11,18,32,.45);
+  position:fixed;inset:0;z-index:119;background:rgba(11,18,32,.45);
   opacity:0;visibility:hidden;transition:opacity .22s var(--ease),visibility .22s var(--ease);
 }
 .member-preview-scrim.is-open{opacity:1;visibility:visible}
-/* Desktop: a self-contained floating card anchored *below* the nav, so the
-   panel never underlaps the header. Header + footer are fixed; only the body
-   between them scrolls. */
+/* Desktop: a self-contained floating card anchored *below* the nav. It sits
+   ABOVE the nav (z 120 vs the nav's 100): the 84px top normally clears the
+   nav, but on a taller/wrapped nav the close button could otherwise underlap
+   the higher-z nav and stop receiving clicks. Header + footer are fixed; only
+   the body between them scrolls. */
 .member-preview-panel{
-  position:fixed;z-index:90;top:84px;right:16px;bottom:16px;width:min(460px,94vw);
+  position:fixed;z-index:120;top:84px;right:16px;bottom:16px;width:min(460px,94vw);
   background:var(--bg-0);border:1px solid var(--line);border-radius:18px;
   box-shadow:0 18px 50px rgba(11,18,32,.28);overflow:hidden;
   transform:translateX(calc(100% + 28px));transition:transform .26s var(--ease);

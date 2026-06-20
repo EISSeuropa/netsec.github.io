@@ -284,6 +284,8 @@
   }
   function closePanel() {
     if (panel.hidden) return;
+    clearTimeout(swapTimer);                 // cancel any in-flight cross-fade
+    panelScroll.classList.remove('is-swapping');
     panel.classList.remove('is-open');
     panelScrim.classList.remove('is-open');
     document.body.classList.remove('mpp-open');
