@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-20T10:47:16+00:00",
+  "generated_at": "2026-06-20T11:53:08+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-20T10:47:16+00:00"
+    "last_synced": "2026-06-20T11:53:08+00:00"
   },
   "members": [
     {
@@ -1600,6 +1600,48 @@
       "themes": [
         "Foreign policy and diplomacy"
       ]
+    },
+    {
+      "id": "yijun-xu",
+      "name": "Ms Yijun Xu",
+      "country": "Germany",
+      "country_code": "de",
+      "affiliation": "Free University of Berlin",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Xu Yijun is a PhD researcher at Freie Universität Berlin specializing in peace studies and Korean studies. Her research explores how transnational experiences shape young Koreans’ visions of peace, comparing perspectives between those living in South Korea and Germany through Q-methodology. From October 2024 to April 2025, she has been visiting PhD at the Institute for Peace and Unification Studies at Seoul National University. In the 2025/26 winter semester, she leads an X-Student Research Group titled “What Does Peace Mean to Us? Young Germans Reflect on Peace in a Post-Unification Society.” Xu holds a bachelor’s degree in German Studies from China and a master’s degree in Political Science from South Korea. Her current work contributes to advancing local and non-Western approaches in peace research.",
+      "keywords": [
+        "positive peace",
+        "peace vision",
+        "plural peace",
+        "divided nation",
+        "unification"
+      ],
+      "email": "cqdsl0612080136@gmail.com",
+      "website": "",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Divided nation",
+        "Peace vision",
+        "Plural peace",
+        "Positive peace",
+        "Unification"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -1756,6 +1798,10 @@
       "count": 1
     },
     {
+      "keyword": "Divided nation",
+      "count": 1
+    },
+    {
       "keyword": "Dual use technologies",
       "count": 1
     },
@@ -1904,7 +1950,15 @@
       "count": 1
     },
     {
+      "keyword": "Peace vision",
+      "count": 1
+    },
+    {
       "keyword": "Peacekeeping",
+      "count": 1
+    },
+    {
+      "keyword": "Plural peace",
       "count": 1
     },
     {
@@ -1913,6 +1967,10 @@
     },
     {
       "keyword": "Political economy",
+      "count": 1
+    },
+    {
+      "keyword": "Positive peace",
       "count": 1
     },
     {
@@ -1981,6 +2039,10 @@
     },
     {
       "keyword": "UN",
+      "count": 1
+    },
+    {
+      "keyword": "Unification",
       "count": 1
     },
     {
@@ -2137,7 +2199,7 @@
     },
     {
       "region": "Global and cross-regional",
-      "count": 11
+      "count": 12
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
