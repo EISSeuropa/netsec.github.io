@@ -214,16 +214,21 @@ guided tour. The `+` smooth-scrolls to `#join` and focuses the
 *Add your bio* CTA — visually distinguished as an accent CTA
 (`.tour-trigger-cta`) rather than the muted help affordance.
 
-### `.member-card.is-expanded` (click-to-expand in compact mode)
+### `.member-preview-panel` (member preview, #72)
 
-In compact mode a single card may carry `.is-expanded`, which
-reverts its compact-mode CSS overrides so it renders as a
-detailed card in place. Triggered by clicks on the card body
-(delegated handler on `.members-grid`), Enter/Space on a focused
-card, or a `#slug` hash in the URL. Esc collapses; clicks outside
-any card collapse. URL hash mirrors the expanded card's
-`data-slug`. Long-term plan is to replace this with a sticky
-side-panel pattern — see Issue #72.
+In compact mode, clicking a card opens that member's detail in a
+preview panel instead of expanding it in the grid: a sticky right
+rail (`position: fixed`, ~400px) on desktop, a bottom sheet over a
+scrim on mobile (`max-width: 899px`). The grid never reflows. The
+panel content is a runtime clone of the clicked card's own detail
+body (the bio is forced open, the dead Show-more toggle dropped), so
+there is no second renderer; the cloned `.member-card` gets
+`.is-panel` to strip the grid-card chrome. `role="dialog"` with a
+focus trap; focus returns to the card on close; Esc, the close
+button, a click outside (desktop) or the scrim (mobile) all dismiss.
+`prefers-reduced-motion` drops the slide. Built and wired in
+`assets/js/people-directory.js`. (The older `.member-card.is-expanded`
+compact rules are now dormant.)
 
 ### `.essc-member-card` — the shared member popover
 

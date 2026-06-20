@@ -123,13 +123,18 @@ flowchart TD
   + contact icons) and compact (one-row, flag + affiliation + WG
   chips). Switched via a segmented toggle in the toolbar; preference
   persists in `localStorage('netsec-directory-view')`.
-- **Click-to-expand in compact mode** — clicking a compact card
-  flips it to its detailed form in place while the rest of the
-  grid stays compact. Incoming `#slug` deep-links auto-expand the
-  matching card; expansion itself stays out of the URL so a shared
-  `#themes=` filter survives tapping through profiles (#647). Esc or
-  click-outside collapses. Tracked upgrade path to a sticky side
-  panel in Issue #72.
+- **Member preview panel** — in compact mode, clicking a card opens
+  that member's detail in a side panel (a right rail on desktop, a
+  bottom sheet on mobile) instead of expanding in place, so the grid
+  never reflows and the visitor keeps their scroll position (#72,
+  replacing the earlier expand-in-place). The panel content is a clone
+  of the card's own detail body, so there is no second renderer; its
+  "View full profile" link hands off to `/people/<slug>` for the bits
+  the preview omits. Incoming `#slug` deep-links open the panel;
+  `role="dialog"`, focus trap, focus returns to the card on close, Esc
+  and click-outside (or the scrim, on mobile) dismiss. Expansion stays
+  out of the URL so a shared `#themes=` filter survives tapping through
+  members (#647).
 - **First-visit orientation** — a dismissible welcome strip above
   the directory toolbar, plus a `?` button that re-opens an
   opt-in six-step guided tour (search → filter chips → country
