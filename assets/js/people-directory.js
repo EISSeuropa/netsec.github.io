@@ -224,9 +224,9 @@
   const panelCta = panel.querySelector('.mpp-cta');
   let panelTrigger = null;
 
-  function openPanel(card) {
-    if (!card) return;
-    panelTrigger = card;
+  // Build the panel body for a card: a cleaned clone, and the footer CTA
+  // lifted out so the "View full profile" path is always in view.
+  function buildPanelClone(card) {
     const clone = card.cloneNode(true);
     clone.classList.add('is-panel');
     clone.classList.remove('is-expanded', 'is-featured', 'is-search-landed');
@@ -250,6 +250,28 @@
     } else {
       panelFoot.hidden = true;
     }
+    return clone;
+  }
+  let swapTimer = null;
+  function openPanel(card) {
+    if (!card) return;
+    const switching = !panel.hidden && panelTrigger !== card;
+    panelTrigger = card;
+    const clone = buildPanelClone(card);
+    if (switching) {
+      // Already open on another member: cross-fade the body rather than
+      // swapping the content instantly. The panel frame stays put.
+      clearTimeout(swapTimer);
+      panelScroll.classList.add('is-swapping');
+      swapTimer = setTimeout(() => {
+        panelScroll.innerHTML = '';
+        panelScroll.appendChild(clone);
+        panelScroll.scrollTop = 0;
+        panelScroll.classList.remove('is-swapping');
+      }, 160);
+      return;
+    }
+    panelScroll.classList.remove('is-swapping');
     panelScroll.innerHTML = '';
     panelScroll.appendChild(clone);
     panelScroll.scrollTop = 0;
@@ -297,7 +319,11 @@
     if (!grid.classList.contains('is-compact')) return;
     if (e.target.closest('a, button')) return; // let the name link / contact icons work
     const card = e.target.closest('.member-card');
-    if (card) openPanel(card);
+    if (!card) return;
+    // Clicking the card whose panel is already open closes it (toggle);
+    // clicking a different card switches the panel to that member.
+    if (!panel.hidden && panelTrigger === card) closePanel();
+    else openPanel(card);
   });
   // Enter/Space on a focused card mirrors the click.
   grid.addEventListener('keydown', (e) => {
