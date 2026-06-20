@@ -172,42 +172,107 @@
     });
   });
 
-  /* Expand-in-place on the compact directory.
-     ─────────────────────────────────────────
-     In compact mode a click anywhere on a card (other than on a
-     link or button child) toggles `.is-expanded` on that card. The
-     CSS rules for `.member-card.is-expanded` revert the compact
-     overrides for that one card, leaving the rest of the grid
-     compact. The expanded card's slug is mirrored to location.hash
-     so the state is shareable; on page load, an existing hash that
-     matches a member's slug auto-expands their card.
-
-     Open Issue #71 (to come) tracks the longer-term plan: replace
-     this with a sticky side panel on desktop / bottom sheet on
-     mobile when membership growth makes the in-place expansion
-     visually disruptive. */
+  /* Member preview panel (#72).
+     ────────────────────────────
+     Clicking a compact card opens that member's detail in a side
+     panel (a right rail on desktop, a bottom sheet on mobile) instead
+     of expanding in place, so the grid never reflows and the visitor
+     keeps their scroll position. The panel content is a clone of the
+     card's own already-rendered detail body, so there is no second
+     renderer to keep in step; the bio is forced open and the
+     non-functional toggle dropped. The "View full profile" CTA inside
+     it hands off to the full /people/<slug> page for the bits the
+     preview omits (the similar-people facepile, the Anthology link).
+     A #slug deep-link opens the panel for that member. */
   function clearHashIfFocus() {
     // Only strip bare member-slug hashes. A key=value hash (the
     // shareable #themes= filter) is owned by the filter code and must
-    // survive card expand/collapse (issue #647).
+    // survive panel open/close (issue #647).
     const raw = (location.hash || '').replace(/^#/, '');
     if (raw && !raw.includes('=')) history.replaceState(null, '', location.pathname + location.search);
   }
+
+  const panel = document.createElement('aside');
+  panel.className = 'member-preview-panel';
+  panel.setAttribute('role', 'dialog');
+  panel.setAttribute('aria-modal', 'false');
+  panel.setAttribute('aria-label', window.netsecT('Member profile'));
+  panel.hidden = true;
+  panel.innerHTML =
+    '<button type="button" class="mpp-close" aria-label="' + window.netsecT('Close') + '">'
+    + '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" '
+    + 'stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+    + '</button><div class="mpp-scroll"></div>';
+  const panelScrim = document.createElement('div');
+  panelScrim.className = 'member-preview-scrim';
+  panelScrim.hidden = true;
+  document.body.appendChild(panelScrim);
+  document.body.appendChild(panel);
+  const panelScroll = panel.querySelector('.mpp-scroll');
+  let panelTrigger = null;
+
+  function openPanel(card) {
+    if (!card) return;
+    panelTrigger = card;
+    const clone = card.cloneNode(true);
+    clone.classList.add('is-panel');
+    clone.classList.remove('is-expanded', 'is-featured', 'is-search-landed');
+    clone.removeAttribute('id');
+    clone.removeAttribute('data-slug');
+    clone.removeAttribute('tabindex');
+    const chev = clone.querySelector('.member-toggle-chevron'); if (chev) chev.remove();
+    const pin = clone.querySelector('.member-spotlight-pin'); if (pin) pin.remove();
+    // Force the bio open and drop the (un-cloned, dead) Show-more toggle.
+    const bio = clone.querySelector('.member-bio'); if (bio) bio.classList.add('is-expanded');
+    const bioToggle = clone.querySelector('.member-bio-toggle'); if (bioToggle) bioToggle.remove();
+    panelScroll.innerHTML = '';
+    panelScroll.appendChild(clone);
+    panelScroll.scrollTop = 0;
+    panel.hidden = false;
+    panelScrim.hidden = false;
+    requestAnimationFrame(() => { panel.classList.add('is-open'); panelScrim.classList.add('is-open'); });
+    document.body.classList.add('mpp-open');
+    panel.querySelector('.mpp-close').focus({ preventScroll: true });
+    document.addEventListener('keydown', panelKeydown, true);
+  }
+  function closePanel() {
+    if (panel.hidden) return;
+    panel.classList.remove('is-open');
+    panelScrim.classList.remove('is-open');
+    document.body.classList.remove('mpp-open');
+    document.removeEventListener('keydown', panelKeydown, true);
+    const t = panelTrigger; panelTrigger = null;
+    setTimeout(() => { panel.hidden = true; panelScrim.hidden = true; }, 280);
+    if (t) { try { t.focus({ preventScroll: true }); } catch (e) {} }
+    clearHashIfFocus();
+  }
+  function panelKeydown(e) {
+    if (e.key === 'Escape') { e.stopPropagation(); closePanel(); return; }
+    if (e.key !== 'Tab') return;
+    // Focus trap inside the panel.
+    const f = panel.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+  panel.querySelector('.mpp-close').addEventListener('click', closePanel);
+  panelScrim.addEventListener('click', closePanel);
+  // Desktop has no scrim (the rail coexists with the grid), so close on a
+  // click outside the panel that is not on another card (a card click
+  // re-opens the panel via the grid handler below).
+  document.addEventListener('click', (e) => {
+    if (panel.hidden) return;
+    if (e.target.closest('.member-preview-panel, .member-card')) return;
+    if (e.target.closest('.tour-backdrop, .tour-tooltip, .tour-trigger')) return;
+    closePanel();
+  });
+
   grid.addEventListener('click', (e) => {
     if (!grid.classList.contains('is-compact')) return;
-    if (e.target.closest('a, button')) return; // let contact icons work
+    if (e.target.closest('a, button')) return; // let the name link / contact icons work
     const card = e.target.closest('.member-card');
-    if (!card) return;
-    const wasExpanded = card.classList.contains('is-expanded');
-    grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
-    if (!wasExpanded) {
-      card.classList.add('is-expanded');
-      // Expansion is transient UI and no longer mirrors the slug to
-      // location.hash: writing it clobbered a shared #themes= filter
-      // (issue #647). Incoming #slug deep-links still auto-expand.
-    } else {
-      clearHashIfFocus();
-    }
+    if (card) openPanel(card);
   });
   // Enter/Space on a focused card mirrors the click.
   grid.addEventListener('keydown', (e) => {
@@ -217,31 +282,6 @@
     if (!card) return;
     e.preventDefault();
     card.click();
-  });
-  // Esc anywhere collapses; click outside any card also collapses.
-  document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape') return;
-    // Let whichever overlay sits on top own Escape: the filter sheet closes via
-    // the dialog's native Escape, and the guided tour has its own, so the card
-    // collapse stands down while either is open rather than both reacting to one
-    // keypress.
-    if (filterSet && filterSet.open) return;
-    if (document.querySelector('.tour-backdrop, .tour-tooltip')) return;
-    const expanded = grid.querySelector('.member-card.is-expanded');
-    if (expanded) {
-      expanded.classList.remove('is-expanded');
-      expanded.focus({ preventScroll: true });
-      clearHashIfFocus();
-    }
-  });
-  document.addEventListener('click', (e) => {
-    if (!grid.classList.contains('is-compact')) return;
-    const expanded = grid.querySelector('.member-card.is-expanded');
-    if (!expanded) return;
-    if (e.target.closest('.member-card.is-expanded')) return;
-    if (e.target.closest('.tour-backdrop, .tour-tooltip, .tour-trigger')) return;
-    expanded.classList.remove('is-expanded');
-    clearHashIfFocus();
   });
 
   // "+" button in the toolbar: smooth-scroll to the join card and
@@ -1836,13 +1876,11 @@
         grid.querySelectorAll('.member-card.is-search-landed')
             .forEach(c => c.classList.remove('is-search-landed'));
         target.classList.add('is-search-landed');
-        // In compact view also expand the card in place. In
-        // detailed view, all cards are already showing full bio
-        // content, so the expand class is unnecessary — the
-        // spotlight is the only visual treatment needed.
+        // In compact view, open the member preview panel for the landed
+        // card. In detailed view, every card already shows its full
+        // content, so the spotlight is the only treatment needed.
         if (grid.classList.contains('is-compact')) {
-          grid.querySelectorAll('.member-card.is-expanded').forEach(c => c.classList.remove('is-expanded'));
-          target.classList.add('is-expanded');
+          openPanel(target);
         }
       }
       // Scroll on the next paint — after `.is-expanded` recomputes

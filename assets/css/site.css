@@ -3622,6 +3622,58 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   .members-grid.is-compact .member-toggle-chevron{transition:none}
 }
 
+/* ── Member preview panel (#72) ──
+   Clicking a compact card opens that member's detail here instead of
+   expanding it in the grid: a right rail on desktop, a bottom sheet on
+   mobile. The grid never reflows. The content is a clone of the card's
+   own detail body (see people-directory.js). */
+.member-preview-scrim{
+  position:fixed;inset:0;z-index:89;background:rgba(11,18,32,.45);
+  opacity:0;visibility:hidden;transition:opacity .22s var(--ease),visibility .22s var(--ease);
+}
+.member-preview-scrim.is-open{opacity:1;visibility:visible}
+.member-preview-panel{
+  position:fixed;z-index:90;top:0;right:0;height:100dvh;width:min(400px,94vw);
+  background:var(--bg-0);border-left:1px solid var(--line);
+  box-shadow:-14px 0 44px rgba(11,18,32,.20);
+  transform:translateX(101%);transition:transform .26s var(--ease);
+  display:flex;flex-direction:column;
+}
+.member-preview-panel.is-open{transform:none}
+.mpp-scroll{flex:1;overflow-y:auto;padding:104px 24px 32px;}  /* top pad clears the floating nav */
+.mpp-close{
+  position:absolute;top:96px;right:16px;z-index:2;
+  display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
+  background:color-mix(in oklab,var(--ink) 6%,var(--bg-0));border:1px solid var(--line);
+  color:var(--muted);cursor:pointer;transition:background .15s var(--ease),color .15s var(--ease);
+}
+.mpp-close:hover,.mpp-close:focus-visible{background:color-mix(in oklab,var(--ink) 12%,var(--bg-0));color:var(--ink)}
+/* The cloned card drops the grid-card chrome; the panel supplies the frame. */
+.member-preview-panel .member-card.is-panel{
+  background:transparent;border:0;box-shadow:none;outline:0;padding:0;width:100%;max-width:none;cursor:default;
+}
+.member-preview-panel .member-card.is-panel .member-photo{width:104px;height:104px}
+.member-preview-panel .member-card.is-panel .member-name{font-size:1.4rem}
+
+/* Mobile: a bottom sheet over a scrim, instead of the right rail. */
+@media (max-width:899px){
+  .member-preview-panel{
+    top:auto;bottom:0;left:0;right:0;width:100%;height:auto;max-height:86dvh;
+    border-left:0;border-top:1px solid var(--line);border-radius:18px 18px 0 0;
+    box-shadow:0 -14px 44px rgba(11,18,32,.22);transform:translateY(101%);
+  }
+  .member-preview-panel.is-open{transform:none}
+  .mpp-scroll{padding:26px 18px 32px}
+  .mpp-close{top:16px}
+}
+/* Desktop: the rail coexists with the grid, so no scrim there. */
+@media (min-width:900px){ .member-preview-scrim{display:none} }
+/* Lock background scroll while the sheet is up on mobile. */
+@media (max-width:899px){ body.mpp-open{overflow:hidden} }
+@media (prefers-reduced-motion:reduce){
+  .member-preview-panel,.member-preview-scrim{transition:none}
+}
+
 /* View-mode toggle (segmented control in the toolbar) */
 .view-toggle{
   display:inline-flex;
