@@ -370,6 +370,11 @@
   // old "All" state, now implicit). Transient (no URL hash). The chip row
   // stays hidden until the data carries at least one mentorship facet.
   const activeMentorship = new Set();
+  // The visitor's own career stage (0 doctoral … 3 senior, or null), set by
+  // the "find a mentoring match" card. Transient: a session variable only,
+  // never stored and never in the URL. It gently personalises the panel's
+  // ordering (a mentor a step above you, a mentee a step below).
+  let viewerStage = null;
   // STSM-hosting filter (#760): a single boolean facet. When true, the
   // grid is narrowed to members whose institution can host STSM visitors
   // ("yes" or "ask"). Bookmarkable via `#stsm=1` so the grants page can
@@ -1326,6 +1331,60 @@
     if (stsmChip) stsmChip.setAttribute('aria-pressed', activeStsm ? 'true' : 'false');
   }
 
+  // "Find a mentoring match" card: a transient, in-browser query. It collects
+  // nothing and stores nothing. The selects just drive the existing theme /
+  // region / mentorship filters, plus the visitor's own career stage, which
+  // gently personalises the panel's order (mentorshipMatchScore). All labels
+  // are localised here through netsecT, so the markup is locale-neutral.
+  function setupMatchFinder() {
+    const card = document.getElementById('match-finder');
+    if (!card) return;
+    const T = window.netsecT;
+    const $ = (id) => document.getElementById(id);
+    $('mf-title').textContent = T('Find a mentoring match');
+    $('mf-lede').textContent = T('Tell us what you are looking for and we will order the directory for you. Nothing is saved.');
+    $('mf-intent-label').textContent = T('I am looking for');
+    $('mf-theme-label').textContent = T('Research theme');
+    $('mf-region-label').textContent = T('Research region');
+    $('mf-stage-label').textContent = T('Your career stage');
+    $('mf-go').textContent = T('Find matches');
+    $('mf-clear').textContent = T('Clear');
+    const fill = (sel, pairs) => {
+      sel.innerHTML = '';
+      pairs.forEach(([value, label]) => {
+        const o = document.createElement('option');
+        o.value = value; o.textContent = label;
+        sel.appendChild(o);
+      });
+    };
+    const intent = $('mf-intent'), theme = $('mf-theme'), region = $('mf-region'), stage = $('mf-stage');
+    fill(intent, [['mentor', T('a mentor')], ['mentee', T('someone to mentor')]]);
+    fill(stage, [['', T('Any')], ['0', T('Doctoral')], ['1', T('Early-career')], ['2', T('Mid-career')], ['3', T('Senior')]]);
+    fill(theme, [['', T('Any')]].concat(KEYWORD_AGGREGATE.map(e => [keywordSlug(e.keyword), T(e.keyword)])));
+    fill(region, [['', T('Any')]].concat(REGION_AGGREGATE.map(e => [keywordSlug(e.region), T(e.region)])));
+    card.hidden = false;
+
+    const reRender = () => {
+      writeHashKeywords();
+      renderKeywordFilter(); renderRegionFilter(); syncMentorshipChips(); syncStsmChip(); render();
+    };
+    $('mf-go').addEventListener('click', () => {
+      viewerStage = stage.value === '' ? null : parseInt(stage.value, 10);
+      activeMentorship.clear(); activeMentorship.add(intent.value);
+      activeKeywords.clear(); if (theme.value) activeKeywords.add(theme.value);
+      activeRegions.clear(); if (region.value) activeRegions.add(region.value);
+      reRender();
+      const p = document.getElementById('members-mentorship-panel');
+      if (p && !p.hidden) p.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    $('mf-clear').addEventListener('click', () => {
+      viewerStage = null;
+      intent.value = 'mentor'; theme.value = ''; region.value = ''; stage.value = '';
+      activeMentorship.clear(); activeKeywords.clear(); activeRegions.clear();
+      reRender();
+    });
+  }
+
   // Mentorship matching view (#763). The facet shipped as data plumbing;
   // this connects the two sides. When a mentorship chip is active, a panel
   // above the grid splits the matching members into "Offering" and
@@ -1374,6 +1433,14 @@
   function mentorshipMatchScore(m, tag, areasActive) {
     let s = mentorshipThemeOverlap(m) * 3 + mentorshipRegionOverlap(m);
     if (areasActive && tag === 'mentor') s += careerStage(m) * 0.5;
+    // Gentle personalisation when the visitor told us their own stage: lean
+    // a mentor a step above them, a mentee a step below. Capped at ~1.2, so a
+    // single shared research theme (weight 3) always outweighs it and a
+    // near-peer is never buried.
+    if (viewerStage != null) {
+      if (tag === 'mentor') s += 0.4 * Math.max(0, careerStage(m) - viewerStage);
+      else if (tag === 'mentee') s += 0.4 * Math.max(0, viewerStage - careerStage(m));
+    }
     return s;
   }
   // Members of one mentorship side, drawn from a pre-scoped pool and ordered
@@ -1452,6 +1519,14 @@
     guide.className = 'mentorship-panel-guide';
     guide.textContent = window.netsecT('Mentoring in the network is informal. Introduce yourself directly and say what you are looking for. If you are unsure where to start, your Working Group lead can help make an introduction.');
     panel.appendChild(guide);
+    // When the visitor set their own stage in the match card, name the gentle
+    // personalisation so the order does not look arbitrary.
+    if (viewerStage != null) {
+      const tuned = document.createElement('p');
+      tuned.className = 'mentorship-panel-tuned';
+      tuned.textContent = window.netsecT('Ordered with your career stage in mind.');
+      panel.appendChild(tuned);
+    }
     const sides = [];
     if (activeMentorship.has('mentor')) sides.push({ tag: 'mentor', label: 'Offering mentorship', other: 'mentee' });
     if (activeMentorship.has('mentee')) sides.push({ tag: 'mentee', label: 'Seeking mentorship', other: 'mentor' });
@@ -1894,6 +1969,7 @@
     syncStsmChip();
     renderKeywordFilter();
     renderRegionFilter();
+    setupMatchFinder();
     // Member spotlight: read the weekly rotation so render() can pin the
     // featured member. Optional; the directory renders fine without it.
     try {

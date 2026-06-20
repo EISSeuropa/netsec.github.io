@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=43b7c785">
+<link rel="stylesheet" href="assets/css/site.css?v=dea4fb63">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -357,6 +357,26 @@
          facet is active; then it orients the visitor, links across to the
          opposite side, and carries the how-to-approach guidance. The grid
          below shows the matching members. -->
+    <!-- Find a mentoring match: a transient, in-browser query that ranks the
+         mentorship panel below for the visitor. Nothing is stored; it drives
+         the existing theme / region / mentorship filters plus a personal
+         career-stage nudge. Every label is filled by people-directory.js via
+         netsecT, so the markup is identical across locales. -->
+    <section class="match-finder glass" id="match-finder" aria-labelledby="mf-title" hidden>
+      <h2 class="match-finder-title" id="mf-title"></h2>
+      <p class="match-finder-lede" id="mf-lede"></p>
+      <div class="match-finder-row">
+        <label class="match-finder-field"><span id="mf-intent-label"></span><select id="mf-intent"></select></label>
+        <label class="match-finder-field"><span id="mf-theme-label"></span><select id="mf-theme"></select></label>
+        <label class="match-finder-field"><span id="mf-region-label"></span><select id="mf-region"></select></label>
+        <label class="match-finder-field"><span id="mf-stage-label"></span><select id="mf-stage"></select></label>
+        <div class="match-finder-actions">
+          <button type="button" class="match-finder-go" id="mf-go"></button>
+          <button type="button" class="match-finder-clear" id="mf-clear"></button>
+        </div>
+      </div>
+    </section>
+
     <aside id="members-mentorship-panel" class="mentorship-panel glass" hidden aria-label="Mentorship matching"></aside>
 
     <div id="members-grid" class="members-grid is-compact" aria-label="Member directory"></div>
@@ -466,10 +486,10 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=1694501e" defer></script>
+<script src="assets/js/site.js?v=99cd2aaf" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
-<script src="assets/js/people-directory.js?v=3ef55998" defer></script>
+<script src="assets/js/people-directory.js?v=9a142f74" defer></script>
 
 </body>
 </html>
