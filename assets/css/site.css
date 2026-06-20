@@ -2618,6 +2618,20 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   color:var(--accent-2);
 }
 .mentorship-person-theme.is-more{ border-style:dashed; }
+/* Region overlap reads in a quieter tone than the theme overlap. */
+.mentorship-person-theme.is-region{
+  background:color-mix(in srgb, var(--ink) 7%, transparent);
+  border-color:var(--glass-border, rgba(255,255,255,.18));
+  color:var(--text-muted, #6b7280);
+}
+/* "Shared research areas:" lead before the chips. */
+.mentorship-person-why-label{
+  align-self:center; font-size:.66rem; color:var(--text-muted, #6b7280);
+}
+/* Two-sided supply/demand line under the scope caption. */
+.mentorship-panel-balance{
+  margin:-6px 0 12px 15px; font-size:.82rem; color:var(--text-muted, #6b7280);
+}
 
 /* Member profile pages (#762): a single directory card centred on its own
    page. Reuses the .member-card styling; this just frames it. */

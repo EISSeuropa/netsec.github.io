@@ -1459,7 +1459,7 @@
     // The panel agrees with the grid: it draws from members who pass every
     // active facet except mentorship itself (#869). When a theme or region is
     // selected, a caption names the slice, and a relaxed pool (areas dropped)
-    // backs the "show people outside your selected areas" escape hatch.
+    // backs the "show people outside your selected research areas" escape hatch.
     const areasActive = activeKeywords.size > 0 || activeRegions.size > 0;
     const scopedPool = MEMBERS.filter(m => memberPassesFilters(m, _lastQuery, { skipMentorship: true }));
     const relaxedPool = areasActive
@@ -1470,14 +1470,26 @@
     if (areasActive) {
       const scope = document.createElement('p');
       scope.className = 'mentorship-panel-scope';
-      scope.textContent = window.netsecT('In your selected areas') + ': ' + activeAreaNames().join(', ');
+      scope.textContent = window.netsecT('In your selected research areas') + ': ' + activeAreaNames().join(', ');
       panel.appendChild(scope);
+      // Two-sided picture: in these research areas, how many members offer
+      // mentoring against how many are seeking it, so supply and demand are
+      // both visible rather than only the side you filtered to.
+      const offerN = scopedPool.filter(m => (m.mentorship || []).includes('mentor')).length;
+      const seekN = scopedPool.filter(m => (m.mentorship || []).includes('mentee')).length;
+      if (offerN || seekN) {
+        const bal = document.createElement('p');
+        bal.className = 'mentorship-panel-balance';
+        bal.textContent = window.netsecT('{offer} offering mentoring, {seek} seeking a mentor')
+          .replace('{offer}', offerN).replace('{seek}', seekN);
+        panel.appendChild(bal);
+      }
     } else {
       // Signpost the theme / region filters: someone browsing all mentors or
       // mentees may not realise the lists can be narrowed to their own area.
       const tip = document.createElement('p');
       tip.className = 'mentorship-panel-tip';
-      tip.textContent = window.netsecT('Tip: add a research-theme or region filter above to narrow these lists to your own area.');
+      tip.textContent = window.netsecT('Tip: add a research-theme or region filter above to narrow these lists to your own research area.');
       panel.appendChild(tip);
     }
 
@@ -1497,30 +1509,36 @@
         people.forEach(m => {
           const li = document.createElement('li');
           li.appendChild(mentorshipPersonLink(m));
-          // Match-strength chips (#869 Phase 2): show which of the active
-          // themes this person works on, so a mentee can read the overlap at
-          // a glance. Only shown when it adds information — more than one
-          // theme selected (which matched?), or the relaxed view is on (so
-          // in-area people carry a chip and out-of-area people, who match no
-          // active theme, visibly do not). Capped at two with a "+N".
-          const matchThemes = (m.themes || []).filter(t => activeKeywords.has(keywordSlug(t)));
-          if (areasActive && matchThemes.length
-              && (activeKeywords.size > 1 || mentorshipShowOutsideScope)) {
-            const chips = document.createElement('div');
-            chips.className = 'mentorship-person-themes';
-            matchThemes.slice(0, 2).forEach(t => {
-              const c = document.createElement('span');
-              c.className = 'mentorship-person-theme is-match';
-              c.textContent = window.netsecT(t);
-              chips.appendChild(c);
-            });
-            if (matchThemes.length > 2) {
-              const more = document.createElement('span');
-              more.className = 'mentorship-person-theme is-more';
-              more.textContent = '+' + (matchThemes.length - 2);
-              chips.appendChild(more);
+          // Why this person is here: the research themes and regions they
+          // share with your active filter. It reads as the match strength too,
+          // since the list is ordered best-first and more shared areas means a
+          // closer fit. Shown whenever an area filter is on; capped with a "+N".
+          if (areasActive) {
+            const shared = (m.themes || []).filter(t => activeKeywords.has(keywordSlug(t)))
+              .map(t => ({ txt: window.netsecT(t), region: false }))
+              .concat((m.regions || []).filter(r => activeRegions.has(keywordSlug(r)))
+                .map(r => ({ txt: window.netsecT(r), region: true })));
+            if (shared.length) {
+              const why = document.createElement('div');
+              why.className = 'mentorship-person-themes';
+              const lab = document.createElement('span');
+              lab.className = 'mentorship-person-why-label';
+              lab.textContent = window.netsecT('Shared research areas') + ':';
+              why.appendChild(lab);
+              shared.slice(0, 3).forEach(it => {
+                const c = document.createElement('span');
+                c.className = 'mentorship-person-theme is-match' + (it.region ? ' is-region' : '');
+                c.textContent = it.txt;
+                why.appendChild(c);
+              });
+              if (shared.length > 3) {
+                const more = document.createElement('span');
+                more.className = 'mentorship-person-theme is-more';
+                more.textContent = '+' + (shared.length - 3);
+                why.appendChild(more);
+              }
+              li.appendChild(why);
             }
-            li.appendChild(chips);
           }
           ul.appendChild(li);
         });
@@ -1532,7 +1550,7 @@
         // one when a theme / region is active, so the relax control below
         // reads as the obvious next step rather than a dead end.
         none.textContent = areasActive
-          ? window.netsecT('No one in your selected areas yet.')
+          ? window.netsecT('No one in your selected research areas yet.')
           : window.netsecT('No one here yet.');
         col.appendChild(none);
       }
@@ -1541,7 +1559,7 @@
     panel.appendChild(cols);
 
     // Escape hatch: with a theme / region filter on, let the visitor widen the
-    // panel to people outside their selected areas, so a mentor who tagged
+    // panel to people outside their selected research areas, so a mentor who tagged
     // themselves narrowly is never hidden from a mentee browsing by area. The
     // toggle re-renders the panel only, leaving the grid and the filters as is.
     if (areasActive) {
@@ -1555,8 +1573,8 @@
         relax.className = 'mentorship-panel-relax';
         relax.setAttribute('aria-pressed', mentorshipShowOutsideScope ? 'true' : 'false');
         relax.textContent = mentorshipShowOutsideScope
-          ? window.netsecT('Show only your selected areas')
-          : window.netsecT('Show people outside your selected areas') + ' (' + extra + ')';
+          ? window.netsecT('Show only your selected research areas')
+          : window.netsecT('Show people outside your selected research areas') + ' (' + extra + ')';
         relax.addEventListener('click', () => {
           mentorshipShowOutsideScope = !mentorshipShowOutsideScope;
           renderMentorshipPanel();
