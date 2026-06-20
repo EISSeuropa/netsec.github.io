@@ -3161,10 +3161,11 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   .members-filterset[open],
   .members-filterset::backdrop{ animation:none; }
 }
-/* Compact (grid) view: keyword block hidden. Full keywords show on
-   expand. The matcher (line 1885-ish, .is-compact .member-card:not
-   (.is-expanded) …) is the canonical rule for "this card is in
-   compact-collapsed state"; we mirror it here. */
+/* Compact (grid) view: keyword block hidden. Full keywords show in
+   the preview panel. The `:not(.is-expanded)` qualifier is vestigial
+   (compact cards no longer expand in-place; clicking opens the
+   preview panel instead), kept only to leave the compact rules'
+   specificity unchanged. */
 .members-grid.is-compact .member-card:not(.is-expanded) .member-keywords,
 .members-grid.is-compact .member-card:not(.is-expanded) .member-regions{
   display:none;
@@ -3452,10 +3453,12 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
    set by the view-mode toggle in the toolbar. Preference persists
    in localStorage.
 
-   Every compact rule is scoped to `.member-card:not(.is-expanded)`
-   so that one clicked card can revert to its detailed form
-   in-place while the rest of the grid stays compact. See the
-   `.is-expanded` block further down. */
+   Every compact rule carries a `.member-card:not(.is-expanded)`
+   qualifier. This is now vestigial: compact cards no longer expand
+   in-place (clicking opens the preview panel, see
+   `.member-preview-panel`), so no card ever takes `.is-expanded`.
+   The qualifier is retained so the compact rules' specificity is
+   left untouched. */
 .members-grid.is-compact{
   grid-template-columns:repeat(auto-fill, minmax(min(280px,100%), 1fr));
   gap:12px;
@@ -3521,20 +3524,22 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 .members-grid.is-compact .member-card:not(.is-expanded) .member-founding{
   margin:4px 0 0;justify-content:flex-start;
 }
-.members-grid.is-compact .member-card:not(.is-expanded) .member-bio,
-.members-grid.is-compact .member-card:not(.is-expanded) .member-bio-toggle,
-.members-grid.is-compact .member-card:not(.is-expanded) .member-pubs,
-.members-grid.is-compact .member-card:not(.is-expanded) .member-profile-cta,
-.members-grid.is-compact .member-card:not(.is-expanded) .member-contact{
+.members-grid.is-compact .member-card .member-bio,
+.members-grid.is-compact .member-card .member-bio-toggle,
+.members-grid.is-compact .member-card .member-pubs,
+.members-grid.is-compact .member-card .member-profile-cta,
+.members-grid.is-compact .member-card .member-contact{
   display:none !important;
 }
 /* The member name links to the standalone profile page; the card click
-   still expands (the delegated handler ignores clicks on link children),
-   so the name link is the way to reach the page from the compact grid. */
+   opens the preview panel (the delegated handler ignores clicks on link
+   children), so the name link is the way to reach the page from the
+   compact grid. */
 .member-name-link{ color:inherit; text-decoration:none; }
 .member-name-link:hover,
 .member-name-link:focus-visible{ text-decoration:underline; text-underline-offset:2px; }
-/* "View full profile" CTA at the foot of a detailed / expanded card. */
+/* "View full profile" CTA at the foot of a detailed card (and in the
+   preview panel). */
 .member-profile-cta{
   display:inline-flex; align-items:center; gap:6px; margin-top:14px;
   font-family:var(--font-sans); font-weight:600; font-size:.9rem;
@@ -3542,41 +3547,14 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 }
 .member-profile-cta:hover,
 .member-profile-cta:focus-visible{ text-decoration:underline; text-underline-offset:2px; }
-/* On an expanded compact card the CTA moves to the bottom-right, swapping
-   corners with the collapse chevron (now bottom-left). Detailed-view cards,
-   which have no chevron, keep the CTA at the foot-left. */
-.members-grid.is-compact .member-card.is-expanded .member-profile-cta{ align-self:flex-end; }
 
-/* Click-to-expand: in compact mode, one card at a time can revert
-   to the detailed layout in-place. Triggered by a click anywhere
-   on the card (delegated handler in people.html), Enter/Space on a
-   focused card, or a #slug hash in the URL. Esc collapses. */
-.members-grid.is-compact .member-card.is-expanded{
-  /* Spans two grid columns where the grid is wide enough to have
-     them — gives the expanded card the room of a detailed one. */
-  grid-column:span 2;
-  cursor:default;
-  outline:2px solid var(--accent-2);
-  outline-offset:0;
-  box-shadow:0 12px 30px rgba(11,18,32,.16);
-}
-.members-grid.is-compact .member-card.is-expanded:focus-visible{
-  outline:3px solid var(--accent-2);
-}
-/* Make sure single-column grids (narrow viewports) don't try to
-   span past the available columns. */
-@media (max-width: 640px){
-  .members-grid.is-compact .member-card.is-expanded{grid-column:auto}
-}
-
-/* Expand/collapse affordance on compact directory cards.
-   Without it, visitors don't know that compact cards can be clicked
-   to expand. A small chevron sits at the bottom-right of each card
-   — pointing ▼ when the card is collapsed, rotating to ▲ when it's
-   expanded. Hidden in detailed mode (no toggle behaviour there).
-   `pointer-events: none` so the chevron never absorbs the click —
-   the whole card is the hit target (delegated handler in
-   people.html). */
+/* "More" affordance on compact directory cards. Without it, visitors
+   don't know that a compact card can be clicked to open its preview
+   panel. A small ▼ chevron sits at the bottom-right of each card,
+   hidden in detailed mode (where every card already shows its full
+   content). `pointer-events: none` so the chevron never absorbs the
+   click — the whole card is the hit target (delegated handler in
+   people-directory.js). */
 /* css-collision-allow: .member-card */
 .member-card{position:relative}
 .member-toggle-chevron{display:none}
@@ -3603,20 +3581,6 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
     color:#a9c2ff;
     border-color:rgba(110,161,255,.36);
   }
-}
-.members-grid.is-compact .member-card.is-expanded .member-toggle-chevron{
-  /* On an expanded card the collapse chevron and the "View full profile"
-     link trade corners: the chevron moves to the bottom-left (the bottom-
-     right now carries the right-aligned CTA below). Collapsed cards keep
-     the chevron bottom-right, where their left edge holds the badges. */
-  left:12px;right:auto;
-  transform:rotate(180deg);
-  color:var(--accent-2);
-  border-color:rgba(10,132,255,.36);
-  background:rgba(255,255,255,.85);
-}
-.dark .members-grid.is-compact .member-card.is-expanded .member-toggle-chevron{
-  background:rgba(28,32,46,.75);
 }
 @media (prefers-reduced-motion: reduce){
   .members-grid.is-compact .member-toggle-chevron{transition:none}
