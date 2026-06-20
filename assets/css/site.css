@@ -3627,7 +3627,9 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   color:var(--muted);cursor:pointer;transition:background .15s var(--ease),color .15s var(--ease);
 }
 .mpp-close:hover,.mpp-close:focus-visible{background:color-mix(in oklab,var(--ink) 12%,var(--bg-0));color:var(--ink)}
-.mpp-scroll{flex:1;overflow-y:auto;padding:22px 24px 26px;}
+.mpp-scroll{flex:1;overflow-y:auto;padding:22px 24px 26px;transition:opacity .15s var(--ease)}
+/* Cross-fade the body when the open panel switches to another member. */
+.mpp-scroll.is-swapping{opacity:0}
 /* Sticky footer: the primary "View full profile" path stays visible without
    scrolling. Hidden when the member has no standalone page. */
 .mpp-foot{flex:none;padding:14px 18px;border-top:1px solid var(--line);background:var(--bg-0)}
@@ -3664,7 +3666,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 /* Lock background scroll while the sheet is up on mobile. */
 @media (max-width:899px){ body.mpp-open{overflow:hidden} }
 @media (prefers-reduced-motion:reduce){
-  .member-preview-panel,.member-preview-scrim{transition:none}
+  .member-preview-panel,.member-preview-scrim,.mpp-scroll{transition:none}
 }
 
 /* View-mode toggle (segmented control in the toolbar) */

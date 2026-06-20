@@ -830,6 +830,7 @@
       ],
       "themes": [
         "Foreign policy and diplomacy",
+        "Peace, mediation, and reconciliation",
         "Transnational and human security"
       ]
     },
@@ -1598,7 +1599,9 @@
         "State-building"
       ],
       "themes": [
-        "Foreign policy and diplomacy"
+        "Foreign policy and diplomacy",
+        "Peace, mediation, and reconciliation",
+        "Security and defence"
       ]
     },
     {
@@ -1641,6 +1644,9 @@
         "Plural peace",
         "Positive peace",
         "Unification"
+      ],
+      "themes": [
+        "Peace, mediation, and reconciliation"
       ]
     }
   ],
@@ -2056,11 +2062,11 @@
   ],
   "theme_aggregate": [
     {
-      "theme": "Foreign policy and diplomacy",
-      "count": 14
+      "theme": "Security and defence",
+      "count": 15
     },
     {
-      "theme": "Security and defence",
+      "theme": "Foreign policy and diplomacy",
       "count": 14
     },
     {
@@ -2090,6 +2096,10 @@
     {
       "theme": "Intelligence, information and influence",
       "count": 4
+    },
+    {
+      "theme": "Peace, mediation, and reconciliation",
+      "count": 3
     },
     {
       "theme": "Identity, narratives and ideational security",
@@ -2124,6 +2134,7 @@
     "Digital sovereignty": "Cyber and emerging technology",
     "Diplomacy": "Foreign policy and diplomacy",
     "Disinformation": "Intelligence, information and influence",
+    "Divided nation": "Peace, mediation, and reconciliation",
     "Dual use technologies": "Cyber and emerging technology",
     "EU foreign policy": "Foreign policy and diplomacy",
     "EU–NATO relations": "European and transatlantic security order",
@@ -2133,6 +2144,7 @@
     "Economic statecraft": "Economic security and geoeconomics",
     "Election interference": "Intelligence, information and influence",
     "Emerging and disruptive technologies": "Cyber and emerging technology",
+    "Ethnic conflict analysis": "Peace, mediation, and reconciliation",
     "European security": "Security and defence",
     "European strategic autonomy": "European and transatlantic security order",
     "Foreign policy analysis": "Foreign policy and diplomacy",
@@ -2170,18 +2182,23 @@
     "Nuclear strategy": "Strategy and deterrence",
     "Ontological security": "Identity, narratives and ideational security",
     "Organisation studies": "Theory and methods",
-    "Peacekeeping": "Transnational and human security",
+    "Peace vision": "Peace, mediation, and reconciliation",
+    "Peacekeeping": "Peace, mediation, and reconciliation",
+    "Plural peace": "Peace, mediation, and reconciliation",
     "Policy evaluation": "Theory and methods",
     "Political economy": "Economic security and geoeconomics",
     "Political psychology": "Theory and methods",
+    "Positive peace": "Peace, mediation, and reconciliation",
     "Power": "Security and defence",
     "Regional cooperation": "Foreign policy and diplomacy",
     "Research methods": "Theory and methods",
     "Russian foreign policy": "Foreign policy and diplomacy",
+    "Security": "Security and defence",
     "Security and defence": "Security and defence",
     "Security politics": "Security and defence",
     "Security studies": "Security and defence",
     "Small states": "Foreign policy and diplomacy",
+    "State-building": "Peace, mediation, and reconciliation",
     "Strategy": "Strategy and deterrence",
     "Subversion": "Intelligence, information and influence",
     "Technology spillovers": "Cyber and emerging technology",
@@ -2190,6 +2207,7 @@
     "Transnational and human security": "Transnational and human security",
     "UN": "Foreign policy and diplomacy",
     "US-China relations": "Foreign policy and diplomacy",
+    "Unification": "Peace, mediation, and reconciliation",
     "Western Balkans": "Foreign policy and diplomacy"
   },
   "region_aggregate": [
