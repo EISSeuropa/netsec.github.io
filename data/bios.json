@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-17T15:59:39+00:00",
+  "generated_at": "2026-06-20T10:47:16+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-17T15:59:39+00:00"
+    "last_synced": "2026-06-20T10:47:16+00:00"
   },
   "members": [
     {
@@ -438,7 +438,7 @@
         3
       ],
       "wg_leadership": {},
-      "bio": "Arthur specialises in election interference, disinformation, subversion, and military cyber operations. Previously, he was the Richard Lounsbery US-France Security Fellow at Stanford CISAC, and a Research Associate in Cyber Diplomacy at the Department of War Studies at King's College London. He is a member of the Management Committee of NetSec (Networking European Security Knowledge), a European Cooperation in Science and Technology project. He also maintains affiliations with Stanford CISAC and King's College London. Arthur has a wide professional experience spanning think-tanks (CSS 2017; IISS 2019; HCSS 2022), consulting (Oxford Analytica, ISTARI), and government projects.\n\nHe obtained his DPhil from the University of Oxford (Wolfson College), and holds an MA (London) and LLM (Leiden). He is an Associate of King's College (AKC) and Fellow of the Higher Education Academy (FHEA).",
+      "bio": "Arthur specialises in election interference, disinformation, subversion, and military cyber operations. Previously, he was the Richard Lounsbery US-France Security Fellow at Stanford CISAC, and a Research Associate in Cyber Diplomacy at the Department of War Studies at King's College London. He is a member of the Management Committee of NetSec (Networking European Security Knowledge), a European Cooperation in Science and Technology project. He also maintains affiliations with Stanford CISAC and King's College London. Arthur has a wide profesionnal experience spanning think-tanks (CSS 2017; IISS 2019; HCSS 2022), consulting (Oxford Analytica, ISTARI), and government projects.\n\nHe obtained his DPhil from the University of Oxford (Wolfson College), and holds an MA (London) and LLM (Leiden). He is an Associate of King's College (AKC) and Fellow of the Higher Education Academy (FHEA).",
       "keywords": [
         "election interference",
         "disinformation",
@@ -1526,7 +1526,7 @@
       ],
       "stsm_hosting": "ask",
       "wg_leadership": {},
-      "bio": "After a PhD on the security policies of some European \"neutral\" countries, I've bee working for several years both on the security policies of Nordic countries and on the security policies of European \"neutral\" countries in the framework of the war in Ukraine. \nI teach International Relations and Political Science at the Catholic University of Paris and I am an associate researcher at Centre Thucydide (Université Panthéon-Assas) and editorial coordinator of L'Année des relations internationales, a yearly French-speaking journal dedicated to International Relations.",
+      "bio": "After a PhD on the security policies of some European \"neutral\" countries, I've bee working for several years both on the security policies of Nordic countries and on the security policies of European \"neutral\" countries in the framework of the war in Ukraine. \nI teach International Relations and Political Science at the Catholic University of Paris and I am a associate researcher at Centre Thucydide (Université Panthéon-Assas) and editorial coordinator of L'Année des relations internationales, a yearly French-speaking journal dedicated to International Relations.",
       "keywords": [
         "Security politices",
         "Nordic countries",
@@ -1554,6 +1554,51 @@
         "European and transatlantic security order",
         "Foreign policy and diplomacy",
         "Security and defence"
+      ]
+    },
+    {
+      "id": "pavlos-koktsidis",
+      "name": "Prof. Pavlos Koktsidis",
+      "country": "Greece",
+      "country_code": "gr",
+      "affiliation": "Anatolia American University",
+      "position": "Associate Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe - Western Balkans",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Lectures on International Relations, Foreign Policy, Security and Conflict Resolution at the American College of Thessaloniki.  Previously worked as Visiting Professor and lecturer of International Relations at the University of Cyprus. He was project manager and researcher for the externally funded program «Rearranging the Puzzle of Security in the Eastern Mediterranean: Mapping Actors and Dynamics» [2020-2023] and for the joint EU EastMed Erasmus+ programme (2016-2019). From 2019 to 2024 coordinated the annual Virginia Tech University-funded seminars programme on Conflict Studies in collaboration with the VT Department of Political Science. He is Senior Researcher at the Institute for Studies of Politics and Democracy (ISPD). His research focuses on ethnic conflict and security analysis in Southeastern Europe and the Eastern Mediterranean, state-building, war and the development of strategic thought in international relations. His work is regularly presented in international conferences, workshops and roundtable discussions (IPSA, ECPR, PSA). His research appears in internationally acclaimed peer-reviewed journals and book chapters (Journal of Ethnopolitics, Journal of Balkan and Near Eastern Studies, Eastern European Quarterly, Dynamics of Asymmetric Conflict, Civil Wars, Mediterranean Quarterly, Journal of Peace and Conflict Studies, Perspectives on Federalism, Journal of Ethnopolitics and Minority Issues in Europe). He is author of the books Ethnofederalism in Cyprus: Territory, Power and Security (Routledge: London 2024), Strategic Rebellion: Ethnic Conflict in FYR Macedonia and the Balkans (Peter Lang: Oxford 2012), and editor of the book Societies in Transition: Economic, Political and Security Transformations in Contemporary Europe (Springer, Frankfurt 2015).",
+      "keywords": [
+        "ethnic conflict analysis",
+        "security",
+        "geopolitics",
+        "state-building"
+      ],
+      "email": "",
+      "website": "https://www.anatoliauniversity.edu.gr/",
+      "orcid": "0000-0001-8144-8963",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/pavlos-koktsidis.jpg",
+      "source": "form",
+      "photo_source_sha256": "ef52da905f6e0389dd0b55bdc4aaac44682948c7577e3e736f52ca0b38d14deb",
+      "canonical_keywords": [
+        "Ethnic conflict analysis",
+        "Geopolitics",
+        "Security",
+        "State-building"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy"
       ]
     }
   ],
@@ -1588,6 +1633,10 @@
     },
     {
       "keyword": "Foreign policy analysis",
+      "count": 2
+    },
+    {
+      "keyword": "Geopolitics",
       "count": 2
     },
     {
@@ -1727,15 +1776,15 @@
       "count": 1
     },
     {
+      "keyword": "Ethnic conflict analysis",
+      "count": 1
+    },
+    {
       "keyword": "European strategic autonomy",
       "count": 1
     },
     {
       "keyword": "EU–NATO relations",
-      "count": 1
-    },
-    {
-      "keyword": "Geopolitics",
       "count": 1
     },
     {
@@ -1883,6 +1932,10 @@
       "count": 1
     },
     {
+      "keyword": "Security",
+      "count": 1
+    },
+    {
       "keyword": "Security and defence",
       "count": 1
     },
@@ -1896,6 +1949,10 @@
     },
     {
       "keyword": "Small states",
+      "count": 1
+    },
+    {
+      "keyword": "State-building",
       "count": 1
     },
     {
@@ -1937,12 +1994,12 @@
   ],
   "theme_aggregate": [
     {
-      "theme": "Security and defence",
+      "theme": "Foreign policy and diplomacy",
       "count": 14
     },
     {
-      "theme": "Foreign policy and diplomacy",
-      "count": 13
+      "theme": "Security and defence",
+      "count": 14
     },
     {
       "theme": "Theory and methods",
@@ -2096,11 +2153,11 @@
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 3
+      "count": 4
     },
     {
       "region": "Middle East and North Africa",
-      "count": 3
+      "count": 4
     },
     {
       "region": "Africa",
