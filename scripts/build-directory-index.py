@@ -72,6 +72,7 @@ def build() -> str:
         if not slug or not name:
             continue
         nk = name_key(name)  # (first, last) tuple, or None
+        photo = (m.get("photo") or "").strip()
         rows.append({
             "name": name,
             # Joined canonical key, e.g. "mattia sguazzini". null when a first
@@ -81,13 +82,21 @@ def build() -> str:
             "slug": slug,
             "url": f"{SITE}/people/{slug}.html",
             "orcid": m.get("orcid") or None,  # for completeness, not a join key
+            # Display fields so a consumer can render an informative chip (a
+            # photo + who the person is) rather than a bare link. All optional;
+            # null when the member hasn't supplied them.
+            "role": " · ".join(m["roles"]) if m.get("roles") else None,
+            "affiliation": m.get("affiliation") or None,
+            "photo": f"{SITE}/{photo.lstrip('/')}" if photo else None,
         })
     rows.sort(key=lambda r: r["slug"])
     index = {
         "_documentation": "Public cross-site contract for linking NetSec Directory members. "
                           "Match author names against members[].name_key (or your own key over "
-                          "members[].name), then link to members[].url. See "
-                          "scripts/build-directory-index.py.",
+                          "members[].name), then link to members[].url. role, affiliation and "
+                          "photo are optional display fields (null when unset) so a consumer can "
+                          "render an informative chip rather than a bare link; orcid is for "
+                          "completeness, not a join key. See scripts/build-directory-index.py.",
         "generated_at": data.get("generated_at") if isinstance(data, dict) else None,
         "source": f"{SITE}/data/bios.json",
         "count": len(rows),

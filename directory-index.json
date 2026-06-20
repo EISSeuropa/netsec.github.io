@@ -1,5 +1,5 @@
 {
-  "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. See scripts/build-directory-index.py.",
+  "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
   "generated_at": "2026-06-17T15:59:39+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
   "count": 37,
@@ -10,7 +10,10 @@
       "aliases": [],
       "slug": "alexander-lanoszka",
       "url": "https://netsec-cost.eu/people/alexander-lanoszka.html",
-      "orcid": "0000-0001-6812-3873"
+      "orcid": "0000-0001-6812-3873",
+      "role": null,
+      "affiliation": "University of Waterloo",
+      "photo": "https://netsec-cost.eu/assets/images/people/alexander-lanoszka.jpg"
     },
     {
       "name": "Dr Alexandra Brankova",
@@ -18,7 +21,10 @@
       "aliases": [],
       "slug": "alexandra-brankova",
       "url": "https://netsec-cost.eu/people/alexandra-brankova.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "Swedish Defence University",
+      "photo": null
     },
     {
       "name": "Ms Alisa Kerschbaum",
@@ -26,7 +32,10 @@
       "aliases": [],
       "slug": "alisa-kerschbaum",
       "url": "https://netsec-cost.eu/people/alisa-kerschbaum.html",
-      "orcid": null
+      "orcid": null,
+      "role": "WG2 Co-Leader",
+      "affiliation": "University of Amsterdam",
+      "photo": "https://netsec-cost.eu/assets/images/people/alisa-kerschbaum.jpeg"
     },
     {
       "name": "Anna Pagnacco",
@@ -34,7 +43,10 @@
       "aliases": [],
       "slug": "anna-pagnacco",
       "url": "https://netsec-cost.eu/people/anna-pagnacco.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "ETH Zurich, Center for Security Studies",
+      "photo": "https://netsec-cost.eu/assets/images/people/anna-pagnacco.jpg"
     },
     {
       "name": "Mr Archishman Goswami",
@@ -42,7 +54,10 @@
       "aliases": [],
       "slug": "archishman-goswami",
       "url": "https://netsec-cost.eu/people/archishman-goswami.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "University of Oxford",
+      "photo": "https://netsec-cost.eu/assets/images/people/archishman-goswami.jpg"
     },
     {
       "name": "Dr Arthur Laudrain",
@@ -50,7 +65,10 @@
       "aliases": [],
       "slug": "arthur-laudrain",
       "url": "https://netsec-cost.eu/people/arthur-laudrain.html",
-      "orcid": "0000-0002-8642-2671"
+      "orcid": "0000-0002-8642-2671",
+      "role": "Management Committee · Switzerland",
+      "affiliation": "ETH Zurich, Center for Security Studies",
+      "photo": "https://netsec-cost.eu/assets/images/people/arthur-laudrain.jpg"
     },
     {
       "name": "Dr Chiara Libiseller",
@@ -58,7 +76,10 @@
       "aliases": [],
       "slug": "chiara-libiseller",
       "url": "https://netsec-cost.eu/people/chiara-libiseller.html",
-      "orcid": null
+      "orcid": null,
+      "role": "Grant Awarding Coordinator Co-lead",
+      "affiliation": "King's College London",
+      "photo": "https://netsec-cost.eu/assets/images/people/chiara-libiseller.webp"
     },
     {
       "name": "Dr Chiara Ruffa",
@@ -66,7 +87,10 @@
       "aliases": [],
       "slug": "chiara-ruffa",
       "url": "https://netsec-cost.eu/people/chiara-ruffa.html",
-      "orcid": null
+      "orcid": null,
+      "role": "WG3 Leader",
+      "affiliation": "Sciences Po, Center for International Studies (CERI)",
+      "photo": "https://netsec-cost.eu/assets/images/people/chiara-ruffa.jpg"
     },
     {
       "name": "Dr Eliza Gheorghe",
@@ -74,7 +98,10 @@
       "aliases": [],
       "slug": "eliza-gheorghe",
       "url": "https://netsec-cost.eu/people/eliza-gheorghe.html",
-      "orcid": null
+      "orcid": null,
+      "role": "Grant Awarding Coordinator",
+      "affiliation": "Bilkent University",
+      "photo": "https://netsec-cost.eu/assets/images/people/eliza-gheorghe.jpg"
     },
     {
       "name": "Mr Eugenio Sánchez",
@@ -82,7 +109,10 @@
       "aliases": [],
       "slug": "eugenio-sanchez",
       "url": "https://netsec-cost.eu/people/eugenio-sanchez.html",
-      "orcid": null
+      "orcid": null,
+      "role": "Science Communication Coordinator",
+      "affiliation": "Sciences Po Paris",
+      "photo": "https://netsec-cost.eu/assets/images/people/eugenio-sanchez.jpg"
     },
     {
       "name": "Mr Felix Kösterke",
@@ -90,7 +120,10 @@
       "aliases": [],
       "slug": "felix-kosterke",
       "url": "https://netsec-cost.eu/people/felix-kosterke.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "Ghent University / Egmont Institute",
+      "photo": null
     },
     {
       "name": "Prof. Filip Ejdus",
@@ -98,7 +131,10 @@
       "aliases": [],
       "slug": "filip-ejdus",
       "url": "https://netsec-cost.eu/people/filip-ejdus.html",
-      "orcid": null
+      "orcid": null,
+      "role": "WG1 Co-Leader",
+      "affiliation": "University of Belgrade",
+      "photo": "https://netsec-cost.eu/assets/images/people/filip-ejdus.jpg"
     },
     {
       "name": "Mr Francesco Canossi",
@@ -106,7 +142,10 @@
       "aliases": [],
       "slug": "francesco-canossi",
       "url": "https://netsec-cost.eu/people/francesco-canossi.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "Independent",
+      "photo": "https://netsec-cost.eu/assets/images/people/francesco-canossi.jpg"
     },
     {
       "name": "Dr Gil Baram",
@@ -114,7 +153,10 @@
       "aliases": [],
       "slug": "gil-baram",
       "url": "https://netsec-cost.eu/people/gil-baram.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "Bar Ilan and UC Berkeley",
+      "photo": "https://netsec-cost.eu/assets/images/people/gil-baram.jpg"
     },
     {
       "name": "Dr John N.T. Helferich",
@@ -122,7 +164,10 @@
       "aliases": [],
       "slug": "john-helferich",
       "url": "https://netsec-cost.eu/people/john-helferich.html",
-      "orcid": "0000-0002-9085-846X"
+      "orcid": "0000-0002-9085-846X",
+      "role": "WG2 Leader",
+      "affiliation": "University of Oxford",
+      "photo": "https://netsec-cost.eu/assets/images/people/john-helferich.jpg"
     },
     {
       "name": "Dr Julia Carver",
@@ -130,7 +175,10 @@
       "aliases": [],
       "slug": "julia-carver",
       "url": "https://netsec-cost.eu/people/julia-carver.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "Leiden University",
+      "photo": "https://netsec-cost.eu/assets/images/people/julia-carver.jpg"
     },
     {
       "name": "Ms Laura Lisboa",
@@ -138,7 +186,10 @@
       "aliases": [],
       "slug": "laura-lisboa",
       "url": "https://netsec-cost.eu/people/laura-lisboa.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "Sciences Po",
+      "photo": "https://netsec-cost.eu/assets/images/people/laura-lisboa.jpg"
     },
     {
       "name": "Dr Linde Desmaele",
@@ -146,7 +197,10 @@
       "aliases": [],
       "slug": "linde-desmaele",
       "url": "https://netsec-cost.eu/people/linde-desmaele.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "Leiden University",
+      "photo": "https://netsec-cost.eu/assets/images/people/linde-desmaele.jpg"
     },
     {
       "name": "Lucian Bumeder",
@@ -154,7 +208,10 @@
       "aliases": [],
       "slug": "lucian-bumeder",
       "url": "https://netsec-cost.eu/people/lucian-bumeder.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "IFSH",
+      "photo": "https://netsec-cost.eu/assets/images/people/lucian-bumeder.jpg"
     },
     {
       "name": "Mr Marco Cifra",
@@ -162,7 +219,10 @@
       "aliases": [],
       "slug": "marco-cifra",
       "url": "https://netsec-cost.eu/people/marco-cifra.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "CASD",
+      "photo": null
     },
     {
       "name": "Dr Marie Robin",
@@ -170,7 +230,10 @@
       "aliases": [],
       "slug": "marie-robin",
       "url": "https://netsec-cost.eu/people/marie-robin.html",
-      "orcid": null
+      "orcid": null,
+      "role": "Action Vice-Chair · Grant Holder Scientific Representative",
+      "affiliation": "Leiden University",
+      "photo": "https://netsec-cost.eu/assets/images/people/marie-robin.png"
     },
     {
       "name": "Prof. Mark Rhinard",
@@ -178,7 +241,10 @@
       "aliases": [],
       "slug": "mark-rhinard",
       "url": "https://netsec-cost.eu/people/mark-rhinard.html",
-      "orcid": "0000-0002-1903-4257"
+      "orcid": "0000-0002-1903-4257",
+      "role": null,
+      "affiliation": "Stockholm University",
+      "photo": "https://netsec-cost.eu/assets/images/people/mark-rhinard.jpg"
     },
     {
       "name": "Dr Mattia Sguazzini",
@@ -186,7 +252,10 @@
       "aliases": [],
       "slug": "mattia-sguazzini",
       "url": "https://netsec-cost.eu/people/mattia-sguazzini.html",
-      "orcid": "0000-0001-9751-8508"
+      "orcid": "0000-0001-9751-8508",
+      "role": null,
+      "affiliation": "University of Genoa",
+      "photo": "https://netsec-cost.eu/assets/images/people/mattia-sguazzini.jpg"
     },
     {
       "name": "Ms Meret Steybe",
@@ -194,7 +263,10 @@
       "aliases": [],
       "slug": "meret-steybe",
       "url": "https://netsec-cost.eu/people/meret-steybe.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "ETH Zurich, Center for Security Studies",
+      "photo": "https://netsec-cost.eu/assets/images/people/meret-steybe.jpg"
     },
     {
       "name": "Dr Moritz Weiss",
@@ -202,7 +274,10 @@
       "aliases": [],
       "slug": "moritz-weiss",
       "url": "https://netsec-cost.eu/people/moritz-weiss.html",
-      "orcid": "0000-0001-9311-6480"
+      "orcid": "0000-0001-9311-6480",
+      "role": "Action Chair · WG1 Leader",
+      "affiliation": "LMU Munich",
+      "photo": "https://netsec-cost.eu/assets/images/people/moritz-weiss.jpg"
     },
     {
       "name": "Prof. Nikolaos Tzifakis",
@@ -210,7 +285,10 @@
       "aliases": [],
       "slug": "nikolaos-tzifakis",
       "url": "https://netsec-cost.eu/people/nikolaos-tzifakis.html",
-      "orcid": "0000-0003-4653-6882"
+      "orcid": "0000-0003-4653-6882",
+      "role": null,
+      "affiliation": "University of the Peloponnese",
+      "photo": "https://netsec-cost.eu/assets/images/people/nikolaos-tzifakis.jpg"
     },
     {
       "name": "Mr Pieter Zhao",
@@ -218,7 +296,10 @@
       "aliases": [],
       "slug": "pieter-zhao",
       "url": "https://netsec-cost.eu/people/pieter-zhao.html",
-      "orcid": "0000-0003-2830-2433"
+      "orcid": "0000-0003-2830-2433",
+      "role": null,
+      "affiliation": "Erasmus University Rotterdam",
+      "photo": "https://netsec-cost.eu/assets/images/people/pieter-zhao.jpg"
     },
     {
       "name": "Dr Revecca Pedi",
@@ -226,7 +307,10 @@
       "aliases": [],
       "slug": "revecca-pedi",
       "url": "https://netsec-cost.eu/people/revecca-pedi.html",
-      "orcid": null
+      "orcid": null,
+      "role": "WG4 Leader",
+      "affiliation": "University of Macedonia",
+      "photo": "https://netsec-cost.eu/assets/images/people/revecca-pedi.jpg"
     },
     {
       "name": "Ms Rusudan Zabakhidze",
@@ -234,7 +318,10 @@
       "aliases": [],
       "slug": "rusudan-zabakhidze",
       "url": "https://netsec-cost.eu/people/rusudan-zabakhidze.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "Swedish Defence University",
+      "photo": "https://netsec-cost.eu/assets/images/people/rusudan-zabakhidze.jpg"
     },
     {
       "name": "Ms Sara Russo",
@@ -242,7 +329,10 @@
       "aliases": [],
       "slug": "sara-russo",
       "url": "https://netsec-cost.eu/people/sara-russo.html",
-      "orcid": "0009-0004-8176-8712"
+      "orcid": "0009-0004-8176-8712",
+      "role": null,
+      "affiliation": "CASD",
+      "photo": "https://netsec-cost.eu/assets/images/people/sara-russo.jpg"
     },
     {
       "name": "Dr Šárka Kolmašová",
@@ -250,7 +340,10 @@
       "aliases": [],
       "slug": "sarka-kolmasova",
       "url": "https://netsec-cost.eu/people/sarka-kolmasova.html",
-      "orcid": null
+      "orcid": null,
+      "role": "WG4 Co-Leader",
+      "affiliation": "Metropolitan University Prague",
+      "photo": "https://netsec-cost.eu/assets/images/people/sarka-kolmasova.jpeg"
     },
     {
       "name": "Mr Saurav Narain",
@@ -258,7 +351,10 @@
       "aliases": [],
       "slug": "saurav-narain",
       "url": "https://netsec-cost.eu/people/saurav-narain.html",
-      "orcid": "0000-0002-6049-9777"
+      "orcid": "0000-0002-6049-9777",
+      "role": null,
+      "affiliation": "Leiden University",
+      "photo": "https://netsec-cost.eu/assets/images/people/saurav-narain.jpg"
     },
     {
       "name": "Prof. Seyithan Ahmet Ates",
@@ -266,7 +362,10 @@
       "aliases": [],
       "slug": "seyithan-ahmet-ates",
       "url": "https://netsec-cost.eu/people/seyithan-ahmet-ates.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "Ankara University of Social Sciences",
+      "photo": "https://netsec-cost.eu/assets/images/people/seyithan-ahmet-ates.jpg"
     },
     {
       "name": "Dr Silvia D'Amato",
@@ -274,7 +373,10 @@
       "aliases": [],
       "slug": "silvia-damato",
       "url": "https://netsec-cost.eu/people/silvia-damato.html",
-      "orcid": null
+      "orcid": null,
+      "role": "WG3 Co-Leader",
+      "affiliation": "James Madison University",
+      "photo": "https://netsec-cost.eu/assets/images/people/silvia-damato.jpeg"
     },
     {
       "name": "Dr Sophie Enos-Attali",
@@ -282,7 +384,10 @@
       "aliases": [],
       "slug": "sophie-enos-attali",
       "url": "https://netsec-cost.eu/people/sophie-enos-attali.html",
-      "orcid": null
+      "orcid": null,
+      "role": null,
+      "affiliation": "Catholic University of Paris",
+      "photo": null
     },
     {
       "name": "Dr Wendy He",
@@ -290,7 +395,10 @@
       "aliases": [],
       "slug": "wendy-he",
       "url": "https://netsec-cost.eu/people/wendy-he.html",
-      "orcid": "0009-0004-8098-4093"
+      "orcid": "0009-0004-8098-4093",
+      "role": null,
+      "affiliation": "College of Fellows, University of Tübingen",
+      "photo": "https://netsec-cost.eu/assets/images/people/wendy-he.jpg"
     },
     {
       "name": "Ms Yanina Shved-Dogrul",
@@ -298,7 +406,10 @@
       "aliases": [],
       "slug": "yanina-shved-dogrul",
       "url": "https://netsec-cost.eu/people/yanina-shved-dogrul.html",
-      "orcid": "0000-0001-8631-5908"
+      "orcid": "0000-0001-8631-5908",
+      "role": null,
+      "affiliation": "Bogazici University",
+      "photo": "https://netsec-cost.eu/assets/images/people/yanina-shved-dogrul.jpg"
     }
   ]
 }
