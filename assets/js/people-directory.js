@@ -1358,7 +1358,7 @@
       });
     };
     const intent = $('mf-intent'), theme = $('mf-theme'), region = $('mf-region'), stage = $('mf-stage');
-    fill(intent, [['mentor', T('a mentor')], ['mentee', T('someone to mentor')]]);
+    fill(intent, [['mentor', T('a mentor')], ['mentee', T('someone to mentor')], ['stsm', T('an STSM host')]]);
     fill(stage, [['', T('Any')], ['0', T('Doctoral')], ['1', T('Early-career')], ['2', T('Mid-career')], ['3', T('Senior')]]);
     fill(theme, [['', T('Any')]].concat(KEYWORD_AGGREGATE.map(e => [keywordSlug(e.keyword), T(e.keyword)])));
     fill(region, [['', T('Any')]].concat(REGION_AGGREGATE.map(e => [keywordSlug(e.region), T(e.region)])));
@@ -1370,17 +1370,27 @@
     };
     $('mf-go').addEventListener('click', () => {
       viewerStage = stage.value === '' ? null : parseInt(stage.value, 10);
-      activeMentorship.clear(); activeMentorship.add(intent.value);
+      activeMentorship.clear(); activeStsm = false;
+      if (intent.value === 'stsm') {
+        // Looking for an STSM host: filter the grid to members who can host,
+        // scoped by the chosen research area. There is no mentor/mentee panel
+        // for hosting, so the stage nudge does not apply and we scroll to the
+        // grid of hosts rather than the mentorship panel.
+        activeStsm = true;
+      } else {
+        activeMentorship.add(intent.value);
+      }
       activeKeywords.clear(); if (theme.value) activeKeywords.add(theme.value);
       activeRegions.clear(); if (region.value) activeRegions.add(region.value);
       reRender();
-      const p = document.getElementById('members-mentorship-panel');
-      if (p && !p.hidden) p.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const panel = document.getElementById('members-mentorship-panel');
+      const target = (panel && !panel.hidden) ? panel : document.getElementById('members-grid');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
     $('mf-clear').addEventListener('click', () => {
       viewerStage = null;
       intent.value = 'mentor'; theme.value = ''; region.value = ''; stage.value = '';
-      activeMentorship.clear(); activeKeywords.clear(); activeRegions.clear();
+      activeMentorship.clear(); activeKeywords.clear(); activeRegions.clear(); activeStsm = false;
       reRender();
     });
   }
