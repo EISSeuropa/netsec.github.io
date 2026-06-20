@@ -2632,6 +2632,42 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 .mentorship-panel-balance{
   margin:-6px 0 12px 15px; font-size:.82rem; color:var(--text-muted, #6b7280);
 }
+.mentorship-panel-tuned{
+  margin:-2px 0 12px; font-size:.82rem; color:var(--accent-2);
+}
+
+/* "Find a mentoring match" card: the transient, viewer-side query that drives
+   the panel below. Sentence-form is avoided for i18n word-order safety; each
+   select carries its own small label instead. */
+.match-finder{ margin:0 0 18px; padding:18px 20px; }
+.match-finder-title{ font-size:1.05rem; margin:0 0 4px; }
+.match-finder-lede{ font-size:.88rem; color:var(--text-muted, #6b7280); margin:0 0 14px; }
+.match-finder-row{ display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px; }
+.match-finder-field{
+  display:flex; flex-direction:column; gap:4px;
+  font-size:.72rem; font-weight:600; letter-spacing:.02em; color:var(--text-muted, #6b7280);
+}
+.match-finder-field select{
+  font-family:inherit; font-size:.9rem; font-weight:400; color:var(--ink);
+  padding:7px 10px; border-radius:9px; border:1px solid var(--line);
+  background:var(--bg-0); min-width:150px;
+}
+.match-finder-actions{ display:flex; gap:8px; align-items:center; }
+.match-finder-go{
+  padding:8px 16px; border-radius:10px; border:0; cursor:pointer;
+  background:var(--accent); color:#fff; font-family:var(--font-sans); font-weight:600; font-size:.9rem;
+  transition:background .15s var(--ease);
+}
+.match-finder-go:hover, .match-finder-go:focus-visible{ background:var(--accent-2); }
+.match-finder-clear{
+  padding:8px 8px; border:0; background:none; cursor:pointer;
+  color:var(--text-muted, #6b7280); font-family:var(--font-sans); font-size:.86rem;
+  text-decoration:underline; text-underline-offset:3px;
+}
+.match-finder-clear:hover, .match-finder-clear:focus-visible{ color:var(--accent-2); }
+@media (max-width:640px){
+  .match-finder-field, .match-finder-field select{ min-width:0; width:100%; }
+}
 
 /* Member profile pages (#762): a single directory card centred on its own
    page. Reuses the .member-card styling; this just frames it. */
