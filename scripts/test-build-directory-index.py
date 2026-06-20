@@ -26,9 +26,24 @@ def test_output_is_valid_json_with_expected_shape():
     assert INDEX["count"] == len(INDEX["members"])
     assert INDEX["source"].endswith("/data/bios.json")
     for m in INDEX["members"]:
-        assert set(m) >= {"name", "name_key", "aliases", "slug", "url", "orcid"}
+        assert set(m) >= {"name", "name_key", "aliases", "slug", "url", "orcid",
+                          "role", "affiliation", "photo"}
         assert m["name"] and m["slug"]
         assert isinstance(m["aliases"], list)
+
+
+def test_display_fields_are_string_or_null():
+    # role / affiliation / photo are optional chip fields: a non-empty string
+    # or null, never an empty string. photo, when present, is an absolute URL.
+    for m in INDEX["members"]:
+        for field in ("role", "affiliation", "photo"):
+            v = m[field]
+            assert v is None or (isinstance(v, str) and v.strip()), (m["slug"], field)
+        if m["photo"]:
+            assert m["photo"].startswith("https://netsec-cost.eu/assets/")
+    # At least some members carry a role and a photo (sanity that it's wired).
+    assert any(m["role"] for m in INDEX["members"])
+    assert any(m["photo"] for m in INDEX["members"])
 
 
 def test_every_url_uses_the_profile_scheme():

@@ -45,6 +45,10 @@ Both indexes carry, per person: the display name, the `name_key`, an
 `aliases` array, and the absolute `url` to that person's page on the
 producing site. A consumer matches its own people against the index by
 `name_key` (falling back to `aliases`) and links to `url`.
+`directory-index.json` additionally carries optional display fields
+(`role`, `affiliation`, `photo`, all null when unset) so a consumer can
+render an informative chip (a headshot plus who the person is) rather than
+a bare link.
 
 **`directory-index.json`** is generated from `data/bios.json`, regenerated
 by the weekly bios-sync, and drift-gated in CI (`build-directory-index.py
