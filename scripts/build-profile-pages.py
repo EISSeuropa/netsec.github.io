@@ -75,6 +75,8 @@ T_THEMES = "Research themes"
 T_REGIONS = "Research regions"
 T_SIMILAR = "Works on similar topics"
 T_SEE_ALL = "See everyone in these themes"
+T_MENTORS = "Mentors on similar topics"
+T_SEE_MENTORS = "See these mentors in the directory"
 T_ANTHOLOGY = "In the EISS Anthology"
 
 WG_NAMES = {"1": "WG1", "2": "WG2", "3": "WG3", "4": "WG4"}
@@ -118,6 +120,61 @@ def similar_members(target: dict, members: list) -> list:
             continue
         scored.append((-shared_kw, -shared_th, (o.get("name") or "").lower(), o))
     scored.sort(key=lambda x: x[:3])
+    return [o for *_, o in scored]
+
+
+def career_stage(m: dict) -> int:
+    """Behind-the-scenes seniority signal (0 doctoral … 3 senior), inferred
+    from the academic position (name honorific as a fallback). Mirrors
+    careerStage() in assets/js/people-directory.js. Never shown: it only
+    orders the mentor facepile so a more established mentor surfaces first
+    among equally on-topic people."""
+    name = m.get("name") or ""
+    p = (m.get("position") or "").lower()
+    if re.search(r"postdoc|post-?doctoral", p):
+        return 1
+    if ((re.search(r"\bprofessor\b", p) and not re.search(r"\b(assistant|associate)\b", p))
+            or re.search(r"\b(director|head|dean|principal investigator)\b", p)
+            or (re.search(r"\bprof\.?\b", name, re.I)
+                and not re.search(r"\b(assistant|associate)\b", p))):
+        return 3
+    if re.search(r"\bassociate professor\b|\breader\b|\bsenior (lecturer|researcher|"
+                 r"research fellow|fellow|analyst)\b|\bteam lead\b|\bprincipal\b", p):
+        return 2
+    if re.search(r"\bphd\b|\bdphil\b|doctoral (candidate|student|researcher|fellow)|"
+                 r"\bdoctoral\b|doctorand|pre-?doctoral|\bcandidate\b|\bstudent\b", p):
+        return 0
+    if re.search(r"\bassistant professor\b|\blecturer\b|research fellow|"
+                 r"research associate|\bresearcher\b|\banalyst\b", p):
+        return 1
+    if re.search(r"\bdr\.?\b", name, re.I):
+        return 1
+    return 1
+
+
+def mentors_on_topics(target: dict, members: list) -> list:
+    """Members who offer mentorship and share at least one topic with the
+    target, most-relevant first. Ranked by shared canonical keywords, then
+    shared themes, then seniority (a more established mentor first among equal
+    topic fits), then name. Excludes the target. Empty when nothing matches, so
+    the facepile simply does not render."""
+    t_kw = {k for k in (target.get("canonical_keywords") or []) if k}
+    t_th = {t for t in (target.get("themes") or []) if t}
+    if not t_kw and not t_th:
+        return []
+    scored = []
+    for o in members:
+        if o.get("id") == target.get("id") or not o.get("id"):
+            continue
+        if "mentor" not in (o.get("mentorship") or []):
+            continue
+        shared_kw = len(t_kw & {k for k in (o.get("canonical_keywords") or []) if k})
+        shared_th = len(t_th & {t for t in (o.get("themes") or []) if t})
+        if not shared_kw and not shared_th:
+            continue
+        scored.append((-shared_kw, -shared_th, -career_stage(o),
+                       (o.get("name") or "").lower(), o))
+    scored.sort(key=lambda x: x[:4])
     return [o for *_, o in scored]
 
 
@@ -178,6 +235,43 @@ def render_similar(target: dict, similar: list, loc: dict) -> str:
             f'<span class="pf-facepile">{"".join(faces)}</span>'
             f'<a class="profile-similar-link" href="{esc(href)}" '
             f'data-i18n="{esc(T_SEE_ALL)}">{esc(T_SEE_ALL)}</a></div>')
+
+
+def render_mentors(target: dict, mentors: list, loc: dict) -> str:
+    """A field-guide-style facepile of mentors working on the target's topics,
+    reusing the similar-people styling. Each face links to that mentor's
+    profile; the trailing link opens the directory filtered to the target's
+    themes with the mentor filter on. Behind-the-scenes seniority orders the
+    list (see mentors_on_topics)."""
+    if not mentors:
+        return ""
+    visible = mentors[:FACEPILE_MAX]
+    overflow = len(mentors) - len(visible)
+    faces = []
+    for o in visible:
+        href = f'people/{esc(o["id"])}{loc["suffix"]}.html'
+        photo = (o.get("photo") or "").strip()
+        if photo:
+            webp = re.sub(r"\.(jpe?g|png)$", ".webp", photo, flags=re.I)
+            inner = (f'<picture><source srcset="{esc(webp)}" type="image/webp">'
+                     f'<img src="{esc(photo)}" alt="" width="44" height="44" '
+                     f'loading="lazy" decoding="async"></picture>')
+        else:
+            ini = "".join(w[0] for w in (o.get("name") or "?").split()[:2]).upper()
+            inner = f'<span class="pf-initials" aria-hidden="true">{esc(ini)}</span>'
+        faces.append(f'<a class="pf-face" href="{href}" '
+                     f'aria-label="{esc(o.get("name"))}">{inner}</a>')
+    if overflow > 0:
+        faces.append(f'<span class="pf-face pf-more" aria-hidden="true">+{overflow}</span>')
+    theme_slugs = [area_slug(t) for t in (target.get("themes") or []) if t]
+    href = f'people{loc["suffix"]}.html#mentorship=mentor'
+    if theme_slugs:
+        href += "&themes=" + ",".join(theme_slugs)
+    return (f'<div class="profile-similar profile-mentors">'
+            f'<p class="profile-aside-label" data-i18n="{esc(T_MENTORS)}">{esc(T_MENTORS)}</p>'
+            f'<span class="pf-facepile">{"".join(faces)}</span>'
+            f'<a class="profile-similar-link" href="{esc(href)}" '
+            f'data-i18n="{esc(T_SEE_MENTORS)}">{esc(T_SEE_MENTORS)}</a></div>')
 
 
 # ──────────────────────── chrome extraction ────────────────────────
@@ -339,7 +433,7 @@ def render_pubs(works: list) -> str:
             f'<ul class="member-pubs-list">{"".join(items)}</ul></div>')
 
 
-def render_card(m: dict, works: list, similar: list, loc: dict, prize: dict | None = None) -> str:
+def render_card(m: dict, works: list, similar: list, mentors: list, loc: dict, prize: dict | None = None) -> str:
     """The static profile card. A hero band (photo + identity + actions) over a
     two-column body: the bio + publications on the left, and a sidebar of
     research themes/regions, similar people, and contacts on the right. Reuses
@@ -419,7 +513,8 @@ def render_card(m: dict, works: list, similar: list, loc: dict, prize: dict | No
     # the script has a mount point; the aside renders even if nothing else fills
     # it, because the slot might.
     anthology_slot = '<div class="profile-anthology-slot" hidden></div>'
-    aside = anthology_slot + render_areas(m, loc) + render_similar(m, similar, loc) + render_contacts(m)
+    aside = (anthology_slot + render_areas(m, loc) + render_similar(m, similar, loc)
+             + render_mentors(m, mentors, loc) + render_contacts(m))
     p.append(f'<aside class="profile-aside">{aside}</aside>')
     p.append("</div>")  # .profile-cols
 
@@ -488,8 +583,8 @@ slot.appendChild(el);slot.hidden=false;
 })();</script>'''
 
 
-def build_page(m: dict, works: list, similar: list, loc_key: str, chrome: dict,
-               prize: dict | None = None) -> str:
+def build_page(m: dict, works: list, similar: list, mentors: list, loc_key: str,
+               chrome: dict, prize: dict | None = None) -> str:
     loc = LOCALES[loc_key]
     slug = m["id"]
     rel = f"people/{slug}{loc['suffix']}.html"
@@ -526,7 +621,7 @@ def build_page(m: dict, works: list, similar: list, loc_key: str, chrome: dict,
 <script type="application/ld+json">
 {person_jsonld(m, canonical)}
 </script>"""
-    card = render_card(m, works, similar, loc, prize)
+    card = render_card(m, works, similar, mentors, loc, prize)
     back = (f'<p class="profile-back"><a href="people{loc["suffix"]}.html#{esc(slug)}" '
             f'data-i18n="{esc(T_BACK)}">&larr; {esc(T_BACK)}</a></p>')
     # site.js localises [data-i18n] chrome strings on load from the shared
@@ -593,10 +688,11 @@ def generate() -> dict[str, str]:
         # Similar-people ranking is locale-independent (names, keywords and
         # themes aren't translated), so compute it once per member.
         similar = similar_members(m, members)
+        mentors = mentors_on_topics(m, members)
         prize = prizes.get(m["id"])
         for k, loc in LOCALES.items():
             rel = f"people/{m['id']}{loc['suffix']}.html"
-            pages[rel] = build_page(m, works, similar, k, chromes[k], prize)
+            pages[rel] = build_page(m, works, similar, mentors, k, chromes[k], prize)
     return pages
 
 

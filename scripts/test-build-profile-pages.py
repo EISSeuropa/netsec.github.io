@@ -81,7 +81,7 @@ def test_similar_empty_for_member_without_topics():
 def test_card_has_hero_two_columns_and_facepile():
     target = next(m for m in MEMBERS if m["id"] == "moritz-weiss")
     sim = bpp.similar_members(target, MEMBERS)
-    html = bpp.render_card(target, [], sim, EN)
+    html = bpp.render_card(target, [], sim, [], EN)
     for needle in ("profile-hero", "profile-cols", "profile-aside",
                    "pf-facepile", "profile-area-chip", "#themes="):
         assert needle in html, needle
@@ -89,10 +89,34 @@ def test_card_has_hero_two_columns_and_facepile():
     assert 'href="people/' in html
 
 
+def test_mentor_facepile_lists_on_topic_mentors_seniority_ordered():
+    # Two mentors on the same topic; the inferred-seniority tiebreak orders the
+    # senior one first, the non-mentor is excluded, and the facepile links into
+    # the mentor-filtered directory.
+    target = {"id": "seeker", "name": "Mr Seeker",
+              "themes": ["Cyber and emerging technology"], "canonical_keywords": ["Cyber"]}
+    senior = {"id": "snr", "name": "Prof. Senior", "position": "Professor",
+              "mentorship": ["mentor"], "themes": ["Cyber and emerging technology"],
+              "canonical_keywords": ["Cyber"]}
+    junior = {"id": "jnr", "name": "Ms Junior", "position": "PhD candidate",
+              "mentorship": ["mentor"], "themes": ["Cyber and emerging technology"],
+              "canonical_keywords": ["Cyber"]}
+    non_mentor = {"id": "nm", "name": "Dr NoMentor",
+                  "themes": ["Cyber and emerging technology"], "canonical_keywords": ["Cyber"]}
+    ranked = bpp.mentors_on_topics(target, [target, junior, senior, non_mentor])
+    assert [m["id"] for m in ranked] == ["snr", "jnr"]
+    assert bpp.career_stage(senior) == 3 and bpp.career_stage(junior) == 0
+    html = bpp.render_card(target, [], [], ranked, EN)
+    assert "profile-mentors" in html
+    assert "mentorship=mentor" in html
+    # No facepile when no on-topic mentor exists.
+    assert "profile-mentors" not in bpp.render_card(target, [], [], [], EN)
+
+
 def test_mentor_badge_becomes_a_mailto_action_when_email_present():
     m = {"id": "t", "name": "Dr Test", "email": "t@example.org",
          "mentorship": ["mentor"], "canonical_keywords": [], "themes": []}
-    html = bpp.render_card(m, [], [], EN)
+    html = bpp.render_card(m, [], [], [], EN)
     assert 'class="mentorship-badge is-offering is-action"' in html
     assert "mailto:t@example.org?subject=" in html
 
@@ -100,7 +124,7 @@ def test_mentor_badge_becomes_a_mailto_action_when_email_present():
 def test_mentor_badge_is_static_without_email():
     m = {"id": "t", "name": "Dr Test", "mentorship": ["mentor"],
          "canonical_keywords": [], "themes": []}
-    html = bpp.render_card(m, [], [], EN)
+    html = bpp.render_card(m, [], [], [], EN)
     assert "mentorship-badge is-offering" in html
     assert "is-action" not in html
     assert "mailto:" not in html
@@ -117,15 +141,15 @@ def test_prize_pill_renders_only_for_listed_winners():
         assert slug in member_ids, f"prize-winners.json key {slug} is not a directory member"
     winner = next(iter(prizes))
     wm = next(m for m in MEMBERS if m["id"] == winner)
-    html = bpp.render_card(wm, [], [], EN, prizes[winner])
+    html = bpp.render_card(wm, [], [], [], EN, prizes[winner])
     assert 'class="profile-prize-chip"' in html and 'lang="en"' in html
     # The pill is absent without prize data.
-    assert "profile-prize-chip" not in bpp.render_card(wm, [], [], EN, None)
+    assert "profile-prize-chip" not in bpp.render_card(wm, [], [], [], EN, None)
 
 
 def test_every_card_has_the_anthology_slot_and_script():
     target = next(m for m in MEMBERS if m["id"] == "moritz-weiss")
-    html = bpp.render_card(target, [], [], EN)
+    html = bpp.render_card(target, [], [], [], EN)
     assert 'class="profile-anthology-slot" hidden' in html
     # The inline runtime script that fills it ships on every built page.
     page = next(v for k, v in bpp.generate().items() if k.endswith("moritz-weiss.html"))
