@@ -1340,15 +1340,15 @@
     nm.className = 'mentorship-person-name';
     nm.textContent = m.name || '';
     a.appendChild(nm);
-    // Keep the active mentorship filter: scroll to and expand the card in
-    // place rather than navigating to #slug (which would clobber the hash
-    // and drop the filter). Detailed view already shows the full card.
+    // Keep the active mentorship filter: open the member preview panel (or, in
+    // detailed view, scroll to the already-full card) rather than navigating to
+    // #slug, which would clobber the hash and drop the filter.
     a.addEventListener('click', (e) => {
       e.preventDefault();
       const card = grid.querySelector('.member-card[data-slug="' + m.id + '"]');
       if (!card) return;
-      if (grid.classList.contains('is-compact')) card.classList.add('is-expanded');
-      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (grid.classList.contains('is-compact')) openPanel(card);
+      else card.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
     return a;
   }
