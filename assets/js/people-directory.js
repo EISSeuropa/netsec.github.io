@@ -199,16 +199,29 @@
   panel.setAttribute('aria-label', window.netsecT('Member profile'));
   panel.hidden = true;
   panel.innerHTML =
-    '<button type="button" class="mpp-close" aria-label="' + window.netsecT('Close') + '">'
+    '<div class="mpp-head">'
+    + '<span class="mpp-eyebrow">' + window.netsecT('Quick look') + '</span>'
+    + '<kbd class="mpp-esc" aria-hidden="true">Esc</kbd>'
+    + '<button type="button" class="mpp-close" aria-label="' + window.netsecT('Close') + '">'
     + '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" '
     + 'stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>'
-    + '</button><div class="mpp-scroll"></div>';
+    + '</button>'
+    + '</div>'
+    + '<div class="mpp-scroll"></div>'
+    + '<div class="mpp-foot" hidden>'
+    + '<a class="mpp-cta" href="#"><span class="mpp-cta-label"></span>'
+    + '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" '
+    + 'stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    + '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>'
+    + '</div>';
   const panelScrim = document.createElement('div');
   panelScrim.className = 'member-preview-scrim';
   panelScrim.hidden = true;
   document.body.appendChild(panelScrim);
   document.body.appendChild(panel);
   const panelScroll = panel.querySelector('.mpp-scroll');
+  const panelFoot = panel.querySelector('.mpp-foot');
+  const panelCta = panel.querySelector('.mpp-cta');
   let panelTrigger = null;
 
   function openPanel(card) {
@@ -222,9 +235,21 @@
     clone.removeAttribute('tabindex');
     const chev = clone.querySelector('.member-toggle-chevron'); if (chev) chev.remove();
     const pin = clone.querySelector('.member-spotlight-pin'); if (pin) pin.remove();
-    // Force the bio open and drop the (un-cloned, dead) Show-more toggle.
-    const bio = clone.querySelector('.member-bio'); if (bio) bio.classList.add('is-expanded');
+    // The panel is a quick look: keep the bio clamped (no force-expand) so
+    // the panel rarely scrolls; the full bio lives on the profile page,
+    // reached via the pinned footer button. Drop the dead Show-more toggle.
     const bioToggle = clone.querySelector('.member-bio-toggle'); if (bioToggle) bioToggle.remove();
+    // Lift the in-card "View full profile" link into the sticky footer so
+    // the path to the full page is always visible without scrolling.
+    const cta = clone.querySelector('.member-profile-cta');
+    if (cta && cta.getAttribute('href')) {
+      panelCta.setAttribute('href', cta.getAttribute('href'));
+      panelCta.querySelector('.mpp-cta-label').textContent = window.netsecT('View full profile');
+      panelFoot.hidden = false;
+      cta.remove();
+    } else {
+      panelFoot.hidden = true;
+    }
     panelScroll.innerHTML = '';
     panelScroll.appendChild(clone);
     panelScroll.scrollTop = 0;
