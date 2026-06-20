@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=a2c6e20b">
+<link rel="stylesheet" href="assets/css/site.css?v=0da10434">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -400,11 +400,12 @@
       <div class="member-pubs" aria-label="Recent publications" hidden></div>
       <div class="member-contact" aria-label="Contact"></div>
     </div>
-    <!-- Toggle affordance for compact mode. CSS hides this in
-         detailed mode (no toggle behaviour) and shows ▼ on
-         collapsed compact cards / ▲ on expanded ones. -->
+    <!-- "More" affordance for compact mode. CSS hides this in detailed
+         view (every card already shows its full content) and shows a ›
+         drill-in chevron on compact cards: clicking opens the preview
+         panel, so the cue points sideways, not down. -->
     <span class="member-toggle-chevron" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
     </span>
   </article>
 </template>
@@ -465,10 +466,10 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=3648e3df" defer></script>
+<script src="assets/js/site.js?v=0c98bdbf" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
-<script src="assets/js/people-directory.js?v=e31550ed" defer></script>
+<script src="assets/js/people-directory.js?v=e5b9459d" defer></script>
 
 </body>
 </html>
