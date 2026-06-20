@@ -63,7 +63,10 @@ jobs:
       - name: Compose (dry-run) into the run summary
         id: compose
         env:
-          KIND: ${{ github.event.inputs.kind || 'all' }}
+          # A news.xml push posts NEWS only; the weekly spotlight is ungated
+          # (spotlight-rotate.yml) and must not be swept into this approval gate.
+          # A manual run still honours its `kind` input (default `all`).
+          KIND: ${{ github.event.inputs.kind || (github.event_name == 'push' && 'news' || 'all') }}
           THREAD: ${{ github.event.inputs.thread || '' }}
         run: |
           if [ -n "$THREAD" ]; then
@@ -100,7 +103,10 @@ jobs:
 
       - name: Post to Bluesky and update the ledger
         env:
-          KIND: ${{ github.event.inputs.kind || 'all' }}
+          # A news.xml push posts NEWS only; the weekly spotlight is ungated
+          # (spotlight-rotate.yml) and must not be swept into this approval gate.
+          # A manual run still honours its `kind` input (default `all`).
+          KIND: ${{ github.event.inputs.kind || (github.event_name == 'push' && 'news' || 'all') }}
           THREAD: ${{ github.event.inputs.thread || '' }}
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
           BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
