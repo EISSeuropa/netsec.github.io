@@ -2650,10 +2650,25 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 .mentorship-panel-stage-label{
   font-size:.82rem; font-weight:600; color:var(--text-muted, #6b7280);
 }
-.mentorship-panel-stage-select{
-  font-family:inherit; font-size:.86rem; color:var(--ink);
-  padding:5px 9px; border-radius:9px; border:1px solid var(--line);
-  background:var(--bg-0);
+/* Compact, themed dropdown. The scoped (.mentorship-panel …) selector beats
+   the global input/select rules (width:100%, the 12px padding, and the
+   select:focus{background:#fff} that otherwise turns it white in dark mode).
+   appearance:none is what lets the CSS background apply at all on a native
+   macOS select; the chevron is drawn back in, matching the country filter. */
+.mentorship-panel .mentorship-panel-stage-select{
+  width:auto; min-width:150px; max-width:100%;
+  font-family:inherit; font-size:.86rem; color:var(--ink); cursor:pointer;
+  padding:6px 30px 6px 12px; border-radius:10px;
+  border:1px solid var(--line);
+  /* Tokens flip with the theme (class toggle and OS prefers-color-scheme),
+     so this stays legible in dark mode without a separate .dark rule. */
+  background-color:var(--bg-1);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237b8aab' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat:no-repeat; background-position:right 11px center;
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+}
+.mentorship-panel .mentorship-panel-stage-select:focus{
+  outline:0; border-color:var(--accent-2); box-shadow:0 0 0 3px rgba(10,132,255,.18);
 }
 
 /* Member profile pages (#762): a single directory card centred on its own
