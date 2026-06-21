@@ -1554,6 +1554,18 @@
       panel.appendChild(tip);
     }
 
+    // Make the ranking legible: the lists are ordered, not alphabetical. Only
+    // claim it when there is an actual signal (a research-area filter or a
+    // chosen career stage); without either, the order is just leadership then
+    // name, which is not a recommendation worth advertising.
+    if (areasActive || viewerStage != null) {
+      const ord = document.createElement('p');
+      ord.className = 'mentorship-panel-order';
+      ord.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg>';
+      ord.appendChild(document.createTextNode(' ' + window.netsecT('Most relevant first')));
+      panel.appendChild(ord);
+    }
+
     const cols = document.createElement('div');
     cols.className = 'mentorship-panel-cols';
     sides.forEach(side => {
