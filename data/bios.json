@@ -1735,6 +1735,11 @@
         "Gender-based violence",
         "International jurisprudence",
         "Transitional justice"
+      ],
+      "themes": [
+        "Peace, mediation, and reconciliation",
+        "Theory and methods",
+        "Transnational and human security"
       ]
     },
     {
@@ -2250,19 +2255,19 @@
       "count": 14
     },
     {
+      "theme": "Theory and methods",
+      "count": 10
+    },
+    {
       "theme": "Cyber and emerging technology",
       "count": 9
     },
     {
-      "theme": "Theory and methods",
-      "count": 9
+      "theme": "Transnational and human security",
+      "count": 7
     },
     {
       "theme": "European and transatlantic security order",
-      "count": 6
-    },
-    {
-      "theme": "Transnational and human security",
       "count": 6
     },
     {
@@ -2279,7 +2284,7 @@
     },
     {
       "theme": "Peace, mediation, and reconciliation",
-      "count": 3
+      "count": 4
     },
     {
       "theme": "Identity, narratives and ideational security",
@@ -2328,7 +2333,9 @@
     "Ethnic conflict analysis": "Peace, mediation, and reconciliation",
     "European security": "Security and defence",
     "European strategic autonomy": "European and transatlantic security order",
+    "Feminist studies": "Theory and methods",
     "Foreign policy analysis": "Foreign policy and diplomacy",
+    "Gender-based violence": "Transnational and human security",
     "Geopolitics": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
     "Grand strategy": "Strategy and deterrence",
@@ -2343,6 +2350,7 @@
     "Intelligence studies": "Intelligence, information and influence",
     "International human rights law": "Transnational and human security",
     "International humanitarian law": "Transnational and human security",
+    "International jurisprudence": "Transnational and human security",
     "International law": "Theory and methods",
     "International relations": "Theory and methods",
     "International security": "Security and defence",
@@ -2387,6 +2395,7 @@
     "Text as data": "Theory and methods",
     "Transatlantic relations": "European and transatlantic security order",
     "Transatlantic security": "European and transatlantic security order",
+    "Transitional justice": "Peace, mediation, and reconciliation",
     "Transnational and human security": "Transnational and human security",
     "UN": "Foreign policy and diplomacy",
     "US-China relations": "Foreign policy and diplomacy",
