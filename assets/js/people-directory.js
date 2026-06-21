@@ -1386,14 +1386,24 @@
   // single shared theme). Applied only when an area filter is on.
   function mentorshipMatchScore(m, tag, areasActive) {
     let s = mentorshipThemeOverlap(m) * 3 + mentorshipRegionOverlap(m);
-    if (areasActive && tag === 'mentor') s += careerStage(m) * 0.5;
-    // Gentle personalisation when the visitor told us their own stage: lean
-    // a mentor a step above them, a mentee a step below. Capped at ~1.2, so a
-    // single shared research theme (weight 3) always outweighs it and a
-    // near-peer is never buried.
-    if (viewerStage != null) {
-      if (tag === 'mentor') s += 0.4 * Math.max(0, careerStage(m) - viewerStage);
-      else if (tag === 'mentee') s += 0.4 * Math.max(0, viewerStage - careerStage(m));
+    // Default (no stage given): among equally on-topic mentors, lean slightly
+    // toward more established ones. Skipped once the viewer names their own
+    // stage, where the near-peer nudge below governs instead.
+    if (areasActive && tag === 'mentor' && viewerStage == null) s += careerStage(m) * 0.5;
+    // Near-peer first. Academic-mentoring research finds the most useful mentor
+    // is usually one or two career stages ahead (a postdoc for a PhD student, an
+    // associate prof for a postdoc): relatable, recently in your shoes, and more
+    // approachable than the most senior person available. So we lean toward a
+    // 1–2 step gap in the mentoring direction, give a same-stage peer a smaller
+    // nudge, and stop rewarding distance beyond that (a doctoral student is not
+    // steered to a full professor over a near-peer). Symmetric on the mentee
+    // side. Gentle: capped at 1.0, below a single shared theme (weight 3).
+    if (viewerStage != null && (tag === 'mentor' || tag === 'mentee')) {
+      const gap = tag === 'mentor' ? careerStage(m) - viewerStage
+                                   : viewerStage - careerStage(m);
+      s += gap <= 0 ? (gap === 0 ? 0.5 : 0)
+         : gap <= 2 ? 1.0
+         : 0.6;
     }
     return s;
   }
