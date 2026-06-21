@@ -641,18 +641,6 @@ class LinkedInChannel(Channel):
         )
 
 
-class LinkedInChannel(Channel):
-    def configured(self) -> bool:
-        return bool(os.environ.get("LINKEDIN_ORG_ID") and os.environ.get("LINKEDIN_ACCESS_TOKEN"))
-
-    def publish(self, post: Post) -> str:
-        raise SystemExit(
-            "LinkedInChannel.publish is a phase-3 stub. Wire the Posts API "
-            "(register image upload → create post) once the LinkedIn app + "
-            "org token exist. See docs/social-publishing.md."
-        )
-
-
 CHANNELS = {"bluesky": BlueskyChannel, "linkedin": LinkedInChannel}
 
 
