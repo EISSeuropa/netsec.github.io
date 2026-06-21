@@ -54,6 +54,7 @@ from __future__ import annotations
 
 import json, re, sys, unicodedata
 from pathlib import Path
+from _directory_common import name_key, slugify
 
 try:
     import requests
@@ -80,33 +81,6 @@ def norm(name: str) -> str:
     s = "".join(c for c in s if not unicodedata.combining(c))
     s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+", "", s)
     return re.sub(r"\s+", " ", s).strip().lower()
-
-
-def name_key(name: str) -> tuple[str, str] | None:
-    """(first, last) tokens of a name, lowercased and de-titled, for a
-    fallback match when the full normalised string differs only by a
-    middle name or initials ("John N.T. Helferich" on our side vs the
-    "John Helferich" cost.eu publishes). Returns None when fewer than two
-    name tokens survive, so a single-token name never matches by accident."""
-    s = unicodedata.normalize("NFKD", name or "")
-    s = "".join(c for c in s if not unicodedata.combining(c))
-    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+", "", s, flags=re.I)
-    post = {"phd", "jr", "sr", "ii", "iii", "iv", "esq"}
-    toks = [t for t in re.split(r"[^A-Za-z]+", s) if t and t.lower() not in post]
-    if len(toks) < 2:
-        return None
-    return (toks[0].lower(), toks[-1].lower())
-
-
-def slugify(name: str) -> str:
-    """Stable slug from a person's name — must match scripts/sync-bios.py."""
-    s = unicodedata.normalize("NFKD", name or "")
-    s = "".join(c for c in s if not unicodedata.combining(c))
-    s = re.sub(r"^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+", "", s)
-    s = s.lower()
-    s = re.sub(r"[‘’ʼ'`]", "", s)
-    s = re.sub(r"[^a-z0-9]+", "-", s).strip("-")
-    return s or "member"
 
 
 _TITLE_TOKENS = {"Dr", "Dr.", "Prof", "Prof.", "Mr", "Mr.", "Ms", "Ms.", "Mrs", "Mrs."}

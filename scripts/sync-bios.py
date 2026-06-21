@@ -54,6 +54,7 @@ import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
+from _directory_common import name_key, slugify
 
 try:
     import requests
@@ -104,82 +105,6 @@ LINK_REWRITES: list[dict] = []
 
 def norm_email(s: str) -> str:
     return (s or "").strip().lower()
-
-
-def slugify(name: str) -> str:
-    """Stable slug from a person's name. Strips diacritics, titles, and
-    apostrophes BEFORE collapsing non-alphanumerics to hyphens, so that
-    e.g. "Dr Silvia D'Amato" → "silvia-damato" (matches the existing
-    seed id) rather than "silvia-d-amato"."""
-    s = unicodedata.normalize("NFKD", name or "")
-    s = "".join(c for c in s if not unicodedata.combining(c))
-    # Strip a leading honorific. The trailing group accepts either a dot
-    # (optionally followed by spaces) or whitespace, so a title glued to
-    # the name with a dot and no space ("Mrs.Yanina") strips too — that
-    # form otherwise kept the title in the slug and split the person into
-    # a second card. A bare "Drew" is safe: the title must be followed by
-    # a dot or a space, never a letter. The written-out forms (Professor,
-    # Doctor) strip too, so they don't leak into the slug.
-    s = re.sub(r"^(Professor|Prof|Doctor|Dr|Mr|Mrs|Ms|Mx)(?:\.\s*|\s+)", "", s)
-    s = s.lower()
-    # Drop apostrophes / curly quotes / similar marks first — they
-    # shouldn't introduce a hyphen between adjacent letters.
-    s = re.sub(r"[‘’ʼ'`]", "", s)
-    s = re.sub(r"[^a-z0-9]+", "-", s).strip("-")
-    return s or "member"
-
-
-def name_key(name: str) -> tuple[str, str] | None:
-    """Reduce a name to (first_token, last_token), lowercased and
-    diacritic-stripped, dropping titles and any middle names / initials.
-
-    Used as a fallback dedup signal in merge(): collapses cases where a
-    member who already has a seed entry (e.g. "Dr John Helferich") fills
-    in the public form with a slightly different name spelling (e.g.
-    "Dr John N.T. Helferich"). slugify() would treat those two as
-    different ids (john-helferich vs john-n-t-helferich), and the form
-    submitter's Google account email isn't on the seed entry to bridge
-    them — so without a third signal, the form submission creates a
-    new alphabetical entry beside the seed one.
-
-    Returns None when we can't extract both a first and a last token —
-    the caller treats that as "no fallback match available".
-
-    Conservative on purpose: only the *first* and the *last* token are
-    used, so middle names, suffixes ("Jr"), and academic post-nominals
-    ("PhD") don't affect the key. The matcher in merge() additionally
-    requires the country to match, so two genuinely different members
-    who happen to share first + last names won't collapse.
-    """
-    s = unicodedata.normalize("NFKD", name or "")
-    s = "".join(c for c in s if not unicodedata.combining(c))
-    # Same honorific strip as slugify(): the trailing group also catches a
-    # title glued to the name by a dot with no space ("Mrs.Yanina"), so the
-    # name+country fallback can still bridge such a submission to its twin.
-    s = re.sub(r"^(Professor|Prof|Doctor|Dr|Mr|Mrs|Ms|Mx)(?:\.\s*|\s+)", "", s, flags=re.I)
-    s = re.sub(r"[‘’ʼ'`]", "", s)
-    # Tokenise on any non-letter so "N.T." becomes ["N", "T"] (and the
-    # initials get dropped by the first/last selection below).
-    tokens = [t.lower() for t in re.split(r"[^A-Za-z]+", s) if t]
-    # Strip common post-nominal tokens that aren't really part of the name.
-    POST_NOMINALS = {"phd", "jr", "sr", "ii", "iii", "iv", "esq"}
-    # Strip nobiliary / patronymic particles too. Without this, "Jéssica
-    # da Costa Pereira" keys as (jessica, pereira) while a bios.json entry
-    # of "Jéssica da Costa" keys as (jessica, costa) and the two miss
-    # each other. Dropping particles makes both reduce to (jessica,
-    # pereira) / (jessica, costa) cleanly based on the actual surname
-    # tokens. Conservative list — only particles that are reliably
-    # connectors, not standalone names.
-    PARTICLES = {
-        "de", "del", "della", "di", "da", "das", "dos",
-        "van", "von", "vom", "der", "den", "ter", "ten",
-        "la", "le", "el", "al", "ibn", "bin", "bint",
-        "zu", "auf", "af",
-    }
-    tokens = [t for t in tokens if t not in POST_NOMINALS and t not in PARTICLES]
-    if len(tokens) < 2:
-        return None
-    return (tokens[0], tokens[-1])
 
 
 def country_key(s: str) -> str:
