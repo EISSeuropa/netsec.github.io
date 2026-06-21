@@ -2640,6 +2640,15 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 .mentorship-panel-balance{
   margin:-6px 0 12px 15px; font-size:.82rem; color:var(--text-muted, #6b7280);
 }
+/* "Most relevant first" — sits right above the lists in the accent colour
+   (not the muted grey of the other captions) so the order reads as a sort
+   cue rather than another skimmable line. The down-arrow signals direction. */
+.mentorship-panel-order{
+  display:flex; align-items:center; gap:5px;
+  margin:2px 0 10px; font-size:.8rem; font-weight:600;
+  color:var(--accent-2);
+}
+.mentorship-panel-order svg{ flex:none; opacity:.85; }
 /* Transient career-stage personaliser inside the panel header. Optional; it
    gently leans the order toward mentors above the visitor and mentees below.
    Inline (label + select) so it reads as a small control, not a form. */
