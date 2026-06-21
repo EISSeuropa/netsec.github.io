@@ -1124,6 +1124,7 @@
     mentorshipChips.forEach(o => o.setAttribute('aria-pressed', 'false'));
     activeStsm = false;
     syncStsmChip();
+    viewerStage = null;  // the in-panel career-stage nudge is a filter too
     activeKeywords.clear();
     activeRegions.clear();
     writeHashKeywords();
@@ -1489,7 +1490,8 @@
     stageSel.value = viewerStage == null ? '' : String(viewerStage);
     stageSel.addEventListener('change', () => {
       viewerStage = stageSel.value === '' ? null : parseInt(stageSel.value, 10);
-      renderMentorshipPanel();
+      renderMentorshipPanel();  // rebuilds the panel (and this select)…
+      document.getElementById('mentorship-panel-stage-select')?.focus();  // …so restore focus
     });
     stageWrap.appendChild(stageLabel);
     stageWrap.appendChild(stageSel);
