@@ -51,7 +51,18 @@ jobs:
       - id: check
         run: |
           hour=$(TZ='Europe/Paris' date +%H)
-          if [ "${{ github.event_name }}" != "schedule" ] || [ "$hour" = "10" ]; then
+          today=$(TZ='Europe/Paris' date +%F)
+          # One-week hold (#social-promo-delay): the weekly member spotlight —
+          # both the home-page rotation and its ungated Bluesky post — is paused
+          # to push the social promotion back a week. It resumes on the first
+          # Tuesday on/after HOLD_UNTIL. A manual workflow_dispatch still
+          # proceeds (override). Self-expiring: once today >= HOLD_UNTIL this
+          # branch never fires — delete it and the HOLD_UNTIL line to clean up.
+          HOLD_UNTIL='2026-06-30'
+          if [ "${{ github.event_name }}" = "schedule" ] && [[ "$today" < "$HOLD_UNTIL" ]]; then
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Spotlight paused until ${HOLD_UNTIL} (social promotion delayed a week); ${today} skipped."
+          elif [ "${{ github.event_name }}" != "schedule" ] || [ "$hour" = "10" ]; then
             echo "go=true" >> "$GITHUB_OUTPUT"
           else
             echo "go=false" >> "$GITHUB_OUTPUT"
