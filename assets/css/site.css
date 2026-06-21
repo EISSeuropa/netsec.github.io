@@ -1022,9 +1022,6 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   box-shadow:0 0 0 0 currentColor;
   animation:ue-pulse 1.8s ease-out infinite;
 }
-@media (prefers-reduced-motion: reduce){
-  .ue-card[data-state="live"] .ue-status .dot{animation:none}
-}
 @keyframes ue-pulse{
   0%   { box-shadow: 0 0 0 0   color-mix(in oklab, currentColor 50%, transparent); }
   70%  { box-shadow: 0 0 0 9px color-mix(in oklab, currentColor 0%,  transparent); }
@@ -1724,9 +1721,20 @@ form button:disabled{opacity:.65;cursor:wait}
   .gantt{min-width:916px}
   .milestone{font-size:.62rem;padding:4px 6px}
 }
+/* Global reduced-motion reset. The standard a11y blanket: near-instant
+   durations, animation-iteration-count:1 so an infinite loop (pulse dots)
+   actually stops instead of flickering, and scroll-behavior:auto to override
+   html{scroll-behavior:smooth}. With !important this covers every component,
+   so per-component transition:none / animation:none blocks are redundant and
+   live only where they remove a hover end-state (transform:none) or swap in a
+   static style. */
 @media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
-  .blob{animation:none}
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
 }
 
 /* -------- Dark mode --------
@@ -2878,7 +2886,6 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 .members-facet-chevron{ flex:0 0 auto;color:var(--muted);transition:transform .18s ease; }
 .members-keyword-filter[open] .members-facet-chevron{ transform:rotate(180deg); }
 .members-keyword-filter[open] > .members-keyword-filter-head{ margin-bottom:12px; }
-@media (prefers-reduced-motion: reduce){ .members-facet-chevron{ transition:none; } }
 .members-keyword-filter-label{
   font-family:'Lexend',sans-serif;
   font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
@@ -3190,10 +3197,6 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   /* Lighter hero on small screens. */
   .people-page .section-head .lede{ font-size:.95rem;line-height:1.5; }
 }
-@media (prefers-reduced-motion: reduce){
-  .members-filterset[open],
-  .members-filterset::backdrop{ animation:none; }
-}
 /* Compact (grid) view: keyword block hidden. Full keywords show in
    the preview panel. The `:not(.is-expanded)` qualifier is vestigial
    (compact cards no longer expand in-place; clicking opens the
@@ -3288,10 +3291,6 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
          0 14px 36px rgba(10,132,255,.18),
          var(--glass-shadow)}
 }
-@media (prefers-reduced-motion: reduce){
-  .member-card.is-search-landed{animation:none}
-}
-
 /* ─── Directory tour ──────────────────────────────────────────
    Trigger button in the toolbar; backdrop, spotlight, and
    tooltip are mounted to <body> by the engine in site.js when
@@ -3406,11 +3405,6 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 }
 
 /* Reduced motion: instant transitions for both spotlight and backdrop. */
-@media (prefers-reduced-motion: reduce){
-  .tour-backdrop,
-  .tour-spotlight{transition:none}
-}
-
 /* ─── Welcome strip on the directory ──────────────────────────
    Shown once to first-time visitors above the directory toolbar.
    Dismiss is sticky via localStorage('netsec-directory-tour-seen').
@@ -3430,9 +3424,6 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 .welcome-strip[hidden]{display:none}
 .dark .welcome-strip{
   background:linear-gradient(180deg, rgba(10,132,255,.14), rgba(10,132,255,.05));
-}
-@media (prefers-reduced-motion: reduce){
-  .welcome-strip{animation:none}
 }
 @keyframes welcome-fade-in{
   from{opacity:0;transform:translateY(-4px)}
@@ -3615,10 +3606,6 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
     border-color:rgba(110,161,255,.36);
   }
 }
-@media (prefers-reduced-motion: reduce){
-  .members-grid.is-compact .member-toggle-chevron{transition:none}
-}
-
 /* ── Member preview panel (#72) ──
    Clicking a compact card opens that member's detail here instead of
    expanding it in the grid: a right rail on desktop, a bottom sheet on
@@ -3700,10 +3687,6 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 @media (min-width:900px){ .member-preview-scrim{display:none} }
 /* Lock background scroll while the sheet is up on mobile. */
 @media (max-width:899px){ body.mpp-open{overflow:hidden} }
-@media (prefers-reduced-motion:reduce){
-  .member-preview-panel,.member-preview-scrim,.mpp-scroll{transition:none}
-}
-
 /* View-mode toggle (segmented control in the toolbar) */
 .view-toggle{
   display:inline-flex;
@@ -3937,10 +3920,6 @@ body.search-open{overflow:hidden}
   from{opacity:0;transform:translateY(-8px)}
   to{opacity:1;transform:translateY(0)}
 }
-@media (prefers-reduced-motion: reduce){
-  .search-backdrop,.search-panel{animation:none}
-}
-
 .search-header{
   display:flex;align-items:center;gap:10px;
   padding:14px 16px;border-bottom:1px solid var(--line);
@@ -4297,9 +4276,6 @@ body.search-open{overflow:hidden}
 }
 .rm-shipped-btn[aria-expanded="true"] .rm-shipped-chevron{
   transform:rotate(180deg);
-}
-@media (prefers-reduced-motion: reduce){
-  .rm-shipped-chevron{transition:none}
 }
 @media print{
   /* Print should show the full history. */
@@ -5744,10 +5720,6 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   background:#34d775;
 }
 .programme-synced{display:block;margin-top:.5rem;font-size:.92em}
-@media (prefers-reduced-motion: reduce){
-  .programme-live-dot{animation:none}
-}
-
 /* "Now happening" banner — appears above the day chips while a session is
    in progress (essc-programme.js, #832). Reuses the green live cue and the
    programmeLivePulse animation so it reads as the same liveness family as
@@ -5778,10 +5750,6 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .programme-now-link:hover,.programme-now-link:focus-visible{text-decoration:underline}
 .programme-now-room,.programme-now-time{color:var(--muted);font-size:.85rem}
 .dark .programme-now-dot{background:#34d775}
-@media (prefers-reduced-motion: reduce){
-  .programme-now-dot{animation:none}
-}
-
 /* Livestream badge — appears on session cards whose subtype is
    "plenary" or "roundtable" (matches EISS's INTRO / KEY / RT /
    CONC livestream classification). Same green as the
@@ -5851,10 +5819,6 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   0%,100%{opacity:1;transform:scale(1)}
   50%{opacity:.4;transform:scale(.7)}
 }
-@media (prefers-reduced-motion: reduce){
-  .programme-slot-livestream.is-live-now::before{animation:none}
-}
-
 /* ──────────────────────────────────────────────────────────────
    Print stylesheet (#123).
    ──────────────────────────────────────────────────────────────
