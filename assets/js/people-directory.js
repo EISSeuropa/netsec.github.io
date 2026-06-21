@@ -1243,6 +1243,13 @@
         activeMentorship.delete(v); c.setAttribute('aria-pressed', 'false'); render();
       }});
     });
+    // STSM hosting is its own chip + boolean (not in mentorshipChips), so it
+    // needs its own removable pill to stay consistent with every other facet.
+    if (activeStsm && stsmChip) {
+      out.push({ label: stsmChip.textContent.trim(), remove: () => {
+        activeStsm = false; syncStsmChip(); render();
+      }});
+    }
     return out;
   }
   const XMARK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
