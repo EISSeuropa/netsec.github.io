@@ -91,9 +91,9 @@
     "Identity, narratives and ideational security": ["Identity", "Narratives", "Ontological security"],
     "Cyber and emerging technology": ["Cybersecurity governance", "Digital sovereignty", "Digital governance", "Cyber defence", "Cyber", "Cyber statecraft", "Infrastructure", "Critical infrastructure", "Supply chain security", "Emerging technology", "Emerging and disruptive technologies", "Artificial intelligence", "AI", "Cybersecurity", "Cybercrime", "Dual use technologies", "Technology spillovers"],
     "Economic security and geoeconomics": ["Economic security", "Economic statecraft", "Industrial policy", "Political economy", "Defence industrial policy", "Defence economics", "Defence industry"],
-    "Transnational and human security": ["Non-state actors", "Maritime security", "Counterterrorism", "Transnational and human security", "International humanitarian law", "International human rights law", "Civil protection"],
-    "Peace, mediation, and reconciliation": ["Positive peace", "Plural peace", "Peace vision", "Peacebuilding", "Peacekeeping", "Mediation", "Conflict resolution", "Reconciliation", "Ethnic conflict analysis", "Divided nation", "Unification", "State-building"],
-    "Theory and methods": ["Text as data", "Research methods", "Political psychology", "Policy evaluation", "Judgment and decision-making", "International relations", "History", "Organisation studies", "International law"]
+    "Transnational and human security": ["Non-state actors", "Maritime security", "Counterterrorism", "Transnational and human security", "International humanitarian law", "International human rights law", "International jurisprudence", "Gender-based violence", "Civil protection"],
+    "Peace, mediation, and reconciliation": ["Positive peace", "Plural peace", "Peace vision", "Peacebuilding", "Peacekeeping", "Mediation", "Conflict resolution", "Reconciliation", "Transitional justice", "Ethnic conflict analysis", "Divided nation", "Unification", "State-building"],
+    "Theory and methods": ["Text as data", "Research methods", "Political psychology", "Policy evaluation", "Judgment and decision-making", "International relations", "History", "Organisation studies", "Feminist studies", "International law"]
   },
 
   "affiliation_aliases": {
