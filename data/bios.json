@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-20T21:32:51+00:00",
+  "generated_at": "2026-06-21T13:23:36+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-20T21:32:51+00:00"
+    "last_synced": "2026-06-21T13:23:36+00:00"
   },
   "members": [
     {
@@ -1670,7 +1670,7 @@
       "bio": "Vasiliki Plessia Aravani is a Marie Skłodowska-Curie Early Stage Researcher and PhD candidate at the Diplomatische Akademie Wien. She is also a Visiting Researcher at the Centre for Security, Diplomacy and Strategy (CSDS) at Vrije Universiteit Brussel. Her doctoral research examines how emerging technologies and science and technology cooperation are transforming military alliances and security partnerships, with a particular focus on the Atlantic security space and its evolving connections with the Indo-Pacific. She holds a Master’s degree in International Security from Sciences Po Paris and has previously worked with NATO’s Science and Technology Organisation and the OECD. Her research interests include transatlantic and Indo-Pacific security, emerging technologies, alliance politics, military innovation, and tech diplomacy.",
       "keywords": [
         "emerging technologies",
-        "trasantlantic security",
+        "transatlantic security",
         "military innovation",
         "security and defence"
       ],
@@ -1685,13 +1685,56 @@
       "source": "form",
       "photo_source_sha256": "772f18a5aa150210856570c83ab1876f3b6c61e06d9d74e2d9f05a77f6fe3cc5",
       "canonical_keywords": [
-        "Emerging technologies",
+        "Emerging technology",
         "Military innovation",
         "Security and defence",
-        "Trasantlantic security"
+        "Transatlantic security"
       ],
       "themes": [
+        "Cyber and emerging technology",
+        "European and transatlantic security order",
         "Security and defence"
+      ]
+    },
+    {
+      "id": "teodora-stoicescu",
+      "name": "Ms Teodora Stoicescu",
+      "country": "Romania",
+      "country_code": "ro",
+      "affiliation": "National University of Political Studies and Public Administration",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Teodora Stoicescu is a PhD candidate at the Department of Political Science at National University of Political Studies and Public Administration, where her doctoral research is fully funded. Her project examines how feminism and international jurisprudence are working in armed conflicts, with focus on sexual violence as a weapon of war in Bosnia and Herzegovina, Ukraine and Armenia. Her research interests are in the fields of Feminist Theories, Sexual Violence during war and outside of war, Jurisprudence, Reconciliation, Transitional Justice and Humanitarian Aid. Teodora holds a BA in Political Science, specialising in Democrating Backsliding in Europe and the reality of post-democratic states, as well as a Master's degree in Security and Diplomacy at the National University of Political Studies and Public Administration, specialising in war crimes against women during the Bosnian War and the international response. Teodora is interested in connecting with scholars interested in feminist theories, gender-based violence, sexual violence as a weapon of war, transitional justice, international jurisprudence, security studies, diplomacy and geostrategy.",
+      "keywords": [
+        "Feminist Studies",
+        "Transitional Justice",
+        "International Jurisprudence",
+        "Gender-based Violence"
+      ],
+      "email": "",
+      "website": "https://snspa.ro/en/",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/teodora-stoicescu-442067222?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/teodora-stoicescu.jpg",
+      "source": "form",
+      "photo_source_sha256": "65e2e229dfa02e3fa896a37f27150cac2f464657928508149fa508fc670ed147",
+      "canonical_keywords": [
+        "Feminist studies",
+        "Gender-based violence",
+        "International jurisprudence",
+        "Transitional justice"
       ]
     }
   ],
@@ -1877,7 +1920,7 @@
       "count": 1
     },
     {
-      "keyword": "Emerging technologies",
+      "keyword": "Emerging technology",
       "count": 1
     },
     {
@@ -1890,6 +1933,14 @@
     },
     {
       "keyword": "EU–NATO relations",
+      "count": 1
+    },
+    {
+      "keyword": "Feminist studies",
+      "count": 1
+    },
+    {
+      "keyword": "Gender-based violence",
       "count": 1
     },
     {
@@ -1942,6 +1993,10 @@
     },
     {
       "keyword": "International humanitarian law",
+      "count": 1
+    },
+    {
+      "keyword": "International jurisprudence",
       "count": 1
     },
     {
@@ -2093,11 +2148,15 @@
       "count": 1
     },
     {
-      "keyword": "Transnational and human security",
+      "keyword": "Transatlantic security",
       "count": 1
     },
     {
-      "keyword": "Trasantlantic security",
+      "keyword": "Transitional justice",
+      "count": 1
+    },
+    {
+      "keyword": "Transnational and human security",
       "count": 1
     },
     {
@@ -2127,12 +2186,16 @@
       "count": 14
     },
     {
+      "theme": "Cyber and emerging technology",
+      "count": 9
+    },
+    {
       "theme": "Theory and methods",
       "count": 9
     },
     {
-      "theme": "Cyber and emerging technology",
-      "count": 8
+      "theme": "European and transatlantic security order",
+      "count": 6
     },
     {
       "theme": "Transnational and human security",
@@ -2140,10 +2203,6 @@
     },
     {
       "theme": "Economic security and geoeconomics",
-      "count": 5
-    },
-    {
-      "theme": "European and transatlantic security order",
       "count": 5
     },
     {
@@ -2201,6 +2260,7 @@
     "Economic statecraft": "Economic security and geoeconomics",
     "Election interference": "Intelligence, information and influence",
     "Emerging and disruptive technologies": "Cyber and emerging technology",
+    "Emerging technology": "Cyber and emerging technology",
     "Ethnic conflict analysis": "Peace, mediation, and reconciliation",
     "European security": "Security and defence",
     "European strategic autonomy": "European and transatlantic security order",
@@ -2227,6 +2287,7 @@
     "Maritime security": "Transnational and human security",
     "Maritime strategy": "Strategy and deterrence",
     "Militarisation": "Security and defence",
+    "Military innovation": "Security and defence",
     "Military neutrality": "European and transatlantic security order",
     "Multilateralism": "Foreign policy and diplomacy",
     "NATO": "European and transatlantic security order",
@@ -2261,6 +2322,7 @@
     "Technology spillovers": "Cyber and emerging technology",
     "Text as data": "Theory and methods",
     "Transatlantic relations": "European and transatlantic security order",
+    "Transatlantic security": "European and transatlantic security order",
     "Transnational and human security": "Transnational and human security",
     "UN": "Foreign policy and diplomacy",
     "US-China relations": "Foreign policy and diplomacy",
@@ -2274,7 +2336,7 @@
     },
     {
       "region": "Global and cross-regional",
-      "count": 13
+      "count": 14
     },
     {
       "region": "Asia",
