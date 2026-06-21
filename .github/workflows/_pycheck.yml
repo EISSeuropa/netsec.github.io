@@ -1,0 +1,33 @@
+# Reusable workflow: check out the repo, set up Python 3.12, run one check
+# command. Called by the single-command, no-dependency check workflows
+# (i18n / calendar / news drift, CSS class collisions, external-link arrows,
+# SEO asset drift, brand lint). Centralises the SHA-pinned checkout +
+# setup-python so a Dependabot bump touches one file instead of seven
+# (CLAUDE.md §12: the pins live here now).
+name: Python check (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      command:
+        description: The check command to run (must exit non-zero on failure).
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v4 (sha-pinned)
+
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+
+      - name: Run check
+        run: ${{ inputs.command }}
