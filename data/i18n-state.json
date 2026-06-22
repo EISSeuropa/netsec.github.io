@@ -103,15 +103,15 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "36266f4eec329c07ea5adcbdb31fbfee0ee82c2d",
-        "translated_on": "2026-06-21",
+        "source_sha1": "c69c45e3adbec2a2741849b278aebf6347d042ab",
+        "translated_on": "2026-06-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "36266f4eec329c07ea5adcbdb31fbfee0ee82c2d",
-        "translated_on": "2026-06-21",
+        "source_sha1": "c69c45e3adbec2a2741849b278aebf6347d042ab",
+        "translated_on": "2026-06-22",
         "status": "beta",
         "reviewed_by": null
       }

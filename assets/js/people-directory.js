@@ -72,7 +72,7 @@
       searchStep,
       { target: '.members-filter',
         title: window.netsecT('Filter by working group or Management Committee role'),
-        body:  window.netsecT('WG1–WG4 filter by Working Group. MC members surfaces only Management Committee representatives.') },
+        body:  window.netsecT('WG1–WG4 filter by Working Group. The Management Committee chip surfaces only Management Committee representatives.') },
       { target: '#members-keyword-filter',
         title: window.netsecT('Filter by research theme'),
         body:  window.netsecT('These chips group the directory by broad research theme, clustering people who work in the same area. Tap to narrow the list, tap more to widen the match. The keyword pills on each card are clickable too, and your selection lives in the URL so a filtered view is shareable.') },

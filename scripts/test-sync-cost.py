@@ -28,6 +28,7 @@ norm = sync_cost.norm
 slugify = sync_cost.slugify
 extract_leadership = sync_cost.extract_leadership
 apply_leadership = sync_cost.apply_leadership
+apply_mc_roles = sync_cost.apply_mc_roles
 
 
 def expect(label: str, got, want) -> None:
@@ -386,6 +387,77 @@ def test_apply_leadership_reconciles_wg_leadership() -> None:
                "WG3 Co-Leader" in bios["new-colead"]["roles"], True)
 
 
+# ─── apply_mc_roles() — Issue 2: MC roster → bios.json ─────────────
+
+def test_apply_mc_roles_tags_matching_bios() -> None:
+    """A bio whose name matches the MC roster (by normalised name)
+    gains "Management Committee · <Country>"; two reps sharing a
+    country each get their own tag (not a single-holder role like
+    apply_leadership's); a stale tag with the wrong country is
+    corrected; a bio no longer on the roster loses the tag; a
+    non-MC custom role survives untouched."""
+    print("\napply_mc_roles() — tags bios matching the MC roster:")
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        path = _seed_bios(tmp, [
+            # Matches the roster, not yet tagged.
+            {"id": "chiara-ruffa", "name": "Dr Chiara Ruffa",
+             "roles": ["WG1 Leader"], "source": "form"},
+            # Matches the roster, but carries a stale country.
+            {"id": "filip-ejdus", "name": "Prof Filip Ejdus",
+             "roles": ["Management Committee · Croatia"], "source": "form"},
+            # No longer on the roster — tag must be removed.
+            {"id": "dropped-rep", "name": "Dr Dropped Rep",
+             "roles": ["Management Committee · Spain"], "source": "form"},
+            # Not on the roster at all — untouched.
+            {"id": "no-match", "name": "Dr No Match",
+             "roles": ["WG2 Leader"], "source": "form"},
+        ])
+        mc = [
+            {"name": "Dr Chiara Ruffa", "country": "France", "country_code": "fr"},
+            {"name": "Prof Filip Ejdus", "country": "Serbia", "country_code": "rs"},
+        ]
+        saved = sync_cost.BIOS
+        sync_cost.BIOS = path
+        try:
+            apply_mc_roles(mc)
+        finally:
+            sync_cost.BIOS = saved
+        bios = {m["id"]: m for m in _read_bios(path)}
+        expect("new match tagged with its country",
+               "Management Committee · France" in bios["chiara-ruffa"]["roles"], True)
+        expect("existing custom role kept alongside the new tag",
+               "WG1 Leader" in bios["chiara-ruffa"]["roles"], True)
+        expect("stale country corrected",
+               bios["filip-ejdus"]["roles"], ["Management Committee · Serbia"])
+        expect("dropped rep loses the tag",
+               bios["dropped-rep"]["roles"], [])
+        expect("non-matching bio untouched",
+               bios["no-match"]["roles"], ["WG2 Leader"])
+
+
+def test_apply_mc_roles_idempotent() -> None:
+    """A second run with the same roster makes no changes."""
+    print("\napply_mc_roles() — idempotent on a second run:")
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        path = _seed_bios(tmp, [
+            {"id": "chiara-ruffa", "name": "Dr Chiara Ruffa",
+             "roles": [], "source": "form"},
+        ])
+        mc = [{"name": "Dr Chiara Ruffa", "country": "France", "country_code": "fr"}]
+        saved = sync_cost.BIOS
+        sync_cost.BIOS = path
+        try:
+            apply_mc_roles(mc)
+            before = path.read_text(encoding="utf-8")
+            apply_mc_roles(mc)
+            after = path.read_text(encoding="utf-8")
+        finally:
+            sync_cost.BIOS = saved
+        expect("second run is a no-op", after, before)
+
+
 # ─── build_wg_json() — per-WG dataset ──────────────────────────────
 
 def test_build_wg_json_resolves_leaders_and_members() -> None:
@@ -553,6 +625,8 @@ def main() -> None:
     test_build_wg_json_resolves_leaders_and_members()
     test_fetch_mc_parses_malformed_table()
     test_build_mc_json_reports_and_idempotent()
+    test_apply_mc_roles_tags_matching_bios()
+    test_apply_mc_roles_idempotent()
     test_apply_stats_rewrites_markers()
     print("\nAll smoke tests passed.")
 

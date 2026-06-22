@@ -128,7 +128,7 @@
       'Free-text search across names, affiliations, and countries. Combines with the filters.': 'Recherche en texte libre sur les noms, affiliations et pays. Se combine avec les filtres.',
       'The + button takes you straight to the join card at the foot of this page.': 'Le bouton + vous amène directement à la carte « Rejoindre le réseau » au pied de la page.',
       'Add yourself via the form here. About three minutes to fill in. Cards appear on this page within a week of submission.': 'Inscrivez-vous via le formulaire ci-dessous. Environ trois minutes. Les cartes apparaissent sur cette page sous une semaine après soumission.',
-      'WG1–WG4 filter by Working Group. MC members surfaces only Management Committee representatives.': "WG1–4 filtrent par groupe de travail. « Membres du CG » n'affiche que les représentant·es du Comité de gestion.",
+      'WG1–WG4 filter by Working Group. The Management Committee chip surfaces only Management Committee representatives.': "WG1–4 filtrent par groupe de travail. La pastille « Comité de gestion » n'affiche que les représentant·es du Comité de gestion.",
       'These chips group the directory by broad research theme, clustering people who work in the same area. Tap to narrow the list, tap more to widen the match. The keyword pills on each card are clickable too, and your selection lives in the URL so a filtered view is shareable.': "Ces pastilles regroupent l'annuaire par grand thème de recherche, en rassemblant les personnes qui travaillent dans le même domaine. Cliquez pour restreindre la liste, cliquez davantage pour élargir la correspondance. Les pastilles de mot-clé sur chaque fiche sont cliquables aussi, et votre sélection vit dans l'URL : une vue filtrée se partage en copiant l'adresse.",
       'A second, geographic axis: the parts of the world members focus their research on, not where they are based. Combine it with the themes above to narrow by both.': "Un second axe, géographique : les régions du monde sur lesquelles les membres concentrent leurs recherches, et non là où elles et ils sont basés. Combinez-le avec les thèmes ci-dessus pour restreindre selon les deux.",
       'Members can flag that they are available to mentor early-career researchers, or seeking mentorship themselves. Use these chips to find them. This row appears once at least one member has opted in.': "Les membres peuvent indiquer qu'ils sont disponibles comme mentor pour les chercheur·euses en début de carrière, ou en recherche de mentorat. Utilisez ces pastilles pour les trouver. Cette rangée apparaît dès qu'au moins un membre s'est inscrit.",
@@ -257,7 +257,7 @@
       'Free-text search across names, affiliations, and countries. Combines with the filters.': 'Freitext-Suche über Namen, Affiliationen und Länder. Lässt sich mit den Filtern kombinieren.',
       'The + button takes you straight to the join card at the foot of this page.': 'Der +-Button bringt Sie direkt zur „Beitreten"-Karte am Seitenende.',
       'Add yourself via the form here. About three minutes to fill in. Cards appear on this page within a week of submission.': 'Tragen Sie sich über das Formular unten ein. Etwa drei Minuten. Die Karte erscheint binnen einer Woche nach Einreichung auf dieser Seite.',
-      'WG1–WG4 filter by Working Group. MC members surfaces only Management Committee representatives.': 'WG1–4 filtern nach Arbeitsgruppe. „MC-Mitglieder" blendet nur Vertreter·innen des Management-Komitees ein.',
+      'WG1–WG4 filter by Working Group. The Management Committee chip surfaces only Management Committee representatives.': 'WG1–4 filtern nach Arbeitsgruppe. Die Pille „Management-Ausschuss" blendet nur Vertreter·innen des Management-Ausschusses ein.',
       'These chips group the directory by broad research theme, clustering people who work in the same area. Tap to narrow the list, tap more to widen the match. The keyword pills on each card are clickable too, and your selection lives in the URL so a filtered view is shareable.': 'Diese Pillen gruppieren das Verzeichnis nach grobem Forschungsthema und bündeln Personen, die im selben Bereich arbeiten. Klicken Sie, um die Liste einzugrenzen, klicken Sie weitere, um die Auswahl zu erweitern. Die Schlüsselwort-Pillen auf jeder Karte sind ebenfalls klickbar, und Ihre Auswahl steht in der URL, sodass sich eine gefilterte Ansicht teilen lässt.',
       'A second, geographic axis: the parts of the world members focus their research on, not where they are based. Combine it with the themes above to narrow by both.': 'Eine zweite, geografische Achse: die Weltregionen, auf die Mitglieder ihre Forschung richten, nicht wo sie ansässig sind. Kombinieren Sie sie mit den Themen oben, um nach beidem einzugrenzen.',
       'Members can flag that they are available to mentor early-career researchers, or seeking mentorship themselves. Use these chips to find them. This row appears once at least one member has opted in.': 'Mitglieder können angeben, dass sie als Mentor für Nachwuchsforschende verfügbar sind oder selbst Mentoring suchen. Mit diesen Chips finden Sie sie. Diese Reihe erscheint, sobald mindestens ein Mitglied teilnimmt.',
@@ -272,10 +272,50 @@
       'Close tour': 'Tour schließen',
     },
   };
+  /* Country-name table for the " · <Country>" tail of role strings like
+     "Management Committee · Switzerland" (data/mc-members.json / bios.json
+     always carry the English exonym). Covers every country appearing in
+     either data file. */
+  const COUNTRY_I18N = {
+    fr: {
+      'Albania': 'Albanie', 'Austria': 'Autriche', 'Belgium': 'Belgique',
+      'Bosnia and Herzegovina': 'Bosnie-Herzégovine', 'Bulgaria': 'Bulgarie',
+      'Canada': 'Canada', 'Croatia': 'Croatie', 'Cyprus': 'Chypre',
+      'Czechia': 'Tchéquie', 'Denmark': 'Danemark', 'Finland': 'Finlande',
+      'France': 'France', 'Georgia': 'Géorgie', 'Germany': 'Allemagne',
+      'Greece': 'Grèce', 'Iceland': 'Islande', 'Ireland': 'Irlande',
+      'Italy': 'Italie', 'Lithuania': 'Lituanie', 'Moldova': 'Moldavie',
+      'Montenegro': 'Monténégro', 'Netherlands': 'Pays-Bas',
+      'North Macedonia': 'Macédoine du Nord', 'Norway': 'Norvège',
+      'Poland': 'Pologne', 'Portugal': 'Portugal', 'Romania': 'Roumanie',
+      'Serbia': 'Serbie', 'Slovakia': 'Slovaquie', 'Slovenia': 'Slovénie',
+      'Spain': 'Espagne', 'Sweden': 'Suède', 'Switzerland': 'Suisse',
+      'Türkiye': 'Turquie', 'Ukraine': 'Ukraine',
+      'United Kingdom': 'Royaume-Uni', 'United States': 'États-Unis',
+    },
+    de: {
+      'Albania': 'Albanien', 'Austria': 'Österreich', 'Belgium': 'Belgien',
+      'Bosnia and Herzegovina': 'Bosnien und Herzegowina', 'Bulgaria': 'Bulgarien',
+      'Canada': 'Kanada', 'Croatia': 'Kroatien', 'Cyprus': 'Zypern',
+      'Czechia': 'Tschechien', 'Denmark': 'Dänemark', 'Finland': 'Finnland',
+      'France': 'Frankreich', 'Georgia': 'Georgien', 'Germany': 'Deutschland',
+      'Greece': 'Griechenland', 'Iceland': 'Island', 'Ireland': 'Irland',
+      'Italy': 'Italien', 'Lithuania': 'Litauen', 'Moldova': 'Moldau',
+      'Montenegro': 'Montenegro', 'Netherlands': 'Niederlande',
+      'North Macedonia': 'Nordmazedonien', 'Norway': 'Norwegen',
+      'Poland': 'Polen', 'Portugal': 'Portugal', 'Romania': 'Rumänien',
+      'Serbia': 'Serbien', 'Slovakia': 'Slowakei', 'Slovenia': 'Slowenien',
+      'Spain': 'Spanien', 'Sweden': 'Schweden', 'Switzerland': 'Schweiz',
+      'Türkiye': 'Türkei', 'Ukraine': 'Ukraine',
+      'United Kingdom': 'Vereinigtes Königreich', 'United States': 'Vereinigte Staaten',
+    },
+  };
   /** Translate a known string for the current page's language.
    *  Falls back to the original if no translation is registered.
-   *  Strings of the form "Management Committee · Switzerland" translate only
-   *  the prefix before " · " so the country name stays intact. */
+   *  Strings of the form "Management Committee · Switzerland" translate
+   *  both the prefix before " · " (via I18N) and the country name after it
+   *  (via COUNTRY_I18N), independently, so an unrecognised role prefix or
+   *  country still falls back to its English original. */
   window.netsecT = function (s) {
     if (typeof s !== 'string') return s;
     const lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
@@ -284,7 +324,9 @@
     const sep = ' · ';
     if (s.includes(sep)) {
       const [head, ...rest] = s.split(sep);
-      return (dict[head] || head) + sep + rest.join(sep);
+      const tail = rest.join(sep);
+      const countries = COUNTRY_I18N[lang];
+      return (dict[head] || head) + sep + ((countries && countries[tail]) || tail);
     }
     return dict[s] || s;
   };
