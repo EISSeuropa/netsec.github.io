@@ -911,6 +911,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   text-align:center;
   font-size:.9rem;color:var(--muted);
 }
+.news-seeall{font-weight:600;font-size:.95rem}
 .event-subscribe,
 .news-subscribe{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
