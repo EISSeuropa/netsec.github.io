@@ -911,6 +911,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   text-align:center;
   font-size:.9rem;color:var(--muted);
 }
+.news-seeall{font-weight:600;font-size:.95rem}
 .event-subscribe,
 .news-subscribe{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
@@ -958,6 +959,15 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .news-archive-list .news-card h3{font-size:1.3rem;line-height:1.25}
 .news-archive-list .card-clickable h3{color:var(--accent)}
 .news-archive-list .news-card p{font-size:1rem}
+/* Mobile "Read more": clamp the home-block body to a few lines and reveal a
+   toggle. Desktop and the archive show the full text, so the button is hidden
+   there. :not(.news-archive-list) scopes the clamp to the home block. */
+.news-readmore{display:none;margin-top:2px;padding:0;background:none;border:0;color:var(--accent);font-size:.9rem;font-weight:600;cursor:pointer}
+@media (max-width:640px){
+  .news-list:not(.news-archive-list) .news-card p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .news-list:not(.news-archive-list) .news-card.is-expanded p{-webkit-line-clamp:unset;overflow:visible}
+  .news-readmore{display:inline-block}
+}
 
 /* ── Upcoming-event banner ────────────────────────────────────
    A single dynamic card slotted between the hero and Latest News

@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=08a4031f">
+<link rel="stylesheet" href="assets/css/site.css?v=61419387">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -208,35 +208,6 @@
   </div>
 </section>
 
-<!-- Banner für bevorstehende Veranstaltung.
-     Eine einzelne dynamische Karte, die auf die nächste NetSec-
-     Konferenz / Schulung / Plenarsitzung verweist. Wird beim
-     Seitenladen aus `data/events.json` gebaut. `hidden`, bis das
-     Inline-Skript bestätigt, dass eine passende Veranstaltung
-     existiert — Besucher ohne JS sehen also keinen kaputten oder
-     veralteten Streifen. -->
-<section class="upcoming-event" aria-label="Bevorstehende Veranstaltung" hidden>
-  <div class="container reveal">
-    <article class="ue-card glass" data-state="upcoming">
-      <div class="ue-body">
-        <div class="ue-status">
-          <span class="dot" aria-hidden="true"></span>
-          <span class="ue-status-label"></span>
-        </div>
-        <h2 class="ue-headline"></h2>
-        <p class="ue-meta"></p>
-      </div>
-      <div class="ue-cta">
-        <a class="btn btn-primary ue-primary" href="#"></a>
-        <a class="btn btn-ghost ue-secondary" href="webcal://netsec-cost.eu/calendar.ics" rel="alternate" type="text/calendar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>
-          <span class="lbl">Zum Kalender hinzufügen</span>
-        </a>
-      </div>
-    </article>
-  </div>
-</section>
-
 <!-- Aktuelles -->
 <section id="news">
   <div class="container reveal">
@@ -276,6 +247,7 @@
          Spiegelt die Kalender-Abonnement-Affordanz unter dem
          Veranstaltungs-Raster. -->
     <p class="news-subscribe-line">
+      <a class="news-seeall" href="news.de.html">Alle Neuigkeiten ansehen &rarr;</a>
       <a class="news-subscribe" href="news.xml" type="application/rss+xml">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 019 9"/><path d="M4 4a16 16 0 0116 16"/><circle cx="5" cy="19" r="1" fill="currentColor"/></svg>
         NetSec-Aktuelles abonnieren (RSS)
@@ -620,7 +592,7 @@
   </button>
 </div>
 
-<script src="assets/js/site.js?v=c36f3f16" defer></script>
+<script src="assets/js/site.js?v=a2534e16" defer></script>
 
 <!-- Veranstaltungs-Renderer der Startseite (#249). Ersetzt die
      handgepflegten Karten oben aus data/events.json; das HTML
@@ -629,7 +601,7 @@
 <!-- News-Renderer + RSS-Feed (v1.9.0). Gleiche Struktur wie der
      Veranstaltungs-Renderer; die handgepflegten News-Karten bleiben
      als Fallback, falls data/news.json nicht geladen werden kann. -->
-<script src="assets/js/home-news.js?v=a7b92d58" defer></script>
+<script src="assets/js/home-news.js?v=82d14e68" defer></script>
 <script src="assets/js/home-spotlight.js?v=5ac6ac80" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -732,199 +704,6 @@ document.addEventListener('DOMContentLoaded', function () {
     el.appendChild(wrap);
   });
 });
-</script>
-
-<!-- ──────────────────────────────────────────────────────────────
-     Upcoming-event banner populator.
-     Reads data/events.json (the canonical source the calendar.ics
-     feed is also built from), filters to events whose URL lives on
-     netsec-cost.eu (so the CTA never sends visitors off-site by
-     surprise), and shows the most-imminent one. Auto-hides when
-     no qualifying event is upcoming or recently-concluded.
-     ────────────────────────────────────────────────────────────── -->
-<script>
-(async function () {
-  const section = document.querySelector('.upcoming-event');
-  if (!section) return;
-  const lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
-  const L = ({
-    en: {
-      starts_in: (n) => n === 1 ? 'Starts tomorrow' : `Starts in ${n} days`,
-      day_of:    'Starts today',
-      live:      (n) => `Live now · ${n} session${n === 1 ? '' : 's'} today`,
-      live_no_n: 'Live now',
-      ended:     'Concluded · Programme archive',
-      view_live: 'View live programme →',
-      view_arch: 'View programme archive →',
-      view_pg:   'View programme →',
-      add_cal:   'Add to calendar',
-    },
-    fr: {
-      starts_in: (n) => n === 1 ? 'Commence demain' : `Commence dans ${n} jours`,
-      day_of:    'Commence aujourd’hui',
-      live:      (n) => `En direct · ${n} session${n === 1 ? '' : 's'} aujourd’hui`,
-      live_no_n: 'En direct',
-      ended:     'Terminée · Archive du programme',
-      view_live: 'Voir le programme en direct →',
-      view_arch: 'Voir l’archive du programme →',
-      view_pg:   'Voir le programme →',
-      add_cal:   'Ajouter au calendrier',
-    },
-    de: {
-      starts_in: (n) => n === 1 ? 'Beginnt morgen' : `Beginnt in ${n} Tagen`,
-      day_of:    'Beginnt heute',
-      live:      (n) => `Jetzt live · ${n} Sitzung${n === 1 ? '' : 'en'} heute`,
-      live_no_n: 'Jetzt live',
-      ended:     'Abgeschlossen · Programmarchiv',
-      view_live: 'Live-Programm ansehen →',
-      view_arch: 'Programmarchiv ansehen →',
-      view_pg:   'Programm ansehen →',
-      add_cal:   'Zum Kalender hinzufügen',
-    },
-  })[lang] || null;
-  if (!L) return;
-
-  let events;
-  try {
-    const res = await fetch('data/events.json', { cache: 'no-cache' });
-    if (!res.ok) return;
-    events = (await res.json()).events || [];
-  } catch (err) {
-    return; // Silent — banner is enhancement, not load-blocking.
-  }
-
-  // Keep events whose URL lives on netsec-cost.eu (so the CTA lands
-  // on a NetSec-hosted page) AND whose end-date is within ±35 days
-  // of today. That window keeps the strip visible from "five weeks
-  // out" through "just concluded".
-  const now = Date.now();
-  const DAY = 86_400_000;
-  const HOSTED = /netsec-cost\.eu/i;
-  const candidates = events
-    .filter(e => e.url && HOSTED.test(e.url))
-    .map(e => {
-      const start = new Date(e.start).getTime();
-      const end   = new Date(e.end).getTime();
-      return { ...e, _start: start, _end: end };
-    })
-    .filter(e => !isNaN(e._start) && !isNaN(e._end))
-    .filter(e => e._end >= now - 35 * DAY && e._start <= now + 60 * DAY)
-    // Sort: live first, then nearest upcoming, then most-recently concluded.
-    // Ranking the three states explicitly keeps an upcoming event ahead of a
-    // past one, and orders several just-concluded events newest-first (so the
-    // ESSC archive shows before the Summer School in the days after both end).
-    .sort((a, b) => {
-      const rank = (e) => (e._start <= now && now <= e._end) ? 0 : (e._start > now ? 1 : 2);
-      const ra = rank(a), rb = rank(b);
-      if (ra !== rb) return ra - rb;
-      if (ra === 2) return b._end - a._end;
-      return a._start - b._start;
-    });
-
-  if (candidates.length === 0) return;
-  const ev = candidates[0];
-
-  // Compute the state + status label.
-  const card = section.querySelector('.ue-card');
-  const statusLbl = section.querySelector('.ue-status-label');
-  const headlineE = section.querySelector('.ue-headline');
-  const metaE     = section.querySelector('.ue-meta');
-  const primary   = section.querySelector('.ue-primary');
-  const secondary = section.querySelector('.ue-secondary');
-
-  const daysUntilStart = Math.ceil((ev._start - now) / DAY);
-
-  if (now < ev._start) {
-    // Upcoming
-    if (daysUntilStart === 0) {
-      card.dataset.state = 'live';
-      statusLbl.textContent = L.day_of;
-    } else if (daysUntilStart <= 7) {
-      card.dataset.state = 'soon';
-      statusLbl.textContent = L.starts_in(daysUntilStart);
-    } else {
-      card.dataset.state = 'upcoming';
-      statusLbl.textContent = L.starts_in(daysUntilStart);
-    }
-    primary.textContent = L.view_pg;
-  } else if (now <= ev._end) {
-    // Live now. Try to read indico.json to surface today's session count;
-    // fall back to a no-count label if the fetch fails.
-    card.dataset.state = 'live';
-    statusLbl.textContent = L.live_no_n;
-    primary.textContent = L.view_live;
-    fetch('data/indico.json', { cache: 'no-cache' })
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
-        if (!d || !d.annualConferences) return;
-        const year = new Date(ev._start).getFullYear();
-        const conf = d.annualConferences[String(year)];
-        if (!conf || !conf.programme || !conf.programme.days) return;
-        const today = new Date().toISOString().slice(0, 10);
-        const day = conf.programme.days.find(d => d.date === today);
-        if (!day) return;
-        const sessionCount = (day.rows || []).reduce(
-          (n, r) => n + ((r.items || []).filter(i => i.kind === 'session').length), 0
-        );
-        if (sessionCount > 0) statusLbl.textContent = L.live(sessionCount);
-      })
-      .catch(() => {});
-  } else {
-    // Concluded
-    card.dataset.state = 'concluded';
-    statusLbl.textContent = L.ended;
-    primary.textContent = L.view_arch;
-  }
-
-  // Localised date range for the meta line. Use the page's lang for
-  // formatting so "11–12 June" → "11–12 juin" / "11.–12. Juni".
-  const dateLocale = lang === 'fr' ? 'fr-FR' : lang === 'de' ? 'de-DE' : 'en-GB';
-  const startD = new Date(ev._start);
-  const endD   = new Date(ev._end);
-  let dateStr;
-  if (startD.toDateString() === endD.toDateString()) {
-    dateStr = startD.toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' });
-  } else if (startD.getMonth() === endD.getMonth() && startD.getFullYear() === endD.getFullYear()) {
-    const month = startD.toLocaleDateString(dateLocale, { month: 'long' });
-    dateStr = `${startD.getDate()}–${endD.getDate()} ${month} ${endD.getFullYear()}`;
-  } else {
-    const a = startD.toLocaleDateString(dateLocale, { day: 'numeric', month: 'short' });
-    const b = endD.toLocaleDateString(dateLocale, { day: 'numeric', month: 'short', year: 'numeric' });
-    dateStr = `${a} – ${b}`;
-  }
-
-  headlineE.textContent = ev.summary || '';
-
-  // Build the meta line from dates + location (first comma-segment of
-  // the address, to keep it short on mobile). Use <strong> for the
-  // venue so the eye lands on "Stockholm University" rather than the
-  // street address.
-  const venue = (ev.location || '').split(',')[0].trim();
-  metaE.innerHTML = '';
-  const dateSpan = document.createElement('strong');
-  dateSpan.textContent = dateStr;
-  metaE.appendChild(dateSpan);
-  if (venue) {
-    metaE.append(' · ');
-    const venueSpan = document.createElement('strong');
-    venueSpan.textContent = venue;
-    metaE.appendChild(venueSpan);
-  }
-
-  // Locale-aware programme URL. The data/events.json url is the
-  // canonical EN URL; rewrite it to the matching FR / DE sibling.
-  let url = ev.url;
-  if (lang !== 'en') {
-    url = url.replace(/\.html(?:[#?]|$)/, m => '.' + lang + m);
-  }
-  primary.href = url;
-  // Only swap the label span; the leading <svg> icon stays put.
-  const secondaryLbl = secondary.querySelector('.lbl');
-  if (secondaryLbl) secondaryLbl.textContent = L.add_cal;
-
-  // Reveal.
-  section.hidden = false;
-})();
 </script>
 
 </body>
