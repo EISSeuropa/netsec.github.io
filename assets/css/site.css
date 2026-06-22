@@ -67,6 +67,13 @@
   --wg-2:#10b981;
   --wg-3:#8b5cf6;
   --wg-4:#f59e0b;
+  /* Readable label colour for each WG hue, so every WG pill (events, news,
+     directory, working-groups) reads the same: white on the two dark hues,
+     dark ink on the two light ones (green, amber). Single source of truth. */
+  --wg-1-ink:#fff;
+  --wg-2-ink:#04321f;
+  --wg-3-ink:#fff;
+  --wg-4-ink:#3b2a00;
   --rm-shipped-check:#2e9e6a;  /* roadmap "N tasks done" tick (dark variant below) */
   --radius:22px;
   --radius-sm:14px;
@@ -545,10 +552,10 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   white-space:nowrap;
 }
 /* Per-WG colour for at-a-glance distinction */
-.wg-chip.wg-1{background:linear-gradient(135deg,var(--wg-1),#5b8def)}
-.wg-chip.wg-2{background:linear-gradient(135deg,var(--wg-2),#34d399)}
-.wg-chip.wg-3{background:linear-gradient(135deg,var(--wg-3),#a78bfa)}
-.wg-chip.wg-4{background:linear-gradient(135deg,var(--wg-4),#fbbf24);color:#3b2a00}
+.wg-chip.wg-1{background:linear-gradient(135deg,var(--wg-1),#5b8def);color:var(--wg-1-ink)}
+.wg-chip.wg-2{background:linear-gradient(135deg,var(--wg-2),#34d399);color:var(--wg-2-ink)}
+.wg-chip.wg-3{background:linear-gradient(135deg,var(--wg-3),#a78bfa);color:var(--wg-3-ink)}
+.wg-chip.wg-4{background:linear-gradient(135deg,var(--wg-4),#fbbf24);color:var(--wg-4-ink)}
 
 /* ── Working Groups page (working-groups.html) ─────────────────────── */
 .wg-page .wg-page-head{padding:48px 0 8px}
@@ -560,10 +567,10 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .wg-stat-n{font-family:'Lexend','Inter',sans-serif;font-size:1.8rem;font-weight:700;line-height:1;color:var(--ink)}
 .wg-stat-l{font-size:.82rem;color:var(--muted)}
 .wg-page .wg-tag{display:inline-flex;align-items:center;margin:0;font-size:.74rem;font-weight:700;padding:.25rem .55rem;border-radius:7px;color:#fff;letter-spacing:.02em;line-height:1}
-.wg-page .wg-tag.wg-1{background:var(--wg-1)}
-.wg-page .wg-tag.wg-2{background:var(--wg-2)}
-.wg-page .wg-tag.wg-3{background:var(--wg-3)}
-.wg-page .wg-tag.wg-4{background:var(--wg-4);color:#3b2a00}
+.wg-page .wg-tag.wg-1{background:var(--wg-1);color:var(--wg-1-ink)}
+.wg-page .wg-tag.wg-2{background:var(--wg-2);color:var(--wg-2-ink)}
+.wg-page .wg-tag.wg-3{background:var(--wg-3);color:var(--wg-3-ink)}
+.wg-page .wg-tag.wg-4{background:var(--wg-4);color:var(--wg-4-ink)}
 .wg-jump{display:flex;flex-wrap:wrap;gap:10px;margin-top:1.6rem}
 /* Scoped under .wg-page so `text-decoration:none` out-specifies the
    `.prose-page a` underline (same tie-break trap as the member cards). */
@@ -744,10 +751,10 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
    than before so the small label stays legible. */
 .event-wg-pill{font-family:'Inter',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.02em;padding:3px 9px;border-radius:7px;color:#fff;text-decoration:none;line-height:1.4;transition:opacity .15s var(--ease)}
 .event-wg-pill:hover{opacity:.85}
-.event-wg-pill.wg-1{background:var(--wg-1)}
-.event-wg-pill.wg-2{background:var(--wg-2);color:#04321f}
-.event-wg-pill.wg-3{background:var(--wg-3)}
-.event-wg-pill.wg-4{background:var(--wg-4);color:#3b2a00}
+.event-wg-pill.wg-1{background:var(--wg-1);color:var(--wg-1-ink)}
+.event-wg-pill.wg-2{background:var(--wg-2);color:var(--wg-2-ink)}
+.event-wg-pill.wg-3{background:var(--wg-3);color:var(--wg-3-ink)}
+.event-wg-pill.wg-4{background:var(--wg-4);color:var(--wg-4-ink)}
 .event-card h3,.output-card h3,.news-card h3{font-size:1.1rem;margin:0}
 .event-card p,.output-card p,.news-card p{font-size:.92rem;color:var(--muted);margin:0;flex-grow:1}
 /* Dedicated Events page (events.html) — reuses .event-card; adds the type
@@ -948,7 +955,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .news-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .news-tag{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:999px;line-height:1.6;white-space:nowrap}
 .news-tag--cat{color:var(--accent);background:color-mix(in srgb,var(--accent) 13%,transparent)}
-.news-tag--wg{color:#fff}
+.news-tag--wg{color:var(--wg-ink,#fff)}
 /* News archive: a flat, readable list (hairline dividers, larger titles,
    year headings) rather than the boxed glass cards used on the home block. */
 .news-year{font-size:.9rem;font-weight:700;letter-spacing:.05em;color:var(--muted);text-transform:uppercase;margin:34px 0 0}
