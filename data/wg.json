@@ -184,7 +184,8 @@
         },
         {
           "name": "Dr Marko Kovacevic",
-          "country": "Serbia"
+          "country": "Serbia",
+          "slug": "marko-kovacevic"
         },
         {
           "name": "Dr Martin Chovancik",
@@ -486,7 +487,8 @@
         },
         {
           "name": "Dr Marko Kovacevic",
-          "country": "Serbia"
+          "country": "Serbia",
+          "slug": "marko-kovacevic"
         },
         {
           "name": "Dr Martin Chovancik",
@@ -588,7 +590,8 @@
         },
         {
           "name": "Ms Vasiliki Plessia Aravani",
-          "country": "Austria"
+          "country": "Austria",
+          "slug": "vasiliki-plessia-aravani"
         },
         {
           "name": "Prof Vedat Coskun",
@@ -833,7 +836,8 @@
         },
         {
           "name": "Dr Marko Kovacevic",
-          "country": "Serbia"
+          "country": "Serbia",
+          "slug": "marko-kovacevic"
         },
         {
           "name": "Dr Martin Chovancik",
@@ -960,7 +964,8 @@
         },
         {
           "name": "Ms Yijun Xu",
-          "country": "Germany"
+          "country": "Germany",
+          "slug": "yijun-xu"
         },
         {
           "name": "Dr Yusuf Özer",
@@ -1086,7 +1091,8 @@
         },
         {
           "name": "Dr Marko Kovacevic",
-          "country": "Serbia"
+          "country": "Serbia",
+          "slug": "marko-kovacevic"
         },
         {
           "name": "Prof Mehmet Gokay Ozerim",

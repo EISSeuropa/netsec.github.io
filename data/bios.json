@@ -1612,7 +1612,9 @@
       "affiliation": "Free University of Berlin",
       "position": "PhD Candidate",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        3
+      ],
       "mentorship": [
         "mentee"
       ],
@@ -1657,7 +1659,9 @@
       "affiliation": "Vienna School of International Studies, University of Vienna",
       "position": "Marie Curie Early Stage Researcher, PhD Candidate",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        2
+      ],
       "mentorship": [
         "mentee"
       ],
@@ -1750,7 +1754,12 @@
       "affiliation": "University of Belgrade, Faculty of Political Science",
       "position": "Assistant Professor",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        2,
+        3,
+        4
+      ],
       "mentorship": [
         "mentor"
       ],
