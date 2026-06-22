@@ -101,7 +101,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Post to Bluesky and update the ledger
+      - name: Post to Bluesky + LinkedIn and update the ledger
         env:
           # A news.xml push posts NEWS only; the weekly spotlight is ungated
           # (spotlight-rotate.yml) and must not be swept into this approval gate.
@@ -110,11 +110,21 @@ jobs:
           THREAD: ${{ github.event.inputs.thread || '' }}
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
           BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+          # LinkedIn (org page). ORG_ID + ACCESS_TOKEN are required to post;
+          # REFRESH_TOKEN + CLIENT_ID + CLIENT_SECRET let the adapter renew an
+          # expired access token. An unset secret resolves to empty and the
+          # LinkedIn channel is simply skipped (configured() is false), so this
+          # stays a no-op for LinkedIn until the secrets are in place.
+          LINKEDIN_ORG_ID: ${{ secrets.LINKEDIN_ORG_ID }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_REFRESH_TOKEN: ${{ secrets.LINKEDIN_REFRESH_TOKEN }}
+          LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID }}
+          LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET }}
         run: |
           if [ -n "$THREAD" ]; then
             python3 scripts/social-post.py --live --thread "data/social-threads/${THREAD}.json"
           else
-            python3 scripts/social-post.py --live --channel bluesky --kind "$KIND"
+            python3 scripts/social-post.py --live --channel all --kind "$KIND"
           fi
 
       - name: Persist the dedup ledger via an auto-merging PR

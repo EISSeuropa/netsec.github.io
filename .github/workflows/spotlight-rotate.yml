@@ -112,21 +112,31 @@ jobs:
             echo "_Workflow: **Rotate member spotlight**, run_id \`${{ github.run_id }}\`, trigger \`${{ github.event_name }}\`._"
           } > /tmp/spotlight-pr-body.md
 
-      - name: Post the spotlight to Bluesky (ungated, idempotent)
+      - name: Post the spotlight to Bluesky + LinkedIn (ungated, idempotent)
         # Posts the current week's spotlight. Idempotent: the dedup key carries
         # the ISO week, so a re-run (or a no-rotation week) posts nothing. Kept
-        # non-blocking so a Bluesky hiccup never holds up the home-page rotation;
+        # non-blocking so a social hiccup never holds up the home-page rotation;
         # if it fails, the ledger stays unchanged and the next run retries.
+        # --best-effort means a LinkedIn failure (e.g. an expired token) doesn't
+        # stop the Bluesky post, and `continue-on-error` keeps a total failure
+        # off the job's red X.
         continue-on-error: true
         env:
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
           BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+          # LinkedIn org page (ungated). Same secrets as the gated environment;
+          # unset ones resolve to empty and LinkedIn is skipped.
+          LINKEDIN_ORG_ID: ${{ secrets.LINKEDIN_ORG_ID }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_REFRESH_TOKEN: ${{ secrets.LINKEDIN_REFRESH_TOKEN }}
+          LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID }}
+          LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET }}
         run: |
           if [ -z "$BSKY_HANDLE" ] || [ -z "$BSKY_APP_PASSWORD" ]; then
             echo "::warning::Bluesky secrets not set on the social-auto environment; skipping the spotlight post."
             exit 0
           fi
-          python3 scripts/social-post.py --live --channel bluesky --kind spotlight
+          python3 scripts/social-post.py --live --channel all --best-effort --kind spotlight
 
       - name: Compose PR title
         id: pr-title

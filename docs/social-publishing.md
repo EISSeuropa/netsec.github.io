@@ -10,7 +10,7 @@ This is being built in phases:
 | --- | --- | --- |
 | 1 | Composer + dedup ledger + `--dry-run` preview + tests | **done** |
 | 2 | Bluesky adapter + the `social-bluesky.yml` workflow + the approval gate | **done** (live once the Bluesky secrets + `social` environment exist) |
-| 3 | LinkedIn adapter | after the LinkedIn app + token clear vetting |
+| 3 | LinkedIn adapter (Posts API + image upload) + token refresh, wired into the gated `social-bluesky.yml` and the ungated `spotlight-rotate.yml` | **done** (live once the LinkedIn secrets exist on the `social` / `social-auto` environments) |
 
 `--dry-run` publishes nothing: it builds the post text, picks the image, and
 prints exactly what *would* go out. Live posting only happens inside the
@@ -132,14 +132,28 @@ with a page-admin's approval. Plan ~30 minutes.
    **"Advertising API"** / **"Community Management API"** access (the product
    that grants `w_organization_social`). Page-admin approval may be required;
    approve it from the page.
-4. Under **Auth**, note the **Client ID** and **Client Secret**, and generate
-   an **access token** with the `w_organization_social` scope (the OAuth
-   "3-legged" flow, authorised as a page admin).
-   - **Important:** LinkedIn access tokens expire after **~60 days**. Save the
-     **refresh token** too; the pipeline (phase 3) will use it to renew. Put a
-     recurring reminder to re-authorise if refresh ever fails.
-5. You will add these environment secrets in step D: `LINKEDIN_ORG_ID` (the number
-   from step 1), `LINKEDIN_ACCESS_TOKEN`, and `LINKEDIN_REFRESH_TOKEN`.
+4. Under **Auth**, note the **Client ID** and **Primary Client Secret**, and
+   generate an **access token** with the `w_organization_social` scope (OAuth
+   "3-legged", authorised as a page admin). `scripts/linkedin-token.py` walks
+   the two steps so you don't hand-build curl:
+   ```
+   python3 scripts/linkedin-token.py auth-url  --client-id <ID> --redirect-uri <URL>
+   # open the printed URL, approve, copy the ?code= value, then:
+   python3 scripts/linkedin-token.py exchange  --client-id <ID> --client-secret <SECRET> \
+       --redirect-uri <URL> --code <CODE>
+   ```
+   It prints `LINKEDIN_ACCESS_TOKEN` and `LINKEDIN_REFRESH_TOKEN`. Run it
+   locally; nothing leaves your machine except the call to LinkedIn.
+   - **Important:** access tokens expire after **~60 days**. The adapter renews
+     them automatically from the refresh token (which lasts ~1 year) **if** the
+     Client ID and Secret are also in the environment; otherwise re-run
+     `linkedin-token.py refresh` (or `exchange` once the refresh token lapses).
+5. You will add these environment secrets in step D: `LINKEDIN_ORG_ID` (the
+   number from step 1), `LINKEDIN_ACCESS_TOKEN`, `LINKEDIN_REFRESH_TOKEN`, and —
+   to let the pipeline auto-renew — `LINKEDIN_CLIENT_ID` and
+   `LINKEDIN_CLIENT_SECRET`. The adapter pins `LinkedIn-Version` (currently a
+   recent `YYYYMM`); set `LINKEDIN_API_VERSION` to override it when LinkedIn
+   sunsets that version (~yearly).
 
 ### C. Create the approval gate (do this before adding the secrets)
 
@@ -166,26 +180,41 @@ Environment secrets → Add secret**, and add each of:
 | `LINKEDIN_ORG_ID` | step B.1 |
 | `LINKEDIN_ACCESS_TOKEN` | step B.4 |
 | `LINKEDIN_REFRESH_TOKEN` | step B.4 |
+| `LINKEDIN_CLIENT_ID` | step B.4 — lets the pipeline auto-renew an expired token |
+| `LINKEDIN_CLIENT_SECRET` | step B.4 — same |
+
+`LINKEDIN_ORG_ID` and `LINKEDIN_ACCESS_TOKEN` are the minimum to post; the other
+three let the adapter renew the access token on its own when it expires. With
+any LinkedIn secret unset, the channel is simply skipped (Bluesky still posts),
+so you can add Bluesky first and LinkedIn later.
 
 ### E. (Optional) the `social-auto` environment for the auto spotlight
 
 The **weekly member spotlight posts itself**, with no approval — it is
 auto-generated, low-risk content. The rotation workflow (`spotlight-rotate.yml`)
-runs in a second environment, **`social-auto`**, which holds the same Bluesky
-credentials but has **no required reviewer**, so the post goes straight out.
+runs in a second environment, **`social-auto`**, which holds the same
+credentials but has **no required reviewer**, so the post goes straight out. It
+posts to both Bluesky and LinkedIn, best-effort: a LinkedIn failure (e.g. an
+expired token) never blocks the Bluesky post.
 
 To enable it: **Settings → Environments → New environment → `social-auto`**,
 leave **Required reviewers unchecked** (optionally restrict it to the `main`
-branch), and add the two Bluesky environment secrets there as well:
+branch), and add the same environment secrets there as on `social`:
 
 | Secret | From |
 | --- | --- |
 | `BSKY_HANDLE` | step A — the bare handle |
 | `BSKY_APP_PASSWORD` | step A |
+| `LINKEDIN_ORG_ID` | step B.1 (omit the LinkedIn block to keep the spotlight Bluesky-only) |
+| `LINKEDIN_ACCESS_TOKEN` | step B.4 |
+| `LINKEDIN_REFRESH_TOKEN` | step B.4 |
+| `LINKEDIN_CLIENT_ID` | step B.4 |
+| `LINKEDIN_CLIENT_SECRET` | step B.4 |
 
-If you skip this, the rotation still runs and the home-page spotlight still
-rotates; the post step simply logs a warning and does nothing (no secrets). News
-and curated threads are unaffected — they stay on the gated `social` environment.
+If you skip this environment entirely, the rotation still runs and the home-page
+spotlight still rotates; the post step simply logs a warning and does nothing (no
+secrets). News and curated threads are unaffected — they stay on the gated
+`social` environment.
 
 Why environment secrets and not repository secrets: an environment secret is
 only released to a job that targets `environment: social`, and only **after**
@@ -198,26 +227,35 @@ add them at repo level as well.
 Secrets are write-only: once saved, no one (including the maintainer) can read
 them back, only overwrite them.
 
-### E. Test it (Bluesky)
+### F. Test it (gated first, LinkedIn included)
 
 Once the Bluesky secrets (A) and the `social` environment (C, D) exist, the
-`Publish to Bluesky (approval-gated)` workflow is live. To do a first, safe
-test:
+`Publish to Bluesky (approval-gated)` workflow is live. **Validate LinkedIn
+through this gated path first**, before relying on the ungated weekly spotlight:
+the preview shows the exact post and you approve each one, so the first real
+LinkedIn post is one you have eyes on.
 
 1. In the repo, go to **Actions → Publish to Bluesky (approval-gated) → Run
    workflow**. Leave the input as `all` (or pick `spotlight`) and run it.
 2. The **preview** job runs first and writes the exact post(s) + image to the
-   run summary. Open the run and read it.
+   run summary, in both the Bluesky and LinkedIn renderings. Open the run and
+   read it.
 3. The **publish** job is then held at the `social` gate — you (the reviewer)
    get an email "Deployment review pending". Read the preview, then click
    **Approve and deploy** to post, or **Reject** to cancel.
-4. After approval, the post goes to Bluesky and a small auto-merging PR records
-   it in the ledger so it is never posted twice.
+4. After approval, the post goes to **both Bluesky and LinkedIn** and a small
+   auto-merging PR records it in the ledger so it is never posted twice.
 
 After that first test, it runs on its own: a new news item (a `news.xml`
 change on `main`) or the weekly spotlight rotation (a `data/spotlight.json`
 change) triggers the same preview-then-approve flow. Nothing posts without your
 approval.
+
+A first-run caveat on the LinkedIn image upload: the adapter uploads the
+spotlight OG card with an HTTP `PUT` to LinkedIn's returned upload URL. If a
+spotlight post ever fails with a `405 Method Not Allowed` on the image step, the
+upload wants `POST` instead — a one-line change in `LinkedInChannel._upload_image`
+(`scripts/social-post.py`). Text-only posts (news) are unaffected.
 
 The ledger is seeded so the four news items already on the site are not
 re-announced; the **current spotlight** is left unseeded, so your first run
