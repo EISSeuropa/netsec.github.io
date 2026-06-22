@@ -43,10 +43,11 @@
     }
     if (item.wg) {
       // Tint with the existing per-WG accent var; no .wg-N class on the tag,
-      // to keep this class's rules in one place (css-collision lint).
+      // to keep this class's rules in one place (css-collision lint). The
+      // matching --wg-N-ink token sets a readable label colour per hue.
       tags.push(el('span', {
         class: 'news-tag news-tag--wg',
-        style: 'background:var(--wg-' + item.wg + ')',
+        style: 'background:var(--wg-' + item.wg + ');--wg-ink:var(--wg-' + item.wg + '-ink)',
         title: 'Working Group ' + item.wg,
       }, ['WG' + item.wg]));
     }
