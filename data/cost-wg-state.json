@@ -172,6 +172,39 @@
         4
       ],
       "form_changed_on": "2026-06-18"
+    },
+    "yijun xu": {
+      "cost_first_seen": {
+        "3": "2026-06-22"
+      },
+      "form_wgs": [
+        3
+      ],
+      "form_changed_on": "2026-06-22"
+    },
+    "vasiliki plessia aravani": {
+      "cost_first_seen": {
+        "2": "2026-06-22"
+      },
+      "form_wgs": [
+        2
+      ],
+      "form_changed_on": "2026-06-22"
+    },
+    "marko kovacevic": {
+      "cost_first_seen": {
+        "1": "2026-06-22",
+        "2": "2026-06-22",
+        "3": "2026-06-22",
+        "4": "2026-06-22"
+      },
+      "form_wgs": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "form_changed_on": "2026-06-22"
     }
   }
 }
