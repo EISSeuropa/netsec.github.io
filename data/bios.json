@@ -1787,7 +1787,9 @@
         "Small states' foreign and security policy"
       ],
       "themes": [
-        "Security and defence"
+        "Foreign policy and diplomacy",
+        "Security and defence",
+        "Theory and methods"
       ]
     }
   ],
@@ -2252,11 +2254,11 @@
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 14
+      "count": 15
     },
     {
       "theme": "Theory and methods",
-      "count": 10
+      "count": 11
     },
     {
       "theme": "Cyber and emerging technology",
@@ -2304,6 +2306,7 @@
     "Counterterrorism": "Transnational and human security",
     "Crises": "Security and defence",
     "Crisis management": "Security and defence",
+    "Critical security studies": "Theory and methods",
     "Cyber defence": "Cyber and emerging technology",
     "Cyber statecraft": "Cyber and emerging technology",
     "Cybercrime": "Cyber and emerging technology",
@@ -2381,13 +2384,16 @@
     "Positive peace": "Peace, mediation, and reconciliation",
     "Power": "Security and defence",
     "Regional cooperation": "Foreign policy and diplomacy",
+    "Regional security cooperation and governance": "Foreign policy and diplomacy",
     "Research methods": "Theory and methods",
+    "Role theory": "Theory and methods",
     "Russian foreign policy": "Foreign policy and diplomacy",
     "Security": "Security and defence",
     "Security and defence": "Security and defence",
     "Security politics": "Security and defence",
     "Security studies": "Security and defence",
     "Small states": "Foreign policy and diplomacy",
+    "Small states' foreign and security policy": "Foreign policy and diplomacy",
     "State-building": "Peace, mediation, and reconciliation",
     "Strategy": "Strategy and deterrence",
     "Subversion": "Intelligence, information and influence",
