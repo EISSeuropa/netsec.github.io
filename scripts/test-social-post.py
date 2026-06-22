@@ -286,3 +286,104 @@ if __name__ == "__main__":
     import sys
 
     sys.exit(_standalone())
+
+
+# ── LinkedIn adapter (mocked HTTP; no network, no posting) ─────────────────
+
+def _li_recorder(responses):
+    """(fake_request, calls). Each item in `responses` is popped per call and is
+    either an (status, headers, body) tuple to return or an Exception to raise."""
+    calls = []
+
+    def fake(url, method="GET", headers=None, json_body=None, data=None, content_type=None):
+        calls.append({"url": url, "method": method, "headers": headers or {},
+                      "json": json_body, "data": data, "content_type": content_type})
+        r = responses.pop(0)
+        if isinstance(r, Exception):
+            raise r
+        return r
+
+    return fake, calls
+
+
+def test_linkedin_configured_requires_org_and_token(monkeypatch):
+    monkeypatch.delenv("LINKEDIN_ORG_ID", raising=False)
+    monkeypatch.delenv("LINKEDIN_ACCESS_TOKEN", raising=False)
+    assert sp.LinkedInChannel("linkedin").configured() is False
+    monkeypatch.setenv("LINKEDIN_ORG_ID", "12345")
+    monkeypatch.setenv("LINKEDIN_ACCESS_TOKEN", "tok-abc")
+    assert sp.LinkedInChannel("linkedin").configured() is True
+
+
+def test_linkedin_text_post_shape_and_headers(monkeypatch):
+    monkeypatch.setenv("LINKEDIN_ORG_ID", "12345")
+    monkeypatch.setenv("LINKEDIN_ACCESS_TOKEN", "tok-abc")
+    fake, calls = _li_recorder([(201, {"x-restli-id": "urn:li:share:99"}, {})])
+    monkeypatch.setattr(sp, "_li_request", fake)
+    post = sp.Post(kind="news", key="k", title="T", summary="S", link="https://x/")
+    url = sp.LinkedInChannel("linkedin").publish(post)
+    assert url == "https://www.linkedin.com/feed/update/urn:li:share:99/"
+    assert len(calls) == 1                      # text-only → no image upload
+    c = calls[0]
+    assert c["url"].endswith("/rest/posts") and c["method"] == "POST"
+    assert c["json"]["author"] == "urn:li:organization:12345"
+    assert c["json"]["lifecycleState"] == "PUBLISHED"
+    assert "content" not in c["json"]
+    assert c["headers"]["X-Restli-Protocol-Version"] == "2.0.0"
+    assert c["headers"]["LinkedIn-Version"]
+    assert c["headers"]["Authorization"] == "Bearer tok-abc"
+
+
+def test_linkedin_image_post_uploads_then_posts(monkeypatch, tmp_path):
+    img = tmp_path / "card.png"
+    img.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 32)
+    monkeypatch.setenv("LINKEDIN_ORG_ID", "12345")
+    monkeypatch.setenv("LINKEDIN_ACCESS_TOKEN", "tok-abc")
+    fake, calls = _li_recorder([
+        (200, {}, {"value": {"uploadUrl": "https://dms/upload/1", "image": "urn:li:image:7"}}),
+        (201, {}, ""),                                   # binary upload
+        (201, {"x-restli-id": "urn:li:share:5"}, {}),    # create post
+    ])
+    monkeypatch.setattr(sp, "_li_request", fake)
+    post = sp.Post(kind="spotlight", key="k", title="T", summary="S",
+                   link="https://x/", image=img, image_alt="alt text")
+    url = sp.LinkedInChannel("linkedin").publish(post)
+    assert url == "https://www.linkedin.com/feed/update/urn:li:share:5/"
+    assert calls[0]["url"].endswith("/rest/images?action=initializeUpload")
+    assert calls[0]["json"]["initializeUploadRequest"]["owner"] == "urn:li:organization:12345"
+    assert calls[1]["url"] == "https://dms/upload/1" and calls[1]["method"] == "PUT"
+    assert calls[1]["data"] == img.read_bytes()
+    assert calls[2]["json"]["content"]["media"]["id"] == "urn:li:image:7"
+    assert calls[2]["json"]["content"]["media"]["altText"] == "alt text"
+
+
+def test_linkedin_refreshes_token_on_401_and_retries(monkeypatch):
+    monkeypatch.setenv("LINKEDIN_ORG_ID", "12345")
+    monkeypatch.setenv("LINKEDIN_ACCESS_TOKEN", "stale")
+    monkeypatch.setenv("LINKEDIN_REFRESH_TOKEN", "refresh-xyz")
+    monkeypatch.setenv("LINKEDIN_CLIENT_ID", "cid")
+    monkeypatch.setenv("LINKEDIN_CLIENT_SECRET", "csecret")
+    fake, calls = _li_recorder([
+        sp._Unauthorized("expired"),                     # first create-post 401
+        (200, {}, {"access_token": "fresh"}),            # token refresh
+        (201, {"x-restli-id": "urn:li:share:8"}, {}),    # retry create-post
+    ])
+    monkeypatch.setattr(sp, "_li_request", fake)
+    post = sp.Post(kind="news", key="k", title="T", summary="S", link="https://x/")
+    url = sp.LinkedInChannel("linkedin").publish(post)
+    assert url == "https://www.linkedin.com/feed/update/urn:li:share:8/"
+    assert "oauth/v2/accessToken" in calls[1]["url"]     # the refresh call
+    import os
+    assert os.environ["LINKEDIN_ACCESS_TOKEN"] == "fresh"  # env updated for the run
+
+
+def test_linkedin_401_without_refresh_creds_raises(monkeypatch):
+    monkeypatch.setenv("LINKEDIN_ORG_ID", "12345")
+    monkeypatch.setenv("LINKEDIN_ACCESS_TOKEN", "stale")
+    monkeypatch.delenv("LINKEDIN_REFRESH_TOKEN", raising=False)
+    fake, _ = _li_recorder([sp._Unauthorized("expired")])
+    monkeypatch.setattr(sp, "_li_request", fake)
+    post = sp.Post(kind="news", key="k", title="T", summary="S", link="https://x/")
+    import pytest
+    with pytest.raises(SystemExit):
+        sp.LinkedInChannel("linkedin").publish(post)

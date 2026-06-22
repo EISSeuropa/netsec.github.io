@@ -629,16 +629,140 @@ class BlueskyChannel(Channel):
         return urls
 
 
+class _Unauthorized(Exception):
+    """Raised by _li_request on a 401 so the caller can refresh + retry once."""
+
+
+def _li_request(url: str, method: str = "GET", headers: dict | None = None,
+                json_body: dict | None = None, data: bytes | None = None,
+                content_type: str | None = None) -> tuple[int, dict, object]:
+    """LinkedIn HTTP via stdlib urllib. Returns (status, lower-cased headers,
+    parsed JSON or raw text). Raises _Unauthorized on 401 (caller refreshes the
+    token), SystemExit on any other HTTP error (with the API's error body)."""
+    import urllib.error
+    import urllib.parse  # noqa: F401  (used by callers for form-encoding)
+    import urllib.request
+
+    hdrs = dict(headers or {})
+    payload = data
+    if json_body is not None:
+        payload = json.dumps(json_body).encode("utf-8")
+        hdrs.setdefault("Content-Type", "application/json")
+    elif content_type:
+        hdrs.setdefault("Content-Type", content_type)
+    req = urllib.request.Request(url, data=payload, headers=hdrs, method=method)
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            raw = resp.read().decode("utf-8", "replace")
+            rh = {k.lower(): v for k, v in resp.headers.items()}
+            body = json.loads(raw) if raw.strip()[:1] in ("{", "[") else raw
+            return resp.status, rh, body
+    except urllib.error.HTTPError as e:
+        detail = e.read().decode("utf-8", "replace")
+        if e.code == 401:
+            raise _Unauthorized(detail) from e
+        raise SystemExit(f"LinkedIn HTTP {e.code} from {url}: {detail}") from e
+
+
 class LinkedInChannel(Channel):
+    """Post to a LinkedIn Company Page via the Community-Management Posts API
+    (POST /rest/posts), uploading the OG image through the Images API first.
+    Image upload → create post is the same shape Bluesky uses. The access token
+    expires ~60 days; on a 401 we refresh it once with the refresh token + app
+    credentials and retry. See docs/social-publishing.md."""
+
+    API = "https://api.linkedin.com"
+    OAUTH = "https://www.linkedin.com/oauth/v2/accessToken"
+    # LinkedIn versions the API monthly (YYYYMM) and sunsets a version after
+    # ~12 months. Bump LINKEDIN_API_VERSION (env) when this one is retired.
+    VERSION = os.environ.get("LINKEDIN_API_VERSION", "202506")
+
+    def _org(self) -> str:
+        return (os.environ.get("LINKEDIN_ORG_ID") or "").strip()
+
+    def _token(self) -> str:
+        return (os.environ.get("LINKEDIN_ACCESS_TOKEN") or "").strip()
+
     def configured(self) -> bool:
-        return bool(os.environ.get("LINKEDIN_ORG_ID") and os.environ.get("LINKEDIN_ACCESS_TOKEN"))
+        return bool(self._org() and self._token())
+
+    def _headers(self) -> dict:
+        return {
+            "Authorization": f"Bearer {self._token()}",
+            "LinkedIn-Version": self.VERSION,
+            "X-Restli-Protocol-Version": "2.0.0",
+        }
+
+    def _refresh(self) -> bool:
+        """Swap the refresh token for a fresh access token, updating the process
+        env so the retry uses it. Returns False when the refresh token or app
+        credentials aren't set (so the caller can fail with a clear message)."""
+        import urllib.parse
+        rt = os.environ.get("LINKEDIN_REFRESH_TOKEN")
+        cid = os.environ.get("LINKEDIN_CLIENT_ID")
+        cs = os.environ.get("LINKEDIN_CLIENT_SECRET")
+        if not (rt and cid and cs):
+            return False
+        body = urllib.parse.urlencode({
+            "grant_type": "refresh_token", "refresh_token": rt,
+            "client_id": cid, "client_secret": cs,
+        }).encode("utf-8")
+        _, _, data = _li_request(self.OAUTH, method="POST", data=body,
+                                 content_type="application/x-www-form-urlencoded")
+        tok = (data or {}).get("access_token") if isinstance(data, dict) else None
+        if tok:
+            os.environ["LINKEDIN_ACCESS_TOKEN"] = tok
+            return True
+        return False
+
+    def _upload_image(self, image: Path, alt: str) -> str:
+        """initializeUpload (owner = the org) → PUT the bytes to the signed
+        uploadUrl → return the urn:li:image URN to attach to the post."""
+        owner = f"urn:li:organization:{self._org()}"
+        _, _, init = _li_request(
+            f"{self.API}/rest/images?action=initializeUpload", method="POST",
+            headers=self._headers(), json_body={"initializeUploadRequest": {"owner": owner}})
+        value = (init or {}).get("value", {}) if isinstance(init, dict) else {}
+        upload_url, urn = value.get("uploadUrl"), value.get("image")
+        if not (upload_url and urn):
+            raise SystemExit(f"LinkedIn initializeUpload returned no uploadUrl/image: {init}")
+        _li_request(upload_url, method="PUT", data=image.read_bytes(),
+                    content_type=_img_mime(image),
+                    headers={"Authorization": f"Bearer {self._token()}"})
+        return urn
+
+    def _do_publish(self, post: Post) -> str:
+        body = {
+            "author": f"urn:li:organization:{self._org()}",
+            "commentary": post.render("linkedin"),
+            "visibility": "PUBLIC",
+            "distribution": {
+                "feedDistribution": "MAIN_FEED",
+                "targetEntities": [],
+                "thirdPartyDistributionChannels": [],
+            },
+            "lifecycleState": "PUBLISHED",
+            "isReshareDisabledByAuthor": False,
+        }
+        if post.image and post.image.exists():
+            urn = self._upload_image(post.image, post.image_alt or post.title)
+            body["content"] = {"media": {"altText": post.image_alt or post.title, "id": urn}}
+        _, headers, _ = _li_request(f"{self.API}/rest/posts", method="POST",
+                                    headers=self._headers(), json_body=body)
+        pid = headers.get("x-restli-id", "")
+        return f"https://www.linkedin.com/feed/update/{pid}/" if pid else "posted"
 
     def publish(self, post: Post) -> str:
-        raise SystemExit(
-            "LinkedInChannel.publish is a phase-3 stub. Wire the Posts API "
-            "(register image upload → create post) once the LinkedIn app + "
-            "org token exist. See docs/social-publishing.md."
-        )
+        try:
+            return self._do_publish(post)
+        except _Unauthorized:
+            if self._refresh():
+                return self._do_publish(post)  # retry once with the fresh token
+            raise SystemExit(
+                "LinkedIn returned 401 and no usable refresh token. Set "
+                "LINKEDIN_REFRESH_TOKEN, LINKEDIN_CLIENT_ID and "
+                "LINKEDIN_CLIENT_SECRET, or regenerate the access token."
+            )
 
 
 CHANNELS = {"bluesky": BlueskyChannel, "linkedin": LinkedInChannel}
@@ -713,6 +837,8 @@ def main() -> int:
     ap.add_argument("--thread", metavar="FILE", help="post a curated thread spec (data/social-threads/*.json)")
     ap.add_argument("--count", action="store_true",
                     help="print only the number of items that would post (for CI gating); publish nothing")
+    ap.add_argument("--best-effort", action="store_true",
+                    help="don't abort if one channel fails to publish (for the ungated spotlight)")
     args = ap.parse_args()
 
     ledger = load_ledger()
@@ -756,10 +882,24 @@ def main() -> int:
         print("No channel is configured (missing secrets); nothing posted.", file=sys.stderr)
         return 1
     for p in posts:
+        posted_any = False
         for c in active:
-            url = c.publish(p)
-            print(f"posted [{p.kind}] to {c.name}: {url}")
-        ledger.setdefault("posted", []).append(p.key)
+            try:
+                url = c.publish(p)
+                print(f"posted [{p.kind}] to {c.name}: {url}")
+                posted_any = True
+            except SystemExit as e:
+                # --best-effort (the ungated weekly spotlight) must not let one
+                # channel's failure — an expired LinkedIn token, an API change —
+                # break the others or the rotation. The gated path re-raises so
+                # a reviewer sees the failure and re-runs.
+                if not args.best_effort:
+                    raise
+                print(f"  ! {c.name} publish failed, skipping (best-effort): {e}", file=sys.stderr)
+        # Record the dedup key once any channel posted, so a partial failure
+        # doesn't double-post the channel that succeeded on the next run.
+        if posted_any:
+            ledger.setdefault("posted", []).append(p.key)
     save_ledger(ledger)
     return 0
 
