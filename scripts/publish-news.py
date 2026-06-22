@@ -43,7 +43,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 NEWS = ROOT / "data" / "news.json"
 
-HEADER_RE = re.compile(r"^\s*(type|url|date)\s*:\s*(.+?)\s*$", re.IGNORECASE)
+HEADER_RE = re.compile(r"^\s*(type|url|date|wg)\s*:\s*(.+?)\s*$", re.IGNORECASE)
 _MONTHS = ["January", "February", "March", "April", "May", "June", "July",
            "August", "September", "October", "November", "December"]
 
@@ -54,7 +54,7 @@ def slugify(text: str) -> str:
 
 
 def parse_issue(title: str, body: str) -> dict:
-    """Pure parse: (title, body) -> {type, url, date, excerpt}. No IO."""
+    """Pure parse: (title, body) -> {type, url, date, wg, excerpt}. No IO."""
     lines = (body or "").replace("\r\n", "\n").split("\n")
     headers = {}
     i = 0
@@ -77,6 +77,7 @@ def parse_issue(title: str, body: str) -> dict:
         "type": headers.get("type", "").strip(),
         "url": headers.get("url", "").strip(),
         "date": headers.get("date", "").strip(),
+        "wg": headers.get("wg", "").strip(),
         "excerpt": excerpt,
     }
 
@@ -97,15 +98,21 @@ def build_item(parsed: dict, issue_number: str, today: dt.date) -> dict:
         date_iso = today.isoformat()
         date_obj = today
     pub = f"{date_iso}T09:00:00+02:00"
-    pill = parsed["type"] or display_date(date_iso)
     item = {
         "id": f"{slugify(parsed['title'])}-{date_obj.strftime('%Y%m%d')}",
         "pubDate": pub,
         "_source_issue": int(issue_number) if str(issue_number).isdigit() else issue_number,
-        "displayDate": {"en": pill},
+        "displayDate": {"en": display_date(date_iso)},
         "title": {"en": parsed["title"]},
         "body": {"en": parsed["excerpt"]},
     }
+    # Optional category tag (rendered as a pill beside the date; the home and
+    # archive renderers Title-case and translate it).
+    if parsed.get("type"):
+        item["type"] = parsed["type"].lower()
+    # Optional Working-Group activity tag (1-4); ignored if out of range.
+    if parsed.get("wg", "").isdigit() and 1 <= int(parsed["wg"]) <= 4:
+        item["wg"] = int(parsed["wg"])
     if parsed["url"]:
         item["cta"] = {
             "href": parsed["url"],

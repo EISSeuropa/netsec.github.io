@@ -943,6 +943,21 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .output-kind{font-size:.75rem;font-weight:700;color:var(--accent-2);text-transform:uppercase;letter-spacing:.1em}
 .news-date{font-size:.82rem;color:var(--muted)}
 .news-card a{font-size:.9rem;font-weight:600;margin-top:auto}
+/* Date + category/WG tag row on each news item (EISS-style scanability). */
+.news-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.news-tag{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:999px;line-height:1.6;white-space:nowrap}
+.news-tag--cat{color:var(--accent);background:color-mix(in srgb,var(--accent) 13%,transparent)}
+.news-tag--wg{color:#fff}
+/* News archive: a flat, readable list (hairline dividers, larger titles,
+   year headings) rather than the boxed glass cards used on the home block. */
+.news-year{font-size:.9rem;font-weight:700;letter-spacing:.05em;color:var(--muted);text-transform:uppercase;margin:34px 0 0}
+.news-year:first-child{margin-top:6px}
+.news-archive-list{display:block}
+.news-archive-list .news-card{background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:0;padding:22px 0;border-bottom:1px solid var(--line)}
+.news-archive-list .news-card:last-child{border-bottom:0}
+.news-archive-list .news-card h3{font-size:1.3rem;line-height:1.25}
+.news-archive-list .card-clickable h3{color:var(--accent)}
+.news-archive-list .news-card p{font-size:1rem}
 
 /* ── Upcoming-event banner ────────────────────────────────────
    A single dynamic card slotted between the hero and Latest News

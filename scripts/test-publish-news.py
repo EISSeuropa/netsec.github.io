@@ -57,6 +57,20 @@ def test_build_item_no_cta_and_default_date():
     assert item["displayDate"]["en"] == "2 January 2026"  # falls back to formatted date
 
 
+def test_build_item_emits_type_and_wg_tags():
+    p = pn.parse_issue("Prize", "Type: Publication\nWG: 3\nDate: 2026-06-17\n\nA paper won.")
+    item = pn.build_item(p, "1", dt.date(2026, 1, 1))
+    assert item["type"] == "publication"                # lowercased structured tag
+    assert item["wg"] == 3                              # int, in range
+    assert item["displayDate"]["en"] == "17 June 2026"  # date kept, not replaced
+
+
+def test_build_item_drops_out_of_range_wg():
+    p = pn.parse_issue("X", "WG: 9\n\nBody.")
+    item = pn.build_item(p, "1", dt.date(2026, 1, 1))
+    assert "wg" not in item
+
+
 def test_display_date_formats_iso():
     assert pn.display_date("2026-06-09") == "9 June 2026"
     assert pn.display_date("not-a-date") == "not-a-date"

@@ -8,6 +8,8 @@
   "items": [
     {
       "id": "essc-2026-best-paper-prize",
+      "type": "publication",
+      "wg": 3,
       "social": "thread:best-paper-prize-2026",
       "pubDate": "2026-06-17T10:00:00+02:00",
       "displayDate": {
@@ -41,6 +43,8 @@
     },
     {
       "id": "essc-2026-concludes-stockholm",
+      "type": "event",
+      "wg": 2,
       "pubDate": "2026-06-12T18:00:00+02:00",
       "displayDate": {
         "en": "12 June 2026",
@@ -73,6 +77,8 @@
     },
     {
       "id": "grants-applications-now-open",
+      "type": "announcement",
+      "wg": 3,
       "pubDate": "2026-05-15T09:00:00+02:00",
       "displayDate": {
         "en": "Now open",
@@ -105,6 +111,8 @@
     },
     {
       "id": "summer-school-2026-applications-closed",
+      "type": "announcement",
+      "wg": 3,
       "pubDate": "2026-03-01T18:00:00+01:00",
       "displayDate": {
         "en": "Applications closed",
@@ -133,6 +141,8 @@
     },
     {
       "id": "netsec-officially-launched",
+      "type": "announcement",
+      "wg": 1,
       "pubDate": "2025-10-10T09:00:00+02:00",
       "displayDate": {
         "en": "10 October 2025",
