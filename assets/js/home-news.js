@@ -71,7 +71,8 @@
     return node;
   }
 
-  function buildCard(item, locale) {
+  function buildCard(item, locale, opts) {
+    opts = opts || {};
     // Whole-card click target (stretched-link) when the item has a CTA;
     // CTA-less news items stay non-clickable with no hover affordance.
     const hasCta = !!(item.cta && item.cta.href);
@@ -91,6 +92,26 @@
     card.appendChild(el('h3', null, [title]));
     const body = pickLocale(item.body, locale, '');
     card.appendChild(el('p', null, [body]));
+    // Mobile-only "Read more": the body is line-clamped on narrow viewports
+    // (CSS), and this button toggles the clamp. Rendered only for the home
+    // block, and only when the body is long enough to actually clamp (a cheap
+    // length heuristic avoids a no-op toggle on short items). Hidden on desktop
+    // via CSS. The button sits above the card's stretched-link overlay
+    // (.card-clickable button → z-index:2), so it never triggers the card CTA.
+    if (opts.readMore && body.length > 140) {
+      const btn = el('button', {
+        type: 'button',
+        class: 'news-readmore',
+        'aria-expanded': 'false',
+      }, [T('Read more')]);
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const open = card.classList.toggle('is-expanded');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.textContent = T(open ? 'Read less' : 'Read more');
+      });
+      card.appendChild(btn);
+    }
     if (item.cta && item.cta.href) {
       const href = typeof item.cta.href === 'string'
         ? item.cta.href
@@ -111,7 +132,7 @@
   // The home block shows at most this many items, and only those still
   // within the decay window. Older items drop off the home page but stay
   // on the /news archive, which renders the full list.
-  const HOME_MAX = 4;
+  const HOME_MAX = 3;
   const DECAY_MONTHS = 18;
 
   function sortedItems(data) {
@@ -166,7 +187,7 @@
       return;
     }
     const frag = document.createDocumentFragment();
-    items.forEach(item => frag.appendChild(buildCard(item, locale)));
+    items.forEach(item => frag.appendChild(buildCard(item, locale, { readMore: true })));
     container.innerHTML = '';
     container.appendChild(frag);
     container.dataset.renderedFromJson = '1';
