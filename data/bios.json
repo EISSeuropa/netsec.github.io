@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-22T10:47:27+00:00",
+  "generated_at": "2026-06-22T11:27:33+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-22T10:47:27+00:00"
+    "last_synced": "2026-06-22T11:27:33+00:00"
   },
   "members": [
     {
@@ -1895,6 +1895,51 @@
       "themes": [
         "Intelligence, information and influence"
       ]
+    },
+    {
+      "id": "isabelle-haynes",
+      "name": "Ms Isabelle Haynes",
+      "country": "Czechia",
+      "country_code": "cz",
+      "affiliation": "Charles University",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe - Western Balkans",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Isabelle Haynes is a PhD candidate in the Area Studies program at the Institute of International Studies, Faculty of Social Sciences, Charles University. She is a Junior Research at the Peace Research Centre Prague and the PhD student on the ERC-project MICROCODE. She holds an MSc in Migration Studies and an MPhil in International Relations from the University of Oxford, as well as a BA in Archaeology and Classics from University College London. Isabelle has professional experience across the public, private, and academic sectors, including roles at UN Tourism, the UK Ministry of Defence, the Nuffield Centre for Experimental Social Science, and SouthWest Archaeology.",
+      "keywords": [
+        "collective defence",
+        "public opinion",
+        "NATO",
+        "defence attitudes"
+      ],
+      "email": "",
+      "website": "https://www.prcprague.cz/isabelle-haynes",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/isabelle-haynes.jpg",
+      "source": "form",
+      "photo_source_sha256": "725ea72701446a28d9cfd7fd235dc4a32a9c285584dae20bcd381ad37fc53ca9",
+      "canonical_keywords": [
+        "Collective defence",
+        "Defence attitudes",
+        "NATO",
+        "Public opinion"
+      ],
+      "themes": [
+        "European and transatlantic security order"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -1951,6 +1996,10 @@
       "count": 2
     },
     {
+      "keyword": "NATO",
+      "count": 2
+    },
+    {
       "keyword": "Non-state actors",
       "count": 2
     },
@@ -1995,6 +2044,10 @@
       "count": 1
     },
     {
+      "keyword": "Collective defence",
+      "count": 1
+    },
+    {
       "keyword": "Counterterrorism",
       "count": 1
     },
@@ -2032,6 +2085,10 @@
     },
     {
       "keyword": "Defence",
+      "count": 1
+    },
+    {
+      "keyword": "Defence attitudes",
       "count": 1
     },
     {
@@ -2219,10 +2276,6 @@
       "count": 1
     },
     {
-      "keyword": "NATO",
-      "count": 1
-    },
-    {
       "keyword": "Nordic countries",
       "count": 1
     },
@@ -2272,6 +2325,10 @@
     },
     {
       "keyword": "Power",
+      "count": 1
+    },
+    {
+      "keyword": "Public opinion",
       "count": 1
     },
     {
@@ -2397,12 +2454,12 @@
       "count": 9
     },
     {
-      "theme": "Transnational and human security",
+      "theme": "European and transatlantic security order",
       "count": 7
     },
     {
-      "theme": "European and transatlantic security order",
-      "count": 6
+      "theme": "Transnational and human security",
+      "count": 7
     },
     {
       "theme": "Strategy and deterrence",
@@ -2547,7 +2604,11 @@
     },
     {
       "region": "Global and cross-regional",
-      "count": 16
+      "count": 17
+    },
+    {
+      "region": "Europe - Western Balkans",
+      "count": 7
     },
     {
       "region": "The Americas",
@@ -2559,10 +2620,6 @@
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 6
-    },
-    {
-      "region": "Europe - Western Balkans",
       "count": 6
     },
     {
