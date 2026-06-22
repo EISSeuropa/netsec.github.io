@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-22T10:10:45+00:00",
+  "generated_at": "2026-06-22T10:47:27+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-22T10:10:45+00:00"
+    "last_synced": "2026-06-22T10:47:27+00:00"
   },
   "members": [
     {
@@ -1849,6 +1849,52 @@
         "Security and defence",
         "Strategy and deterrence"
       ]
+    },
+    {
+      "id": "fabio-iguavita-duarte",
+      "name": "Mr Fabio Iguavita Duarte",
+      "country": "Czechia",
+      "country_code": "cz",
+      "affiliation": "Czech Technical University",
+      "position": "Strategic Intelligence Analyst",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Europe",
+        "Europe - Western Balkans",
+        "The Americas"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Strategic Intelligence Analyst at ČVUT–UCEEB and PhD candidate in Political Science at Charles University. He specialises in comparative politics, geopolitics, and security dynamics in the Americas, with a current focus on hybrid threats and systems resilience. He holds degrees in International Relations and Geography–Development Studies, with additional training in Global Terrorism and Cybersecurity. He has teaching experience in Geopolitics of Latin America at Charles University and international academic exposure (ECPR, ISA, CEISA, CES, EISS, University of Sarajevo, Ludovika University of Public Service). His doctoral research examined comparatively post-conflict transitions in Bosnia and Herzegovina and Colombia.",
+      "keywords": [
+        "Hybrid Threats",
+        "Critical Infrastructure Security",
+        "Systems Resilience",
+        "Transnational Organised Crime (TCOs)",
+        "The Americas"
+      ],
+      "email": "fabio.duarte@cvut.cz",
+      "website": "https://www.uceeb.cz/en/fabio-iguavita-duarte/",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/fiduarte/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/fabio-iguavita-duarte.jpg",
+      "source": "form",
+      "photo_source_sha256": "f6a93af54021221588975354747a0cf9d16dfcc312e4b07e90f4a5a90720f45c",
+      "canonical_keywords": [
+        "Critical infrastructure security",
+        "Hybrid threats",
+        "Systems resilience",
+        "The Americas",
+        "Transnational organised crime (tcos)"
+      ],
+      "themes": [
+        "Intelligence, information and influence"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -1894,6 +1940,10 @@
     },
     {
       "keyword": "Grand strategy",
+      "count": 2
+    },
+    {
+      "keyword": "Hybrid threats",
       "count": 2
     },
     {
@@ -1954,6 +2004,10 @@
     },
     {
       "keyword": "Crisis management",
+      "count": 1
+    },
+    {
+      "keyword": "Critical infrastructure security",
       "count": 1
     },
     {
@@ -2082,10 +2136,6 @@
     },
     {
       "keyword": "History",
-      "count": 1
-    },
-    {
-      "keyword": "Hybrid threats",
       "count": 1
     },
     {
@@ -2277,11 +2327,19 @@
       "count": 1
     },
     {
+      "keyword": "Systems resilience",
+      "count": 1
+    },
+    {
       "keyword": "Technology spillovers",
       "count": 1
     },
     {
       "keyword": "Text as data",
+      "count": 1
+    },
+    {
+      "keyword": "The Americas",
       "count": 1
     },
     {
@@ -2298,6 +2356,10 @@
     },
     {
       "keyword": "Transnational and human security",
+      "count": 1
+    },
+    {
+      "keyword": "Transnational organised crime (tcos)",
       "count": 1
     },
     {
@@ -2352,7 +2414,7 @@
     },
     {
       "theme": "Intelligence, information and influence",
-      "count": 4
+      "count": 5
     },
     {
       "theme": "Peace, mediation, and reconciliation",
@@ -2481,11 +2543,15 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 22
+      "count": 23
     },
     {
       "region": "Global and cross-regional",
       "count": 16
+    },
+    {
+      "region": "The Americas",
+      "count": 7
     },
     {
       "region": "Asia",
@@ -2496,12 +2562,8 @@
       "count": 6
     },
     {
-      "region": "The Americas",
-      "count": 6
-    },
-    {
       "region": "Europe - Western Balkans",
-      "count": 5
+      "count": 6
     },
     {
       "region": "Middle East and North Africa",
