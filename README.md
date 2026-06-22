@@ -116,7 +116,7 @@ the EN page; the FR/DE variants sit alongside.
 │   └── indico-fix-plans/   # YAML fix-plan inputs for scripts/indico_patch.py (write-side)
 ├── scripts/
 │   ├── sync-cost.py        # Weekly: WG_MAP + per-bio wgs + leadership roles from cost.eu
-│   ├── sync-bios.py        # Weekly: Google Form submissions → data/bios.json + headshots
+│   ├── sync-bios.py        # Daily:  Google Form submissions → data/bios.json + headshots
 │   ├── sync-indico.py      # Daily:  indico.eiss-europa.com → data/indico.json + calendar.ics
 │   ├── sync-roadmap.py     # On CHANGELOG.md push: refresh autostamp in docs/roadmap-2026.md
 │   ├── promote-roadmap.py  # Called by release.sh: flip planned roadmap card to shipped (EN/FR/DE)
@@ -234,7 +234,7 @@ Conventions documented in [`CLAUDE.md`](CLAUDE.md) §12.
 There are four classes of content with four different workflows:
 
 1. **Page copy** (everything not in the directory, programme, or calendar): edit the relevant `*.html` file directly and open a PR. CSS lives in `assets/css/site.css`; JS in `assets/js/site.js`. For FR/DE pages, mirror the EN edit and run `python3 scripts/check-i18n-drift.py --mark-fresh <source> <lang>` before merging.
-2. **Member bios and photos**: submit or update via the Google Form linked from `people.html#join`. The next weekly sync (or a manual dispatch of `sync-bios.yml`) opens a PR with the diff. WG memberships on existing bios are reconciled separately from cost.eu by `sync-cost.yml`.
+2. **Member bios and photos**: submit or update via the Google Form linked from `people.html#join`. The next daily sync (or a manual dispatch of `sync-bios.yml`) opens a PR with the diff. WG memberships on existing bios are reconciled separately from cost.eu by `sync-cost.yml`.
 3. **MC / leadership roster + WG memberships**: managed on cost.eu. The next weekly sync (or a manual dispatch of `sync-cost.yml`) opens a PR.
 4. **Live ESSC programme + calendar**: managed on `indico.eiss-europa.com` (event 22 for ESSC 2026). The nightly `sync-indico.yml` PR carries through to both the public programme grid on `essc-2026.html` and the home-page event banner via `events.json`. Last-resort fixes for metadata that admins on Indico can't reach are scripted via `scripts/indico_patch.py` against a YAML fix-plan.
 

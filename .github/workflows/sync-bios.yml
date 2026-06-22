@@ -1,9 +1,11 @@
-# Weekly sync of data/bios.json from the NetSec member bios Google Form.
+# Daily sync of data/bios.json from the NetSec member bios Google Form.
 #
 # What this does
-#   1. Every Monday at 05:15 UTC (15 min after the cost.eu sync so it
-#      can pick up any WG changes already merged), and on manual
-#      dispatch, fetch the linked Google Sheet as CSV.
+#   1. Every day at 05:15 UTC, and on manual dispatch, fetch the
+#      linked Google Sheet as CSV. The time of day is unchanged from
+#      the original weekly cadence (15 min after the cost.eu sync, which
+#      stays weekly, so a same-day WG change on cost.eu is still picked
+#      up promptly).
 #   2. Parse each row into the bios.json schema, download any new
 #      headshots from Google Drive, write data/bios.json.
 #   3. If anything changed, open or update a pull request on the
@@ -22,7 +24,7 @@ name: Sync member bios from Google Form
 
 on:
   schedule:
-    - cron: '15 5 * * 1'   # Every Monday 05:15 UTC
+    - cron: '15 5 * * *'   # Every day 05:15 UTC
   workflow_dispatch:       # Manual run from the Actions tab
 
 permissions:

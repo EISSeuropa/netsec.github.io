@@ -829,8 +829,8 @@
         "UN"
       ],
       "themes": [
-        "Foreign policy and diplomacy",
-        "Peace, mediation, and reconciliation",
+        "EU, UN and other international organisations",
+        "Peace, mediation and reconciliation",
         "Transnational and human security"
       ]
     },
@@ -1389,9 +1389,9 @@
         "European security"
       ],
       "themes": [
+        "Crisis management and critical systems resilience",
         "Foreign policy and diplomacy",
-        "Security and defence",
-        "Transnational and human security"
+        "Security and defence"
       ]
     },
     {
@@ -1600,7 +1600,7 @@
       ],
       "themes": [
         "Foreign policy and diplomacy",
-        "Peace, mediation, and reconciliation",
+        "Peace, mediation and reconciliation",
         "Security and defence"
       ]
     },
@@ -1648,7 +1648,7 @@
         "Unification"
       ],
       "themes": [
-        "Peace, mediation, and reconciliation"
+        "Peace, mediation and reconciliation"
       ]
     },
     {
@@ -1741,7 +1741,7 @@
         "Transitional justice"
       ],
       "themes": [
-        "Peace, mediation, and reconciliation",
+        "Peace, mediation and reconciliation",
         "Theory and methods",
         "Transnational and human security"
       ]
@@ -1846,6 +1846,7 @@
         "Grand strategy"
       ],
       "themes": [
+        "EU, UN and other international organisations",
         "Security and defence",
         "Strategy and deterrence"
       ]
@@ -1893,6 +1894,7 @@
         "Transnational organised crime (tcos)"
       ],
       "themes": [
+        "Crisis management and critical systems resilience",
         "Intelligence, information and influence"
       ]
     },
@@ -2443,7 +2445,7 @@
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 15
+      "count": 14
     },
     {
       "theme": "Theory and methods",
@@ -2458,11 +2460,11 @@
       "count": 7
     },
     {
-      "theme": "Transnational and human security",
-      "count": 7
+      "theme": "Strategy and deterrence",
+      "count": 6
     },
     {
-      "theme": "Strategy and deterrence",
+      "theme": "Transnational and human security",
       "count": 6
     },
     {
@@ -2474,8 +2476,16 @@
       "count": 5
     },
     {
-      "theme": "Peace, mediation, and reconciliation",
+      "theme": "Peace, mediation and reconciliation",
       "count": 4
+    },
+    {
+      "theme": "Crisis management and critical systems resilience",
+      "count": 2
+    },
+    {
+      "theme": "EU, UN and other international organisations",
+      "count": 2
     },
     {
       "theme": "Identity, narratives and ideational security",
@@ -2489,12 +2499,13 @@
     "Black sea security": "Security and defence",
     "Capability planning": "Security and defence",
     "Civil defence": "Security and defence",
-    "Civil protection": "Transnational and human security",
+    "Civil protection": "Crisis management and critical systems resilience",
     "Civil-military relations": "Security and defence",
     "Cognitive warfare": "Intelligence, information and influence",
     "Counterterrorism": "Transnational and human security",
-    "Crises": "Security and defence",
-    "Crisis management": "Security and defence",
+    "Crises": "Crisis management and critical systems resilience",
+    "Crisis management": "Crisis management and critical systems resilience",
+    "Critical infrastructure security": "Crisis management and critical systems resilience",
     "Critical security studies": "Theory and methods",
     "Cyber defence": "Cyber and emerging technology",
     "Cyber statecraft": "Cyber and emerging technology",
@@ -2511,9 +2522,10 @@
     "Digital sovereignty": "Cyber and emerging technology",
     "Diplomacy": "Foreign policy and diplomacy",
     "Disinformation": "Intelligence, information and influence",
-    "Divided nation": "Peace, mediation, and reconciliation",
+    "Divided nation": "Peace, mediation and reconciliation",
     "Dual use technologies": "Cyber and emerging technology",
     "EU foreign policy": "Foreign policy and diplomacy",
+    "EU security": "EU, UN and other international organisations",
     "EU–NATO relations": "European and transatlantic security order",
     "East central Europe": "Foreign policy and diplomacy",
     "Eastern Europe": "Foreign policy and diplomacy",
@@ -2522,7 +2534,7 @@
     "Election interference": "Intelligence, information and influence",
     "Emerging and disruptive technologies": "Cyber and emerging technology",
     "Emerging technology": "Cyber and emerging technology",
-    "Ethnic conflict analysis": "Peace, mediation, and reconciliation",
+    "Ethnic conflict analysis": "Peace, mediation and reconciliation",
     "European security": "Security and defence",
     "European strategic autonomy": "European and transatlantic security order",
     "Feminist studies": "Theory and methods",
@@ -2530,6 +2542,7 @@
     "Gender-based violence": "Transnational and human security",
     "Geopolitics": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
+    "Global order": "EU, UN and other international organisations",
     "Grand strategy": "Strategy and deterrence",
     "History": "Theory and methods",
     "Hybrid threats": "Intelligence, information and influence",
@@ -2553,7 +2566,7 @@
     "Militarisation": "Security and defence",
     "Military innovation": "Security and defence",
     "Military neutrality": "European and transatlantic security order",
-    "Multilateralism": "Foreign policy and diplomacy",
+    "Multilateralism": "EU, UN and other international organisations",
     "NATO": "European and transatlantic security order",
     "Narratives": "Identity, narratives and ideational security",
     "National security": "Security and defence",
@@ -2564,13 +2577,13 @@
     "Nuclear strategy": "Strategy and deterrence",
     "Ontological security": "Identity, narratives and ideational security",
     "Organisation studies": "Theory and methods",
-    "Peace vision": "Peace, mediation, and reconciliation",
-    "Peacekeeping": "Peace, mediation, and reconciliation",
-    "Plural peace": "Peace, mediation, and reconciliation",
+    "Peace vision": "Peace, mediation and reconciliation",
+    "Peacekeeping": "Peace, mediation and reconciliation",
+    "Plural peace": "Peace, mediation and reconciliation",
     "Policy evaluation": "Theory and methods",
     "Political economy": "Economic security and geoeconomics",
     "Political psychology": "Theory and methods",
-    "Positive peace": "Peace, mediation, and reconciliation",
+    "Positive peace": "Peace, mediation and reconciliation",
     "Power": "Security and defence",
     "Regional cooperation": "Foreign policy and diplomacy",
     "Regional security cooperation and governance": "Foreign policy and diplomacy",
@@ -2583,18 +2596,19 @@
     "Security studies": "Security and defence",
     "Small states": "Foreign policy and diplomacy",
     "Small states' foreign and security policy": "Foreign policy and diplomacy",
-    "State-building": "Peace, mediation, and reconciliation",
+    "State-building": "Peace, mediation and reconciliation",
     "Strategy": "Strategy and deterrence",
     "Subversion": "Intelligence, information and influence",
+    "Systems resilience": "Crisis management and critical systems resilience",
     "Technology spillovers": "Cyber and emerging technology",
     "Text as data": "Theory and methods",
     "Transatlantic relations": "European and transatlantic security order",
     "Transatlantic security": "European and transatlantic security order",
-    "Transitional justice": "Peace, mediation, and reconciliation",
+    "Transitional justice": "Peace, mediation and reconciliation",
     "Transnational and human security": "Transnational and human security",
-    "UN": "Foreign policy and diplomacy",
+    "UN": "EU, UN and other international organisations",
     "US-China relations": "Foreign policy and diplomacy",
-    "Unification": "Peace, mediation, and reconciliation",
+    "Unification": "Peace, mediation and reconciliation",
     "Western Balkans": "Foreign policy and diplomacy"
   },
   "region_aggregate": [

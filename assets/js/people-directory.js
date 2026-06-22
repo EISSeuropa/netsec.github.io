@@ -672,8 +672,8 @@
       } else {
         nameEl.textContent = m.name || '';
       }
-      // Role pill: formal role(s) if any, otherwise WG-participant or
-      // a neutral "Network member" fallback so a card never feels empty.
+      // Role pill: formal role(s) if any, otherwise WG-participant; a
+      // member with neither shows no pill at all.
       const roleEl = node.querySelector('.member-role');
       if ((m.roles || []).length) {
         // Translate each role label via the catalog while preserving
@@ -681,8 +681,12 @@
         roleEl.textContent = m.roles.map(r => window.netsecT(r)).join(' · ');
       } else {
         const hasWGs = (m.wgs || []).length || ((m.wg_leadership || {}).lead || []).length || ((m.wg_leadership || {}).co_lead || []).length;
-        roleEl.textContent = window.netsecT(hasWGs ? 'Working Group participant' : 'Network member');
-        roleEl.classList.add('is-soft');
+        if (hasWGs) {
+          roleEl.textContent = window.netsecT('Working Group participant');
+          roleEl.classList.add('is-soft');
+        } else {
+          roleEl.remove();
+        }
       }
       // Affiliation line: optional position prefix (e.g. PhD candidate)
       // + institution + flag + country.

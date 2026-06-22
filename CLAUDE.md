@@ -422,7 +422,7 @@ text is being edited anyway.
   files as a side-effect of a verification run, decide whether the
   modification is part of the current PR (include it) or an
   unrelated drift (revert before committing).
-- The weekly bios-sync workflow is structurally tuned to produce
+- The bios-sync workflow is structurally tuned to produce
   zero dirty files when no submitter has substantively changed
   their entry (PR #117). If you see the workflow trip an
   apparently-empty PR, that's a regression — open an issue and

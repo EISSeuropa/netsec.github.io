@@ -176,6 +176,11 @@ maintainer-facing audience.
 
 #### Added
 - A "Published" marker on conference-programme papers (the archived `/essc-2026.html` and the parked ESSC 2027 template, all three locales). When a paper's published version has been reviewed into the EISS Anthology, a quiet marker links from the programme straight to that paper's Anthology page, where the publication card lives. It carries the site's automatic external-link icon, so it needs no manual arrow. The match is made at load against the Anthology's own `anthology-index.json`, which the EISS site publishes from its paper index, so NetSec consumes the result rather than reconstructing the collision-deduped slug. It is scoped to the conference year and shown only for papers flagged published, so it stays a genuine signal and fills in on its own as EISS reviews more publications, with no NetSec rebuild. A card under the programme grid also points at the Anthology's published-papers view, with a heading, a line of context, and a button. The marker and card are hand-translated for FR and DE, and the whole thing fails soft: a missing or unreachable index just means no markers, with the programme unaffected.
+- The directory's research-theme taxonomy gains two themes. "EU, UN and other international organisations" clusters the UN, multilateralism, EU security and global-order keywords (moving "UN" and "Multilateralism" out of "Foreign policy and diplomacy"). "Crisis management and critical systems resilience" clusters crisis management, crises, critical infrastructure security, systems resilience and civil protection (moving the first three out of "Security and defence" and "Transnational and human security"). The English names are live now; FR and DE hand-translation is tracked in #1237.
+
+#### Changed
+- Every research-theme name is standardised on no serial comma before the final "and". "Peace, mediation and reconciliation" drops the one Oxford comma that had crept into an otherwise comma-free list of theme names.
+- A directory member with no formal role and no Working Group membership now shows no role pill on their card or profile page, rather than the generic "Network member" label, which read as filler rather than information.
 
 ## [1.12.0] · 2026-06-17 — A working directory and life after Stockholm
 
