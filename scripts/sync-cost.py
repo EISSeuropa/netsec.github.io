@@ -707,6 +707,59 @@ def fetch_mc(html: str) -> list[dict]:
     return out
 
 
+_MC_ROLE_RE = re.compile(r"^Management Committee\b")
+
+
+def apply_mc_roles(mc: list[dict]) -> list[str]:
+    """Tag data/bios.json entries that are also official cost.eu
+    Management Committee representatives with a "Management
+    Committee · <Country>" role, by normalised-name match against
+    the MC roster.
+
+    Unlike apply_leadership's roles, MC membership isn't a single
+    holder per role label — two reps can share a country (e.g. two
+    Swiss MC members), so this matches each bio independently rather
+    than building one role -> slug map. Only roles already shaped
+    like a Management Committee tag are ever added or removed, so
+    other form-provided custom roles are untouched. Returns diff
+    lines."""
+    if not BIOS.exists():
+        return ["MC roles: data/bios.json not present, skipped."]
+
+    data = json.loads(BIOS.read_text(encoding="utf-8"))
+    members: list[dict] = data.get("members", [])
+    mc_by_name = {norm(m["name"]): m for m in mc}
+
+    diffs: list[str] = []
+    for m in members:
+        match = mc_by_name.get(norm(m["name"]))
+        current = list(m.get("roles") or [])
+        desired = f"Management Committee · {match['country']}" if match else None
+        current_mc = [r for r in current if _MC_ROLE_RE.match(str(r))]
+        if current_mc == ([desired] if desired else []):
+            continue
+        kept = [r for r in current if not _MC_ROLE_RE.match(str(r))]
+        if desired:
+            kept.append(desired)
+        for r in current_mc:
+            if r != desired:
+                diffs.append(f"  - {m['name']}: -{r}")
+        if desired and desired not in current_mc:
+            diffs.append(f"  + {m['name']}: +{desired}")
+        m["roles"] = kept
+
+    out_lines = [f"MC roles: {len(mc)} representatives on cost.eu"]
+    if diffs:
+        out_lines.extend(diffs)
+        BIOS.write_text(
+            json.dumps(data, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+    else:
+        out_lines.append("  (no changes)")
+    return out_lines
+
+
 def build_mc_json(mc: list[dict]) -> list[str]:
     """Write data/mc-members.json from the parsed MC table. Reports
     adds/removals against the previous roster so a representative
@@ -906,6 +959,9 @@ def main() -> None:
     mc = fetch_mc(r.text)
     print()
     for line in build_mc_json(mc):
+        print(line)
+    print()
+    for line in apply_mc_roles(mc):
         print(line)
     print()
     for line in apply_stats(mc):

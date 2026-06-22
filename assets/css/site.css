@@ -2312,6 +2312,12 @@ body{padding-top:var(--whats-new-h, 0px)}
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(min(380px,100%),1fr));
   gap:22px;
+  /* Clears .members-utilitybar's fixed bottom-right pill so the last
+     row of cards isn't covered by the density/tour/join buttons. */
+  padding-bottom:90px;
+}
+@media (max-width:540px){
+  .members-grid{padding-bottom:76px}
 }
 
 .member-card{
