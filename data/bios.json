@@ -1906,7 +1906,9 @@
       "affiliation": "Charles University",
       "position": "PhD candidate",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1
+      ],
       "mentorship": [
         "mentee"
       ],
