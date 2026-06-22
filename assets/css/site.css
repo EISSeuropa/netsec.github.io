@@ -791,6 +791,13 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .events-list .event-wg-pill,
 .events-list .event-link,
 .events-list .event-atc-item{text-decoration:none}
+/* `.prose-page a` also recolours to --accent-2 (== --wg-1 blue), which left
+   the white-text pills (WG1, WG3) with near-invisible blue label text. Restore
+   each hue's readable label colour at (0,3,0) so it beats the prose-link rule. */
+.events-list .event-wg-pill.wg-1,
+.events-list .event-wg-pill.wg-3{color:#fff}
+.events-list .event-wg-pill.wg-2{color:#04321f}
+.events-list .event-wg-pill.wg-4{color:#3b2a00}
 .events-seeall{margin:22px 0 0;text-align:right}
 .events-seeall a{font-weight:600}
 .event-loc{font-size:.85rem;color:var(--ink-2);display:flex;align-items:center;gap:6px}
