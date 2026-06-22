@@ -461,9 +461,11 @@ def render_card(m: dict, works: list, similar: list, mentors: list, loc: dict, p
     if roles:
         p.append(f'<p class="member-role" data-i18n-each>{esc(" · ".join(roles))}</p>')
     else:
-        has_wg = bool(m.get("wgs") or (m.get("wg_leadership") or {}))
-        key = "Working Group participant" if has_wg else "Network member"
-        p.append(f'<p class="member-role is-soft" data-i18n="{esc(key)}">{esc(key)}</p>')
+        wg_leadership = m.get("wg_leadership") or {}
+        has_wg = bool(m.get("wgs") or wg_leadership.get("lead") or wg_leadership.get("co_lead"))
+        if has_wg:
+            p.append('<p class="member-role is-soft" data-i18n="Working Group participant">'
+                      'Working Group participant</p>')
     aff_parts = [x for x in (m.get("position"), m.get("affiliation"), m.get("country")) if x]
     if aff_parts:
         flag = ""

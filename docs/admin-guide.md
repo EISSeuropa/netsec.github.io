@@ -124,11 +124,11 @@ network calls when someone loads the site.
 
 ## Routine admin tasks
 
-### Reviewing a weekly sync PR
+### Reviewing a sync PR
 
 Both sync workflows open PRs against `main` on the branches
-`bios-sync/auto` and `cost-sync/auto`. Either may be empty most
-weeks.
+`bios-sync/auto` (daily) and `cost-sync/auto` (weekly). Either may be
+empty most runs.
 
 ```mermaid
 sequenceDiagram
@@ -198,7 +198,7 @@ When you can't wait for Monday morning:
 1. Open `data/bios.json` (or the PR if a sync just added them).
 2. Delete the relevant `members[]` entry.
 3. Delete the headshot at `assets/images/people/<slug>.jpg` if present.
-4. Run `python3 scripts/build-profile-pages.py` to drop their generated profile pages at `people/<slug>{,.fr,.de}.html` (#762). The script removes the orphaned pages automatically; the next weekly sync would do this too, but doing it now keeps the removal clean.
+4. Run `python3 scripts/build-profile-pages.py` to drop their generated profile pages at `people/<slug>{,.fr,.de}.html` (#762). The script removes the orphaned pages automatically; the next sync would do this too, but doing it now keeps the removal clean.
 5. **Lock the source.** Open the Google Sheet and either:
    - delete the row (cleanest), or
    - clear the consent column → next sync drops them anyway.
