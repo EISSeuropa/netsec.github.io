@@ -205,6 +205,15 @@
         4
       ],
       "form_changed_on": "2026-06-22"
+    },
+    "isabelle haynes": {
+      "cost_first_seen": {
+        "1": "2026-06-22"
+      },
+      "form_wgs": [
+        1
+      ],
+      "form_changed_on": "2026-06-22"
     }
   }
 }
