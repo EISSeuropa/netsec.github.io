@@ -1,0 +1,123 @@
+# Archive stale, unmerged branches so the branch list stays signal.
+#
+# GitHub already deletes a branch the moment its PR merges
+# (`delete_branch_on_merge` is on), so shipped work cleans itself up.
+# This sweep covers the other case: branches that were never merged
+# and have gone quiet (abandoned spikes, parked experiments).
+#
+# A branch is swept when ALL of these hold:
+#   * no new commit in STALE_AFTER_DAYS (14) days,
+#   * no open pull request points at it,
+#   * it is not the default branch, gh-pages, or an automation
+#     branch (anything ending in `/auto`, plus `social/ledger`).
+#
+# "Archive" is non-destructive: before the branch is deleted, a
+# lightweight tag `archive/<branch>` is pushed at its tip, so every
+# commit survives indefinitely and the work is recoverable with
+# `git checkout archive/<branch>`. The branch just leaves the
+# branch list. Re-running is safe: an existing archive tag is reused.
+#
+# Once-daily cadence matches issue-sweep.yml. Zero cost, no API keys.
+name: Branch sweep
+
+on:
+  schedule:
+    - cron: '30 14 * * *'   # Daily 14:30 UTC, just after issue-sweep
+  workflow_dispatch:
+
+permissions:
+  contents: write          # delete branches + create archive tags
+  pull-requests: read      # find branches with an open PR
+
+concurrency:
+  group: branch-sweep
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Archive + delete stale unmerged branches
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v7 (sha-pinned)
+        with:
+          script: |
+            const STALE_AFTER_DAYS = 14;
+
+            const { owner, repo } = context.repo;
+            const defaultBranch = context.payload.repository?.default_branch || 'main';
+
+            // Never sweep these. Automation branches re-create themselves,
+            // gh-pages is the deploy target, the default branch is sacred.
+            const isExempt = (name) =>
+              name === defaultBranch ||
+              name === 'gh-pages' ||
+              name === 'social/ledger' ||
+              /\/auto$/.test(name);
+
+            const cutoff = new Date();
+            cutoff.setDate(cutoff.getDate() - STALE_AFTER_DAYS);
+
+            // Branches with an open PR are active by definition — collect them.
+            const openPrHeads = new Set();
+            for (let page = 1; ; page++) {
+              const { data: prs } = await github.rest.pulls.list({
+                owner, repo, state: 'open', per_page: 100, page,
+              });
+              prs.forEach(pr => openPrHeads.add(pr.head.ref));
+              if (prs.length < 100) break;
+            }
+
+            const counters = { scanned: 0, archived: 0, skipped_recent: 0, skipped_pr: 0 };
+
+            for (let page = 1; ; page++) {
+              const { data: branches } = await github.rest.repos.listBranches({
+                owner, repo, per_page: 100, page,
+              });
+              if (branches.length === 0) break;
+
+              for (const branch of branches) {
+                const name = branch.name;
+                if (isExempt(name)) continue;
+                counters.scanned++;
+
+                if (openPrHeads.has(name)) { counters.skipped_pr++; continue; }
+
+                // Last commit date drives staleness. A branch behind main
+                // but freshly pushed is not stale; an old spike is.
+                const { data: commit } = await github.rest.repos.getCommit({
+                  owner, repo, ref: branch.commit.sha,
+                });
+                const lastCommit = new Date(
+                  commit.commit.committer?.date || commit.commit.author?.date
+                );
+                if (lastCommit >= cutoff) { counters.skipped_recent++; continue; }
+
+                // Archive: push a lightweight tag at the tip (idempotent),
+                // then delete the branch.
+                const tag = `archive/${name}`;
+                try {
+                  await github.rest.git.createRef({
+                    owner, repo,
+                    ref: `refs/tags/${tag}`,
+                    sha: branch.commit.sha,
+                  });
+                } catch (e) {
+                  // 422 = tag already exists (a prior run, or re-pushed
+                  // same name). The commits are already preserved, so
+                  // proceed to delete. Anything else is a real error.
+                  if (e.status !== 422) throw e;
+                }
+
+                await github.rest.git.deleteRef({
+                  owner, repo, ref: `heads/${name}`,
+                });
+                counters.archived++;
+                console.log(`archived + deleted ${name} (last commit ${lastCommit.toISOString().slice(0, 10)}) → tag ${tag}`);
+              }
+
+              if (branches.length < 100) break;
+            }
+
+            console.log(`Branch sweep complete. Scanned ${counters.scanned}; ` +
+                        `archived ${counters.archived}, ` +
+                        `kept ${counters.skipped_recent} recent + ${counters.skipped_pr} with open PR.`);
