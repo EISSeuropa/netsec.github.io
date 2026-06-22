@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-21T19:09:44+00:00",
+  "generated_at": "2026-06-22T10:10:45+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-21T19:09:44+00:00"
+    "last_synced": "2026-06-22T10:10:45+00:00"
   },
   "members": [
     {
@@ -1791,12 +1791,61 @@
         "Security and defence",
         "Theory and methods"
       ]
+    },
+    {
+      "id": "gesine-weber",
+      "name": "Dr Gesine Weber",
+      "country": "Switzerland",
+      "country_code": "ch",
+      "affiliation": "Center for Security Studies, ETH Zürich",
+      "position": "Senior Researcher",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor",
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Dr. Gesine Weber is a Senior Researcher in the Global Security team at the Center for Security Studies (CSS). Her research interests include European security and defense in the context of global powershifts, grand strategy, the global order, and Europe–China relations.\n\nBefore joining the CSS, Gesine was a Research Fellow at the Paris office of the German Marshall Fund of the United States (GMF), a transatlantic think tank. In 2024, she spent six months as a Visiting Scholar at Columbia University’s Arnold A. Saltzman Institute in New York, conducting research with a Fulbright-Schuman scholarship. Previously, she worked as a Research Consultant for the Friedrich-Ebert-Stiftung in Shanghai and as policy advisor focusing on defense policy in the German Bundestag. She has also been an Associate Researcher at the European Council on Foreign Relations (ECFR) and the Centre for Grand Strategy at King’s College London, as well as a Non-Resident Hans J. Morgenthau Fellow at the Notre Dame Center for International Security.\n\nGesine regularly advises government bodies and international organizations in Europe and the United States and publishes and comments in European and international media, including Le Monde, Deutsche Welle, War on the Rocks, BBC, and NZZ, as well as on her Substack newsletter Geopolitical Europe. In 2024, her commitment to translating academic research into policy practice and public debate was recognized with the Research Impact Prize of the Faculty of Social Science and Public Policy at King’s College London.\n\nGesine holds a PhD in Defence Studies from King’s College London, master’s degrees from Sciences Po Paris and Freie Universität Berlin, and a bachelor’s degree from the Albert-Ludwigs-Universität Freiburg.",
+      "keywords": [
+        "European defence",
+        "European security",
+        "grand strategy",
+        "EU security",
+        "global order"
+      ],
+      "email": "gesine.weber@sipo.gess.ethz.ch",
+      "website": "https://geopoliticaleurope.substack.com",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/gesine-weber.jpg",
+      "source": "form",
+      "photo_source_sha256": "2160b1c4e92edc15987377df6caa2bc5c042638e2f430c561b192cef75f4b596",
+      "canonical_keywords": [
+        "EU security",
+        "European defence",
+        "European security",
+        "Global order",
+        "Grand strategy"
+      ],
+      "themes": [
+        "Security and defence",
+        "Strategy and deterrence"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "European security",
-      "count": 4
+      "count": 5
     },
     {
       "keyword": "EU foreign policy",
@@ -1832,6 +1881,10 @@
     },
     {
       "keyword": "Geopolitics",
+      "count": 2
+    },
+    {
+      "keyword": "Grand strategy",
       "count": 2
     },
     {
@@ -1987,6 +2040,14 @@
       "count": 1
     },
     {
+      "keyword": "EU security",
+      "count": 1
+    },
+    {
+      "keyword": "European defence",
+      "count": 1
+    },
+    {
       "keyword": "European strategic autonomy",
       "count": 1
     },
@@ -2007,7 +2068,7 @@
       "count": 1
     },
     {
-      "keyword": "Grand strategy",
+      "keyword": "Global order",
       "count": 1
     },
     {
@@ -2250,7 +2311,7 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 17
+      "count": 18
     },
     {
       "theme": "Foreign policy and diplomacy",
@@ -2273,11 +2334,11 @@
       "count": 6
     },
     {
-      "theme": "Economic security and geoeconomics",
-      "count": 5
+      "theme": "Strategy and deterrence",
+      "count": 6
     },
     {
-      "theme": "Strategy and deterrence",
+      "theme": "Economic security and geoeconomics",
       "count": 5
     },
     {
@@ -2411,11 +2472,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 21
+      "count": 22
     },
     {
       "region": "Global and cross-regional",
-      "count": 15
+      "count": 16
     },
     {
       "region": "Asia",
