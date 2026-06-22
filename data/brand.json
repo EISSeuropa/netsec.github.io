@@ -10,9 +10,9 @@
     "mark": "assets/images/brand/netsec-mark.png"
   },
   "working_groups": [
-    { "id": 1, "colour": "#0a84ff" },
+    { "id": 1, "colour": "#0973de" },
     { "id": 2, "colour": "#10b981" },
-    { "id": 3, "colour": "#8b5cf6" },
+    { "id": 3, "colour": "#8457ea" },
     { "id": 4, "colour": "#f59e0b" }
   ]
 }
