@@ -63,9 +63,10 @@
   --accent-2:#0a84ff;        /* Apple blue */
   --accent-glow:rgba(10,132,255,.35);
   --gold:#ffcc00;            /* EU stars */
-  --wg-1:#0a84ff;            /* Working Group accents (source: data/brand.json) */
+  --wg-1:#0973de;            /* Working Group accents (source: data/brand.json), darkened from
+                                #0a84ff / #8b5cf6 so white pill text clears WCAG AA (#1248) */
   --wg-2:#10b981;
-  --wg-3:#8b5cf6;
+  --wg-3:#8457ea;
   --wg-4:#f59e0b;
   /* Readable label colour for each WG hue, so every WG pill (events, news,
      directory, working-groups) reads the same: white on the two dark hues,
@@ -552,10 +553,13 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   white-space:nowrap;
 }
 /* Per-WG colour for at-a-glance distinction */
-.wg-chip.wg-1{background:linear-gradient(135deg,var(--wg-1),#5b8def);color:var(--wg-1-ink)}
-.wg-chip.wg-2{background:linear-gradient(135deg,var(--wg-2),#34d399);color:var(--wg-2-ink)}
-.wg-chip.wg-3{background:linear-gradient(135deg,var(--wg-3),#a78bfa);color:var(--wg-3-ink)}
-.wg-chip.wg-4{background:linear-gradient(135deg,var(--wg-4),#fbbf24);color:var(--wg-4-ink)}
+/* Solid per-WG colour (was a gradient to a lighter tint, but the light end
+   dropped white text below WCAG AA on WG1/WG3). Solid matches the events,
+   news, and working-groups pills, so all four WG pills share one look. */
+.wg-chip.wg-1{background:var(--wg-1);color:var(--wg-1-ink)}
+.wg-chip.wg-2{background:var(--wg-2);color:var(--wg-2-ink)}
+.wg-chip.wg-3{background:var(--wg-3);color:var(--wg-3-ink)}
+.wg-chip.wg-4{background:var(--wg-4);color:var(--wg-4-ink)}
 
 /* ── Working Groups page (working-groups.html) ─────────────────────── */
 .wg-page .wg-page-head{padding:48px 0 8px}
