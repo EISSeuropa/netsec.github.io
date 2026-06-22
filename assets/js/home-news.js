@@ -20,6 +20,39 @@
     return obj[locale] || obj.en || fallback;
   }
 
+  // Locale lookup for the small set of fixed UI strings (category labels),
+  // routed through the shared catalog so the FR/DE pages translate them.
+  function T(s) {
+    return (window.netsecT && window.netsecT(s)) || s;
+  }
+
+  // Controlled category vocabulary → English label (netsecT translates it).
+  // An unknown type falls back to a Title-cased version of the raw value.
+  const TYPE_LABELS = {
+    event: 'Event',
+    publication: 'Publication',
+    announcement: 'Announcement',
+  };
+
+  function tagsRow(item, locale) {
+    const tags = [];
+    if (item.type) {
+      const label = TYPE_LABELS[item.type] ||
+        (item.type.charAt(0).toUpperCase() + item.type.slice(1));
+      tags.push(el('span', { class: 'news-tag news-tag--cat' }, [T(label)]));
+    }
+    if (item.wg) {
+      // Tint with the existing per-WG accent var; no .wg-N class on the tag,
+      // to keep this class's rules in one place (css-collision lint).
+      tags.push(el('span', {
+        class: 'news-tag news-tag--wg',
+        style: 'background:var(--wg-' + item.wg + ')',
+        title: 'Working Group ' + item.wg,
+      }, ['WG' + item.wg]));
+    }
+    return tags;
+  }
+
   function el(tag, attrs, children) {
     const node = document.createElement(tag);
     if (attrs) {
@@ -47,8 +80,12 @@
       'data-news-id': item.id,
     });
     const dateLabel = pickLocale(item.displayDate, locale, '');
-    if (dateLabel) {
-      card.appendChild(el('span', { class: 'news-date' }, [dateLabel]));
+    const tags = tagsRow(item, locale);
+    if (dateLabel || tags.length) {
+      const meta = el('div', { class: 'news-meta' });
+      if (dateLabel) meta.appendChild(el('span', { class: 'news-date' }, [dateLabel]));
+      tags.forEach(t => meta.appendChild(t));
+      card.appendChild(meta);
     }
     const title = pickLocale(item.title, locale, '');
     card.appendChild(el('h3', null, [title]));
@@ -154,7 +191,15 @@
     const items = sortedItems(data);
     if (!items.length) return; // keep the "archive is empty" fallback
     const frag = document.createDocumentFragment();
+    // Group under a year heading (newest year first). An item without a
+    // parseable pubDate keeps flowing under the current heading.
+    let currentYear = null;
     items.forEach(item => {
+      const year = (item.pubDate || '').slice(0, 4);
+      if (year && year !== currentYear) {
+        currentYear = year;
+        frag.appendChild(el('h2', { class: 'news-year' }, [year]));
+      }
       const card = buildCard(item, locale);
       if (item.id) card.id = 'news-' + item.id;
       frag.appendChild(card);
