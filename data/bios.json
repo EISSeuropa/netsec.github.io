@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-23T20:20:31+00:00",
+  "generated_at": "2026-06-23T20:27:29+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-23T20:20:31+00:00"
+    "last_synced": "2026-06-23T20:27:29+00:00"
   },
   "members": [
     {
@@ -1900,7 +1900,7 @@
         "Hybrid threats",
         "Systems resilience",
         "The Americas",
-        "Transnational organised crime (TOCs)"
+        "Transnational organised crime (TCOs)"
       ],
       "themes": [
         "Crisis management and critical systems resilience",
@@ -2553,7 +2553,7 @@
       "count": 1
     },
     {
-      "keyword": "Transnational organised crime (TOCs)",
+      "keyword": "Transnational organised crime (TCOs)",
       "count": 1
     },
     {
@@ -2751,7 +2751,7 @@
     "Transatlantic security": "European and transatlantic security order",
     "Transitional justice": "Peace, mediation and reconciliation",
     "Transnational and human security": "Transnational and human security",
-    "Transnational organised crime (TOCs)": "Transnational and human security",
+    "Transnational organised crime (TCOs)": "Transnational and human security",
     "UN": "EU, UN and other international organisations",
     "US-China relations": "Foreign policy and diplomacy",
     "Unification": "Peace, mediation and reconciliation",
