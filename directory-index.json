@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-06-22T11:27:33+00:00",
+  "generated_at": "2026-06-23T09:39:15+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 45,
+  "count": 46,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -47,6 +47,17 @@
       "role": null,
       "affiliation": "ETH Zurich, Center for Security Studies",
       "photo": "https://netsec-cost.eu/assets/images/people/anna-pagnacco.jpg"
+    },
+    {
+      "name": "Ms Anna Seliverstova",
+      "name_key": "anna seliverstova",
+      "aliases": [],
+      "slug": "anna-seliverstova",
+      "url": "https://netsec-cost.eu/people/anna-seliverstova.html",
+      "orcid": "0009-0006-0592-5127",
+      "role": null,
+      "affiliation": "Linnaeus University",
+      "photo": "https://netsec-cost.eu/assets/images/people/anna-seliverstova.jpg"
     },
     {
       "name": "Mr Archishman Goswami",

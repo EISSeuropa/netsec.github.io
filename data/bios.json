@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-22T11:27:33+00:00",
+  "generated_at": "2026-06-23T09:39:15+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-22T11:27:33+00:00"
+    "last_synced": "2026-06-23T09:39:15+00:00"
   },
   "members": [
     {
@@ -1950,6 +1950,48 @@
       "themes": [
         "European and transatlantic security order"
       ]
+    },
+    {
+      "id": "anna-seliverstova",
+      "name": "Ms Anna Seliverstova",
+      "country": "Sweden",
+      "country_code": "se",
+      "affiliation": "Linnaeus University",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe - Western Balkans"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "I am a PhD candidate in Political Science at Linnaeus University, Sweden. My research focuses on EU enlargement, democratic backsliding, and the politics of reform in the Western Balkans, with a particular focus on Serbia. More broadly, I am interested in EU external governance, conditionality, civil society, and how candidate countries navigate the accession process.",
+      "keywords": [
+        "EU enlargement",
+        "Western Balkans",
+        "European integration"
+      ],
+      "email": "anna.seliverstova@lnu.se",
+      "website": "",
+      "orcid": "0009-0006-0592-5127",
+      "linkedin": "https://www.linkedin.com/in/annaseliverstova/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/anna-seliverstova.jpg",
+      "source": "form",
+      "photo_source_sha256": "8697f9cc1e6d98ba3a984d4ecdfbd535000474a1cee31805af9bb8bcbf7d8a77",
+      "canonical_keywords": [
+        "EU enlargement",
+        "European integration",
+        "Western Balkans"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -2019,6 +2061,10 @@
     },
     {
       "keyword": "Security and defence",
+      "count": 2
+    },
+    {
+      "keyword": "Western Balkans",
       "count": 2
     },
     {
@@ -2170,11 +2216,19 @@
       "count": 1
     },
     {
+      "keyword": "EU enlargement",
+      "count": 1
+    },
+    {
       "keyword": "EU security",
       "count": 1
     },
     {
       "keyword": "European defence",
+      "count": 1
+    },
+    {
+      "keyword": "European integration",
       "count": 1
     },
     {
@@ -2440,10 +2494,6 @@
     {
       "keyword": "US-China relations",
       "count": 1
-    },
-    {
-      "keyword": "Western Balkans",
-      "count": 1
     }
   ],
   "theme_aggregate": [
@@ -2453,7 +2503,7 @@
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 14
+      "count": 15
     },
     {
       "theme": "Theory and methods",
@@ -2630,7 +2680,7 @@
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 7
+      "count": 8
     },
     {
       "region": "The Americas",
