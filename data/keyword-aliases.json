@@ -31,6 +31,7 @@
 
   "aliases": {
     "Cybersecurity": ["cyber security"],
+    "Transnational organised crime (TOCs)": ["transnational organised crime (tcos)", "transnational organized crime (tocs)", "transnational organised crime (tocs)"],
     "EU": ["european union"],
     "NATO": ["north atlantic treaty organization", "north atlantic treaty organisation"],
     "UN": ["united nations"],
@@ -86,16 +87,17 @@
     "Foreign policy and diplomacy": ["EU foreign policy", "German security policy", "Foreign policy analysis", "Russian foreign policy", "Indian foreign policy", "India", "Geopolitics", "Eastern Europe", "Western Balkans", "Regional cooperation", "US-China relations", "Diplomacy", "East central Europe", "Nordic countries", "Nordic-Baltic space", "Small states", "Small states' foreign and security policy", "Regional security cooperation and governance"],
     "Security and defence": ["European security", "Defence", "International security", "Power", "Civil defence", "Civil-military relations", "Militarisation", "Irregular warfare", "National security", "Capability planning", "Military innovation", "Black sea security", "Security and defence", "Security studies", "Security politics", "Security"],
     "Strategy and deterrence": ["Grand strategy", "Strategy", "Maritime strategy", "Nuclear strategy", "Nuclear politics", "Arms control", "Deterrence"],
-    "European and transatlantic security order": ["EU–NATO relations", "European strategic autonomy", "Transatlantic relations", "Transatlantic security", "Alliance politics", "NATO", "Military neutrality"],
-    "Intelligence, information and influence": ["Disinformation", "Election interference", "Subversion", "Digital media", "Intelligence studies", "Influence", "Cognitive warfare", "Hybrid threats"],
+    "European and transatlantic security order": ["EU–NATO relations", "European strategic autonomy", "Transatlantic relations", "Transatlantic security", "Alliance politics", "NATO", "Military neutrality", "European defence", "Collective defence"],
+    "Intelligence, information and influence": ["Disinformation", "Election interference", "Subversion", "Digital media", "Intelligence studies", "Influence", "Cognitive warfare", "Hybrid threats", "Information integrity"],
     "Identity, narratives and ideational security": ["Identity", "Narratives", "Ontological security"],
-    "Cyber and emerging technology": ["Cybersecurity governance", "Digital sovereignty", "Digital governance", "Cyber defence", "Cyber", "Cyber statecraft", "Infrastructure", "Critical infrastructure", "Supply chain security", "Emerging technology", "Emerging and disruptive technologies", "Artificial intelligence", "AI", "Cybersecurity", "Cybercrime", "Dual use technologies", "Technology spillovers"],
+    "Cyber and emerging technology": ["Cybersecurity governance", "Digital sovereignty", "Digital governance", "Cyber defence", "Cyber", "Cyber statecraft", "Infrastructure", "Critical infrastructure", "Supply chain security", "Emerging technology", "Emerging and disruptive technologies", "Artificial intelligence", "AI", "Cybersecurity", "Cybercrime", "Dual use technologies", "Technology spillovers", "AI governance", "Digital security", "Human rights and technology"],
     "Economic security and geoeconomics": ["Economic security", "Economic statecraft", "Industrial policy", "Political economy", "Defence industrial policy", "Defence economics", "Defence industry"],
-    "Transnational and human security": ["Non-state actors", "Maritime security", "Counterterrorism", "Transnational and human security", "International humanitarian law", "International human rights law", "International jurisprudence", "Gender-based violence"],
+    "Transnational and human security": ["Non-state actors", "Maritime security", "Counterterrorism", "Transnational and human security", "International humanitarian law", "International human rights law", "International jurisprudence", "Gender-based violence", "Transnational organised crime (TOCs)"],
     "Peace, mediation and reconciliation": ["Positive peace", "Plural peace", "Peace vision", "Peacebuilding", "Peacekeeping", "Mediation", "Conflict resolution", "Reconciliation", "Transitional justice", "Ethnic conflict analysis", "Divided nation", "Unification", "State-building"],
-    "Theory and methods": ["Text as data", "Research methods", "Political psychology", "Policy evaluation", "Judgment and decision-making", "International relations", "History", "Organisation studies", "Feminist studies", "International law", "Critical security studies", "Role theory"],
-    "EU, UN and other international organisations": ["UN", "Multilateralism", "EU security", "Global order"],
-    "Crisis management and critical systems resilience": ["Crisis management", "Crises", "Critical infrastructure security", "Systems resilience", "Civil protection"]
+    "Theory and methods": ["Text as data", "Research methods", "Policy evaluation", "International relations", "History", "Organisation studies", "Feminist studies", "International law", "Critical security studies", "Role theory"],
+    "EU, UN and other international organisations": ["UN", "Multilateralism", "EU security", "Global order", "EU enlargement", "European integration"],
+    "Crisis management and critical systems resilience": ["Crisis management", "Crises", "Critical infrastructure security", "Systems resilience", "Civil protection"],
+    "Political psychology, public opinion and decision-making": ["Political psychology", "Judgment and decision-making", "Public opinion", "Defence attitudes"]
   },
 
   "affiliation_aliases": {

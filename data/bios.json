@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-23T16:16:28+00:00",
+  "generated_at": "2026-06-23T20:20:31+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-23T16:16:28+00:00"
+    "last_synced": "2026-06-23T20:20:31+00:00"
   },
   "members": [
     {
@@ -230,6 +230,7 @@
       "themes": [
         "European and transatlantic security order",
         "Foreign policy and diplomacy",
+        "Political psychology, public opinion and decision-making",
         "Theory and methods"
       ],
       "regions": [
@@ -1272,6 +1273,7 @@
       ],
       "themes": [
         "Foreign policy and diplomacy",
+        "Political psychology, public opinion and decision-making",
         "Security and defence",
         "Theory and methods"
       ]
@@ -1853,6 +1855,7 @@
       ],
       "themes": [
         "EU, UN and other international organisations",
+        "European and transatlantic security order",
         "Security and defence",
         "Strategy and deterrence"
       ]
@@ -1897,11 +1900,12 @@
         "Hybrid threats",
         "Systems resilience",
         "The Americas",
-        "Transnational organised crime (tcos)"
+        "Transnational organised crime (TOCs)"
       ],
       "themes": [
         "Crisis management and critical systems resilience",
-        "Intelligence, information and influence"
+        "Intelligence, information and influence",
+        "Transnational and human security"
       ]
     },
     {
@@ -1948,7 +1952,8 @@
         "Public opinion"
       ],
       "themes": [
-        "European and transatlantic security order"
+        "European and transatlantic security order",
+        "Political psychology, public opinion and decision-making"
       ]
     },
     {
@@ -1990,6 +1995,7 @@
         "Western Balkans"
       ],
       "themes": [
+        "EU, UN and other international organisations",
         "Foreign policy and diplomacy"
       ]
     },
@@ -2039,6 +2045,8 @@
         "Transitional justice"
       ],
       "themes": [
+        "Cyber and emerging technology",
+        "Intelligence, information and influence",
         "Peace, mediation and reconciliation"
       ]
     }
@@ -2545,7 +2553,7 @@
       "count": 1
     },
     {
-      "keyword": "Transnational organised crime (tcos)",
+      "keyword": "Transnational organised crime (TOCs)",
       "count": 1
     },
     {
@@ -2576,18 +2584,22 @@
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 9
+      "count": 10
     },
     {
       "theme": "European and transatlantic security order",
-      "count": 7
-    },
-    {
-      "theme": "Strategy and deterrence",
-      "count": 6
+      "count": 8
     },
     {
       "theme": "Transnational and human security",
+      "count": 7
+    },
+    {
+      "theme": "Intelligence, information and influence",
+      "count": 6
+    },
+    {
+      "theme": "Strategy and deterrence",
       "count": 6
     },
     {
@@ -2595,19 +2607,19 @@
       "count": 5
     },
     {
-      "theme": "Intelligence, information and influence",
-      "count": 5
-    },
-    {
       "theme": "Peace, mediation and reconciliation",
       "count": 5
     },
     {
-      "theme": "Crisis management and critical systems resilience",
-      "count": 2
+      "theme": "EU, UN and other international organisations",
+      "count": 3
     },
     {
-      "theme": "EU, UN and other international organisations",
+      "theme": "Political psychology, public opinion and decision-making",
+      "count": 3
+    },
+    {
+      "theme": "Crisis management and critical systems resilience",
       "count": 2
     },
     {
@@ -2617,6 +2629,7 @@
   ],
   "keyword_theme_map": {
     "AI": "Cyber and emerging technology",
+    "AI governance": "Cyber and emerging technology",
     "Alliance politics": "European and transatlantic security order",
     "Arms control": "Strategy and deterrence",
     "Black sea security": "Security and defence",
@@ -2625,6 +2638,7 @@
     "Civil protection": "Crisis management and critical systems resilience",
     "Civil-military relations": "Security and defence",
     "Cognitive warfare": "Intelligence, information and influence",
+    "Collective defence": "European and transatlantic security order",
     "Counterterrorism": "Transnational and human security",
     "Crises": "Crisis management and critical systems resilience",
     "Crisis management": "Crisis management and critical systems resilience",
@@ -2636,17 +2650,20 @@
     "Cybersecurity": "Cyber and emerging technology",
     "Cybersecurity governance": "Cyber and emerging technology",
     "Defence": "Security and defence",
+    "Defence attitudes": "Political psychology, public opinion and decision-making",
     "Defence economics": "Economic security and geoeconomics",
     "Defence industrial policy": "Economic security and geoeconomics",
     "Defence industry": "Economic security and geoeconomics",
     "Deterrence": "Strategy and deterrence",
     "Digital governance": "Cyber and emerging technology",
     "Digital media": "Intelligence, information and influence",
+    "Digital security": "Cyber and emerging technology",
     "Digital sovereignty": "Cyber and emerging technology",
     "Diplomacy": "Foreign policy and diplomacy",
     "Disinformation": "Intelligence, information and influence",
     "Divided nation": "Peace, mediation and reconciliation",
     "Dual use technologies": "Cyber and emerging technology",
+    "EU enlargement": "EU, UN and other international organisations",
     "EU foreign policy": "Foreign policy and diplomacy",
     "EU security": "EU, UN and other international organisations",
     "EU–NATO relations": "European and transatlantic security order",
@@ -2658,6 +2675,8 @@
     "Emerging and disruptive technologies": "Cyber and emerging technology",
     "Emerging technology": "Cyber and emerging technology",
     "Ethnic conflict analysis": "Peace, mediation and reconciliation",
+    "European defence": "European and transatlantic security order",
+    "European integration": "EU, UN and other international organisations",
     "European security": "Security and defence",
     "European strategic autonomy": "European and transatlantic security order",
     "Feminist studies": "Theory and methods",
@@ -2668,12 +2687,14 @@
     "Global order": "EU, UN and other international organisations",
     "Grand strategy": "Strategy and deterrence",
     "History": "Theory and methods",
+    "Human rights and technology": "Cyber and emerging technology",
     "Hybrid threats": "Intelligence, information and influence",
     "Identity": "Identity, narratives and ideational security",
     "India": "Foreign policy and diplomacy",
     "Indian foreign policy": "Foreign policy and diplomacy",
     "Industrial policy": "Economic security and geoeconomics",
     "Influence": "Intelligence, information and influence",
+    "Information integrity": "Intelligence, information and influence",
     "Infrastructure": "Cyber and emerging technology",
     "Intelligence studies": "Intelligence, information and influence",
     "International human rights law": "Transnational and human security",
@@ -2683,7 +2704,7 @@
     "International relations": "Theory and methods",
     "International security": "Security and defence",
     "Irregular warfare": "Security and defence",
-    "Judgment and decision-making": "Theory and methods",
+    "Judgment and decision-making": "Political psychology, public opinion and decision-making",
     "Maritime security": "Transnational and human security",
     "Maritime strategy": "Strategy and deterrence",
     "Militarisation": "Security and defence",
@@ -2705,9 +2726,10 @@
     "Plural peace": "Peace, mediation and reconciliation",
     "Policy evaluation": "Theory and methods",
     "Political economy": "Economic security and geoeconomics",
-    "Political psychology": "Theory and methods",
+    "Political psychology": "Political psychology, public opinion and decision-making",
     "Positive peace": "Peace, mediation and reconciliation",
     "Power": "Security and defence",
+    "Public opinion": "Political psychology, public opinion and decision-making",
     "Regional cooperation": "Foreign policy and diplomacy",
     "Regional security cooperation and governance": "Foreign policy and diplomacy",
     "Research methods": "Theory and methods",
@@ -2729,6 +2751,7 @@
     "Transatlantic security": "European and transatlantic security order",
     "Transitional justice": "Peace, mediation and reconciliation",
     "Transnational and human security": "Transnational and human security",
+    "Transnational organised crime (TOCs)": "Transnational and human security",
     "UN": "EU, UN and other international organisations",
     "US-China relations": "Foreign policy and diplomacy",
     "Unification": "Peace, mediation and reconciliation",
