@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-23T09:39:15+00:00",
+  "generated_at": "2026-06-23T16:16:28+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-23T09:39:15+00:00"
+    "last_synced": "2026-06-23T16:16:28+00:00"
   },
   "members": [
     {
@@ -1992,6 +1992,55 @@
       "themes": [
         "Foreign policy and diplomacy"
       ]
+    },
+    {
+      "id": "kara-schneider",
+      "name": "Ms Kara Schneider",
+      "country": "France",
+      "country_code": "fr",
+      "affiliation": "UNESCO",
+      "position": "Policy analyst",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Africa",
+        "Asia",
+        "Europe",
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "wg_leadership": {},
+      "bio": "Kara Schneider is a researcher and policy professional specializing in the intersection of human rights, emerging technologies, and international security. She is completing an MSc in Human Rights and Data Science at The American University of Paris and has worked with UNESCO, International Bridges to Justice, and Lawyers Without Borders on projects related to AI governance, digital rights, access to justice, and international law.\n\nHer current research examines the impact of generative AI on the integrity of mass violence and genocide testimony, with a focus on testimonial manipulation, digital evidence, archival governance, and information integrity. Her broader interests include AI governance, cybersecurity policy, international humanitarian law, gender-based violence, transitional justice, and European security governance.\n\nShe will begin studies in European Governance at Vrije Universiteit Brussel while pursuing a career in European technology and security policy.",
+      "keywords": [
+        "AI Governance",
+        "Information Integrity",
+        "Human Rights and Technology",
+        "Digital Security",
+        "Transitional Justice"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/kara-schneider-ba6100220/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/kara-schneider.jpg",
+      "source": "form",
+      "photo_source_sha256": "2bfd6a414254a5a73413ec98211b69d8eab664c352fe00672fb592d1f482133b",
+      "canonical_keywords": [
+        "AI governance",
+        "Digital security",
+        "Human rights and technology",
+        "Information integrity",
+        "Transitional justice"
+      ],
+      "themes": [
+        "Peace, mediation and reconciliation"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -2064,11 +2113,19 @@
       "count": 2
     },
     {
+      "keyword": "Transitional justice",
+      "count": 2
+    },
+    {
       "keyword": "Western Balkans",
       "count": 2
     },
     {
       "keyword": "AI",
+      "count": 1
+    },
+    {
+      "keyword": "AI governance",
       "count": 1
     },
     {
@@ -2172,6 +2229,10 @@
       "count": 1
     },
     {
+      "keyword": "Digital security",
+      "count": 1
+    },
+    {
       "keyword": "Digital sovereignty",
       "count": 1
     },
@@ -2260,6 +2321,10 @@
       "count": 1
     },
     {
+      "keyword": "Human rights and technology",
+      "count": 1
+    },
+    {
       "keyword": "Identity",
       "count": 1
     },
@@ -2277,6 +2342,10 @@
     },
     {
       "keyword": "Influence",
+      "count": 1
+    },
+    {
+      "keyword": "Information integrity",
       "count": 1
     },
     {
@@ -2472,10 +2541,6 @@
       "count": 1
     },
     {
-      "keyword": "Transitional justice",
-      "count": 1
-    },
-    {
       "keyword": "Transnational and human security",
       "count": 1
     },
@@ -2535,7 +2600,7 @@
     },
     {
       "theme": "Peace, mediation and reconciliation",
-      "count": 4
+      "count": 5
     },
     {
       "theme": "Crisis management and critical systems resilience",
@@ -2672,11 +2737,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 23
+      "count": 24
     },
     {
       "region": "Global and cross-regional",
-      "count": 17
+      "count": 18
     },
     {
       "region": "Europe - Western Balkans",
@@ -2684,11 +2749,11 @@
     },
     {
       "region": "The Americas",
-      "count": 7
+      "count": 8
     },
     {
       "region": "Asia",
-      "count": 6
+      "count": 7
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -2700,7 +2765,7 @@
     },
     {
       "region": "Africa",
-      "count": 1
+      "count": 2
     }
   ]
 }
