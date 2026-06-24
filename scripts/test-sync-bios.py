@@ -165,6 +165,17 @@ def test_suggest_theme() -> None:
     expect("empty -> None", st("", theme_of), None)
 
 
+def test_region_names_dropped_from_keywords() -> None:
+    """A region name typed into the keyword box is excluded from keywords:
+    geography belongs to the regions facet. The sync drops any normalised
+    keyword whose lowercase form is in the regions vocabulary."""
+    print("\nregion-name keyword drop:")
+    vocab = load_region_vocab()
+    # The predicate the keyword loop uses: `canon.lower() in region_vocab`.
+    expect("region name is in vocab (would drop)", "The Americas".lower() in vocab, True)
+    expect("real keyword not in vocab (kept)", "Maritime security".lower() in vocab, False)
+
+
 def test_country_key() -> None:
     print("\ncountry_key():")
     expect("lowercased", country_key("United Kingdom"), "united kingdom")
@@ -1380,6 +1391,7 @@ def main() -> None:
     test_build_name()
     test_parse_keywords()
     test_suggest_theme()
+    test_region_names_dropped_from_keywords()
     test_country_key()
     test_title_only_name_skipped()
     test_merge_helferich()

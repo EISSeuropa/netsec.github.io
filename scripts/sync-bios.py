@@ -2048,16 +2048,25 @@ def main() -> None:
     print("Normalising keywords against data/keyword-aliases.json …")
     acronyms, alias_map, spelling_map = load_keyword_aliases()
     theme_of = load_keyword_themes()
+    region_vocab = load_region_vocab()
     aggregate: dict[str, int] = {}
     theme_member_counts: dict[str, int] = {}  # theme → distinct members
     keyword_theme_map: dict[str, str] = {}    # canonical keyword → theme
     uncategorised: set[str] = set()
+    dropped_regions: set[str] = set()         # region names typed as keywords
     for m in merged:
         raw_kws = m.get("keywords") or []
         seen: dict[str, str] = {}  # lowercase canonical → canonical
         for raw in raw_kws:
             canon = normalise_keyword(raw, acronyms, alias_map, spelling_map)
             if not canon:
+                continue
+            # Geography belongs to the regions facet, not the topical keyword
+            # pills. A region name typed into the keyword box (e.g. "The
+            # Americas") would otherwise stand alone in the theme filter; drop
+            # it here so the controlled regions vocabulary owns that axis.
+            if canon.lower() in region_vocab:
+                dropped_regions.add(canon)
                 continue
             key = canon.lower()
             if key in seen:
@@ -2098,6 +2107,11 @@ def main() -> None:
             m.pop("themes", None)
     print(f"  {len(aggregate)} unique canonical keywords across "
           f"{sum(aggregate.values())} bio mentions.")
+    if dropped_regions:
+        print(
+            "  · dropped region names from keywords (they belong to the "
+            "regions facet): " + ", ".join(sorted(dropped_regions))
+        )
     if uncategorised:
         # Keep the taxonomy complete: any canonical keyword without a theme
         # won't cluster and its card pill renders as display-only.
