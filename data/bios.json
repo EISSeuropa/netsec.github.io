@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-23T20:30:17+00:00",
+  "generated_at": "2026-06-24T08:53:36+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-23T20:30:17+00:00"
+    "last_synced": "2026-06-24T08:53:36+00:00"
   },
   "members": [
     {
@@ -1877,13 +1877,13 @@
       ],
       "stsm_hosting": "ask",
       "wg_leadership": {},
-      "bio": "Strategic Intelligence Analyst at ČVUT–UCEEB and PhD candidate in Political Science at Charles University. He specialises in comparative politics, geopolitics, and security dynamics in the Americas, with a current focus on hybrid threats and systems resilience. He holds degrees in International Relations and Geography–Development Studies, with additional training in Global Terrorism and Cybersecurity. He has teaching experience in Geopolitics of Latin America at Charles University and international academic exposure (ECPR, ISA, CEISA, CES, EISS, University of Sarajevo, Ludovika University of Public Service). His doctoral research examined comparatively post-conflict transitions in Bosnia and Herzegovina and Colombia.",
+      "bio": "Strategic Intelligence Analyst at the Czech Technical University (ČVUT–UCEEB), within the Security of Strategic Infrastructure team, and a PhD candidate in Political Science at Charles University. He holds degrees with honours in International Relations and Geography–Development Studies, with additional training in Global Terrorism and Cybersecurity. His work covers hybrid threat mapping affecting EU/NATO, systems resilience, and tabletop exercise scenario design. He developed a vectorial analytical model for hybrid threat classification, presented at ESSC 2026 (Stockholm), jointly organised by NetSec, EISS, and Stockholm University. He has participated in ECPR, ISA, CEISA, CES, and South America-focused conferences at Ludovika University of Public Service (Budapest), conducted teaching mobility at the University of Sarajevo, and lectures on Geopolitics and Security in Latin America at Charles University. His current focus engages critical infrastructure vulnerability, organised crime, great power strategy, and instability dynamics from the Western Hemisphere, bringing disciplinary and geographic perspectives relevant to Europe's defence and strategic autonomy.",
       "keywords": [
-        "Hybrid Threats",
         "Critical Infrastructure Security",
+        "Hybrid Threats",
         "Systems Resilience",
-        "Transnational Organised Crime (TCOs)",
-        "The Americas"
+        "The Americas",
+        "Trasnational Criminal Organisations (TCOs)"
       ],
       "email": "fabio.duarte@cvut.cz",
       "website": "https://www.uceeb.cz/en/fabio-iguavita-duarte/",
@@ -1899,12 +1899,11 @@
         "Critical infrastructure security",
         "Hybrid threats",
         "Systems resilience",
-        "Transnational organised crime (TCOs)"
+        "Trasnational criminal organisations (tcos)"
       ],
       "themes": [
         "Crisis management and critical systems resilience",
-        "Intelligence, information and influence",
-        "Transnational and human security"
+        "Intelligence, information and influence"
       ]
     },
     {
@@ -2548,7 +2547,7 @@
       "count": 1
     },
     {
-      "keyword": "Transnational organised crime (TCOs)",
+      "keyword": "Trasnational criminal organisations (tcos)",
       "count": 1
     },
     {
@@ -2586,15 +2585,15 @@
       "count": 8
     },
     {
-      "theme": "Transnational and human security",
-      "count": 7
-    },
-    {
       "theme": "Intelligence, information and influence",
       "count": 6
     },
     {
       "theme": "Strategy and deterrence",
+      "count": 6
+    },
+    {
+      "theme": "Transnational and human security",
       "count": 6
     },
     {
@@ -2746,7 +2745,6 @@
     "Transatlantic security": "European and transatlantic security order",
     "Transitional justice": "Peace, mediation and reconciliation",
     "Transnational and human security": "Transnational and human security",
-    "Transnational organised crime (TCOs)": "Transnational and human security",
     "UN": "EU, UN and other international organisations",
     "US-China relations": "Foreign policy and diplomacy",
     "Unification": "Peace, mediation and reconciliation",
