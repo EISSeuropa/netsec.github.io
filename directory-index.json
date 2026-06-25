@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-06-25T08:31:32+00:00",
+  "generated_at": "2026-06-25T14:14:16+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 47,
+  "count": 48,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -102,6 +102,17 @@
       "role": "WG3 Leader · Management Committee · France",
       "affiliation": "Sciences Po, Center for International Studies (CERI)",
       "photo": "https://netsec-cost.eu/assets/images/people/chiara-ruffa.jpg"
+    },
+    {
+      "name": "Ms Clara Jammot",
+      "name_key": "clara jammot",
+      "aliases": [],
+      "slug": "clara-jammot",
+      "url": "https://netsec-cost.eu/people/clara-jammot.html",
+      "orcid": null,
+      "role": null,
+      "affiliation": "King's College London",
+      "photo": "https://netsec-cost.eu/assets/images/people/clara-jammot.jpg"
     },
     {
       "name": "Dr Eliza Gheorghe",
