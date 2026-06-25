@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-25T08:31:32+00:00",
+  "generated_at": "2026-06-25T14:14:16+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-25T08:31:32+00:00"
+    "last_synced": "2026-06-25T14:14:16+00:00"
   },
   "members": [
     {
@@ -2047,6 +2047,55 @@
         "Intelligence, information and influence",
         "Peace, mediation and reconciliation"
       ]
+    },
+    {
+      "id": "clara-jammot",
+      "name": "Ms Clara Jammot",
+      "country": "France",
+      "country_code": "fr",
+      "affiliation": "King's College London",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Asia",
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Clara Jammot is a PhD Candidate in the Department of War Studies at King’s College London where she specializes on the nexus between international security and technology. Her doctoral research focuses on how algorithms impact ontological (in)security and perceptions of the Self within extremist communities, drawing on a mixed methods approach that reverse engineers TikTok’s algorithm through social media walkthroughs, Social Network Analysis, Python-coded sentiment analysis, and content analysis. Clara holds an MA in International Security from the Sciences Po Paris School of International Affairs with a concentration in East Asian politics and cybersecurity. She also has a BA (Hons) in Politics and International Studies from the University of Warwick.\n\nAdditionally, Clara is a part of the King’s Cyber Security Research Group where she participates in the group’s agenda-setting and research development, as well as having launched the group’s newsletter. Alongside this, she is an external expert for the Global Internet Forum to Counter Terrorism (GIFCT) as well as having advised the UK Metropolitan Police on the spread of far-right content online.\n\nClara has also worked for the European Cyber Security Organization (ECSO) on the Interreg Cyber Europe project and EU cyber-legislation like the NIS2 Directive, the Digital Services Act, and the Digital Markets Act. Her private sector research experience spans PwC and Kerabeo Ltd. where she research the digital transformation of society as well as conducting policy research on peacebuilding in fragile and conflict-affected states for firms consulting with the United Nations.",
+      "keywords": [
+        "Emerging Technology",
+        "Extremism",
+        "Ontological Security",
+        "Algorithms and AI",
+        "Social Media"
+      ],
+      "email": "jammot.clara@kcl.ac.uk",
+      "website": "https://www.kcl.ac.uk/people/clara-jammot",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/clara-jammot-b10505155/",
+      "twitter": "https://x.com/clara_jam_",
+      "bluesky": "https://bsky.app/profile/clara-jam.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/clara-jammot.jpg",
+      "source": "form",
+      "photo_source_sha256": "9701c62e2fdede260d658dfe5475b7e3518ab7fc9e60f076d4a72213a6ac394b",
+      "canonical_keywords": [
+        "Algorithms and AI",
+        "Emerging technology",
+        "Extremism",
+        "Ontological security",
+        "Social media"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Identity, narratives and ideational security"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -2083,6 +2132,10 @@
       "count": 2
     },
     {
+      "keyword": "Emerging technology",
+      "count": 2
+    },
+    {
       "keyword": "Foreign policy analysis",
       "count": 2
     },
@@ -2111,6 +2164,10 @@
       "count": 2
     },
     {
+      "keyword": "Ontological security",
+      "count": 2
+    },
+    {
       "keyword": "Political psychology",
       "count": 2
     },
@@ -2132,6 +2189,10 @@
     },
     {
       "keyword": "AI governance",
+      "count": 1
+    },
+    {
+      "keyword": "Algorithms and AI",
       "count": 1
     },
     {
@@ -2275,10 +2336,6 @@
       "count": 1
     },
     {
-      "keyword": "Emerging technology",
-      "count": 1
-    },
-    {
       "keyword": "Ethnic conflict analysis",
       "count": 1
     },
@@ -2304,6 +2361,10 @@
     },
     {
       "keyword": "EU–NATO relations",
+      "count": 1
+    },
+    {
+      "keyword": "Extremism",
       "count": 1
     },
     {
@@ -2431,10 +2492,6 @@
       "count": 1
     },
     {
-      "keyword": "Ontological security",
-      "count": 1
-    },
-    {
       "keyword": "Organisation studies",
       "count": 1
     },
@@ -2511,6 +2568,10 @@
       "count": 1
     },
     {
+      "keyword": "Social media",
+      "count": 1
+    },
+    {
       "keyword": "State-building",
       "count": 1
     },
@@ -2573,12 +2634,12 @@
       "count": 15
     },
     {
-      "theme": "Theory and methods",
+      "theme": "Cyber and emerging technology",
       "count": 11
     },
     {
-      "theme": "Cyber and emerging technology",
-      "count": 10
+      "theme": "Theory and methods",
+      "count": 11
     },
     {
       "theme": "European and transatlantic security order",
@@ -2618,7 +2679,7 @@
     },
     {
       "theme": "Identity, narratives and ideational security",
-      "count": 1
+      "count": 2
     }
   ],
   "keyword_theme_map": {
@@ -2753,11 +2814,15 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 24
+      "count": 25
     },
     {
       "region": "Global and cross-regional",
-      "count": 18
+      "count": 19
+    },
+    {
+      "region": "Asia",
+      "count": 8
     },
     {
       "region": "Europe - Western Balkans",
@@ -2766,10 +2831,6 @@
     {
       "region": "The Americas",
       "count": 8
-    },
-    {
-      "region": "Asia",
-      "count": 7
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
