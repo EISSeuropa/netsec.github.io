@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-24T09:11:17+00:00",
+  "generated_at": "2026-06-25T08:31:32+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-24T09:11:17+00:00"
+    "last_synced": "2026-06-25T08:31:32+00:00"
   },
   "members": [
     {
@@ -1020,7 +1020,7 @@
       ],
       "email": "gilbaram@berkeley.edu",
       "website": "https://gilbaram.com/",
-      "orcid": "",
+      "orcid": "0000-0002-0384-612X",
       "linkedin": "https://www.linkedin.com/in/dr-gil-baram-cyber/",
       "twitter": "",
       "bluesky": "",
