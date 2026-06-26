@@ -8,8 +8,8 @@
       "colour": "wg-1",
       "memberCount": 79,
       "lead": {
-        "slug": "moritz-weiss",
-        "name": "Dr Moritz Weiss"
+        "slug": "filip-ejdus",
+        "name": "Prof. Filip Ejdus"
       },
       "coLead": {
         "slug": "filip-ejdus",
@@ -47,7 +47,8 @@
         },
         {
           "name": "Ms Clara Jammot",
-          "country": "United Kingdom"
+          "country": "United Kingdom",
+          "slug": "clara-jammot"
         },
         {
           "name": "Dr Constantinos Adamides",
@@ -222,6 +223,11 @@
           "country": "Norway"
         },
         {
+          "name": "Dr Moritz Weiss",
+          "country": "Germany",
+          "slug": "moritz-weiss"
+        },
+        {
           "name": "Mr Muhammet Ozcan",
           "country": "Türkiye"
         },
@@ -393,7 +399,8 @@
         },
         {
           "name": "Ms Clara Jammot",
-          "country": "United Kingdom"
+          "country": "United Kingdom",
+          "slug": "clara-jammot"
         },
         {
           "name": "Dr Constantinos Adamides",
@@ -978,7 +985,7 @@
       "number": 4,
       "name": "Inclusion, Representativeness & Ethics",
       "colour": "wg-4",
-      "memberCount": 45,
+      "memberCount": 44,
       "lead": {
         "slug": "revecca-pedi",
         "name": "Dr Revecca Pedi"
@@ -1114,10 +1121,6 @@
         {
           "name": "Dr Nemanja Džuverović",
           "country": "Serbia"
-        },
-        {
-          "name": "Prof Njazi Bytyqi",
-          "country": "Kosovo*"
         },
         {
           "name": "Dr Pinar Caglayan",
