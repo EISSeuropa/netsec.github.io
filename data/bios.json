@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-26T10:56:08+00:00",
+  "generated_at": "2026-06-26T12:53:04+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-26T10:56:08+00:00"
+    "last_synced": "2026-06-26T12:53:04+00:00"
   },
   "members": [
     {
@@ -1899,11 +1899,12 @@
         "Critical infrastructure security",
         "Hybrid threats",
         "Systems resilience",
-        "Transnational criminal organisations (tcos)"
+        "Transnational criminal organisations (TCOs)"
       ],
       "themes": [
         "Crisis management and critical systems resilience",
-        "Intelligence, information and influence"
+        "Intelligence, information and influence",
+        "Transnational and human security"
       ]
     },
     {
@@ -2094,7 +2095,9 @@
       ],
       "themes": [
         "Cyber and emerging technology",
-        "Identity, narratives and ideational security"
+        "Identity, narratives and ideational security",
+        "Intelligence, information and influence",
+        "Transnational and human security"
       ]
     },
     {
@@ -2142,7 +2145,8 @@
         "Great power competition"
       ],
       "themes": [
-        "EU, UN and other international organisations"
+        "EU, UN and other international organisations",
+        "Foreign policy and diplomacy"
       ]
     },
     {
@@ -2182,13 +2186,16 @@
       "source": "form",
       "photo_source_sha256": "70e7f9b56c1e76694a3bbd37b4fac87eb42554aa8005bb4c8117da132f142fec",
       "canonical_keywords": [
-        "EU-NATO",
         "European security",
+        "EU–NATO relations",
         "Informality",
         "Nuclear deterrence"
       ],
       "themes": [
-        "Security and defence"
+        "EU, UN and other international organisations",
+        "European and transatlantic security order",
+        "Security and defence",
+        "Strategy and deterrence"
       ]
     }
   ],
@@ -2231,6 +2238,10 @@
     },
     {
       "keyword": "European integration",
+      "count": 2
+    },
+    {
+      "keyword": "EU–NATO relations",
       "count": 2
     },
     {
@@ -2458,19 +2469,11 @@
       "count": 1
     },
     {
-      "keyword": "EU-NATO",
-      "count": 1
-    },
-    {
       "keyword": "European defence",
       "count": 1
     },
     {
       "keyword": "European strategic autonomy",
-      "count": 1
-    },
-    {
-      "keyword": "EU–NATO relations",
       "count": 1
     },
     {
@@ -2730,7 +2733,7 @@
       "count": 1
     },
     {
-      "keyword": "Transnational criminal organisations (tcos)",
+      "keyword": "Transnational criminal organisations (TCOs)",
       "count": 1
     },
     {
@@ -2753,7 +2756,7 @@
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 15
+      "count": 16
     },
     {
       "theme": "Cyber and emerging technology",
@@ -2765,31 +2768,31 @@
     },
     {
       "theme": "European and transatlantic security order",
+      "count": 9
+    },
+    {
+      "theme": "Transnational and human security",
       "count": 8
     },
     {
       "theme": "Intelligence, information and influence",
-      "count": 6
+      "count": 7
     },
     {
       "theme": "Strategy and deterrence",
-      "count": 6
-    },
-    {
-      "theme": "Transnational and human security",
-      "count": 6
+      "count": 7
     },
     {
       "theme": "Economic security and geoeconomics",
       "count": 5
     },
     {
-      "theme": "Peace, mediation and reconciliation",
+      "theme": "EU, UN and other international organisations",
       "count": 5
     },
     {
-      "theme": "EU, UN and other international organisations",
-      "count": 4
+      "theme": "Peace, mediation and reconciliation",
+      "count": 5
     },
     {
       "theme": "Political psychology, public opinion and decision-making",
@@ -2807,6 +2810,7 @@
   "keyword_theme_map": {
     "AI": "Cyber and emerging technology",
     "AI governance": "Cyber and emerging technology",
+    "Algorithms and AI": "Cyber and emerging technology",
     "Alliance politics": "European and transatlantic security order",
     "Arms control": "Strategy and deterrence",
     "Black sea security": "Security and defence",
@@ -2816,6 +2820,8 @@
     "Civil-military relations": "Security and defence",
     "Cognitive warfare": "Intelligence, information and influence",
     "Collective defence": "European and transatlantic security order",
+    "Common foreign and security policy": "Foreign policy and diplomacy",
+    "Comparative foreign policy analysis": "Foreign policy and diplomacy",
     "Counterterrorism": "Transnational and human security",
     "Crises": "Crisis management and critical systems resilience",
     "Crisis management": "Crisis management and critical systems resilience",
@@ -2839,6 +2845,7 @@
     "Diplomacy": "Foreign policy and diplomacy",
     "Disinformation": "Intelligence, information and influence",
     "Divided nation": "Peace, mediation and reconciliation",
+    "Domestic politics of foreign and security policy": "Foreign policy and diplomacy",
     "Dual use technologies": "Cyber and emerging technology",
     "EU enlargement": "EU, UN and other international organisations",
     "EU foreign policy": "Foreign policy and diplomacy",
@@ -2856,6 +2863,7 @@
     "European integration": "EU, UN and other international organisations",
     "European security": "Security and defence",
     "European strategic autonomy": "European and transatlantic security order",
+    "Extremism": "Transnational and human security",
     "Feminist studies": "Theory and methods",
     "Foreign policy analysis": "Foreign policy and diplomacy",
     "Gender-based violence": "Transnational and human security",
@@ -2863,6 +2871,7 @@
     "German security policy": "Foreign policy and diplomacy",
     "Global order": "EU, UN and other international organisations",
     "Grand strategy": "Strategy and deterrence",
+    "Great power competition": "Foreign policy and diplomacy",
     "History": "Theory and methods",
     "Human rights and technology": "Cyber and emerging technology",
     "Hybrid threats": "Intelligence, information and influence",
@@ -2871,6 +2880,7 @@
     "Indian foreign policy": "Foreign policy and diplomacy",
     "Industrial policy": "Economic security and geoeconomics",
     "Influence": "Intelligence, information and influence",
+    "Informality": "EU, UN and other international organisations",
     "Information integrity": "Intelligence, information and influence",
     "Infrastructure": "Cyber and emerging technology",
     "Intelligence studies": "Intelligence, information and influence",
@@ -2894,6 +2904,7 @@
     "Non-state actors": "Transnational and human security",
     "Nordic countries": "Foreign policy and diplomacy",
     "Nordic-Baltic space": "Foreign policy and diplomacy",
+    "Nuclear deterrence": "Strategy and deterrence",
     "Nuclear politics": "Strategy and deterrence",
     "Nuclear strategy": "Strategy and deterrence",
     "Ontological security": "Identity, narratives and ideational security",
@@ -2918,6 +2929,7 @@
     "Security studies": "Security and defence",
     "Small states": "Foreign policy and diplomacy",
     "Small states' foreign and security policy": "Foreign policy and diplomacy",
+    "Social media": "Intelligence, information and influence",
     "State-building": "Peace, mediation and reconciliation",
     "Strategy": "Strategy and deterrence",
     "Subversion": "Intelligence, information and influence",
@@ -2928,6 +2940,7 @@
     "Transatlantic security": "European and transatlantic security order",
     "Transitional justice": "Peace, mediation and reconciliation",
     "Transnational and human security": "Transnational and human security",
+    "Transnational criminal organisations (TCOs)": "Transnational and human security",
     "UN": "EU, UN and other international organisations",
     "US-China relations": "Foreign policy and diplomacy",
     "Unification": "Peace, mediation and reconciliation",

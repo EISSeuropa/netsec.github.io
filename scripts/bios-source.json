@@ -16,7 +16,7 @@
     "name_legacy": "Full name (with title — Dr / Prof / Mr / Ms / Mx)",
     "position": "Position or current role (e.g. PhD candidate, Associate Professor, Policy analyst)",
     "affiliation": "Institution or organisation",
-    "country": "Country",
+    "country": "Country of your institution",
     "public_email": "Public email (optional)",
     "bio": "Short bio (max. 300 words)",
     "keywords": "Research keywords (comma-separated, 3 to 5 suggested)",
