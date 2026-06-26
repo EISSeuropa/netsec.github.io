@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-25T14:14:16+00:00",
+  "generated_at": "2026-06-26T10:56:08+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-25T14:14:16+00:00"
+    "last_synced": "2026-06-26T10:56:08+00:00"
   },
   "members": [
     {
@@ -2096,12 +2096,106 @@
         "Cyber and emerging technology",
         "Identity, narratives and ideational security"
       ]
+    },
+    {
+      "id": "marius-ghincea",
+      "name": "Dr Marius Ghincea",
+      "country": "Switzerland",
+      "country_code": "ch",
+      "affiliation": "ETH Zurich",
+      "position": "Postdoctoral Researcher",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Marius Ghincea is a Postdoctoral Researcher and university lecturer at ETH Zurich’s Department of Humanities, Social and Political Sciences. He received his PhD from the European University Institute in 2024, where his dissertation examined the domestic politics of foreign and security policy. Before joining ETH Zurich, he held visiting or adjunct positions at the Hertie School’s Centre for International Security, Syracuse University’s Florence program, Johns Hopkins School of Advanced International Studies (SAIS) in Bologna, Central European University, George Washington University, University of Lucern, and St Antony’s College, Oxford.",
+      "keywords": [
+        "European integration",
+        "Common Foreign and Security Policy",
+        "Great Power Competition",
+        "Comparative Foreign Policy Analysis",
+        "Domestic Politics of Foreign and Security Policy"
+      ],
+      "email": "marius.ghincea@eup.gess.ethz.ch",
+      "website": "https://ghincea.eu",
+      "orcid": "0000-0001-8061-6769",
+      "linkedin": "https://www.linkedin.com/in/mariusghincea/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/marius-ghincea.jpg",
+      "source": "form",
+      "photo_source_sha256": "58b763d5a391cb7837da3dd73695b53a06b25005911228343e7820e1f69c7d19",
+      "canonical_keywords": [
+        "Common foreign and security policy",
+        "Comparative foreign policy analysis",
+        "Domestic politics of foreign and security policy",
+        "European integration",
+        "Great power competition"
+      ],
+      "themes": [
+        "EU, UN and other international organisations"
+      ]
+    },
+    {
+      "id": "monika-sus",
+      "name": "Prof. Monika Sus",
+      "country": "Poland",
+      "country_code": "pl",
+      "affiliation": "Polish Academy of Sciences",
+      "position": "Associate Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Monika Sus is an Associate Professor of Political Science at the Institute of Political Studies of the Polish Academy of Sciences in Warsaw and a Fellow and Adjunct at the Center for International Security at the Hertie School in Berlin. She is also a part-time Professor at the Robert Schuman Centre for Advanced Studies at the European University Institute, where she was previously a Jean Monnet Fellow (2016–2017). Her research interests lie primarily in international relations, particularly in the study of the European Union’s foreign, security, and defence policy and in the investigation of the institutional dynamics between the supranational and national level in EU foreign policy making. Her articles have appeared in International Affairs, Journal of Common Market Studies, Geopolitics, Contemporary Security Policy, Journal of European Integration, The British Journal of Politics and International Relations, West European Politics, among others.",
+      "keywords": [
+        "European security",
+        "nuclear deterrence",
+        "EU-NATO",
+        "informality"
+      ],
+      "email": "monika.sus@eui.eu",
+      "website": "",
+      "orcid": "0000-0002-5916-3555",
+      "linkedin": "https://www.linkedin.com/in/monika-sus-0428381/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/monika-sus.jpg",
+      "source": "form",
+      "photo_source_sha256": "70e7f9b56c1e76694a3bbd37b4fac87eb42554aa8005bb4c8117da132f142fec",
+      "canonical_keywords": [
+        "EU-NATO",
+        "European security",
+        "Informality",
+        "Nuclear deterrence"
+      ],
+      "themes": [
+        "Security and defence"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "European security",
-      "count": 5
+      "count": 6
     },
     {
       "keyword": "EU foreign policy",
@@ -2133,6 +2227,10 @@
     },
     {
       "keyword": "Emerging technology",
+      "count": 2
+    },
+    {
+      "keyword": "European integration",
       "count": 2
     },
     {
@@ -2228,6 +2326,14 @@
       "count": 1
     },
     {
+      "keyword": "Common foreign and security policy",
+      "count": 1
+    },
+    {
+      "keyword": "Comparative foreign policy analysis",
+      "count": 1
+    },
+    {
       "keyword": "Counterterrorism",
       "count": 1
     },
@@ -2316,6 +2422,10 @@
       "count": 1
     },
     {
+      "keyword": "Domestic politics of foreign and security policy",
+      "count": 1
+    },
+    {
       "keyword": "Dual use technologies",
       "count": 1
     },
@@ -2348,11 +2458,11 @@
       "count": 1
     },
     {
-      "keyword": "European defence",
+      "keyword": "EU-NATO",
       "count": 1
     },
     {
-      "keyword": "European integration",
+      "keyword": "European defence",
       "count": 1
     },
     {
@@ -2384,6 +2494,10 @@
       "count": 1
     },
     {
+      "keyword": "Great power competition",
+      "count": 1
+    },
+    {
       "keyword": "History",
       "count": 1
     },
@@ -2409,6 +2523,10 @@
     },
     {
       "keyword": "Influence",
+      "count": 1
+    },
+    {
+      "keyword": "Informality",
       "count": 1
     },
     {
@@ -2481,6 +2599,10 @@
     },
     {
       "keyword": "Nordic-Baltic space",
+      "count": 1
+    },
+    {
+      "keyword": "Nuclear deterrence",
       "count": 1
     },
     {
@@ -2627,7 +2749,7 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 18
+      "count": 19
     },
     {
       "theme": "Foreign policy and diplomacy",
@@ -2667,7 +2789,7 @@
     },
     {
       "theme": "EU, UN and other international organisations",
-      "count": 3
+      "count": 4
     },
     {
       "theme": "Political psychology, public opinion and decision-making",
@@ -2814,14 +2936,18 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 25
+      "count": 27
     },
     {
       "region": "Global and cross-regional",
-      "count": 19
+      "count": 21
     },
     {
       "region": "Asia",
+      "count": 8
+    },
+    {
+      "region": "Europe - Eastern neighbours / Russia",
       "count": 8
     },
     {
@@ -2831,10 +2957,6 @@
     {
       "region": "The Americas",
       "count": 8
-    },
-    {
-      "region": "Europe - Eastern neighbours / Russia",
-      "count": 6
     },
     {
       "region": "Middle East and North Africa",
