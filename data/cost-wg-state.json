@@ -214,6 +214,17 @@
         1
       ],
       "form_changed_on": "2026-06-22"
+    },
+    "clara jammot": {
+      "cost_first_seen": {
+        "1": "2026-06-26",
+        "2": "2026-06-26"
+      },
+      "form_wgs": [
+        1,
+        2
+      ],
+      "form_changed_on": "2026-06-26"
     }
   }
 }
