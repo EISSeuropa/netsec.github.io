@@ -26,7 +26,7 @@ Google Form ──► Google Sheet ──► sync-bios.yml (daily) ──► PR 
 | 1b | **Full name** | Short answer · response validation: minimum 3 characters, with a custom error message | ✅ |
 | 2 | **Position or current role (e.g. PhD candidate, Associate Professor, Policy analyst)** | Short answer | ✅ |
 | 3 | **Institution or organisation** | Short answer | ✅ |
-| 4 | **Country** | Dropdown — paste the full list of COST member countries plus an "Other / outside Europe" option | ✅ |
+| 4 | **Country of your institution** | Dropdown — paste the full list of COST member countries plus an "Other / outside Europe" option | ✅ |
 | 5 | **Public email (optional, will be shown on the site)** | Short answer | ⬜ |
 | 6 | **Short bio (max 300 words)** | Paragraph | ✅ |
 | 7 | **Research keywords (comma-separated, 3–5 suggested)** | Short answer | ⬜ |
