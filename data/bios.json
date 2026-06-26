@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-26T12:53:04+00:00",
+  "generated_at": "2026-06-26T15:30:21+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-26T12:53:04+00:00"
+    "last_synced": "2026-06-26T15:30:21+00:00"
   },
   "members": [
     {
@@ -1454,7 +1454,7 @@
       "country": "Canada",
       "country_code": "ca",
       "affiliation": "University of Waterloo",
-      "position": "Associate Professor",
+      "position": "Associate Professor of Political Science",
       "roles": [],
       "wgs": [],
       "mentorship": [
@@ -1570,7 +1570,7 @@
       "country": "Greece",
       "country_code": "gr",
       "affiliation": "Anatolia American University",
-      "position": "Associate Professor",
+      "position": "Associate Professor of International Relations",
       "roles": [],
       "wgs": [],
       "mentorship": [
@@ -1759,7 +1759,7 @@
       "country": "Serbia",
       "country_code": "rs",
       "affiliation": "University of Belgrade, Faculty of Political Science",
-      "position": "Assistant Professor",
+      "position": "Assistant Professor of International Security",
       "roles": [],
       "wgs": [
         1,
@@ -2051,7 +2051,7 @@
     {
       "id": "clara-jammot",
       "name": "Ms Clara Jammot",
-      "country": "France",
+      "country": "United Kingdom",
       "country_code": "fr",
       "affiliation": "King's College London",
       "position": "PhD Candidate",
@@ -2157,7 +2157,7 @@
       "country": "Poland",
       "country_code": "pl",
       "affiliation": "Polish Academy of Sciences",
-      "position": "Associate Professor",
+      "position": "Associate Professor of Political Science",
       "roles": [],
       "wgs": [],
       "mentorship": [
