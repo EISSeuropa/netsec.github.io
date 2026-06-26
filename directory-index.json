@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-06-26T10:56:08+00:00",
+  "generated_at": "2026-06-26T14:25:37+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 50,
+  "count": 51,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -223,6 +223,17 @@
       "role": "WG2 Leader",
       "affiliation": "University of Oxford",
       "photo": "https://netsec-cost.eu/assets/images/people/john-helferich.jpg"
+    },
+    {
+      "name": "Dr John N.T. Helferich",
+      "name_key": "john helferich",
+      "aliases": [],
+      "slug": "john-n-t-helferich",
+      "url": "https://netsec-cost.eu/people/john-n-t-helferich.html",
+      "orcid": "0000-0002-9085-846X",
+      "role": null,
+      "affiliation": "University of Oxford",
+      "photo": "https://netsec-cost.eu/assets/images/people/john-n-t-helferich.jpg"
     },
     {
       "name": "Dr Julia Carver",

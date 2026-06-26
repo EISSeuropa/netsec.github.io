@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-26T10:56:08+00:00",
+  "generated_at": "2026-06-26T14:25:37+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-26T10:56:08+00:00"
+    "last_synced": "2026-06-26T14:25:37+00:00"
   },
   "members": [
     {
@@ -1455,7 +1455,7 @@
       "country": "Canada",
       "country_code": "ca",
       "affiliation": "University of Waterloo",
-      "position": "Associate Professor",
+      "position": "Associate Professor of Political Science",
       "roles": [],
       "wgs": [],
       "mentorship": [
@@ -1571,7 +1571,7 @@
       "country": "Greece",
       "country_code": "gr",
       "affiliation": "Anatolia American University",
-      "position": "Associate Professor",
+      "position": "Associate Professor of International Relations",
       "roles": [],
       "wgs": [],
       "mentorship": [
@@ -1760,7 +1760,7 @@
       "country": "Serbia",
       "country_code": "rs",
       "affiliation": "University of Belgrade, Faculty of Political Science",
-      "position": "Assistant Professor",
+      "position": "Assistant Professor of International Security",
       "roles": [],
       "wgs": [
         1,
@@ -2151,7 +2151,7 @@
       "country": "Poland",
       "country_code": "pl",
       "affiliation": "Polish Academy of Sciences",
-      "position": "Associate Professor",
+      "position": "Associate Professor of Political Science",
       "roles": [],
       "wgs": [],
       "mentorship": [
@@ -2190,6 +2190,50 @@
       "themes": [
         "Security and defence"
       ]
+    },
+    {
+      "id": "john-n-t-helferich",
+      "name": "Dr John N.T. Helferich",
+      "country": "",
+      "country_code": "",
+      "affiliation": "University of Oxford",
+      "position": "Lecturer in Politics",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Europe"
+      ],
+      "wg_leadership": {},
+      "bio": "John Helferich is a Lecturer in Politics at Hertford College and a researcher with the Oxford Global Security Programme. His research focuses on European security and transformations in international order. He holds a Doctor of Philosophy (DPhil) in International Relations from the University of Oxford and a Master’s degree in International Security (summa cum laude) from Sciences Po. His dissertation on EU defence integration won the PSA Best Dissertation Prize in International Relations. He chairs the Working Group on Transfer of Knowledge within the COST Action Networking European Security Knowledge and serves as a board member of the European Initiative for Security Studies (EISS).",
+      "keywords": [
+        "Foreign Policy Analysis",
+        "EU–NATO Relations",
+        "Political Psychology",
+        "Research Methods"
+      ],
+      "email": "john.helferich@hertford.ox.ac.uk",
+      "website": "https://johnhelferich.com",
+      "orcid": "0000-0002-9085-846X",
+      "linkedin": "https://www.linkedin.com/in/john-h-990850158",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/john-n-t-helferich.jpg",
+      "source": "form",
+      "photo_source_sha256": "9edb78d985955231ba40d36fd16267b5c86d30c2257ad60d98b3eea6e416850f",
+      "canonical_keywords": [
+        "EU–NATO relations",
+        "Foreign policy analysis",
+        "Political psychology",
+        "Research methods"
+      ],
+      "themes": [
+        "European and transatlantic security order",
+        "Foreign policy and diplomacy",
+        "Political psychology, public opinion and decision-making",
+        "Theory and methods"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -2202,11 +2246,19 @@
       "count": 3
     },
     {
+      "keyword": "Foreign policy analysis",
+      "count": 3
+    },
+    {
       "keyword": "International relations",
       "count": 3
     },
     {
       "keyword": "International security",
+      "count": 3
+    },
+    {
+      "keyword": "Political psychology",
       "count": 3
     },
     {
@@ -2234,7 +2286,7 @@
       "count": 2
     },
     {
-      "keyword": "Foreign policy analysis",
+      "keyword": "EU–NATO relations",
       "count": 2
     },
     {
@@ -2266,7 +2318,7 @@
       "count": 2
     },
     {
-      "keyword": "Political psychology",
+      "keyword": "Research methods",
       "count": 2
     },
     {
@@ -2470,10 +2522,6 @@
       "count": 1
     },
     {
-      "keyword": "EU–NATO relations",
-      "count": 1
-    },
-    {
       "keyword": "Extremism",
       "count": 1
     },
@@ -2658,10 +2706,6 @@
       "count": 1
     },
     {
-      "keyword": "Research methods",
-      "count": 1
-    },
-    {
       "keyword": "Role theory",
       "count": 1
     },
@@ -2753,19 +2797,19 @@
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 15
+      "count": 16
+    },
+    {
+      "theme": "Theory and methods",
+      "count": 12
     },
     {
       "theme": "Cyber and emerging technology",
       "count": 11
     },
     {
-      "theme": "Theory and methods",
-      "count": 11
-    },
-    {
       "theme": "European and transatlantic security order",
-      "count": 8
+      "count": 9
     },
     {
       "theme": "Intelligence, information and influence",
@@ -2793,7 +2837,7 @@
     },
     {
       "theme": "Political psychology, public opinion and decision-making",
-      "count": 3
+      "count": 4
     },
     {
       "theme": "Crisis management and critical systems resilience",
@@ -2936,7 +2980,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 27
+      "count": 28
     },
     {
       "region": "Global and cross-regional",
