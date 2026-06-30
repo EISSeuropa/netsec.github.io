@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-06-26T15:30:21+00:00",
+  "generated_at": "2026-06-30T15:09:32+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 50,
+  "count": 51,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -212,6 +212,17 @@
       "role": null,
       "affiliation": "Charles University",
       "photo": "https://netsec-cost.eu/assets/images/people/isabelle-haynes.jpg"
+    },
+    {
+      "name": "Dr Ivan Zaccagnini",
+      "name_key": "ivan zaccagnini",
+      "aliases": [],
+      "slug": "ivan-zaccagnini",
+      "url": "https://netsec-cost.eu/people/ivan-zaccagnini.html",
+      "orcid": "0009-0005-1685-5796",
+      "role": null,
+      "affiliation": "ETH Zurich, Center for Security Studies",
+      "photo": "https://netsec-cost.eu/assets/images/people/ivan-zaccagnini.jpg"
     },
     {
       "name": "Dr John N.T. Helferich",
