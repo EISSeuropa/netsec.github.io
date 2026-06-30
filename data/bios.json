@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-26T15:30:21+00:00",
+  "generated_at": "2026-06-30T15:09:32+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-26T15:30:21+00:00"
+    "last_synced": "2026-06-30T15:09:32+00:00"
   },
   "members": [
     {
@@ -2199,12 +2199,64 @@
         "Security and defence",
         "Strategy and deterrence"
       ]
+    },
+    {
+      "id": "ivan-zaccagnini",
+      "name": "Dr Ivan Zaccagnini",
+      "country": "Switzerland",
+      "country_code": "ch",
+      "affiliation": "ETH Zurich, Center for Security Studies",
+      "position": "Senior Researcher",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Dr. Ivan Zaccagnini is a senior researcher in Technology and Geopolitics at the Center for Security Studies (CSS) at ETH Zurich and a non-resident fellow at the Center for International and Strategic Studies (CISS) at LUISS Guido Carli university. His research interests focus on Emerging and Disruptive Technologies, Future of Warfare and Great Power Competition. His work has been published in prestigious journals including International Security, Security Studies, Contemporary Security Policy, Journal of European Integration, and Geopolitics. In April 2026 he defended his joint Ph.D. thesis entitled “Europe's Place in US–China Technology Competition. Insights from Wedging, Binding and Dynamic Sequencing” at the LUISS Guido Carli University in Rome and, for his research, he was awarded the title cum laude. The thesis was the result of a joint program between the LUISS Guido Carli University in Rome and the Centre for Security, Diplomacy and Strategy (CSDS) of the Brussels School of Governance (BSoG) at the Vrije Universiteit Brussel (VUB) in Brussels. From 2020 to 2026, he was teaching assistant for International Relations and Political Risk Analysis at the Department of Political Science at LUISS University. Since 2020, he worked as Research Assistant at the Center for International and Strategic Studies (CISS-LUISS), where he is currently affiliated as a non-resident fellow. In 2022, with the financial support of the Italian Ministry of Foreign Affairs and International Cooperation (MAECI), he co-authored two studies on military drones and the hider-finder competition in air warfare, published respectively on International Security and Security Studies.",
+      "keywords": [
+        "Emerging and disruptive technologies",
+        "drones",
+        "artificial intelligence",
+        "future of warfare",
+        "great power competition"
+      ],
+      "email": "ivan.zaccagnini@sipo.gess.ethz.ch",
+      "website": "https://gess.ethz.ch/en/the-department/people/person-detail.MzY0NTM0.TGlzdC81MTIsNjE4MTIwODY=.html",
+      "orcid": "0009-0005-1685-5796",
+      "linkedin": "https://www.linkedin.com/in/ivan-zaccagnini-8b8aa71ba",
+      "twitter": "https://x.com/zaccagniniivan?s=11",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/ivan-zaccagnini.jpg",
+      "source": "form",
+      "photo_source_sha256": "b6c29d18e327a2ac8b13ff421a556bb181edc2c95aeb15b621cb3faeb72940ac",
+      "canonical_keywords": [
+        "AI",
+        "Drones",
+        "Emerging and disruptive technologies",
+        "Future of warfare",
+        "Great power competition"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Foreign policy and diplomacy"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "European security",
       "count": 6
+    },
+    {
+      "keyword": "Emerging and disruptive technologies",
+      "count": 3
     },
     {
       "keyword": "EU foreign policy",
@@ -2219,6 +2271,10 @@
       "count": 3
     },
     {
+      "keyword": "AI",
+      "count": 2
+    },
+    {
       "keyword": "Alliance politics",
       "count": 2
     },
@@ -2228,10 +2284,6 @@
     },
     {
       "keyword": "Economic security",
-      "count": 2
-    },
-    {
-      "keyword": "Emerging and disruptive technologies",
       "count": 2
     },
     {
@@ -2256,6 +2308,10 @@
     },
     {
       "keyword": "Grand strategy",
+      "count": 2
+    },
+    {
+      "keyword": "Great power competition",
       "count": 2
     },
     {
@@ -2293,10 +2349,6 @@
     {
       "keyword": "Western Balkans",
       "count": 2
-    },
-    {
-      "keyword": "AI",
-      "count": 1
     },
     {
       "keyword": "AI governance",
@@ -2439,6 +2491,10 @@
       "count": 1
     },
     {
+      "keyword": "Drones",
+      "count": 1
+    },
+    {
       "keyword": "Dual use technologies",
       "count": 1
     },
@@ -2487,6 +2543,10 @@
       "count": 1
     },
     {
+      "keyword": "Future of warfare",
+      "count": 1
+    },
+    {
       "keyword": "Gender-based violence",
       "count": 1
     },
@@ -2496,10 +2556,6 @@
     },
     {
       "keyword": "Global order",
-      "count": 1
-    },
-    {
-      "keyword": "Great power competition",
       "count": 1
     },
     {
@@ -2758,11 +2814,11 @@
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 16
+      "count": 17
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 11
+      "count": 12
     },
     {
       "theme": "Theory and methods",
@@ -2951,11 +3007,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 27
+      "count": 28
     },
     {
       "region": "Global and cross-regional",
-      "count": 21
+      "count": 22
     },
     {
       "region": "Asia",
