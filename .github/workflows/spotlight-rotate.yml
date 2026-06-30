@@ -29,6 +29,13 @@ on:
     # is not 10:00 local, so the spotlight posts once, at 10:00, every Tuesday.
     - cron: '0 8 * * 2'
     - cron: '0 9 * * 2'
+    # ponytail: one-off, exceptional Thursday firing for the week of 2026-06-30
+    # (agreed with the maintainer; this Tuesday's run never fired). Gate logic
+    # below only checks the hour, not the weekday, so 08:00 UTC == 10:00 CEST
+    # on Thursday 2026-07-02 passes through unchanged. Recurs every Thursday
+    # until removed — delete this line after 2026-07-02. Normal Tuesday
+    # cadence resumes automatically next week, no other change needed.
+    - cron: '0 8 * * 4'
   workflow_dispatch:       # Manual run from the Actions tab
 
 permissions:
