@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-06-30T15:09:32+00:00",
+  "generated_at": "2026-07-01T08:55:30+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 51,
+  "count": 52,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -256,6 +256,17 @@
       "role": null,
       "affiliation": "UNESCO",
       "photo": "https://netsec-cost.eu/assets/images/people/kara-schneider.jpg"
+    },
+    {
+      "name": "Dr Kire Babanoski",
+      "name_key": "kire babanoski",
+      "aliases": [],
+      "slug": "kire-babanoski",
+      "url": "https://netsec-cost.eu/people/kire-babanoski.html",
+      "orcid": "0000-0002-2842-3633",
+      "role": "Management Committee · North Macedonia",
+      "affiliation": "Faculty of Security, Skopje, University \"St. Kliment Ohridski\", Bitola",
+      "photo": "https://netsec-cost.eu/assets/images/people/kire-babanoski.jpg"
     },
     {
       "name": "Ms Laura Lisboa",
