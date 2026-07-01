@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-30T15:09:32+00:00",
+  "generated_at": "2026-07-01T08:55:30+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-06-30T15:09:32+00:00"
+    "last_synced": "2026-07-01T08:55:30+00:00"
   },
   "members": [
     {
@@ -2247,6 +2247,52 @@
         "Cyber and emerging technology",
         "Foreign policy and diplomacy"
       ]
+    },
+    {
+      "id": "kire-babanoski",
+      "name": "Dr Kire Babanoski",
+      "country": "North Macedonia",
+      "country_code": "mk",
+      "affiliation": "Faculty of Security, Skopje, University \"St. Kliment Ohridski\", Bitola",
+      "position": "Assistant Professor",
+      "roles": [
+        "Management Committee · North Macedonia"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe - Western Balkans"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Kire Babanoski received his PhD in 2014 from the Faculty of Security in Skopje, University “St. Kliment Ohridski” – Bitola, North Macedonia, where he is currently an Assistant Professor. His research focuses on security studies, criminology and criminal justice, with particular emphasis on human security, regional security cooperation, and human rights in law enforcement. He also specialises in security sector governance (SSG) and security sector reform (SSR), contributing to research, policy development, and capacity-building initiatives in these fields. He has contributed as an expert to research projects supported by local civil society and international organisations, including NATO SPS, the Council of Europe, OSCE, COST, DCAF, Interreg, etc. In addition to his scholarly work, he is a licensed project manager and a certified judicial expert witness in the field of security.",
+      "keywords": [
+        "security studies",
+        "human security",
+        "security sector governance",
+        "security sector reforms"
+      ],
+      "email": "kire.babanoski@uklo.edu.mk",
+      "website": "https://www.fb.uklo.edu.mk",
+      "orcid": "0000-0002-2842-3633",
+      "linkedin": "https://www.linkedin.com/in/kire-babanoski/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/kire-babanoski.jpg",
+      "source": "form",
+      "photo_source_sha256": "bfb0c23b85a9771de22733ac496d808a95959ac9fb4d8787ea530bcf9311018b",
+      "canonical_keywords": [
+        "Human security",
+        "Security sector governance",
+        "Security sector reforms",
+        "Security studies"
+      ],
+      "themes": [
+        "Security and defence"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -2340,6 +2386,10 @@
     },
     {
       "keyword": "Security and defence",
+      "count": 2
+    },
+    {
+      "keyword": "Security studies",
       "count": 2
     },
     {
@@ -2567,6 +2617,10 @@
       "count": 1
     },
     {
+      "keyword": "Human security",
+      "count": 1
+    },
+    {
       "keyword": "Identity",
       "count": 1
     },
@@ -2739,7 +2793,11 @@
       "count": 1
     },
     {
-      "keyword": "Security studies",
+      "keyword": "Security sector governance",
+      "count": 1
+    },
+    {
+      "keyword": "Security sector reforms",
       "count": 1
     },
     {
@@ -2810,7 +2868,7 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 19
+      "count": 20
     },
     {
       "theme": "Foreign policy and diplomacy",
@@ -3014,15 +3072,15 @@
       "count": 22
     },
     {
+      "region": "Europe - Western Balkans",
+      "count": 9
+    },
+    {
       "region": "Asia",
       "count": 8
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 8
-    },
-    {
-      "region": "Europe - Western Balkans",
       "count": 8
     },
     {
