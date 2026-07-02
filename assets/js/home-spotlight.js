@@ -41,29 +41,11 @@
     return m && (m.photo || '').trim() && (m.bio || '').trim();
   }
 
-  function initials(name) {
-    var cleaned = (name || '').replace(/^(Dr\.?|Prof\.?|Mr\.?|Ms\.?|Mrs\.?|Mx\.?)\s+/i, '');
-    var parts = cleaned.split(/\s+/).filter(Boolean);
-    var first = parts[0] ? parts[0][0] : '';
-    var last = parts.length > 1 ? parts[parts.length - 1][0] : '';
-    return (first + last).toUpperCase() || '?';
-  }
-
-  // Title-case a research keyword for the chip text, matching the directory
-  // (assets/js/people-directory.js) and the spotlight composer: every word
-  // capitalised except small connectors mid-phrase, acronyms and internally-
-  // capitalised tokens left as-is. "Black sea security" → "Black Sea Security".
-  var TITLE_SMALL = ['a','an','and','the','of','for','in','on','to','with','vs'];
-  function titlecaseTheme(raw) {
-    return String(raw || '').split(/\s+/).map(function (w, i) {
-      if (!w) return w;
-      if (w === w.toUpperCase() && /[A-Z]/.test(w)) return w;
-      if (/[A-Z]/.test(w.slice(1))) return w;
-      var lw = w.toLowerCase();
-      if (i !== 0 && TITLE_SMALL.indexOf(lw) !== -1) return lw;
-      return lw.charAt(0).toUpperCase() + lw.slice(1);
-    }).join(' ');
-  }
+  // Avatar initials + theme-chip title-casing are the shared sitewide
+  // helpers from site.js (#1194), which loads before this file on every
+  // page (defer scripts run in document order).
+  var initials = window.netsecInitials;
+  var titlecaseTheme = window.netsecTitlecaseTheme;
 
   function flag(cc) {
     cc = (cc || '').toLowerCase();

@@ -347,6 +347,39 @@
       : null;
   };
 
+  /* Two-letter avatar initials: strip the salutation, take the first
+     letter of the first and last name. Single sitewide rule (#1194).
+     Four forked copies had drifted (the directory took the first two
+     words instead of first and last). Plain text: callers that build
+     HTML strings escape it themselves. */
+  window.netsecInitials = function (name) {
+    const tokens = String(name || '')
+      .replace(/^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+/i, '')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+    if (tokens.length === 0) return '?';
+    const first = tokens[0].charAt(0);
+    const last = tokens.length > 1 ? tokens[tokens.length - 1].charAt(0) : '';
+    return (first + last).toUpperCase() || '?';
+  };
+
+  /* Title-case a research keyword or theme for chip text, preserving
+     acronyms and internal capitals, lowercasing small connector words
+     after the first. Shared by the directory and the home spotlight
+     so both render identical chip labels (#1194). */
+  const TITLE_SMALL = new Set(['a', 'an', 'and', 'the', 'of', 'for', 'in', 'on', 'to', 'with', 'vs']);
+  window.netsecTitlecaseTheme = function (raw) {
+    return String(raw || '').split(/\s+/).map((w, i) => {
+      if (!w) return w;
+      if (w === w.toUpperCase() && /[A-Z]/.test(w)) return w;   // acronym
+      if (/[A-Z]/.test(w.slice(1))) return w;                    // internal cap
+      const lw = w.toLowerCase();
+      if (i !== 0 && TITLE_SMALL.has(lw)) return lw;
+      return lw.charAt(0).toUpperCase() + lw.slice(1);
+    }).join(' ');
+  };
+
   /* Beta-translation ribbon: keep the layout offset in step with the
      ribbon's real measured height.
 
@@ -1402,20 +1435,11 @@
     return `${peoplePath}${query || ''}#${slug}`;
   }
 
-  // Two-letter initials for the photo fallback — mirrors the
-  // directory's own avatar fallback rule (strip salutation, take
-  // first letter of first and last name).
+  // Two-letter initials for the photo fallback. The shared rule lives
+  // in window.netsecInitials (#1194); this wrapper only adds the HTML
+  // escaping the search-result template string needs.
   function initialsFor(name) {
-    const tokens = String(name)
-      .replace(/^(Dr|Prof|Mr|Mrs|Ms|Mx)\.?\s+/i, '')
-      .trim()
-      .split(/\s+/);
-    if (tokens.length === 0) return '?';
-    const first = tokens[0].charAt(0).toUpperCase();
-    const last = tokens.length > 1
-      ? tokens[tokens.length - 1].charAt(0).toUpperCase()
-      : '';
-    return escapeHtml(first + last);
+    return escapeHtml(window.netsecInitials(name));
   }
 
   function moveActive(delta) {

@@ -20,6 +20,11 @@
 #                     dereferences) blanks one locale while the others
 #                     render. Checking all three catches that.
 #   /index.html       >= 1 event-atc block (the home events cards)
+#   /working-groups.html  >= 1 mc-avatar--initials (roster-only members
+#                     get initials avatars from the shared
+#                     window.netsecInitials helper, #1194)
+#   /index.html       >= 1 spotlight-chip (the spotlight theme chips run
+#                     through window.netsecTitlecaseTheme, #1194)
 #
 # Requires a Chrome/Chromium binary (preinstalled on the GitHub
 # ubuntu runners; resolved from common paths locally, or set
@@ -91,5 +96,7 @@ check "people.html" 'class="member-card' 2
 check "people.fr.html" 'class="member-card' 2
 check "people.de.html" 'class="member-card' 2
 check "index.html" 'class="event-atc' 1
+check "working-groups.html" 'mc-avatar--initials' 1
+check "index.html" 'class="spotlight-chip' 1
 
 exit "$fail"

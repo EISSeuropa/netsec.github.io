@@ -419,10 +419,11 @@
       .replace(/^-+|-+$/g, '');
   }
 
-  function initials(name) {
-    return (name || '').replace(/^(Dr|Prof|Mr|Ms|Mrs)\.?\s+/i, '')
-      .split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).slice(0, 2).join('');
-  }
+  // Shared sitewide rule from site.js (#1194): salutation stripped,
+  // first letter of first and last name. This file's old fork took the
+  // first two words instead, so a middle-named member rendered
+  // different avatar initials here than in search or the spotlight.
+  const initials = window.netsecInitials;
 
   // Fallback normaliser. Used only when a bio lacks the sync-emitted
   // `canonical_keywords` field (an old bios.json, a hand-edited
@@ -454,24 +455,13 @@
     });
   }
 
-  // Title-case a research keyword for display on the card pills, mirroring
-  // the spotlight composer (scripts/social-post.py `titlecase_theme`): every
-  // word is capitalised except small connectors mid-phrase, and any token that
-  // is already an acronym (EU, NATO) or carries an internal capital (IoT) is
-  // left as-is. "Black sea security" → "Black Sea Security"; "EU foreign
-  // policy" → "EU Foreign Policy". Applied to display text only — the original
-  // canonical form still drives the theme lookup, slug, and dedup.
-  const TITLE_SMALL = new Set(['a','an','and','the','of','for','in','on','to','with','vs']);
-  function titlecaseTheme(raw) {
-    return String(raw || '').split(/\s+/).map((w, i) => {
-      if (!w) return w;
-      if (w === w.toUpperCase() && /[A-Z]/.test(w)) return w;   // acronym
-      if (/[A-Z]/.test(w.slice(1))) return w;                    // internal cap
-      const lw = w.toLowerCase();
-      if (i !== 0 && TITLE_SMALL.has(lw)) return lw;
-      return lw.charAt(0).toUpperCase() + lw.slice(1);
-    }).join(' ');
-  }
+  // Title-case for the card pills: the shared helper in site.js
+  // (#1194), which still mirrors the spotlight composer
+  // (scripts/social-post.py `titlecase_theme`) by necessity — the
+  // Python side runs at build time, the JS side at render time.
+  // Applied to display text only — the original canonical form still
+  // drives the theme lookup, slug, and dedup.
+  const titlecaseTheme = window.netsecTitlecaseTheme;
 
   function leadershipOrder(m) {
     // Sort key: leadership first, then country reps alphabetical
