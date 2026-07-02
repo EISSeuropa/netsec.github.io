@@ -94,7 +94,7 @@ flowchart TD
 
 | Page                  | Purpose                                                                         | Reads at runtime         |
 | --------------------- | ------------------------------------------------------------------------------- | ------------------------ |
-| `index.html`          | Action overview, news, WGs, MC composition, events, roadmap, outputs, *Find out more* discovery grid, *For NetSec members* Wiki signposting strip, contact | `data/bios.json` (none — leadership baked in via `data-bios-roles`) |
+| `index.html`          | Action overview, audience-track strip (researcher / policy-maker / MC member / press routing, `docs/homepage-ia-phase2.md`), news, WGs, MC composition, events, *Find out more* discovery grid, *For NetSec members* Wiki signposting strip, contact. Roadmap and Outputs moved to their own pages in the Phase 1 IA pass. | `data/bios.json` (none — leadership baked in via `data-bios-roles`) |
 | `people.html`         | Open community directory with WG/MC/country filters and the Join-the-network CTA| `data/bios.json` (full) |
 | `grants.html`         | The five NetSec grant schemes, the e-COST timeline, resources, grant managers   | `data/bios.json` (Grant Awarding Coordinator cards) |
 | `faq.html`            | 21 Q&As across six themed sections, with a jump-to TOC and per-question deep-link anchors. Migrated from the members' Wiki in website v1.3.0. | nothing |
@@ -538,9 +538,11 @@ If you're adding a new page:
 1. Copy a prose-page skeleton (e.g. `licensing.html` or `faq.html`) —
    either provides the canonical `<head>`, theme-FOUC script,
    ambience blobs, nav, and footer.
-2. Decide whether the page belongs in the top nav (10 items already;
-   keep tight). If not, signpost it via the home page's *Find out
-   more* discovery grid at the end of the About section.
+2. Decide whether the page belongs in the top nav (8 items today,
+   the capacity rule in `docs/homepage-ia-phase2.md` keeps it flat
+   through a 9th or 10th item and only groups into dropdowns at an
+   11th). If not, signpost it via the home page's *Find out more*
+   discovery grid at the end of the About section.
 3. Create FR + DE beta siblings (`page.fr.html`, `page.de.html`).
    Translate chrome and content manually — no machine translation.
 4. Add the page to `data/i18n-state.json` (the SHA-1 drift manifest)

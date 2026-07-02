@@ -1,5 +1,10 @@
 # Homepage IA — Phase 1 quick-audit
 
+> *Phase 2 has since shipped: see
+> [`docs/homepage-ia-phase2.md`](./homepage-ia-phase2.md) for
+> the header-grouping rule, the audience-track strip, and the
+> other Phase 2 decisions this document deferred.*
+
 > *Audience: Action Chair, Vice-Chair, MC members, the
 > maintainer. This document is the output of Phase 1 of the
 > two-phase IA pass described in `roadmap-h2-2026.md` §2.
