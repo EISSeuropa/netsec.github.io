@@ -81,6 +81,21 @@
       '{offer} offering mentoring, {seek} seeking a mentor': '{offer} proposant du mentorat, {seek} à la recherche d’un·e mentor·e',
       'Shared research areas': 'Domaines de recherche partagés',
       'Order for my career stage': 'Classer selon mon niveau de carrière',
+      // Warm contact intro (#1171). The same texts are baked build-time into
+      // the profile pages by scripts/build-profile-pages.py (SCAFFOLDS); its
+      // test_scaffold_parity fails if the two homes drift. Edit both.
+      'Introduce yourself by email': 'Se présenter par e-mail',
+      'Mentorship enquiry via the NetSec directory': "Demande de mentorat via l'annuaire NetSec",
+      'Mentorship via the NetSec directory': "Mentorat via l'annuaire NetSec",
+      'STSM hosting enquiry via the NetSec directory': "Demande d'accueil STSM via l'annuaire NetSec",
+      ' We share these research areas: {areas}.': ' Nous partageons ces domaines de recherche : {areas}.',
+      ' I was drawn by your work on {areas}.': ' Vos travaux sur {areas} ont retenu mon attention.',
+      "Dear {name},\n\nI found your profile in the NetSec directory.{areas_line}\n\nAbout me: [your name, career stage, institution, and a line on your research]\nWhat I am hoping for: [advice on publishing, a career conversation, feedback on a draft]\n\nWould you be open to a short online conversation in the coming weeks?\n\nBest regards,\n[your name]":
+        "Bonjour {name},\n\nJ'ai trouvé votre profil dans l'annuaire NetSec.{areas_line}\n\nQui je suis : [votre nom, niveau de carrière, institution, et une ligne sur vos recherches]\nCe que je recherche : [des conseils de publication, un échange sur la carrière, un retour sur un texte]\n\nSeriez-vous ouvert·e à un court échange en ligne dans les prochaines semaines ?\n\nBien cordialement,\n[votre nom]",
+      "Dear {name},\n\nI saw in the NetSec directory that you are seeking mentorship.{areas_line}\n\nAbout me: [your name, role, institution, and the areas where you could help]\n\nIf useful, I would be happy to have a short conversation about your goals.\n\nBest regards,\n[your name]":
+        "Bonjour {name},\n\nJ'ai vu dans l'annuaire NetSec que vous recherchez un mentorat.{areas_line}\n\nQui je suis : [votre nom, fonction, institution, et les domaines où vous pourriez aider]\n\nSi cela vous est utile, je serais heureux·se d'échanger brièvement sur vos objectifs.\n\nBien cordialement,\n[votre nom]",
+      "Dear {name},\n\nI found you in the NetSec directory as a possible STSM host.{areas_line}\n\nAbout me: [your name, career stage, institution]\nVisit idea: [topic and rough dates]\n\nAn STSM is a short funded research visit under the NetSec COST Action. If the fit looks right I would apply through e-COST. Would you be open to discussing it?\n\nBest regards,\n[your name]":
+        "Bonjour {name},\n\nJe vous ai trouvé·e dans l'annuaire NetSec comme hôte STSM possible.{areas_line}\n\nQui je suis : [votre nom, niveau de carrière, institution]\nIdée de visite : [sujet et dates approximatives]\n\nUne STSM est une courte visite de recherche financée par l'Action COST NetSec. Si cela correspond, je déposerais une candidature via e-COST. Seriez-vous ouvert·e à en discuter ?\n\nBien cordialement,\n[votre nom]",
       'Most relevant first': 'Les plus pertinent·es en premier',
       'Any': 'Indifférent',
       'Doctoral': 'Doctorat',
@@ -211,6 +226,20 @@
       '{offer} offering mentoring, {seek} seeking a mentor': '{offer} bieten Mentoring an, {seek} suchen eine·n Mentor·in',
       'Shared research areas': 'Gemeinsame Forschungsbereiche',
       'Order for my career stage': 'Nach meiner Karrierestufe sortieren',
+      // Warm contact intro (#1171). Twin of the FR block above; the build-time
+      // copy lives in scripts/build-profile-pages.py (SCAFFOLDS). Edit both.
+      'Introduce yourself by email': 'Per E-Mail vorstellen',
+      'Mentorship enquiry via the NetSec directory': 'Mentoring-Anfrage über das NetSec-Verzeichnis',
+      'Mentorship via the NetSec directory': 'Mentoring über das NetSec-Verzeichnis',
+      'STSM hosting enquiry via the NetSec directory': 'STSM-Gastgeber-Anfrage über das NetSec-Verzeichnis',
+      ' We share these research areas: {areas}.': ' Wir teilen diese Forschungsbereiche: {areas}.',
+      ' I was drawn by your work on {areas}.': ' Ihre Arbeit zu {areas} hat mein Interesse geweckt.',
+      "Dear {name},\n\nI found your profile in the NetSec directory.{areas_line}\n\nAbout me: [your name, career stage, institution, and a line on your research]\nWhat I am hoping for: [advice on publishing, a career conversation, feedback on a draft]\n\nWould you be open to a short online conversation in the coming weeks?\n\nBest regards,\n[your name]":
+        "Guten Tag {name},\n\nich habe Ihr Profil im NetSec-Verzeichnis gefunden.{areas_line}\n\nZu mir: [Ihr Name, Karrierestufe, Institution und eine Zeile zu Ihrer Forschung]\nWas ich mir erhoffe: [Publikationsberatung, ein Karrieregespräch, Feedback zu einem Entwurf]\n\nWären Sie offen für ein kurzes Online-Gespräch in den kommenden Wochen?\n\nMit freundlichen Grüßen\n[Ihr Name]",
+      "Dear {name},\n\nI saw in the NetSec directory that you are seeking mentorship.{areas_line}\n\nAbout me: [your name, role, institution, and the areas where you could help]\n\nIf useful, I would be happy to have a short conversation about your goals.\n\nBest regards,\n[your name]":
+        "Guten Tag {name},\n\nich habe im NetSec-Verzeichnis gesehen, dass Sie Mentoring suchen.{areas_line}\n\nZu mir: [Ihr Name, Funktion, Institution und die Bereiche, in denen Sie helfen könnten]\n\nFalls hilfreich, würde ich mich über ein kurzes Gespräch über Ihre Ziele freuen.\n\nMit freundlichen Grüßen\n[Ihr Name]",
+      "Dear {name},\n\nI found you in the NetSec directory as a possible STSM host.{areas_line}\n\nAbout me: [your name, career stage, institution]\nVisit idea: [topic and rough dates]\n\nAn STSM is a short funded research visit under the NetSec COST Action. If the fit looks right I would apply through e-COST. Would you be open to discussing it?\n\nBest regards,\n[your name]":
+        "Guten Tag {name},\n\nich habe Sie im NetSec-Verzeichnis als möglichen STSM-Gastgeber gefunden.{areas_line}\n\nZu mir: [Ihr Name, Karrierestufe, Institution]\nIdee für den Besuch: [Thema und ungefähre Daten]\n\nEine STSM ist ein kurzer, von der COST Action NetSec finanzierter Forschungsaufenthalt. Wenn es passt, würde ich mich über e-COST bewerben. Wären Sie offen, darüber zu sprechen?\n\nMit freundlichen Grüßen\n[Ihr Name]",
       'Most relevant first': 'Relevanteste zuerst',
       'Any': 'Beliebig',
       'Doctoral': 'Promotion',

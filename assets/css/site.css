@@ -2568,6 +2568,25 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 }
 .mentorship-person-avatar img{ width:100%;height:100%;object-fit:cover; }
 .mentorship-person-name{ font-size:.92rem; }
+/* Warm-intro mail action on a panel row (#1171): the person link keeps the
+   row's width, the envelope sits at the end, and the shared-areas row below
+   wraps to its own full-width line. 30px hit area inside a 44px-tall row. */
+.mentorship-panel-people li{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.mentorship-panel-people li > .mentorship-person{ flex:1 1 auto; min-width:0; }
+.mentorship-panel-people li > .mentorship-person-themes{ flex-basis:100%; }
+.mentorship-person-mail{
+  flex:0 0 auto;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:30px; height:30px; border-radius:50%;
+  color:var(--accent-2);
+  border:1px solid color-mix(in srgb, var(--accent-2) 35%, transparent);
+  background:color-mix(in srgb, var(--accent-2) 8%, transparent);
+  transition:var(--tr-tint);
+}
+.mentorship-person-mail:hover,
+.mentorship-person-mail:focus-visible{
+  background:color-mix(in srgb, var(--accent-2) 18%, transparent);
+}
 .mentorship-panel-none{
   margin:0;font-size:.88rem;color:var(--text-muted, #6b7280);font-style:italic;
 }
