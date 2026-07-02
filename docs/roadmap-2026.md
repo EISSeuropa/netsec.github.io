@@ -631,6 +631,8 @@ months. Splitting the audit into two passes avoids that:
   *Logos, socials, IA polish* to flag the broader scope.
 - **v1.9.0 (mid Oct)** ships the deeper restructure from
   Phase 2 alongside the Year-1 close.
+- The Phase 2 document shipped 2 July 2026 at
+  `docs/homepage-ia-phase2.md`.
 
 #### Open question
 

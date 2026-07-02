@@ -135,15 +135,15 @@
     "index.html": {
       "fr": {
         "file": "index.fr.html",
-        "source_sha1": "15314e564bd41b1921eba668d049489b190f9750",
-        "translated_on": "2026-06-26",
+        "source_sha1": "9d233904e1e946dc5f923d76b1583f9b10a9858a",
+        "translated_on": "2026-07-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "index.de.html",
-        "source_sha1": "15314e564bd41b1921eba668d049489b190f9750",
-        "translated_on": "2026-06-26",
+        "source_sha1": "9d233904e1e946dc5f923d76b1583f9b10a9858a",
+        "translated_on": "2026-07-02",
         "status": "beta",
         "reviewed_by": null
       }

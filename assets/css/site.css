@@ -3853,6 +3853,36 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 }
 .find-card p{margin:0;font-size:.86rem;color:var(--muted);line-height:1.5}
 
+/* -------- Home > Audience tracks --------
+   Static link strip between the details strip and News: four compact
+   cards routing researchers, policy readers, Action members, and press
+   to the part of the site most relevant to them. Reuses .glass for the
+   card surface/hover and .section-head/.eyebrow for the heading, same
+   as the Find-out-more grid just above. */
+.audiences-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+.audience-card{padding:22px 22px 24px;display:flex;flex-direction:column;gap:10px}
+.audience-card h3{
+  margin:0;font-size:1rem;letter-spacing:-.005em;
+  font-family:'Lexend','Inter',sans-serif;
+}
+.audience-card p{margin:0;font-size:.86rem;color:var(--muted);line-height:1.5;flex:1}
+.audience-links{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.audience-links a{
+  font-size:.86rem;font-weight:600;color:var(--accent);text-decoration:none;
+}
+.audience-links a:hover,
+.audience-links a:focus-visible{text-decoration:underline}
+@media (max-width:899px){
+  .audiences-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:480px){
+  .audiences-grid{grid-template-columns:1fr}
+}
+
 /* -------- For NetSec members (Wiki signposting) --------
    Sits between Outputs and Contact on the home page. Visually
    distinct (lightly tinted) so members notice it on first scroll. */
