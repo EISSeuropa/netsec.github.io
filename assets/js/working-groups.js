@@ -72,12 +72,9 @@
     return n;
   }
 
-  function initials(name) {
-    var parts = (name || '').replace(/^(Dr|Prof|Mr|Ms|Mrs)\.?\s+/i, '').trim().split(/\s+/);
-    var a = (parts[0] || '')[0] || '';
-    var b = (parts.length > 1 ? parts[parts.length - 1] : '')[0] || '';
-    return (a + b).toUpperCase();
-  }
+  // Shared sitewide avatar-initials rule from site.js (#1194), which
+  // loads before this file (defer scripts run in document order).
+  var initials = window.netsecInitials;
 
   // A member with a directory bio gets a photo, their affiliation, and
   // a link to their card (which auto-expands on arrival). A member with
