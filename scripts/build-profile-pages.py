@@ -81,6 +81,116 @@ T_ANTHOLOGY = "In the EISS Anthology"
 
 WG_NAMES = {"1": "WG1", "2": "WG2", "3": "WG3", "4": "WG4"}
 
+# Warm contact-intro scaffolds (#1171 part 1). Baked into the mailto: hrefs at
+# build time because data-i18n only rewrites textContent, never an href, so
+# runtime localisation cannot reach these. The directory's runtime twin lives
+# in assets/js/site.js (the I18N catalog, same EN keys) and the two homes are
+# held together by test_scaffold_parity in test-build-profile-pages.py: edit
+# the texts in BOTH places or that test fails.
+#
+# Each body is short and deliberately editable: the bracketed blanks are the
+# sender's to fill, and the {areas_line} slot carries the one piece of match
+# context the page already knows (the member's own research themes).
+SCAFFOLDS = {
+    "en": {
+        "subject_mentor": "Mentorship enquiry via the NetSec directory",
+        "subject_mentee": "Mentorship via the NetSec directory",
+        "subject_stsm": "STSM hosting enquiry via the NetSec directory",
+        "areas_own": " I was drawn by your work on {areas}.",
+        "mentor": (
+            "Dear {name},\n\n"
+            "I found your profile in the NetSec directory.{areas_line}\n\n"
+            "About me: [your name, career stage, institution, and a line on your research]\n"
+            "What I am hoping for: [advice on publishing, a career conversation, feedback on a draft]\n\n"
+            "Would you be open to a short online conversation in the coming weeks?\n\n"
+            "Best regards,\n[your name]"),
+        "mentee": (
+            "Dear {name},\n\n"
+            "I saw in the NetSec directory that you are seeking mentorship.{areas_line}\n\n"
+            "About me: [your name, role, institution, and the areas where you could help]\n\n"
+            "If useful, I would be happy to have a short conversation about your goals.\n\n"
+            "Best regards,\n[your name]"),
+        "stsm": (
+            "Dear {name},\n\n"
+            "I found you in the NetSec directory as a possible STSM host.{areas_line}\n\n"
+            "About me: [your name, career stage, institution]\n"
+            "Visit idea: [topic and rough dates]\n\n"
+            "An STSM is a short funded research visit under the NetSec COST Action. "
+            "If the fit looks right I would apply through e-COST. "
+            "Would you be open to discussing it?\n\n"
+            "Best regards,\n[your name]"),
+    },
+    "fr": {
+        "subject_mentor": "Demande de mentorat via l'annuaire NetSec",
+        "subject_mentee": "Mentorat via l'annuaire NetSec",
+        "subject_stsm": "Demande d'accueil STSM via l'annuaire NetSec",
+        "areas_own": " Vos travaux sur {areas} ont retenu mon attention.",
+        "mentor": (
+            "Bonjour {name},\n\n"
+            "J'ai trouvé votre profil dans l'annuaire NetSec.{areas_line}\n\n"
+            "Qui je suis : [votre nom, niveau de carrière, institution, et une ligne sur vos recherches]\n"
+            "Ce que je recherche : [des conseils de publication, un échange sur la carrière, un retour sur un texte]\n\n"
+            "Seriez-vous ouvert·e à un court échange en ligne dans les prochaines semaines ?\n\n"
+            "Bien cordialement,\n[votre nom]"),
+        "mentee": (
+            "Bonjour {name},\n\n"
+            "J'ai vu dans l'annuaire NetSec que vous recherchez un mentorat.{areas_line}\n\n"
+            "Qui je suis : [votre nom, fonction, institution, et les domaines où vous pourriez aider]\n\n"
+            "Si cela vous est utile, je serais heureux·se d'échanger brièvement sur vos objectifs.\n\n"
+            "Bien cordialement,\n[votre nom]"),
+        "stsm": (
+            "Bonjour {name},\n\n"
+            "Je vous ai trouvé·e dans l'annuaire NetSec comme hôte STSM possible.{areas_line}\n\n"
+            "Qui je suis : [votre nom, niveau de carrière, institution]\n"
+            "Idée de visite : [sujet et dates approximatives]\n\n"
+            "Une STSM est une courte visite de recherche financée par l'Action COST NetSec. "
+            "Si cela correspond, je déposerais une candidature via e-COST. "
+            "Seriez-vous ouvert·e à en discuter ?\n\n"
+            "Bien cordialement,\n[votre nom]"),
+    },
+    "de": {
+        "subject_mentor": "Mentoring-Anfrage über das NetSec-Verzeichnis",
+        "subject_mentee": "Mentoring über das NetSec-Verzeichnis",
+        "subject_stsm": "STSM-Gastgeber-Anfrage über das NetSec-Verzeichnis",
+        "areas_own": " Ihre Arbeit zu {areas} hat mein Interesse geweckt.",
+        "mentor": (
+            "Guten Tag {name},\n\n"
+            "ich habe Ihr Profil im NetSec-Verzeichnis gefunden.{areas_line}\n\n"
+            "Zu mir: [Ihr Name, Karrierestufe, Institution und eine Zeile zu Ihrer Forschung]\n"
+            "Was ich mir erhoffe: [Publikationsberatung, ein Karrieregespräch, Feedback zu einem Entwurf]\n\n"
+            "Wären Sie offen für ein kurzes Online-Gespräch in den kommenden Wochen?\n\n"
+            "Mit freundlichen Grüßen\n[Ihr Name]"),
+        "mentee": (
+            "Guten Tag {name},\n\n"
+            "ich habe im NetSec-Verzeichnis gesehen, dass Sie Mentoring suchen.{areas_line}\n\n"
+            "Zu mir: [Ihr Name, Funktion, Institution und die Bereiche, in denen Sie helfen könnten]\n\n"
+            "Falls hilfreich, würde ich mich über ein kurzes Gespräch über Ihre Ziele freuen.\n\n"
+            "Mit freundlichen Grüßen\n[Ihr Name]"),
+        "stsm": (
+            "Guten Tag {name},\n\n"
+            "ich habe Sie im NetSec-Verzeichnis als möglichen STSM-Gastgeber gefunden.{areas_line}\n\n"
+            "Zu mir: [Ihr Name, Karrierestufe, Institution]\n"
+            "Idee für den Besuch: [Thema und ungefähre Daten]\n\n"
+            "Eine STSM ist ein kurzer, von der COST Action NetSec finanzierter Forschungsaufenthalt. "
+            "Wenn es passt, würde ich mich über e-COST bewerben. "
+            "Wären Sie offen, darüber zu sprechen?\n\n"
+            "Mit freundlichen Grüßen\n[Ihr Name]"),
+    },
+}
+
+
+def scaffold_body(m: dict, tag: str, lang: str) -> str:
+    """Assemble the prefilled intro body for one member + intent + locale.
+    Theme names stay as stored (English) in every locale: they are the
+    directory's canonical research-area labels and the sentence around
+    them is what localises."""
+    sc = SCAFFOLDS[lang]
+    themes = [t for t in (m.get("themes") or []) if t][:2]
+    areas_line = sc["areas_own"].replace("{areas}", ", ".join(themes)) if themes else ""
+    return (sc[tag]
+            .replace("{name}", (m.get("name") or "").strip())
+            .replace("{areas_line}", areas_line))
+
 # Faces shown in the similar-people facepile before the "+N" overflow disc.
 FACEPILE_MAX = 5
 
@@ -346,20 +456,26 @@ def render_contacts(m: dict) -> str:
     return "".join(out)
 
 
-def render_actions(m: dict) -> str:
+def render_actions(m: dict, loc: dict) -> str:
     """The founding badge plus the actionable mentor / STSM calls-to-action.
 
     On a full profile the mentorship + hosting badges become buttons: when the
     member has published an email they are a `mailto:` with a directory-aware
-    subject, turning the passive label into the "find a mentor / host" action
-    from the directory's own framing. Without an email they fall back to the
-    plain badge."""
+    subject and a short prefilled intro scaffold (#1171), turning the passive
+    label into the "find a mentor / host" action from the directory's own
+    framing. Without an email they fall back to the plain badge. Subject and
+    body come from SCAFFOLDS in the page's own locale, since an href cannot be
+    localised at runtime."""
     email = (m.get("email") or "").strip()
+    lang = loc["lang"]
 
-    def action(label: str, cls: str, subject: str) -> str:
+    def action(label: str, cls: str, tag: str) -> str:
         if email:
+            subject = SCAFFOLDS[lang]["subject_" + tag]
+            body = scaffold_body(m, tag, lang).replace("\n", "\r\n")
             href = (f"mailto:{esc(email)}?subject="
-                    + urllib.parse.quote(subject))
+                    + urllib.parse.quote(subject)
+                    + "&amp;body=" + urllib.parse.quote(body))
             return (f'<a class="{cls} is-action" href="{href}" '
                     f'data-i18n="{esc(label)}">{esc(label)}</a>')
         return f'<span class="{cls}" data-i18n="{esc(label)}">{esc(label)}</span>'
@@ -368,19 +484,17 @@ def render_actions(m: dict) -> str:
     if m.get("founding_contributor"):
         bits.append('<span class="founding-badge" '
                     'data-i18n="Founding contributor">Founding contributor</span>')
-    for tag, cls, label, subj in (
-        ("mentor", "mentorship-badge is-offering", "Available to mentor",
-         "Mentorship enquiry via the NetSec directory"),
-        ("mentee", "mentorship-badge is-seeking", "Seeking mentorship",
-         "Mentorship via the NetSec directory"),
+    for tag, cls, label in (
+        ("mentor", "mentorship-badge is-offering", "Available to mentor"),
+        ("mentee", "mentorship-badge is-seeking", "Seeking mentorship"),
     ):
         if tag in (m.get("mentorship") or []):
-            bits.append(action(label, cls, subj))
+            bits.append(action(label, cls, tag))
     stsm = m.get("stsm_hosting")
     if stsm in ("yes", "ask"):
         label = "Open to hosting STSM visitors" if stsm == "ask" else "Can host STSM visitors"
         cls = "stsm-badge is-ask" if stsm == "ask" else "stsm-badge"
-        bits.append(action(label, cls, "STSM hosting enquiry via the NetSec directory"))
+        bits.append(action(label, cls, "stsm"))
     if not bits:
         return ""
     return '<div class="profile-actions">' + "".join(bits) + "</div>"
@@ -491,7 +605,7 @@ def render_card(m: dict, works: list, similar: list, mentors: list, loc: dict, p
         p.append('<div class="member-wgs" role="group" aria-label="Working-group membership">'
                  + "".join(chips) + "</div>")
     p.append(render_prize(prize))
-    p.append(render_actions(m))
+    p.append(render_actions(m, loc))
     p.append("</div>")  # .profile-hero-id
     p.append("</div>")  # .profile-hero
 

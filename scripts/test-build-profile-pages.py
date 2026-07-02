@@ -164,6 +164,80 @@ def test_generate_produces_three_locales_per_member():
     assert "profile-aside" in sample and "profile-hero" in sample
 
 
+# ── Warm contact intro (#1171 part 1) ──
+
+_INTRO_MEMBER = {
+    "id": "t", "name": "Dr Test Person", "email": "t@example.org",
+    "mentorship": ["mentor"], "stsm_hosting": "yes",
+    "canonical_keywords": [], "themes": ["Cyber and emerging technology"],
+}
+
+
+def _decoded_bodies(html_out: str) -> list[str]:
+    import re
+    import urllib.parse
+    return [urllib.parse.unquote(m)
+            for m in re.findall(r'&amp;body=([^"]+)"', html_out)]
+
+
+def test_action_mailto_carries_scaffold_body_with_theme_and_name():
+    html_out = bpp.render_actions(_INTRO_MEMBER, EN)
+    bodies = _decoded_bodies(html_out)
+    assert len(bodies) == 2  # mentor badge + STSM badge
+    mentor_body = bodies[0]
+    assert "Dear Dr Test Person," in mentor_body
+    assert "I found your profile in the NetSec directory." in mentor_body
+    assert "I was drawn by your work on Cyber and emerging technology." in mentor_body
+    assert "[your name]" in mentor_body            # editable blanks survive
+    assert "\r\n" in mentor_body                   # RFC 6068 line breaks
+    assert "e-COST" in bodies[1]                   # the STSM body is the STSM one
+
+
+def test_action_mailto_body_and_subject_are_localised_per_page_locale():
+    import urllib.parse
+    for lang, body_probe, subject_probe in (
+        ("fr", "J'ai trouvé votre profil", "Demande de mentorat"),
+        ("de", "ich habe Ihr Profil", "Mentoring-Anfrage"),
+    ):
+        html_out = bpp.render_actions(_INTRO_MEMBER, bpp.LOCALES[lang])
+        assert body_probe in _decoded_bodies(html_out)[0], lang
+        subjects = [urllib.parse.unquote(m) for m in
+                    __import__("re").findall(r'\?subject=([^&"]+)', html_out)]
+        assert any(subject_probe in s for s in subjects), lang
+
+
+def test_action_without_email_stays_a_passive_badge():
+    m = dict(_INTRO_MEMBER, email="")
+    html_out = bpp.render_actions(m, EN)
+    assert "mailto:" not in html_out and "<span" in html_out
+
+
+def test_scaffold_parity_with_site_js_catalog():
+    """The scaffold texts live twice: SCAFFOLDS here (baked into profile-page
+    hrefs) and the site.js I18N catalog (used by the directory at runtime).
+    This test extracts the FR and DE catalog values from site.js and asserts
+    byte-for-byte equality with SCAFFOLDS, so an edit to one home without the
+    other fails CI instead of shipping drift."""
+    import re
+    js = (ROOT / "assets" / "js" / "site.js").read_text(encoding="utf-8")
+
+    def js_value(en_key: str, occurrence: int) -> str:
+        lit = re.escape(en_key.replace("\\", "\\\\").replace("\n", "\\n"))
+        pat = re.compile(r"(['\"])" + lit + r"\1\s*:\s*(?P<q>['\"])"
+                         r"(?P<v>(?:\\.|(?!(?P=q))[^\\\n])*)(?P=q)")
+        matches = [m.group("v") for m in pat.finditer(js)]
+        assert len(matches) >= occurrence + 1, f"missing catalog entry: {en_key[:50]!r}"
+        return (matches[occurrence]
+                .replace("\\n", "\n").replace("\\'", "'").replace('\\"', '"'))
+
+    en = bpp.SCAFFOLDS["en"]
+    for occurrence, lang in ((0, "fr"), (1, "de")):
+        for key in ("subject_mentor", "subject_mentee", "subject_stsm",
+                    "areas_own", "mentor", "mentee", "stsm"):
+            assert js_value(en[key], occurrence) == bpp.SCAFFOLDS[lang][key], \
+                f"{lang}/{key} drifted between site.js and SCAFFOLDS"
+
+
 if __name__ == "__main__":
     import sys
     import pytest

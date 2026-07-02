@@ -425,6 +425,49 @@
   // different avatar initials here than in search or the spotlight.
   const initials = window.netsecInitials;
 
+  // Warm contact intro (#1171 part 1). The matchmaking stack computes match
+  // context (shared research areas, mentorship side) and then, before this,
+  // dropped it at the moment of contact: the mailto: carried a subject only.
+  // introMailto builds the full href for one member and intent, prefilling a
+  // short localised body scaffold the sender edits before sending. The EN
+  // texts below are the netsecT catalog keys (FR/DE live in site.js), and the
+  // same texts are baked build-time into profile pages by
+  // scripts/build-profile-pages.py (SCAFFOLDS). test_scaffold_parity in
+  // test-build-profile-pages.py holds the two homes together: edit both or
+  // it fails.
+  const INTRO_SUBJECTS = {
+    mentor: 'Mentorship enquiry via the NetSec directory',
+    mentee: 'Mentorship via the NetSec directory',
+    stsm: 'STSM hosting enquiry via the NetSec directory',
+  };
+  const INTRO_BODIES = {
+    mentor: "Dear {name},\n\nI found your profile in the NetSec directory.{areas_line}\n\nAbout me: [your name, career stage, institution, and a line on your research]\nWhat I am hoping for: [advice on publishing, a career conversation, feedback on a draft]\n\nWould you be open to a short online conversation in the coming weeks?\n\nBest regards,\n[your name]",
+    mentee: "Dear {name},\n\nI saw in the NetSec directory that you are seeking mentorship.{areas_line}\n\nAbout me: [your name, role, institution, and the areas where you could help]\n\nIf useful, I would be happy to have a short conversation about your goals.\n\nBest regards,\n[your name]",
+    stsm: "Dear {name},\n\nI found you in the NetSec directory as a possible STSM host.{areas_line}\n\nAbout me: [your name, career stage, institution]\nVisit idea: [topic and rough dates]\n\nAn STSM is a short funded research visit under the NetSec COST Action. If the fit looks right I would apply through e-COST. Would you be open to discussing it?\n\nBest regards,\n[your name]",
+  };
+  const INTRO_AREAS_SHARED = " We share these research areas: {areas}.";
+  const INTRO_AREAS_OWN = " I was drawn by your work on {areas}.";
+
+  function introMailto(m, tag, sharedNames) {
+    // Panel rows pass the live shared areas (already translated); everywhere
+    // else the member's own top themes stand in as the stable context.
+    const shared = (sharedNames || []).slice(0, 2);
+    const own = (m.themes || []).filter(Boolean).slice(0, 2)
+      .map(t => window.netsecT(t));
+    const areasLine = shared.length
+      ? window.netsecT(INTRO_AREAS_SHARED).replace('{areas}', shared.join(', '))
+      : (own.length
+        ? window.netsecT(INTRO_AREAS_OWN).replace('{areas}', own.join(', '))
+        : '');
+    const body = window.netsecT(INTRO_BODIES[tag])
+      .replace('{name}', (m.name || '').trim())
+      .replace('{areas_line}', areasLine)
+      .replace(/\n/g, '\r\n');
+    return 'mailto:' + m.email
+      + '?subject=' + encodeURIComponent(window.netsecT(INTRO_SUBJECTS[tag]))
+      + '&body=' + encodeURIComponent(body);
+  }
+
   // Fallback normaliser. Used only when a bio lacks the sync-emitted
   // `canonical_keywords` field (an old bios.json, a hand-edited
   // record, or a transition period). For any normal sync, the Python
@@ -758,13 +801,22 @@
         { tag: 'mentor', cls: 'is-offering', label: 'Available to mentor' },
         { tag: 'mentee', cls: 'is-seeking', label: 'Seeking mentorship' },
       ];
+      // With a published email the badge is a mailto: action carrying the
+      // warm intro scaffold (#1171), mirroring the profile pages. Without
+      // one it stays the passive pill it always was. The compact preview
+      // panel clones the card, so it inherits the action for free.
+      const badgeEl = (cls, text, tag) => {
+        const el = document.createElement(m.email ? 'a' : 'span');
+        el.className = cls + (m.email ? ' is-action' : '');
+        el.textContent = text;
+        if (m.email) el.href = introMailto(m, tag);
+        return el;
+      };
       let mentorAdded = false;
       MENTOR_BADGES.forEach(badge => {
         if (!mentorship.includes(badge.tag)) return;
-        const span = document.createElement('span');
-        span.className = 'mentorship-badge ' + badge.cls;
-        span.textContent = window.netsecT(badge.label);
-        mentorWrap.appendChild(span);
+        mentorWrap.appendChild(badgeEl('mentorship-badge ' + badge.cls,
+          window.netsecT(badge.label), badge.tag));
         mentorAdded = true;
       });
       if (mentorAdded) mentorWrap.removeAttribute('hidden');
@@ -774,11 +826,11 @@
       // so it costs nothing while the Form question is still gathering data.
       const stsmWrap = node.querySelector('.member-stsm');
       if (stsmWrap && (m.stsm_hosting === 'yes' || m.stsm_hosting === 'ask')) {
-        const span = document.createElement('span');
-        span.className = 'stsm-badge' + (m.stsm_hosting === 'ask' ? ' is-ask' : '');
-        span.textContent = window.netsecT(
-          m.stsm_hosting === 'ask' ? 'Open to hosting STSM visitors' : 'Can host STSM visitors');
-        stsmWrap.appendChild(span);
+        stsmWrap.appendChild(badgeEl(
+          'stsm-badge' + (m.stsm_hosting === 'ask' ? ' is-ask' : ''),
+          window.netsecT(m.stsm_hosting === 'ask'
+            ? 'Open to hosting STSM visitors' : 'Can host STSM visitors'),
+          'stsm'));
         stsmWrap.removeAttribute('hidden');
       } else if (stsmWrap) {
         stsmWrap.remove();
@@ -1576,15 +1628,33 @@
         people.forEach(m => {
           const li = document.createElement('li');
           li.appendChild(mentorshipPersonLink(m));
+          // The shared research areas with the active filter, reused twice
+          // below: as the visible "why this person" row and as the context
+          // line inside the prefilled intro email.
+          const shared = !areasActive ? [] :
+            (m.themes || []).filter(t => activeKeywords.has(keywordSlug(t)))
+              .map(t => ({ txt: window.netsecT(t), region: false }))
+              .concat((m.regions || []).filter(r => activeRegions.has(keywordSlug(r)))
+                .map(r => ({ txt: window.netsecT(r), region: true })));
+          // The warm-intro affordance (#1171): a small mail action at the
+          // match moment, prefilled with the side and the shared areas the
+          // panel just computed. Only for members with a published email;
+          // everyone else keeps the card path via the person link.
+          if (m.email) {
+            const mail = document.createElement('a');
+            mail.className = 'mentorship-person-mail';
+            mail.href = introMailto(m, side.tag, shared.map(it => it.txt));
+            const introLabel = window.netsecT('Introduce yourself by email');
+            mail.setAttribute('aria-label', introLabel + ' — ' + (m.name || ''));
+            mail.title = introLabel;
+            mail.innerHTML = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>';
+            li.appendChild(mail);
+          }
           // Why this person is here: the research themes and regions they
           // share with your active filter. It reads as the match strength too,
           // since the list is ordered best-first and more shared areas means a
           // closer fit. Shown whenever an area filter is on; capped with a "+N".
           if (areasActive) {
-            const shared = (m.themes || []).filter(t => activeKeywords.has(keywordSlug(t)))
-              .map(t => ({ txt: window.netsecT(t), region: false }))
-              .concat((m.regions || []).filter(r => activeRegions.has(keywordSlug(r)))
-                .map(r => ({ txt: window.netsecT(r), region: true })));
             if (shared.length) {
               const why = document.createElement('div');
               why.className = 'mentorship-person-themes';
