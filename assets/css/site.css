@@ -80,6 +80,12 @@
   --radius-sm:14px;
   --maxw:1180px;
   --ease:cubic-bezier(.22,.61,.36,1);
+  /* Shared motion + elevation tokens (#1196). The two shadows lean on
+     --accent-glow, which the dark theme overrides, so both adapt to the
+     theme without dark-mode counterparts here. */
+  --tr-tint:background .2s var(--ease),color .2s var(--ease);
+  --accent-shadow:0 4px 12px var(--accent-glow);
+  --accent-shadow-lg:0 6px 16px var(--accent-glow);
 }
 
 *{box-sizing:border-box}
@@ -332,7 +338,7 @@ img{max-width:100%;display:block}
   width:34px;height:34px;border-radius:10px;
   background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
   display:grid;place-items:center;color:#fff;font-weight:800;font-size:.78rem;letter-spacing:.04em;
-  box-shadow:0 6px 16px var(--accent-glow);
+  box-shadow:var(--accent-shadow-lg);
 }
 
 /* Match the in-overlay snippet style for the on-page highlight
@@ -354,7 +360,7 @@ img{max-width:100%;display:block}
 .nav-links a{
   color:var(--ink-2);font-size:.92rem;font-weight:500;padding:8px 12px;border-radius:10px;
   white-space:nowrap;            /* don't let a label split mid-word */
-  transition:background .2s var(--ease),color .2s var(--ease);
+  transition:var(--tr-tint);
 }
 .nav-links a:hover{background:rgba(11,18,32,.05);color:var(--ink);opacity:1}
 .nav-cta{
@@ -931,7 +937,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   border:1px solid var(--accent);
   color:#fff;font-weight:600;font-size:.95rem;
   text-decoration:none;
-  box-shadow:0 4px 12px var(--accent-glow);
+  box-shadow:var(--accent-shadow);
   transition:transform .15s var(--ease),box-shadow .15s var(--ease),background .15s var(--ease);
 }
 .event-subscribe:hover,
@@ -1233,7 +1239,7 @@ form button:disabled{opacity:.65;cursor:wait}
   width:28px;height:28px;border-radius:8px;border:0;cursor:pointer;
   background:transparent;color:var(--muted);
   display:grid;place-items:center;
-  transition:background .2s var(--ease),color .2s var(--ease);
+  transition:var(--tr-tint);
 }
 .toast .toast-close:hover{background:rgba(11,18,32,.06);color:var(--ink)}
 @media (max-width:540px){
@@ -1851,7 +1857,7 @@ form button:disabled{opacity:.65;cursor:wait}
   width:36px;height:36px;margin-right:6px;
   background:transparent;border:0;cursor:pointer;border-radius:10px;
   color:var(--ink-2);
-  transition:background .2s var(--ease),color .2s var(--ease);
+  transition:var(--tr-tint);
 }
 .theme-toggle:hover{background:rgba(11,18,32,.06);color:var(--ink);opacity:1}
 .theme-toggle svg{width:18px;height:18px}
@@ -1879,7 +1885,7 @@ form button:disabled{opacity:.65;cursor:wait}
   text-transform:uppercase;
   color:var(--muted);
   padding:4px 9px;border-radius:999px;
-  transition:background .2s var(--ease),color .2s var(--ease);
+  transition:var(--tr-tint);
 }
 .lang-switch a:hover{color:var(--ink);opacity:1}
 .lang-switch a[aria-current="true"]{
@@ -2171,7 +2177,7 @@ body{padding-top:var(--whats-new-h, 0px)}
   font:inherit;font-size:.82rem;font-weight:600;
   padding:6px 14px;border-radius:999px;border:1px solid rgba(11,18,32,.22);
   background:rgba(255,255,255,.7);color:var(--ink-2);cursor:pointer;
-  transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease);
+  transition:var(--tr-tint),border-color .2s var(--ease);
 }
 /* Hover styling is gated to real pointers so a tap on iOS WebKit does not
    leave a chip stuck in its hover state until the next tap elsewhere. */
@@ -2185,7 +2191,7 @@ body{padding-top:var(--whats-new-h, 0px)}
 .members-filter-chip[aria-pressed="true"]{
   background:linear-gradient(135deg,var(--accent),var(--accent-2));
   color:#fff;border-color:transparent;
-  box-shadow:0 4px 12px var(--accent-glow);
+  box-shadow:var(--accent-shadow);
 }
 /* MC chip — subtle visual separator from WG chips. A thin dot before
    the label hints that it's a different axis (role, not WG). */
@@ -2836,8 +2842,10 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   .profile-areas, .profile-similar .pf-facepile,
   .profile-page .profile-aside .member-contact{ justify-content:center; }
 }
+/* The global reduced-motion reset above zeroes transition durations
+   sitewide; this block (and its siblings below) only needs to cancel
+   the hover/focus transform end-state. */
 @media (prefers-reduced-motion:reduce){
-  .pf-face{ transition:none; }
   .pf-face:hover, .pf-face:focus-visible{ transform:none; }
 }
 /* Region pills (#555) reuse the keyword-pill shape but carry a small
@@ -3033,7 +3041,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   font:inherit;font-size:.8rem;font-weight:600;
   padding:5px 13px;border-radius:999px;border:1px solid rgba(11,18,32,.22);
   background:transparent;color:var(--ink-2);cursor:pointer;
-  transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease);
+  transition:var(--tr-tint),border-color .2s var(--ease);
 }
 @media (hover: hover){
   .members-mentorship-chip:hover{background:rgba(11,18,32,.04);color:var(--ink)}
@@ -3045,7 +3053,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 .members-mentorship-chip[aria-pressed="true"]{
   background:linear-gradient(135deg,var(--accent),var(--accent-2));
   color:#fff;border-color:transparent;
-  box-shadow:0 4px 12px var(--accent-glow);
+  box-shadow:var(--accent-shadow);
 }
 .members-mentorship-chip[hidden]{display:none}
 .members-mentorship-chip:focus-visible{
@@ -3206,7 +3214,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
     flex:1 1 auto;font:inherit;font-size:.95rem;font-weight:600;
     color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2));
     border:0;border-radius:12px;padding:13px 18px;cursor:pointer;
-    box-shadow:0 4px 12px var(--accent-glow);
+    box-shadow:var(--accent-shadow);
   }
 
   /* On phones the active filters become one horizontally-scrollable line
@@ -3277,7 +3285,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   width:34px;height:34px;border-radius:50%;
   display:grid;place-items:center;
   background:rgba(11,18,32,.04);color:var(--ink-2);
-  transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease);
+  transition:var(--tr-tint),transform .2s var(--ease);
 }
 .member-card .member-contact a:hover{
   background:var(--accent);color:#fff;opacity:1;transform:translateY(-1px);
@@ -3331,7 +3339,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   display:grid;place-items:center;
   background:rgba(11,18,32,.04);color:var(--muted);
   font:inherit;font-size:1rem;font-weight:600;
-  transition:background .2s var(--ease),color .2s var(--ease);
+  transition:var(--tr-tint);
   align-self:center;
 }
 .tour-trigger:hover,
@@ -3415,7 +3423,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   appearance:none;border:0;cursor:pointer;
   font:inherit;font-size:.85rem;font-weight:600;
   padding:7px 14px;border-radius:999px;
-  transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease);
+  transition:var(--tr-tint),transform .2s var(--ease);
 }
 .tour-btn:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
 .tour-btn-primary{background:var(--accent);color:#fff}
@@ -3487,7 +3495,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   background:transparent;color:var(--muted);
   font:inherit;font-size:.85rem;font-weight:600;
   padding:7px 14px;border-radius:999px;
-  transition:background .2s var(--ease),color .2s var(--ease);
+  transition:var(--tr-tint);
 }
 .welcome-strip-dismiss:hover,
 .welcome-strip-dismiss:focus-visible{
@@ -3732,7 +3740,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   width:30px;height:30px;
   border-radius:999px;
   display:grid;place-items:center;color:var(--muted);
-  transition:background .2s var(--ease),color .2s var(--ease);
+  transition:var(--tr-tint);
 }
 .view-toggle button[aria-pressed="true"]{
   background:#ffffff;color:var(--accent);
@@ -4478,19 +4486,14 @@ body.search-open{overflow:hidden}
   font-size:.92rem;font-weight:600;color:#fff;
   background:var(--accent);border:1px solid var(--accent);
   text-decoration:none;
-  box-shadow:0 4px 12px var(--accent-glow);
+  box-shadow:var(--accent-shadow);
   transition:background .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease);
 }
 .deliverables-roadmap-link-cta:hover{
   background:var(--accent-2);border-color:var(--accent-2);
   transform:translateY(-1px);
-  box-shadow:0 6px 16px var(--accent-glow);
+  box-shadow:var(--accent-shadow-lg);
 }
-@media (prefers-reduced-motion: reduce){
-  .deliverables-roadmap-link-cta{transition:none}
-  .deliverables-roadmap-link-cta:hover{transform:none}
-}
-
 /* "Help shape this" card — invites community feedback / feature
    requests / issue reports via GitHub. Sits between the under-watch
    section and the docs footnote so the page closes on a participatory
@@ -4529,18 +4532,13 @@ body.search-open{overflow:hidden}
 }
 .rm-feedback-action.is-primary{
   background:var(--accent);border-color:var(--accent);color:#fff;
-  box-shadow:0 4px 12px var(--accent-glow);
+  box-shadow:var(--accent-shadow);
 }
 .rm-feedback-action.is-primary:hover{
   background:var(--accent-2);border-color:var(--accent-2);
-  box-shadow:0 6px 16px var(--accent-glow);
+  box-shadow:var(--accent-shadow-lg);
 }
 .rm-feedback-action svg{flex-shrink:0;width:16px;height:16px}
-@media (prefers-reduced-motion: reduce){
-  .rm-feedback-action{transition:none}
-  .rm-feedback-action:hover{transform:none}
-}
-
 /* Footer note pointing at the internal doc */
 .rm-footnote{
   margin:48px 0 0;padding:18px 22px;border-radius:12px;
@@ -4567,8 +4565,11 @@ body.search-open{overflow:hidden}
   .rm-legend{padding:12px 14px;gap:8px}
 }
 
+/* One reduced-motion block for the roadmap page's three hover lifts
+   (link CTA, feedback action, card) instead of one block per feature. */
 @media (prefers-reduced-motion: reduce){
-  .rm-card{transition:none}
+  .deliverables-roadmap-link-cta:hover,
+  .rm-feedback-action:hover,
   .rm-card:hover{transform:none}
 }
 
@@ -6249,7 +6250,6 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   color:var(--accent-2);font-weight:500;font-size:.9rem;
 }
 @media (prefers-reduced-motion: reduce){
-  .prose-page .glossary-dl dd .fg-face{transition:none;}
   .prose-page .glossary-dl dd .fg-face:hover,
   .prose-page .glossary-dl dd .fg-face:focus-visible{transform:none;}
 }
