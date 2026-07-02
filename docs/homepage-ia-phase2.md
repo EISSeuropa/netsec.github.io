@@ -239,8 +239,8 @@ surfaces. The Events page itself already separates Upcoming
 and Past into distinct visual blocks. The home-page Events
 block does not yet need the same split at today's event count,
 but will as entries accumulate past the Year 1 mark. This is
-noted as a future issue candidate rather than scoped here,
-since it needs a concrete trigger (event count, or a specific
+tracked in issue [#1295](https://github.com/EISSeuropa/netsec.github.io/issues/1295) rather than scoped here, since
+it needs a concrete trigger (event count, or a specific
 complaint) before it is worth designing against.
 
 **Future-proofing (D11, D12).** The Inclusion & Diversity
@@ -286,7 +286,7 @@ this document are the best available call without that data.
 | 2 | Static four-card audience-track strip after the details strip, no JS | ~½ day | 2, implemented |
 | 3 | No sticky TOC, no mobile reorder. The audience strip is the mobile treatment | none beyond position 2 | 2, closed |
 | 4 | Section order unchanged | none | 2, closed |
-| 5 | News scaling tracked in #1230. Events past-treatment noted as a future issue candidate. D11/D12 land as cards in existing sections | none | 2, positions recorded |
+| 5 | News scaling tracked in #1230. Events past-treatment tracked in #1295. D11/D12 land as cards in existing sections | none | 2, positions recorded |
 | 6 | UI/UX consult stays open, revisited once #727 analytics (v1.13.0) show routing usage | none now | deferred to Year 2 |
 
 **Total build cost this pass:** roughly half a day, all in
@@ -296,9 +296,9 @@ position 2.
 
 - **The UI/UX consult** (position 6): open, gated on Year-2
   traffic data from issue #727.
-- **Events past-events home-page treatment** (position 5): a
-  future issue candidate, not scoped here. Needs a concrete
-  trigger before it is worth designing against.
+- **Events past-events home-page treatment** (position 5):
+  tracked in issue [#1295](https://github.com/EISSeuropa/netsec.github.io/issues/1295), not scoped here. Needs a
+  concrete trigger before it is worth designing against.
 - **Nav grouping implementation** (position 1): the grouping
   itself is pre-agreed, not built. It fires mechanically once
   a real 11th nav item is proposed.
