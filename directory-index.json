@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-07-01T08:55:30+00:00",
+  "generated_at": "2026-07-03T12:21:49+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 52,
+  "count": 58,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -24,6 +24,17 @@
       "orcid": null,
       "role": null,
       "affiliation": "Swedish Defence University",
+      "photo": null
+    },
+    {
+      "name": "Dr Alin Barbantan",
+      "name_key": "alin barbantan",
+      "aliases": [],
+      "slug": "alin-barbantan",
+      "url": "https://netsec-cost.eu/people/alin-barbantan.html",
+      "orcid": "0000-0002-3938-3526",
+      "role": null,
+      "affiliation": "Romanian Academy",
       "photo": null
     },
     {
@@ -113,6 +124,28 @@
       "role": null,
       "affiliation": "King's College London",
       "photo": "https://netsec-cost.eu/assets/images/people/clara-jammot.jpg"
+    },
+    {
+      "name": "Dr Daniela Mechkaroska",
+      "name_key": "daniela mechkaroska",
+      "aliases": [],
+      "slug": "daniela-mechkaroska",
+      "url": "https://netsec-cost.eu/people/daniela-mechkaroska.html",
+      "orcid": "0000-0002-3567-8335",
+      "role": "Management Committee · North Macedonia",
+      "affiliation": "University for Information Science and Technology “St. Paul the Apostle”",
+      "photo": "https://netsec-cost.eu/assets/images/people/daniela-mechkaroska.jpg"
+    },
+    {
+      "name": "Dr Eda KUŞKU SÖNMEZ",
+      "name_key": "eda sonmez",
+      "aliases": [],
+      "slug": "eda-kusku-sonmez",
+      "url": "https://netsec-cost.eu/people/eda-kusku-sonmez.html",
+      "orcid": "0000-0002-2689-3500",
+      "role": null,
+      "affiliation": "Samsun University",
+      "photo": null
     },
     {
       "name": "Dr Eliza Gheorghe",
@@ -357,6 +390,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/marko-kovacevic.jpg"
     },
     {
+      "name": "Mr Martin Haváček",
+      "name_key": "martin havacek",
+      "aliases": [],
+      "slug": "martin-havacek",
+      "url": "https://netsec-cost.eu/people/martin-havacek.html",
+      "orcid": "0000-0002-1276-2702",
+      "role": null,
+      "affiliation": "VSB, Technical University of Ostrava",
+      "photo": "https://netsec-cost.eu/assets/images/people/martin-havacek.jpg"
+    },
+    {
       "name": "Dr Mattia Sguazzini",
       "name_key": "mattia sguazzini",
       "aliases": [],
@@ -522,6 +566,17 @@
       "photo": null
     },
     {
+      "name": "Dr Tanja Pavleska",
+      "name_key": "tanja pavleska",
+      "aliases": [],
+      "slug": "tanja-pavleska",
+      "url": "https://netsec-cost.eu/people/tanja-pavleska.html",
+      "orcid": null,
+      "role": "Management Committee · Slovenia",
+      "affiliation": "Jozef Stefan Institute",
+      "photo": "https://netsec-cost.eu/assets/images/people/tanja-pavleska.jpg"
+    },
+    {
       "name": "Ms Teodora Stoicescu",
       "name_key": "teodora stoicescu",
       "aliases": [],
@@ -531,6 +586,17 @@
       "role": null,
       "affiliation": "National University of Political Studies and Public Administration",
       "photo": "https://netsec-cost.eu/assets/images/people/teodora-stoicescu.jpg"
+    },
+    {
+      "name": "Dr Tolga Çıkrıkçı",
+      "name_key": "tolga kc",
+      "aliases": [],
+      "slug": "tolga-c-kr-kc",
+      "url": "https://netsec-cost.eu/people/tolga-c-kr-kc.html",
+      "orcid": "0000-0001-5102-0907",
+      "role": null,
+      "affiliation": "Giresun University",
+      "photo": null
     },
     {
       "name": "Ms Vasiliki Plessia Aravani",
