@@ -25,17 +25,10 @@ name: Rotate member spotlight
 on:
   schedule:
     # Tuesday 10:00 Europe/Paris year-round. 08:00 UTC == 10:00 CEST (summer),
-    # 09:00 UTC == 10:00 CET (winter); the gate job below drops whichever one
-    # is not 10:00 local, so the spotlight posts once, at 10:00, every Tuesday.
+    # 09:00 UTC == 10:00 CET (winter); the gate job below lets through the one
+    # matching the current DST offset, so the spotlight posts once every Tuesday.
     - cron: '0 8 * * 2'
     - cron: '0 9 * * 2'
-    # ponytail: one-off, exceptional Thursday firing for the week of 2026-06-30
-    # (agreed with the maintainer; this Tuesday's run never fired). Gate logic
-    # below only checks the hour, not the weekday, so 08:00 UTC == 10:00 CEST
-    # on Thursday 2026-07-02 passes through unchanged. Recurs every Thursday
-    # until removed — delete this line after 2026-07-02. Normal Tuesday
-    # cadence resumes automatically next week, no other change needed.
-    - cron: '0 8 * * 4'
   workflow_dispatch:       # Manual run from the Actions tab
 
 permissions:
@@ -47,8 +40,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # DST gate: both scheduled triggers fire, but only the one at 10:00
-  # Europe/Paris proceeds. A manual dispatch always proceeds.
+  # DST gate: both scheduled triggers fire, but only the one whose UTC hour is
+  # 10:00 Europe/Paris under the current DST offset proceeds. A manual dispatch
+  # always proceeds. Gating on which cron fired (github.event.schedule) rather
+  # than the observed local hour makes this immune to GitHub's scheduled-run
+  # delays, which routinely push a run tens of minutes (sometimes hours) past
+  # its cron minute and used to fail an exact hour==10 check (#1298).
   gate:
     name: Proceed only at 10:00 Europe/Paris
     runs-on: ubuntu-latest
@@ -56,24 +53,18 @@ jobs:
       go: ${{ steps.check.outputs.go }}
     steps:
       - id: check
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
         run: |
-          hour=$(TZ='Europe/Paris' date +%H)
-          today=$(TZ='Europe/Paris' date +%F)
-          # One-week hold (#social-promo-delay): the weekly member spotlight —
-          # both the home-page rotation and its ungated Bluesky post — is paused
-          # to push the social promotion back a week. It resumes on the first
-          # Tuesday on/after HOLD_UNTIL. A manual workflow_dispatch still
-          # proceeds (override). Self-expiring: once today >= HOLD_UNTIL this
-          # branch never fires — delete it and the HOLD_UNTIL line to clean up.
-          HOLD_UNTIL='2026-06-30'
-          if [ "${{ github.event_name }}" = "schedule" ] && [[ "$today" < "$HOLD_UNTIL" ]]; then
-            echo "go=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Spotlight paused until ${HOLD_UNTIL} (social promotion delayed a week); ${today} skipped."
-          elif [ "${{ github.event_name }}" != "schedule" ] || [ "$hour" = "10" ]; then
+          offset=$(TZ='Europe/Paris' date +%z)   # +0200 in summer (CEST), +0100 in winter (CET)
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "go=true" >> "$GITHUB_OUTPUT"
+          elif { [ "$offset" = "+0200" ] && [[ "$SCHEDULE" == "0 8 "* ]]; } \
+            || { [ "$offset" = "+0100" ] && [[ "$SCHEDULE" == "0 9 "* ]]; }; then
             echo "go=true" >> "$GITHUB_OUTPUT"
           else
             echo "go=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Currently ${hour}:00 Europe/Paris, not 10:00; this trigger is skipped."
+            echo "::notice::Cron '${SCHEDULE}' is not the 10:00 Europe/Paris trigger for offset ${offset}; skipped."
           fi
 
   rotate:
