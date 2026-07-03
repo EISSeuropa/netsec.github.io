@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NetSec — Website & Directory · Documentation Pack v1.12.0</title>
+<title>NetSec — Website & Directory · Documentation Pack v1.12.1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -569,11 +569,17 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
 .toc ol{list-style:none;padding:0;margin:0;counter-reset:tocnum}
 .toc ol > li{
   counter-increment:tocnum;
-  display:grid;grid-template-columns:24pt 1fr;
+  display:grid;grid-template-columns:24pt 1fr auto;
   gap:8pt;
   padding:10pt 0;
   border-bottom:1px dashed var(--line);
   font-size:11pt;
+}
+.toc ol > li .pagenum{
+  align-self:start;
+  font-family:'Lexend','Inter',sans-serif;font-weight:600;
+  color:var(--muted);font-size:10pt;letter-spacing:-.01em;
+  padding-left:12pt;
 }
 .toc ol > li::before{
   content:counter(tocnum,decimal-leading-zero);
@@ -646,7 +652,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.12.0 · June 2026</div>
+        <div class="value">v1.12.1 · July 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -835,7 +841,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.12.0 · June 2026</span>
+    <span class="url">v1.12.1 · July 2026</span>
   </footer>
 
 </section>
@@ -856,66 +862,77 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
           <span class="title">Overview &amp; purpose</span>
           <span class="desc">What the site is, who it serves, and the principles behind every design choice.</span>
         </div>
+        <span class="pagenum">5</span>
       </li>
       <li>
         <div>
           <span class="title">Architecture</span>
           <span class="desc">Tech stack, page-by-page inventory, data-flow diagrams for the weekly sync workflows, repository layout.</span>
         </div>
+        <span class="pagenum">11</span>
       </li>
       <li>
         <div>
           <span class="title">Design system</span>
           <span class="desc">Colour tokens, typography, components, motion budget, iconography, accessibility checklist.</span>
         </div>
+        <span class="pagenum">25</span>
       </li>
       <li>
         <div>
           <span class="title">Translation &amp; multilingual posture</span>
           <span class="desc">How the FR/DE beta variants work, the drift-checker workflow, what falls in/out of scope.</span>
         </div>
+        <span class="pagenum">29</span>
       </li>
       <li>
         <div>
           <span class="title">SEO &amp; discoverability</span>
           <span class="desc">Open Graph, Twitter Card, JSON-LD, canonical URLs, hreflang, sitemap, 404 strategy.</span>
         </div>
+        <span class="pagenum">32</span>
       </li>
       <li>
         <div>
           <span class="title">Admin guide</span>
           <span class="desc">Every account, login, and asset the site depends on; routine tasks; escalation; handover checklist.</span>
         </div>
+        <span class="pagenum">35</span>
       </li>
       <li>
         <div>
           <span class="title">Security &amp; DevSecOps</span>
           <span class="desc">Threat model, coordinated-disclosure policy, GitHub-native security automation, supply-chain and operational hardening.</span>
         </div>
+        <span class="pagenum">45</span>
       </li>
       <li>
         <div>
           <span class="title">Appendix A · Accessibility standard &amp; assessment</span>
           <span class="desc">WCAG 2.1 AA target, EN&nbsp;301&nbsp;549 alignment, latest self-assessment results, known limitations, reporting route.</span>
         </div>
+        <span class="pagenum">50</span>
       </li>
       <li>
         <div>
           <span class="title">Appendix B · Licensing</span>
           <span class="desc">The dual MIT + CC&nbsp;BY&nbsp;4.0 model and suggested attribution.</span>
         </div>
+        <span class="pagenum">53</span>
       </li>
       <li>
         <div>
           <span class="title">Appendix C · Promotional poster</span>
           <span class="desc">An outward-facing A3 poster of the Action, ready for conferences, training schools, and noticeboards.</span>
         </div>
+        <span class="pagenum">54</span>
       </li>
       <li>
         <div>
           <span class="title">Appendix D · Changelog</span>
           <span class="desc">Per-version summary of what this documentation pack records — kept last so the most recent revision is the final page.</span>
         </div>
+        <span class="pagenum">57</span>
       </li>
     </ol>
   </nav>
@@ -1029,7 +1046,7 @@ flowchart LR
 
   <h2>Site structure</h2>
 
-  <p>Seventeen public pages in total (each with FR and DE beta siblings, plus a locale-detecting <code>404.html</code>). The home page is the hub: it hosts most of the static content as anchored sections and signposts the discovery and reference pages and the members' Wiki through two dedicated home-page sections. Phase 1 of the v1.4.0 IA pass split the home page's denser blocks out into standalone pages (<code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code>); v1.6.0 added the live ESSC 2026 programme page (<code>essc-2026.html</code>); v1.10.0 added the dedicated Working Groups page (<code>working-groups.html</code>); v1.12.0 added the NetSec Summer School page (<code>summer-school.html</code>), run jointly with EISS and co-located with the conference. Three full-page applications, four reference pages branched off Home, the live conference programme and the Summer School, and four statutory pages branch off the hub.</p>
+  <p>Eighteen public pages in total (each with FR and DE beta siblings, plus a locale-detecting <code>404.html</code>). The home page is the hub: it hosts most of the static content as anchored sections and signposts the discovery and reference pages and the members' Wiki through two dedicated home-page sections. Phase 1 of the v1.4.0 IA pass split the home page's denser blocks out into standalone pages (<code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code>); v1.6.0 added the live ESSC 2026 programme page (<code>essc-2026.html</code>); v1.10.0 added the dedicated Working Groups page (<code>working-groups.html</code>); v1.12.0 added the NetSec Summer School page (<code>summer-school.html</code>), run jointly with EISS and co-located with the conference, then grew a dedicated Events page (<code>events.html</code>) gathering every NetSec event in one place. The directory also fans out into a generated profile page per member at <code>people/&lt;slug&gt;.html</code> (177 pages at the time of writing, three locales each), built by <code>scripts/build-profile-pages.py</code> and counted separately from the eighteen hand-authored pages. Three full-page applications, four reference pages branched off Home, the live conference programme, the Summer School and the Events page, and four statutory pages branch off the hub.</p>
 
   <div class="diagram">
     <div class="mermaid">
@@ -1040,6 +1057,7 @@ flowchart TB
     G["<b>grants.html</b><br/>Grants &amp; Calls"]
     E["<b>essc-2026.html</b><br/>ESSC 2026 programme"]
     SS["<b>summer-school.html</b><br/>Summer School (ECS³)"]
+    EV["<b>events.html</b><br/>Events"]
     WG["<b>working-groups.html</b><br/>Working Groups"]
     AB["<b>about.html</b><br/>About"]
     N["<b>news.html</b><br/>News"]
@@ -1072,12 +1090,14 @@ flowchart TB
     G -.-> P
     H ==> WG
     H -.-> |"events block"| SS
+    H -.-> |"events block"| EV
 
     style H fill:#0a84ff,stroke:#0a84ff,color:#fff
     style P fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style G fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style E fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style SS fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style EV fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style WG fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style AB fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
     style N fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
@@ -1096,8 +1116,9 @@ flowchart TB
     linkStyle 14,15 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.4px
     linkStyle 16 stroke:#003399,stroke-width:2.2px
     linkStyle 17 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
+    linkStyle 18 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
     </div>
-    <div class="diagram-caption">Figure 3 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav links to Network, Working Groups, Grants and About from every page). <strong>Dashed blue arrows from Home</strong> reach the v1.4.0 IA-split pages (News, Roadmap, Outputs), the v1.6.0 ESSC 2026 programme page, the v1.12.0 Summer School page, and the four-card <em>Find out more</em> discovery grid at the end of the About section (FAQ, Glossary, Press kit). <strong>Dashed grey arrows</strong> are footer-only links (Accessibility, Privacy, Licensing, Site map appear in every page's footer). <strong>Dashed blue arrows between people and grants</strong> are in-page cross-links between the Network and Grants pages.</div>
+    <div class="diagram-caption">Figure 3 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav links to Network, Working Groups, Grants and About from every page). <strong>Dashed blue arrows from Home</strong> reach the v1.4.0 IA-split pages (News, Roadmap, Outputs), the v1.6.0 ESSC 2026 programme page, the v1.12.0 Summer School and Events pages, and the four-card <em>Find out more</em> discovery grid at the end of the About section (FAQ, Glossary, Press kit). The Directory node also fans out into a generated profile page per member at <code>people/&lt;slug&gt;.html</code>, omitted here for legibility. <strong>Dashed grey arrows</strong> are footer-only links (Accessibility, Privacy, Licensing, Site map appear in every page's footer). <strong>Dashed blue arrows between people and grants</strong> are in-page cross-links between the Network and Grants pages.</div>
   </div>
 
   <h3>Page inventory</h3>
@@ -1106,6 +1127,7 @@ flowchart TB
     <tbody>
       <tr><td><code>index.html</code></td><td>Overview, news lede, WGs, MC, events banner, <em>Find out more</em> discovery grid, <em>For NetSec members</em> Wiki signposting strip, contact. Trimmed by ~25% in v1.4.0 when the standalone About / News / Roadmap / Outputs pages took over the denser blocks.</td><td><code>data/events.json</code> (events banner; added v1.6.0)</td></tr>
       <tr><td><code>people.html</code></td><td>Open community directory with WG / MC / country filters; Join-the-network CTA. <em>Directory research-interest keyword filter added v1.7.0; research-theme and mentorship filters and a native mobile filter sheet added v1.11.0; a quiet "Founding contributor" badge for the founding cohort added v1.12.0.</em></td><td><code>data/bios.json</code> (all), <code>data/keyword-aliases.json</code> (inline fallback normaliser; added v1.7.0)</td></tr>
+      <tr><td><code>people/&lt;slug&gt;.html</code></td><td>One shareable profile page per directory member, generated by <code>scripts/build-profile-pages.py</code> with its own <code>Person</code> structured data, an ORCID-fed recent-publications list, research-theme and region chips, and "works on similar topics" facepiles that cross-link related members and mentors. A CI gate fails any PR whose member data changed without regenerating the pages. <em>Added post-conference in the v1.12.0 cycle.</em></td><td><code>data/authors-index.json</code> (Anthology slot); otherwise static, derived at build time from <code>data/bios.json</code> and <code>data/orcid-works.json</code></td></tr>
       <tr><td><code>grants.html</code></td><td>Five grant schemes, the e-COST timeline, resources, grant-manager contact cards.</td><td><code>data/bios.json</code> (Grant Awarding Coordinator only)</td></tr>
       <tr><td><code>working-groups.html</code></td><td>The four Working Groups, each an anchored section with its MoU objective, focus areas, lead and co-lead, an expandable member grid rendered live from the COST directory, and a <em>Related events</em> block. Opens with overall stats (people, countries, groups). <em>Added v1.10.0.</em></td><td><code>data/wg.json</code> (leadership + members), <code>data/bios.json</code> (photos + affiliations), <code>data/events.json</code> (related events)</td></tr>
       <tr><td><code>about.html</code></td><td>Standalone About page: mission, deliverables, <em>Find out more</em> discovery grid, milestones. <em>Added v1.4.0.</em></td><td>—</td></tr>
@@ -1114,6 +1136,7 @@ flowchart TB
       <tr><td><code>outputs.html</code></td><td>Outputs page (placeholder for COST deliverables, papers, training-school materials). <em>Added v1.4.0.</em></td><td>—</td></tr>
       <tr><td><code>essc-2026.html</code></td><td>Live ESSC 2026 programme: day chips, plenary and parallel session cards, contributions, chairs, abstracts, room badges, livestream pills, member-aware speaker popovers. <em>Added v1.6.0; speaker popover deduped onto the shared <code>window.netsecMemberCard</code> component v1.12.0.</em></td><td><code>data/indico.json</code>, <code>data/bios.json</code> (for member-aware speaker links)</td></tr>
       <tr><td><code>summer-school.html</code></td><td>NetSec Early-Career Scholars Summer School (ECS³), run jointly with EISS. Card-based page with a faculty roster whose member headshots resolve live from the directory by name, an EISS partner block with an inline logo, an application contact, and a heritage note placing it as the successor to Euro-SWAMOS. <em>Added v1.12.0.</em></td><td><code>data/bios.json</code> (faculty headshots, matched by name)</td></tr>
+      <tr><td><code>events.html</code></td><td>Every NetSec event in one place: upcoming and past, each card carrying dates, venue, format, and a link to its programme or registration. The conference pages settled into a fixed archive once Stockholm closed, and this page became the living index over them. <em>Added post-conference in the v1.12.0 cycle.</em></td><td><code>data/events.json</code></td></tr>
       <tr><td><code>faq.html</code></td><td>21 Q&amp;As across six themed sections; jump-to TOC; per-question deep-link anchors. <em>Added v1.3.0; migrated from the members' Wiki.</em></td><td>—</td></tr>
       <tr><td><code>glossary.html</code></td><td>~35 COST and NetSec terms across five sections; per-term deep-link anchors. <em>Added v1.3.0; migrated from the members' Wiki.</em></td><td>—</td></tr>
       <tr><td><code>press-kit.html</code></td><td>Logos with pairing rules, palette, typography, funding acknowledgements, attribution wording, do / don't rules. <em>Added v1.2.0.</em></td><td>—</td></tr>
@@ -1381,7 +1404,11 @@ sequenceDiagram
 ├── roadmap.html                     # Public roadmap (v1.4.0)
 ├── outputs.html                     # Outputs placeholder (v1.4.0)
 ├── essc-2026.html                   # ESSC 2026 live programme (v1.6.0)
+├── working-groups.html              # The four Working Groups (v1.10.0)
+├── summer-school.html               # Summer School ECS³ (v1.12.0)
+├── events.html                      # Events index (v1.12.0)
 ├── people.html                      # The Directory
+├── people/&lt;slug&gt;.html               # Generated per-member profile pages (v1.12.0)
 ├── grants.html                      # Grants &amp; Calls
 ├── faq.html                         # Public FAQ
 ├── glossary.html                    # COST + NetSec terminology
@@ -1399,7 +1426,8 @@ sequenceDiagram
 │
 ├── assets/
 │   ├── css/site.css                 # Single shared stylesheet
-│   ├── js/site.js                   # Nav, theme, reveal, directory, tour, netsecT()
+│   ├── js/site.js                   # Nav, theme, reveal, tour, netsecT()
+│   ├── js/people-directory.js       # Shared directory renderer, one module for all three locales (v1.12.0)
 │   └── images/people/*.{jpg,png}    # Member headshots
 │
 ├── data/
@@ -1410,6 +1438,7 @@ sequenceDiagram
 │   ├── wg.json                      # Per-WG leadership + members from cost.eu (v1.10.0)
 │   ├── roadmap-progress.json        # GitHub milestone progress for the roadmap (v1.10.0)
 │   ├── keyword-aliases.json         # Curated acronyms + alias map for directory keywords (v1.7.0)
+│   ├── orcid-works.json             # ORCID publications cache feeding cards + profile pages (v1.12.0)
 │   └── i18n-state.json              # SHA-1 stamps for drift checker
 │
 ├── scripts/
@@ -1422,6 +1451,7 @@ sequenceDiagram
 │   ├── test-sync-bios.py            # Pipeline tests
 │   ├── test-sync-indico.py          # Pipeline tests
 │   ├── inject-seo.py                # Canonical + OG + JSON-LD generator
+│   ├── build-profile-pages.py       # Renders people/&lt;slug&gt;.html from bios + ORCID works (v1.12.0)
 │   ├── check-i18n-drift.py          # Reports stale translations
 │   ├── check-css-class-collisions.py # Lints accidental class-name reuse (v1.6.0)
 │   ├── check-a11y.sh                # axe-core scan wrapper
@@ -2389,9 +2419,12 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <div class="changelog-entries">
 
-  <h2 class="current">v1.12.0 · June 2026 · Section-level catch-up to website v1.11.0 and v1.12.0</h2>
+  <h2 class="current">v1.12.1 · July 2026 · Post-conference section catch-up and TOC page numbers</h2>
+  <p class="cl-summary">Pack-only revision closing the section-level catch-up the v1.12.0 addendum deferred. Section 02 now carries the post-conference surface: the page graph and the inventory gain the Events page (<code>events.html</code>) and the generated per-member profile pages at <code>people/&lt;slug&gt;.html</code> (177 pages from 59 members at the time of writing), with the hand-authored page count moving to eighteen and the generated profiles counted separately. Section 04's repository layout catches up on the same scope, on two pages it had missed earlier (<code>working-groups.html</code>, <code>summer-school.html</code>), and records the shared <code>assets/js/people-directory.js</code> renderer, the <code>data/orcid-works.json</code> publications cache, and <code>scripts/build-profile-pages.py</code>. The table of contents now carries a page number per section, completing the structural improvement first queued in <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>. This build is also the first PDF to include the news/social and OG-card pipeline sections with Figures 13 and 14, which had landed in the HTML source after the previous build. Site screenshots were re-captured from the live worktree.</p>
+
+  <h2>v1.12.0 · June 2026 · Section-level catch-up to website v1.11.0 and v1.12.0</h2>
   <p class="cl-summary">Cover bump and section-level catch-up spanning website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.11.0">v1.11.0</a> ("Directory filters, mentorship, and a smoother mobile directory") and the v1.12.0 work cut alongside this pack. v1.11.0 gave the directory a research-theme filter and a mentorship axis, rebuilt the mobile filter sheet as a native top-layer <code>&lt;dialog&gt;</code> for Safari-grade responsiveness, and laid the groundwork for the founding cohort. The v1.12.0 cycle adds a dedicated NetSec Summer School page (<code>/summer-school.html</code> + FR + DE), run jointly with EISS, whose faculty roster resolves member headshots live from the directory by name and whose partner block embeds the EISS lockup as an inline SVG. The member-card popover that the ESSC programme and the directory share is now a single <code>window.netsecMemberCard</code> component rather than a copy per page, and the same first-and-last name matcher now also heals the About-page and Working-Group leadership cards, so a card gains its live headshot the first time the person appears in the directory. A quiet "Founding contributor" badge marks the 52 founding proposers on directory cards, computed at sync time from <code>data/founding-proposers.json</code>, with the founding figures (52 contributors across 21 countries) added to About and the press kit. This revision adds <code>summer-school.html</code> to the page graph (Figure 3) and the page inventory and bumps the page count to seventeen, and records the shared member-card component and the founding badge. Site screenshots were re-captured from the live worktree.</p>
-  <p class="cl-summary">Post-conference addendum: the v1.12.0 release grew well beyond what this pack captures, gathering the work merged once the Summer School and the European Security Studies Conference were over. The directory gained real shareable profile pages at <code>/people/&lt;slug&gt;</code> with their own <code>Person</code> structured data, an STSM-hosting signal tied to the grants page, ORCID-fed recent-publications lists on cards, and a mentorship matching panel that pairs offers with requests inside the active filters. A dedicated Events page (<code>/events.html</code> + FR + DE) now gathers every NetSec event in one place, the About page opens with an "In numbers" strip, and the conference pages settled into a fixed archive once Stockholm closed. The bare "MC" abbreviation was spelled out as "Management Committee" across the reader-facing copy, and the triplicated directory renderer became one shared <code>assets/js/people-directory.js</code> module. Section-level catch-up for this post-conference scope (the new pages in the Section 02 page graph and inventory, the shared renderer in Section 04) is deferred to the next pack revision, tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>.</p>
+  <p class="cl-summary">Post-conference addendum: the v1.12.0 release grew well beyond what this pack captures, gathering the work merged once the Summer School and the European Security Studies Conference were over. The directory gained real shareable profile pages at <code>/people/&lt;slug&gt;</code> with their own <code>Person</code> structured data, an STSM-hosting signal tied to the grants page, ORCID-fed recent-publications lists on cards, and a mentorship matching panel that pairs offers with requests inside the active filters. A dedicated Events page (<code>/events.html</code> + FR + DE) now gathers every NetSec event in one place, the About page opens with an "In numbers" strip, and the conference pages settled into a fixed archive once Stockholm closed. The bare "MC" abbreviation was spelled out as "Management Committee" across the reader-facing copy, and the triplicated directory renderer became one shared <code>assets/js/people-directory.js</code> module. Section-level catch-up for this post-conference scope (the new pages in the Section 02 page graph and inventory, the shared renderer in Section 04) was deferred to the next pack revision and completed in v1.12.1 above.</p>
 
   <h2>v1.10.0 · May 2026 · Section-level catch-up to website v1.10.0</h2>
   <p class="cl-summary">Cover bump and section-level catch-up to website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.10.0">v1.10.0</a> ("Working Groups page and milestone-aware roadmap"), cut just before the European Security Conference. The headline is a dedicated Working Groups page (<code>/working-groups.html</code> + FR + DE) rendering each group's objective, leadership, and live membership from a new <code>data/wg.json</code> surface the weekly cost.eu sync writes (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/378">#378</a>), with the Memorandum-of-Understanding titles adopted site-wide and Events cross-linked to the groups they serve in both directions. The public roadmap reads its own GitHub milestones, showing a progress bar per in-flight release and auto-marking the next one in progress. The conference run-up adds non-presenting co-authors to the ESSC programme, an <em>At a NetSec conference</em> FAQ section, a one-click programme PDF, and a chain of print-to-PDF fixes, while the directory keyword pipeline folds American spellings to British English and the weekly member-spotlight engine landed dormant. This revision also refreshes the sections: Section 02 adds <code>working-groups.html</code> to the page graph (Figure 3) and the page inventory and bumps the page count to sixteen, and Section 04's repository layout records the two new data surfaces (<code>data/wg.json</code>, <code>data/roadmap-progress.json</code>) and the <code>sync-cost.py</code> fourth output. Site screenshots were re-captured from the live worktree. This closes the section-level catch-up tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>.</p>
