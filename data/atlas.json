@@ -3,7 +3,7 @@
   "stats": {
     "working_groups": 4,
     "people": 145,
-    "people_with_bios": 26,
+    "people_with_bios": 28,
     "edges": 267
   },
   "nodes": [
@@ -75,6 +75,13 @@
       "slug": "daniela-mechkaroska"
     },
     {
+      "id": "david-matsaberidze",
+      "type": "person",
+      "name": "Dr David Matsaberidze",
+      "country": "Georgia",
+      "slug": "david-matsaberidze"
+    },
+    {
       "id": "eda-kusku-sonmez",
       "type": "person",
       "name": "Dr Eda Kuşku Sönmez",
@@ -101,6 +108,13 @@
       "name": "Ms Isabelle Haynes",
       "country": "Czechia",
       "slug": "isabelle-haynes"
+    },
+    {
+      "id": "islam-jusufi",
+      "type": "person",
+      "name": "Prof Islam Jusufi",
+      "country": "North Macedonia",
+      "slug": "islam-jusufi"
     },
     {
       "id": "julia-carver",
@@ -297,12 +311,6 @@
       "country": "United Kingdom"
     },
     {
-      "id": "p-david-matsaberidze",
-      "type": "person",
-      "name": "Dr David Matsaberidze",
-      "country": "Georgia"
-    },
-    {
       "id": "p-dimitar-atanasov",
       "type": "person",
       "name": "Mr Dimitar Atanasov",
@@ -451,12 +459,6 @@
       "type": "person",
       "name": "Dr Ilyas Ferhat Demirbas",
       "country": "Türkiye"
-    },
-    {
-      "id": "p-islam-jusufi",
-      "type": "person",
-      "name": "Prof Islam Jusufi",
-      "country": "North Macedonia"
     },
     {
       "id": "p-iztok-prezelj",
@@ -978,6 +980,14 @@
       "target": "wg-3"
     },
     {
+      "source": "david-matsaberidze",
+      "target": "wg-1"
+    },
+    {
+      "source": "david-matsaberidze",
+      "target": "wg-3"
+    },
+    {
       "source": "eda-kusku-sonmez",
       "target": "wg-1"
     },
@@ -1004,6 +1014,18 @@
     {
       "source": "isabelle-haynes",
       "target": "wg-1"
+    },
+    {
+      "source": "islam-jusufi",
+      "target": "wg-1"
+    },
+    {
+      "source": "islam-jusufi",
+      "target": "wg-2"
+    },
+    {
+      "source": "islam-jusufi",
+      "target": "wg-3"
     },
     {
       "source": "julia-carver",
@@ -1234,14 +1256,6 @@
       "target": "wg-4"
     },
     {
-      "source": "p-david-matsaberidze",
-      "target": "wg-1"
-    },
-    {
-      "source": "p-david-matsaberidze",
-      "target": "wg-3"
-    },
-    {
       "source": "p-dimitar-atanasov",
       "target": "wg-2"
     },
@@ -1435,18 +1449,6 @@
     },
     {
       "source": "p-ilyas-ferhat-demirbas",
-      "target": "wg-3"
-    },
-    {
-      "source": "p-islam-jusufi",
-      "target": "wg-1"
-    },
-    {
-      "source": "p-islam-jusufi",
-      "target": "wg-2"
-    },
-    {
-      "source": "p-islam-jusufi",
       "target": "wg-3"
     },
     {

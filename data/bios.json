@@ -2681,7 +2681,10 @@
       "roles": [
         "Management Committee · Georgia"
       ],
-      "wgs": [],
+      "wgs": [
+        1,
+        3
+      ],
       "mentorship": [
         "mentor"
       ],
@@ -2728,7 +2731,11 @@
       "affiliation": "Independent Researcher",
       "position": "Associate Professor",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        2,
+        3
+      ],
       "mentorship": [
         "mentor"
       ],
