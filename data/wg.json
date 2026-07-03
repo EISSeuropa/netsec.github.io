@@ -22,7 +22,8 @@
         },
         {
           "name": "Dr Alin Barbantan",
-          "country": "Romania"
+          "country": "Romania",
+          "slug": "alin-barbantan"
         },
         {
           "name": "Prof Andreea Dragomir",
@@ -72,7 +73,8 @@
         },
         {
           "name": "Dr Eda Kuşku Sönmez",
-          "country": "Türkiye"
+          "country": "Türkiye",
+          "slug": "eda-kusku-sonmez"
         },
         {
           "name": "Dr Eleni Christodoulou",
@@ -158,7 +160,8 @@
         },
         {
           "name": "Dr Kire Babanoski",
-          "country": "North Macedonia"
+          "country": "North Macedonia",
+          "slug": "kire-babanoski"
         },
         {
           "name": "Ms Laurena Kalaja",
@@ -195,7 +198,8 @@
         },
         {
           "name": "Mr Martin Haváček",
-          "country": "Czechia"
+          "country": "Czechia",
+          "slug": "martin-havacek"
         },
         {
           "name": "Mr Mattia Sguazzini",
@@ -302,7 +306,8 @@
         },
         {
           "name": "Dr Tanja Pavleska",
-          "country": "Slovenia"
+          "country": "Slovenia",
+          "slug": "tanja-pavleska"
         },
         {
           "name": "Dr Teemu Häkkinen",
@@ -408,7 +413,8 @@
         },
         {
           "name": "Prof Daniela Mechkaroska",
-          "country": "North Macedonia"
+          "country": "North Macedonia",
+          "slug": "daniela-mechkaroska"
         },
         {
           "name": "Mr Danilo Kalezic",
@@ -655,7 +661,8 @@
         },
         {
           "name": "Dr Alin Barbantan",
-          "country": "Romania"
+          "country": "Romania",
+          "slug": "alin-barbantan"
         },
         {
           "name": "Prof Ana Santos Pinto",
@@ -701,7 +708,8 @@
         },
         {
           "name": "Prof Daniela Mechkaroska",
-          "country": "North Macedonia"
+          "country": "North Macedonia",
+          "slug": "daniela-mechkaroska"
         },
         {
           "name": "Dr David Curran",
@@ -717,7 +725,8 @@
         },
         {
           "name": "Dr Eda Kuşku Sönmez",
-          "country": "Türkiye"
+          "country": "Türkiye",
+          "slug": "eda-kusku-sonmez"
         },
         {
           "name": "Dr Edlira Titini",
@@ -811,7 +820,8 @@
         },
         {
           "name": "Dr Kire Babanoski",
-          "country": "North Macedonia"
+          "country": "North Macedonia",
+          "slug": "kire-babanoski"
         },
         {
           "name": "Mr Kujtim Zeka",
@@ -853,7 +863,8 @@
         },
         {
           "name": "Mr Martin Haváček",
-          "country": "Czechia"
+          "country": "Czechia",
+          "slug": "martin-havacek"
         },
         {
           "name": "Dr Mehmet Recai Uygur",
@@ -940,7 +951,8 @@
         },
         {
           "name": "Dr Tanja Pavleska",
-          "country": "Slovenia"
+          "country": "Slovenia",
+          "slug": "tanja-pavleska"
         },
         {
           "name": "Dr Tijana Recevic",
@@ -1083,7 +1095,8 @@
         },
         {
           "name": "Dr Kire Babanoski",
-          "country": "North Macedonia"
+          "country": "North Macedonia",
+          "slug": "kire-babanoski"
         },
         {
           "name": "Mr Kujtim Zeka",
@@ -1145,7 +1158,8 @@
         },
         {
           "name": "Dr Tanja Pavleska",
-          "country": "Slovenia"
+          "country": "Slovenia",
+          "slug": "tanja-pavleska"
         },
         {
           "name": "Dr Tijana Recevic",
