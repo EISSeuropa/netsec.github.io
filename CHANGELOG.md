@@ -125,6 +125,26 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+### Indico write path moves into the plugin
+
+The external `scripts/indico_patch.py` tool — the ~950-line helper that
+reverse-engineered Indico's undocumented management endpoints to apply
+YAML fix-plans over HTTP — has been retired. Its replacement, the
+`netsec-dispatch` plugin CLI `indico netsec apply-fixplan <yaml>
+[--dry-run]`, applies the same fix-plans server-side through Indico's
+own Python API in a single transaction (delivered and validated
+end-to-end in [#824](https://github.com/EISSeuropa/netsec.github.io/issues/824);
+see [`docs/indico-integration.md`](docs/indico-integration.md) Phase 2).
+The **YAML fix-plan schema is unchanged**, so committed plans apply
+verbatim; the tool, its test suite, and the Phase 1/1.5 endpoint
+findings live on in git history and in [#210](https://github.com/EISSeuropa/netsec.github.io/issues/210)
+/ [#323](https://github.com/EISSeuropa/netsec.github.io/issues/323). The
+duplicate-cleanup companion `scripts/indico_clean_duplicate.py` is kept
+(it was already self-contained) and is now the only consumer of
+`INDICO_WRITE_TOKEN`. Docs, the fix-plan READMEs, the sidecar
+`.gitignore` pattern, and the now-unused `PyYAML` dependency are updated
+or dropped to match.
+
 #### Added
 - The Phase 2 homepage IA recommendation document (`docs/homepage-ia-phase2.md`), succeeding the Phase 1 quick-audit, records the header-grouping capacity rule, the mobile and section-ordering decisions, and content-lifecycle pointers, and ships alongside its one implementation: a static "Start where you are" audience-track strip on the home page routing researchers, policy-makers, MC members, and press to the pages each needs.
 - News items now carry a category tag (Event, Publication, or Announcement) and an optional Working-Group activity tag (WG1 to WG4), shown as small pills beside the date on both the home "Latest news" block and the news archive. The News archive is also restyled into a cleaner, more scannable list grouped under year headings, with hairline dividers and larger titles in place of the boxed cards. The category labels are hand-translated for FR and DE, the WG pill takes its Working-Group colour, and an item published from a GitHub issue can set both with `Type:` and `WG:` header lines. The home "Latest news" block shows the three most recent items, and on a phone each card's text is shortened to a few lines with a "Read more" toggle (hand-translated) so the block stays compact. The block also gains a "See all news" link through to the archive, beside the RSS button, and the standalone upcoming-event banner (which had gone stale after the conference) is retired from the home page. The visual site map now points its News entry at the News archive page and no longer renders a stray empty bullet in the Home card. Hand-translated for FR and DE.
@@ -190,6 +210,9 @@ maintainer-facing audience.
 #### Changed
 - Every research-theme name is standardised on no serial comma before the final "and". "Peace, mediation and reconciliation" drops the one Oxford comma that had crept into an otherwise comma-free list of theme names.
 - A directory member with no formal role and no Working Group membership now shows no role pill on their card or profile page, rather than the generic "Network member" label, which read as filler rather than information.
+
+#### Removed
+- The external Indico write tool `scripts/indico_patch.py` and its test `scripts/test-indico_patch.py`, superseded by the `netsec-dispatch` plugin CLI `indico netsec apply-fixplan` (#824). The YAML fix-plan schema is unchanged; `docs/indico-patch.md` becomes a retirement notice, the fix-plan READMEs point at the plugin CLI, the `data/indico-fix-plans/*.resolved.json` sidecar `.gitignore` pattern is dropped (the plugin has no sidecar cache), and `PyYAML` is removed from `requirements.txt` (it was used only by the retired tool).
 
 ## [1.12.0] · 2026-06-17 — A working directory and life after Stockholm
 

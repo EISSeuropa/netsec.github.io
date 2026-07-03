@@ -113,14 +113,13 @@ the EN page; the FR/DE variants sit alongside.
 │   ├── news.json           # Curated news entries shown on home and /news.html
 │   ├── keyword-aliases.json # Curated alias map + acronym preservation for directory keywords
 │   ├── i18n-state.json     # SHA-1 hashes for the EN-to-FR/DE drift checker
-│   └── indico-fix-plans/   # YAML fix-plan inputs for scripts/indico_patch.py (write-side)
+│   └── indico-fix-plans/   # YAML fix-plan inputs, applied via `indico netsec apply-fixplan` (plugin CLI)
 ├── scripts/
 │   ├── sync-cost.py        # Weekly: WG_MAP + per-bio wgs + leadership roles from cost.eu
 │   ├── sync-bios.py        # Daily:  Google Form submissions → data/bios.json + headshots
 │   ├── sync-indico.py      # Daily:  indico.eiss-europa.com → data/indico.json + calendar.ics
 │   ├── sync-roadmap.py     # On CHANGELOG.md push: refresh autostamp in docs/roadmap-2026.md
 │   ├── promote-roadmap.py  # Called by release.sh: flip planned roadmap card to shipped (EN/FR/DE)
-│   ├── indico_patch.py     # Manual: YAML fix-plan → Indico management API writes (admin-token)
 │   ├── indico_clean_duplicate.py # Manual: ESSC-N to ESSC-N+1 rollover after Indico duplicate
 │   ├── release.sh          # Promote CHANGELOG [Unreleased] to dated section; tag; publish
 │   ├── inject-seo.py       # Idempotent SEO + JSON-LD block regeneration across all pages
@@ -131,7 +130,7 @@ the EN page; the FR/DE variants sit alongside.
 │   ├── check-css-class-collisions.py # CSS class shadowing lint (CI on every site.css PR)
 │   ├── check-external-link-arrows.py # External-link arrow-glyph lint
 │   ├── test-sync-*.py / test-promote-roadmap.py  # Smoke-test suites (standalone runnable)
-│   └── requirements.txt    # Python deps (requests, beautifulsoup4, Pillow, PyYAML)
+│   └── requirements.txt    # Python deps (requests, beautifulsoup4, Pillow)
 ├── .github/
 │   ├── ISSUE_TEMPLATE/     # YAML issue forms (bug, enhancement, documentation) + config.yml
 │   └── workflows/          # Twelve workflows, see "Automated pipelines" table below
@@ -145,7 +144,7 @@ the EN page; the FR/DE variants sit alongside.
 │   ├── seo.md              # OG / JSON-LD / canonical / hreflang / sitemap conventions
 │   ├── security.md         # Threat model + disclosure timeline (companion to SECURITY.md)
 │   ├── indico-sync.md      # Read-side: nightly Indico → indico.json + calendar.ics
-│   ├── indico-patch.md     # Write-side: YAML fix-plan, admin-token unlock, Phase 1.5 finding
+│   ├── indico-patch.md     # Write-side: retirement notice (superseded by the plugin CLI, #824)
 │   ├── brand-deployment.md # Designer-hand-off workflow for the NetSec logo refresh
 │   ├── launch-qa-2026.md   # Pre-launch QA checklist + journey-test record
 │   ├── roadmap-2026.md     # Maintainer-facing roadmap (source of truth for /roadmap.html)
@@ -205,7 +204,7 @@ request rather than pushing directly to `main`.
 | `sync-indico.yml`    | <https://indico.eiss-europa.com>        | `indico.json` (live programme) + `calendar.ics` + matching fields in `events.json` | Nightly 03:45 UTC |
 | `sync-roadmap.yml`   | `CHANGELOG.md` push                     | Autostamp block in `docs/roadmap-2026.md` (bullet counts + freshness date)    | On `main` push + weekly |
 
-The Google-Form pipeline is documented in [`docs/bios-setup.md`](docs/bios-setup.md). The Indico read-side at [`docs/indico-sync.md`](docs/indico-sync.md); the write-side at [`docs/indico-patch.md`](docs/indico-patch.md).
+The Google-Form pipeline is documented in [`docs/bios-setup.md`](docs/bios-setup.md). The Indico read-side at [`docs/indico-sync.md`](docs/indico-sync.md); the write-side (fix-plans, now applied via the `netsec-dispatch` plugin CLI) in [`docs/indico-integration.md`](docs/indico-integration.md) Phase 2, with the retired external tool's history noted in [`docs/indico-patch.md`](docs/indico-patch.md).
 
 ### Build + pre-merge checks
 
@@ -236,7 +235,7 @@ There are four classes of content with four different workflows:
 1. **Page copy** (everything not in the directory, programme, or calendar): edit the relevant `*.html` file directly and open a PR. CSS lives in `assets/css/site.css`; JS in `assets/js/site.js`. For FR/DE pages, mirror the EN edit and run `python3 scripts/check-i18n-drift.py --mark-fresh <source> <lang>` before merging.
 2. **Member bios and photos**: submit or update via the Google Form linked from `people.html#join`. The next daily sync (or a manual dispatch of `sync-bios.yml`) opens a PR with the diff. WG memberships on existing bios are reconciled separately from cost.eu by `sync-cost.yml`.
 3. **MC / leadership roster + WG memberships**: managed on cost.eu. The next weekly sync (or a manual dispatch of `sync-cost.yml`) opens a PR.
-4. **Live ESSC programme + calendar**: managed on `indico.eiss-europa.com` (event 22 for ESSC 2026). The nightly `sync-indico.yml` PR carries through to both the public programme grid on `essc-2026.html` and the home-page event banner via `events.json`. Last-resort fixes for metadata that admins on Indico can't reach are scripted via `scripts/indico_patch.py` against a YAML fix-plan.
+4. **Live ESSC programme + calendar**: managed on `indico.eiss-europa.com` (event 22 for ESSC 2026). The nightly `sync-indico.yml` PR carries through to both the public programme grid on `essc-2026.html` and the home-page event banner via `events.json`. Last-resort fixes for metadata that admins on Indico can't reach are scripted as a YAML fix-plan and applied server-side with `indico netsec apply-fixplan` (the `netsec-dispatch` plugin CLI, over SSH).
 
 ## Contributing
 

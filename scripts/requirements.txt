@@ -8,6 +8,3 @@ beautifulsoup4>=4.15.0,<5
 # uploaded via the Google Form. Optional at runtime — sync-bios.py
 # falls back to copying the raw bytes if Pillow is unavailable.
 Pillow>=12.2.0,<13
-# PyYAML is used by indico_patch.py to read/write fix-plan files.
-# Capped at <7 since the YAML 1.2 transition is still in flight upstream.
-PyYAML>=6.0.3,<7

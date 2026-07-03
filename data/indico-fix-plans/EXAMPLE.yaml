@@ -2,9 +2,9 @@
 # the refs below are real items from the ESSC 2026 audit (#208) that
 # have already been corrected.
 #
-# Usage:
-#   dry-run : python3 scripts/indico_patch.py data/indico-fix-plans/EXAMPLE.yaml
-#   apply   : python3 scripts/indico_patch.py data/indico-fix-plans/EXAMPLE.yaml --apply
+# Usage (applied via the netsec-dispatch plugin CLI on the VPS):
+#   dry-run : ssh <vps> indico netsec apply-fixplan data/indico-fix-plans/EXAMPLE.yaml --dry-run
+#   apply   : ssh <vps> indico netsec apply-fixplan data/indico-fix-plans/EXAMPLE.yaml
 #
 # Each patch is a dict with these keys:
 #   kind         — 'session' | 'person' | 'contribution' | 'block_time'
@@ -17,10 +17,10 @@
 #   set          — dict of field → new value
 #   note         — free-text reason (optional, surfaces in the log)
 #
-# Resolved internal IDs are NOT stored in this file — they live in
-# a sidecar JSON (EXAMPLE.yaml.resolved.json, gitignored) that the
-# script auto-creates on first dry-run. Keeps the YAML pristine
-# and comment-friendly.
+# Resolved internal IDs are NOT stored in this file. The plugin CLI
+# resolves friendly refs to database IDs via the ORM at apply time
+# (dry-run prints the resolution), so the YAML stays pristine and
+# comment-friendly and there is no sidecar cache to keep in sync.
 
 event_id: 22   # ESSC 2026
 

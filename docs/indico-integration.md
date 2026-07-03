@@ -23,7 +23,7 @@ Indico draws a hard line between two surfaces.
   `HTTPAPIResult` envelope for freshness. This is what `sync-indico.py`
   already uses.
 - **Writes are undocumented and unstable.** The management endpoints
-  that `indico_patch.py` reverse-engineers carry an explicit warning in
+  that the former `indico_patch.py` reverse-engineered carry an explicit warning in
   Indico's own docs: "We make absolutely no promises of backwards
   compatibility on endpoints that are not part of documented APIs. You
   use them at your own risk." The docs also confirm the exact wall #323
@@ -51,8 +51,9 @@ push pipeline below.
   works, not `full:everything`. Token creation can be restricted to
   admins instance-wide.
 - **The `everything` scopes reach any endpoint**, including undocumented
-  ones, which is how `indico_patch.py` can call management routes at
-  all, but those routes have no stability guarantee.
+  ones, which is how the former `indico_patch.py` could call management
+  routes at all, but those routes have no stability guarantee — the
+  reason writes moved server-side into the plugin.
 - **Reads.** `/export/event/<id>.json` and
   `/export/timetable/<id>.json`, detail levels
   `events | contributions | subcontributions | sessions`, multiple
@@ -72,9 +73,9 @@ A custom plugin bridges the two systems in both directions:
   GitHub `repository_dispatch` when the EISS programme changes, so the
   site refreshes in about a minute instead of waiting for the daily
   cron.
-- **Writes server-side.** A plugin CLI command (or token-guarded
-  endpoint) applies corrections through Indico's Python API, replacing
-  the fragile external HTTP-write path.
+- **Writes server-side.** A plugin CLI command applies corrections
+  through Indico's Python API, replacing the fragile external HTTP-write
+  path (delivered in Phase 2; the external `indico_patch.py` is retired).
 - **Pull stays as the safety net.** The daily Actions sync keeps
   running, now also triggerable on dispatch.
 - **Claude** drafts fix-plan PRs on a schedule and runs the plugin CLI
@@ -116,19 +117,36 @@ The cleanest "impossible in isolation" win, with zero write risk.
 - Result: an Indico edit refreshes the live programme within about a
   minute.
 
-### Phase 2 — Writes via the plugin (July–Aug, v1.13.0, supersedes #323 B/C/D)
+### Phase 2 — Writes via the plugin (delivered + validated July 2026, v1.13.0, supersedes #323 B/C/D)
 
-The upgrade-safe resolution of #323.
+The upgrade-safe resolution of #323. **Delivered and validated
+end-to-end on the VPS** (see #824); the external HTTP-write tool
+`scripts/indico_patch.py` has been retired in its favour.
 
-- Add a plugin CLI command, `indico netsec apply-fixplan <yaml>`, that
-  performs the corrections through Indico's Python API inside a database
-  transaction. No CSRF, no wtforms scraping, no undocumented HTTP.
-- Reuse the shipped read-back verification (#323 slice A) as the
-  post-condition and the scope pre-flight (slice E) as the pre-check.
-- Claude or Actions invoke it over SSH or a token-guarded plugin
-  endpoint.
+- The plugin CLI command `indico netsec apply-fixplan <yaml> [--dry-run]`
+  performs the corrections through Indico's Python API inside a single
+  database transaction (all-or-nothing: any resolution failure, apply
+  error, or read-back mismatch rolls back and exits non-zero). No CSRF,
+  no wtforms scraping, no undocumented HTTP. Friendly-ref → ID resolution
+  is an ORM query, so the sidecar cache is gone; `--dry-run` resolves and
+  prints the plan without writing.
+- Verification is server-side (`db.session.expire_all()` → re-query →
+  compare), so the "unverifiable field" category from the external tool
+  disappears — the #323 slice-A read-back and slice-E pre-flight are
+  *obviated*, not ported.
+- The **YAML fix-plan schema is unchanged**, so existing committed plans
+  keep working verbatim.
+- Because writes go through Indico's operations layer, a successful apply
+  fires the Phase 1 lifecycle signals and triggers the site refresh with
+  no manual sync step (validated: one apply produced a green
+  `repository_dispatch` run within ~2 minutes).
+- Invoked over SSH: `ssh <vps> indico netsec apply-fixplan plan.yaml`.
+  The token-guarded HTTP endpoint was dropped from scope (single SSH
+  operator; add it only if a non-SSH caller ever materialises).
 - #323 slices B/C/D (HTTP-write reverse-engineering) are retired in
-  favour of this path.
+  favour of this path. Implementation lives in
+  [`netsec-indico-dispatch`](https://github.com/EISSeuropa/netsec-indico-dispatch)
+  (`indico_netsec_dispatch/cli.py` + `fixplan.py`).
 
 ### Phase 3 — Registration + visa letters, server-side (September, gated by #374)
 
@@ -187,7 +205,7 @@ programme token is used by Actions.
 | --- | --- | --- |
 | 0 | folded into this doc + the #323 version pin | v1.12.0 |
 | 1 | push pipeline plugin ([netsec-indico-dispatch](https://github.com/EISSeuropa/netsec-indico-dispatch)) + `repository_dispatch` (#828, merged) | v1.12.0 |
-| 2 | plugin-CLI write path (supersedes #323 B/C/D) | v1.13.0 |
+| 2 | plugin-CLI write path (#824, delivered + validated July 2026; supersedes #323 B/C/D; retires `scripts/indico_patch.py`) | v1.13.0 |
 | 3 | registrant + visa-letter pipeline (with #374) | Backlog |
 | 4 | VPS upgrade/backup automation | Backlog |
 

@@ -6,9 +6,9 @@
 # maintainer, so this plan carries NO time patches — only the panel
 # rename + the paper-placement fixes the PDF reconciliation surfaced.
 #
-# Dry-run : python3 scripts/indico_patch.py data/indico-fix-plans/2026-05-29-essc-programme-reconcile.yaml
-# Apply   : python3 scripts/indico_patch.py data/indico-fix-plans/2026-05-29-essc-programme-reconcile.yaml --apply
-#           (requires INDICO_WRITE_TOKEN — GH Actions secret, not local)
+# Dry-run : ssh <vps> indico netsec apply-fixplan data/indico-fix-plans/2026-05-29-essc-programme-reconcile.yaml --dry-run
+# Apply   : ssh <vps> indico netsec apply-fixplan data/indico-fix-plans/2026-05-29-essc-programme-reconcile.yaml
+#           (applied server-side by the netsec-dispatch plugin; no repo token needed)
 #
 # `ref` for session/block patches is the SESSION friendlyId from the
 # Indico timetable export. `ref` for contribution patches is a unique
