@@ -28,6 +28,7 @@ reference for maintainers, MC representatives, and admins.
 | [`cross-repo-workflow.md`](./cross-repo-workflow.md) | Conventions for keeping the NetSec and EISS sites in step: shared patterns, the "ported from" convention, the duplicate-scripts stance, and Indico sync alignment. Complements CLAUDE.md §13 (the shared Project board). |
 | [`audit-2026-06.md`](./audit-2026-06.md)       | Point-in-time cross-cutting static audit (June 2026): accessibility, voice, links, dead code, responsive, SEO, across all pages and locales. Records what was fixed, dismissed as a false positive, and deferred. |
 | [`pdf/NetSec-website-documentation.pdf`](./pdf/NetSec-website-documentation.pdf) | All of the above combined into a stakeholder-ready PDF deliverable. Cover, table of contents, every diagram, and three site screenshots. Rebuild via `docs/pdf/build.sh`. |
+| [`pdf/NetSec-Design-System.pdf`](./pdf/NetSec-Design-System.pdf) | A4 visual companion to `design-system.md`: cover, design language, colour / type / spacing tokens, components, and the conference-deck layouts, rendered as swatches and specimens. Built from the standalone NetSec Design System package (the Claude Design export), so it includes the tidied, partly aspirational token layer the live `site.css` does not yet fully implement. |
 
 ## Conventions across all docs
 
