@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-01T08:55:30+00:00",
+  "generated_at": "2026-07-03T12:53:14+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-01T08:55:30+00:00"
+    "last_synced": "2026-07-03T12:53:14+00:00"
   },
   "members": [
     {
@@ -2283,7 +2283,7 @@
       "mastodon": "",
       "photo": "assets/images/people/kire-babanoski.jpg",
       "source": "form",
-      "photo_source_sha256": "bfb0c23b85a9771de22733ac496d808a95959ac9fb4d8787ea530bcf9311018b",
+      "photo_source_sha256": "366cecc48bde6753439e8b15e96157a9aa4163a30a60aceda927416d21430ed5",
       "canonical_keywords": [
         "Human security",
         "Security sector governance",
@@ -2293,6 +2293,300 @@
       "themes": [
         "Security and defence"
       ]
+    },
+    {
+      "id": "alin-barbantan",
+      "name": "Dr Alin Barbantan",
+      "country": "Romania",
+      "country_code": "ro",
+      "affiliation": "Romanian Academy",
+      "position": "Research Assistant",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Asia",
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "The Americas"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Researcher in contemporary history and international relations, focusing on Euro-Atlantic diplomacy, US foreign policy, and Indo-Pacific strategic culture. My work examines how strategic culture and alliance networks shape the behavior of states across regions, with particular interest in comparative perspectives within the Euro-Atlantic and Indo-Pacific areas. \n\nI hold a PhD in International Relations from University College London and have published research on alliance systems, strategic alignment, and regional security frameworks. I am particularly interested in collaborations, visiting research positions, and interdisciplinary projects on strategic culture and alliance systems.",
+      "keywords": [
+        "strategic culture",
+        "alliances",
+        "post-Cold War international relations",
+        "Euro-Atlantic foreign policy",
+        "NATO"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "0000-0002-3938-3526",
+      "linkedin": "https://www.linkedin.com/in/alin-barbantan/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Alliances",
+        "Euro-Atlantic foreign policy",
+        "NATO",
+        "Post-cold war international relations",
+        "Strategic culture"
+      ],
+      "themes": [
+        "European and transatlantic security order"
+      ]
+    },
+    {
+      "id": "daniela-mechkaroska",
+      "name": "Dr Daniela Mechkaroska",
+      "country": "North Macedonia",
+      "country_code": "mk",
+      "affiliation": "University for Information Science and Technology “St. Paul the Apostle”",
+      "position": "Assistant Professor",
+      "roles": [
+        "Management Committee · North Macedonia"
+      ],
+      "wgs": [],
+      "mentorship": [],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Daniela Mechkaroska is an Assistant Professor at the University of Information Science and Technology “St. Paul the Apostle” in Ohrid, North Macedonia. Her academic and research interests include cybersecurity, artificial intelligence, Internet of Things, cloud and edge systems, secure communication, coding theory, cryptography, and digital resilience. She is involved in university teaching, student supervision, research, and international academic cooperation. Her work focuses on the security and reliability of digital and cloud-connected systems, including AI-supported monitoring, IoT security, data integrity, and secure communication. She is particularly interested in interdisciplinary collaboration that connects emerging technologies with European security studies, institutional resilience, and trustworthy digital transformation.",
+      "keywords": [
+        "Cybersecurity",
+        "Artificial Intelligence",
+        "Internet of Things",
+        "Cloud and Edge Systems",
+        "Digital Resilience"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "0000-0002-3567-8335",
+      "linkedin": "https://www.linkedin.com/in/daniela-meckaroska-a63064195",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/daniela-mechkaroska.jpg",
+      "source": "form",
+      "photo_source_sha256": "a76b7cb1e22d99b9b130d7fb8694c089b5c145a6e1f2293aa2f4ac802d459a36",
+      "canonical_keywords": [
+        "AI",
+        "Cloud and edge systems",
+        "Cybersecurity",
+        "Digital resilience",
+        "IoT"
+      ],
+      "themes": [
+        "Cyber and emerging technology"
+      ]
+    },
+    {
+      "id": "eda-kusku-sonmez",
+      "name": "Dr Eda KUŞKU SÖNMEZ",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Samsun University",
+      "position": "Associate Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Europe - Western Balkans"
+      ],
+      "wg_leadership": {},
+      "bio": "Eda Kuşku-Sönmez holds a PhD in political science from Sabancı University, İstanbul. She is Assoc. Prof. of International Relations at Samsun University in Samsun, Turkey. Her research interests are European Union, Turkey-European Union Relations, Comparative Politics, and Turkish Foreign Policy. She previously published articles in Caucasian Review of International Affairs (2008 and 2010), and Southeast European and Black Sea Studies (2014), and Turkish Studies (2019). With Çiğdem Üstün, she coedited the book titled Turkey’s Changing Transatlantic Relations published by Lexington Books, (2021).",
+      "keywords": [
+        "European Union Türkiye Relations",
+        "Comparative Politics",
+        "Foreign Policy Analysis"
+      ],
+      "email": "eda.sonmez@samsun.edu.tr",
+      "website": "",
+      "orcid": "0000-0002-2689-3500",
+      "linkedin": "",
+      "twitter": "https://x.com/EdaKuskuSonmez",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Comparative politics",
+        "European union türkiye relations",
+        "Foreign policy analysis"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy"
+      ]
+    },
+    {
+      "id": "p-nar-akgul",
+      "name": "Dr Pınar Akgül",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Giresun University",
+      "position": "Assistant Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Europe - Eastern neighbours / Russia"
+      ],
+      "wg_leadership": {},
+      "bio": "Pınar Akgül is an Assistant Professor in the Department of International Relations at Giresun University, Giresun/Türkiye. Akgül earned her PhD in International Relations from University of Sussex, Brighton/UK. She holds a BA degree in International Relations from Karadeniz Teknik University, Trabzon/Türkiye and MA degree in International Relations from King’s College London, London/UK. Her research area includes studies of the Black Sea Region. Her sub-concerns are non-Western IR theories and the impact of popular culture on world politics.",
+      "keywords": [
+        "WG1",
+        "WG2",
+        "Black Sea Region"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/p-nar-akgul.jpg",
+      "source": "form",
+      "photo_source_sha256": "d843a57ec7e38fd6867af7d6c2dd183c9af75845e7e4598620e02f7cbef6e536",
+      "canonical_keywords": [
+        "Black sea region",
+        "Wg1",
+        "Wg2"
+      ]
+    },
+    {
+      "id": "tanja-pavleska",
+      "name": "Dr Tanja Pavleska",
+      "country": "Slovenia",
+      "country_code": "si",
+      "affiliation": "Jozef Stefan Institute",
+      "position": "Senior Researcher",
+      "roles": [
+        "Management Committee · Slovenia"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Western Balkans",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Tanja Pavleska is a Senior Researcher at the Laboratory for Open Systems and Networks, Jožef Stefan Institute. She holds a degree in Automation and Systems Engineering and a PhD in Advanced Internet Technologies, with emphasis on user behavior in digital environments. Her research interests and expertise include the architecture design, security, and trustworthiness of digital infrastructures, information and data governance, digital policies for trust and identity management, artificial intelligence for society and society for artificial intelligence, with a focus on cybersecurity and safety. She has participated in numerous European R&I projects focused on the digital transformation of the public sector and the society in general, in view of achieving cross-border interoperability, governance, and secure service provision.",
+      "keywords": [
+        "cybersecurity",
+        "governance",
+        "artificial intelligence",
+        "policy frameworks"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/tanjaazderska/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/tanja-pavleska.jpg",
+      "source": "form",
+      "photo_source_sha256": "2bdf959b3b210ae431f6223d219d219468f29102551f33dad20a5e5be2e82c23",
+      "canonical_keywords": [
+        "AI",
+        "Cybersecurity",
+        "Governance",
+        "Policy frameworks"
+      ],
+      "themes": [
+        "Cyber and emerging technology"
+      ]
+    },
+    {
+      "id": "tolga-c-kr-kc",
+      "name": "Dr Tolga Çıkrıkçı",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Giresun University",
+      "position": "Assistant Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "I am an Assistant Professor in the Department of International Relations at Giresun University, Türkiye, where I teach undergraduate and graduate courses in Public International Law, International Human Rights Law, International Organizations, and Private International Law. I hold a PhD in International Relations, and my academic work focuses on the intersection of international law and international politics.\n\nMy research interests include international law, human rights, human security, global governance, international organizations, and contemporary security challenges. In my recent work, I have examined topics such as vaccine hesitancy and human security, discrimination and intolerance in the European Union, global justice, and the role of international law in responding to armed conflicts and international crises.\n\nAlongside my research and teaching, I regularly present my work at national and international conferences and serve as a reviewer for academic journals in the fields of international relations and international law. I also participate in international research collaborations and contribute to academic quality assurance and accreditation processes.\n\nThrough my research, teaching, and international engagement, I aim to contribute to a deeper understanding of contemporary global challenges and the evolving role of international law and global governance in addressing them.",
+      "keywords": [
+        "International Law Human Security Global Governance International Organizations Human Rights"
+      ],
+      "email": "tcikrikci92@gmail.com",
+      "website": "https://ulus.giresun.edu.tr/",
+      "orcid": "0000-0001-5102-0907",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "International law human security global governance international organisations human rights"
+      ]
+    },
+    {
+      "id": "martin-havacek",
+      "name": "Mr Martin Haváček",
+      "country": "Czechia",
+      "country_code": "cz",
+      "affiliation": "VSB, Technical University of Ostrava",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Martin Haváček is a doctoral researcher at the Faculty of Safety Engineering (FSE), VSB-TUO, and a research associate at the Faculty of Electrical Engineering and Computer Science (FEECS) at the same university. His doctoral research develops neural networks for detecting security-relevant phenomena in visual data, with a focus on object detection under adverse conditions, thermal imaging, adversarial robustness of detection models, and UAV and counter-UAV detection for real-time situational awareness.\n\nHis work bridges security engineering and applied artificial intelligence. Alongside his security research, he contributes to biomedical AI projects at the LERCO centre, including ECG segmentation and biometric identification. He holds degrees in physical security engineering and in informatics and physics, and previously worked for several years as a safety technician and lecturer in occupational and fire safety, giving him a practitioner’s perspective on how detection technologies translate into operational security practice.\n\nHe also serves as an independent quality assurance evaluator for the Czech National Accreditation Bureau, the Slovak Accreditation Agency,, and is a member of IEEE and its Computational Intelligence Society.\n\nWithin NetSec he participates in WG1 and WG3, where he is interested in connecting machine learning methods for visual threat detection with the wider European security knowledge base. He welcomes collaboration on detection under adverse conditions, adversarial robustness, and the responsible deployment of AI in security-critical settings.",
+      "keywords": [
+        "machine learning for security",
+        "visual threat detection",
+        "thermal imaging",
+        "adversarial robustness",
+        "counter-UAV detection"
+      ],
+      "email": "martin.havacek@vsb.cz",
+      "website": "",
+      "orcid": "0000-0002-1276-2702",
+      "linkedin": "https://www.linkedin.com/in/havacek/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/martin-havacek.jpg",
+      "source": "form",
+      "photo_source_sha256": "8543fc06e8e470874057a43169bfc15f55ea880285ebf8258c25ce34ce53f645",
+      "canonical_keywords": [
+        "Adversarial robustness",
+        "Counter-uav detection",
+        "Machine learning for security",
+        "Thermal imaging",
+        "Visual threat detection"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -2301,11 +2595,23 @@
       "count": 6
     },
     {
+      "keyword": "AI",
+      "count": 4
+    },
+    {
+      "keyword": "Cybersecurity",
+      "count": 4
+    },
+    {
       "keyword": "Emerging and disruptive technologies",
       "count": 3
     },
     {
       "keyword": "EU foreign policy",
+      "count": 3
+    },
+    {
+      "keyword": "Foreign policy analysis",
       "count": 3
     },
     {
@@ -2317,15 +2623,11 @@
       "count": 3
     },
     {
-      "keyword": "AI",
-      "count": 2
+      "keyword": "NATO",
+      "count": 3
     },
     {
       "keyword": "Alliance politics",
-      "count": 2
-    },
-    {
-      "keyword": "Cybersecurity",
       "count": 2
     },
     {
@@ -2342,10 +2644,6 @@
     },
     {
       "keyword": "EU–NATO relations",
-      "count": 2
-    },
-    {
-      "keyword": "Foreign policy analysis",
       "count": 2
     },
     {
@@ -2366,10 +2664,6 @@
     },
     {
       "keyword": "Maritime security",
-      "count": 2
-    },
-    {
-      "keyword": "NATO",
       "count": 2
     },
     {
@@ -2401,6 +2695,10 @@
       "count": 2
     },
     {
+      "keyword": "Adversarial robustness",
+      "count": 1
+    },
+    {
       "keyword": "AI governance",
       "count": 1
     },
@@ -2409,7 +2707,15 @@
       "count": 1
     },
     {
+      "keyword": "Alliances",
+      "count": 1
+    },
+    {
       "keyword": "Arms control",
+      "count": 1
+    },
+    {
+      "keyword": "Black sea region",
       "count": 1
     },
     {
@@ -2433,6 +2739,10 @@
       "count": 1
     },
     {
+      "keyword": "Cloud and edge systems",
+      "count": 1
+    },
+    {
       "keyword": "Cognitive warfare",
       "count": 1
     },
@@ -2446,6 +2756,14 @@
     },
     {
       "keyword": "Comparative foreign policy analysis",
+      "count": 1
+    },
+    {
+      "keyword": "Comparative politics",
+      "count": 1
+    },
+    {
+      "keyword": "Counter-uav detection",
       "count": 1
     },
     {
@@ -2517,6 +2835,10 @@
       "count": 1
     },
     {
+      "keyword": "Digital resilience",
+      "count": 1
+    },
+    {
       "keyword": "Digital security",
       "count": 1
     },
@@ -2577,11 +2899,19 @@
       "count": 1
     },
     {
+      "keyword": "Euro-Atlantic foreign policy",
+      "count": 1
+    },
+    {
       "keyword": "European defence",
       "count": 1
     },
     {
       "keyword": "European strategic autonomy",
+      "count": 1
+    },
+    {
+      "keyword": "European union türkiye relations",
       "count": 1
     },
     {
@@ -2606,6 +2936,10 @@
     },
     {
       "keyword": "Global order",
+      "count": 1
+    },
+    {
+      "keyword": "Governance",
       "count": 1
     },
     {
@@ -2673,11 +3007,23 @@
       "count": 1
     },
     {
+      "keyword": "International law human security global governance international organisations human rights",
+      "count": 1
+    },
+    {
+      "keyword": "IoT",
+      "count": 1
+    },
+    {
       "keyword": "Irregular warfare",
       "count": 1
     },
     {
       "keyword": "Judgment and decision-making",
+      "count": 1
+    },
+    {
+      "keyword": "Machine learning for security",
       "count": 1
     },
     {
@@ -2749,11 +3095,19 @@
       "count": 1
     },
     {
+      "keyword": "Policy frameworks",
+      "count": 1
+    },
+    {
       "keyword": "Political economy",
       "count": 1
     },
     {
       "keyword": "Positive peace",
+      "count": 1
+    },
+    {
+      "keyword": "Post-cold war international relations",
       "count": 1
     },
     {
@@ -2817,6 +3171,10 @@
       "count": 1
     },
     {
+      "keyword": "Strategic culture",
+      "count": 1
+    },
+    {
       "keyword": "Strategy",
       "count": 1
     },
@@ -2834,6 +3192,10 @@
     },
     {
       "keyword": "Text as data",
+      "count": 1
+    },
+    {
+      "keyword": "Thermal imaging",
       "count": 1
     },
     {
@@ -2863,6 +3225,18 @@
     {
       "keyword": "US-China relations",
       "count": 1
+    },
+    {
+      "keyword": "Visual threat detection",
+      "count": 1
+    },
+    {
+      "keyword": "Wg1",
+      "count": 1
+    },
+    {
+      "keyword": "Wg2",
+      "count": 1
     }
   ],
   "theme_aggregate": [
@@ -2872,11 +3246,11 @@
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 17
+      "count": 18
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 12
+      "count": 14
     },
     {
       "theme": "Theory and methods",
@@ -2884,7 +3258,7 @@
     },
     {
       "theme": "European and transatlantic security order",
-      "count": 9
+      "count": 10
     },
     {
       "theme": "Transnational and human security",
@@ -3065,27 +3439,27 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 28
+      "count": 33
     },
     {
       "region": "Global and cross-regional",
-      "count": 22
-    },
-    {
-      "region": "Europe - Western Balkans",
-      "count": 9
-    },
-    {
-      "region": "Asia",
-      "count": 8
+      "count": 25
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 8
+      "count": 11
+    },
+    {
+      "region": "Europe - Western Balkans",
+      "count": 11
+    },
+    {
+      "region": "Asia",
+      "count": 9
     },
     {
       "region": "The Americas",
-      "count": 8
+      "count": 9
     },
     {
       "region": "Middle East and North Africa",
