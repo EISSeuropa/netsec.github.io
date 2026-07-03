@@ -399,6 +399,60 @@ The full contract is in
 [`cross-repo-workflow.md`](./cross-repo-workflow.md); the page anatomy is
 in [`profile-pages.md`](./profile-pages.md).
 
+## Code layers
+
+The codebase falls into nine layers. The map below is the conceptual
+summary that the file tree in the next section spells out in full. It is
+derived from the interactive codemap, which reads the actual imports and
+data flows out of the code, so it reflects how the parts really depend on
+each other rather than how they happen to be filed.
+
+```mermaid
+flowchart TD
+    CI["CI/CD &amp; repo tooling"]
+    PY["Python automation"]
+    CFG["Repository root config"]
+    RD["Runtime data (JSON)"]
+    GEN["Generated member content"]
+    ICS["Calendar feeds (.ics)"]
+    HAND["Hand-authored pages"]
+    FE["Shared frontend assets"]
+    DOCS["Maintainer documentation"]
+
+    CI -->|runs| PY
+    CI -->|reads| CFG
+    PY -->|reads| CFG
+    PY -->|writes| RD
+    PY -->|generates| GEN
+    PY -->|generates| ICS
+    FE -->|fetches at runtime| RD
+    FE -->|hydrates| GEN
+    HAND -->|load| FE
+    DOCS -.->|describe| PY
+
+    style PY fill:#003399,stroke:#003399,color:#fff
+    style CI fill:#003399,stroke:#003399,color:#fff
+    style FE fill:#0a84ff,stroke:#0a84ff,color:#fff
+    style HAND fill:#0a84ff,stroke:#0a84ff,color:#fff
+    style RD fill:#eef2fb,stroke:#0a84ff
+    style GEN fill:#eef2fb,stroke:#0a84ff
+```
+
+Read it top to bottom as a pipeline. GitHub Actions workflows run the
+Python tooling on a schedule, and that tooling regenerates the JSON data,
+the per-member profile pages, and the calendar feeds. In the browser the
+shared stylesheet and widgets fetch that JSON at runtime and hydrate the
+generated pages, while the hand-authored pages pull in those same shared
+assets. The maintainer docs sit to one side, describing the tooling
+rather than being called by it.
+
+The live, explorable version is at
+[codemap.netsec-cost.eu](https://codemap.netsec-cost.eu/), a
+hand-refreshed snapshot built with the Understand-Anything tool. When
+this diagram and that snapshot disagree, one of them has gone stale,
+which makes the codemap a useful cross-check during a documentation
+sweep (rule §11).
+
 ## Repository layout
 
 ```
