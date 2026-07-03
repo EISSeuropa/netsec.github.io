@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-03T12:53:14+00:00",
+  "generated_at": "2026-07-03T19:24:29+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-03T12:53:14+00:00"
+    "last_synced": "2026-07-03T19:24:29+00:00"
   },
   "members": [
     {
@@ -2459,9 +2459,11 @@
       "wg_leadership": {},
       "bio": "Pınar Akgül is an Assistant Professor in the Department of International Relations at Giresun University, Giresun/Türkiye. Akgül earned her PhD in International Relations from University of Sussex, Brighton/UK. She holds a BA degree in International Relations from Karadeniz Teknik University, Trabzon/Türkiye and MA degree in International Relations from King’s College London, London/UK. Her research area includes studies of the Black Sea Region. Her sub-concerns are non-Western IR theories and the impact of popular culture on world politics.",
       "keywords": [
-        "WG1",
-        "WG2",
-        "Black Sea Region"
+        "Black Sea Region",
+        "European security",
+        "energy security",
+        "regionalism",
+        "cooperation"
       ],
       "email": "",
       "website": "",
@@ -2475,12 +2477,15 @@
       "photo_source_sha256": "d843a57ec7e38fd6867af7d6c2dd183c9af75845e7e4598620e02f7cbef6e536",
       "canonical_keywords": [
         "Black sea region",
-        "Wg1",
-        "Wg2"
+        "Cooperation",
+        "Energy security",
+        "European security",
+        "Regionalism"
       ],
       "themes": [
         "Security and defence"
-      ]
+      ],
+      "stsm_hosting": "yes"
     },
     {
       "id": "tanja-pavleska",
@@ -2619,19 +2624,160 @@
         "Cyber and emerging technology",
         "Security and defence"
       ]
+    },
+    {
+      "id": "esra-merve-boztosun-cal-skan",
+      "name": "Dr Esra Merve Boztosun-Çalışkan",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Istanbul Medipol University",
+      "position": "Assistant Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Europe - Western Balkans",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Dr. Esra Merve Boztosun-Çalışkan is an Assistant Professor in the Department of Political Science and International Relations at Istanbul Medipol University, where she teaches courses on cybersecurity in global politics, international security, foreign policy analysis, and nationalism studies. Her research focuses on cybersecurity governance, digital sovereignty, cyber deterrence and diplomacy, and state-sponsored cyber operations, with a particular emphasis on Turkish foreign policy and the broader geopolitics of cyberspace.",
+      "keywords": [
+        "cyber security",
+        "international security",
+        "digital politics"
+      ],
+      "email": "ecaliskan@medipol.edu.tr",
+      "website": "",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/esra-merve-boztosun-cal-skan.jpg",
+      "source": "form",
+      "photo_source_sha256": "e89edc59edb7d7666bfc329230f1ca51223e5a012cfb0afd037a9423b71b42df",
+      "canonical_keywords": [
+        "Cybersecurity",
+        "Digital politics",
+        "International security"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Security and defence"
+      ]
+    },
+    {
+      "id": "david-matsaberidze",
+      "name": "Prof. David Matsaberidze",
+      "country": "Georgia",
+      "country_code": "ge",
+      "affiliation": "Ivane Javakhishvili Tbilisi State University",
+      "position": "Associate Professor",
+      "roles": [
+        "Management Committee · Georgia"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "PhD, Political Science, Ivane Javakhishvili Tbilisi State University (2015); MA, Nationalism and Ethnicity Studies, Central European University (2008). In 2015-2017 completed professional development programs on regional and international security at the George C. Marshall European Centre for Security Studies (Garmisch-Partenkirchen, Germany). In 2013-2023 served as a recurrent visiting expert with the Partnership for Peace Consortium of Defence Academies and Security Studies Institutes at the Austrian Ministry of Defence and Sports (Germany-Austria). In 2024 was awarded Ghent University’s EUREAST Platform Fellowship and was the EUREAST visiting fellow at the Institute for International and European Studies, Ghent University, Belgium. In 2008-2014 – recipient of the fellowship of the Academic Fellowship Programme, International Higher Education Support Programme and in 2011-2012  working group on frozen conflicts under the East-East Beyond Borders Program (EEBB), the Open Society Foundations (OSF) - Budapest, Hungary. Since 2023 =MC Member & WG4 Researcher at COST Action CA22121: New Rising Nationalisms, Shifting Geopolitics and the Future of European Higher Education. Research Openness (OPEN) (Brussels, Belgium) and is a Senior Research Fellow, Institute for National and International Security (Belgrade, Serbia); Since 2022 he briefs US students from various US HEIs under the SRAS - The School of Russian and Asian Studies, USA and Since 2017 he is a re-current visiting lecturer at various European universities under Erasmus+ ACM&PDP programs and lectured in Austria (2017; 2018; 2019; PoSIG 2023); Hungary (2023) and Finland (2024). Since 2017 he also serves as a member of the Academic Council. European Neighbourhood Council (ENC), Brussels, Belgium.",
+      "keywords": [
+        "Security",
+        ". Foreign Policy",
+        "Nationalism",
+        "Geopolitics",
+        "Conflcits"
+      ],
+      "email": "dmatsaberidze@gmail.com",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://ge.linkedin.com/in/david-matsaberidze-71162566",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        ". Foreign policy",
+        "Conflcits",
+        "Geopolitics",
+        "Nationalism",
+        "Security"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Security and defence"
+      ]
+    },
+    {
+      "id": "islam-jusufi",
+      "name": "Prof. Islam Jusufi",
+      "country": "North Macedonia",
+      "country_code": "mk",
+      "affiliation": "Independent Researcher",
+      "position": "Associate Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Western Balkans"
+      ],
+      "wg_leadership": {},
+      "bio": "Islam Jusufi is a political science researcher and academic who is based in Skopje, North Macedonia. He holds an Associate Professorship in political science, awarded by Tirana University, Albania. Previously, he was a lecturer and department head at Epoka University, Albania. His research focuses on European and Balkan governance and security.",
+      "keywords": [
+        "Security",
+        "Defence",
+        "Theory"
+      ],
+      "email": "islam.jusufi@gmail.com",
+      "website": "https://islamjusufi.wixsite.com/website",
+      "orcid": "0000-0003-0437-3819",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/islam-jusufi.jpg",
+      "source": "form",
+      "photo_source_sha256": "e6c7e84867e935c578c68c8e3061e5e35cc95f885ec800527210ac799adae7ad",
+      "canonical_keywords": [
+        "Defence",
+        "Security",
+        "Theory"
+      ],
+      "themes": [
+        "Security and defence"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "European security",
-      "count": 6
+      "count": 7
+    },
+    {
+      "keyword": "Cybersecurity",
+      "count": 5
     },
     {
       "keyword": "AI",
       "count": 4
     },
     {
-      "keyword": "Cybersecurity",
+      "keyword": "International security",
       "count": 4
     },
     {
@@ -2647,11 +2793,11 @@
       "count": 3
     },
     {
-      "keyword": "International relations",
+      "keyword": "Geopolitics",
       "count": 3
     },
     {
-      "keyword": "International security",
+      "keyword": "International relations",
       "count": 3
     },
     {
@@ -2659,7 +2805,15 @@
       "count": 3
     },
     {
+      "keyword": "Security",
+      "count": 3
+    },
+    {
       "keyword": "Alliance politics",
+      "count": 2
+    },
+    {
+      "keyword": "Defence",
       "count": 2
     },
     {
@@ -2676,10 +2830,6 @@
     },
     {
       "keyword": "EU–NATO relations",
-      "count": 2
-    },
-    {
-      "keyword": "Geopolitics",
       "count": 2
     },
     {
@@ -2725,6 +2875,10 @@
     {
       "keyword": "Western Balkans",
       "count": 2
+    },
+    {
+      "keyword": ". Foreign policy",
+      "count": 1
     },
     {
       "keyword": "Adversarial robustness",
@@ -2795,6 +2949,14 @@
       "count": 1
     },
     {
+      "keyword": "Conflcits",
+      "count": 1
+    },
+    {
+      "keyword": "Cooperation",
+      "count": 1
+    },
+    {
       "keyword": "Counter-uav detection",
       "count": 1
     },
@@ -2835,10 +2997,6 @@
       "count": 1
     },
     {
-      "keyword": "Defence",
-      "count": 1
-    },
-    {
       "keyword": "Defence attitudes",
       "count": 1
     },
@@ -2864,6 +3022,10 @@
     },
     {
       "keyword": "Digital media",
+      "count": 1
+    },
+    {
+      "keyword": "Digital politics",
       "count": 1
     },
     {
@@ -2916,6 +3078,10 @@
     },
     {
       "keyword": "Election interference",
+      "count": 1
+    },
+    {
+      "keyword": "Energy security",
       "count": 1
     },
     {
@@ -3087,6 +3253,10 @@
       "count": 1
     },
     {
+      "keyword": "Nationalism",
+      "count": 1
+    },
+    {
       "keyword": "Nordic countries",
       "count": 1
     },
@@ -3159,6 +3329,10 @@
       "count": 1
     },
     {
+      "keyword": "Regionalism",
+      "count": 1
+    },
+    {
       "keyword": "Research methods",
       "count": 1
     },
@@ -3168,10 +3342,6 @@
     },
     {
       "keyword": "Russian foreign policy",
-      "count": 1
-    },
-    {
-      "keyword": "Security",
       "count": 1
     },
     {
@@ -3227,6 +3397,10 @@
       "count": 1
     },
     {
+      "keyword": "Theory",
+      "count": 1
+    },
+    {
       "keyword": "Thermal imaging",
       "count": 1
     },
@@ -3261,28 +3435,20 @@
     {
       "keyword": "Visual threat detection",
       "count": 1
-    },
-    {
-      "keyword": "Wg1",
-      "count": 1
-    },
-    {
-      "keyword": "Wg2",
-      "count": 1
     }
   ],
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 23
+      "count": 26
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 18
+      "count": 19
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 15
+      "count": 16
     },
     {
       "theme": "Theory and methods",
@@ -3491,19 +3657,19 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 33
+      "count": 36
     },
     {
       "region": "Global and cross-regional",
-      "count": 25
+      "count": 26
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 11
+      "count": 13
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 11
+      "count": 13
     },
     {
       "region": "Asia",
