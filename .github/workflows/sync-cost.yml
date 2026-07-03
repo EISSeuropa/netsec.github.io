@@ -120,6 +120,15 @@ jobs:
           # is not needed here, the sync touches no ?v= asset hashes.
           python3 scripts/build-profile-pages.py
 
+      - name: Regenerate the NetSec Atlas graph from the synced WG rosters (#764)
+        run: |
+          # data/atlas.json is derived from data/wg.json. sync-cost.py rewrites
+          # wg.json, so regenerate the graph in the same auto-PR; otherwise the
+          # "atlas.json is current (#764)" gate in data-shape-check.yml fails on
+          # every sync that adds, removes, or re-slugs a WG member. Pure standard
+          # library, idempotent: an unchanged roster produces no diff.
+          python3 scripts/build-atlas.py
+
       - name: Open or update PR if WG_MAP changed
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)
         with:

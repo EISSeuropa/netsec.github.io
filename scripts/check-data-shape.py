@@ -290,10 +290,44 @@ def check_spotlight(data) -> list:
     return errs
 
 
+def check_atlas(data) -> list:
+    """data/atlas.json: the NetSec Atlas graph (#764), derived from wg.json by
+    scripts/build-atlas.py. Confirms the node/edge shape and referential
+    integrity (every edge endpoint is a real node id) so a stale or malformed
+    atlas.json is caught in CI, not by a blank render. Staleness against wg.json
+    is guarded separately by `build-atlas.py --check`."""
+    errs: list = []
+    if not isinstance(data, dict):
+        return ["atlas: top level must be an object"]
+    if not _req(data, "nodes", list, errs, "atlas", non_empty=True):
+        return errs
+    _req(data, "edges", list, errs, "atlas")
+    ids = set()
+    for i, n in enumerate(data["nodes"]):
+        ctx = f"atlas.nodes[{i}]"
+        if not isinstance(n, dict):
+            errs.append(f"{ctx}: must be an object")
+            continue
+        _req(n, "id", str, errs, ctx, non_empty=True)
+        _req(n, "type", str, errs, ctx, non_empty=True)
+        if isinstance(n.get("id"), str):
+            ids.add(n["id"])
+    for i, e in enumerate(data.get("edges") or []):
+        ctx = f"atlas.edges[{i}]"
+        if not isinstance(e, dict):
+            errs.append(f"{ctx}: must be an object")
+            continue
+        for end in ("source", "target"):
+            if e.get(end) not in ids:
+                errs.append(f"{ctx}: {end} {e.get(end)!r} is not a node id")
+    return errs
+
+
 CHECKS = {
     "data/indico.json": check_indico,
     "data/bios.json": check_bios,
     "data/wg.json": check_wg,
+    "data/atlas.json": check_atlas,
     "data/mc-members.json": check_mc_members,
     "data/events.json": check_events,
     "data/roadmap-progress.json": check_roadmap_progress,
