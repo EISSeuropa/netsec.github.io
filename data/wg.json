@@ -69,7 +69,8 @@
         },
         {
           "name": "Dr David Matsaberidze",
-          "country": "Georgia"
+          "country": "Georgia",
+          "slug": "david-matsaberidze"
         },
         {
           "name": "Dr Eda Kuşku Sönmez",
@@ -139,7 +140,8 @@
         },
         {
           "name": "Prof Islam Jusufi",
-          "country": "North Macedonia"
+          "country": "North Macedonia",
+          "slug": "islam-jusufi"
         },
         {
           "name": "Prof Iztok Prezelj",
@@ -471,7 +473,8 @@
         },
         {
           "name": "Prof Islam Jusufi",
-          "country": "North Macedonia"
+          "country": "North Macedonia",
+          "slug": "islam-jusufi"
         },
         {
           "name": "Prof Iztok Prezelj",
@@ -717,7 +720,8 @@
         },
         {
           "name": "Dr David Matsaberidze",
-          "country": "Georgia"
+          "country": "Georgia",
+          "slug": "david-matsaberidze"
         },
         {
           "name": "Ms Draga Gajic",
@@ -800,7 +804,8 @@
         },
         {
           "name": "Prof Islam Jusufi",
-          "country": "North Macedonia"
+          "country": "North Macedonia",
+          "slug": "islam-jusufi"
         },
         {
           "name": "Prof Iztok Prezelj",
