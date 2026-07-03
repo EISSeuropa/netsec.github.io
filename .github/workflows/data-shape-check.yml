@@ -45,6 +45,8 @@ on:
       - 'assets/og/people/**'
       - 'scripts/build-directory-index.py'
       - 'directory-index.json'
+      - 'scripts/build-atlas.py'
+      - 'data/atlas.json'
       - '.github/workflows/data-shape-check.yml'
   workflow_dispatch:
 
@@ -88,6 +90,12 @@ jobs:
         # reflected in the committed index, so a consuming site never matches
         # against stale data.
         run: python3 scripts/build-directory-index.py --check
+
+      - name: atlas.json is current (#764)
+        # The NetSec Atlas graph is derived from wg.json by build-atlas.py.
+        # Fail if wg.json changed without regenerating the committed atlas.json,
+        # so the sync (sync-cost.py) can never leave the graph stale.
+        run: python3 scripts/build-atlas.py --check
 
       - name: OG cards are current (#1023)
         # Per-member OG card PNGs are generated from bios.json. This check is
