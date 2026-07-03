@@ -18,8 +18,11 @@ config and reset counters.
 
 PRECONDITION: the bot account owning INDICO_WRITE_TOKEN must have
 the admin flag set on the Indico instance. Phase 1.5 of #210
-established this; see scripts/indico_patch.py + docs/indico-patch.md
-for the full back-story.
+established this; see docs/indico-patch.md (retirement notice) for
+the back-story. The fix-plan write path that shared this precondition
+(the former scripts/indico_patch.py) has been retired in favour of the
+plugin CLI `indico netsec apply-fixplan`; this cleanup script is the
+only remaining consumer of INDICO_WRITE_TOKEN.
 
 SAFETY:
   - Refuses to touch events in PROTECTED_EVENTS (a hardcoded
@@ -48,7 +51,8 @@ USAGE:
     behaviour on deleted records is one of the open Phase 1.5
     items — first real apply will resolve it.
 
-Tracked alongside indico_patch.py in #210 (v1.7.0 milestone).
+Tracked alongside the (now-retired) indico_patch.py in #210
+(v1.7.0 milestone).
 """
 
 from __future__ import annotations
@@ -108,9 +112,10 @@ CATEGORIES: dict[str, dict[str, str]] = {
 # ──────────────────────────── HTTP layer ────────────────────────────
 
 class IndicoClient:
-    """Minimal HTTP wrapper. Same shape as indico_patch.py's client
-    but read+delete only — no PATCH or POST surfaces because the
-    write side of this script is strictly DELETE."""
+    """Minimal HTTP wrapper: read + delete only — no PATCH or POST
+    surfaces, because the write side of this script is strictly
+    DELETE. (The former indico_patch.py carried a fuller client with
+    PATCH/POST; it has been retired, so this is now self-contained.)"""
 
     def __init__(self, *, apply: bool, verbose: bool = True):
         self.apply = apply

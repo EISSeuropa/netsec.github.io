@@ -31,7 +31,4 @@ pagefind/
 # tracked.
 tmp/
 
-# Sidecar JSON caches for indico-patch.py fix-plans. Auto-generated
-# next to each fix-plan YAML on first dry-run; not committed.
-data/indico-fix-plans/*.resolved.json
 /ogcards-*/

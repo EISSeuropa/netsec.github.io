@@ -4,5 +4,4 @@
 # itself ships no Python; these are maintainer-tooling deps only.
 beautifulsoup4
 Pillow
-PyYAML
 requests
