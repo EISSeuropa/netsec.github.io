@@ -7,6 +7,14 @@ The NetSec site follows an **Apple-inspired glassmorphism** language
 on top of EU/COST brand colours. The look should feel modern,
 trustworthy, and Brussels-adjacent without being corporate.
 
+A rendered A4 companion to this document lives at
+[`pdf/NetSec-Design-System.pdf`](./pdf/NetSec-Design-System.pdf): the
+same language shown as colour swatches, type specimens and component
+demos. It is built from the standalone design-system package, so it also
+carries a tidied token layer (a full spacing scale, the extra radii, the
+motion and shadow tokens) that this markdown and the live `site.css` do
+not yet fully implement.
+
 ## Principles
 
 1. **Restraint over decoration.** White space, generous line-height,
@@ -385,6 +393,41 @@ This is only the developer index of which file goes where. The
 authority for the contractual rules (the COST and EU emblem pairing,
 clear-space, minimum sizes, the colour swatches and type specimens) is
 the public press kit at [`press-kit.html`](../press-kit.html).
+
+## Slides / conference deck
+
+The design language reaches past the web pages into a conference slide
+deck. Eight layouts in the NetSec house style ship as one editable file,
+downloadable as PowerPoint (`assets/downloads/NetSec-Slide-Templates.pptx`)
+or Keynote (`assets/downloads/NetSec-Slide-Templates.key`) from the public
+[`slides.html`](../slides.html). That page is written for a non-technical
+presenter: it previews every layout, then hands over the deck to fill in.
+The Claude Design export renders the same layouts as HTML under its
+`slides/` and `templates/conference-deck/` groups, which is the visual
+companion this markdown cannot be.
+
+The deck is a fixed 16:9 canvas (1280×720), so its headings are set in
+absolute pixels rather than the responsive `clamp()` scale the site uses.
+Lexend carries every headline, and the accent-blue (`#0a84ff`) span is
+reserved for the one emphasised phrase in a title. The display sizes are
+deliberately large so they read from the back of a conference room, with
+the cover hero largest at 148 px:
+
+| Layout | Purpose | Headline size |
+| --- | --- | --- |
+| Title / session | Opening slide, split headline, chair and date | 128 px |
+| Section divider | Between-section marker | 104 px |
+| Agenda / programme | Session running order | 96 px |
+| Speaker / panellist | Name, affiliation, photo | 104 px |
+| Content / bullets | Standard body slide | 104 px |
+| Two-column | Comparison, before and after | 104 px head, 54 px sub |
+| Plenary / name cards | Closing plenary, a row of speaker cards | 104 px |
+| Thank you / call to action | Closing slide with a glass QR card | 116 px, 52 px sub |
+
+These sizes live as inline styles in `slides.html` (the on-page previews)
+and inside the deck file. No stylesheet is shared between the slides and
+the site, so the web `site.css` tokens do not reach the deck. A change to
+the slide house style has to be made in both places by hand.
 
 ## Responsive breakpoints
 
