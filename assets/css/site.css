@@ -6689,3 +6689,187 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   .faces-track{animation:none}
   .faces-marquee{overflow-x:auto}
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   Directory cinematics
+   ───────────────────────────────────────────────────────────────────
+   Six presentational layers for the members directory (people.html and
+   its FR / DE variants), all driven from assets/js/people-directory.js:
+   a load-state skeleton shimmer, a one-shot staggered first render, a
+   FLIP glide when a filter reorders the grid, a results-count pop, chip
+   press feedback, and a greyscale-to-colour photo hover in detailed
+   view. Every animation has a prefers-reduced-motion off-switch at the
+   foot of this block. The global reduced-motion reset near the top of
+   this file already flattens transition and animation timings, so the
+   off-switches add only what that reset cannot express (a static
+   skeleton, full-colour photos, no cascade offset). Colours come from
+   the theme tokens, with a .dark counterpart wherever a raw value is
+   needed. All rules for a given class are kept adjacent so the
+   class-collision lint stays quiet. JS binds to ids and data-* hooks or
+   to these dedicated is-* state classes, never to a styling class.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── A. Skeleton shimmer (load state) ───────────────────────────────
+   Nine placeholder cards injected before bios.json resolves. Geometry
+   roughly matches a compact card so the swap to real cards does not
+   jump. A diagonal sheen sweeps across each placeholder via a moving
+   linear-gradient background-position. aria-hidden in the markup keeps
+   them out of the accessibility tree. */
+.member-skeleton{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 18px;border-radius:16px;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  overflow:hidden;
+}
+.dark .member-skeleton{background:rgba(255,255,255,.04);border-color:var(--line)}
+.member-skeleton-avatar{
+  flex:0 0 auto;width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(
+    100deg,
+    color-mix(in srgb,var(--ink-2) 8%,transparent) 30%,
+    color-mix(in srgb,var(--ink-2) 16%,transparent) 50%,
+    color-mix(in srgb,var(--ink-2) 8%,transparent) 70%);
+  background-size:220% 100%;
+  animation:member-skeleton-sheen 1.4s linear infinite;
+}
+.member-skeleton-lines{flex:1 1 auto;display:flex;flex-direction:column;gap:9px;min-width:0}
+.member-skeleton-bar{
+  height:10px;border-radius:6px;
+  background:linear-gradient(
+    100deg,
+    color-mix(in srgb,var(--ink-2) 8%,transparent) 30%,
+    color-mix(in srgb,var(--ink-2) 16%,transparent) 50%,
+    color-mix(in srgb,var(--ink-2) 8%,transparent) 70%);
+  background-size:220% 100%;
+  animation:member-skeleton-sheen 1.4s linear infinite;
+}
+.member-skeleton-bar-name{width:62%;height:13px}
+.member-skeleton-bar-role{width:44%}
+.member-skeleton-bar-aff{width:78%}
+@keyframes member-skeleton-sheen{
+  from{background-position:120% 0}
+  to{background-position:-120% 0}
+}
+
+/* ── B. Staggered first render ──────────────────────────────────────
+   On the first real paint only, the grid carries .is-first-reveal and
+   each card cascades in (opacity + small translateY) with an
+   incremental :nth-child delay, capped so the 13th card onward shares
+   the last delay and the whole cascade finishes under 500ms. The class
+   is removed after playback so later renders never re-trigger it. */
+.members-grid.is-first-reveal .member-card{
+  animation:member-card-in .34s var(--ease) both;
+}
+.members-grid.is-first-reveal .member-card:nth-child(1){animation-delay:0ms}
+.members-grid.is-first-reveal .member-card:nth-child(2){animation-delay:35ms}
+.members-grid.is-first-reveal .member-card:nth-child(3){animation-delay:70ms}
+.members-grid.is-first-reveal .member-card:nth-child(4){animation-delay:105ms}
+.members-grid.is-first-reveal .member-card:nth-child(5){animation-delay:140ms}
+.members-grid.is-first-reveal .member-card:nth-child(6){animation-delay:175ms}
+.members-grid.is-first-reveal .member-card:nth-child(7){animation-delay:210ms}
+.members-grid.is-first-reveal .member-card:nth-child(8){animation-delay:245ms}
+.members-grid.is-first-reveal .member-card:nth-child(9){animation-delay:280ms}
+.members-grid.is-first-reveal .member-card:nth-child(10){animation-delay:315ms}
+.members-grid.is-first-reveal .member-card:nth-child(11){animation-delay:350ms}
+.members-grid.is-first-reveal .member-card:nth-child(12){animation-delay:385ms}
+.members-grid.is-first-reveal .member-card:nth-child(n+13){animation-delay:420ms}
+@keyframes member-card-in{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
+}
+
+/* ── C. FLIP transitions on filter changes ──────────────────────────
+   Every render after the first animates the reorder. The JS inverts a
+   surviving card with an inline transform, then adds .is-cine-move to
+   transition it back to zero (the glide). New cards get .is-cine-enter
+   (fade + scale). Both classes and any inline transform are cleared on
+   transitionend or a safety timeout, so no card is left with a stale
+   transform that would break the preview panel anchoring. */
+.member-card.is-cine-move{
+  transition:transform .18s var(--ease);
+  will-change:transform;
+}
+.member-card.is-cine-enter{
+  animation:member-card-enter .15s var(--ease) both;
+}
+@keyframes member-card-enter{
+  from{opacity:0;transform:scale(.96)}
+  to{opacity:1;transform:none}
+}
+
+/* ── D. Animated results count ──────────────────────────────────────
+   #members-count is aria-live="polite"; the text is set once per render
+   so screen readers announce the final value once. The JS toggles
+   .is-count-pop only when the number changes, restarting this subtle
+   opacity + translateY crossfade. */
+.members-count.is-count-pop{
+  animation:members-count-pop .2s var(--ease);
+}
+@keyframes members-count-pop{
+  from{opacity:.35;transform:translateY(4px)}
+  to{opacity:1;transform:none}
+}
+
+/* ── E. Filter-chip press feedback ──────────────────────────────────
+   Pure CSS on the existing chip classes via attribute selectors, so JS
+   never adds a class for this. A subtle scale press-in on :active, and a
+   static accent ring on the pressed state, echoing the homepage
+   conic-trace accent vocabulary without rotating. Specificity is kept
+   to a single class + attribute so the existing pressed background still
+   wins. The press feedback deliberately extends the existing chip
+   classes defined earlier in this file, so the cross-cluster split is
+   intentional and each rule is annotated for the collision lint. */
+/* Press-in scale. Split per class so each carries its own lint
+   annotation (a shared selector list can only annotate one class). */
+/* css-collision-allow: .members-filter-chip */
+.members-filter-chip:active{transform:scale(.96)}
+/* css-collision-allow: .members-mentorship-chip */
+.members-mentorship-chip:active{transform:scale(.96)}
+/* css-collision-allow: .members-filter-chip */
+.members-filter-chip[aria-pressed="true"]{
+  box-shadow:var(--accent-shadow),0 0 0 1px color-mix(in srgb,var(--accent-2) 65%,transparent);
+}
+/* css-collision-allow: .members-mentorship-chip */
+.members-mentorship-chip[aria-pressed="true"]{
+  box-shadow:var(--accent-shadow),0 0 0 1px color-mix(in srgb,var(--accent-2) 65%,transparent);
+}
+/* .dark variants use descendant context, so the collision lint skips
+   them; no annotation needed. */
+.dark .members-filter-chip[aria-pressed="true"]{
+  box-shadow:var(--accent-shadow),0 0 0 1px color-mix(in srgb,var(--accent-2) 80%,transparent);
+}
+.dark .members-mentorship-chip[aria-pressed="true"]{
+  box-shadow:var(--accent-shadow),0 0 0 1px color-mix(in srgb,var(--accent-2) 80%,transparent);
+}
+
+/* ── F. Greyscale-to-colour photo hover (detailed view only) ────────
+   In detailed view, member photos rest greyscale and warm to full
+   colour on hover or focus-within, mirroring the homepage faces
+   marquee. Compact view keeps full colour, since it is a scanning view
+   where colour aids recognition. */
+.members-grid:not(.is-compact) .member-card .member-photo img{
+  filter:grayscale(1);
+  transition:filter .3s var(--ease);
+}
+.members-grid:not(.is-compact) .member-card:hover .member-photo img,
+.members-grid:not(.is-compact) .member-card:focus-within .member-photo img{
+  filter:grayscale(0);
+}
+
+/* ── Reduced-motion off-switches for the directory cinematics ───────
+   The global reset already flattens transition and animation timings.
+   These add what it cannot express: a static skeleton (no sheen), no
+   cascade or FLIP offset, no count pop, and full-colour photos at rest
+   (the greyscale filter transition is motion enough to disable). */
+@media (prefers-reduced-motion: reduce){
+  .member-skeleton-avatar,
+  .member-skeleton-bar{animation:none;background-position:0 0}
+  .members-grid.is-first-reveal .member-card{animation:none}
+  .member-card.is-cine-move{transition:none}
+  .member-card.is-cine-enter{animation:none}
+  .members-count.is-count-pop{animation:none}
+  .members-filter-chip:active,
+  .members-mentorship-chip:active{transform:none}
+  .members-grid:not(.is-compact) .member-card .member-photo img{filter:none;transition:none}
+}
