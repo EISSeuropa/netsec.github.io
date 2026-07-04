@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-03T19:34:01+00:00",
+  "generated_at": "2026-07-04T07:13:15+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-03T19:34:01+00:00"
+    "last_synced": "2026-07-04T07:13:15+00:00"
   },
   "members": [
     {
@@ -2559,7 +2559,11 @@
       "wg_leadership": {},
       "bio": "I am an Assistant Professor in the Department of International Relations at Giresun University, Türkiye, where I teach undergraduate and graduate courses in Public International Law, International Human Rights Law, International Organizations, and Private International Law. I hold a PhD in International Relations, and my academic work focuses on the intersection of international law and international politics.\n\nMy research interests include international law, human rights, human security, global governance, international organizations, and contemporary security challenges. In my recent work, I have examined topics such as vaccine hesitancy and human security, discrimination and intolerance in the European Union, global justice, and the role of international law in responding to armed conflicts and international crises.\n\nAlongside my research and teaching, I regularly present my work at national and international conferences and serve as a reviewer for academic journals in the fields of international relations and international law. I also participate in international research collaborations and contribute to academic quality assurance and accreditation processes.\n\nThrough my research, teaching, and international engagement, I aim to contribute to a deeper understanding of contemporary global challenges and the evolving role of international law and global governance in addressing them.",
       "keywords": [
-        "International Law Human Security Global Governance International Organizations Human Rights"
+        "International Law",
+        "Human Security",
+        "Global Governance",
+        "International Organizations",
+        "Human Rights"
       ],
       "email": "tcikrikci92@gmail.com",
       "website": "https://ulus.giresun.edu.tr/",
@@ -2571,7 +2575,15 @@
       "photo": "",
       "source": "form",
       "canonical_keywords": [
-        "International law human security global governance international organisations human rights"
+        "Global governance",
+        "Human rights",
+        "Human security",
+        "International law",
+        "International organisations"
+      ],
+      "themes": [
+        "Theory and methods",
+        "Transnational and human security"
       ]
     },
     {
@@ -2768,6 +2780,47 @@
       "themes": [
         "Security and defence"
       ]
+    },
+    {
+      "id": "danilo-kalezic",
+      "name": "Prof. Danilo Kalezic",
+      "country": "Montenegro",
+      "country_code": "me",
+      "affiliation": "University of Montenegro",
+      "position": "Research Fellow",
+      "roles": [
+        "Management Committee · Montenegro"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe - Western Balkans"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "",
+      "keywords": [
+        "Transformation",
+        "democratization",
+        "comparative politicas"
+      ],
+      "email": "kalezic13@gmail.com",
+      "website": "https://www.ucg.ac.me/radnik/900952-danilo-kalezic",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/danilo-kalezic.jpg",
+      "source": "form",
+      "photo_source_sha256": "05a8396f0052c34509a0e473da802d07cd0ca7d51efb89823e6a1663156c570b",
+      "canonical_keywords": [
+        "Comparative politicas",
+        "Democratisation",
+        "Transformation"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -2848,7 +2901,15 @@
       "count": 2
     },
     {
+      "keyword": "Human security",
+      "count": 2
+    },
+    {
       "keyword": "Hybrid threats",
+      "count": 2
+    },
+    {
+      "keyword": "International law",
       "count": 2
     },
     {
@@ -2952,6 +3013,10 @@
       "count": 1
     },
     {
+      "keyword": "Comparative politicas",
+      "count": 1
+    },
+    {
       "keyword": "Comparative politics",
       "count": 1
     },
@@ -3017,6 +3082,10 @@
     },
     {
       "keyword": "Defence industry",
+      "count": 1
+    },
+    {
+      "keyword": "Democratisation",
       "count": 1
     },
     {
@@ -3140,6 +3209,10 @@
       "count": 1
     },
     {
+      "keyword": "Global governance",
+      "count": 1
+    },
+    {
       "keyword": "Global order",
       "count": 1
     },
@@ -3152,11 +3225,11 @@
       "count": 1
     },
     {
-      "keyword": "Human rights and technology",
+      "keyword": "Human rights",
       "count": 1
     },
     {
-      "keyword": "Human security",
+      "keyword": "Human rights and technology",
       "count": 1
     },
     {
@@ -3208,11 +3281,7 @@
       "count": 1
     },
     {
-      "keyword": "International law",
-      "count": 1
-    },
-    {
-      "keyword": "International law human security global governance international organisations human rights",
+      "keyword": "International organisations",
       "count": 1
     },
     {
@@ -3420,6 +3489,10 @@
       "count": 1
     },
     {
+      "keyword": "Transformation",
+      "count": 1
+    },
+    {
       "keyword": "Transnational and human security",
       "count": 1
     },
@@ -3459,7 +3532,7 @@
     },
     {
       "theme": "Theory and methods",
-      "count": 13
+      "count": 14
     },
     {
       "theme": "European and transatlantic security order",
@@ -3467,7 +3540,7 @@
     },
     {
       "theme": "Transnational and human security",
-      "count": 9
+      "count": 10
     },
     {
       "theme": "Strategy and deterrence",
@@ -3671,11 +3744,11 @@
       "count": 26
     },
     {
-      "region": "Europe - Eastern neighbours / Russia",
-      "count": 13
+      "region": "Europe - Western Balkans",
+      "count": 14
     },
     {
-      "region": "Europe - Western Balkans",
+      "region": "Europe - Eastern neighbours / Russia",
       "count": 13
     },
     {
