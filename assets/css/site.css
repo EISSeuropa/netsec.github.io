@@ -6642,7 +6642,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
    full colour on the hovered face. Edge mask dissolves both ends. */
 .faces-marquee{
   overflow:hidden;
-  margin:0 0 14px;
+  margin:0;
   -webkit-mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
@@ -6667,8 +6667,10 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 }
 .faces-track img:hover{filter:grayscale(0);opacity:1;transform:scale(1.12)}
 @keyframes faces-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.faces-marquee-caption{text-align:center;margin:0 0 22px;font-size:.9rem;font-weight:600}
-.faces-marquee-caption a{color:var(--accent)}
+/* Mirrors .events-seeall, the site's established "see all" link, but
+   centred under the marquee rather than right-aligned. */
+.faces-seeall{margin:22px 0 0;text-align:center}
+.faces-seeall a{font-weight:600;color:var(--accent)}
 
 /* ── Reduced-motion off-switches for the cinematic bundle ───────────
    The global reset already flattens transition and animation timings.
