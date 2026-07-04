@@ -80,6 +80,9 @@
     const card = el('article', {
       class: 'news-card glass' + (hasCta ? ' card-clickable' : ''),
       'data-news-id': item.id,
+      // Cinematic-home tilt hook. The tilt IIFE in site.js delegates off
+      // document, so cards rendered here after page load still get the effect.
+      'data-tilt': '',
     });
     const dateLabel = pickLocale(item.displayDate, locale, '');
     const tags = tagsRow(item, locale);
