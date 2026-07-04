@@ -2325,16 +2325,28 @@ window.netsecMemberCard = (function () {
   };
   var SVG_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
 
-  fetch('/data/audiences.json', { cache: 'no-cache' })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (data) {
-      if (!data) return;
-      var lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
-      var block = data[lang] || data.en;
-      if (!block || !block.cards || !block.cards.length) return;
-      render(block);
-    })
-    .catch(function () { /* 404 or parse error — silent no-op */ });
+  // The tab/drawer are a secondary wayfinding aid, not needed at first
+  // paint, so the fetch + injection are deferred to idle time to keep
+  // them off the critical load path (they were nudging about.html below
+  // the Lighthouse performance budget). Default caching is fine — the
+  // router content is stable, unlike the freshness-sensitive banner.
+  function boot() {
+    fetch('/data/audiences.json')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (!data) return;
+        var lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
+        var block = data[lang] || data.en;
+        if (!block || !block.cards || !block.cards.length) return;
+        render(block);
+      })
+      .catch(function () { /* 404 or parse error — silent no-op */ });
+  }
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(boot, { timeout: 2000 });
+  } else {
+    setTimeout(boot, 1200);
+  }
 
   function icon(key) {
     return SVG_OPEN + (ICONS[key] || '') + '</svg>';
