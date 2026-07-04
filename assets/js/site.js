@@ -2303,3 +2303,113 @@ window.netsecMemberCard = (function () {
     })
     .catch((err) => { console.warn('ecs-faculty: bios.json fetch failed; monograms kept:', err); });
 })();
+
+/* Audiences side-drawer — the recurring "Start where you are" role-router.
+   ──────────────────────────────────────────────────────────────────────
+   The homepage carries an inline #audiences section; this makes the same
+   role-router available site-wide as a right-edge tab that opens a drawer.
+   Reads /data/audiences.json, picks the locale off <html lang>, injects a
+   fixed edge tab + a native <dialog> on every page. Native <dialog> gives
+   Esc-to-close, focus trapping, and a ::backdrop for free.
+
+   Z-order note: the tab/drawer sit below the Directory member-preview panel
+   (z-index:120) on purpose, so on people.html the member preview wins the
+   right edge and covers the tab while open, then the tab returns on close.
+   Silent no-op if the JSON is missing or a locale block is absent. */
+(function () {
+  var ICONS = {
+    researcher: '<path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/>',
+    policy: '<line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/>',
+    member: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/>',
+    press: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/>'
+  };
+  var SVG_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+
+  fetch('/data/audiences.json', { cache: 'no-cache' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      if (!data) return;
+      var lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
+      var block = data[lang] || data.en;
+      if (!block || !block.cards || !block.cards.length) return;
+      render(block);
+    })
+    .catch(function () { /* 404 or parse error — silent no-op */ });
+
+  function icon(key) {
+    return SVG_OPEN + (ICONS[key] || '') + '</svg>';
+  }
+
+  function render(block) {
+    var tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'aud-tab';
+    tab.setAttribute('aria-haspopup', 'dialog');
+    tab.innerHTML =
+      '<span class="aud-tab-icon" aria-hidden="true">' +
+      SVG_OPEN + '<circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></span>' +
+      '<span class="aud-tab-label">' + esc(block.tab) + '</span>';
+
+    var dlg = document.createElement('dialog');
+    dlg.className = 'aud-drawer';
+    dlg.setAttribute('aria-label', block.title);
+
+    var cards = block.cards.map(function (c) {
+      var links = (c.links || []).map(function (l) {
+        var ext = l.external ? ' target="_blank" rel="noopener"' : '';
+        var glyph = l.external
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+        return '<a href="' + esc(l.href) + '"' + ext + '>' + esc(l.label) + ' ' + glyph + '</a>';
+      }).join('');
+      return '<div class="audience-card glass">' +
+        '<h3><span class="aud-card-icon" aria-hidden="true">' + icon(c.icon) + '</span>' + esc(c.h3) + '</h3>' +
+        '<p>' + esc(c.p) + '</p>' +
+        '<div class="audience-links">' + links + '</div></div>';
+    }).join('');
+
+    dlg.innerHTML =
+      '<div class="aud-head">' +
+        '<div><span class="aud-eyebrow">' + esc(block.tab) + '</span>' +
+        '<span class="aud-title">' + esc(block.title) + '</span></div>' +
+        '<button type="button" class="aud-close" aria-label="' + esc(block.close || 'Close') + '">' +
+        SVG_OPEN + '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' +
+      '</div>' +
+      '<div class="aud-cards">' + cards + '</div>';
+
+    document.body.appendChild(tab);
+    document.body.appendChild(dlg);
+
+    function openDrawer() {
+      if (typeof dlg.showModal === 'function') { dlg.showModal(); } else { dlg.setAttribute('open', ''); }
+      requestAnimationFrame(function () { dlg.classList.add('aud-open'); });
+    }
+    function closeDrawer() {
+      dlg.classList.remove('aud-open');
+      // Keep the dialog displayed through the slide-out, then close.
+      // Timeout (not transitionend) so reduced-motion — where there is
+      // no transition to fire — still closes reliably.
+      window.setTimeout(function () {
+        if (typeof dlg.close === 'function') { dlg.close(); } else { dlg.removeAttribute('open'); }
+      }, 260);
+    }
+
+    tab.addEventListener('click', openDrawer);
+    dlg.querySelector('.aud-close').addEventListener('click', closeDrawer);
+    // Click on the ::backdrop registers as a click on the dialog itself.
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) closeDrawer(); });
+    // Native Esc fires 'cancel'; intercept so the slide-out animates.
+    dlg.addEventListener('cancel', function (e) { e.preventDefault(); closeDrawer(); });
+    // A card link was followed — close so the drawer isn't left open behind
+    // the destination (same-page anchors don't reload).
+    dlg.querySelector('.aud-cards').addEventListener('click', function (e) {
+      if (e.target.closest('a')) closeDrawer();
+    });
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+})();
