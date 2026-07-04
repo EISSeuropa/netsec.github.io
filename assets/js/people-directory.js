@@ -12,6 +12,49 @@
   const stsmChip = document.querySelector('[data-stsm]');
   const countrySelect = document.getElementById('member-country');
   const tpl = document.getElementById('member-card-template');
+
+  /* Directory cinematics (#dir-cine): shared reduced-motion gate for the
+     load skeleton, the first-render cascade, the FLIP reorder on filter
+     changes, and the results-count pop. Every motion path below consults
+     this and no-ops when the visitor prefers reduced motion. Guarded for
+     very old engines that lack matchMedia. */
+  const CINE_RM = (function () {
+    try { return window.matchMedia('(prefers-reduced-motion: reduce)'); }
+    catch (e) { return { matches: false }; }
+  })();
+  const cinePrefersReducedMotion = () => !!(CINE_RM && CINE_RM.matches);
+
+  /* Load-state skeletons (#dir-cine A): inject placeholder cards into the
+     grid immediately, before bios.json resolves, so the visitor sees the
+     shape of the directory rather than an empty box. The geometry roughly
+     matches a compact card (circle avatar + a couple of text bars) so the
+     swap to real cards does not jump. They carry aria-hidden and no id or
+     data-slug, so the count line, the empty state, and the deep-link and
+     FLIP logic never mistake them for members. render()'s replaceChildren()
+     clears them on the first real paint; the fetch catch clears them too. */
+  function injectSkeletons() {
+    if (!grid) return;
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < 9; i++) {
+      const card = document.createElement('div');
+      card.className = 'member-skeleton';
+      card.setAttribute('aria-hidden', 'true');
+      card.innerHTML =
+        '<div class="member-skeleton-avatar"></div>' +
+        '<div class="member-skeleton-lines">' +
+          '<div class="member-skeleton-bar member-skeleton-bar-name"></div>' +
+          '<div class="member-skeleton-bar member-skeleton-bar-role"></div>' +
+          '<div class="member-skeleton-bar member-skeleton-bar-aff"></div>' +
+        '</div>';
+      frag.appendChild(card);
+    }
+    grid.appendChild(frag);
+  }
+  function clearSkeletons() {
+    if (!grid) return;
+    grid.querySelectorAll('.member-skeleton').forEach(el => el.remove());
+  }
+  injectSkeletons();
   // Standalone profile-page URL for a member, in the current locale.
   // The directory cards link to these (name + "View full profile" CTA);
   // the card click still expands in place (the delegated handler ignores
@@ -600,6 +643,98 @@
   // input element.
   let _lastQuery = '';
 
+  /* Directory cinematics render state (#dir-cine B/C/D).
+     _cineFirstRender flips false after the first real paint so the
+     staggered cascade fires exactly once. _cineLastCount tracks the
+     previous count so the results-count pop only replays when the number
+     actually changes. The FLIP snapshot Map lives per-render inside the
+     helpers below. */
+  let _cineFirstRender = true;
+  let _cineLastCount = null;
+  const CINE_FLIP_MAX = 80;   // above this many cards, skip the reorder animation
+
+  /* FLIP step 1 (#dir-cine C): before render() rebuilds the grid, capture
+     each current card's on-screen rectangle keyed by member id. Returns
+     null when the animation should be skipped entirely, so render() knows
+     not to bother playing it back. Guards: reduced motion, an empty grid
+     before the change (nothing to glide from), a hidden tab (rects are
+     unreliable and the visitor sees nothing), and the very first render
+     (which owns the cascade instead). */
+  function cineSnapshotPositions() {
+    if (_cineFirstRender) return null;
+    if (cinePrefersReducedMotion()) return null;
+    if (document.hidden) return null;
+    const cards = grid.querySelectorAll('.member-card[data-slug]');
+    if (cards.length === 0) return null;               // empty before → let new cards just enter
+    if (cards.length > CINE_FLIP_MAX) return null;     // too many to animate within budget
+    const snap = new Map();
+    cards.forEach(c => {
+      const id = c.getAttribute('data-slug');
+      if (id) snap.set(id, c.getBoundingClientRect());
+    });
+    return snap;
+  }
+
+  /* FLIP step 2 (#dir-cine C): after the rebuild, glide surviving cards
+     from their old position to the new one (invert then play) and fade or
+     scale new cards in. Cards that disappeared are simply gone (no exit
+     animation, by design). Transforms are always cleared on transitionend
+     or a safety timeout, so no card is left holding a stale transform that
+     would break the preview-panel anchoring or is-featured stacking. */
+  function cinePlayFlip(snap) {
+    const newCards = Array.prototype.slice.call(grid.querySelectorAll('.member-card[data-slug]'));
+    if (newCards.length > CINE_FLIP_MAX) return;
+    const movers = [];
+    newCards.forEach(card => {
+      const id = card.getAttribute('data-slug');
+      const prev = snap && id ? snap.get(id) : null;
+      if (prev) {
+        const now = card.getBoundingClientRect();
+        const dx = prev.left - now.left;
+        const dy = prev.top - now.top;
+        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+          card.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+          movers.push(card);
+        }
+      } else {
+        // A card new to this view: fade and scale in.
+        card.classList.add('is-cine-enter');
+      }
+    });
+    // One forced reflow for the whole batch, not per card, so the inverted
+    // transforms register before we transition them away.
+    if (movers.length) void grid.offsetWidth;
+    requestAnimationFrame(function () {
+      movers.forEach(function (card) {
+        card.classList.add('is-cine-move');
+        card.style.transform = '';
+        const done = function () {
+          card.classList.remove('is-cine-move');
+          card.style.transform = '';
+          card.removeEventListener('transitionend', done);
+        };
+        card.addEventListener('transitionend', done);
+        setTimeout(done, 320);   // safety net if transitionend never fires
+      });
+    });
+    /* Second safety net, deliberately OUTSIDE the rAF: if the tab is
+       hidden in the instant between the click and the next frame, the
+       rAF above never runs and the inverted transforms would otherwise
+       stick, leaving the grid scrambled when the visitor returns. This
+       sweep runs on the timer clock regardless and is a no-op when the
+       rAF path already cleaned up. */
+    setTimeout(function () {
+      movers.forEach(function (card) {
+        card.classList.remove('is-cine-move');
+        card.style.transform = '';
+      });
+    }, 400);
+    // Clear the enter class after its animation would have finished.
+    grid.querySelectorAll('.member-card.is-cine-enter').forEach(function (card) {
+      setTimeout(function () { card.classList.remove('is-cine-enter'); }, 320);
+    });
+  }
+
   // Single source of truth for the directory filter predicate, shared by the
   // grid and the mentorship matching panel (#869). `skipMentorship` lets the
   // panel pool everyone who passes the *other* facets, then split that pool
@@ -645,6 +780,9 @@
   }
 
   function render() {
+    // FLIP: snapshot the outgoing cards' positions before the grid is torn
+    // down (#dir-cine C). Returns null when the reorder animation is skipped.
+    const _cineSnap = cineSnapshotPositions();
     grid.replaceChildren();
     const q = (search.value || '').trim().toLowerCase();
     _lastQuery = q;
@@ -659,6 +797,13 @@
       const _fi = filtered.findIndex(m => m.id === featuredId);
       if (_fi > 0) { const _fm = filtered.splice(_fi, 1)[0]; filtered.unshift(_fm); }
     }
+
+    // First-render cascade (#dir-cine B): mark the grid so the freshly
+    // appended cards stagger in via CSS :nth-child delays. One-shot, and
+    // never on reduced motion. Removed shortly after so later renders never
+    // re-trigger it. The DOM update itself is not deferred by this.
+    const _cineCascade = _cineFirstRender && !cinePrefersReducedMotion();
+    if (_cineCascade) grid.classList.add('is-first-reveal');
 
     filtered.forEach(m => {
       const node = tpl.content.firstElementChild.cloneNode(true);
@@ -1031,10 +1176,33 @@
     countEl.textContent = (filtered.length === MEMBERS.length)
       ? filtered.length + ' ' + window.netsecT(filtered.length === 1 ? 'member' : 'members')
       : filtered.length + ' / ' + MEMBERS.length + ' ' + window.netsecT('members');
+    // Results-count pop (#dir-cine D): the text is set exactly once above so
+    // the aria-live region announces the final value once, not a tick. The
+    // visual crossfade only replays when the number actually changed, and
+    // never on reduced motion. Restart the CSS animation by removing then
+    // re-adding the class across a frame.
+    if (!cinePrefersReducedMotion() && _cineLastCount !== null && filtered.length !== _cineLastCount) {
+      countEl.classList.remove('is-count-pop');
+      // Force a reflow so the re-added class restarts the animation.
+      void countEl.offsetWidth;
+      countEl.classList.add('is-count-pop');
+    }
+    _cineLastCount = filtered.length;
     empty.hidden = filtered.length > 0;
     _lastCount = filtered.length;
     updateFilterChrome();
     renderMentorshipPanel();
+
+    // Cinematics playback (#dir-cine B/C), after the cards are in the DOM.
+    if (_cineCascade) {
+      // Drop the one-shot cascade class once its longest delay has played,
+      // so subsequent renders animate via FLIP instead of the cascade.
+      setTimeout(function () { grid.classList.remove('is-first-reveal'); }, 600);
+    } else if (_cineSnap) {
+      // FLIP glide for every render after the first.
+      cinePlayFlip(_cineSnap);
+    }
+    _cineFirstRender = false;
 
     // Kick the deferred publications load exactly once, off the critical
     // path. Cards are already painted from bios.json; the works arrive in a
