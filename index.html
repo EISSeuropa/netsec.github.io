@@ -67,7 +67,7 @@
     } catch (e) { /* localStorage / matchMedia may be unavailable */ }
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=d4cb5503">
+<link rel="stylesheet" href="assets/css/site.css?v=b843b6d4">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -179,7 +179,8 @@
 
 <!-- Hero -->
 <section class="hero">
-  <div class="container reveal">
+  <canvas class="hero-net" data-hero-net aria-hidden="true"></canvas>
+  <div class="container reveal reveal-stagger">
     <span class="eyebrow">COST Action · European Cooperation in Science &amp; Technology</span>
     <h1>Networking European Security Knowledge</h1>
     <p class="lede">An inclusive, multidisciplinary network integrating diverse perspectives on European defence and security, bridging the academia–policy divide and cultivating the next generation of security scholars.</p>
@@ -206,7 +207,7 @@
 <!-- Action details strip -->
 <section class="details-strip" aria-label="Action details">
   <div class="container reveal">
-    <div class="details-grid glass">
+    <div class="details-grid glass reveal reveal-stagger">
       <div class="item"><div class="label">Action Number</div><div class="value">CA24154</div></div>
       <div class="item"><div class="label">MoU</div><div class="value">063/25</div></div>
       <div class="item"><div class="label">CSO Approval</div><div class="value">19 May 2025</div></div>
@@ -220,12 +221,12 @@
      strip and News so it catches visitors before they scroll past. -->
 <section id="audiences" aria-labelledby="audiences-title">
   <div class="container reveal">
-    <div class="section-head">
+    <div class="section-head" data-sec-num="01">
       <span class="eyebrow">Find your way in</span>
       <h2 id="audiences-title">Start where you are</h2>
     </div>
-    <div class="audiences-grid">
-      <div class="audience-card glass">
+    <div class="audiences-grid reveal reveal-stagger">
+      <div class="audience-card glass" data-tilt>
         <h3>I'm a researcher</h3>
         <p>Find collaborators across the network and see which grants are open.</p>
         <div class="audience-links">
@@ -233,7 +234,7 @@
           <a href="grants.html">Grants</a>
         </div>
       </div>
-      <div class="audience-card glass">
+      <div class="audience-card glass" data-tilt>
         <h3>I work in policy</h3>
         <p>Get the evidence base: published outputs and the terms behind them.</p>
         <div class="audience-links">
@@ -241,7 +242,7 @@
           <a href="glossary.html">Glossary</a>
         </div>
       </div>
-      <div class="audience-card glass">
+      <div class="audience-card glass" data-tilt>
         <h3>I'm an Action member</h3>
         <p>Jump straight to member resources and the Wiki.</p>
         <div class="audience-links">
@@ -249,7 +250,7 @@
           <a href="https://github.com/EISSeuropa/netsec.github.io/wiki" target="_blank" rel="noopener">Members' Wiki</a>
         </div>
       </div>
-      <div class="audience-card glass">
+      <div class="audience-card glass" data-tilt>
         <h3>I'm covering the Action</h3>
         <p>Logos, boilerplate, and the latest news in one place.</p>
         <div class="audience-links">
@@ -264,31 +265,31 @@
 <!-- News -->
 <section id="news">
   <div class="container reveal">
-    <div class="section-head">
+    <div class="section-head" data-sec-num="02">
       <span class="eyebrow">Updates</span>
       <h2>Latest News</h2>
       <p>Announcements, calls, and milestones from the NetSec community.</p>
     </div>
-    <div class="news-list">
-      <article class="news-card glass card-clickable">
+    <div class="news-list reveal reveal-stagger">
+      <article class="news-card glass card-clickable" data-tilt>
         <span class="news-date">17 June 2026</span>
         <h3>European Security Studies Prize awarded</h3>
         <p>The European Security Studies Prize 2026 has gone to Anna Seliverstova (Linnaeus University) and Mattia Sguazzini (University of Genova). Awarded in partnership with the Journal of Strategic Studies, the prize marks outstanding research in security studies. Anna Seliverstova won for "Telegram in Russia's Information Strategy: Evidence from Serbia", and Mattia Sguazzini for "Do Parliaments Dream of Cyber Power? Parliamentary Scrutiny in the Strategic Domain of Cyberspace". The awards were presented at the European Security Studies Conference in Stockholm, co-organised by the European Initiative for Security Studies (EISS), NetSec, and Stockholm University.</p>
         <a class="card-stretch" href="https://eiss-europa.com/prizes.html" target="_blank" rel="noopener">See the awarded papers</a>
       </article>
-      <article class="news-card glass card-clickable">
+      <article class="news-card glass card-clickable" data-tilt>
         <span class="news-date">12 June 2026</span>
         <h3>ESSC 2026 concludes in Stockholm</h3>
         <p>The European Security Studies Conference 2026 came to a close on 12 June at Stockholm University, after two days of panels and roundtables jointly hosted by NetSec, the European Initiative for Security Studies (EISS), and Stockholm University. It was the first edition to run under the ESSC name, following the NetSec Early-Career Scholars Summer School earlier that week. The full programme stays online, now joined by a conference film and a photo gallery from the two days.</p>
         <a class="card-stretch" href="essc-2026.html">Revisit the conference →</a>
       </article>
-      <article class="news-card glass card-clickable">
+      <article class="news-card glass card-clickable" data-tilt>
         <span class="news-date">Now open</span>
         <h3>NetSec Grants: Applications now open</h3>
         <p>Applications are now open for all five NetSec grant categories: Short-Term Scientific Missions, Virtual Mobility Grants, and three Conference Grants (Young Researcher &amp; Innovator, Inclusiveness Target Country, Dissemination). Open to the wider research community, not just Action participants. Submissions go through e-COST. See eligibility and amounts on the Grants page.</p>
         <a class="card-stretch" href="grants.html">View grants &amp; apply →</a>
       </article>
-      <article class="news-card glass card-clickable">
+      <article class="news-card glass card-clickable" data-tilt>
         <span class="news-date">Applications closed</span>
         <h3>NetSec Training School: applications closed</h3>
         <p>The call for the 2026 NetSec Early-Career Scholars Summer School in Stockholm (9–11 June 2026) closed on 1 March 2026. Selected participants will be contacted by the scientific coordinators in due course. A new call for the next training school will be announced when the 2027 cohort opens.</p>
@@ -322,7 +323,7 @@
 <!-- About -->
 <section id="about">
   <div class="container reveal">
-    <div class="section-head">
+    <div class="section-head" data-sec-num="03">
       <span class="eyebrow">About</span>
       <h2>Overcoming fragmentation in European security studies</h2>
       <p>NetSec addresses the fragmentation of Europe's intellectual and analytical base in security studies. That fragmentation hinders the EU's pursuit of strategic autonomy and its ability to respond to complex security challenges.</p>
@@ -390,7 +391,7 @@
 <!-- Working Groups -->
 <section id="working-groups">
   <div class="container reveal">
-    <div class="section-head">
+    <div class="section-head" data-sec-num="04">
       <span class="eyebrow">Structure</span>
       <h2>Four Working Groups</h2>
       <p>The Action's three objectives are pursued through four interconnected Working Groups, each anchored in a distinct mission and contributing to the wider network.</p>
@@ -438,7 +439,7 @@
 <!-- Events -->
 <section id="events">
   <div class="container reveal">
-    <div class="section-head">
+    <div class="section-head" data-sec-num="05">
       <span class="eyebrow">Calendar</span>
       <h2>Events</h2>
       <p>Annual conferences, policy workshops, training schools, and short-term scientific missions across the network.</p>
@@ -510,6 +511,8 @@
      leads them there. -->
 <section class="members-strip" id="for-members">
   <div class="container reveal">
+    <div class="faces-marquee" data-faces-marquee aria-hidden="true"></div>
+    <p class="faces-marquee-caption"><a href="people.html">Meet the network &rarr;</a></p>
     <div class="members-card">
       <div>
         <span class="eyebrow">For NetSec members</span>
@@ -531,7 +534,7 @@
 <!-- Contact -->
 <section id="contact">
   <div class="container reveal">
-    <div class="section-head">
+    <div class="section-head" data-sec-num="06">
       <span class="eyebrow">Get in touch</span>
       <h2>Contact</h2>
       <p>Researchers, policy-makers, and practitioners interested in joining or collaborating with NetSec are welcome to reach out.</p>
@@ -702,7 +705,7 @@
 
 <!-- Shared site script: nav, theme toggle, mobile menu, reveal,
      mc-countries collapse, year stamp. Loaded by every page. -->
-<script src="assets/js/site.js?v=cb3be548" defer></script>
+<script src="assets/js/site.js?v=449809ca" defer></script>
 
 <!-- Home-page events renderer (#249). Wipes the hand-coded event
      cards above on success and rebuilds them from data/events.json;
@@ -714,7 +717,7 @@
      events renderer — hand-coded news cards above survive as fail-
      soft fallback if data/news.json fails to load. The RSS feed at
      /news.xml is the public, machine-readable mirror. -->
-<script src="assets/js/home-news.js?v=7f41e27f" defer></script>
+<script src="assets/js/home-news.js?v=4ce15697" defer></script>
 <script src="assets/js/home-spotlight.js?v=3fdad259" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {

@@ -6459,3 +6459,231 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .slide-meta{ padding:20px 22px 22px; display:flex; flex-direction:column; gap:8px; }
 .slide-meta h2{ font-family:'Lexend',sans-serif; font-size:1.12rem; letter-spacing:-.01em; margin:0; }
 .slide-meta p{ margin:0; color:var(--muted); font-size:.92rem; line-height:1.5; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   Cinematic homepage bundle
+   ───────────────────────────────────────────────────────────────────
+   Five presentational layers added to the home page: the hero network
+   constellation canvas, a richer reveal vocabulary, ghost section
+   numerals, card tilt with glare and a border trace, and a faces
+   marquee on the members strip. Every animation here has a
+   prefers-reduced-motion off-switch. The global reduced-motion reset
+   near the top of this file already nukes transitions and animations,
+   so the blocks below add only the extra neutralising that reset
+   cannot express (static rings, browsable overflow, hidden pulses).
+   All rules for a given class are kept adjacent so the class-collision
+   lint stays quiet. Colours come from the existing theme tokens, with
+   a .dark counterpart wherever a raw value is needed.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── A. Hero network constellation ──────────────────────────────────
+   The canvas fills the hero and sits behind the content. A radial mask
+   fades it out toward the edges and bottom so it dissolves into the
+   aurora background and never competes with the headline. The hero
+   .container is lifted above it. Drawing, drift, pulses and parallax
+   all live in the data-hero-net IIFE in site.js. */
+/* css-collision-allow: .hero-net */
+.hero-net{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+  pointer-events:none;
+  /* Dissolve toward the edges and, more strongly, the bottom so the
+     field reads as emerging from the page rather than a hard rectangle. */
+  -webkit-mask-image:radial-gradient(120% 90% at 50% 34%, #000 38%, transparent 82%);
+  mask-image:radial-gradient(120% 90% at 50% 34%, #000 38%, transparent 82%);
+}
+.hero .container{position:relative;z-index:1}
+
+/* ── B. Reveal vocabulary ───────────────────────────────────────────
+   These compose with the existing .reveal / .in mechanism. The
+   observer adds .in to the same element, so each variant is pure CSS.
+   The global safety timeout still ends with .in on every target, so
+   content is never left hidden. */
+
+/* Staggered children: when the parent is hidden, children start faded
+   and nudged down. When .in lands, they ease in with a per-child delay. */
+.js-reveal .reveal-stagger:not(.in) > *{
+  opacity:0;
+  transform:translateY(18px);
+}
+.reveal-stagger > *{
+  transition:opacity .6s var(--ease), transform .6s var(--ease);
+}
+.reveal-stagger.in > *{opacity:1;transform:none}
+.reveal-stagger.in > *:nth-child(1){transition-delay:.00s}
+.reveal-stagger.in > *:nth-child(2){transition-delay:.07s}
+.reveal-stagger.in > *:nth-child(3){transition-delay:.14s}
+.reveal-stagger.in > *:nth-child(4){transition-delay:.21s}
+.reveal-stagger.in > *:nth-child(5){transition-delay:.28s}
+.reveal-stagger.in > *:nth-child(6){transition-delay:.35s}
+.reveal-stagger.in > *:nth-child(7){transition-delay:.42s}
+.reveal-stagger.in > *:nth-child(8){transition-delay:.49s}
+
+/* Directional slide-in variants: horizontal instead of the default
+   vertical nudge. .reveal already owns the transition and the visible
+   resting state, so these only redefine the hidden offset. */
+.js-reveal .reveal-left:not(.in){opacity:0;transform:translateX(-24px)}
+.js-reveal .reveal-right:not(.in){opacity:0;transform:translateX(24px)}
+
+/* ── C. Ghost section numerals ──────────────────────────────────────
+   A huge, ultra-light numeral sits behind the section heading. It is
+   clipped to the section head box and offset upward so it reads as a
+   watermark, not a label. Kept low-opacity in both themes and pinned
+   with pointer-events:none so it never intercepts clicks. The base
+   .section-head rule sits with the other layout primitives near the top
+   of this file; these data-sec-num variants are a separate presentational
+   feature, so the cross-cluster split is intentional. */
+/* css-collision-allow: .section-head */
+.section-head[data-sec-num]{position:relative}
+/* css-collision-allow: .section-head */
+.section-head[data-sec-num]::before{
+  content:attr(data-sec-num);
+  position:absolute;
+  left:50%;
+  top:-.35em;
+  transform:translateX(-50%);
+  z-index:0;
+  pointer-events:none;
+  font-family:'Lexend','Inter',sans-serif;
+  font-weight:300;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.06em;
+  font-size:clamp(5rem, 14vw, 9rem);
+  line-height:1;
+  color:var(--ink);
+  opacity:.05;
+  /* Keep the oversized glyph from pushing the page wide on phones. */
+  max-width:100%;
+  overflow:hidden;
+  white-space:nowrap;
+}
+.dark .section-head[data-sec-num]::before{color:var(--ink);opacity:.07}
+.section-head[data-sec-num] > *{position:relative;z-index:1}
+
+/* ── D. Card tilt, glare and border trace ───────────────────────────
+   Scoped entirely to [data-tilt] so .glass elsewhere is untouched. The
+   tilt IIFE sets --tx / --ty (degrees) and --mx / --my (glare centre).
+   The perspective wrapper stays on the element itself. Both pseudo
+   layers are pointer-events:none so the stretched-link stays clickable.
+   @property registers --angle for the animated conic border trace, with
+   a static ring fallback for browsers that lack @property support. */
+@property --angle{
+  syntax:'<angle>';
+  inherits:false;
+  initial-value:0deg;
+}
+[data-tilt]{
+  transform:perspective(800px) rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg));
+  transform-style:preserve-3d;
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+  will-change:transform;
+}
+/* The specular glare, a soft radial highlight that follows the pointer.
+   Alpha stays low so it never washes out the light theme. */
+[data-tilt]::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+  border-radius:inherit;
+  opacity:0;
+  transition:opacity .3s var(--ease);
+  background:radial-gradient(
+    240px circle at var(--mx,50%) var(--my,50%),
+    rgba(255,255,255,.28), transparent 60%);
+}
+[data-tilt]:hover::after{opacity:1}
+.dark [data-tilt]::after{
+  background:radial-gradient(
+    240px circle at var(--mx,50%) var(--my,50%),
+    rgba(180,205,255,.20), transparent 60%);
+}
+/* The border trace, a thin accent ring that slowly rotates on hover.
+   The static value is a plain accent ring, so browsers without @property
+   support still get a tasteful highlight rather than nothing. */
+[data-tilt]::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  border-radius:inherit;
+  padding:1px;
+  opacity:0;
+  transition:opacity .3s var(--ease);
+  background:linear-gradient(var(--accent), var(--accent));
+  /* Mask the fill down to a 1px ring around the card. */
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite:exclude;
+}
+@supports (background:conic-gradient(from 0deg, red, red)){
+  [data-tilt]::before{
+    background:conic-gradient(
+      from var(--angle),
+      transparent 0deg,
+      var(--accent) 90deg,
+      var(--accent-2) 180deg,
+      transparent 300deg);
+  }
+}
+[data-tilt]:hover::before{opacity:.9;animation:tilt-border-spin 4s linear infinite}
+@keyframes tilt-border-spin{to{--angle:360deg}}
+
+/* ── E. Faces marquee ───────────────────────────────────────────────
+   A single row of circular headshots scrolling seamlessly. The JS
+   builds two identical halves inside .faces-track and the track slides
+   -50% forever, so the loop has no visible seam. Grayscale at rest,
+   full colour on the hovered face. Edge mask dissolves both ends. */
+.faces-marquee{
+  overflow:hidden;
+  margin:0 0 14px;
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.faces-track{
+  display:flex;
+  gap:6px;
+  width:max-content;
+  animation:faces-scroll 60s linear infinite;
+}
+.faces-marquee:hover .faces-track{animation-play-state:paused}
+.faces-track picture{display:block;flex:0 0 auto}
+.faces-track img{
+  display:block;
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid var(--glass-border);
+  filter:grayscale(1);
+  opacity:.85;
+  transition:filter .3s var(--ease), transform .3s var(--ease), opacity .3s var(--ease);
+}
+.faces-track img:hover{filter:grayscale(0);opacity:1;transform:scale(1.12)}
+@keyframes faces-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.faces-marquee-caption{text-align:center;margin:0 0 22px;font-size:.9rem;font-weight:600}
+.faces-marquee-caption a{color:var(--accent)}
+
+/* ── Reduced-motion off-switches for the cinematic bundle ───────────
+   The global reset already flattens transition and animation timings.
+   These add the pieces it cannot express: no hero drift or pulses (the
+   canvas IIFE checks the media query itself and paints one static
+   frame), the marquee stops moving and becomes horizontally browsable,
+   and every reveal variant lands fully visible with no offset. */
+@media (prefers-reduced-motion: reduce){
+  .js-reveal .reveal-stagger:not(.in) > *,
+  .reveal-stagger.in > *{opacity:1;transform:none;transition-delay:0s}
+  .js-reveal .reveal-left:not(.in),
+  .js-reveal .reveal-right:not(.in){opacity:1;transform:none}
+  [data-tilt]{transform:none}
+  [data-tilt]:hover::after,
+  [data-tilt]:hover::before{animation:none}
+  .faces-track{animation:none}
+  .faces-marquee{overflow-x:auto}
+}

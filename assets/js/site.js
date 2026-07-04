@@ -2425,3 +2425,316 @@ window.netsecMemberCard = (function () {
       .replace(/"/g, '&quot;');
   }
 })();
+
+/* ═══════════════════════════════════════════════════════════════════
+   Cinematic homepage: hero constellation, card tilt, faces marquee.
+   Three independent presentational IIFEs, each a silent no-op when its
+   hook element is absent, so they add nothing on pages that do not carry
+   the markup. Colours track the live theme via the .dark class on the
+   document element. Every loop pauses off-screen and when the tab is
+   hidden. Reduced motion is honoured per feature.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── A. Hero network constellation (data-hero-net) ──────────────────
+   A canvas of drifting nodes joined by proximity lines, with the odd
+   bright pulse travelling an edge and a gentle pointer parallax. The
+   node layout is a fixed hand-picked seed loosely evoking Europe,
+   denser toward the centre-west, so it never clusters badly at load.
+   Under reduced motion it paints a single static frame and stops. */
+(function () {
+  var canvas = document.querySelector('[data-hero-net]');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  var hero = canvas.closest('.hero') || canvas.parentElement;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Fixed normalised seed coordinates (0..1). Hand-picked to sit denser
+  // in the centre-west and thin out toward the east and north, so the
+  // field reads as a loose map rather than an even grid. 40 nodes.
+  var SEED = [
+    [0.30, 0.34], [0.34, 0.30], [0.38, 0.38], [0.33, 0.44], [0.28, 0.40],
+    [0.42, 0.32], [0.40, 0.46], [0.36, 0.52], [0.30, 0.52], [0.44, 0.40],
+    [0.47, 0.36], [0.46, 0.50], [0.50, 0.44], [0.52, 0.34], [0.38, 0.60],
+    [0.32, 0.62], [0.44, 0.62], [0.50, 0.58], [0.56, 0.48], [0.55, 0.40],
+    [0.60, 0.42], [0.58, 0.56], [0.62, 0.36], [0.64, 0.50], [0.26, 0.30],
+    [0.24, 0.46], [0.28, 0.56], [0.36, 0.24], [0.48, 0.26], [0.42, 0.54],
+    [0.68, 0.44], [0.70, 0.34], [0.66, 0.58], [0.72, 0.50], [0.78, 0.40],
+    [0.54, 0.64], [0.60, 0.62], [0.34, 0.68], [0.46, 0.70], [0.24, 0.62]
+  ];
+
+  var nodes = SEED.map(function (p, i) {
+    return {
+      bx: p[0], by: p[1],           // base normalised position
+      phase: (i * 1.7) % (Math.PI * 2),
+      speed: 0.5 + (i % 5) * 0.12,
+      ampx: 4 + (i % 3) * 2,
+      ampy: 3 + (i % 4) * 2,
+      x: 0, y: 0
+    };
+  });
+
+  var W = 0, H = 0, dpr = 1;
+  var pointer = { tx: 0, ty: 0, x: 0, y: 0 };   // parallax offset, eased
+  var pulses = [];
+  var lastPulse = 0;
+  var LINK = 0.16;   // link distance as a fraction of the min dimension
+  var running = false;
+  var visible = true;
+  var rafId = 0;
+
+  function palette() {
+    var dark = document.documentElement.classList.contains('dark');
+    return dark
+      ? { node: 'rgba(150,185,255,', line: 'rgba(130,170,255,', pulse: 'rgba(190,215,255,' }
+      : { node: 'rgba(0,51,153,',    line: 'rgba(10,90,200,',   pulse: 'rgba(10,132,255,' };
+  }
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = hero.clientWidth;
+    H = hero.clientHeight;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function positions(t) {
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      var driftX = reduce ? 0 : Math.sin(t * 0.0004 * n.speed + n.phase) * n.ampx;
+      var driftY = reduce ? 0 : Math.cos(t * 0.0004 * n.speed + n.phase) * n.ampy;
+      n.x = n.bx * W + driftX + pointer.x;
+      n.y = n.by * H + driftY + pointer.y;
+    }
+  }
+
+  function draw(t) {
+    var pal = palette();
+    var linkDist = Math.min(W, H) * LINK;
+    ctx.clearRect(0, 0, W, H);
+
+    // Proximity lines, alpha falling off with distance.
+    ctx.lineWidth = 1;
+    for (var i = 0; i < nodes.length; i++) {
+      for (var j = i + 1; j < nodes.length; j++) {
+        var dx = nodes[i].x - nodes[j].x;
+        var dy = nodes[i].y - nodes[j].y;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d < linkDist) {
+          var a = (1 - d / linkDist) * 0.28;
+          ctx.strokeStyle = pal.line + a.toFixed(3) + ')';
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Nodes.
+    for (var k = 0; k < nodes.length; k++) {
+      ctx.fillStyle = pal.node + '0.55)';
+      ctx.beginPath();
+      ctx.arc(nodes[k].x, nodes[k].y, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Signal pulses travelling along an edge.
+    if (!reduce) {
+      for (var p = pulses.length - 1; p >= 0; p--) {
+        var pu = pulses[p];
+        pu.t += 0.02;
+        if (pu.t >= 1) { pulses.splice(p, 1); continue; }
+        var a2 = nodes[pu.a], b2 = nodes[pu.b];
+        if (!a2 || !b2) { pulses.splice(p, 1); continue; }
+        var px = a2.x + (b2.x - a2.x) * pu.t;
+        var py = a2.y + (b2.y - a2.y) * pu.t;
+        var fade = Math.sin(pu.t * Math.PI);
+        ctx.fillStyle = pal.pulse + (0.9 * fade).toFixed(3) + ')';
+        ctx.beginPath();
+        ctx.arc(px, py, 2.6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  function spawnPulse() {
+    // Pick a random pair that is currently within link distance.
+    var linkDist = Math.min(W, H) * LINK;
+    var candidates = [];
+    for (var i = 0; i < nodes.length; i++) {
+      for (var j = i + 1; j < nodes.length; j++) {
+        var dx = nodes[i].x - nodes[j].x;
+        var dy = nodes[i].y - nodes[j].y;
+        if (Math.sqrt(dx * dx + dy * dy) < linkDist) candidates.push([i, j]);
+      }
+    }
+    if (!candidates.length) return;
+    var pick = candidates[Math.floor(Math.random() * candidates.length)];
+    pulses.push({ a: pick[0], b: pick[1], t: 0 });
+  }
+
+  function frame(t) {
+    // Ease the parallax toward the target offset.
+    pointer.x += (pointer.tx - pointer.x) * 0.06;
+    pointer.y += (pointer.ty - pointer.y) * 0.06;
+    positions(t);
+    draw(t);
+    if (!reduce && t - lastPulse > 2600 && Math.random() < 0.4) {
+      spawnPulse();
+      lastPulse = t;
+    }
+    rafId = window.requestAnimationFrame(frame);
+  }
+
+  function start() {
+    if (running || reduce) return;
+    running = true;
+    rafId = window.requestAnimationFrame(frame);
+  }
+  function stop() {
+    running = false;
+    if (rafId) window.cancelAnimationFrame(rafId);
+    rafId = 0;
+  }
+
+  // Static single frame for the reduced-motion path.
+  function paintStatic() {
+    resize();
+    positions(0);
+    draw(0);
+  }
+
+  resize();
+  window.addEventListener('resize', function () {
+    resize();
+    if (reduce) paintStatic();
+  });
+
+  if (reduce) {
+    paintStatic();
+    return;
+  }
+
+  // Pointer parallax, capped at ~8px.
+  hero.addEventListener('pointermove', function (e) {
+    var r = hero.getBoundingClientRect();
+    var nx = (e.clientX - r.left) / r.width - 0.5;
+    var ny = (e.clientY - r.top) / r.height - 0.5;
+    pointer.tx = nx * 8;
+    pointer.ty = ny * 8;
+  });
+  hero.addEventListener('pointerleave', function () { pointer.tx = 0; pointer.ty = 0; });
+
+  // Pause when the hero scrolls out of view.
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting;
+      if (visible && !document.hidden) start(); else stop();
+    }, { threshold: 0 });
+    io.observe(hero);
+  } else {
+    start();
+  }
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) stop();
+    else if (visible) start();
+  });
+
+  start();
+})();
+
+/* ── D. Card tilt, glare and border trace (data-tilt) ───────────────
+   One delegated pointer handler for every [data-tilt] card. It sets the
+   rotation (--tx / --ty, capped at 3 degrees) and the glare centre
+   (--mx / --my) as inline custom properties, then eases them back to
+   rest on leave. Skipped entirely on touch pointers and under reduced
+   motion, so nothing binds where the effect does not belong. */
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  if (reduce || coarse) return;
+  if (!document.querySelector('[data-tilt]')) return;
+
+  var MAX = 3;   // maximum tilt in degrees
+
+  function onMove(e) {
+    var card = e.target.closest('[data-tilt]');
+    if (!card) return;
+    var r = card.getBoundingClientRect();
+    var px = (e.clientX - r.left) / r.width;    // 0..1
+    var py = (e.clientY - r.top) / r.height;    // 0..1
+    // rotateX tips on the vertical axis, rotateY on the horizontal.
+    card.style.setProperty('--ty', ((px - 0.5) * 2 * MAX).toFixed(2) + 'deg');
+    card.style.setProperty('--tx', ((0.5 - py) * 2 * MAX).toFixed(2) + 'deg');
+    card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+    card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+  }
+
+  function onLeave(e) {
+    var card = e.target.closest('[data-tilt]');
+    if (!card) return;
+    card.style.setProperty('--tx', '0deg');
+    card.style.setProperty('--ty', '0deg');
+  }
+
+  // Delegated on document so cards rendered after load (the home News
+  // list is rebuilt from JSON) still respond without re-binding.
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerout', onLeave);
+})();
+
+/* ── E. Faces marquee (data-faces-marquee) ──────────────────────────
+   Builds one scrolling row of circular headshots from the members that
+   carry a photo, then duplicates the row so the CSS -50% loop is
+   seamless. Purely decorative: the container is aria-hidden and every
+   image has an empty alt. Silent no-op if the fetch fails, matching the
+   site's other data-driven blocks. */
+(function () {
+  var box = document.querySelector('[data-faces-marquee]');
+  if (!box) return;
+
+  fetch('data/bios.json', { cache: 'no-cache' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      if (!data) return;
+      var members = Array.isArray(data.members) ? data.members : [];
+      var withPhoto = members.filter(function (m) { return m && m.photo; });
+      if (!withPhoto.length) return;
+      render(withPhoto);
+    })
+    .catch(function () { /* JSON 404 or parse error — silent no-op */ });
+
+  function render(list) {
+    var track = document.createElement('div');
+    track.className = 'faces-track';
+    // Two identical halves for the seamless -50% loop.
+    appendRow(track, list);
+    appendRow(track, list);
+    box.appendChild(track);
+  }
+
+  function appendRow(track, list) {
+    list.forEach(function (m) {
+      var pic = document.createElement('picture');
+      var webp = window.netsecWebp ? window.netsecWebp(m.photo) : null;
+      if (webp) {
+        var src = document.createElement('source');
+        src.type = 'image/webp';
+        src.srcset = webp;
+        pic.appendChild(src);
+      }
+      var img = document.createElement('img');
+      img.src = m.photo;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.width = 60;
+      img.height = 60;
+      pic.appendChild(img);
+      track.appendChild(pic);
+    });
+  }
+})();
