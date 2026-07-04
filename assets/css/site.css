@@ -3883,6 +3883,78 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   .audiences-grid{grid-template-columns:1fr}
 }
 
+/* -------- Audiences side-drawer (site-wide role-router) --------
+   A fixed right-edge tab opens a native <dialog> drawer carrying the
+   same four audience cards as the inline #audiences home section.
+   Injected on every page by the IIFE at the foot of site.js. The tab
+   sits at z-index 110 (below the Directory member-preview panel, z:120,
+   so the preview covers it on people.html); the drawer uses showModal(),
+   which renders in the browser top layer above all page content. */
+.aud-tab{
+  position:fixed;z-index:110;top:50%;right:0;transform:translateY(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  padding:14px 9px;cursor:pointer;
+  background:var(--glass-bg);border:1px solid var(--glass-border);border-right:0;
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border-radius:14px 0 0 14px;box-shadow:0 8px 24px rgba(11,18,32,.14);
+  color:var(--ink);font-family:'Lexend','Inter',sans-serif;
+  transition:padding-right .18s var(--ease),background .18s var(--ease);
+}
+.aud-tab:hover,.aud-tab:focus-visible{padding-right:13px;background:var(--glass-border)}
+.aud-tab-icon{display:grid;place-items:center;color:var(--accent)}
+.aud-tab-icon svg{width:20px;height:20px}
+.aud-tab-label{
+  writing-mode:vertical-rl;font-size:.72rem;font-weight:600;letter-spacing:.02em;
+}
+.aud-drawer{
+  position:fixed;inset:0 0 0 auto;margin:0;z-index:130;
+  height:100dvh;max-height:100dvh;width:min(380px,92vw);max-width:92vw;
+  padding:0;border:0;background:var(--bg-0);color:var(--ink);overflow:hidden;
+  box-shadow:-18px 0 50px rgba(11,18,32,.28);
+  transform:translateX(100%);transition:transform .26s var(--ease);
+  display:flex;flex-direction:column;
+}
+.aud-drawer.aud-open{transform:none}
+.aud-drawer::backdrop{background:rgba(11,18,32,.42)}
+.aud-head{
+  flex:none;display:flex;align-items:flex-start;gap:10px;
+  padding:18px 16px 14px 20px;border-bottom:1px solid var(--line);
+}
+.aud-eyebrow{
+  display:block;font-family:'Lexend','Inter',sans-serif;font-weight:600;
+  font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;color:var(--accent-2);
+}
+.aud-title{
+  display:block;margin-top:2px;font-family:'Lexend','Inter',sans-serif;
+  font-size:1.06rem;letter-spacing:-.01em;color:var(--ink);
+}
+.aud-head > div{margin-right:auto}
+.aud-close{
+  flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
+  background:transparent;border:1px solid var(--line);color:var(--muted);cursor:pointer;
+  transition:background .15s var(--ease),color .15s var(--ease);
+}
+.aud-close:hover,.aud-close:focus-visible{background:var(--bg-1);color:var(--ink)}
+.aud-close svg{width:18px;height:18px}
+.aud-cards{
+  flex:1;min-height:0;overflow-y:auto;
+  padding:14px;display:flex;flex-direction:column;gap:12px;
+}
+.aud-drawer .audience-card{padding:16px 18px 18px;gap:8px}
+.aud-drawer .audience-card h3{display:flex;align-items:center;gap:9px}
+.aud-card-icon{display:grid;place-items:center;color:var(--accent);flex:none}
+.aud-card-icon svg{width:19px;height:19px}
+.aud-drawer .audience-links{flex-direction:row;flex-wrap:wrap;gap:6px 16px;margin-top:6px}
+.aud-drawer .audience-links a{display:inline-flex;align-items:center;gap:5px}
+.aud-drawer .audience-links a svg{width:14px;height:14px}
+@media (max-width:480px){
+  .aud-tab-label{font-size:.68rem}
+  .aud-drawer{width:100vw;max-width:100vw}
+}
+@media (prefers-reduced-motion:reduce){
+  .aud-tab,.aud-drawer{transition:none}
+}
+
 /* -------- For NetSec members (Wiki signposting) --------
    Sits between Outputs and Contact on the home page. Visually
    distinct (lightly tinted) so members notice it on first scroll. */

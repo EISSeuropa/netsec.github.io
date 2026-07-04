@@ -1,0 +1,137 @@
+{
+  "_documentation": {
+    "purpose": "Content for the site-wide audience side-drawer (the recurring 'Start where you are' role-router). Rendered at runtime by the IIFE at the foot of assets/js/site.js, which injects a right-edge tab and a <dialog> drawer on every page. Locale is read from <html lang>; falls back to 'en'.",
+    "editing": "Copy mirrors the inline #audiences section on index.html / .fr / .de. Keep the two in step. Same-page anchors (#for-members, #news) are stored as absolute per-locale URLs (index.<loc>.html#...) so they resolve from any page, not just the homepage.",
+    "icons": "Each card's 'icon' key maps to an inline Lucide SVG in site.js (researcher, policy, member, press). Add a new key there before using it here.",
+    "translation": "FR/DE are hand-translated (CLAUDE.md §1). No machine translation."
+  },
+  "en": {
+    "tab": "Find your way in",
+    "title": "Start where you are",
+    "close": "Close",
+    "cards": [
+      {
+        "icon": "researcher",
+        "h3": "I'm a researcher",
+        "p": "Find collaborators across the network and see which grants are open.",
+        "links": [
+          { "label": "Directory", "href": "people.html" },
+          { "label": "Grants", "href": "grants.html" }
+        ]
+      },
+      {
+        "icon": "policy",
+        "h3": "I work in policy",
+        "p": "Get the evidence base: published outputs and the terms behind them.",
+        "links": [
+          { "label": "Publications", "href": "outputs.html" },
+          { "label": "Glossary", "href": "glossary.html" }
+        ]
+      },
+      {
+        "icon": "member",
+        "h3": "I'm an Action member",
+        "p": "Jump straight to member resources and the Wiki.",
+        "links": [
+          { "label": "For members", "href": "index.html#for-members" },
+          { "label": "Members' Wiki", "href": "https://github.com/EISSeuropa/netsec.github.io/wiki", "external": true }
+        ]
+      },
+      {
+        "icon": "press",
+        "h3": "I'm covering the Action",
+        "p": "Logos, boilerplate, and the latest news in one place.",
+        "links": [
+          { "label": "Press kit", "href": "press-kit.html" },
+          { "label": "News", "href": "index.html#news" }
+        ]
+      }
+    ]
+  },
+  "fr": {
+    "tab": "Trouvez votre chemin",
+    "title": "Commencez par où vous êtes",
+    "close": "Fermer",
+    "cards": [
+      {
+        "icon": "researcher",
+        "h3": "Vous êtes chercheur·se ?",
+        "p": "Trouvez des collaborateur·rices dans le réseau et repérez les subventions ouvertes.",
+        "links": [
+          { "label": "Annuaire", "href": "people.fr.html" },
+          { "label": "Subventions", "href": "grants.fr.html" }
+        ]
+      },
+      {
+        "icon": "policy",
+        "h3": "Vous travaillez dans la sphère politique ?",
+        "p": "Accédez à la base de preuves : les publications et les termes qui les sous-tendent.",
+        "links": [
+          { "label": "Publications", "href": "outputs.fr.html" },
+          { "label": "Glossaire", "href": "glossary.fr.html" }
+        ]
+      },
+      {
+        "icon": "member",
+        "h3": "Vous participez à l'Action ?",
+        "p": "Accédez directement aux ressources des membres et au Wiki.",
+        "links": [
+          { "label": "Pour les membres", "href": "index.fr.html#for-members" },
+          { "label": "Wiki des membres", "href": "https://github.com/EISSeuropa/netsec.github.io/wiki", "external": true }
+        ]
+      },
+      {
+        "icon": "press",
+        "h3": "Vous couvrez l'Action ?",
+        "p": "Logos, argumentaire type et dernières actualités, réunis au même endroit.",
+        "links": [
+          { "label": "Kit presse", "href": "press-kit.fr.html" },
+          { "label": "Actualités", "href": "index.fr.html#news" }
+        ]
+      }
+    ]
+  },
+  "de": {
+    "tab": "Finden Sie Ihren Einstieg",
+    "title": "Starten Sie, wo Sie stehen",
+    "close": "Schließen",
+    "cards": [
+      {
+        "icon": "researcher",
+        "h3": "Sie forschen?",
+        "p": "Finden Sie Mitwirkende im Netzwerk und sehen Sie, welche Förderungen offen sind.",
+        "links": [
+          { "label": "Verzeichnis", "href": "people.de.html" },
+          { "label": "Förderungen", "href": "grants.de.html" }
+        ]
+      },
+      {
+        "icon": "policy",
+        "h3": "Sie arbeiten in der Politik?",
+        "p": "Zur Evidenzbasis: veröffentlichte Arbeiten und die Begriffe dahinter.",
+        "links": [
+          { "label": "Publikationen", "href": "outputs.de.html" },
+          { "label": "Glossar", "href": "glossary.de.html" }
+        ]
+      },
+      {
+        "icon": "member",
+        "h3": "Sie sind Mitglied der Aktion?",
+        "p": "Direkt zu den Mitgliederressourcen und zum Wiki.",
+        "links": [
+          { "label": "Für Mitglieder", "href": "index.de.html#for-members" },
+          { "label": "Mitglieder-Wiki", "href": "https://github.com/EISSeuropa/netsec.github.io/wiki", "external": true }
+        ]
+      },
+      {
+        "icon": "press",
+        "h3": "Sie berichten über die Aktion?",
+        "p": "Logos, Standardtexte und die neuesten Meldungen an einem Ort.",
+        "links": [
+          { "label": "Pressemappe", "href": "press-kit.de.html" },
+          { "label": "Aktuelles", "href": "index.de.html#news" }
+        ]
+      }
+    ]
+  }
+}
