@@ -28,6 +28,7 @@ Usage:
     python3 scripts/build-og-cards.py            # render all cards + manifest
     python3 scripts/build-og-cards.py --check     # exit 1 if any card is stale
     python3 scripts/build-og-cards.py --only SLUG # render one card (debugging)
+    python3 scripts/build-og-cards.py --ensure-flags  # fetch any missing country flag
 
 Run from the repo root. Stdlib only. Rendering needs Google Chrome / Chromium
 (set $CHROME, else common paths are tried); --check needs no browser.
@@ -147,6 +148,41 @@ WG_LABELS = {"1": "WG1", "2": "WG2", "3": "WG3", "4": "WG4"}
 def members() -> list[dict]:
     data = json.loads(BIOS.read_text(encoding="utf-8"))
     return [m for m in data.get("members", []) if m.get("id")]
+
+
+# The bundled flags all come from the lipis/flag-icons 4x3 set, the same
+# source used to hand-add Romania (#1213), Poland (#1271) and Georgia (#1316)
+# one at a time whenever a new country tripped the "bundled flag" test. This
+# fetches a missing one automatically so the SVG rides the bios-sync auto-PR
+# instead of failing pytest and waiting for a person to bundle it by hand.
+FLAG_SRC = "https://raw.githubusercontent.com/lipis/flag-icons/main/flags/4x3/{cc}.svg"
+
+
+def _minify_flag(svg: str) -> str:
+    """Collapse a flag-icons SVG to the one-line, id-free form used on disk."""
+    svg = re.sub(r'\s+id="[^"]*"', "", svg, count=1)
+    return re.sub(r">\s+<", "><", svg).strip() + "\n"
+
+
+def ensure_flags() -> int:
+    """Download a bundled flag for any country_code in bios.json that lacks one.
+
+    Returns the number of flags fetched. Fetch failure (bad code, network) is
+    fatal so the workflow surfaces it rather than shipping a card with a blank
+    flag; the test_every_country_code_has_a_bundled_flag backstop stays too.
+    """
+    have = {p.stem for p in FLAGS_DIR.glob("*.svg")}
+    want = {(m.get("country_code") or "").strip().lower() for m in members()} - {""}
+    fetched = 0
+    for cc in sorted(want - have):
+        with urllib.request.urlopen(FLAG_SRC.format(cc=cc), timeout=30) as r:
+            svg = r.read().decode("utf-8")
+        (FLAGS_DIR / f"{cc}.svg").write_text(_minify_flag(svg), encoding="utf-8")
+        print(f"bundled flag: {cc}.svg")
+        fetched += 1
+    if not fetched:
+        print("all country flags already bundled")
+    return fetched
 
 
 def initials(name: str) -> str:
@@ -559,7 +595,12 @@ def main() -> int:
     ap.add_argument("--check", action="store_true", help="exit 1 if any card is stale")
     ap.add_argument("--only", metavar="SLUG", help="render a single member's card")
     ap.add_argument("--force", action="store_true", help="re-render every card, ignoring the manifest")
+    ap.add_argument("--ensure-flags", action="store_true",
+                    help="fetch any missing country flag from flag-icons (needs network), then exit")
     args = ap.parse_args()
+    if args.ensure_flags:
+        ensure_flags()
+        return 0
     if args.check:
         return check()
     return render_all(only=args.only, force=args.force)

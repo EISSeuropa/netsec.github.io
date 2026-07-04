@@ -103,6 +103,17 @@ jobs:
           # file rides this same auto-PR. Idempotent: no change, no diff.
           python3 scripts/sync-orcid.py
 
+      - name: Bundle any missing country flag before rendering cards
+        run: |
+          # A new member from a new country used to trip
+          # test_every_country_code_has_a_bundled_flag until someone hand-added
+          # the flag SVG (Romania #1213, Poland #1271, Georgia #1316). This
+          # fetches a missing flag from lipis/flag-icons (the source of the
+          # bundled set) so the SVG rides this same auto-PR and the card below
+          # renders with the flag instead of a blank. Idempotent: no missing
+          # flag, no diff. The pytest backstop stays as belt-and-braces.
+          python3 scripts/build-og-cards.py --ensure-flags
+
       - name: Regenerate per-member OG cards (#1023)
         run: |
           # Render the OG card image for any member whose card inputs changed
@@ -182,10 +193,10 @@ jobs:
             data-sync
           # Assign the maintainer as reviewer so GitHub emails +
           # mobile push the auto-PR opening. The maintainer reviews and
-          # merges it by hand: a member's bio is their own copy, and a
-          # new member from a new country needs a bundled flag added
-          # before the PR is green, so a human eyeball before merge is
-          # worth the small friction.
+          # merges it by hand: a member's bio is their own copy, so a
+          # human eyeball before merge is worth the small friction. (A new
+          # country's flag is now auto-bundled by the --ensure-flags step
+          # above, so it no longer blocks the PR from going green.)
           reviewers: APB-LDN
 
       # The auto-PR is NOT auto-merged. The maintainer merges it by hand

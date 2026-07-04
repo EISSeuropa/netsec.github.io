@@ -96,6 +96,18 @@ def test_every_country_code_has_a_bundled_flag():
             assert (boc.FLAGS_DIR / f"{cc}.svg").exists(), f"missing bundled flag for {cc}"
 
 
+def test_minify_flag_strips_id_and_collapses_whitespace():
+    # A raw flag-icons SVG (multi-line, carries an id) becomes the one-line,
+    # id-free form the ensure_flags step writes to disk.
+    raw = ('<svg xmlns="http://www.w3.org/2000/svg" id="flag-icons-ge" '
+           'viewBox="0 0 640 480">\n  <path fill="#fff" d="M0 0h640v480H0z"/>\n</svg>')
+    out = boc._minify_flag(raw)
+    assert 'id=' not in out
+    assert '>\n' not in out.rstrip("\n") and '  <' not in out
+    assert out.endswith("\n") and out.count("\n") == 1
+    assert out.startswith('<svg xmlns="http://www.w3.org/2000/svg" viewBox=')
+
+
 def test_check_passes_against_committed_cards():
     assert boc.check() == 0
 
