@@ -1,6 +1,6 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-07-04T08:04:27+00:00",
+  "generated_at": "2026-07-05T08:14:17+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
   "count": 63,
   "members": [
@@ -56,7 +56,7 @@
       "url": "https://netsec-cost.eu/people/anna-pagnacco.html",
       "orcid": null,
       "role": null,
-      "affiliation": "ETH Zurich, Center for Security Studies",
+      "affiliation": "ETH Zürich, Center for Security Studies",
       "photo": "https://netsec-cost.eu/assets/images/people/anna-pagnacco.jpg"
     },
     {
@@ -89,7 +89,7 @@
       "url": "https://netsec-cost.eu/people/arthur-laudrain.html",
       "orcid": "0000-0002-8642-2671",
       "role": "Management Committee · Switzerland",
-      "affiliation": "ETH Zurich, Center for Security Studies",
+      "affiliation": "ETH Zürich, Center for Security Studies",
       "photo": "https://netsec-cost.eu/assets/images/people/arthur-laudrain.jpg"
     },
     {
@@ -254,7 +254,7 @@
       "url": "https://netsec-cost.eu/people/gesine-weber.html",
       "orcid": null,
       "role": null,
-      "affiliation": "Center for Security Studies, ETH Zürich",
+      "affiliation": "ETH Zürich, Center for Security Studies",
       "photo": "https://netsec-cost.eu/assets/images/people/gesine-weber.jpg"
     },
     {
@@ -298,7 +298,7 @@
       "url": "https://netsec-cost.eu/people/ivan-zaccagnini.html",
       "orcid": "0009-0005-1685-5796",
       "role": null,
-      "affiliation": "ETH Zurich, Center for Security Studies",
+      "affiliation": "ETH Zürich, Center for Security Studies",
       "photo": "https://netsec-cost.eu/assets/images/people/ivan-zaccagnini.jpg"
     },
     {
@@ -408,7 +408,7 @@
       "url": "https://netsec-cost.eu/people/marius-ghincea.html",
       "orcid": "0000-0001-8061-6769",
       "role": null,
-      "affiliation": "ETH Zurich",
+      "affiliation": "ETH Zürich",
       "photo": "https://netsec-cost.eu/assets/images/people/marius-ghincea.jpg"
     },
     {
@@ -463,7 +463,7 @@
       "url": "https://netsec-cost.eu/people/meret-steybe.html",
       "orcid": null,
       "role": null,
-      "affiliation": "ETH Zurich, Center for Security Studies",
+      "affiliation": "ETH Zürich, Center for Security Studies",
       "photo": "https://netsec-cost.eu/assets/images/people/meret-steybe.jpg"
     },
     {
