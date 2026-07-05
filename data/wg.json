@@ -257,7 +257,8 @@
         },
         {
           "name": "Prof Pavlosioannis Koktsidis",
-          "country": "Greece"
+          "country": "Greece",
+          "slug": "pavlosioannis-koktsidis"
         },
         {
           "name": "Dr Pinar Akgül",
@@ -543,7 +544,8 @@
         },
         {
           "name": "Prof Pavlosioannis Koktsidis",
-          "country": "Greece"
+          "country": "Greece",
+          "slug": "pavlosioannis-koktsidis"
         },
         {
           "name": "Dr Pinar Akgül",
@@ -920,7 +922,8 @@
         },
         {
           "name": "Prof Pavlosioannis Koktsidis",
-          "country": "Greece"
+          "country": "Greece",
+          "slug": "pavlosioannis-koktsidis"
         },
         {
           "name": "Mr Pieter Zhao",

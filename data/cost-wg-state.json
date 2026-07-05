@@ -330,6 +330,19 @@
         2
       ],
       "form_changed_on": "2026-07-05"
+    },
+    "pavlosioannis koktsidis": {
+      "cost_first_seen": {
+        "1": "2026-07-05",
+        "2": "2026-07-05",
+        "3": "2026-07-05"
+      },
+      "form_wgs": [
+        1,
+        2,
+        3
+      ],
+      "form_changed_on": "2026-07-05"
     }
   }
 }

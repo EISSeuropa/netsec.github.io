@@ -2882,7 +2882,11 @@
       "affiliation": "Anatolia American University",
       "position": "Associate Professor",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        2,
+        3
+      ],
       "mentorship": [
         "mentor"
       ],
