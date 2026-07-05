@@ -139,6 +139,7 @@
       'Filter by working group or Management Committee role': 'Filtres par groupe de travail ou rôle au Comité de gestion',
       'Filter by mentorship': 'Filtrer par mentorat',
       'Filter by STSM hosting': 'Filtrer par accueil STSM',
+      'Filter by country': 'Filtrer par pays',
       'Switch card density': 'Changer la densité des cartes',
       'Filters': 'Filtres',
       'Free-text search across names, affiliations, and countries. Combines with the filters.': 'Recherche en texte libre sur les noms, affiliations et pays. Se combine avec les filtres.',
@@ -283,6 +284,7 @@
       'Filter by working group or Management Committee role': 'Nach Arbeitsgruppe oder Management-Ausschuss-Rolle filtern',
       'Filter by mentorship': 'Nach Mentoring filtern',
       'Filter by STSM hosting': 'Nach STSM-Gastgeberschaft filtern',
+      'Filter by country': 'Nach Land filtern',
       'Switch card density': 'Kartendichte wechseln',
       'Filters': 'Filter',
       'Free-text search across names, affiliations, and countries. Combines with the filters.': 'Freitext-Suche über Namen, Affiliationen und Länder. Lässt sich mit den Filtern kombinieren.',
@@ -360,6 +362,18 @@
       return (dict[head] || head) + sep + ((countries && countries[tail]) || tail);
     }
     return dict[s] || s;
+  };
+
+  /* Country-name translator. COUNTRY_I18N is module-scoped, so page
+     scripts (the directory flag strip, for one) reach a translated
+     country name through this accessor rather than the ' · ' composite
+     trick netsecT uses internally. Falls back to the English name when
+     the locale carries no entry. */
+  window.netsecCountry = function (name) {
+    if (typeof name !== 'string') return name;
+    const lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
+    const countries = COUNTRY_I18N[lang];
+    return (countries && countries[name]) || name;
   };
 
   /* Headshot WebP helper (#269). The directory cards, the ESSC member

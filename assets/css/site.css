@@ -6881,3 +6881,118 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   .members-mentorship-chip:active{transform:none}
   .members-grid:not(.is-compact) .member-card .member-photo img{filter:none;transition:none}
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   Directory cinematics wave 2
+   ───────────────────────────────────────────────────────────────────
+   Three further layers on the directory, all injected from
+   people-directory.js so the page markup stays untouched: a member-count
+   constellation band behind the heading, theme-match connection lines in
+   the mentorship panel, and a country flag strip driving the existing
+   activeCountry filter. Reduced-motion off-switches sit at the foot.
+   Colours come from the theme tokens with a .dark counterpart where a raw
+   value is needed. Each class's rules are kept adjacent for the lint.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── A. Constellation band behind the page heading ──────────────────
+   The canvas fills the heading block and sits behind the text, masked so
+   it dissolves toward the edges and never competes with the h1. The host
+   class (added in JS) carries the positioning context, not .section-head
+   itself, to keep the collision lint quiet. */
+.people-net-host{position:relative}
+.people-net-host > *:not(.people-net){position:relative;z-index:1}
+.people-net{
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  height:180px;
+  z-index:0;
+  pointer-events:none;
+  -webkit-mask-image:radial-gradient(120% 100% at 50% 30%, #000 34%, transparent 78%);
+  mask-image:radial-gradient(120% 100% at 50% 30%, #000 34%, transparent 78%);
+}
+
+/* ── B. Mentorship theme-match connection lines ─────────────────────
+   The overlay covers the two-column container and never intercepts
+   clicks. Lines draw from the hovered row to every theme-sharing row in
+   the other column; matched rows lift. Reduced motion drops the draw
+   animation (handled at the foot) but keeps the lines and the lift. */
+[data-mentorship-lines-host]{position:relative}
+[data-mentorship-lines]{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:visible;
+  pointer-events:none;
+  z-index:2;
+}
+.mentorship-line{
+  fill:none;
+  stroke:var(--accent);
+  stroke-width:1.5;
+  opacity:.55;
+  transition:stroke-dashoffset .22s var(--ease);
+}
+.mentorship-person.is-line-source{
+  background:color-mix(in srgb, var(--accent) 14%, transparent);
+  border-radius:8px;
+}
+.mentorship-person.is-line-match{
+  background:color-mix(in srgb, var(--accent) 9%, transparent);
+  border-radius:8px;
+}
+
+/* ── C. Country flag strip (drives activeCountry) ───────────────────
+   A slim single-row ribbon of flags above the active-filter chips. It
+   scrolls horizontally when it overflows, with a mask fade at both ends.
+   The pressed flag carries an accent ring. */
+.country-strip{
+  display:flex;
+  gap:6px;
+  align-items:center;
+  margin:0 0 12px;
+  padding:2px 0;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  mask-image:linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+}
+.country-strip::-webkit-scrollbar{display:none}
+.country-flag{
+  flex:0 0 auto;
+  padding:0;
+  border:0;
+  background:none;
+  cursor:pointer;
+  line-height:0;
+  border-radius:4px;
+  opacity:.72;
+  transition:opacity .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.country-flag img{
+  display:block;
+  width:28px;
+  height:20px;
+  object-fit:cover;
+  border-radius:3px;
+  box-shadow:0 0 0 1px var(--glass-border);
+}
+.country-flag:hover{opacity:1;transform:translateY(-1px)}
+.country-flag[aria-pressed="true"]{
+  opacity:1;
+  box-shadow:0 0 0 2px var(--accent);
+  border-radius:5px;
+}
+
+/* ── Reduced-motion off-switches for wave 2 ─────────────────────────
+   The constellation IIFE paints one static frame itself. Here we drop the
+   line draw-on (lines still appear, they carry information) and the flag
+   hover lift. */
+@media (prefers-reduced-motion: reduce){
+  .mentorship-line{transition:none}
+  .country-flag{transition:none}
+  .country-flag:hover{transform:none}
+}
