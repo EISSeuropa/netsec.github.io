@@ -61,7 +61,8 @@
         },
         {
           "name": "Mr Danilo Kalezic",
-          "country": "Montenegro"
+          "country": "Montenegro",
+          "slug": "danilo-kalezic"
         },
         {
           "name": "Dr David Curran",
@@ -414,13 +415,14 @@
           "country": "Cyprus"
         },
         {
-          "name": "Prof Daniela Mechkaroska",
+          "name": "Dr Daniela Mechkaroska",
           "country": "North Macedonia",
           "slug": "daniela-mechkaroska"
         },
         {
           "name": "Mr Danilo Kalezic",
-          "country": "Montenegro"
+          "country": "Montenegro",
+          "slug": "danilo-kalezic"
         },
         {
           "name": "Dr David Curran",
@@ -644,7 +646,7 @@
       "number": 3,
       "name": "Fostering the Next Generation of Scholars",
       "colour": "wg-3",
-      "memberCount": 81,
+      "memberCount": 80,
       "lead": {
         "slug": "chiara-ruffa",
         "name": "Dr Chiara Ruffa"
@@ -710,7 +712,7 @@
           "country": "Türkiye"
         },
         {
-          "name": "Prof Daniela Mechkaroska",
+          "name": "Dr Daniela Mechkaroska",
           "country": "North Macedonia",
           "slug": "daniela-mechkaroska"
         },
@@ -838,10 +840,6 @@
         },
         {
           "name": "Ms Laurena Kalaja",
-          "country": "Albania"
-        },
-        {
-          "name": "Dr Lindita Licaj",
           "country": "Albania"
         },
         {
@@ -1002,7 +1000,7 @@
       "number": 4,
       "name": "Inclusion, Representativeness & Ethics",
       "colour": "wg-4",
-      "memberCount": 44,
+      "memberCount": 43,
       "lead": {
         "slug": "revecca-pedi",
         "name": "Dr Revecca Pedi"
@@ -1110,10 +1108,6 @@
         {
           "name": "Dr Laura Íñigo Álvarez",
           "country": "Portugal"
-        },
-        {
-          "name": "Dr Lindita Licaj",
-          "country": "Albania"
         },
         {
           "name": "Dr Marko Kovacevic",
