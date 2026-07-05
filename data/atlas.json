@@ -3,7 +3,7 @@
   "stats": {
     "working_groups": 4,
     "people": 144,
-    "people_with_bios": 29,
+    "people_with_bios": 30,
     "edges": 265
   },
   "nodes": [
@@ -666,12 +666,6 @@
       "country": "Poland"
     },
     {
-      "id": "p-pavlosioannis-koktsidis",
-      "type": "person",
-      "name": "Prof Pavlosioannis Koktsidis",
-      "country": "Greece"
-    },
-    {
       "id": "p-pinar-akgul",
       "type": "person",
       "name": "Dr Pinar Akgül",
@@ -868,6 +862,13 @@
       "type": "person",
       "name": "Dr Yusuf Özer",
       "country": "Türkiye"
+    },
+    {
+      "id": "pavlosioannis-koktsidis",
+      "type": "person",
+      "name": "Prof Pavlosioannis Koktsidis",
+      "country": "Greece",
+      "slug": "pavlosioannis-koktsidis"
     },
     {
       "id": "pieter-zhao",
@@ -1695,18 +1696,6 @@
       "target": "wg-2"
     },
     {
-      "source": "p-pavlosioannis-koktsidis",
-      "target": "wg-1"
-    },
-    {
-      "source": "p-pavlosioannis-koktsidis",
-      "target": "wg-2"
-    },
-    {
-      "source": "p-pavlosioannis-koktsidis",
-      "target": "wg-3"
-    },
-    {
       "source": "p-pinar-akgul",
       "target": "wg-1"
     },
@@ -1936,6 +1925,18 @@
     },
     {
       "source": "p-yusuf-ozer",
+      "target": "wg-3"
+    },
+    {
+      "source": "pavlosioannis-koktsidis",
+      "target": "wg-1"
+    },
+    {
+      "source": "pavlosioannis-koktsidis",
+      "target": "wg-2"
+    },
+    {
+      "source": "pavlosioannis-koktsidis",
       "target": "wg-3"
     },
     {
