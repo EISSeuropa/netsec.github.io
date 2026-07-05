@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-04T08:04:27+00:00",
+  "generated_at": "2026-07-05T08:14:17+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-04T08:04:27+00:00"
+    "last_synced": "2026-07-05T08:14:17+00:00"
   },
   "members": [
     {
@@ -433,7 +433,7 @@
       "name": "Dr Arthur Laudrain",
       "country": "Switzerland",
       "country_code": "ch",
-      "affiliation": "ETH Zurich, Center for Security Studies",
+      "affiliation": "ETH Zürich, Center for Security Studies",
       "position": "Team Lead & Senior Researcher, Cyber Security",
       "roles": [
         "Management Committee · Switzerland"
@@ -520,7 +520,7 @@
       "name": "Ms Meret Steybe",
       "country": "Switzerland",
       "country_code": "ch",
-      "affiliation": "ETH Zurich, Center for Security Studies",
+      "affiliation": "ETH Zürich, Center for Security Studies",
       "position": "Researcher",
       "roles": [],
       "wgs": [],
@@ -562,7 +562,7 @@
       "name": "Anna Pagnacco",
       "country": "Switzerland",
       "country_code": "ch",
-      "affiliation": "ETH Zurich, Center for Security Studies",
+      "affiliation": "ETH Zürich, Center for Security Studies",
       "position": "Researcher",
       "roles": [],
       "wgs": [],
@@ -1813,7 +1813,7 @@
       "name": "Dr Gesine Weber",
       "country": "Switzerland",
       "country_code": "ch",
-      "affiliation": "Center for Security Studies, ETH Zürich",
+      "affiliation": "ETH Zürich, Center for Security Studies",
       "position": "Senior Researcher",
       "roles": [],
       "wgs": [],
@@ -2107,7 +2107,7 @@
       "name": "Dr Marius Ghincea",
       "country": "Switzerland",
       "country_code": "ch",
-      "affiliation": "ETH Zurich",
+      "affiliation": "ETH Zürich",
       "position": "Postdoctoral Researcher",
       "roles": [],
       "wgs": [],
@@ -2205,7 +2205,7 @@
       "name": "Dr Ivan Zaccagnini",
       "country": "Switzerland",
       "country_code": "ch",
-      "affiliation": "ETH Zurich, Center for Security Studies",
+      "affiliation": "ETH Zürich, Center for Security Studies",
       "position": "Senior Researcher",
       "roles": [],
       "wgs": [],
