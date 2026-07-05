@@ -1191,6 +1191,7 @@
     empty.hidden = filtered.length > 0;
     _lastCount = filtered.length;
     updateFilterChrome();
+    syncCountryStrip();
     renderMentorshipPanel();
 
     // Cinematics playback (#dir-cine B/C), after the cards are in the DOM.
@@ -1442,7 +1443,8 @@
       }});
     }
     if (activeCountry !== 'all') {
-      out.push({ label: activeCountry, remove: () => { activeCountry = 'all'; if (countrySelect) countrySelect.value = 'all'; render(); } });
+      const _cl = window.netsecCountry ? window.netsecCountry(activeCountry) : activeCountry;
+      out.push({ label: _cl, remove: () => { activeCountry = 'all'; if (countrySelect) countrySelect.value = 'all'; syncCountryStrip(); render(); } });
     }
     activeKeywords.forEach(slug => {
       out.push({ label: window.netsecT(themeNameForSlug(slug)), remove: () => toggleKeywordFilter(slug) });
@@ -1654,6 +1656,10 @@
     const a = document.createElement('a');
     a.href = '#' + m.id;
     a.className = 'mentorship-person';
+    // Bind the connection-line overlay (#dir-cine2 B) to a data hook, not to
+    // the styling class, so a later element that borrows the pill look is
+    // never swept into the theme-match geometry.
+    if (m.id) a.setAttribute('data-slug', m.id);
     const av = document.createElement('span');
     av.className = 'mentorship-person-avatar';
     if (m.photo) {
@@ -1862,6 +1868,10 @@
       cols.appendChild(col);
     });
     panel.appendChild(cols);
+    // Theme-match connection lines (#dir-cine2 B): only meaningful when both
+    // sides are on screen. wireMentorshipLines() no-ops when a single side is
+    // active or the columns have wrapped into a vertical stack.
+    if (sides.length === 2) wireMentorshipLines(cols);
 
     // Escape hatch: with a theme / region filter on, let the visitor widen the
     // panel to people outside their selected research areas, so a mentor who tagged
@@ -2167,6 +2177,245 @@
     }
   });
 
+  /* ═══════════════════════════════════════════════════════════════════
+     Directory cinematics wave 2 (#dir-cine2). Three presentational layers
+     added on top of wave 1: a member-count constellation band behind the
+     page heading, theme-match connection lines in the mentorship panel,
+     and a country flag strip that drives the existing activeCountry filter.
+     All three are injected from here, so the page markup is untouched, and
+     all three still under cinePrefersReducedMotion(). The CSS lives in the
+     "Directory cinematics wave 2" block at the foot of site.css.
+     ═══════════════════════════════════════════════════════════════════ */
+  const CINE_SVG_NS = 'http://www.w3.org/2000/svg';
+
+  /* A. Constellation band. One node per member (honest data), scattered by
+     a deterministic index hash so reloads look identical, drifting slowly
+     behind the "The Directory" heading. Quieter than the home-page hero:
+     no pulses, no pointer parallax. Pauses off-screen and on a hidden tab.
+     Reduced motion paints a single static frame. */
+  function initPeopleConstellation(count) {
+    const head = document.querySelector('.people-page .section-head');
+    if (!head || count <= 0) return;
+    // Dedicated host class rather than styling .section-head itself, so the
+    // canvas anchors here without the collision lint treating a positioned
+    // .section-head rule as a cross-cluster clash with its base rule.
+    head.classList.add('people-net-host');
+    const canvas = document.createElement('canvas');
+    canvas.className = 'people-net';
+    canvas.setAttribute('data-people-net', '');
+    canvas.setAttribute('aria-hidden', 'true');
+    head.insertBefore(canvas, head.firstChild);
+    const ctx = canvas.getContext && canvas.getContext('2d');
+    if (!ctx) { canvas.remove(); return; }
+
+    // Deterministic pseudo-random in [0,1) from an integer seed, so the
+    // layout is fixed across reloads without a hand-authored seed array
+    // (the node count is data-driven, unlike the home-page hero).
+    const rand = (s) => { const x = Math.sin(s * 12.9898 + 78.233) * 43758.5453; return x - Math.floor(x); };
+    const N = Math.min(count, 80);   // cap so a large directory stays cheap
+    const nodes = [];
+    for (let i = 0; i < N; i++) {
+      nodes.push({
+        bx: 0.04 + rand(i + 1) * 0.92,
+        by: 0.10 + rand(i + 101) * 0.80,
+        phase: rand(i + 201) * Math.PI * 2,
+        speed: 0.5 + rand(i + 301) * 0.6,
+        ampx: 3 + rand(i + 401) * 3,
+        ampy: 2 + rand(i + 501) * 3,
+        x: 0, y: 0
+      });
+    }
+    let W = 0, H = 0, dpr = 1, rafId = 0, running = false, visible = true;
+    const reduce = () => cinePrefersReducedMotion();
+    function palette() {
+      const dark = document.documentElement.classList.contains('dark');
+      return dark
+        ? { node: 'rgba(150,185,255,', line: 'rgba(130,170,255,' }
+        : { node: 'rgba(0,51,153,',    line: 'rgba(10,90,200,'  };
+    }
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = head.clientWidth; H = canvas.offsetHeight || 180;
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function positions(t) {
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        const dx = reduce() ? 0 : Math.sin(t * 0.0004 * n.speed + n.phase) * n.ampx;
+        const dy = reduce() ? 0 : Math.cos(t * 0.0004 * n.speed + n.phase) * n.ampy;
+        n.x = n.bx * W + dx; n.y = n.by * H + dy;
+      }
+    }
+    function draw() {
+      const pal = palette();
+      const linkDist = Math.min(W, H) * 0.42;
+      ctx.clearRect(0, 0, W, H);
+      ctx.lineWidth = 1;
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < linkDist) {
+            ctx.strokeStyle = pal.line + ((1 - d / linkDist) * 0.22).toFixed(3) + ')';
+            ctx.beginPath(); ctx.moveTo(nodes[i].x, nodes[i].y); ctx.lineTo(nodes[j].x, nodes[j].y); ctx.stroke();
+          }
+        }
+      }
+      for (let k = 0; k < nodes.length; k++) {
+        ctx.fillStyle = pal.node + '0.5)';
+        ctx.beginPath(); ctx.arc(nodes[k].x, nodes[k].y, 1.6, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    function frame(t) { positions(t); draw(); rafId = window.requestAnimationFrame(frame); }
+    function start() { if (running || reduce()) return; running = true; rafId = window.requestAnimationFrame(frame); }
+    function stop() { running = false; if (rafId) window.cancelAnimationFrame(rafId); rafId = 0; }
+    function paintStatic() { resize(); positions(0); draw(); }
+    resize();
+    // Paint frame zero synchronously so the band is never blank, even if the
+    // rAF loop is throttled (a backgrounded tab) or slow to start. The loop
+    // takes over from here when the tab is visible.
+    positions(0); draw();
+    window.addEventListener('resize', function () { resize(); if (reduce()) paintStatic(); else { positions(0); draw(); } });
+    if (reduce()) { paintStatic(); return; }
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(function (e) {
+        visible = e[0].isIntersecting;
+        if (visible && !document.hidden) start(); else stop();
+      }, { threshold: 0 });
+      io.observe(canvas);
+    } else { start(); }
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stop(); else if (visible) start();
+    });
+  }
+
+  /* B. Mentorship theme-match lines. On hover or focus of a person row,
+     draw a curve to every person in the OTHER column who shares a research
+     theme, and lift those rows. Information, so the lines still appear under
+     reduced motion, just without the draw-on animation. Never intercepts
+     clicks (the overlay is pointer-events:none). */
+  function memberThemeSlugs(id) {
+    const m = MEMBERS.find(x => x.id === id);
+    if (!m) return new Set();
+    return new Set((m.themes || []).map(keywordSlug));
+  }
+  function wireMentorshipLines(cols) {
+    const colEls = cols.querySelectorAll('.mentorship-panel-col');
+    if (colEls.length < 2) return;   // single side on screen, nothing to join
+    cols.setAttribute('data-mentorship-lines-host', '');
+    const svg = document.createElementNS(CINE_SVG_NS, 'svg');
+    svg.setAttribute('data-mentorship-lines', '');
+    svg.setAttribute('aria-hidden', 'true');
+    cols.appendChild(svg);
+    const clear = () => {
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      cols.querySelectorAll('.mentorship-person.is-line-source, .mentorship-person.is-line-match')
+        .forEach(r => r.classList.remove('is-line-source', 'is-line-match'));
+    };
+    const drawFor = (row) => {
+      clear();
+      const srcCol = row.closest('.mentorship-panel-col');
+      if (!srcCol) return;
+      const otherCol = Array.prototype.filter.call(colEls, c => c !== srcCol)[0];
+      if (!otherCol) return;
+      // Stacked (wrapped) columns: skip, the geometry would cross the page.
+      const sr = srcCol.getBoundingClientRect(), or = otherCol.getBoundingClientRect();
+      if (or.top >= sr.bottom - 4) return;
+      const themes = memberThemeSlugs(row.getAttribute('data-slug'));
+      if (themes.size === 0) return;
+      const matches = Array.prototype.filter.call(
+        otherCol.querySelectorAll('.mentorship-person[data-slug]'),
+        r => { const s = memberThemeSlugs(r.getAttribute('data-slug')); for (const t of s) if (themes.has(t)) return true; return false; }
+      );
+      if (matches.length === 0) return;
+      const host = cols.getBoundingClientRect();
+      const srcLeft = sr.left < or.left;                 // source is the left column
+      const rowR = row.getBoundingClientRect();
+      const x1 = (srcLeft ? rowR.right : rowR.left) - host.left;
+      const y1 = rowR.top + rowR.height / 2 - host.top;
+      svg.setAttribute('viewBox', '0 0 ' + host.width + ' ' + host.height);
+      row.classList.add('is-line-source');
+      matches.forEach(mr => {
+        mr.classList.add('is-line-match');
+        const r2 = mr.getBoundingClientRect();
+        const x2 = (srcLeft ? r2.left : r2.right) - host.left;
+        const y2 = r2.top + r2.height / 2 - host.top;
+        const mx = (x1 + x2) / 2;
+        const path = document.createElementNS(CINE_SVG_NS, 'path');
+        path.setAttribute('d', 'M' + x1 + ',' + y1 + ' C' + mx + ',' + y1 + ' ' + mx + ',' + y2 + ' ' + x2 + ',' + y2);
+        path.setAttribute('class', 'mentorship-line');
+        svg.appendChild(path);
+        if (!cinePrefersReducedMotion()) {
+          const len = path.getTotalLength ? path.getTotalLength() : 300;
+          path.style.strokeDasharray = len;
+          path.style.strokeDashoffset = len;
+          // Force a reflow so the transition from offset→0 animates the draw.
+          void path.getBoundingClientRect();
+          path.style.strokeDashoffset = '0';
+        }
+      });
+    };
+    cols.querySelectorAll('.mentorship-person[data-slug]').forEach(row => {
+      row.addEventListener('pointerenter', () => drawFor(row));
+      row.addEventListener('focusin', () => drawFor(row));
+      row.addEventListener('pointerleave', clear);
+      row.addEventListener('focusout', clear);
+    });
+    window.addEventListener('resize', clear);
+  }
+
+  /* C. Country flag strip. A visual surface for the existing (UI-less)
+     activeCountry filter: one flag per represented country, count-sorted,
+     driving the same filter the dropdown would have. Toggling the active
+     flag clears it. aria-pressed is kept in sync by syncCountryStrip(),
+     called from render(). */
+  let _countryStripBuilt = false;
+  function buildCountryStrip() {
+    if (_countryStripBuilt) return;
+    const anchor = document.getElementById('members-active-filters');
+    if (!anchor || !anchor.parentNode) return;
+    const counts = {};
+    MEMBERS.forEach(m => { if (m.country && m.country_code) { counts[m.country] = counts[m.country] || { n: 0, code: m.country_code }; counts[m.country].n++; } });
+    const countries = Object.keys(counts);
+    if (countries.length === 0) return;
+    countries.sort((a, b) => counts[b].n - counts[a].n || a.localeCompare(b));
+    const strip = document.createElement('div');
+    strip.className = 'country-strip';
+    strip.setAttribute('data-country-strip', '');
+    strip.setAttribute('role', 'group');
+    strip.setAttribute('aria-label', window.netsecT('Filter by country'));
+    countries.forEach(country => {
+      const name = window.netsecCountry ? window.netsecCountry(country) : country;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'country-flag';
+      btn.setAttribute('data-country', country);
+      btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute('aria-label', name);
+      btn.title = name;
+      const img = document.createElement('img');
+      img.src = 'https://flagcdn.com/h20/' + counts[country].code + '.png';
+      img.alt = ''; img.loading = 'lazy'; img.width = 28; img.height = 20;
+      btn.appendChild(img);
+      btn.addEventListener('click', () => {
+        activeCountry = (activeCountry === country) ? 'all' : country;   // toggle off if re-clicked
+        if (countrySelect) countrySelect.value = activeCountry;
+        syncCountryStrip();
+        render();
+      });
+      strip.appendChild(btn);
+    });
+    anchor.parentNode.insertBefore(strip, anchor);
+    _countryStripBuilt = true;
+    syncCountryStrip();
+  }
+  function syncCountryStrip() {
+    document.querySelectorAll('[data-country-strip] .country-flag').forEach(btn => {
+      btn.setAttribute('aria-pressed', btn.getAttribute('data-country') === activeCountry ? 'true' : 'false');
+    });
+  }
+
   // Load data
   try {
     const res = await fetch('data/bios.json', { cache: 'no-cache' });
@@ -2208,7 +2457,12 @@
         if (_sp && _sp.active && _sp.current && MEMBERS.some(m => m.id === _sp.current)) featuredId = _sp.current;
       }
     } catch (e) { /* spotlight optional */ }
+    // Wave 2 injections: build the flag strip before the first render so its
+    // aria-pressed sync runs with real data, and light up the constellation
+    // band behind the heading with one node per member.
+    buildCountryStrip();
     render();
+    initPeopleConstellation(MEMBERS.length);
     // Surface how current the directory is, driven by bios.json's
     // `generated_at` stamp (#271). The stamp only moves when the sync
     // produces a substantive change, so this date stays honest across
