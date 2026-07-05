@@ -92,10 +92,7 @@
       body
     ]);
 
-    var head = el('div', { class: 'section-head' }, [
-      el('span', { class: 'eyebrow', text: t.eyebrow }),
-      el('h2', { id: 'spotlight-title', text: t.title })
-    ]);
+    var head = el('h3', { class: 'spotlight-heading', id: 'spotlight-title', text: t.title });
 
     var container = section.querySelector('.container') || section;
     container.innerHTML = '';
