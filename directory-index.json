@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-07-05T08:14:17+00:00",
+  "generated_at": "2026-07-05T17:06:49+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 63,
+  "count": 65,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -269,6 +269,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/gil-baram.jpg"
     },
     {
+      "name": "Mr Immanuel Rummel",
+      "name_key": "immanuel rummel",
+      "aliases": [],
+      "slug": "immanuel-rummel",
+      "url": "https://netsec-cost.eu/people/immanuel-rummel.html",
+      "orcid": null,
+      "role": null,
+      "affiliation": "ETH Zürich, Center for Security Studies",
+      "photo": "https://netsec-cost.eu/assets/images/people/immanuel-rummel.jpg"
+    },
+    {
       "name": "Ms Isabelle Haynes",
       "name_key": "isabelle haynes",
       "aliases": [],
@@ -520,6 +531,17 @@
       "role": null,
       "affiliation": "Anatolia American University",
       "photo": "https://netsec-cost.eu/assets/images/people/pavlos-koktsidis.jpg"
+    },
+    {
+      "name": "Prof. Pavlosioannis Koktsidis",
+      "name_key": "pavlosioannis koktsidis",
+      "aliases": [],
+      "slug": "pavlosioannis-koktsidis",
+      "url": "https://netsec-cost.eu/people/pavlosioannis-koktsidis.html",
+      "orcid": "0000-0001-8144-8963",
+      "role": null,
+      "affiliation": "Anatolia American University",
+      "photo": "https://netsec-cost.eu/assets/images/people/pavlosioannis-koktsidis.jpg"
     },
     {
       "name": "Mr Pieter Zhao",
