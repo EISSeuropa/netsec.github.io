@@ -2791,7 +2791,10 @@
       "roles": [
         "Management Committee · Montenegro"
       ],
-      "wgs": [],
+      "wgs": [
+        1,
+        2
+      ],
       "mentorship": [
         "mentee"
       ],

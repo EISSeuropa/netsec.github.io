@@ -319,6 +319,17 @@
         3
       ],
       "form_changed_on": "2026-07-03"
+    },
+    "danilo kalezic": {
+      "cost_first_seen": {
+        "1": "2026-07-05",
+        "2": "2026-07-05"
+      },
+      "form_wgs": [
+        1,
+        2
+      ],
+      "form_changed_on": "2026-07-05"
     }
   }
 }
