@@ -1209,6 +1209,14 @@ form button:disabled{opacity:.65;cursor:wait}
   .spotlight-wgs,.spotlight-keywords{justify-content:center}
 }
 
+/* Spotlight nested inside "Meet the network" as a subsection above the
+   faces marquee: a lighter heading than a full section-head, with room
+   before the marquee below it. */
+.spotlight-heading{font-size:1.2rem;margin:0 0 6px}
+/* No display declaration here: a bare section is already block, so the
+   hidden attribute still collapses the empty state to nothing. */
+.network-spotlight{margin-bottom:40px}
+
 /* -------- Toast notification -------- */
 .toast{
   position:fixed;z-index:200;

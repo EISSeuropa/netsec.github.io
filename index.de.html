@@ -59,7 +59,7 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=acca9abd">
+<link rel="stylesheet" href="assets/css/site.css?v=0465a2ef">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -305,14 +305,6 @@
   </div>
 </section>
 
-<!-- Member spotlight. Rendered by assets/js/home-spotlight.js from
-     data/spotlight.json + data/bios.json. Stays hidden until the
-     spotlight is active (issue #341); the markup is locale-neutral,
-     only the JS chrome translates. -->
-<section id="member-spotlight" aria-labelledby="spotlight-title" hidden>
-  <div class="container"></div>
-</section>
-
 <!-- Über -->
 <section id="about">
   <div class="container reveal">
@@ -390,6 +382,13 @@
       <h2 id="network-title">Das Netzwerk kennenlernen</h2>
       <p>Forschende und Praktiker·innen aus ganz Europa, versammelt in einem offenen Verzeichnis.</p>
     </div>
+    <!-- Weekly member spotlight. Rendered by assets/js/home-spotlight.js
+         from data/spotlight.json + data/bios.json, it presents the
+         featured member as the centrepiece of this section, above the
+         faces marquee. Stays hidden until a member is featured, so the
+         section reads fine with or without one (issue #341). The markup
+         is locale-neutral, only the JS chrome translates. -->
+    <section id="member-spotlight" class="network-spotlight" aria-labelledby="spotlight-title" hidden></section>
     <div class="faces-marquee" data-faces-marquee aria-hidden="true"></div>
     <p class="faces-seeall"><a href="people.de.html">Das Verzeichnis durchsuchen &rarr;</a></p>
   </div>
@@ -666,7 +665,7 @@
      Veranstaltungs-Renderer; die handgepflegten News-Karten bleiben
      als Fallback, falls data/news.json nicht geladen werden kann. -->
 <script src="assets/js/home-news.js?v=4ce15697" defer></script>
-<script src="assets/js/home-spotlight.js?v=3fdad259" defer></script>
+<script src="assets/js/home-spotlight.js?v=67ea5d71" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     if (window.NetSec && window.NetSec.renderHomeEvents) {
