@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-05T17:06:49+00:00",
+  "generated_at": "2026-07-06T09:10:54+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-05T17:06:49+00:00"
+    "last_synced": "2026-07-06T09:10:54+00:00"
   },
   "members": [
     {
@@ -540,7 +540,7 @@
       "mastodon": "",
       "photo": "assets/images/people/meret-steybe.jpg",
       "source": "form",
-      "photo_source_sha256": "8c73d65e4a5c41ee4a1861935d7f425b8cc090ffb857e09cad75c2d96b8dbc8d",
+      "photo_source_sha256": "379633c7df1aeabb90b3fb6ff413fe22bf05a6a0fc52374583f4d1e6a2fed8cb",
       "canonical_keywords": [
         "EU foreign policy",
         "German security policy",
@@ -628,7 +628,7 @@
       "mastodon": "",
       "photo": "assets/images/people/rusudan-zabakhidze.jpg",
       "source": "form",
-      "photo_source_sha256": "697038881be94978774c704535e1f31b44b28a7335e865846c12208377f3f8b7",
+      "photo_source_sha256": "b28af43993dca83895bc31b333e39b3c90d6460a9e3aa6aa36cbcddd6572e7c1",
       "canonical_keywords": [
         "Civil defence",
         "Civil-military relations",
@@ -2087,7 +2087,7 @@
       "mastodon": "",
       "photo": "assets/images/people/clara-jammot.jpg",
       "source": "form",
-      "photo_source_sha256": "9701c62e2fdede260d658dfe5475b7e3518ab7fc9e60f076d4a72213a6ac394b",
+      "photo_source_sha256": "ab37db1b8b1ca5c6d5750e222ac58d4b425d38da0b30a979729193a5bad12756",
       "canonical_keywords": [
         "Algorithms and AI",
         "Emerging technology",
