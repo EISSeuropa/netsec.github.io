@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-06T09:10:54+00:00",
+  "generated_at": "2026-07-06T14:28:37+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-06T09:10:54+00:00"
+    "last_synced": "2026-07-06T14:28:37+00:00"
   },
   "members": [
     {
@@ -540,7 +540,7 @@
       "mastodon": "",
       "photo": "assets/images/people/meret-steybe.jpg",
       "source": "form",
-      "photo_source_sha256": "379633c7df1aeabb90b3fb6ff413fe22bf05a6a0fc52374583f4d1e6a2fed8cb",
+      "photo_source_sha256": "8c73d65e4a5c41ee4a1861935d7f425b8cc090ffb857e09cad75c2d96b8dbc8d",
       "canonical_keywords": [
         "EU foreign policy",
         "German security policy",
@@ -628,7 +628,7 @@
       "mastodon": "",
       "photo": "assets/images/people/rusudan-zabakhidze.jpg",
       "source": "form",
-      "photo_source_sha256": "b28af43993dca83895bc31b333e39b3c90d6460a9e3aa6aa36cbcddd6572e7c1",
+      "photo_source_sha256": "697038881be94978774c704535e1f31b44b28a7335e865846c12208377f3f8b7",
       "canonical_keywords": [
         "Civil defence",
         "Civil-military relations",
@@ -2087,7 +2087,7 @@
       "mastodon": "",
       "photo": "assets/images/people/clara-jammot.jpg",
       "source": "form",
-      "photo_source_sha256": "ab37db1b8b1ca5c6d5750e222ac58d4b425d38da0b30a979729193a5bad12756",
+      "photo_source_sha256": "9701c62e2fdede260d658dfe5475b7e3518ab7fc9e60f076d4a72213a6ac394b",
       "canonical_keywords": [
         "Algorithms and AI",
         "Emerging technology",
@@ -2923,6 +2923,90 @@
       "themes": [
         "Foreign policy and diplomacy"
       ]
+    },
+    {
+      "id": "giulia-biselli",
+      "name": "Ms Giulia Biselli",
+      "country": "Italy",
+      "country_code": "it",
+      "affiliation": "CASD",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Asia",
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Giulia Biselli is a Ph.D. candidate in Defence and Security Studies at the School ofAdvanced Defense Studies (CASD) and the University of Turin. She is also a Research Fellow at Geopolitica.info, where she conducts analyses on China, the Indo-Pacific, and international security.\n\nHer research focuses on economic security, the geopolitics of critical supply chains, and strategic competition in the Indo-Pacific, with particular attention to China's foreign and economic policies and their implications for European security. Her doctoral research examines how states leverage economic, infrastructural, and institutional instruments to generate long-term strategic influence below the threshold of armed conflict.\n\nAlongside her academic work, Giulia is the founder and director of a Switzerland-based consultancy specializing in human rights, responsible supply chains, and social sustainability. She has extensive expertise in human rights investigations and due diligence across global supply chains, advising organizations on social and geopolitical risks. She also delivers training on business and human rights, women's rights, DEI, and the protection of vulnerable and minority groups.\n\nThis professional experience provides a practical dimension to her academic research, offering first-hand insight into the governance challenges, strategic vulnerabilities, and resilience of critical supply chains.",
+      "keywords": [
+        "Economic Security",
+        "Geopolitics of the Indo-Pacific",
+        "China's Foreign Policy",
+        "Strategic Competition"
+      ],
+      "email": "",
+      "website": "https://www.difesa.it/smd/casd/index/26451.html",
+      "orcid": "0009-0002-8685-229X",
+      "linkedin": "https://www.linkedin.com/in/giuliabiselli/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/giulia-biselli.jpg",
+      "source": "form",
+      "photo_source_sha256": "69bad1fe62aa5b13471a2294246e66ac712a2895bba1638dbd52d98eafae65bf",
+      "canonical_keywords": [
+        "China's foreign policy",
+        "Economic security",
+        "Geopolitics of the indo-Pacific",
+        "Strategic competition"
+      ],
+      "themes": [
+        "Economic security and geoeconomics"
+      ]
+    },
+    {
+      "id": "paulina-polko",
+      "name": "Prof. Paulina Polko",
+      "country": "Poland",
+      "country_code": "pl",
+      "affiliation": "Akademia WSB, WSB University",
+      "position": "Head of the Security Studies Department",
+      "roles": [
+        "Management Committee · Poland"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Correspondence address: WSB University, Cieplaka 1c, 41-300 Dabrowa Gornicza, Poland\n\n2001: MA, University of Warsaw, Poland, Political Studies Department\n2010: PhD, Polish Academy of Science, Institute of Political Studies. Dissertation: Enlightened oligarchic monarchy – Italy under Silvio Berlusconi's rule\n2023: DSc, WSB University. Main research achievement: Security in Polish political discourse (1989-2020). \n2023: associate professor at WSB University\n\nScientific fields of interest: critical security studies, national security, security policy, migration-security nexus, security discourse. Author or co-author of over 70 publications on different aspects related to security studies. \n\nIn the field of migration-security nexus, she employs a flexible approach that proposes more complex research, focusing not only on the perspective of the destination country (state/nation/social groups/individual) but also on the perspective of the country (nation) of origin and immigrants as individuals. This perspective has not been widely recognised in recent security studies. In Poland, she has already initiated the project and comparative research on the security perception of three waves of Ukrainian migrants (before 2014, 2014-2022, and after Feb. 24, 2022).\n\nIn the field of securitisation and critical security studies, she focuses on deepening the assessment and evaluation of securitisation processes at both the theoretical and empirical levels. \n\nIn the field of national security systems, she focuses on institutional cooperation and collaboration, as well as evaluating the efficiency of systemic solutions. \n\nMember of the Polish Society of Security Studies, Polish Geopolitical Society and European Initiative for Security Studies – EISS.",
+      "keywords": [
+        "migration-securty nexus",
+        "securitisation"
+      ],
+      "email": "ppolko@wsb.edu.pl",
+      "website": "",
+      "orcid": "0000-0002-9770-7373",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/paulina-polko.jpg",
+      "source": "form",
+      "photo_source_sha256": "58833aa3d89be15aa1c5a5c0e5f974db0291d40e0be02c3e0f0d15fb88f94f91",
+      "canonical_keywords": [
+        "Migration-securty nexus",
+        "Securitisation"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -2955,6 +3039,10 @@
       "count": 3
     },
     {
+      "keyword": "Economic security",
+      "count": 3
+    },
+    {
       "keyword": "Emerging and disruptive technologies",
       "count": 3
     },
@@ -2984,10 +3072,6 @@
     },
     {
       "keyword": "Diplomacy",
-      "count": 2
-    },
-    {
-      "keyword": "Economic security",
       "count": 2
     },
     {
@@ -3088,6 +3172,10 @@
     },
     {
       "keyword": "Capability planning",
+      "count": 1
+    },
+    {
+      "keyword": "China's foreign policy",
       "count": 1
     },
     {
@@ -3315,6 +3403,10 @@
       "count": 1
     },
     {
+      "keyword": "Geopolitics of the indo-Pacific",
+      "count": 1
+    },
+    {
       "keyword": "German security policy",
       "count": 1
     },
@@ -3412,6 +3504,10 @@
     },
     {
       "keyword": "Maritime strategy",
+      "count": 1
+    },
+    {
+      "keyword": "Migration-securty nexus",
       "count": 1
     },
     {
@@ -3531,6 +3627,10 @@
       "count": 1
     },
     {
+      "keyword": "Securitisation",
+      "count": 1
+    },
+    {
       "keyword": "Security politics",
       "count": 1
     },
@@ -3556,6 +3656,10 @@
     },
     {
       "keyword": "State-building",
+      "count": 1
+    },
+    {
+      "keyword": "Strategic competition",
       "count": 1
     },
     {
@@ -3662,7 +3766,7 @@
     },
     {
       "theme": "Economic security and geoeconomics",
-      "count": 5
+      "count": 6
     },
     {
       "theme": "EU, UN and other international organisations",
@@ -3847,11 +3951,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 38
+      "count": 40
     },
     {
       "region": "Global and cross-regional",
-      "count": 27
+      "count": 29
     },
     {
       "region": "Europe - Western Balkans",
@@ -3862,12 +3966,12 @@
       "count": 14
     },
     {
-      "region": "The Americas",
+      "region": "Asia",
       "count": 10
     },
     {
-      "region": "Asia",
-      "count": 9
+      "region": "The Americas",
+      "count": 10
     },
     {
       "region": "Middle East and North Africa",
