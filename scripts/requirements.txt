@@ -7,4 +7,4 @@ beautifulsoup4>=4.15.0,<5
 # Pillow is used by sync-bios.py to downscale + re-encode headshots
 # uploaded via the Google Form. Optional at runtime — sync-bios.py
 # falls back to copying the raw bytes if Pillow is unavailable.
-Pillow>=12.2.0,<13
+Pillow>=12.3.0,<13
