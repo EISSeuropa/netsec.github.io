@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-07-06T14:28:37+00:00",
+  "generated_at": "2026-07-10T08:37:49+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 67,
+  "count": 68,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -476,6 +476,17 @@
       "role": null,
       "affiliation": "University of Genoa",
       "photo": "https://netsec-cost.eu/assets/images/people/mattia-sguazzini.jpg"
+    },
+    {
+      "name": "Dr Mehmet Babacan",
+      "name_key": "mehmet babacan",
+      "aliases": [],
+      "slug": "mehmet-babacan",
+      "url": "https://netsec-cost.eu/people/mehmet-babacan.html",
+      "orcid": "0000-0003-1420-7726",
+      "role": null,
+      "affiliation": "Yildiz Technical University",
+      "photo": "https://netsec-cost.eu/assets/images/people/mehmet-babacan.jpg"
     },
     {
       "name": "Ms Meret Steybe",

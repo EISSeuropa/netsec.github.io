@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-06T14:28:37+00:00",
+  "generated_at": "2026-07-10T08:37:49+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-06T14:28:37+00:00"
+    "last_synced": "2026-07-10T08:37:49+00:00"
   },
   "members": [
     {
@@ -3007,6 +3007,57 @@
         "Migration-securty nexus",
         "Securitisation"
       ]
+    },
+    {
+      "id": "mehmet-babacan",
+      "name": "Dr Mehmet Babacan",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Yildiz Technical University",
+      "position": "Lecturer",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Africa",
+        "Europe",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Mehmet BABACAN was awarded his PhD degree in Middle East Studies from the Department of International Relations at Bursa Uludag University. With numerous national and international publications in the fields of international politics, Turkish foreign policy, Middle East Studies and Jerusalem and Palestinian studies, Babacan currently serves at Yıldız Technical University. Babacan, who has served as an expert and researcher on numerous YOK (Turkish Higher Education Council) and EU (European Union) projects, is married, has three children and speaks Turkish, English, Arabic.",
+      "keywords": [
+        "Middle East Studies",
+        "International Relations",
+        "Foreign Policy",
+        "Securiy Studies",
+        "Diplomacy",
+        "Turkish Foreign Policy"
+      ],
+      "email": "mbabacan@yildiz.edu.tr",
+      "website": "https://avesis.yildiz.edu.tr/mbabacan/",
+      "orcid": "0000-0003-1420-7726",
+      "linkedin": "https://www.linkedin.com/in/mehmet-babacan-phd/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/mehmet-babacan.jpg",
+      "source": "form",
+      "photo_source_sha256": "18b59798e0729fe772cb582b2beb15bd5ea3116b357c9c61a2b159ed26550fec",
+      "canonical_keywords": [
+        "Diplomacy",
+        "Foreign policy",
+        "International relations",
+        "Middle east studies",
+        "Securiy studies",
+        "Turkish foreign policy"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Theory and methods"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3027,6 +3078,10 @@
       "count": 4
     },
     {
+      "keyword": "International relations",
+      "count": 4
+    },
+    {
       "keyword": "International security",
       "count": 4
     },
@@ -3036,6 +3091,10 @@
     },
     {
       "keyword": "Alliance politics",
+      "count": 3
+    },
+    {
+      "keyword": "Diplomacy",
       "count": 3
     },
     {
@@ -3055,10 +3114,6 @@
       "count": 3
     },
     {
-      "keyword": "International relations",
-      "count": 3
-    },
-    {
       "keyword": "Security",
       "count": 3
     },
@@ -3071,10 +3126,6 @@
       "count": 2
     },
     {
-      "keyword": "Diplomacy",
-      "count": 2
-    },
-    {
       "keyword": "Emerging technology",
       "count": 2
     },
@@ -3084,6 +3135,10 @@
     },
     {
       "keyword": "EU–NATO relations",
+      "count": 2
+    },
+    {
+      "keyword": "Foreign policy",
       "count": 2
     },
     {
@@ -3391,10 +3446,6 @@
       "count": 1
     },
     {
-      "keyword": "Foreign policy",
-      "count": 1
-    },
-    {
       "keyword": "Future of warfare",
       "count": 1
     },
@@ -3504,6 +3555,10 @@
     },
     {
       "keyword": "Maritime strategy",
+      "count": 1
+    },
+    {
+      "keyword": "Middle east studies",
       "count": 1
     },
     {
@@ -3643,6 +3698,10 @@
       "count": 1
     },
     {
+      "keyword": "Securiy studies",
+      "count": 1
+    },
+    {
       "keyword": "Small states",
       "count": 1
     },
@@ -3715,6 +3774,10 @@
       "count": 1
     },
     {
+      "keyword": "Turkish foreign policy",
+      "count": 1
+    },
+    {
       "keyword": "UN",
       "count": 1
     },
@@ -3738,7 +3801,7 @@
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 20
+      "count": 21
     },
     {
       "theme": "Cyber and emerging technology",
@@ -3746,7 +3809,7 @@
     },
     {
       "theme": "Theory and methods",
-      "count": 14
+      "count": 15
     },
     {
       "theme": "European and transatlantic security order",
@@ -3951,7 +4014,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 40
+      "count": 41
     },
     {
       "region": "Global and cross-regional",
@@ -3975,11 +4038,11 @@
     },
     {
       "region": "Middle East and North Africa",
-      "count": 5
+      "count": 6
     },
     {
       "region": "Africa",
-      "count": 2
+      "count": 3
     }
   ]
 }
