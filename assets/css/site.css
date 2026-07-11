@@ -431,20 +431,51 @@ img{max-width:100%;display:block}
   :lang(de) .nav-links a[href*="outputs"]{display:none}
 }
 
-/* -------- Hero -------- */
-.hero{padding:140px 0 80px;text-align:center;position:relative}
+/* -------- Hero --------
+   Letterboxed full-bleed band: one muted vertical wash with a single
+   low-alpha accent bloom, closed by a hairline rule at the band's
+   foot. The type lockup is left-aligned on desktop, centred on
+   phones. The constellation canvas is the band's image layer and
+   keeps its drift, pulses and pointer parallax.
+   Optional maintainer asset: the wash can carry a supplied photo
+   instead. Drop it in as a background-image on .hero::before
+   (cover, centre), 2400x1200, muted or duotone grade, <=300 KB, and
+   keep the gradients above it as the legibility scrim. */
+.hero{padding:clamp(150px,20vh,190px) 0 clamp(76px,10vh,104px);text-align:center;position:relative;border-bottom:1px solid var(--line)}
+.hero::before{
+  content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(88% 64% at 50% 0%, rgba(0,51,153,.07), transparent 72%),
+    linear-gradient(180deg, rgba(238,242,251,.9) 0%, rgba(238,242,251,0) 78%);
+}
+.dark .hero::before{
+  background:
+    radial-gradient(88% 64% at 50% 0%, rgba(110,161,255,.09), transparent 72%),
+    linear-gradient(180deg, rgba(16,26,48,.85) 0%, rgba(16,26,48,0) 78%);
+}
 .hero .container{display:flex;flex-direction:column;align-items:center}
 /* Solid ink at display size: the gradient text fill it replaces cost
    contrast without adding presence. */
 .hero h1{margin:0 auto 1.2rem;max-width:15ch;font-size:var(--fs-display);letter-spacing:-.04em;color:var(--ink)}
 .hero .lede{max-width:var(--measure-narrow);font-size:var(--fs-lede);line-height:1.6;color:var(--ink-2)}
-.hero-keywords{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:1.4rem}
+/* Keyword chips read as a quiet editorial keyword line (muted text
+   separated by middots) rather than a row of glass pills, so the
+   lockup carries the band. */
+.hero-keywords{display:flex;flex-wrap:wrap;gap:8px 26px;justify-content:center;margin-top:1.4rem}
 .chip{
-  font-size:.82rem;font-weight:500;color:var(--ink-2);
-  background:var(--glass-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:1px solid var(--glass-border);border-radius:999px;padding:.4rem .9rem;
+  font-size:.8rem;font-weight:500;letter-spacing:.02em;color:var(--muted);
+  padding:.15rem 0;position:relative;
 }
+.chip:not(:last-child)::after{content:'\00B7';position:absolute;right:-15px;color:var(--muted);opacity:.6}
 .hero-cta{display:flex;gap:12px;margin-top:2rem;flex-wrap:wrap;justify-content:center}
+/* Desktop: the lockup sits left, editorial-page style. Phones keep
+   the centred stack. */
+@media (min-width:880px){
+  .hero{text-align:left}
+  .hero .container{align-items:flex-start}
+  .hero h1{margin:0 0 1.2rem}
+  .hero-keywords,.hero-cta{justify-content:flex-start}
+}
 .btn{
   display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:13px;
   font-weight:600;font-size:.95rem;cursor:pointer;border:0;transition:transform .2s var(--ease),box-shadow .2s var(--ease);
@@ -6526,9 +6557,10 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   z-index:0;
   pointer-events:none;
   /* Dissolve toward the edges and, more strongly, the bottom so the
-     field reads as emerging from the page rather than a hard rectangle. */
-  -webkit-mask-image:radial-gradient(120% 90% at 50% 34%, #000 38%, transparent 82%);
-  mask-image:radial-gradient(120% 90% at 50% 34%, #000 38%, transparent 82%);
+     field sits inside the letterboxed band and is fully gone before
+     the hairline rule at the band's foot. */
+  -webkit-mask-image:radial-gradient(120% 82% at 50% 30%, #000 40%, transparent 78%);
+  mask-image:radial-gradient(120% 82% at 50% 30%, #000 40%, transparent 78%);
 }
 .hero .container{position:relative;z-index:1}
 
