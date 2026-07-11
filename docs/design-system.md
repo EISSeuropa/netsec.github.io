@@ -68,6 +68,7 @@ references these steps rather than fresh ad-hoc values.
 | Spacing     | `--sp-1` (.25rem) … `--sp-8` (5rem), `--section-pad` | Vertical rhythm. `section` padding is `--section-pad`.                                     |
 | Measure     | `--measure` (70ch), `--measure-narrow` (62ch)        | Prose column widths: ledes, section-head paragraphs, card prose.                           |
 | Photo grade | `--photo-grade` (dark variant on `.dark`)            | One shared grade for content photography. Identity headshots keep natural colour by design. |
+| Durations   | `--dur-fast` (.15s), `--dur` (.25s), `--dur-slow` (.35s) | The three motion speeds: micro feedback, hover states, surface moves. Reveal timings stay bespoke. |
 
 ## Typography
 
@@ -326,7 +327,15 @@ plus a single-accent border trace.
 - `.reveal` — fades in + slides up 12 px when intersecting viewport.
   Default state is **visible**; the `js-reveal` class on `<html>`
   (added by `site.js`) opts in to the fade-out-then-in. If JS
-  fails, content stays visible.
+  fails, content stays visible. **Page headers are exempt** (#1355):
+  nothing above the fold may start hidden behind JavaScript, so the
+  header wrappers listed in the exemption rule always render at full
+  opacity. Below-fold reveals are unaffected.
+- Cross-document view transitions — same-origin navigations
+  cross-fade, with the nav named (`site-nav`) so the header holds
+  still. CSS-only (`@view-transition`), wrapped in
+  `prefers-reduced-motion: no-preference`, hard-cut fallback in
+  older browsers.
 - `.blob` — three large translucent radial blobs in `.ambience`,
   drifting on a 22–34 s loop with `transform: translate + scale`.
   Pure decoration; `aria-hidden="true"`.
