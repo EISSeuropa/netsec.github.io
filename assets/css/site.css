@@ -441,7 +441,7 @@ img{max-width:100%;display:block}
    instead. Drop it in as a background-image on .hero::before
    (cover, centre), 2400x1200, muted or duotone grade, <=300 KB, and
    keep the gradients above it as the legibility scrim. */
-.hero{padding:clamp(150px,20vh,190px) 0 clamp(76px,10vh,104px);text-align:center;position:relative;border-bottom:1px solid var(--line)}
+.hero{padding:clamp(150px,20vh,190px) 0 clamp(76px,10vh,104px);text-align:left;position:relative;border-bottom:1px solid var(--line)}
 .hero::before{
   content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:
@@ -453,29 +453,23 @@ img{max-width:100%;display:block}
     radial-gradient(88% 64% at 50% 0%, rgba(110,161,255,.09), transparent 72%),
     linear-gradient(180deg, rgba(16,26,48,.85) 0%, rgba(16,26,48,0) 78%);
 }
-.hero .container{display:flex;flex-direction:column;align-items:center}
+.hero .container{display:flex;flex-direction:column;align-items:flex-start}
 /* Solid ink at display size: the gradient text fill it replaces cost
-   contrast without adding presence. */
-.hero h1{margin:0 auto 1.2rem;max-width:15ch;font-size:var(--fs-display);letter-spacing:-.04em;color:var(--ink)}
+   contrast without adding presence. Left-aligned at every width: the
+   readability evidence for a fixed left return edge applies most
+   where the text wraps most, and the phone hero wraps worst. */
+.hero h1{margin:0 0 1.2rem;max-width:15ch;font-size:var(--fs-display);letter-spacing:-.04em;color:var(--ink)}
 .hero .lede{max-width:var(--measure-narrow);font-size:var(--fs-lede);line-height:1.6;color:var(--ink-2)}
 /* Keyword chips read as a quiet editorial keyword line (muted text
    separated by middots) rather than a row of glass pills, so the
    lockup carries the band. */
-.hero-keywords{display:flex;flex-wrap:wrap;gap:8px 26px;justify-content:center;margin-top:1.4rem}
+.hero-keywords{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:1.4rem}
 .chip{
   font-size:.8rem;font-weight:500;letter-spacing:.02em;color:var(--muted);
   padding:.15rem 0;position:relative;
 }
 .chip:not(:last-child)::after{content:'\00B7';position:absolute;right:-15px;color:var(--muted);opacity:.6}
-.hero-cta{display:flex;gap:12px;margin-top:2rem;flex-wrap:wrap;justify-content:center}
-/* Desktop: the lockup sits left, editorial-page style. Phones keep
-   the centred stack. */
-@media (min-width:880px){
-  .hero{text-align:left}
-  .hero .container{align-items:flex-start}
-  .hero h1{margin:0 0 1.2rem}
-  .hero-keywords,.hero-cta{justify-content:flex-start}
-}
+.hero-cta{display:flex;gap:12px;margin-top:2rem;flex-wrap:wrap}
 .btn{
   display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:13px;
   font-weight:600;font-size:.95rem;cursor:pointer;border:0;transition:transform .2s var(--ease),box-shadow .2s var(--ease);
@@ -1379,6 +1373,17 @@ form button:disabled{opacity:.65;cursor:wait}
    If JS fails for any reason, content stays visible — never invisible. */
 .reveal{opacity:1;transform:none;transition:opacity .8s var(--ease),transform .8s var(--ease)}
 .js-reveal .reveal:not(.in){opacity:0;transform:translateY(20px)}
+/* Above-the-fold exemption (#1355). Content in the page-header band
+   must never start hidden behind JavaScript: a visitor cannot
+   perceive an entrance animation on what is already on screen at
+   load, and under a throttled CPU the observer round-trip shows up
+   as pure LCP render delay (measured at ~6.4s on about.html). The
+   :is() list names every page-header wrapper; reveals in later,
+   genuinely below-the-fold sections are untouched. The directional
+   .reveal-left/.reveal-right variants are not used in any header, so
+   they need no counterpart here. */
+.js-reveal :is(.hero,.about-page,.people-page,.grants-page,.sitemap-page,.roadmap-page,.essc-hero,.prose-page,.slides-page,.wg-page-head) .reveal:not(.in){opacity:1;transform:none}
+.js-reveal :is(.hero,.about-page,.people-page,.grants-page,.sitemap-page,.roadmap-page,.essc-hero,.prose-page,.slides-page,.wg-page-head) .reveal-stagger:not(.in) > *{opacity:1;transform:none;transition-delay:0s}
 
 /* -------- CA badge in hero -------- */
 .ca-badge{
