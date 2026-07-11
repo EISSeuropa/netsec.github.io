@@ -311,6 +311,21 @@ img{max-width:100%;display:block}
     background:color-mix(in oklab, var(--bg-0) 88%, transparent);
   }
 }
+/* ── Cross-document view transitions ──────────────────────────
+   Same-origin navigations cross-fade instead of hard-cutting
+   (Chrome 126+, Safari 18.2+, Firefox 144+; anything older keeps
+   today's instant cut). Pure CSS progressive enhancement: every
+   page opts in via the at-rule (they all load this stylesheet),
+   and the floating nav carries its own name so the header holds
+   still while the page content fades beneath it. The fixed
+   .ambience backdrop needs no name: it is identical on both sides
+   of any navigation, so its part in the cross-fade is invisible.
+   The whole block sits inside prefers-reduced-motion, so visitors
+   who ask for reduced motion keep the instant navigation. */
+@media (prefers-reduced-motion: no-preference){
+  @view-transition{ navigation: auto }
+  .nav{ view-transition-name: site-nav }
+}
 /* Nav layout: brand on the left; everything else (nav-links and
    utility chips like the language switcher and theme toggle) on
    the right. We achieve this without changing the HTML source
