@@ -2,7 +2,7 @@
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
   "generated_at": "2026-07-10T08:37:49+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 68,
+  "count": 67,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -553,17 +553,6 @@
       "role": "Management Committee · Poland",
       "affiliation": "Akademia WSB, WSB University",
       "photo": "https://netsec-cost.eu/assets/images/people/paulina-polko.jpg"
-    },
-    {
-      "name": "Prof. Pavlos Koktsidis",
-      "name_key": "pavlos koktsidis",
-      "aliases": [],
-      "slug": "pavlos-koktsidis",
-      "url": "https://netsec-cost.eu/people/pavlos-koktsidis.html",
-      "orcid": "0000-0001-8144-8963",
-      "role": null,
-      "affiliation": "Anatolia American University",
-      "photo": "https://netsec-cost.eu/assets/images/people/pavlos-koktsidis.jpg"
     },
     {
       "name": "Prof. Pavlosioannis Koktsidis",
