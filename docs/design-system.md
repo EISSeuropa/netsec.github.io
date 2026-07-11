@@ -57,6 +57,18 @@ The dark theme inverts `--bg-*`, `--ink*`, `--line`, and `--glass-*`
 but keeps `--accent` / `--accent-2` identical so brand colour is
 constant across modes.
 
+### Type, spacing and imagery tokens
+
+The editorial token layer (v1.13.0), also on `:root`. New work
+references these steps rather than fresh ad-hoc values.
+
+| Token group | Tokens                                              | Used for                                                                                   |
+| ----------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Type scale  | `--fs-display`, `--fs-h1` … `--fs-h4`, `--fs-lede`  | Fluid `clamp()` sizes. `h1`–`h4` read them; `--fs-display` is the home hero lockup only.   |
+| Spacing     | `--sp-1` (.25rem) … `--sp-8` (5rem), `--section-pad` | Vertical rhythm. `section` padding is `--section-pad`.                                     |
+| Measure     | `--measure` (70ch), `--measure-narrow` (62ch)        | Prose column widths: ledes, section-head paragraphs, card prose.                           |
+| Photo grade | `--photo-grade` (dark variant on `.dark`)            | One shared grade for content photography. Identity headshots keep natural colour by design. |
+
 ## Typography
 
 ```mermaid
@@ -71,6 +83,12 @@ flowchart LR
   reading speed.
 - **Inter** for body and UI — battle-tested at small sizes, full
   weight range.
+- Heading sizes come from the `--fs-*` tokens (fluid clamps), so
+  don't hand-set new heading sizes in components.
+- Headlines are solid `--ink`. The gradient text fills used before
+  v1.13.0 cost contrast without adding presence and are retired;
+  don't reintroduce them (the 404 numeral is the one deliberate
+  exception).
 
 Both are self-hosted as `assets/fonts/*.woff2` and preloaded in every
 page's `<head>` (since v1.4.x, issue #121). There is no external Google
@@ -158,7 +176,8 @@ transparent with a border, hover → slight lift + glass fill.
 
 Small pill-shaped labels:
 
-- `.chip` — neutral keyword pill in the hero
+- `.chip` — quiet middot-separated keyword line in the hero (a pill
+  until v1.13.0)
 - `.wg-chip wg-1` … `wg-4` — colour-coded Working Group chips on
   member cards
 - `.grant-tag` — uppercase tag inside a grant card head
@@ -171,7 +190,8 @@ Small pill-shaped labels:
 ```
 
 Small uppercase letter-spaced label above an `h1` or `h2`. Conveys
-section context without competing for hierarchy.
+section context without competing for hierarchy. Since v1.13.0 it is
+a bare editorial kicker in the accent colour, not a tinted pill.
 
 ### `.timeline` (grants page)
 
@@ -295,6 +315,13 @@ cards are untouched, and it collapses to a single centred column under
   link, injected at runtime when the member is an Anthology author.
 
 ## Animations
+
+The home hero is a letterboxed full-bleed band (muted wash, one
+accent bloom, hairline foot rule) with the constellation canvas as
+its image layer. The canvas keeps its drift, pulses and pointer
+parallax. Hover values across the site share one quiet vocabulary:
+the glass lift, the button lift, and the tilt cards' softened glare
+plus a single-accent border trace.
 
 - `.reveal` — fades in + slides up 12 px when intersecting viewport.
   Default state is **visible**; the `js-reveal` class on `<html>`
