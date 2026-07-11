@@ -53,7 +53,7 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CSS_FILE = ROOT / "assets" / "css" / "site.css"
+CSS_DIR = ROOT / "assets" / "css"
 GAP_THRESHOLD_LINES = 200
 
 # Matches `.identifier`. The negative lookbehind keeps "0.5em" from
@@ -378,32 +378,57 @@ def format_problem(p):
 
 
 def main():
-    if not CSS_FILE.exists():
-        print(f"ERROR: {CSS_FILE} not found", file=sys.stderr)
+    css_files = sorted(CSS_DIR.glob("*.css"))
+    if not css_files:
+        print(f"ERROR: no CSS files under {CSS_DIR}", file=sys.stderr)
         return 2
 
-    css_text = CSS_FILE.read_text(encoding="utf-8")
-    decls = collect_declarations(css_text)
+    exit_code = 0
+    all_decls = {}  # rel path -> decls dict
 
-    problems = list(find_collisions(decls))
-    rel = CSS_FILE.relative_to(ROOT)
+    # Per-file pass: the original within-file cluster check.
+    for css_file in css_files:
+        css_text = css_file.read_text(encoding="utf-8")
+        decls = collect_declarations(css_text)
+        rel = css_file.relative_to(ROOT)
+        all_decls[str(rel)] = decls
 
-    if not problems:
-        print(f"✓ {rel}: no class-name collisions detected "
-              f"({len(decls)} unique classes scanned).")
-        return 0
+        problems = list(find_collisions(decls))
+        if not problems:
+            print(f"✓ {rel}: no class-name collisions detected "
+                  f"({len(decls)} unique classes scanned).")
+            continue
 
-    plural = "s" if len(problems) != 1 else ""
-    print(f"✗ {rel}: {len(problems)} CSS class-name collision{plural} detected.")
-    print()
-    for p in problems:
-        print(format_problem(p))
+        exit_code = 1
+        plural = "s" if len(problems) != 1 else ""
+        print(f"✗ {rel}: {len(problems)} CSS class-name collision{plural} detected.")
         print()
-    print("To suppress a known-safe false positive, add a comment on the")
-    print("line immediately above the offending rule:")
-    print("    /* css-collision-allow: .my-class */")
-    print("    .my-class { ... }")
-    return 1
+        for p in problems:
+            print(format_problem(p))
+            print()
+
+    # Cross-file pass: the same keyed class declared in two stylesheets
+    # is the split-bundle variant of the original bug — the second file
+    # silently overrides the first on any page loading both. Classes
+    # suppressed with css-collision-allow are already excluded per file.
+    owners = defaultdict(list)
+    for rel, decls in all_decls.items():
+        for cls in decls:
+            owners[cls].append(rel)
+    cross = {c: fs for c, fs in owners.items() if len(fs) > 1}
+    if cross:
+        exit_code = 1
+        print(f"✗ cross-file: {len(cross)} class(es) keyed in more than one stylesheet.")
+        for c, fs in sorted(cross.items()):
+            print(f"    .{c}: {', '.join(fs)}")
+        print()
+
+    if exit_code:
+        print("To suppress a known-safe false positive, add a comment on the")
+        print("line immediately above the offending rule:")
+        print("    /* css-collision-allow: .my-class */")
+        print("    .my-class { ... }")
+    return exit_code
 
 
 if __name__ == "__main__":

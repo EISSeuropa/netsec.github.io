@@ -108,9 +108,18 @@ Never skip a level (no `h2` → `h4`).
 
 ## Components
 
-The site is built from a small kit of components. They live in
-`assets/css/site.css`; each has a leading comment block explaining
-intent. Use the existing classes — don't introduce parallel ones.
+The site is built from a small kit of components. Core components live
+in `assets/css/site.css`, loaded by every page; each has a leading
+comment block explaining intent. Two page bundles carry page-specific
+weight out of the shared render-blocking path (#1355):
+`assets/css/directory.css` (the members directory and profile pages)
+and `assets/css/roadmap.css` (the public roadmap). A rule belongs in a
+bundle only when everything it can match lives on that bundle's pages;
+anything a shared script can inject elsewhere (the tour engine chrome,
+the `.members-filter-chip` pill the home events renderer borrows)
+stays in core. The collision lint checks each file and flags a class
+keyed in more than one stylesheet. Use the existing classes — don't
+introduce parallel ones.
 
 ### `.glass` — the workhorse card
 
