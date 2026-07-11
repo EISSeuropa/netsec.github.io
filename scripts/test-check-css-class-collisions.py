@@ -336,20 +336,26 @@ class TestFormatProblem:
 # main (via monkeypatched module globals; no real file mutation / network)
 # ---------------------------------------------------------------------------
 class TestMain:
+    @staticmethod
+    def _css_dir(tmp_path):
+        d = tmp_path / "assets" / "css"
+        d.mkdir(parents=True)
+        return d
+
     def test_missing_file_returns_2(self, tmp_path, monkeypatch, capsys):
-        missing = tmp_path / "nope" / "site.css"
-        monkeypatch.setattr(ccc, "CSS_FILE", missing)
+        # An empty (or absent) css directory is a setup error.
         monkeypatch.setattr(ccc, "ROOT", tmp_path)
+        monkeypatch.setattr(ccc, "CSS_DIR", tmp_path / "nope")
         rc = ccc.main()
         assert rc == 2
         err = capsys.readouterr().err
-        assert "not found" in err
+        assert "no CSS files" in err
 
     def test_clean_file_returns_0(self, tmp_path, monkeypatch, capsys):
-        css = tmp_path / "site.css"
-        css.write_text(".foo { color: red; }\n.bar { color: blue; }", encoding="utf-8")
+        d = self._css_dir(tmp_path)
+        (d / "site.css").write_text(".foo { color: red; }\n.bar { color: blue; }", encoding="utf-8")
         monkeypatch.setattr(ccc, "ROOT", tmp_path)
-        monkeypatch.setattr(ccc, "CSS_FILE", css)
+        monkeypatch.setattr(ccc, "CSS_DIR", d)
         rc = ccc.main()
         assert rc == 0
         out = capsys.readouterr().out
@@ -357,11 +363,11 @@ class TestMain:
 
     def test_collision_file_returns_1(self, tmp_path, monkeypatch, capsys):
         # `.foo` declared ~400 lines apart -> a collision.
+        d = self._css_dir(tmp_path)
         body = ".foo { color: red; }\n" + ("/* pad */\n" * 400) + ".foo { color: blue; }\n"
-        css = tmp_path / "site.css"
-        css.write_text(body, encoding="utf-8")
+        (d / "site.css").write_text(body, encoding="utf-8")
         monkeypatch.setattr(ccc, "ROOT", tmp_path)
-        monkeypatch.setattr(ccc, "CSS_FILE", css)
+        monkeypatch.setattr(ccc, "CSS_DIR", d)
         rc = ccc.main()
         assert rc == 1
         out = capsys.readouterr().out
@@ -370,16 +376,42 @@ class TestMain:
 
     def test_suppression_round_trip(self, tmp_path, monkeypatch, capsys):
         # Same collision as above but the second rule is suppressed.
+        d = self._css_dir(tmp_path)
         body = (
             ".foo { color: red; }\n"
             + ("/* pad */\n" * 400)
             + "/* css-collision-allow: .foo */\n"
             + ".foo { color: blue; }\n"
         )
-        css = tmp_path / "site.css"
-        css.write_text(body, encoding="utf-8")
+        (d / "site.css").write_text(body, encoding="utf-8")
         monkeypatch.setattr(ccc, "ROOT", tmp_path)
-        monkeypatch.setattr(ccc, "CSS_FILE", css)
+        monkeypatch.setattr(ccc, "CSS_DIR", d)
+        rc = ccc.main()
+        assert rc == 0
+
+    def test_cross_file_duplicate_returns_1(self, tmp_path, monkeypatch, capsys):
+        # The same keyed class in two stylesheets is the split-bundle
+        # variant of the collision: the second file silently overrides
+        # the first on any page loading both.
+        d = self._css_dir(tmp_path)
+        (d / "site.css").write_text(".foo { color: red; }", encoding="utf-8")
+        (d / "bundle.css").write_text(".foo { color: blue; }", encoding="utf-8")
+        monkeypatch.setattr(ccc, "ROOT", tmp_path)
+        monkeypatch.setattr(ccc, "CSS_DIR", d)
+        rc = ccc.main()
+        assert rc == 1
+        out = capsys.readouterr().out
+        assert "cross-file" in out
+        assert ".foo" in out
+
+    def test_cross_file_suppression(self, tmp_path, monkeypatch, capsys):
+        # An allow-comment on either declaration excuses the pair.
+        d = self._css_dir(tmp_path)
+        (d / "site.css").write_text(".foo { color: red; }", encoding="utf-8")
+        (d / "bundle.css").write_text(
+            "/* css-collision-allow: .foo */\n.foo { color: blue; }", encoding="utf-8")
+        monkeypatch.setattr(ccc, "ROOT", tmp_path)
+        monkeypatch.setattr(ccc, "CSS_DIR", d)
         rc = ccc.main()
         assert rc == 0
 
@@ -390,11 +422,13 @@ class TestMain:
 def test_real_css_parses_if_present():
     """If the repo's site.css exists, collect_declarations must run without
     raising and return a dict. This is read-only; it never writes."""
-    if not ccc.CSS_FILE.exists():
-        pytest.skip("site.css not present in this checkout")
-    text = ccc.CSS_FILE.read_text(encoding="utf-8")
-    decls = ccc.collect_declarations(text)
-    assert isinstance(decls, dict)
+    css_files = sorted(ccc.CSS_DIR.glob("*.css"))
+    if not css_files:
+        pytest.skip("no stylesheets present in this checkout")
+    for css_file in css_files:
+        text = css_file.read_text(encoding="utf-8")
+        decls = ccc.collect_declarations(text)
+        assert isinstance(decls, dict)
     # find_collisions must also be iterable without error.
     problems = list(ccc.find_collisions(decls))
     assert isinstance(problems, list)

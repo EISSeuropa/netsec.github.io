@@ -477,7 +477,9 @@ sweep (rule §11).
 ├── lighthouserc.json                # Lighthouse CI budget assertions (perf/a11y/SEO + per-page image weight)
 │
 ├── assets/
-│   ├── css/site.css                 # Single shared stylesheet
+│   ├── css/site.css                 # Core stylesheet, loaded by every page
+│   ├── css/directory.css            # Directory bundle: /people.html + the generated /people/<slug> pages only
+│   ├── css/roadmap.css              # Roadmap bundle: /roadmap.html only
 │   ├── js/site.js                   # Nav, theme, reveal-on-scroll, accordions, directory, member-card popover
 │   ├── js/home-events.js            # Home Events block (renders from data/events.json)
 │   ├── js/home-news.js              # Home News block (renders from data/news.json)

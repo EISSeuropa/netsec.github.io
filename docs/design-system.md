@@ -57,6 +57,19 @@ The dark theme inverts `--bg-*`, `--ink*`, `--line`, and `--glass-*`
 but keeps `--accent` / `--accent-2` identical so brand colour is
 constant across modes.
 
+### Type, spacing and imagery tokens
+
+The editorial token layer (v1.13.0), also on `:root`. New work
+references these steps rather than fresh ad-hoc values.
+
+| Token group | Tokens                                              | Used for                                                                                   |
+| ----------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Type scale  | `--fs-display`, `--fs-h1` … `--fs-h4`, `--fs-lede`  | Fluid `clamp()` sizes. `h1`–`h4` read them; `--fs-display` is the home hero lockup only.   |
+| Spacing     | `--sp-1` (.25rem) … `--sp-8` (5rem), `--section-pad` | Vertical rhythm. `section` padding is `--section-pad`.                                     |
+| Measure     | `--measure` (70ch), `--measure-narrow` (62ch)        | Prose column widths: ledes, section-head paragraphs, card prose.                           |
+| Photo grade | `--photo-grade` (dark variant on `.dark`)            | One shared grade for content photography. Identity headshots keep natural colour by design. |
+| Durations   | `--dur-fast` (.15s), `--dur` (.25s), `--dur-slow` (.35s) | The three motion speeds: micro feedback, hover states, surface moves. Reveal timings stay bespoke. |
+
 ## Typography
 
 ```mermaid
@@ -71,6 +84,12 @@ flowchart LR
   reading speed.
 - **Inter** for body and UI — battle-tested at small sizes, full
   weight range.
+- Heading sizes come from the `--fs-*` tokens (fluid clamps), so
+  don't hand-set new heading sizes in components.
+- Headlines are solid `--ink`. The gradient text fills used before
+  v1.13.0 cost contrast without adding presence and are retired;
+  don't reintroduce them (the 404 numeral is the one deliberate
+  exception).
 
 Both are self-hosted as `assets/fonts/*.woff2` and preloaded in every
 page's `<head>` (since v1.4.x, issue #121). There is no external Google
@@ -89,9 +108,18 @@ Never skip a level (no `h2` → `h4`).
 
 ## Components
 
-The site is built from a small kit of components. They live in
-`assets/css/site.css`; each has a leading comment block explaining
-intent. Use the existing classes — don't introduce parallel ones.
+The site is built from a small kit of components. Core components live
+in `assets/css/site.css`, loaded by every page; each has a leading
+comment block explaining intent. Two page bundles carry page-specific
+weight out of the shared render-blocking path (#1355):
+`assets/css/directory.css` (the members directory and profile pages)
+and `assets/css/roadmap.css` (the public roadmap). A rule belongs in a
+bundle only when everything it can match lives on that bundle's pages;
+anything a shared script can inject elsewhere (the tour engine chrome,
+the `.members-filter-chip` pill the home events renderer borrows)
+stays in core. The collision lint checks each file and flags a class
+keyed in more than one stylesheet. Use the existing classes — don't
+introduce parallel ones.
 
 ### `.glass` — the workhorse card
 
@@ -158,7 +186,8 @@ transparent with a border, hover → slight lift + glass fill.
 
 Small pill-shaped labels:
 
-- `.chip` — neutral keyword pill in the hero
+- `.chip` — quiet middot-separated keyword line in the hero (a pill
+  until v1.13.0)
 - `.wg-chip wg-1` … `wg-4` — colour-coded Working Group chips on
   member cards
 - `.grant-tag` — uppercase tag inside a grant card head
@@ -171,7 +200,8 @@ Small pill-shaped labels:
 ```
 
 Small uppercase letter-spaced label above an `h1` or `h2`. Conveys
-section context without competing for hierarchy.
+section context without competing for hierarchy. Since v1.13.0 it is
+a bare editorial kicker in the accent colour, not a tinted pill.
 
 ### `.timeline` (grants page)
 
@@ -296,10 +326,25 @@ cards are untouched, and it collapses to a single centred column under
 
 ## Animations
 
+The home hero is a letterboxed full-bleed band (muted wash, one
+accent bloom, hairline foot rule) with the constellation canvas as
+its image layer. The canvas keeps its drift, pulses and pointer
+parallax. Hover values across the site share one quiet vocabulary:
+the glass lift, the button lift, and the tilt cards' softened glare
+plus a single-accent border trace.
+
 - `.reveal` — fades in + slides up 12 px when intersecting viewport.
   Default state is **visible**; the `js-reveal` class on `<html>`
   (added by `site.js`) opts in to the fade-out-then-in. If JS
-  fails, content stays visible.
+  fails, content stays visible. **Page headers are exempt** (#1355):
+  nothing above the fold may start hidden behind JavaScript, so the
+  header wrappers listed in the exemption rule always render at full
+  opacity. Below-fold reveals are unaffected.
+- Cross-document view transitions — same-origin navigations
+  cross-fade, with the nav named (`site-nav`) so the header holds
+  still. CSS-only (`@view-transition`), wrapped in
+  `prefers-reduced-motion: no-preference`, hard-cut fallback in
+  older browsers.
 - `.blob` — three large translucent radial blobs in `.ambience`,
   drifting on a 22–34 s loop with `transform: translate + scale`.
   Pure decoration; `aria-hidden="true"`.

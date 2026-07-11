@@ -1,0 +1,1887 @@
+/* -------------------------------------------------------------
+   NetSec — directory bundle (assets/css/directory.css)
+   Loaded ONLY by /people.html (+ FR/DE) and the generated
+   /people/<slug> profile pages (they splice the people shell's
+   head). Split out of site.css so the other pages stop paying
+   for the directory-only CSS in their render-blocking path
+   (#1355). Everything here is people-scoped: the toolbar,
+   member cards, profile layout, filter sheet, preview panel,
+   tour, and the directory cinematics.
+   ------------------------------------------------------------- */
+
+/* -------- Members directory (/people.html) -------- */
+.people-page{padding:120px 0 80px}
+.people-page .container{max-width:1100px}
+.people-page h1{margin:0 0 1rem;text-align:center}
+.people-page .lede{max-width:var(--measure-narrow);margin:0 auto;font-size:var(--fs-lede);text-align:center;color:var(--ink-2)}
+
+.members-toolbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:12px;
+  padding:12px 18px;margin:32px 0 18px;
+}
+.members-search{
+  display:flex;align-items:center;gap:8px;flex:1 1 280px;min-width:0;
+  padding:4px 14px;border-radius:12px;
+  background:rgba(255,255,255,.92);border:1px solid rgba(11,18,32,.14);
+  box-shadow:inset 0 1px 2px rgba(11,18,32,.05);
+  color:var(--muted);
+}
+.dark .members-search{background:rgba(255,255,255,.06);border-color:var(--glass-border);box-shadow:none}
+.members-search svg{flex-shrink:0}
+.members-search input{
+  flex:1;border:0;background:transparent;outline:none;
+  font:inherit;font-size:.95rem;color:var(--ink);min-width:0;
+}
+.members-filter{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+/* Tap responsiveness on the directory's tap-only controls. `manipulation`
+   drops the iOS double-tap-zoom wait (the ~300ms delay that reads as a sticky
+   tap), and a transparent tap highlight removes the grey flash on every press.
+   `manipulation` still allows panning, so scrolling over a chip or card is
+   unaffected. */
+.members-keyword-filter-chip,
+.members-mentorship-chip,
+.members-active-filter,
+.members-filter-toggle-btn,
+.members-sheet-close,
+.members-sheet-reset,
+.members-sheet-apply,
+.members-keyword-filter-toggle,
+.members-keyword-filter-clear,
+.members-clear-all,
+.members-grid.is-compact .member-card{
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+/* The directory grows with the membership, so the compact grid can hold
+   dozens of cards. Skip rendering (layout + paint + style) the ones below
+   the fold until they scroll near, which keeps the page's load cost flat
+   as the directory grows. Scoped to compact, non-expanded cards only: the
+   detailed view measures bio height for its "show more" affordance and an
+   expanded card is on screen, so neither is affected. The intrinsic-size
+   `auto` keyword lets the browser remember each card's real height after
+   its first render, so the scrollbar doesn't jump. */
+.members-grid.is-compact .member-card:not(.is-expanded){
+  content-visibility:auto;
+  contain-intrinsic-size:auto 88px;
+}
+/* Country dropdown — matches the search field styling */
+.members-country{
+  display:flex;align-items:center;gap:8px;flex:0 1 220px;min-width:0;
+  padding:6px 12px 6px 14px;border-radius:12px;
+  background:rgba(255,255,255,.92);border:1px solid rgba(11,18,32,.14);
+  box-shadow:inset 0 1px 2px rgba(11,18,32,.05);
+  color:var(--muted);
+}
+.dark .members-country{background:rgba(255,255,255,.06);border-color:var(--glass-border);box-shadow:none}
+.members-country svg{flex-shrink:0}
+.members-country select{
+  flex:1;border:0;background:transparent;outline:none;
+  font:inherit;font-size:.92rem;color:var(--ink);min-width:0;
+  cursor:pointer;
+  /* Strip the OS chrome a bit so the field reads as part of the toolbar. */
+  appearance:none;-webkit-appearance:none;-moz-appearance:none;
+  padding-right:18px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237b8aab' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat:no-repeat;background-position:right 0 center;
+}
+.members-country select::-ms-expand{display:none}
+.members-count{font-size:.85rem;color:var(--muted);margin:0}
+
+/* Results bar: the live count plus a global reset, always visible above
+   the collapsed "More filters" disclosure so the grid leads with people. */
+.members-resultbar{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  margin:2px 2px 14px;
+}
+/* Count + freshness sit together on the left; the freshness carries a
+   middot separator that only shows once its stamp is populated. */
+.members-resultmeta{ display:flex;align-items:baseline;flex-wrap:wrap;min-width:0; }
+.members-resultmeta .directory-freshness::before{ content:'·';margin:0 8px;opacity:.55; }
+.members-clear-all{
+  font-family:'Inter',sans-serif;
+  font-size:.82rem;font-weight:500;
+  color:var(--ink-2);
+  background:transparent;border:0;padding:2px 6px;border-radius:6px;
+  cursor:pointer;flex:0 0 auto;
+}
+/* Enabled state reads as an actionable link, not static text: a soft
+   underline that firms up on hover. Disabled stays plain + muted. */
+.members-clear-all:not(:disabled){ text-decoration:underline;text-decoration-color:color-mix(in oklab, currentColor 45%, transparent);text-underline-offset:3px; }
+.members-clear-all:not(:disabled):hover{ color:var(--ink); text-decoration-color:currentColor; }
+.members-clear-all:focus-visible{ outline:2px solid var(--accent);outline-offset:2px; }
+/* Always present, but muted + non-interactive until a filter is active. */
+.members-clear-all:disabled{ color:var(--muted);opacity:.55;cursor:default; }
+
+/* Secondary facets render directly in the filter card as a full-width,
+   divided group below the primary search / WG / country row. Each facet
+   row keeps its own "Show all" retraction. */
+.members-facets{
+  flex:1 0 100%;margin:0;padding-top:4px;
+  border-top:1px solid var(--glass-border);
+  display:flex;flex-direction:column;gap:8px;
+}
+
+/* Pinned directory tools: density toggle, guided tour, and the add-your-bio
+   CTA. Fixed to the bottom-right so they stay reachable while the grid
+   scrolls, pulled out of the filter card where they read as stray controls
+   among the filters. Sits below the nav (z:100) and the guided tour. */
+.members-utilitybar{
+  position:fixed;right:24px;bottom:24px;z-index:90;
+  display:flex;align-items:center;gap:8px;
+  padding:7px 9px;border-radius:999px;
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:saturate(160%) blur(18px);
+  backdrop-filter:saturate(160%) blur(18px);
+  border:1px solid var(--glass-border);
+  box-shadow:0 10px 30px rgba(11,18,32,.16);
+}
+@media (max-width:540px){
+  .members-utilitybar{right:14px;bottom:14px;gap:6px;padding:6px 8px}
+}
+
+.members-empty{padding:36px;text-align:center;margin:24px 0}
+.members-empty h3{margin:0 0 8px}
+.members-empty p{margin:0;color:var(--muted)}
+
+.members-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(380px,100%),1fr));
+  gap:22px;
+  /* Clears .members-utilitybar's fixed bottom-right pill so the last
+     row of cards isn't covered by the density/tour/join buttons. */
+  padding-bottom:90px;
+}
+@media (max-width:540px){
+  .members-grid{padding-bottom:76px}
+}
+
+.member-card{
+  display:flex;flex-direction:column;padding:24px;
+  scroll-margin-top:100px;  /* for deep-link landing */
+}
+/* Member spotlight (#921): the weekly-featured member is pinned to the front
+   of the default directory view with a gold star, using the brand's EU-flag
+   yellow so it reads as a highlight rather than another status pill. */
+.member-card.is-featured{
+  position:relative;
+  /* Let the spotlight banner claim its own full-width row at the top of
+     the card. In the detailed (column) card it stacks naturally; in the
+     compact (row) card flex-wrap lets the 100%-wide banner push the
+     avatar + body onto the next line. No absolute positioning, so the
+     badge can never sit on top of the centred name. */
+  flex-wrap:wrap;
+  box-shadow:inset 0 0 0 1.5px color-mix(in srgb,#FFCC00 70%,transparent), 0 10px 34px rgba(0,0,0,.20);
+}
+.member-spotlight-pin{
+  width:100%;display:flex;justify-content:center;
+  margin:0 0 12px;
+}
+.member-spotlight-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 8px 2px 6px;border-radius:999px;white-space:nowrap;
+  font-size:.7rem;font-weight:700;letter-spacing:.02em;line-height:1;
+  color:#FFCC00;
+  background:color-mix(in srgb,#FFCC00 18%,transparent);
+  border:1px solid color-mix(in srgb,#FFCC00 55%,transparent);
+}
+.member-spotlight-badge svg{flex-shrink:0}
+.member-card .member-photo{
+  position:relative;width:84px;height:84px;border-radius:50%;
+  margin:0 auto 14px;overflow:hidden;
+  background:linear-gradient(135deg,#cfd9ee,#e8d8c2);
+  border:2px solid rgba(255,255,255,.8);
+}
+.member-card .member-photo img{
+  width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;
+}
+.member-card .member-photo picture{display:contents}
+.member-photo-fallback{
+  position:absolute;inset:0;display:grid;place-items:center;
+  color:var(--accent);font-weight:700;font-size:1.4rem;font-family:'Lexend','Inter',sans-serif;
+}
+.member-card .member-body{display:flex;flex-direction:column;flex:1;text-align:center}
+.member-card .member-name{
+  font-size:1.1rem;margin:0 0 6px;font-weight:600;letter-spacing:-.01em;color:var(--ink);
+  font-family:'Lexend','Inter',sans-serif;
+}
+.member-card .member-role{
+  font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--accent);font-weight:700;margin:0 0 6px;
+}
+.member-card .member-affiliation{
+  font-size:.88rem;color:var(--muted);margin:0 0 12px;line-height:1.45;
+  display:inline-flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;
+}
+/* Detailed mode shows the full position · affiliation · country
+   string; the compact variant is hidden. The compact-mode block
+   further down inverts these. */
+.member-affiliation .aff-compact{display:none}
+.member-affiliation .aff-full{display:inline}
+.member-flag{
+  width:18px;height:auto;border-radius:2px;
+  box-shadow:0 1px 2px rgba(0,0,0,.18);
+  vertical-align:middle;
+}
+.member-card .member-wgs{
+  display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:0 0 14px;
+}
+/* Mentorship badges. Two facets read as distinct visual languages:
+   offering ("Mentor") is a give, tinted green; seeking ("Seeking a
+   mentor") is an ask, tinted in the brand accent. A leading dot keeps
+   each badge legible without relying on colour alone. Shown in both
+   detailed and compact view (like the WG chips), since the card stays
+   compact. */
+.member-card .member-mentorship{
+  display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-4px 0 14px;
+}
+.mentorship-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'Inter',sans-serif;
+  font-size:.72rem;font-weight:600;letter-spacing:.005em;line-height:1.3;
+  padding:3px 10px;border-radius:999px;white-space:nowrap;
+}
+.mentorship-badge::before{
+  content:"";width:6px;height:6px;border-radius:50%;
+  background:currentColor;opacity:.85;flex-shrink:0;
+}
+.mentorship-badge.is-offering{
+  color:#1c7a4a;
+  background:color-mix(in oklab, #2ea36a 13%, transparent);
+  border:1px solid color-mix(in oklab, #2ea36a 34%, transparent);
+}
+.mentorship-badge.is-seeking{
+  color:var(--accent);
+  background:color-mix(in oklab, var(--accent) 12%, transparent);
+  border:1px solid color-mix(in oklab, var(--accent) 32%, transparent);
+}
+.dark .mentorship-badge.is-offering{
+  color:#6fd29c;
+  background:color-mix(in oklab, #2ea36a 20%, transparent);
+  border-color:color-mix(in oklab, #2ea36a 44%, transparent);
+}
+.dark .mentorship-badge.is-seeking{
+  color:color-mix(in oklab, var(--accent) 72%, #fff);
+  background:color-mix(in oklab, var(--accent) 20%, transparent);
+  border-color:color-mix(in oklab, var(--accent) 46%, transparent);
+}
+/* STSM hosting badge (#760): reuses the mentorship-badge pill shape in a
+   distinct teal so a hosting signal reads apart from the mentorship pair.
+   "ask" (conditional) is rendered with a dashed border + a hollow dot. */
+.member-stsm{ display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:-4px 0 14px; }
+.stsm-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'Inter',sans-serif;
+  font-size:.72rem;font-weight:600;letter-spacing:.005em;line-height:1.3;
+  padding:3px 10px;border-radius:999px;white-space:nowrap;
+  color:#0f7b86;
+  background:color-mix(in oklab, #14a3b0 12%, transparent);
+  border:1px solid color-mix(in oklab, #14a3b0 34%, transparent);
+}
+.stsm-badge::before{
+  content:"";width:6px;height:6px;border-radius:50%;
+  background:currentColor;opacity:.85;flex-shrink:0;
+}
+.stsm-badge.is-ask{
+  border-style:dashed;
+}
+.stsm-badge.is-ask::before{ background:transparent;border:1.5px solid currentColor; }
+.dark .stsm-badge{
+  color:#5ed7e2;
+  background:color-mix(in oklab, #14a3b0 20%, transparent);
+  border-color:color-mix(in oklab, #14a3b0 46%, transparent);
+}
+/* Founding-contributor badge. A deliberately quiet, outlined pill set
+   on members who appear in the COST Open Call proposer list. It reads
+   as a soft acknowledgement, not a role, so it carries no gradient and
+   no colour fill: a thin muted border and muted text keep it well below
+   the bright WG chips in the visual hierarchy. A small star glyph marks
+   it without leaning on colour. Shown in both detailed and compact view
+   alongside the WG chips. */
+.member-card .member-founding{
+  display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-4px 0 14px;
+}
+.founding-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'Inter',sans-serif;
+  font-size:.7rem;font-weight:600;letter-spacing:.02em;line-height:1.3;
+  padding:3px 10px;border-radius:999px;white-space:nowrap;cursor:default;
+  color:var(--muted);
+  background:transparent;
+  border:1px solid color-mix(in oklab, var(--muted) 40%, transparent);
+}
+.founding-badge::before{
+  content:"\2726";font-size:.78em;line-height:1;opacity:.7;flex-shrink:0;
+}
+.dark .founding-badge{
+  border-color:color-mix(in oklab, var(--muted) 52%, transparent);
+}
+/* Research-interest keywords. Distinct from `.wg-chip` so visitors
+   parse the two layers at a glance: WG chips are bright + bold
+   gradient pills tied to the four working groups; keyword chips are
+   subdued outlined pills tied to a member's own research interests.
+   Compact view hides them entirely (handled below) since the small
+   card is already dense with photo + name + WGs + chevron. */
+.member-card .member-keywords,
+.member-card .member-regions{
+  display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start;
+  margin:6px 0 14px;
+}
+.member-card .member-regions{ margin-top:-6px; }
+/* Recent publications (#761): a compact, lazily-loaded list of a
+   member's three most recent ORCID works. Detailed view only, like the
+   keyword pills; hidden in compact-collapsed cards (rule further down). */
+.member-card .member-pubs{
+  margin:2px 0 14px;
+  font-size:.82rem;
+  line-height:1.4;
+}
+.member-pubs-title{
+  margin:0 0 4px;
+  font-weight:600;
+  font-size:.72rem;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  color:var(--text-muted, #6b7280);
+}
+.member-pubs-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.member-pubs-list li{ margin:0; }
+.member-pubs-link{ color:var(--text, inherit); text-decoration:none; }
+a.member-pubs-link:hover,
+a.member-pubs-link:focus-visible{ text-decoration:underline; }
+.member-pubs-meta{ color:var(--text-muted, #6b7280); }
+
+/* Mentorship matching panel (#763): shown above the grid when a
+   mentorship facet is active. Orients the visitor, splits the matching
+   members into Offering / Seeking, and links across to the other side. */
+.mentorship-panel{
+  margin:0 0 18px;
+  padding:14px 18px;
+  border-radius:16px;
+}
+.mentorship-panel-title{
+  margin:0 0 6px;
+  font-size:1.05rem;
+}
+.mentorship-panel-guide{
+  margin:0 0 12px;
+  font-size:.9rem;
+  color:var(--text-muted, #6b7280);
+  max-width:62ch;
+}
+.mentorship-panel-cols{
+  /* Flex (not grid) so each column sizes to its own content height and the
+     two lists pack left rather than stretching across a wide screen. */
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  gap:14px 28px;
+}
+.mentorship-panel-col{
+  flex:0 1 300px;
+  min-width:200px;
+  /* It is a <section>, which the global `section{padding:80px 0}` rule would
+     give 160px of vertical padding — the source of the panel's empty space. */
+  padding:0;
+}
+.mentorship-panel-col-title{
+  margin:0 0 10px;
+  font-size:.74rem;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--text-muted, #6b7280);
+}
+.mentorship-panel-people{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.mentorship-person{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--text, inherit);
+}
+.mentorship-person:hover .mentorship-person-name{ text-decoration:underline; }
+.mentorship-person-avatar{
+  width:34px;height:34px;flex:0 0 34px;
+  border-radius:50%;
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+  color:#fff;font-size:.74rem;font-weight:600;
+}
+.mentorship-person-avatar img{ width:100%;height:100%;object-fit:cover; }
+.mentorship-person-name{ font-size:.92rem; }
+/* Warm-intro mail action on a panel row (#1171): the person link keeps the
+   row's width, the envelope sits at the end, and the shared-areas row below
+   wraps to its own full-width line. 30px hit area inside a 44px-tall row. */
+.mentorship-panel-people li{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.mentorship-panel-people li > .mentorship-person{ flex:1 1 auto; min-width:0; }
+.mentorship-panel-people li > .mentorship-person-themes{ flex-basis:100%; }
+.mentorship-person-mail{
+  flex:0 0 auto;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:30px; height:30px; border-radius:50%;
+  color:var(--accent-2);
+  border:1px solid color-mix(in srgb, var(--accent-2) 35%, transparent);
+  background:color-mix(in srgb, var(--accent-2) 8%, transparent);
+  transition:var(--tr-tint);
+}
+.mentorship-person-mail:hover,
+.mentorship-person-mail:focus-visible{
+  background:color-mix(in srgb, var(--accent-2) 18%, transparent);
+}
+.mentorship-panel-none{
+  margin:0;font-size:.88rem;color:var(--text-muted, #6b7280);font-style:italic;
+}
+.mentorship-panel-cross{
+  margin-top:16px;
+  background:none;
+  border:1px solid var(--glass-border, rgba(255,255,255,.18));
+  border-radius:999px;
+  padding:7px 16px;
+  font-size:.85rem;
+  color:var(--accent-2);
+  cursor:pointer;
+  transition:opacity .25s var(--ease);
+}
+.mentorship-panel-cross:hover{ opacity:.75; }
+.mentorship-panel-tip{
+  margin:0 0 12px;
+  padding:6px 12px;
+  border-left:3px dashed var(--glass-border, rgba(255,255,255,.25));
+  border-radius:0 6px 6px 0;
+  font-size:.85rem;
+  color:var(--text-muted, #6b7280);
+}
+.mentorship-panel-scope{
+  margin:0 0 12px;
+  padding:6px 12px;
+  border-left:3px solid var(--accent-2);
+  border-radius:0 6px 6px 0;
+  background:var(--glass-bg, rgba(255,255,255,.04));
+  font-size:.85rem;
+  color:var(--text-muted, #6b7280);
+}
+.mentorship-panel-relax{
+  display:block;
+  margin-top:14px;
+  background:none;
+  border:none;
+  padding:4px 0;
+  font-size:.82rem;
+  color:var(--text-muted, #6b7280);
+  text-decoration:underline;
+  text-underline-offset:3px;
+  cursor:pointer;
+  transition:color .25s var(--ease);
+}
+.mentorship-panel-relax:hover{ color:var(--accent-2); }
+.mentorship-panel-relax[aria-pressed="true"]{ color:var(--accent-2); }
+/* Match-strength chips under a panel person (#869 Phase 2): the active
+   themes they work on, indented to line up past the avatar. */
+.mentorship-person-themes{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  margin:3px 0 0 44px;
+}
+.mentorship-person-theme{
+  font-size:.66rem;
+  line-height:1.3;
+  padding:1px 7px;
+  border-radius:999px;
+  background:var(--glass-bg, rgba(255,255,255,.05));
+  color:var(--text-muted, #6b7280);
+  border:1px solid var(--glass-border, rgba(255,255,255,.12));
+}
+.mentorship-person-theme.is-match{
+  background:color-mix(in srgb, var(--accent-2) 16%, transparent);
+  border-color:color-mix(in srgb, var(--accent-2) 40%, transparent);
+  color:var(--accent-2);
+}
+.mentorship-person-theme.is-more{ border-style:dashed; }
+/* Region overlap reads in a quieter tone than the theme overlap. */
+.mentorship-person-theme.is-region{
+  background:color-mix(in srgb, var(--ink) 7%, transparent);
+  border-color:var(--glass-border, rgba(255,255,255,.18));
+  color:var(--text-muted, #6b7280);
+}
+/* "Shared research areas:" lead before the chips. */
+.mentorship-person-why-label{
+  align-self:center; font-size:.66rem; color:var(--text-muted, #6b7280);
+}
+/* Two-sided supply/demand line under the scope caption. */
+.mentorship-panel-balance{
+  margin:-6px 0 12px 15px; font-size:.82rem; color:var(--text-muted, #6b7280);
+}
+/* "Most relevant first" — sits right above the lists in the accent colour
+   (not the muted grey of the other captions) so the order reads as a sort
+   cue rather than another skimmable line. The down-arrow signals direction. */
+.mentorship-panel-order{
+  display:flex; align-items:center; gap:5px;
+  margin:2px 0 10px; font-size:.8rem; font-weight:600;
+  color:var(--accent-2);
+}
+.mentorship-panel-order svg{ flex:none; opacity:.85; }
+/* Transient career-stage personaliser inside the panel header. Optional; it
+   gently leans the order toward mentors above the visitor and mentees below.
+   Inline (label + select) so it reads as a small control, not a form. */
+.mentorship-panel-stage{
+  display:flex; align-items:center; flex-wrap:wrap; gap:8px;
+  margin:-2px 0 14px;
+}
+.mentorship-panel-stage-label{
+  font-size:.82rem; font-weight:600; color:var(--text-muted, #6b7280);
+}
+/* Compact, themed dropdown. The scoped (.mentorship-panel …) selector beats
+   the global input/select rules (width:100%, the 12px padding, and the
+   select:focus{background:#fff} that otherwise turns it white in dark mode).
+   appearance:none is what lets the CSS background apply at all on a native
+   macOS select; the chevron is drawn back in, matching the country filter. */
+.mentorship-panel .mentorship-panel-stage-select{
+  width:auto; min-width:150px; max-width:100%;
+  font-family:inherit; font-size:.86rem; color:var(--ink); cursor:pointer;
+  padding:6px 30px 6px 12px; border-radius:10px;
+  border:1px solid var(--line);
+  /* Tokens flip with the theme (class toggle and OS prefers-color-scheme),
+     so this stays legible in dark mode without a separate .dark rule. */
+  background-color:var(--bg-1);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237b8aab' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat:no-repeat; background-position:right 11px center;
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+}
+.mentorship-panel .mentorship-panel-stage-select:focus{
+  outline:0; border-color:var(--accent-2); box-shadow:0 0 0 3px rgba(10,132,255,.18);
+}
+
+/* Member profile pages (#762): a single directory card centred on its own
+   page. Reuses the .member-card styling; this just frames it. */
+.profile-page{ padding:120px 0 80px; }
+.profile-container{ max-width:1000px; }
+.profile-back{ margin:22px 2px 0; font-size:.92rem; }
+.profile-back a{ color:var(--accent-2); }
+.profile-back a:hover{ text-decoration:underline; }
+
+/* ── Enriched individual profile page (#762 follow-up) ──
+   The profile reuses the directory's .member-* chips and badges, but lays
+   them out as a hero band over a two-column body. All of this is scoped to
+   .is-profile so the directory's own cards (same classes) are untouched. */
+.profile-page .member-card.is-profile{
+  width:100%; display:block; text-align:left; padding:26px 30px;
+}
+.profile-page .member-name{ font-size:1.5rem; }
+
+/* Hero: larger headshot beside the identity block */
+.profile-page .profile-hero{
+  display:flex; align-items:center; gap:22px;
+  padding-bottom:20px; border-bottom:1px solid var(--line);
+}
+.profile-page .profile-hero .member-photo{
+  width:104px; height:104px; margin:0; flex:0 0 auto;
+}
+.profile-page .profile-hero .member-photo-fallback{ font-size:1.8rem; }
+.profile-page .profile-hero-id{ min-width:0; flex:1; }
+.profile-page .profile-hero-id .member-role,
+.profile-page .profile-hero-id .member-affiliation{ justify-content:flex-start; }
+.profile-page .profile-hero-id .member-wgs{ justify-content:flex-start; margin:10px 0 0; }
+/* The founding badge + actionable mentor/STSM CTAs sit in one wrap row */
+.profile-actions{
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0 0;
+}
+.profile-actions .is-action{
+  text-decoration:none; cursor:pointer;
+  transition:filter .12s ease, transform .12s ease;
+}
+.profile-actions .is-action:hover{ filter:brightness(1.06) saturate(1.08); }
+.profile-actions .is-action:active{ transform:translateY(1px); }
+
+/* Two-column body: bio + publications, then a sidebar rail */
+.profile-page .profile-cols{
+  display:grid; grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);
+  gap:30px; padding-top:22px;
+}
+.profile-page .profile-main{ min-width:0; }
+.profile-page .profile-main .member-bio{ text-align:left; margin:0 0 14px; }
+.profile-page .profile-main .member-keywords{ justify-content:flex-start; }
+.profile-page .profile-aside{
+  min-width:0; padding-left:30px; border-left:1px solid var(--line);
+}
+.profile-aside-label{
+  font-size:.68rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--muted); margin:0 0 8px;
+}
+.profile-aside > * + .profile-aside-label{ margin-top:20px; }
+/* The facepile blocks (Works on / Mentors on similar topics) wrap their own
+   label, so it isn't a direct child of .profile-aside and misses the gap
+   above. Give the block itself the section spacing. */
+.profile-aside > * + .profile-similar{ margin-top:22px; }
+
+/* Theme + region chips, each deep-linking to the filtered directory */
+.profile-areas{ display:flex; flex-wrap:wrap; gap:6px; margin:0 0 4px; }
+.profile-area-chip{
+  display:inline-block; font-size:.74rem; line-height:1.3; padding:4px 10px;
+  border-radius:8px; text-decoration:none; color:var(--ink);
+  background:color-mix(in oklab, var(--ink) 5%, transparent);
+  border:1px solid var(--line); transition:border-color .12s ease, background .12s ease;
+}
+.profile-area-chip:hover{
+  border-color:color-mix(in oklab, var(--accent-2) 55%, transparent);
+  background:color-mix(in oklab, var(--accent-2) 12%, transparent);
+}
+.profile-area-chip.is-region{ color:var(--muted); }
+
+/* Similar-people facepile, the Glossary field-guide pattern reused */
+.profile-similar .pf-facepile{ display:flex; align-items:center; margin:2px 0 8px; }
+.pf-face{
+  width:44px; height:44px; flex:0 0 auto; margin-left:-10px;
+  border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center;
+  border:2px solid var(--bg-0); background:color-mix(in srgb, var(--accent) 12%, var(--bg-0));
+  text-decoration:none; transition:transform .12s ease, box-shadow .12s ease;
+}
+.pf-face:first-child{ margin-left:0; }
+.pf-face img{ width:100%; height:100%; object-fit:cover; display:block; }
+.pf-face picture{ display:contents; }
+.pf-initials{
+  font-family:'Lexend','Inter',sans-serif; font-weight:600; font-size:.85rem;
+  letter-spacing:.02em; color:var(--accent);
+}
+.pf-face.pf-more{
+  font-size:.78rem; font-weight:600; color:var(--muted);
+  background:color-mix(in oklab, var(--ink) 6%, var(--bg-0));
+}
+.pf-face:hover, .pf-face:focus-visible{
+  transform:translateY(-2px); box-shadow:0 2px 9px rgba(11,18,32,.22); z-index:2;
+}
+.pf-face:focus-visible{ outline:2px solid var(--accent-2); outline-offset:2px; }
+.profile-similar-link{
+  display:inline-block; font-size:.78rem; color:var(--accent-2); text-decoration:none;
+}
+.profile-similar-link:hover{ text-decoration:underline; }
+.profile-page .profile-aside .member-contact{ justify-content:flex-start; margin-top:20px; }
+
+/* "In the EISS Anthology" link, injected into the sidebar slot at runtime
+   when this member matches an author in the EISS authors-index. */
+.profile-anthology-slot{ margin:0 0 4px; }
+.profile-anthology-link{
+  display:inline-flex; align-items:center; gap:7px; margin-bottom:14px;
+  font-size:.82rem; color:var(--accent-2); text-decoration:none;
+}
+.profile-anthology-link svg{ width:16px; height:16px; flex:0 0 auto; }
+.profile-anthology-link:hover{ text-decoration:underline; }
+
+/* Gold prize pill, the NetSec counterpart of the EISS Anthology's
+   .paper-prize-chip. Solid gold with dark text reads on both themes; shown
+   only on the full profile page (build-profile-pages.py), never on a card. */
+.profile-prize{ margin:12px 0 0; }
+.profile-prize-chip{
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 11px 3px 9px; border-radius:999px; white-space:nowrap;
+  font-family:'Inter',sans-serif; font-size:.7rem; font-weight:700;
+  letter-spacing:.04em; text-transform:uppercase; line-height:1.4;
+  text-decoration:none;
+  background:hsl(43 96% 56%); color:hsl(222 35% 10%);
+  border:1px solid hsl(40 80% 42%);
+  transition:filter .12s ease;
+}
+.profile-prize-chip svg{ width:1.05em; height:1.05em; flex:0 0 auto; }
+.profile-prize-chip:hover{ filter:brightness(1.05); text-decoration:none; }
+
+/* Stack to one column on narrow viewports; centre the hero like a card. */
+@media (max-width:820px){
+  .profile-page .member-card.is-profile{ padding:22px 18px; text-align:center; }
+  .profile-page .profile-hero{ flex-direction:column; gap:14px; text-align:center; }
+  .profile-page .profile-hero .member-photo{ margin:0 auto; }
+  .profile-page .profile-hero-id .member-role,
+  .profile-page .profile-hero-id .member-affiliation,
+  .profile-page .profile-hero-id .member-wgs,
+  .profile-actions{ justify-content:center; }
+  .profile-page .profile-cols{ grid-template-columns:1fr; gap:22px; padding-top:18px; }
+  .profile-page .profile-main .member-bio,
+  .profile-page .profile-main .member-keywords{ text-align:left; }
+  .profile-page .profile-aside{
+    padding-left:0; padding-top:20px; border-left:0; border-top:1px solid var(--line);
+  }
+  .profile-areas, .profile-similar .pf-facepile,
+  .profile-page .profile-aside .member-contact{ justify-content:center; }
+}
+/* The global reduced-motion reset above zeroes transition durations
+   sitewide; this block (and its siblings below) only needs to cancel
+   the hover/focus transform end-state. */
+@media (prefers-reduced-motion:reduce){
+  .pf-face:hover, .pf-face:focus-visible{ transform:none; }
+}
+/* Region pills (#555) reuse the keyword-pill shape but carry a small
+   map-pin glyph and a neutral tint, so a geographic tag reads as
+   distinct from a topical keyword. */
+.member-region-chip::before{ content:"\1F4CD\00a0"; font-size:.7em; opacity:.85; }
+.member-card .member-region-chip{
+  background:color-mix(in oklab, var(--ink-2) 7%, transparent);
+  border-color:color-mix(in oklab, var(--ink-2) 20%, transparent);
+}
+.member-card .member-region-chip:hover{
+  background:color-mix(in oklab, var(--ink-2) 13%, transparent);
+  border-color:color-mix(in oklab, var(--ink-2) 32%, transparent);
+}
+.member-keyword-chip{
+  font-family:'Inter',sans-serif;
+  font-size:.74rem;font-weight:500;letter-spacing:-.005em;
+  padding:2px 9px;border-radius:999px;
+  color:var(--ink-2);
+  background:color-mix(in oklab, var(--accent-2) 7%, transparent);
+  border:1px solid color-mix(in oklab, var(--accent-2) 22%, transparent);
+  white-space:nowrap;
+  /* Phase 3: chips are buttons now (click to filter). Reset the
+     UA button styling that creeps in (inherit colour, no shadow,
+     pointer cursor) so they read identically to the old span. */
+  cursor:pointer;
+  font:inherit;font-size:.74rem;font-weight:500;letter-spacing:-.005em;
+  line-height:1.4;
+  transition:background-color .15s ease, border-color .15s ease, transform .12s ease;
+}
+.member-keyword-chip:hover{
+  background:color-mix(in oklab, var(--accent-2) 14%, transparent);
+  border-color:color-mix(in oklab, var(--accent-2) 38%, transparent);
+}
+.member-keyword-chip:active{ transform:translateY(1px); }
+.member-keyword-chip:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px;
+}
+/* A keyword pill with no theme (so nothing to filter by) renders as a
+   static, non-interactive <span> — drop the button affordances. */
+.member-keyword-chip.is-static{ cursor:default; }
+.member-keyword-chip.is-static:hover{
+  background:color-mix(in oklab, var(--accent-2) 7%, transparent);
+  border-color:color-mix(in oklab, var(--accent-2) 22%, transparent);
+}
+
+/* Phase 3: research-interest filter chip row.
+   Sits between the toolbar and the members count. Hidden when the
+   aggregate is empty (no canonical keywords across the directory).
+   The chip list is built dynamically in people.html; styles below
+   handle the row itself + chip toggle state + the show-all toggle. */
+.members-keyword-filter{
+  margin:0;
+  padding:9px 14px;
+  border-radius:14px;
+  background:color-mix(in oklab, var(--accent-2) 4%, transparent);
+  border:1px solid color-mix(in oklab, var(--accent-2) 14%, transparent);
+}
+/* Dark mode: the accent-tinted border is too faint against the dark card.
+   Lift it to a visible edge so the collapsed facet reads as a panel. */
+.dark .members-keyword-filter{
+  background:rgba(255,255,255,.04);
+  border-color:rgba(255,255,255,.18);
+}
+/* The head is the disclosure <summary>: a clickable row with a chevron
+   that rotates when the facet is open. Collapsed by default. */
+.members-keyword-filter-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  cursor:pointer;list-style:none;user-select:none;
+}
+.members-keyword-filter-head::-webkit-details-marker{ display:none; }
+.members-keyword-filter-head:focus-visible{
+  outline:2px solid var(--accent);outline-offset:3px;border-radius:8px;
+}
+.members-keyword-filter-titlegroup{ display:inline-flex;align-items:center;gap:8px;min-width:0; }
+.members-facet-chevron{ flex:0 0 auto;color:var(--muted);transition:transform .18s ease; }
+.members-keyword-filter[open] .members-facet-chevron{ transform:rotate(180deg); }
+.members-keyword-filter[open] > .members-keyword-filter-head{ margin-bottom:12px; }
+.members-keyword-filter-label{
+  font-family:'Lexend',sans-serif;
+  font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);
+}
+.members-keyword-filter-hint{
+  font-family:'Inter',sans-serif;
+  font-size:.82rem;line-height:1.45;
+  color:var(--muted);
+  margin:0 0 10px;
+  max-width:66ch;
+}
+.members-keyword-filter-clear{
+  font-family:'Inter',sans-serif;
+  font-size:.78rem;font-weight:500;
+  color:var(--ink-2);
+  background:transparent;border:0;padding:2px 6px;border-radius:6px;
+  cursor:pointer;
+}
+.members-keyword-filter-clear:hover{ color:var(--ink); text-decoration:underline; }
+.members-keyword-filter-clear:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px;
+}
+.members-keyword-filter-chips{
+  display:flex;flex-wrap:wrap;gap:8px;
+}
+.members-keyword-filter-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Inter',sans-serif;
+  font-size:.78rem;font-weight:500;letter-spacing:-.005em;line-height:1.4;
+  padding:5px 11px;border-radius:999px;
+  color:var(--ink);
+  background:color-mix(in oklab, var(--bg) 70%, transparent);
+  border:1px solid color-mix(in oklab, var(--accent-2) 24%, transparent);
+  cursor:pointer;
+  transition:background-color .15s ease, border-color .15s ease, color .15s ease, transform .12s ease;
+}
+@media (hover: hover){
+  .members-keyword-filter-chip:hover{
+    background:color-mix(in oklab, var(--accent-2) 12%, transparent);
+    border-color:color-mix(in oklab, var(--accent-2) 42%, transparent);
+  }
+}
+.members-keyword-filter-chip:active{ transform:translateY(1px); }
+.members-keyword-filter-chip:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px;
+}
+.members-keyword-filter-chip[aria-pressed="true"]{
+  background:color-mix(in oklab, var(--accent) 22%, transparent);
+  border-color:color-mix(in oklab, var(--accent) 60%, transparent);
+  color:var(--ink);
+}
+.members-keyword-filter-chip[aria-pressed="true"]:hover{
+  background:color-mix(in oklab, var(--accent) 30%, transparent);
+}
+.members-keyword-filter-chip .count{
+  font-size:.7rem;font-weight:500;
+  color:var(--muted);
+  padding:0 4px;border-radius:6px;
+  background:color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.members-keyword-filter-chip[aria-pressed="true"] .count{
+  color:var(--ink);
+  background:color-mix(in oklab, var(--accent) 22%, transparent);
+}
+.members-keyword-filter-toggle{
+  margin-top:10px;
+  font-family:'Inter',sans-serif;
+  font-size:.78rem;font-weight:500;
+  color:var(--ink-2);
+  background:transparent;border:0;padding:2px 0;
+  cursor:pointer;
+}
+.members-keyword-filter-toggle:hover{ color:var(--ink); text-decoration:underline; }
+.members-keyword-filter-toggle:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px;
+}
+@media (max-width: 640px){
+  .members-keyword-filter{ padding:10px 12px; margin:0; }
+  .members-keyword-filter-chips{ gap:6px; }
+  .members-keyword-filter-chip{ padding:4px 9px; font-size:.74rem; }
+}
+
+/* Mentorship filter row. A separate AND dimension, single-select
+   (All / Mentors / Seeking a mentor). Wrapped in its own tinted band
+   like the keyword filter, but the chips use the bright gradient
+   pressed-state of the WG chips since this is a primary filter. The
+   whole row + each chip are hidden until the data carries the
+   matching facet (handled in people.html). */
+/* Mentorship sits inline in the primary toolbar row (alongside the search
+   and WG chips), so it reads as a plain control group with no tinted band. */
+.members-mentorship-filter{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  margin:0;
+}
+/* Mentorship + STSM-hosting filters share one row so the secondary-facet
+   stack stays short (they were two full-width rows). Wraps to two rows
+   only if there isn't horizontal room; the mobile sheet stacks them. */
+.members-facet-row{
+  display:flex;flex-wrap:wrap;align-items:flex-start;
+  gap:10px 32px;
+}
+/* Shared facet-caption style. `.members-filter-label` is a child of
+   `.members-filter` but lives here, beside the sibling label it shares
+   styling with, rather than next to its block. Intentional, not a collision. */
+/* css-collision-allow: .members-filter-label */
+.members-filter-label,
+.members-mentorship-filter-label{
+  font-family:'Lexend',sans-serif;
+  font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);
+}
+.members-mentorship-filter-chips{display:flex;flex-wrap:wrap;gap:6px}
+.members-mentorship-chip{
+  font:inherit;font-size:.8rem;font-weight:600;
+  padding:5px 13px;border-radius:999px;border:1px solid rgba(11,18,32,.22);
+  background:transparent;color:var(--ink-2);cursor:pointer;
+  transition:var(--tr-tint),border-color .2s var(--ease);
+}
+@media (hover: hover){
+  .members-mentorship-chip:hover{background:rgba(11,18,32,.04);color:var(--ink)}
+}
+.dark .members-mentorship-chip{border-color:rgba(255,255,255,.28)}
+@media (hover: hover){
+  .dark .members-mentorship-chip:hover{background:rgba(255,255,255,.06)}
+}
+.members-mentorship-chip[aria-pressed="true"]{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#fff;border-color:transparent;
+  box-shadow:var(--accent-shadow);
+}
+.members-mentorship-chip[hidden]{display:none}
+.members-mentorship-chip:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px;
+}
+@media (max-width: 640px){
+  .members-mentorship-filter{ padding:0; margin:0; gap:8px; }
+}
+
+/* ── Mobile filter bottom sheet ──────────────────────────────────────
+   The wrapper is a native <dialog>. On desktop it is never opened modally,
+   so display:contents lets the Working-Group, theme, region and mentorship
+   controls flow inline in the toolbar (the UA dialog box, border, padding
+   and ::backdrop are never seen). Below 640px the Filters button opens it
+   with showModal(), which puts it in the top layer as a bottom sheet; see
+   people.html for the behaviour. */
+.members-filterset{ display:contents; }
+.members-filter-toggle-btn,
+.members-sheet-head,
+.members-sheet-foot{ display:none; }
+
+/* Active-filter chips: removable pills summarising what's currently applied,
+   shown below the filter card once any filter is on, so current state and the
+   per-filter remove live together (the "Clear all" in the result bar handles
+   the bulk reset). Desktop wraps; the ≤640px block switches it to a single
+   horizontally-scrollable line. Populated by renderActiveFilters() in
+   people.html, which toggles the [hidden] attribute when the set is empty. */
+.members-active-filters{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin:0 2px 16px;padding:1px;
+}
+.members-active-filters[hidden]{ display:none; }
+.members-active-filter{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;
+  font:inherit;font-size:.78rem;font-weight:500;
+  padding:5px 6px 5px 11px;border-radius:999px;
+  background:color-mix(in oklab, var(--accent) 12%, transparent);
+  border:1px solid color-mix(in oklab, var(--accent) 32%, transparent);
+  color:var(--ink);cursor:pointer;white-space:nowrap;
+  transition:background .2s var(--ease),border-color .2s var(--ease);
+}
+@media (hover: hover){
+  .members-active-filter:hover{ background:color-mix(in oklab, var(--accent) 20%, transparent); }
+}
+.members-active-filter:focus-visible{ outline:2px solid var(--accent);outline-offset:2px; }
+.members-active-filter svg{ width:13px;height:13px;opacity:.7;flex:0 0 auto; }
+.dark .members-active-filter{
+  background:color-mix(in oklab, var(--accent) 22%, transparent);
+  border-color:color-mix(in oklab, var(--accent) 50%, transparent);
+}
+
+@media (max-width:640px){
+  /* Compact toolbar: free-text search + a Filters button. The toolbar's
+     backdrop-filter would otherwise establish a containing block + stacking
+     context that traps the position:fixed filter sheet inside it — anchoring
+     it to the toolbar and rendering it beneath the cards. Drop the blur on
+     mobile so the sheet escapes to the viewport. */
+  .members-toolbar{ gap:10px; align-items:center; -webkit-backdrop-filter:none; backdrop-filter:none; }
+  .members-search{ flex:1 1 auto; min-width:0; }
+  .members-filter-toggle-btn{
+    display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;
+    font:inherit;font-size:.85rem;font-weight:600;
+    padding:9px 13px;border-radius:12px;
+    background:rgba(255,255,255,.92);border:1px solid rgba(11,18,32,.14);
+    color:var(--ink);cursor:pointer;
+  }
+  .dark .members-filter-toggle-btn{ background:rgba(255,255,255,.06);border-color:var(--glass-border); }
+  .members-filter-toggle-count{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:18px;height:18px;padding:0 5px;border-radius:9px;
+    font-size:.72rem;font-weight:700;color:#fff;background:var(--accent);
+  }
+  .members-filter-toggle-count[hidden]{ display:none; }
+
+  /* Opened modally (showModal), the dialog sits in the top layer and is a
+     bottom sheet scrolling between a sticky header and footer. Top-layer
+     placement is what makes it immune to the toolbar's containing block, to
+     page scroll, and to the iOS keyboard viewport offset. */
+  .members-filterset[open]{
+    display:flex;flex-direction:column;
+    position:fixed;inset:auto 0 0 0;width:auto;max-width:100%;
+    /* dvh resolves against the *current* (small) viewport on iOS Safari, so the
+       sheet footer + Apply button stay above the browser toolbar; vh first as a
+       fallback for engines without dvh. */
+    max-height:85vh;max-height:85dvh;
+    margin:0;border:0;padding:0;             /* reset the UA dialog box */
+    overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;
+    background:var(--bg-0);
+    border-radius:18px 18px 0 0;
+    box-shadow:0 -12px 40px rgba(11,18,32,.24);
+    /* A keyframe animation (not a transition) runs the moment the dialog is
+       rendered by showModal, so the slide-up needs no @starting-style dance. */
+    animation:members-sheet-rise .28s var(--ease);
+  }
+  /* Closed on mobile: hidden. (The desktop base is display:contents, which
+     would otherwise spill the controls inline on phones too.) */
+  .members-filterset:not([open]){ display:none; }
+  @keyframes members-sheet-rise{ from{ transform:translateY(100%); } }
+  /* The native backdrop replaces the old manual dimming div. */
+  .members-filterset::backdrop{
+    /* A plain dim, no backdrop-filter: blurring a full viewport of the grid is
+       GPU-expensive on iOS Safari, and tearing it down on close forced a ~0.5s
+       recomposite that read as a laggy dismiss. The 50% dim alone carries the
+       modal weight; a 2px blur under it was imperceptible anyway. */
+    background:rgba(11,18,32,.5);
+    animation:members-sheet-backdrop-in .28s var(--ease);
+    /* Without this the backdrop's default touch-action makes a tap-to-dismiss
+       read as a scroll gesture, so the click is suppressed on the slightest
+       finger drift and the tap appears to do nothing until the 2nd or 3rd try.
+       `none` makes the tap land immediately. */
+    touch-action:none;
+  }
+  @keyframes members-sheet-backdrop-in{ from{ opacity:0; } }
+  /* No html{overflow:hidden} scroll lock: toggling it forces a reflow + scroll
+     reconciliation on iOS Safari that made closing the sheet feel laggy. The
+     background is held instead by the modal dialog's own inertness plus the
+     backdrop's touch-action:none and the sheet's overscroll-behavior:contain,
+     which is what keeps scroll from leaking behind the open sheet. */
+
+  .members-sheet-head{
+    display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:2;background:var(--bg-0);
+    padding:16px 18px 10px;
+  }
+  .members-sheet-title{ font-family:'Lexend',sans-serif;font-size:1.05rem;font-weight:600;color:var(--ink); }
+  .members-sheet-close{
+    appearance:none;border:0;background:transparent;cursor:pointer;color:var(--muted);
+    /* 44px hit target (Apple's minimum): the old 36px sat right at the backdrop
+       edge, so a slightly-high tap missed the button and landed on the dim. */
+    width:44px;height:44px;display:grid;place-items:center;border-radius:50%;
+    margin:-4px -8px -4px 0;
+  }
+  .members-sheet-close:hover{ background:rgba(11,18,32,.06);color:var(--ink); }
+
+  /* Sheet body: each control full-width, stacked. Override the desktop
+     flex bases that would otherwise set the height in a column. */
+  .members-filterset > .members-filter{ padding:0 18px;margin-bottom:4px;flex:0 0 auto; }
+  .members-filterset > .members-facets{ padding:12px 18px 16px;margin:0;flex:0 0 auto; }
+  /* Mentorship + STSM live inside .members-facets (which supplies the
+     18px gutter), so they sit flush like the theme / region rows. The
+     descendant combinator reaches them through the desktop .members-facet-row
+     wrapper, which the sheet stacks back into a column. */
+  .members-facets .members-mentorship-filter{ margin:0 0 2px; }
+  .members-facet-row{ display:flex;flex-direction:column;gap:2px; }
+
+  .members-sheet-foot{
+    display:flex;align-items:center;gap:10px;
+    position:sticky;bottom:0;z-index:2;background:var(--bg-0);
+    padding:12px 18px calc(14px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--glass-border);
+  }
+  .members-sheet-reset{
+    flex:0 0 auto;font:inherit;font-size:.9rem;font-weight:500;
+    background:transparent;border:0;color:var(--ink-2);padding:10px 6px;cursor:pointer;
+  }
+  .members-sheet-reset:hover{ color:var(--ink);text-decoration:underline; }
+  .members-sheet-apply{
+    flex:1 1 auto;font:inherit;font-size:.95rem;font-weight:600;
+    color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    border:0;border-radius:12px;padding:13px 18px;cursor:pointer;
+    box-shadow:var(--accent-shadow);
+  }
+
+  /* On phones the active filters become one horizontally-scrollable line
+     under the toolbar; the chip styling inherits from the base rule. */
+  .members-active-filters{
+    flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+    margin:10px 0 0;-webkit-overflow-scrolling:touch;
+  }
+  .members-active-filters::-webkit-scrollbar{ display:none; }
+
+  /* Stack the count over the freshness line rather than wrapping them inline,
+     which left the middot separator orphaned at the start of the second line. */
+  .members-resultmeta{ flex-direction:column; gap:1px; }
+  .members-resultmeta .directory-freshness::before{ content:none; }
+
+  /* Density toggle is meaningless on a single-column grid. */
+  .members-utilitybar .view-toggle{ display:none; }
+  /* Lighter hero on small screens. */
+  .people-page .section-head .lede{ font-size:.95rem;line-height:1.5; }
+}
+/* Compact (grid) view: keyword block hidden. Full keywords show in
+   the preview panel. The `:not(.is-expanded)` qualifier is vestigial
+   (compact cards no longer expand in-place; clicking opens the
+   preview panel instead), kept only to leave the compact rules'
+   specificity unchanged. */
+.members-grid.is-compact .member-card:not(.is-expanded) .member-keywords,
+.members-grid.is-compact .member-card:not(.is-expanded) .member-regions{
+  display:none;
+}
+.member-card .member-bio{
+  font-size:.92rem;line-height:1.55;color:var(--ink-2);margin:0 0 6px;
+  flex:1;text-align:left;
+  /* Clamp to four lines by default; JS detects overflow and adds a
+     "Show more" toggle that flips `.is-expanded`. */
+  display:-webkit-box;
+  -webkit-line-clamp:4;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.member-card .member-bio.is-expanded{
+  -webkit-line-clamp:unset;
+  display:block;
+  overflow:visible;
+}
+.member-card .member-bio.is-pending{
+  color:var(--muted);font-style:italic;text-align:center;
+  /* No clamping needed — pending placeholder is always short. */
+  display:block;-webkit-line-clamp:unset;overflow:visible;
+}
+.member-bio-toggle{
+  display:inline-flex;align-items:center;gap:4px;
+  margin:0 0 12px;padding:2px 0;
+  font:inherit;font-size:.82rem;font-weight:600;letter-spacing:-.005em;
+  color:var(--accent-2);background:transparent;border:0;cursor:pointer;
+  align-self:flex-start;
+}
+.member-bio-toggle:hover{opacity:.7}
+.member-bio-toggle svg{
+  width:12px;height:12px;
+  transition:transform .2s var(--ease);
+}
+.member-bio-toggle.is-expanded svg{transform:rotate(180deg)}
+.member-card .member-contact{
+  display:flex;gap:6px;justify-content:center;flex-wrap:wrap;
+  margin-top:auto;padding-top:12px;border-top:1px solid var(--line);
+}
+.member-card .member-contact a{
+  width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(11,18,32,.04);color:var(--ink-2);
+  transition:var(--tr-tint),transform .2s var(--ease);
+}
+.member-card .member-contact a:hover{
+  background:var(--accent);color:#fff;opacity:1;transform:translateY(-1px);
+}
+.dark .member-card .member-contact a{background:rgba(255,255,255,.06)}
+.dark .member-card .member-contact a:hover{background:var(--accent)}
+.member-card .member-contact a svg{width:16px;height:16px}
+/* ORCID brand mark is always green — the inner glyph is white. The
+   surrounding pill bg still tints on hover. */
+.member-card .member-contact a.contact-orcid{color:#a6ce39}
+.member-card .member-contact a.contact-orcid:hover{background:#a6ce39;color:#fff}
+.dark .member-card .member-contact a.contact-orcid{color:#a6ce39}
+.dark .member-card .member-contact a.contact-orcid:hover{background:#a6ce39}
+
+/* Search-landing spotlight. Applied to the card a visitor lands
+   on after clicking a search result that points at
+   /people.html#<slug>. Auto-fades after ~3.5 s (the JS removes
+   the class) so it confirms the landing without becoming a
+   permanent selection state. Works in detailed AND compact view —
+   in detailed view it's the only visual cue that this card is
+   "the one you searched for". */
+.member-card.is-search-landed{
+  outline:2px solid var(--accent-2);
+  outline-offset:3px;
+  box-shadow:
+    0 0 0 6px rgba(10,132,255,.20),
+    0 14px 36px rgba(10,132,255,.18),
+    var(--glass-shadow);
+  background:color-mix(in oklab, var(--accent-2) 8%, var(--glass-bg));
+  animation:search-landed-in .45s var(--ease);
+  position:relative;z-index:2;
+}
+.dark .member-card.is-search-landed{
+  background:color-mix(in oklab, var(--accent-2) 14%, var(--glass-bg));
+}
+@keyframes search-landed-in{
+  from{transform:scale(.98);box-shadow:0 0 0 0 rgba(10,132,255,.55),var(--glass-shadow)}
+  to  {transform:scale(1);
+       box-shadow:
+         0 0 0 6px rgba(10,132,255,.20),
+         0 14px 36px rgba(10,132,255,.18),
+         var(--glass-shadow)}
+}
+/* ─── Directory tour ──────────────────────────────────────────
+   Trigger button in the toolbar; backdrop, spotlight, and
+   tooltip are mounted to <body> by the engine in site.js when
+   the tour starts. */
+.tour-trigger{
+  appearance:none;border:0;cursor:pointer;
+  width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(11,18,32,.04);color:var(--muted);
+  font:inherit;font-size:1rem;font-weight:600;
+  transition:var(--tr-tint);
+  align-self:center;
+}
+.tour-trigger:hover,
+.tour-trigger:focus-visible{
+  background:var(--accent-2);color:#fff;outline:none;
+}
+.dark .tour-trigger{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.dark .tour-trigger:hover,
+.dark .tour-trigger:focus-visible{background:var(--accent-2);color:#fff}
+
+/* The `+` join-trigger is styled as a primary CTA, not as a hint
+   button. It reads as the bright sibling next to the muted `?`. */
+.tour-trigger-cta{
+  background:var(--accent);color:#fff;
+  font-size:1.15rem;
+}
+.tour-trigger-cta:hover,
+.tour-trigger-cta:focus-visible{
+  background:var(--accent-2);color:#fff;transform:translateY(-1px);
+}
+.dark .tour-trigger-cta{background:var(--accent);color:#fff}
+.dark .tour-trigger-cta:hover,
+.dark .tour-trigger-cta:focus-visible{background:var(--accent-2)}
+
+/* ─── Welcome strip on the directory ──────────────────────────
+   Shown once to first-time visitors above the directory toolbar.
+   Dismiss is sticky via localStorage('netsec-directory-tour-seen').
+   Returning visitors never see it; the next PR will add a `?`
+   button in the toolbar that can re-open the tour from scratch. */
+.welcome-strip{
+  position:relative;
+  margin:0 0 18px;
+  padding:18px 56px 18px 22px;
+  border-radius:14px;
+  border-left:3px solid var(--accent-2);
+  /* Subtle EU-blue tinted background so it reads as a temporary
+     interstitial rather than blending into the toolbar below. */
+  background:linear-gradient(180deg, rgba(10,132,255,.07), rgba(10,132,255,.02));
+  animation:welcome-fade-in .28s var(--ease) both;
+}
+.welcome-strip[hidden]{display:none}
+.dark .welcome-strip{
+  background:linear-gradient(180deg, rgba(10,132,255,.14), rgba(10,132,255,.05));
+}
+@keyframes welcome-fade-in{
+  from{opacity:0;transform:translateY(-4px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.welcome-strip-title{
+  font-family:'Lexend','Inter',sans-serif;
+  font-size:1.05rem;font-weight:600;letter-spacing:-.01em;
+  margin:0 0 4px;color:var(--ink);
+}
+.welcome-strip-lede{
+  margin:0 0 10px;color:var(--ink-2);font-size:.92rem;line-height:1.5;
+  max-width:62ch;
+}
+.welcome-strip-tips{
+  list-style:none;margin:0;padding:0;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:4px 18px;
+  font-size:.88rem;color:var(--ink-2);line-height:1.45;
+}
+.welcome-strip-tips li{margin:0;padding:0}
+.welcome-strip-tips li::marker{content:""}
+.welcome-strip-tips strong{color:var(--ink);font-weight:600}
+.welcome-strip-actions{
+  display:flex;gap:8px;align-items:center;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+.welcome-strip-dismiss{
+  appearance:none;border:0;cursor:pointer;
+  background:transparent;color:var(--muted);
+  font:inherit;font-size:.85rem;font-weight:600;
+  padding:7px 14px;border-radius:999px;
+  transition:var(--tr-tint);
+}
+.welcome-strip-dismiss:hover,
+.welcome-strip-dismiss:focus-visible{
+  background:rgba(11,18,32,.06);color:var(--ink);outline:none;
+}
+.dark .welcome-strip-dismiss:hover,
+.dark .welcome-strip-dismiss:focus-visible{
+  background:rgba(255,255,255,.10);color:#fff;
+}
+
+/* ─── Compact directory mode ──────────────────────────────────
+   A higher-density layout for the directory: each member becomes
+   a single-row card (initials/photo on the left, name + affiliation
+   + WG chips stacked on the right), with bio and contact icons
+   hidden. Tighter grid (~3 cards across on a desktop, vs ~2 in the
+   detailed view). Toggled via the .is-compact class on the grid,
+   set by the view-mode toggle in the toolbar. Preference persists
+   in localStorage.
+
+   Every compact rule carries a `.member-card:not(.is-expanded)`
+   qualifier. This is now vestigial: compact cards no longer expand
+   in-place (clicking opens the preview panel, see
+   `.member-preview-panel`), so no card ever takes `.is-expanded`.
+   The qualifier is retained so the compact rules' specificity is
+   left untouched. */
+.members-grid.is-compact{
+  grid-template-columns:repeat(auto-fill, minmax(min(280px,100%), 1fr));
+  gap:12px;
+}
+.members-grid.is-compact .member-card:not(.is-expanded){
+  flex-direction:row;
+  padding:12px 14px;
+  gap:14px;
+  align-items:center;
+  cursor:pointer;            /* hint that clicking will expand */
+}
+.members-grid.is-compact .member-card:not(.is-expanded):hover{
+  background:rgba(255,255,255,.04);
+}
+.members-grid.is-compact .member-card:not(.is-expanded):focus-visible{
+  outline:2px solid var(--accent-2);outline-offset:2px;
+}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-photo{
+  width:46px;height:46px;
+  margin:0;flex-shrink:0;
+  border-width:1px;
+}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-photo-fallback{
+  font-size:.95rem;
+}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-body{
+  align-items:flex-start;text-align:left;
+  flex:1;min-width:0;        /* min-width:0 lets the affiliation truncate */
+  gap:2px;
+}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-name{
+  font-size:.95rem;margin:0;line-height:1.25;
+}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-role{
+  font-size:.66rem;margin:1px 0 0;letter-spacing:.04em;
+}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-affiliation{
+  font-size:.78rem;margin:0;line-height:1.35;
+  justify-content:flex-start;
+  /* Single line, with ellipsis when an affiliation runs long. */
+  display:flex;flex-wrap:nowrap;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+}
+/* Compact mode drops position + country in full; the flag
+   still conveys country implicitly and the affiliation is the
+   one piece every card needs at a glance. */
+.members-grid.is-compact .member-card:not(.is-expanded) .member-affiliation .aff-full{display:none}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-affiliation .aff-compact{display:inline}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-wgs{
+  margin:4px 0 0;justify-content:flex-start;
+}
+/* Compact mode: the mentorship badge sits snug under the WG chips,
+   left-aligned like them. Without this it keeps the detailed-view
+   margin (-4px top, 14px bottom), leaving a dead gap below the badge
+   that makes a member's compact card noticeably taller than its
+   neighbours. */
+.members-grid.is-compact .member-card:not(.is-expanded) .member-mentorship{
+  margin:4px 0 0;justify-content:flex-start;
+}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-stsm{
+  margin:4px 0 0;justify-content:flex-start;
+}
+.members-grid.is-compact .member-card:not(.is-expanded) .member-founding{
+  margin:4px 0 0;justify-content:flex-start;
+}
+.members-grid.is-compact .member-card .member-bio,
+.members-grid.is-compact .member-card .member-bio-toggle,
+.members-grid.is-compact .member-card .member-pubs,
+.members-grid.is-compact .member-card .member-profile-cta,
+.members-grid.is-compact .member-card .member-contact{
+  display:none !important;
+}
+/* The member name links to the standalone profile page; the card click
+   opens the preview panel (the delegated handler ignores clicks on link
+   children), so the name link is the way to reach the page from the
+   compact grid. */
+.member-name-link{ color:inherit; text-decoration:none; }
+.member-name-link:hover,
+.member-name-link:focus-visible{ text-decoration:underline; text-underline-offset:2px; }
+/* "View full profile" CTA at the foot of a detailed card (and in the
+   preview panel). */
+.member-profile-cta{
+  display:inline-flex; align-items:center; gap:6px; margin-top:14px;
+  font-family:var(--font-sans); font-weight:600; font-size:.9rem;
+  color:var(--accent-2); text-decoration:none;
+}
+.member-profile-cta:hover,
+.member-profile-cta:focus-visible{ text-decoration:underline; text-underline-offset:2px; }
+
+/* "More" affordance on compact directory cards. Without it, visitors
+   don't know that a compact card can be clicked to open its preview
+   panel. A small ▼ chevron sits at the bottom-right of each card,
+   hidden in detailed mode (where every card already shows its full
+   content). `pointer-events: none` so the chevron never absorbs the
+   click — the whole card is the hit target (delegated handler in
+   people-directory.js). */
+/* css-collision-allow: .member-card */
+.member-card{position:relative}
+.member-toggle-chevron{display:none}
+.members-grid.is-compact .member-toggle-chevron{
+  display:grid;place-items:center;
+  position:absolute;bottom:10px;right:12px;
+  width:24px;height:24px;border-radius:50%;
+  background:rgba(255,255,255,.65);
+  border:1px solid var(--glass-border);
+  color:var(--muted);
+  pointer-events:none;
+  transition:transform .25s var(--ease),background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease);
+}
+.dark .members-grid.is-compact .member-toggle-chevron{
+  background:rgba(28,32,46,.55);
+}
+.members-grid.is-compact .member-toggle-chevron svg{width:14px;height:14px;display:block}
+@media (hover: hover){
+  .members-grid.is-compact .member-card:hover .member-toggle-chevron{
+    color:var(--accent);
+    border-color:rgba(0,51,153,.30);
+  }
+  .dark .members-grid.is-compact .member-card:hover .member-toggle-chevron{
+    color:#a9c2ff;
+    border-color:rgba(110,161,255,.36);
+  }
+}
+/* ── Member preview panel (#72) ──
+   Clicking a compact card opens that member's detail here instead of
+   expanding it in the grid: a right rail on desktop, a bottom sheet on
+   mobile. The grid never reflows. The content is a clone of the card's
+   own detail body (see people-directory.js). */
+.member-preview-scrim{
+  position:fixed;inset:0;z-index:119;background:rgba(11,18,32,.45);
+  opacity:0;visibility:hidden;transition:opacity .22s var(--ease),visibility .22s var(--ease);
+}
+.member-preview-scrim.is-open{opacity:1;visibility:visible}
+/* Desktop: a self-contained floating card anchored *below* the nav. It sits
+   ABOVE the nav (z 120 vs the nav's 100): the 84px top normally clears the
+   nav, but on a taller/wrapped nav the close button could otherwise underlap
+   the higher-z nav and stop receiving clicks. Header + footer are fixed; only
+   the body between them scrolls. */
+.member-preview-panel{
+  position:fixed;z-index:120;top:84px;right:16px;bottom:16px;width:min(460px,94vw);
+  background:var(--bg-0);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 18px 50px rgba(11,18,32,.28);overflow:hidden;
+  transform:translateX(calc(100% + 28px));transition:transform .26s var(--ease);
+  display:flex;flex-direction:column;
+}
+.member-preview-panel.is-open{transform:none}
+/* Sticky header: the "Quick look" eyebrow signposts this is a preview, the
+   Esc hint + close button signpost dismissal. */
+.mpp-head{
+  flex:none;display:flex;align-items:center;gap:10px;
+  padding:13px 13px 13px 22px;border-bottom:1px solid var(--line);
+}
+.mpp-eyebrow{
+  margin-right:auto;font-family:var(--font-sans);font-weight:700;
+  font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;color:var(--accent-2);
+}
+.mpp-esc{
+  font-family:var(--font-sans);font-size:.64rem;font-weight:600;line-height:1;color:var(--muted);
+  border:1px solid var(--line);border-radius:6px;padding:3px 6px;background:transparent;
+}
+.mpp-close{
+  display:grid;place-items:center;width:34px;height:34px;border-radius:50%;flex:none;
+  background:color-mix(in oklab,var(--ink) 6%,var(--bg-0));border:1px solid var(--line);
+  color:var(--muted);cursor:pointer;transition:background .15s var(--ease),color .15s var(--ease);
+}
+.mpp-close:hover,.mpp-close:focus-visible{background:color-mix(in oklab,var(--ink) 12%,var(--bg-0));color:var(--ink)}
+.mpp-scroll{flex:1;overflow-y:auto;padding:22px 24px 26px;transition:opacity .15s var(--ease)}
+/* Cross-fade the body when the open panel switches to another member. */
+.mpp-scroll.is-swapping{opacity:0}
+/* Sticky footer: the primary "View full profile" path stays visible without
+   scrolling. Hidden when the member has no standalone page. */
+.mpp-foot{flex:none;padding:14px 18px;border-top:1px solid var(--line);background:var(--bg-0)}
+.mpp-cta{
+  display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  padding:11px 16px;border-radius:12px;background:var(--accent);color:#fff;
+  text-decoration:none;font-family:var(--font-sans);font-weight:600;font-size:.95rem;
+  transition:background .15s var(--ease);
+}
+.mpp-cta:hover,.mpp-cta:focus-visible{background:var(--accent-2)}
+/* The cloned card drops the grid-card chrome; the panel supplies the frame. */
+.member-preview-panel .member-card.is-panel{
+  background:transparent;border:0;box-shadow:none;outline:0;padding:0;width:100%;max-width:none;cursor:default;
+}
+.member-preview-panel .member-card.is-panel .member-photo{width:112px;height:112px}
+.member-preview-panel .member-card.is-panel .member-name{font-size:1.4rem}
+/* Quick-look bio: a slightly longer teaser than the grid clamp, but still
+   bounded so the panel rarely scrolls; the rest lives on the profile page. */
+.member-preview-panel .member-bio{-webkit-line-clamp:6}
+
+/* Mobile: a bottom sheet over a scrim, instead of the right rail. */
+@media (max-width:899px){
+  .member-preview-panel{
+    top:auto;bottom:0;left:0;right:0;width:100%;max-height:86dvh;
+    border:0;border-top:1px solid var(--line);border-radius:18px 18px 0 0;
+    box-shadow:0 -14px 44px rgba(11,18,32,.22);transform:translateY(101%);
+  }
+  .member-preview-panel.is-open{transform:none}
+  .mpp-scroll{padding:20px 18px 24px}
+  .mpp-esc{display:none}  /* no physical Esc key on touch */
+}
+/* Desktop: the rail coexists with the grid, so no scrim there. */
+@media (min-width:900px){ .member-preview-scrim{display:none} }
+/* Lock background scroll while the sheet is up on mobile. */
+@media (max-width:899px){ body.mpp-open{overflow:hidden} }
+/* View-mode toggle (segmented control in the toolbar) */
+.view-toggle{
+  display:inline-flex;
+  border-radius:999px;
+  background:rgba(11,18,32,.04);
+  padding:3px;
+  gap:2px;
+  align-self:center;
+}
+.dark .view-toggle{background:rgba(255,255,255,.06)}
+.view-toggle button{
+  appearance:none;border:0;background:transparent;cursor:pointer;
+  width:30px;height:30px;
+  border-radius:999px;
+  display:grid;place-items:center;color:var(--muted);
+  transition:var(--tr-tint);
+}
+.view-toggle button[aria-pressed="true"]{
+  background:#ffffff;color:var(--accent);
+  box-shadow:0 1px 2px rgba(11,18,32,.10);
+}
+.dark .view-toggle button[aria-pressed="true"]{
+  background:rgba(255,255,255,.14);color:#fff;
+}
+.view-toggle button:hover:not([aria-pressed="true"]){color:var(--ink-2)}
+.view-toggle button svg{width:16px;height:16px}
+
+@media (max-width:540px){
+  .people-page{padding:100px 0 60px}
+  .members-toolbar{padding:12px 14px}
+  .members-grid{grid-template-columns:1fr}
+  .member-card{padding:20px}
+}
+
+/* Network-directory: soft "Network member" pill for cards without a
+   formal role, and the "Join the network" CTA card. */
+.member-card .member-role.is-soft{
+  color:var(--muted);
+  font-weight:600;
+  letter-spacing:.05em;
+}
+.join-card{
+  margin:48px auto 0;
+  max-width:680px;
+  padding:36px 32px;
+  text-align:center;
+  scroll-margin-top:100px;
+}
+.join-card h2{
+  font-size:clamp(1.4rem,2.5vw,1.8rem);
+  margin:0 0 .6rem;
+  letter-spacing:-.02em;
+}
+.join-card p{
+  margin:0 auto 1.2rem;
+  max-width:54ch;
+  color:var(--ink-2);
+  font-size:1rem;
+  line-height:1.55;
+}
+.join-card-cta{margin-top:6px}
+.join-card-fineprint{
+  margin-top:1.2rem !important;
+  font-size:.85rem;
+  color:var(--muted) !important;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   Directory cinematics
+   ───────────────────────────────────────────────────────────────────
+   Six presentational layers for the members directory (people.html and
+   its FR / DE variants), all driven from assets/js/people-directory.js:
+   a load-state skeleton shimmer, a one-shot staggered first render, a
+   FLIP glide when a filter reorders the grid, a results-count pop, chip
+   press feedback, and a greyscale-to-colour photo hover in detailed
+   view. Every animation has a prefers-reduced-motion off-switch at the
+   foot of this block. The global reduced-motion reset near the top of
+   this file already flattens transition and animation timings, so the
+   off-switches add only what that reset cannot express (a static
+   skeleton, full-colour photos, no cascade offset). Colours come from
+   the theme tokens, with a .dark counterpart wherever a raw value is
+   needed. All rules for a given class are kept adjacent so the
+   class-collision lint stays quiet. JS binds to ids and data-* hooks or
+   to these dedicated is-* state classes, never to a styling class.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── A. Skeleton shimmer (load state) ───────────────────────────────
+   Nine placeholder cards injected before bios.json resolves. Geometry
+   roughly matches a compact card so the swap to real cards does not
+   jump. A diagonal sheen sweeps across each placeholder via a moving
+   linear-gradient background-position. aria-hidden in the markup keeps
+   them out of the accessibility tree. */
+.member-skeleton{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 18px;border-radius:16px;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  overflow:hidden;
+}
+.dark .member-skeleton{background:rgba(255,255,255,.04);border-color:var(--line)}
+.member-skeleton-avatar{
+  flex:0 0 auto;width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(
+    100deg,
+    color-mix(in srgb,var(--ink-2) 8%,transparent) 30%,
+    color-mix(in srgb,var(--ink-2) 16%,transparent) 50%,
+    color-mix(in srgb,var(--ink-2) 8%,transparent) 70%);
+  background-size:220% 100%;
+  animation:member-skeleton-sheen 1.4s linear infinite;
+}
+.member-skeleton-lines{flex:1 1 auto;display:flex;flex-direction:column;gap:9px;min-width:0}
+.member-skeleton-bar{
+  height:10px;border-radius:6px;
+  background:linear-gradient(
+    100deg,
+    color-mix(in srgb,var(--ink-2) 8%,transparent) 30%,
+    color-mix(in srgb,var(--ink-2) 16%,transparent) 50%,
+    color-mix(in srgb,var(--ink-2) 8%,transparent) 70%);
+  background-size:220% 100%;
+  animation:member-skeleton-sheen 1.4s linear infinite;
+}
+.member-skeleton-bar-name{width:62%;height:13px}
+.member-skeleton-bar-role{width:44%}
+.member-skeleton-bar-aff{width:78%}
+@keyframes member-skeleton-sheen{
+  from{background-position:120% 0}
+  to{background-position:-120% 0}
+}
+
+/* ── B. Staggered first render ──────────────────────────────────────
+   On the first real paint only, the grid carries .is-first-reveal and
+   each card cascades in (opacity + small translateY) with an
+   incremental :nth-child delay, capped so the 13th card onward shares
+   the last delay and the whole cascade finishes under 500ms. The class
+   is removed after playback so later renders never re-trigger it. */
+.members-grid.is-first-reveal .member-card{
+  animation:member-card-in .34s var(--ease) both;
+}
+.members-grid.is-first-reveal .member-card:nth-child(1){animation-delay:0ms}
+.members-grid.is-first-reveal .member-card:nth-child(2){animation-delay:35ms}
+.members-grid.is-first-reveal .member-card:nth-child(3){animation-delay:70ms}
+.members-grid.is-first-reveal .member-card:nth-child(4){animation-delay:105ms}
+.members-grid.is-first-reveal .member-card:nth-child(5){animation-delay:140ms}
+.members-grid.is-first-reveal .member-card:nth-child(6){animation-delay:175ms}
+.members-grid.is-first-reveal .member-card:nth-child(7){animation-delay:210ms}
+.members-grid.is-first-reveal .member-card:nth-child(8){animation-delay:245ms}
+.members-grid.is-first-reveal .member-card:nth-child(9){animation-delay:280ms}
+.members-grid.is-first-reveal .member-card:nth-child(10){animation-delay:315ms}
+.members-grid.is-first-reveal .member-card:nth-child(11){animation-delay:350ms}
+.members-grid.is-first-reveal .member-card:nth-child(12){animation-delay:385ms}
+.members-grid.is-first-reveal .member-card:nth-child(n+13){animation-delay:420ms}
+@keyframes member-card-in{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
+}
+
+/* ── C. FLIP transitions on filter changes ──────────────────────────
+   Every render after the first animates the reorder. The JS inverts a
+   surviving card with an inline transform, then adds .is-cine-move to
+   transition it back to zero (the glide). New cards get .is-cine-enter
+   (fade + scale). Both classes and any inline transform are cleared on
+   transitionend or a safety timeout, so no card is left with a stale
+   transform that would break the preview panel anchoring. */
+.member-card.is-cine-move{
+  transition:transform .18s var(--ease);
+  will-change:transform;
+}
+.member-card.is-cine-enter{
+  animation:member-card-enter .15s var(--ease) both;
+}
+@keyframes member-card-enter{
+  from{opacity:0;transform:scale(.96)}
+  to{opacity:1;transform:none}
+}
+
+/* ── D. Animated results count ──────────────────────────────────────
+   #members-count is aria-live="polite"; the text is set once per render
+   so screen readers announce the final value once. The JS toggles
+   .is-count-pop only when the number changes, restarting this subtle
+   opacity + translateY crossfade. */
+.members-count.is-count-pop{
+  animation:members-count-pop .2s var(--ease);
+}
+@keyframes members-count-pop{
+  from{opacity:.35;transform:translateY(4px)}
+  to{opacity:1;transform:none}
+}
+
+/* ── E. Filter-chip press feedback ──────────────────────────────────
+   Pure CSS on the existing chip classes via attribute selectors, so JS
+   never adds a class for this. A subtle scale press-in on :active, and a
+   static accent ring on the pressed state, echoing the homepage
+   conic-trace accent vocabulary without rotating. Specificity is kept
+   to a single class + attribute so the existing pressed background still
+   wins. The press feedback deliberately extends the existing chip
+   classes defined earlier in this file, so the cross-cluster split is
+   intentional and each rule is annotated for the collision lint. */
+/* Press-in scale. Split per class so each carries its own lint
+   annotation (a shared selector list can only annotate one class). */
+/* css-collision-allow: .members-filter-chip */
+.members-filter-chip:active{transform:scale(.96)}
+/* css-collision-allow: .members-mentorship-chip */
+.members-mentorship-chip:active{transform:scale(.96)}
+/* css-collision-allow: .members-filter-chip */
+.members-filter-chip[aria-pressed="true"]{
+  box-shadow:var(--accent-shadow),0 0 0 1px color-mix(in srgb,var(--accent-2) 65%,transparent);
+}
+/* css-collision-allow: .members-mentorship-chip */
+.members-mentorship-chip[aria-pressed="true"]{
+  box-shadow:var(--accent-shadow),0 0 0 1px color-mix(in srgb,var(--accent-2) 65%,transparent);
+}
+/* .dark variants use descendant context, so the collision lint skips
+   them; no annotation needed. */
+.dark .members-filter-chip[aria-pressed="true"]{
+  box-shadow:var(--accent-shadow),0 0 0 1px color-mix(in srgb,var(--accent-2) 80%,transparent);
+}
+.dark .members-mentorship-chip[aria-pressed="true"]{
+  box-shadow:var(--accent-shadow),0 0 0 1px color-mix(in srgb,var(--accent-2) 80%,transparent);
+}
+
+/* ── F. Greyscale-to-colour photo hover (detailed view only) ────────
+   In detailed view, member photos rest greyscale and warm to full
+   colour on hover or focus-within, mirroring the homepage faces
+   marquee. Compact view keeps full colour, since it is a scanning view
+   where colour aids recognition. */
+.members-grid:not(.is-compact) .member-card .member-photo img{
+  filter:grayscale(1);
+  transition:filter .3s var(--ease);
+}
+.members-grid:not(.is-compact) .member-card:hover .member-photo img,
+.members-grid:not(.is-compact) .member-card:focus-within .member-photo img{
+  filter:grayscale(0);
+}
+
+/* ── Reduced-motion off-switches for the directory cinematics ───────
+   The global reset already flattens transition and animation timings.
+   These add what it cannot express: a static skeleton (no sheen), no
+   cascade or FLIP offset, no count pop, and full-colour photos at rest
+   (the greyscale filter transition is motion enough to disable). */
+@media (prefers-reduced-motion: reduce){
+  .member-skeleton-avatar,
+  .member-skeleton-bar{animation:none;background-position:0 0}
+  .members-grid.is-first-reveal .member-card{animation:none}
+  .member-card.is-cine-move{transition:none}
+  .member-card.is-cine-enter{animation:none}
+  .members-count.is-count-pop{animation:none}
+  .members-filter-chip:active,
+  .members-mentorship-chip:active{transform:none}
+  .members-grid:not(.is-compact) .member-card .member-photo img{filter:none;transition:none}
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Directory cinematics wave 2
+   ───────────────────────────────────────────────────────────────────
+   Three further layers on the directory, all injected from
+   people-directory.js so the page markup stays untouched: a member-count
+   constellation band behind the heading, theme-match connection lines in
+   the mentorship panel, and a country flag strip driving the existing
+   activeCountry filter. Reduced-motion off-switches sit at the foot.
+   Colours come from the theme tokens with a .dark counterpart where a raw
+   value is needed. Each class's rules are kept adjacent for the lint.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── A. Constellation band behind the page heading ──────────────────
+   The canvas fills the heading block and sits behind the text, masked so
+   it dissolves toward the edges and never competes with the h1. The host
+   class (added in JS) carries the positioning context, not .section-head
+   itself, to keep the collision lint quiet. */
+.people-net-host{position:relative}
+.people-net-host > *:not(.people-net){position:relative;z-index:1}
+.people-net{
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  height:180px;
+  z-index:0;
+  pointer-events:none;
+  -webkit-mask-image:radial-gradient(120% 100% at 50% 30%, #000 34%, transparent 78%);
+  mask-image:radial-gradient(120% 100% at 50% 30%, #000 34%, transparent 78%);
+}
+
+/* ── B. Mentorship theme-match connection lines ─────────────────────
+   The overlay covers the two-column container and never intercepts
+   clicks. Lines draw from the hovered row to every theme-sharing row in
+   the other column; matched rows lift. Reduced motion drops the draw
+   animation (handled at the foot) but keeps the lines and the lift. */
+[data-mentorship-lines-host]{position:relative}
+[data-mentorship-lines]{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:visible;
+  pointer-events:none;
+  z-index:2;
+}
+.mentorship-line{
+  fill:none;
+  stroke:var(--accent);
+  stroke-width:1.5;
+  opacity:.55;
+  transition:stroke-dashoffset .22s var(--ease);
+}
+.mentorship-person.is-line-source{
+  background:color-mix(in srgb, var(--accent) 14%, transparent);
+  border-radius:8px;
+}
+.mentorship-person.is-line-match{
+  background:color-mix(in srgb, var(--accent) 9%, transparent);
+  border-radius:8px;
+}
+
+/* ── C. Country flag strip (drives activeCountry) ───────────────────
+   A slim single-row ribbon of flags above the active-filter chips. It
+   scrolls horizontally when it overflows, with a mask fade at both ends.
+   The pressed flag carries an accent ring. */
+.country-strip{
+  display:flex;
+  gap:6px;
+  align-items:center;
+  margin:0 0 12px;
+  padding:2px 0;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  mask-image:linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+}
+.country-strip::-webkit-scrollbar{display:none}
+.country-flag{
+  flex:0 0 auto;
+  padding:0;
+  border:0;
+  background:none;
+  cursor:pointer;
+  line-height:0;
+  border-radius:4px;
+  opacity:.72;
+  transition:opacity .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.country-flag img{
+  display:block;
+  width:28px;
+  height:20px;
+  object-fit:cover;
+  border-radius:3px;
+  box-shadow:0 0 0 1px var(--glass-border);
+}
+.country-flag:hover{opacity:1;transform:translateY(-1px)}
+.country-flag[aria-pressed="true"]{
+  opacity:1;
+  box-shadow:0 0 0 2px var(--accent);
+  border-radius:5px;
+}
+
+/* ── Reduced-motion off-switches for wave 2 ─────────────────────────
+   The constellation IIFE paints one static frame itself. Here we drop the
+   line draw-on (lines still appear, they carry information) and the flag
+   hover lift. */
+@media (prefers-reduced-motion: reduce){
+  .mentorship-line{transition:none}
+  .country-flag{transition:none}
+  .country-flag:hover{transform:none}
+}

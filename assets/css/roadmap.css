@@ -1,0 +1,354 @@
+/* -------------------------------------------------------------
+   NetSec — roadmap bundle (assets/css/roadmap.css)
+   Loaded ONLY by /roadmap.html (+ FR/DE). Split out of site.css
+   so the other pages stop paying for the roadmap timeline CSS in
+   their render-blocking path (#1355). The .deliverables-roadmap-
+   link signpost stays in site.css: it renders on /about.html.
+   ------------------------------------------------------------- */
+
+/* -------- Public roadmap page (/roadmap.html) --------
+   Visual timeline with colour-coded status pills. Companion to
+   docs/roadmap-2026.md, intentionally simpler and audience-facing. */
+.roadmap-page{padding:140px 0 80px}
+.roadmap-page .container{max-width:920px}
+.roadmap-page h1{
+  font-size:clamp(2.4rem,4.6vw,3.4rem);margin:0 0 1rem;letter-spacing:-.02em;
+  color:var(--ink);
+}
+.roadmap-page .lede{
+  font-size:var(--fs-lede);color:var(--ink-2);max-width:var(--measure);
+  margin:0 0 8px;line-height:1.55;
+}
+.roadmap-updated{
+  font-size:.85rem;color:var(--muted);margin:0 0 32px;
+}
+
+/* Legend strip — colour key for the four statuses */
+.rm-legend{
+  display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;
+  padding:14px 18px;margin:0 0 40px;border-radius:14px;
+  background:var(--glass-bg-strong);border:1px solid var(--line);
+}
+.rm-legend-label{
+  font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-right:4px;
+}
+
+/* Status pill (shipped / in-progress / planned / deferred) */
+.rm-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 11px;border-radius:999px;
+  font-size:.74rem;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;
+  border:1px solid transparent;line-height:1.2;
+  font-family:'Lexend','Inter',sans-serif;
+}
+.rm-pill .dot{
+  width:7px;height:7px;border-radius:50%;background:currentColor;
+  flex-shrink:0;box-shadow:0 0 0 2px rgba(255,255,255,.4);
+}
+.rm-pill.shipped{
+  background:rgba(22,163,74,.12);color:#15803d;
+  border-color:rgba(22,163,74,.30);
+}
+.rm-pill.in-progress{
+  background:rgba(10,132,255,.12);color:#0a6cff;
+  border-color:rgba(10,132,255,.30);
+}
+.rm-pill.planned{
+  background:rgba(99,102,241,.10);color:#5a5fd6;
+  border-color:rgba(99,102,241,.26);
+}
+.rm-pill.deferred{
+  background:rgba(245,158,11,.14);color:#b45309;
+  border-color:rgba(245,158,11,.32);
+}
+.dark .rm-pill.shipped{color:#4ade80;background:rgba(22,163,74,.18)}
+.dark .rm-pill.in-progress{color:#7dd3fc;background:rgba(10,132,255,.18)}
+.dark .rm-pill.planned{color:#a5b4fc;background:rgba(99,102,241,.18)}
+.dark .rm-pill.deferred{color:#fbbf24;background:rgba(245,158,11,.18)}
+/* Slow blink on the next-incoming release's In-progress dot, which
+   roadmap-progress.js promotes. Scoped to .rm-card so the legend key
+   stays steady. Disabled under reduced-motion. */
+@keyframes rm-inprogress-blink{0%,100%{opacity:1}50%{opacity:.18}}
+.rm-card .rm-pill.in-progress .dot{animation:rm-inprogress-blink 1.8s ease-in-out infinite}
+/* Reduced motion: drop the blink, but keep the dot reading as "live"
+   with a steady accent halo (a ring + soft glow in the pill colour)
+   instead of looking identical to a static pill dot. No motion. */
+@media (prefers-reduced-motion:reduce){
+  .rm-card .rm-pill.in-progress .dot{
+    animation:none;
+    box-shadow:0 0 0 2px rgba(255,255,255,.4),
+               0 0 0 3px color-mix(in srgb, currentColor 30%, transparent),
+               0 0 5px 1px color-mix(in srgb, currentColor 45%, transparent);
+  }
+}
+
+/* In-flight milestone progress bar, rendered by roadmap-progress.js
+   from data/roadmap-progress.json (GitHub milestone closed / total).
+   Only planned + in-progress cards get one; the fill follows the
+   card's status colour. */
+.rm-progress{margin-top:14px}
+.rm-progress-track{height:7px;border-radius:99px;background:rgba(99,102,241,.14);overflow:hidden}
+.rm-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#6366f1,#8b8fe8);transition:width .7s var(--ease)}
+.rm-entry.in-progress .rm-progress-track{background:rgba(10,132,255,.14)}
+.rm-entry.in-progress .rm-progress-fill{background:linear-gradient(90deg,#0a84ff,#38bdf8)}
+.rm-progress-label{margin-top:6px;font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.dark .rm-progress-track{background:rgba(255,255,255,.10)}
+
+/* Quarter heading band */
+.rm-quarter{
+  margin:44px 0 18px;display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;
+  padding-bottom:8px;border-bottom:1px solid var(--line);
+}
+.rm-quarter h2{
+  font-size:1.35rem;letter-spacing:-.01em;margin:0;
+  font-family:'Lexend','Inter',sans-serif;font-weight:600;color:var(--ink);
+}
+.rm-quarter .sub{
+  font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* Timeline (vertical, single column) */
+.rm-timeline{
+  position:relative;margin:0;padding:8px 0 8px 36px;list-style:none;
+}
+.rm-timeline::before{
+  content:'';position:absolute;left:13px;top:6px;bottom:6px;width:2px;
+  background:linear-gradient(180deg,var(--line) 0%,var(--line) 90%,transparent 100%);
+  border-radius:2px;
+}
+.rm-entry{position:relative;margin:0 0 18px;padding:0}
+.rm-entry:last-child{margin-bottom:0}
+/* Marker is vertically centred on the status-pill row.
+   Pill row sits at the top of the card (.rm-card has padding-top:16px);
+   the pill is ~24px tall, so its visual centre lands ~28px below the
+   card top. The marker top values below put each shape's centre at 28px:
+     circle (18×18)   → top:19px  → centre 28px
+     diamond (14×14)  → top:21px  → geometric centre 28px (rotated 45°)
+   Horizontally, the marker's centre must land on the connector line,
+   whose centre is at x=14px (line is left:13px, width:2px). The marker
+   is content-box: the global `*{box-sizing:border-box}` rule does NOT
+   match pseudo-elements, so the 3px / 2px border sits OUTSIDE `width`.
+   The rendered (border-box) centre is left + (width + 2*border)/2 from
+   the timeline's content edge, so with padding-left:36px:
+     left = 14 - 36 - width/2 - border
+     circle (w18, b3) → -34px ; diamond (w14, b2) → -31px.
+   (Forgetting the border is the bug fixed in the second alignment pass:
+   measuring centre off `getComputedStyle().width` alone is short by the
+   border and over-corrects.) */
+.rm-entry::before{
+  content:'';position:absolute;left:-34px;top:19px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--accent);
+  border:3px solid var(--bg-0);
+  box-shadow:0 0 0 1px var(--line);
+  z-index:1;
+}
+.rm-entry.shipped::before{background:#22c55e}
+.rm-entry.in-progress::before{
+  background:#0a84ff;
+  box-shadow:0 0 0 1px var(--line),0 0 0 5px rgba(10,132,255,.18);
+}
+.rm-entry.planned::before{background:#8b8fe8}
+.rm-entry.deferred::before{background:#f59e0b}
+.rm-entry.rm-milestone::before{
+  width:14px;height:14px;left:-31px;top:21px;
+  background:var(--ink);border-radius:3px;transform:rotate(45deg);
+  border-width:2px;
+}
+.dark .rm-entry::before{border-color:var(--bg-0)}
+.dark .rm-entry.rm-milestone::before{background:#cbd5e1}
+
+/* Collapsed shipped section. JS injects a toggle <li> at the top of
+   any rm-timeline that contains more than one shipped entry, tags every
+   shipped entry except the most recent with .rm-shipped-collapsible,
+   and sets data-shipped-state="collapsed" on the parent <ol>. The CSS
+   below hides only those earlier entries, leaving the most recent
+   shipped card, plus in-progress, planned, and milestone entries,
+   visible. */
+.rm-timeline[data-shipped-state="collapsed"] > .rm-entry.rm-shipped-collapsible{
+  display:none;
+}
+/* The toggle itself sits in the timeline gutter like a regular entry
+   but without the marker dot or the connector — it's chrome, not
+   content. */
+.rm-shipped-toggle{
+  position:relative;
+  list-style:none;
+  margin:0 0 14px;
+  padding:0;
+}
+.rm-shipped-toggle::before,
+.rm-shipped-toggle::marker{content:none}
+.rm-shipped-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 14px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:transparent;
+  color:var(--ink-2);
+  font:inherit;
+  font-size:.86rem;
+  font-weight:500;
+  cursor:pointer;
+  transition:background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
+}
+.rm-shipped-btn:hover,
+.rm-shipped-btn:focus-visible{
+  background:var(--glass-bg);
+  border-color:var(--accent-2);
+  color:var(--accent-2);
+  opacity:1;
+}
+.rm-shipped-chevron{
+  width:14px;height:14px;
+  flex-shrink:0;
+  transition:transform .2s var(--ease);
+}
+.rm-shipped-btn[aria-expanded="true"] .rm-shipped-chevron{
+  transform:rotate(180deg);
+}
+@media print{
+  /* Print should show the full history. */
+  .rm-shipped-toggle{display:none}
+  .rm-timeline[data-shipped-state="collapsed"] > .rm-entry.rm-shipped-collapsible{display:list-item}
+}
+
+.rm-card{
+  padding:16px 20px;border-radius:14px;
+  background:var(--glass-bg-strong);border:1px solid var(--line);
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease);
+}
+.rm-card:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 22px rgba(11,18,32,.07);
+  border-color:rgba(0,51,153,.18);
+}
+.dark .rm-card:hover{box-shadow:0 8px 22px rgba(0,0,0,.35)}
+/* "Milestone" cards on the public roadmap = Action events (Conference,
+   MC plenary, Year-1 anniversary) — read as different from release
+   cards via the diamond-shaped marker dot + a soft dashed border. The
+   class is named `.rm-milestone` (NOT `.milestone`) to avoid colliding
+   with the pre-existing `.milestone` pill used in the Gantt chart,
+   which paints a saturated EU-blue → Apple-blue gradient directly on
+   whichever element carries the class. That collision was the cause
+   of the "milestone cards render as a strong blue panel with
+   unreadable text" regression in PRs #95 / #97. */
+.rm-entry.rm-milestone .rm-card{
+  border-style:dashed;
+  border-color:rgba(0,51,153,.22);
+}
+.dark .rm-entry.rm-milestone .rm-card{
+  border-color:rgba(110,161,255,.30);
+}
+.rm-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:6px;
+}
+.rm-head .when{
+  font-size:.82rem;font-weight:600;color:var(--muted);
+  font-variant-numeric:tabular-nums;letter-spacing:.01em;
+}
+.rm-card h3{
+  margin:0 0 6px;font-size:1.02rem;letter-spacing:-.01em;
+  color:var(--ink);font-family:'Lexend','Inter',sans-serif;font-weight:600;
+  line-height:1.35;
+}
+.rm-card p{
+  margin:0;font-size:.93rem;color:var(--ink-2);line-height:1.55;
+}
+.rm-card .notes-link{
+  display:inline-block;margin-top:8px;font-size:.85rem;
+  color:var(--accent-2);text-decoration:none;
+  border-bottom:1px solid transparent;transition:border-color .2s var(--ease);
+}
+.rm-card .notes-link:hover{border-bottom-color:currentColor}
+/* Closed-issue tally on shipped cards, sitting on the same row as the
+   Release-notes link (roadmap-progress.js inserts it just before the
+   link). A green check reads the milestone as completed. */
+.rm-card .rm-shipped-count{
+  display:inline-block;margin-top:8px;margin-right:14px;
+  font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;
+}
+.rm-card .rm-shipped-count::before{
+  content:"\2713\00a0";color:var(--rm-shipped-check);font-weight:700;
+}
+
+/* Feature chips (issue #767). A row of small glass mini-pills below the
+   card prose, each pairing an rmi-* stroke icon with a short label, so
+   a headline release reads its big features at a glance. Lives as a
+   sibling <ul> after the <p>, never inside it, because promote-roadmap.py
+   rewrites the <h3> + first <p> at release time. Patch releases carry no
+   chips, which is itself the visual minor/patch signal. The mini-pills
+   reuse the .rm-pill glass language at a smaller scale. No animation, so
+   prefers-reduced-motion needs no override. */
+.rm-features{
+  list-style:none;margin:12px 0 0;padding:0;
+  display:flex;flex-wrap:wrap;gap:7px;
+}
+.rm-features li{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 10px;border-radius:999px;
+  font-size:.78rem;font-weight:600;line-height:1.25;
+  color:var(--ink-2);
+  background:rgba(0,51,153,.05);
+  border:1px solid rgba(0,51,153,.14);
+  font-family:'Lexend','Inter',sans-serif;
+}
+.rm-features .rmi{
+  width:1em;height:1em;flex-shrink:0;
+  fill:none;stroke:currentColor;
+  color:var(--accent-2);
+}
+.dark .rm-features li{
+  color:var(--ink-2);
+  background:rgba(110,161,255,.10);
+  border-color:rgba(110,161,255,.22);
+}
+.dark .rm-features .rmi{color:#7dd3fc}
+
+/* Considering-for-later — deferred / under-watch items */
+.rm-later{
+  margin-top:56px;padding:24px 26px;border-radius:16px;
+  background:var(--glass-bg-strong);border:1px solid var(--line);
+}
+.rm-later h2{
+  margin:0 0 .4rem;font-size:1.25rem;letter-spacing:-.01em;
+  font-family:'Lexend','Inter',sans-serif;font-weight:600;color:var(--ink);
+}
+/* Count badge on the Under-watch heading (roadmap-progress.js counts the
+   cards actually shown). Amber, matching the Under-watch pill colour. */
+.rm-later-count{display:inline-flex;align-items:center;justify-content:center;min-width:1.5em;height:1.5em;margin-left:.5em;padding:0 .45em;border-radius:999px;background:rgba(245,158,11,.16);color:#b45309;font-size:.62em;font-weight:700;vertical-align:middle;line-height:1}
+.dark .rm-later-count{background:rgba(245,158,11,.2);color:#fbbf24}
+.rm-later > p{
+  margin:0 0 16px;font-size:.92rem;color:var(--ink-2);line-height:1.55;max-width:60ch;
+}
+.rm-later-list{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:14px;margin:0;padding:0;list-style:none;
+}
+.rm-later-item{
+  padding:14px 16px;border-radius:12px;
+  background:rgba(245,158,11,.05);
+  border:1px solid rgba(245,158,11,.22);
+}
+.dark .rm-later-item{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.30)}
+.rm-later-item-head{
+  display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;
+}
+.rm-later-item h3{
+  margin:0;font-size:.96rem;font-weight:600;
+  font-family:'Lexend','Inter',sans-serif;color:var(--ink);letter-spacing:-.005em;
+}
+.rm-later-item p{
+  margin:0;font-size:.86rem;color:var(--ink-2);line-height:1.5;
+}
+
+
+@media (prefers-reduced-motion: reduce){
+  .rm-feedback-action:hover,
+  .rm-card:hover{transform:none}
+}
