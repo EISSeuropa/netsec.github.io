@@ -249,7 +249,7 @@ img{max-width:100%;display:block}
   background:linear-gradient(180deg,#eef3fc 0%,#f6f8fc 40%,#fcfaf5 100%);
 }
 .blob{
-  position:absolute;border-radius:50%;filter:blur(80px);opacity:.55;
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:.45;
   animation:drift 22s var(--ease) infinite alternate;
 }
 .blob.b1{width:520px;height:520px;background:#9bb8ff;top:-160px;left:-120px}
@@ -6665,13 +6665,13 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   transition:opacity .3s var(--ease);
   background:radial-gradient(
     240px circle at var(--mx,50%) var(--my,50%),
-    rgba(255,255,255,.28), transparent 60%);
+    rgba(255,255,255,.22), transparent 60%);
 }
 [data-tilt]:hover::after{opacity:1}
 .dark [data-tilt]::after{
   background:radial-gradient(
     240px circle at var(--mx,50%) var(--my,50%),
-    rgba(180,205,255,.20), transparent 60%);
+    rgba(180,205,255,.16), transparent 60%);
 }
 /* The border trace, a thin accent ring that slowly rotates on hover.
    The static value is a plain accent ring, so browsers without @property
@@ -6693,13 +6693,13 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite:exclude;
 }
+/* Single-accent trace: the one-accent principle holds on hover too. */
 @supports (background:conic-gradient(from 0deg, red, red)){
   [data-tilt]::before{
     background:conic-gradient(
       from var(--angle),
       transparent 0deg,
-      var(--accent) 90deg,
-      var(--accent-2) 180deg,
+      var(--accent) 140deg,
       transparent 300deg);
   }
 }
@@ -6739,7 +6739,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   opacity:.85;
   transition:filter .3s var(--ease), transform .3s var(--ease), opacity .3s var(--ease);
 }
-.faces-track img:hover{filter:grayscale(0);opacity:1;transform:scale(1.12)}
+.faces-track img:hover{filter:grayscale(0);opacity:1;transform:scale(1.06)}
 @keyframes faces-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 /* Mirrors .events-seeall, the site's established "see all" link, but
    centred under the marquee rather than right-aligned. */
