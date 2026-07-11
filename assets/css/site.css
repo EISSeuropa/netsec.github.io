@@ -6481,13 +6481,17 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .ts-edition-topics li{ margin:0 0 .2rem; }
 .ts-gallery{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:.7rem; }
 .ts-gallery-item{ margin:0; }
-.ts-gallery-img{ width:100%; height:200px; object-fit:cover; border-radius:12px; display:block; }
+/* --photo-grade: the shared grade for content photography, so
+   mixed-source event photos read as one set in both themes.
+   Identity headshots (avatars, spotlight, directory, marquee) are
+   deliberately exempt from the desaturation. */
+.ts-gallery-img{ width:100%; height:200px; object-fit:cover; border-radius:12px; display:block; filter:var(--photo-grade); }
 
 /* ── ESSC archive "In pictures" gallery (essc-2026.html) ─────────────── */
 .essc-photos-section{ padding:1.5rem 0; }
 .essc-photos{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:.7rem; }
 .essc-photos-item{ margin:0; }
-.essc-photos-img{ width:100%; height:240px; object-fit:cover; border-radius:12px; display:block; }
+.essc-photos-img{ width:100%; height:240px; object-fit:cover; border-radius:12px; display:block; filter:var(--photo-grade); }
 
 /* ============================================================
    Slide-templates gallery (/slides.html)
@@ -6728,7 +6732,10 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   border-radius:50%;
   object-fit:cover;
   border:2px solid var(--glass-border);
-  filter:grayscale(1);
+  /* Resting state carries the shared grade's contrast so the
+     marquee sits in the same photographic register as the graded
+     event photos; hover restores the person's natural colour. */
+  filter:grayscale(1) contrast(1.05);
   opacity:.85;
   transition:filter .3s var(--ease), transform .3s var(--ease), opacity .3s var(--ease);
 }
