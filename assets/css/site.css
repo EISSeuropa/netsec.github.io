@@ -86,6 +86,36 @@
   --tr-tint:background .2s var(--ease),color .2s var(--ease);
   --accent-shadow:0 4px 12px var(--accent-glow);
   --accent-shadow-lg:0 6px 16px var(--accent-glow);
+  /* ── Editorial token layer (v1.13.0) ──────────────────────────
+     Fluid type scale, spacing scale, prose measure and photo grade.
+     Closes the gap the design-system PDF already documents: the
+     components below reference these steps, not fresh ad-hoc
+     values. Type scale is Lexend-led, clamped so phones never
+     overshoot. */
+  --fs-display:clamp(2.7rem,6vw,4.6rem);   /* home hero lockup */
+  --fs-h1:clamp(2.4rem,4.8vw,3.6rem);      /* page titles */
+  --fs-h2:clamp(1.8rem,3.2vw,2.6rem);      /* section heads */
+  --fs-h3:clamp(1.18rem,1.6vw,1.35rem);    /* card / sub-section heads */
+  --fs-h4:1rem;                            /* smallest labelled head */
+  --fs-lede:clamp(1.08rem,1.5vw,1.22rem);  /* page ledes */
+  /* Spacing scale. Existing components migrate opportunistically;
+     new work uses these rather than new pixel values. */
+  --sp-1:.25rem;
+  --sp-2:.5rem;
+  --sp-3:.75rem;
+  --sp-4:1rem;
+  --sp-5:1.5rem;
+  --sp-6:2rem;
+  --sp-7:3rem;
+  --sp-8:5rem;
+  --section-pad:clamp(64px,9vw,112px);     /* vertical section rhythm */
+  /* Prose measure: body columns aim for 65–75 characters. */
+  --measure:70ch;
+  --measure-narrow:62ch;
+  /* One photographic grade for content photography (event photos,
+     spotlight, faculty). Identity headshots are exempt: a grade on
+     a directory face would misrepresent the person. */
+  --photo-grade:saturate(.78) contrast(1.05);
 }
 
 *{box-sizing:border-box}
@@ -1811,6 +1841,9 @@ form button:disabled{opacity:.65;cursor:wait}
   --rm-shipped-check:#5fcf94;
   --accent-2:#82b7ff;
   --accent-glow:rgba(110,161,255,.30);
+  /* Graded photos lift a touch in the dark theme so they don't sink
+     into the navy background. */
+  --photo-grade:saturate(.78) contrast(1.03) brightness(1.06);
   color-scheme:dark;
 }
 .dark .ambience{background:linear-gradient(180deg,#0c1428 0%,#0b1220 45%,#161024 100%)}
