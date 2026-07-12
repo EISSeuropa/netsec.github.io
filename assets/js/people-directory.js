@@ -1307,9 +1307,17 @@
     b.addEventListener('click', () => {
       activeWG = b.dataset.wg;
       filterChips.forEach(o => o.setAttribute('aria-pressed', o === b));
+      writeHashKeywords();
       render();
     });
   });
+  // Mirror activeWG / activeCountry back into the toolbar controls after a
+  // hash parse (deep link or back/forward), the same job the chip row's own
+  // click handler does for a direct tap.
+  function syncWgChips() {
+    filterChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.wg === activeWG ? 'true' : 'false'));
+    if (countrySelect) countrySelect.value = activeCountry;
+  }
   mentorshipChips.forEach(b => {
     b.addEventListener('click', () => {
       const v = b.dataset.mentorship;
@@ -1331,13 +1339,16 @@
   if (countrySelect) {
     countrySelect.addEventListener('change', () => {
       activeCountry = countrySelect.value;
+      writeHashKeywords();
       render();
     });
   }
   let searchTimeout;
   search.addEventListener('input', () => {
     clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(render, 120);
+    // The hash write shares the debounce so the URL settles with the grid
+    // rather than churning per keystroke.
+    searchTimeout = setTimeout(() => { writeHashKeywords(); render(); }, 120);
   });
 
   // Results bar: a global "Clear all filters" control, shown whenever any
@@ -1967,6 +1978,9 @@
     activeRegions.clear();
     activeMentorship.clear();
     activeStsm = false;
+    activeWG = 'all';
+    activeCountry = 'all';
+    search.value = '';
     const raw = (location.hash || '').replace(/^#/, '');
     if (!raw) return;
     // Try query-string-style first: `themes=a,b,c` or
@@ -1995,6 +2009,23 @@
     if (stsm && stsm !== '0' && stsm.toLowerCase() !== 'false') {
       activeStsm = true;
     }
+    // Working-group / MC facet (#648): `wg=1..4` or `wg=mc`, matching the
+    // chip row's dataset values, so a filtered view is shareable.
+    const wg = params.get('wg');
+    if (wg && ['1', '2', '3', '4', 'mc'].includes(wg)) {
+      activeWG = wg;
+    }
+    // Country facet: the select's option value (the country name),
+    // URL-encoded. URLSearchParams already decoded it.
+    const country = params.get('country');
+    if (country) {
+      activeCountry = country;
+    }
+    // Free-text search: `q=<query>`, decoded by URLSearchParams.
+    const q = params.get('q');
+    if (q) {
+      search.value = q;
+    }
   }
   function writeHashKeywords() {
     const slugs = Array.from(activeKeywords);
@@ -2003,7 +2034,7 @@
     // Preserve any portion of the hash this function does not own (e.g. a
     // member-card deep-link slug stays intact). Both the theme and the
     // mentorship keys are owned here so they coexist in one hash.
-    const hasKeywordsKey = /(^|&)(themes|regions|mentorship|stsm)=/.test(rawHash);
+    const hasKeywordsKey = /(^|&)(themes|regions|mentorship|stsm|wg|country|q)=/.test(rawHash);
     let rest = '';
     if (rawHash && hasKeywordsKey) {
       const params = new URLSearchParams(rawHash);
@@ -2011,6 +2042,9 @@
       params.delete('regions');
       params.delete('mentorship');
       params.delete('stsm');
+      params.delete('wg');
+      params.delete('country');
+      params.delete('q');
       rest = params.toString();
     } else if (rawHash && !hasKeywordsKey && !rawHash.includes('=')) {
       // A bare member-id-style hash; keep it as a separate fragment.
@@ -2024,6 +2058,13 @@
     if (regions.length) parts.push('regions=' + regions.join(','));
     if (mentors.length) parts.push('mentorship=' + mentors.join(','));
     if (activeStsm) parts.push('stsm=1');
+    // Toolbar facets (#648): working group / MC, country, and the free-text
+    // query join the shareable hash when non-default, so any filtered view
+    // round-trips through the URL.
+    if (activeWG !== 'all') parts.push('wg=' + activeWG);
+    if (activeCountry !== 'all') parts.push('country=' + encodeURIComponent(activeCountry));
+    const _q = (search.value || '').trim();
+    if (_q) parts.push('q=' + encodeURIComponent(_q));
     if (rest) parts.push(rest);
     const next = parts.join('&');
     // Use replaceState rather than assigning location.hash so that
@@ -2218,7 +2259,8 @@
   window.addEventListener('hashchange', () => {
     const snap = () => Array.from(activeKeywords).sort().join(',') + '|'
       + Array.from(activeRegions).sort().join(',') + '|'
-      + Array.from(activeMentorship).sort().join(',') + '|' + (activeStsm ? '1' : '');
+      + Array.from(activeMentorship).sort().join(',') + '|' + (activeStsm ? '1' : '')
+      + '|' + activeWG + '|' + activeCountry + '|' + (search.value || '').trim();
     const before = snap();
     parseHashKeywords();
     const after = snap();
@@ -2227,6 +2269,7 @@
       renderRegionFilter();
       syncMentorshipChips();
       syncStsmChip();
+      syncWgChips();
       render();
     }
   });
@@ -2496,6 +2539,7 @@
     if (keywordDetails && activeKeywords.size > 0) keywordDetails.open = true;
     if (regionDetails && activeRegions.size > 0) regionDetails.open = true;
     populateCountryFilter();
+    syncWgChips();
     setupMentorshipFilter();
     syncMentorshipChips();
     setupStsmFilter();
