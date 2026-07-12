@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-10T08:37:49+00:00",
+  "generated_at": "2026-07-12T17:26:26+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-10T08:37:49+00:00"
+    "last_synced": "2026-07-12T17:26:26+00:00"
   },
   "members": [
     {
@@ -1506,17 +1506,42 @@
         4
       ],
       "wg_leadership": {},
-      "bio": "",
-      "keywords": [],
-      "email": "",
+      "bio": "Dr. Julia Carver is an Assistant Professor in ISGA’s Cybersecurity Governance Research Group. Previously, she was a Postdoctoral Researcher with the Hague Programme on International Cyber Security. She earned her DPhil in International Relations at the University of Oxford (Nuffield College) as the recipient of an ESRC/UKRI studentship. Prior to the DPhil, she completed an MPhil in Politics (European Governance) at Oxford with Distinction, and a Bachelor of Arts (Honours) at Queen's University in Canada, specialising in Politics and Modern European Languages. Prior to joining Leiden, Julia was a 2024–2025 European Cyber Security Fellow at Virtual Routes, a Research Associate at Oxford’s Department of Computer Science, and a Research Fellow at Oxford’s Changing Character of War Centre. At Oxford, she also served as a Lecturer in Politics at Magdalen College, where she taught undergraduate politics for three years. In 2021, she founded the Cyber Strategy and Information Operations research group (now the Oxford Technology & Security Nexus), affiliated with Oxford’s Changing Character of War Centre and Nuffield College. Julia has collaborated with national governments on cybersecurity, defence, and strategic policy, including governance responses to large-scale ransomware attacks and net assessment.",
+      "keywords": [
+        "digital sovereignty",
+        "cybersecurity",
+        "strategic competition",
+        "geopolitics"
+      ],
+      "email": "j.i.carver@fgga.leidenuniv.nl",
       "website": "",
-      "orcid": "",
+      "orcid": "0000-0002-1397-7393",
       "linkedin": "",
       "twitter": "",
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/julia-carver.jpg",
-      "source": "seed"
+      "source": "form",
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "stsm_hosting": "ask",
+      "photo_source_sha256": "c6d537a34e7bddb1d43572319ae184b2ea1e26cb68604c6bf909a9014e87fe79",
+      "canonical_keywords": [
+        "Cybersecurity",
+        "Digital sovereignty",
+        "Geopolitics",
+        "Strategic competition"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Foreign policy and diplomacy"
+      ]
     },
     {
       "id": "sophie-enos-attali",
@@ -3020,7 +3045,7 @@
     },
     {
       "keyword": "Cybersecurity",
-      "count": 5
+      "count": 6
     },
     {
       "keyword": "AI",
@@ -3067,15 +3092,15 @@
       "count": 3
     },
     {
-      "keyword": "Security",
-      "count": 3
-    },
-    {
       "keyword": "Defence",
       "count": 2
     },
     {
       "keyword": "Deterrence",
+      "count": 2
+    },
+    {
+      "keyword": "Digital sovereignty",
       "count": 2
     },
     {
@@ -3131,11 +3156,19 @@
       "count": 2
     },
     {
+      "keyword": "Security",
+      "count": 2
+    },
+    {
       "keyword": "Security and defence",
       "count": 2
     },
     {
       "keyword": "Security studies",
+      "count": 2
+    },
+    {
+      "keyword": "Strategic competition",
       "count": 2
     },
     {
@@ -3319,10 +3352,6 @@
       "count": 1
     },
     {
-      "keyword": "Digital sovereignty",
-      "count": 1
-    },
-    {
       "keyword": "Disinformation",
       "count": 1
     },
@@ -3360,10 +3389,6 @@
     },
     {
       "keyword": "Energy security",
-      "count": 1
-    },
-    {
-      "keyword": "Ethnic conflict analysis",
       "count": 1
     },
     {
@@ -3667,14 +3692,6 @@
       "count": 1
     },
     {
-      "keyword": "State-building",
-      "count": 1
-    },
-    {
-      "keyword": "Strategic competition",
-      "count": 1
-    },
-    {
       "keyword": "Strategic culture",
       "count": 1
     },
@@ -3750,7 +3767,7 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 27
+      "count": 26
     },
     {
       "theme": "Foreign policy and diplomacy",
@@ -3758,7 +3775,7 @@
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 16
+      "count": 17
     },
     {
       "theme": "Theory and methods",
@@ -3790,7 +3807,7 @@
     },
     {
       "theme": "Peace, mediation and reconciliation",
-      "count": 5
+      "count": 4
     },
     {
       "theme": "Political psychology, public opinion and decision-making",
@@ -3864,7 +3881,6 @@
     "Election interference": "Intelligence, information and influence",
     "Emerging and disruptive technologies": "Cyber and emerging technology",
     "Emerging technology": "Cyber and emerging technology",
-    "Ethnic conflict analysis": "Peace, mediation and reconciliation",
     "Euro-Atlantic foreign policy": "European and transatlantic security order",
     "European defence": "European and transatlantic security order",
     "European integration": "EU, UN and other international organisations",
@@ -3945,7 +3961,6 @@
     "Small states": "Foreign policy and diplomacy",
     "Small states' foreign and security policy": "Foreign policy and diplomacy",
     "Social media": "Intelligence, information and influence",
-    "State-building": "Peace, mediation and reconciliation",
     "Strategic culture": "Strategy and deterrence",
     "Strategy": "Strategy and deterrence",
     "Subversion": "Intelligence, information and influence",
@@ -3967,31 +3982,31 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 41
+      "count": 42
     },
     {
       "region": "Global and cross-regional",
-      "count": 29
-    },
-    {
-      "region": "Europe - Western Balkans",
-      "count": 15
+      "count": 30
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
       "count": 14
     },
     {
+      "region": "Europe - Western Balkans",
+      "count": 14
+    },
+    {
+      "region": "The Americas",
+      "count": 11
+    },
+    {
       "region": "Asia",
       "count": 10
     },
     {
-      "region": "The Americas",
-      "count": 10
-    },
-    {
       "region": "Middle East and North Africa",
-      "count": 6
+      "count": 5
     },
     {
       "region": "Africa",
