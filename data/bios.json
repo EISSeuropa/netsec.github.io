@@ -138,10 +138,15 @@
       "position": "",
       "roles": [
         "Grant Awarding Coordinator",
-        "Management Committee · Türkiye"
+        "Management Committee · Türkiye",
+        "WG2 Co-Leader"
       ],
       "wgs": [],
-      "wg_leadership": {},
+      "wg_leadership": {
+        "co_lead": [
+          2
+        ]
+      },
       "bio": "",
       "keywords": [],
       "email": "",
@@ -304,7 +309,6 @@
       "affiliation": "University of Belgrade",
       "position": "",
       "roles": [
-        "WG1 Co-Leader",
         "Management Committee · Serbia",
         "WG1 Leader"
       ],
@@ -316,9 +320,6 @@
       ],
       "wg_leadership": {
         "lead": [
-          1
-        ],
-        "co_lead": [
           1
         ]
       },
@@ -343,15 +344,10 @@
       "affiliation": "University of Amsterdam",
       "position": "",
       "roles": [
-        "WG2 Co-Leader",
         "Management Committee · Netherlands"
       ],
       "wgs": [],
-      "wg_leadership": {
-        "co_lead": [
-          2
-        ]
-      },
+      "wg_leadership": {},
       "bio": "",
       "keywords": [],
       "email": "",
@@ -1315,7 +1311,9 @@
       "country_code": "gr",
       "affiliation": "University of the Peloponnese",
       "position": "Professor of International Relations",
-      "roles": [],
+      "roles": [
+        "WG1 Co-Leader"
+      ],
       "wgs": [
         1
       ],
@@ -1327,7 +1325,11 @@
         "Europe - Western Balkans"
       ],
       "stsm_hosting": "yes",
-      "wg_leadership": {},
+      "wg_leadership": {
+        "co_lead": [
+          1
+        ]
+      },
       "bio": "Nikolaos Tzifakis holds a Jean Monnet Chair in EU Foreign Policy and the Western Balkans and is a Professor of International Relations at the Department of Political Science and International Relations of the University of the Peloponnese. He is the Coordinator of the “Empowering the Geopolitical EU in the Eastern Neighborhood and the Western Balkans (GEO-POWER-EU)” Horizon Europe Project (2024–2027). He is also a Visiting Professor at the College of Europe (in Tirana) and at the European Regional Master (ERMA) in “Democracy and Human Rights in South-East Europe” (University of Bologna/University of Sarajevo), and a member of Balkans in Europe Policy Advisory Group (BiEPAG). His research interests include EU enlargement policy and geopolitical competition in the Western Balkans.",
       "keywords": [
         "EU Foreign Polcy",
@@ -2910,7 +2912,12 @@
       "affiliation": "CASD",
       "position": "PhD Candidate",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        2,
+        3,
+        4
+      ],
       "mentorship": [],
       "regions": [
         "Asia",
@@ -2956,7 +2963,9 @@
       "roles": [
         "Management Committee · Poland"
       ],
-      "wgs": [],
+      "wgs": [
+        2
+      ],
       "mentorship": [
         "mentor"
       ],
@@ -2994,7 +3003,9 @@
       "affiliation": "Yildiz Technical University",
       "position": "Lecturer",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        2
+      ],
       "mentorship": [
         "mentor"
       ],
