@@ -185,9 +185,23 @@
     });
     // Manage tabindex + collapse any expanded card when leaving
     // compact mode — there's nothing left to expand into in detailed.
+    // Compact cards are interactive: a click opens the member preview
+    // panel (a role="dialog" aside), so each card announces itself as a
+    // button that pops a dialog, with aria-expanded tracking whether its
+    // own panel is open (openPanel / closePanel flip it; false here).
     grid.querySelectorAll('.member-card').forEach(card => {
-      if (compact) card.setAttribute('tabindex', '0');
-      else { card.removeAttribute('tabindex'); card.classList.remove('is-expanded'); }
+      if (compact) {
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-haspopup', 'dialog');
+        card.setAttribute('aria-expanded', 'false');
+      } else {
+        card.removeAttribute('tabindex');
+        card.removeAttribute('role');
+        card.removeAttribute('aria-haspopup');
+        card.removeAttribute('aria-expanded');
+        card.classList.remove('is-expanded');
+      }
     });
   }
   // Density is desktop-choosable, phone-forced. On phones (≤640px) the grid is
@@ -276,6 +290,11 @@
     clone.removeAttribute('id');
     clone.removeAttribute('data-slug');
     clone.removeAttribute('tabindex');
+    // The clone is static panel content, not the popup trigger, so the
+    // compact card's button-with-dialog semantics must not ride along.
+    clone.removeAttribute('role');
+    clone.removeAttribute('aria-haspopup');
+    clone.removeAttribute('aria-expanded');
     const chev = clone.querySelector('.member-toggle-chevron'); if (chev) chev.remove();
     const pin = clone.querySelector('.member-spotlight-pin'); if (pin) pin.remove();
     // The panel is a quick look: keep the bio clamped (no force-expand) so
@@ -299,7 +318,11 @@
   function openPanel(card) {
     if (!card) return;
     const switching = !panel.hidden && panelTrigger !== card;
+    // aria-expanded mirrors whose panel is open: the outgoing trigger
+    // card (when switching) drops to false, the new one flips true.
+    if (switching && panelTrigger) panelTrigger.setAttribute('aria-expanded', 'false');
     panelTrigger = card;
+    card.setAttribute('aria-expanded', 'true');
     const clone = buildPanelClone(card);
     if (switching) {
       // Already open on another member: cross-fade the body rather than
@@ -335,6 +358,7 @@
     document.removeEventListener('keydown', panelKeydown, true);
     const t = panelTrigger; panelTrigger = null;
     setTimeout(() => { panel.hidden = true; panelScrim.hidden = true; }, 280);
+    if (t) t.setAttribute('aria-expanded', 'false');
     if (t) { try { t.focus({ preventScroll: true }); } catch (e) {} }
     clearHashIfFocus();
   }
@@ -440,6 +464,13 @@
   let regionFilterExpanded = false;
   let keywordFilterExpanded = false;
   const KEYWORD_FILTER_VISIBLE_TOP_N = 8;
+  // Slug of the theme / region chip whose toggle was just clicked, so the
+  // rebuilt chip row (replaceChildren drops focus) can re-home focus onto
+  // the same chip instead of letting it fall to <body>. Mirrors
+  // _refocusActiveFilterIdx for the active-filter pill row: set only by
+  // the toggle handlers, so init and hashchange renders never move focus.
+  let _refocusKeywordSlug = null;
+  let _refocusRegionSlug = null;
 
   function isMC(m) {
     return (m.roles || []).some(r => /^Management Committee\b/i.test(r));
@@ -819,10 +850,15 @@
         node.insertBefore(_pin, node.firstChild);
       }
       // Keyboard focusability is mode-dependent: in compact mode
-      // cards are interactive (click expands), in detailed mode the
-      // card itself doesn't do anything (contact icons inside it do).
+      // cards are interactive (click opens the preview panel, a
+      // role="dialog" aside), in detailed mode the card itself doesn't
+      // do anything (contact icons inside it do). The button + dialog
+      // semantics mirror applyView's compact branch.
       if (grid.classList.contains('is-compact')) {
         node.setAttribute('tabindex', '0');
+        node.setAttribute('role', 'button');
+        node.setAttribute('aria-haspopup', 'dialog');
+        node.setAttribute('aria-expanded', 'false');
       }
       const img = node.querySelector('img');
       const webpSource = node.querySelector('.member-photo-webp');
@@ -2050,12 +2086,22 @@
     }
     // Show / hide "Clear" depending on whether any filter is active.
     clearBtn.hidden = activeKeywords.size === 0;
+    // Re-home focus after a toggle rebuilt the row: back onto the toggled
+    // chip, or the first chip if it left the visible top-N. Only when a
+    // toggle asked for it, so init / hashchange renders never move focus.
+    if (_refocusKeywordSlug !== null) {
+      const tgt = chipsWrap.querySelector('[data-slug="' + CSS.escape(_refocusKeywordSlug) + '"]')
+        || chipsWrap.querySelector('.members-keyword-filter-chip');
+      if (tgt) tgt.focus({ preventScroll: true });
+      _refocusKeywordSlug = null;
+    }
   }
 
   function toggleKeywordFilter(slug) {
     if (activeKeywords.has(slug)) activeKeywords.delete(slug);
     else activeKeywords.add(slug);
     if (keywordDetails && activeKeywords.has(slug)) keywordDetails.open = true;
+    _refocusKeywordSlug = slug;
     writeHashKeywords();
     renderKeywordFilter();
     render();
@@ -2130,11 +2176,19 @@
       toggleBtn.hidden = true;
     }
     clearBtn.hidden = activeRegions.size === 0;
+    // Same focus re-homing as the theme row above (W4.1c).
+    if (_refocusRegionSlug !== null) {
+      const tgt = chipsWrap.querySelector('[data-slug="' + CSS.escape(_refocusRegionSlug) + '"]')
+        || chipsWrap.querySelector('.members-region-filter-chip');
+      if (tgt) tgt.focus({ preventScroll: true });
+      _refocusRegionSlug = null;
+    }
   }
   function toggleRegionFilter(slug) {
     if (activeRegions.has(slug)) activeRegions.delete(slug);
     else activeRegions.add(slug);
     if (regionDetails && activeRegions.has(slug)) regionDetails.open = true;
+    _refocusRegionSlug = slug;
     writeHashKeywords();
     renderRegionFilter();
     render();
