@@ -12,8 +12,8 @@
         "name": "Prof. Filip Ejdus"
       },
       "coLead": {
-        "slug": "filip-ejdus",
-        "name": "Prof. Filip Ejdus"
+        "slug": "nikolaos-tzifakis",
+        "name": "Prof. Nikolaos Tzifakis"
       },
       "members": [
         {
@@ -108,7 +108,8 @@
         },
         {
           "name": "Ms Giulia Biselli",
-          "country": "Italy"
+          "country": "Italy",
+          "slug": "giulia-biselli"
         },
         {
           "name": "Dr Grigor Vardanyan",
@@ -247,11 +248,6 @@
           "country": "Germany"
         },
         {
-          "name": "Dr Nikolaos Tzifakis",
-          "country": "Greece",
-          "slug": "nikolaos-tzifakis"
-        },
-        {
           "name": "Dr Noela Mahmutaj",
           "country": "Albania"
         },
@@ -361,8 +357,8 @@
         "name": "Dr John N.T. Helferich"
       },
       "coLead": {
-        "slug": "alisa-kerschbaum",
-        "name": "Ms Alisa Kerschbaum"
+        "slug": "eliza-gheorghe",
+        "name": "Dr Eliza Gheorghe"
       },
       "members": [
         {
@@ -464,7 +460,8 @@
         },
         {
           "name": "Ms Giulia Biselli",
-          "country": "Italy"
+          "country": "Italy",
+          "slug": "giulia-biselli"
         },
         {
           "name": "Dr Grigor Vardanyan",
@@ -516,7 +513,8 @@
         },
         {
           "name": "Dr Mehmet Babacan",
-          "country": "Türkiye"
+          "country": "Türkiye",
+          "slug": "mehmet-babacan"
         },
         {
           "name": "Dr Mehmet Recai Uygur",
@@ -540,7 +538,8 @@
         },
         {
           "name": "Prof Paulina Polko",
-          "country": "Poland"
+          "country": "Poland",
+          "slug": "paulina-polko"
         },
         {
           "name": "Prof Pavlosioannis Koktsidis",
@@ -788,7 +787,8 @@
         },
         {
           "name": "Ms Giulia Biselli",
-          "country": "Italy"
+          "country": "Italy",
+          "slug": "giulia-biselli"
         },
         {
           "name": "Dr Grigor Vardanyan",
@@ -1003,7 +1003,7 @@
       "number": 4,
       "name": "Inclusion, Representativeness & Ethics",
       "colour": "wg-4",
-      "memberCount": 43,
+      "memberCount": 42,
       "lead": {
         "slug": "revecca-pedi",
         "name": "Dr Revecca Pedi"
@@ -1016,10 +1016,6 @@
         {
           "name": "Prof Abdelouahid Ezzarfi",
           "country": "Morocco"
-        },
-        {
-          "name": "Dr Alena Lochmannová",
-          "country": "Czechia"
         },
         {
           "name": "Dr Alessandro Indelicato",
@@ -1068,7 +1064,8 @@
         },
         {
           "name": "Ms Giulia Biselli",
-          "country": "Italy"
+          "country": "Italy",
+          "slug": "giulia-biselli"
         },
         {
           "name": "Dr Grigor Vardanyan",
