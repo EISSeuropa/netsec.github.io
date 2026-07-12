@@ -15,7 +15,7 @@ visitor attaches the letter to their application on e-COST.
 Dear [Visitor name],
 
 On behalf of [Institution], I am pleased to invite you to undertake a
-Short-Term Scientific Mission under COST Action CA23112 (NetSec) at
+Short-Term Scientific Mission under COST Action CA24154 (NetSec) at
 our institution.
 
 We understand that the purpose of your visit is [Purpose], and that
