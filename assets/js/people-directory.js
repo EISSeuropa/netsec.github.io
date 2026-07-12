@@ -1479,19 +1479,21 @@
   // The list of currently-active filters, each with a remover, for the
   // removable chip row shown under the toolbar on mobile.
   function activeFilterPills() {
+    // Every remover that mutates hash-owned state rewrites the hash too, so
+    // a removed pill never leaves a stale key in the shareable URL.
     const out = [];
     if (search.value.trim() !== '') {
-      out.push({ label: '“' + search.value.trim() + '”', remove: () => { search.value = ''; render(); } });
+      out.push({ label: '“' + search.value.trim() + '”', remove: () => { search.value = ''; writeHashKeywords(); render(); } });
     }
     if (activeWG !== 'all') {
       const chip = Array.from(filterChips).find(c => c.dataset.wg === activeWG);
       out.push({ label: chip ? chip.textContent.trim() : ('WG' + activeWG), remove: () => {
-        activeWG = 'all'; filterChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.wg === 'all')); render();
+        activeWG = 'all'; filterChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.wg === 'all')); writeHashKeywords(); render();
       }});
     }
     if (activeCountry !== 'all') {
       const _cl = window.netsecCountry ? window.netsecCountry(activeCountry) : activeCountry;
-      out.push({ label: _cl, remove: () => { activeCountry = 'all'; if (countrySelect) countrySelect.value = 'all'; syncCountryStrip(); render(); } });
+      out.push({ label: _cl, remove: () => { activeCountry = 'all'; if (countrySelect) countrySelect.value = 'all'; syncCountryStrip(); writeHashKeywords(); render(); } });
     }
     activeKeywords.forEach(slug => {
       out.push({ label: window.netsecT(themeNameForSlug(slug)), remove: () => toggleKeywordFilter(slug) });
@@ -1503,14 +1505,14 @@
       const v = c.dataset.mentorship;
       if (!activeMentorship.has(v)) return;
       out.push({ label: c.textContent.trim(), remove: () => {
-        activeMentorship.delete(v); c.setAttribute('aria-pressed', 'false'); render();
+        activeMentorship.delete(v); c.setAttribute('aria-pressed', 'false'); writeHashKeywords(); render();
       }});
     });
     // STSM hosting is its own chip + boolean (not in mentorshipChips), so it
     // needs its own removable pill to stay consistent with every other facet.
     if (activeStsm && stsmChip) {
       out.push({ label: stsmChip.textContent.trim(), remove: () => {
-        activeStsm = false; syncStsmChip(); render();
+        activeStsm = false; syncStsmChip(); writeHashKeywords(); render();
       }});
     }
     return out;
@@ -2499,6 +2501,7 @@
         activeCountry = (activeCountry === country) ? 'all' : country;   // toggle off if re-clicked
         if (countrySelect) countrySelect.value = activeCountry;
         syncCountryStrip();
+        writeHashKeywords();
         render();
       });
       strip.appendChild(btn);
