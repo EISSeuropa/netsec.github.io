@@ -2463,6 +2463,8 @@
         "Regionalism"
       ],
       "themes": [
+        "Economic security and geoeconomics",
+        "Foreign policy and diplomacy",
         "Security and defence"
       ],
       "stsm_hosting": "yes"
@@ -2516,7 +2518,8 @@
         "Policy frameworks"
       ],
       "themes": [
-        "Cyber and emerging technology"
+        "Cyber and emerging technology",
+        "Theory and methods"
       ]
     },
     {
@@ -2562,6 +2565,7 @@
         "International organisations"
       ],
       "themes": [
+        "EU, UN and other international organisations",
         "Theory and methods",
         "Transnational and human security"
       ]
@@ -2704,14 +2708,16 @@
       "photo": "",
       "source": "form",
       "canonical_keywords": [
-        ". Foreign policy",
-        "Conflcits",
+        "Conflict studies",
+        "Foreign policy",
         "Geopolitics",
         "Nationalism",
         "Security"
       ],
       "themes": [
         "Foreign policy and diplomacy",
+        "Identity, narratives and ideational security",
+        "Peace, mediation and reconciliation",
         "Security and defence"
       ]
     },
@@ -2758,7 +2764,8 @@
         "Theory"
       ],
       "themes": [
-        "Security and defence"
+        "Security and defence",
+        "Theory and methods"
       ]
     },
     {
@@ -2800,9 +2807,13 @@
       "source": "form",
       "photo_source_sha256": "05a8396f0052c34509a0e473da802d07cd0ca7d51efb89823e6a1663156c570b",
       "canonical_keywords": [
-        "Comparative politicas",
+        "Comparative politics",
         "Democratisation",
         "Transformation"
+      ],
+      "themes": [
+        "Peace, mediation and reconciliation",
+        "Theory and methods"
       ]
     },
     {
@@ -2901,7 +2912,8 @@
         "Geopolitics"
       ],
       "themes": [
-        "Foreign policy and diplomacy"
+        "Foreign policy and diplomacy",
+        "Peace, mediation and reconciliation"
       ]
     },
     {
@@ -2950,7 +2962,8 @@
         "Strategic competition"
       ],
       "themes": [
-        "Economic security and geoeconomics"
+        "Economic security and geoeconomics",
+        "Foreign policy and diplomacy"
       ]
     },
     {
@@ -2991,8 +3004,12 @@
       "source": "form",
       "photo_source_sha256": "58833aa3d89be15aa1c5a5c0e5f974db0291d40e0be02c3e0f0d15fb88f94f91",
       "canonical_keywords": [
-        "Migration-securty nexus",
+        "Migration-security nexus",
         "Securitisation"
+      ],
+      "themes": [
+        "Theory and methods",
+        "Transnational and human security"
       ]
     },
     {
@@ -3040,11 +3057,12 @@
         "Foreign policy",
         "International relations",
         "Middle east studies",
-        "Securiy studies",
+        "Security studies",
         "Turkish foreign policy"
       ],
       "themes": [
         "Foreign policy and diplomacy",
+        "Security and defence",
         "Theory and methods"
       ]
     }
@@ -3099,8 +3117,24 @@
       "count": 3
     },
     {
+      "keyword": "Foreign policy",
+      "count": 3
+    },
+    {
       "keyword": "Foreign policy analysis",
       "count": 3
+    },
+    {
+      "keyword": "Security studies",
+      "count": 3
+    },
+    {
+      "keyword": "Comparative politics",
+      "count": 2
+    },
+    {
+      "keyword": "Conflict studies",
+      "count": 2
     },
     {
       "keyword": "Defence",
@@ -3124,10 +3158,6 @@
     },
     {
       "keyword": "EU–NATO relations",
-      "count": 2
-    },
-    {
-      "keyword": "Foreign policy",
       "count": 2
     },
     {
@@ -3175,10 +3205,6 @@
       "count": 2
     },
     {
-      "keyword": "Security studies",
-      "count": 2
-    },
-    {
       "keyword": "Strategic competition",
       "count": 2
     },
@@ -3189,10 +3215,6 @@
     {
       "keyword": "Western Balkans",
       "count": 2
-    },
-    {
-      "keyword": ". Foreign policy",
-      "count": 1
     },
     {
       "keyword": "Adversarial robustness",
@@ -3260,22 +3282,6 @@
     },
     {
       "keyword": "Comparative foreign policy analysis",
-      "count": 1
-    },
-    {
-      "keyword": "Comparative politicas",
-      "count": 1
-    },
-    {
-      "keyword": "Comparative politics",
-      "count": 1
-    },
-    {
-      "keyword": "Conflcits",
-      "count": 1
-    },
-    {
-      "keyword": "Conflict studies",
       "count": 1
     },
     {
@@ -3551,7 +3557,7 @@
       "count": 1
     },
     {
-      "keyword": "Migration-securty nexus",
+      "keyword": "Migration-security nexus",
       "count": 1
     },
     {
@@ -3687,10 +3693,6 @@
       "count": 1
     },
     {
-      "keyword": "Securiy studies",
-      "count": 1
-    },
-    {
       "keyword": "Small states",
       "count": 1
     },
@@ -3778,19 +3780,19 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 26
+      "count": 27
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 21
+      "count": 23
+    },
+    {
+      "theme": "Theory and methods",
+      "count": 19
     },
     {
       "theme": "Cyber and emerging technology",
       "count": 17
-    },
-    {
-      "theme": "Theory and methods",
-      "count": 15
     },
     {
       "theme": "European and transatlantic security order",
@@ -3798,27 +3800,31 @@
     },
     {
       "theme": "Transnational and human security",
-      "count": 10
+      "count": 11
     },
     {
       "theme": "Strategy and deterrence",
       "count": 9
     },
     {
+      "theme": "Economic security and geoeconomics",
+      "count": 7
+    },
+    {
       "theme": "Intelligence, information and influence",
       "count": 7
     },
     {
-      "theme": "Economic security and geoeconomics",
-      "count": 6
+      "theme": "Peace, mediation and reconciliation",
+      "count": 7
     },
     {
       "theme": "EU, UN and other international organisations",
-      "count": 5
+      "count": 6
     },
     {
-      "theme": "Peace, mediation and reconciliation",
-      "count": 4
+      "theme": "Identity, narratives and ideational security",
+      "count": 3
     },
     {
       "theme": "Political psychology, public opinion and decision-making",
@@ -3826,10 +3832,6 @@
     },
     {
       "theme": "Crisis management and critical systems resilience",
-      "count": 2
-    },
-    {
-      "theme": "Identity, narratives and ideational security",
       "count": 2
     }
   ],
@@ -3844,6 +3846,7 @@
     "Black sea region": "Security and defence",
     "Black sea security": "Security and defence",
     "Capability planning": "Security and defence",
+    "China's foreign policy": "Foreign policy and diplomacy",
     "Civil defence": "Security and defence",
     "Civil protection": "Crisis management and critical systems resilience",
     "Civil-military relations": "Security and defence",
@@ -3853,6 +3856,8 @@
     "Common foreign and security policy": "Foreign policy and diplomacy",
     "Comparative foreign policy analysis": "Foreign policy and diplomacy",
     "Comparative politics": "Theory and methods",
+    "Conflict studies": "Peace, mediation and reconciliation",
+    "Cooperation": "Foreign policy and diplomacy",
     "Counter-uav detection": "Security and defence",
     "Counterterrorism": "Transnational and human security",
     "Crises": "Crisis management and critical systems resilience",
@@ -3869,9 +3874,11 @@
     "Defence economics": "Economic security and geoeconomics",
     "Defence industrial policy": "Economic security and geoeconomics",
     "Defence industry": "Economic security and geoeconomics",
+    "Democratisation": "Peace, mediation and reconciliation",
     "Deterrence": "Strategy and deterrence",
     "Digital governance": "Cyber and emerging technology",
     "Digital media": "Intelligence, information and influence",
+    "Digital politics": "Cyber and emerging technology",
     "Digital resilience": "Cyber and emerging technology",
     "Digital security": "Cyber and emerging technology",
     "Digital sovereignty": "Cyber and emerging technology",
@@ -3892,6 +3899,7 @@
     "Election interference": "Intelligence, information and influence",
     "Emerging and disruptive technologies": "Cyber and emerging technology",
     "Emerging technology": "Cyber and emerging technology",
+    "Energy security": "Economic security and geoeconomics",
     "Euro-Atlantic foreign policy": "European and transatlantic security order",
     "European defence": "European and transatlantic security order",
     "European integration": "EU, UN and other international organisations",
@@ -3900,15 +3908,20 @@
     "European union türkiye relations": "Foreign policy and diplomacy",
     "Extremism": "Transnational and human security",
     "Feminist studies": "Theory and methods",
+    "Foreign policy": "Foreign policy and diplomacy",
     "Foreign policy analysis": "Foreign policy and diplomacy",
     "Future of warfare": "Security and defence",
     "Gender-based violence": "Transnational and human security",
     "Geopolitics": "Foreign policy and diplomacy",
+    "Geopolitics of the indo-Pacific": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
+    "Global governance": "EU, UN and other international organisations",
     "Global order": "EU, UN and other international organisations",
+    "Governance": "Cyber and emerging technology",
     "Grand strategy": "Strategy and deterrence",
     "Great power competition": "Foreign policy and diplomacy",
     "History": "Theory and methods",
+    "Human rights": "Transnational and human security",
     "Human rights and technology": "Cyber and emerging technology",
     "Human security": "Transnational and human security",
     "Hybrid threats": "Intelligence, information and influence",
@@ -3925,6 +3938,7 @@
     "International humanitarian law": "Transnational and human security",
     "International jurisprudence": "Transnational and human security",
     "International law": "Theory and methods",
+    "International organisations": "EU, UN and other international organisations",
     "International relations": "Theory and methods",
     "International security": "Security and defence",
     "IoT": "Cyber and emerging technology",
@@ -3933,6 +3947,8 @@
     "Machine learning for security": "Cyber and emerging technology",
     "Maritime security": "Transnational and human security",
     "Maritime strategy": "Strategy and deterrence",
+    "Middle east studies": "Foreign policy and diplomacy",
+    "Migration-security nexus": "Transnational and human security",
     "Militarisation": "Security and defence",
     "Military innovation": "Security and defence",
     "Military neutrality": "European and transatlantic security order",
@@ -3940,6 +3956,7 @@
     "NATO": "European and transatlantic security order",
     "Narratives": "Identity, narratives and ideational security",
     "National security": "Security and defence",
+    "Nationalism": "Identity, narratives and ideational security",
     "Non-state actors": "Transnational and human security",
     "Nordic countries": "Foreign policy and diplomacy",
     "Nordic-Baltic space": "Foreign policy and diplomacy",
@@ -3952,6 +3969,7 @@
     "Peacekeeping": "Peace, mediation and reconciliation",
     "Plural peace": "Peace, mediation and reconciliation",
     "Policy evaluation": "Theory and methods",
+    "Policy frameworks": "Theory and methods",
     "Political economy": "Economic security and geoeconomics",
     "Political psychology": "Political psychology, public opinion and decision-making",
     "Positive peace": "Peace, mediation and reconciliation",
@@ -3960,9 +3978,11 @@
     "Public opinion": "Political psychology, public opinion and decision-making",
     "Regional cooperation": "Foreign policy and diplomacy",
     "Regional security cooperation and governance": "Foreign policy and diplomacy",
+    "Regionalism": "Foreign policy and diplomacy",
     "Research methods": "Theory and methods",
     "Role theory": "Theory and methods",
     "Russian foreign policy": "Foreign policy and diplomacy",
+    "Securitisation": "Theory and methods",
     "Security": "Security and defence",
     "Security and defence": "Security and defence",
     "Security politics": "Security and defence",
@@ -3972,18 +3992,22 @@
     "Small states": "Foreign policy and diplomacy",
     "Small states' foreign and security policy": "Foreign policy and diplomacy",
     "Social media": "Intelligence, information and influence",
+    "Strategic competition": "Foreign policy and diplomacy",
     "Strategic culture": "Strategy and deterrence",
     "Strategy": "Strategy and deterrence",
     "Subversion": "Intelligence, information and influence",
     "Systems resilience": "Crisis management and critical systems resilience",
     "Technology spillovers": "Cyber and emerging technology",
     "Text as data": "Theory and methods",
+    "Theory": "Theory and methods",
     "Thermal imaging": "Security and defence",
     "Transatlantic relations": "European and transatlantic security order",
     "Transatlantic security": "European and transatlantic security order",
+    "Transformation": "Peace, mediation and reconciliation",
     "Transitional justice": "Peace, mediation and reconciliation",
     "Transnational and human security": "Transnational and human security",
     "Transnational criminal organisations (TCOs)": "Transnational and human security",
+    "Turkish foreign policy": "Foreign policy and diplomacy",
     "UN": "EU, UN and other international organisations",
     "US-China relations": "Foreign policy and diplomacy",
     "Unification": "Peace, mediation and reconciliation",
