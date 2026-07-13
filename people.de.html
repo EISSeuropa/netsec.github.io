@@ -54,10 +54,21 @@
         document.documentElement.classList.add('dark');
       }
     } catch (e) {}
+    /* First visit: mark the welcome strip visible BEFORE first paint, so
+       it renders in the static flow instead of popping in after the
+       deferred directory script runs and shifting the toolbar down
+       (the CLS regression the Lighthouse gate caught on people.html).
+       people-directory.js reconciles the hidden attribute and removes
+       this class once it takes over. */
+    try {
+      if (localStorage.getItem('netsec-directory-tour-seen') !== 'true') {
+        document.documentElement.classList.add('dir-welcome');
+      }
+    } catch (e) {}
   })();
 </script>
 <link rel="stylesheet" href="assets/css/site.css?v=abc71007">
-<link rel="stylesheet" href="assets/css/directory.css?v=f0e9318d">
+<link rel="stylesheet" href="assets/css/directory.css?v=d188e387">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -437,7 +448,7 @@
 <script src="assets/js/site.js?v=817050f0" defer></script>
 
 <!-- Page-specific: load and render member directory from data/bios.json -->
-<script src="assets/js/people-directory.js?v=44ae60b3" defer></script>
+<script src="assets/js/people-directory.js?v=5c4c482a" defer></script>
 
 </body>
 </html>

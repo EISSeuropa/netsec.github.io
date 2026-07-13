@@ -79,6 +79,9 @@
   function markSeen() {
     try { localStorage.setItem(TOUR_KEY, 'true'); } catch (e) {}
     if (welcome) welcome.hidden = true;
+    // Drop the pre-paint reveal class, or the CSS override would keep
+    // the dismissed strip visible despite the hidden attribute.
+    document.documentElement.classList.remove('dir-welcome');
   }
 
   // Tour configuration — selectors anchor each step to a real DOM
@@ -162,11 +165,15 @@
     }).start();
   }
 
-  // Auto-show the welcome strip on first visit.
+  // Auto-show the welcome strip on first visit. The inline head script
+  // already made it visible pre-paint via html.dir-welcome (so it never
+  // pops in and shifts the toolbar); here we reconcile the real hidden
+  // attribute and retire the bridging class.
   if (welcome && welcomeDismiss) {
     let seen = false;
     try { seen = localStorage.getItem(TOUR_KEY) === 'true'; } catch (e) {}
     if (!seen) welcome.hidden = false;
+    document.documentElement.classList.remove('dir-welcome');
     welcomeDismiss.addEventListener('click', markSeen);
     if (welcomeTour) welcomeTour.addEventListener('click', startTour);
   }
