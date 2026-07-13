@@ -33,6 +33,13 @@ data/spotlight.json (wk) ─┘        composes text + image; records the ledger
   Cron can't follow DST, so `spotlight-rotate.yml` fires at both 08:00 and
   09:00 UTC on Tuesdays and a gate job lets through only the one that lands at
   10:00 Europe/Paris.
+- **Tagging the member.** When a member has supplied a Bluesky profile
+  (`bluesky` in `data/bios.json`), the handle is woven into the Bluesky post as
+  an @-mention and resolved to a richtext facet, so the person is notified. On
+  LinkedIn a public vanity URL can't become a notifying person-mention, so the
+  member's LinkedIn profile link is posted as the **first comment** instead of
+  in the body (a body link would suppress the post's reach). Both degrade
+  silently: no handle, no mention; a failed comment leaves the post standing.
 - **No duplicates.** `data/social-posted.json` records what has been posted
   (news by feed GUID; spotlight by member + ISO week), so re-runs post
   nothing and a member is posted at most once per week.
