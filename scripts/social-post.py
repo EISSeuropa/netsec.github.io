@@ -69,6 +69,17 @@ class Post:
     image: Path | None = None
     image_alt: str = ""
     hashtags: str = HASHTAGS
+    # Optional per-member social handles (spotlight only). `bsky_handle` is
+    # woven into the Bluesky text as an @-mention (resolved to a facet at
+    # publish time); `profile_url` is the member's own LinkedIn URL, posted
+    # as a first comment rather than in the body (LinkedIn downranks posts
+    # with outbound links in the body, and person-mentions aren't reachable
+    # from a public vanity URL). See read_spotlight.
+    bsky_handle: str | None = None
+    profile_url: str | None = None
+
+    def _bsky_mention(self) -> str:
+        return f"\n\nOn Bluesky: @{self.bsky_handle}" if self.bsky_handle else ""
 
     def render(self, channel: str) -> str:
         """Channel-appropriate text. Bluesky is trimmed to its limit; the
@@ -76,9 +87,10 @@ class Post:
         head = f"📣 {self.title}" if self.kind == "news" else f"⭐ {self.title}"
         tail = f"\n\n{self.link}"
         if channel == "bluesky":
-            budget = BLUESKY_LIMIT - len(head) - len(tail) - 2
+            mention = self._bsky_mention()
+            budget = BLUESKY_LIMIT - len(head) - len(mention) - len(tail) - 2
             summary = _truncate(self.summary, max(0, budget))
-            body = f"{head}\n\n{summary}{tail}" if summary else f"{head}{tail}"
+            body = f"{head}\n\n{summary}{mention}{tail}" if summary else f"{head}{mention}{tail}"
             return body[:BLUESKY_LIMIT]
         # LinkedIn (and the dry-run echo): room for the full summary + tags.
         parts = [head, "", self.summary, "", self.link]
@@ -236,6 +248,21 @@ def _status_sentence(m: dict) -> str:
     return (sent[:1].upper() + sent[1:] + ".") if sent else ""
 
 
+def bluesky_handle(url: str | None) -> str | None:
+    """The handle from a stored Bluesky profile URL (…/profile/<handle>), or
+    None. Members submit a full URL; the tail is a resolvable Bluesky handle
+    (e.g. `apb-ldn.org`, `foo.bsky.social`), which is what an @-mention needs.
+    A bare handle (no URL) is accepted too."""
+    s = (url or "").strip()
+    if not s:
+        return None
+    m = re.search(r"bsky\.app/profile/([^/?#\s]+)", s)
+    if m:
+        return m.group(1)
+    # Tolerate a bare handle typed without the profile URL.
+    return s.lstrip("@") if "." in s and "/" not in s else None
+
+
 def read_spotlight() -> Post | None:
     """The current weekly spotlight member as a post, or None when the
     spotlight is dormant or the member is missing."""
@@ -259,12 +286,22 @@ def read_spotlight() -> Post | None:
     title = "NetSec Directory Spotlight"
     link = f"{SITE}/people/{slug}.html"
 
+    # Tag the member on the platforms where that's reachable. Bluesky: the
+    # submitted profile URL yields a handle we @-mention (resolved to a facet
+    # at publish time). LinkedIn: the vanity URL can't be turned into a
+    # notifying person-mention, so it rides along as a first comment instead
+    # (see LinkedInChannel._do_publish).
+    bsky = bluesky_handle(m.get("bluesky"))
+    li_url = (m.get("linkedin") or "").strip() or None
+
     # Assemble the summary so the Bluesky render never has to hard-truncate
     # mid-word: the post text is lead + "Working on …" + status, and when it
     # would overrun the 300 limit we drop whole pieces (a theme at a time,
     # keeping the mentorship/STSM status line) so it always ends on a full
-    # sentence. The budget mirrors Post.render's head/tail arithmetic.
-    budget = BLUESKY_LIMIT - len(f"⭐ {title}") - len(f"\n\n{link}") - 2
+    # sentence. The budget mirrors Post.render's head/tail/mention arithmetic,
+    # reserving the same @-mention length render() will append.
+    mention_len = len(f"\n\nOn Bluesky: @{bsky}") if bsky else 0
+    budget = BLUESKY_LIMIT - len(f"⭐ {title}") - len(f"\n\n{link}") - 2 - mention_len
 
     def _summary(n_themes: int, with_status: bool) -> str:
         parts = [lead]
@@ -291,6 +328,8 @@ def read_spotlight() -> Post | None:
         link=link,
         image=card if card.exists() else (SITE_OG if SITE_OG.exists() else None),
         image_alt=f"Profile card for {m.get('name', slug)} in the NetSec Directory",
+        bsky_handle=bsky,
+        profile_url=li_url,
     )
 
 
@@ -437,6 +476,10 @@ class DryRunChannel(Channel):
             print(f"  ── would post to {ch} ──")
             for line in post.render(ch).splitlines():
                 print(f"    {line}")
+            if ch == "bluesky" and post.bsky_handle:
+                print(f"    [mention → resolves live: @{post.bsky_handle}]")
+            if ch == "linkedin" and post.profile_url:
+                print(f"    [+ first comment: {post.profile_url}]")
             if post.image:
                 print(f"    [image: {post.image.relative_to(ROOT)} | alt: {post.image_alt}]")
             print()
@@ -583,7 +626,10 @@ class BlueskyChannel(Channel):
             "langs": ["en"],
             "createdAt": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z"),
         }
-        facets = link_facets(text, post.link)
+        # _rich_facets covers the link (find_links catches post.link in the
+        # tail) plus any @-mention the spotlight wove in; news posts carry no
+        # mention, so this stays equivalent to the old link-only path there.
+        facets = self._rich_facets(text)
         if facets:
             record["facets"] = facets
         if post.image and post.image.exists():
@@ -731,6 +777,19 @@ class LinkedInChannel(Channel):
                     headers={"Authorization": f"Bearer {self._token()}"})
         return urn
 
+    def _comment(self, post_urn: str, text: str) -> None:
+        """Post a first comment on a just-published share, authored by the org.
+        Used to carry the spotlighted member's own LinkedIn profile link out of
+        the post body (LinkedIn suppresses reach on body links; a comment link
+        sidesteps that). The URN is path-encoded per the socialActions API."""
+        from urllib.parse import quote
+        body = {
+            "actor": f"urn:li:organization:{self._org()}",
+            "message": {"text": text},
+        }
+        _li_request(f"{self.API}/rest/socialActions/{quote(post_urn, safe='')}/comments",
+                    method="POST", headers=self._headers(), json_body=body)
+
     def _do_publish(self, post: Post) -> str:
         body = {
             "author": f"urn:li:organization:{self._org()}",
@@ -750,6 +809,19 @@ class LinkedInChannel(Channel):
         _, headers, _ = _li_request(f"{self.API}/rest/posts", method="POST",
                                     headers=self._headers(), json_body=body)
         pid = headers.get("x-restli-id", "")
+        # Best-effort first comment carrying the member's LinkedIn profile link.
+        # A broad catch keeps a comment failure from bubbling to publish()'s
+        # 401 refresh-and-retry, which would re-post the whole share.
+        # ponytail: comment is a nice-to-have; the share already stands.
+        if pid and post.profile_url:
+            try:
+                self._comment(pid, post.profile_url)
+            except (Exception, SystemExit) as e:  # noqa: BLE001
+                # _li_request signals HTTP errors as SystemExit and 401 as
+                # _Unauthorized; catch both so neither aborts the run nor
+                # reaches publish()'s refresh-and-retry (which would re-post).
+                print(f"  ! LinkedIn profile-link comment failed, post stands: {e}",
+                      file=sys.stderr)
         return f"https://www.linkedin.com/feed/update/{pid}/" if pid else "posted"
 
     def publish(self, post: Post) -> str:
