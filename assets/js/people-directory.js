@@ -79,6 +79,9 @@
   function markSeen() {
     try { localStorage.setItem(TOUR_KEY, 'true'); } catch (e) {}
     if (welcome) welcome.hidden = true;
+    // Drop the pre-paint reveal class, or the CSS override would keep
+    // the dismissed strip visible despite the hidden attribute.
+    document.documentElement.classList.remove('dir-welcome');
   }
 
   // Tour configuration — selectors anchor each step to a real DOM
@@ -162,11 +165,15 @@
     }).start();
   }
 
-  // Auto-show the welcome strip on first visit.
+  // Auto-show the welcome strip on first visit. The inline head script
+  // already made it visible pre-paint via html.dir-welcome (so it never
+  // pops in and shifts the toolbar); here we reconcile the real hidden
+  // attribute and retire the bridging class.
   if (welcome && welcomeDismiss) {
     let seen = false;
     try { seen = localStorage.getItem(TOUR_KEY) === 'true'; } catch (e) {}
     if (!seen) welcome.hidden = false;
+    document.documentElement.classList.remove('dir-welcome');
     welcomeDismiss.addEventListener('click', markSeen);
     if (welcomeTour) welcomeTour.addEventListener('click', startTour);
   }
@@ -185,9 +192,23 @@
     });
     // Manage tabindex + collapse any expanded card when leaving
     // compact mode — there's nothing left to expand into in detailed.
+    // Compact cards are interactive: a click opens the member preview
+    // panel (a role="dialog" aside), so each card announces itself as a
+    // button that pops a dialog, with aria-expanded tracking whether its
+    // own panel is open (openPanel / closePanel flip it; false here).
     grid.querySelectorAll('.member-card').forEach(card => {
-      if (compact) card.setAttribute('tabindex', '0');
-      else { card.removeAttribute('tabindex'); card.classList.remove('is-expanded'); }
+      if (compact) {
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-haspopup', 'dialog');
+        card.setAttribute('aria-expanded', 'false');
+      } else {
+        card.removeAttribute('tabindex');
+        card.removeAttribute('role');
+        card.removeAttribute('aria-haspopup');
+        card.removeAttribute('aria-expanded');
+        card.classList.remove('is-expanded');
+      }
     });
   }
   // Density is desktop-choosable, phone-forced. On phones (≤640px) the grid is
@@ -276,6 +297,11 @@
     clone.removeAttribute('id');
     clone.removeAttribute('data-slug');
     clone.removeAttribute('tabindex');
+    // The clone is static panel content, not the popup trigger, so the
+    // compact card's button-with-dialog semantics must not ride along.
+    clone.removeAttribute('role');
+    clone.removeAttribute('aria-haspopup');
+    clone.removeAttribute('aria-expanded');
     const chev = clone.querySelector('.member-toggle-chevron'); if (chev) chev.remove();
     const pin = clone.querySelector('.member-spotlight-pin'); if (pin) pin.remove();
     // The panel is a quick look: keep the bio clamped (no force-expand) so
@@ -299,7 +325,11 @@
   function openPanel(card) {
     if (!card) return;
     const switching = !panel.hidden && panelTrigger !== card;
+    // aria-expanded mirrors whose panel is open: the outgoing trigger
+    // card (when switching) drops to false, the new one flips true.
+    if (switching && panelTrigger) panelTrigger.setAttribute('aria-expanded', 'false');
     panelTrigger = card;
+    card.setAttribute('aria-expanded', 'true');
     const clone = buildPanelClone(card);
     if (switching) {
       // Already open on another member: cross-fade the body rather than
@@ -335,6 +365,7 @@
     document.removeEventListener('keydown', panelKeydown, true);
     const t = panelTrigger; panelTrigger = null;
     setTimeout(() => { panel.hidden = true; panelScrim.hidden = true; }, 280);
+    if (t) t.setAttribute('aria-expanded', 'false');
     if (t) { try { t.focus({ preventScroll: true }); } catch (e) {} }
     clearHashIfFocus();
   }
@@ -440,6 +471,13 @@
   let regionFilterExpanded = false;
   let keywordFilterExpanded = false;
   const KEYWORD_FILTER_VISIBLE_TOP_N = 8;
+  // Slug of the theme / region chip whose toggle was just clicked, so the
+  // rebuilt chip row (replaceChildren drops focus) can re-home focus onto
+  // the same chip instead of letting it fall to <body>. Mirrors
+  // _refocusActiveFilterIdx for the active-filter pill row: set only by
+  // the toggle handlers, so init and hashchange renders never move focus.
+  let _refocusKeywordSlug = null;
+  let _refocusRegionSlug = null;
 
   function isMC(m) {
     return (m.roles || []).some(r => /^Management Committee\b/i.test(r));
@@ -819,10 +857,15 @@
         node.insertBefore(_pin, node.firstChild);
       }
       // Keyboard focusability is mode-dependent: in compact mode
-      // cards are interactive (click expands), in detailed mode the
-      // card itself doesn't do anything (contact icons inside it do).
+      // cards are interactive (click opens the preview panel, a
+      // role="dialog" aside), in detailed mode the card itself doesn't
+      // do anything (contact icons inside it do). The button + dialog
+      // semantics mirror applyView's compact branch.
       if (grid.classList.contains('is-compact')) {
         node.setAttribute('tabindex', '0');
+        node.setAttribute('role', 'button');
+        node.setAttribute('aria-haspopup', 'dialog');
+        node.setAttribute('aria-expanded', 'false');
       }
       const img = node.querySelector('img');
       const webpSource = node.querySelector('.member-photo-webp');
@@ -1271,9 +1314,17 @@
     b.addEventListener('click', () => {
       activeWG = b.dataset.wg;
       filterChips.forEach(o => o.setAttribute('aria-pressed', o === b));
+      writeHashKeywords();
       render();
     });
   });
+  // Mirror activeWG / activeCountry back into the toolbar controls after a
+  // hash parse (deep link or back/forward), the same job the chip row's own
+  // click handler does for a direct tap.
+  function syncWgChips() {
+    filterChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.wg === activeWG ? 'true' : 'false'));
+    if (countrySelect) countrySelect.value = activeCountry;
+  }
   mentorshipChips.forEach(b => {
     b.addEventListener('click', () => {
       const v = b.dataset.mentorship;
@@ -1295,13 +1346,16 @@
   if (countrySelect) {
     countrySelect.addEventListener('change', () => {
       activeCountry = countrySelect.value;
+      writeHashKeywords();
       render();
     });
   }
   let searchTimeout;
   search.addEventListener('input', () => {
     clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(render, 120);
+    // The hash write shares the debounce so the URL settles with the grid
+    // rather than churning per keystroke.
+    searchTimeout = setTimeout(() => { writeHashKeywords(); render(); }, 120);
   });
 
   // Results bar: a global "Clear all filters" control, shown whenever any
@@ -1432,19 +1486,21 @@
   // The list of currently-active filters, each with a remover, for the
   // removable chip row shown under the toolbar on mobile.
   function activeFilterPills() {
+    // Every remover that mutates hash-owned state rewrites the hash too, so
+    // a removed pill never leaves a stale key in the shareable URL.
     const out = [];
     if (search.value.trim() !== '') {
-      out.push({ label: '“' + search.value.trim() + '”', remove: () => { search.value = ''; render(); } });
+      out.push({ label: '“' + search.value.trim() + '”', remove: () => { search.value = ''; writeHashKeywords(); render(); } });
     }
     if (activeWG !== 'all') {
       const chip = Array.from(filterChips).find(c => c.dataset.wg === activeWG);
       out.push({ label: chip ? chip.textContent.trim() : ('WG' + activeWG), remove: () => {
-        activeWG = 'all'; filterChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.wg === 'all')); render();
+        activeWG = 'all'; filterChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.wg === 'all')); writeHashKeywords(); render();
       }});
     }
     if (activeCountry !== 'all') {
       const _cl = window.netsecCountry ? window.netsecCountry(activeCountry) : activeCountry;
-      out.push({ label: _cl, remove: () => { activeCountry = 'all'; if (countrySelect) countrySelect.value = 'all'; syncCountryStrip(); render(); } });
+      out.push({ label: _cl, remove: () => { activeCountry = 'all'; if (countrySelect) countrySelect.value = 'all'; syncCountryStrip(); writeHashKeywords(); render(); } });
     }
     activeKeywords.forEach(slug => {
       out.push({ label: window.netsecT(themeNameForSlug(slug)), remove: () => toggleKeywordFilter(slug) });
@@ -1456,14 +1512,14 @@
       const v = c.dataset.mentorship;
       if (!activeMentorship.has(v)) return;
       out.push({ label: c.textContent.trim(), remove: () => {
-        activeMentorship.delete(v); c.setAttribute('aria-pressed', 'false'); render();
+        activeMentorship.delete(v); c.setAttribute('aria-pressed', 'false'); writeHashKeywords(); render();
       }});
     });
     // STSM hosting is its own chip + boolean (not in mentorshipChips), so it
     // needs its own removable pill to stay consistent with every other facet.
     if (activeStsm && stsmChip) {
       out.push({ label: stsmChip.textContent.trim(), remove: () => {
-        activeStsm = false; syncStsmChip(); render();
+        activeStsm = false; syncStsmChip(); writeHashKeywords(); render();
       }});
     }
     return out;
@@ -1931,6 +1987,9 @@
     activeRegions.clear();
     activeMentorship.clear();
     activeStsm = false;
+    activeWG = 'all';
+    activeCountry = 'all';
+    search.value = '';
     const raw = (location.hash || '').replace(/^#/, '');
     if (!raw) return;
     // Try query-string-style first: `themes=a,b,c` or
@@ -1959,6 +2018,23 @@
     if (stsm && stsm !== '0' && stsm.toLowerCase() !== 'false') {
       activeStsm = true;
     }
+    // Working-group / MC facet (#648): `wg=1..4` or `wg=mc`, matching the
+    // chip row's dataset values, so a filtered view is shareable.
+    const wg = params.get('wg');
+    if (wg && ['1', '2', '3', '4', 'mc'].includes(wg)) {
+      activeWG = wg;
+    }
+    // Country facet: the select's option value (the country name),
+    // URL-encoded. URLSearchParams already decoded it.
+    const country = params.get('country');
+    if (country) {
+      activeCountry = country;
+    }
+    // Free-text search: `q=<query>`, decoded by URLSearchParams.
+    const q = params.get('q');
+    if (q) {
+      search.value = q;
+    }
   }
   function writeHashKeywords() {
     const slugs = Array.from(activeKeywords);
@@ -1967,7 +2043,7 @@
     // Preserve any portion of the hash this function does not own (e.g. a
     // member-card deep-link slug stays intact). Both the theme and the
     // mentorship keys are owned here so they coexist in one hash.
-    const hasKeywordsKey = /(^|&)(themes|regions|mentorship|stsm)=/.test(rawHash);
+    const hasKeywordsKey = /(^|&)(themes|regions|mentorship|stsm|wg|country|q)=/.test(rawHash);
     let rest = '';
     if (rawHash && hasKeywordsKey) {
       const params = new URLSearchParams(rawHash);
@@ -1975,6 +2051,9 @@
       params.delete('regions');
       params.delete('mentorship');
       params.delete('stsm');
+      params.delete('wg');
+      params.delete('country');
+      params.delete('q');
       rest = params.toString();
     } else if (rawHash && !hasKeywordsKey && !rawHash.includes('=')) {
       // A bare member-id-style hash; keep it as a separate fragment.
@@ -1988,6 +2067,13 @@
     if (regions.length) parts.push('regions=' + regions.join(','));
     if (mentors.length) parts.push('mentorship=' + mentors.join(','));
     if (activeStsm) parts.push('stsm=1');
+    // Toolbar facets (#648): working group / MC, country, and the free-text
+    // query join the shareable hash when non-default, so any filtered view
+    // round-trips through the URL.
+    if (activeWG !== 'all') parts.push('wg=' + activeWG);
+    if (activeCountry !== 'all') parts.push('country=' + encodeURIComponent(activeCountry));
+    const _q = (search.value || '').trim();
+    if (_q) parts.push('q=' + encodeURIComponent(_q));
     if (rest) parts.push(rest);
     const next = parts.join('&');
     // Use replaceState rather than assigning location.hash so that
@@ -2050,12 +2136,22 @@
     }
     // Show / hide "Clear" depending on whether any filter is active.
     clearBtn.hidden = activeKeywords.size === 0;
+    // Re-home focus after a toggle rebuilt the row: back onto the toggled
+    // chip, or the first chip if it left the visible top-N. Only when a
+    // toggle asked for it, so init / hashchange renders never move focus.
+    if (_refocusKeywordSlug !== null) {
+      const tgt = chipsWrap.querySelector('[data-slug="' + CSS.escape(_refocusKeywordSlug) + '"]')
+        || chipsWrap.querySelector('.members-keyword-filter-chip');
+      if (tgt) tgt.focus({ preventScroll: true });
+      _refocusKeywordSlug = null;
+    }
   }
 
   function toggleKeywordFilter(slug) {
     if (activeKeywords.has(slug)) activeKeywords.delete(slug);
     else activeKeywords.add(slug);
     if (keywordDetails && activeKeywords.has(slug)) keywordDetails.open = true;
+    _refocusKeywordSlug = slug;
     writeHashKeywords();
     renderKeywordFilter();
     render();
@@ -2130,11 +2226,19 @@
       toggleBtn.hidden = true;
     }
     clearBtn.hidden = activeRegions.size === 0;
+    // Same focus re-homing as the theme row above (W4.1c).
+    if (_refocusRegionSlug !== null) {
+      const tgt = chipsWrap.querySelector('[data-slug="' + CSS.escape(_refocusRegionSlug) + '"]')
+        || chipsWrap.querySelector('.members-region-filter-chip');
+      if (tgt) tgt.focus({ preventScroll: true });
+      _refocusRegionSlug = null;
+    }
   }
   function toggleRegionFilter(slug) {
     if (activeRegions.has(slug)) activeRegions.delete(slug);
     else activeRegions.add(slug);
     if (regionDetails && activeRegions.has(slug)) regionDetails.open = true;
+    _refocusRegionSlug = slug;
     writeHashKeywords();
     renderRegionFilter();
     render();
@@ -2164,7 +2268,8 @@
   window.addEventListener('hashchange', () => {
     const snap = () => Array.from(activeKeywords).sort().join(',') + '|'
       + Array.from(activeRegions).sort().join(',') + '|'
-      + Array.from(activeMentorship).sort().join(',') + '|' + (activeStsm ? '1' : '');
+      + Array.from(activeMentorship).sort().join(',') + '|' + (activeStsm ? '1' : '')
+      + '|' + activeWG + '|' + activeCountry + '|' + (search.value || '').trim();
     const before = snap();
     parseHashKeywords();
     const after = snap();
@@ -2173,6 +2278,7 @@
       renderRegionFilter();
       syncMentorshipChips();
       syncStsmChip();
+      syncWgChips();
       render();
     }
   });
@@ -2402,6 +2508,7 @@
         activeCountry = (activeCountry === country) ? 'all' : country;   // toggle off if re-clicked
         if (countrySelect) countrySelect.value = activeCountry;
         syncCountryStrip();
+        writeHashKeywords();
         render();
       });
       strip.appendChild(btn);
@@ -2442,6 +2549,7 @@
     if (keywordDetails && activeKeywords.size > 0) keywordDetails.open = true;
     if (regionDetails && activeRegions.size > 0) regionDetails.open = true;
     populateCountryFilter();
+    syncWgChips();
     setupMentorshipFilter();
     syncMentorshipChips();
     setupStsmFilter();

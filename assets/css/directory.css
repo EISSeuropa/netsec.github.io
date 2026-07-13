@@ -1254,6 +1254,14 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   animation:welcome-fade-in .28s var(--ease) both;
 }
 .welcome-strip[hidden]{display:none}
+/* First-visit pre-paint reveal. The inline head script on the people
+   pages stamps html.dir-welcome before first paint when the strip has
+   never been dismissed, so the strip occupies its space from the first
+   frame instead of popping in when the deferred directory script runs
+   (that pop-in shifted the whole toolbar and cost people.html its
+   Lighthouse CLS budget). people-directory.js removes the class once
+   it reconciles the hidden attribute, and on dismissal. */
+html.dir-welcome .welcome-strip[hidden]{display:block}
 .dark .welcome-strip{
   background:linear-gradient(180deg, rgba(10,132,255,.14), rgba(10,132,255,.05));
 }

@@ -103,15 +103,15 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "e917cc369ff38d2dad9b95be38d097e9ae902a6e",
-        "translated_on": "2026-07-11",
+        "source_sha1": "1ecc0e07cabba53865396f36250dc0ed1b9caaba",
+        "translated_on": "2026-07-13",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "e917cc369ff38d2dad9b95be38d097e9ae902a6e",
-        "translated_on": "2026-07-11",
+        "source_sha1": "1ecc0e07cabba53865396f36250dc0ed1b9caaba",
+        "translated_on": "2026-07-13",
         "status": "beta",
         "reviewed_by": null
       }
@@ -119,15 +119,15 @@
     "grants.html": {
       "fr": {
         "file": "grants.fr.html",
-        "source_sha1": "1fd50ee9ef5c5a70ebe7dc31c8355f811a6af280",
-        "translated_on": "2026-07-11",
+        "source_sha1": "d44d344039941d071beb77028fafcb50afcfc1e8",
+        "translated_on": "2026-07-12",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "grants.de.html",
-        "source_sha1": "1fd50ee9ef5c5a70ebe7dc31c8355f811a6af280",
-        "translated_on": "2026-07-11",
+        "source_sha1": "d44d344039941d071beb77028fafcb50afcfc1e8",
+        "translated_on": "2026-07-12",
         "status": "beta",
         "reviewed_by": null
       }
@@ -263,15 +263,15 @@
     "working-groups.html": {
       "fr": {
         "file": "working-groups.fr.html",
-        "source_sha1": "f59452a9e41c5457867d681aad631196093a374e",
-        "translated_on": "2026-07-03",
+        "source_sha1": "e7f583ea7c6e4971310489f7b1c32ec5be418a01",
+        "translated_on": "2026-07-12",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "working-groups.de.html",
-        "source_sha1": "f59452a9e41c5457867d681aad631196093a374e",
-        "translated_on": "2026-07-03",
+        "source_sha1": "e7f583ea7c6e4971310489f7b1c32ec5be418a01",
+        "translated_on": "2026-07-12",
         "status": "beta",
         "reviewed_by": null
       }
