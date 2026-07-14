@@ -681,6 +681,11 @@
   // localStorage under 'netsec-mentorship-view', mirroring the directory
   // density toggle. Lazily seeded on first render (null until then).
   let mentorshipView = null;
+  // Grid-face "Show all" state per side. The grid caps each list at
+  // MENTORSHIP_GRID_CAP cards; the expander flips a side to reveal the rest.
+  // Reset when a filter change re-renders the panel, so a narrowed list starts
+  // capped again rather than sprawling.
+  let _mentorshipGridExpand = { mentor: false, mentee: false };
   // The search query in force at the last render(), so renderMentorshipPanel()
   // can rebuild its (separately scoped) member pool without re-reading the
   // input element.
@@ -830,6 +835,8 @@
     const q = (search.value || '').trim().toLowerCase();
     _lastQuery = q;
     mentorshipShowOutsideScope = false;
+    // A filter change collapses the grid "Show all" expansions back to capped.
+    _mentorshipGridExpand = { mentor: false, mentee: false };
     const filtered = MEMBERS.filter(m => memberPassesFilters(m, q, {}));
 
     filtered.sort((a, b) => leadershipOrder(a).localeCompare(leadershipOrder(b)) || (a.name||'').localeCompare(b.name||''));
@@ -1713,43 +1720,6 @@
     }
     return names;
   }
-  function mentorshipPersonLink(m) {
-    const a = document.createElement('a');
-    a.href = '#' + m.id;
-    a.className = 'mentorship-person';
-    // Bind the connection-line overlay (#dir-cine2 B) to a data hook, not to
-    // the styling class, so a later element that borrows the pill look is
-    // never swept into the theme-match geometry.
-    if (m.id) a.setAttribute('data-slug', m.id);
-    const av = document.createElement('span');
-    av.className = 'mentorship-person-avatar';
-    if (m.photo) {
-      const img = document.createElement('img');
-      img.src = m.photo;
-      img.alt = '';
-      img.loading = 'lazy';
-      av.appendChild(img);
-    } else {
-      av.classList.add('is-fallback');
-      av.textContent = initials(m.name);
-    }
-    a.appendChild(av);
-    const nm = document.createElement('span');
-    nm.className = 'mentorship-person-name';
-    nm.textContent = m.name || '';
-    a.appendChild(nm);
-    // Keep the active mentorship filter: open the member preview panel (or, in
-    // detailed view, scroll to the already-full card) rather than navigating to
-    // #slug, which would clobber the hash and drop the filter.
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      const card = grid.querySelector('.member-card[data-slug="' + m.id + '"]');
-      if (!card) return;
-      if (grid.classList.contains('is-compact')) openPanel(card);
-      else card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
-    return a;
-  }
   // ─────────── Mentorship panel: wizard + grid faces ───────────
   //
   // The panel has two faces over one shared state (#dir-cine retired here in
@@ -1764,6 +1734,8 @@
   // researcher …"). Separate from the terse labels above so each language can
   // phrase the sentence naturally.
   const MENTORSHIP_STAGE_SENTENCE = ['a doctoral researcher', 'an early-career researcher', 'a mid-career researcher', 'a senior researcher'];
+  // Grid "browse all" list cap before the "Show all N" expander appears.
+  const MENTORSHIP_GRID_CAP = 6;
 
   // Small HTML-escape for the one place we build innerHTML (the why-line, where
   // area names are wrapped in <strong>). Data-sourced strings pass through here.
@@ -2181,6 +2153,234 @@
     }
   }
 
+  // ── Grid "browse all" face ──
+  // A career-stage chip for a grid card: on the offering side the gap to the
+  // viewer (the ordering signal made visible), on the seeking side the member's
+  // own stage. Null when the viewer has not named a stage (offering side).
+  function mentorshipStageChip(m, tag) {
+    const chip = document.createElement('span');
+    chip.className = 'mentorship-why-chip is-stage';
+    if (tag === 'mentor') {
+      if (viewerStage == null) return null;
+      const gap = careerStage(m) - viewerStage;
+      chip.textContent = gap <= 0 ? window.netsecT('Near peer')
+        : gap === 1 ? window.netsecT('1 step ahead')
+        : gap === 2 ? window.netsecT('2 steps ahead')
+        : window.netsecT('{n} steps ahead').replace('{n}', gap);
+    } else {
+      chip.textContent = careerStageLabel(careerStage(m));
+    }
+    return chip;
+  }
+
+  // Why-chips for a grid card: the shared research areas (or the member's own
+  // top areas when no area filter is on), then the stage chip.
+  function mentorshipWhyChips(m, tag) {
+    const wrap = document.createElement('div');
+    wrap.className = 'mentorship-card-why-chips';
+    const shared = mentorshipSharedAreas(m);
+    const names = (shared.length ? shared : (m.themes || []).map(t => window.netsecT(t))).slice(0, 2);
+    names.forEach(n => {
+      const s = document.createElement('span');
+      s.className = 'mentorship-why-chip';
+      s.textContent = n;
+      wrap.appendChild(s);
+    });
+    const stage = mentorshipStageChip(m, tag);
+    if (stage) wrap.appendChild(stage);
+    return wrap;
+  }
+
+  // One grid card: identity (name links to the member), why-chips, actions.
+  // data-slug + data-themes drive the hover pairing ring (no canvas).
+  function mentorshipGridCard(m, tag) {
+    const art = document.createElement('article');
+    art.className = 'mentorship-card';
+    if (m.id) art.dataset.slug = m.id;
+    art.dataset.themes = (m.themes || []).map(keywordSlug).join(' ');
+    const id = document.createElement('div');
+    id.className = 'mentorship-card-id';
+    id.appendChild(mentorshipAvatar(m, 'mentorship-card-avatar'));
+    const meta = document.createElement('div');
+    meta.className = 'mentorship-card-meta';
+    const nm = document.createElement('div');
+    nm.className = 'mentorship-card-name';
+    const link = document.createElement('a');
+    link.href = '#' + m.id;
+    link.textContent = m.name || '';
+    link.addEventListener('click', (e) => { e.preventDefault(); mentorshipOpenMember(m); });
+    nm.appendChild(link);
+    meta.appendChild(nm);
+    if (m.affiliation) {
+      const a = document.createElement('div');
+      a.className = 'mentorship-card-aff';
+      a.textContent = m.affiliation;
+      meta.appendChild(a);
+    }
+    id.appendChild(meta);
+    art.appendChild(id);
+    art.appendChild(mentorshipWhyChips(m, tag));
+    art.appendChild(mentorshipCardActions(m, tag));
+    return art;
+  }
+
+  // The actionable scope bar: theme chips (the top few plus any active one) and
+  // an order-for-my-stage select, replacing the old whispered tip. Both write
+  // the same shared state the toolbar filters own.
+  function mentorshipScopeBar() {
+    const bar = document.createElement('div');
+    bar.className = 'mentorship-scope';
+    bar.setAttribute('role', 'group');
+    bar.setAttribute('aria-label', window.netsecT('Narrow the matches'));
+    const label = document.createElement('span');
+    label.className = 'mentorship-scope-label';
+    label.textContent = window.netsecT('Show people in:');
+    bar.appendChild(label);
+    // Top themes by directory count, with any active-but-lower theme folded in
+    // so a live filter always shows as a pressed chip.
+    const seen = new Set();
+    const chips = [];
+    KEYWORD_AGGREGATE.forEach(e => { const s = keywordSlug(e.keyword); if (activeKeywords.has(s) && !seen.has(s)) { seen.add(s); chips.push(e); } });
+    KEYWORD_AGGREGATE.forEach(e => { const s = keywordSlug(e.keyword); if (chips.length >= Math.max(4, activeKeywords.size) || seen.has(s)) return; seen.add(s); chips.push(e); });
+    chips.forEach(e => {
+      const slug = keywordSlug(e.keyword);
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'members-filter-chip';
+      chip.setAttribute('aria-pressed', activeKeywords.has(slug) ? 'true' : 'false');
+      chip.textContent = window.netsecT(e.keyword);
+      chip.addEventListener('click', () => {
+        if (activeKeywords.has(slug)) activeKeywords.delete(slug); else activeKeywords.add(slug);
+        mentorshipApplyChange();
+      });
+      bar.appendChild(chip);
+    });
+    const more = document.createElement('a');
+    more.href = '#';
+    more.className = 'mentorship-scope-more';
+    more.textContent = window.netsecT('All themes…');
+    more.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (keywordDetails) { keywordDetails.open = true; keywordDetails.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    });
+    bar.appendChild(more);
+    const spacer = document.createElement('span');
+    spacer.className = 'mentorship-scope-spacer';
+    bar.appendChild(spacer);
+    const slabel = document.createElement('label');
+    slabel.className = 'mentorship-scope-label';
+    slabel.setAttribute('for', 'mentorship-scope-stage');
+    slabel.textContent = window.netsecT('Order for my stage:');
+    bar.appendChild(slabel);
+    const sel = document.createElement('select');
+    sel.id = 'mentorship-scope-stage';
+    sel.className = 'mentorship-scope-select';
+    [['', 'Any'], ['0', 'Doctoral'], ['1', 'Early-career'], ['2', 'Mid-career'], ['3', 'Senior']].forEach(([v, lbl]) => {
+      const o = document.createElement('option');
+      o.value = v;
+      o.textContent = window.netsecT(lbl);
+      if (v === '' ? viewerStage == null : String(viewerStage) === v) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.addEventListener('change', () => {
+      viewerStage = sel.value === '' ? null : parseInt(sel.value, 10);
+      renderMentorshipPanel();  // panel-only ordering, no hash / grid change
+    });
+    bar.appendChild(sel);
+    return bar;
+  }
+
+  // Hover / focus pairing: highlighting a card rings every card in the OTHER
+  // side that shares a research theme (keyed off data-themes, no canvas). This
+  // is the connection-line overlay's replacement.
+  function wireMentorshipPairing(gridA, gridB) {
+    if (!gridA || !gridB) return;
+    const themesOf = (el) => (el.dataset.themes || '').split(' ').filter(Boolean);
+    const clear = () => [gridA, gridB].forEach(g =>
+      g.querySelectorAll('.mentorship-card.is-paired').forEach(c => c.classList.remove('is-paired')));
+    const ring = (card, other) => {
+      const mine = new Set(themesOf(card));
+      if (mine.size === 0) return;
+      other.querySelectorAll('.mentorship-card').forEach(c => {
+        if (themesOf(c).some(t => mine.has(t))) c.classList.add('is-paired');
+      });
+    };
+    [[gridA, gridB], [gridB, gridA]].forEach(([from, to]) => {
+      from.querySelectorAll('.mentorship-card').forEach(card => {
+        card.addEventListener('pointerenter', () => { clear(); ring(card, to); });
+        card.addEventListener('focusin', () => { clear(); ring(card, to); });
+        card.addEventListener('pointerleave', clear);
+        card.addEventListener('focusout', clear);
+      });
+    });
+  }
+
+  function renderMentorshipGrid(panel, ctx) {
+    const guide = document.createElement('p');
+    guide.className = 'mentorship-guide';
+    guide.textContent = window.netsecT('Mentoring in the network is informal: introduce yourself directly and say what you are looking for. Nothing you choose here is stored.');
+    panel.appendChild(guide);
+
+    panel.appendChild(mentorshipScopeBar());
+
+    const grids = {};
+    [['mentor', ctx.offerN], ['mentee', ctx.seekN]].forEach(([tag, count]) => {
+      const isMentor = tag === 'mentor';
+      const people = mentorshipMembers(tag, ctx.scopedPool);
+      const h = document.createElement('h3');
+      h.className = 'mentorship-colhead';
+      h.textContent = (ctx.areasActive
+        ? (isMentor ? window.netsecT('Offering mentorship in your area ({n})') : window.netsecT('Seeking mentorship in your area ({n})'))
+        : (isMentor ? window.netsecT('Offering mentorship ({n})') : window.netsecT('Seeking mentorship ({n})'))
+      ).replace('{n}', count);
+      panel.appendChild(h);
+
+      if (people.length === 0) {
+        const none = document.createElement('p');
+        none.className = 'mentorship-none';
+        none.textContent = ctx.areasActive
+          ? window.netsecT('No one in your selected research areas yet.')
+          : window.netsecT('No one here yet.');
+        panel.appendChild(none);
+        return;
+      }
+
+      const order = document.createElement('p');
+      order.className = 'mentorship-order';
+      order.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg>';
+      order.appendChild(document.createTextNode(' ' + (isMentor
+        ? window.netsecT('Most relevant first: shared research areas, then a mentor one or two steps ahead of you')
+        : window.netsecT('Most relevant first: shared research areas, then someone a step or two earlier in their career'))));
+      panel.appendChild(order);
+
+      const grid = document.createElement('div');
+      grid.className = 'mentorship-grid';
+      const expanded = _mentorshipGridExpand[tag];
+      people.forEach((m, i) => {
+        const card = mentorshipGridCard(m, tag);
+        if (!expanded && i >= MENTORSHIP_GRID_CAP) card.classList.add('is-hidden');
+        grid.appendChild(card);
+      });
+      panel.appendChild(grid);
+      grids[tag] = grid;
+
+      if (people.length > MENTORSHIP_GRID_CAP && !expanded) {
+        const wrap = document.createElement('p');
+        wrap.className = 'mentorship-showall';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = (isMentor
+          ? window.netsecT('Show all {n} offering mentorship')
+          : window.netsecT('Show all {n} seeking mentorship')).replace('{n}', people.length);
+        btn.addEventListener('click', () => { _mentorshipGridExpand[tag] = true; renderMentorshipPanel(); });
+        wrap.appendChild(btn);
+        panel.appendChild(wrap);
+      }
+    });
+
+    wireMentorshipPairing(grids.mentor, grids.mentee);
+  }
+
   function renderMentorshipPanel() {
     const panel = document.getElementById('members-mentorship-panel');
     if (!panel) return;
@@ -2214,9 +2414,28 @@
     balance.appendChild(bOffer);
     balance.appendChild(bSeek);
     head.appendChild(balance);
+
+    // Face toggle (Wizard | Browse all), mirroring the directory density
+    // toggle. Persists in localStorage('netsec-mentorship-view').
+    const view = savedMentorshipView();
+    const toggle = document.createElement('div');
+    toggle.className = 'mentorship-view-toggle';
+    toggle.setAttribute('role', 'group');
+    toggle.setAttribute('aria-label', window.netsecT('Mentorship view'));
+    [['wizard', 'Guided'], ['grid', 'Browse all']].forEach(([v, label]) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.dataset.mentorshipView = v;
+      b.setAttribute('aria-pressed', view === v ? 'true' : 'false');
+      b.textContent = window.netsecT(label);
+      b.addEventListener('click', () => { if (mentorshipView !== v) switchMentorshipView(v); });
+      toggle.appendChild(b);
+    });
+    head.appendChild(toggle);
     panel.appendChild(head);
 
-    renderMentorshipWizard(panel, ctx);
+    if (view === 'grid') renderMentorshipGrid(panel, ctx);
+    else renderMentorshipWizard(panel, ctx);
   }
 
   // ─────────── Research-interest filter (Phase 3) ───────────
@@ -2530,15 +2749,16 @@
   });
 
   /* ═══════════════════════════════════════════════════════════════════
-     Directory cinematics wave 2 (#dir-cine2). Three presentational layers
+     Directory cinematics wave 2 (#dir-cine2). Two presentational layers
      added on top of wave 1: a member-count constellation band behind the
-     page heading, theme-match connection lines in the mentorship panel,
-     and a country flag strip that drives the existing activeCountry filter.
-     All three are injected from here, so the page markup is untouched, and
-     all three still under cinePrefersReducedMotion(). The CSS lives in the
-     "Directory cinematics wave 2" block at the foot of site.css.
+     page heading and a country flag strip that drives the existing
+     activeCountry filter. Both are injected from here, so the page markup
+     is untouched, and both still under cinePrefersReducedMotion(). The CSS
+     lives in the "Directory cinematics wave 2" block at the foot of site.css.
+     The mentorship theme-match connection lines that once sat here were
+     retired with the wizard/grid panel redesign (the pairing signal is now
+     the grid's hover ring).
      ═══════════════════════════════════════════════════════════════════ */
-  const CINE_SVG_NS = 'http://www.w3.org/2000/svg';
 
   /* A. Constellation band. One node per member (honest data), scattered by
      a deterministic index hash so reloads look identical, drifting slowly
@@ -2642,82 +2862,7 @@
     });
   }
 
-  /* B. Mentorship theme-match lines. On hover or focus of a person row,
-     draw a curve to every person in the OTHER column who shares a research
-     theme, and lift those rows. Information, so the lines still appear under
-     reduced motion, just without the draw-on animation. Never intercepts
-     clicks (the overlay is pointer-events:none). */
-  function memberThemeSlugs(id) {
-    const m = MEMBERS.find(x => x.id === id);
-    if (!m) return new Set();
-    return new Set((m.themes || []).map(keywordSlug));
-  }
-  function wireMentorshipLines(cols) {
-    const colEls = cols.querySelectorAll('.mentorship-panel-col');
-    if (colEls.length < 2) return;   // single side on screen, nothing to join
-    cols.setAttribute('data-mentorship-lines-host', '');
-    const svg = document.createElementNS(CINE_SVG_NS, 'svg');
-    svg.setAttribute('data-mentorship-lines', '');
-    svg.setAttribute('aria-hidden', 'true');
-    cols.appendChild(svg);
-    const clear = () => {
-      while (svg.firstChild) svg.removeChild(svg.firstChild);
-      cols.querySelectorAll('.mentorship-person.is-line-source, .mentorship-person.is-line-match')
-        .forEach(r => r.classList.remove('is-line-source', 'is-line-match'));
-    };
-    const drawFor = (row) => {
-      clear();
-      const srcCol = row.closest('.mentorship-panel-col');
-      if (!srcCol) return;
-      const otherCol = Array.prototype.filter.call(colEls, c => c !== srcCol)[0];
-      if (!otherCol) return;
-      // Stacked (wrapped) columns: skip, the geometry would cross the page.
-      const sr = srcCol.getBoundingClientRect(), or = otherCol.getBoundingClientRect();
-      if (or.top >= sr.bottom - 4) return;
-      const themes = memberThemeSlugs(row.getAttribute('data-slug'));
-      if (themes.size === 0) return;
-      const matches = Array.prototype.filter.call(
-        otherCol.querySelectorAll('.mentorship-person[data-slug]'),
-        r => { const s = memberThemeSlugs(r.getAttribute('data-slug')); for (const t of s) if (themes.has(t)) return true; return false; }
-      );
-      if (matches.length === 0) return;
-      const host = cols.getBoundingClientRect();
-      const srcLeft = sr.left < or.left;                 // source is the left column
-      const rowR = row.getBoundingClientRect();
-      const x1 = (srcLeft ? rowR.right : rowR.left) - host.left;
-      const y1 = rowR.top + rowR.height / 2 - host.top;
-      svg.setAttribute('viewBox', '0 0 ' + host.width + ' ' + host.height);
-      row.classList.add('is-line-source');
-      matches.forEach(mr => {
-        mr.classList.add('is-line-match');
-        const r2 = mr.getBoundingClientRect();
-        const x2 = (srcLeft ? r2.left : r2.right) - host.left;
-        const y2 = r2.top + r2.height / 2 - host.top;
-        const mx = (x1 + x2) / 2;
-        const path = document.createElementNS(CINE_SVG_NS, 'path');
-        path.setAttribute('d', 'M' + x1 + ',' + y1 + ' C' + mx + ',' + y1 + ' ' + mx + ',' + y2 + ' ' + x2 + ',' + y2);
-        path.setAttribute('class', 'mentorship-line');
-        svg.appendChild(path);
-        if (!cinePrefersReducedMotion()) {
-          const len = path.getTotalLength ? path.getTotalLength() : 300;
-          path.style.strokeDasharray = len;
-          path.style.strokeDashoffset = len;
-          // Force a reflow so the transition from offset→0 animates the draw.
-          void path.getBoundingClientRect();
-          path.style.strokeDashoffset = '0';
-        }
-      });
-    };
-    cols.querySelectorAll('.mentorship-person[data-slug]').forEach(row => {
-      row.addEventListener('pointerenter', () => drawFor(row));
-      row.addEventListener('focusin', () => drawFor(row));
-      row.addEventListener('pointerleave', clear);
-      row.addEventListener('focusout', clear);
-    });
-    window.addEventListener('resize', clear);
-  }
-
-  /* C. Country flag strip. A visual surface for the existing (UI-less)
+  /* B. Country flag strip. A visual surface for the existing (UI-less)
      activeCountry filter: one flag per represented country, count-sorted,
      driving the same filter the dropdown would have. Toggling the active
      flag clears it. aria-pressed is kept in sync by syncCountryStrip(),
