@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "martin-havacek",
-  "featuredSince": "2026-07-07",
+  "current": "isabelle-haynes",
+  "featuredSince": "2026-07-14",
   "pinned": null,
   "history": [
+    {
+      "id": "isabelle-haynes",
+      "week": "2026-W29",
+      "date": "2026-07-14"
+    },
     {
       "id": "martin-havacek",
       "week": "2026-W28",
