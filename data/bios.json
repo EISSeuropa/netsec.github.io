@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-12T17:26:26+00:00",
+  "generated_at": "2026-07-14T07:20:28+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-12T17:26:26+00:00"
+    "last_synced": "2026-07-14T07:20:28+00:00"
   },
   "members": [
     {
@@ -3065,6 +3065,49 @@
         "Security and defence",
         "Theory and methods"
       ]
+    },
+    {
+      "id": "gayane-harutyunyan",
+      "name": "Dr Gayane Harutyunyan",
+      "country": "Armenia",
+      "country_code": "am",
+      "affiliation": "Public Administration Academy of the Republic of Armenia",
+      "position": "Vice-rector for Scientific Affairs",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Europe - Eastern neighbours / Russia"
+      ],
+      "wg_leadership": {},
+      "bio": "Gayane Harutyunyan is the vice-rector for scientific affairs of the Public Administration Academy of the Republic of Armenia. She is also part-time research fellow of the Strategic Games and Simulation Group of the National Defense Research University of the Ministry of Defense of the Republic of Armenia. Her academic and research work covers more than 70 research papers on defense economics, military and economic security, international economic relations, defense resources management, green defense industry, military use of artificial intelligence, 3 monographs, 5 teaching manuals, over 20 papers for local and international conferences and workshops. During past ten years she was also а research team leader of five scientific projects funding by the Science Committee of the Republic of Armenia within the framework of contractual (thematic) financing of the scientific and scientific-technical activities.",
+      "keywords": [
+        "Defense economics",
+        "defense industry",
+        "emerging technologies in military domain",
+        "defense resources management",
+        "green defense industry"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "0000-0003-3240-0802",
+      "linkedin": "https://www.linkedin.com/in/gayane-harutyunyan-23a862186/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/gayane-harutyunyan.jpg",
+      "source": "form",
+      "photo_source_sha256": "65efe813bac147414995213b8cdd79b76797657b4b6582a7350d43416f404f97",
+      "canonical_keywords": [
+        "Defence economics",
+        "Defence industry",
+        "Defence resources management",
+        "Emerging technologies in military domain",
+        "Green defence industry"
+      ],
+      "themes": [
+        "Economic security and geoeconomics"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3138,6 +3181,14 @@
     },
     {
       "keyword": "Defence",
+      "count": 2
+    },
+    {
+      "keyword": "Defence economics",
+      "count": 2
+    },
+    {
+      "keyword": "Defence industry",
       "count": 2
     },
     {
@@ -3333,15 +3384,11 @@
       "count": 1
     },
     {
-      "keyword": "Defence economics",
-      "count": 1
-    },
-    {
       "keyword": "Defence industrial policy",
       "count": 1
     },
     {
-      "keyword": "Defence industry",
+      "keyword": "Defence resources management",
       "count": 1
     },
     {
@@ -3402,6 +3449,10 @@
     },
     {
       "keyword": "Election interference",
+      "count": 1
+    },
+    {
+      "keyword": "Emerging technologies in military domain",
       "count": 1
     },
     {
@@ -3466,6 +3517,10 @@
     },
     {
       "keyword": "Governance",
+      "count": 1
+    },
+    {
+      "keyword": "Green defence industry",
       "count": 1
     },
     {
@@ -3808,7 +3863,7 @@
     },
     {
       "theme": "Economic security and geoeconomics",
-      "count": 7
+      "count": 8
     },
     {
       "theme": "Intelligence, information and influence",
@@ -4025,7 +4080,7 @@
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 14
+      "count": 15
     },
     {
       "region": "Europe - Western Balkans",
