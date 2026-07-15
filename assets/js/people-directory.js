@@ -1434,6 +1434,7 @@
   // and is excluded from the badge count).
   function sheetFilterCount() {
     return (activeWG !== 'all' ? 1 : 0) + (activeCountry !== 'all' ? 1 : 0)
+      + (activeStsm ? 1 : 0)
       + activeMentorship.size + activeKeywords.size + activeRegions.size;
   }
   // The filter sheet is a native <dialog>. On mobile the Filters button opens
@@ -1612,12 +1613,9 @@
   function setupStsmFilter() {
     const root = document.getElementById('members-stsm-filter');
     if (!root) return;
-    const hasHost = MEMBERS.some(m => m.stsm_hosting === 'yes' || m.stsm_hosting === 'ask');
-    root.hidden = !hasHost;
-    // If a deep link set the filter but no member hosts yet, neutralise it
-    // so the visitor sees the full directory rather than an empty grid with
-    // no visible chip to clear.
-    if (!hasHost) activeStsm = false;
+    // Neutralising a deep link that set the filter with no hosts behind it is
+    // dropUnbackedFacets()'s job, on every hash parse rather than only at init.
+    root.hidden = !MEMBERS.some(m => m.stsm_hosting === 'yes' || m.stsm_hosting === 'ask');
   }
   function syncStsmChip() {
     if (stsmChip) stsmChip.setAttribute('aria-pressed', activeStsm ? 'true' : 'false');
@@ -1702,23 +1700,25 @@
         || leadershipOrder(a).localeCompare(leadershipOrder(b))
         || (a.name || '').localeCompare(b.name || ''));
   }
-  // Localised display names of the active theme + region filters, for the
-  // panel's scope caption. Read from the aggregates (which carry every theme /
+  // Each active theme + region filter as {value, label}. The label is the
+  // localised display name and the value carries the wizard popover's own
+  // `theme:<slug>` / `region:<slug>` form, so a caller can hand it straight
+  // back to onAreaPick. Read from the aggregates (which carry every theme /
   // region) rather than the chip DOM, so an active-but-collapsed chip still
   // shows. Themes lead, regions follow.
-  function activeAreaNames() {
-    const names = [];
+  function activeAreaEntries() {
+    const out = [];
     if (activeKeywords.size) {
       const map = {};
       KEYWORD_AGGREGATE.forEach(e => { map[keywordSlug(e.keyword)] = window.netsecT(e.keyword); });
-      activeKeywords.forEach(s => { if (map[s]) names.push(map[s]); });
+      activeKeywords.forEach(s => { if (map[s]) out.push({ value: 'theme:' + s, label: map[s] }); });
     }
     if (activeRegions.size) {
       const map = {};
       REGION_AGGREGATE.forEach(e => { map[keywordSlug(e.region)] = window.netsecT(e.region); });
-      activeRegions.forEach(s => { if (map[s]) names.push(map[s]); });
+      activeRegions.forEach(s => { if (map[s]) out.push({ value: 'region:' + s, label: map[s] }); });
     }
-    return names;
+    return out;
   }
   // ─────────── Mentorship panel: wizard + grid faces ───────────
   //
@@ -2030,7 +2030,6 @@
     sentence.appendChild(dirToken);
 
     sentence.appendChild(mentorshipLead(window.netsecT('in')));
-    const areaNames = activeAreaNames();
     const areaOptions = () => {
       const opts = [];
       KEYWORD_AGGREGATE.forEach(e => {
@@ -2049,15 +2048,17 @@
       if (set.has(slug)) set.delete(slug); else set.add(slug);
       mentorshipApplyChange('area');
     };
-    const areaToken = mentorshipToken(
-      'area',
-      areaNames.length ? areaNames[0] : window.netsecT('choose a research area'),
-      areaNames.length === 0,
-      areaOptions,
-      onAreaPick
-    );
-    sentence.appendChild(areaToken);
-    if (areaNames.length) {
+    // One token per active area, not just the first: every area the hash
+    // carries is filtering the matches, so every one of them has to be
+    // visible and removable here. Rendering only areaNames[0] let the second
+    // and third selection narrow the results from off screen.
+    const areas = activeAreaEntries();
+    if (areas.length === 0) {
+      sentence.appendChild(mentorshipToken('area', window.netsecT('choose a research area'), true, areaOptions, onAreaPick));
+    } else {
+      areas.forEach(a => {
+        sentence.appendChild(mentorshipToken('area', a.label, false, areaOptions, onAreaPick));
+      });
       const addToken = mentorshipToken('area-add', window.netsecT('add an area'), true, areaOptions, onAreaPick);
       addToken.classList.add('is-plus');
       sentence.appendChild(addToken);
@@ -2500,6 +2501,17 @@
     if (q) {
       search.value = q;
     }
+    dropUnbackedFacets();
+  }
+  // A mentorship side or the STSM facet with nobody behind it hides its own
+  // chip (setupMentorshipFilter / setupStsmFilter), so a deep link to one would
+  // otherwise leave an empty grid filtered by a control the visitor cannot see.
+  // Drop it instead. Runs on every hash parse, so back/forward is covered too.
+  function dropUnbackedFacets() {
+    if (!MEMBERS.length) return;
+    if (!MEMBERS.some(m => (m.mentorship || []).includes('mentor'))) activeMentorship.delete('mentor');
+    if (!MEMBERS.some(m => (m.mentorship || []).includes('mentee'))) activeMentorship.delete('mentee');
+    if (activeStsm && !MEMBERS.some(m => m.stsm_hosting === 'yes' || m.stsm_hosting === 'ask')) activeStsm = false;
   }
   function writeHashKeywords() {
     const slugs = Array.from(activeKeywords);
@@ -2569,7 +2581,13 @@
     chipsWrap.replaceChildren();
     const total = KEYWORD_AGGREGATE.length;
     const limit = keywordFilterExpanded ? total : Math.min(KEYWORD_FILTER_VISIBLE_TOP_N, total);
-    KEYWORD_AGGREGATE.slice(0, limit).forEach(entry => {
+    // The collapse hides the long tail, never a live filter: any active theme
+    // from below the cut rides along with the top-N. Otherwise selecting a rare
+    // theme (or deep-linking to one) filters the grid from a chip that is not
+    // on screen to unpick.
+    const shown = KEYWORD_AGGREGATE.slice(0, limit).concat(
+      KEYWORD_AGGREGATE.slice(limit).filter(e => activeKeywords.has(keywordSlug(e.keyword))));
+    shown.forEach(entry => {
       const slug = keywordSlug(entry.keyword);
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -2663,7 +2681,10 @@
     chipsWrap.replaceChildren();
     const total = REGION_AGGREGATE.length;
     const limit = regionFilterExpanded ? total : Math.min(KEYWORD_FILTER_VISIBLE_TOP_N, total);
-    REGION_AGGREGATE.slice(0, limit).forEach(entry => {
+    // Same rule as the theme row: an active region is never collapsed away.
+    const shown = REGION_AGGREGATE.slice(0, limit).concat(
+      REGION_AGGREGATE.slice(limit).filter(e => activeRegions.has(keywordSlug(e.region))));
+    shown.forEach(entry => {
       const slug = keywordSlug(entry.region);
       const btn = document.createElement('button');
       btn.type = 'button';
