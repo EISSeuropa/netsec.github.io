@@ -470,7 +470,9 @@ html.dark .mentorship-rank.is-quiet{ background:rgba(255,255,255,.14); color:#b8
   background:var(--bg-1); border:1px solid var(--line); border-radius:12px;
   box-shadow:0 12px 34px rgba(0,0,0,.28); padding:6px;
   display:flex; flex-direction:column; gap:2px;
-  max-height:min(320px,60vh); overflow-y:auto; z-index:1200;
+  /* contain: a wheel at the list's top/bottom edge stays in the list rather
+     than leaking to the page, whose scroll would dismiss the popover. */
+  max-height:min(320px,60vh); overflow-y:auto; overscroll-behavior:contain; z-index:1200;
 }
 .mentorship-pop-opt{
   font:inherit; font-size:.9rem; text-align:left; color:var(--ink);
