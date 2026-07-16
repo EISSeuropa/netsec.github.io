@@ -33,3 +33,6 @@ pagefind/
 tmp/
 
 /ogcards-*/
+
+# npm (directory interaction tests)
+node_modules/

@@ -1,0 +1,48 @@
+# Interaction smoke tests for the Directory (people.html).
+#
+# Drives the real page in headless Chrome (puppeteer-core against the
+# runner's preinstalled Chrome) and asserts the interaction-level contract
+# the structural gates cannot see: every active filter shows a pressed
+# control, the mentorship wizard reflects every selection, its area popover
+# survives being scrolled, and dark-mode badges stay readable. Each journey
+# is a regression tripwire for a bug class that previously shipped through
+# a green build (#1376, #1380, #1382, #1383).
+name: directory interactions
+
+on:
+  pull_request:
+    paths:
+      - 'people.html'
+      - 'assets/js/people-directory.js'
+      - 'assets/js/site.js'
+      - 'assets/css/directory.css'
+      - 'assets/css/site.css'
+      - 'data/bios.json'
+      - 'scripts/test-directory-interactions.mjs'
+      - 'package.json'
+      - '.github/workflows/directory-interactions.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v4 (sha-pinned)
+
+      - name: Set up Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e  # v4 (sha-pinned)
+        with:
+          node-version: '22'
+
+      - name: Install puppeteer-core
+        run: npm ci --no-audit --no-fund
+
+      - name: Run directory interaction journeys
+        run: node scripts/test-directory-interactions.mjs
+        env:
+          CHROME_PATH: /usr/bin/google-chrome

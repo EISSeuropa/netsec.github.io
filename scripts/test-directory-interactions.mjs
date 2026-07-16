@@ -1,0 +1,272 @@
+#!/usr/bin/env node
+// Interaction smoke tests for the Directory (people.html).
+//
+// The repo's CI gates check structure (links, i18n drift, asset stamps); none
+// of them opens a browser, clicks a control, and asserts the page responded.
+// Every directory bug shipped in July 2026 (#1376, #1380, #1382, #1383) was
+// invisible to a green build for exactly that reason. This suite drives the
+// real page in headless Chrome and asserts the interaction-level contract:
+// every active filter has a visible pressed control, the mentorship wizard
+// reflects every selection, and its popover survives being scrolled.
+//
+// Run locally:   node scripts/test-directory-interactions.mjs
+// Dependencies:  puppeteer-core (npm ci) + an installed Chrome/Chromium.
+// Chrome path:   $CHROME_PATH overrides autodetection.
+
+import puppeteer from 'puppeteer-core';
+import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+const CHROME_CANDIDATES = [
+  process.env.CHROME_PATH,
+  '/usr/bin/google-chrome',
+  '/usr/bin/chromium-browser',
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+].filter(Boolean);
+const CHROME = CHROME_CANDIDATES.find(p => fs.existsSync(p));
+if (!CHROME) {
+  console.error('No Chrome binary found. Set CHROME_PATH.');
+  process.exit(2);
+}
+
+const MIME = {
+  '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css',
+  '.json': 'application/json', '.svg': 'image/svg+xml', '.webp': 'image/webp',
+  '.jpg': 'image/jpeg', '.png': 'image/png', '.ico': 'image/x-icon',
+};
+const server = http.createServer((req, res) => {
+  // Resolve and confine to ROOT: the server only ever faces this script's
+  // own requests on 127.0.0.1, but a traversal guard costs two lines
+  // (CodeQL js/path-injection).
+  let file = path.resolve(ROOT, '.' + path.posix.normalize('/' + decodeURIComponent(req.url.split('?')[0])));
+  if (!file.startsWith(ROOT + path.sep) && file !== ROOT) { res.writeHead(403); res.end('403'); return; }
+  if (req.url.split('?')[0].endsWith('/')) file = path.join(file, 'index.html');
+  fs.readFile(file, (err, data) => {
+    if (err) { res.writeHead(404); res.end('404'); return; }
+    res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream' });
+    res.end(data);
+  });
+});
+await new Promise(r => server.listen(0, '127.0.0.1', r));
+const BASE = `http://127.0.0.1:${server.address().port}`;
+
+const browser = await puppeteer.launch({
+  executablePath: CHROME,
+  headless: 'new',
+  args: ['--no-sandbox', '--disable-dev-shm-usage'],
+});
+
+// One fresh page per journey. Reduced motion kills the FLIP/scroll animations
+// so geometry is deterministic; the tour key suppresses the first-visit
+// overlay that would otherwise intercept clicks.
+async function openDirectory(hash = '', { width = 1280, height = 900, dark = false, expectCards = true } = {}) {
+  const page = await browser.newPage();
+  await page.setViewport({ width, height });
+  await page.emulateMediaFeatures([
+    { name: 'prefers-reduced-motion', value: 'reduce' },
+    { name: 'prefers-color-scheme', value: dark ? 'dark' : 'light' },
+  ]);
+  await page.evaluateOnNewDocument(() => {
+    localStorage.setItem('netsec-directory-tour-seen', '1');
+  });
+  await page.goto(`${BASE}/people.html${hash}`, { waitUntil: 'networkidle0' });
+  // A deep link can legitimately land on zero cards; the chip row renders on
+  // every load, so it is the page-ready signal for those journeys.
+  await page.waitForSelector(
+    expectCards ? '#members-grid .member-card' : '#members-keyword-filter-chips .members-keyword-filter-chip',
+    { timeout: 15000 });
+  return page;
+}
+
+const gridCount = (page) => page.$$eval('#members-grid .member-card', els => els.length);
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+function assert(cond, msg) {
+  if (!cond) throw new Error(msg);
+}
+
+// Popover option clicks: the popover arms a 150 ms grace period before its
+// dismiss handlers go live, so wait it out before interacting.
+async function openAreaPopover(page, tokenKind = 'area') {
+  await page.click(`.mentorship-token[data-token-kind="${tokenKind}"]`);
+  await page.waitForSelector('.mentorship-pop', { timeout: 5000 });
+  await sleep(200);
+}
+
+const journeys = {
+
+  // #1376: the wizard rendered only the first selected area; later picks
+  // filtered the matches from off screen.
+  async 'wizard shows every selected area as its own token'() {
+    const page = await openDirectory('#mentorship=mentor');
+    await openAreaPopover(page);
+    await page.click('.mentorship-pop-opt:nth-of-type(1)');
+    await page.waitForSelector('.mentorship-token[data-token-kind="area-add"]');
+    await openAreaPopover(page, 'area-add');
+    await page.click('.mentorship-pop-opt:nth-of-type(2)');
+    await sleep(100);
+    const tokens = await page.$$eval('.mentorship-token[data-token-kind="area"]', els => els.length);
+    const hash = await page.evaluate(() => location.hash);
+    assert(tokens === 2, `expected 2 area tokens, got ${tokens} (hash ${hash})`);
+    assert((hash.match(/themes=([^&]*)/)?.[1] || '').split(',').length === 2,
+      `hash should carry 2 themes: ${hash}`);
+    await page.close();
+  },
+
+  // #1383: the popover's dismiss-on-scroll guard fired on its own list
+  // scroll, so the lower options could never be reached.
+  async 'area picker scrolls without dismissing'() {
+    const page = await openDirectory('#mentorship=mentor');
+    await openAreaPopover(page);
+    const box = await (await page.$('.mentorship-pop')).boundingBox();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.wheel({ deltaY: 240 });
+    await sleep(150);
+    const state = await page.evaluate(() => {
+      const p = document.querySelector('.mentorship-pop');
+      return p ? { open: true, scrollTop: p.scrollTop } : { open: false };
+    });
+    assert(state.open, 'popover closed on its own scroll');
+    assert(state.scrollTop > 0, `popover did not scroll (scrollTop ${state.scrollTop})`);
+    await page.close();
+  },
+
+  // #1376: a deep link to a below-the-fold theme landed with an empty grid
+  // and no pressed chip anywhere on screen.
+  async 'deep link to a rare theme shows its pressed chip'() {
+    let page = await openDirectory();
+    await page.evaluate(() => { document.getElementById('members-keyword-filter').open = true; });
+    await page.click('#members-keyword-filter-toggle');
+    const rareSlug = await page.$$eval('#members-keyword-filter-chips .members-keyword-filter-chip',
+      els => els[els.length - 1].dataset.slug);
+    await page.close();
+    page = await openDirectory(`#themes=${rareSlug}&mentorship=mentor`, { expectCards: false });
+    const pressed = await page.$$eval('#members-keyword-filter-chips [aria-pressed="true"]',
+      els => els.map(e => e.dataset.slug));
+    assert(pressed.includes(rareSlug), `chip for ${rareSlug} not pressed/visible (pressed: ${pressed})`);
+    await page.close();
+  },
+
+  // #1376: "Show fewer" collapsed an active chip out of the row while it
+  // carried on filtering the grid.
+  async 'collapsing the theme row keeps the active chip visible'() {
+    const page = await openDirectory();
+    await page.evaluate(() => { document.getElementById('members-keyword-filter').open = true; });
+    await page.click('#members-keyword-filter-toggle');   // Show all
+    const rareSlug = await page.$$eval('#members-keyword-filter-chips .members-keyword-filter-chip',
+      els => els[els.length - 1].dataset.slug);
+    await page.click(`#members-keyword-filter-chips [data-slug="${rareSlug}"]`);
+    await page.click('#members-keyword-filter-toggle');   // Show fewer
+    const chip = await page.$(`#members-keyword-filter-chips [data-slug="${rareSlug}"][aria-pressed="true"]`);
+    assert(chip, `active chip ${rareSlug} vanished on collapse`);
+    await page.close();
+  },
+
+  // #1376: the mobile Filters badge left the STSM chip out of its count.
+  async 'mobile filter badge counts every sheet facet'() {
+    const page = await openDirectory('', { width: 375, height: 812 });
+    await page.click('#members-filter-toggle');
+    await page.waitForSelector('#members-filterset[open]');
+    await page.click('#members-stsm-filter [data-stsm]');
+    await page.click('.members-mentorship-chip[data-mentorship="mentor"]');
+    await page.click('#members-sheet-apply');
+    await sleep(100);
+    const badge = await page.$eval('#members-filter-toggle-count',
+      el => ({ hidden: el.hidden, n: el.textContent.trim() }));
+    assert(!badge.hidden && badge.n === '2', `badge should read 2, got ${JSON.stringify(badge)}`);
+    await page.close();
+  },
+
+  // #1380: a specificity slip rendered the quiet No.2/No.3 rank badges as
+  // near-black text on a dark pill in dark mode.
+  async 'runner-up rank badges are readable in dark mode'() {
+    const page = await openDirectory('#mentorship=mentor', { dark: true });
+    await page.waitForSelector('.mentorship-rank.is-quiet');
+    const lum = await page.$eval('.mentorship-rank.is-quiet', el => {
+      const [r, g, b] = getComputedStyle(el).color.match(/[\d.]+/g).map(Number);
+      const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; };
+      return .2126 * f(r) + .7152 * f(g) + .0722 * f(b);
+    });
+    assert(lum > 0.3, `quiet rank badge text too dark for a dark pill (luminance ${lum.toFixed(3)})`);
+    await page.close();
+  },
+
+  // #1382: the sentence's line slot was shorter than the token boxes, so
+  // wrapped rows of tokens touched.
+  async 'sentence tokens never overlap'() {
+    const page = await openDirectory('#mentorship=mentor');
+    await openAreaPopover(page);
+    await page.click('.mentorship-pop-opt:nth-of-type(1)');
+    await page.waitForSelector('.mentorship-token[data-token-kind="area-add"]');
+    await openAreaPopover(page, 'area-add');
+    await page.click('.mentorship-pop-opt:nth-of-type(2)');
+    await sleep(100);
+    const bad = await page.$$eval('.mentorship-sentence .mentorship-token', els => {
+      const rs = els.map(e => e.getBoundingClientRect());
+      for (let i = 0; i < rs.length; i++) for (let j = i + 1; j < rs.length; j++) {
+        const a = rs[i], b = rs[j];
+        if (a.left < b.right - 1 && b.left < a.right - 1 && a.top < b.bottom - 1 && b.top < a.bottom - 1) {
+          return `${i}~${j}`;
+        }
+      }
+      return null;
+    });
+    assert(!bad, `sentence tokens overlap (${bad})`);
+    await page.close();
+  },
+
+  // The render-state contract behind the whole #1376 bug class: after any
+  // interaction, every active facet must surface a visible pressed control,
+  // and clearing must actually clear.
+  async 'clear all filters resets grid, hash and controls'() {
+    const page = await openDirectory('#mentorship=mentor&stsm=1');
+    const total = await page.$eval('#members-count', el => parseInt(el.textContent, 10))
+      .catch(() => null);
+    await page.click('#members-clear-all');
+    await sleep(150);
+    const after = await page.evaluate(() => ({
+      hash: location.hash,
+      pressed: document.querySelectorAll(
+        '.members-mentorship-chip[aria-pressed="true"], [data-stsm][aria-pressed="true"]').length,
+      cards: document.querySelectorAll('#members-grid .member-card').length,
+      panelHidden: document.getElementById('members-mentorship-panel').hidden,
+    }));
+    assert(after.pressed === 0, `chips still pressed after clear (${after.pressed})`);
+    assert(after.hash === '' || after.hash === '#', `hash not cleared: ${after.hash}`);
+    assert(after.panelHidden, 'mentorship panel still open after clear');
+    if (total) assert(after.cards >= total, 'grid did not return to the full directory');
+    await page.close();
+  },
+
+  async 'search narrows the grid'() {
+    const page = await openDirectory();
+    const before = await gridCount(page);
+    const name = await page.$eval('#members-grid .member-card .member-name',
+      el => el.textContent.trim());
+    await page.type('#member-search', name);
+    await sleep(400);   // debounce is 120 ms
+    const after = await gridCount(page);
+    assert(after >= 1 && after < before, `search "${name}": ${before} -> ${after} cards`);
+    await page.close();
+  },
+};
+
+let failed = 0;
+for (const [name, fn] of Object.entries(journeys)) {
+  try {
+    await fn();
+    console.log(`  ok    ${name}`);
+  } catch (e) {
+    failed++;
+    console.error(`  FAIL  ${name}\n        ${e.message}`);
+  }
+}
+
+await browser.close();
+server.close();
+console.log(failed ? `\n${failed} journey(s) failed` : '\nall journeys passed');
+process.exit(failed ? 1 : 0);
