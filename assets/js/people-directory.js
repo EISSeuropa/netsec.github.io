@@ -1896,11 +1896,16 @@
     if (p.anchor) p.anchor.setAttribute('aria-expanded', 'false');
     _mentorshipPop = null;
   }
-  function openMentorshipPopover(anchor, options, onPick) {
+  function openMentorshipPopover(anchor, options, onPick, name, multi) {
     closeMentorshipPopover();
     const pop = document.createElement('div');
     pop.className = 'mentorship-pop';
     pop.setAttribute('role', 'listbox');
+    // A listbox with no accessible name announces as a bare "list"; name it
+    // after the token it fills ("Research area", "Career stage"). The area
+    // list toggles its options in place, so declare it multi-select.
+    if (name) pop.setAttribute('aria-label', name);
+    if (multi) pop.setAttribute('aria-multiselectable', 'true');
     options.forEach(opt => {
       const b = document.createElement('button');
       b.type = 'button';
@@ -1928,10 +1933,17 @@
     const onDocClick = (e) => { if (Date.now() < readyAt) return; if (!pop.contains(e.target) && e.target !== anchor) closeMentorshipPopover(); };
     const onKey = (e) => {
       if (e.key === 'Escape') { closeMentorshipPopover(); anchor.focus(); return; }
+      // Tab would otherwise move focus out of the body-appended popover and
+      // leave it stranded open with the token still marked expanded. Close
+      // and re-home focus first; the default Tab then advances from the
+      // token to its natural neighbour.
+      if (e.key === 'Tab') { closeMentorshipPopover(); anchor.focus(); return; }
       const opts = Array.prototype.slice.call(pop.querySelectorAll('.mentorship-pop-opt'));
       const idx = opts.indexOf(document.activeElement);
       if (e.key === 'ArrowDown') { e.preventDefault(); (opts[idx + 1] || opts[0]).focus(); }
       else if (e.key === 'ArrowUp') { e.preventDefault(); (opts[idx - 1] || opts[opts.length - 1]).focus(); }
+      else if (e.key === 'Home') { e.preventDefault(); if (opts[0]) opts[0].focus(); }
+      else if (e.key === 'End') { e.preventDefault(); if (opts.length) opts[opts.length - 1].focus(); }
     };
     // Dismiss on a page/anchor scroll (the popover is position:fixed, pinned to
     // the token, so a page scroll strands it) or a resize. But the listener is
@@ -1953,13 +1965,23 @@
     if (first) first.focus({ preventScroll: true });
   }
   // A sentence token button that toggles its popover on click.
-  function mentorshipToken(kind, label, isPlaceholder, buildOptions, onPick) {
+  function mentorshipToken(kind, label, isPlaceholder, buildOptions, onPick, name, multi) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'mentorship-token' + (isPlaceholder ? ' is-add' : '');
     btn.dataset.tokenKind = kind;
     btn.setAttribute('aria-haspopup', 'listbox');
     btn.setAttribute('aria-expanded', 'false');
+    // A filled token's visible text is only its value ("Security and
+    // defence"), so a screen reader hears the value with no hint of what the
+    // control chooses. Prefix the control's name, keeping the visible text
+    // inside the accessible name (WCAG 2.5.3). Placeholder tokens already
+    // read as instructions ("choose a research area") and stay as-is.
+    if (!isPlaceholder && name) {
+      // French typography sets a space before the colon.
+      const sep = (document.documentElement.lang || 'en').toLowerCase().startsWith('fr') ? ' : ' : ': ';
+      btn.setAttribute('aria-label', name + sep + label);
+    }
     const lbl = document.createElement('span');
     lbl.className = 'mentorship-token-label';
     lbl.textContent = label;
@@ -1973,7 +1995,7 @@
     }
     btn.addEventListener('click', () => {
       if (_mentorshipPop && _mentorshipPop.anchor === btn) { closeMentorshipPopover(); return; }
-      openMentorshipPopover(btn, buildOptions(), onPick);
+      openMentorshipPopover(btn, buildOptions(), onPick, name, multi);
     });
     return btn;
   }
@@ -2020,7 +2042,8 @@
         viewerStage = value === '' ? null : parseInt(value, 10);
         _mentorshipRefocusToken = 'stage';
         renderMentorshipPanel();  // stage is panel-only ordering, no hash / grid change
-      }
+      },
+      window.netsecT('Career stage')
     );
     sentence.appendChild(stageToken);
 
@@ -2035,7 +2058,8 @@
         activeMentorship.clear();
         activeMentorship.add(value);
         mentorshipApplyChange('dir');
-      }
+      },
+      window.netsecT('Looking for')
     );
     sentence.appendChild(dirToken);
 
@@ -2064,12 +2088,12 @@
     // and third selection narrow the results from off screen.
     const areas = activeAreaEntries();
     if (areas.length === 0) {
-      sentence.appendChild(mentorshipToken('area', window.netsecT('choose a research area'), true, areaOptions, onAreaPick));
+      sentence.appendChild(mentorshipToken('area', window.netsecT('choose a research area'), true, areaOptions, onAreaPick, window.netsecT('Research area'), true));
     } else {
       areas.forEach(a => {
-        sentence.appendChild(mentorshipToken('area', a.label, false, areaOptions, onAreaPick));
+        sentence.appendChild(mentorshipToken('area', a.label, false, areaOptions, onAreaPick, window.netsecT('Research area'), true));
       });
-      const addToken = mentorshipToken('area-add', window.netsecT('add an area'), true, areaOptions, onAreaPick);
+      const addToken = mentorshipToken('area-add', window.netsecT('add an area'), true, areaOptions, onAreaPick, window.netsecT('Research area'), true);
       addToken.classList.add('is-plus');
       sentence.appendChild(addToken);
     }
