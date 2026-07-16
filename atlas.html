@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- PROTOTYPE (#764): the NetSec Atlas proof of concept. Not linked from the
+     site navigation, excluded from search engines, EN only. The graph data
+     is the real data/atlas.json derived by scripts/build-atlas.py. -->
+<meta name="robots" content="noindex">
+<title>The NetSec Atlas · prototype</title>
+<link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/site.css?v=abc71007">
+<style>
+  .atlas-shell{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+  .atlas-masthead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:18px 0 6px}
+  .atlas-masthead h1{font-family:'Lexend','Inter',sans-serif;font-size:clamp(1.6rem,3.4vw,2.4rem);margin:0;color:var(--ink);letter-spacing:-.02em}
+  .atlas-proto-pill{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 11px;border-radius:999px;background:rgba(245,158,11,.16);border:1px solid rgba(245,158,11,.45);color:#8a5a00}
+  .dark .atlas-proto-pill{color:#ffd489}
+  .atlas-lede{color:var(--muted);max-width:74ch;margin:0 0 18px;font-size:.98rem}
+  .atlas-lede a{color:var(--accent-2)}
+  .atlas-stats{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+  .atlas-stat{padding:10px 16px;border-radius:14px;background:rgba(255,255,255,.55);border:1px solid rgba(11,18,32,.08)}
+  .dark .atlas-stat{background:rgba(255,255,255,.05);border-color:var(--glass-border)}
+  .atlas-stat b{display:block;font-family:'Lexend',sans-serif;font-size:1.3rem;color:var(--ink);line-height:1.1}
+  .atlas-stat span{font-size:.76rem;color:var(--muted)}
+  .atlas-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
+  .atlas-controls .lbl{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+  .atlas-wg-chip{font:inherit;font-size:.82rem;font-weight:600;padding:6px 13px;border-radius:999px;cursor:pointer;border:1px solid transparent;color:#fff;opacity:.94;transition:opacity .15s,transform .15s}
+  .atlas-wg-chip:hover{transform:translateY(-1px)}
+  .atlas-wg-chip[aria-pressed="false"]{opacity:.32}
+  .atlas-wg-chip:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+  .atlas-stage{position:relative;border-radius:var(--radius);overflow:hidden;background:radial-gradient(120% 90% at 50% 0%,rgba(10,132,255,.07),transparent 60%),var(--bg-1);border:1px solid rgba(11,18,32,.08)}
+  .dark .atlas-stage{background:radial-gradient(120% 90% at 50% 0%,rgba(110,161,255,.09),transparent 60%),rgba(255,255,255,.03);border-color:var(--glass-border)}
+  #atlas-canvas{display:block;width:100%;height:640px;cursor:default}
+  #atlas-canvas.is-link{cursor:pointer}
+  .atlas-card{position:absolute;pointer-events:none;max-width:280px;padding:12px 15px;border-radius:14px;
+    background:rgba(255,255,255,.92);border:1px solid rgba(11,18,32,.10);box-shadow:0 10px 28px rgba(11,18,32,.16);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s}
+  .dark .atlas-card{background:rgba(18,26,44,.92);border-color:var(--glass-border);box-shadow:0 10px 28px rgba(0,0,0,.4)}
+  .atlas-card.is-on{opacity:1;transform:none}
+  .atlas-card .nm{font-family:'Lexend',sans-serif;font-weight:600;color:var(--ink);font-size:.95rem}
+  .atlas-card .meta{font-size:.8rem;color:var(--muted);margin-top:2px}
+  .atlas-card .wgs{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+  .atlas-card .wgp{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;color:#fff}
+  .atlas-card .go{font-size:.78rem;color:var(--accent-2);margin-top:7px}
+  .atlas-legend{display:flex;gap:16px;flex-wrap:wrap;margin:12px 2px 0;font-size:.78rem;color:var(--muted);align-items:center}
+  .atlas-legend .sw{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:5px}
+  .atlas-back{font-size:.85rem;color:var(--accent-2);text-decoration:none}
+  .atlas-back:hover{text-decoration:underline}
+  @media (max-width:640px){ #atlas-canvas{height:480px} }
+</style>
+</head>
+<body>
+<div class="atlas-shell">
+  <a class="atlas-back" href="index.html">&larr; netsec-cost.eu</a>
+  <div class="atlas-masthead">
+    <h1>The NetSec Atlas</h1>
+    <span class="atlas-proto-pill">Prototype</span>
+  </div>
+  <p class="atlas-lede">A live map of the network behind Networking European Security Knowledge: every person on a Working Group roster, drawn to the groups they work in. People sitting between two groups are the bridges of the Action. Hover a dot for who it is, click through to their directory profile where one exists. The graph is generated from the same data that drives the <a href="working-groups.html">Working Groups page</a>.</p>
+
+  <div class="atlas-stats" id="atlas-stats" aria-label="Network statistics"></div>
+
+  <div class="atlas-controls" role="group" aria-label="Filter by Working Group">
+    <span class="lbl">Working Groups</span>
+    <!-- chips injected by atlas-poc.js, one per WG hub in the data -->
+  </div>
+
+  <div class="atlas-stage">
+    <canvas id="atlas-canvas" aria-label="Force-directed graph of Working Group membership. The same information is available as lists on the Working Groups page."></canvas>
+    <div class="atlas-card" id="atlas-card" aria-hidden="true"></div>
+  </div>
+  <div class="atlas-legend" id="atlas-legend">
+    <span><span class="sw" style="background:var(--accent-2)"></span>member with a directory profile</span>
+    <span><span class="sw" style="background:#9aa7bd"></span>roster member (no profile yet)</span>
+    <span>drag a Working Group to rearrange the map</span>
+  </div>
+</div>
+<script src="assets/js/atlas-poc.js?v=af5188c2" defer></script>
+</body>
+</html>
