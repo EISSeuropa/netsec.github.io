@@ -390,7 +390,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 
 .mentorship-sentence{
   font-family:'Lexend','Inter',sans-serif;
-  font-size:clamp(1.3rem,2.4vw,1.9rem); font-weight:600; line-height:1.9;
+  font-size:clamp(1.15rem,2vw,1.55rem); font-weight:600; line-height:1.75;
   color:var(--ink); letter-spacing:-.015em; margin:0 0 6px;
 }
 .mentorship-sentence .mentorship-lead{ margin:0 .08em 0 .22em; }
@@ -430,6 +430,10 @@ html:not(.dark) .mentorship-match{ background:rgba(255,255,255,.62); }
 html.dark .mentorship-rank{ color:#0b1220; }
 .mentorship-rank.is-quiet{ background:rgba(255,255,255,.10); color:var(--muted); }
 html:not(.dark) .mentorship-rank.is-quiet{ background:rgba(11,18,32,.08); color:var(--muted); }
+/* The `html.dark .mentorship-rank` accent-chip rule above sets near-black text
+   (for the light-blue BEST MATCH chip) and outspecifies the quiet override, so
+   the dark quiet chip was rendering navy text on a dark pill. Reclaim it. */
+html.dark .mentorship-rank.is-quiet{ background:rgba(255,255,255,.14); color:#b8c2d8; }
 .mentorship-card-id{ display:flex; gap:12px; align-items:center; min-width:0; }
 .mentorship-card-avatar{
   width:54px; height:54px; border-radius:50%; overflow:hidden; flex:none;
