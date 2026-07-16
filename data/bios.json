@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-14T07:20:28+00:00",
+  "generated_at": "2026-07-16T07:41:27+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-14T07:20:28+00:00"
+    "last_synced": "2026-07-16T07:41:27+00:00"
   },
   "members": [
     {
@@ -3108,6 +3108,53 @@
       "themes": [
         "Economic security and geoeconomics"
       ]
+    },
+    {
+      "id": "huw-bennett",
+      "name": "Prof. Huw Bennett",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "affiliation": "Cardiff University",
+      "position": "Professor of International Relations",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Africa",
+        "Europe",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Huw Bennett is Professor of International Relations at Cardiff University. He specialises in strategic studies, the history of war and intelligence studies. Huw's writing on the history and politics of the British Army since 1945 tackles questions of civil-military relations, strategy making and the effects of conflict on society.\n\nHis research has been funded by the Economic and Social Research Council, the Leverhulme Trust and the British Academy. Huw regularly engages with the armed forces, and has spoken to military audiences in Australia, the Netherlands, Norway, Switzerland, the United Kingdom and the United States. He has addressed public audiences at the Imperial War Museum, the National Army Museum, a Cardiff primary school, the Holywell Trust in Derry, the Oxford and Cambridge Club, the Royal Air Force Museum, Rosscarbery Historical Society, Amsterdam Public Library and the Senedd Cymru.\n\nHuw has served as an expert witness in several court cases on behalf of victims of torture. His work has been covered in media outlets such as The Guardian, The Financial Times, The Irish Times, The Belfast Telegraph, BBC Radio 4 and TV Cultura.\n\nAt Cardiff, Huw teaches intelligence and strategy modules. He previously taught at Aberystwyth University and for King's College London at the Joint Services Command and Staff College. Huw received his undergraduate and postgraduate education in International Politics at the University of Wales, Aberystwyth. He was made a Fellow of the Higher Education Academy in 2011, and elected a Fellow of the Royal Historical Society in 2013.",
+      "keywords": [
+        "Strategy",
+        "British Army",
+        "counter-insurgency",
+        "intelligence",
+        "military history"
+      ],
+      "email": "bennetthc@cardiff.ac.uk",
+      "website": "https://profiles.cardiff.ac.uk/staff/bennetthc",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "https://bsky.app/profile/bennetthuw.bsky.social",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "British army",
+        "Counter-insurgency",
+        "Intelligence",
+        "Military history",
+        "Strategy"
+      ],
+      "themes": [
+        "Strategy and deterrence"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3260,6 +3307,10 @@
       "count": 2
     },
     {
+      "keyword": "Strategy",
+      "count": 2
+    },
+    {
       "keyword": "Transitional justice",
       "count": 2
     },
@@ -3293,6 +3344,10 @@
     },
     {
       "keyword": "Black sea security",
+      "count": 1
+    },
+    {
+      "keyword": "British army",
       "count": 1
     },
     {
@@ -3337,6 +3392,10 @@
     },
     {
       "keyword": "Cooperation",
+      "count": 1
+    },
+    {
+      "keyword": "Counter-insurgency",
       "count": 1
     },
     {
@@ -3568,6 +3627,10 @@
       "count": 1
     },
     {
+      "keyword": "Intelligence",
+      "count": 1
+    },
+    {
       "keyword": "Intelligence studies",
       "count": 1
     },
@@ -3617,6 +3680,10 @@
     },
     {
       "keyword": "Militarisation",
+      "count": 1
+    },
+    {
+      "keyword": "Military history",
       "count": 1
     },
     {
@@ -3764,10 +3831,6 @@
       "count": 1
     },
     {
-      "keyword": "Strategy",
-      "count": 1
-    },
-    {
       "keyword": "Subversion",
       "count": 1
     },
@@ -3859,7 +3922,7 @@
     },
     {
       "theme": "Strategy and deterrence",
-      "count": 9
+      "count": 10
     },
     {
       "theme": "Economic security and geoeconomics",
@@ -4072,7 +4135,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 42
+      "count": 43
     },
     {
       "region": "Global and cross-regional",
@@ -4096,11 +4159,11 @@
     },
     {
       "region": "Middle East and North Africa",
-      "count": 5
+      "count": 6
     },
     {
       "region": "Africa",
-      "count": 3
+      "count": 4
     }
   ]
 }
