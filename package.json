@@ -1,0 +1,8 @@
+{
+  "name": "netsec-site-checks",
+  "private": true,
+  "description": "Dev dependencies for the directory interaction smoke tests (scripts/test-directory-interactions.mjs). The site itself is static and has no build.",
+  "devDependencies": {
+    "puppeteer-core": "^23.11.1"
+  }
+}
