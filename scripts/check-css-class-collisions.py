@@ -48,6 +48,7 @@ Exit code
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -378,7 +379,19 @@ def format_problem(p):
 
 
 def main():
-    css_files = sorted(CSS_DIR.glob("*.css"))
+    # Scan the git-tracked stylesheets, not the raw directory. A stray local
+    # copy (macOS Finder "name 2.css" duplicates have tripped this before)
+    # otherwise re-declares every class in the original and fails the
+    # cross-file check with noise CI never sees. Falls back to the directory
+    # glob outside a git checkout.
+    try:
+        tracked = subprocess.run(
+            ["git", "ls-files", "assets/css/*.css"],
+            capture_output=True, text=True, check=True, cwd=CSS_DIR.parent.parent,
+        ).stdout.split()
+        css_files = sorted(CSS_DIR.parent.parent / p for p in tracked)
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        css_files = sorted(CSS_DIR.glob("*.css"))
     if not css_files:
         print(f"ERROR: no CSS files under {CSS_DIR}", file=sys.stderr)
         return 2

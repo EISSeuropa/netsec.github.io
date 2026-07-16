@@ -15,6 +15,7 @@ scripts/__pycache__/
 # macOS/iCloud "Foo 2.ext" duplicate files that get spawned in
 # the working tree by some sync tools.
 * 2.*
+* 3.*
 
 # Pagefind search index — built at deploy time by the Pages workflow
 # (.github/workflows/pages-deploy.yml), not committed to main. See
