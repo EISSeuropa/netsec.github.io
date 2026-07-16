@@ -133,6 +133,15 @@ jobs:
           # blocks a stale set from merging.
           python3 scripts/build-profile-pages.py
 
+      - name: Rebuild the Pagefind bio search stubs
+        run: |
+          # search/bios/<lang>/<slug>.html are the stubs Pagefind indexes so
+          # a member is findable by site search (#1218). This was the one
+          # generator the sync did not run, so every new member arrived
+          # unsearchable until a hand rebuild (32 of 69 members were missing
+          # when the gap was closed). Idempotent; regenerated from bios.json.
+          python3 scripts/build-bio-search-stubs.py
+
       - name: Regenerate sitemap.xml from the refreshed member set
         run: |
           # sitemap.xml lists every /people/<slug> profile page (#1027).

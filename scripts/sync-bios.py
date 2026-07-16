@@ -1976,6 +1976,43 @@ def render_pr_body_overview(
 # ──────────────────────────── main ────────────────────────────
 
 
+def apply_overrides(members: list[dict]) -> None:
+    """Apply the hand corrections in data/bios-overrides.json (#1219).
+
+    The Google Sheet is authoritative for member data, so an edit made only
+    in bios.json is silently reverted by the next sync (this is how the
+    'profesionnal' typo fix was lost). Corrections that cannot be made in
+    the Sheet itself live in the overrides file and are re-applied after
+    every fetch, so they survive any number of syncs. Each entry is a plain
+    string substitution on one field of one member. A fix whose `from` text
+    no longer occurs (the submitter corrected it upstream) prints a prune
+    hint rather than failing, so the overrides file stays a short list of
+    live corrections instead of accumulating fossils.
+    """
+    path = ROOT / "data" / "bios-overrides.json"
+    if not path.exists():
+        return
+    fixes = json.loads(path.read_text()).get("text_fixes", [])
+    if not fixes:
+        return
+    by_id = {m["id"]: m for m in members}
+    print("Applying hand corrections from data/bios-overrides.json …")
+    for fix in fixes:
+        m = by_id.get(fix["id"])
+        if m is None:
+            print(f"  ! override for unknown member {fix['id']!r} — prune it?",
+                  file=sys.stderr)
+            continue
+        field, old, new = fix["field"], fix["from"], fix["to"]
+        text = m.get(field)
+        if not isinstance(text, str) or old not in text:
+            print(f"  · {fix['id']}.{field}: {old!r} not present (fixed at "
+                  "source?) — override can be pruned.")
+            continue
+        m[field] = text.replace(old, new)
+        print(f"  · {fix['id']}.{field}: {old!r} → {new!r}")
+
+
 def main() -> None:
     config = json.loads(CONFIG.read_text())
     csv_url = (config.get("sheet", {}).get("csv_url") or "").strip()
@@ -2031,6 +2068,7 @@ def main() -> None:
             form_entries.append(entry)
 
     merged = merge(old_members, form_entries)
+    apply_overrides(merged)
     print(diff_summary(old_members, merged))
 
     # Make sure every headshot has a .webp sibling for the directory's
@@ -2054,6 +2092,7 @@ def main() -> None:
     keyword_theme_map: dict[str, str] = {}    # canonical keyword → theme
     uncategorised: set[str] = set()
     dropped_regions: set[str] = set()         # region names typed as keywords
+    dropped_wg_tags: set[str] = set()         # WG memberships typed as keywords
     for m in merged:
         raw_kws = m.get("keywords") or []
         seen: dict[str, str] = {}  # lowercase canonical → canonical
@@ -2067,6 +2106,12 @@ def main() -> None:
             # it here so the controlled regions vocabulary owns that axis.
             if canon.lower() in region_vocab:
                 dropped_regions.add(canon)
+                continue
+            # Working-group memberships typed into the keywords field ("Wg1",
+            # "WG 2") already have a home in the wgs facet and would never
+            # cluster into a research theme; drop them the same way (#1308).
+            if re.fullmatch(r"wg\s*\d+", canon.lower()):
+                dropped_wg_tags.add(canon)
                 continue
             key = canon.lower()
             if key in seen:
@@ -2111,6 +2156,11 @@ def main() -> None:
         print(
             "  · dropped region names from keywords (they belong to the "
             "regions facet): " + ", ".join(sorted(dropped_regions))
+        )
+    if dropped_wg_tags:
+        print(
+            "  · dropped working-group tags from keywords (they belong to "
+            "the wgs facet): " + ", ".join(sorted(dropped_wg_tags))
         )
     if uncategorised:
         # Keep the taxonomy complete: any canonical keyword without a theme
