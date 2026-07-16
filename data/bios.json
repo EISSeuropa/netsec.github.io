@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-16T07:41:27+00:00",
+  "generated_at": "2026-07-16T14:58:33+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-16T07:41:27+00:00"
+    "last_synced": "2026-07-16T14:58:33+00:00"
   },
   "members": [
     {
@@ -3155,6 +3155,50 @@
       "themes": [
         "Strategy and deterrence"
       ]
+    },
+    {
+      "id": "david-morgan-owen",
+      "name": "Dr David Morgan-Owen",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "affiliation": "University of St Andrews",
+      "position": "Senior Lecturer",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "David Morgan-Owen teaches international relations at the University of St Andrews. He works on the history of war and strategy, and his research has been supported by the National Maritime Museum, the William Lind Foundation, and the British Academy. His first book, The Fear of Invasion: Strategy, Politics, and British War Planning, 1880-1914 was awarded the Templer Medal for best first book by the Society for Army Historical Research. He has also won the Julian Corbett Prize in Modern Naval History.",
+      "keywords": [
+        "Strategy",
+        "war",
+        "history",
+        "maritime"
+      ],
+      "email": "dgmo1@st-andrews.ac.uk",
+      "website": "",
+      "orcid": "0000-0002-0551-2836",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "https://bsky.app/profile/dmorganowen.bsky.social",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "History",
+        "Maritime",
+        "Strategy",
+        "War"
+      ],
+      "themes": [
+        "Strategy and deterrence",
+        "Theory and methods"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3219,6 +3263,10 @@
       "count": 3
     },
     {
+      "keyword": "Strategy",
+      "count": 3
+    },
+    {
       "keyword": "Comparative politics",
       "count": 2
     },
@@ -3267,6 +3315,10 @@
       "count": 2
     },
     {
+      "keyword": "History",
+      "count": 2
+    },
+    {
       "keyword": "Human security",
       "count": 2
     },
@@ -3304,10 +3356,6 @@
     },
     {
       "keyword": "Strategic competition",
-      "count": 2
-    },
-    {
-      "keyword": "Strategy",
       "count": 2
     },
     {
@@ -3583,10 +3631,6 @@
       "count": 1
     },
     {
-      "keyword": "History",
-      "count": 1
-    },
-    {
       "keyword": "Human rights",
       "count": 1
     },
@@ -3664,6 +3708,10 @@
     },
     {
       "keyword": "Machine learning for security",
+      "count": 1
+    },
+    {
+      "keyword": "Maritime",
       "count": 1
     },
     {
@@ -3893,6 +3941,10 @@
     {
       "keyword": "Visual threat detection",
       "count": 1
+    },
+    {
+      "keyword": "War",
+      "count": 1
     }
   ],
   "theme_aggregate": [
@@ -3906,7 +3958,7 @@
     },
     {
       "theme": "Theory and methods",
-      "count": 19
+      "count": 20
     },
     {
       "theme": "Cyber and emerging technology",
@@ -3917,12 +3969,12 @@
       "count": 11
     },
     {
-      "theme": "Transnational and human security",
+      "theme": "Strategy and deterrence",
       "count": 11
     },
     {
-      "theme": "Strategy and deterrence",
-      "count": 10
+      "theme": "Transnational and human security",
+      "count": 11
     },
     {
       "theme": "Economic security and geoeconomics",
@@ -4135,7 +4187,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 43
+      "count": 44
     },
     {
       "region": "Global and cross-regional",
