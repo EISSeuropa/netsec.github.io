@@ -1933,7 +1933,17 @@
       if (e.key === 'ArrowDown') { e.preventDefault(); (opts[idx + 1] || opts[0]).focus(); }
       else if (e.key === 'ArrowUp') { e.preventDefault(); (opts[idx - 1] || opts[opts.length - 1]).focus(); }
     };
-    const onDismiss = () => { if (Date.now() < readyAt) return; closeMentorshipPopover(); };
+    // Dismiss on a page/anchor scroll (the popover is position:fixed, pinned to
+    // the token, so a page scroll strands it) or a resize. But the listener is
+    // capturing on window, so it also catches the popover's OWN option-list
+    // scroll: ignore that, otherwise scrolling the theme list snaps it shut and
+    // the lower options can never be reached.
+    const onDismiss = (e) => {
+      if (Date.now() < readyAt) return;
+      if (e && e.type === 'scroll' && e.target
+          && (e.target === pop || (e.target.nodeType === 1 && pop.contains(e.target)))) return;
+      closeMentorshipPopover();
+    };
     document.addEventListener('click', onDocClick, true);
     document.addEventListener('keydown', onKey, true);
     window.addEventListener('resize', onDismiss, true);
