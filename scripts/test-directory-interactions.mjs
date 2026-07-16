@@ -135,6 +135,33 @@ const journeys = {
     await page.close();
   },
 
+  // The popover is a named, multi-select listbox with full keyboard support:
+  // End reaches the last option, Tab closes rather than stranding it open.
+  async 'area picker is an accessible listbox'() {
+    const page = await openDirectory('#mentorship=mentor');
+    await openAreaPopover(page);
+    const aria = await page.$eval('.mentorship-pop', el => ({
+      label: el.getAttribute('aria-label'),
+      multi: el.getAttribute('aria-multiselectable'),
+    }));
+    assert(aria.label, 'popover listbox has no accessible name');
+    assert(aria.multi === 'true', 'area popover not declared multi-select');
+    await page.keyboard.press('End');
+    const onLast = await page.evaluate(() => {
+      const opts = document.querySelectorAll('.mentorship-pop-opt');
+      return document.activeElement === opts[opts.length - 1];
+    });
+    assert(onLast, 'End did not focus the last option');
+    await page.keyboard.press('Tab');
+    const after = await page.evaluate(() => ({
+      popOpen: !!document.querySelector('.mentorship-pop'),
+      tokenExpanded: document.querySelector('.mentorship-token[data-token-kind="area"]')?.getAttribute('aria-expanded'),
+    }));
+    assert(!after.popOpen, 'Tab left the popover stranded open');
+    assert(after.tokenExpanded === 'false', 'token still marked expanded after Tab');
+    await page.close();
+  },
+
   // #1376: a deep link to a below-the-fold theme landed with an empty grid
   // and no pressed chip anywhere on screen.
   async 'deep link to a rare theme shows its pressed chip'() {
