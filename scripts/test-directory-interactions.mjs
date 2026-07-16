@@ -39,8 +39,12 @@ const MIME = {
   '.jpg': 'image/jpeg', '.png': 'image/png', '.ico': 'image/x-icon',
 };
 const server = http.createServer((req, res) => {
-  let file = path.join(ROOT, decodeURIComponent(req.url.split('?')[0]));
-  if (file.endsWith('/')) file += 'index.html';
+  // Resolve and confine to ROOT: the server only ever faces this script's
+  // own requests on 127.0.0.1, but a traversal guard costs two lines
+  // (CodeQL js/path-injection).
+  let file = path.resolve(ROOT, '.' + path.posix.normalize('/' + decodeURIComponent(req.url.split('?')[0])));
+  if (!file.startsWith(ROOT + path.sep) && file !== ROOT) { res.writeHead(403); res.end('403'); return; }
+  if (req.url.split('?')[0].endsWith('/')) file = path.join(file, 'index.html');
   fs.readFile(file, (err, data) => {
     if (err) { res.writeHead(404); res.end('404'); return; }
     res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream' });
