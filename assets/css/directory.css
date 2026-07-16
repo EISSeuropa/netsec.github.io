@@ -390,7 +390,7 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
 
 .mentorship-sentence{
   font-family:'Lexend','Inter',sans-serif;
-  font-size:clamp(1.15rem,2vw,1.55rem); font-weight:600; line-height:1.75;
+  font-size:clamp(1.15rem,2vw,1.55rem); font-weight:600; line-height:1.9;
   color:var(--ink); letter-spacing:-.015em; margin:0 0 6px;
 }
 .mentorship-sentence .mentorship-lead{ margin:0 .08em 0 .22em; }
@@ -398,6 +398,9 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   display:inline-flex; align-items:center; gap:7px; padding:1px 12px 3px; margin:0 2px;
   border-radius:11px; background:rgba(10,132,255,.12); border:1px solid rgba(10,132,255,.30);
   color:var(--accent-2); cursor:pointer; white-space:nowrap; font:inherit;
+  /* Own line-height, tighter than the sentence's, so a wrapped token box stays
+     shorter than its line slot and two rows of tokens never touch. */
+  line-height:1.25;
   transition:background var(--dur) var(--ease);
 }
 .mentorship-token:hover{ background:rgba(10,132,255,.2); }
