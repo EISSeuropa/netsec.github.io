@@ -45,6 +45,13 @@
   .atlas-card .go{font-size:.78rem;color:var(--accent-2);margin-top:7px}
   .atlas-legend{display:flex;gap:16px;flex-wrap:wrap;margin:12px 2px 0;font-size:.78rem;color:var(--muted);align-items:center}
   .atlas-legend .sw{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:5px}
+  .atlas-legend .sw-ring{background:transparent;border:2px solid}
+  .atlas-wg-chip.is-plain{background:rgba(11,18,32,.55);color:#fff}
+  .dark .atlas-wg-chip.is-plain{background:rgba(255,255,255,.14)}
+  .atlas-card .face{width:44px;height:44px;border-radius:50%;object-fit:cover;float:right;margin:0 0 6px 10px}
+  .atlas-card .themes{font-size:.76rem;color:var(--muted);margin-top:6px}
+  .atlas-card .panels{font-size:.76rem;color:#d23a68;margin-top:6px}
+  .dark .atlas-card .panels{color:#ff9db8}
   .atlas-back{font-size:.85rem;color:var(--accent-2);text-decoration:none}
   .atlas-back:hover{text-decoration:underline}
   @media (max-width:640px){ #atlas-canvas{height:480px} }
@@ -57,25 +64,35 @@
     <h1>The NetSec Atlas</h1>
     <span class="atlas-proto-pill">Prototype</span>
   </div>
-  <p class="atlas-lede">A live map of the network behind Networking European Security Knowledge: every person on a Working Group roster, drawn to the groups they work in. People sitting between two groups are the bridges of the Action. Hover a dot for who it is, click through to their directory profile where one exists. The graph is generated from the same data that drives the <a href="working-groups.html">Working Groups page</a>.</p>
+  <p class="atlas-lede">A live map of the network behind Networking European Security Knowledge. Two lenses over the same people: the <strong>Working Groups</strong> they sit in, and the <strong>research themes</strong> they work on (the map of the field). Overlay who shared a conference panel at ESSC 2026, or who is offering and seeking mentorship. People between two hubs are the bridges of the Action. Hover a face or dot for who it is, click through to their directory profile where one exists. Everything is generated from the same data that drives the <a href="working-groups.html">Working Groups page</a> and the <a href="people.html">Directory</a>.</p>
 
   <div class="atlas-stats" id="atlas-stats" aria-label="Network statistics"></div>
 
-  <div class="atlas-controls" role="group" aria-label="Filter by Working Group">
-    <span class="lbl">Working Groups</span>
-    <!-- chips injected by atlas-poc.js, one per WG hub in the data -->
+  <div class="atlas-controls" id="atlas-lens" role="group" aria-label="Choose the map lens">
+    <span class="lbl">Lens</span>
+    <!-- lens buttons injected by atlas-poc.js -->
+  </div>
+  <div class="atlas-controls" id="atlas-overlays" role="group" aria-label="Overlays">
+    <span class="lbl">Overlays</span>
+    <!-- overlay toggles injected by atlas-poc.js -->
+  </div>
+  <div class="atlas-controls" id="atlas-hub-chips" role="group" aria-label="Filter by hub">
+    <!-- one chip per hub in the active lens, injected by atlas-poc.js -->
   </div>
 
   <div class="atlas-stage">
-    <canvas id="atlas-canvas" aria-label="Force-directed graph of Working Group membership. The same information is available as lists on the Working Groups page."></canvas>
+    <canvas id="atlas-canvas" aria-label="Force-directed map of the NetSec network: Working Group membership, research themes, conference co-panels, and mentorship. The same information is available as lists on the Working Groups and Directory pages."></canvas>
     <div class="atlas-card" id="atlas-card" aria-hidden="true"></div>
   </div>
   <div class="atlas-legend" id="atlas-legend">
-    <span><span class="sw" style="background:var(--accent-2)"></span>member with a directory profile</span>
+    <span>faces and <span class="sw" style="background:var(--accent-2)"></span>blue dots link to a directory profile</span>
     <span><span class="sw" style="background:#9aa7bd"></span>roster member (no profile yet)</span>
-    <span>drag a Working Group to rearrange the map</span>
+    <span><span class="sw" style="background:#d23a68"></span>shared an ESSC 2026 panel</span>
+    <span><span class="sw sw-ring" style="border-color:#2e9e6a"></span>offers mentorship</span>
+    <span><span class="sw sw-ring" style="border-color:#f59e0b"></span>seeking a mentor</span>
+    <span>drag a hub to rearrange the map</span>
   </div>
 </div>
-<script src="assets/js/atlas-poc.js?v=af5188c2" defer></script>
+<script src="assets/js/atlas-poc.js?v=92c0819b" defer></script>
 </body>
 </html>
