@@ -7,7 +7,9 @@
     "edges": 470,
     "themes": 14,
     "panels_matched": 14,
-    "panel_edges": 51
+    "panel_edges": 51,
+    "publications_matched": 0,
+    "coauthor_edges": 0
   },
   "nodes": [
     {

@@ -93,3 +93,37 @@ def test_real_wg_json_derives_sane_stats():
     # Every edge endpoint resolves to a real node id.
     ids = {n["id"] for n in atlas["nodes"]}
     assert all(e["source"] in ids and e["target"] in ids for e in atlas["edges"])
+
+
+def test_coauthor_edges_from_publications():
+    atlas = build(
+        _wg(
+            {"number": 1, "name": "One", "colour": "wg-1", "memberCount": 3,
+             "members": [
+                 {"name": "Dr Ada Lovelace", "country": "UK", "slug": "ada-lovelace"},
+                 {"name": "Prof. Alan Turing", "country": "UK", "slug": "alan-turing"},
+                 {"name": "Dr Grace Hopper", "country": "US", "slug": "grace-hopper"},
+             ]},
+        ),
+        publications={"publications": [
+            # Two members + one outside author: one edge, outsider ignored.
+            {"title": {"en": "Paper A"}, "authors": ["Ada Lovelace", "Alan Turing", "Jane Doe"]},
+            # The same pair again: weight climbs to 2.
+            {"title": {"en": "Paper B"}, "authors": ["Alan Turing", "Ada Lovelace"]},
+            # A single matched author: no edge.
+            {"title": {"en": "Paper C"}, "authors": ["Grace Hopper", "Someone Else"]},
+        ]},
+    )
+    co = [e for e in atlas["edges"] if e.get("type") == "coauthor"]
+    assert co == [{"source": "ada-lovelace", "target": "alan-turing",
+                   "type": "coauthor", "weight": 2}]
+    assert atlas["stats"]["publications_matched"] == 2
+    assert atlas["stats"]["coauthor_edges"] == 1
+
+
+def test_empty_publications_add_zero_edges_and_stats():
+    atlas = build(_wg({"number": 1, "name": "One", "colour": "wg-1",
+                       "memberCount": 0, "members": []}),
+                  publications={"publications": []})
+    assert atlas["stats"]["coauthor_edges"] == 0
+    assert atlas["stats"]["publications_matched"] == 0

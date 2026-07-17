@@ -159,6 +159,16 @@ jobs:
           # (data-shape-check.yml) blocks a stale index.
           python3 scripts/build-directory-index.py
 
+      - name: Rebuild the NetSec Atlas graph from the refreshed bios
+        run: |
+          # data/atlas.json (#764) derives its theme hubs, mentorship flags,
+          # and headshot paths from bios.json, so a bios change would leave
+          # the committed atlas stale and fail the data-shape drift gate on
+          # this very auto-PR. Same posture as the search stubs (#1218):
+          # every generator the data feeds runs in the sync that moves the
+          # data. Idempotent; no bios change, no diff.
+          python3 scripts/build-atlas.py
+
       - name: Rebuild the glossary field guide from the refreshed bios
         run: |
           # The field-guide facepile (#801) is baked from data/bios.json at

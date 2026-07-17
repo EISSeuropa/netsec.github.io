@@ -17,9 +17,12 @@ Person nodes carry slug/photo/mentorship/country when a bio exists, so the
 renderer can draw headshots, mentorship rings, and profile links without
 fetching bios.json.
 
+Co-authorship edges (type "coauthor") derive from data/publications.json's
+`authors` arrays the same way; the file is empty until D6 ships its first
+output, so the layer starts at zero edges and grows with the data.
+
 Not here yet, on purpose (follow-ups):
   - x/y layout coordinates (the renderer lays out client-side for now)
-  - co-authorship edges (data/publications.json is empty today)
 
 Input:  data/wg.json (always), data/bios.json + data/essc-2026-programme.json
         (optional at call level, so the original skeleton tests stay valid).
@@ -60,7 +63,8 @@ _DOC = (
 )
 
 
-def build(wg: dict, bios: dict | None = None, programme: dict | None = None) -> dict:
+def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
+          publications: dict | None = None) -> dict:
     """Pure function: wg.json (+ optional bios.json / ESSC programme) -> atlas.json dict. No I/O, so it is trivially
     testable and its output depends only on its input (determinism)."""
     if not isinstance(wg, dict) or not isinstance(wg.get("groups"), list):
@@ -187,6 +191,29 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None) -> 
                                     pair = (ordered[i], ordered[j])
                                     panel_weights[pair] = panel_weights.get(pair, 0) + 1
 
+    # ── Optional enrichment: co-authorship (#764 Phase 3) ──
+    # publications.json is hand-maintained and empty until D6 ships its first
+    # output, but the schema already carries an `authors` array of display
+    # names. Match them the same way as panel speakers; two matched authors on
+    # one output are co-authors (weight = shared outputs). Zero edges today,
+    # so the overlay lights up on its own as publications are entered.
+    coauthor_weights: dict[tuple, int] = {}
+    publications_matched = 0
+    if publications is not None:
+        for pub in publications.get("publications") or []:
+            keys = set()
+            for author in pub.get("authors") or []:
+                k = name_key(author if isinstance(author, str) else author.get("name", ""))
+                if k and k in people:
+                    keys.add(k)
+            if len(keys) >= 2:
+                publications_matched += 1
+                ordered = sorted(keys, key=lambda k: people[k]["id"])
+                for i in range(len(ordered)):
+                    for j in range(i + 1, len(ordered)):
+                        pair = (ordered[i], ordered[j])
+                        coauthor_weights[pair] = coauthor_weights.get(pair, 0) + 1
+
     person_nodes = sorted(people.values(), key=lambda p: p["id"])
     nodes = wg_nodes + theme_nodes + person_nodes
     edges = sorted(
@@ -205,6 +232,14 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None) -> 
         ),
         key=lambda e: (e["source"], e["target"]),
     )
+    edges += sorted(
+        (
+            {"source": people[a]["id"], "target": people[b]["id"],
+             "type": "coauthor", "weight": w}
+            for (a, b), w in coauthor_weights.items()
+        ),
+        key=lambda e: (e["source"], e["target"]),
+    )
 
     stats = {
         "working_groups": len(wg_nodes),
@@ -217,6 +252,9 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None) -> 
     if programme is not None:
         stats["panels_matched"] = panels_matched
         stats["panel_edges"] = len(panel_weights)
+    if publications is not None:
+        stats["publications_matched"] = publications_matched
+        stats["coauthor_edges"] = len(coauthor_weights)
 
     return {
         "_documentation": _DOC,
@@ -237,7 +275,9 @@ def main(argv: list) -> int:
     prog_path = REPO / "data" / "essc-2026-programme.json"
     bios = json.loads(bios_path.read_text(encoding="utf-8")) if bios_path.exists() else None
     programme = json.loads(prog_path.read_text(encoding="utf-8")) if prog_path.exists() else None
-    atlas = build(wg, bios, programme)
+    pubs_path = REPO / "data" / "publications.json"
+    publications = json.loads(pubs_path.read_text(encoding="utf-8")) if pubs_path.exists() else None
+    atlas = build(wg, bios, programme, publications)
     text = _serialise(atlas)
 
     if check:

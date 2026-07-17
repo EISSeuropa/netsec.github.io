@@ -61,9 +61,10 @@
   let people = [], byId = {};
   let hubEdges = { wg: [], theme: [] };   // person->hub, keyed by lens
   let panelEdges = [];                    // person<->person, weighted
+  let coauthorEdges = [];                 // person<->person, from publications
   let lens = 'wg';
   const activeHubs = new Set();           // hub ids active in the current lens
-  const overlays = { panels: false, mentorship: false };
+  const overlays = { panels: false, mentorship: false, coauthors: false };
   let hovered = null, draggingHub = null;
   let W = 0, H = 0, dpr = 1;
   const avatars = {};                     // person id -> loaded Image
@@ -159,7 +160,7 @@
     ctx.clearRect(0, 0, W, H);
     const hoverIds = hovered
       ? new Set([hovered.id].concat(hovered.links ? hovered.links[lens] : [],
-          hovered.people || [], hovered.panelPeers || []))
+          hovered.people || [], hovered.panelPeers || [], hovered.coPeers || []))
       : null;
 
     edges().forEach(e => {
@@ -177,6 +178,23 @@
       ctx.stroke();
     });
     ctx.globalAlpha = 1;
+
+    if (overlays.coauthors) {
+      coauthorEdges.forEach(e => {
+        const a = byId[e.source], b = byId[e.target];
+        if (!personVisible(a) || !personVisible(b)) return;
+        const lit = hoverIds && (hoverIds.has(a.id) && hoverIds.has(b.id));
+        ctx.strokeStyle = theme.dark ? '#5fd4e8' : '#0aa2c0';
+        ctx.globalAlpha = lit ? 0.9 : (hoverIds ? 0.06 : 0.45);
+        ctx.lineWidth = 0.8 + e.weight * 0.8;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.quadraticCurveTo((a.x + b.x) / 2 + (a.y - b.y) * 0.14,
+          (a.y + b.y) / 2 + (b.x - a.x) * 0.14, b.x, b.y);
+        ctx.stroke();
+      });
+      ctx.globalAlpha = 1;
+    }
 
     if (overlays.panels) {
       panelEdges.forEach(e => {
@@ -291,6 +309,8 @@
         + (themes.length ? '<div class="themes"></div>' : '')
         + (node.panelPeers && node.panelPeers.length
             ? '<div class="panels">Shared an ESSC 2026 panel with ' + node.panelPeers.length + ' member' + (node.panelPeers.length > 1 ? 's' : '') + '</div>' : '')
+        + (node.coPeers && node.coPeers.length
+            ? '<div class="coauth">Co-authored with ' + node.coPeers.length + ' member' + (node.coPeers.length > 1 ? 's' : '') + '</div>' : '')
         + (node.slug ? '<div class="go">View profile &rarr;</div>' : '');
       if (node.photo) card.querySelector('.face').src = node.photo;
       card.querySelector('.nm').textContent = node.name;
@@ -388,13 +408,17 @@
       people = data.nodes.filter(n => n.type === 'person');
       byId = {};
       data.nodes.forEach(n => { byId[n.id] = n; });
-      people.forEach(p => { p.links = { wg: [], theme: [] }; p.panelPeers = []; p.r = p.photo ? 8 : (p.slug ? 5 : 3.5); });
+      people.forEach(p => { p.links = { wg: [], theme: [] }; p.panelPeers = []; p.coPeers = []; p.r = p.photo ? 8 : (p.slug ? 5 : 3.5); });
       allHubs.wg.concat(allHubs.theme).forEach(h => { h.people = []; });
       data.edges.forEach(e => {
         if (e.type === 'panel') {
           panelEdges.push(e);
           byId[e.source].panelPeers.push(e.target);
           byId[e.target].panelPeers.push(e.source);
+        } else if (e.type === 'coauthor') {
+          coauthorEdges.push(e);
+          byId[e.source].coPeers.push(e.target);
+          byId[e.target].coPeers.push(e.source);
         } else if (e.target.indexOf('wg-') === 0) {
           byId[e.source].links.wg.push(e.target);
           byId[e.target].people.push(e.source);
@@ -417,6 +441,7 @@
        ['' + countries.size, 'countries'],
        ['' + allHubs.theme.length, 'research themes'],
        ['' + panelEdges.length, 'ESSC co-panel ties'],
+       ...(coauthorEdges.length ? [['' + coauthorEdges.length, 'co-authored outputs']] : []),
        [data.stats.people_with_bios + ' / ' + people.length, 'with a directory profile']]
         .forEach(([b, s]) => {
           const el = document.createElement('div');
@@ -432,7 +457,19 @@
         b.dataset.lens = v;
         lensEl.appendChild(b);
       });
-      [['panels', 'ESSC 2026 co-panels'], ['mentorship', 'Mentorship offers & requests']].forEach(([k, label]) => {
+      const overlayDefs = [['panels', 'ESSC 2026 co-panels'], ['mentorship', 'Mentorship offers & requests']];
+      // Co-authorship starts at zero edges (publications.json is empty until
+      // D6 ships its first output) and the chip appears with the first one.
+      if (coauthorEdges.length) {
+        overlayDefs.push(['coauthors', 'Co-authored outputs']);
+        const leg = document.getElementById('atlas-legend');
+        if (leg) {
+          const sp = document.createElement('span');
+          sp.innerHTML = '<span class="sw" style="background:#0aa2c0"></span>co-authored an Action output';
+          leg.insertBefore(sp, leg.lastElementChild);
+        }
+      }
+      overlayDefs.forEach(([k, label]) => {
         overlaysEl.appendChild(chip(label, overlays[k], (b) => {
           overlays[k] = !overlays[k];
           b.setAttribute('aria-pressed', overlays[k] ? 'true' : 'false');

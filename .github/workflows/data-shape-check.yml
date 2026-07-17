@@ -47,6 +47,8 @@ on:
       - 'directory-index.json'
       - 'scripts/build-atlas.py'
       - 'data/atlas.json'
+      - 'data/essc-2026-programme.json'
+      - 'data/publications.json'
       - '.github/workflows/data-shape-check.yml'
   workflow_dispatch:
 
