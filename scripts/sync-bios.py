@@ -178,7 +178,7 @@ def parse_mentorship(raw: str) -> list[str]:
       - "mentor-full"  the member mentors but is at capacity right now.
       - "matched"      the member found a mentor through the directory.
 
-    The last two are the off-switches for the first two (#1416). merge()
+    The last two are the off-switches for the first two (#1415). merge()
     only overwrites a field when the new value is non-empty, so unticking
     a box and resubmitting leaves the old flag standing forever. A member
     who has filled their roster or found their mentor therefore needs a

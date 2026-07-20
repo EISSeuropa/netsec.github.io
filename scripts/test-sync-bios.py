@@ -1091,7 +1091,7 @@ def test_parse_mentorship() -> None:
            ["mentor", "mentee"])
     expect("unrelated text -> []",
            parse_mentorship("Maybe later"), [])
-    # The two off-switches (#1416). Each retires the standing flag it
+    # The two off-switches (#1415). Each retires the standing flag it
     # replaces, including when the member leaves the old box ticked, so the
     # re-parsed cell can actually take a member out of the matching pool.
     expect("at capacity -> mentor-full",

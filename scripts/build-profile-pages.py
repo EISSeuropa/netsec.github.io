@@ -490,7 +490,7 @@ def render_actions(m: dict, loc: dict) -> str:
     ):
         if tag in (m.get("mentorship") or []):
             bits.append(action(label, cls, tag))
-    # At capacity (#1416) stays a plain pill even when the member publishes an
+    # At capacity (#1415) stays a plain pill even when the member publishes an
     # email: the state exists to stop the intro mail, so it must not offer one.
     if "mentor-full" in (m.get("mentorship") or []):
         bits.append('<span class="mentorship-badge is-full" '
