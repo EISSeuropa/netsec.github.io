@@ -452,7 +452,8 @@
         },
         {
           "name": "Dr Gayane Harutyunyan",
-          "country": "Armenia"
+          "country": "Armenia",
+          "slug": "gayane-harutyunyan"
         },
         {
           "name": "Dr Georgian Marius Ghincea",
@@ -779,7 +780,8 @@
         },
         {
           "name": "Dr Gayane Harutyunyan",
-          "country": "Armenia"
+          "country": "Armenia",
+          "slug": "gayane-harutyunyan"
         },
         {
           "name": "Dr Georgian Marius Ghincea",

@@ -3074,7 +3074,10 @@
       "affiliation": "Public Administration Academy of the Republic of Armenia",
       "position": "Vice-rector for Scientific Affairs",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        2,
+        3
+      ],
       "mentorship": [],
       "regions": [
         "Europe - Eastern neighbours / Russia"

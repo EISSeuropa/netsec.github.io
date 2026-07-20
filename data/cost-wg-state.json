@@ -376,6 +376,17 @@
         2
       ],
       "form_changed_on": "2026-07-12"
+    },
+    "gayane harutyunyan": {
+      "cost_first_seen": {
+        "2": "2026-07-20",
+        "3": "2026-07-20"
+      },
+      "form_wgs": [
+        2,
+        3
+      ],
+      "form_changed_on": "2026-07-20"
     }
   }
 }
