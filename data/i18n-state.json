@@ -291,6 +291,22 @@
         "status": "beta",
         "translated_on": "2026-07-03"
       }
+    },
+    "atlas.html": {
+      "fr": {
+        "file": "atlas.fr.html",
+        "source_sha1": "d0fbfdde63f8c1ca4dc495bd1bb6b5fe6322bc52",
+        "translated_on": "2026-07-20",
+        "status": "beta",
+        "reviewed_by": null
+      },
+      "de": {
+        "file": "atlas.de.html",
+        "source_sha1": "d0fbfdde63f8c1ca4dc495bd1bb6b5fe6322bc52",
+        "translated_on": "2026-07-20",
+        "status": "beta",
+        "reviewed_by": null
+      }
     }
   }
 }

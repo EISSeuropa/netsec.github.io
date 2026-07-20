@@ -15,6 +15,15 @@
    settled layout without animating. */
 (function () {
   'use strict';
+  // Every string this file injects goes through T(), which defers to the
+  // shared netsecT catalogue in site.js so the FR and DE pages render the
+  // controls, stats, and hover card in their own language. Falls back to the
+  // English key when site.js has not loaded, which keeps the map working if
+  // the page is ever opened on its own again.
+  const T = (s) => (window.netsecT ? window.netsecT(s) : s);
+  // Singular and plural are separate catalogue keys rather than an English
+  // "member" + "s", which no other language would build the same way.
+  const peerLine = (one, many, n) => T(n === 1 ? one : many).replace('{n}', n);
   const canvas = document.getElementById('atlas-canvas');
   const card = document.getElementById('atlas-card');
   const statsEl = document.getElementById('atlas-stats');
@@ -264,7 +273,7 @@
         ctx.fillText('WG' + h.number, h.x, h.y - 2);
         ctx.font = '600 10px Inter, sans-serif';
         ctx.fillStyle = 'rgba(255,255,255,.85)';
-        ctx.fillText(h.memberCount + ' members', h.x, h.y + 12);
+        ctx.fillText(T('{n} members').replace('{n}', h.memberCount), h.x, h.y + 12);
       } else {
         ctx.font = '700 12px Lexend, Inter, sans-serif';
         ctx.fillStyle = '#fff';
@@ -273,8 +282,12 @@
       ctx.globalAlpha = 1;
       ctx.font = '600 11px Inter, sans-serif';
       ctx.fillStyle = theme.muted;
-      const label = h.type === 'wg' ? h.name
-        : (h.name.length > 26 ? h.name.slice(0, 25) + '…' : h.name);
+      // Both the WG titles and the 14 theme names are catalogue keys, so the
+      // labels under each hub follow the page language. Truncation runs on
+      // the translated string, since a translation can be the longer one.
+      const name = T(h.name);
+      const label = h.type === 'wg' ? name
+        : (name.length > 26 ? name.slice(0, 25) + '…' : name);
       ctx.fillText(label, h.x, h.y + h.r + 15);
     });
   }
@@ -295,9 +308,12 @@
     if (!node) { card.classList.remove('is-on'); card.setAttribute('aria-hidden', 'true'); return; }
     if (node.type !== 'person') {
       card.innerHTML = '<div class="nm"></div><div class="meta"></div>';
-      card.querySelector('.nm').textContent = node.name;
-      card.querySelector('.meta').textContent = node.memberCount
-        + (node.type === 'wg' ? ' members' : ' people work here');
+      // A hub node, so the name is a WG title or a theme, both catalogue
+      // keys. The person branch below leaves node.name alone.
+      card.querySelector('.nm').textContent = T(node.name);
+      card.querySelector('.meta').textContent =
+        T(node.type === 'wg' ? '{n} members' : '{n} people work here')
+          .replace('{n}', node.memberCount);
     } else {
       const wgs = node.links.wg.map(id => byId[id]);
       const themes = node.links.theme.map(id => byId[id]);
@@ -308,15 +324,21 @@
             '<span class="wgp" style="background:' + hubColour(h) + '">WG' + h.number + '</span>').join('') + '</div>'
         + (themes.length ? '<div class="themes"></div>' : '')
         + (node.panelPeers && node.panelPeers.length
-            ? '<div class="panels">Shared an ESSC 2026 panel with ' + node.panelPeers.length + ' member' + (node.panelPeers.length > 1 ? 's' : '') + '</div>' : '')
+            ? '<div class="panels">' + peerLine(
+                'Shared an ESSC 2026 panel with {n} member',
+                'Shared an ESSC 2026 panel with {n} members',
+                node.panelPeers.length) + '</div>' : '')
         + (node.coPeers && node.coPeers.length
-            ? '<div class="coauth">Co-authored with ' + node.coPeers.length + ' member' + (node.coPeers.length > 1 ? 's' : '') + '</div>' : '')
-        + (node.slug ? '<div class="go">View profile &rarr;</div>' : '');
+            ? '<div class="coauth">' + peerLine(
+                'Co-authored with {n} member',
+                'Co-authored with {n} members',
+                node.coPeers.length) + '</div>' : '')
+        + (node.slug ? '<div class="go">' + T('View profile') + ' &rarr;</div>' : '');
       if (node.photo) card.querySelector('.face').src = node.photo;
       card.querySelector('.nm').textContent = node.name;
       card.querySelector('.meta').textContent = node.country || '';
       if (themes.length) card.querySelector('.themes').textContent =
-        themes.slice(0, 3).map(t => t.name).join(' · ') + (themes.length > 3 ? ' +' + (themes.length - 3) : '');
+        themes.slice(0, 3).map(t => T(t.name)).join(' · ') + (themes.length > 3 ? ' +' + (themes.length - 3) : '');
     }
     const stage = canvas.parentElement.getBoundingClientRect();
     card.style.left = Math.min(mx + 16, stage.width - 300) + 'px';
@@ -330,7 +352,9 @@
     const mx = e.clientX - r.left, my = e.clientY - r.top;
     if (draggingHub) { draggingHub.x = mx; draggingHub.y = my; draw(); return; }
     hovered = nodeAt(mx, my);
-    canvas.classList.toggle('is-link', !!(hovered && hovered.slug));
+    // Cursor set inline rather than through a class: `.is-link` is already
+    // claimed by site.css, and one property is not worth a second name.
+    canvas.style.cursor = (hovered && hovered.slug) ? 'pointer' : 'default';
     showCard(hovered, mx, my);
     draw();
   });
@@ -363,7 +387,10 @@
     hubChipsEl.replaceChildren();
     hubs().forEach(h => {
       hubChipsEl.appendChild(chip(
-        h.type === 'wg' ? 'WG' + h.number : h.name,
+        // The 14 theme names are already in the shared catalogue (the
+        // directory's theme filter chips use the same keys), so the hub
+        // chips translate without a single new string.
+        h.type === 'wg' ? 'WG' + h.number : T(h.name),
         activeHubs.has(h.id),
         (b) => {
           if (activeHubs.has(h.id)) activeHubs.delete(h.id);
@@ -447,13 +474,13 @@
           const el = document.createElement('div');
           el.className = 'atlas-stat';
           const bb = document.createElement('b'); bb.textContent = b;
-          const ss = document.createElement('span'); ss.textContent = s;
+          const ss = document.createElement('span'); ss.textContent = T(s);
           el.appendChild(bb); el.appendChild(ss);
           statsEl.appendChild(el);
         });
 
       [['wg', 'Working Groups'], ['theme', 'Research themes']].forEach(([v, label]) => {
-        const b = chip(label, v === lens, () => switchLens(v));
+        const b = chip(T(label), v === lens, () => switchLens(v));
         b.dataset.lens = v;
         lensEl.appendChild(b);
       });
@@ -465,12 +492,13 @@
         const leg = document.getElementById('atlas-legend');
         if (leg) {
           const sp = document.createElement('span');
-          sp.innerHTML = '<span class="sw" style="background:#0aa2c0"></span>co-authored an Action output';
+          sp.innerHTML = '<span class="sw" style="background:#0aa2c0"></span>';
+          sp.appendChild(document.createTextNode(T('co-authored an Action output')));
           leg.insertBefore(sp, leg.lastElementChild);
         }
       }
       overlayDefs.forEach(([k, label]) => {
-        overlaysEl.appendChild(chip(label, overlays[k], (b) => {
+        overlaysEl.appendChild(chip(T(label), overlays[k], (b) => {
           overlays[k] = !overlays[k];
           b.setAttribute('aria-pressed', overlays[k] ? 'true' : 'false');
           draw();
@@ -480,7 +508,7 @@
       resize();
       switchLens('wg');
     })
-    .catch(() => { statsEl.textContent = 'The atlas data could not be loaded.'; });
+    .catch(() => { statsEl.textContent = T('The atlas data could not be loaded.'); });
 
   window.addEventListener('resize', () => { resize(); seedPositions(); reheat(120); });
   new MutationObserver(() => { readTheme(); draw(); })
