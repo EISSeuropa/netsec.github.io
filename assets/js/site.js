@@ -219,6 +219,35 @@
       'Skip': 'Ignorer',
       'Step %1 of %2': 'Étape %1 sur %2',
       'Close tour': 'Fermer la visite',
+      // NetSec Atlas (#764): the controls, the statistics strip, and the
+      // hover card, all injected by assets/js/atlas-poc.js. The 14 theme
+      // names the hub chips carry are already translated further up, since
+      // the directory's theme filter uses the same keys.
+      'Working Groups': 'Groupes de travail',
+      // The four WG titles, drawn on the canvas under each hub. Lifted from
+      // the hand-translated headings on working-groups.fr.html so the two
+      // surfaces cannot disagree.
+      'Building the Network': 'Bâtir le réseau',
+      'Transfer of Knowledge': 'Transfert des connaissances',
+      'Fostering the Next Generation of Scholars': 'Former la prochaine génération de chercheurs',
+      'Inclusion, Representativeness & Ethics': 'Inclusion, représentativité et éthique',
+      'ESSC 2026 co-panels': 'Panels partagés ESSC 2026',
+      'Mentorship offers & requests': 'Offres et demandes de mentorat',
+      'Co-authored outputs': 'Publications co-signées',
+      'people in the network': 'personnes dans le réseau',
+      'countries': 'pays',
+      'research themes': 'thèmes de recherche',
+      'ESSC co-panel ties': 'liens de panel ESSC',
+      'co-authored outputs': 'publications co-signées',
+      'with a directory profile': 'avec un profil dans l\'annuaire',
+      '{n} members': '{n} membres',
+      '{n} people work here': '{n} personnes y travaillent',
+      'Shared an ESSC 2026 panel with {n} member': 'A partagé un panel ESSC 2026 avec {n} membre',
+      'Shared an ESSC 2026 panel with {n} members': 'A partagé un panel ESSC 2026 avec {n} membres',
+      'Co-authored with {n} member': 'A co-signé avec {n} membre',
+      'Co-authored with {n} members': 'A co-signé avec {n} membres',
+      'co-authored an Action output': 'a co-signé une publication de l\'Action',
+      'The atlas data could not be loaded.': 'Les données de l\'atlas n\'ont pas pu être chargées.',
     },
     de: {
       'Action Chair': 'Aktionsvorsitz',
@@ -425,6 +454,29 @@
       'Skip': 'Überspringen',
       'Step %1 of %2': 'Schritt %1 von %2',
       'Close tour': 'Tour schließen',
+      // NetSec Atlas (#764), same set as the FR block above.
+      'Working Groups': 'Arbeitsgruppen',
+      'Building the Network': 'Aufbau des Netzwerks',
+      'Transfer of Knowledge': 'Wissenstransfer',
+      'Fostering the Next Generation of Scholars': 'Förderung der nächsten Generation von Forschenden',
+      'Inclusion, Representativeness & Ethics': 'Inklusion, Repräsentativität und Ethik',
+      'ESSC 2026 co-panels': 'Gemeinsame ESSC-2026-Panels',
+      'Mentorship offers & requests': 'Mentoring-Angebote und -Gesuche',
+      'Co-authored outputs': 'Gemeinsame Veröffentlichungen',
+      'people in the network': 'Personen im Netzwerk',
+      'countries': 'Länder',
+      'research themes': 'Forschungsthemen',
+      'ESSC co-panel ties': 'ESSC-Panel-Verbindungen',
+      'co-authored outputs': 'gemeinsame Veröffentlichungen',
+      'with a directory profile': 'mit Profil im Verzeichnis',
+      '{n} members': '{n} Mitglieder',
+      '{n} people work here': '{n} Personen arbeiten hier',
+      'Shared an ESSC 2026 panel with {n} member': 'Teilte ein ESSC-2026-Panel mit {n} Mitglied',
+      'Shared an ESSC 2026 panel with {n} members': 'Teilte ein ESSC-2026-Panel mit {n} Mitgliedern',
+      'Co-authored with {n} member': 'Gemeinsame Veröffentlichung mit {n} Mitglied',
+      'Co-authored with {n} members': 'Gemeinsame Veröffentlichung mit {n} Mitgliedern',
+      'co-authored an Action output': 'hat eine Veröffentlichung der Aktion mitverfasst',
+      'The atlas data could not be loaded.': 'Die Atlas-Daten konnten nicht geladen werden.',
     },
   };
   /* Country-name table for the " · <Country>" tail of role strings like
