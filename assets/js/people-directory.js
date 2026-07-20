@@ -997,26 +997,33 @@
       // question is dormant and no member has opted in yet.
       const mentorWrap = node.querySelector('.member-mentorship');
       const mentorship = Array.isArray(m.mentorship) ? m.mentorship : [];
+      // 'mentor-full' is the at-capacity state (#1415): the member mentors
+      // but has no room right now, so the badge is muted and never becomes
+      // a mailto action. It is a tag no chip or wizard column matches, so
+      // carrying it drops the member out of the offer pool by itself.
       const MENTOR_BADGES = [
         { tag: 'mentor', cls: 'is-offering', label: 'Available to mentor' },
         { tag: 'mentee', cls: 'is-seeking', label: 'Seeking mentorship' },
+        { tag: 'mentor-full', cls: 'is-full', label: 'Mentoring, at capacity',
+          passive: true },
       ];
       // With a published email the badge is a mailto: action carrying the
       // warm intro scaffold (#1171), mirroring the profile pages. Without
       // one it stays the passive pill it always was. The compact preview
       // panel clones the card, so it inherits the action for free.
-      const badgeEl = (cls, text, tag) => {
-        const el = document.createElement(m.email ? 'a' : 'span');
-        el.className = cls + (m.email ? ' is-action' : '');
+      const badgeEl = (cls, text, tag, passive) => {
+        const action = m.email && !passive;
+        const el = document.createElement(action ? 'a' : 'span');
+        el.className = cls + (action ? ' is-action' : '');
         el.textContent = text;
-        if (m.email) el.href = introMailto(m, tag);
+        if (action) el.href = introMailto(m, tag);
         return el;
       };
       let mentorAdded = false;
       MENTOR_BADGES.forEach(badge => {
         if (!mentorship.includes(badge.tag)) return;
         mentorWrap.appendChild(badgeEl('mentorship-badge ' + badge.cls,
-          window.netsecT(badge.label), badge.tag));
+          window.netsecT(badge.label), badge.tag, badge.passive));
         mentorAdded = true;
       });
       if (mentorAdded) mentorWrap.removeAttribute('hidden');
