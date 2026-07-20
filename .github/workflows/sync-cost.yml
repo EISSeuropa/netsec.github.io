@@ -69,13 +69,29 @@ jobs:
           # Build a Markdown body for the PR. peter-evans/create-pull-request
           # will only actually open a PR if `git diff` shows changes, so this
           # body is only ever surfaced when there's something to report.
+          # Every report section prints "(no changes)" when it is quiet, so a
+          # sync that moved one member reads as four no-op blocks and is easy
+          # to skim past (#1411). Lift the actual change bullets (the report's
+          # "  + " / "  - " lines) to the top as the verdict. The "  · " lines
+          # are discrepancies under watch, not changes, so they stay below.
+          grep -E '^  [+-] ' /tmp/sync-output.txt > /tmp/sync-changes.txt || true
           {
             echo "Auto-detected changes in the Membership table at"
             echo "<https://www.cost.eu/actions/CA24154/>."
             echo ""
+            echo "**$(wc -l < /tmp/sync-changes.txt | tr -d ' ') change(s) in this sync:**"
+            echo ""
+            echo '```'
+            cat /tmp/sync-changes.txt
+            echo '```'
+            echo ""
+            echo "<details><summary>Full sync report</summary>"
+            echo ""
             echo '```'
             cat /tmp/sync-output.txt
             echo '```'
+            echo ""
+            echo "</details>"
             echo ""
             echo "### Translation drift after this sync"
             echo ""
