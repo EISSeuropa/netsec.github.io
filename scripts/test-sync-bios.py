@@ -1091,6 +1091,29 @@ def test_parse_mentorship() -> None:
            ["mentor", "mentee"])
     expect("unrelated text -> []",
            parse_mentorship("Maybe later"), [])
+    # The two off-switches (#1416). Each retires the standing flag it
+    # replaces, including when the member leaves the old box ticked, so the
+    # re-parsed cell can actually take a member out of the matching pool.
+    expect("at capacity -> mentor-full",
+           parse_mentorship("I am currently mentoring at full capacity"),
+           ["mentor-full"])
+    expect("at capacity suppresses a still-ticked offer",
+           parse_mentorship("Open to mentoring early-career researchers, "
+                            "I am currently mentoring at full capacity"),
+           ["mentor-full"])
+    expect("found a mentor -> matched",
+           parse_mentorship("I found a mentor through this directory"),
+           ["matched"])
+    expect("found a mentor suppresses a still-ticked request",
+           parse_mentorship("Looking for a mentor, "
+                            "I found a mentor through this directory"),
+           ["matched"])
+    expect("offering while matched keeps the offer",
+           parse_mentorship("Open to mentoring early-career researchers, "
+                            "I found a mentor through this directory"),
+           ["mentor", "matched"])
+    expect("badge 'Mentoring, at capacity' -> mentor-full",
+           parse_mentorship("Mentoring, at capacity"), ["mentor-full"])
     # Directory badge labels (what a maintainer might type into the Sheet
     # by hand) are recognised too, not only the Form-option wording.
     expect("badge 'Available to mentor' -> mentor",

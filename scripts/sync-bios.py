@@ -169,39 +169,71 @@ def parse_mentorship(raw: str) -> list[str]:
     """Map the mentorship checkbox cell to role tags for the directory.
 
     The cell is the comma-joined list of ticked options. We emit a
-    small ordered list drawn from {"mentor", "mentee"}:
+    small ordered list drawn from {"mentor", "mentee", "mentor-full",
+    "matched"}:
 
-      - "mentor"  the member is offering to mentor (a mid-career or
-                  senior scholar open to mentoring early-career ones).
-      - "mentee"  the member is looking for a mentor.
+      - "mentor"       the member is offering to mentor (a mid-career or
+                       senior scholar open to mentoring early-career ones).
+      - "mentee"       the member is looking for a mentor.
+      - "mentor-full"  the member mentors but is at capacity right now.
+      - "matched"      the member found a mentor through the directory.
+
+    The last two are the off-switches for the first two (#1416). merge()
+    only overwrites a field when the new value is non-empty, so unticking
+    a box and resubmitting leaves the old flag standing forever. A member
+    who has filled their roster or found their mentor therefore needs a
+    positive option to tick: the re-parsed cell replaces the stored list,
+    and the new tag is one no filter chip or wizard column looks for, so
+    they drop out of the matching pool while keeping the badge that says
+    why. "mentor-full" suppresses "mentor" and "matched" suppresses
+    "mentee", which covers the member who ticks the new box but leaves the
+    old one ticked as well.
 
     Matching is tolerant substring matching against the option text, so
     light edits to the Form wording keep working. Distinct phrases keep
-    the two directions apart even though both contain "mentor":
+    the directions apart even though all four contain "mentor":
     "open to mentoring" / "as a mentor" -> mentor;
-    "looking for a mentor" / "seeking a mentor" -> mentee. The directory
-    badge labels are also recognised ("available to mentor" -> mentor,
-    "seeking mentorship" -> mentee), so a maintainer editing the Sheet
-    by hand can type the displayed status rather than the exact Form
-    option. An empty or absent cell (the question is optional, and
-    unconfigured columns read as "") yields []."""
+    "looking for a mentor" / "seeking a mentor" -> mentee;
+    "at capacity" / "full capacity" -> mentor-full;
+    "found a mentor" / "found my mentor" -> matched. The directory badge
+    labels are also recognised ("available to mentor" -> mentor,
+    "seeking mentorship" -> mentee, "mentoring, at capacity" ->
+    mentor-full), so a maintainer editing the Sheet by hand can type the
+    displayed status rather than the exact Form option. An empty or
+    absent cell (the question is optional, and unconfigured columns read
+    as "") yields []."""
     if not raw:
         return []
     s = str(raw).lower()
     out: list[str] = []
-    if any(p in s for p in (
+    # The two off-switches are tested first: each suppresses the standing
+    # flag it retires, so a member who ticks the new box without unticking
+    # the old one still reads as full / matched rather than both at once.
+    full = any(p in s for p in (
+        "at capacity", "at full capacity", "full capacity",
+        "not taking on", "no capacity",
+    ))
+    matched = any(p in s for p in (
+        "found a mentor", "found my mentor",
+        "no longer looking for a mentor", "no longer seeking",
+    ))
+    if not full and any(p in s for p in (
         "open to mentoring", "offer mentor", "offering mentor",
         "happy to mentor", "as a mentor", "provide mentor",
         "mentoring early", "available to mentor", "available as a mentor",
     )):
         out.append("mentor")
-    if any(p in s for p in (
+    if not matched and any(p in s for p in (
         "looking for a mentor", "seeking a mentor", "find a mentor",
         "want a mentor", "need a mentor", "be mentored", "as a mentee",
         "seeking mentorship", "seeking mentoring", "looking for mentorship",
         "want mentorship", "need mentorship", "find mentorship",
     )):
         out.append("mentee")
+    if full:
+        out.append("mentor-full")
+    if matched:
+        out.append("matched")
     return out
 
 

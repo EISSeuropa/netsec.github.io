@@ -254,6 +254,18 @@
   background:color-mix(in oklab, var(--accent) 12%, transparent);
   border:1px solid color-mix(in oklab, var(--accent) 32%, transparent);
 }
+/* At capacity (#1416): the member mentors but has no room right now. Read
+   as a status, not an offer, so it drops the colour fill the other two
+   carry and takes muted text on a hollow dot. The pill is never a mailto
+   action, which is the whole point of the state. */
+.mentorship-badge.is-full{
+  color:var(--muted);
+  background:transparent;
+  border:1px dashed color-mix(in oklab, var(--muted) 42%, transparent);
+}
+.mentorship-badge.is-full::before{
+  background:transparent;border:1.5px solid currentColor;
+}
 .dark .mentorship-badge.is-offering{
   color:#6fd29c;
   background:color-mix(in oklab, #2ea36a 20%, transparent);
