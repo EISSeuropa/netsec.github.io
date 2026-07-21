@@ -136,6 +136,17 @@ jobs:
           # is not needed here, the sync touches no ?v= asset hashes.
           python3 scripts/build-profile-pages.py
 
+      - name: Rebuild the Pagefind bio search stubs (#1428)
+        run: |
+          # search/bios/<lang>/<slug>.html carry the `wgs` facet site search
+          # filters on, and sync-cost.py writes `wgs` into data/bios.json. This
+          # was the one generator the cost sync did not run, so a WG membership
+          # arriving from cost.eu left the member missing from a WG-filtered
+          # search until the next daily bios sync happened to rebuild the stubs
+          # (four days, in #1411 -> #1421). Same gap as #1218 on the bios side.
+          # Idempotent; regenerated from bios.json.
+          python3 scripts/build-bio-search-stubs.py
+
       - name: Regenerate the NetSec Atlas graph from the synced WG rosters (#764)
         run: |
           # data/atlas.json is derived from data/wg.json. sync-cost.py rewrites

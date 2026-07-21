@@ -99,6 +99,15 @@ jobs:
         # so the sync (sync-cost.py) can never leave the graph stale.
         run: python3 scripts/build-atlas.py --check
 
+      - name: Bio search stubs are current (#1428)
+        # search/bios/<lang>/<slug>.html are what Pagefind indexes, and they
+        # carry the country and `wgs` facets site search filters on. Both the
+        # bios sync and the cost.eu sync write fields the stubs render, so this
+        # gate is what stops either one leaving a member unsearchable or
+        # missing from a WG filter. Without it the drift is silent until
+        # someone notices the member absent from a search result.
+        run: python3 scripts/build-bio-search-stubs.py --check
+
       - name: OG cards are current (#1023)
         # Per-member OG card PNGs are generated from bios.json. This check is
         # content-keyed (a manifest of each card's inputs), not a pixel diff,
