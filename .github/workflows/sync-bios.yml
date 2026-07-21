@@ -8,10 +8,15 @@
 #      up promptly).
 #   2. Parse each row into the bios.json schema, download any new
 #      headshots from Google Drive, write data/bios.json.
-#   3. If anything changed, open or update a pull request on the
-#      branch `bios-sync/auto` with the human-readable diff in the
-#      body. If nothing changed, exit silently — no inbox noise.
-#   4. While scripts/bios-source.json has no csv_url set (initial
+#   3. Run every generator that reads bios.json (OG cards, profile
+#      pages, search stubs, sitemap, directory index, atlas, field
+#      guide), so the derived files travel in the same PR.
+#   4. If anything changed, open or update a pull request on the
+#      branch `bios-sync/auto`. The body leads with a one-line summary
+#      of what actually changed, derived files included, over the
+#      human-readable diff and the run log. If nothing changed, exit
+#      silently — no inbox noise.
+#   5. While scripts/bios-source.json has no csv_url set (initial
 #      state), the script no-ops cleanly so the workflow stays green
 #      while the Google Form is still being set up.
 #
@@ -179,6 +184,22 @@ jobs:
           # unchanged. It rewrites only the field-guide region of the
           # glossary pages, leaving the ?v= asset hashes untouched.
           python3 scripts/build-field-guide.py
+
+      - name: Prepend a one-line summary of what actually changed
+        run: |
+          # The body above was composed straight after sync-bios.py, which is
+          # before any of the generator steps ran, so its run log can only
+          # describe the upstream fetch. That is how #1421 shipped a log
+          # reading "No substantive changes" (true of data/bios.json) over a
+          # diff that carried a real correction to one member's search stubs.
+          # Now that every generator has run, read the working tree and put a
+          # one-line verdict at the very top of the body. Prints nothing on a
+          # clean tree, so this is safe to run unconditionally.
+          python3 scripts/summarise-sync-changes.py > /tmp/sync-summary.md
+          if [ -s /tmp/sync-summary.md ]; then
+            { cat /tmp/sync-summary.md; echo ""; cat /tmp/bios-pr-body.md; } \
+              > /tmp/bios-pr-body.new && mv /tmp/bios-pr-body.new /tmp/bios-pr-body.md
+          fi
 
       - name: Compose PR title (dynamic if available, fallback otherwise)
         id: pr-title
