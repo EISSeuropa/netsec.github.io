@@ -145,6 +145,20 @@ jobs:
           # library, idempotent: an unchanged roster produces no diff.
           python3 scripts/build-atlas.py
 
+      - name: Prepend a one-line summary of what actually changed
+        run: |
+          # Same reasoning as the matching step in sync-bios.yml: /tmp/pr-body.md
+          # was composed straight after sync-cost.py, before the OG-card,
+          # profile-page, and atlas rebuilds above, so its run log describes the
+          # cost.eu fetch and not the derived files in the diff. Read the working
+          # tree now that the generators have run and lead the body with a
+          # one-line verdict. Prints nothing on a clean tree.
+          python3 scripts/summarise-sync-changes.py > /tmp/sync-summary.md
+          if [ -s /tmp/sync-summary.md ]; then
+            { cat /tmp/sync-summary.md; echo ""; cat /tmp/pr-body.md; } \
+              > /tmp/pr-body.new && mv /tmp/pr-body.new /tmp/pr-body.md
+          fi
+
       - name: Open or update PR if WG_MAP changed
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)
         with:

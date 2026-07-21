@@ -140,7 +140,7 @@ sequenceDiagram
 
     W->>G: Open PR on bios-sync/auto<br/>(or cost-sync/auto)
     G->>A: Notify (watching the repo)
-    A->>G: Read PR body — it shows the human-readable diff
+    A->>G: Read PR body — summary line first, then the diff
     alt All entries look right
         A->>G: Approve + merge
         G->>R: Squash-merge
@@ -149,6 +149,21 @@ sequenceDiagram
         A->>A: Either edit the source<br/>(Google Sheet) and re-run<br/>the workflow, or close the PR<br/>and contact the submitter
     end
 ```
+
+**Reading the PR body.** Both sync PRs lead with a one-line summary of
+what the run actually changed, generated after every rebuild step has
+run, so it covers the derived files (profile pages, OG cards, search
+stubs, sitemap, atlas) and not only the upstream fetch. It names the
+members involved when only a few are touched:
+
+> **Summary: no member edits upstream. 3 derived files rebuilt — search stubs (gayane-harutyunyan).**
+
+The run log below it reports on the fetch alone, so a log reading "No
+substantive changes" over a non-empty diff is expected rather than a
+fault: it means nobody edited their submission, but a generator picked
+up data that had arrived by another route. That is what happened in
+[#1421](https://github.com/EISSeuropa/netsec.github.io/pull/1421), which
+is why the summary line exists.
 
 **Soft-review policy.** We don't auto-merge — every new bio passes
 through a human's eyes. The reviewer's job is **not** to fact-check
