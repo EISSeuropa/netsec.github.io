@@ -36,6 +36,7 @@ from __future__ import annotations
 import json
 import re
 import shutil
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -172,7 +173,90 @@ def render_stub(member: dict, lang: str) -> str:
 """
 
 
-def main() -> int:
+def build_stubs(members: list) -> dict[str, str]:
+    """Render every stub in memory, keyed by path relative to OUT_ROOT.
+
+    Kept separate from the writing so `--check` can compare against the
+    committed tree without touching it.
+    """
+    stubs: dict[str, str] = {}
+    for m in members:
+        slug = (m.get("id") or "").strip()
+        if not slug:
+            continue
+        for lang in LANGS:
+            html = render_stub(m, lang)
+            if not html:
+                continue
+            stubs[f"{lang}/{slug}.html"] = html
+    return stubs
+
+
+def read_committed() -> dict[str, str]:
+    if not OUT_ROOT.exists():
+        return {}
+    return {
+        f"{p.parent.name}/{p.name}": p.read_text(encoding="utf-8")
+        for p in OUT_ROOT.glob("*/*.html")
+    }
+
+
+def check(stubs: dict[str, str]) -> int:
+    """Fail if the committed stubs have drifted from what bios.json implies.
+
+    Exists because sync-cost.py writes `wgs` into bios.json, and a WG facet
+    that never reached the stubs leaves the member missing from a
+    WG-filtered site search until the next bios sync happens to rebuild them
+    (#1428; the four-day gap visible in #1411 → #1421).
+    """
+    committed = read_committed()
+    missing = sorted(set(stubs) - set(committed))
+    extra = sorted(set(committed) - set(stubs))
+    differing = sorted(
+        path for path in set(stubs) & set(committed) if stubs[path] != committed[path]
+    )
+
+    if not (missing or extra or differing):
+        print(f"✓ {len(stubs)} bio search stubs are current")
+        return 0
+
+    print("✗ Bio search stubs have drifted from data/bios.json")
+    for label, paths in (
+        ("missing (member unsearchable)", missing),
+        ("stale content", differing),
+        ("orphaned (member gone)", extra),
+    ):
+        if paths:
+            shown = ", ".join(paths[:8])
+            more = f" (+{len(paths) - 8} more)" if len(paths) > 8 else ""
+            print(f"    {label}: {len(paths)} — {shown}{more}")
+    print("\n  Fix: python3 scripts/build-bio-search-stubs.py")
+    return 1
+
+
+def write(stubs: dict[str, str]) -> int:
+    # Wipe and recreate to drop stubs for members that have left the
+    # directory.
+    if OUT_ROOT.exists():
+        shutil.rmtree(OUT_ROOT)
+    for lang in LANGS:
+        (OUT_ROOT / lang).mkdir(parents=True, exist_ok=True)
+
+    counts = {lang: 0 for lang in LANGS}
+    for path, html in stubs.items():
+        (OUT_ROOT / path).write_text(html, encoding="utf-8")
+        counts[path.split("/", 1)[0]] += 1
+
+    total = sum(counts.values())
+    print(
+        f"✓ Generated {total} bio stubs "
+        f"({counts['en']} EN · {counts['fr']} FR · {counts['de']} DE)"
+    )
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    argv = [] if argv is None else argv
     if not BIOS.exists():
         print(f"✗ {BIOS} not found")
         return 1
@@ -183,32 +267,9 @@ def main() -> int:
         print("✗ No members in bios.json")
         return 1
 
-    # Wipe and recreate to drop stubs for members that have left the
-    # directory.
-    if OUT_ROOT.exists():
-        shutil.rmtree(OUT_ROOT)
-    for lang in LANGS:
-        (OUT_ROOT / lang).mkdir(parents=True, exist_ok=True)
-
-    counts = {lang: 0 for lang in LANGS}
-    for m in members:
-        slug = (m.get("id") or "").strip()
-        if not slug:
-            continue
-        for lang in LANGS:
-            html = render_stub(m, lang)
-            if not html:
-                continue
-            (OUT_ROOT / lang / f"{slug}.html").write_text(html, encoding="utf-8")
-            counts[lang] += 1
-
-    total = sum(counts.values())
-    print(
-        f"✓ Generated {total} bio stubs "
-        f"({counts['en']} EN · {counts['fr']} FR · {counts['de']} DE)"
-    )
-    return 0
+    stubs = build_stubs(members)
+    return check(stubs) if "--check" in argv else write(stubs)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

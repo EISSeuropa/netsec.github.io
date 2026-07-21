@@ -384,3 +384,75 @@ def test_main_does_not_touch_repo_outside_tmp(monkeypatch, tmp_path):
     _bios, out_root = _setup_root(monkeypatch, tmp_path, payload)
     assert bss.main() == 0
     assert str(out_root).startswith(str(tmp_path))
+
+
+# --- --check drift gate (#1428) ------------------------------------------
+
+
+def test_check_passes_on_a_freshly_built_tree(monkeypatch, tmp_path, capsys):
+    payload = {"members": [_full()]}
+    _setup_root(monkeypatch, tmp_path, payload)
+    assert bss.main() == 0
+    assert bss.main(["--check"]) == 0
+    assert "are current" in capsys.readouterr().out
+
+
+def test_check_catches_stale_content(monkeypatch, tmp_path, capsys):
+    """The #1421 case: a member's wgs facet reaches bios.json but not the stub."""
+    member = _full()
+    member["wgs"] = []
+    _bios, out_root = _setup_root(monkeypatch, tmp_path, {"members": [member]})
+    assert bss.main() == 0
+
+    member["wgs"] = [2, 3]
+    (tmp_path / "data" / "bios.json").write_text(
+        json.dumps({"members": [member]}), encoding="utf-8"
+    )
+    assert bss.main(["--check"]) == 1
+    out = capsys.readouterr().out
+    assert "stale content" in out
+    assert "drifted" in out
+
+
+def test_check_catches_a_missing_stub(monkeypatch, tmp_path, capsys):
+    _bios, out_root = _setup_root(monkeypatch, tmp_path, {"members": [_full()]})
+    assert bss.main() == 0
+    (out_root / "en" / "laudrain.html").unlink()
+    assert bss.main(["--check"]) == 1
+    assert "missing (member unsearchable)" in capsys.readouterr().out
+
+
+def test_check_catches_an_orphaned_stub(monkeypatch, tmp_path, capsys):
+    _bios, out_root = _setup_root(monkeypatch, tmp_path, {"members": [_full()]})
+    assert bss.main() == 0
+    (out_root / "en" / "ghost.html").write_text("<html></html>", encoding="utf-8")
+    assert bss.main(["--check"]) == 1
+    assert "orphaned (member gone)" in capsys.readouterr().out
+
+
+def test_check_never_writes_to_the_tree(monkeypatch, tmp_path):
+    """A gate that repairs what it measures would always pass."""
+    _bios, out_root = _setup_root(monkeypatch, tmp_path, {"members": [_full()]})
+    assert bss.main() == 0
+    (out_root / "en" / "laudrain.html").unlink()
+    before = sorted(p.name for p in out_root.glob("*/*.html"))
+    assert bss.main(["--check"]) == 1
+    assert sorted(p.name for p in out_root.glob("*/*.html")) == before
+
+
+def test_check_on_a_missing_out_root_reports_everything_missing(
+    monkeypatch, tmp_path, capsys
+):
+    _setup_root(monkeypatch, tmp_path, {"members": [_full()]})
+    assert bss.main(["--check"]) == 1
+    assert "missing (member unsearchable)" in capsys.readouterr().out
+
+
+def test_build_stubs_keys_are_lang_slug_paths(monkeypatch, tmp_path):
+    _setup_root(monkeypatch, tmp_path, {"members": [_full()]})
+    stubs = bss.build_stubs([_full()])
+    assert set(stubs) == {
+        "en/laudrain.html",
+        "fr/laudrain.html",
+        "de/laudrain.html",
+    }
