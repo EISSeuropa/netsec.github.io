@@ -217,8 +217,13 @@
    further down inverts these. */
 .member-affiliation .aff-compact{display:none}
 .member-affiliation .aff-full{display:inline}
+/* Shares the flag sizing recipe documented at .country-card .flag in
+   site.css: a fixed 3:2 box plus object-fit:contain, so a flag keeps its
+   own proportions instead of letting the rendered height follow the ratio
+   FlagCDN happens to serve. */
 .member-flag{
-  width:18px;height:auto;border-radius:2px;
+  width:18px;height:12px;object-fit:contain;
+  border-radius:2px;flex-shrink:0;
   box-shadow:0 1px 2px rgba(0,0,0,.18);
   vertical-align:middle;
 }
@@ -1887,6 +1892,12 @@ html.dir-welcome .welcome-strip[hidden]{display:block}
   opacity:.72;
   transition:opacity .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
 }
+/* object-fit:cover is deliberate here and is the one exception to the
+   contain recipe every other flag on the site follows. The strip reads as a
+   dense row of uniform tiles, so edge-to-edge fill matters more than
+   showing each flag whole, and a letterboxed tile would leave a visible gap
+   inside the 1px ring. The trade is that wide flags lose their left and
+   right edges. Do not "fix" this to contain without redesigning the strip. */
 .country-flag img{
   display:block;
   width:28px;

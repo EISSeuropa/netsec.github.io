@@ -1622,10 +1622,21 @@ form button:disabled{opacity:.65;cursor:wait}
 }
 .country-card{padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px}
 .country-card .country-head{display:flex;align-items:center;gap:10px}
+/* Flag thumbnails, sizing recipe. FlagCDN serves every flag at its true
+   ratio, which across the 31 MC countries runs from 1.00 (Switzerland) to
+   2.00 (the UK and seven others). Sizing by width alone therefore let the
+   rendered height swing by a factor of two, so the Swiss card's head row
+   stood taller than its neighbours. A fixed 3:2 box plus object-fit:contain
+   keeps each flag's real proportions, crops nothing, and gives the browser
+   an intrinsic size, so the lazy load costs no layout shift. The same three
+   declarations appear on .search-bio-flag and .essc-member-card-country img
+   below, and on .member-flag in directory.css. The one deliberate exception
+   is the directory's country filter strip, which stays on object-fit:cover
+   because it reads as a dense grid of uniform tiles. */
 .country-card .flag{
-  width:28px;height:auto;border-radius:3px;flex-shrink:0;
+  width:28px;height:19px;object-fit:contain;
+  border-radius:3px;flex-shrink:0;
   box-shadow:0 1px 3px rgba(0,0,0,.18);
-  background:#e5e9f1;
 }
 .country-card .country-name{
   font-weight:600;font-size:.98rem;color:var(--ink);letter-spacing:-.01em;
@@ -2719,8 +2730,12 @@ body.search-open{overflow:hidden}
   font-weight:600;font-size:1rem;color:var(--ink);letter-spacing:-.01em;
   font-family:'Lexend','Inter',sans-serif;
 }
+/* Shares the flag sizing recipe documented at .country-card .flag. This one
+   was fixed at 18x14 with no object-fit, so every flag was stretched to a
+   1.29 ratio regardless of its own. */
 .search-bio-flag{
-  width:18px;height:14px;border-radius:2px;flex-shrink:0;
+  width:18px;height:12px;object-fit:contain;
+  border-radius:2px;flex-shrink:0;
   box-shadow:0 0 0 1px rgba(0,0,0,.08);
 }
 .search-bio-subline,
@@ -3719,9 +3734,11 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   color:var(--muted);
   font-size:.82rem;
 }
+/* Shares the flag sizing recipe documented at .country-card .flag. The
+   matching width/height attributes are set in assets/js/site.js. */
 .essc-member-card-country img{
-  width:18px;height:auto;
-  border-radius:2px;
+  width:18px;height:12px;object-fit:contain;
+  border-radius:2px;flex-shrink:0;
   display:inline-block;
 }
 .essc-member-card-bio{
