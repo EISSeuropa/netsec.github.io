@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "isabelle-haynes",
-  "featuredSince": "2026-07-14",
+  "current": "teodora-stoicescu",
+  "featuredSince": "2026-07-21",
   "pinned": null,
   "history": [
+    {
+      "id": "teodora-stoicescu",
+      "week": "2026-W30",
+      "date": "2026-07-21"
+    },
     {
       "id": "isabelle-haynes",
       "week": "2026-W29",
