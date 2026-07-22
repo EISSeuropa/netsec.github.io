@@ -535,7 +535,7 @@ sweep (rule §11).
 │   ├── build-calendar.py            # Generates /calendar.ics + /calendar/<slug>.ics from data/events.json
 │   ├── build-news-rss.py            # Generates /news.xml (RSS 2.0) from data/news.json
 │   ├── build-field-guide.py         # Renders data/field-guide.json into the glossary "Concepts" section (EN/FR/DE), sentinel-scoped; --check drift gate (#766)
-│   ├── build-atlas.py               # Regenerates data/atlas.json (theme hubs, mentorship flags, headshots) from bios.json + wg.json for the NetSec Atlas page; --check drift gate (#764)
+│   ├── build-atlas.py               # Regenerates data/atlas.json (theme hubs, mentorship flags, headshots) from bios.json + wg.json for the NetSec Atlas page; --check drift gate (see atlas.md, #764)
 │   ├── sync-roadmap-progress.py     # Writes data/roadmap-progress.json from GitHub milestone closed/total
 │   ├── build-search.sh              # Builds /pagefind/ via `npx pagefind` (gitignored)
 │   ├── build-bio-search-stubs.py    # Renders search/bios/<lang>/<slug>.html — the per-member stubs Pagefind indexes so a member is findable by site search (country + wgs facets); --check drift gate (#1218, #1428)
@@ -572,6 +572,7 @@ sweep (rule §11).
 │   ├── i18n.md                      # Translation workflow + drift conventions
 │   ├── seo.md                       # SEO injector design, OG/JSON-LD schema
 │   ├── profile-pages.md             # The enriched /people/<slug> pages + the cross-site member/author links
+│   ├── atlas.md                     # The NetSec Atlas prototype: the network map + how build-atlas.py derives its graph
 │   ├── cross-repo-workflow.md       # NetSec ↔ EISS conventions, incl. the directory-index/authors-index contract
 │   ├── bios-setup.md                # One-time Google Form set-up guide
 │   ├── pdf/                         # Source for the documentation pack
