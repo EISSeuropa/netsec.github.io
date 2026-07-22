@@ -185,7 +185,13 @@ flowchart TD
   leave the visitor's browser; the index is served from
   `/pagefind/` on the same origin. Keyboard navigation, focus
   trap, `aria-live` result count, full light + dark theme
-  parity.
+  parity. Directory members are indexed through per-member stub
+  pages (`search/bios/<lang>/<slug>.html`, one per locale) that
+  `build-bio-search-stubs.py` renders from `data/bios.json`, carrying
+  the country and Working-Group facets so a member is findable by
+  name and filterable by WG. Both syncs regenerate the stubs, and
+  `data-shape-check.yml` fails on any drift, so a member added or
+  moved between WGs never silently drops out of search (#1218, #1428).
 
 ### Operator-facing
 
@@ -529,15 +535,24 @@ sweep (rule §11).
 │   ├── build-calendar.py            # Generates /calendar.ics + /calendar/<slug>.ics from data/events.json
 │   ├── build-news-rss.py            # Generates /news.xml (RSS 2.0) from data/news.json
 │   ├── build-field-guide.py         # Renders data/field-guide.json into the glossary "Concepts" section (EN/FR/DE), sentinel-scoped; --check drift gate (#766)
+│   ├── build-atlas.py               # Regenerates data/atlas.json (theme hubs, mentorship flags, headshots) from bios.json + wg.json for the NetSec Atlas page; --check drift gate (#764)
 │   ├── sync-roadmap-progress.py     # Writes data/roadmap-progress.json from GitHub milestone closed/total
 │   ├── build-search.sh              # Builds /pagefind/ via `npx pagefind` (gitignored)
+│   ├── build-bio-search-stubs.py    # Renders search/bios/<lang>/<slug>.html — the per-member stubs Pagefind indexes so a member is findable by site search (country + wgs facets); --check drift gate (#1218, #1428)
+│   ├── summarise-sync-changes.py    # Reads the working tree after the sync generators run; prints the one-line "what actually changed" summary that leads each sync PR body (#1427)
+│   ├── social-post.py               # Composes + publishes news / spotlight / thread posts to Bluesky + LinkedIn (see social-publishing.md, #1072)
+│   ├── rotate-spotlight.py          # Picks the weekly home-page member spotlight by balanced-rotation score; writes data/spotlight.json (#341)
+│   ├── check-linkedin-version.py    # Keeps data/linkedin-api-version.json current vs. LinkedIn's published active versions, so the LinkedIn-Version header never sunsets silently (see social-publishing.md, #1223)
 │   ├── release.sh                   # Cuts a tagged release; promotes CHANGELOG
 │   └── requirements.txt             # requests, beautifulsoup4, Pillow
 │
 ├── .github/workflows/
 │   ├── pages-deploy.yml             # Build → deploy on push-to-main (builds /pagefind/ here)
-│   ├── sync-cost.yml                # Weekly cron — opens PR on any cost.eu change (WG_MAP, leadership, MC roster, stats, reconciled WGs)
-│   ├── sync-bios.yml                # Weekly cron — opens PR if bios.json changed
+│   ├── sync-cost.yml                # Weekly cron — opens PR on any cost.eu change (WG_MAP, leadership, MC roster, stats, reconciled WGs); reruns every bios-derived generator incl. search stubs; PR body leads with a one-line change summary
+│   ├── sync-bios.yml                # Daily cron — opens PR if bios.json changed; reruns every bios-derived generator (profile pages, OG cards, search stubs, sitemap, index, atlas, field guide); PR body leads with a one-line change summary
+│   ├── spotlight-rotate.yml         # Weekly cron (Tue 10:00 Europe/Paris) — rotates data/spotlight.json and posts the spotlight to Bluesky + LinkedIn, ungated (#341, #1072)
+│   ├── social-bluesky.yml           # Approval-gated news / thread posting to Bluesky + LinkedIn on a news.xml change or manual dispatch (#1072)
+│   ├── linkedin-version-check.yml   # Monthly cron — bumps data/linkedin-api-version.json before LinkedIn sunsets the pinned API version; auto-merging PR (#1223)
 │   ├── i18n-drift.yml               # Drift checker for FR/DE translations
 │   ├── seo-asset-check.yml          # SEO drift + asset cache-bust drift (inject-seo.py --check)
 │   ├── calendar-drift.yml           # Drift checker for /calendar.ics + /calendar/*.ics vs. events.json
@@ -545,7 +560,7 @@ sweep (rule §11).
 │   ├── roadmap-progress.yml         # Refreshes data/roadmap-progress.json on issue/milestone events
 │   ├── external-link-arrows.yml    # Lint: trailing → on external links
 │   ├── search-drift.yml             # Build sanity check on PRs (per-locale page count > 0)
-│   ├── data-shape-check.yml         # Shape lint + headless render smoke on data/** PRs (#724)
+│   ├── data-shape-check.yml         # Shape lint + headless render smoke on data/** PRs; runs the --check drift gates (profile pages, sitemap, directory index, atlas, OG cards, bio search stubs) (#724, #1428)
 │   ├── launch-qa-link-check.yml     # Internal+external link check + a11y-statement review-date check (weekly + root-HTML PRs)
 │   └── lighthouse.yml               # Lighthouse budget assertions per lighthouserc.json on HTML/CSS/JS PRs (#270; non-required)
 │

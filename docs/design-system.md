@@ -223,6 +223,20 @@ Responsive card grid showing the MC countries with FlagCDN flags. The
 grid markup is hand-authored (curated flags + deep-link ids) and
 drift-checked against the synced roster, so it is not auto-generated.
 
+Every flag on the site shares one sizing recipe: a fixed box (3:2, so
+`28×19` on the country cards and `18×12` elsewhere) plus
+`object-fit:contain`. FlagCDN serves each flag at its true proportions,
+which run from square (Switzerland) to twice as wide as tall (the UK and
+seven others), so sizing by width alone let the rendered height vary by a
+factor of two and threw the card rows out of line. The fixed box keeps
+each flag's own proportions without cropping, and reserves the space before
+a lazy-loaded image arrives. The one deliberate exception is the
+Directory's country filter strip (`.country-flag img`), which uses
+`object-fit:cover` so its tiles read as a uniform row. That exception is
+commented as such in `directory.css` to stop a well-meant "fix". The recipe is
+documented once at `.country-card .flag` in `site.css` and cross-referenced
+from `.search-bio-flag`, `.essc-member-card-country img`, and `.member-flag`.
+
 ### Deliverables Gantt (`.gantt` / `.g-row` / `.milestone`)
 
 The About-page deliverables chart. One CSS grid owns the 17 column

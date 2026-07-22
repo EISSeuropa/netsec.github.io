@@ -316,6 +316,33 @@ workflow but adds nothing new) no longer leaves a no-op approval sitting in the
 queue — the run finishes with a `Nothing pending` notice. When there *is*
 something to post, the notice says so and the required reviewer is emailed.
 
+## Keeping the LinkedIn API version current
+
+LinkedIn's posting API is versioned by month (`YYYYMM`) and each version is
+supported for about a year before it sunsets. A sunset version returns HTTP
+426 and every LinkedIn post fails, while Bluesky (a different service) keeps
+working. This is what happened once: the pin sat stale for 13 months and the
+weekly spotlight quietly stopped reaching LinkedIn until a missing post was
+noticed by hand.
+
+Two mechanisms now prevent a repeat:
+
+- The version is pinned in `data/linkedin-api-version.json`, and the
+  `linkedin-version-check` workflow runs `scripts/check-linkedin-version.py`
+  monthly. The script reads LinkedIn's published active-version list and,
+  once the pin reaches the trailing edge of that window, opens an
+  auto-merging PR that bumps it to the current latest. Most months nothing is
+  due. The `LINKEDIN_API_VERSION` env var still overrides the pin at runtime.
+- A failed live post is no longer silent. The best-effort spotlight path
+  (which deliberately does not abort when one channel fails) now emits a
+  GitHub `::warning::`, so a LinkedIn failure surfaces on the workflow run
+  even though the job stays green.
+
+Because the spotlight's dedup key is written once any channel posts, fixing a
+sunset version does **not** back-fill a spotlight that already went out on
+Bluesky. That member's key is spent, so the next week's spotlight is the first
+to reach both channels again.
+
 ## Notes
 
 - The pipeline is a **consumer** of already-published surfaces (the RSS feed
