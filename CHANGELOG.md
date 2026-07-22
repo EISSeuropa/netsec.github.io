@@ -138,6 +138,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.13.0] · 2026-07-22 — Introducing Mentorship Matching 2.0
+
 > This release turns the Directory from something you read into something you use. A member can now find a mentor or a mentee through a guided matching panel, open a fuller profile page that links out to their published work, and be introduced more widely as the weekly spotlight begins posting to LinkedIn alongside Bluesky. The site also takes an editorial design pass, loads faster, and moves its Indico programme updates onto a supported, upgrade-safe path. Three themes follow, then a single canonical index at the bottom.
 
 ### A Directory that matches
@@ -1066,7 +1070,8 @@ Open Graph, Twitter Card, JSON-LD (Organization + WebSite + WebPage), canonical 
 - Members' Wiki seeded with glossary, FAQ, onboarding, meeting-notes convention, decisions log.
 - Dual licensing — MIT for code, CC BY 4.0 for content + docs.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.12.0...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.13.0...HEAD
+[1.13.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.11.0...v1.12.0
 [1.11.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.9.0...v1.10.0
