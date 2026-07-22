@@ -190,6 +190,21 @@ If you delete by accident, Drive's version history can restore the Sheet row.
 - **Non-photo fields.** Use the edit link from the confirmation email. The form re-opens with the previous values prefilled; save the changes and the sync picks them up on the next run.
 - **Photo update.** Submit a fresh response via the public form URL (not the edit link). The sync dedupes by email; the new submission is *merged* into the previous entry (truthy-merge per field: non-empty new values overwrite, blanks leave the old value alone), photo included. So only the required fields plus the changed photo need to be filled in. This dance exists because Google Forms doesn't let respondents replace a file upload through the edit flow; see the box under Step 1.
 
+### Durable corrections that survive the sync (`data/bios-overrides.json`)
+
+Editing the Sheet is the right fix when you can reach the value, but sometimes you cannot: the entry is a respondent's own copy you would rather not overwrite, or a typo keeps coming back through resubmissions. A correction made only in `data/bios.json` does not last, because the Sheet is authoritative and the next sync overwrites `bios.json` wholesale.
+
+`data/bios-overrides.json` is the durable channel. Each entry replaces one string with another in one field of one member, matched by `id`, and `sync-bios.py` re-applies every entry after each fetch (`apply_overrides`, issue #1219), so the fix outlives any number of resubmissions:
+
+```json
+{
+  "id": "arthur-laudrain", "field": "bio",
+  "from": "profesionnal", "to": "professional"
+}
+```
+
+The sync logs each override it applies. When it reports one as *"not present (fixed at source?)"*, the respondent has since corrected it upstream and you can delete that entry. Prefer fixing at source when you can, and reserve the overrides file for corrections that need to stick without touching the respondent's submission.
+
 ### Optional: `name_aliases` for hard-to-match speakers
 
 The ESSC live programme page (`essc-2026.html`) tries to link any Indico speaker who is one of our members straight to their `/people.html` card. Matching is name-based, with diacritics, honorifics, post-nominals, and particles stripped, then keyed on (first surviving token, last surviving token). That handles most cases automatically, but a few patterns slip through: nickname vs legal name, married vs maiden, transliteration variants, reversed name order on Hungarian or East-Asian conventions.

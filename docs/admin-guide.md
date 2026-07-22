@@ -37,6 +37,7 @@ Keep this current as roles change.
 | Dependabot security alerts                                   | Repo `Insights → Dependency graph`                      | Same                                        |
 | Branch & tag protection rulesets                             | Repo `Settings → Rules → Rulesets`                      | Read by all; edited by repo admin           |
 | Automation PAT (for `release.sh` and any `gh api` work)      | <https://github.com/settings/personal-access-tokens>    | The maintainer; do not share                |
+| `AUTOPR_TOKEN` repo secret (auth for the auto-PR sync workflows) | Repo `Settings → Secrets and variables → Actions`   | The maintainer; a fine-grained PAT, see *Rotating the `AUTOPR_TOKEN`* below |
 
 #### Branch & tag protection in place
 
@@ -570,6 +571,35 @@ self-hosted alternative:
    SCC reference).
 5. PR + merge.
 
+### Rotating the `AUTOPR_TOKEN`
+
+The six auto-PR sync workflows (bios, cost, roadmap, indico, spotlight,
+social) authenticate `peter-evans/create-pull-request` with the
+`AUTOPR_TOKEN` repo secret, a fine-grained PAT. This is deliberate: a PR
+opened by the built-in `GITHUB_TOKEN` does **not** trigger the required
+status checks (a GitHub anti-recursion rule, issue #486), so without the
+PAT the sync PRs would open unchecked. The workflows already fall back to
+`GITHUB_TOKEN` when the secret is empty, which is exactly the failure to
+watch for: a lapsed token does not error loudly, it silently drops the
+sync PRs to unchecked and they stall behind admin-merge friction.
+
+A fine-grained PAT expires. The `autopr-token-health.yml` workflow probes
+the token every Monday and opens (or refreshes) a tracking issue when it
+is missing, rejected, or within 10 days of expiry, so a rotation never
+depends on spotting GitHub's own expiry email. When that issue appears:
+
+1. Create a fresh fine-grained PAT (same account) at
+   <https://github.com/settings/personal-access-tokens>, scoped to this
+   repo with `Contents: read+write` and `Pull requests: read+write`.
+2. Update the `AUTOPR_TOKEN` secret under
+   *Settings → Secrets and variables → Actions*.
+3. Trigger any sync manually (see *Manually triggering a sync*) and
+   confirm the PR it opens runs the full check suite, not just the
+   deploy. Close the tracking issue.
+
+The same PAT can back both this secret and the local automation PAT, but
+they are separate slots: rotating one does not rotate the other.
+
 ## Escalation
 
 If something breaks:
@@ -580,6 +610,7 @@ If something breaks:
 | Sync workflow fails                                   | *Actions* tab → click the failed run → scroll to the red step   |
 | Form submissions stop arriving                        | <https://formspree.io/forms/meenwyrb> dashboard                 |
 | New bio doesn't appear after Monday's sync            | Check the Google Sheet (consent ticked? row present?) → manually trigger `Sync member bios` |
+| Sync PRs open but run no checks / syncs stall unmerged | `AUTOPR_TOKEN` has likely lapsed → *Rotating the `AUTOPR_TOKEN`* above (a tracking issue from `autopr-token-health.yml` usually flags this first) |
 | Suspected security issue                              | Follow [`../SECURITY.md`](../SECURITY.md) — **do not open a public issue** |
 | DNS / domain issue                                    | Registrar admin (TBC); GitHub Pages settings as a sanity check  |
 
