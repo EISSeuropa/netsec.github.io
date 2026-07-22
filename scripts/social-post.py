@@ -48,12 +48,39 @@ SPOTLIGHT = ROOT / "data" / "spotlight.json"
 BIOS = ROOT / "data" / "bios.json"
 LEDGER = ROOT / "data" / "social-posted.json"
 THREADS_DIR = ROOT / "data" / "social-threads"
+LINKEDIN_VERSION_FILE = ROOT / "data" / "linkedin-api-version.json"
 SITE = "https://netsec-cost.eu"
 SITE_OG = ROOT / "assets" / "images" / "og-image.png"
 
 # Bluesky posts are capped at 300 graphemes; we trim to a safe budget.
 BLUESKY_LIMIT = 300
 HASHTAGS = "#EuropeanSecurity #COSTAction"
+
+# Last-resort LinkedIn version if the pin file is unreadable. Kept in sync
+# with data/linkedin-api-version.json by hand only if that file is ever
+# removed; the file is the real source (see LinkedInChannel.VERSION).
+_LINKEDIN_VERSION_FALLBACK = "202607"
+
+
+def _pinned_api_version() -> str:
+    """Read the LinkedIn API version pin from its data file.
+
+    Falls back to a literal only when the file is missing or malformed, so a
+    posting run never dies on a bad pin file. The workflow keeps the file
+    current; see .github/workflows/linkedin-version-check.yml."""
+    try:
+        v = str(json.loads(LINKEDIN_VERSION_FILE.read_text(encoding="utf-8"))["version"]).strip()
+        return v if re.fullmatch(r"\d{6}", v) else _LINKEDIN_VERSION_FALLBACK
+    except (OSError, ValueError, KeyError, TypeError):
+        return _LINKEDIN_VERSION_FALLBACK
+
+
+def _gha_warning(msg: str) -> None:
+    """Emit a GitHub Actions warning annotation, so a best-effort channel
+    failure surfaces on the run summary instead of hiding in the log. No-op
+    off CI (the plain-text failure line is printed separately either way)."""
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        print(f"::warning title=Social post::{msg}")
 
 
 # --------------------------------------------------------------------------
@@ -720,8 +747,12 @@ class LinkedInChannel(Channel):
     API = "https://api.linkedin.com"
     OAUTH = "https://www.linkedin.com/oauth/v2/accessToken"
     # LinkedIn versions the API monthly (YYYYMM) and sunsets a version after
-    # ~12 months. Bump LINKEDIN_API_VERSION (env) when this one is retired.
-    VERSION = os.environ.get("LINKEDIN_API_VERSION", "202506")
+    # ~12 months; a sunset version returns HTTP 426 and the post fails. The
+    # pin lives in data/linkedin-api-version.json, kept current by the
+    # linkedin-version-check workflow (auto-PR before sunset). LINKEDIN_API_VERSION
+    # overrides it at runtime; the literal is a last-resort fallback if the
+    # file is missing or unreadable, never the routine source of the value.
+    VERSION = os.environ.get("LINKEDIN_API_VERSION") or _pinned_api_version()
 
     def _org(self) -> str:
         return (os.environ.get("LINKEDIN_ORG_ID") or "").strip()
@@ -968,6 +999,7 @@ def main() -> int:
                 if not args.best_effort:
                     raise
                 print(f"  ! {c.name} publish failed, skipping (best-effort): {e}", file=sys.stderr)
+                _gha_warning(f"{c.name} publish failed for [{p.kind}] {p.title}: {e}")
         # Record the dedup key once any channel posted, so a partial failure
         # doesn't double-post the channel that succeeded on the next run.
         if posted_any:

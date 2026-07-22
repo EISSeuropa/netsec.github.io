@@ -158,9 +158,14 @@ with a page-admin's approval. Plan ~30 minutes.
 5. You will add these environment secrets in step D: `LINKEDIN_ORG_ID` (the
    number from step 1), `LINKEDIN_ACCESS_TOKEN`, `LINKEDIN_REFRESH_TOKEN`, and —
    to let the pipeline auto-renew — `LINKEDIN_CLIENT_ID` and
-   `LINKEDIN_CLIENT_SECRET`. The adapter pins `LinkedIn-Version` (currently a
-   recent `YYYYMM`); set `LINKEDIN_API_VERSION` to override it when LinkedIn
-   sunsets that version (~yearly).
+   `LINKEDIN_CLIENT_SECRET`. The adapter sends a `LinkedIn-Version` header
+   pinned in `data/linkedin-api-version.json`. LinkedIn sunsets a version after
+   ~12 months (a sunset version returns HTTP 426 and the post fails), so the
+   `linkedin-version-check` workflow reads LinkedIn's published active-version
+   list monthly and opens an auto-merging PR to bump the pin before it lapses.
+   Set the `LINKEDIN_API_VERSION` env var to override the pin at runtime. If a
+   live post is ever rejected mid-cycle, `social-post.py` emits a GitHub
+   `::warning::` on the run so the failure is visible rather than silent.
 
 ### C. Create the approval gate (do this before adding the secrets)
 

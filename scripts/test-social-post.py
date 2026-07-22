@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 import sys
 import types
 from pathlib import Path
@@ -340,6 +341,33 @@ def _li_recorder(responses):
         return r
 
     return fake, calls
+
+
+def test_pinned_api_version_reads_the_data_file():
+    # The committed pin file drives the LinkedIn-Version header.
+    assert re.fullmatch(r"\d{6}", sp._pinned_api_version())
+    assert sp._pinned_api_version() == sp.LinkedInChannel.VERSION
+
+
+def test_pinned_api_version_falls_back_when_file_unreadable(monkeypatch, tmp_path):
+    monkeypatch.setattr(sp, "LINKEDIN_VERSION_FILE", tmp_path / "gone.json")
+    assert sp._pinned_api_version() == sp._LINKEDIN_VERSION_FALLBACK
+
+
+def test_pinned_api_version_falls_back_on_malformed_pin(monkeypatch, tmp_path):
+    bad = tmp_path / "pin.json"
+    bad.write_text('{"version": "not-a-version"}', encoding="utf-8")
+    monkeypatch.setattr(sp, "LINKEDIN_VERSION_FILE", bad)
+    assert sp._pinned_api_version() == sp._LINKEDIN_VERSION_FALLBACK
+
+
+def test_gha_warning_only_emits_under_actions(monkeypatch, capsys):
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
+    sp._gha_warning("nope")
+    assert capsys.readouterr().out == ""
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    sp._gha_warning("boom")
+    assert "::warning" in capsys.readouterr().out
 
 
 def test_linkedin_configured_requires_org_and_token(monkeypatch):
