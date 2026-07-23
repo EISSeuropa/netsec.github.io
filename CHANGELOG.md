@@ -142,6 +142,10 @@ maintainer-facing audience.
 
 - The Directory's research-theme filter gains a fifteenth chip, Democracy, governance and political change, promoted from the taxonomy's watch list after the domestic-political-change cluster reached four members.
 
+#### Changed
+
+- The mentorship matching panel now works with one research area at a time. Picking an area from the guided sentence, or a theme chip in the browse-all scope bar, replaces the previous selection instead of adding to it, so switching area is a single click rather than deselect-then-select, and picking the selected area again clears it. The "add an area" token is retired with its FR and DE strings, and the area picker no longer announces itself to assistive technology as a multi-select list. The directory's own research-theme filter chips outside the panel keep their multi-select behaviour, and areas they select all stay visible in the sentence. The interaction test suite covers the replace and clear journeys.
+
 #### Fixed
 
 - Eleven directory keywords that sat outside the research-theme taxonomy (War, Intelligence, Maritime, Military history and others) are now filed under their matching themes, so every keyword pill resolves to a filterable theme.

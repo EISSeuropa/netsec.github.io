@@ -1903,16 +1903,15 @@
     if (p.anchor) p.anchor.setAttribute('aria-expanded', 'false');
     _mentorshipPop = null;
   }
-  function openMentorshipPopover(anchor, options, onPick, name, multi) {
+  function openMentorshipPopover(anchor, options, onPick, name) {
     closeMentorshipPopover();
     const pop = document.createElement('div');
     pop.className = 'mentorship-pop';
     pop.setAttribute('role', 'listbox');
     // A listbox with no accessible name announces as a bare "list"; name it
-    // after the token it fills ("Research area", "Career stage"). The area
-    // list toggles its options in place, so declare it multi-select.
+    // after the token it fills ("Research area", "Career stage"). Every
+    // token picks one value at a time, so the listbox stays single-select.
     if (name) pop.setAttribute('aria-label', name);
-    if (multi) pop.setAttribute('aria-multiselectable', 'true');
     options.forEach(opt => {
       const b = document.createElement('button');
       b.type = 'button';
@@ -1972,7 +1971,7 @@
     if (first) first.focus({ preventScroll: true });
   }
   // A sentence token button that toggles its popover on click.
-  function mentorshipToken(kind, label, isPlaceholder, buildOptions, onPick, name, multi) {
+  function mentorshipToken(kind, label, isPlaceholder, buildOptions, onPick, name) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'mentorship-token' + (isPlaceholder ? ' is-add' : '');
@@ -2002,7 +2001,7 @@
     }
     btn.addEventListener('click', () => {
       if (_mentorshipPop && _mentorshipPop.anchor === btn) { closeMentorshipPopover(); return; }
-      openMentorshipPopover(btn, buildOptions(), onPick, name, multi);
+      openMentorshipPopover(btn, buildOptions(), onPick, name);
     });
     return btn;
   }
@@ -2084,25 +2083,32 @@
       return opts;
     };
     const onAreaPick = (value) => {
+      // One area at a time (radio semantics): picking an area replaces
+      // whatever was selected, so switching theme is a single click rather
+      // than deselect-then-select. Picking the sole active area again
+      // clears it back to "any area". The directory's own theme filter
+      // chips outside this panel keep their multi-select behaviour.
       const [kind, slug] = value.split(':');
       const set = kind === 'region' ? activeRegions : activeKeywords;
-      if (set.has(slug)) set.delete(slug); else set.add(slug);
+      const wasSole = set.has(slug) && (activeKeywords.size + activeRegions.size) === 1;
+      activeKeywords.clear();
+      activeRegions.clear();
+      if (!wasSole) set.add(slug);
       mentorshipApplyChange('area');
     };
-    // One token per active area, not just the first: every area the hash
-    // carries is filtering the matches, so every one of them has to be
-    // visible and removable here. Rendering only areaNames[0] let the second
-    // and third selection narrow the results from off screen.
+    // The wizard holds one area at a time, so there is no "+ add an area"
+    // token. Still render one token per active area rather than only the
+    // first: the main theme chips (multi-select) can put several areas in
+    // the hash, and every area that is filtering the matches has to stay
+    // visible and removable here (#1376). Picking from any token collapses
+    // the selection to the picked area.
     const areas = activeAreaEntries();
     if (areas.length === 0) {
-      sentence.appendChild(mentorshipToken('area', window.netsecT('choose a research area'), true, areaOptions, onAreaPick, window.netsecT('Research area'), true));
+      sentence.appendChild(mentorshipToken('area', window.netsecT('choose a research area'), true, areaOptions, onAreaPick, window.netsecT('Research area')));
     } else {
       areas.forEach(a => {
-        sentence.appendChild(mentorshipToken('area', a.label, false, areaOptions, onAreaPick, window.netsecT('Research area'), true));
+        sentence.appendChild(mentorshipToken('area', a.label, false, areaOptions, onAreaPick, window.netsecT('Research area')));
       });
-      const addToken = mentorshipToken('area-add', window.netsecT('add an area'), true, areaOptions, onAreaPick, window.netsecT('Research area'), true);
-      addToken.classList.add('is-plus');
-      sentence.appendChild(addToken);
     }
     panel.appendChild(sentence);
 
@@ -2292,7 +2298,12 @@
       chip.setAttribute('aria-pressed', activeKeywords.has(slug) ? 'true' : 'false');
       chip.textContent = window.netsecT(e.keyword);
       chip.addEventListener('click', () => {
-        if (activeKeywords.has(slug)) activeKeywords.delete(slug); else activeKeywords.add(slug);
+        // Same one-area-at-a-time rule as the sentence's area token: a chip
+        // replaces the selection, and re-clicking the active chip clears it.
+        const had = activeKeywords.has(slug);
+        activeKeywords.clear();
+        activeRegions.clear();
+        if (!had) activeKeywords.add(slug);
         mentorshipApplyChange();
       });
       bar.appendChild(chip);

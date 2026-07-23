@@ -99,21 +99,47 @@ async function openAreaPopover(page, tokenKind = 'area') {
 
 const journeys = {
 
-  // #1376: the wizard rendered only the first selected area; later picks
-  // filtered the matches from off screen.
-  async 'wizard shows every selected area as its own token'() {
+  // The wizard holds one research area at a time: picking a new area from
+  // the token replaces the current one, so switching theme is one click
+  // rather than deselect-then-select, and the "+ add an area" token is gone.
+  async 'picking a second area replaces the first'() {
     const page = await openDirectory('#mentorship=mentor');
     await openAreaPopover(page);
     await page.click('.mentorship-pop-opt:nth-of-type(1)');
-    await page.waitForSelector('.mentorship-token[data-token-kind="area-add"]');
-    await openAreaPopover(page, 'area-add');
-    await page.click('.mentorship-pop-opt:nth-of-type(2)');
-    await sleep(100);
+    await sleep(150);
+    const firstSlug = await page.evaluate(() => (location.hash.match(/themes=([^&]*)/)?.[1] || ''));
+    assert(firstSlug, 'first pick did not reach the hash');
+    await openAreaPopover(page);
+    // A DOM-level click: page.click() would scroll the option into view
+    // first, and that page scroll trips the popover's dismiss-on-scroll
+    // guard, detaching the option mid-click.
+    await page.$eval('.mentorship-pop-opt:nth-of-type(2)', el => el.click());
+    await sleep(150);
     const tokens = await page.$$eval('.mentorship-token[data-token-kind="area"]', els => els.length);
     const hash = await page.evaluate(() => location.hash);
-    assert(tokens === 2, `expected 2 area tokens, got ${tokens} (hash ${hash})`);
-    assert((hash.match(/themes=([^&]*)/)?.[1] || '').split(',').length === 2,
-      `hash should carry 2 themes: ${hash}`);
+    const slugs = (hash.match(/themes=([^&]*)/)?.[1] || '').split(',').filter(Boolean);
+    assert(tokens === 1, `expected 1 area token, got ${tokens} (hash ${hash})`);
+    assert(slugs.length === 1, `hash should carry exactly 1 theme: ${hash}`);
+    assert(slugs[0] !== firstSlug, `second pick should replace the first (still ${firstSlug})`);
+    const add = await page.$('.mentorship-token[data-token-kind="area-add"]');
+    assert(!add, 'the add-an-area token should no longer render');
+    await page.close();
+  },
+
+  // Re-picking the sole active area clears it back to the placeholder.
+  async 'picking the active area again clears it'() {
+    const page = await openDirectory('#mentorship=mentor');
+    await openAreaPopover(page);
+    await page.click('.mentorship-pop-opt:nth-of-type(1)');
+    await sleep(150);
+    await openAreaPopover(page);
+    await page.click('.mentorship-pop-opt:nth-of-type(1)');
+    await sleep(150);
+    const hash = await page.evaluate(() => location.hash);
+    assert(!/themes=/.test(hash), `hash should carry no theme after clearing: ${hash}`);
+    const placeholder = await page.$eval('.mentorship-token[data-token-kind="area"]',
+      el => el.classList.contains('is-add'));
+    assert(placeholder, 'area token should be back to its placeholder state');
     await page.close();
   },
 
@@ -135,7 +161,7 @@ const journeys = {
     await page.close();
   },
 
-  // The popover is a named, multi-select listbox with full keyboard support:
+  // The popover is a named, single-select listbox with full keyboard support:
   // End reaches the last option, Tab closes rather than stranding it open.
   async 'area picker is an accessible listbox'() {
     const page = await openDirectory('#mentorship=mentor');
@@ -145,7 +171,9 @@ const journeys = {
       multi: el.getAttribute('aria-multiselectable'),
     }));
     assert(aria.label, 'popover listbox has no accessible name');
-    assert(aria.multi === 'true', 'area popover not declared multi-select');
+    // The picker holds one area at a time, so it must NOT declare
+    // aria-multiselectable (it did when the wizard accumulated areas).
+    assert(aria.multi !== 'true', 'area popover must not declare multi-select');
     await page.keyboard.press('End');
     const onLast = await page.evaluate(() => {
       const opts = document.querySelectorAll('.mentorship-pop-opt');
@@ -223,15 +251,15 @@ const journeys = {
   },
 
   // #1382: the sentence's line slot was shorter than the token boxes, so
-  // wrapped rows of tokens touched.
+  // wrapped rows of tokens touched. A phone-width viewport forces the
+  // stage, direction, and area tokens onto wrapped rows (the wizard holds
+  // a single area now, so width does the wrapping that a second area
+  // token used to).
   async 'sentence tokens never overlap'() {
-    const page = await openDirectory('#mentorship=mentor');
+    const page = await openDirectory('#mentorship=mentor', { width: 375, height: 800 });
     await openAreaPopover(page);
     await page.click('.mentorship-pop-opt:nth-of-type(1)');
-    await page.waitForSelector('.mentorship-token[data-token-kind="area-add"]');
-    await openAreaPopover(page, 'area-add');
-    await page.click('.mentorship-pop-opt:nth-of-type(2)');
-    await sleep(100);
+    await sleep(150);
     const bad = await page.$$eval('.mentorship-sentence .mentorship-token', els => {
       const rs = els.map(e => e.getBoundingClientRect());
       for (let i = 0; i < rs.length; i++) for (let j = i + 1; j < rs.length; j++) {
