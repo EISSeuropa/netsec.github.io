@@ -4,8 +4,8 @@
     "working_groups": 4,
     "people": 179,
     "people_with_bios": 71,
-    "edges": 474,
-    "themes": 14,
+    "edges": 481,
+    "themes": 15,
     "panels_matched": 14,
     "panel_edges": 54,
     "publications_matched": 0,
@@ -54,7 +54,13 @@
       "id": "theme-cyber-and-emerging-technology",
       "type": "theme",
       "name": "Cyber and emerging technology",
-      "memberCount": 17
+      "memberCount": 18
+    },
+    {
+      "id": "theme-democracy-governance-and-political-change",
+      "type": "theme",
+      "name": "Democracy, governance and political change",
+      "memberCount": 4
     },
     {
       "id": "theme-economic-security-and-geoeconomics",
@@ -84,13 +90,13 @@
       "id": "theme-identity-narratives-and-ideational-security",
       "type": "theme",
       "name": "Identity, narratives and ideational security",
-      "memberCount": 3
+      "memberCount": 2
     },
     {
       "id": "theme-intelligence-information-and-influence",
       "type": "theme",
       "name": "Intelligence, information and influence",
-      "memberCount": 7
+      "memberCount": 8
     },
     {
       "id": "theme-peace-mediation-and-reconciliation",
@@ -108,7 +114,7 @@
       "id": "theme-security-and-defence",
       "type": "theme",
       "name": "Security and defence",
-      "memberCount": 27
+      "memberCount": 30
     },
     {
       "id": "theme-strategy-and-deterrence",
@@ -120,13 +126,13 @@
       "id": "theme-theory-and-methods",
       "type": "theme",
       "name": "Theory and methods",
-      "memberCount": 20
+      "memberCount": 18
     },
     {
       "id": "theme-transnational-and-human-security",
       "type": "theme",
       "name": "Transnational and human security",
-      "memberCount": 11
+      "memberCount": 12
     },
     {
       "id": "alexander-lanoszka",
@@ -2606,11 +2612,11 @@
     },
     {
       "source": "danilo-kalezic",
-      "target": "theme-peace-mediation-and-reconciliation"
+      "target": "theme-democracy-governance-and-political-change"
     },
     {
-      "source": "danilo-kalezic",
-      "target": "theme-theory-and-methods"
+      "source": "david-matsaberidze",
+      "target": "theme-democracy-governance-and-political-change"
     },
     {
       "source": "david-matsaberidze",
@@ -2618,14 +2624,14 @@
     },
     {
       "source": "david-matsaberidze",
-      "target": "theme-identity-narratives-and-ideational-security"
-    },
-    {
-      "source": "david-matsaberidze",
       "target": "theme-peace-mediation-and-reconciliation"
     },
     {
       "source": "david-matsaberidze",
+      "target": "theme-security-and-defence"
+    },
+    {
+      "source": "david-morgan-owen",
       "target": "theme-security-and-defence"
     },
     {
@@ -2638,11 +2644,11 @@
     },
     {
       "source": "eda-kusku-sonmez",
-      "target": "theme-foreign-policy-and-diplomacy"
+      "target": "theme-democracy-governance-and-political-change"
     },
     {
       "source": "eda-kusku-sonmez",
-      "target": "theme-theory-and-methods"
+      "target": "theme-foreign-policy-and-diplomacy"
     },
     {
       "source": "esra-merve-boztosun-cal-skan",
@@ -2702,7 +2708,15 @@
     },
     {
       "source": "gayane-harutyunyan",
+      "target": "theme-cyber-and-emerging-technology"
+    },
+    {
+      "source": "gayane-harutyunyan",
       "target": "theme-economic-security-and-geoeconomics"
+    },
+    {
+      "source": "gayane-harutyunyan",
+      "target": "theme-security-and-defence"
     },
     {
       "source": "gesine-weber",
@@ -2739,6 +2753,14 @@
     {
       "source": "giulia-biselli",
       "target": "theme-foreign-policy-and-diplomacy"
+    },
+    {
+      "source": "huw-bennett",
+      "target": "theme-intelligence-information-and-influence"
+    },
+    {
+      "source": "huw-bennett",
+      "target": "theme-security-and-defence"
     },
     {
       "source": "huw-bennett",
@@ -2786,7 +2808,15 @@
     },
     {
       "source": "johannes-lucht",
+      "target": "theme-peace-mediation-and-reconciliation"
+    },
+    {
+      "source": "johannes-lucht",
       "target": "theme-strategy-and-deterrence"
+    },
+    {
+      "source": "johannes-lucht",
+      "target": "theme-transnational-and-human-security"
     },
     {
       "source": "john-helferich",
@@ -3071,6 +3101,10 @@
     {
       "source": "tanja-pavleska",
       "target": "theme-cyber-and-emerging-technology"
+    },
+    {
+      "source": "tanja-pavleska",
+      "target": "theme-democracy-governance-and-political-change"
     },
     {
       "source": "tanja-pavleska",
