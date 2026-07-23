@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-16T14:58:33+00:00",
+  "generated_at": "2026-07-23T07:44:40+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-16T14:58:33+00:00"
+    "last_synced": "2026-07-23T07:44:40+00:00"
   },
   "members": [
     {
@@ -3202,6 +3202,45 @@
         "Strategy and deterrence",
         "Theory and methods"
       ]
+    },
+    {
+      "id": "johannes-lucht",
+      "name": "Mr Johannes Lucht",
+      "country": "Switzerland",
+      "country_code": "ch",
+      "affiliation": "ETH Zurich",
+      "position": "Scientific Assistant and PhD Student",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Johannes Lucht is a scientific assistant for Strategic Studies at the Military Academy at ETH Zurich. He is also a PhD student in the International Relations and Data Science group at ETH Zurich. His research focuses on how non-state armed groups regulate violence and restraint.",
+      "keywords": [
+        "Civil Conflict",
+        "Non-state armed groups",
+        "Strategy"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Civil conflict",
+        "Non-state armed groups",
+        "Strategy"
+      ],
+      "themes": [
+        "Strategy and deterrence"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3234,6 +3273,10 @@
       "count": 4
     },
     {
+      "keyword": "Strategy",
+      "count": 4
+    },
+    {
       "keyword": "Alliance politics",
       "count": 3
     },
@@ -3263,10 +3306,6 @@
     },
     {
       "keyword": "Security studies",
-      "count": 3
-    },
-    {
-      "keyword": "Strategy",
       "count": 3
     },
     {
@@ -3407,6 +3446,10 @@
     },
     {
       "keyword": "China's foreign policy",
+      "count": 1
+    },
+    {
+      "keyword": "Civil conflict",
       "count": 1
     },
     {
@@ -3762,6 +3805,10 @@
       "count": 1
     },
     {
+      "keyword": "Non-state armed groups",
+      "count": 1
+    },
+    {
       "keyword": "Nordic countries",
       "count": 1
     },
@@ -3968,11 +4015,11 @@
       "count": 17
     },
     {
-      "theme": "European and transatlantic security order",
-      "count": 11
+      "theme": "Strategy and deterrence",
+      "count": 12
     },
     {
-      "theme": "Strategy and deterrence",
+      "theme": "European and transatlantic security order",
       "count": 11
     },
     {
@@ -4194,7 +4241,7 @@
     },
     {
       "region": "Global and cross-regional",
-      "count": 30
+      "count": 31
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
