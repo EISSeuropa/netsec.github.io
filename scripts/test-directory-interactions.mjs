@@ -110,7 +110,10 @@ const journeys = {
     const firstSlug = await page.evaluate(() => (location.hash.match(/themes=([^&]*)/)?.[1] || ''));
     assert(firstSlug, 'first pick did not reach the hash');
     await openAreaPopover(page);
-    await page.click('.mentorship-pop-opt:nth-of-type(2)');
+    // A DOM-level click: page.click() would scroll the option into view
+    // first, and that page scroll trips the popover's dismiss-on-scroll
+    // guard, detaching the option mid-click.
+    await page.$eval('.mentorship-pop-opt:nth-of-type(2)', el => el.click());
     await sleep(150);
     const tokens = await page.$$eval('.mentorship-token[data-token-kind="area"]', els => els.length);
     const hash = await page.evaluate(() => location.hash);
@@ -158,7 +161,7 @@ const journeys = {
     await page.close();
   },
 
-  // The popover is a named, multi-select listbox with full keyboard support:
+  // The popover is a named, single-select listbox with full keyboard support:
   // End reaches the last option, Tab closes rather than stranding it open.
   async 'area picker is an accessible listbox'() {
     const page = await openDirectory('#mentorship=mentor');
@@ -168,7 +171,9 @@ const journeys = {
       multi: el.getAttribute('aria-multiselectable'),
     }));
     assert(aria.label, 'popover listbox has no accessible name');
-    assert(aria.multi === 'true', 'area popover not declared multi-select');
+    // The picker holds one area at a time, so it must NOT declare
+    // aria-multiselectable (it did when the wizard accumulated areas).
+    assert(aria.multi !== 'true', 'area popover must not declare multi-select');
     await page.keyboard.press('End');
     const onLast = await page.evaluate(() => {
       const opts = document.querySelectorAll('.mentorship-pop-opt');
