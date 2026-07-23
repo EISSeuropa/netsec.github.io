@@ -138,7 +138,13 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+#### Added
+
+- The Directory's research-theme filter gains a fifteenth chip, Democracy, governance and political change, promoted from the taxonomy's watch list after the domestic-political-change cluster reached four members.
+
+#### Fixed
+
+- Eleven directory keywords that sat outside the research-theme taxonomy (War, Intelligence, Maritime, Military history and others) are now filed under their matching themes, so every keyword pill resolves to a filterable theme.
 
 ## [1.13.0] · 2026-07-22 — Introducing Mentorship Matching 2.0
 
