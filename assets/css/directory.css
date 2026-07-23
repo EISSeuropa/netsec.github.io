@@ -427,7 +427,6 @@ a.member-pubs-link:focus-visible{ text-decoration:underline; }
   background:transparent; border-style:dashed; color:var(--muted);
   font-size:.65em; font-weight:500; vertical-align:.25em; padding:3px 12px;
 }
-.mentorship-token.is-plus::before{ content:"+ "; }
 .mentorship-sentence-note{ font-size:.8rem; color:var(--muted); margin:0 0 26px; }
 
 .mentorship-results-head{ display:flex; align-items:baseline; gap:12px; margin:0 0 14px; }
