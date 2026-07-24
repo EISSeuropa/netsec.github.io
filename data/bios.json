@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-23T07:44:40+00:00",
+  "generated_at": "2026-07-24T07:42:22+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-23T07:44:40+00:00"
+    "last_synced": "2026-07-24T07:42:22+00:00"
   },
   "members": [
     {
@@ -3248,6 +3248,50 @@
         "Strategy and deterrence",
         "Transnational and human security"
       ]
+    },
+    {
+      "id": "niklas-karlen",
+      "name": "Dr Niklas Karlén",
+      "country": "Sweden",
+      "country_code": "se",
+      "affiliation": "Swedish Defence University",
+      "position": "Associate Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Niklas Karlén is Associate Professor of War Studies at the Swedish Defence University. He received his Ph.D. from the Department of Peace and Conflict Research at Uppsala University.\n\nDr. Karlén's main areas of expertise include military interventions, civil wars, and proxy warfare. His current research focuses on external state support to warring parties, invitations to intervene, control of non-state armed groups, escalation processes, and covert action. Dr. Karlén’s work has appeared in outlets such as International Security, Journal of Peace Research, Security Studies, International Studies Review, Terrorism and Political Violence, Studies in Conflict & Terrorism, European Journal of International Security, Journal of Strategic Studies, and Civil Wars. In his research, he uses a broad range of methods ranging from inferential statistics and social network analysis to comparative case studies and process tracing. Dr. Karlén mainly teaches courses on research design, methods, proxy wars, interventions, and covert operations at the MA and PhD levels at the Swedish Defence University. He has twice received ‘best teacher’ awards for his pedagogical approach based on active student learning.",
+      "keywords": [
+        "Interventions",
+        "Proxy warfare",
+        "Civil wars",
+        "Covert action",
+        "US foreign policy"
+      ],
+      "email": "niklas.karlen@fhs.se",
+      "website": "https://www.fhs.se/sc/profilsida.html?identity=400.43ea74ae164157b198baad11",
+      "orcid": "0000-0001-8428-4861",
+      "linkedin": "https://www.linkedin.com/in/niklas-karl%C3%A9n-534b1179/",
+      "twitter": "https://x.com/niklaskarlen",
+      "bluesky": "https://bsky.app/profile/niklaskarlen.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/niklas-karlen.jpg",
+      "source": "form",
+      "photo_source_sha256": "e8c4cf9dd11f8aa9942befd3a3393035b1a0c2688a866e1ec26f8ecbabe266e3",
+      "canonical_keywords": [
+        "Civil wars",
+        "Covert action",
+        "Interventions",
+        "Proxy warfare",
+        "US foreign policy"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3468,6 +3512,10 @@
       "count": 1
     },
     {
+      "keyword": "Civil wars",
+      "count": 1
+    },
+    {
       "keyword": "Civil-military relations",
       "count": 1
     },
@@ -3505,6 +3553,10 @@
     },
     {
       "keyword": "Counterterrorism",
+      "count": 1
+    },
+    {
+      "keyword": "Covert action",
       "count": 1
     },
     {
@@ -3748,6 +3800,10 @@
       "count": 1
     },
     {
+      "keyword": "Interventions",
+      "count": 1
+    },
+    {
       "keyword": "IoT",
       "count": 1
     },
@@ -3876,6 +3932,10 @@
       "count": 1
     },
     {
+      "keyword": "Proxy warfare",
+      "count": 1
+    },
+    {
       "keyword": "Public opinion",
       "count": 1
     },
@@ -3989,6 +4049,10 @@
     },
     {
       "keyword": "Unification",
+      "count": 1
+    },
+    {
+      "keyword": "US foreign policy",
       "count": 1
     },
     {
@@ -4263,7 +4327,7 @@
     },
     {
       "region": "Global and cross-regional",
-      "count": 31
+      "count": 32
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -4275,7 +4339,7 @@
     },
     {
       "region": "The Americas",
-      "count": 11
+      "count": 12
     },
     {
       "region": "Asia",
