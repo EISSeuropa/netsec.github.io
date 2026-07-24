@@ -4,8 +4,42 @@
   "channelDescription": "Announcements, calls, and milestones from the COST Action CA24154 (NetSec).",
   "channelLink": "https://netsec-cost.eu/#news",
   "channelLanguage": "en-GB",
-  "lastBuildDate": "2026-06-18T17:30:00+02:00",
+  "lastBuildDate": "2026-07-24T09:00:00+02:00",
   "items": [
+    {
+      "id": "wg2-policy-workshop-2026-call",
+      "type": "announcement",
+      "wg": 2,
+      "pubDate": "2026-07-24T09:00:00+02:00",
+      "displayDate": {
+        "en": "Now open",
+        "fr": "Ouvert",
+        "de": "Geöffnet"
+      },
+      "title": {
+        "en": "WG2 Policy Workshop: applications now open",
+        "fr": "Atelier politique du GT2 : candidatures ouvertes",
+        "de": "GT2-Politik-Workshop: Bewerbungen jetzt offen"
+      },
+      "body": {
+        "en": "Working Group 2 invites applications to a one-day policy workshop, Great Power Politics and the Future of Alliances, at Bilkent University, Ankara, on 13 September 2026. The workshop convenes scholars and policy practitioners to examine how alliance politics is evolving under intensifying great power competition. Accommodation and meals are provided by Bilkent University and the Royal Danish Defence College, and travel is reimbursed through COST up to €700 per participant. Applications close 15 August 2026, with notification of acceptance by 22 August 2026.",
+        "fr": "Le Groupe de travail 2 invite à candidater à un atelier politique d'une journée, Les grandes puissances et l'avenir des alliances, à l'Université Bilkent, Ankara, le 13 septembre 2026. L'atelier réunit des chercheur·euses et des praticien·nes des politiques publiques pour examiner comment la politique des alliances évolue sous l'effet de l'intensification de la compétition entre grandes puissances. L'hébergement et les repas sont assurés par l'Université Bilkent et le Collège de défense royal danois, et les déplacements sont remboursés par COST jusqu'à 700 € par participant·e. Les candidatures closent le 15 août 2026, avec notification d'acceptation au plus tard le 22 août 2026.",
+        "de": "Die Arbeitsgruppe 2 lädt zur Bewerbung für einen eintägigen Politik-Workshop ein, Großmachtpolitik und die Zukunft der Bündnisse, an der Bilkent-Universität, Ankara, am 13. September 2026. Der Workshop bringt Forschende und Praktiker·innen der Politik zusammen, um zu untersuchen, wie sich die Bündnispolitik unter dem sich verschärfenden Großmachtwettbewerb verändert. Unterkunft und Verpflegung werden von der Bilkent-Universität und dem Royal Danish Defence College bereitgestellt, und Reisekosten werden über COST bis zu 700 € pro Teilnehmer·in erstattet. Bewerbungsschluss ist der 15. August 2026, die Benachrichtigung über die Annahme erfolgt bis zum 22. August 2026."
+      },
+      "cta": {
+        "href": {
+          "en": "policy-workshop-2026.html",
+          "fr": "policy-workshop-2026.fr.html",
+          "de": "policy-workshop-2026.de.html"
+        },
+        "external": false,
+        "i18n": {
+          "en": "Read the call & apply →",
+          "fr": "Lire l'appel & postuler →",
+          "de": "Ausschreibung lesen & bewerben →"
+        }
+      }
+    },
     {
       "id": "essc-2026-best-paper-prize",
       "type": "announcement",
