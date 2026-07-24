@@ -4,7 +4,7 @@
   "caldesc": "Events from the NetSec COST Action (CA24154): annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
   "tzid": "Europe/Stockholm",
   "refresh_days": 7,
-  "dtstamp": "20260608T120000Z",
+  "dtstamp": "20260724T120000Z",
   "events": [
     {
       "uid": "summer-school-2026@netsec-cost.eu",
@@ -161,12 +161,12 @@
     },
     {
       "uid": "policy-workshop-2026-09@netsec-cost.eu",
-      "summary": "NetSec Policy Workshop",
-      "description": "A NetSec-hosted policy workshop bringing together members of the Action with policy practitioners on a topic to be confirmed. Format and registration details will be published on the Action's website ahead of the date.",
-      "location": "To be confirmed",
-      "url": "https://netsec-cost.eu/#events",
-      "start": "2026-09-04T09:00",
-      "end": "2026-09-04T18:00",
+      "summary": "NetSec Policy Workshop: Great Power Politics and the Future of Alliances",
+      "description": "A NetSec Working Group 2 policy workshop on great power politics and the future of alliances, convening scholars and policy practitioners to examine how alliance politics is evolving under intensifying great power competition, and what the implications are for European security.\n\nAccommodation in Ankara and all meals are provided by Bilkent University and the Royal Danish Defence College. Travel is reimbursed through COST Action NetSec up to a maximum of €700 per participant.\n\nApplications close 15 August 2026. Full details and the application form: https://netsec-cost.eu/policy-workshop-2026.html",
+      "location": "Bilkent University, Ankara, Türkiye",
+      "url": "https://netsec-cost.eu/policy-workshop-2026.html",
+      "start": "2026-09-13T09:00",
+      "end": "2026-09-13T18:00",
       "categories": [
         "Policy workshop",
         "NetSec"
@@ -176,29 +176,50 @@
       "workingGroups": [
         2
       ],
-      "featured": false,
+      "featured": true,
       "displayDate": {
-        "en": "4 September 2026",
-        "fr": "4 septembre 2026",
-        "de": "4. September 2026"
+        "en": "13 September 2026",
+        "fr": "13 septembre 2026",
+        "de": "13. September 2026"
       },
       "cardDescription": {
-        "en": "A NetSec-hosted workshop bringing together members of the Action with policy practitioners on a topic to be confirmed. Programme and registration details will be published on the Action's website ahead of the date.",
-        "fr": "Un atelier organisé par NetSec rassemblant des membres de l'Action et des praticien·nes des politiques publiques sur un sujet à confirmer. Programme et inscriptions seront publiés sur le site de l'Action avant la date.",
-        "de": "Ein von NetSec ausgerichteter Workshop, der Mitglieder der Aktion mit Praktiker·innen aus der Politik zu einem noch festzulegenden Thema zusammenbringt. Programm und Anmeldung werden rechtzeitig vor dem Termin auf der Website der Aktion veröffentlicht."
+        "en": "Working Group 2's one-day policy workshop on great power politics and the future of alliances, at Bilkent University, Ankara. Accommodation and meals are covered, and travel is reimbursed up to €700. Applications close 15 August 2026.",
+        "fr": "L'atelier politique d'une journée du Groupe de travail 2 sur les grandes puissances et l'avenir des alliances, à l'Université Bilkent, Ankara. L'hébergement et les repas sont pris en charge, et les déplacements sont remboursés jusqu'à 700 €. Candidatures jusqu'au 15 août 2026.",
+        "de": "Der eintägige Politik-Workshop der Arbeitsgruppe 2 zu Großmachtpolitik und der Zukunft der Bündnisse an der Bilkent-Universität, Ankara. Unterkunft und Verpflegung werden übernommen, Reisekosten bis 700 € erstattet. Bewerbungen bis 15. August 2026."
       },
       "cardTitle": {
         "en": "NetSec Policy Workshop",
         "fr": "Atelier politique NetSec",
         "de": "NetSec Politik-Workshop"
       },
+      "cta": {
+        "href": {
+          "en": "policy-workshop-2026.html",
+          "fr": "policy-workshop-2026.fr.html",
+          "de": "policy-workshop-2026.de.html"
+        },
+        "external": false,
+        "i18n": {
+          "en": "Apply · full details",
+          "fr": "Postuler · détails complets",
+          "de": "Bewerben · alle Details"
+        }
+      },
       "meta": [
+        {
+          "icon": "pin",
+          "i18n": {
+            "en": "<strong>Bilkent University</strong> · Ankara, Türkiye",
+            "fr": "<strong>Université Bilkent</strong> · Ankara, Türkiye",
+            "de": "<strong>Bilkent-Universität</strong> · Ankara, Türkiye"
+          }
+        },
         {
           "icon": "calendar",
           "i18n": {
-            "en": "Format and venue to be confirmed",
-            "fr": "Format et lieu à confirmer",
-            "de": "Format und Ort werden noch bestätigt"
+            "en": "<strong>Applications open</strong> · deadline 15 August 2026",
+            "fr": "<strong>Candidatures ouvertes</strong> · clôture le 15 août 2026",
+            "de": "<strong>Bewerbungen offen</strong> · Frist 15. August 2026"
           }
         }
       ]
