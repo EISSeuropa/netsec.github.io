@@ -352,5 +352,11 @@ to reach both channels again.
   posted". To re-post something deliberately, remove its key. The news key is
   the item id (`news::<id>`); the spotlight key includes the ISO week; threads
   use `thread::<slug>`.
+- A published post reaches the ledger on `main` only once its auto-merging PR
+  lands, so both jobs of `social-bluesky.yml` read `data/social-posted.json`
+  from the `social/ledger` branch whenever that branch still exists. Otherwise
+  a news push arriving in the gap would offer the reviewer a post that has
+  already gone out (run 30129049311 on 24 July 2026 is the case that prompted
+  this).
 - Account creation, app registration, entering credentials, and granting
   OAuth are done by a person, never by the website code.

@@ -9,6 +9,11 @@
 #      reads the preview, approves, and only then does the post go to Bluesky.
 #      The dedup ledger update rides back in an auto-merging PR.
 #
+# Both jobs first union in the keys on the `social/ledger` branch, because that
+# PR can still be open when the next run composes. Without it a second news.xml
+# push in that window re-queues an already-published item, and the reviewer is
+# offered a duplicate post to approve (run 30129049311, 24 July 2026).
+#
 # Scope: NEWS and curated THREADS (higher-stakes, human-reviewed). The weekly
 # member SPOTLIGHT is auto-posted ungated by spotlight-rotate.yml (low-risk,
 # auto-generated), so it is deliberately NOT triggered here on a spotlight.json
@@ -60,6 +65,29 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v5 (sha-pinned)
         with:
           python-version: '3.12'
+      - name: Fold in a ledger that has not reached main yet
+        run: |
+          # The previous run's ledger PR (branch social/ledger) can still be
+          # open when this run composes, so main's ledger is missing the keys
+          # of posts that already went out and this run re-queues them for
+          # approval. Union the branch's keys in rather than replacing the
+          # file, because social/ledger outlives its merged PR and is often
+          # behind main; a union only ever adds "already posted" and so can
+          # never resurrect an item main had already ruled out.
+          git fetch --depth=1 origin social/ledger 2>/dev/null || exit 0
+          git show FETCH_HEAD:data/social-posted.json > branch-ledger.json || exit 0
+          python3 - <<'PY'
+          import json, pathlib
+          led = pathlib.Path("data/social-posted.json")
+          cur = json.loads(led.read_text(encoding="utf-8"))
+          extra = [k for k in json.loads(pathlib.Path("branch-ledger.json").read_text(encoding="utf-8")).get("posted", [])
+                   if k not in cur["posted"]]
+          if extra:
+              cur["posted"] += extra
+              led.write_text(json.dumps(cur, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+          print(f"::notice::Folded {len(extra)} key(s) in from the unmerged social/ledger branch.")
+          PY
+          rm -f branch-ledger.json
       - name: Compose (dry-run) into the run summary
         id: compose
         env:
@@ -100,6 +128,30 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v5 (sha-pinned)
         with:
           python-version: '3.12'
+
+      - name: Fold in a ledger that has not reached main yet
+        run: |
+          # The previous run's ledger PR (branch social/ledger) can still be
+          # open when this run composes, so main's ledger is missing the keys
+          # of posts that already went out and this run re-queues them for
+          # approval. Union the branch's keys in rather than replacing the
+          # file, because social/ledger outlives its merged PR and is often
+          # behind main; a union only ever adds "already posted" and so can
+          # never resurrect an item main had already ruled out.
+          git fetch --depth=1 origin social/ledger 2>/dev/null || exit 0
+          git show FETCH_HEAD:data/social-posted.json > branch-ledger.json || exit 0
+          python3 - <<'PY'
+          import json, pathlib
+          led = pathlib.Path("data/social-posted.json")
+          cur = json.loads(led.read_text(encoding="utf-8"))
+          extra = [k for k in json.loads(pathlib.Path("branch-ledger.json").read_text(encoding="utf-8")).get("posted", [])
+                   if k not in cur["posted"]]
+          if extra:
+              cur["posted"] += extra
+              led.write_text(json.dumps(cur, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+          print(f"::notice::Folded {len(extra)} key(s) in from the unmerged social/ledger branch.")
+          PY
+          rm -f branch-ledger.json
 
       - name: Post to Bluesky + LinkedIn and update the ledger
         env:
