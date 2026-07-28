@@ -142,6 +142,7 @@ maintainer-facing audience.
 
 - A dedicated page for the Working Group 2 policy workshop, Great Power Politics and the Future of Alliances, at Bilkent University, Ankara, on 13 September 2026 (EN, FR, DE). It carries the call, the themes, what is covered, and how to apply, with the application form available to download and a home-page news card and calendar event pointing to it. Applications close 15 August 2026.
 - The Directory's research-theme filter gains a fifteenth chip, Democracy, governance and political change, promoted from the taxonomy's watch list after the domestic-political-change cluster reached four members.
+- The site search overlay can now separate people from pages. When a query matches both, a row of chips appears under the search box reading All, Pages and People, each carrying its own count, so a name that also turns up in prose no longer has to be picked out of a mixed list. The chips filter the results already on screen rather than running a fresh search, which keeps the ranking intact and the response immediate, and the row stays hidden when everything found is of one kind. Available in English, French and German.
 
 #### Changed
 
