@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "teodora-stoicescu",
-  "featuredSince": "2026-07-21",
+  "current": "mehmet-babacan",
+  "featuredSince": "2026-07-28",
   "pinned": null,
   "history": [
+    {
+      "id": "mehmet-babacan",
+      "week": "2026-W31",
+      "date": "2026-07-28"
+    },
     {
       "id": "teodora-stoicescu",
       "week": "2026-W30",
