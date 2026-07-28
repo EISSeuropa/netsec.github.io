@@ -9,18 +9,15 @@
 # a green build (#1376, #1380, #1382, #1383).
 name: directory interactions
 
+# Runs on every pull request, deliberately. This job is a required check in
+# the `protect-main` ruleset, and a path-filtered workflow never reports on a
+# PR that misses its filter, which leaves that PR blocked on a check that will
+# never arrive. The other required checks (`pytest`, `Check SEO + asset
+# version drift`) trigger unfiltered for the same reason. The cost is about a
+# minute on PRs that could not have broken the directory, which is the price
+# of a gate that cannot be silently skipped.
 on:
   pull_request:
-    paths:
-      - 'people.html'
-      - 'assets/js/people-directory.js'
-      - 'assets/js/site.js'
-      - 'assets/css/directory.css'
-      - 'assets/css/site.css'
-      - 'data/bios.json'
-      - 'scripts/test-directory-interactions.mjs'
-      - 'package.json'
-      - '.github/workflows/directory-interactions.yml'
   workflow_dispatch:
 
 permissions:
