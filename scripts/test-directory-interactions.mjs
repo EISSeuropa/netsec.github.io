@@ -89,16 +89,30 @@ function assert(cond, msg) {
   if (!cond) throw new Error(msg);
 }
 
-// Click a control that the previous step just revealed (#1472). An `open`
-// attribute or a "Show all" toggle resolves the moment the DOM changes, which
-// is before layout has given the control a box, and puppeteer's click then
-// fails with "Node is either not clickable or not an Element". Waiting for
-// visibility asks for a non-empty bounding box, which is exactly the
-// precondition clicking needs. Normally resolves on the first poll: the suite
-// runs with prefers-reduced-motion, so there is no transition to sit through.
+// Click a control that only just became clickable (#1472). Two shapes hit
+// this: a control revealed by an `open` attribute or a "Show all" toggle,
+// where the attribute lands before layout gives it a box, and a control the
+// mobile media query switches from `display:none`, where the box arrives once
+// the viewport is applied. Puppeteer needs a non-empty bounding box to compute
+// a click point and throws "Node is either not clickable or not an Element"
+// without one, naming no selector. Waiting for visibility asks for exactly
+// that box, and the wrapper puts the selector and the measured geometry into
+// any failure so the next one is evidence rather than another guess.
 async function clickWhenReady(page, selector) {
-  await page.waitForSelector(selector, { visible: true, timeout: 10000 });
-  await page.click(selector);
+  try {
+    await page.waitForSelector(selector, { visible: true, timeout: 10000 });
+    await page.click(selector);
+  } catch (e) {
+    const seen = await page.evaluate((sel) => {
+      const el = document.querySelector(sel);
+      if (!el) return 'no such element';
+      const r = el.getBoundingClientRect();
+      const s = getComputedStyle(el);
+      return `box ${Math.round(r.width)}x${Math.round(r.height)} at ${Math.round(r.x)},${Math.round(r.y)} ` +
+             `display:${s.display} visibility:${s.visibility} opacity:${s.opacity}`;
+    }, selector).catch(() => 'could not measure');
+    throw new Error(`click "${selector}" failed: ${e.message.split('\n')[0]} — ${seen}`);
+  }
 }
 
 // Popover option clicks: the popover arms a 150 ms grace period before its
@@ -304,7 +318,11 @@ const journeys = {
   // #1376: the mobile Filters badge left the STSM chip out of its count.
   async 'mobile filter badge counts every sheet facet'() {
     const page = await openDirectory('', { width: 375, height: 812 });
-    await page.click('#members-filter-toggle');
+    // The Filters button is display:none until the <=640px media query
+    // applies, so it is the one control here whose box can lag the cards
+    // this journey waits on. It was the click still failing after the first
+    // pass at #1472 converted the three inside the sheet.
+    await clickWhenReady(page, '#members-filter-toggle');
     await page.waitForSelector('#members-filterset[open]');
     await clickWhenReady(page, '#members-stsm-filter [data-stsm]');
     await clickWhenReady(page, '.members-mentorship-chip[data-mentorship="mentor"]');
