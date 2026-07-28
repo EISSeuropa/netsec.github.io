@@ -42,6 +42,13 @@ jobs:
       - name: Install puppeteer-core
         run: npm ci --no-audit --no-fund
 
+      # ./pagefind/ is gitignored and built at deploy time, so a checkout has
+      # no index and every search journey would time out against an overlay
+      # stuck on its load-error message (#1404 shipped that way). The same
+      # script the deploy runs builds it here.
+      - name: Build the Pagefind index
+        run: bash scripts/build-search.sh
+
       - name: Run directory interaction journeys
         run: node scripts/test-directory-interactions.mjs
         env:
