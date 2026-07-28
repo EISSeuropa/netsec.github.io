@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-24T07:42:22+00:00",
+  "generated_at": "2026-07-28T07:47:56+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-24T07:42:22+00:00"
+    "last_synced": "2026-07-28T07:47:56+00:00"
   },
   "members": [
     {
@@ -3292,6 +3292,57 @@
         "Proxy warfare",
         "US foreign policy"
       ]
+    },
+    {
+      "id": "athanasios-skraparlis",
+      "name": "Dr Athanasios Skraparlis",
+      "country": "Greece",
+      "country_code": "gr",
+      "affiliation": "University of West Attica",
+      "position": "Senior Researcher",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor",
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Europe - Western Balkans",
+        "Global and cross-regional",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "I am a security researcher and EU border security practitioner with a PhD in Critical Infrastructure Protection from the University of West Attica. My background combines academic research with operational experience in border management, law enforcement cooperation, surveillance, reporting and security procedures in international environments.\n\nMy academic work focuses on critical infrastructure protection, cyber-physical threats, security risk assessment, malicious drones, illicit goods detection and dangerous goods transport risks. I also hold an MSc in Environmental, Disasters and Crises Management Strategies, with previous work on EU Host Nation Support Policy.\n\nSince 2021, I have coordinated R&D work on security-related topics, including drones, illicit goods, dangerous goods/ADR transport and critical infrastructure protection, and have contributed to research and innovation proposal activities. My publications address applied security challenges at the interface of technology, risk assessment and operational protection.\n\nMy interests include European security, border security, critical infrastructure resilience, emerging technologies, civil-military coordination, crisis management and the link between academic research and operational practice. I participate in this community in a personal academic and professional capacity, and not as an official representative of any employer or institution.",
+      "keywords": [
+        "Critical infrastructure protection",
+        "border security",
+        "malicious drones",
+        "security risk assessment",
+        "crisis management"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "0000-0002-8248-4883",
+      "linkedin": "https://www.linkedin.com/in/athanasios-skraparlis-phd-44a947313/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/athanasios-skraparlis.jpg",
+      "source": "form",
+      "photo_source_sha256": "5b10ce1b8284fe5122d6c973df1c6eea75283e823b5e50dc2ccf259e5b2ed997",
+      "canonical_keywords": [
+        "Border security",
+        "Crisis management",
+        "Critical infrastructure protection",
+        "Malicious drones",
+        "Security risk assessment"
+      ],
+      "themes": [
+        "Crisis management and critical systems resilience"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3365,6 +3416,10 @@
     },
     {
       "keyword": "Conflict studies",
+      "count": 2
+    },
+    {
+      "keyword": "Crisis management",
       "count": 2
     },
     {
@@ -3488,6 +3543,10 @@
       "count": 1
     },
     {
+      "keyword": "Border security",
+      "count": 1
+    },
+    {
       "keyword": "British army",
       "count": 1
     },
@@ -3564,7 +3623,7 @@
       "count": 1
     },
     {
-      "keyword": "Crisis management",
+      "keyword": "Critical infrastructure protection",
       "count": 1
     },
     {
@@ -3820,6 +3879,10 @@
       "count": 1
     },
     {
+      "keyword": "Malicious drones",
+      "count": 1
+    },
+    {
       "keyword": "Maritime",
       "count": 1
     },
@@ -3972,6 +4035,10 @@
       "count": 1
     },
     {
+      "keyword": "Security risk assessment",
+      "count": 1
+    },
+    {
       "keyword": "Security sector governance",
       "count": 1
     },
@@ -4118,12 +4185,12 @@
       "count": 4
     },
     {
-      "theme": "Political psychology, public opinion and decision-making",
+      "theme": "Crisis management and critical systems resilience",
       "count": 3
     },
     {
-      "theme": "Crisis management and critical systems resilience",
-      "count": 2
+      "theme": "Political psychology, public opinion and decision-making",
+      "count": 3
     },
     {
       "theme": "Identity, narratives and ideational security",
@@ -4323,19 +4390,19 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 44
+      "count": 45
     },
     {
       "region": "Global and cross-regional",
-      "count": 32
+      "count": 33
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 15
+      "count": 16
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 14
+      "count": 15
     },
     {
       "region": "The Americas",
@@ -4347,7 +4414,7 @@
     },
     {
       "region": "Middle East and North Africa",
-      "count": 6
+      "count": 7
     },
     {
       "region": "Africa",
