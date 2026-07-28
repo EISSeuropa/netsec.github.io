@@ -118,8 +118,27 @@ async function typeQuery(page, query) {
   await sleep(120);
 }
 
+// ./pagefind/ is gitignored and built at deploy time. Without it the overlay
+// sits on its load-error message and every search journey dies on a bare
+// 15-second timeout, which says nothing about the cause. Check once and say
+// so plainly instead.
+let indexChecked = false;
+async function requireSearchIndex(page) {
+  if (indexChecked) return;
+  const status = await page.evaluate(async (base) => {
+    try { return (await fetch(`${base}/pagefind/pagefind-entry.json`)).status; }
+    catch { return 0; }
+  }, BASE);
+  if (status !== 200) {
+    throw new Error(
+      `no Pagefind index at /pagefind/ (HTTP ${status}). Run: bash scripts/build-search.sh`);
+  }
+  indexChecked = true;
+}
+
 async function openSearch(query, { dark = false } = {}) {
   const page = await openDirectory('', { dark, expectCards: false });
+  await requireSearchIndex(page);
   await page.evaluate(() => document.querySelector('.search-trigger').click());
   await page.waitForSelector('.search-overlay:not([hidden])', { timeout: 5000 });
   await typeQuery(page, query);
@@ -379,15 +398,29 @@ const journeys = {
     await page.close();
   },
 
-  // The row only earns its space when both types are present. A query that
-  // returns one type must not ask the reader for a decision.
-  async 'chip row hides when every hit is one type'() {
+  // The row only earns its space when both types are present. Asserted as an
+  // invariant over a sweep rather than against one hand-picked query: which
+  // words return a mixed result set is a property of the content, and a
+  // fixture query that quietly stops being single-type would read as a
+  // feature regression. Counting the rendered rows works for both cases
+  // because a fresh query always renders under All.
+  async 'the chip row appears exactly when both types are present'() {
     const page = await openSearch('security');
-    assert(!(await chipState(page)).rowHidden, 'expected the row on a mixed query');
-    await typeQuery(page, 'cyber');
-    const single = await chipState(page);
-    assert(single.rowHidden, 'chip row still shown when one type is returned');
-    assert(single.rendered > 0, 'no results at all, so the journey proves nothing');
+    let sawMixed = 0;
+    let sawSingle = 0;
+    for (const query of ['security', 'cyber', 'sitemap', 'changelog', 'accessibility', 'faq']) {
+      await typeQuery(page, query);
+      const s = await chipState(page);
+      assert(s.rendered > 0, `"${query}" returned nothing, so it proves nothing`);
+      const bothTypes = s.renderedBios > 0 && s.renderedBios < s.rendered;
+      assert(s.rowHidden === !bothTypes,
+        `"${query}": row ${s.rowHidden ? 'hidden' : 'shown'} with ` +
+        `${s.renderedBios} bio of ${s.rendered} rows`);
+      if (bothTypes) { sawMixed++; } else { sawSingle++; }
+    }
+    assert(sawMixed > 0 && sawSingle > 0,
+      `sweep saw ${sawMixed} mixed and ${sawSingle} single-type queries, so one ` +
+      `side of the rule went untested — refresh the query list`);
     await page.close();
   },
 
