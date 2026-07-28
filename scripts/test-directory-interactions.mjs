@@ -97,6 +97,55 @@ async function openAreaPopover(page, tokenKind = 'area') {
   await sleep(200);
 }
 
+// ── Search-overlay helpers (#1404) ──────────────────────────────────────
+// Pagefind loads its WASM lazily on the first query, so the waits here are
+// on rendered rows rather than on a fixed sleep.
+async function typeQuery(page, query) {
+  // Clear through a real input event so runSearch empties the list, then wait
+  // for that empty state. Without it the previous query's rows are still in
+  // the DOM and a "rows > 0" wait resolves instantly on stale results.
+  await page.$eval('.search-input', (el) => {
+    el.value = '';
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await page.waitForFunction(
+    () => document.querySelectorAll('.search-results li').length === 0,
+    { timeout: 15000 });
+  await page.type('.search-input', query);
+  await page.waitForFunction(
+    () => document.querySelectorAll('.search-results li').length > 0,
+    { timeout: 15000 });
+  await sleep(120);
+}
+
+async function openSearch(query, { dark = false } = {}) {
+  const page = await openDirectory('', { dark, expectCards: false });
+  await page.evaluate(() => document.querySelector('.search-trigger').click());
+  await page.waitForSelector('.search-overlay:not([hidden])', { timeout: 5000 });
+  await typeQuery(page, query);
+  return page;
+}
+
+function chipState(page) {
+  return page.evaluate(() => {
+    const row = document.querySelector('[data-search-filters]');
+    const chips = [...row.querySelectorAll('[data-search-filter]')];
+    const counts = {};
+    chips.forEach((c) => {
+      counts[c.dataset.searchFilter] = Number((c.textContent.match(/\((\d+)\)/) || [])[1] ?? -1);
+    });
+    const rows = [...document.querySelectorAll('.search-results li')];
+    return {
+      rowHidden: row.hidden,
+      counts,
+      pressed: (chips.find(c => c.getAttribute('aria-pressed') === 'true') || {}).dataset?.searchFilter,
+      rendered: rows.length,
+      // renderBioHit puts .search-bio on the <li> itself, not inside it.
+      renderedBios: rows.filter(li => li.classList.contains('search-bio')).length,
+    };
+  });
+}
+
 const journeys = {
 
   // The wizard holds one research area at a time: picking a new area from
@@ -295,6 +344,106 @@ const journeys = {
     assert(after.panelHidden, 'mentorship panel still open after clear');
     if (total) assert(after.cards >= total, 'grid did not return to the full directory');
     await page.close();
+  },
+
+  // ── Search overlay: result-type chips (#1404) ────────────────────────
+  // The overlay is site-wide rather than directory-only, but it ships from
+  // the same assets/js/site.js this suite already loads and this workflow
+  // already watches, so its journeys live here rather than in a second
+  // harness with its own server and browser.
+
+  // The chips are a filter over hits already in hand. Clicking People must
+  // render exactly the people, and every rendered row must be a bio card.
+  async 'search chips filter the results to one type'() {
+    const page = await openSearch('security');
+    const before = await chipState(page);
+    assert(!before.rowHidden, 'chip row hidden on a query returning both types');
+    assert(before.counts.page + before.counts.bio === before.counts.all,
+      `counts do not partition: ${JSON.stringify(before.counts)}`);
+
+    await page.click('[data-search-filter="bio"]');
+    await sleep(120);
+    const after = await chipState(page);
+    assert(after.rendered === before.counts.bio,
+      `People chip rendered ${after.rendered}, expected ${before.counts.bio}`);
+    assert(after.renderedBios === after.rendered,
+      `${after.rendered - after.renderedBios} non-bio row(s) survived the People filter`);
+    assert(after.pressed === 'bio', `pressed chip is ${after.pressed}, expected bio`);
+
+    await page.click('[data-search-filter="page"]');
+    await sleep(120);
+    const pages = await chipState(page);
+    assert(pages.rendered === before.counts.page,
+      `Pages chip rendered ${pages.rendered}, expected ${before.counts.page}`);
+    assert(pages.renderedBios === 0, 'a bio card survived the Pages filter');
+    await page.close();
+  },
+
+  // The row only earns its space when both types are present. A query that
+  // returns one type must not ask the reader for a decision.
+  async 'chip row hides when every hit is one type'() {
+    const page = await openSearch('security');
+    assert(!(await chipState(page)).rowHidden, 'expected the row on a mixed query');
+    await typeQuery(page, 'cyber');
+    const single = await chipState(page);
+    assert(single.rowHidden, 'chip row still shown when one type is returned');
+    assert(single.rendered > 0, 'no results at all, so the journey proves nothing');
+    await page.close();
+  },
+
+  // A filtered view must not leave activeIndex pointing at a row that is no
+  // longer on screen, or Enter opens something the visitor cannot see.
+  async 'arrow keys stay inside the filtered rows'() {
+    const page = await openSearch('security');
+    await page.click('[data-search-filter="bio"]');
+    await sleep(120);
+    const { rendered } = await chipState(page);
+    await page.click('.search-input');
+    for (let i = 0; i < rendered + 2; i++) await page.keyboard.press('ArrowDown');
+    await sleep(80);
+    const active = await page.evaluate(() => {
+      const items = [...document.querySelectorAll('.search-results li')];
+      return { total: items.length, activeAt: items.findIndex(li => li.classList.contains('is-active')) };
+    });
+    assert(active.activeAt >= 0 && active.activeAt < active.total,
+      `highlight at ${active.activeAt} of ${active.total} rows`);
+    await page.close();
+  },
+
+  // A fresh query starts from All, so a filter set two searches ago cannot
+  // silently hide the new results.
+  async 'a new query resets the filter to All'() {
+    const page = await openSearch('security');
+    await page.click('[data-search-filter="bio"]');
+    await sleep(120);
+    assert((await chipState(page)).pressed === 'bio', 'People chip did not take');
+    await typeQuery(page, 'policy');
+    const next = await chipState(page);
+    assert(next.pressed === 'all', `filter stuck on ${next.pressed} after a new query`);
+    assert(next.rendered === next.counts.all, 'new query did not render every hit');
+    await page.close();
+  },
+
+  // The selected chip inverts via --ink on --bg-0, which flip together, so
+  // it must stay readable in both themes without a .dark override.
+  async 'selected chip keeps contrast in dark mode'() {
+    for (const dark of [false, true]) {
+      const page = await openSearch('security', { dark });
+      const seen = await page.$eval('[data-search-filter="all"]', (el) => {
+        const s = getComputedStyle(el);
+        return { bg: s.backgroundColor, fg: s.color };
+      });
+      const lum = (rgb) => {
+        const [r, g, b] = rgb.match(/[\d.]+/g).slice(0, 3).map(Number)
+          .map(v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; });
+        return .2126 * r + .7152 * g + .0722 * b;
+      };
+      const [hi, lo] = [lum(seen.bg), lum(seen.fg)].sort((a, b) => b - a);
+      const ratio = (hi + .05) / (lo + .05);
+      assert(ratio >= 4.5,
+        `${dark ? 'dark' : 'light'} selected chip contrast ${ratio.toFixed(2)}:1 (${seen.fg} on ${seen.bg})`);
+      await page.close();
+    }
   },
 
   async 'search narrows the grid'() {

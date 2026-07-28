@@ -1285,6 +1285,10 @@
       loading: 'Loading search…',
       loadError: 'Search is unavailable. Reload the page to try again.',
       searchLabel: 'Search',
+      filterLabel: 'Filter results by type',
+      filterAll: 'All',
+      filterPages: 'Pages',
+      filterPeople: 'People',
     },
     fr: {
       placeholder: 'Rechercher sur le site…',
@@ -1298,6 +1302,10 @@
       loading: 'Chargement de la recherche…',
       loadError: 'La recherche est indisponible. Rechargez la page pour réessayer.',
       searchLabel: 'Rechercher',
+      filterLabel: 'Filtrer les résultats par type',
+      filterAll: 'Tout',
+      filterPages: 'Pages',
+      filterPeople: 'Personnes',
     },
     de: {
       placeholder: 'Website durchsuchen…',
@@ -1311,6 +1319,10 @@
       loading: 'Suche wird geladen…',
       loadError: 'Suche nicht verfügbar. Seite neu laden und erneut versuchen.',
       searchLabel: 'Suchen',
+      filterLabel: 'Ergebnisse nach Typ filtern',
+      filterAll: 'Alle',
+      filterPages: 'Seiten',
+      filterPeople: 'Personen',
     },
   };
 
@@ -1366,7 +1378,12 @@
   let lastFocus = null;          // Restore on close
   let debounceTimer = 0;
   let activeIndex = -1;          // Highlighted result row
-  let currentResults = [];       // Hits from the last search
+  let currentResults = [];       // The hits currently RENDERED, so activeIndex
+                                 // and the Enter handler index the same rows
+                                 // the visitor can see under the active filter.
+  let allHits = [];              // Every hit from the last search, unfiltered
+  let currentQuery = '';         // Kept so a chip can re-render without a re-query
+  let activeFilter = 'all';      // 'all' | 'page' | 'bio'
 
   // Last error from Pagefind, surfaced in the overlay's meta line
   // alongside the user-facing message so a maintainer reading over
@@ -1425,6 +1442,11 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
           </button>
         </div>
+        <div class="search-filters" role="group" aria-label="${t.filterLabel}" data-search-filters hidden>
+          <button type="button" class="search-filter" data-search-filter="all" aria-pressed="true"></button>
+          <button type="button" class="search-filter" data-search-filter="page" aria-pressed="false"></button>
+          <button type="button" class="search-filter" data-search-filter="bio" aria-pressed="false"></button>
+        </div>
         <div class="search-meta" aria-live="polite" aria-atomic="true"></div>
         <ul class="search-results" id="search-results-list" role="listbox" aria-label="${t.searchLabel}"></ul>
         <div class="search-hints">
@@ -1457,7 +1479,12 @@
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         moveActive(-1);
-      } else if (e.key === 'Enter' && activeIndex >= 0 && currentResults[activeIndex]) {
+      } else if (
+        e.key === 'Enter' && activeIndex >= 0 && currentResults[activeIndex] &&
+        // A focused filter chip keeps its own Enter: swallowing it here would
+        // open the highlighted result instead of applying the filter.
+        !e.target.closest('[data-search-filter]')
+      ) {
         e.preventDefault();
         const a = list.children[activeIndex]?.querySelector('a');
         if (a) a.click();
@@ -1465,6 +1492,18 @@
     });
 
     overlay.addEventListener('click', (e) => {
+      // Filter chips re-render from the hits already in hand, so Pagefind is
+      // never re-invoked and the ranking is untouched. Keyed off
+      // data-search-filter rather than the styling class, per the
+      // .members-mentorship-chip collision in #862.
+      const chip = e.target.closest('[data-search-filter]');
+      if (chip) {
+        activeFilter = chip.dataset.searchFilter;
+        activeIndex = -1;
+        renderResults(allHits, currentQuery);
+        return;
+      }
+
       // Close on the explicit close button / backdrop, AND on any
       // result-link click. Without the latter, the overlay would
       // stay open after navigation: same-page hash-only links
@@ -1489,11 +1528,18 @@
 
     activeIndex = -1;
     currentResults = [];
+    allHits = [];
+    currentQuery = query;
+    // Every query starts from All. Carrying a filter across queries would let
+    // a chip pressed two searches ago silently hide the new results, and the
+    // chip row is not visible while the reader is typing to remind them.
+    activeFilter = 'all';
 
     if (!query) {
       meta.textContent = t.typeToSearch;
       list.innerHTML = '';
       input.setAttribute('aria-expanded', 'false');
+      hideFilters();
       return;
     }
 
@@ -1502,6 +1548,7 @@
         ? `${t.loadError} (${pagefindErrorMessage})`
         : t.loadError;
       list.innerHTML = '';
+      hideFilters();
       return;
     }
 
@@ -1517,14 +1564,49 @@
       // search.results is a Promise array of hit handles. Resolve
       // the first ~12 — Pagefind returns ranked results lazily.
       const hits = await Promise.all(search.results.slice(0, 12).map((r) => r.data()));
-      currentResults = hits;
+      allHits = hits;
       renderResults(hits, query);
     } catch (e) {
       pagefindErrorMessage = String(e && e.message ? e.message : e);
       console.error('Pagefind search failed', e);
       meta.textContent = `${t.loadError} (${pagefindErrorMessage})`;
       list.innerHTML = '';
+      hideFilters();
     }
+  }
+
+  function isBioHit(hit) {
+    return !!(hit.meta && hit.meta.kind === 'bio');
+  }
+
+  function hideFilters() {
+    const row = overlay && overlay.querySelector('[data-search-filters]');
+    if (row) row.hidden = true;
+    activeFilter = 'all';
+  }
+
+  // The chip row only earns its space when both types are present. A query
+  // that returns pages alone, or people alone, gets no row and no decision
+  // to make.
+  function syncFilters(hits) {
+    const row = overlay.querySelector('[data-search-filters]');
+    const people = hits.filter(isBioHit).length;
+    const pages = hits.length - people;
+
+    if (!pages || !people) {
+      row.hidden = true;
+      activeFilter = 'all';
+      return;
+    }
+
+    row.hidden = false;
+    const counts = { all: hits.length, page: pages, bio: people };
+    const labels = { all: t.filterAll, page: t.filterPages, bio: t.filterPeople };
+    row.querySelectorAll('[data-search-filter]').forEach((chip) => {
+      const kind = chip.dataset.searchFilter;
+      chip.textContent = `${labels[kind]} (${counts[kind]})`;
+      chip.setAttribute('aria-pressed', kind === activeFilter ? 'true' : 'false');
+    });
   }
 
   function renderResults(hits, query) {
@@ -1536,13 +1618,23 @@
       meta.textContent = `${t.noResults} "${query}"`;
       list.innerHTML = '';
       input.setAttribute('aria-expanded', 'false');
+      hideFilters();
+      currentResults = [];
       return;
     }
 
-    meta.textContent = t.resultsCount(hits.length);
+    // syncFilters can clear activeFilter back to 'all' when the row is not
+    // warranted, so partition after it has run, not before.
+    syncFilters(hits);
+    const shown = activeFilter === 'all'
+      ? hits
+      : hits.filter((hit) => isBioHit(hit) === (activeFilter === 'bio'));
+
+    currentResults = shown;
+    meta.textContent = t.resultsCount(shown.length);
     input.setAttribute('aria-expanded', 'true');
 
-    list.innerHTML = hits.map((hit, i) => renderHit(hit, i)).join('');
+    list.innerHTML = shown.map((hit, i) => renderHit(hit, i)).join('');
   }
 
   // Per-hit renderer. Directory bio hits get a richer card with the
@@ -1707,8 +1799,11 @@
     if (list) list.innerHTML = '';
     const meta = overlay.querySelector('.search-meta');
     if (meta) meta.textContent = t.typeToSearch;
+    hideFilters();
     activeIndex = -1;
     currentResults = [];
+    allHits = [];
+    currentQuery = '';
     if (lastFocus && typeof lastFocus.focus === 'function') {
       lastFocus.focus();
     }

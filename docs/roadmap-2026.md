@@ -787,10 +787,11 @@ Each has a rough cost estimate and a decision point.
 - **Result-type filter chips** (*All / Pages / People*) in
   the overlay header. Quality-of-life when both a page and a
   bio match the same query. Cost: ~1 day. Trigger fired in
-  Q3 2026: scheduled for v1.14.0 and tracked in
+  Q3 2026: tracked in
   [#1404](https://github.com/EISSeuropa/netsec.github.io/issues/1404),
   so it has left the watch list and the public roadmap's
-  *Under watch* section.
+  *Under watch* section. Built and merged, and it ships with
+  v1.14.0.
 
 #### Outputs section refresh
 
