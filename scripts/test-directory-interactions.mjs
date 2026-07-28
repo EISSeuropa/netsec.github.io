@@ -89,6 +89,18 @@ function assert(cond, msg) {
   if (!cond) throw new Error(msg);
 }
 
+// Click a control that the previous step just revealed (#1472). An `open`
+// attribute or a "Show all" toggle resolves the moment the DOM changes, which
+// is before layout has given the control a box, and puppeteer's click then
+// fails with "Node is either not clickable or not an Element". Waiting for
+// visibility asks for a non-empty bounding box, which is exactly the
+// precondition clicking needs. Normally resolves on the first poll: the suite
+// runs with prefers-reduced-motion, so there is no transition to sit through.
+async function clickWhenReady(page, selector) {
+  await page.waitForSelector(selector, { visible: true, timeout: 10000 });
+  await page.click(selector);
+}
+
 // Popover option clicks: the popover arms a 150 ms grace period before its
 // dismiss handlers go live, so wait it out before interacting.
 async function openAreaPopover(page, tokenKind = 'area') {
@@ -263,7 +275,7 @@ const journeys = {
   async 'deep link to a rare theme shows its pressed chip'() {
     let page = await openDirectory();
     await page.evaluate(() => { document.getElementById('members-keyword-filter').open = true; });
-    await page.click('#members-keyword-filter-toggle');
+    await clickWhenReady(page, '#members-keyword-filter-toggle');
     const rareSlug = await page.$$eval('#members-keyword-filter-chips .members-keyword-filter-chip',
       els => els[els.length - 1].dataset.slug);
     await page.close();
@@ -279,11 +291,11 @@ const journeys = {
   async 'collapsing the theme row keeps the active chip visible'() {
     const page = await openDirectory();
     await page.evaluate(() => { document.getElementById('members-keyword-filter').open = true; });
-    await page.click('#members-keyword-filter-toggle');   // Show all
+    await clickWhenReady(page, '#members-keyword-filter-toggle');   // Show all
     const rareSlug = await page.$$eval('#members-keyword-filter-chips .members-keyword-filter-chip',
       els => els[els.length - 1].dataset.slug);
-    await page.click(`#members-keyword-filter-chips [data-slug="${rareSlug}"]`);
-    await page.click('#members-keyword-filter-toggle');   // Show fewer
+    await clickWhenReady(page, `#members-keyword-filter-chips [data-slug="${rareSlug}"]`);
+    await clickWhenReady(page, '#members-keyword-filter-toggle');   // Show fewer
     const chip = await page.$(`#members-keyword-filter-chips [data-slug="${rareSlug}"][aria-pressed="true"]`);
     assert(chip, `active chip ${rareSlug} vanished on collapse`);
     await page.close();
@@ -294,9 +306,9 @@ const journeys = {
     const page = await openDirectory('', { width: 375, height: 812 });
     await page.click('#members-filter-toggle');
     await page.waitForSelector('#members-filterset[open]');
-    await page.click('#members-stsm-filter [data-stsm]');
-    await page.click('.members-mentorship-chip[data-mentorship="mentor"]');
-    await page.click('#members-sheet-apply');
+    await clickWhenReady(page, '#members-stsm-filter [data-stsm]');
+    await clickWhenReady(page, '.members-mentorship-chip[data-mentorship="mentor"]');
+    await clickWhenReady(page, '#members-sheet-apply');
     await sleep(100);
     const badge = await page.$eval('#members-filter-toggle-count',
       el => ({ hidden: el.hidden, n: el.textContent.trim() }));
