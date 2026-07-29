@@ -1042,4 +1042,15 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://netsec-cost.eu/people/yijun-xu.de.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/people/yijun-xu.html"/>
   </url>
+
+  <url>
+    <loc>https://netsec-cost.eu/people/zane-sime.html</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://netsec-cost.eu/people/zane-sime.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/people/zane-sime.fr.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://netsec-cost.eu/people/zane-sime.de.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/people/zane-sime.html"/>
+  </url>
 </urlset>
