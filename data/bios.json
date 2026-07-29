@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-28T07:47:56+00:00",
+  "generated_at": "2026-07-29T07:52:50+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-28T07:47:56+00:00"
+    "last_synced": "2026-07-29T07:52:50+00:00"
   },
   "members": [
     {
@@ -3343,6 +3343,51 @@
       "themes": [
         "Crisis management and critical systems resilience"
       ]
+    },
+    {
+      "id": "zane-sime",
+      "name": "Dr Zane Šime",
+      "country": "Latvia",
+      "country_code": "lv",
+      "affiliation": "Rīga Stradiņš University, RSU",
+      "position": "alumna (doctoral degree holder) at the Norwegian University of Science and Technology, NTNU; guest lecturer at Rīga Stradiņš University, RSU",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Zane Šime is a guest lecturer at Rīga Stradiņš University who has devised and is responsible for graduate courses about international organisations and global security governance. She is an Earth System Governance Fellow and European Climate Pact Ambassador. On 23 January 2026, Zane successfully defended her Dr. Philos thesis, “The EU Science Diplomacy Towards the Southern Neighbourhood: Reappraising the EU Structural Diplomacy”, at the Norwegian University of Science and Technology (NTNU). In October 2026, she will participate in the celebratory occasion linked to her doctoral thesis being awarded the Dr. Alois Mock Science Prize 2025. She has completed research at the United Nations University Institute on Comparative Regional Integration Studies (UNU-CRIS) and the Academy of the Organisation for Security and Co-operation in Europe (OSCE). She has acquired academic administration experience in the Department of EU International Relations and Diplomacy Studies at the College of Europe (Bruges campus). Zane is an alumna of several Asia-Europe Foundation programmes and the Geneva Centre for Security Policy. She is a former Salzburg Global Seminar Fellow of the Emerging Urban Leaders Programme. Her previous work experience includes project implementation at the Secretariat of the Council of the Baltic Sea States (CBSS) and the Latvian civil service. Zane is a graduate of KU Leuven and the University of Latvia. She is a co-recipient of the Vilis Vītols Article Prize 2022, awarded by the Association for the Advancement of Baltic Studies, and a member of the 2020 class of ‘Top 40 Under 40 EU India/UK India Young Leaders’.",
+      "keywords": [
+        "dipomacy studies",
+        "regionalism",
+        "science and innovation policies",
+        "multilateralism"
+      ],
+      "email": "zane.sime@rsu.lv",
+      "website": "https://www.earthsystemgovernance.org/person/zane-sime/",
+      "orcid": "0000-0002-4690-3243",
+      "linkedin": "https://www.linkedin.com/in/zanesime/",
+      "twitter": "https://twitter.com/SimeZane",
+      "bluesky": "https://bsky.app/profile/simezane.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/zane-sime.jpg",
+      "source": "form",
+      "photo_source_sha256": "916417d43a3025c14e68602dad0900ba029dcd9ea739ccc00a26e9e452d94029",
+      "canonical_keywords": [
+        "Dipomacy studies",
+        "Multilateralism",
+        "Regionalism",
+        "Science and innovation policies"
+      ],
+      "themes": [
+        "EU, UN and other international organisations",
+        "Foreign policy and diplomacy"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3483,6 +3528,10 @@
       "count": 2
     },
     {
+      "keyword": "Multilateralism",
+      "count": 2
+    },
+    {
       "keyword": "Non-state actors",
       "count": 2
     },
@@ -3492,6 +3541,10 @@
     },
     {
       "keyword": "Political psychology",
+      "count": 2
+    },
+    {
+      "keyword": "Regionalism",
       "count": 2
     },
     {
@@ -3684,6 +3737,10 @@
     },
     {
       "keyword": "Digital security",
+      "count": 1
+    },
+    {
+      "keyword": "Dipomacy studies",
       "count": 1
     },
     {
@@ -3915,10 +3972,6 @@
       "count": 1
     },
     {
-      "keyword": "Multilateralism",
-      "count": 1
-    },
-    {
       "keyword": "Narratives",
       "count": 1
     },
@@ -4011,10 +4064,6 @@
       "count": 1
     },
     {
-      "keyword": "Regionalism",
-      "count": 1
-    },
-    {
       "keyword": "Research methods",
       "count": 1
     },
@@ -4024,6 +4073,10 @@
     },
     {
       "keyword": "Russian foreign policy",
+      "count": 1
+    },
+    {
+      "keyword": "Science and innovation policies",
       "count": 1
     },
     {
@@ -4142,7 +4195,7 @@
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 23
+      "count": 24
     },
     {
       "theme": "Cyber and emerging technology",
@@ -4173,12 +4226,12 @@
       "count": 8
     },
     {
-      "theme": "Peace, mediation and reconciliation",
+      "theme": "EU, UN and other international organisations",
       "count": 7
     },
     {
-      "theme": "EU, UN and other international organisations",
-      "count": 6
+      "theme": "Peace, mediation and reconciliation",
+      "count": 7
     },
     {
       "theme": "Democracy, governance and political change",
@@ -4394,7 +4447,7 @@
     },
     {
       "region": "Global and cross-regional",
-      "count": 33
+      "count": 34
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
