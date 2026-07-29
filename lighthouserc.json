@@ -1,14 +1,29 @@
 {
   "_documentation": "Lighthouse CI assertion config for .github/workflows/lighthouse.yml (#270). Category thresholds sit below the day-to-day scores on purpose: the gate exists to catch collapses (a 1 MB image landing on a page, a render-blocking regression), not to flake on shared-runner variance. The performance floor is 0.70: the heaviest audited page (about.html, a long page with the deliverables Gantt + self-hosted fonts) measured a median 0.72 on the GitHub runner on 2026-07-16, after the July 2026 editorial pass first dropped it to a flapping 0.69-0.70 (#1355) and the reveal-animation exemption on page headers in #1352 won the margin back. The 2-point headroom is thin, so if flapping returns the next levers are trimming render-blocking site.css or a 0.65 floor (see #1355 for the analysis). A first 0.75 floor flaked on about.html at 0.74 in an earlier era. resource-summary:image:size warns when any audited page ships more than 500 KB of images, the class of regression the June 2026 press-kit fix removed. The workflow is not a required check, so a red run signals without blocking auto-merge.",
+  "_documentation_atlas": "atlas.html (#764) joined the audited set on 2026-07-29 and needs exactly one exemption, which is why the assertions became a matrix. The two patterns are mutually exclusive: the general block carries a negative lookahead so it never also matches the Atlas, because a second matching block would re-apply the very assertion the Atlas block drops. The Atlas block is identical to the general one EXCEPT that categories:seo is absent. The Atlas scores 0.58 there because it carries <meta name=\"robots\" content=\"noindex\"> on purpose while it is an unlisted prototype (docs/atlas.md, Status), so that is the page working as designed. Asserting on it would print the same warning on every run forever, which is how a gate stops being read. Restore the seo assertion when the prototype graduates and the noindex comes off. Its first measured run passed the 0.70 performance and 0.90 accessibility floors with no relaxation needed, which is why the thresholds are shared rather than softened. That same run flagged 5.6 MB of headshots, fixed at source by pointing atlas.json at the webp variants (1.45 MB) rather than by raising the budget.",
   "ci": {
     "assert": {
-      "assertions": {
-        "categories:performance": ["error", { "minScore": 0.70 }],
-        "categories:accessibility": ["error", { "minScore": 0.9 }],
-        "categories:best-practices": ["warn", { "minScore": 0.9 }],
-        "categories:seo": ["warn", { "minScore": 0.9 }],
-        "resource-summary:image:size": ["warn", { "maxNumericValue": 500000 }]
-      }
+      "assertMatrix": [
+        {
+          "matchingUrlPattern": "^(?!.*atlas\\.html).*$",
+          "assertions": {
+            "categories:performance": ["error", { "minScore": 0.70 }],
+            "categories:accessibility": ["error", { "minScore": 0.9 }],
+            "categories:best-practices": ["warn", { "minScore": 0.9 }],
+            "categories:seo": ["warn", { "minScore": 0.9 }],
+            "resource-summary:image:size": ["warn", { "maxNumericValue": 500000 }]
+          }
+        },
+        {
+          "matchingUrlPattern": ".*atlas\\.html.*",
+          "assertions": {
+            "categories:performance": ["error", { "minScore": 0.70 }],
+            "categories:accessibility": ["error", { "minScore": 0.9 }],
+            "categories:best-practices": ["warn", { "minScore": 0.9 }],
+            "resource-summary:image:size": ["warn", { "maxNumericValue": 500000 }]
+          }
+        }
+      ]
     }
   }
 }

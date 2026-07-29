@@ -150,6 +150,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The Atlas prototype loads its member headshots about three quarters lighter, taking the page from 5.6 MB of images to 1.65 MB. The faces are drawn as small circles on the map, so the full-size photographs were sending detail the map cannot show. The page also joins the performance budget checks that already cover the rest of the site, which is what surfaced the weight in the first place.
+
 - Eleven directory keywords that sat outside the research-theme taxonomy (War, Intelligence, Maritime, Military history and others) are now filed under their matching themes, so every keyword pill resolves to a filterable theme.
 
 ## [1.13.0] · 2026-07-22 — Introducing Mentorship Matching 2.0
