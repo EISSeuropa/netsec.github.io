@@ -107,6 +107,32 @@ through the shared `netsecT` catalogue in `site.js`, so the FR and DE
 pages render in their own language, with singular and plural kept as
 separate catalogue keys rather than an English stem plus an "s".
 
+Headshots come from the webp variant the bios sync generates, not the
+original JPEG. The faces render as small circles, so the originals were
+spending bytes the canvas cannot show: 5.24 MB across the 62 members
+carrying a photo, against 1.45 MB of webp. `build-atlas.py` picks the
+webp when the file exists and falls back to the original otherwise,
+which is the state a member sits in between joining and the next sync.
+
+## The performance budget
+
+`atlas.html` is in the Lighthouse budget set (`lighthouserc.json`,
+`.github/workflows/lighthouse.yml`). It was unmeasured until July 2026
+even though that workflow already ran on every change to the files that
+build it, which is how the page came to ship 5.6 MB of headshots
+unnoticed. The first measured run caught exactly that.
+
+It shares the performance and accessibility floors with every other
+audited page, which it passes without relaxation. The one exemption is
+`categories:seo`: the page scores 0.58 there because of its deliberate
+`noindex` (see *Status* above), so asserting on it would warn on every
+run forever. Restore that assertion when the prototype graduates.
+
+The image budget is **still warning** at 1.65 MB against 500 KB. The
+canvas loads every headshot eagerly on open, so trimming it further
+means loading faces on demand or generating smaller derivatives rather
+than raising the budget.
+
 ## Accessibility
 
 The canvas is a visual convenience, not the only way to the

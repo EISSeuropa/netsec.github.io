@@ -127,3 +127,40 @@ def test_empty_publications_add_zero_edges_and_stats():
                   publications={"publications": []})
     assert atlas["stats"]["coauthor_edges"] == 0
     assert atlas["stats"]["publications_matched"] == 0
+
+
+# The Atlas draws headshots as small canvas circles, so a node pointing at the
+# original JPEG spends bytes the page cannot use. Lighthouse's 500 KB image
+# budget caught the page shipping 5.6 MB of them.
+def test_photo_prefers_the_webp_beside_it(tmp_path, monkeypatch):
+    monkeypatch.setattr(build_atlas, "REPO", tmp_path)
+    (tmp_path / "assets").mkdir()
+    (tmp_path / "assets" / "ada.webp").write_bytes(b"webp")
+    assert build_atlas.prefer_webp("assets/ada.jpg") == "assets/ada.webp"
+
+
+def test_photo_falls_back_when_no_webp_exists(tmp_path, monkeypatch):
+    # The state a member sits in between joining and the next bios sync.
+    monkeypatch.setattr(build_atlas, "REPO", tmp_path)
+    assert build_atlas.prefer_webp("assets/newcomer.jpg") == "assets/newcomer.jpg"
+
+
+def test_every_committed_photo_path_resolves_to_a_real_file():
+    """A photo path that 404s renders a faceless dot, which no gate would catch."""
+    atlas = json.loads((REPO / "data" / "atlas.json").read_text(encoding="utf-8"))
+    missing = [n["photo"] for n in atlas["nodes"]
+               if n.get("photo") and not (REPO / n["photo"]).exists()]
+    assert missing == [], f"atlas.json points at files that do not exist: {missing}"
+
+
+def test_committed_photo_payload_stays_under_the_lighthouse_budget():
+    """resource-summary:image:size warns above 500 KB; the canvas loads every
+    headshot eagerly, so the whole set is the page's image weight."""
+    atlas = json.loads((REPO / "data" / "atlas.json").read_text(encoding="utf-8"))
+    total = sum((REPO / n["photo"]).stat().st_size
+                for n in atlas["nodes"]
+                if n.get("photo") and (REPO / n["photo"]).exists())
+    mb = total / 1024 / 1024
+    # 2.5 MB leaves room to grow from today's 1.45 MB without hiding a
+    # regression back to the 5.24 MB the originals cost.
+    assert mb < 2.5, f"atlas headshot payload is {mb:.2f} MB"
