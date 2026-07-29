@@ -1,5 +1,5 @@
 {
-  "_documentation": "Single source of truth for the public calendar feeds AND the home-page event cards (#249). Two consumers: (a) `scripts/build-calendar.py` generates `calendar.ics` + `calendar/<slug>.ics` from the top-level scheduling fields (`uid`, `summary`, `description`, `start`, `end`, `location`, `url`, `organizer`, `categories`, `status`); see `docs/architecture.md` *Adding a new event*. (b) The inline JS renderer in `index.html` (+ FR + DE) reads the *renderer* fields (`eventType`, `featured`, `displayDate`, `i18n`, `meta`, `cta`) to build the event cards on the home page. EN content comes from the canonical top-level `summary` + `description` (also used by the .ics); FR + DE overrides live under `i18n.{fr,de}`. The renderer falls back to EN if a locale block is missing, and the hand-coded HTML in each home page is preserved as a `<noscript>`-style fail-soft fallback that the renderer empties on success. When you edit an event here: bump `dtstamp`, run `python3 scripts/build-calendar.py`, and confirm the FR/DE i18n blocks track any EN copy changes. CI runs the drift checker on every PR. Two Indico-derived markers (set by scripts/sync-indico.py, see docs/indico-sync.md): `coHost` is 'joint' for jointly-run EISS × NetSec events (the renderer shows a 'Joint EISS × NetSec' pill) and 'standalone' / absent otherwise; `autoDiscovered: true` flags an entry the sync appended from NetSec's Indico category (#8) carrying only EN copy, to be hand-enriched (richer description, FR/DE) by the maintainer.",
+  "_documentation": "Single source of truth for the public calendar feeds AND the home-page event cards (#249). Two consumers: (a) `scripts/build-calendar.py` generates `calendar.ics` + `calendar/<slug>.ics` from the top-level scheduling fields (`uid`, `summary`, `description`, `start`, `end`, `location`, `url`, `organizer`, `categories`, `status`); see `docs/architecture.md` *Adding a new event*. (b) The inline JS renderer in `index.html` (+ FR + DE) reads the *renderer* fields (`eventType`, `featured`, `displayDate`, `i18n`, `meta`, `cta`) to build the event cards on the home page. EN content comes from the canonical top-level `summary` + `description` (also used by the .ics); FR + DE overrides live under `i18n.{fr,de}`. The renderer falls back to EN if a locale block is missing, and the hand-coded HTML in each home page is preserved as a `<noscript>`-style fail-soft fallback that the renderer empties on success. When you edit an event here: bump `dtstamp`, run `python3 scripts/build-calendar.py`, and confirm the FR/DE i18n blocks track any EN copy changes. CI runs the drift checker on every PR. Two Indico-derived markers (set by scripts/sync-indico.py, see docs/indico-sync.md): `coHost` is 'joint' for jointly-run EISS × NetSec events (the renderer shows a 'Joint EISS × NetSec' pill) and 'standalone' / absent otherwise; `autoDiscovered: true` flags an entry the sync appended from NetSec's Indico category (#8) carrying only EN copy, to be hand-enriched (richer description, FR/DE) by the maintainer. (c) A third consumer, `assets/js/working-groups.js`, builds the *Related events* cards in each Working Group section from `workingGroups`, `eventType`, `cardTitle`, the optional `cardSubtitle` (a themed strand title, e.g. the policy workshop's), `cardLocation` (a short city-level place, or a localised 'venue to be confirmed' line), `displayDate` and `cta`. Cards run earliest-first, ordered on `start`.",
   "calname": "NetSec, COST Action CA24154",
   "caldesc": "Events from the NetSec COST Action (CA24154): annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
   "tzid": "Europe/Stockholm",
@@ -44,6 +44,11 @@
         "en": "NetSec Early-Career Scholars Summer School",
         "fr": "École d'été NetSec des chercheur·euses en début de carrière",
         "de": "NetSec-Summer-School für Nachwuchsforschende"
+      },
+      "cardLocation": {
+        "en": "Stockholm, Sweden",
+        "fr": "Stockholm, Suède",
+        "de": "Stockholm, Schweden"
       },
       "meta": [
         {
@@ -119,6 +124,11 @@
         "fr": "European Security Conference",
         "de": "European Security Conference"
       },
+      "cardLocation": {
+        "en": "Stockholm, Sweden",
+        "fr": "Stockholm, Suède",
+        "de": "Stockholm, Schweden"
+      },
       "meta": [
         {
           "icon": "clock",
@@ -192,6 +202,16 @@
         "fr": "Atelier politique NetSec",
         "de": "NetSec Politik-Workshop"
       },
+      "cardSubtitle": {
+        "en": "Great Power Politics and the Future of Alliances",
+        "fr": "Les grandes puissances et l'avenir des alliances",
+        "de": "Großmachtpolitik und die Zukunft der Bündnisse"
+      },
+      "cardLocation": {
+        "en": "Ankara, Türkiye",
+        "fr": "Ankara, Türkiye",
+        "de": "Ankara, Türkiye"
+      },
       "cta": {
         "href": {
           "en": "policy-workshop-2026.html",
@@ -258,6 +278,11 @@
         "fr": "Conférence ITC NetSec",
         "de": "NetSec ITC-Konferenz"
       },
+      "cardLocation": {
+        "en": "Venue to be confirmed",
+        "fr": "Lieu à confirmer",
+        "de": "Ort wird noch bestätigt"
+      },
       "meta": [
         {
           "icon": "calendar",
@@ -301,6 +326,11 @@
         "en": "Inaugural Management Committee Plenary",
         "fr": "Plénière inaugurale du Comité de gestion",
         "de": "Konstituierende Plenarsitzung des Management-Ausschusses"
+      },
+      "cardLocation": {
+        "en": "Venue to be announced",
+        "fr": "Lieu à annoncer",
+        "de": "Ort wird noch bekannt gegeben"
       },
       "meta": [
         {

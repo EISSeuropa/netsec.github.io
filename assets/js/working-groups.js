@@ -133,17 +133,26 @@
     return v || '';
   }
 
-  // A compact card for an event tagged with this Working Group. Date
-  // chip + type tag + title, the whole card linking to the event.
+  // A compact card for an event tagged with this Working Group. Type
+  // tag + title, then the themed strand title where an event has one
+  // (only the policy workshop does today), the place, and the date. The
+  // whole card links to the event. Several NetSec events share a
+  // generic name, so the subtitle and the place are what make a card
+  // identifiable at a glance (the Ankara workshop otherwise read as
+  // just "NetSec Policy Workshop").
   function wgEventCard(ev) {
     var href = localize(ev.cta && ev.cta.href) || ev.url || '#';
     var typeLabel = (t.types && t.types[ev.eventType])
       || (ev.categories && ev.categories[0]) || '';
+    var subtitle = localize(ev.cardSubtitle);
+    var place = localize(ev.cardLocation);
     var attrs = { 'class': 'wg-event-card glass', 'href': href };
     if (ev.cta && ev.cta.external) { attrs.target = '_blank'; attrs.rel = 'noopener'; }
     return el('a', attrs,
       typeLabel ? el('span', { 'class': 'wg-event-type', 'text': typeLabel }) : null,
       el('h4', { 'text': localize(ev.cardTitle) || ev.summary || '' }),
+      subtitle ? el('span', { 'class': 'wg-event-sub', 'text': subtitle }) : null,
+      place ? el('span', { 'class': 'wg-event-place', 'text': place }) : null,
       el('span', { 'class': 'wg-event-date', 'text': localize(ev.displayDate) + ' →' })
     );
   }
@@ -234,6 +243,11 @@
       if (evWrap) {
         var groupEvents = allEvents.filter(function (ev) {
           return (ev.workingGroups || []).indexOf(g.number) !== -1;
+        }).sort(function (a, b) {
+          // Chronological, earliest first, so the grid reads left to
+          // right as the year progresses. The JSON file order tracks
+          // how events were added, not when they happen.
+          return String(a.start || '').localeCompare(String(b.start || ''));
         });
         if (groupEvents.length) {
           evWrap.innerHTML = '';

@@ -713,6 +713,8 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .wg-page a.wg-member-card,.wg-page a.wg-event-card{text-decoration:none;color:inherit}
 .wg-event-type{font-size:.66rem;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--muted)}
 .wg-event-card h4{margin:0;font-size:.97rem;line-height:1.32;font-weight:600}
+.wg-event-sub{font-size:.85rem;line-height:1.35;color:var(--ink-2)}
+.wg-event-place{font-size:.8rem;color:var(--muted)}
 .wg-event-date{margin-top:2px;font-size:.82rem;font-weight:600;color:var(--wg-accent)}
 
 /* Deliverables ("Working towards"): a vertical list of the COST
@@ -839,12 +841,19 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 /* Solid WG colour with the readable text colour for each hue: the two
    light pills (green WG2, amber WG4) carry dark text, the two darker
    pills (blue WG1, purple WG3) carry white. Slightly larger + heavier
-   than before so the small label stays legible. */
+   than before so the small label stays legible. The .wg-N hue modifier
+   is shared with .wg-chip further up the file, and both compound it onto
+   their own component class, so the collision lint's markers below record
+   that the shared name is deliberate. */
 .event-wg-pill{font-family:'Inter',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.02em;padding:3px 9px;border-radius:7px;color:#fff;text-decoration:none;line-height:1.4;transition:opacity .15s var(--ease)}
 .event-wg-pill:hover{opacity:.85}
+/* css-collision-allow: .wg-1 */
 .event-wg-pill.wg-1{background:var(--wg-1);color:var(--wg-1-ink)}
+/* css-collision-allow: .wg-2 */
 .event-wg-pill.wg-2{background:var(--wg-2);color:var(--wg-2-ink)}
+/* css-collision-allow: .wg-3 */
 .event-wg-pill.wg-3{background:var(--wg-3);color:var(--wg-3-ink)}
+/* css-collision-allow: .wg-4 */
 .event-wg-pill.wg-4{background:var(--wg-4);color:var(--wg-4-ink)}
 .event-card h3,.output-card h3,.news-card h3{font-size:1.1rem;margin:0}
 .event-card p,.output-card p,.news-card p{font-size:.92rem;color:var(--muted);margin:0;flex-grow:1}
