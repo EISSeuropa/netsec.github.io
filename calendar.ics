@@ -28,7 +28,7 @@ END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
 UID:summer-school-2026@netsec-cost.eu
-DTSTAMP:20260724T160000Z
+DTSTAMP:20260731T120000Z
 DTSTART;TZID=Europe/Stockholm:20260609T090000
 DTEND;TZID=Europe/Stockholm:20260611T180000
 SUMMARY:NetSec Early-Career Scholars Summer School
@@ -41,7 +41,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:european-security-conference-2026@netsec-cost.eu
-DTSTAMP:20260724T160000Z
+DTSTAMP:20260731T120000Z
 DTSTART;TZID=Europe/Stockholm:20260611T080000
 DTEND;TZID=Europe/Stockholm:20260612T200000
 SUMMARY:2026 European Security Studies Conference
@@ -53,7 +53,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:policy-workshop-2026-09@netsec-cost.eu
-DTSTAMP:20260724T160000Z
+DTSTAMP:20260731T120000Z
 DTSTART;TZID=Europe/Stockholm:20260913T090000
 DTEND;TZID=Europe/Stockholm:20260913T180000
 SUMMARY:NetSec Policy Workshop: Great Power Politics and the Future of Alliances
@@ -64,20 +64,8 @@ CATEGORIES:Policy workshop,NetSec
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
-UID:itc-conference-2026-09@netsec-cost.eu
-DTSTAMP:20260724T160000Z
-DTSTART;TZID=Europe/Stockholm:20260908T090000
-DTEND;TZID=Europe/Stockholm:20260911T180000
-SUMMARY:NetSec ITC Conference
-DESCRIPTION:A NetSec Inclusiveness Target Country (ITC) Conference\, supported by the COST ITC Conference Grant scheme. The format prioritises participation from researchers based in ITCs\, with travel-grant support coordinated through the Action. Programme and registration to be published on the Action's website.\n\nThe ITC Conference Grant is one of five NetSec grant schemes. See https://netsec-cost.eu/grants.html for the full set.
-LOCATION:To be confirmed
-URL;VALUE=URI:https://netsec-cost.eu/grants.html
-CATEGORIES:ITC Conference,NetSec
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
 UID:mc-plenary-2026-09@netsec-cost.eu
-DTSTAMP:20260724T160000Z
+DTSTAMP:20260731T120000Z
 DTSTART;TZID=Europe/Stockholm:20260918T090000
 DTEND;TZID=Europe/Stockholm:20260918T180000
 SUMMARY:Inaugural NetSec Management Committee plenary

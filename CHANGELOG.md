@@ -151,6 +151,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The NetSec ITC Conference, listed for 8 to 11 September 2026, has been removed from the site. The event was never scheduled, so it is gone from the home-page events block, the Working Group related-events cards, the public calendar feed and its per-event `.ics` file, in all three locales. The COST ITC Conference Grant scheme is a separate thing and stays documented on the Grants page, the Glossary and the FAQ.
+
 - The Atlas prototype loads its member headshots about three quarters lighter, taking the page from 5.6 MB of images to 1.65 MB. The faces are drawn as small circles on the map, so the full-size photographs were sending detail the map cannot show. The page also joins the performance budget checks that already cover the rest of the site, which is what surfaced the weight in the first place.
 
 - Eleven directory keywords that sat outside the research-theme taxonomy (War, Intelligence, Maritime, Military history and others) are now filed under their matching themes, so every keyword pill resolves to a filterable theme.

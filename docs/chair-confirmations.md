@@ -66,13 +66,11 @@ in `data/events.json`.*
 | NetSec Early-Career Scholars Summer School | WG2, WG3, WG4 |
 | European Security Conference (ESSC) | WG1, WG2, WG3, WG4 |
 | NetSec Policy Workshop | WG2 |
-| NetSec ITC Conference | WG2, WG4 |
 | Inaugural Management Committee Plenary | WG1 |
 
 - [ ] Summer School tags correct
 - [ ] ESSC tags correct
 - [ ] Policy Workshop tags correct
-- [ ] ITC Conference tags correct
 - [ ] MC Plenary tags correct
 
 ## 4. WG objective and focus-area copy

@@ -151,15 +151,15 @@
     "index.html": {
       "fr": {
         "file": "index.fr.html",
-        "source_sha1": "cd7cdcdd8efc03599b10d17aa4839005aa4e980a",
-        "translated_on": "2026-07-12",
+        "source_sha1": "9db730ac71c52ebb5ce1ab93dbb40a2bbc4c107f",
+        "translated_on": "2026-07-31",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "index.de.html",
-        "source_sha1": "cd7cdcdd8efc03599b10d17aa4839005aa4e980a",
-        "translated_on": "2026-07-12",
+        "source_sha1": "9db730ac71c52ebb5ce1ab93dbb40a2bbc4c107f",
+        "translated_on": "2026-07-31",
         "status": "beta",
         "reviewed_by": null
       }
