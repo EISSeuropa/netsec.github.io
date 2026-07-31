@@ -4,7 +4,7 @@
   "caldesc": "Events from the NetSec COST Action (CA24154): annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
   "tzid": "Europe/Stockholm",
   "refresh_days": 7,
-  "dtstamp": "20260724T160000Z",
+  "dtstamp": "20260731T120000Z",
   "events": [
     {
       "uid": "summer-school-2026@netsec-cost.eu",
@@ -240,56 +240,6 @@
             "en": "<strong>Applications open</strong> · deadline 15 August 2026",
             "fr": "<strong>Candidatures ouvertes</strong> · clôture le 15 août 2026",
             "de": "<strong>Bewerbungen offen</strong> · Frist 15. August 2026"
-          }
-        }
-      ]
-    },
-    {
-      "uid": "itc-conference-2026-09@netsec-cost.eu",
-      "summary": "NetSec ITC Conference",
-      "description": "A NetSec Inclusiveness Target Country (ITC) Conference, supported by the COST ITC Conference Grant scheme. The format prioritises participation from researchers based in ITCs, with travel-grant support coordinated through the Action. Programme and registration to be published on the Action's website.\n\nThe ITC Conference Grant is one of five NetSec grant schemes. See https://netsec-cost.eu/grants.html for the full set.",
-      "location": "To be confirmed",
-      "url": "https://netsec-cost.eu/grants.html",
-      "start": "2026-09-08T09:00",
-      "end": "2026-09-11T18:00",
-      "categories": [
-        "ITC Conference",
-        "NetSec"
-      ],
-      "status": "CONFIRMED",
-      "eventType": "itc-conference",
-      "workingGroups": [
-        2,
-        4
-      ],
-      "featured": false,
-      "displayDate": {
-        "en": "8–11 September 2026",
-        "fr": "8–11 septembre 2026",
-        "de": "8.–11. September 2026"
-      },
-      "cardDescription": {
-        "en": "An Inclusiveness Target Country (ITC) Conference supported by the COST ITC Conference Grant scheme. The format prioritises participation from researchers based in ITCs, with travel-grant support coordinated through the Action. Programme and registration to be announced.",
-        "fr": "Une conférence pour les Pays Cibles d'Inclusivité (ITC), soutenue par le dispositif de subventions COST ITC Conference Grant. Le format privilégie la participation des chercheur·euses basé·es dans les ITC, avec un soutien aux frais de déplacement coordonné par l'Action. Programme et inscriptions à venir.",
-        "de": "Eine Konferenz für Inclusiveness Target Countries (ITC), unterstützt durch das COST-Förderinstrument *ITC Conference Grant*. Das Format priorisiert die Teilnahme von Forschenden aus ITC-Ländern, mit über die Aktion koordinierter Reisekostenunterstützung. Programm und Anmeldung folgen."
-      },
-      "cardTitle": {
-        "en": "NetSec ITC Conference",
-        "fr": "Conférence ITC NetSec",
-        "de": "NetSec ITC-Konferenz"
-      },
-      "cardLocation": {
-        "en": "Venue to be confirmed",
-        "fr": "Lieu à confirmer",
-        "de": "Ort wird noch bestätigt"
-      },
-      "meta": [
-        {
-          "icon": "calendar",
-          "i18n": {
-            "en": "Venue to be confirmed · Travel-grant details on <a href=\"grants.html\">grants.html</a>",
-            "fr": "Lieu à confirmer · Détails sur les subventions de voyage : <a href=\"grants.fr.html\">grants.fr.html</a>",
-            "de": "Ort wird noch bestätigt · Details zu Reisestipendien auf <a href=\"grants.de.html\">grants.de.html</a>"
           }
         }
       ]
