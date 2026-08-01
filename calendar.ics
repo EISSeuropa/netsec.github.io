@@ -28,7 +28,7 @@ END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
 UID:summer-school-2026@netsec-cost.eu
-DTSTAMP:20260731T120000Z
+DTSTAMP:20260801T090000Z
 DTSTART;TZID=Europe/Stockholm:20260609T090000
 DTEND;TZID=Europe/Stockholm:20260611T180000
 SUMMARY:NetSec Early-Career Scholars Summer School
@@ -41,7 +41,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:european-security-conference-2026@netsec-cost.eu
-DTSTAMP:20260731T120000Z
+DTSTAMP:20260801T090000Z
 DTSTART;TZID=Europe/Stockholm:20260611T080000
 DTEND;TZID=Europe/Stockholm:20260612T200000
 SUMMARY:2026 European Security Studies Conference
@@ -53,7 +53,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:policy-workshop-2026-09@netsec-cost.eu
-DTSTAMP:20260731T120000Z
+DTSTAMP:20260801T090000Z
 DTSTART;TZID=Europe/Stockholm:20260913T090000
 DTEND;TZID=Europe/Stockholm:20260913T180000
 SUMMARY:NetSec Policy Workshop: Great Power Politics and the Future of Alliances
@@ -65,14 +65,14 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:mc-plenary-2026-09@netsec-cost.eu
-DTSTAMP:20260731T120000Z
+DTSTAMP:20260801T090000Z
 DTSTART;TZID=Europe/Stockholm:20260918T090000
 DTEND;TZID=Europe/Stockholm:20260918T180000
 SUMMARY:Inaugural NetSec Management Committee plenary
-DESCRIPTION:The Action's first formal Management Committee plenary\, bringing together the MC representatives from the participating COST Member countries to align on workstreams\, confirm Working Group leadership for the coming cycle\, and elect any remaining roles. Followed by a Core Group working session.\n\nAccess is restricted to MC representatives\, Working Group leads\, and invited observers.
+DESCRIPTION:The Action's first formal Management Committee plenary\, bringing together the MC representatives from the participating COST Member countries to align on workstreams\, confirm Working Group leadership for the coming cycle\, and elect any remaining roles. Followed by a Core Group working session.\n\nThe date is not yet confirmed. This entry is provisional and will be updated once the Action announces it.\n\nAccess is restricted to MC representatives\, Working Group leads\, and invited observers.
 LOCATION:To be confirmed
 URL;VALUE=URI:https://netsec-cost.eu/#events
 CATEGORIES:MC Plenary,NetSec
-STATUS:CONFIRMED
+STATUS:TENTATIVE
 END:VEVENT
 END:VCALENDAR
