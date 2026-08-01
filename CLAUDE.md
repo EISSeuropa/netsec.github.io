@@ -55,6 +55,24 @@ and costs context.
   `build-field-guide.py`) once to recompute every `?v=` against the
   combined tree. A bounded wait for a merge the next step genuinely
   depends on is fine.
+- **Stack the PRs when the work is dependent and you were never
+  going to auto-merge it.** Both conditions have to hold. The
+  changes build on each other, the batch above being the canonical
+  case, and the change needs the maintainer's eyes before it lands,
+  so auto-merge was already off the table. Stacking and auto-merge
+  are mutually exclusive: GitHub refuses `enablePullRequestAutoMerge`
+  on a stacked PR, which is why the second condition is not a
+  preference but the price of admission. Land the chain in the
+  foreground with `gh stack merge --merge-method squash`, atomic
+  across the whole stack and still bound by the `protect-main`
+  ruleset. Stacking removes the `?v=` collision, because each PR's
+  base is the one below it rather than `main`, but not the churn,
+  since every level still restamps every page. When only one
+  condition holds, open an ordinary PR and arm auto-merge as usual.
+  Scripted use needs flags: `gh stack init <branches>` and
+  `gh stack submit --auto`, which creates drafts unless you add
+  `--open`. Trial findings in
+  [#1497](https://github.com/EISSeuropa/netsec.github.io/issues/1497).
 - **Carve-out: release notes.** When cutting a release via
   `scripts/release.sh`, eyeball the lede + themes + index before
   confirming the publish prompt. The maintainer expects to see the
