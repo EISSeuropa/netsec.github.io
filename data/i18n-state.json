@@ -151,15 +151,15 @@
     "index.html": {
       "fr": {
         "file": "index.fr.html",
-        "source_sha1": "9db730ac71c52ebb5ce1ab93dbb40a2bbc4c107f",
-        "translated_on": "2026-07-31",
+        "source_sha1": "a2d344dd927f5da14e1580faee84a4dd1657cb1f",
+        "translated_on": "2026-08-01",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "index.de.html",
-        "source_sha1": "9db730ac71c52ebb5ce1ab93dbb40a2bbc4c107f",
-        "translated_on": "2026-07-31",
+        "source_sha1": "a2d344dd927f5da14e1580faee84a4dd1657cb1f",
+        "translated_on": "2026-08-01",
         "status": "beta",
         "reviewed_by": null
       }
@@ -263,15 +263,15 @@
     "roadmap.html": {
       "fr": {
         "file": "roadmap.fr.html",
-        "source_sha1": "8b006840b44a1a7a77051a829e60229a30e8e703",
-        "translated_on": "2026-07-28",
+        "source_sha1": "ec4e6218ea74279230d858f887643a8b2d05f887",
+        "translated_on": "2026-08-01",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "roadmap.de.html",
-        "source_sha1": "8b006840b44a1a7a77051a829e60229a30e8e703",
-        "translated_on": "2026-07-28",
+        "source_sha1": "ec4e6218ea74279230d858f887643a8b2d05f887",
+        "translated_on": "2026-08-01",
         "status": "beta",
         "reviewed_by": null
       }

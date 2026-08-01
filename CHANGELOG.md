@@ -151,6 +151,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The inaugural Management Committee plenary no longer advertises a firm date. It now reads September 2026, date to be confirmed, on the home page, the public roadmap and the calendar feed, in all three locales, and its calendar entry is marked tentative so subscribers see it as provisional rather than settled. The 18 September date came from the same event ledger that produced the NetSec ITC Conference, and nothing outside that ledger corroborates it. The date returns as soon as the Action announces it.
+
 - The NetSec ITC Conference, listed for 8 to 11 September 2026, has been removed from the site. The event was never scheduled, so it is gone from the home-page events block, the Working Group related-events cards, the public calendar feed and its per-event `.ics` file, in all three locales. The COST ITC Conference Grant scheme is a separate thing and stays documented on the Grants page, the Glossary and the FAQ.
 
 - The Atlas prototype loads its member headshots about three quarters lighter, taking the page from 5.6 MB of images to 1.65 MB. The faces are drawn as small circles on the map, so the full-size photographs were sending detail the map cannot show. The page also joins the performance budget checks that already cover the rest of the site, which is what surfaced the weight in the first place.
