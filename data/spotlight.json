@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "mehmet-babacan",
-  "featuredSince": "2026-07-28",
+  "current": "zane-sime",
+  "featuredSince": "2026-08-04",
   "pinned": null,
   "history": [
+    {
+      "id": "zane-sime",
+      "week": "2026-W32",
+      "date": "2026-08-04"
+    },
     {
       "id": "mehmet-babacan",
       "week": "2026-W31",
