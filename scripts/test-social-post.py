@@ -268,6 +268,30 @@ def test_spotlight_bluesky_render_fits_without_truncation():
         assert "…" not in text
 
 
+def test_spotlight_drops_an_overlong_role_instead_of_truncating(monkeypatch, tmp_path):
+    # A submitted position long enough to blow the budget on its own falls back
+    # to the bare introduction, and an affiliation already named in the position
+    # is not appended a second time.
+    bios = tmp_path / "bios.json"
+    bios.write_text(json.dumps({"members": [{
+        "id": "long-role", "name": "Dr Long Role",
+        "position": "guest lecturer at Some Very Long University Name Indeed " * 4,
+        "affiliation": "Some Very Long University Name Indeed",
+        "canonical_keywords": ["cyber diplomacy"], "mentorship": ["mentor"],
+    }]}), encoding="utf-8")
+    spot = tmp_path / "spotlight.json"
+    spot.write_text(json.dumps({"active": True, "current": "long-role",
+                                "featuredSince": "2026-08-04"}), encoding="utf-8")
+    monkeypatch.setattr(sp, "BIOS", bios)
+    monkeypatch.setattr(sp, "SPOTLIGHT", spot)
+    post = sp.read_spotlight()
+    text = post.render("bluesky")
+    assert len(text) <= sp.BLUESKY_LIMIT
+    assert "…" not in text
+    assert post.summary.startswith("Meet Dr Long Role in the NetSec Directory.")
+    assert "Indeed at Some Very Long University Name Indeed" not in post.summary
+
+
 def test_bluesky_handle_from_profile_url_or_bare():
     assert sp.bluesky_handle("https://bsky.app/profile/apb-ldn.org") == "apb-ldn.org"
     assert sp.bluesky_handle("https://bsky.app/profile/foo.bsky.social") == "foo.bsky.social"
