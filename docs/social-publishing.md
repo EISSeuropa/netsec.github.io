@@ -42,7 +42,12 @@ data/spotlight.json (wk) ─┘        composes text + image; records the ledger
   silently: no handle, no mention; a failed comment leaves the post standing.
 - **No duplicates.** `data/social-posted.json` records what has been posted
   (news by feed GUID; spotlight by member + ISO week), so re-runs post
-  nothing and a member is posted at most once per week.
+  nothing and a member is posted at most once per week. The ledger is read
+  from the checkout, and the rotation workflow checks out `main`, so the guard
+  only holds once the week's auto-PR has merged. Re-running **Rotate member
+  spotlight** while that PR is still open reads a ledger without the week's
+  key and posts the spotlight a second time. Wait for the merge, or use the
+  dry run.
 - **Approval gate.** The publishing job runs inside a GitHub *environment*
   called `social` with a required reviewer. GitHub pauses the job and emails
   the reviewer; the run page shows the exact text and image; the post is sent
@@ -281,13 +286,24 @@ publish step then fails safely and posts nothing).
 - **News:** `📣 {headline}` + a one-paragraph summary + the article link.
   Bluesky is trimmed to 300 characters; LinkedIn carries the full summary plus
   `#EuropeanSecurity #COSTAction`.
-- **Spotlight:** `🔦 Member spotlight` + "Meet {name} in the NetSec Directory.
-  {role}. {status}. Working on {themes}." + the profile link, with the member's
-  OG card image. The **status** sentence is built from the same fields as the OG
-  card (Working-Group membership or leadership, mentorship, STSM hosting) and is
-  omitted when the member has none of them. **Themes** are title-cased with
-  acronym preservation (so "black sea security" reads "Black Sea Security",
-  "EU foreign policy" reads "EU Foreign Policy").
+- **Spotlight:** `⭐ NetSec Directory Spotlight` + "Meet {name} in the NetSec
+  Directory, {role}. Working on {themes}. {status}" + the profile link, with the
+  member's OG card image. The **status** sentence is built from the same fields
+  as the OG card (Working-Group membership or leadership, mentorship, STSM
+  hosting) and is omitted when the member has none of them. **Themes** are
+  title-cased with acronym preservation (so "black sea security" reads "Black
+  Sea Security", "EU foreign policy" reads "EU Foreign Policy"). The **role**
+  joins the submitted position and affiliation, unless the position already
+  names the affiliation, in which case it is not repeated.
+
+  Bluesky has 300 characters for all of that, so `read_spotlight` drops whole
+  pieces until the text fits rather than letting `Post.render` cut a word in
+  half: three themes, then two, then one, then none, then the status sentence,
+  and finally the role itself, which leaves the bare introduction and the
+  profile link. A submitted position long enough to fill the limit on its own
+  is what the last rung is for (PR #1503). The pieces come off in that order
+  because the link is what the post is for and the mentorship line is what a
+  reader can act on.
 
 Posts are **English only**. Edit the templates in `scripts/social-post.py`
 (the `Post.render` method and the `read_spotlight` composer) to adjust tone,
