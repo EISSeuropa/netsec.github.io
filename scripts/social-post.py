@@ -305,7 +305,10 @@ def read_spotlight() -> Post | None:
         return None
     pos = (m.get("position") or "").strip()
     aff = (m.get("affiliation") or "").strip()
-    role = f"{pos} at {aff}" if pos and aff else (pos or aff)
+    # Some submitted positions already spell out the affiliation ("guest
+    # lecturer at X University"), so appending "at X University" again reads
+    # as a stutter.
+    role = pos if aff and aff.lower() in pos.lower() else (f"{pos} at {aff}" if pos and aff else (pos or aff))
     themes = [titlecase_theme(t) for t in (m.get("canonical_keywords") or [])][:3]
     intro = f"Meet {m.get('name', slug)} in the NetSec Directory"
     lead = f"{intro}, {role}." if role else f"{intro}."
@@ -330,19 +333,24 @@ def read_spotlight() -> Post | None:
     mention_len = len(f"\n\nOn Bluesky: @{bsky}") if bsky else 0
     budget = BLUESKY_LIMIT - len(f"⭐ {title}") - len(f"\n\n{link}") - 2 - mention_len
 
-    def _summary(n_themes: int, with_status: bool) -> str:
-        parts = [lead]
+    def _summary(opening: str, n_themes: int, with_status: bool) -> str:
+        parts = [opening]
         if themes and n_themes:
             parts.append("Working on " + ", ".join(themes[:n_themes]) + ".")
         if with_status and status:
             parts.append(status)
         return " ".join(parts)
 
-    summary = _summary(len(themes), bool(status))
-    for n, ws in [(3, True), (2, True), (1, True), (0, True), (0, False)]:
-        cand = _summary(min(n, len(themes)), ws)
-        if len(cand) <= budget:
-            summary = cand
+    # A long submitted position can blow the budget on its own, so the last
+    # resort drops the role and keeps the bare introduction.
+    summary = ""
+    for opening in (lead, f"{intro}."):
+        for n, ws in [(3, True), (2, True), (1, True), (0, True), (0, False)]:
+            cand = _summary(opening, min(n, len(themes)), ws)
+            if len(cand) <= budget:
+                summary = cand
+                break
+        if summary:
             break
 
     card = ROOT / "assets" / "og" / "people" / f"{slug}.png"
