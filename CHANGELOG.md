@@ -161,6 +161,8 @@ maintainer-facing audience.
 
 - Eleven directory keywords that sat outside the research-theme taxonomy (War, Intelligence, Maritime, Military history and others) are now filed under their matching themes, so every keyword pill resolves to a filterable theme.
 
+- A further eleven directory keywords surfaced by the weekly taxonomy check (Civil wars, Covert action, Proxy warfare, US foreign policy, Interventions, Border security, Critical infrastructure protection, Malicious drones, Security risk assessment, Science and innovation policies, Diplomacy studies) are now filed under their matching themes, and a typo on a member's "Dipomacy studies" keyword is corrected to "Diplomacy studies".
+
 ## [1.13.0] · 2026-07-22 — Introducing Mentorship Matching 2.0
 
 > This release turns the Directory from something you read into something you use. A member can now find a mentor or a mentee through a guided matching panel, open a fuller profile page that links out to their published work, and be introduced more widely as the weekly spotlight begins posting to LinkedIn alongside Bluesky. The site also takes an editorial design pass, loads faster, and moves its Indico programme updates onto a supported, upgrade-safe path. Three themes follow, then a single canonical index at the bottom.

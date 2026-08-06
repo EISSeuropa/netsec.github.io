@@ -3291,6 +3291,12 @@
         "Interventions",
         "Proxy warfare",
         "US foreign policy"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Intelligence, information and influence",
+        "Peace, mediation and reconciliation",
+        "Security and defence"
       ]
     },
     {
@@ -3341,7 +3347,9 @@
         "Security risk assessment"
       ],
       "themes": [
-        "Crisis management and critical systems resilience"
+        "Crisis management and critical systems resilience",
+        "Security and defence",
+        "Transnational and human security"
       ]
     },
     {
@@ -3363,7 +3371,7 @@
       "wg_leadership": {},
       "bio": "Zane Šime is a guest lecturer at Rīga Stradiņš University who has devised and is responsible for graduate courses about international organisations and global security governance. She is an Earth System Governance Fellow and European Climate Pact Ambassador. On 23 January 2026, Zane successfully defended her Dr. Philos thesis, “The EU Science Diplomacy Towards the Southern Neighbourhood: Reappraising the EU Structural Diplomacy”, at the Norwegian University of Science and Technology (NTNU). In October 2026, she will participate in the celebratory occasion linked to her doctoral thesis being awarded the Dr. Alois Mock Science Prize 2025. She has completed research at the United Nations University Institute on Comparative Regional Integration Studies (UNU-CRIS) and the Academy of the Organisation for Security and Co-operation in Europe (OSCE). She has acquired academic administration experience in the Department of EU International Relations and Diplomacy Studies at the College of Europe (Bruges campus). Zane is an alumna of several Asia-Europe Foundation programmes and the Geneva Centre for Security Policy. She is a former Salzburg Global Seminar Fellow of the Emerging Urban Leaders Programme. Her previous work experience includes project implementation at the Secretariat of the Council of the Baltic Sea States (CBSS) and the Latvian civil service. Zane is a graduate of KU Leuven and the University of Latvia. She is a co-recipient of the Vilis Vītols Article Prize 2022, awarded by the Association for the Advancement of Baltic Studies, and a member of the 2020 class of ‘Top 40 Under 40 EU India/UK India Young Leaders’.",
       "keywords": [
-        "dipomacy studies",
+        "diplomacy studies",
         "regionalism",
         "science and innovation policies",
         "multilateralism"
@@ -3379,12 +3387,13 @@
       "source": "form",
       "photo_source_sha256": "916417d43a3025c14e68602dad0900ba029dcd9ea739ccc00a26e9e452d94029",
       "canonical_keywords": [
-        "Dipomacy studies",
+        "Diplomacy studies",
         "Multilateralism",
         "Regionalism",
         "Science and innovation policies"
       ],
       "themes": [
+        "Cyber and emerging technology",
         "EU, UN and other international organisations",
         "Foreign policy and diplomacy"
       ]
@@ -3740,7 +3749,7 @@
       "count": 1
     },
     {
-      "keyword": "Dipomacy studies",
+      "keyword": "Diplomacy studies",
       "count": 1
     },
     {
@@ -4191,26 +4200,26 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 30
+      "count": 32
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 24
+      "count": 25
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 18
+      "count": 19
     },
     {
       "theme": "Theory and methods",
       "count": 18
     },
     {
-      "theme": "Strategy and deterrence",
-      "count": 12
+      "theme": "Transnational and human security",
+      "count": 13
     },
     {
-      "theme": "Transnational and human security",
+      "theme": "Strategy and deterrence",
       "count": 12
     },
     {
@@ -4218,19 +4227,19 @@
       "count": 11
     },
     {
+      "theme": "Intelligence, information and influence",
+      "count": 9
+    },
+    {
       "theme": "Economic security and geoeconomics",
       "count": 8
     },
     {
-      "theme": "Intelligence, information and influence",
+      "theme": "Peace, mediation and reconciliation",
       "count": 8
     },
     {
       "theme": "EU, UN and other international organisations",
-      "count": 7
-    },
-    {
-      "theme": "Peace, mediation and reconciliation",
       "count": 7
     },
     {
@@ -4260,12 +4269,14 @@
     "Arms control": "Strategy and deterrence",
     "Black sea region": "Security and defence",
     "Black sea security": "Security and defence",
+    "Border security": "Transnational and human security",
     "British army": "Security and defence",
     "Capability planning": "Security and defence",
     "China's foreign policy": "Foreign policy and diplomacy",
     "Civil conflict": "Peace, mediation and reconciliation",
     "Civil defence": "Security and defence",
     "Civil protection": "Crisis management and critical systems resilience",
+    "Civil wars": "Peace, mediation and reconciliation",
     "Civil-military relations": "Security and defence",
     "Cloud and edge systems": "Cyber and emerging technology",
     "Cognitive warfare": "Intelligence, information and influence",
@@ -4278,8 +4289,10 @@
     "Counter-insurgency": "Security and defence",
     "Counter-uav detection": "Security and defence",
     "Counterterrorism": "Transnational and human security",
+    "Covert action": "Intelligence, information and influence",
     "Crises": "Crisis management and critical systems resilience",
     "Crisis management": "Crisis management and critical systems resilience",
+    "Critical infrastructure protection": "Crisis management and critical systems resilience",
     "Critical infrastructure security": "Crisis management and critical systems resilience",
     "Critical security studies": "Theory and methods",
     "Cyber defence": "Cyber and emerging technology",
@@ -4302,6 +4315,7 @@
     "Digital security": "Cyber and emerging technology",
     "Digital sovereignty": "Cyber and emerging technology",
     "Diplomacy": "Foreign policy and diplomacy",
+    "Diplomacy studies": "Foreign policy and diplomacy",
     "Disinformation": "Intelligence, information and influence",
     "Divided nation": "Peace, mediation and reconciliation",
     "Domestic politics of foreign and security policy": "Foreign policy and diplomacy",
@@ -4363,10 +4377,12 @@
     "International organisations": "EU, UN and other international organisations",
     "International relations": "Theory and methods",
     "International security": "Security and defence",
+    "Interventions": "Security and defence",
     "IoT": "Cyber and emerging technology",
     "Irregular warfare": "Security and defence",
     "Judgment and decision-making": "Political psychology, public opinion and decision-making",
     "Machine learning for security": "Cyber and emerging technology",
+    "Malicious drones": "Security and defence",
     "Maritime": "Security and defence",
     "Maritime security": "Transnational and human security",
     "Maritime strategy": "Strategy and deterrence",
@@ -4400,6 +4416,7 @@
     "Positive peace": "Peace, mediation and reconciliation",
     "Post-cold war international relations": "Theory and methods",
     "Power": "Security and defence",
+    "Proxy warfare": "Security and defence",
     "Public opinion": "Political psychology, public opinion and decision-making",
     "Regional cooperation": "Foreign policy and diplomacy",
     "Regional security cooperation and governance": "Foreign policy and diplomacy",
@@ -4407,10 +4424,12 @@
     "Research methods": "Theory and methods",
     "Role theory": "Theory and methods",
     "Russian foreign policy": "Foreign policy and diplomacy",
+    "Science and innovation policies": "Cyber and emerging technology",
     "Securitisation": "Theory and methods",
     "Security": "Security and defence",
     "Security and defence": "Security and defence",
     "Security politics": "Security and defence",
+    "Security risk assessment": "Crisis management and critical systems resilience",
     "Security sector governance": "Security and defence",
     "Security sector reforms": "Security and defence",
     "Security studies": "Security and defence",
@@ -4434,6 +4453,7 @@
     "Transnational criminal organisations (TCOs)": "Transnational and human security",
     "Turkish foreign policy": "Foreign policy and diplomacy",
     "UN": "EU, UN and other international organisations",
+    "US foreign policy": "Foreign policy and diplomacy",
     "US-China relations": "Foreign policy and diplomacy",
     "Unification": "Peace, mediation and reconciliation",
     "Visual threat detection": "Security and defence",
