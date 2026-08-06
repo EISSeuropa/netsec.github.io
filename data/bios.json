@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-07-29T07:52:50+00:00",
+  "generated_at": "2026-08-06T08:17:21+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-07-29T07:52:50+00:00"
+    "last_synced": "2026-08-06T08:17:21+00:00"
   },
   "members": [
     {
@@ -3371,7 +3371,7 @@
       "wg_leadership": {},
       "bio": "Zane Šime is a guest lecturer at Rīga Stradiņš University who has devised and is responsible for graduate courses about international organisations and global security governance. She is an Earth System Governance Fellow and European Climate Pact Ambassador. On 23 January 2026, Zane successfully defended her Dr. Philos thesis, “The EU Science Diplomacy Towards the Southern Neighbourhood: Reappraising the EU Structural Diplomacy”, at the Norwegian University of Science and Technology (NTNU). In October 2026, she will participate in the celebratory occasion linked to her doctoral thesis being awarded the Dr. Alois Mock Science Prize 2025. She has completed research at the United Nations University Institute on Comparative Regional Integration Studies (UNU-CRIS) and the Academy of the Organisation for Security and Co-operation in Europe (OSCE). She has acquired academic administration experience in the Department of EU International Relations and Diplomacy Studies at the College of Europe (Bruges campus). Zane is an alumna of several Asia-Europe Foundation programmes and the Geneva Centre for Security Policy. She is a former Salzburg Global Seminar Fellow of the Emerging Urban Leaders Programme. Her previous work experience includes project implementation at the Secretariat of the Council of the Baltic Sea States (CBSS) and the Latvian civil service. Zane is a graduate of KU Leuven and the University of Latvia. She is a co-recipient of the Vilis Vītols Article Prize 2022, awarded by the Association for the Advancement of Baltic Studies, and a member of the 2020 class of ‘Top 40 Under 40 EU India/UK India Young Leaders’.",
       "keywords": [
-        "diplomacy studies",
+        "dipomacy studies",
         "regionalism",
         "science and innovation policies",
         "multilateralism"
@@ -3397,6 +3397,128 @@
         "EU, UN and other international organisations",
         "Foreign policy and diplomacy"
       ]
+    },
+    {
+      "id": "ken-mcdonagh",
+      "name": "Dr Ken McDonagh",
+      "country": "Ireland",
+      "country_code": "ie",
+      "affiliation": "Dublin City University",
+      "position": "Associate Professor of International Relations",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Western Balkans"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Kenneth McDonagh is Associate Professor in International Relations in the School of Law and Government. He was Head of School from 2021-2024 and the Associate Dean for Teaching and Learning in the Faculty of Humanities and Social Sciences from 2019-2021. His research is focused on EU Foreign Policy and Common Security and Defence Policy, the role of small states in CSDP, Ireland's security and defence policy, and the gendered impact of CSDP missions. He has published on the EU as a global actor, the gendered impact of CSDP missions and contributed to policy papers and training activities in the area of Women,  Peace and Security and CSDP. He was Principal Investigator of the H2020-MCSA-ITN Global India (www.globalindia.eu) which aimed to train a new generation of experts on EU-India relations and empower them with the skills and expertise to contribute to the EU’s engagement with India. Previously, he was PI of an Irish Research Council funded project on the Gendered impact of CSDP missions in the Western Balkans which produced training material and policy reports aimed at the European External Action Service and other stakeholders. Dr McDonagh has over a decade of teaching experience in EU and International Relations at Undergraduate and Postgraduate levels.",
+      "keywords": [
+        "CSDP",
+        "EU Security and Defence",
+        "EU Foreign Policy",
+        "Ireland"
+      ],
+      "email": "kenneth.mcdonagh@dcu.ie",
+      "website": "https://www.dcu.ie/lawandgovernment/people/ken-mcdonagh",
+      "orcid": "0000-0003-1811-3081",
+      "linkedin": "https://www.linkedin.com/in/kennethmcdonagh/",
+      "twitter": "",
+      "bluesky": "https://bsky.app/profile/kenmcdonagh.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/ken-mcdonagh.jpg",
+      "source": "form",
+      "photo_source_sha256": "73b87f39de55b4cf9e0ff7417128cdfcb139b1536cbf82c019a948af881679bf",
+      "canonical_keywords": [
+        "CSDP",
+        "EU foreign policy",
+        "EU security and defence",
+        "Ireland"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy"
+      ]
+    },
+    {
+      "id": "francisco-javier-montilla-aguilera",
+      "name": "Mr Francisco Javier Montilla Aguilera",
+      "country": "Spain",
+      "country_code": "es",
+      "affiliation": "Universidad de Granada",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional",
+        "Middle East and North Africa"
+      ],
+      "wg_leadership": {},
+      "bio": "PhD candidate in International Relations at the University of Granada and Project Officer at the Euro-Arab Foundation for Higher Studies (FUNDEA), where he manages and conducts research within European-funded projects on security, foreign interference, disinformation, and the prevention of violent radicalisation.\n\nHe holds Bachelor's degrees in Political Science and Public Administration and in Law, as well as an MA in Advanced International and European Studies from the University of Granada. He previously worked as a Research Intern in the Department of Political Science and Public Administration at the same university.\n\nHis doctoral research examines foreign interference through disinformation as an instrument of power in International Relations, with a particular focus on its conceptualisation, its impact on democratic resilience and international security, and its links to hybrid threats and foreign influence operations. His broader research interests include international security, European security, China's foreign policy, and the role of international actors in the Middle East and North Africa (MENA). He is also a member of the Secretariat of the Ideologies and Conspiracy Narratives Panel within the EU Knowledge Hub on Prevention of Radicalisation.",
+      "keywords": [
+        "Foreign interference",
+        "FIMI",
+        "information manipulation",
+        "hybrid threats."
+      ],
+      "email": "jmontillaa01@gmail.com",
+      "website": "",
+      "orcid": "0009-0007-8027-5838",
+      "linkedin": "https://www.linkedin.com/in/f-javier-montilla-aguilera-5125b52a0",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/francisco-javier-montilla-aguilera.jpg",
+      "source": "form",
+      "photo_source_sha256": "4494cdc0435ec0e897127cba08b16085d678c44b72335c3072ab043be8c874d2",
+      "canonical_keywords": [
+        "Fimi",
+        "Foreign interference",
+        "Hybrid threats.",
+        "Information manipulation"
+      ]
+    },
+    {
+      "id": "joe-burton",
+      "name": "Prof. Joe Burton",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "affiliation": "Lancaster University",
+      "position": "Professor of International Security",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Dr Joe Burton is Professor of International Security in the School of Global Affairs, Lancaster University.  He joined the university in July 2023 as part of the Security and Protection Science initiative. Joe is the author of NATO's Durability in a Post-Cold War World (SUNY Press, 2018), editor of Emerging Technologies and International Security: Machines the State and War (Routledge, 2020), and his work on Artificial Intelligence and Cyber Security has been published in a range of leading scientific journals, including International Affairs, Journal of Global Security Studies, Technology in Society, Asian Security, Defence Studies, the Cyber Defence Review, the RUSI Journal and Political Science.  Dr Burton has served as a ministerial advisor in New Zealand and the UK.  He is the coordinator of the CYDIPLO Jean Monnet Network on Cyber Diplomacy and a recipient of the US Department of State (DoS) SUSI Fellowship (New York, Washington D.C.), the Taiwan Fellowship (Ministry of Foreign Affairs, Taipei), and has been a visiting researcher and lecturer at the NATO Cooperative Cyber Defence Centre of Excellence (CCDCOE) in Tallinn, Estonia.  Joe has implemented projects and received funding from the US Department of State, the Taiwan Ministry of Foreign Affairs (MOFA), the NATO Science for Peace and Security Programme (NATO SPS), NATO CCDCOE, the European Commission (Marie Curie program and Jean Monnet Network lead), the National Cyber Security Centre (NCSC), the Alan Turing Institute and the New Zealand Department for Prime Minister and Cabinet (DPMC).  Professor Burton has extensive experience of futures methods, scenario and simulation design, wargaming and has received formal NATO/EU training in this area.",
+      "keywords": [
+        "AI cyber security geopolitics"
+      ],
+      "email": "j.burton6@lancaster.ac.uk",
+      "website": "https://www.lancaster.ac.uk/global-affairs/people/joe-burton",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/joe-burton-6242aab0/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/joe-burton.jpg",
+      "source": "form",
+      "photo_source_sha256": "25751b2cb7d6ce9f074ba4c706626568f03b58694ebe80335b21bf9bd181d241",
+      "canonical_keywords": [
+        "AI cyber security geopolitics"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3410,6 +3532,10 @@
     },
     {
       "keyword": "AI",
+      "count": 4
+    },
+    {
+      "keyword": "EU foreign policy",
       "count": 4
     },
     {
@@ -3446,10 +3572,6 @@
     },
     {
       "keyword": "Emerging and disruptive technologies",
-      "count": 3
-    },
-    {
-      "keyword": "EU foreign policy",
       "count": 3
     },
     {
@@ -3581,6 +3703,10 @@
       "count": 1
     },
     {
+      "keyword": "AI cyber security geopolitics",
+      "count": 1
+    },
+    {
       "keyword": "AI governance",
       "count": 1
     },
@@ -3697,6 +3823,10 @@
       "count": 1
     },
     {
+      "keyword": "CSDP",
+      "count": 1
+    },
+    {
       "keyword": "Cyber defence",
       "count": 1
     },
@@ -3805,6 +3935,10 @@
       "count": 1
     },
     {
+      "keyword": "EU security and defence",
+      "count": 1
+    },
+    {
       "keyword": "Euro-Atlantic foreign policy",
       "count": 1
     },
@@ -3826,6 +3960,14 @@
     },
     {
       "keyword": "Feminist studies",
+      "count": 1
+    },
+    {
+      "keyword": "Fimi",
+      "count": 1
+    },
+    {
+      "keyword": "Foreign interference",
       "count": 1
     },
     {
@@ -3869,6 +4011,10 @@
       "count": 1
     },
     {
+      "keyword": "Hybrid threats.",
+      "count": 1
+    },
+    {
       "keyword": "Identity",
       "count": 1
     },
@@ -3894,6 +4040,10 @@
     },
     {
       "keyword": "Information integrity",
+      "count": 1
+    },
+    {
+      "keyword": "Information manipulation",
       "count": 1
     },
     {
@@ -3930,6 +4080,10 @@
     },
     {
       "keyword": "IoT",
+      "count": 1
+    },
+    {
+      "keyword": "Ireland",
       "count": 1
     },
     {
@@ -4204,7 +4358,7 @@
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 25
+      "count": 26
     },
     {
       "theme": "Cyber and emerging technology",
@@ -4463,11 +4617,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 45
+      "count": 47
     },
     {
       "region": "Global and cross-regional",
-      "count": 34
+      "count": 36
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -4475,7 +4629,7 @@
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 15
+      "count": 16
     },
     {
       "region": "The Americas",
@@ -4487,7 +4641,7 @@
     },
     {
       "region": "Middle East and North Africa",
-      "count": 7
+      "count": 8
     },
     {
       "region": "Africa",

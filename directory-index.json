@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-07-29T07:52:50+00:00",
+  "generated_at": "2026-08-06T08:17:21+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 74,
+  "count": 77,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -269,6 +269,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/francesco-canossi.jpg"
     },
     {
+      "name": "Mr Francisco Javier Montilla Aguilera",
+      "name_key": "francisco aguilera",
+      "aliases": [],
+      "slug": "francisco-javier-montilla-aguilera",
+      "url": "https://netsec-cost.eu/people/francisco-javier-montilla-aguilera.html",
+      "orcid": "0009-0007-8027-5838",
+      "role": null,
+      "affiliation": "Universidad de Granada",
+      "photo": "https://netsec-cost.eu/assets/images/people/francisco-javier-montilla-aguilera.jpg"
+    },
+    {
       "name": "Dr Gayane Harutyunyan",
       "name_key": "gayane harutyunyan",
       "aliases": [],
@@ -368,6 +379,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/ivan-zaccagnini.jpg"
     },
     {
+      "name": "Prof. Joe Burton",
+      "name_key": "joe burton",
+      "aliases": [],
+      "slug": "joe-burton",
+      "url": "https://netsec-cost.eu/people/joe-burton.html",
+      "orcid": null,
+      "role": null,
+      "affiliation": "Lancaster University",
+      "photo": "https://netsec-cost.eu/assets/images/people/joe-burton.jpg"
+    },
+    {
       "name": "Mr Johannes Lucht",
       "name_key": "johannes lucht",
       "aliases": [],
@@ -410,6 +432,17 @@
       "role": null,
       "affiliation": "UNESCO",
       "photo": "https://netsec-cost.eu/assets/images/people/kara-schneider.jpg"
+    },
+    {
+      "name": "Dr Ken McDonagh",
+      "name_key": "ken mcdonagh",
+      "aliases": [],
+      "slug": "ken-mcdonagh",
+      "url": "https://netsec-cost.eu/people/ken-mcdonagh.html",
+      "orcid": "0000-0003-1811-3081",
+      "role": null,
+      "affiliation": "Dublin City University",
+      "photo": "https://netsec-cost.eu/assets/images/people/ken-mcdonagh.jpg"
     },
     {
       "name": "Dr Kire Babanoski",
