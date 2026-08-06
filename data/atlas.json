@@ -4,7 +4,7 @@
     "working_groups": 4,
     "people": 182,
     "people_with_bios": 74,
-    "edges": 484,
+    "edges": 491,
     "themes": 15,
     "panels_matched": 14,
     "panel_edges": 54,
@@ -54,7 +54,7 @@
       "id": "theme-cyber-and-emerging-technology",
       "type": "theme",
       "name": "Cyber and emerging technology",
-      "memberCount": 18
+      "memberCount": 19
     },
     {
       "id": "theme-democracy-governance-and-political-change",
@@ -84,7 +84,7 @@
       "id": "theme-foreign-policy-and-diplomacy",
       "type": "theme",
       "name": "Foreign policy and diplomacy",
-      "memberCount": 24
+      "memberCount": 25
     },
     {
       "id": "theme-identity-narratives-and-ideational-security",
@@ -96,13 +96,13 @@
       "id": "theme-intelligence-information-and-influence",
       "type": "theme",
       "name": "Intelligence, information and influence",
-      "memberCount": 8
+      "memberCount": 9
     },
     {
       "id": "theme-peace-mediation-and-reconciliation",
       "type": "theme",
       "name": "Peace, mediation and reconciliation",
-      "memberCount": 7
+      "memberCount": 8
     },
     {
       "id": "theme-political-psychology-public-opinion-and-decision-making",
@@ -114,7 +114,7 @@
       "id": "theme-security-and-defence",
       "type": "theme",
       "name": "Security and defence",
-      "memberCount": 30
+      "memberCount": 32
     },
     {
       "id": "theme-strategy-and-deterrence",
@@ -132,7 +132,7 @@
       "id": "theme-transnational-and-human-security",
       "type": "theme",
       "name": "Transnational and human security",
-      "memberCount": 12
+      "memberCount": 13
     },
     {
       "id": "alexander-lanoszka",
@@ -2629,6 +2629,14 @@
       "target": "theme-crisis-management-and-critical-systems-resilience"
     },
     {
+      "source": "athanasios-skraparlis",
+      "target": "theme-security-and-defence"
+    },
+    {
+      "source": "athanasios-skraparlis",
+      "target": "theme-transnational-and-human-security"
+    },
+    {
       "source": "clara-jammot",
       "target": "theme-cyber-and-emerging-technology"
     },
@@ -3037,6 +3045,22 @@
       "target": "theme-security-and-defence"
     },
     {
+      "source": "niklas-karlen",
+      "target": "theme-foreign-policy-and-diplomacy"
+    },
+    {
+      "source": "niklas-karlen",
+      "target": "theme-intelligence-information-and-influence"
+    },
+    {
+      "source": "niklas-karlen",
+      "target": "theme-peace-mediation-and-reconciliation"
+    },
+    {
+      "source": "niklas-karlen",
+      "target": "theme-security-and-defence"
+    },
+    {
       "source": "nikolaos-tzifakis",
       "target": "theme-foreign-policy-and-diplomacy"
     },
@@ -3215,6 +3239,10 @@
     {
       "source": "yijun-xu",
       "target": "theme-peace-mediation-and-reconciliation"
+    },
+    {
+      "source": "zane-sime",
+      "target": "theme-cyber-and-emerging-technology"
     },
     {
       "source": "zane-sime",
