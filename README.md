@@ -1,11 +1,5 @@
 # NetSec — COST Action CA24154 website
 
-<p align="center">
-  <a href="https://netsec-cost.eu/press-kit.html">
-    <img src="docs/promo/poster-promo-card.png" alt="NetSec promotional poster — Networking European security knowledge. CC BY 4.0 · COST Action CA24154. Click for the press kit." width="360">
-  </a>
-</p>
-
 > Official website and open community directory of **COST Action
 > CA24154 — Networking European Security Knowledge (NetSec)**.
 
@@ -17,6 +11,9 @@
 This site doubles as the Action's **Deliverable D1** (open community
 directory) and is maintained by [Dr Arthur Laudrain](https://netsec-cost.eu/people.html#arthur-laudrain)
 (MC member, CH).
+
+[![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/EISSeuropa/netsec.github.io/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/EISSeuropa/netsec.github.io)
+[![SWH](https://archive.softwareheritage.org/badge/swh:1:dir:82e9d45c86c908ebd56a817ae96028b29c83ea67/)](https://archive.softwareheritage.org/swh:1:dir:82e9d45c86c908ebd56a817ae96028b29c83ea67;origin=https://github.com/EISSeuropa/netsec.github.io;visit=swh:1:snp:88347e107d664de75754e144be25edfc9392fbbd;anchor=swh:1:rev:d6896e08c12d3ec323f928239f91b61f4d30ab01)
 
 ---
 
