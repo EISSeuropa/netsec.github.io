@@ -89,6 +89,21 @@ def test_card_has_hero_two_columns_and_facepile():
     assert 'href="people/' in html
 
 
+def test_affiliation_line_skips_an_institution_the_position_already_names():
+    # #1506: a joint appointment spelled out in the position used to print the
+    # institution twice in a row.
+    m = {"id": "dup", "name": "Dr Dup",
+         "position": "guest lecturer at Rīga Stradiņš University, RSU",
+         "affiliation": "Rīga Stradiņš University, RSU", "country": "Latvia"}
+    html = bpp.render_card(m, [], [], [], EN)
+    assert "guest lecturer at Rīga Stradiņš University, RSU · Latvia" in html
+    assert "RSU · Rīga Stradiņš University" not in html
+    # An affiliation the position does not name still shows.
+    other = dict(m, position="PhD candidate")
+    assert "PhD candidate · Rīga Stradiņš University, RSU · Latvia" in bpp.render_card(
+        other, [], [], [], EN)
+
+
 def test_mentor_facepile_lists_on_topic_mentors_seniority_ordered():
     # Two mentors on the same topic; the inferred-seniority tiebreak orders the
     # senior one first, the non-mentor is excluded, and the facepile links into

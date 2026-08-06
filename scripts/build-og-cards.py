@@ -271,7 +271,10 @@ def card_hash(inputs: dict) -> str:
 
 
 def card_markup(inputs: dict) -> str:
-    role_bits = [b for b in (inputs.get("position", ""), inputs.get("affiliation", "")) if b]
+    # A position that already names the institution ("guest lecturer at X
+    # University") would otherwise print it twice in a row (#1506).
+    pos, aff = inputs.get("position", ""), inputs.get("affiliation", "")
+    role_bits = [b for b in (pos, "" if aff and aff.lower() in pos.lower() else aff) if b]
     role = " · ".join(role_bits)
     role_html = f'<div class="role">{html_mod.escape(role)}</div>' if role else ""
 

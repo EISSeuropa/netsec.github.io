@@ -151,6 +151,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- A member whose job title already names their university no longer sees it printed twice on their profile page and on the profile card that circulates when the page is shared.
+
 - The weekly member spotlight posted to Bluesky no longer risks ending mid-word. A submitted job title long enough to fill the 300-character limit on its own now falls back to the bare introduction and profile link rather than being cut off, and a university already named in the job title is no longer repeated after it.
 
 - The inaugural Management Committee plenary no longer advertises a firm date. It now reads September 2026, date to be confirmed, on the home page, the public roadmap and the calendar feed, in all three locales, and its calendar entry is marked tentative so subscribers see it as provisional rather than settled. The 18 September date came from the same event ledger that produced the NetSec ITC Conference, and nothing outside that ledger corroborates it. The date returns as soon as the Action announces it.
