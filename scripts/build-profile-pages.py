@@ -586,7 +586,11 @@ def render_card(m: dict, works: list, similar: list, mentors: list, loc: dict, p
         if has_wg:
             p.append('<p class="member-role is-soft" data-i18n="Working Group participant">'
                       'Working Group participant</p>')
-    aff_parts = [x for x in (m.get("position"), m.get("affiliation"), m.get("country")) if x]
+    # A position that already names the institution ("guest lecturer at X
+    # University") would otherwise print it twice in a row (#1506).
+    pos = (m.get("position") or "").strip()
+    aff = (m.get("affiliation") or "").strip()
+    aff_parts = [x for x in (pos, "" if aff.lower() in pos.lower() else aff, m.get("country")) if x]
     if aff_parts:
         flag = ""
         if m.get("country_code"):

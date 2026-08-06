@@ -42,6 +42,16 @@ def test_card_markup_escapes_and_includes_flag():
     assert "Netherlands" in html
 
 
+def test_card_markup_skips_an_affiliation_the_position_already_names():
+    # #1506: the role line used to read "… at X University · X University".
+    inp = {"name": "Dr Dup", "position": "guest lecturer at X University, XU",
+           "affiliation": "X University, XU"}
+    assert "guest lecturer at X University, XU</div>" in boc.card_markup(inp)
+    # Distinct affiliations still join.
+    other = dict(inp, position="PhD candidate")
+    assert "PhD candidate · X University, XU" in boc.card_markup(other)
+
+
 def test_card_markup_omits_flag_when_missing():
     inp = {"name": "X", "position": "", "affiliation": "", "country": "Nowhere", "country_code": "zz"}
     html = boc.card_markup(inp)
