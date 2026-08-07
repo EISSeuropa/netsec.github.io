@@ -45,7 +45,7 @@
 #       minor / major releases (X.Y.0 / X.0.0), an additional
 #       six-point cross-check reminder prints before the prompt
 #       (roadmap / sitemap / translations / repo docs + PDF / Wiki)
-#       — see CLAUDE.md §5 for the full checklist.
+#       — see the release-cross-check skill for the full checklist.
 #       (--dry-run skips the prompt; the dry-run output IS the preview.)
 #   6.  Promote [Unreleased] to `[<version>] · <today> — <title>` and
 #       start a fresh [Unreleased] section above it. Update the
@@ -276,17 +276,18 @@ if [[ "$DRY_RUN" != "--dry-run" ]]; then
   # six-point cross-check reminder before the prompt. Skipped for
   # patch releases — they're scoped to small fixes and the overhead
   # isn't justified. The full version of the checklist lives in
-  # CLAUDE.md §5 and is mirrored in docs/admin-guide.md → Cutting a
+  # the release-cross-check skill and is mirrored in docs/admin-guide.md →
+  # Cutting a
   # release.
   PATCH_PART="${VERSION##*.}"
   if [[ "$PATCH_PART" == "0" ]]; then
-    printf '  Minor / major release — six-point cross-check (CLAUDE.md §5):\n'
+    printf '  Minor / major release — six-point cross-check (release-cross-check skill):\n'
     printf '    1. Roadmap       — /roadmap.html (+ FR + DE) and docs/roadmap-2026.md.\n'
     printf '    2. Sitemap       — sitemap.xml and /sitemap.html (+ FR + DE).\n'
     printf '    3. Translations  — `python3 scripts/check-i18n-drift.py` reports zero drift?\n'
     printf '    4. Repo docs+PDF — docs/ markdown + docs/pdf/documentation.html cover stamp.\n'
     printf "    5. Members' Wiki — decisions log, templates, stubs match public pages.\n"
-    printf "    6. Banner        — data/whats-new.json \`active\` state still appropriate? (§14)\n"
+    printf "    6. Banner        — data/whats-new.json \`active\` state still appropriate?\n"
     printf '\n'
     printf '  Land any edits in the same release, or open tracking issues (rule §3)\n'
     printf '  and reference them from the surface. Abort here if anything is missing —\n'
@@ -451,7 +452,7 @@ if [[ "$DRY_RUN" != "--dry-run" ]]; then
     fi
   fi
   echo
-  echo "  ⚠ Card BODY check (CLAUDE.md §5.1). The script flipped the"
+  echo "  ⚠ Card BODY check (release-cross-check skill, step 1). The script flipped the"
   echo "    status pill and bumped the date, but the card description"
   echo "    on roadmap.html (+ FR + DE) still shows whatever was planned"
   echo "    at the time the v$VERSION card was authored. If the actual"
@@ -527,7 +528,8 @@ echo "  https://github.com/EISSeuropa/netsec.github.io/releases/tag/v$VERSION"
 # ────────────────────────────────────────────────────────────────────
 # Post-release maintainer reminder: PDF documentation pack.
 #
-# Per CLAUDE.md §5.4 + §11, the PDF cover bumps on every minor / major
+# Per the release-cross-check skill (step 4) + CLAUDE.md §11, the PDF cover
+# bumps on every minor / major
 # release; patches skip it. The PDF version axis is independent from
 # the website version (they don't track 1-to-1; see CHANGELOG appendix
 # inside docs/pdf/documentation.html). The script doesn't auto-bump

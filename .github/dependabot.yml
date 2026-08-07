@@ -3,7 +3,7 @@
 # Watches two surfaces for upstream updates:
 #
 #   1. GitHub Actions used in any .github/workflows/*.yml. We SHA-pin
-#      every third-party action per CLAUDE.md §12 (release-infrastructure
+#      every third-party action per .github/CLAUDE.md (release-infrastructure
 #      hygiene). Dependabot opens a PR each time an upstream tag moves
 #      to a new SHA, so the SHA-pin stays current without manual sweeps.
 #

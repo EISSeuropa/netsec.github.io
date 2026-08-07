@@ -5,7 +5,7 @@
 # days". Each label fires its own comment. Labels not in the
 # vocabulary below are ignored (no spurious bot comment).
 #
-# Label vocabulary documented in CLAUDE.md §12 (release-infra
+# Label vocabulary documented in .github/CLAUDE.md (release-infra
 # hygiene). When adding a new label here, update the rule.
 #
 # Zero cost: no third-party services, no API keys.

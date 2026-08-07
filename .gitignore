@@ -6,6 +6,15 @@
 .claude/*
 !.claude/settings.json
 !.claude/hooks/
+# Procedures that used to live in CLAUDE.md, moved out so they load on
+# invocation instead of costing context every session. CLAUDE.md points at
+# them, so they are checked in for the same reason it is.
+!.claude/skills/
+# ...but not netsec-design: a 33 MB local design bundle (fonts, a .pptx,
+# screenshots, scraps) that belongs on disk rather than in git history.
+# Re-excluded after the un-ignore above, since git cannot re-include a path
+# whose parent directory is still excluded.
+.claude/skills/netsec-design/
 scripts/__pycache__/
 
 # macOS Finder metadata

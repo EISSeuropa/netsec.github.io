@@ -419,13 +419,14 @@ conference dates, or `event/22`:
 | `data/events.json` | `indicoEventId`, the `Registration:` URL in the description, the `url` block (`essc-<year>.*`), and the dates, location, and chairpersons. The co-located Summer School has its own `events.json` entry: update its dates and rebuild the feed with `python3 scripts/build-calendar.py`. |
 | `summer-school.html` + `.fr` + `.de` | The Summer School page is co-located with the conference but is **not** year-suffixed, so edit it in place rather than renaming: the edition dates, the *This edition* year and host, the application-status pill and deadline, and the faculty roster (names, affiliations, and which two are scientific coordinators). Faculty who are NetSec members resolve to their directory cards by name, so no `data-slug` editing is needed. |
 | `data/essc-livestream.json` | The conference livestream. Set `url` to the Zoom webinar link and `start`/`end` to the conference window (ISO with a `+02:00` CEST offset). Inside that window each plenary and roundtable "Livestream" pill on the programme becomes the link to the webinar, and the running session's pill gets a red "live" pulse. Blank `url` (or delete the file) to take it down after the conference. The daily Indico sync does not touch this file. |
-| `data/whats-new.json` | The `/essc-2026.html` links and the campaign reason, if the banner is run for the conference (it is off by default, see CLAUDE.md §14). |
+| `data/whats-new.json` | The `/essc-2026.html` links and the campaign reason, if the banner is run for the conference (it is off by default, see the whats-new-banner skill). |
 | `sitemap.xml` + `sitemap.html` (+ FR + DE) | The `essc-2026` URL entry. Re-run `scripts/inject-seo.py` to regenerate `sitemap.xml`. |
 | `scripts/indico_clean_duplicate.py` | The `PROTECTED_EVENTS` allow-list, so the rollover script refuses to touch the new live event. |
 | `docs/admin-guide.md` (*Canned replies* above) | The `event/22/...` and `essc-2026` URLs inside the four reply templates. |
 
 The stakeholder PDF pack (`docs/pdf/documentation.html`) also names
-ESSC 2026, but it refreshes on the release cadence (CLAUDE.md §5.4),
+ESSC 2026, but it refreshes on the release cadence (release-cross-check
+skill, step 4),
 not per-conference, so leave it to the next pack update.
 
 **Indico-side steps** (off-repo, re-apply each edition): grant chairs

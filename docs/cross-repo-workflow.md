@@ -4,7 +4,8 @@
 account share infrastructure and features that routinely port between
 them: `netsec.github.io` (this site) and `EISSeuropa.github.io` (the
 EISS site). This note records the lightweight conventions that keep the
-two in step without rework. It complements CLAUDE.md §13, which covers
+two in step without rework. It complements the cross-repo-project skill,
+which covers
 the shared GitHub Project board. The board tracks *what* crosses over.
 This doc covers *how* it crosses over.
 
@@ -82,7 +83,7 @@ When a feature or fix lands on one site and the other needs the same:
 
 1. File an enhancement issue on the target repo.
 2. Link the source PR in the body: *"Ported from EISSeuropa/&lt;repo&gt;#N"*.
-3. Add it to the shared Project board (CLAUDE.md §13) so the pairing is
+3. Add it to the shared Project board (cross-repo-project skill) so the pairing is
    visible at the next release cycle.
 
 This keeps the audit trail self-referencing on both sides, the same way
@@ -121,5 +122,6 @@ each other:
 
 It is not a migration plan to merge the two repos, and it is not a
 mandate to share code today. It is the convention that makes the
-existing two-repo split cheap to maintain. The Project board (§13) is
+existing two-repo split cheap to maintain. The Project board
+(cross-repo-project skill) is
 the live view. This doc is the rulebook behind it.

@@ -3,7 +3,7 @@
 # (i18n / calendar / news drift, CSS class collisions, external-link arrows,
 # SEO asset drift, brand lint). Centralises the SHA-pinned checkout +
 # setup-python so a Dependabot bump touches one file instead of seven
-# (CLAUDE.md §12: the pins live here now).
+# (.github/CLAUDE.md: the pins live here now).
 name: Python check (reusable)
 
 on:

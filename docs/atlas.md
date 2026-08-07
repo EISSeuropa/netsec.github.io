@@ -20,7 +20,7 @@ in the top nav, not in the footer, and not in `sitemap.xml`**, so it is
 reachable only by its URL. That is on purpose while it proves itself.
 When it graduates it needs three things it does not have yet: a nav or
 discovery-grid entry, a `sitemap.xml` row plus a visual-sitemap entry
-(CLAUDE.md §5.2), and a decision on whether the "prototype" framing
+(release-cross-check skill, step 2), and a decision on whether the "prototype" framing
 comes off. Until then, treat it as a standalone that most visitors will
 never land on.
 
