@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-08-06T08:17:21+00:00",
+  "generated_at": "2026-08-08T07:30:20+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-08-06T08:17:21+00:00"
+    "last_synced": "2026-08-08T07:30:20+00:00"
   },
   "members": [
     {
@@ -3519,12 +3519,100 @@
       "canonical_keywords": [
         "AI cyber security geopolitics"
       ]
+    },
+    {
+      "id": "carla-sofia-ferreira-fernandes",
+      "name": "Carla Sofia Ferreira Fernandes",
+      "country": "Portugal",
+      "country_code": "pt",
+      "affiliation": "Centre for Functional Ecology",
+      "position": "Researcher",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Africa",
+        "Global and cross-regional",
+        "Middle East and North Africa"
+      ],
+      "wg_leadership": {},
+      "bio": "Early-career researcher working at the intersection of climate change, environemntal stressors and migration with a particular focus on North Africa, and authored policy briefs translating research and field observations into recommendations for decision-makers.. Alongside my academic work, I have field experience as a humanitarian practitioner in conflict-affected areas, which has given me a grounded, practice-informed perspective on human security. \n\nThis combination of academic research, humanitarian practice, and institutional policy experience has shaped an interdisciplinary approach that bridges scholarly analysis with on-the-ground realities and policy relevance. My work sits within the broader field of non-traditional security studies, engaging with themes such as environmental (in)security and displacement.\n\nI am particularly interested in how research can more directly inform adaptation to environmental degardation and migration policy in a human security perspective, and in strengthening the connection between academic knowledge production and practical policymaking.\n\n Looking ahead, I am keen to expand my engagement with broader security debates, contribute to collaborative, cross-disciplinary research, and continue developing the practical skills needed to make academic work more accessible and useful to policymakers working on migration, climate adaptation, and human security.",
+      "keywords": [
+        "Climate Change",
+        "Environmental Degradation",
+        "Migration",
+        "MENA Region"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "0000-0002-2650-9759",
+      "linkedin": "https://www.linkedin.com/in/sofia-ferreira-fernandes/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Climate change",
+        "Environmental degradation",
+        "MENA region",
+        "Migration"
+      ]
+    },
+    {
+      "id": "andriy-tyushka",
+      "name": "Dr Andriy Tyushka",
+      "country": "Poland",
+      "country_code": "pl",
+      "affiliation": "College of Europe (Natolin)",
+      "position": "Senior Research Fellow",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Global and cross-regional"
+      ],
+      "wg_leadership": {},
+      "bio": "Dr Andriy TYUSHKA is a Senior Research Fellow in the European Neighbourhood Chair at the College of Europe in Natolin. He has also been WP8 team member of the ‘ENGAGE’ Horizon 2020 Project (2021-2024) ‘Envisioning a New Governance Architecture for a Global Europe’ (https://www.engage-eu.eu) and is now part of ‘REUNIR’ Horizon Europe Project (since 2024) focusing on ‘Future-proofing EU security, Enlargement and Eastern Neighbourhood Policies for a New Age of International Relations’ (https://reunir-horizon.eu).\n\nPrior to joining the College of Europe in Natolin, Dr Andriy TYUSHKA held research and teaching positions in Spain (University of Deusto), Germany (German-French Institute in Ludwigsburg), and, most recently, Estonia (Baltic Defence College), where in 2016, he was awarded the BALTDEFCOL Service Cross for outstanding service. He was also a research fellow in the Department of International Relations and Diplomacy at the Ivan Franko National University of Lviv (Ukraine), where he obtained his M.A. and Ph.D. in International Relations and World Politics. He also holds advanced postgraduate degrees in Constitutional Law (University of Lviv), and International Relations and European Integration (Estonian School of Diplomacy).\n\nDr TYUSHKA’s research focuses primarily on (Eastern) European security (Ukraine, Poland, Russia); the EU’s (Eastern) neighbourhood, foreign and security policy, including the EU association agreements and structural power in the neighbourhood.",
+      "keywords": [
+        "European security",
+        "Eastern Europe",
+        "Ukraine",
+        "Russia-Ukraine war",
+        "deterrence"
+      ],
+      "email": "andriy.tyushka@coleurope.eu",
+      "website": "https://www.coleurope.eu/whoswho/person/andriy.tyushka",
+      "orcid": "0000-0003-1876-5338",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/andriy-tyushka.jpg",
+      "source": "form",
+      "photo_source_sha256": "5a80b1c063d4eb7ba749a35231473cbf4c873465cfc309e44a0dc40a7a16b06c",
+      "canonical_keywords": [
+        "Deterrence",
+        "Eastern Europe",
+        "European security",
+        "Russia-Ukraine war",
+        "Ukraine"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Security and defence",
+        "Strategy and deterrence"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "European security",
-      "count": 8
+      "count": 9
     },
     {
       "keyword": "Cybersecurity",
@@ -3560,6 +3648,10 @@
     },
     {
       "keyword": "Alliance politics",
+      "count": 3
+    },
+    {
+      "keyword": "Deterrence",
       "count": 3
     },
     {
@@ -3611,11 +3703,11 @@
       "count": 2
     },
     {
-      "keyword": "Deterrence",
+      "keyword": "Digital sovereignty",
       "count": 2
     },
     {
-      "keyword": "Digital sovereignty",
+      "keyword": "Eastern Europe",
       "count": 2
     },
     {
@@ -3767,6 +3859,10 @@
       "count": 1
     },
     {
+      "keyword": "Climate change",
+      "count": 1
+    },
+    {
       "keyword": "Cloud and edge systems",
       "count": 1
     },
@@ -3907,10 +4003,6 @@
       "count": 1
     },
     {
-      "keyword": "Eastern Europe",
-      "count": 1
-    },
-    {
       "keyword": "Economic statecraft",
       "count": 1
     },
@@ -3924,6 +4016,10 @@
     },
     {
       "keyword": "Energy security",
+      "count": 1
+    },
+    {
+      "keyword": "Environmental degradation",
       "count": 1
     },
     {
@@ -4111,7 +4207,15 @@
       "count": 1
     },
     {
+      "keyword": "MENA region",
+      "count": 1
+    },
+    {
       "keyword": "Middle east studies",
+      "count": 1
+    },
+    {
+      "keyword": "Migration",
       "count": 1
     },
     {
@@ -4235,6 +4339,10 @@
       "count": 1
     },
     {
+      "keyword": "Russia-Ukraine war",
+      "count": 1
+    },
+    {
       "keyword": "Russian foreign policy",
       "count": 1
     },
@@ -4327,6 +4435,10 @@
       "count": 1
     },
     {
+      "keyword": "Ukraine",
+      "count": 1
+    },
+    {
       "keyword": "UN",
       "count": 1
     },
@@ -4354,11 +4466,11 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 32
+      "count": 33
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 26
+      "count": 27
     },
     {
       "theme": "Cyber and emerging technology",
@@ -4369,12 +4481,12 @@
       "count": 18
     },
     {
-      "theme": "Transnational and human security",
+      "theme": "Strategy and deterrence",
       "count": 13
     },
     {
-      "theme": "Strategy and deterrence",
-      "count": 12
+      "theme": "Transnational and human security",
+      "count": 13
     },
     {
       "theme": "European and transatlantic security order",
@@ -4617,15 +4729,15 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 47
+      "count": 48
     },
     {
       "region": "Global and cross-regional",
-      "count": 36
+      "count": 38
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 16
+      "count": 17
     },
     {
       "region": "Europe - Western Balkans",
@@ -4641,11 +4753,11 @@
     },
     {
       "region": "Middle East and North Africa",
-      "count": 8
+      "count": 9
     },
     {
       "region": "Africa",
-      "count": 4
+      "count": 5
     }
   ]
 }
