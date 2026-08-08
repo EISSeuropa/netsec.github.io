@@ -2,6 +2,9 @@
   "_documentation": "Hand corrections the bios sync re-applies after every fetch (see apply_overrides in scripts/sync-bios.py, issue #1219). The Google Sheet is authoritative, so a correction made only in bios.json is reverted by the next sync; entries here survive it. Each entry replaces `from` with `to` in one field of one member, matched by id. When the sync reports an entry as 'not present (fixed at source?)', the submitter has corrected it upstream and the entry can be deleted.",
   "text_fixes": [
     { "id": "arthur-laudrain", "field": "bio", "from": "profesionnal", "to": "professional" },
-    { "id": "sophie-enos-attali", "field": "bio", "from": "a associate researcher", "to": "an associate researcher" }
+    { "id": "sophie-enos-attali", "field": "bio", "from": "a associate researcher", "to": "an associate researcher" },
+    { "id": "sophie-enos-attali", "field": "bio", "from": "bee working", "to": "been working" },
+    { "id": "moritz-weiss", "field": "bio", "from": "; and also Principal Investigator", "to": ", and also Principal Investigator" },
+    { "id": "felix-kosterke", "field": "position", "from": "PhD candidate; Research Fellow", "to": "PhD candidate and Research Fellow" }
   ]
 }
