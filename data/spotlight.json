@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "zane-sime",
-  "featuredSince": "2026-08-04",
+  "current": "saurav-narain",
+  "featuredSince": "2026-08-11",
   "pinned": null,
   "history": [
+    {
+      "id": "saurav-narain",
+      "week": "2026-W33",
+      "date": "2026-08-11"
+    },
     {
       "id": "zane-sime",
       "week": "2026-W32",
