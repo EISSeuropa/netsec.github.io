@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-08-08T07:30:20+00:00",
+  "generated_at": "2026-08-16T05:40:36+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-08-08T07:30:20+00:00"
+    "last_synced": "2026-08-16T05:40:36+00:00"
   },
   "members": [
     {
@@ -3607,6 +3607,56 @@
         "Security and defence",
         "Strategy and deterrence"
       ]
+    },
+    {
+      "id": "sprincean-serghei",
+      "name": "Prof. Sprincean Serghei",
+      "country": "Moldova",
+      "country_code": "md",
+      "affiliation": "Moldova State University. Institute of Legal, Political and Sociological Research",
+      "position": "PhD, leading researcher, scientific secretary of the Institute",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor-full",
+        "matched"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Europe - Western Balkans",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Serghei SPRINCEAN\nORCID: https://orcid.org/0000-0002-7411-9958,\nScopus Author ID: 58172233200,\nWoS ID: V-3296-2017, https://scholar.google.com/citations?user=z4vnBmoAAAAJ\nI activate as scientific secretary and researcher of the Institute of Legal,\nPolitical and Sociological Research of the Moldova State University. I am author of over 330 scientific publications on the specific of assuring human safety and security, assessment and evaluation of public policies, the role of the interests and pressure groups and of the civil society in decision-making process. \nI am coordinating the international project \"Camps and Camp-like Settings in Urban\nEnvironments: Bridging Humanitarian and Development Activities\", funded by Swiss Network for International Studies (SNIS), hosting institution: Fachhochschule Nordwestschweiz (FHNW), international Consortium between University of Applied Sciences Northwestern Switzerland,\nMoldova State University and University of Jordan (2025 - 2027) - as national coordinator. As well I participated in such projects as 20.70086.13/COV \"Mitigation of the negative impact of the COVID-19 pandemic on the functioning of state power institutions in the Republic of Moldova (FUNCOV)\" (2020-2021 also as coordinator), 20.80009.1606.05 \"Quality of justice and respect for human rights in the Republic of Moldova: interdisciplinary research in the context of the\nimplementation of the Association Agreement Republic of Moldova - European Union\" (2020-2023), \"The development of legal framework of Republic of Moldova in the context of the necessities in security and in assuring European path” (2015-2019), “Interaction between state and civil society\nin Republic of Moldova in the context of deepening of democratic reforms” (2011-2014).",
+      "keywords": [
+        "Human securirty",
+        "national security",
+        "research ethics",
+        "pressure groups",
+        "political bioethics"
+      ],
+      "email": "sprinceans@yahoo.com",
+      "website": "",
+      "orcid": "0000-0002-7411-9958",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/sprincean-serghei.jpg",
+      "source": "form",
+      "photo_source_sha256": "d0b6be6b400a650443daddcafc07f50e3c22be60b4637e94cc4beeae8f05ea02",
+      "canonical_keywords": [
+        "Human securirty",
+        "National security",
+        "Political bioethics",
+        "Pressure groups",
+        "Research ethics"
+      ],
+      "themes": [
+        "Security and defence"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3752,6 +3802,10 @@
     },
     {
       "keyword": "Multilateralism",
+      "count": 2
+    },
+    {
+      "keyword": "National security",
       "count": 2
     },
     {
@@ -4107,6 +4161,10 @@
       "count": 1
     },
     {
+      "keyword": "Human securirty",
+      "count": 1
+    },
+    {
       "keyword": "Hybrid threats.",
       "count": 1
     },
@@ -4243,10 +4301,6 @@
       "count": 1
     },
     {
-      "keyword": "National security",
-      "count": 1
-    },
-    {
       "keyword": "Nationalism",
       "count": 1
     },
@@ -4299,6 +4353,10 @@
       "count": 1
     },
     {
+      "keyword": "Political bioethics",
+      "count": 1
+    },
+    {
       "keyword": "Political economy",
       "count": 1
     },
@@ -4315,6 +4373,10 @@
       "count": 1
     },
     {
+      "keyword": "Pressure groups",
+      "count": 1
+    },
+    {
       "keyword": "Proxy warfare",
       "count": 1
     },
@@ -4328,6 +4390,10 @@
     },
     {
       "keyword": "Regional security cooperation and governance",
+      "count": 1
+    },
+    {
+      "keyword": "Research ethics",
       "count": 1
     },
     {
@@ -4466,7 +4532,7 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 33
+      "count": 34
     },
     {
       "theme": "Foreign policy and diplomacy",
@@ -4729,19 +4795,19 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 48
+      "count": 49
     },
     {
       "region": "Global and cross-regional",
-      "count": 38
+      "count": 39
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 17
+      "count": 18
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 16
+      "count": 17
     },
     {
       "region": "The Americas",
