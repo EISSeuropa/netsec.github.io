@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-08-16T05:40:36+00:00",
+  "generated_at": "2026-08-17T05:48:58+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-08-16T05:40:36+00:00"
+    "last_synced": "2026-08-17T05:48:58+00:00"
   },
   "members": [
     {
@@ -3657,12 +3657,61 @@
       "themes": [
         "Security and defence"
       ]
+    },
+    {
+      "id": "li-yang",
+      "name": "Dr Li Yang",
+      "country": "Belgium",
+      "country_code": "be",
+      "affiliation": "Horizon Europe ReConnect China Project",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Asia",
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Yang Li is a PhD researcher at Ghent University and a researcher with the Horizon Europe ReConnect China project. His work examines EU–China relations, European economic security, strategic autonomy, strategic narratives, and the implications of geoeconomic competition for European and Asian security. He is particularly interested in how European institutions and member states respond differently to China-related risks, technological competition, research security, and changing international alignments. His research combines qualitative document analysis, comparative case studies, and policy-oriented analysis. His research and publications address EU de-risking, China-related research cooperation, strategic narratives, global order, and regional security. He was a visiting scholar at the Graduate Institute of National Development, National Taiwan University, in 2024. Through NetSec, he hopes to contribute to policy-oriented research, comparative European security analysis, and collaboration between academic and policy communities.",
+      "keywords": [
+        "European security",
+        "EU–China relations",
+        "economic security",
+        "strategic autonomy",
+        "geoeconomic competition"
+      ],
+      "email": "yangyali.li@ugent.be",
+      "website": "https://research.flw.ugent.be/nl/yangyali.li",
+      "orcid": "0000-0000-0000-0000",
+      "linkedin": "https://www.linkedin.com/in/li-yang-3578a2194/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/li-yang.jpg",
+      "source": "form",
+      "photo_source_sha256": "419cbcdc8f3d046d1b5f94fbb24d57551fdb21c573841d51e2a7f310a494ccc6",
+      "canonical_keywords": [
+        "Economic security",
+        "European security",
+        "EU–China relations",
+        "Geoeconomic competition",
+        "Strategic autonomy"
+      ],
+      "themes": [
+        "Economic security and geoeconomics",
+        "Security and defence"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "European security",
-      "count": 9
+      "count": 10
     },
     {
       "keyword": "Cybersecurity",
@@ -3670,6 +3719,10 @@
     },
     {
       "keyword": "AI",
+      "count": 4
+    },
+    {
+      "keyword": "Economic security",
       "count": 4
     },
     {
@@ -3706,10 +3759,6 @@
     },
     {
       "keyword": "Diplomacy",
-      "count": 3
-    },
-    {
-      "keyword": "Economic security",
       "count": 3
     },
     {
@@ -4105,6 +4154,10 @@
       "count": 1
     },
     {
+      "keyword": "EU–China relations",
+      "count": 1
+    },
+    {
       "keyword": "Extremism",
       "count": 1
     },
@@ -4126,6 +4179,10 @@
     },
     {
       "keyword": "Gender-based violence",
+      "count": 1
+    },
+    {
+      "keyword": "Geoeconomic competition",
       "count": 1
     },
     {
@@ -4449,6 +4506,10 @@
       "count": 1
     },
     {
+      "keyword": "Strategic autonomy",
+      "count": 1
+    },
+    {
       "keyword": "Strategic culture",
       "count": 1
     },
@@ -4532,7 +4593,7 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 34
+      "count": 35
     },
     {
       "theme": "Foreign policy and diplomacy",
@@ -4559,12 +4620,12 @@
       "count": 11
     },
     {
-      "theme": "Intelligence, information and influence",
+      "theme": "Economic security and geoeconomics",
       "count": 9
     },
     {
-      "theme": "Economic security and geoeconomics",
-      "count": 8
+      "theme": "Intelligence, information and influence",
+      "count": 9
     },
     {
       "theme": "Peace, mediation and reconciliation",
@@ -4795,11 +4856,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 49
+      "count": 50
     },
     {
       "region": "Global and cross-regional",
-      "count": 39
+      "count": 40
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -4815,7 +4876,7 @@
     },
     {
       "region": "Asia",
-      "count": 10
+      "count": 11
     },
     {
       "region": "Middle East and North Africa",
