@@ -456,6 +456,25 @@ output that looks right but breaks a downstream check.
 Hard-won checks that earned a place here after a near-miss. Each
 entry is a rule, kept short on purpose.
 
+### A cancelled run is not a passing run
+
+Auditing CI by listing failures misses the worst outages, because a run
+blocked by a concurrency group is recorded as `cancelled` rather than
+`failed`. A Pages deploy job sat in `queued` for six days in August 2026
+without ever getting a runner, held the `pages` slot, and every deploy
+behind it was cancelled while pending. The failed-run list stayed empty
+and the live site quietly fell four commits behind `main`.
+
+When checking CI health, read the `cancelled` runs too, and confirm the
+deploy actually published rather than trusting the workflow list:
+
+```bash
+gh api "repos/EISSeuropa/netsec.github.io/deployments?environment=github-pages&per_page=1" --jq '.[].sha'
+```
+
+A run of `cancelled` results on one scheduled workflow is the signature
+to look for, since a healthy schedule does not cancel itself.
+
 ### A green build is not proof a feature renders
 
 CI checks consistency and structure (link integrity, i18n drift, SEO
