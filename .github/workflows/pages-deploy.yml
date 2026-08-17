@@ -24,9 +24,16 @@
 #   would fail with a "Pages site is not enabled for Actions" error;
 #   that's expected during the transition.
 #
-# Concurrency: at most one in-flight deploy per branch; queued
-# deploys do not cancel an in-progress one (we'd rather finish a
-# deploy than truncate it half-way).
+# Concurrency: at most one in-flight deploy, and a newer run cancels
+# the one holding the slot. This reverses the original rule, which let
+# a queued deploy wait rather than truncate an in-flight one. In August
+# 2026 a deploy job sat in `queued` for six days without ever being
+# handed a runner, so it never timed out, held the slot the whole time,
+# and every later run was cancelled while pending behind it. The live
+# site froze four commits behind main with nothing to signal it.
+# Truncating a deploy is the cheaper failure: the next push or the
+# six-hourly heartbeat below republishes the same content, which bounds
+# staleness at six hours instead of leaving it open-ended.
 #
 # GOTCHA — cascading workflow suppression on auto-merge:
 # GitHub Actions intentionally suppresses downstream workflow runs
@@ -78,12 +85,17 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
     name: Build site (incl. Pagefind index)
     runs-on: ubuntu-latest
+    # Ceiling, not a target. A healthy build finishes in about three
+    # minutes, so anything approaching this is a hung Pagefind crawl
+    # rather than a slow one, and the run should die instead of sitting
+    # on the `pages` concurrency slot.
+    timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
@@ -120,6 +132,12 @@ jobs:
     name: Deploy to github-pages
     needs: build
     runs-on: ubuntu-latest
+    # See the build job's ceiling above. Note the limitation: the clock
+    # starts when a runner picks the job up, so it covers a deploy that
+    # hangs mid-flight but not one that never starts. The August 2026
+    # stall was the latter, which is why `cancel-in-progress` at the top
+    # of this file carries the rest of the load.
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
