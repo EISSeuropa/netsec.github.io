@@ -220,9 +220,9 @@
         },
         "external": false,
         "i18n": {
-          "en": "Apply · full details",
-          "fr": "Postuler · détails complets",
-          "de": "Bewerben · alle Details"
+          "en": "Workshop details",
+          "fr": "Détails de l'atelier",
+          "de": "Details zum Workshop"
         }
       },
       "meta": [
@@ -237,9 +237,9 @@
         {
           "icon": "calendar",
           "i18n": {
-            "en": "<strong>Applications open</strong> · deadline 15 August 2026",
-            "fr": "<strong>Candidatures ouvertes</strong> · clôture le 15 août 2026",
-            "de": "<strong>Bewerbungen offen</strong> · Frist 15. August 2026"
+            "en": "<strong>Applications closed</strong> · notification by 22 August 2026",
+            "fr": "<strong>Candidatures closes</strong> · notification d'ici le 22 août 2026",
+            "de": "<strong>Bewerbungen geschlossen</strong> · Benachrichtigung bis 22. August 2026"
           }
         }
       ]
