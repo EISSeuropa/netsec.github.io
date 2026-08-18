@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "saurav-narain",
-  "featuredSince": "2026-08-11",
+  "current": "yanina-shved-dogrul",
+  "featuredSince": "2026-08-18",
   "pinned": null,
   "history": [
+    {
+      "id": "yanina-shved-dogrul",
+      "week": "2026-W34",
+      "date": "2026-08-18"
+    },
     {
       "id": "saurav-narain",
       "week": "2026-W33",
