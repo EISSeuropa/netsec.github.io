@@ -21,7 +21,10 @@ Design (see issue #341):
               + ITC boost                    (Inclusiveness Target Country)
               + WG-balance boost             (under-featured WGs up)
               + deterministic tie-break jitter
-    Recently-featured members are held out of the candidate pool.
+    Recently-featured members are held out of the candidate pool: no
+    repeat inside `recencyDays` (183, about six months), with the
+    older count-based window kept as a floor. Both relax rather than
+    leave the pool empty on a small network.
   * `pinned` override: set `pinned` to a member id in spotlight.json to
     feature them next run regardless of score; the script consumes it.
   * Gender is deliberately NOT scored (no gender data is stored); the
@@ -39,7 +42,7 @@ import json
 import os
 import re
 import sys
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -62,6 +65,7 @@ DEFAULT_WEIGHTS = {
     "itc": 2.0,
     "wg": 1.5,
     "recencyWindow": 6,
+    "recencyDays": 183,
 }
 DEFAULT_MIN_ELIGIBLE = 10
 
@@ -113,6 +117,16 @@ def _jitter(member_id: str, wk: str) -> float:
     for ch in f"{member_id}|{wk}":
         h = (h * 31 + ord(ch)) & 0xFFFFFFFF
     return (h % 1000) / 2000.0
+
+
+def _entry_date(entry: dict) -> date | None:
+    """Parse a history entry's ISO date, or None when it is missing or
+    malformed. History written before the date-based hold-out landed is
+    still well-formed, but a hand-edit could not be."""
+    try:
+        return date.fromisoformat(entry.get("date") or "")
+    except (TypeError, ValueError):
+        return None
 
 
 def _score(member, wk, itc_set, wg_recent_counts, weights) -> float:
@@ -192,11 +206,29 @@ def rotate(bios: dict, state: dict, today: date) -> tuple[dict, bool, list[str]]
     if pinned:
         log.append(f"Ignoring pin {pinned!r}: not currently eligible.")
 
-    # Hold out the most recently featured members so we don't repeat too
-    # soon, but never empty the pool.
+    # Hold out the recently featured. Two hold-outs stack: nobody repeats
+    # inside `recencyDays` (183, about six months), and the older
+    # count-based window stays as a floor for entries whose date is
+    # missing or unparseable. Each relaxes in turn rather than leaving the
+    # pool empty, so a small network still rotates.
     window = min(int(weights["recencyWindow"]), len(eligible) - 1)
-    recent = {h.get("id") for h in history[:window]}
-    candidates = [m for m in eligible if m["id"] not in recent] or eligible
+    by_count = {h.get("id") for h in history[:window]}
+    cutoff = today - timedelta(days=int(weights["recencyDays"]))
+    by_date = {
+        h.get("id")
+        for h in history
+        if (d := _entry_date(h)) is not None and d > cutoff
+    }
+    cooled = [m for m in eligible if m["id"] not in by_count | by_date]
+    if cooled:
+        candidates = cooled
+    else:
+        candidates = [m for m in eligible if m["id"] not in by_count] or eligible
+        log.append(
+            f"Pool exhausted under the {weights['recencyDays']}-day cool-off "
+            f"({len(eligible)} eligible): falling back to the "
+            f"{window}-feature window."
+        )
 
     # Recent feature counts per WG, for the balance boost.
     wg_recent_counts: dict[int, int] = {}

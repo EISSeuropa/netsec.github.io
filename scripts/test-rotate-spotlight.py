@@ -347,6 +347,68 @@ def test_rotate_holds_out_recently_featured():
     assert new_state["current"] not in {f"m{i}" for i in range(6)}
 
 
+def test_rotate_holds_out_for_six_months():
+    # m0 was featured 8 weeks ago: outside the 6-feature count window
+    # (m1..m6 are newer) but well inside the 183-day cool-off. m0 also
+    # scores highest by far (early-career + ITC against a pool of neutral
+    # non-ITC members), so only the cool-off can keep them out.
+    members = pool(20)
+    members[0] = member("m0", position="PhD candidate", country_code="pl")
+    bios = {"members": members}
+    history = [
+        {"id": f"m{i}", "week": f"2026-W{31 - i:02d}", "date": f"2026-0{8 - i}-01"}
+        for i in range(1, 7)
+    ]
+    history.append({"id": "m0", "week": "2026-W25", "date": "2026-06-15"})
+    state = {"history": history, "current": "m1"}
+    new_state, _, _ = rs.rotate(bios, state, date(2026, 8, 11))
+    assert new_state["current"] != "m0"
+
+
+def test_rotate_allows_repeat_after_six_months():
+    # The same setup, but m0's last feature is older than the cool-off:
+    # the top scorer comes back into the pool.
+    members = pool(20)
+    members[0] = member("m0", position="PhD candidate", country_code="pl")
+    bios = {"members": members}
+    history = [
+        {"id": f"m{i}", "week": f"2026-W{31 - i:02d}", "date": f"2026-0{8 - i}-01"}
+        for i in range(1, 7)
+    ]
+    history.append({"id": "m0", "week": "2026-W02", "date": "2026-01-05"})
+    state = {"history": history, "current": "m1"}
+    new_state, _, _ = rs.rotate(bios, state, date(2026, 8, 11))
+    assert new_state["current"] == "m0"
+
+
+def test_rotate_cooloff_relaxes_when_pool_too_small():
+    # 10 eligible, every one featured inside the cool-off: the cool-off
+    # gives way rather than blocking the rotation, and says so in the log.
+    bios = {"members": pool(10)}
+    history = [
+        {"id": f"m{i}", "week": f"2026-W{20 + i:02d}", "date": "2026-06-01"}
+        for i in range(10)
+    ]
+    state = {"history": history, "current": "m9"}
+    new_state, changed, log = rs.rotate(bios, state, date(2026, 8, 11))
+    assert new_state["current"] is not None
+    assert changed is True
+    assert any("cool-off" in line for line in log)
+
+
+def test_rotate_cooloff_ignores_undated_history():
+    # A hand-edited entry with no usable date must not crash the parse and
+    # must not silently hold its member out forever.
+    bios = {"members": pool(20)}
+    state = {
+        "history": [{"id": "m0", "week": "2026-W25", "date": "not-a-date"}],
+        "current": "m0",
+    }
+    new_state, changed, _ = rs.rotate(bios, state, date(2026, 8, 11))
+    assert changed is True
+    assert new_state["current"] is not None
+
+
 def test_rotate_recency_never_empties_pool():
     # Exactly minEligible members, all in recent history -> pool would be
     # empty; the code falls back to the full eligible list.
