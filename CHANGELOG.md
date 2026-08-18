@@ -154,6 +154,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- Visitors browsing without JavaScript no longer see the Ankara policy workshop advertised at the wrong date. The home page builds its events from the calendar data and keeps a hand-written copy of the block for anyone whose browser does not run that code, and the hand-written copy still carried the workshop's pre-correction date of 4 September 2026, a topic "to be confirmed" and no venue. It now matches the calendar: 13 September 2026 at Bilkent University, Ankara, with a link through to the workshop page. Hand-translated for FR and DE.
+
 - A member whose job title already names their university no longer sees it printed twice on their profile page and on the profile card that circulates when the page is shared.
 
 - The weekly member spotlight posted to Bluesky no longer risks ending mid-word. A submitted job title long enough to fill the 300-character limit on its own now falls back to the bare introduction and profile link rather than being cut off, and a university already named in the job title is no longer repeated after it.
