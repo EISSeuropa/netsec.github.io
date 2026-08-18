@@ -172,7 +172,7 @@
     {
       "uid": "policy-workshop-2026-09@netsec-cost.eu",
       "summary": "NetSec Policy Workshop: Great Power Politics and the Future of Alliances",
-      "description": "A NetSec Working Group 2 policy workshop on great power politics and the future of alliances, convening scholars and policy practitioners to examine how alliance politics is evolving under intensifying great power competition, and what the implications are for European security.\n\nAccommodation in Ankara and all meals are provided by Bilkent University and the Royal Danish Defence College. NetSec plans to reimburse accepted participants' travel costs through COST Action NetSec up to a maximum of €700 per participant, pending a decision by NetSec's Management Committee.\n\nApplications close 15 August 2026. Full details and the application form: https://netsec-cost.eu/policy-workshop-2026.html",
+      "description": "A NetSec Working Group 2 policy workshop on great power politics and the future of alliances, convening scholars and policy practitioners to examine how alliance politics is evolving under intensifying great power competition, and what the implications are for European security.\n\nAccommodation in Ankara and all meals are provided by Bilkent University and the Royal Danish Defence College. NetSec plans to reimburse accepted participants' travel costs through COST Action NetSec up to a maximum of €700 per participant, pending a decision by NetSec's Management Committee.\n\nApplications closed on 15 August 2026, and applicants will be notified by 22 August 2026. Full details: https://netsec-cost.eu/policy-workshop-2026.html",
       "location": "Bilkent University, Ankara, Türkiye",
       "url": "https://netsec-cost.eu/policy-workshop-2026.html",
       "start": "2026-09-13T09:00",
@@ -193,9 +193,9 @@
         "de": "13. September 2026"
       },
       "cardDescription": {
-        "en": "Working Group 2's one-day policy workshop on great power politics and the future of alliances, at Bilkent University, Ankara. Accommodation and meals are covered, and travel reimbursement up to €700 is planned, pending Management Committee approval. Applications close 15 August 2026.",
-        "fr": "L'atelier politique d'une journée du Groupe de travail 2 sur les grandes puissances et l'avenir des alliances, à l'Université Bilkent, Ankara. L'hébergement et les repas sont pris en charge, et un remboursement des déplacements jusqu'à 700 € est prévu, sous réserve de l'approbation du Comité de gestion. Candidatures jusqu'au 15 août 2026.",
-        "de": "Der eintägige Politik-Workshop der Arbeitsgruppe 2 zu Großmachtpolitik und der Zukunft der Bündnisse an der Bilkent-Universität, Ankara. Unterkunft und Verpflegung werden übernommen, eine Reisekostenerstattung bis 700 € ist vorbehaltlich der Zustimmung des Management Committee geplant. Bewerbungen bis 15. August 2026."
+        "en": "Working Group 2's one-day policy workshop on great power politics and the future of alliances, at Bilkent University, Ankara. Accommodation and meals are covered, and travel reimbursement up to €700 is planned, pending Management Committee approval. Applications closed on 15 August 2026.",
+        "fr": "L'atelier politique d'une journée du Groupe de travail 2 sur les grandes puissances et l'avenir des alliances, à l'Université Bilkent, Ankara. L'hébergement et les repas sont pris en charge, et un remboursement des déplacements jusqu'à 700 € est prévu, sous réserve de l'approbation du Comité de gestion. Candidatures closes depuis le 15 août 2026.",
+        "de": "Der eintägige Politik-Workshop der Arbeitsgruppe 2 zu Großmachtpolitik und der Zukunft der Bündnisse an der Bilkent-Universität, Ankara. Unterkunft und Verpflegung werden übernommen, eine Reisekostenerstattung bis 700 € ist vorbehaltlich der Zustimmung des Management Committee geplant. Bewerbungsfrist am 15. August 2026 beendet."
       },
       "cardTitle": {
         "en": "NetSec Policy Workshop",
@@ -220,9 +220,9 @@
         },
         "external": false,
         "i18n": {
-          "en": "Apply · full details",
-          "fr": "Postuler · détails complets",
-          "de": "Bewerben · alle Details"
+          "en": "Workshop details",
+          "fr": "Détails de l'atelier",
+          "de": "Details zum Workshop"
         }
       },
       "meta": [
@@ -237,9 +237,9 @@
         {
           "icon": "calendar",
           "i18n": {
-            "en": "<strong>Applications open</strong> · deadline 15 August 2026",
-            "fr": "<strong>Candidatures ouvertes</strong> · clôture le 15 août 2026",
-            "de": "<strong>Bewerbungen offen</strong> · Frist 15. August 2026"
+            "en": "<strong>Applications closed</strong> · notification by 22 August 2026",
+            "fr": "<strong>Candidatures closes</strong> · notification d'ici le 22 août 2026",
+            "de": "<strong>Bewerbungen geschlossen</strong> · Benachrichtigung bis 22. August 2026"
           }
         }
       ]
