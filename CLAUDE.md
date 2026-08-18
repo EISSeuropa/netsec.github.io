@@ -254,6 +254,22 @@ dash.
 standing on their own. Fold them into a fuller sentence so the
 prose flows rather than clipping to a halt.
 
+**No justifying a fact you have just stated.** State the fact and
+stop. The tell is a trailing clause arguing for the decision the
+sentence has already described, so "we cap this at one per person,
+because capacity is the real limit" is just "one per person", and
+the heading "Unpaid, and we say so plainly" is just "Unpaid".
+Before calling a page done, grep it for "because", "so that",
+"rather than", "which is why", "not something". Each hit is a
+question rather than a verdict, since some are real cause
+("Because the API is rate-limited, retries back off"). Delete the
+ones defending a choice no reader challenged. Narrower scope than
+the rest of §7: this one covers user-facing copy (site pages, UI
+text, error messages, the documentation pack body) and leaves
+commit messages, PR bodies, the CHANGELOG, the Wiki decisions log,
+and code comments alone, because in those the reasoning is the
+point.
+
 The rules are forward-looking. They apply to prose authored from
 the PR that introduces them onwards; pre-existing em dashes in
 the repo aren't retroactively scrubbed unless the surrounding
