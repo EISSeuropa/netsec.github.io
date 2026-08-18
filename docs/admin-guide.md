@@ -446,8 +446,12 @@ The home page can feature one member per week ([#341](https://github.com/EISSeur
 Rotation is automatic (`scripts/rotate-spotlight.py`, weekly via the
 `spotlight-rotate.yml` workflow) and stays **dormant until at least
 10 members are eligible** (a member needs a photo and a written bio),
-so nothing renders while the network is small. To feature a specific
-member next run (a new joiner, an award, a deliverable author), set
+so nothing renders while the network is small. Nobody is featured
+twice inside six months (`recencyDays` in the `weights` block of
+`data/spotlight.json`, 183 days). On a pool too small to honour that,
+the cool-off gives way to the older six-feature window and the weekly
+PR body records that it did. To feature a specific member next run
+(a new joiner, an award, a deliverable author), set
 `"pinned": "<member-id>"` in `data/spotlight.json` and push; the
 script features them and clears the pin. Do not hand-edit `current`
 or `history`; let the script manage them. Gender is not part of the

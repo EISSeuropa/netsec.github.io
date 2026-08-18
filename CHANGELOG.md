@@ -156,6 +156,8 @@ maintainer-facing audience.
 
 - The weekly member spotlight posted to Bluesky no longer risks ending mid-word. A submitted job title long enough to fill the 300-character limit on its own now falls back to the bare introduction and profile link rather than being cut off, and a university already named in the job title is no longer repeated after it.
 
+- The weekly member spotlight no longer brings the same member back after a few weeks. The rotation held out only the six most recent features, so anyone could return once seven weeks had passed, and Saurav Narain was featured again eight weeks after his first turn. Anyone spotlit in the past six months is now kept out of the running, and that cool-off relaxes only when too few members are eligible to fill six months of weeks.
+
 - The inaugural Management Committee plenary no longer advertises a firm date. It now reads September 2026, date to be confirmed, on the home page, the public roadmap and the calendar feed, in all three locales, and its calendar entry is marked tentative so subscribers see it as provisional rather than settled. The 18 September date came from the same event ledger that produced the NetSec ITC Conference, and nothing outside that ledger corroborates it. The date returns as soon as the Action announces it.
 
 - The NetSec ITC Conference, listed for 8 to 11 September 2026, has been removed from the site. The event was never scheduled, so it is gone from the home-page events block, the Working Group related-events cards, the public calendar feed and its per-event `.ics` file, in all three locales. The COST ITC Conference Grant scheme is a separate thing and stays documented on the Grants page, the Glossary and the FAQ.
