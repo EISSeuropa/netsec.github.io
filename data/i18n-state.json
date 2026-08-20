@@ -39,15 +39,15 @@
     "policy-workshop-2026.html": {
       "fr": {
         "file": "policy-workshop-2026.fr.html",
-        "source_sha1": "bee49998af4e260c37c36ce1675211c01f23b917",
-        "translated_on": "2026-08-18",
+        "source_sha1": "1d0400f479d69375a8d9f00670bcb51f7f17c354",
+        "translated_on": "2026-08-20",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "policy-workshop-2026.de.html",
-        "source_sha1": "bee49998af4e260c37c36ce1675211c01f23b917",
-        "translated_on": "2026-08-18",
+        "source_sha1": "1d0400f479d69375a8d9f00670bcb51f7f17c354",
+        "translated_on": "2026-08-20",
         "status": "beta",
         "reviewed_by": null
       }
