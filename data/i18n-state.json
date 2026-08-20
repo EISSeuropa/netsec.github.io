@@ -263,15 +263,15 @@
     "roadmap.html": {
       "fr": {
         "file": "roadmap.fr.html",
-        "source_sha1": "ec4e6218ea74279230d858f887643a8b2d05f887",
-        "translated_on": "2026-08-01",
+        "source_sha1": "df6b6be4cbdf6605f7c57225b71ab962e31f1c82",
+        "translated_on": "2026-08-19",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "roadmap.de.html",
-        "source_sha1": "ec4e6218ea74279230d858f887643a8b2d05f887",
-        "translated_on": "2026-08-01",
+        "source_sha1": "df6b6be4cbdf6605f7c57225b71ab962e31f1c82",
+        "translated_on": "2026-08-19",
         "status": "beta",
         "reviewed_by": null
       }
