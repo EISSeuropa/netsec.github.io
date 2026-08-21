@@ -51,28 +51,6 @@ def test_build_keeps_only_version_titles():
     assert set(out["milestones"]) == {"v1.11.0", "v1.12.0"}
 
 
-def test_build_keeps_event_cycle_titles():
-    ms = [
-        _ms("ESSC 2027: call for papers", closed=1, opened=4),
-        _ms("Backlog — Under watch", closed=1, opened=9),
-        _ms("Directory Page and Workflow"),
-    ]
-    out = srp.build(ms, "2026-08-21")
-    assert set(out["milestones"]) == {"ESSC 2027: call for papers"}
-
-
-def test_build_sorts_releases_before_events_and_events_by_due():
-    ms = [
-        _ms("ESSC 2027: conference", due="2027-06-11T00:00:00Z"),
-        _ms("v1.15.0", due="2026-12-08T00:00:00Z"),
-        _ms("ESSC 2027: save the date", due="2026-09-30T00:00:00Z"),
-    ]
-    out = srp.build(ms, "2026-08-21")
-    assert list(out["milestones"]) == [
-        "v1.15.0", "ESSC 2027: save the date", "ESSC 2027: conference",
-    ]
-
-
 def test_build_rejects_two_component_version():
     out = srp.build([_ms("v1.11")], "2026-06-02")
     assert out["milestones"] == {}

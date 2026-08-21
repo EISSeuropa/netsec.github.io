@@ -324,22 +324,6 @@ title that isn't `vX.Y.Z`). Leave them as-is, do not rename them
 to versions (their work spanned several early releases, so no
 single version maps).
 
-A third kind joined the set in August 2026: **event-cycle
-milestones**, one per phase of a dated Action event, named
-`<Event> <year>: <phase>` (the ESSC 2027 cycle runs *save the
-date*, *call for papers*, *selection and notifications*,
-*programme and logistics*, *conference*). They exist because the
-prep deadlines for a conference are set by the organising group
-and do not land on the release cadence, so folding them into
-`vX.Y.Z` milestones would either move release dates around an
-external calendar or bury the deadline in an issue body where
-nothing can query it. Their phase rows live in
-[`docs/roadmap-2026.md`](docs/roadmap-2026.md) beside the release
-timeline, and the same due-date rule below applies. The
-roadmap-progress sync only reads titles matching `vX.Y.Z`
-(`VERSION_RE` in `scripts/sync-roadmap-progress.py`), so an event
-milestone never reaches the public roadmap cards.
-
 Due dates on the milestones come from the same timeline. When the
 roadmap shifts a planned release, **bump the milestone's due date
 in the same commit that updates the roadmap row** — they're two
