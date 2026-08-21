@@ -8,9 +8,8 @@ static, there is no unauthenticated rate limit (60/hr/IP) to trip, and
 it keeps working if the API is briefly unreachable. Same render-from-
 JSON contract as data/wg.json / data/indico.json.
 
-Each version milestone (title matching `vMAJOR.MINOR.PATCH`) and each
-event-cycle milestone (`<Event> <year>: <phase>`, CLAUDE.md §10) becomes
-an entry keyed by its title:
+Each version milestone (title matching `vMAJOR.MINOR.PATCH`) becomes an
+entry keyed by its title:
 
     "v1.11.0": { "closed": 2, "total": 7, "percent": 29,
                  "state": "open", "due": "2026-07-06" }
@@ -42,15 +41,6 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "roadmap-progress.json"
 REPO = "EISSeuropa/netsec.github.io"
 VERSION_RE = re.compile(r"^v\d+\.\d+\.\d+$")
-# Event-cycle milestones (CLAUDE.md §10), e.g. "ESSC 2027: call for papers".
-# They carry a dated card on the public roadmap the same way a release does,
-# so the progress bar has somewhere to render.
-EVENT_RE = re.compile(r"^[A-Z][A-Za-z]* \d{4}: .+$")
-
-
-def tracked(title: str) -> bool:
-    """A milestone with a dated card on the public roadmap."""
-    return bool(VERSION_RE.match(title) or EVENT_RE.match(title))
 
 DOC = (
     "Per-milestone progress for the public roadmap's in-flight cards. "
@@ -58,9 +48,7 @@ DOC = (
     "milestones. DO NOT EDIT BY HAND: the roadmap-progress workflow "
     "overwrites it whenever an issue or milestone changes. Keyed by "
     "milestone title (vMAJOR.MINOR.PATCH). `percent` is closed / (open + "
-    "closed). Event-cycle milestones (\"ESSC 2027: call for papers\") are "
-    "kept too, since they carry a dated card as well. "
-    "assets/js/roadmap-progress.js renders a bar onto the card "
+    "closed). assets/js/roadmap-progress.js renders a bar onto the card "
     "carrying the matching data-milestone."
 )
 
@@ -79,7 +67,7 @@ def build(milestones: list[dict], today: str) -> dict:
     out: dict[str, dict] = {}
     for m in milestones:
         title = (m.get("title") or "").strip()
-        if not tracked(title):
+        if not VERSION_RE.match(title):
             continue
         closed = int(m.get("closed_issues", 0))
         opened = int(m.get("open_issues", 0))
@@ -93,12 +81,9 @@ def build(milestones: list[dict], today: str) -> dict:
             "state": m.get("state"),
             "due": due,
         }
-    # Releases first, ordered by version, then the event milestones by due
-    # date, so the file diffs cleanly whichever kind changed.
+    # Sort by version so the file diffs cleanly.
     def key(t: str) -> tuple:
-        if VERSION_RE.match(t):
-            return (0, tuple(int(n) for n in t[1:].split(".")), "")
-        return (1, (), out[t]["due"] or "9999-12-31")
+        return tuple(int(n) for n in t[1:].split("."))
     ordered = {k: out[k] for k in sorted(out, key=key)}
     return {
         "_documentation": DOC,
