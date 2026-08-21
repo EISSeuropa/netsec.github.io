@@ -101,6 +101,22 @@ function assert(cond, msg) {
 async function clickWhenReady(page, selector) {
   try {
     await page.waitForSelector(selector, { visible: true, timeout: 10000 });
+    // A visible box is not yet a clickable one. The filter sheet's rise
+    // keyframe starts at translateY(100%), and Chrome paints that start frame
+    // for two or three frames even under reduced motion, because the .01ms
+    // duration only applies once the animation has begun. The control has its
+    // full box the whole time, parked a sheet-height below the viewport, so
+    // waitForSelector returns and page.click throws "not clickable" on a click
+    // point that is off-screen. Waiting for the box to stop moving covers that
+    // window without hard-coding the animation length.
+    await page.waitForFunction((sel) => {
+      const el = document.querySelector(sel);
+      if (!el) return false;
+      const y = Math.round(el.getBoundingClientRect().y);
+      const settled = el.__lastY === y;
+      el.__lastY = y;
+      return settled;
+    }, { polling: 'raf', timeout: 10000 }, selector);
     await page.click(selector);
   } catch (e) {
     const seen = await page.evaluate((sel) => {
