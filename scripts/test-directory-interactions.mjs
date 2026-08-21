@@ -153,11 +153,22 @@ async function typeQuery(page, query) {
   await page.waitForFunction(
     () => document.querySelectorAll('.search-results li').length === 0,
     { timeout: 15000 });
-  await page.type('.search-input', query);
+  // Set the whole query through one input event rather than typing it key by
+  // key (#1553). Each keystroke restarts the 120 ms debounce, so a runner that
+  // stalls mid-word fires a query for the prefix as well as for the full word,
+  // and the two land in either order. The prefix render satisfies the wait
+  // below, the journey reads its chip counts, and the full query then arrives
+  // and re-renders, resetting activeFilter to 'all' on its way through
+  // runSearch: the People chip had said 7 while the list underneath had gone
+  // back to all 9 rows. One event is one query, so the wait for rows means the
+  // results are this query's and nothing further is coming.
+  await page.$eval('.search-input', (el, q) => {
+    el.value = q;
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  }, query);
   await page.waitForFunction(
     () => document.querySelectorAll('.search-results li').length > 0,
     { timeout: 15000 });
-  await sleep(120);
 }
 
 // ./pagefind/ is gitignored and built at deploy time. Without it the overlay
