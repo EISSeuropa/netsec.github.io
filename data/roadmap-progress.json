@@ -75,47 +75,33 @@
     },
     "v1.14.0": {
       "closed": 44,
-      "total": 53,
-      "percent": 83,
+      "total": 57,
+      "percent": 77,
       "state": "open",
       "due": "2026-10-06"
     },
     "v1.15.0": {
       "closed": 0,
-      "total": 3,
+      "total": 8,
       "percent": 0,
       "state": "open",
       "due": "2026-12-08"
     },
-    "ESSC 2027: save the date": {
-      "closed": 0,
-      "total": 4,
-      "percent": 0,
-      "state": "open",
-      "due": "2026-09-30"
-    },
-    "ESSC 2027: call for papers": {
-      "closed": 0,
-      "total": 5,
-      "percent": 0,
-      "state": "open",
-      "due": "2026-11-06"
-    },
-    "ESSC 2027: selection and notifications": {
+    "v1.16.0": {
       "closed": 0,
       "total": 4,
       "percent": 0,
       "state": "open",
       "due": "2026-12-31"
     },
-    "ESSC 2027: programme and logistics": {
+    "v1.17.0": {
       "closed": 0,
       "total": 8,
       "percent": 0,
       "state": "open",
       "due": "2027-04-30"
     },
-    "ESSC 2027: conference": {
+    "v1.18.0": {
       "closed": 0,
       "total": 2,
       "percent": 0,
