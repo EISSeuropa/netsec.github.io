@@ -58,6 +58,35 @@ Symbol key: ✅ shipped, 📅 planned.
 
 ---
 
+## ESSC 2027 preparation
+
+The next European Security Studies Conference is planned for
+**11 to 12 June 2027 at Stockholm University**, jointly organised
+with EISS and the university. The organising group met in August
+2026 and meets again on 7 September 2026 to settle the panels and
+the roundtables.
+
+The prep cycle runs on its own calendar rather than the release
+cadence, so it carries five event milestones (CLAUDE.md §10). The
+due dates below are the milestone due dates, and the two move
+together.
+
+| Due | Milestone | What has to be true |
+| --- | --- | --- |
+| 30 Sep 2026 | *ESSC 2027: save the date* | Dates, venue and rooms confirmed and in `data/events.json` ([#1557](https://github.com/EISSeuropa/netsec.github.io/issues/1557)) · the Indico event created and the rollover clean-up run for the first time live ([#1558](https://github.com/EISSeuropa/netsec.github.io/issues/1558)) · save-the-date published ([#1559](https://github.com/EISSeuropa/netsec.github.io/issues/1559)) · the Stockholm timezone mislabel fixed ([#1310](https://github.com/EISSeuropa/netsec.github.io/issues/1310)) |
+| 6 Nov 2026 | *ESSC 2027: call for papers* | The conference page un-parked and its 2026 leftovers cleared ([#1560](https://github.com/EISSeuropa/netsec.github.io/issues/1560)) · the call surface built ([#1561](https://github.com/EISSeuropa/netsec.github.io/issues/1561)) · the banner run for the call window ([#1562](https://github.com/EISSeuropa/netsec.github.io/issues/1562)) · EISS and COST approval recorded ([#1563](https://github.com/EISSeuropa/netsec.github.io/issues/1563)) · activation coordinated with the EISS page ([#1564](https://github.com/EISSeuropa/netsec.github.io/issues/1564)). Draft due end of October, publication early November. |
+| 31 Dec 2026 | *ESSC 2027: selection and notifications* | Review workflow and notification templates ready ([#1565](https://github.com/EISSeuropa/netsec.github.io/issues/1565)) · the prize jury confirmed ([#1566](https://github.com/EISSeuropa/netsec.github.io/issues/1566)) · registration form carrying the dorm and reception numbers ([#1567](https://github.com/EISSeuropa/netsec.github.io/issues/1567)) · visa letters ([#374](https://github.com/EISSeuropa/netsec.github.io/issues/374)) |
+| 30 Apr 2027 | *ESSC 2027: programme and logistics* | Programme renderer wired to the new edition ([#1568](https://github.com/EISSeuropa/netsec.github.io/issues/1568)) · practical information rewritten around the arranged accommodation ([#1569](https://github.com/EISSeuropa/netsec.github.io/issues/1569)) · budget envelope confirmed ([#1570](https://github.com/EISSeuropa/netsec.github.io/issues/1570)) · chairing guidance ([#1571](https://github.com/EISSeuropa/netsec.github.io/issues/1571)) · keynote confirmed and surfaced ([#1572](https://github.com/EISSeuropa/netsec.github.io/issues/1572)) · the ESSC backlog pulled into the cycle ([#1034](https://github.com/EISSeuropa/netsec.github.io/issues/1034), [#855](https://github.com/EISSeuropa/netsec.github.io/issues/855), [#364](https://github.com/EISSeuropa/netsec.github.io/issues/364)) |
+| 11 Jun 2027 | *ESSC 2027: conference* | Live-programme readiness, which needs the dispatch plugin at 1.0.0 and the push pipeline deployed ([#1573](https://github.com/EISSeuropa/netsec.github.io/issues/1573), [#823](https://github.com/EISSeuropa/netsec.github.io/issues/823)) · the archive rollover afterwards, parking the 2028 template ([#1574](https://github.com/EISSeuropa/netsec.github.io/issues/1574)) |
+
+The public roadmap does not carry these rows yet. The dates are
+copied from the 2026 edition until the September meeting confirms
+them, and the site should not announce a date it has not been
+given. The save-the-date issue is what puts the edition on the
+public pages.
+
+---
+
 ## Where we are today
 
 As of late May 2026 — month **M8** of the four-year Action — the
