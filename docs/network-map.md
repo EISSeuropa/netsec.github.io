@@ -193,6 +193,18 @@ produces the data:
   way co-panel edges derive from the programme. The file is empty until
   D6 ships its first output, so the layer starts at zero edges and grows
   on its own.
+
+  `match_author()` resolves an author string to a member. It reads a plain
+  display name, an inverted "Lovelace, Ada" (only where the string actually
+  carries a comma, so a two-token name is never reversed on a guess), and
+  an initialised "A. Lovelace" (only where exactly one member fits, since a
+  wrong tie is worse than a missing one). Anything it cannot resolve is
+  listed in `stats.authors_unmatched` and printed by the build.
+
+  That list is deliberately not a gate. A genuine co-author from outside
+  the Action is an unmatched author and always will be, so no threshold
+  separates one from a mistyped member. Reporting makes a formatting
+  problem visible without a check that would cry wolf on most papers.
 - **Server-side layout coordinates** are a deliberate follow-up. The
   renderer lays out client-side for now, which is fine at this size.
 
