@@ -7,7 +7,7 @@ Why this exists
 The bios-sync workflow composes its PR body immediately after running
 `sync-bios.py`, which is *before* the eight generator steps that rebuild
 profile pages, OG cards, search stubs, the sitemap, the directory index,
-the atlas, and the glossary field guide. So the run log in the body could
+the network map, and the glossary field guide. So the run log in the body could
 only ever describe the upstream fetch, never the derived files that
 actually landed in the diff.
 
@@ -53,7 +53,7 @@ BUCKETS: list[tuple[str, str, bool]] = [
     ("assets/images/people/", "headshots", True),
     ("people/", "profile pages", True),
     ("data/orcid-works.json", "ORCID publications", False),
-    ("data/atlas.json", "Atlas graph", False),
+    ("data/network-map.json", "Network Map graph", False),
     ("data/cost-wg-state.json", "WG state", False),
     ("data/wg.json", "WG rosters", False),
     ("directory-index.json", "directory index", False),

@@ -9,7 +9,7 @@
 #   2. Parse each row into the bios.json schema, download any new
 #      headshots from Google Drive, write data/bios.json.
 #   3. Run every generator that reads bios.json (OG cards, profile
-#      pages, search stubs, sitemap, directory index, atlas, field
+#      pages, search stubs, sitemap, directory index, network map, field
 #      guide), so the derived files travel in the same PR.
 #   4. If anything changed, open or update a pull request on the
 #      branch `bios-sync/auto`. The body leads with a one-line summary
@@ -164,15 +164,15 @@ jobs:
           # (data-shape-check.yml) blocks a stale index.
           python3 scripts/build-directory-index.py
 
-      - name: Rebuild the NetSec Atlas graph from the refreshed bios
+      - name: Rebuild the NetSec Network Map graph from the refreshed bios
         run: |
-          # data/atlas.json (#764) derives its theme hubs, mentorship flags,
+          # data/network-map.json (#764) derives its theme hubs, mentorship flags,
           # and headshot paths from bios.json, so a bios change would leave
-          # the committed atlas stale and fail the data-shape drift gate on
+          # the committed network map stale and fail the data-shape drift gate on
           # this very auto-PR. Same posture as the search stubs (#1218):
           # every generator the data feeds runs in the sync that moves the
           # data. Idempotent; no bios change, no diff.
-          python3 scripts/build-atlas.py
+          python3 scripts/build-network-map.py
 
       - name: Rebuild the glossary field guide from the refreshed bios
         run: |

@@ -11,7 +11,7 @@ loses one member's publications, not the whole run.
 The output feeds the directory's lazy "Recent publications" card section
 (#761): /people.html fetches data/orcid-works.json only when a visitor
 expands a card, so member cards at rest gain no weight. The same map is
-the natural future feed for the Outputs page and a co-authorship Atlas,
+the natural future feed for the Outputs page and a co-authorship Network Map,
 so it is keyed by slug for a single-fetch join against bios.json.
 
 Reads:  data/bios.json (members[].orcid, the canonical 19-char iD that

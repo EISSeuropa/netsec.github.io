@@ -147,20 +147,20 @@ jobs:
           # Idempotent; regenerated from bios.json.
           python3 scripts/build-bio-search-stubs.py
 
-      - name: Regenerate the NetSec Atlas graph from the synced WG rosters (#764)
+      - name: Regenerate the NetSec Network Map graph from the synced WG rosters (#764)
         run: |
-          # data/atlas.json is derived from data/wg.json. sync-cost.py rewrites
+          # data/network-map.json is derived from data/wg.json. sync-cost.py rewrites
           # wg.json, so regenerate the graph in the same auto-PR; otherwise the
-          # "atlas.json is current (#764)" gate in data-shape-check.yml fails on
+          # "network-map.json is current (#764)" gate in data-shape-check.yml fails on
           # every sync that adds, removes, or re-slugs a WG member. Pure standard
           # library, idempotent: an unchanged roster produces no diff.
-          python3 scripts/build-atlas.py
+          python3 scripts/build-network-map.py
 
       - name: Prepend a one-line summary of what actually changed
         run: |
           # Same reasoning as the matching step in sync-bios.yml: /tmp/pr-body.md
           # was composed straight after sync-cost.py, before the OG-card,
-          # profile-page, and atlas rebuilds above, so its run log describes the
+          # profile-page, and network-map rebuilds above, so its run log describes the
           # cost.eu fetch and not the derived files in the diff. Read the working
           # tree now that the generators have run and lead the body with a
           # one-line verdict. Prints nothing on a clean tree.

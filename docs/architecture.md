@@ -535,7 +535,7 @@ sweep (rule §11).
 │   ├── build-calendar.py            # Generates /calendar.ics + /calendar/<slug>.ics from data/events.json
 │   ├── build-news-rss.py            # Generates /news.xml (RSS 2.0) from data/news.json
 │   ├── build-field-guide.py         # Renders data/field-guide.json into the glossary "Concepts" section (EN/FR/DE), sentinel-scoped; --check drift gate (#766)
-│   ├── build-atlas.py               # Regenerates data/atlas.json (theme hubs, mentorship flags, headshots) from bios.json + wg.json for the NetSec Atlas page; --check drift gate (see atlas.md, #764)
+│   ├── build-network-map.py               # Regenerates data/network-map.json (theme hubs, mentorship flags, headshots) from bios.json + wg.json for the NetSec Network Map page; --check drift gate (see network-map.md, #764)
 │   ├── sync-roadmap-progress.py     # Writes data/roadmap-progress.json from GitHub milestone closed/total
 │   ├── build-search.sh              # Builds /pagefind/ via `npx pagefind` (gitignored)
 │   ├── build-bio-search-stubs.py    # Renders search/bios/<lang>/<slug>.html — the per-member stubs Pagefind indexes so a member is findable by site search (country + wgs facets); --check drift gate (#1218, #1428)
@@ -549,7 +549,7 @@ sweep (rule §11).
 ├── .github/workflows/
 │   ├── pages-deploy.yml             # Build → deploy on push-to-main (builds /pagefind/ here)
 │   ├── sync-cost.yml                # Weekly cron — opens PR on any cost.eu change (WG_MAP, leadership, MC roster, stats, reconciled WGs); reruns every bios-derived generator incl. search stubs; PR body leads with a one-line change summary
-│   ├── sync-bios.yml                # Daily cron — opens PR if bios.json changed; reruns every bios-derived generator (profile pages, OG cards, search stubs, sitemap, index, atlas, field guide); PR body leads with a one-line change summary
+│   ├── sync-bios.yml                # Daily cron — opens PR if bios.json changed; reruns every bios-derived generator (profile pages, OG cards, search stubs, sitemap, index, network map, field guide); PR body leads with a one-line change summary
 │   ├── spotlight-rotate.yml         # Weekly cron (Tue 10:00 Europe/Paris) — rotates data/spotlight.json and posts the spotlight to Bluesky + LinkedIn, ungated (#341, #1072)
 │   ├── social-bluesky.yml           # Approval-gated news / thread posting to Bluesky + LinkedIn on a news.xml change or manual dispatch (#1072)
 │   ├── linkedin-version-check.yml   # Monthly cron — bumps data/linkedin-api-version.json before LinkedIn sunsets the pinned API version; auto-merging PR (#1223)
@@ -560,7 +560,7 @@ sweep (rule §11).
 │   ├── roadmap-progress.yml         # Refreshes data/roadmap-progress.json on issue/milestone events
 │   ├── external-link-arrows.yml    # Lint: trailing → on external links
 │   ├── search-drift.yml             # Build sanity check on PRs (per-locale page count > 0)
-│   ├── data-shape-check.yml         # Shape lint + headless render smoke on data/** PRs; runs the --check drift gates (profile pages, sitemap, directory index, atlas, OG cards, bio search stubs) (#724, #1428)
+│   ├── data-shape-check.yml         # Shape lint + headless render smoke on data/** PRs; runs the --check drift gates (profile pages, sitemap, directory index, network map, OG cards, bio search stubs) (#724, #1428)
 │   ├── launch-qa-link-check.yml     # Internal+external link check + a11y-statement review-date check (weekly + root-HTML PRs)
 │   └── lighthouse.yml               # Lighthouse budget assertions per lighthouserc.json on HTML/CSS/JS PRs (#270; non-required)
 │
@@ -572,7 +572,7 @@ sweep (rule §11).
 │   ├── i18n.md                      # Translation workflow + drift conventions
 │   ├── seo.md                       # SEO injector design, OG/JSON-LD schema
 │   ├── profile-pages.md             # The enriched /people/<slug> pages + the cross-site member/author links
-│   ├── atlas.md                     # The NetSec Atlas prototype: the network map + how build-atlas.py derives its graph
+│   ├── network-map.md                     # The NetSec Network Map prototype: the network map + how build-network-map.py derives its graph
 │   ├── cross-repo-workflow.md       # NetSec ↔ EISS conventions, incl. the directory-index/authors-index contract
 │   ├── bios-setup.md                # One-time Google Form set-up guide
 │   ├── pdf/                         # Source for the documentation pack

@@ -1,5 +1,5 @@
-/* The NetSec Atlas — proof of concept renderer (#764).
-   Vanilla, no dependencies. Reads data/atlas.json (scripts/build-atlas.py):
+/* The NetSec Network Map — proof of concept renderer (#764).
+   Vanilla, no dependencies. Reads data/network-map.json (scripts/build-network-map.py):
    one deduped person universe (WG rosters union directory bios) under three
    graph layers, rendered as two lenses plus two overlays:
 
@@ -24,12 +24,12 @@
   // Singular and plural are separate catalogue keys rather than an English
   // "member" + "s", which no other language would build the same way.
   const peerLine = (one, many, n) => T(n === 1 ? one : many).replace('{n}', n);
-  const canvas = document.getElementById('atlas-canvas');
-  const card = document.getElementById('atlas-card');
-  const statsEl = document.getElementById('atlas-stats');
-  const hubChipsEl = document.getElementById('atlas-hub-chips');
-  const lensEl = document.getElementById('atlas-lens');
-  const overlaysEl = document.getElementById('atlas-overlays');
+  const canvas = document.getElementById('network-map-canvas');
+  const card = document.getElementById('network-map-card');
+  const statsEl = document.getElementById('network-map-stats');
+  const hubChipsEl = document.getElementById('network-map-hub-chips');
+  const lensEl = document.getElementById('network-map-lens');
+  const overlaysEl = document.getElementById('network-map-overlays');
   if (!canvas || !canvas.getContext) return;
   const ctx = canvas.getContext('2d');
 
@@ -375,7 +375,7 @@
   function chip(label, pressed, onClick, bg) {
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = 'atlas-wg-chip';
+    b.className = 'network-map-wg-chip';
     if (bg) b.style.background = bg; else b.classList.add('is-plain');
     b.textContent = label;
     b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
@@ -426,7 +426,7 @@
   }
 
   // ── Boot ──
-  fetch('data/atlas.json', { cache: 'no-cache' })
+  fetch('data/network-map.json', { cache: 'no-cache' })
     .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(data => {
       allHubs.wg = data.nodes.filter(n => n.type === 'wg');
@@ -472,7 +472,7 @@
        [data.stats.people_with_bios + ' / ' + people.length, 'with a directory profile']]
         .forEach(([b, s]) => {
           const el = document.createElement('div');
-          el.className = 'atlas-stat';
+          el.className = 'network-map-stat';
           const bb = document.createElement('b'); bb.textContent = b;
           const ss = document.createElement('span'); ss.textContent = T(s);
           el.appendChild(bb); el.appendChild(ss);
@@ -489,7 +489,7 @@
       // D6 ships its first output) and the chip appears with the first one.
       if (coauthorEdges.length) {
         overlayDefs.push(['coauthors', 'Co-authored outputs']);
-        const leg = document.getElementById('atlas-legend');
+        const leg = document.getElementById('network-map-legend');
         if (leg) {
           const sp = document.createElement('span');
           sp.innerHTML = '<span class="sw" style="background:#0aa2c0"></span>';
@@ -508,7 +508,7 @@
       resize();
       switchLens('wg');
     })
-    .catch(() => { statsEl.textContent = T('The atlas data could not be loaded.'); });
+    .catch(() => { statsEl.textContent = T('The network map data could not be loaded.'); });
 
   window.addEventListener('resize', () => { resize(); seedPositions(); reheat(120); });
   new MutationObserver(() => { readTheme(); draw(); })
