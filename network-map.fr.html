@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- PROTOTYPE (#764): the NetSec Atlas. Carries the site chrome, the theme
+<!-- PROTOTYPE (#764): the NetSec Network Map. Carries the site chrome, the theme
      bootstrap, and hand translations, but is deliberately NOT signposted:
      nothing links to it, it stays out of sitemap.xml and the visual sitemap,
      it is excluded from search engines below, and <main> carries no
      data-pagefind-body so on-site search does not surface it either. The
-     graph data is the real data/atlas.json derived by scripts/build-atlas.py. -->
+     graph data is the real data/network-map.json derived by scripts/build-network-map.py. -->
 <meta name="robots" content="noindex">
 <!-- Locale alternates. inject-seo.py only manages the PAGES list, and the
-     Atlas is deliberately not on it (#764), so these are hand-written. The
+     Network Map is deliberately not on it (#764), so these are hand-written. The
      language switcher in site.js reads them to send a visitor whose saved
      language is FR or DE to their variant, the way every other page does.
      They are not signposting: the page stays noindex and unlinked. -->
-<link rel="alternate" hreflang="en" href="https://netsec-cost.eu/atlas.html">
-<link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/atlas.fr.html">
-<link rel="alternate" hreflang="de" href="https://netsec-cost.eu/atlas.de.html">
-<link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/atlas.html">
-<title>L’Atlas NetSec · prototype</title>
+<link rel="alternate" hreflang="en" href="https://netsec-cost.eu/network-map.html">
+<link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/network-map.fr.html">
+<link rel="alternate" hreflang="de" href="https://netsec-cost.eu/network-map.de.html">
+<link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/network-map.html">
+<title>La carte du réseau NetSec · prototype</title>
 <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/lexend-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
   })();
 </script>
 <link rel="stylesheet" href="assets/css/site.css?v=7e885c0a">
-<link rel="stylesheet" href="assets/css/atlas.css?v=70725aef">
+<link rel="stylesheet" href="assets/css/network-map.css?v=69032652">
 </head>
 <body>
 <a class="skip-link" href="#main">Aller au contenu principal</a>
@@ -86,36 +86,36 @@
 
 <div class="i18n-beta-ribbon" role="status">
   <span class="i18n-beta-ribbon-badge">Bêta</span>
-  <span>Traduction manuelle, la version anglaise fait foi. <a href="atlas.html" hreflang="en">Voir en anglais →</a></span>
+  <span>Traduction manuelle, la version anglaise fait foi. <a href="network-map.html" hreflang="en">Voir en anglais →</a></span>
 </div>
 
 <main id="main">
-<div class="atlas-shell">
-  <div class="atlas-masthead">
-    <h1>L’Atlas NetSec</h1>
-    <span class="atlas-proto-pill">Prototype</span>
+<div class="network-map-shell">
+  <div class="network-map-masthead">
+    <h1>La carte du réseau NetSec</h1>
+    <span class="network-map-proto-pill">Prototype</span>
   </div>
-  <p class="atlas-lede">Une carte vivante du réseau qui porte Networking European Security Knowledge. Deux angles sur les mêmes personnes : les <strong>groupes de travail</strong> auxquels elles appartiennent, et les <strong>thèmes de recherche</strong> sur lesquels elles travaillent (la carte du domaine). Superposez qui a partagé un panel lors de l’ESSC 2026, ou qui propose et recherche un mentorat. Les co-signatures rejoindront la carte d’elles-mêmes à mesure que les publications de l’Action seront ajoutées. Les personnes situées entre deux pôles sont les passerelles de l’Action. Survolez un visage ou un point pour savoir de qui il s’agit, et cliquez pour rejoindre son profil dans l’annuaire lorsqu’il existe. Tout est généré à partir des données qui alimentent la <a href="working-groups.fr.html">page Groupes de travail</a> et l’<a href="people.fr.html">annuaire</a>.</p>
+  <p class="network-map-lede">Une carte vivante du réseau qui porte Networking European Security Knowledge. Deux angles sur les mêmes personnes : les <strong>groupes de travail</strong> auxquels elles appartiennent, et les <strong>thèmes de recherche</strong> sur lesquels elles travaillent. Superposez qui a partagé un panel lors de l’ESSC 2026, ou qui propose et recherche un mentorat. Les co-signatures rejoindront la carte d’elles-mêmes à mesure que les publications de l’Action seront ajoutées. Les personnes situées entre deux pôles sont les passerelles de l’Action. Survolez un visage ou un point pour savoir de qui il s’agit, et cliquez pour rejoindre son profil dans l’annuaire lorsqu’il existe. Tout est généré à partir des données qui alimentent la <a href="working-groups.fr.html">page Groupes de travail</a> et l’<a href="people.fr.html">annuaire</a>.</p>
 
-  <div class="atlas-stats" id="atlas-stats" aria-label="Statistiques du réseau"></div>
+  <div class="network-map-stats" id="network-map-stats" aria-label="Statistiques du réseau"></div>
 
-  <div class="atlas-controls" id="atlas-lens" role="group" aria-label="Choisir l’angle de la carte">
+  <div class="network-map-controls" id="network-map-lens" role="group" aria-label="Choisir l’angle de la carte">
     <span class="lbl">Angle</span>
-    <!-- lens buttons injected by atlas-poc.js -->
+    <!-- lens buttons injected by network-map.js -->
   </div>
-  <div class="atlas-controls" id="atlas-overlays" role="group" aria-label="Superpositions">
+  <div class="network-map-controls" id="network-map-overlays" role="group" aria-label="Superpositions">
     <span class="lbl">Superpositions</span>
-    <!-- overlay toggles injected by atlas-poc.js -->
+    <!-- overlay toggles injected by network-map.js -->
   </div>
-  <div class="atlas-controls" id="atlas-hub-chips" role="group" aria-label="Filtrer par pôle">
-    <!-- one chip per hub in the active lens, injected by atlas-poc.js -->
+  <div class="network-map-controls" id="network-map-hub-chips" role="group" aria-label="Filtrer par pôle">
+    <!-- one chip per hub in the active lens, injected by network-map.js -->
   </div>
 
-  <div class="atlas-stage">
-    <canvas id="atlas-canvas" aria-label="Carte dynamique du réseau NetSec : appartenance aux groupes de travail, thèmes de recherche, panels partagés en conférence et mentorat. Les mêmes informations sont disponibles sous forme de listes sur la page Groupes de travail et dans l’annuaire."></canvas>
-    <div class="atlas-card" id="atlas-card" aria-hidden="true"></div>
+  <div class="network-map-stage">
+    <canvas id="network-map-canvas" aria-label="Carte dynamique du réseau NetSec : appartenance aux groupes de travail, thèmes de recherche, panels partagés en conférence et mentorat. Les mêmes informations sont disponibles sous forme de listes sur la page Groupes de travail et dans l’annuaire."></canvas>
+    <div class="network-map-card" id="network-map-card" aria-hidden="true"></div>
   </div>
-  <div class="atlas-legend" id="atlas-legend">
+  <div class="network-map-legend" id="network-map-legend">
     <span>les visages et les <span class="sw" style="background:var(--accent-2)"></span>points bleus mènent à un profil de l’annuaire</span>
     <span><span class="sw" style="background:#9aa7bd"></span>membre de la liste (pas encore de profil)</span>
     <span><span class="sw" style="background:#d23a68"></span>a partagé un panel ESSC 2026</span>
@@ -161,7 +161,7 @@
     </div>
   </div>
 </footer>
-<script src="assets/js/site.js?v=790463de" defer></script>
-<script src="assets/js/atlas-poc.js?v=a4808472" defer></script>
+<script src="assets/js/site.js?v=824a23e1" defer></script>
+<script src="assets/js/network-map.js?v=01cd9dfc" defer></script>
 </body>
 </html>

@@ -290,21 +290,21 @@ def check_spotlight(data) -> list:
     return errs
 
 
-def check_atlas(data) -> list:
-    """data/atlas.json: the NetSec Atlas graph (#764), derived from wg.json by
-    scripts/build-atlas.py. Confirms the node/edge shape and referential
+def check_network_map(data) -> list:
+    """data/network-map.json: the NetSec Network Map graph (#764), derived from wg.json by
+    scripts/build-network-map.py. Confirms the node/edge shape and referential
     integrity (every edge endpoint is a real node id) so a stale or malformed
-    atlas.json is caught in CI, not by a blank render. Staleness against wg.json
-    is guarded separately by `build-atlas.py --check`."""
+    network-map.json is caught in CI, not by a blank render. Staleness against wg.json
+    is guarded separately by `build-network-map.py --check`."""
     errs: list = []
     if not isinstance(data, dict):
-        return ["atlas: top level must be an object"]
-    if not _req(data, "nodes", list, errs, "atlas", non_empty=True):
+        return ["network-map: top level must be an object"]
+    if not _req(data, "nodes", list, errs, "network-map", non_empty=True):
         return errs
-    _req(data, "edges", list, errs, "atlas")
+    _req(data, "edges", list, errs, "network-map")
     ids = set()
     for i, n in enumerate(data["nodes"]):
-        ctx = f"atlas.nodes[{i}]"
+        ctx = f"network-map.nodes[{i}]"
         if not isinstance(n, dict):
             errs.append(f"{ctx}: must be an object")
             continue
@@ -313,7 +313,7 @@ def check_atlas(data) -> list:
         if isinstance(n.get("id"), str):
             ids.add(n["id"])
     for i, e in enumerate(data.get("edges") or []):
-        ctx = f"atlas.edges[{i}]"
+        ctx = f"network-map.edges[{i}]"
         if not isinstance(e, dict):
             errs.append(f"{ctx}: must be an object")
             continue
@@ -327,7 +327,7 @@ CHECKS = {
     "data/indico.json": check_indico,
     "data/bios.json": check_bios,
     "data/wg.json": check_wg,
-    "data/atlas.json": check_atlas,
+    "data/network-map.json": check_network_map,
     "data/mc-members.json": check_mc_members,
     "data/events.json": check_events,
     "data/roadmap-progress.json": check_roadmap_progress,

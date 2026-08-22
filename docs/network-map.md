@@ -1,12 +1,22 @@
-# The NetSec Atlas
+# The NetSec Network Map
 
-A live map of the network behind the Action, at `/atlas.html` (plus
-`/atlas.fr.html` and `/atlas.de.html`). It draws every person in the
+A live map of the network behind the Action, at `/network-map.html` (plus
+`/network-map.fr.html` and `/network-map.de.html`). It draws every person in the
 Action as a node and links them through the structures they share:
 the Working Groups they sit in, the research themes they work on, the
 conference panels they shared, and the mentorship they offer or seek.
 People sitting between two hubs are the bridges of the network. Issue
 #764.
+
+**Formerly the NetSec Atlas.** EISS publishes an Atlas of its own at
+`/anthology-atlas.html`, a force-directed map of the Anthology corpus,
+and the EISS brand work goes further by making the constellation graph
+the shared identity of the Anthology and its Atlas
+(EISSeuropa/EISSeuropa.github.io#1253). Two force-directed maps across
+two sites of the same initiative cannot both be the Atlas, so each is
+now named for its subject: the EISS Atlas maps published works, and
+this one maps people. The rename landed while the page was still an
+unlisted prototype, which is why it cost no redirects.
 
 The whole map is **derived from the same data that already drives the
 [Working Groups page](../working-groups.html) and the
@@ -54,13 +64,13 @@ map as its own edge type once the Action's publications land (see
 
 ```
 data/wg.json ─────────────┐
-data/bios.json ───────────┼──►  scripts/build-atlas.py  ──►  data/atlas.json  ──►  assets/js/atlas-poc.js
-data/essc-2026-programme.json ─┤        (derivation)              (committed)          (renders /atlas.html)
+data/bios.json ───────────┼──►  scripts/build-network-map.py  ──►  data/network-map.json  ──►  assets/js/network-map.js
+data/essc-2026-programme.json ─┤        (derivation)              (committed)          (renders /network-map.html)
 data/publications.json ───┘
 ```
 
-`scripts/build-atlas.py` builds `data/atlas.json`, a node/edge graph.
-The renderer, `assets/js/atlas-poc.js`, is a **pure consumer**: it reads
+`scripts/build-network-map.py` builds `data/network-map.json`, a node/edge graph.
+The renderer, `assets/js/network-map.js`, is a **pure consumer**: it reads
 the committed JSON and never fetches `bios.json` or reaches the network.
 
 **Nodes** are the four WG hubs, one hub per research theme in use, and
@@ -82,21 +92,21 @@ the bipartite hubs carry the same information legibly.
 **Determinism.** There is no layout step in the build (the renderer lays
 out client-side), so there is no randomness. Every list is sorted by a
 stable key, so a given `wg.json` always produces byte-identical
-`atlas.json`. That is what lets the `--check` gate work.
+`network-map.json`. That is what lets the `--check` gate work.
 
 ### How it stays current
 
-`build-atlas.py` runs inside **both** sync workflows, since a WG move
+`build-network-map.py` runs inside **both** sync workflows, since a WG move
 comes from the cost.eu sync and a bios change comes from the bios sync,
 and either shifts the graph. It also carries a `--check` mode that
 regenerates in memory and diffs against the committed file. `data-shape-check.yml`
 runs `--check` on any PR that touches the inputs, so a stale
-`atlas.json` fails CI the same way a stale sitemap or directory index
-does. Nothing about the Atlas is edited by hand.
+`network-map.json` fails CI the same way a stale sitemap or directory index
+does. Nothing about the Network Map is edited by hand.
 
 ## The renderer
 
-`atlas-poc.js` is vanilla JavaScript with no dependencies. It paints to
+`network-map.js` is vanilla JavaScript with no dependencies. It paints to
 a `<canvas>` with a hand-rolled force layout on a deterministic seed, is
 DPR-aware for sharp rendering on high-density screens, and reads its
 colours from the CSS variables so it re-themes on a light/dark flip.
@@ -110,13 +120,13 @@ separate catalogue keys rather than an English stem plus an "s".
 Headshots come from the webp variant the bios sync generates, not the
 original JPEG. The faces render as small circles, so the originals were
 spending bytes the canvas cannot show: 5.24 MB across the 62 members
-carrying a photo, against 1.45 MB of webp. `build-atlas.py` picks the
+carrying a photo, against 1.45 MB of webp. `build-network-map.py` picks the
 webp when the file exists and falls back to the original otherwise,
 which is the state a member sits in between joining and the next sync.
 
 ## The performance budget
 
-`atlas.html` is in the Lighthouse budget set (`lighthouserc.json`,
+`network-map.html` is in the Lighthouse budget set (`lighthouserc.json`,
 `.github/workflows/lighthouse.yml`). It was unmeasured until July 2026
 even though that workflow already ran on every change to the files that
 build it, which is how the page came to ship 5.6 MB of headshots
@@ -158,9 +168,9 @@ produces the data:
 
 | Path | Role |
 | --- | --- |
-| `atlas.html`, `atlas.fr.html`, `atlas.de.html` | The prototype page in three locales |
-| `assets/js/atlas-poc.js` | The canvas renderer (pure consumer of `atlas.json`) |
-| `assets/css/atlas.css` | Atlas-only styles |
-| `scripts/build-atlas.py` | Derives `data/atlas.json` (with a `--check` drift gate) |
-| `scripts/test-build-atlas.py` | Tests for the derivation |
-| `data/atlas.json` | The committed node/edge graph (generated, never hand-edited) |
+| `network-map.html`, `network-map.fr.html`, `network-map.de.html` | The prototype page in three locales |
+| `assets/js/network-map.js` | The canvas renderer (pure consumer of `network-map.json`) |
+| `assets/css/network-map.css` | Network-Map-only styles |
+| `scripts/build-network-map.py` | Derives `data/network-map.json` (with a `--check` drift gate) |
+| `scripts/test-build-network-map.py` | Tests for the derivation |
+| `data/network-map.json` | The committed node/edge graph (generated, never hand-edited) |

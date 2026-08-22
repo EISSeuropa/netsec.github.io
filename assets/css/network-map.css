@@ -1,0 +1,59 @@
+/* The NetSec Network Map (#764).
+
+   Lifted out of the inline <style> block network-map.html carried while it was a
+   single-page prototype, so the three locale pages share one stylesheet
+   rather than triplicating it. Keeping it inline would also have made every
+   styling tweak read as translation drift on the FR and DE pages, since the
+   drift checker hashes page markup.
+
+   The page-level chrome (nav, footer, glass cards, theme variables) comes
+   from site.css. Everything here is the map itself. */
+/* The nav is fixed, so the shell clears it the same way .prose-page and
+   .roadmap-page do (140px desktop, 120px on a phone). The prototype used
+   28px because it had no nav above it. */
+.network-map-shell{max-width:1180px;margin:0 auto;padding:140px 20px 60px}
+@media (max-width:900px){ .network-map-shell{padding:120px 16px 48px} }
+.network-map-masthead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:18px 0 6px}
+.network-map-masthead h1{font-family:'Lexend','Inter',sans-serif;font-size:clamp(1.6rem,3.4vw,2.4rem);margin:0;color:var(--ink);letter-spacing:-.02em}
+.network-map-proto-pill{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 11px;border-radius:999px;background:rgba(245,158,11,.16);border:1px solid rgba(245,158,11,.45);color:#8a5a00}
+.dark .network-map-proto-pill{color:#ffd489}
+.network-map-lede{color:var(--muted);max-width:74ch;margin:0 0 18px;font-size:.98rem}
+.network-map-lede a{color:var(--accent-2)}
+.network-map-stats{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.network-map-stat{padding:10px 16px;border-radius:14px;background:rgba(255,255,255,.55);border:1px solid rgba(11,18,32,.08)}
+.dark .network-map-stat{background:rgba(255,255,255,.05);border-color:var(--glass-border)}
+.network-map-stat b{display:block;font-family:'Lexend',sans-serif;font-size:1.3rem;color:var(--ink);line-height:1.1}
+.network-map-stat span{font-size:.76rem;color:var(--muted)}
+.network-map-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
+.network-map-controls .lbl{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.network-map-wg-chip{font:inherit;font-size:.82rem;font-weight:600;padding:6px 13px;border-radius:999px;cursor:pointer;border:1px solid transparent;color:#fff;opacity:.94;transition:opacity .15s,transform .15s}
+.network-map-wg-chip:hover{transform:translateY(-1px)}
+.network-map-wg-chip[aria-pressed="false"]{opacity:.32}
+.network-map-wg-chip:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.network-map-stage{position:relative;border-radius:var(--radius);overflow:hidden;background:radial-gradient(120% 90% at 50% 0%,rgba(10,132,255,.07),transparent 60%),var(--bg-1);border:1px solid rgba(11,18,32,.08)}
+.dark .network-map-stage{background:radial-gradient(120% 90% at 50% 0%,rgba(110,161,255,.09),transparent 60%),rgba(255,255,255,.03);border-color:var(--glass-border)}
+#network-map-canvas{display:block;width:100%;height:640px;cursor:default}
+.network-map-card{position:absolute;pointer-events:none;max-width:280px;padding:12px 15px;border-radius:14px;
+  background:rgba(255,255,255,.92);border:1px solid rgba(11,18,32,.10);box-shadow:0 10px 28px rgba(11,18,32,.16);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s}
+.dark .network-map-card{background:rgba(18,26,44,.92);border-color:var(--glass-border);box-shadow:0 10px 28px rgba(0,0,0,.4)}
+.network-map-card.is-on{opacity:1;transform:none}
+.network-map-card .nm{font-family:'Lexend',sans-serif;font-weight:600;color:var(--ink);font-size:.95rem}
+.network-map-card .meta{font-size:.8rem;color:var(--muted);margin-top:2px}
+.network-map-card .wgs{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.network-map-card .wgp{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;color:#fff}
+.network-map-card .go{font-size:.78rem;color:var(--accent-2);margin-top:7px}
+.network-map-legend{display:flex;gap:16px;flex-wrap:wrap;margin:12px 2px 0;font-size:.78rem;color:var(--muted);align-items:center}
+.network-map-legend .sw{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:5px}
+.network-map-legend .sw-ring{background:transparent;border:2px solid}
+/* The lens chips carry white text, so the light-theme fill has to stay dark
+   enough to clear AA at 13px. .55 blended to roughly 4.2:1 against the page. */
+.network-map-wg-chip.is-plain{background:rgba(11,18,32,.72);color:#fff}
+.dark .network-map-wg-chip.is-plain{background:rgba(255,255,255,.14)}
+.network-map-card .face{width:44px;height:44px;border-radius:50%;object-fit:cover;float:right;margin:0 0 6px 10px}
+.network-map-card .themes{font-size:.76rem;color:var(--muted);margin-top:6px}
+.network-map-card .panels{font-size:.76rem;color:#d23a68;margin-top:6px}
+.dark .network-map-card .panels{color:#ff9db8}
+.network-map-card .coauth{font-size:.76rem;color:#0aa2c0;margin-top:4px}
+.dark .network-map-card .coauth{color:#5fd4e8}
+@media (max-width:640px){ #network-map-canvas{height:480px} }

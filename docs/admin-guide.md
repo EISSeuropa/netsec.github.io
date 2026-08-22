@@ -154,7 +154,7 @@ sequenceDiagram
 **Reading the PR body.** Both sync PRs lead with a one-line summary of
 what the run actually changed, generated after every rebuild step has
 run, so it covers the derived files (profile pages, OG cards, search
-stubs, sitemap, atlas) and not only the upstream fetch. It names the
+stubs, sitemap, network map) and not only the upstream fetch. It names the
 members involved when only a few are touched:
 
 > **Summary: no member edits upstream. 3 derived files rebuilt — search stubs (gayane-harutyunyan).**

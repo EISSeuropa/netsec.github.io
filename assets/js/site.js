@@ -218,8 +218,8 @@
       'Skip': 'Ignorer',
       'Step %1 of %2': 'Étape %1 sur %2',
       'Close tour': 'Fermer la visite',
-      // NetSec Atlas (#764): the controls, the statistics strip, and the
-      // hover card, all injected by assets/js/atlas-poc.js. The 14 theme
+      // NetSec Network Map (#764): the controls, the statistics strip, and the
+      // hover card, all injected by assets/js/network-map.js. The 14 theme
       // names the hub chips carry are already translated further up, since
       // the directory's theme filter uses the same keys.
       'Working Groups': 'Groupes de travail',
@@ -246,7 +246,7 @@
       'Co-authored with {n} member': 'A co-signé avec {n} membre',
       'Co-authored with {n} members': 'A co-signé avec {n} membres',
       'co-authored an Action output': 'a co-signé une publication de l\'Action',
-      'The atlas data could not be loaded.': 'Les données de l\'atlas n\'ont pas pu être chargées.',
+      'The network map data could not be loaded.': 'Les données de la carte du réseau n\'ont pas pu être chargées.',
     },
     de: {
       'Action Chair': 'Aktionsvorsitz',
@@ -452,7 +452,7 @@
       'Skip': 'Überspringen',
       'Step %1 of %2': 'Schritt %1 von %2',
       'Close tour': 'Tour schließen',
-      // NetSec Atlas (#764), same set as the FR block above.
+      // NetSec Network Map (#764), same set as the FR block above.
       'Working Groups': 'Arbeitsgruppen',
       'Building the Network': 'Aufbau des Netzwerks',
       'Transfer of Knowledge': 'Wissenstransfer',
@@ -474,7 +474,7 @@
       'Co-authored with {n} member': 'Gemeinsame Veröffentlichung mit {n} Mitglied',
       'Co-authored with {n} members': 'Gemeinsame Veröffentlichung mit {n} Mitgliedern',
       'co-authored an Action output': 'hat eine Veröffentlichung der Aktion mitverfasst',
-      'The atlas data could not be loaded.': 'Die Atlas-Daten konnten nicht geladen werden.',
+      'The network map data could not be loaded.': 'Die Daten der Netzwerkkarte konnten nicht geladen werden.',
     },
   };
   /* Country-name table for the " · <Country>" tail of role strings like

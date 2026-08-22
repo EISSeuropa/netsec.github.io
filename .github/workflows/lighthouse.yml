@@ -13,7 +13,7 @@ name: Lighthouse (budgets)
 # report artifact, find the failed assertion, and fix it (or record
 # why it is acceptable) before merging anyway.
 #
-# atlas.html joined the set in July 2026 (#764). It is the one page doing
+# network-map.html joined the set in July 2026 (#764). It is the one page doing
 # sustained canvas work, and it was previously unmeasured even though this
 # workflow already triggered on the files that build it. Its assertions
 # differ in one respect only, documented in lighthouserc.json.
@@ -50,7 +50,7 @@ jobs:
             http://localhost:8080/about.html
             http://localhost:8080/essc-2026.html
             http://localhost:8080/press-kit.html
-            http://localhost:8080/atlas.html
+            http://localhost:8080/network-map.html
           runs: 3
           configPath: './lighthouserc.json'
           uploadArtifacts: true

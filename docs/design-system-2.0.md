@@ -367,7 +367,7 @@ referenced via same-document `<use href="#rmi-‚Ä¶">` ‚Äî no extra reques
 | `rmi-a11y`      | Accessibility                                         |
 | `rmi-document`  | Outputs, PDFs, FAQ, About, deliverables               |
 | `rmi-filter`    | Directory facets, filter chips                        |
-| `rmi-graph`     | Atlas, statistics, retrospectives, milestone tracking |
+| `rmi-graph`     | Network Map, statistics, retrospectives, milestone tracking |
 | `rmi-school`    | Summer School, mentorship, glossary                   |
 
 Chip rules: at most three chips per card, headline minor releases and planned
