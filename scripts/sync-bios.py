@@ -905,6 +905,56 @@ def download_photo(
     )
 
 
+# The Network Map draws each face as a circle of about 16 CSS px on the
+# canvas, and at 44 px in the hover card. Serving the directory's 600 px
+# headshot for that sent roughly 1.7 MB of detail the map cannot show and
+# put the page over the 500 KB image budget (#1480). These derivatives sit
+# in their own directory so none of the slug globs above can touch them.
+MAP_AVATAR_DIR = PHOTO_DIR / "map"
+MAP_AVATAR_WIDTH = 128
+
+
+def ensure_map_avatars() -> int:
+    """Write a map-sized .webp for every headshot, into
+    assets/images/people/map/. Idempotent the same way ensure_people_webp
+    is: a derivative newer than its source is left alone. Returns the
+    count written.
+
+    Sourced from the .webp the directory already serves where one exists,
+    falling back to the original, so this never re-encodes a JPEG twice.
+    """
+    if not HAS_PIL:
+        return 0
+    MAP_AVATAR_DIR.mkdir(exist_ok=True)
+    written = 0
+    for src in sorted(PHOTO_DIR.iterdir()):
+        # .webp is in the list because a hand-added seed photo can arrive
+        # as a webp with no JPEG sibling, and would otherwise be the one
+        # member on the map still served at full size.
+        if src.suffix.lower() not in (".jpg", ".jpeg", ".png", ".webp"):
+            continue
+        preferred = src.with_suffix(".webp")
+        source = preferred if preferred.exists() else src
+        dest = MAP_AVATAR_DIR / f"{src.stem}.webp"
+        if dest.exists() and dest.stat().st_mtime >= source.stat().st_mtime:
+            continue
+        try:
+            img = Image.open(source)
+            if img.mode in ("RGBA", "P", "LA"):
+                img = img.convert("RGB")
+            if img.width > MAP_AVATAR_WIDTH:
+                ratio = MAP_AVATAR_WIDTH / img.width
+                img = img.resize(
+                    (MAP_AVATAR_WIDTH, int(img.height * ratio)), Image.LANCZOS,
+                )
+            img.save(dest, format="WEBP", quality=80, method=6)
+            written += 1
+            PHOTOS_CHANGED.append(str(dest.relative_to(ROOT)).replace(os.sep, "/"))
+        except Exception as e:
+            print(f"  ! map avatar encode failed for {src.name}: {e}", file=sys.stderr)
+    return written
+
+
 def ensure_people_webp() -> int:
     """Make sure every headshot in assets/images/people/ has a sibling
     .webp (the smaller format the directory serves first, with the
@@ -2108,6 +2158,10 @@ def main() -> None:
     _webp_n = ensure_people_webp()
     if _webp_n:
         print(f"Generated {_webp_n} new .webp headshot(s).")
+    # Map-sized derivatives come after, so they encode from the fresh .webp.
+    _map_n = ensure_map_avatars()
+    if _map_n:
+        print(f"Generated {_map_n} new map avatar(s).")
 
     # Resolve raw keywords through the alias map + sentence-case +
     # acronym word-walk normaliser. Emits a `canonical_keywords` field

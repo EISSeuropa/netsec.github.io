@@ -156,6 +156,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The Network Map loads about a tenth of the images it used to, taking the faces on the page from 1.65 MB to 178 KB and bringing it inside the performance budget that had been warning on every run. The map draws each face as a circle roughly the size of a full stop on a printed page, so it was being sent portraits with far more detail than it can show. It now uses a small map-sized copy of each headshot, generated alongside the existing ones whenever the directory syncs ([#1480](https://github.com/EISSeuropa/netsec.github.io/issues/1480)).
+
 - The Network Map will pick up future conference editions on its own. It read a single frozen copy of the ESSC 2026 programme, so the shared-panel overlay would have kept showing the 2026 conference after ESSC 2027 happened, with nothing to signal that it had gone stale. It now reads every programme the site holds, each shared-panel tie records which conference it came from, and the wording no longer names a single year ([#1584](https://github.com/EISSeuropa/netsec.github.io/issues/1584)). Hand-translated for FR and DE.
 
 - Visitors browsing without JavaScript no longer see the Ankara policy workshop advertised at the wrong date. The home page builds its events from the calendar data and keeps a hand-written copy of the block for anyone whose browser does not run that code, and the hand-written copy still carried the workshop's pre-correction date of 4 September 2026, a topic "to be confirmed" and no venue. It now matches the calendar: 13 September 2026 at Bilkent University, Ankara, with a link through to the workshop page. Hand-translated for FR and DE.

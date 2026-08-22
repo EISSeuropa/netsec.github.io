@@ -136,12 +136,20 @@ through the shared `netsecT` catalogue in `site.js`, so the FR and DE
 pages render in their own language, with singular and plural kept as
 separate catalogue keys rather than an English stem plus an "s".
 
-Headshots come from the webp variant the bios sync generates, not the
-original JPEG. The faces render as small circles, so the originals were
-spending bytes the canvas cannot show: 5.24 MB across the 62 members
-carrying a photo, against 1.45 MB of webp. `build-network-map.py` picks the
-webp when the file exists and falls back to the original otherwise,
-which is the state a member sits in between joining and the next sync.
+Headshots come from a map-sized derivative, not from the directory's
+headshot. A face draws as a circle of about 16 CSS px on the canvas and
+at 44 px in the hover card, so almost every byte of a 600 px portrait is
+detail the page cannot show. `ensure_map_avatars()` in `sync-bios.py`
+writes a 128 px webp per member into `assets/images/people/map/`, and
+`build-network-map.py` prefers it. Across the current roster that is
+178 KB of faces, against 1.67 MB for the directory webp variants and
+5.24 MB for the original JPEGs.
+
+The preference falls through rather than failing: map avatar, then the
+sibling webp, then the original. A member who joins between syncs is
+served the largest file that exists rather than none, and the canvas
+draws no face at all if a path 404s, so no rung of the fallback can
+break the layout.
 
 ## The performance budget
 
@@ -157,10 +165,15 @@ audited page, which it passes without relaxation. The one exemption is
 `noindex` (see *Status* above), so asserting on it would warn on every
 run forever. Restore that assertion when the prototype graduates.
 
-The image budget is **still warning** at 1.65 MB against 500 KB. The
-canvas loads every headshot eagerly on open, so trimming it further
-means loading faces on demand or generating smaller derivatives rather
-than raising the budget.
+The image budget passes. It warned for a while at 1.65 MB against
+500 KB, fixed in #1480 by generating the map-sized derivatives described
+above rather than by raising the budget.
+
+Loading faces on demand was the other option in that issue and was not
+taken. The whole graph is laid out inside the canvas, so every node is on
+screen from the first paint and there is no offscreen work for a viewport
+check to defer. At 178 KB the eager loop is no longer worth replacing
+with per-frame intersection maths.
 
 ## Accessibility
 

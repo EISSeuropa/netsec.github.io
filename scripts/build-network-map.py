@@ -56,20 +56,28 @@ NETWORK_MAP_JSON = REPO / "data" / "network-map.json"
 
 
 def prefer_webp(photo: str) -> str:
-    """Point a headshot at the webp the bios sync generates beside it.
+    """Point a headshot at the smallest derivative the bios sync has made.
 
-    The Network Map draws faces as small circles on a canvas, so the original
-    JPEG spends bytes on resolution the page cannot show: across the 62
-    members carrying a photo, the originals are 5.24 MB against 1.45 MB
-    of webp, and Lighthouse's 500 KB image budget flagged the page at
-    5.6 MB.
+    The map draws faces as circles of about 16 CSS px on the canvas and at
+    44 px in the hover card, so the directory's 600 px headshot spends
+    almost all of its bytes on detail the page cannot show. Preference
+    order, smallest first:
 
-    Falls back to the original when no webp exists, which is the state a
-    member sits in between joining and the next bios sync. The canvas
-    renders no face if that path 404s rather than breaking the layout,
-    so the fallback is safe either way. Deterministic across checkouts,
+      1. assets/images/people/map/<slug>.webp — the 128 px map avatar
+         (#1480). Across the current roster that is 176 KB in total.
+      2. the sibling .webp the directory serves — 1.67 MB in total.
+      3. the original JPEG — 5.24 MB in total.
+
+    Each step falls through to the next when the file is absent, which is
+    the state a member sits in between joining and the next bios sync. The
+    canvas draws no face if a path 404s rather than breaking the layout, so
+    every rung of the fallback is safe. Deterministic across checkouts,
     since the images are committed (until #119 moves them out).
     """
+    stem = Path(photo).stem
+    map_avatar = Path("assets/images/people/map") / f"{stem}.webp"
+    if (REPO / map_avatar).exists():
+        return map_avatar.as_posix()
     candidate = Path(photo).with_suffix(".webp")
     return candidate.as_posix() if (REPO / candidate).exists() else photo
 
