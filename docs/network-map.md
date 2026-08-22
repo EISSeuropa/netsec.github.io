@@ -190,6 +190,33 @@ screen from the first paint and there is no offscreen work for a viewport
 check to defer. At 178 KB the eager loop is no longer worth replacing
 with per-frame intersection maths.
 
+## Touch
+
+Touch has no hover, so the desktop interaction (hover names a node, click
+opens the profile) collapsed into a single tap that navigated to a profile
+the visitor never saw the name of. At phone width the canvas is about
+340 px across and holds 189 nodes, roughly 29 px apart, so the nearest
+node to a fingertip is frequently the neighbour, and the visitor landed on
+the wrong person with nothing to tell them so.
+
+A tap now previews and a second tap on the same node follows through, with
+a tap on empty space clearing the card. The pick radius widens from 13 px
+to 20 px on a coarse pointer, which is safe only because the preview means
+a wrong pick is seen before it is acted on. Mouse behaviour is unchanged:
+hover names, one click opens.
+
+The same bug was found and fixed on the EISS Atlas
+(EISSeuropa/EISSeuropa.github.io#1431).
+
+## Without JavaScript
+
+`<main>` carries a `<noscript>` block naming the list-based equivalents,
+matching the convention the ESSC pages already use. The canvas, the
+statistics strip and the control rows are all script-rendered, so without
+it the page was a heading, a lede and three empty boxes. That did not
+matter while the page was unlisted and started mattering the moment it was
+linked and indexed.
+
 ## Accessibility
 
 The canvas is a visual convenience, not the only way to the

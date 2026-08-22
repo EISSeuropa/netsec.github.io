@@ -24,6 +24,13 @@
 .dark .network-map-stat{background:rgba(255,255,255,.05);border-color:var(--glass-border)}
 .network-map-stat b{display:block;font-family:'Lexend',sans-serif;font-size:1.3rem;color:var(--ink);line-height:1.1}
 .network-map-stat span{font-size:.76rem;color:var(--muted)}
+.network-map-noscript{
+  margin:0 0 18px;padding:14px 18px;border-radius:12px;
+  font-size:.95rem;line-height:1.55;color:var(--ink-2);
+  background:rgba(10,132,255,.06);border:1px solid rgba(10,132,255,.22);
+}
+.dark .network-map-noscript{background:rgba(110,161,255,.10);border-color:rgba(110,161,255,.28)}
+.network-map-noscript a{color:var(--accent-2);font-weight:500}
 .network-map-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
 .network-map-controls .lbl{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:2px}
 .network-map-wg-chip{font:inherit;font-size:.82rem;font-weight:600;padding:6px 13px;border-radius:999px;cursor:pointer;border:1px solid transparent;color:#fff;opacity:.94;transition:opacity .15s,transform .15s}
