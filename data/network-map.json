@@ -8,6 +8,9 @@
     "themes": 15,
     "panels_matched": 14,
     "panel_edges": 54,
+    "panel_editions": [
+      "2026"
+    ],
     "publications_matched": 0,
     "coauthor_edges": 0
   },
@@ -3358,325 +3361,379 @@
       "source": "alexander-lanoszka",
       "target": "giulia-biselli",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "alexander-lanoszka",
       "target": "p-samuel-zilincik",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "alexander-lanoszka",
       "target": "sara-russo",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "alexandra-brankova",
       "target": "anna-seliverstova",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "alexandra-brankova",
       "target": "clara-jammot",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "alexandra-brankova",
       "target": "gil-baram",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "anna-seliverstova",
       "target": "clara-jammot",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "anna-seliverstova",
       "target": "gil-baram",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "archishman-goswami",
       "target": "lucian-bumeder",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "clara-jammot",
       "target": "gil-baram",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "daniela-mechkaroska",
       "target": "p-gurkan-gur",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "daniela-mechkaroska",
       "target": "p-lorenz-sommer",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "eliza-gheorghe",
       "target": "yanina-shved-dogrul",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "fabio-iguavita-duarte",
       "target": "vasiliki-plessia-aravani",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "filip-ejdus",
       "target": "marko-kovacevic",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "filip-ejdus",
       "target": "nikolaos-tzifakis",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "filip-ejdus",
       "target": "p-milan-varda",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "giulia-biselli",
       "target": "p-samuel-zilincik",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "giulia-biselli",
       "target": "sara-russo",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "isabelle-haynes",
       "target": "mark-rhinard",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "isabelle-haynes",
       "target": "wendy-he",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "johannes-lucht",
       "target": "p-mia-abdic",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "johannes-lucht",
       "target": "pieter-zhao",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "johannes-lucht",
       "target": "rusudan-zabakhidze",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "kire-babanoski",
       "target": "p-kenan-hodzic",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "kire-babanoski",
       "target": "p-sandra-cvikic",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "kire-babanoski",
       "target": "p-senada-selo-sabic",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "marie-robin",
       "target": "saurav-narain",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "marie-robin",
       "target": "silvia-damato",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "marie-robin",
       "target": "yijun-xu",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "mark-rhinard",
       "target": "wendy-he",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "marko-kovacevic",
       "target": "nikolaos-tzifakis",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "marko-kovacevic",
       "target": "p-milan-varda",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "mattia-sguazzini",
       "target": "moritz-weiss",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "mattia-sguazzini",
       "target": "p-yagnyashri-kodaru",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "moritz-weiss",
       "target": "p-yagnyashri-kodaru",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "nikolaos-tzifakis",
       "target": "p-milan-varda",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-elisabetta-ginevra-iida",
       "target": "p-jessica-pereira",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-elisabetta-ginevra-iida",
       "target": "teodora-stoicescu",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-gurkan-gur",
       "target": "p-lorenz-sommer",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-jessica-pereira",
       "target": "teodora-stoicescu",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-kenan-hodzic",
       "target": "p-sandra-cvikic",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-kenan-hodzic",
       "target": "p-senada-selo-sabic",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-mia-abdic",
       "target": "pieter-zhao",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-mia-abdic",
       "target": "rusudan-zabakhidze",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-nicolas-krieger",
       "target": "p-tim-thies",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-nicolas-krieger",
       "target": "p-yagnyashri-kodaru",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-samuel-zilincik",
       "target": "sara-russo",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-sandra-cvikic",
       "target": "p-senada-selo-sabic",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "p-tim-thies",
       "target": "p-yagnyashri-kodaru",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "pieter-zhao",
       "target": "rusudan-zabakhidze",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "saurav-narain",
       "target": "silvia-damato",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "saurav-narain",
       "target": "yijun-xu",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     },
     {
       "source": "silvia-damato",
       "target": "yijun-xu",
       "type": "panel",
-      "weight": 1
+      "weight": 1,
+      "year": "2026"
     }
   ]
 }

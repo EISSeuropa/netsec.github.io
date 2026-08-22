@@ -8,8 +8,9 @@ a pure consumer. Three graph layers over one deduped person universe:
            unique person (WG rosters UNION directory bios, deduped by name_key)
   edges  = person->WG roster memberships (bipartite), person->theme edges from
            the member's bio themes, and person<->person ESSC co-panel edges
-           (type "panel", weight = shared panels) matched by name_key against
-           the frozen conference programme. Bipartite hub forms are chosen over
+           (type "panel", weight = shared panels in that edition, tagged with
+           the edition `year`) matched by name_key against every conference
+           programme on disk. Bipartite hub forms are chosen over
            pairwise co-membership on purpose: pairwise would be a ~9k-edge
            hairball, the hub form carries the same information legibly.
 
@@ -24,8 +25,10 @@ output, so the layer starts at zero edges and grows with the data.
 Not here yet, on purpose (follow-ups):
   - x/y layout coordinates (the renderer lays out client-side for now)
 
-Input:  data/wg.json (always), data/bios.json + data/essc-2026-programme.json
-        (optional at call level, so the original skeleton tests stay valid).
+Input:  data/wg.json (always), data/bios.json, data/publications.json, and
+        every conference programme (data/indico.json + each frozen
+        data/essc-<year>-programme.json, merged by load_programmes()).
+        All optional at call level, so the original skeleton tests stay valid.
 Output: data/network-map.json
 
 Determinism: there is no layout yet, so there is no RNG. Everything is sorted by a
@@ -192,7 +195,7 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
     panel_weights: dict[tuple, int] = {}
     panels_matched = 0
     if programme is not None:
-        for conf in (programme.get("annualConferences") or {}).values():
+        for year, conf in sorted((programme.get("annualConferences") or {}).items()):
             for day in ((conf.get("programme") or {}).get("days") or []):
                 for row in day.get("rows", []):
                     for item in row.get("items", []):
@@ -207,7 +210,7 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
                             ordered = sorted(keys, key=lambda k: people[k]["id"])
                             for i in range(len(ordered)):
                                 for j in range(i + 1, len(ordered)):
-                                    pair = (ordered[i], ordered[j])
+                                    pair = (year, ordered[i], ordered[j])
                                     panel_weights[pair] = panel_weights.get(pair, 0) + 1
 
     # ── Optional enrichment: co-authorship (#764 Phase 3) ──
@@ -246,10 +249,10 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
     edges += sorted(
         (
             {"source": people[a]["id"], "target": people[b]["id"],
-             "type": "panel", "weight": w}
-            for (a, b), w in panel_weights.items()
+             "type": "panel", "weight": w, "year": year}
+            for (year, a, b), w in panel_weights.items()
         ),
-        key=lambda e: (e["source"], e["target"]),
+        key=lambda e: (e["year"], e["source"], e["target"]),
     )
     edges += sorted(
         (
@@ -271,6 +274,7 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
     if programme is not None:
         stats["panels_matched"] = panels_matched
         stats["panel_edges"] = len(panel_weights)
+        stats["panel_editions"] = sorted({y for (y, _a, _b) in panel_weights})
     if publications is not None:
         stats["publications_matched"] = publications_matched
         stats["coauthor_edges"] = len(coauthor_weights)
@@ -283,6 +287,29 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
     }
 
 
+def load_programmes() -> dict | None:
+    """Merge every conference programme on disk into one annualConferences map.
+
+    data/indico.json is the live sync and holds whichever edition Indico is
+    currently serving. Each data/essc-<year>-programme.json is a frozen snapshot
+    taken at conference close, so where both carry the same edition the frozen
+    copy wins: it is the record of what actually happened, and sync-indico will
+    not touch it again.
+
+    Reading every file rather than one hardcoded path is what makes a new
+    edition appear on the map by itself (#1584).
+    """
+    merged: dict = {}
+    live = REPO / "data" / "indico.json"
+    if live.exists():
+        data = json.loads(live.read_text(encoding="utf-8"))
+        merged.update(data.get("annualConferences") or {})
+    for frozen in sorted(REPO.glob("data/essc-*-programme.json")):
+        data = json.loads(frozen.read_text(encoding="utf-8"))
+        merged.update(data.get("annualConferences") or {})
+    return {"annualConferences": merged} if merged else None
+
+
 def _serialise(graph: dict) -> str:
     return json.dumps(graph, indent=2, ensure_ascii=False) + "\n"
 
@@ -291,9 +318,8 @@ def main(argv: list) -> int:
     check = "--check" in argv
     wg = json.loads(WG_JSON.read_text(encoding="utf-8"))
     bios_path = REPO / "data" / "bios.json"
-    prog_path = REPO / "data" / "essc-2026-programme.json"
     bios = json.loads(bios_path.read_text(encoding="utf-8")) if bios_path.exists() else None
-    programme = json.loads(prog_path.read_text(encoding="utf-8")) if prog_path.exists() else None
+    programme = load_programmes()
     pubs_path = REPO / "data" / "publications.json"
     publications = json.loads(pubs_path.read_text(encoding="utf-8")) if pubs_path.exists() else None
     graph = build(wg, bios, programme, publications)

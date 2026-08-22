@@ -535,7 +535,7 @@ sweep (rule §11).
 │   ├── build-calendar.py            # Generates /calendar.ics + /calendar/<slug>.ics from data/events.json
 │   ├── build-news-rss.py            # Generates /news.xml (RSS 2.0) from data/news.json
 │   ├── build-field-guide.py         # Renders data/field-guide.json into the glossary "Concepts" section (EN/FR/DE), sentinel-scoped; --check drift gate (#766)
-│   ├── build-network-map.py               # Regenerates data/network-map.json (theme hubs, mentorship flags, headshots) from bios.json + wg.json for the NetSec Network Map page; --check drift gate (see network-map.md, #764)
+│   ├── build-network-map.py               # Regenerates data/network-map.json (theme hubs, mentorship flags, headshots) from bios.json + wg.json + every conference programme (indico.json + each frozen essc-<year>-programme.json) for the NetSec Network Map page; --check drift gate (see network-map.md, #764, #1584)
 │   ├── sync-roadmap-progress.py     # Writes data/roadmap-progress.json from GitHub milestone closed/total
 │   ├── build-search.sh              # Builds /pagefind/ via `npx pagefind` (gitignored)
 │   ├── build-bio-search-stubs.py    # Renders search/bios/<lang>/<slug>.html — the per-member stubs Pagefind indexes so a member is findable by site search (country + wgs facets); --check drift gate (#1218, #1428)

@@ -325,8 +325,8 @@
         + (themes.length ? '<div class="themes"></div>' : '')
         + (node.panelPeers && node.panelPeers.length
             ? '<div class="panels">' + peerLine(
-                'Shared an ESSC 2026 panel with {n} member',
-                'Shared an ESSC 2026 panel with {n} members',
+                'Shared an ESSC panel with {n} member',
+                'Shared an ESSC panel with {n} members',
                 node.panelPeers.length) + '</div>' : '')
         + (node.coPeers && node.coPeers.length
             ? '<div class="coauth">' + peerLine(
@@ -454,6 +454,13 @@
           byId[e.target].people.push(e.source);
         }
       });
+      people.forEach(p => {
+        // One panel edge per edition, so a pair who shared a panel at two
+        // conferences appears twice. The arcs want both, the hover card's
+        // "with {n} members" wants distinct people (#1584).
+        p.panelPeers = p.panelPeers.filter((id, i, a) => a.indexOf(id) === i);
+        p.coPeers = p.coPeers.filter((id, i, a) => a.indexOf(id) === i);
+      });
 
       // Faces: lazy-load headshots; each arrival repaints once.
       people.forEach(p => {
@@ -484,7 +491,7 @@
         b.dataset.lens = v;
         lensEl.appendChild(b);
       });
-      const overlayDefs = [['panels', 'ESSC 2026 co-panels'], ['mentorship', 'Mentorship offers & requests']];
+      const overlayDefs = [['panels', 'ESSC co-panels'], ['mentorship', 'Mentorship offers & requests']];
       // Co-authorship starts at zero edges (publications.json is empty until
       // D6 ships its first output) and the chip appears with the first one.
       if (coauthorEdges.length) {

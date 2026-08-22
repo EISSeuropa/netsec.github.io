@@ -47,7 +47,7 @@ on:
       - 'directory-index.json'
       - 'scripts/build-network-map.py'
       - 'data/network-map.json'
-      - 'data/essc-2026-programme.json'
+      - 'data/essc-*-programme.json'
       - 'data/publications.json'
       - '.github/workflows/data-shape-check.yml'
   workflow_dispatch:
