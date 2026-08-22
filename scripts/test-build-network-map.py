@@ -230,3 +230,67 @@ def test_load_programmes_returns_none_with_no_files(tmp_path, monkeypatch):
     monkeypatch.setattr(build_network_map, "REPO", tmp_path)
     (tmp_path / "data").mkdir()
     assert build_network_map.load_programmes() is None
+
+
+# ── #1586: author strings as bibliographies actually render them ──────────
+
+def _pub_members():
+    return _wg(
+        {"number": 1, "name": "One", "colour": "wg-1", "memberCount": 3,
+         "members": [
+             {"name": "Dr Ada Lovelace", "country": "UK", "slug": "ada-lovelace"},
+             {"name": "Prof. Alan Turing", "country": "UK", "slug": "alan-turing"},
+             {"name": "Dr Grace Hopper", "country": "US", "slug": "grace-hopper"},
+         ]},
+    )
+
+
+def _coauthors(authors):
+    graph = build(_pub_members(), publications={"publications": [
+        {"title": {"en": "P"}, "authors": authors}]})
+    return graph, [e for e in graph["edges"] if e.get("type") == "coauthor"]
+
+
+def test_initialised_first_name_matches():
+    _g, co = _coauthors(["A. Lovelace", "Alan Turing"])
+    assert [(e["source"], e["target"]) for e in co] == [("ada-lovelace", "alan-turing")]
+
+
+def test_surname_first_inversion_matches():
+    _g, co = _coauthors(["Lovelace, Ada", "Turing, Alan"])
+    assert [(e["source"], e["target"]) for e in co] == [("ada-lovelace", "alan-turing")]
+
+
+def test_inversion_is_not_guessed_without_a_comma():
+    """"Turing Alan" has no comma, so reversing it would be a guess. The pair
+    must not be invented out of a name written back to front by accident."""
+    graph = build(
+        _wg({"number": 1, "name": "One", "colour": "wg-1", "memberCount": 2,
+             "members": [{"name": "Alan Turing", "slug": "alan-turing"},
+                         {"name": "Ada Lovelace", "slug": "ada-lovelace"}]}),
+        publications={"publications": [
+            {"title": {"en": "P"}, "authors": ["Turing Alan", "Ada Lovelace"]}]},
+    )
+    assert [e for e in graph["edges"] if e.get("type") == "coauthor"] == []
+    assert graph["stats"]["authors_unmatched"] == ["Turing Alan"]
+
+
+def test_ambiguous_initial_is_refused():
+    """Two members sharing a surname and a first initial: a wrong edge is
+    worse than none, so neither is chosen."""
+    graph = build(
+        _wg({"number": 1, "name": "One", "colour": "wg-1", "memberCount": 3,
+             "members": [{"name": "Ada Turing", "slug": "ada-turing"},
+                         {"name": "Alice Turing", "slug": "alice-turing"},
+                         {"name": "Grace Hopper", "slug": "grace-hopper"}]}),
+        publications={"publications": [
+            {"title": {"en": "P"}, "authors": ["A. Turing", "Grace Hopper"]}]},
+    )
+    assert [e for e in graph["edges"] if e.get("type") == "coauthor"] == []
+    assert graph["stats"]["authors_unmatched"] == ["A. Turing"]
+
+
+def test_outside_coauthor_is_reported_not_matched():
+    graph, co = _coauthors(["Ada Lovelace", "Alan Turing", "Jane Doe"])
+    assert len(co) == 1
+    assert graph["stats"]["authors_unmatched"] == ["Jane Doe"]

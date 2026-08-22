@@ -156,6 +156,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- Co-authored publications will connect the right people on the Network Map even when an author is written the way a reference list renders them. The map matched authors on full first and last names only, so "A. Lovelace" or "Lovelace, Ada" quietly connected nobody, and the result was indistinguishable from the Action having no co-authored work yet. Both forms now resolve, an initial that fits two members is left alone rather than guessed at, and any author name the map cannot place is reported so a typo can be spotted ([#1586](https://github.com/EISSeuropa/netsec.github.io/issues/1586)).
+
 - The Network Map loads about a tenth of the images it used to, taking the faces on the page from 1.65 MB to 178 KB and bringing it inside the performance budget that had been warning on every run. The map draws each face as a circle roughly the size of a full stop on a printed page, so it was being sent portraits with far more detail than it can show. It now uses a small map-sized copy of each headshot, generated alongside the existing ones whenever the directory syncs ([#1480](https://github.com/EISSeuropa/netsec.github.io/issues/1480)).
 
 - The Network Map will pick up future conference editions on its own. It read a single frozen copy of the ESSC 2026 programme, so the shared-panel overlay would have kept showing the 2026 conference after ESSC 2027 happened, with nothing to signal that it had gone stale. It now reads every programme the site holds, each shared-panel tie records which conference it came from, and the wording no longer names a single year ([#1584](https://github.com/EISSeuropa/netsec.github.io/issues/1584)). Hand-translated for FR and DE.

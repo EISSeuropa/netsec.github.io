@@ -55,6 +55,44 @@ WG_JSON = REPO / "data" / "wg.json"
 NETWORK_MAP_JSON = REPO / "data" / "network-map.json"
 
 
+def match_author(raw: str, people: dict) -> tuple | None:
+    """Resolve one publication author string to a key in the person universe.
+
+    `name_key` reduces a name to (first, last), which matches the display
+    names the rosters and bios carry. Bibliographies do not use display
+    names, so an author entered the way a reference list renders them was
+    silently skipped before #1586. Three passes, most confident first:
+
+      1. The plain key, which is what a display name gives.
+      2. Inverted, for "Laudrain, Arthur". Only attempted when the raw
+         string actually contains a comma, so a two-token name is never
+         reversed on a guess.
+      3. Surname plus first initial, for "A. Laudrain". Only accepted when
+         exactly one member matches: two members sharing a surname and an
+         initial is a coin flip, and a wrong edge is worse than none.
+
+    Returns None when nothing matches, which stays the correct answer for a
+    genuine co-author from outside the Action.
+    """
+    key = name_key(raw)
+    if key is None:
+        return None
+    if key in people:
+        return key
+    if "," in (raw or ""):
+        flipped = (key[1], key[0])
+        if flipped in people:
+            return flipped
+    # Initial fallback: name_key already dropped middle names, so a leading
+    # initial survives as a one-letter first token.
+    first, last = key
+    if len(first) == 1:
+        hits = [k for k in people if k[1] == last and k[0].startswith(first)]
+        if len(hits) == 1:
+            return hits[0]
+    return None
+
+
 def prefer_webp(photo: str) -> str:
     """Point a headshot at the smallest derivative the bios sync has made.
 
@@ -229,13 +267,17 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
     # so the overlay lights up on its own as publications are entered.
     coauthor_weights: dict[tuple, int] = {}
     publications_matched = 0
+    unmatched_authors: set = set()
     if publications is not None:
         for pub in publications.get("publications") or []:
             keys = set()
             for author in pub.get("authors") or []:
-                k = name_key(author if isinstance(author, str) else author.get("name", ""))
-                if k and k in people:
+                raw = author if isinstance(author, str) else author.get("name", "")
+                k = match_author(raw, people)
+                if k:
                     keys.add(k)
+                elif raw:
+                    unmatched_authors.add(raw)
             if len(keys) >= 2:
                 publications_matched += 1
                 ordered = sorted(keys, key=lambda k: people[k]["id"])
@@ -286,6 +328,11 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
     if publications is not None:
         stats["publications_matched"] = publications_matched
         stats["coauthor_edges"] = len(coauthor_weights)
+        # Every author string that resolved to nobody. A co-author from
+        # outside the Action belongs here and is not a problem. A member
+        # written in a format the matcher cannot read also lands here, and
+        # is: this list is what makes that visible instead of silent.
+        stats["authors_unmatched"] = sorted(unmatched_authors)
 
     return {
         "_documentation": _DOC,
@@ -346,6 +393,13 @@ def main(argv: list) -> int:
 
     NETWORK_MAP_JSON.write_text(text, encoding="utf-8")
     s = graph["stats"]
+    if s.get("authors_unmatched"):
+        # Printed, not fatal: an outside co-author is a legitimate miss, so
+        # there is no threshold that separates one from a typo (#1586).
+        print("  authors matching no member (check the spelling of any that "
+              "should have matched):", file=sys.stderr)
+        for a in s["authors_unmatched"]:
+            print(f"    - {a}", file=sys.stderr)
     print(
         f"✓ wrote data/network-map.json — {s['working_groups']} WGs, {s['people']} people "
         f"({s['people_with_bios']} with bios), {s['edges']} edges"
