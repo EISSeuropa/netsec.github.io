@@ -204,12 +204,20 @@ produces the data:
   D6 ships its first output, so the layer starts at zero edges and grows
   on its own.
 
-  `match_author()` resolves an author string to a member. It reads a plain
-  display name, an inverted "Lovelace, Ada" (only where the string actually
-  carries a comma, so a two-token name is never reversed on a guess), and
-  an initialised "A. Lovelace" (only where exactly one member fits, since a
-  wrong tie is worse than a missing one). Anything it cannot resolve is
-  listed in `stats.authors_unmatched` and printed by the build.
+  `match_author()` resolves an author string to a member in two passes: the
+  name as written, then the same name rewritten given-first when it is
+  unambiguously surname-first. Each pass matches exactly, then on a first
+  initial where exactly one member fits, since a wrong tie is worse than a
+  missing one. Between them that covers `Ada Lovelace`, `A. Lovelace`,
+  `Lovelace, Ada`, `Lovelace, A.P.B.` and `LOVELACE Ada`.
+
+  Two guards keep it from inventing collaborations. A plain two-token name
+  is never reversed, so `Turing Alan` stays unmatched rather than becoming
+  Alan Turing. An entirely upper-case name is left alone, since there the
+  capitalisation says nothing about which token is the surname, though
+  initials are excluded from that test because they are upper case under
+  every convention. Anything unresolved is listed in
+  `stats.authors_unmatched` and printed by the build.
 
   That list is deliberately not a gate. A genuine co-author from outside
   the Action is an unmatched author and always will be, so no threshold
