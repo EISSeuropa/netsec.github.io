@@ -23,21 +23,26 @@ The whole map is **derived from the same data that already drives the
 [Directory](../people.html)**, so it never carries its own copy of who
 is who. It is a reading of the existing data, not a new source of it.
 
-## Status: a prototype, deliberately unlisted
+## Status: a signposted prototype
 
-The page carries a "Prototype" pill and the title says so. It is **not
-in the top nav, not in the footer, and not in `sitemap.xml`**, so it is
-reachable only by its URL. That is on purpose while it proves itself.
-When it graduates it needs three things it does not have yet: a nav or
-discovery-grid entry, a `sitemap.xml` row plus a visual-sitemap entry
-(release-cross-check skill, step 2), and a decision on whether the "prototype" framing
-comes off. Until then, treat it as a standalone that most visitors will
-never land on.
+The page is reachable and indexable. It carries a *Prototype* pill, is
+linked from the Working Groups page and the Directory, sits in
+`sitemap.xml` and the visual sitemap in all three locales, and its
+`<main>` carries `data-pagefind-body` so on-site search finds it.
 
-All three locales exist, with the hand-translation beta ribbon
-(*Traduction manuelle* / *Manuell übersetzt*) and full hreflang
-alternates (added in #1419, which also wired the language switcher so it
-lands on the right locale rather than the home page).
+There is no primary-nav entry. The header is at the capacity rule in
+`docs/homepage-ia-phase2.md`, so the map is reached from the two pages
+whose data it draws, using the shared signpost callout that
+`/about.html` already uses for the roadmap.
+
+The *Prototype* pill stays until the co-authorship layer has edges,
+which gives it a defined removal trigger rather than a judgement call.
+
+One thing to confirm after the first Lighthouse run on the indexable
+page: `lighthouserc.json` still drops the `categories:seo` assertion for
+this URL, an exemption that existed only because of the `noindex`. Now
+that the page is managed by `inject-seo.py` and indexable, that
+assertion should be restorable.
 
 ## Two lenses and two overlays
 

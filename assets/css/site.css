@@ -2810,12 +2810,19 @@ body.search-open{overflow:hidden}
   overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
 }
 
-/* Roadmap signpost — small accent callout that sits at the foot of
-   the Deliverables section on /about.html. Frames the public roadmap
-   as the website + directory counterpart to the Action's
-   deliverables timeline (the Gantt above). Stakeholders who arrive
-   on /about.html for the deliverables view also see "here's the
-   shipping cadence on the website itself". */
+/* Signpost callout — a small accent card that points from one page to
+   its counterpart elsewhere on the site. Three uses, all in-body, none
+   of them JS-bound:
+
+     - /about.html, at the foot of the Deliverables section, framing the
+       public roadmap as the website counterpart to the Gantt above.
+     - /working-groups.html and /people.html, pointing at the Network
+       Map (#1595). The header is at the capacity rule in
+       docs/homepage-ia-phase2.md, so the map is reached from the two
+       pages whose data it draws rather than from a nav item.
+
+   The class keeps its original name so the existing markup did not have
+   to churn; read it as the component rather than as "the roadmap one". */
 .deliverables-roadmap-link{
   margin:28px 0 0;
   padding:18px 22px;

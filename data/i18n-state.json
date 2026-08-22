@@ -71,15 +71,15 @@
     "sitemap.html": {
       "fr": {
         "file": "sitemap.fr.html",
-        "source_sha1": "d41c2e61cb0e4b429948b11ea1aca3b2724e1049",
-        "translated_on": "2026-07-24",
+        "source_sha1": "cc4425f2588f4775cbe092f56bff43b284825ddd",
+        "translated_on": "2026-08-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "sitemap.de.html",
-        "source_sha1": "d41c2e61cb0e4b429948b11ea1aca3b2724e1049",
-        "translated_on": "2026-07-24",
+        "source_sha1": "cc4425f2588f4775cbe092f56bff43b284825ddd",
+        "translated_on": "2026-08-22",
         "status": "beta",
         "reviewed_by": null
       }
@@ -119,15 +119,15 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "1ecc0e07cabba53865396f36250dc0ed1b9caaba",
-        "translated_on": "2026-07-13",
+        "source_sha1": "5be863036690714f796db2614d884582c5b11669",
+        "translated_on": "2026-08-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "1ecc0e07cabba53865396f36250dc0ed1b9caaba",
-        "translated_on": "2026-07-13",
+        "source_sha1": "5be863036690714f796db2614d884582c5b11669",
+        "translated_on": "2026-08-22",
         "status": "beta",
         "reviewed_by": null
       }
@@ -279,15 +279,15 @@
     "working-groups.html": {
       "fr": {
         "file": "working-groups.fr.html",
-        "source_sha1": "e7f583ea7c6e4971310489f7b1c32ec5be418a01",
-        "translated_on": "2026-07-12",
+        "source_sha1": "32429d1b0a65c555d3f499fe169e0e2ed0af48fe",
+        "translated_on": "2026-08-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "working-groups.de.html",
-        "source_sha1": "e7f583ea7c6e4971310489f7b1c32ec5be418a01",
-        "translated_on": "2026-07-12",
+        "source_sha1": "32429d1b0a65c555d3f499fe169e0e2ed0af48fe",
+        "translated_on": "2026-08-22",
         "status": "beta",
         "reviewed_by": null
       }
@@ -311,14 +311,14 @@
     "network-map.html": {
       "fr": {
         "file": "network-map.fr.html",
-        "source_sha1": "e7c38a513dccc2e74bba7b5fe1cc5078b72f9a7d",
+        "source_sha1": "af0988898e8ef80582c5a0806e796a08c13e6a61",
         "translated_on": "2026-08-22",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "network-map.de.html",
-        "source_sha1": "e7c38a513dccc2e74bba7b5fe1cc5078b72f9a7d",
+        "source_sha1": "af0988898e8ef80582c5a0806e796a08c13e6a61",
         "translated_on": "2026-08-22",
         "status": "beta",
         "reviewed_by": null

@@ -141,6 +141,8 @@ maintainer-facing audience.
 
 #### Added
 
+- The Network Map is now reachable from the site. The Working Groups page and the Directory each carry a card pointing to it, it appears in the sitemap in all three locales, and the site search finds it. It keeps its Prototype label while the co-authored-publications layer is still empty. Hand-translated for FR and DE.
+
 - The Network Map can be filtered to a single conference once it covers more than one. A row of edition chips appears beside the overlays, and picking one shows only the panels shared at that conference, with the hover card counting the people on screen rather than everyone who has ever shared a panel. The row stays hidden while the map holds a single conference, so it will arrive by itself with ESSC 2027 ([#1584](https://github.com/EISSeuropa/netsec.github.io/issues/1584)). Hand-translated for FR and DE.
 
 - A dedicated page for the Working Group 2 policy workshop, Great Power Politics and the Future of Alliances, at Bilkent University, Ankara, on 13 September 2026 (EN, FR, DE). It carries the call, the themes, what is covered, and how to apply, with the application form available to download and a home-page news card and calendar event pointing to it. Applications close 15 August 2026.
