@@ -143,7 +143,7 @@
       "name": "Dr Alexander Lanoszka",
       "country": "Canada",
       "slug": "alexander-lanoszka",
-      "photo": "assets/images/people/alexander-lanoszka.webp",
+      "photo": "assets/images/people/map/alexander-lanoszka.webp",
       "mentorship": [
         "mentor"
       ]
@@ -171,7 +171,7 @@
       "name": "Ms Alisa Kerschbaum",
       "country": "Netherlands",
       "slug": "alisa-kerschbaum",
-      "photo": "assets/images/people/alisa-kerschbaum.webp"
+      "photo": "assets/images/people/map/alisa-kerschbaum.webp"
     },
     {
       "id": "andriy-tyushka",
@@ -179,7 +179,7 @@
       "name": "Dr Andriy Tyushka",
       "country": "Poland",
       "slug": "andriy-tyushka",
-      "photo": "assets/images/people/andriy-tyushka.webp"
+      "photo": "assets/images/people/map/andriy-tyushka.webp"
     },
     {
       "id": "anna-pagnacco",
@@ -187,7 +187,7 @@
       "name": "Anna Pagnacco",
       "country": "Switzerland",
       "slug": "anna-pagnacco",
-      "photo": "assets/images/people/anna-pagnacco.webp"
+      "photo": "assets/images/people/map/anna-pagnacco.webp"
     },
     {
       "id": "anna-seliverstova",
@@ -195,7 +195,7 @@
       "name": "Ms Anna Seliverstova",
       "country": "Sweden",
       "slug": "anna-seliverstova",
-      "photo": "assets/images/people/anna-seliverstova.webp",
+      "photo": "assets/images/people/map/anna-seliverstova.webp",
       "mentorship": [
         "mentee"
       ]
@@ -206,7 +206,7 @@
       "name": "Mr Archishman Goswami",
       "country": "United Kingdom",
       "slug": "archishman-goswami",
-      "photo": "assets/images/people/archishman-goswami.webp"
+      "photo": "assets/images/people/map/archishman-goswami.webp"
     },
     {
       "id": "arthur-laudrain",
@@ -214,7 +214,7 @@
       "name": "Dr Arthur Laudrain",
       "country": "Switzerland",
       "slug": "arthur-laudrain",
-      "photo": "assets/images/people/arthur-laudrain.webp",
+      "photo": "assets/images/people/map/arthur-laudrain.webp",
       "mentorship": [
         "mentor"
       ]
@@ -225,7 +225,7 @@
       "name": "Dr Athanasios Skraparlis",
       "country": "Greece",
       "slug": "athanasios-skraparlis",
-      "photo": "assets/images/people/athanasios-skraparlis.webp",
+      "photo": "assets/images/people/map/athanasios-skraparlis.webp",
       "mentorship": [
         "mentee",
         "mentor"
@@ -247,7 +247,7 @@
       "name": "Dr Chiara Libiseller",
       "country": "United Kingdom",
       "slug": "chiara-libiseller",
-      "photo": "assets/images/people/chiara-libiseller.webp"
+      "photo": "assets/images/people/map/chiara-libiseller.webp"
     },
     {
       "id": "chiara-ruffa",
@@ -255,7 +255,7 @@
       "name": "Dr Chiara Ruffa",
       "country": "France",
       "slug": "chiara-ruffa",
-      "photo": "assets/images/people/chiara-ruffa.webp"
+      "photo": "assets/images/people/map/chiara-ruffa.webp"
     },
     {
       "id": "clara-jammot",
@@ -263,7 +263,7 @@
       "name": "Ms Clara Jammot",
       "country": "United Kingdom",
       "slug": "clara-jammot",
-      "photo": "assets/images/people/clara-jammot.webp",
+      "photo": "assets/images/people/map/clara-jammot.webp",
       "mentorship": [
         "mentee"
       ]
@@ -274,7 +274,7 @@
       "name": "Dr Daniela Mechkaroska",
       "country": "North Macedonia",
       "slug": "daniela-mechkaroska",
-      "photo": "assets/images/people/daniela-mechkaroska.webp"
+      "photo": "assets/images/people/map/daniela-mechkaroska.webp"
     },
     {
       "id": "danilo-kalezic",
@@ -282,7 +282,7 @@
       "name": "Mr Danilo Kalezic",
       "country": "Montenegro",
       "slug": "danilo-kalezic",
-      "photo": "assets/images/people/danilo-kalezic.webp",
+      "photo": "assets/images/people/map/danilo-kalezic.webp",
       "mentorship": [
         "mentee"
       ]
@@ -323,7 +323,7 @@
       "name": "Dr Eliza Gheorghe",
       "country": "Türkiye",
       "slug": "eliza-gheorghe",
-      "photo": "assets/images/people/eliza-gheorghe.webp"
+      "photo": "assets/images/people/map/eliza-gheorghe.webp"
     },
     {
       "id": "esra-merve-boztosun-cal-skan",
@@ -331,7 +331,7 @@
       "name": "Dr Esra Merve Boztosun-Çalışkan",
       "country": "Türkiye",
       "slug": "esra-merve-boztosun-cal-skan",
-      "photo": "assets/images/people/esra-merve-boztosun-cal-skan.webp",
+      "photo": "assets/images/people/map/esra-merve-boztosun-cal-skan.webp",
       "mentorship": [
         "mentor"
       ]
@@ -342,7 +342,7 @@
       "name": "Mr Eugenio Sánchez",
       "country": "France",
       "slug": "eugenio-sanchez",
-      "photo": "assets/images/people/eugenio-sanchez.webp"
+      "photo": "assets/images/people/map/eugenio-sanchez.webp"
     },
     {
       "id": "fabio-iguavita-duarte",
@@ -350,7 +350,7 @@
       "name": "Mr Fabio Iguavita Duarte",
       "country": "Czechia",
       "slug": "fabio-iguavita-duarte",
-      "photo": "assets/images/people/fabio-iguavita-duarte.webp"
+      "photo": "assets/images/people/map/fabio-iguavita-duarte.webp"
     },
     {
       "id": "felix-kosterke",
@@ -365,7 +365,7 @@
       "name": "Prof Filip Ejdus",
       "country": "Serbia",
       "slug": "filip-ejdus",
-      "photo": "assets/images/people/filip-ejdus.webp"
+      "photo": "assets/images/people/map/filip-ejdus.webp"
     },
     {
       "id": "francesco-canossi",
@@ -373,7 +373,7 @@
       "name": "Mr Francesco Canossi",
       "country": "Italy",
       "slug": "francesco-canossi",
-      "photo": "assets/images/people/francesco-canossi.webp",
+      "photo": "assets/images/people/map/francesco-canossi.webp",
       "mentorship": [
         "mentee"
       ]
@@ -384,7 +384,7 @@
       "name": "Mr Francisco Javier Montilla Aguilera",
       "country": "Spain",
       "slug": "francisco-javier-montilla-aguilera",
-      "photo": "assets/images/people/francisco-javier-montilla-aguilera.webp",
+      "photo": "assets/images/people/map/francisco-javier-montilla-aguilera.webp",
       "mentorship": [
         "mentee"
       ]
@@ -395,7 +395,7 @@
       "name": "Dr Gayane Harutyunyan",
       "country": "Armenia",
       "slug": "gayane-harutyunyan",
-      "photo": "assets/images/people/gayane-harutyunyan.webp"
+      "photo": "assets/images/people/map/gayane-harutyunyan.webp"
     },
     {
       "id": "gesine-weber",
@@ -403,7 +403,7 @@
       "name": "Dr Gesine Weber",
       "country": "Switzerland",
       "slug": "gesine-weber",
-      "photo": "assets/images/people/gesine-weber.webp",
+      "photo": "assets/images/people/map/gesine-weber.webp",
       "mentorship": [
         "mentee",
         "mentor"
@@ -415,7 +415,7 @@
       "name": "Dr Gil Baram",
       "country": "United States",
       "slug": "gil-baram",
-      "photo": "assets/images/people/gil-baram.webp",
+      "photo": "assets/images/people/map/gil-baram.webp",
       "mentorship": [
         "mentor"
       ]
@@ -426,7 +426,7 @@
       "name": "Ms Giulia Biselli",
       "country": "Italy",
       "slug": "giulia-biselli",
-      "photo": "assets/images/people/giulia-biselli.webp"
+      "photo": "assets/images/people/map/giulia-biselli.webp"
     },
     {
       "id": "huw-bennett",
@@ -444,7 +444,7 @@
       "name": "Mr Immanuel Rummel",
       "country": "Switzerland",
       "slug": "immanuel-rummel",
-      "photo": "assets/images/people/immanuel-rummel.webp",
+      "photo": "assets/images/people/map/immanuel-rummel.webp",
       "mentorship": [
         "mentee"
       ]
@@ -455,7 +455,7 @@
       "name": "Ms Isabelle Haynes",
       "country": "Czechia",
       "slug": "isabelle-haynes",
-      "photo": "assets/images/people/isabelle-haynes.webp",
+      "photo": "assets/images/people/map/isabelle-haynes.webp",
       "mentorship": [
         "mentee"
       ]
@@ -466,7 +466,7 @@
       "name": "Prof Islam Jusufi",
       "country": "North Macedonia",
       "slug": "islam-jusufi",
-      "photo": "assets/images/people/islam-jusufi.webp",
+      "photo": "assets/images/people/map/islam-jusufi.webp",
       "mentorship": [
         "mentor"
       ]
@@ -477,7 +477,7 @@
       "name": "Dr Ivan Zaccagnini",
       "country": "Switzerland",
       "slug": "ivan-zaccagnini",
-      "photo": "assets/images/people/ivan-zaccagnini.webp",
+      "photo": "assets/images/people/map/ivan-zaccagnini.webp",
       "mentorship": [
         "mentor"
       ]
@@ -488,7 +488,7 @@
       "name": "Prof. Joe Burton",
       "country": "United Kingdom",
       "slug": "joe-burton",
-      "photo": "assets/images/people/joe-burton.webp",
+      "photo": "assets/images/people/map/joe-burton.webp",
       "mentorship": [
         "mentor"
       ]
@@ -506,7 +506,7 @@
       "name": "Dr John Helferich",
       "country": "United Kingdom",
       "slug": "john-helferich",
-      "photo": "assets/images/people/john-helferich.webp"
+      "photo": "assets/images/people/map/john-helferich.webp"
     },
     {
       "id": "julia-carver",
@@ -514,7 +514,7 @@
       "name": "Dr Julia Carver",
       "country": "United Kingdom",
       "slug": "julia-carver",
-      "photo": "assets/images/people/julia-carver.webp",
+      "photo": "assets/images/people/map/julia-carver.webp",
       "mentorship": [
         "mentor"
       ]
@@ -525,7 +525,7 @@
       "name": "Ms Kara Schneider",
       "country": "France",
       "slug": "kara-schneider",
-      "photo": "assets/images/people/kara-schneider.webp",
+      "photo": "assets/images/people/map/kara-schneider.webp",
       "mentorship": [
         "mentee"
       ]
@@ -536,7 +536,7 @@
       "name": "Dr Ken McDonagh",
       "country": "Ireland",
       "slug": "ken-mcdonagh",
-      "photo": "assets/images/people/ken-mcdonagh.webp",
+      "photo": "assets/images/people/map/ken-mcdonagh.webp",
       "mentorship": [
         "mentor"
       ]
@@ -547,7 +547,7 @@
       "name": "Dr Kire Babanoski",
       "country": "North Macedonia",
       "slug": "kire-babanoski",
-      "photo": "assets/images/people/kire-babanoski.webp",
+      "photo": "assets/images/people/map/kire-babanoski.webp",
       "mentorship": [
         "mentee"
       ]
@@ -558,7 +558,7 @@
       "name": "Ms Laura Lisboa",
       "country": "France",
       "slug": "laura-lisboa",
-      "photo": "assets/images/people/laura-lisboa.webp",
+      "photo": "assets/images/people/map/laura-lisboa.webp",
       "mentorship": [
         "mentee"
       ]
@@ -569,7 +569,7 @@
       "name": "Dr Li Yang",
       "country": "Belgium",
       "slug": "li-yang",
-      "photo": "assets/images/people/li-yang.webp",
+      "photo": "assets/images/people/map/li-yang.webp",
       "mentorship": [
         "mentee"
       ]
@@ -580,7 +580,7 @@
       "name": "Dr Linde Desmaele",
       "country": "Netherlands",
       "slug": "linde-desmaele",
-      "photo": "assets/images/people/linde-desmaele.webp",
+      "photo": "assets/images/people/map/linde-desmaele.webp",
       "mentorship": [
         "mentor"
       ]
@@ -591,7 +591,7 @@
       "name": "Lucian Bumeder",
       "country": "Germany",
       "slug": "lucian-bumeder",
-      "photo": "assets/images/people/lucian-bumeder.webp",
+      "photo": "assets/images/people/map/lucian-bumeder.webp",
       "mentorship": [
         "mentee"
       ]
@@ -609,7 +609,7 @@
       "name": "Dr Marie Robin",
       "country": "Netherlands",
       "slug": "marie-robin",
-      "photo": "assets/images/people/marie-robin.webp"
+      "photo": "assets/images/people/map/marie-robin.webp"
     },
     {
       "id": "marius-ghincea",
@@ -617,7 +617,7 @@
       "name": "Dr Marius Ghincea",
       "country": "Switzerland",
       "slug": "marius-ghincea",
-      "photo": "assets/images/people/marius-ghincea.webp",
+      "photo": "assets/images/people/map/marius-ghincea.webp",
       "mentorship": [
         "mentee"
       ]
@@ -628,7 +628,7 @@
       "name": "Prof. Mark Rhinard",
       "country": "Sweden",
       "slug": "mark-rhinard",
-      "photo": "assets/images/people/mark-rhinard.webp"
+      "photo": "assets/images/people/map/mark-rhinard.webp"
     },
     {
       "id": "marko-kovacevic",
@@ -636,7 +636,7 @@
       "name": "Dr Marko Kovacevic",
       "country": "Serbia",
       "slug": "marko-kovacevic",
-      "photo": "assets/images/people/marko-kovacevic.webp",
+      "photo": "assets/images/people/map/marko-kovacevic.webp",
       "mentorship": [
         "mentor"
       ]
@@ -647,7 +647,7 @@
       "name": "Mr Martin Haváček",
       "country": "Czechia",
       "slug": "martin-havacek",
-      "photo": "assets/images/people/martin-havacek.webp",
+      "photo": "assets/images/people/map/martin-havacek.webp",
       "mentorship": [
         "mentee"
       ]
@@ -658,7 +658,7 @@
       "name": "Mr Mattia Sguazzini",
       "country": "Italy",
       "slug": "mattia-sguazzini",
-      "photo": "assets/images/people/mattia-sguazzini.webp"
+      "photo": "assets/images/people/map/mattia-sguazzini.webp"
     },
     {
       "id": "mehmet-babacan",
@@ -666,7 +666,7 @@
       "name": "Dr Mehmet Babacan",
       "country": "Türkiye",
       "slug": "mehmet-babacan",
-      "photo": "assets/images/people/mehmet-babacan.webp",
+      "photo": "assets/images/people/map/mehmet-babacan.webp",
       "mentorship": [
         "mentor"
       ]
@@ -677,7 +677,7 @@
       "name": "Ms Meret Steybe",
       "country": "Switzerland",
       "slug": "meret-steybe",
-      "photo": "assets/images/people/meret-steybe.webp",
+      "photo": "assets/images/people/map/meret-steybe.webp",
       "mentorship": [
         "mentee"
       ]
@@ -688,7 +688,7 @@
       "name": "Prof. Monika Sus",
       "country": "Poland",
       "slug": "monika-sus",
-      "photo": "assets/images/people/monika-sus.webp",
+      "photo": "assets/images/people/map/monika-sus.webp",
       "mentorship": [
         "mentor"
       ]
@@ -699,7 +699,7 @@
       "name": "Dr Moritz Weiss",
       "country": "Germany",
       "slug": "moritz-weiss",
-      "photo": "assets/images/people/moritz-weiss.webp"
+      "photo": "assets/images/people/map/moritz-weiss.webp"
     },
     {
       "id": "niklas-karlen",
@@ -707,7 +707,7 @@
       "name": "Dr Niklas Karlén",
       "country": "Sweden",
       "slug": "niklas-karlen",
-      "photo": "assets/images/people/niklas-karlen.webp",
+      "photo": "assets/images/people/map/niklas-karlen.webp",
       "mentorship": [
         "mentor"
       ]
@@ -718,7 +718,7 @@
       "name": "Prof. Nikolaos Tzifakis",
       "country": "Greece",
       "slug": "nikolaos-tzifakis",
-      "photo": "assets/images/people/nikolaos-tzifakis.webp",
+      "photo": "assets/images/people/map/nikolaos-tzifakis.webp",
       "mentorship": [
         "mentor"
       ]
@@ -1155,7 +1155,7 @@
       "name": "Dr Pınar Akgül",
       "country": "Türkiye",
       "slug": "p-nar-akgul",
-      "photo": "assets/images/people/p-nar-akgul.webp"
+      "photo": "assets/images/people/map/p-nar-akgul.webp"
     },
     {
       "id": "p-nemanja-dzuverovic",
@@ -1385,7 +1385,7 @@
       "name": "Prof Paulina Polko",
       "country": "Poland",
       "slug": "paulina-polko",
-      "photo": "assets/images/people/paulina-polko.webp",
+      "photo": "assets/images/people/map/paulina-polko.webp",
       "mentorship": [
         "mentor"
       ]
@@ -1396,7 +1396,7 @@
       "name": "Prof Pavlosioannis Koktsidis",
       "country": "Greece",
       "slug": "pavlosioannis-koktsidis",
-      "photo": "assets/images/people/pavlosioannis-koktsidis.webp",
+      "photo": "assets/images/people/map/pavlosioannis-koktsidis.webp",
       "mentorship": [
         "mentor"
       ]
@@ -1407,7 +1407,7 @@
       "name": "Mr Pieter Zhao",
       "country": "Netherlands",
       "slug": "pieter-zhao",
-      "photo": "assets/images/people/pieter-zhao.webp",
+      "photo": "assets/images/people/map/pieter-zhao.webp",
       "mentorship": [
         "mentee"
       ]
@@ -1418,7 +1418,7 @@
       "name": "Dr Revecca Pedi",
       "country": "Greece",
       "slug": "revecca-pedi",
-      "photo": "assets/images/people/revecca-pedi.webp"
+      "photo": "assets/images/people/map/revecca-pedi.webp"
     },
     {
       "id": "rusudan-zabakhidze",
@@ -1426,7 +1426,7 @@
       "name": "Ms Rusudan Zabakhidze",
       "country": "Sweden",
       "slug": "rusudan-zabakhidze",
-      "photo": "assets/images/people/rusudan-zabakhidze.webp",
+      "photo": "assets/images/people/map/rusudan-zabakhidze.webp",
       "mentorship": [
         "mentee"
       ]
@@ -1437,7 +1437,7 @@
       "name": "Ms sara russo",
       "country": "Italy",
       "slug": "sara-russo",
-      "photo": "assets/images/people/sara-russo.webp"
+      "photo": "assets/images/people/map/sara-russo.webp"
     },
     {
       "id": "sarka-kolmasova",
@@ -1445,7 +1445,7 @@
       "name": "Dr Sarka Kolmasova",
       "country": "Czechia",
       "slug": "sarka-kolmasova",
-      "photo": "assets/images/people/sarka-kolmasova.webp"
+      "photo": "assets/images/people/map/sarka-kolmasova.webp"
     },
     {
       "id": "saurav-narain",
@@ -1453,7 +1453,7 @@
       "name": "Mr Saurav Narain",
       "country": "Netherlands",
       "slug": "saurav-narain",
-      "photo": "assets/images/people/saurav-narain.webp",
+      "photo": "assets/images/people/map/saurav-narain.webp",
       "mentorship": [
         "mentee"
       ]
@@ -1464,7 +1464,7 @@
       "name": "Dr Seyithan Ahmet Ateş",
       "country": "Türkiye",
       "slug": "seyithan-ahmet-ates",
-      "photo": "assets/images/people/seyithan-ahmet-ates.webp",
+      "photo": "assets/images/people/map/seyithan-ahmet-ates.webp",
       "mentorship": [
         "mentor"
       ]
@@ -1475,7 +1475,7 @@
       "name": "Dr Silvia D'Amato",
       "country": "",
       "slug": "silvia-damato",
-      "photo": "assets/images/people/silvia-damato.webp"
+      "photo": "assets/images/people/map/silvia-damato.webp"
     },
     {
       "id": "sophie-enos-attali",
@@ -1490,7 +1490,7 @@
       "name": "Prof. Sprincean Serghei",
       "country": "Moldova",
       "slug": "sprincean-serghei",
-      "photo": "assets/images/people/sprincean-serghei.webp",
+      "photo": "assets/images/people/map/sprincean-serghei.webp",
       "mentorship": [
         "matched",
         "mentor-full"
@@ -1502,7 +1502,7 @@
       "name": "Dr Tanja Pavleska",
       "country": "Slovenia",
       "slug": "tanja-pavleska",
-      "photo": "assets/images/people/tanja-pavleska.webp",
+      "photo": "assets/images/people/map/tanja-pavleska.webp",
       "mentorship": [
         "mentor"
       ]
@@ -1513,7 +1513,7 @@
       "name": "Ms Teodora Stoicescu",
       "country": "Romania",
       "slug": "teodora-stoicescu",
-      "photo": "assets/images/people/teodora-stoicescu.webp",
+      "photo": "assets/images/people/map/teodora-stoicescu.webp",
       "mentorship": [
         "mentee"
       ]
@@ -1534,7 +1534,7 @@
       "name": "Ms Vasiliki Plessia Aravani",
       "country": "Austria",
       "slug": "vasiliki-plessia-aravani",
-      "photo": "assets/images/people/vasiliki-plessia-aravani.webp",
+      "photo": "assets/images/people/map/vasiliki-plessia-aravani.webp",
       "mentorship": [
         "mentee"
       ]
@@ -1545,7 +1545,7 @@
       "name": "Dr Wendy He",
       "country": "Germany",
       "slug": "wendy-he",
-      "photo": "assets/images/people/wendy-he.webp"
+      "photo": "assets/images/people/map/wendy-he.webp"
     },
     {
       "id": "yanina-shved-dogrul",
@@ -1553,7 +1553,7 @@
       "name": "Ms Yanina Shved-Dogrul",
       "country": "Türkiye",
       "slug": "yanina-shved-dogrul",
-      "photo": "assets/images/people/yanina-shved-dogrul.webp",
+      "photo": "assets/images/people/map/yanina-shved-dogrul.webp",
       "mentorship": [
         "mentee"
       ]
@@ -1574,7 +1574,7 @@
       "name": "Dr Zane Šime",
       "country": "Latvia",
       "slug": "zane-sime",
-      "photo": "assets/images/people/zane-sime.webp",
+      "photo": "assets/images/people/map/zane-sime.webp",
       "mentorship": [
         "mentor"
       ]
