@@ -44,6 +44,7 @@ Usage:
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -55,21 +56,76 @@ WG_JSON = REPO / "data" / "wg.json"
 NETWORK_MAP_JSON = REPO / "data" / "network-map.json"
 
 
+def _given_first(raw: str) -> str | None:
+    """Rewrite a surname-first author string as "Given Surname", or None.
+
+    Two conventions, both unambiguous, both standard in reference lists:
+
+      "Laudrain, Arthur"   the comma is the signal
+      "LAUDRAIN Arthur"    the all-caps surname is the signal, which is the
+                           house style across French and much EU bibliography
+
+    Returning a rewritten string rather than a flipped key matters for the
+    initialised forms. `name_key` keeps only the first and last tokens, so
+    flipping its output turns "Laudrain, A.P.B." into ("b", "laudrain") and
+    loses the very initial the fallback needs. Rewriting first and letting
+    name_key run on "A.P.B. Laudrain" keeps it.
+
+    Deliberately conservative. A plain two-token name is never reversed on a
+    guess, and an entirely upper-case name ("ADA LOVELACE") is left alone,
+    since there the capitalisation says nothing about which token is which.
+    Initials are excluded from that test, being upper case whatever the
+    convention, so "LOVELACE A." still reads as surname-first.
+    """
+    if not raw:
+        return None
+    if "," in raw:
+        surname, given = raw.split(",", 1)
+        given, surname = given.strip(), surname.strip()
+        return f"{given} {surname}" if given and surname else None
+    tokens = raw.split()
+    if len(tokens) < 2:
+        return None
+    head = re.sub(r"[^A-Za-z]", "", tokens[0])
+    rest = [re.sub(r"[^A-Za-z]", "", x) for x in tokens[1:]]
+    rest = [x for x in rest if x]
+    if len(head) < 2 or not head.isupper() or not rest:
+        return None
+    # Only real words carry case information. A lone initial is always upper
+    # case, so "LOVELACE A." must not be read as a shouted whole name.
+    words = [x for x in rest if len(x) > 1]
+    if words and all(x.isupper() for x in words):
+        return None
+    return " ".join(tokens[1:] + [tokens[0]])
+
+
+def _resolve(key: tuple, people: dict) -> tuple | None:
+    """A (first, last) key against the person universe, exact then initial.
+
+    The initial pass only fires on a one-letter first token, and only when
+    exactly one member fits. Two members sharing a surname and an initial is
+    a coin flip, and a wrong co-authorship edge is worse than a missing one.
+    """
+    if key in people:
+        return key
+    first, last = key
+    if len(first) == 1:
+        hits = [k for k in people if k[1] == last and k[0].startswith(first)]
+        if len(hits) == 1:
+            return hits[0]
+    return None
+
+
 def match_author(raw: str, people: dict) -> tuple | None:
     """Resolve one publication author string to a key in the person universe.
 
-    `name_key` reduces a name to (first, last), which matches the display
-    names the rosters and bios carry. Bibliographies do not use display
-    names, so an author entered the way a reference list renders them was
-    silently skipped before #1586. Three passes, most confident first:
+    `name_key` reduces a name to (first, last), which is the shape a display
+    name has. Bibliographies do not use display names, so an author written
+    the way a reference list renders them was silently skipped before #1586.
 
-      1. The plain key, which is what a display name gives.
-      2. Inverted, for "Laudrain, Arthur". Only attempted when the raw
-         string actually contains a comma, so a two-token name is never
-         reversed on a guess.
-      3. Surname plus first initial, for "A. Laudrain". Only accepted when
-         exactly one member matches: two members sharing a surname and an
-         initial is a coin flip, and a wrong edge is worse than none.
+    Two passes. The name as written, then the same name rewritten given-first
+    when it is unambiguously surname-first (see `_given_first`). Each pass
+    resolves exactly and then on a first initial.
 
     Returns None when nothing matches, which stays the correct answer for a
     genuine co-author from outside the Action.
@@ -77,19 +133,14 @@ def match_author(raw: str, people: dict) -> tuple | None:
     key = name_key(raw)
     if key is None:
         return None
-    if key in people:
-        return key
-    if "," in (raw or ""):
-        flipped = (key[1], key[0])
-        if flipped in people:
-            return flipped
-    # Initial fallback: name_key already dropped middle names, so a leading
-    # initial survives as a one-letter first token.
-    first, last = key
-    if len(first) == 1:
-        hits = [k for k in people if k[1] == last and k[0].startswith(first)]
-        if len(hits) == 1:
-            return hits[0]
+    hit = _resolve(key, people)
+    if hit:
+        return hit
+    swapped = _given_first(raw)
+    if swapped:
+        key2 = name_key(swapped)
+        if key2:
+            return _resolve(key2, people)
     return None
 
 
