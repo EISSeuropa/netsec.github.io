@@ -75,14 +75,14 @@
     },
     "v1.14.0": {
       "closed": 54,
-      "total": 67,
-      "percent": 81,
+      "total": 68,
+      "percent": 79,
       "state": "open",
       "due": "2026-10-06"
     },
     "v1.15.0": {
       "closed": 0,
-      "total": 8,
+      "total": 10,
       "percent": 0,
       "state": "open",
       "due": "2026-12-08"
