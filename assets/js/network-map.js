@@ -69,7 +69,11 @@
   let allHubs = { wg: [], theme: [] };
   let people = [], byId = {};
   let hubEdges = { wg: [], theme: [] };   // person->hub, keyed by lens
-  let panelEdges = [];                    // person<->person, weighted
+  let panelEdges = [];                    // person<->person, weighted, per edition
+  // Which conference edition the co-panel arcs show. 'all' until the map
+  // holds more than one, at which point the chips below appear (#1584).
+  let panelEdition = 'all';
+  const inEdition = (e) => panelEdition === 'all' || e.year === panelEdition;
   let coauthorEdges = [];                 // person<->person, from publications
   let lens = 'wg';
   const activeHubs = new Set();           // hub ids active in the current lens
@@ -207,6 +211,7 @@
 
     if (overlays.panels) {
       panelEdges.forEach(e => {
+        if (!inEdition(e)) return;
         const a = byId[e.source], b = byId[e.target];
         if (!personVisible(a) || !personVisible(b)) return;
         const lit = hoverIds && (hoverIds.has(a.id) && hoverIds.has(b.id));
@@ -371,6 +376,50 @@
     if (n && n.slug) location.href = 'people/' + n.slug + '.html';
   });
 
+  // One panel edge per edition, so a pair who shared a panel at two
+  // conferences appears twice. The arcs want both, the hover card's
+  // "with {n} members" wants distinct people who are actually on screen,
+  // which is why this is recomputed when the edition filter moves (#1584).
+  function recomputePanelPeers() {
+    people.forEach(p => { p.panelPeers = []; });
+    panelEdges.forEach(e => {
+      if (!inEdition(e)) return;
+      byId[e.source].panelPeers.push(e.target);
+      byId[e.target].panelPeers.push(e.source);
+    });
+    people.forEach(p => {
+      p.panelPeers = p.panelPeers.filter((id, i, a) => a.indexOf(id) === i);
+    });
+  }
+
+  // The edition row is built rather than sitting in the three locale pages,
+  // and only when there is a choice to make. With one conference on the map
+  // a filter offering that one conference is furniture, so it stays absent
+  // and appears by itself the first time a second edition lands (#1584), the
+  // same way the co-authorship chip waits for the first publication.
+  function buildEditionChips(editions) {
+    if (!editions || editions.length < 2) return;
+    const row = document.createElement('div');
+    row.className = 'network-map-controls';
+    row.id = 'network-map-editions';
+    row.setAttribute('role', 'group');
+    row.setAttribute('aria-label', T('Filter co-panels by conference edition'));
+    const lab = document.createElement('span');
+    lab.className = 'lbl';
+    lab.textContent = T('Edition');
+    row.appendChild(lab);
+    const choose = (value) => (b) => {
+      panelEdition = value;
+      row.querySelectorAll('button').forEach(x =>
+        x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+      recomputePanelPeers();
+      draw();
+    };
+    row.appendChild(chip(T('All editions'), true, choose('all')));
+    editions.forEach(y => row.appendChild(chip(y, false, choose(y))));
+    overlaysEl.parentNode.insertBefore(row, overlaysEl.nextSibling);
+  }
+
   // ── Controls ──
   function chip(label, pressed, onClick, bg) {
     const b = document.createElement('button');
@@ -455,12 +504,9 @@
         }
       });
       people.forEach(p => {
-        // One panel edge per edition, so a pair who shared a panel at two
-        // conferences appears twice. The arcs want both, the hover card's
-        // "with {n} members" wants distinct people (#1584).
-        p.panelPeers = p.panelPeers.filter((id, i, a) => a.indexOf(id) === i);
         p.coPeers = p.coPeers.filter((id, i, a) => a.indexOf(id) === i);
       });
+      recomputePanelPeers();
 
       // Faces: lazy-load headshots; each arrival repaints once.
       people.forEach(p => {
@@ -504,6 +550,7 @@
           leg.insertBefore(sp, leg.lastElementChild);
         }
       }
+      buildEditionChips(data.stats && data.stats.panel_editions);
       overlayDefs.forEach(([k, label]) => {
         overlaysEl.appendChild(chip(T(label), overlays[k], (b) => {
           overlays[k] = !overlays[k];

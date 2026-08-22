@@ -53,6 +53,16 @@ with overlays layered on top:
   shared in that edition. Works on either lens. Each arc carries the
   edition it came from, so a pair who sat together at two conferences
   gets one arc per edition rather than a single merged tie.
+
+  When the map holds more than one edition, an **Edition** row appears
+  between the overlays and the hub chips, offering *All editions* plus
+  one chip per conference. It is built by the renderer rather than sitting
+  in the three locale pages, and only when there is a choice to make: a
+  filter offering the single conference on the map is furniture. This
+  mirrors the co-authorship chip, which waits for the first publication.
+  Filtering recomputes each person's panel peers, so the hover card's
+  "with {n} members" counts who is on screen rather than who ever shared
+  a panel.
 - **Mentorship overlay.** Rings on the dots for who is offering
   mentorship and who is seeking it.
 
