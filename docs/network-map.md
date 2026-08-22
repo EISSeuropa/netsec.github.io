@@ -23,21 +23,26 @@ The whole map is **derived from the same data that already drives the
 [Directory](../people.html)**, so it never carries its own copy of who
 is who. It is a reading of the existing data, not a new source of it.
 
-## Status: a prototype, deliberately unlisted
+## Status: a signposted prototype
 
-The page carries a "Prototype" pill and the title says so. It is **not
-in the top nav, not in the footer, and not in `sitemap.xml`**, so it is
-reachable only by its URL. That is on purpose while it proves itself.
-When it graduates it needs three things it does not have yet: a nav or
-discovery-grid entry, a `sitemap.xml` row plus a visual-sitemap entry
-(release-cross-check skill, step 2), and a decision on whether the "prototype" framing
-comes off. Until then, treat it as a standalone that most visitors will
-never land on.
+The page is reachable and indexable. It carries a *Prototype* pill, is
+linked from the Working Groups page and the Directory, sits in
+`sitemap.xml` and the visual sitemap in all three locales, and its
+`<main>` carries `data-pagefind-body` so on-site search finds it.
 
-All three locales exist, with the hand-translation beta ribbon
-(*Traduction manuelle* / *Manuell übersetzt*) and full hreflang
-alternates (added in #1419, which also wired the language switcher so it
-lands on the right locale rather than the home page).
+There is no primary-nav entry. The header is at the capacity rule in
+`docs/homepage-ia-phase2.md`, so the map is reached from the two pages
+whose data it draws, using the shared signpost callout that
+`/about.html` already uses for the roadmap.
+
+The *Prototype* pill stays until the co-authorship layer has edges,
+which gives it a defined removal trigger rather than a judgement call.
+
+One thing to confirm after the first Lighthouse run on the indexable
+page: `lighthouserc.json` still drops the `categories:seo` assertion for
+this URL, an exemption that existed only because of the `noindex`. Now
+that the page is managed by `inject-seo.py` and indexable, that
+assertion should be restorable.
 
 ## Two lenses and two overlays
 
@@ -184,6 +189,33 @@ taken. The whole graph is laid out inside the canvas, so every node is on
 screen from the first paint and there is no offscreen work for a viewport
 check to defer. At 178 KB the eager loop is no longer worth replacing
 with per-frame intersection maths.
+
+## Touch
+
+Touch has no hover, so the desktop interaction (hover names a node, click
+opens the profile) collapsed into a single tap that navigated to a profile
+the visitor never saw the name of. At phone width the canvas is about
+340 px across and holds 189 nodes, roughly 29 px apart, so the nearest
+node to a fingertip is frequently the neighbour, and the visitor landed on
+the wrong person with nothing to tell them so.
+
+A tap now previews and a second tap on the same node follows through, with
+a tap on empty space clearing the card. The pick radius widens from 13 px
+to 20 px on a coarse pointer, which is safe only because the preview means
+a wrong pick is seen before it is acted on. Mouse behaviour is unchanged:
+hover names, one click opens.
+
+The same bug was found and fixed on the EISS Atlas
+(EISSeuropa/EISSeuropa.github.io#1431).
+
+## Without JavaScript
+
+`<main>` carries a `<noscript>` block naming the list-based equivalents,
+matching the convention the ESSC pages already use. The canvas, the
+statistics strip and the control rows are all script-rendered, so without
+it the page was a heading, a lede and three empty boxes. That did not
+matter while the page was unlisted and started mattering the moment it was
+linked and indexed.
 
 ## Accessibility
 

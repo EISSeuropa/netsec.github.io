@@ -298,9 +298,12 @@
   }
 
   // ── Interaction ──
-  function nodeAt(mx, my) {
+  // `touch` widens the pick radius: a fingertip covers far more than a mouse
+  // point, and the preview tap above means a wrong pick is now seen before it
+  // is acted on rather than after.
+  function nodeAt(mx, my, touch) {
     for (const h of hubs()) if (Math.hypot(mx - h.x, my - h.y) <= h.r) return h;
-    let best = null, bd = 13;
+    let best = null, bd = touch ? 20 : 13;
     for (const p of people) {
       if (!personVisible(p)) continue;
       const d = Math.hypot(mx - p.x, my - p.y);
@@ -372,7 +375,17 @@
   canvas.addEventListener('pointerup', (e) => {
     if (draggingHub) { draggingHub = null; return; }
     const r = canvas.getBoundingClientRect();
-    const n = nodeAt(e.clientX - r.left, e.clientY - r.top);
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    const touch = e.pointerType !== 'mouse';
+    const n = nodeAt(mx, my, touch);
+    // Touch has no hover, so navigating on the first tap sent a visitor to a
+    // profile they never saw the name of, and at phone density the nearest
+    // node to a fingertip is often the neighbour. First tap previews, second
+    // tap on the same node follows through, and a tap on empty space clears.
+    if (touch) {
+      if (!n) { hovered = null; showCard(null); draw(); return; }
+      if (hovered !== n) { hovered = n; showCard(n, mx, my); draw(); return; }
+    }
     if (n && n.slug) location.href = 'people/' + n.slug + '.html';
   });
 
@@ -413,6 +426,7 @@
       row.querySelectorAll('button').forEach(x =>
         x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
       recomputePanelPeers();
+      hovered = null; showCard(null);
       draw();
     };
     row.appendChild(chip(T('All editions'), true, choose('all')));

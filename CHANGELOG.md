@@ -141,6 +141,8 @@ maintainer-facing audience.
 
 #### Added
 
+- The Network Map is now reachable from the site. The Working Groups page and the Directory each carry a card pointing to it, it appears in the sitemap in all three locales, and the site search finds it. It keeps its Prototype label while the co-authored-publications layer is still empty. Hand-translated for FR and DE.
+
 - The Network Map can be filtered to a single conference once it covers more than one. A row of edition chips appears beside the overlays, and picking one shows only the panels shared at that conference, with the hover card counting the people on screen rather than everyone who has ever shared a panel. The row stays hidden while the map holds a single conference, so it will arrive by itself with ESSC 2027 ([#1584](https://github.com/EISSeuropa/netsec.github.io/issues/1584)). Hand-translated for FR and DE.
 
 - A dedicated page for the Working Group 2 policy workshop, Great Power Politics and the Future of Alliances, at Bilkent University, Ankara, on 13 September 2026 (EN, FR, DE). It carries the call, the themes, what is covered, and how to apply, with the application form available to download and a home-page news card and calendar event pointing to it. Applications close 15 August 2026.
@@ -158,6 +160,11 @@ maintainer-facing audience.
 
 #### Fixed
 
+- Tapping a face on the Network Map from a phone no longer jumps straight to a profile, and no longer to the wrong person. Touch has no hover, so the first tap had to serve as the click, and on a small screen the nearest point to a fingertip is often somebody's neighbour. A tap now shows the name first and a second tap opens the profile, tapping empty space clears it, and the area a tap has to land in is larger. Using a mouse is unchanged.
+
+- The Network Map explains itself to visitors browsing without JavaScript, pointing to the Working Groups page and the Directory for the same information as lists, instead of showing an empty frame. Hand-translated for FR and DE.
+
+- Co-authored publications will connect the right people on the Network Map even when an author is written the way a reference list renders them. The map matched authors on full first and last names only, so "A. Lovelace" or "Lovelace, Ada" quietly connected nobody, and the result was indistinguishable from the Action having no co-authored work yet. Both forms now resolve, an initial that fits two members is left alone rather than guessed at, and any author name the map cannot place is reported so a typo can be spotted ([#1586](https://github.com/EISSeuropa/netsec.github.io/issues/1586)).
 - Co-authored publications will connect the right people on the Network Map even when an author is written the way a reference list renders them. The map matched authors on full first and last names only, so a bibliographic spelling quietly connected nobody, and the result was indistinguishable from the Action having no co-authored work yet. "A. Lovelace", "Lovelace, Ada", "Lovelace, A.P.B." and the all-capitals "LOVELACE Ada" now all resolve. An initial that fits two members is left alone rather than guessed at, a name that is merely shouted is not mistaken for a surname-first one, and any author the map cannot place is reported so a typo can be spotted ([#1586](https://github.com/EISSeuropa/netsec.github.io/issues/1586)).
 
 - The Network Map loads about a tenth of the images it used to, taking the faces on the page from 1.65 MB to 178 KB and bringing it inside the performance budget that had been warning on every run. The map draws each face as a circle roughly the size of a full stop on a printed page, so it was being sent portraits with far more detail than it can show. It now uses a small map-sized copy of each headshot, generated alongside the existing ones whenever the directory syncs ([#1480](https://github.com/EISSeuropa/netsec.github.io/issues/1480)).

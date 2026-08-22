@@ -67,7 +67,7 @@ LANG_NATIVE = {"en": "English", "fr": "Français", "de": "Deutsch"}
 
 # Pages we manage. Each base-name has EN + FR + DE variants except
 # 404 (single page; locale-detect in JS) and any future ones.
-PAGES = ["index", "people", "grants", "accessibility", "privacy", "licensing", "press-kit", "faq", "glossary", "about", "working-groups", "outputs", "news", "roadmap", "sitemap", "essc-2026", "summer-school", "policy-workshop-2026", "events"]
+PAGES = ["index", "people", "grants", "accessibility", "privacy", "licensing", "press-kit", "faq", "glossary", "about", "working-groups", "outputs", "news", "roadmap", "sitemap", "essc-2026", "summer-school", "policy-workshop-2026", "events", "network-map"]
 
 # Canonical URL per (base, lang). The root EN URL is "/" not
 # "/index.html" because that's how GitHub Pages serves it.
@@ -91,6 +91,7 @@ OG_TYPES = {
     "news": "website",
     "events": "website",
     "roadmap": "website",
+    "network-map": "website",
     "accessibility": "article",
     "privacy": "article",
     "licensing": "article",
