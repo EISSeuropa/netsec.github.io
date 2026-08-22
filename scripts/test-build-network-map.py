@@ -8,6 +8,7 @@ pytest's collection.
 
 import importlib.util
 import json
+import pytest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -294,3 +295,44 @@ def test_outside_coauthor_is_reported_not_matched():
     graph, co = _coauthors(["Ada Lovelace", "Alan Turing", "Jane Doe"])
     assert len(co) == 1
     assert graph["stats"]["authors_unmatched"] == ["Jane Doe"]
+
+
+# ── Surname-first author forms (audit follow-up to #1586) ────────────────
+
+@pytest.mark.parametrize("written", [
+    "Lovelace, A.",          # comma inversion carrying only an initial
+    "Lovelace, A.B.C.",      # ... with middle initials name_key would drop
+    "LOVELACE Ada",          # all-caps surname first, the FR/EU house style
+    "LOVELACE A.",           # both conventions at once
+])
+def test_surname_first_forms_match(written):
+    _g, co = _coauthors([written, "Alan Turing"])
+    assert [(e["source"], e["target"]) for e in co] == [("ada-lovelace", "alan-turing")]
+
+
+def test_all_caps_name_is_not_reordered():
+    """"ADA LOVELACE" is shouted, not surname-first. Capitalisation says
+    nothing about which token is which, so it must resolve as written."""
+    _g, co = _coauthors(["ADA LOVELACE", "Alan Turing"])
+    assert [(e["source"], e["target"]) for e in co] == [("ada-lovelace", "alan-turing")]
+
+
+def test_all_caps_reordering_does_not_invent_a_member():
+    """"TURING Grace" is surname-first for a Turing named Grace, who is not
+    on the roster. It must not collapse onto Alan Turing or Grace Hopper."""
+    graph, co = _coauthors(["TURING Grace", "Alan Turing"])
+    assert co == []
+    assert graph["stats"]["authors_unmatched"] == ["TURING Grace"]
+
+
+def test_comma_inversion_still_refuses_an_ambiguous_initial():
+    graph = build(
+        _wg({"number": 1, "name": "One", "colour": "wg-1", "memberCount": 3,
+             "members": [{"name": "Ada Turing", "slug": "ada-turing"},
+                         {"name": "Alice Turing", "slug": "alice-turing"},
+                         {"name": "Grace Hopper", "slug": "grace-hopper"}]}),
+        publications={"publications": [
+            {"title": {"en": "P"}, "authors": ["Turing, A.", "Grace Hopper"]}]},
+    )
+    assert [e for e in graph["edges"] if e.get("type") == "coauthor"] == []
+    assert graph["stats"]["authors_unmatched"] == ["Turing, A."]
