@@ -164,3 +164,69 @@ def test_committed_photo_payload_stays_under_the_lighthouse_budget():
     # 2.5 MB leaves room to grow from today's 1.45 MB without hiding a
     # regression back to the 5.24 MB the originals cost.
     assert mb < 2.5, f"graph headshot payload is {mb:.2f} MB"
+
+
+def _edition(year, panels):
+    """One annualConferences entry: each panel is a list of speaker names."""
+    return {
+        year: {"programme": {"days": [{"rows": [{"items": [
+            {"contributions": [{"people": [{"name": n} for n in names]}]}
+            for names in panels
+        ]}]}]}}
+    }
+
+
+def _three_members():
+    return _wg(
+        {"number": 1, "name": "One", "colour": "wg-1", "memberCount": 3,
+         "members": [
+             {"name": "Dr Ada Lovelace", "country": "UK", "slug": "ada-lovelace"},
+             {"name": "Prof. Alan Turing", "country": "UK", "slug": "alan-turing"},
+             {"name": "Dr Grace Hopper", "country": "US", "slug": "grace-hopper"},
+         ]},
+    )
+
+
+def test_panel_edges_carry_their_edition():
+    graph = build(_three_members(), programme={"annualConferences":
+                  _edition("2026", [["Ada Lovelace", "Alan Turing", "Jane Doe"]])})
+    panels = [e for e in graph["edges"] if e.get("type") == "panel"]
+    assert panels == [{"source": "ada-lovelace", "target": "alan-turing",
+                       "type": "panel", "weight": 1, "year": "2026"}]
+    assert graph["stats"]["panel_editions"] == ["2026"]
+
+
+def test_two_editions_stay_separate_edges(monkeypatch):
+    """#1584: the same pair sharing a panel in two editions is two edges, not one
+    with weight 2, so an edition filter has something to filter on."""
+    ac = _edition("2026", [["Ada Lovelace", "Alan Turing"]])
+    ac.update(_edition("2027", [["Ada Lovelace", "Alan Turing"],
+                                ["Ada Lovelace", "Grace Hopper"]]))
+    graph = build(_three_members(), programme={"annualConferences": ac})
+    panels = [e for e in graph["edges"] if e.get("type") == "panel"]
+    assert [(e["year"], e["source"], e["target"], e["weight"]) for e in panels] == [
+        ("2026", "ada-lovelace", "alan-turing", 1),
+        ("2027", "ada-lovelace", "alan-turing", 1),
+        ("2027", "ada-lovelace", "grace-hopper", 1),
+    ]
+    assert graph["stats"]["panel_editions"] == ["2026", "2027"]
+    assert graph["stats"]["panels_matched"] == 3
+
+
+def test_frozen_snapshot_wins_over_the_live_sync(tmp_path, monkeypatch):
+    """load_programmes prefers data/essc-<year>-programme.json where both files
+    carry the same edition, since the frozen copy is the record of what happened."""
+    monkeypatch.setattr(build_network_map, "REPO", tmp_path)
+    (tmp_path / "data").mkdir()
+    (tmp_path / "data" / "indico.json").write_text(json.dumps(
+        {"annualConferences": {"2026": {"stale": True}, "2027": {"live": True}}}))
+    (tmp_path / "data" / "essc-2026-programme.json").write_text(json.dumps(
+        {"annualConferences": {"2026": {"frozen": True}}}))
+    merged = build_network_map.load_programmes()["annualConferences"]
+    assert merged == {"2026": {"frozen": True}, "2027": {"live": True}}
+
+
+def test_load_programmes_returns_none_with_no_files(tmp_path, monkeypatch):
+    monkeypatch.setattr(build_network_map, "REPO", tmp_path)
+    (tmp_path / "data").mkdir()
+    assert build_network_map.load_programmes() is None

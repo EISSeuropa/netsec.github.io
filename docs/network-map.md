@@ -49,8 +49,10 @@ with overlays layered on top:
 - **Research themes lens.** One hub per research theme drawn from the
   bios, the map of what the Action works on.
 - **ESSC co-panels overlay.** Person-to-person arcs for a shared
-  conference panel at ESSC 2026, the arc weighted by how many panels two
-  people shared. Works on either lens.
+  conference panel, the arc weighted by how many panels two people
+  shared in that edition. Works on either lens. Each arc carries the
+  edition it came from, so a pair who sat together at two conferences
+  gets one arc per edition rather than a single merged tie.
 - **Mentorship overlay.** Rings on the dots for who is offering
   mentorship and who is seeking it.
 
@@ -65,9 +67,26 @@ map as its own edge type once the Action's publications land (see
 ```
 data/wg.json ─────────────┐
 data/bios.json ───────────┼──►  scripts/build-network-map.py  ──►  data/network-map.json  ──►  assets/js/network-map.js
-data/essc-2026-programme.json ─┤        (derivation)              (committed)          (renders /network-map.html)
+data/indico.json ─────────┼──►    (derivation)              (committed)          (renders /network-map.html)
+data/essc-<year>-programme.json ┤
 data/publications.json ───┘
 ```
+
+### Which conference files are read
+
+`load_programmes()` merges every programme on disk rather than naming one
+file. `data/indico.json` is the live sync and holds whichever edition
+Indico is currently serving. Each `data/essc-<year>-programme.json` is a
+snapshot frozen at conference close so the past-conference page stays
+stable against later syncs, and where both carry the same edition the
+frozen copy wins, being the record of what actually happened.
+
+Reading the whole set is what makes a new edition appear on the map by
+itself. Before #1584 the script named `data/essc-2026-programme.json`
+alone, which would have left ESSC 2027 invisible with no gate going red,
+since `--check` can only detect staleness in inputs the script already
+reads. `sync-indico.yml` now regenerates the graph in the same auto-PR
+that refreshes `indico.json`.
 
 `scripts/build-network-map.py` builds `data/network-map.json`, a node/edge graph.
 The renderer, `assets/js/network-map.js`, is a **pure consumer**: it reads
@@ -84,8 +103,8 @@ without any further data.
 
 **Edges** are bipartite person-to-hub memberships (person-to-WG from the
 rosters, person-to-theme from the bio themes) plus person-to-person
-ESSC co-panel ties matched by `name_key` against the frozen conference
-programme. The hub form is chosen over pairwise co-membership on
+ESSC co-panel ties matched by `name_key` against the conference
+programmes. The hub form is chosen over pairwise co-membership on
 purpose: pairwise would be a roughly nine-thousand-edge hairball, while
 the bipartite hubs carry the same information legibly.
 
