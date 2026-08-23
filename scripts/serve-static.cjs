@@ -15,8 +15,16 @@
  * which is cheaper than pinning and auditing an npm package for it.
  *
  * Not a production server. No caching headers, no HTTP/2, no directory
- * listing, no symlink hardening. It exists to make one measurement
- * representative and runs only inside the audit job.
+ * listing. It exists to make one measurement representative and runs only
+ * inside the audit job.
+ *
+ * No path is ever built from a request. The tree under ROOT is indexed
+ * once at startup into a Map of request path -> absolute path, and a
+ * request can only ever look up a key in that Map. A traversal sequence,
+ * an encoded separator or a symlink pointing outside ROOT cannot express
+ * anything the index does not already contain, so the class of bug
+ * usually written into hand-rolled static servers is absent by
+ * construction rather than by a check that has to be right.
  *
  * Usage: node scripts/serve-static.cjs [port] [rootDir]
  */
@@ -52,6 +60,33 @@ const TYPES = {
 // Compress what Pages compresses: text, not already-compressed binaries.
 const COMPRESSIBLE = /^(text\/|application\/(json|xml|javascript))/;
 
+/**
+ * Index the tree once, so serving is a Map lookup rather than a path build.
+ * Skips .git and node_modules, which the audit never requests and which
+ * would dominate the walk.
+ */
+function indexTree(dir, out, prefix = '') {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const name = entry.name;
+    if (name === '.git' || name === 'node_modules') continue;
+    const abs = path.join(dir, name);
+    const key = `${prefix}/${name}`;
+    // Resolve symlinks and keep only what really lives under ROOT.
+    let real;
+    try {
+      real = fs.realpathSync(abs);
+    } catch {
+      continue;
+    }
+    if (real !== ROOT && !real.startsWith(ROOT + path.sep)) continue;
+    if (entry.isDirectory()) indexTree(abs, out, key);
+    else if (entry.isFile()) out.set(key, real);
+  }
+}
+
+const FILES = new Map();
+indexTree(ROOT, FILES);
+
 http.createServer((req, res) => {
   let rel;
   try {
@@ -62,10 +97,10 @@ http.createServer((req, res) => {
   }
   if (rel.endsWith('/')) rel += 'index.html';
 
-  const file = path.join(ROOT, rel);
-  // Keep the server inside ROOT even if a request tries to climb out.
-  if (!file.startsWith(ROOT + path.sep) && file !== ROOT) {
-    res.writeHead(403).end('forbidden');
+  // The only way to a file. `rel` selects a key; it never becomes a path.
+  const file = FILES.get(rel);
+  if (file === undefined) {
+    res.writeHead(404, { 'Content-Type': 'text/plain' }).end('404');
     return;
   }
 
@@ -115,5 +150,7 @@ http.createServer((req, res) => {
     }
   });
 }).listen(PORT, () => {
-  console.log(`serving ${ROOT} on http://localhost:${PORT} (gzip + ranges)`);
+  console.log(
+    `serving ${FILES.size} files from ${ROOT} on http://localhost:${PORT} (gzip + ranges)`
+  );
 });
