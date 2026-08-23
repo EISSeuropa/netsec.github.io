@@ -11,6 +11,14 @@
 #   * it is not the default branch, gh-pages, or an automation
 #     branch (anything ending in `/auto`, plus `social/ledger`).
 #
+# A second pass covers the automation branches the rule above skips.
+# `create-pull-request` sets `delete-branch: true`, but the branch
+# survives a squash-merge through the auto-merge queue, so leftovers
+# accumulate and the next run pushes onto a stale base (#1463). Those
+# are deleted on a different signal: their last PR merged and the tip
+# has not moved since. Staleness is the wrong test for them, because a
+# leftover can be pushed daily and still be a leftover.
+#
 # "Archive" is non-destructive: before the branch is deleted, a
 # lightweight tag `archive/<branch>` is pushed at its tip, so every
 # commit survives indefinitely and the work is recoverable with
@@ -67,7 +75,9 @@ jobs:
               if (prs.length < 100) break;
             }
 
-            const counters = { scanned: 0, archived: 0, skipped_recent: 0, skipped_pr: 0 };
+            const counters = { scanned: 0, archived: 0, skipped_recent: 0, skipped_pr: 0,
+                               auto_deleted: 0, auto_open_pr: 0, auto_no_merged_pr: 0,
+                               auto_moved_since_merge: 0 };
 
             for (let page = 1; ; page++) {
               const { data: branches } = await github.rest.repos.listBranches({
@@ -118,6 +128,69 @@ jobs:
               if (branches.length < 100) break;
             }
 
+            // ── Pass 2: automation leftovers (#1463) ──────────────────
+            //
+            // These are exempt above on purpose: they re-create themselves,
+            // so "no commit in 14 days" would delete a healthy branch that
+            // simply had nothing to sync. The signal here is different, and
+            // exact rather than heuristic:
+            //
+            //   * the branch's most recent PR is merged, and
+            //   * the branch tip is still that PR's head commit.
+            //
+            // The second condition is what makes this safe. If a later run
+            // has pushed, the tip has moved and the branch is left alone,
+            // so an in-flight sync is never clobbered.
+            //
+            // Ancestry cannot be used instead: a squash-merge leaves the
+            // branch tip unreachable from main, so every one of these reads
+            // as "1 ahead" whether it merged or not.
+            //
+            // Not archived, unlike pass 1. The content is already on main
+            // through the squash commit, and a single `archive/<branch>`
+            // tag name reused across runs would preserve only the first
+            // tip and silently drop the rest. Deleting is also self-healing:
+            // the next run re-creates the branch from a fresh main, which
+            // is the outcome #1463 wants.
+            const isAutomation = (name) =>
+              /\/auto$/.test(name) || name === 'social/ledger';
+
+            for (let page = 1; ; page++) {
+              const { data: branches } = await github.rest.repos.listBranches({
+                owner, repo, per_page: 100, page,
+              });
+              if (branches.length === 0) break;
+
+              for (const branch of branches) {
+                const name = branch.name;
+                if (!isAutomation(name)) continue;
+                if (openPrHeads.has(name)) { counters.auto_open_pr++; continue; }
+
+                const { data: prs } = await github.rest.pulls.list({
+                  owner, repo, state: 'all', head: `${owner}:${name}`,
+                  sort: 'updated', direction: 'desc', per_page: 1,
+                });
+                const last = prs[0];
+                if (!last || !last.merged_at) { counters.auto_no_merged_pr++; continue; }
+                if (last.head.sha !== branch.commit.sha) {
+                  counters.auto_moved_since_merge++;
+                  continue;
+                }
+
+                await github.rest.git.deleteRef({
+                  owner, repo, ref: `heads/${name}`,
+                });
+                counters.auto_deleted++;
+                console.log(`deleted automation leftover ${name} (PR #${last.number} merged ${last.merged_at.slice(0, 10)}, tip unmoved)`);
+              }
+
+              if (branches.length < 100) break;
+            }
+
             console.log(`Branch sweep complete. Scanned ${counters.scanned}; ` +
                         `archived ${counters.archived}, ` +
                         `kept ${counters.skipped_recent} recent + ${counters.skipped_pr} with open PR.`);
+            console.log(`Automation leftovers: deleted ${counters.auto_deleted}; ` +
+                        `kept ${counters.auto_open_pr} with an open PR, ` +
+                        `${counters.auto_no_merged_pr} with no merged PR, ` +
+                        `${counters.auto_moved_since_merge} pushed since their PR merged.`);
