@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-08-17T05:48:58+00:00",
+  "generated_at": "2026-08-23T05:43:21+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 81,
+  "count": 82,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -113,6 +113,17 @@
       "role": null,
       "affiliation": "University of West Attica",
       "photo": "https://netsec-cost.eu/assets/images/people/athanasios-skraparlis.jpg"
+    },
+    {
+      "name": "Mr Avnihan Kırışık",
+      "name_key": "avnihan k",
+      "aliases": [],
+      "slug": "avnihan-k-r-s-k",
+      "url": "https://netsec-cost.eu/people/avnihan-k-r-s-k.html",
+      "orcid": "0000-0001-5552-3958",
+      "role": null,
+      "affiliation": "Ankara University & Mersin University",
+      "photo": "https://netsec-cost.eu/assets/images/people/avnihan-k-r-s-k.jpg"
     },
     {
       "name": "Carla Sofia Ferreira Fernandes",
