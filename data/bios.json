@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-08-17T05:48:58+00:00",
+  "generated_at": "2026-08-23T05:43:21+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-08-17T05:48:58+00:00"
+    "last_synced": "2026-08-23T05:43:21+00:00"
   },
   "members": [
     {
@@ -3706,6 +3706,56 @@
         "Economic security and geoeconomics",
         "Security and defence"
       ]
+    },
+    {
+      "id": "avnihan-k-r-s-k",
+      "name": "Mr Avnihan Kırışık",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Ankara University & Mersin University",
+      "position": "PhD Candidate & Research Assistant",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Europe - Western Balkans"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Avnihan Kirisik is a Research Assistant in the Department of International Relations at Mersin University and a PhD candidate in International Relations at Ankara University. His research interests lie at the intersection of International Relations theory, Foreign Policy Analysis, and security studies. His doctoral research focuses on ontological security and epistemic communities, examining the relationship between expert knowledge, identity narratives, and foreign policy change. His broader research interests include securitization, security practices, constructivist approaches to foreign policy, and the production and circulation of security knowledge. He is also conducting research on the material and spatial dimensions of security.",
+      "keywords": [
+        "Ontological security",
+        "Epistemic communities",
+        "Foreign policy analysis",
+        "Securitization",
+        "Security knowledge"
+      ],
+      "email": "avnihan@mersin.edu.tr",
+      "website": "https://apbs.mersin.edu.tr/profiles_mail/avnihan",
+      "orcid": "0000-0001-5552-3958",
+      "linkedin": "https://www.linkedin.com/in/avnihank/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/avnihan-k-r-s-k.jpg",
+      "source": "form",
+      "photo_source_sha256": "c1335828a0eb4aeba2cee5237681353a0ab15ae93dee0d5dc2df3d6d4bea92fa",
+      "canonical_keywords": [
+        "Epistemic communities",
+        "Foreign policy analysis",
+        "Ontological security",
+        "Securitisation",
+        "Security knowledge"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Identity, narratives and ideational security",
+        "Theory and methods"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3727,6 +3777,10 @@
     },
     {
       "keyword": "EU foreign policy",
+      "count": 4
+    },
+    {
+      "keyword": "Foreign policy analysis",
       "count": 4
     },
     {
@@ -3770,7 +3824,7 @@
       "count": 3
     },
     {
-      "keyword": "Foreign policy analysis",
+      "keyword": "Ontological security",
       "count": 3
     },
     {
@@ -3862,15 +3916,15 @@
       "count": 2
     },
     {
-      "keyword": "Ontological security",
-      "count": 2
-    },
-    {
       "keyword": "Political psychology",
       "count": 2
     },
     {
       "keyword": "Regionalism",
+      "count": 2
+    },
+    {
+      "keyword": "Securitisation",
       "count": 2
     },
     {
@@ -4123,6 +4177,10 @@
     },
     {
       "keyword": "Environmental degradation",
+      "count": 1
+    },
+    {
+      "keyword": "Epistemic communities",
       "count": 1
     },
     {
@@ -4474,7 +4532,7 @@
       "count": 1
     },
     {
-      "keyword": "Securitisation",
+      "keyword": "Security knowledge",
       "count": 1
     },
     {
@@ -4597,7 +4655,7 @@
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 27
+      "count": 28
     },
     {
       "theme": "Cyber and emerging technology",
@@ -4605,7 +4663,7 @@
     },
     {
       "theme": "Theory and methods",
-      "count": 18
+      "count": 19
     },
     {
       "theme": "Strategy and deterrence",
@@ -4644,12 +4702,12 @@
       "count": 3
     },
     {
-      "theme": "Political psychology, public opinion and decision-making",
+      "theme": "Identity, narratives and ideational security",
       "count": 3
     },
     {
-      "theme": "Identity, narratives and ideational security",
-      "count": 2
+      "theme": "Political psychology, public opinion and decision-making",
+      "count": 3
     }
   ],
   "keyword_theme_map": {
@@ -4856,7 +4914,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 50
+      "count": 51
     },
     {
       "region": "Global and cross-regional",
@@ -4864,11 +4922,11 @@
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 18
+      "count": 19
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 17
+      "count": 18
     },
     {
       "region": "The Americas",
