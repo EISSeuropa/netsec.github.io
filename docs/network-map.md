@@ -38,11 +38,12 @@ whose data it draws, using the shared signpost callout that
 The *Prototype* pill stays until the co-authorship layer has edges,
 which gives it a defined removal trigger rather than a judgement call.
 
-One thing to confirm after the first Lighthouse run on the indexable
-page: `lighthouserc.json` still drops the `categories:seo` assertion for
-this URL, an exemption that existed only because of the `noindex`. Now
-that the page is managed by `inject-seo.py` and indexable, that
-assertion should be restorable.
+The page is held to the same Lighthouse assertions as every other
+audited page. It used to carry the one exemption `lighthouserc.json` ever
+had, dropping `categories:seo` while the deliberate `noindex` kept the
+score at 0.58. The first measured run after signposting put it at 1.00,
+so the exemption and the `assertMatrix` it forced were both removed
+(#1605).
 
 ## Two lenses and two overlays
 
@@ -188,9 +189,11 @@ audited page, which it passes without relaxation. The one exemption is
 `noindex` (see *Status* above), so asserting on it would warn on every
 run forever. Restore that assertion when the prototype graduates.
 
-The image budget passes. It warned for a while at 1.65 MB against
-500 KB, fixed in #1480 by generating the map-sized derivatives described
-above rather than by raising the budget.
+The image budget passes, confirmed by measurement rather than by
+arithmetic: the run on the signposted page reports no budget warning for
+this URL. It warned for a while at 1.65 MB against 500 KB, fixed in #1480
+by generating the map-sized derivatives described above rather than by
+raising the budget.
 
 Loading faces on demand was the other option in that issue and was not
 taken. The whole graph is laid out inside the canvas, so every node is on
