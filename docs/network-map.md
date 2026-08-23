@@ -123,6 +123,14 @@ programmes. The hub form is chosen over pairwise co-membership on
 purpose: pairwise would be a roughly nine-thousand-edge hairball, while
 the bipartite hubs carry the same information legibly.
 
+`check-data-shape.py` validates the node and edge shape, the referential
+integrity of every edge endpoint, and the fields the edition filter depends
+on: a `year` on every panel edge, and a `stats.panel_editions` that is
+sorted and agrees with the years actually present (#1600). That last check
+matters because `--check` only proves the committed file matches what the
+current script emits, so a bug in the script yields a file that is
+consistent, wrong, and stale-free.
+
 **Determinism.** There is no layout step in the build (the renderer lays
 out client-side), so there is no randomness. Every list is sorted by a
 stable key, so a given `wg.json` always produces byte-identical

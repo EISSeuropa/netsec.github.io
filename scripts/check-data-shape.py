@@ -294,7 +294,10 @@ def check_network_map(data) -> list:
     """data/network-map.json: the NetSec Network Map graph (#764), derived from wg.json by
     scripts/build-network-map.py. Confirms the node/edge shape and referential
     integrity (every edge endpoint is a real node id) so a stale or malformed
-    network-map.json is caught in CI, not by a blank render. Staleness against wg.json
+    network-map.json is caught in CI, not by a blank render. Also checks the
+    fields the edition filter depends on, since `--check` only proves the file
+    matches what the current script emits and would wave through a script bug
+    that produced a consistent but wrong file (#1600). Staleness against wg.json
     is guarded separately by `build-network-map.py --check`."""
     errs: list = []
     if not isinstance(data, dict):
@@ -312,6 +315,7 @@ def check_network_map(data) -> list:
         _req(n, "type", str, errs, ctx, non_empty=True)
         if isinstance(n.get("id"), str):
             ids.add(n["id"])
+    panel_years = set()
     for i, e in enumerate(data.get("edges") or []):
         ctx = f"network-map.edges[{i}]"
         if not isinstance(e, dict):
@@ -320,6 +324,46 @@ def check_network_map(data) -> list:
         for end in ("source", "target"):
             if e.get(end) not in ids:
                 errs.append(f"{ctx}: {end} {e.get(end)!r} is not a node id")
+        # A panel edge names the conference edition it came from (#1584). The
+        # renderer builds its edition chips from stats.panel_editions and then
+        # filters the arcs on this field with strict equality, so a missing or
+        # non-string year is a filter that silently matches nothing.
+        if e.get("type") == "panel":
+            if _req(e, "year", str, errs, ctx, non_empty=True):
+                panel_years.add(e["year"])
+
+    stats = data.get("stats")
+    if stats is not None and not isinstance(stats, dict):
+        errs.append("network-map.stats: must be an object")
+    elif isinstance(stats, dict):
+        # The two halves of the edition filter have to agree, or the chips
+        # offer an edition with no arcs behind it (or hide one that has them).
+        editions = stats.get("panel_editions")
+        if editions is not None:
+            if not isinstance(editions, list) or not all(
+                isinstance(y, str) and y for y in editions
+            ):
+                errs.append(
+                    "network-map.stats.panel_editions: must be a list of non-empty strings"
+                )
+            elif list(editions) != sorted(editions):
+                errs.append("network-map.stats.panel_editions: must be sorted")
+            elif set(editions) != panel_years:
+                errs.append(
+                    "network-map.stats.panel_editions "
+                    f"{sorted(editions)} does not match the years on the panel "
+                    f"edges {sorted(panel_years)}"
+                )
+        unmatched = stats.get("authors_unmatched")
+        if unmatched is not None and (
+            not isinstance(unmatched, list)
+            or not all(isinstance(a, str) and a for a in unmatched)
+            or list(unmatched) != sorted(unmatched)
+        ):
+            errs.append(
+                "network-map.stats.authors_unmatched: must be a sorted list of "
+                "non-empty strings"
+            )
     return errs
 
 
