@@ -38,9 +38,27 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
       - name: Serve the static site
         # Backgrounded; the runner VM keeps it alive for the next step.
+        #
+        # scripts/serve-static.cjs rather than `python3 -m http.server`,
+        # which serves HTTP/1.0 with neither compression nor range support
+        # (#1617). GitHub Pages does both, so the audit was measuring a
+        # transport the site never runs on: uses-text-compression came out
+        # as the home page's single largest opportunity at 2.8s even though
+        # production gzips everything it named, and the ESSC recap video
+        # reported a 24.9MB transfer because a metadata-only preload cannot
+        # range-request its way to a trailing moov atom.
+        #
+        # Node is already on the runner for lhci, and the server has no
+        # dependencies, so this costs nothing to install.
         run: |
-          python3 -m http.server 8080 --directory . &
+          node scripts/serve-static.cjs 8080 . &
           sleep 3
+          # Fail loudly here rather than letting Lighthouse audit six 404s.
+          curl -fsS -o /dev/null http://localhost:8080/index.html
+          curl -fsS -o /dev/null -H 'Accept-Encoding: gzip' \
+            -D /tmp/h http://localhost:8080/assets/css/site.css
+          grep -qi 'content-encoding: gzip' /tmp/h \
+            || { echo '::error::static server is not compressing'; exit 1; }
       - name: Run Lighthouse with budget assertions
         uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18  # v12 (sha-pinned)
         with:
