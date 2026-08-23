@@ -239,3 +239,70 @@ def test_main_invalid_json(tmp_path, monkeypatch):
 def test_main_missing_file(tmp_path, monkeypatch):
     monkeypatch.setattr(mod, "REPO", tmp_path)
     assert mod.main(["data/bios.json"]) == 1
+
+
+# ── Network Map edition fields (#1600) ───────────────────────────────
+
+def valid_network_map():
+    """Two people, one WG hub, and a panel tie between them at one edition."""
+    return {
+        "stats": {"panel_editions": ["2026"], "authors_unmatched": []},
+        "nodes": [
+            {"id": "wg-1", "type": "wg"},
+            {"id": "ada-lovelace", "type": "person"},
+            {"id": "alan-turing", "type": "person"},
+        ],
+        "edges": [
+            {"source": "ada-lovelace", "target": "wg-1"},
+            {"source": "ada-lovelace", "target": "alan-turing",
+             "type": "panel", "weight": 1, "year": "2026"},
+        ],
+    }
+
+
+def test_valid_network_map_passes():
+    assert mod.check_network_map(valid_network_map()) == []
+
+
+def test_panel_edge_without_a_year_is_caught():
+    d = valid_network_map()
+    del d["edges"][1]["year"]
+    assert any("year" in e for e in mod.check_network_map(d))
+
+
+def test_panel_year_must_be_a_string():
+    """The renderer filters with strict equality against the strings in
+    panel_editions, so an int year matches nothing and draws no arcs."""
+    d = valid_network_map()
+    d["edges"][1]["year"] = 2026
+    assert any("year" in e for e in mod.check_network_map(d))
+
+
+def test_panel_editions_must_match_the_edge_years():
+    d = valid_network_map()
+    d["stats"]["panel_editions"] = ["2026", "2027"]
+    errs = mod.check_network_map(d)
+    assert any("does not match the years" in e for e in errs)
+
+
+def test_panel_editions_must_be_sorted():
+    d = valid_network_map()
+    d["edges"].append(dict(d["edges"][1], year="2027"))
+    d["stats"]["panel_editions"] = ["2027", "2026"]
+    assert any("must be sorted" in e for e in mod.check_network_map(d))
+
+
+def test_authors_unmatched_must_be_sorted_strings():
+    d = valid_network_map()
+    d["stats"]["authors_unmatched"] = ["Zed A", "Ada B"]
+    assert any("authors_unmatched" in e for e in mod.check_network_map(d))
+    d["stats"]["authors_unmatched"] = [1, 2]
+    assert any("authors_unmatched" in e for e in mod.check_network_map(d))
+
+
+def test_stats_block_is_optional():
+    """The pure build() path omits stats keys when its optional inputs are
+    absent, and those graphs must still validate."""
+    d = valid_network_map()
+    del d["stats"]
+    assert mod.check_network_map(d) == []
