@@ -605,6 +605,126 @@ depends on spotting GitHub's own expiry email. When that issue appears:
 The same PAT can back both this secret and the local automation PAT, but
 they are separate slots: rotating one does not rotate the other.
 
+### Renewing the LinkedIn access token
+
+LinkedIn access tokens last about 60 days. The refresh token behind them
+lasts about a year. When the access token lapses, `social-post.py` gets a
+401, tries to swap the refresh token for a new one in-process, and retries
+the post once. That renewal only works when `LINKEDIN_CLIENT_ID` and
+`LINKEDIN_CLIENT_SECRET` are present in the environment alongside the
+refresh token. With those two missing the pipeline cannot self-heal, and
+the weekly spotlight simply stops reaching LinkedIn while Bluesky carries
+on normally. That is what happened on 25 August 2026.
+
+You will know because the spotlight workflow opens (or comments on) an
+issue titled *Weekly spotlight did not reach every social channel*,
+carrying the failure line and the run URL. The run itself stays green: the
+post step is best-effort by design, so a social failure never holds up the
+home-page rotation.
+
+**First, try the refresh.** Run it locally, and use `/usr/bin/python3`
+rather than a python.org build, which ships without CA certificates and
+fails with `CERTIFICATE_VERIFY_FAILED` before it reaches LinkedIn.
+
+```bash
+/usr/bin/python3 scripts/linkedin-token.py refresh \
+    --client-id <ID> --client-secret '<SECRET>' --refresh-token '<TOKEN>'
+```
+
+The client ID and primary client secret are on the **Auth** tab of the app
+in the LinkedIn developer console. GitHub will not show you a stored secret
+value, so if you do not have the refresh token saved locally, go straight to
+the full re-authorisation below.
+
+**Full re-authorisation**, needed when the refresh token has also lapsed:
+
+```bash
+/usr/bin/python3 scripts/linkedin-token.py auth-url \
+    --client-id <ID> --redirect-uri <URL>
+```
+
+The redirect URI has to match one registered under *Auth → Authorized
+redirect URLs* exactly. Open the printed URL, approve as a page admin, and
+copy the `code=` value out of the address bar you land on. **Stop before the
+`&`**, and quote what you copied: the authorisation URL comes back with
+`&state=netsec` appended, and an unquoted `&` in zsh backgrounds the command
+and silently truncates the code. Codes are single-use and expire in about
+thirty minutes, so run the exchange straight away.
+
+```bash
+/usr/bin/python3 scripts/linkedin-token.py exchange \
+    --client-id <ID> --client-secret '<SECRET>' \
+    --redirect-uri <URL> --code '<CODE>'
+```
+
+**Then update the secrets.** Everything printed goes into *Settings →
+Environments*, on **both** `social` and `social-auto`. The two environments
+hold separate copies of the same five secrets, so updating one leaves the
+other stale.
+
+| Secret | Renew it? |
+| --- | --- |
+| `LINKEDIN_ACCESS_TOKEN` | yes, every time |
+| `LINKEDIN_REFRESH_TOKEN` | yes, whenever the command prints a new one |
+| `LINKEDIN_CLIENT_ID` | only if the app changed |
+| `LINKEDIN_CLIENT_SECRET` | only if the app changed, or if the value leaked |
+| `LINKEDIN_ORG_ID` | no, it is the page's numeric id |
+
+You can confirm which secrets exist (names and timestamps, never values)
+without opening the browser:
+
+```bash
+gh api repos/EISSeuropa/netsec.github.io/environments/social-auto/secrets \
+  --jq '.secrets[] | "\(.name)\t\(.updated_at)"'
+```
+
+**Then verify.** A plain manual dispatch proves nothing, because the ledger
+already holds the current week's dedup key and the run exits with `Nothing
+pending`. To publish for real, drop that one key from
+`data/social-posted.json` through a PR, then dispatch with the channel input
+so the channels that already posted this week are not sent a duplicate:
+
+```bash
+gh workflow run spotlight-rotate.yml -f channel=linkedin
+```
+
+A successful run writes the key back through the usual auto-PR. If it fails
+the key stays absent, which costs nothing, since the next Tuesday's rotation
+picks a different member under a new week key.
+
+Setup from scratch, including creating the developer app, is in
+[`social-publishing.md`](social-publishing.md) section B.
+
+### Chasing incomplete directory entries
+
+Members fill the join form once and rarely return to it, so entries drift
+into a half-filled state. The cost is not cosmetic: a member with no
+research keywords is absent from every theme filter and from the mentorship
+matcher, and a member with no published email cannot be contacted through
+the directory at all.
+
+```bash
+/usr/bin/python3 scripts/report-missing-bios.py --incomplete > gaps.csv
+```
+
+The CSV is a mail-merge list, worst rows first, with columns `name`,
+`source`, `email`, `missing`, and `form_link`. Split it on `source` before
+writing to anyone. A `form` row is someone who submitted the join form and
+holds an edit link in their confirmation email, so they need a reminder
+naming the fields their own row lists. A `seed` row is an entry built from
+the cost.eu roster by someone who has never filled the form, so their
+`email` column is blank and their contact details come from the roster
+instead. Those need an invitation rather than a reminder.
+
+A fresh form submission merges into the existing entry and leaves blank
+answers exactly as they were, so nobody has to retype what has not changed.
+Write the mail as an offer rather than a chase, since several of these
+blanks are deliberate and the mentorship question in particular is opt-in.
+
+Without `--incomplete` the same script answers the opposite question, which
+is who appears on the cost.eu roster or the ESSC programme but is absent
+from the directory entirely.
+
 ## Escalation
 
 If something breaks:
