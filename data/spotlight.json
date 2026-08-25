@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "yanina-shved-dogrul",
-  "featuredSince": "2026-08-18",
+  "current": "avnihan-k-r-s-k",
+  "featuredSince": "2026-08-25",
   "pinned": null,
   "history": [
+    {
+      "id": "avnihan-k-r-s-k",
+      "week": "2026-W35",
+      "date": "2026-08-25"
+    },
     {
       "id": "yanina-shved-dogrul",
       "week": "2026-W34",
