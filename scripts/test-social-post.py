@@ -523,3 +523,60 @@ def test_linkedin_401_without_refresh_creds_raises(monkeypatch):
     import pytest
     with pytest.raises(SystemExit):
         sp.LinkedInChannel("linkedin").publish(post)
+
+# --------------------------------------------------------------------------
+# main() exit codes: a swallowed best-effort failure must be loud.
+# --------------------------------------------------------------------------
+def _stub_channels(monkeypatch, tmp_path, *, linkedin_fails):
+    """Point main() at two fake channels and a scratch ledger."""
+    class _Fake(sp.Channel):
+        def __init__(self, name):
+            self.name = name
+
+        def configured(self):
+            return True
+
+        def publish(self, post):
+            if self.name == "linkedin" and linkedin_fails:
+                raise SystemExit("LinkedIn returned 401 and no usable refresh token.")
+            return f"https://{self.name}.example/1"
+
+    post = sp.Post(kind="spotlight", key="spotlight-2026-W35",
+                   title="T", summary="S", link="https://netsec-cost.eu/")
+    monkeypatch.setattr(sp, "CHANNELS", {"bluesky": _Fake, "linkedin": _Fake})
+    monkeypatch.setattr(sp, "pending", lambda kinds, ledger: [post])
+    monkeypatch.setattr(sp, "load_ledger", lambda: {"posted": []})
+    monkeypatch.setattr(sp, "LEDGER", tmp_path / "ledger.json")
+    monkeypatch.setattr(sys, "argv", [
+        "social-post.py", "--live", "--channel", "all",
+        "--best-effort", "--kind", "spotlight",
+    ])
+
+
+def test_main_exits_2_when_best_effort_swallows_a_failure(monkeypatch, tmp_path):
+    _stub_channels(monkeypatch, tmp_path, linkedin_fails=True)
+    assert sp.main() == 2
+
+
+def test_main_exits_0_when_every_channel_publishes(monkeypatch, tmp_path):
+    _stub_channels(monkeypatch, tmp_path, linkedin_fails=False)
+    assert sp.main() == 0
+
+
+def test_main_still_records_the_ledger_key_on_partial_failure(monkeypatch, tmp_path):
+    # Exit 2 must not cost the successful channel its dedup key, or the next
+    # run double-posts to Bluesky while retrying LinkedIn.
+    _stub_channels(monkeypatch, tmp_path, linkedin_fails=True)
+    sp.main()
+    saved = json.loads((tmp_path / "ledger.json").read_text(encoding="utf-8"))
+    assert saved["posted"] == ["spotlight-2026-W35"]
+
+
+def test_best_effort_failure_line_matches_what_the_workflow_greps(monkeypatch, tmp_path, capsys):
+    # spotlight-rotate.yml greps stderr for a leading-whitespace "! " to build
+    # the alert body. Keep the two in step.
+    _stub_channels(monkeypatch, tmp_path, linkedin_fails=True)
+    sp.main()
+    err = capsys.readouterr().err
+    assert re.search(r"^\s+! linkedin publish failed", err, re.M)
+
