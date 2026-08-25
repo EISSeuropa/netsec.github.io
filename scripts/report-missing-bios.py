@@ -9,11 +9,20 @@ directory is emitted as a CSV row, so the maintainer can run a
 mail-merge that invites every named-but-bio-less person to add their
 profile via the join form.
 
+With --incomplete it reports the other half of the same problem:
+people who are already in the directory but whose entry is missing
+fields. A member with no keywords is absent from every research-theme
+filter and from the mentorship matcher, so they sit in the grid as a
+name and nothing else. The output is the same mail-merge shape, so one
+round of mail can invite them to fill the gaps. A fresh Form submission
+merges into the existing entry and leaves blank answers as they were
+(docs/bios-setup.md), so they only retype what is changing.
+
 This is a maintainer-only tool with no UI. It is stdlib-only (json +
 csv) so it runs under the system /usr/bin/python3 with no install
 step.
 
-Output columns:
+Output columns (default mode):
   name          display name as it appears in the source
   country       country if the source carries one (MC always does;
                 Indico speakers rarely do, so this is often blank)
@@ -21,12 +30,24 @@ Output columns:
                 "speaker" for an Indico speaker
   form_link     the join-form URL read from bios.json's source block
 
+Output columns (--incomplete):
+  name          display name as it appears in the directory
+  source        "form" if they submitted the join form (they hold an edit
+                link and a gap is theirs to fill), "seed" if the entry was
+                created from the cost.eu roster and they have never filled
+                the form at all, which needs an invitation rather than a
+                reminder
+  email         published contact address, blank when they published none
+  missing       the absent fields, comma-joined, worst rows first
+  form_link     the join-form URL read from bios.json's source block
+
 A person who is both an MC representative and an ESSC speaker is
 reported once, under "mc" (the MC roster carries their country, the
 speaker record usually does not, so the richer row wins).
 
 Usage:
-  /usr/bin/python3 scripts/report-missing-bios.py            > recruit.csv
+  /usr/bin/python3 scripts/report-missing-bios.py             > recruit.csv
+  /usr/bin/python3 scripts/report-missing-bios.py --incomplete > gaps.csv
   /usr/bin/python3 scripts/report-missing-bios.py --help
 
 The name key matches the norm() in scripts/sync-cost.py: lowercase,
@@ -144,10 +165,50 @@ def collect_missing(mc: dict, indico: dict, bios: dict):
     return rows
 
 
-def write_csv(rows, stream):
-    writer = csv.DictWriter(
-        stream, fieldnames=["name", "country", "source", "form_link"]
-    )
+# Fields worth chasing on an entry that already exists. Working group is
+# deliberately absent: the directory is open to the wider community, most
+# of whom legitimately sit in no Working Group, so flagging it would bury
+# the real gaps under half the roster.
+INCOMPLETE_FIELDS = [
+    ("bio", "bio"),
+    ("keywords", "research keywords"),
+    ("photo", "photo"),
+    ("position", "position"),
+    ("email", "contact email"),
+    ("mentorship", "mentorship preference"),
+]
+
+
+def collect_incomplete(bios: dict):
+    """Return the list of directory entries with fields left blank.
+
+    One row per member missing at least one field in INCOMPLETE_FIELDS,
+    worst first so the top of the CSV is the mail worth sending. An
+    absent mentorship answer counts as missing: the question is opt-in
+    and an untouched entry is indistinguishable from a considered "no",
+    so the invitation goes to both.
+    """
+    form_link = (bios.get("source") or {}).get("form_url", "")
+    rows = []
+    for m in bios.get("members", []):
+        if not m.get("name"):
+            continue
+        gaps = [label for key, label in INCOMPLETE_FIELDS if not m.get(key)]
+        if not gaps:
+            continue
+        rows.append((len(gaps), {
+            "name": m["name"],
+            "source": m.get("source", "") or "",
+            "email": m.get("email", "") or "",
+            "missing": ", ".join(gaps),
+            "form_link": form_link,
+        }))
+    rows.sort(key=lambda pair: (-pair[0], pair[1]["name"]))
+    return [row for _, row in rows]
+
+
+def write_csv(rows, stream, fieldnames=("name", "country", "source", "form_link")):
+    writer = csv.DictWriter(stream, fieldnames=list(fieldnames))
     writer.writeheader()
     for r in rows:
         writer.writerow(r)
@@ -170,7 +231,20 @@ def main(argv=None):
         "--bios", type=Path, default=BIOS,
         help="path to bios.json (default: data/bios.json)",
     )
+    parser.add_argument(
+        "--incomplete", action="store_true",
+        help="report directory entries with blank fields instead of "
+             "people missing from the directory",
+    )
     args = parser.parse_args(argv)
+
+    if args.incomplete:
+        bios = json.loads(args.bios.read_text(encoding="utf-8"))
+        write_csv(
+            collect_incomplete(bios), sys.stdout,
+            fieldnames=("name", "source", "email", "missing", "form_link"),
+        )
+        return 0
 
     mc = json.loads(args.mc.read_text(encoding="utf-8"))
     indico = json.loads(args.indico.read_text(encoding="utf-8"))

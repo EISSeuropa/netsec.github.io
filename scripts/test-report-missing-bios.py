@@ -12,7 +12,10 @@ Covered logic:
   * speaker_people  nested-programme walk, speaker=true gate, dedup
   * collect_missing already-in-directory drop, mc-over-speaker
                     precedence, alias suppression, form_link plumbing
-  * write_csv       header + row shape
+  * collect_incomplete
+                    gap detection, complete entries dropped, worst-first
+                    ordering, seed/form source plumbing
+  * write_csv       header + row shape, both column sets
 
 Run standalone:  /usr/bin/python3 scripts/test-report-missing-bios.py
 Run via pytest:  /usr/bin/python3 -m pytest scripts/test-report-missing-bios.py -q
@@ -163,6 +166,62 @@ def test_collect_respects_directory_aliases():
 
 
 # --------------------------------------------------------------------------
+# collect_incomplete
+# --------------------------------------------------------------------------
+def _full_member(**over):
+    """A directory entry with every INCOMPLETE_FIELDS key filled."""
+    m = {
+        "name": "Dr Jane Doe", "source": "form", "bio": "A bio.",
+        "keywords": ["deterrence"], "photo": "assets/img/jane.webp",
+        "position": "Senior Lecturer", "email": "jane@example.eu",
+        "mentorship": ["mentor"],
+    }
+    m.update(over)
+    return m
+
+
+def test_incomplete_drops_a_complete_entry():
+    rows = rmb.collect_incomplete(_bios([_full_member()]))
+    assert rows == []
+
+
+def test_incomplete_names_the_absent_fields():
+    rows = rmb.collect_incomplete(_bios([_full_member(bio="", photo=None)]))
+    assert len(rows) == 1
+    assert rows[0]["missing"] == "bio, photo"
+    assert rows[0]["form_link"] == "https://forms.example/join"
+
+
+def test_incomplete_counts_an_empty_mentorship_list_as_missing():
+    # [] is what parse_mentorship emits for an untouched question, and is
+    # indistinguishable from a considered "none", so it is chased either way.
+    rows = rmb.collect_incomplete(_bios([_full_member(mentorship=[])]))
+    assert rows[0]["missing"] == "mentorship preference"
+
+
+def test_incomplete_orders_worst_first_then_by_name():
+    bios = _bios([
+        _full_member(name="Bee", photo=""),
+        _full_member(name="Ann", photo="", bio="", email=""),
+        _full_member(name="Cid", photo=""),
+    ])
+    rows = rmb.collect_incomplete(bios)
+    assert [r["name"] for r in rows] == ["Ann", "Bee", "Cid"]
+
+
+def test_incomplete_carries_source_and_blank_email():
+    rows = rmb.collect_incomplete(_bios([
+        _full_member(name="Seeded", source="seed", email=None, bio=""),
+    ]))
+    assert rows[0]["source"] == "seed"
+    assert rows[0]["email"] == ""
+
+
+def test_incomplete_skips_a_nameless_entry():
+    assert rmb.collect_incomplete(_bios([_full_member(name="", bio="")])) == []
+
+
+# --------------------------------------------------------------------------
 # write_csv
 # --------------------------------------------------------------------------
 def test_write_csv_shape():
@@ -175,6 +234,16 @@ def test_write_csv_shape():
     lines = buf.getvalue().splitlines()
     assert lines[0] == "name,country,source,form_link"
     assert lines[1] == "Dr Jane Doe,Albania,mc,https://forms.example/join"
+
+
+def test_write_csv_takes_the_incomplete_column_set():
+    rows = rmb.collect_incomplete(_bios([_full_member(photo="")]))
+    buf = io.StringIO()
+    rmb.write_csv(rows, buf,
+                  fieldnames=("name", "source", "email", "missing", "form_link"))
+    lines = buf.getvalue().splitlines()
+    assert lines[0] == "name,source,email,missing,form_link"
+    assert lines[1].startswith("Dr Jane Doe,form,jane@example.eu,photo,")
 
 
 # --------------------------------------------------------------------------
@@ -197,6 +266,22 @@ def test_real_data_produces_wellformed_csv():
     for r in parsed:
         assert r["source"] in ("mc", "speaker")
         assert set(r.keys()) == {"name", "country", "source", "form_link"}
+
+
+def test_real_data_incomplete_report_is_wellformed():
+    root = _MOD_PATH.resolve().parent.parent
+    path = root / "data" / "bios.json"
+    if not path.exists():
+        return  # checkout without data; skip silently
+    bios = json.loads(path.read_text(encoding="utf-8"))
+    rows = rmb.collect_incomplete(bios)
+    names = {m.get("name") for m in bios["members"]}
+    for r in rows:
+        assert r["name"] in names
+        assert r["missing"]
+    # Worst-first ordering holds across the real roster.
+    counts = [r["missing"].count(",") for r in rows]
+    assert counts == sorted(counts, reverse=True)
 
 
 # --------------------------------------------------------------------------
