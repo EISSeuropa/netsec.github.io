@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-08-23T05:43:21+00:00",
+  "generated_at": "2026-08-25T05:46:32+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-08-23T05:43:21+00:00"
+    "last_synced": "2026-08-25T05:46:32+00:00"
   },
   "members": [
     {
@@ -3756,6 +3756,50 @@
         "Identity, narratives and ideational security",
         "Theory and methods"
       ]
+    },
+    {
+      "id": "leonardo-pesci",
+      "name": "Mr Leonardo Pesci",
+      "country": "France",
+      "country_code": "fr",
+      "affiliation": "Université Catholique de Lille",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Africa",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Leonardo Pesci is a PhD candidate in International Relations and Comparative Law at the Catholic University of Lille, affiliated with the C3RD (Research Centre on the Relations between Risks and Law). His research examines how non-state religious actors participate in the production, exercise, and contestation of sovereign authority, particularly in the fields of governance, security, and military and defence practices. Focusing primarily on sub-Saharan Africa, his doctoral project explores the involvement of evangelical and Pentecostal groups in public institutions and political life, and the ways in which their practices redraw the boundaries between religious and secular authority. Leonardo holds a Master’s degree in International Security Politics from the Catholic University of Lille and a Bachelor’s degree in Diplomatic Affairs and Political Sciences from the University of Bologna.",
+      "keywords": [
+        "Non-state actors",
+        "Religion",
+        "Critical Security",
+        "Africa"
+      ],
+      "email": "leonardo.pesci@univ-catholille.fr",
+      "website": "",
+      "orcid": "0009-0006-6818-7686",
+      "linkedin": "https://www.linkedin.com/in/leonardo-pesci-234150237",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/leonardo-pesci.jpg",
+      "source": "form",
+      "photo_source_sha256": "45bdd4675a1f991be8daa53f4da28e259d95b60a0b5d7b4f7c21d34eff0bf54d",
+      "canonical_keywords": [
+        "Critical security",
+        "Non-state actors",
+        "Religion"
+      ],
+      "themes": [
+        "Transnational and human security"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3821,6 +3865,10 @@
     },
     {
       "keyword": "Foreign policy",
+      "count": 3
+    },
+    {
+      "keyword": "Non-state actors",
       "count": 3
     },
     {
@@ -3909,10 +3957,6 @@
     },
     {
       "keyword": "National security",
-      "count": 2
-    },
-    {
-      "keyword": "Non-state actors",
       "count": 2
     },
     {
@@ -4069,6 +4113,10 @@
     },
     {
       "keyword": "Critical infrastructure security",
+      "count": 1
+    },
+    {
+      "keyword": "Critical security",
       "count": 1
     },
     {
@@ -4508,6 +4556,10 @@
       "count": 1
     },
     {
+      "keyword": "Religion",
+      "count": 1
+    },
+    {
       "keyword": "Research ethics",
       "count": 1
     },
@@ -4666,11 +4718,11 @@
       "count": 19
     },
     {
-      "theme": "Strategy and deterrence",
-      "count": 13
+      "theme": "Transnational and human security",
+      "count": 14
     },
     {
-      "theme": "Transnational and human security",
+      "theme": "Strategy and deterrence",
       "count": 13
     },
     {
@@ -4938,11 +4990,11 @@
     },
     {
       "region": "Middle East and North Africa",
-      "count": 9
+      "count": 10
     },
     {
       "region": "Africa",
-      "count": 5
+      "count": 6
     }
   ]
 }
