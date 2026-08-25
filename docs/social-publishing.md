@@ -158,8 +158,12 @@ with a page-admin's approval. Plan ~30 minutes.
    locally; nothing leaves your machine except the call to LinkedIn.
    - **Important:** access tokens expire after **~60 days**. The adapter renews
      them automatically from the refresh token (which lasts ~1 year) **if** the
-     Client ID and Secret are also in the environment; otherwise re-run
+     Client ID and Secret are also in the environment, otherwise re-run
      `linkedin-token.py refresh` (or `exchange` once the refresh token lapses).
+     The step-by-step renewal, including the shell and certificate traps that
+     have caught this out before, is in
+     [`admin-guide.md`](admin-guide.md) under *Renewing the LinkedIn access
+     token*.
 5. You will add these environment secrets in step D: `LINKEDIN_ORG_ID` (the
    number from step 1), `LINKEDIN_ACCESS_TOKEN`, `LINKEDIN_REFRESH_TOKEN`, and —
    to let the pipeline auto-renew — `LINKEDIN_CLIENT_ID` and
@@ -218,6 +222,17 @@ runs in a second environment, **`social-auto`**, which holds the same
 credentials but has **no required reviewer**, so the post goes straight out. It
 posts to both Bluesky and LinkedIn, best-effort: a LinkedIn failure (e.g. an
 expired token) never blocks the Bluesky post.
+
+A manual run of that workflow takes a **`channel`** input (`all`, `bluesky`,
+`linkedin`), defaulting to `all`. Scheduled runs always use `all`. The input
+exists for verifying one channel after a credential fix: the ledger records a
+single dedup key per week for every channel, so clearing it to retry one
+channel would otherwise send a second copy of the same post to the channels
+that already published.
+
+```bash
+gh workflow run spotlight-rotate.yml -f channel=linkedin
+```
 
 To enable it: **Settings → Environments → New environment → `social-auto`**,
 leave **Required reviewers unchecked** (optionally restrict it to the `main`
