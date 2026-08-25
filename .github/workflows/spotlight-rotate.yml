@@ -30,6 +30,12 @@ on:
     - cron: '0 8 * * 2'
     - cron: '0 9 * * 2'
   workflow_dispatch:       # Manual run from the Actions tab
+    inputs:
+      channel:
+        description: 'Publish through one channel only (for verifying a credential fix without double-posting the others)'
+        type: choice
+        options: [all, bluesky, linkedin]
+        default: all
 
 permissions:
   contents: write
@@ -128,6 +134,9 @@ jobs:
         id: social
         continue-on-error: true
         env:
+          # Scheduled runs carry no inputs, so this resolves empty and the
+          # command below falls back to "all".
+          CHANNEL: ${{ inputs.channel }}
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
           BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
           # LinkedIn org page (ungated). Same secrets as the gated environment;
@@ -142,7 +151,7 @@ jobs:
             echo "::warning::Bluesky secrets not set on the social-auto environment; skipping the spotlight post."
             exit 0
           fi
-          python3 scripts/social-post.py --live --channel all --best-effort --kind spotlight 2>&1 | tee /tmp/social.txt
+          python3 scripts/social-post.py --live --channel "${CHANNEL:-all}" --best-effort --kind spotlight 2>&1 | tee /tmp/social.txt
           rc=${PIPESTATUS[0]}
           if [ "$rc" -eq 2 ]; then
             echo "degraded=true" >> "$GITHUB_OUTPUT"
