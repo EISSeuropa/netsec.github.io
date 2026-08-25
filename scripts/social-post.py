@@ -992,6 +992,7 @@ def main() -> int:
     if not active:
         print("No channel is configured (missing secrets); nothing posted.", file=sys.stderr)
         return 1
+    degraded = False
     for p in posts:
         posted_any = False
         for c in active:
@@ -1006,6 +1007,7 @@ def main() -> int:
                 # a reviewer sees the failure and re-runs.
                 if not args.best_effort:
                     raise
+                degraded = True
                 print(f"  ! {c.name} publish failed, skipping (best-effort): {e}", file=sys.stderr)
                 _gha_warning(f"{c.name} publish failed for [{p.kind}] {p.title}: {e}")
         # Record the dedup key once any channel posted, so a partial failure
@@ -1013,7 +1015,13 @@ def main() -> int:
         if posted_any:
             ledger.setdefault("posted", []).append(p.key)
     save_ledger(ledger)
-    return 0
+    # Exit 2 when --best-effort swallowed a channel failure. Best-effort means
+    # the run carries on, which until now also meant the LinkedIn access token
+    # could expire with no trace beyond a ::warning:: on an otherwise green
+    # run. The distinct code lets the caller keep the run green and still raise
+    # an alarm (see the alert step in .github/workflows/spotlight-rotate.yml).
+    # Exit 1 stays "nothing posted at all", so the two failure modes never blur.
+    return 2 if degraded else 0
 
 
 if __name__ == "__main__":

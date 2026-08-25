@@ -170,7 +170,12 @@ with a page-admin's approval. Plan ~30 minutes.
    list monthly and opens an auto-merging PR to bump the pin before it lapses.
    Set the `LINKEDIN_API_VERSION` env var to override the pin at runtime. If a
    live post is ever rejected mid-cycle, `social-post.py` emits a GitHub
-   `::warning::` on the run so the failure is visible rather than silent.
+   `::warning::` on the run and, under `--best-effort`, exits 2 rather than 0.
+   The weekly spotlight workflow reads that exit code and opens (or comments
+   on) a tracking issue titled *Weekly spotlight did not reach every social
+   channel*, so a dead token surfaces as a notification instead of an absent
+   post nobody noticed. A warning annotation alone had proved easy to miss on
+   an otherwise green run.
 
 ### C. Create the approval gate (do this before adding the secrets)
 

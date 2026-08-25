@@ -34,6 +34,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write          # the alert step below opens/refreshes a tracking issue
 
 concurrency:
   group: spotlight-rotate
@@ -118,6 +119,13 @@ jobs:
         # --best-effort means a LinkedIn failure (e.g. an expired token) doesn't
         # stop the Bluesky post, and `continue-on-error` keeps a total failure
         # off the job's red X.
+        #
+        # Exit 2 is social-post.py's "best-effort swallowed a channel failure"
+        # code. We record it as an output rather than failing the step, so the
+        # rotation still lands and the final step can raise a visible alarm.
+        # The LinkedIn access token expired in August 2026 and the only trace
+        # was a ::warning:: on a green run, so the miss was noticed by hand.
+        id: social
         continue-on-error: true
         env:
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
@@ -134,7 +142,14 @@ jobs:
             echo "::warning::Bluesky secrets not set on the social-auto environment; skipping the spotlight post."
             exit 0
           fi
-          python3 scripts/social-post.py --live --channel all --best-effort --kind spotlight
+          python3 scripts/social-post.py --live --channel all --best-effort --kind spotlight 2>&1 | tee /tmp/social.txt
+          rc=${PIPESTATUS[0]}
+          if [ "$rc" -eq 2 ]; then
+            echo "degraded=true" >> "$GITHUB_OUTPUT"
+            # The failure lines social-post.py prints, for the alert body.
+            grep -E '^[[:space:]]+! ' /tmp/social.txt | head -n 5 > /tmp/social-failures.txt || true
+          fi
+          exit 0
 
       - name: Compose PR title
         id: pr-title
@@ -181,3 +196,39 @@ jobs:
             "${{ steps.create-pr.outputs.pull-request-number }}" \
             --squash --auto \
             --repo "${{ github.repository }}"
+
+      # Silent degradation is the failure mode that actually bites here: the
+      # post step is best-effort and continue-on-error, so a dead LinkedIn
+      # token leaves a green run and an absent post. Mirrors the alert shape
+      # in autopr-token-health.yml: one open issue, refreshed by comment on
+      # each recurrence, rather than a new issue every Tuesday. Runs last so
+      # a failure here cannot hold up the rotation PR above.
+      - name: Alert when a channel failed to publish
+        if: steps.social.outputs.degraded == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -uo pipefail
+          {
+            echo "The weekly spotlight rotation published to some channels but not all. The rotation itself is unaffected: the home page updated normally and the ledger did not record the failed channel, so the next run retries it."
+            echo ""
+            echo '```'
+            if [ -s /tmp/social-failures.txt ]; then
+              cat /tmp/social-failures.txt
+            else
+              echo "(no failure line captured; read the run log)"
+            fi
+            echo '```'
+            echo ""
+            echo "Run: ${RUN_URL}"
+            echo ""
+            echo "Most likely cause is an expired LinkedIn access token, which lasts about 60 days. It renews itself only when LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET are set on the social-auto environment alongside the refresh token. Setup and the refresh command are in docs/social-publishing.md, section B.4."
+          } > /tmp/social-alert.md
+          title="Weekly spotlight did not reach every social channel"
+          existing=$(gh issue list --search "${title} in:title" --state open --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file /tmp/social-alert.md
+          else
+            gh issue create --title "$title" --body-file /tmp/social-alert.md --label bug
+          fi
