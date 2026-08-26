@@ -96,14 +96,10 @@ class Post:
     image: Path | None = None
     image_alt: str = ""
     hashtags: str = HASHTAGS
-    # Optional per-member social handles (spotlight only). `bsky_handle` is
-    # woven into the Bluesky text as an @-mention (resolved to a facet at
-    # publish time); `profile_url` is the member's own LinkedIn URL, posted
-    # as a first comment rather than in the body (LinkedIn downranks posts
-    # with outbound links in the body, and person-mentions aren't reachable
-    # from a public vanity URL). See read_spotlight.
+    # Optional per-member Bluesky handle (spotlight only), woven into the
+    # Bluesky text as an @-mention and resolved to a facet at publish time.
+    # See read_spotlight.
     bsky_handle: str | None = None
-    profile_url: str | None = None
 
     def _bsky_mention(self) -> str:
         return f"\n\nOn Bluesky: @{self.bsky_handle}" if self.bsky_handle else ""
@@ -322,7 +318,6 @@ def read_spotlight() -> Post | None:
     # notifying person-mention, so it rides along as a first comment instead
     # (see LinkedInChannel._do_publish).
     bsky = bluesky_handle(m.get("bluesky"))
-    li_url = (m.get("linkedin") or "").strip() or None
 
     # Assemble the summary so the Bluesky render never has to hard-truncate
     # mid-word: the post text is lead + "Working on …" + status, and when it
@@ -364,7 +359,6 @@ def read_spotlight() -> Post | None:
         image=card if card.exists() else (SITE_OG if SITE_OG.exists() else None),
         image_alt=f"Profile card for {m.get('name', slug)} in the NetSec Directory",
         bsky_handle=bsky,
-        profile_url=li_url,
     )
 
 
@@ -513,8 +507,6 @@ class DryRunChannel(Channel):
                 print(f"    {line}")
             if ch == "bluesky" and post.bsky_handle:
                 print(f"    [mention → resolves live: @{post.bsky_handle}]")
-            if ch == "linkedin" and post.profile_url:
-                print(f"    [+ first comment: {post.profile_url}]")
             if post.image:
                 print(f"    [image: {post.image.relative_to(ROOT)} | alt: {post.image_alt}]")
             print()
@@ -816,19 +808,6 @@ class LinkedInChannel(Channel):
                     headers={"Authorization": f"Bearer {self._token()}"})
         return urn
 
-    def _comment(self, post_urn: str, text: str) -> None:
-        """Post a first comment on a just-published share, authored by the org.
-        Used to carry the spotlighted member's own LinkedIn profile link out of
-        the post body (LinkedIn suppresses reach on body links; a comment link
-        sidesteps that). The URN is path-encoded per the socialActions API."""
-        from urllib.parse import quote
-        body = {
-            "actor": f"urn:li:organization:{self._org()}",
-            "message": {"text": text},
-        }
-        _li_request(f"{self.API}/rest/socialActions/{quote(post_urn, safe='')}/comments",
-                    method="POST", headers=self._headers(), json_body=body)
-
     def _do_publish(self, post: Post) -> str:
         body = {
             "author": f"urn:li:organization:{self._org()}",
@@ -848,19 +827,12 @@ class LinkedInChannel(Channel):
         _, headers, _ = _li_request(f"{self.API}/rest/posts", method="POST",
                                     headers=self._headers(), json_body=body)
         pid = headers.get("x-restli-id", "")
-        # Best-effort first comment carrying the member's LinkedIn profile link.
-        # A broad catch keeps a comment failure from bubbling to publish()'s
-        # 401 refresh-and-retry, which would re-post the whole share.
-        # ponytail: comment is a nice-to-have; the share already stands.
-        if pid and post.profile_url:
-            try:
-                self._comment(pid, post.profile_url)
-            except (Exception, SystemExit) as e:  # noqa: BLE001
-                # _li_request signals HTTP errors as SystemExit and 401 as
-                # _Unauthorized; catch both so neither aborts the run nor
-                # reaches publish()'s refresh-and-retry (which would re-post).
-                print(f"  ! LinkedIn profile-link comment failed, post stands: {e}",
-                      file=sys.stderr)
+        # A first comment used to carry the member's own LinkedIn URL here,
+        # removed in #1630. Comment creation on /rest/socialActions needs a
+        # partner-tier product we have never held, so the call was refused
+        # 403 ACCESS_DENIED on every run that reached it and the link never
+        # appeared. The post body already carries the member's netsec-cost.eu
+        # profile page, which links their LinkedIn in turn.
         return f"https://www.linkedin.com/feed/update/{pid}/" if pid else "posted"
 
     def publish(self, post: Post) -> str:
