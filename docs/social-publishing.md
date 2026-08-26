@@ -35,11 +35,14 @@ data/spotlight.json (wk) ─┘        composes text + image; records the ledger
   10:00 Europe/Paris.
 - **Tagging the member.** When a member has supplied a Bluesky profile
   (`bluesky` in `data/bios.json`), the handle is woven into the Bluesky post as
-  an @-mention and resolved to a richtext facet, so the person is notified. On
-  LinkedIn a public vanity URL can't become a notifying person-mention, so the
-  member's LinkedIn profile link is posted as the **first comment** instead of
-  in the body (a body link would suppress the post's reach). Both degrade
-  silently: no handle, no mention; a failed comment leaves the post standing.
+  an @-mention and resolved to a richtext facet, so the person is notified. It
+  degrades silently: no handle, no mention. LinkedIn has no equivalent, because
+  a public vanity URL cannot become a notifying person-mention. The spotlight
+  briefly tried posting the member's LinkedIn URL as a first comment instead,
+  removed in #1630: comment creation needs a partner-tier product the app has
+  never held, so it was refused on every run that reached it. The post body
+  carries the member's netsec-cost.eu profile page, which links their LinkedIn
+  in turn.
 - **No duplicates.** `data/social-posted.json` records what has been posted
   (news by feed GUID; spotlight by member + ISO week), so re-runs post
   nothing and a member is posted at most once per week. The ledger is read

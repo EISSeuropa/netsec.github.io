@@ -304,14 +304,13 @@ def test_bluesky_handle_from_profile_url_or_bare():
 
 def test_spotlight_render_tags_bluesky_only():
     # A member with a Bluesky handle gets an @-mention on Bluesky (an actual
-    # detectable mention token, within the limit), and the LinkedIn body stays
-    # link-free (its profile link rides along as a comment instead).
+    # detectable mention token, within the limit). The handle never reaches the
+    # LinkedIn body, which carries the netsec-cost.eu profile link instead.
     post = sp.Post(
         kind="spotlight", key="k", title="NetSec Directory Spotlight",
         summary="Meet Dr X in the NetSec Directory, Researcher at Y. Working on Cyber.",
         link="https://netsec-cost.eu/people/x.html",
         bsky_handle="foo.bsky.social",
-        profile_url="https://www.linkedin.com/in/foo",
     )
     bt = post.render("bluesky")
     assert len(bt) <= sp.BLUESKY_LIMIT
@@ -319,7 +318,7 @@ def test_spotlight_render_tags_bluesky_only():
     assert [h for h, _, _ in sp.find_mentions(bt)] == ["foo.bsky.social"]
     lt = post.render("linkedin")
     assert "@foo.bsky.social" not in lt      # the handle is Bluesky-only
-    assert "linkedin.com/in/foo" not in lt    # profile link is a comment, not body
+    assert "netsec-cost.eu/people/x.html" in lt
 
 
 def test_spotlight_render_without_handle_is_unchanged():
@@ -445,52 +444,21 @@ def test_linkedin_image_post_uploads_then_posts(monkeypatch, tmp_path):
     assert calls[2]["json"]["content"]["media"]["altText"] == "alt text"
 
 
-def test_linkedin_posts_profile_link_as_first_comment(monkeypatch):
+def test_linkedin_publish_makes_no_comment_call(monkeypatch):
+    # The spotlight used to post the member's own LinkedIn URL as a first
+    # comment. Comment creation on /rest/socialActions needs a partner-tier
+    # product we have never held, so it was refused 403 on every run that
+    # reached it (#1630) and the call was removed. A text post is exactly one
+    # request; a second would mean the comment path has crept back in.
     monkeypatch.setenv("LINKEDIN_ORG_ID", "12345")
     monkeypatch.setenv("LINKEDIN_ACCESS_TOKEN", "tok-abc")
-    fake, calls = _li_recorder([
-        (201, {"x-restli-id": "urn:li:share:99"}, {}),   # create post
-        (201, {}, {}),                                    # comment
-    ])
-    monkeypatch.setattr(sp, "_li_request", fake)
-    post = sp.Post(kind="spotlight", key="k", title="T", summary="S",
-                   link="https://x/", profile_url="https://www.linkedin.com/in/foo")
-    url = sp.LinkedInChannel("linkedin").publish(post)
-    assert url == "https://www.linkedin.com/feed/update/urn:li:share:99/"
-    assert len(calls) == 2
-    comment = calls[1]
-    # URN is path-encoded (colons escaped) on the socialActions comments route.
-    assert comment["url"].endswith("/rest/socialActions/urn%3Ali%3Ashare%3A99/comments")
-    assert comment["method"] == "POST"
-    assert comment["json"]["actor"] == "urn:li:organization:12345"
-    assert comment["json"]["message"]["text"] == "https://www.linkedin.com/in/foo"
-
-
-def test_linkedin_comment_failure_does_not_fail_the_post(monkeypatch):
-    monkeypatch.setenv("LINKEDIN_ORG_ID", "12345")
-    monkeypatch.setenv("LINKEDIN_ACCESS_TOKEN", "tok-abc")
-    # The comment call errors (SystemExit, as _li_request raises on HTTP fail);
-    # the share already went out, so publish must still return its URL.
-    fake, calls = _li_recorder([
-        (201, {"x-restli-id": "urn:li:share:99"}, {}),
-        SystemExit("HTTP 500 from comments"),
-    ])
-    monkeypatch.setattr(sp, "_li_request", fake)
-    post = sp.Post(kind="spotlight", key="k", title="T", summary="S",
-                   link="https://x/", profile_url="https://www.linkedin.com/in/foo")
-    url = sp.LinkedInChannel("linkedin").publish(post)
-    assert url == "https://www.linkedin.com/feed/update/urn:li:share:99/"
-    assert len(calls) == 2   # attempted, then swallowed
-
-
-def test_linkedin_no_comment_when_no_profile_url(monkeypatch):
-    monkeypatch.setenv("LINKEDIN_ORG_ID", "12345")
-    monkeypatch.setenv("LINKEDIN_ACCESS_TOKEN", "tok-abc")
-    fake, calls = _li_recorder([(201, {"x-restli-id": "urn:li:share:1"}, {})])
+    fake, calls = _li_recorder([(201, {"x-restli-id": "urn:li:share:99"}, {})])
     monkeypatch.setattr(sp, "_li_request", fake)
     post = sp.Post(kind="spotlight", key="k", title="T", summary="S", link="https://x/")
-    sp.LinkedInChannel("linkedin").publish(post)
-    assert len(calls) == 1   # no profile link → no comment call
+    url = sp.LinkedInChannel("linkedin").publish(post)
+    assert url == "https://www.linkedin.com/feed/update/urn:li:share:99/"
+    assert len(calls) == 1
+    assert "socialActions" not in calls[0]["url"]
 
 
 def test_linkedin_refreshes_token_on_401_and_retries(monkeypatch):
