@@ -30,6 +30,10 @@
   const hubChipsEl = document.getElementById('network-map-hub-chips');
   const lensEl = document.getElementById('network-map-lens');
   const overlaysEl = document.getElementById('network-map-overlays');
+  const filtersEl = document.getElementById('network-map-filters');
+  const filtersNEl = document.getElementById('network-map-filters-n');
+  const listBodyEl = document.getElementById('network-map-list-body');
+  const listHintEl = document.getElementById('network-map-list-hint');
   if (!canvas || !canvas.getContext) return;
   const ctx = canvas.getContext('2d');
 
@@ -81,6 +85,17 @@
   let hovered = null, draggingHub = null;
   let W = 0, H = 0, dpr = 1;
   const avatars = {};                     // person id -> loaded Image
+
+  // The list under the map is rendered at build time by build-network-map.py.
+  // Narrowing it here, off the same personVisible() the canvas paints with,
+  // means one rule decides who is on the map and the two surfaces cannot
+  // disagree.
+  const listRows = listBodyEl ? Array.prototype.slice.call(listBodyEl.rows) : [];
+  const listHintFull = listHintEl ? listHintEl.textContent : '';
+  // Countries are stored as English exonyms in bios.json. The Directory renders
+  // them translated, so the map's table and hover card go through the same
+  // accessor rather than showing an English name on the FR and DE pages.
+  const localCountry = (c) => (c && window.netsecCountry ? window.netsecCountry(c) : c);
 
   const hubs = () => allHubs[lens];
   const edges = () => hubEdges[lens];
@@ -344,7 +359,7 @@
         + (node.slug ? '<div class="go">' + T('View profile') + ' &rarr;</div>' : '');
       if (node.photo) card.querySelector('.face').src = node.photo;
       card.querySelector('.nm').textContent = node.name;
-      card.querySelector('.meta').textContent = node.country || '';
+      card.querySelector('.meta').textContent = localCountry(node.country) || '';
       if (themes.length) card.querySelector('.themes').textContent =
         themes.slice(0, 3).map(t => T(t.name)).join(' · ') + (themes.length > 3 ? ' +' + (themes.length - 3) : '');
     }
@@ -459,10 +474,38 @@
           if (activeHubs.has(h.id)) activeHubs.delete(h.id);
           else activeHubs.add(h.id);
           b.setAttribute('aria-pressed', activeHubs.has(h.id) ? 'true' : 'false');
+          syncFilters();
           draw();
         },
         hubColour(h)));
     });
+  }
+
+  // The chip row is folded away by default, so the summary has to report what
+  // it is holding. Without that, a filtered map behind a closed disclosure is a
+  // state with nothing on screen to explain it.
+  function syncFilters() {
+    const total = hubs().length;
+    const on = hubs().filter(h => activeHubs.has(h.id)).length;
+    if (filtersNEl) {
+      filtersNEl.textContent = on === total
+        ? T('showing all {n}').replace('{n}', total)
+        : T('showing {n} of {m}').replace('{n}', on).replace('{m}', total);
+    }
+    if (!listRows.length) return;
+    let shown = 0;
+    listRows.forEach(row => {
+      const person = byId[row.dataset.person];
+      const visible = !person || personVisible(person);
+      row.hidden = !visible;
+      if (visible) shown += 1;
+    });
+    if (listHintEl) {
+      listHintEl.textContent = shown === listRows.length
+        ? listHintFull
+        : T('Showing {n} of {m} people.')
+            .replace('{n}', shown).replace('{m}', listRows.length);
+    }
   }
 
   let animFrames = 0;
@@ -484,6 +527,7 @@
     lensEl.querySelectorAll('button').forEach(b =>
       b.setAttribute('aria-pressed', b.dataset.lens === lens ? 'true' : 'false'));
     buildHubChips();
+    syncFilters();
     seedPositions();
     reheat(300);
   }
@@ -573,6 +617,14 @@
         }));
       });
 
+      // Rendered open so the no-script reader gets the chips, closed here so
+      // the map itself is the first thing on screen. On a 375px phone the
+      // canvas used to start at y=998, below the whole first screen.
+      if (filtersEl) filtersEl.open = false;
+      listRows.forEach(row => {
+        const cell = row.querySelector('[data-country]');
+        if (cell) cell.textContent = localCountry(cell.dataset.country);
+      });
       resize();
       switchLens('wg');
     })

@@ -36,13 +36,20 @@ stable key, so the output is byte-identical for a given wg.json. `--check`
 regenerates in memory and diffs against the file on disk, so CI can catch a stale
 network-map.json the same way build-calendar.py guards calendar.ics.
 
+The script also rewrites the list region of the three locale pages, between
+the network-map:list sentinels. The canvas needs scripting to draw anything
+and is opaque to assistive technologies either way, so the page's alternative
+cannot itself be script-rendered. Same posture, and the same sentinel splice,
+as build-field-guide.py on the glossary pages.
+
 Usage:
-  python3 scripts/build-network-map.py            # write data/network-map.json
-  python3 scripts/build-network-map.py --check    # exit 1 if the file is stale
+  python3 scripts/build-network-map.py            # write the graph + the three pages
+  python3 scripts/build-network-map.py --check    # exit 1 if either is stale
 """
 
 from __future__ import annotations
 
+import html
 import json
 import re
 import sys
@@ -416,6 +423,132 @@ def load_programmes() -> dict | None:
     return {"annualConferences": merged} if merged else None
 
 
+# ── The in-page list (#764) ─────────────────────────────────────────────────
+# The canvas needs scripting to draw anything at all, and it is opaque to a
+# screen reader whether or not scripting runs. The page used to answer both by
+# pointing at the Working Groups page and the Directory, which is an
+# alternative carrying the same dependency as the barrier in the first case and
+# a different page in the second. The same people are now rendered here as a
+# table at build time, inside a closed <details>, since a hidden link is a
+# focusable link a sighted keyboard user cannot see. network-map.js narrows the
+# same <tbody> as the filters move, so one code path serves both and the list
+# cannot drift from the canvas.
+#
+# data-pagefind-ignore, because <main> carries data-pagefind-body: without it
+# every member's name would index against this page as well as their own
+# profile, and a search for a person would answer with the map.
+LIST_START = "<!-- network-map:list start -->"
+LIST_END = "<!-- network-map:list end -->"
+
+# Countries are stored as English exonyms in bios.json, the same way the
+# Directory stores them, and network-map.js localises the cell through
+# window.netsecCountry from the data-country attribute. Without scripting the
+# FR and DE tables carry the English name, which is the information rather than
+# an error, and the alternative's job is to carry the information.
+LIST_LOCALES = {
+    "en": {
+        "file": "network-map.html",
+        "summary": "Browse this map as a list",
+        "count": "Everyone the map draws, {n} people.",
+        "col_name": "Name",
+        "col_wgs": "Working Groups",
+        "col_country": "Country",
+        "none": "None recorded",
+    },
+    "fr": {
+        "file": "network-map.fr.html",
+        "summary": "Parcourir cette carte sous forme de liste",
+        "count": "Toutes les personnes que la carte dessine, soit {n}.",
+        "col_name": "Nom",
+        "col_wgs": "Groupes de travail",
+        "col_country": "Pays",
+        "none": "Aucun",
+    },
+    "de": {
+        "file": "network-map.de.html",
+        "summary": "Diese Karte als Liste ansehen",
+        "count": "Alle Personen der Karte, insgesamt {n}.",
+        "col_name": "Name",
+        "col_wgs": "Arbeitsgruppen",
+        "col_country": "Land",
+        "none": "Keine",
+    },
+}
+
+
+def _wg_numbers(graph: dict) -> dict:
+    """person id -> sorted WG numbers. Reads the same bipartite edges the
+    canvas paints, so the two cannot disagree about who is in what."""
+    by_id = {n["id"]: n for n in graph["nodes"]}
+    out: dict = {}
+    for e in graph["edges"]:
+        if e.get("type"):          # panel / coauthor edges are person-to-person
+            continue
+        target = by_id.get(e["target"])
+        if target and target["type"] == "wg":
+            out.setdefault(e["source"], []).append(target["number"])
+    return {k: sorted(v) for k, v in out.items()}
+
+
+def render_list_region(loc: str, graph: dict) -> str:
+    """The list region for one locale, sentinels included.
+
+    Row order is the node order in the graph, which is sorted by person id, so
+    the table and the JSON walk the same people in the same sequence. That is
+    also the order the keyboard traversal in #1645 will want.
+    """
+    l = LIST_LOCALES[loc]
+    wgs = _wg_numbers(graph)
+    people = [n for n in graph["nodes"] if n["type"] == "person"]
+    rows = []
+    for p in people:
+        name = html.escape(p["name"])
+        cell = (f'<a href="people/{html.escape(p["slug"])}.html">{name}</a>'
+                if p.get("slug") else name)
+        nums = wgs.get(p["id"], [])
+        wg_text = ", ".join(f"WG{n}" for n in nums) if nums else l["none"]
+        country = p.get("country") or ""
+        country_cell = (
+            f'<td data-country="{html.escape(country)}">{html.escape(country)}</td>'
+            if country else "<td></td>"
+        )
+        rows.append(
+            f'          <tr data-person="{html.escape(p["id"])}">'
+            f"<th scope=\"row\">{cell}</th>"
+            f"<td>{wg_text}</td>{country_cell}</tr>"
+        )
+    return "\n".join([
+        LIST_START,
+        '  <details class="network-map-list" id="network-map-list" data-pagefind-ignore>',
+        f'    <summary class="network-map-list__summary">{html.escape(l["summary"])}</summary>',
+        f'    <p class="network-map-list__hint" id="network-map-list-hint">'
+        f'{html.escape(l["count"]).replace("{n}", str(len(people)))}</p>',
+        '    <div class="network-map-list__scroll" tabindex="0">',
+        '      <table class="network-map-list__table">',
+        "        <thead><tr>"
+        f'<th scope="col">{html.escape(l["col_name"])}</th>'
+        f'<th scope="col">{html.escape(l["col_wgs"])}</th>'
+        f'<th scope="col">{html.escape(l["col_country"])}</th>'
+        "</tr></thead>",
+        '        <tbody id="network-map-list-body">',
+        *rows,
+        "        </tbody>",
+        "      </table>",
+        "    </div>",
+        "  </details>",
+        "  " + LIST_END,
+    ]) + "\n"
+
+
+def replace_list_region(page: str, region: str) -> str:
+    """Swap the region between the sentinels. Raises when a page has lost
+    them, rather than silently writing a page with no list on it."""
+    pattern = re.compile(re.escape(LIST_START) + r".*?" + re.escape(LIST_END), re.DOTALL)
+    if not pattern.search(page):
+        raise ValueError(f"missing {LIST_START} / {LIST_END} sentinels")
+    return pattern.sub(lambda _m: region.rstrip("\n"), page, count=1)
+
+
 def _serialise(graph: dict) -> str:
     return json.dumps(graph, indent=2, ensure_ascii=False) + "\n"
 
@@ -431,18 +564,36 @@ def main(argv: list) -> int:
     graph = build(wg, bios, programme, publications)
     text = _serialise(graph)
 
+    pages = {
+        loc: (REPO / l["file"], replace_list_region(
+            (REPO / l["file"]).read_text(encoding="utf-8"), render_list_region(loc, graph)))
+        for loc, l in LIST_LOCALES.items()
+    }
+
     if check:
+        stale = []
         current = NETWORK_MAP_JSON.read_text(encoding="utf-8") if NETWORK_MAP_JSON.exists() else ""
         if current != text:
+            stale.append("data/network-map.json")
+        for loc, (path, rendered) in pages.items():
+            if path.read_text(encoding="utf-8") != rendered:
+                stale.append(LIST_LOCALES[loc]["file"])
+        if stale:
+            for name in stale:
+                print(f"✗ {name} is stale", file=sys.stderr)
             print(
-                "✗ data/network-map.json is stale — run: python3 scripts/build-network-map.py",
+                "  Run: python3 scripts/build-network-map.py, and commit the result.",
                 file=sys.stderr,
             )
             return 1
-        print("✓ data/network-map.json is current")
+        print("✓ data/network-map.json and the three locale pages are current")
         return 0
 
     NETWORK_MAP_JSON.write_text(text, encoding="utf-8")
+    for loc, (path, rendered) in pages.items():
+        if path.read_text(encoding="utf-8") != rendered:
+            path.write_text(rendered, encoding="utf-8")
+            print(f"✓ rebuilt the list on {LIST_LOCALES[loc]['file']}")
     s = graph["stats"]
     if s.get("authors_unmatched"):
         # Printed, not fatal: an outside co-author is a legitimate miss, so

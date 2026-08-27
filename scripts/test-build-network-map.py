@@ -336,3 +336,51 @@ def test_comma_inversion_still_refuses_an_ambiguous_initial():
     )
     assert [e for e in graph["edges"] if e.get("type") == "coauthor"] == []
     assert graph["stats"]["authors_unmatched"] == ["Turing, A."]
+
+
+# ── The in-page list region ────────────────────────────────────────────────
+
+def _one_person_graph():
+    return build(
+        _wg(
+            {"number": 1, "name": "One", "colour": "wg-1", "memberCount": 1,
+             "members": [{"name": "Dr Ada Lovelace", "country": "UK",
+                          "slug": "ada-lovelace"}]},
+            {"number": 3, "name": "Three", "colour": "wg-3", "memberCount": 1,
+             "members": [{"name": "Dr Ada Lovelace", "country": "UK",
+                          "slug": "ada-lovelace"}]},
+        )
+    )
+
+
+def test_list_region_carries_a_row_per_person():
+    region = build_network_map.render_list_region("en", _one_person_graph())
+    assert region.count("<tr data-person=") == 1
+    assert '<a href="people/ada-lovelace.html">Dr Ada Lovelace</a>' in region
+    # Both rosters, in numeric order, from the same bipartite edges the canvas
+    # paints.
+    assert "<td>WG1, WG3</td>" in region
+    assert '<td data-country="UK">UK</td>' in region
+
+
+def test_list_region_says_so_when_a_member_is_on_no_roster():
+    graph = build(
+        _wg({"number": 1, "name": "One", "colour": "wg-1", "memberCount": 0,
+             "members": []}),
+        {"members": [{"name": "Dr Grace Hopper", "slug": "grace-hopper",
+                      "country": "US"}]},
+    )
+    assert "<td>None recorded</td>" in build_network_map.render_list_region("en", graph)
+    assert "<td>Aucun</td>" in build_network_map.render_list_region("fr", graph)
+
+
+def test_list_region_splice_is_idempotent():
+    region = build_network_map.render_list_region("en", _one_person_graph())
+    page = f"<main>\n  {build_network_map.LIST_START}\n  {build_network_map.LIST_END}\n</main>\n"
+    once = build_network_map.replace_list_region(page, region)
+    assert build_network_map.replace_list_region(once, region) == once
+
+
+def test_list_region_splice_refuses_a_page_without_sentinels():
+    with pytest.raises(ValueError):
+        build_network_map.replace_list_region("<main></main>", "x")

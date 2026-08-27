@@ -141,6 +141,8 @@ maintainer-facing audience.
 
 #### Added
 
+- Everyone the Network Map draws is now listed as a table under the map, with their Working Groups and their country, and a link to each profile the Directory holds. It narrows as the map does, so a filtered map and the list under it always agree, and it is written into the page rather than drawn by the browser, so it is there for anyone whose browser does not run the map at all. Hand-translated for FR and DE.
+
 - The Network Map is now reachable from the site. The Working Groups page and the Directory each carry a card pointing to it, it appears in the sitemap in all three locales, and the site search finds it. It keeps its Prototype label while the co-authored-publications layer is still empty. Hand-translated for FR and DE.
 
 - The Network Map can be filtered to a single conference once it covers more than one. A row of edition chips appears beside the overlays, and picking one shows only the panels shared at that conference, with the hover card counting the people on screen rather than everyone who has ever shared a panel. The row stays hidden while the map holds a single conference, so it will arrive by itself with ESSC 2027 ([#1584](https://github.com/EISSeuropa/netsec.github.io/issues/1584)). Hand-translated for FR and DE.
@@ -150,6 +152,10 @@ maintainer-facing audience.
 - The site search overlay can now separate people from pages. When a query matches both, a row of chips appears under the search box reading All, Pages and People, each carrying its own count, so a name that also turns up in prose no longer has to be picked out of a mixed list. The chips filter the results already on screen rather than running a fresh search, which keeps the ranking intact and the response immediate, and the row stays hidden when everything found is of one kind. Available in English, French and German.
 
 #### Changed
+
+- The Network Map opens on the map. On a phone the canvas used to begin below the whole first screen, behind an introduction that explained the controls, six statistics and three rows of chips. The introduction now says what the map is and leaves the mechanics to the chips and the legend, the statistics moved under the map, and the hub filters fold into a control that reports how many hubs are showing. The map now starts a third of the way down a desktop screen and inside the first screen of a phone. Hand-translated for FR and DE.
+
+- The Network Map shows a member's country in the language of the page, on the hover card and in the list under the map, the way the Directory already does.
 
 - The network visualisation is now called the Network Map rather than the Atlas, and lives at `/network-map.html` (plus FR and DE, where it reads *La carte du réseau NetSec* and *Die NetSec-Netzwerkkarte*). EISS publishes its own Atlas, a map of the Anthology's published works, and two maps of the same initiative sharing one name was going to confuse readers of both. Each is now named for what it maps: the EISS Atlas covers the literature, and this one covers the people of the Action and the structures they share. The page also drops a parenthetical that described the research-themes lens as a map of the field, which overstated what it draws. Nothing about the map itself changed, and the rename lands while the page is still an unlisted prototype, so no published link breaks ([#764](https://github.com/EISSeuropa/netsec.github.io/issues/764)).
 

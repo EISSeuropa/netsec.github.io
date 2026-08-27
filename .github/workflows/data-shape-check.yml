@@ -47,6 +47,11 @@ on:
       - 'directory-index.json'
       - 'scripts/build-network-map.py'
       - 'data/network-map.json'
+      # build-network-map.py also owns the list region of these three
+      # pages, so a hand edit to one has to face the same drift gate.
+      - 'network-map.html'
+      - 'network-map.fr.html'
+      - 'network-map.de.html'
       - 'data/essc-*-programme.json'
       - 'data/publications.json'
       - '.github/workflows/data-shape-check.yml'
@@ -93,10 +98,11 @@ jobs:
         # against stale data.
         run: python3 scripts/build-directory-index.py --check
 
-      - name: network-map.json is current (#764)
-        # The NetSec Network Map graph is derived from wg.json by build-network-map.py.
-        # Fail if wg.json changed without regenerating the committed network-map.json,
-        # so the sync (sync-cost.py) can never leave the graph stale.
+      - name: network-map.json and the map's list region are current (#764)
+        # The NetSec Network Map graph is derived from wg.json by build-network-map.py,
+        # which also renders the list region of the three locale pages. Fail if wg.json
+        # changed without regenerating either, so the sync (sync-cost.py) can never
+        # leave the graph stale, and the list under the map can never disagree with it.
         run: python3 scripts/build-network-map.py --check
 
       - name: Bio search stubs are current (#1428)
