@@ -46,3 +46,14 @@ jobs:
 
       - name: Run SEO + cache-bust checker
         run: python3 scripts/inject-seo.py --check
+
+      - name: Install Pillow for the photograph check
+        run: python3 -m pip install --quiet 'Pillow>=12.3.0,<13'
+
+      - name: Editorial photographs have a current .webp (#1615)
+        # The gallery on /essc-2026.html served four 1400px JPEGs into a grid
+        # that renders each at most 327x240, which was the last page over the
+        # image budget. This fails if a photograph has been added or replaced
+        # without its derivative, which is the same posture as the cache-bust
+        # check above: a generated asset that must be current in the same PR.
+        run: python3 scripts/build-photo-derivatives.py --check

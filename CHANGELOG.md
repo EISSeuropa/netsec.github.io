@@ -200,6 +200,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The ESSC 2026 conference photographs load about a quarter of the data they used to. The four pictures in the gallery were full-size camera exports, 1.23 MB between them, shown in a grid that displays each one at about the size of a postcard. They are now served at the size they are actually shown, which takes them to 290 KB and brings the page inside its image budget, the last one that was over.
+
 - The Network Map explains itself when there is nothing to draw. Switching every filter chip off used to leave a blank rectangle, and a failure to load the map's data wrote a single line into the statistics, which now sit below the map and would have put the message out of sight. Both now say what happened on the map itself, and the empty map names the control that emptied it. Hand-translated for FR and DE.
 
 - The Network Map's hover card no longer loses its bottom edge. Hovering a person in the lower third of the map cut the card off where it met the edge of the map, taking the research themes, the shared-panel line and the link to their profile with it. It now opens above the pointer when there is no room below, and to the left when there is none to the right.
