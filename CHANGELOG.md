@@ -141,6 +141,8 @@ maintainer-facing audience.
 
 #### Added
 
+- The Network Map reports how much of the Action comes from an Inclusiveness Target Country, which is the figure COST weighs most heavily when it looks at an Action's inclusiveness. 106 of the 192 people on the map do, and a new overlay rings them. The figure counts by country, which the page says plainly, since a member based in an EU Outermost Region is not visible in the data behind it. Hand-translated for FR and DE.
+
 - The Network Map will count each Working Group's outputs once the Action has some. Every publication the site holds is already tagged to the groups it belongs to, and the map ignored that tag, so a brief written by one person was invisible to it. The tag now counts towards the group, which shows on the group when you hover or open it, and as a figure beside the map. Nothing appears until the first output is entered. Hand-translated for FR and DE.
 
 - The Network Map says what its own shape shows. Under the figures sits a line naming the two Working Groups or research themes that share the most people, how many people belong to more than one of them, and which one has the fewest, with the first and last opening the group they name. It follows whichever view you are in. Hand-translated for FR and DE.

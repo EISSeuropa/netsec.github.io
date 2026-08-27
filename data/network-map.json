@@ -11,6 +11,7 @@
     "panel_editions": [
       "2026"
     ],
+    "itc_people": 106,
     "publications_matched": 0,
     "coauthor_edges": 0,
     "authors_unmatched": []
@@ -164,7 +165,8 @@
       "type": "person",
       "name": "Dr Alin Barbantan",
       "country": "Romania",
-      "slug": "alin-barbantan"
+      "slug": "alin-barbantan",
+      "itc": true
     },
     {
       "id": "alisa-kerschbaum",
@@ -180,7 +182,8 @@
       "name": "Dr Andriy Tyushka",
       "country": "Poland",
       "slug": "andriy-tyushka",
-      "photo": "assets/images/people/map/andriy-tyushka.webp"
+      "photo": "assets/images/people/map/andriy-tyushka.webp",
+      "itc": true
     },
     {
       "id": "anna-pagnacco",
@@ -230,7 +233,8 @@
       "mentorship": [
         "mentee",
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "avnihan-k-r-s-k",
@@ -241,7 +245,8 @@
       "photo": "assets/images/people/map/avnihan-k-r-s-k.webp",
       "mentorship": [
         "mentee"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "carla-sofia-ferreira-fernandes",
@@ -251,7 +256,8 @@
       "slug": "carla-sofia-ferreira-fernandes",
       "mentorship": [
         "mentee"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "chiara-libiseller",
@@ -286,7 +292,8 @@
       "name": "Dr Daniela Mechkaroska",
       "country": "North Macedonia",
       "slug": "daniela-mechkaroska",
-      "photo": "assets/images/people/map/daniela-mechkaroska.webp"
+      "photo": "assets/images/people/map/daniela-mechkaroska.webp",
+      "itc": true
     },
     {
       "id": "danilo-kalezic",
@@ -297,7 +304,8 @@
       "photo": "assets/images/people/map/danilo-kalezic.webp",
       "mentorship": [
         "mentee"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "david-matsaberidze",
@@ -307,7 +315,8 @@
       "slug": "david-matsaberidze",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "david-morgan-owen",
@@ -327,7 +336,8 @@
       "slug": "eda-kusku-sonmez",
       "mentorship": [
         "mentee"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "eliza-gheorghe",
@@ -335,7 +345,8 @@
       "name": "Dr Eliza Gheorghe",
       "country": "Türkiye",
       "slug": "eliza-gheorghe",
-      "photo": "assets/images/people/map/eliza-gheorghe.webp"
+      "photo": "assets/images/people/map/eliza-gheorghe.webp",
+      "itc": true
     },
     {
       "id": "esra-merve-boztosun-cal-skan",
@@ -346,7 +357,8 @@
       "photo": "assets/images/people/map/esra-merve-boztosun-cal-skan.webp",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "eugenio-sanchez",
@@ -362,7 +374,8 @@
       "name": "Mr Fabio Iguavita Duarte",
       "country": "Czechia",
       "slug": "fabio-iguavita-duarte",
-      "photo": "assets/images/people/map/fabio-iguavita-duarte.webp"
+      "photo": "assets/images/people/map/fabio-iguavita-duarte.webp",
+      "itc": true
     },
     {
       "id": "felix-kosterke",
@@ -377,7 +390,8 @@
       "name": "Prof Filip Ejdus",
       "country": "Serbia",
       "slug": "filip-ejdus",
-      "photo": "assets/images/people/map/filip-ejdus.webp"
+      "photo": "assets/images/people/map/filip-ejdus.webp",
+      "itc": true
     },
     {
       "id": "francesco-canossi",
@@ -407,7 +421,8 @@
       "name": "Dr Gayane Harutyunyan",
       "country": "Armenia",
       "slug": "gayane-harutyunyan",
-      "photo": "assets/images/people/map/gayane-harutyunyan.webp"
+      "photo": "assets/images/people/map/gayane-harutyunyan.webp",
+      "itc": true
     },
     {
       "id": "gesine-weber",
@@ -470,7 +485,8 @@
       "photo": "assets/images/people/map/isabelle-haynes.webp",
       "mentorship": [
         "mentee"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "islam-jusufi",
@@ -481,7 +497,8 @@
       "photo": "assets/images/people/map/islam-jusufi.webp",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "ivan-zaccagnini",
@@ -562,7 +579,8 @@
       "photo": "assets/images/people/map/kire-babanoski.webp",
       "mentorship": [
         "mentee"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "laura-lisboa",
@@ -662,7 +680,8 @@
       "photo": "assets/images/people/map/marko-kovacevic.webp",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "martin-havacek",
@@ -673,7 +692,8 @@
       "photo": "assets/images/people/map/martin-havacek.webp",
       "mentorship": [
         "mentee"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "mattia-sguazzini",
@@ -692,7 +712,8 @@
       "photo": "assets/images/people/map/mehmet-babacan.webp",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "meret-steybe",
@@ -714,7 +735,8 @@
       "photo": "assets/images/people/map/monika-sus.webp",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "moritz-weiss",
@@ -744,7 +766,8 @@
       "photo": "assets/images/people/map/nikolaos-tzifakis.webp",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "p-abdelouahid-ezzarfi",
@@ -756,13 +779,15 @@
       "id": "p-ajsela-toci",
       "type": "person",
       "name": "Ms Ajsela Toci",
-      "country": "Albania"
+      "country": "Albania",
+      "itc": true
     },
     {
       "id": "p-aleksandar-ivanov",
       "type": "person",
       "name": "Prof Aleksandar Ivanov",
-      "country": "North Macedonia"
+      "country": "North Macedonia",
+      "itc": true
     },
     {
       "id": "p-alessandro-indelicato",
@@ -774,13 +799,15 @@
       "id": "p-ana-santos-pinto",
       "type": "person",
       "name": "Prof Ana Santos Pinto",
-      "country": "Portugal"
+      "country": "Portugal",
+      "itc": true
     },
     {
       "id": "p-andreea-dragomir",
       "type": "person",
       "name": "Prof Andreea Dragomir",
-      "country": "Romania"
+      "country": "Romania",
+      "itc": true
     },
     {
       "id": "p-antonio-calcara",
@@ -792,13 +819,15 @@
       "id": "p-anzelika-baneviciene",
       "type": "person",
       "name": "Dr Anželika Banevičienė",
-      "country": "Lithuania"
+      "country": "Lithuania",
+      "itc": true
     },
     {
       "id": "p-aurelija-puraite",
       "type": "person",
       "name": "Ms Aurelija Pūraitė",
-      "country": "Lithuania"
+      "country": "Lithuania",
+      "itc": true
     },
     {
       "id": "p-benoit-josset",
@@ -816,7 +845,8 @@
       "id": "p-bora-iyiat",
       "type": "person",
       "name": "Mr Bora İyiat",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-brynjolfur-stefansson",
@@ -828,7 +858,8 @@
       "id": "p-burak-toraman",
       "type": "person",
       "name": "Mr Burak Toraman",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-carmen-marquez-carrasco",
@@ -846,13 +877,15 @@
       "id": "p-cigdem-ustun",
       "type": "person",
       "name": "Prof Cigdem Ustun",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-constantinos-adamides",
       "type": "person",
       "name": "Dr Constantinos Adamides",
-      "country": "Cyprus"
+      "country": "Cyprus",
+      "itc": true
     },
     {
       "id": "p-daniel-otoole",
@@ -864,7 +897,8 @@
       "id": "p-daniela-castilhos",
       "type": "person",
       "name": "Prof Daniela Castilhos",
-      "country": "Portugal"
+      "country": "Portugal",
+      "itc": true
     },
     {
       "id": "p-david-curran",
@@ -876,43 +910,50 @@
       "id": "p-dimitar-atanasov",
       "type": "person",
       "name": "Mr Dimitar Atanasov",
-      "country": "Portugal"
+      "country": "Portugal",
+      "itc": true
     },
     {
       "id": "p-draga-gajic",
       "type": "person",
       "name": "Ms Draga Gajic",
-      "country": "Bosnia & Herzegovina"
+      "country": "Bosnia & Herzegovina",
+      "itc": true
     },
     {
       "id": "p-edlira-titini",
       "type": "person",
       "name": "Dr Edlira Titini",
-      "country": "Albania"
+      "country": "Albania",
+      "itc": true
     },
     {
       "id": "p-ekrem-ok",
       "type": "person",
       "name": "Dr Ekrem Ok",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-eleni-christodoulou",
       "type": "person",
       "name": "Dr Eleni Christodoulou",
-      "country": "Cyprus"
+      "country": "Cyprus",
+      "itc": true
     },
     {
       "id": "p-eleri-lillemae",
       "type": "person",
       "name": "Dr Eleri Lillemäe",
-      "country": "Estonia"
+      "country": "Estonia",
+      "itc": true
     },
     {
       "id": "p-elif-kara",
       "type": "person",
       "name": "Dr Elif Kara",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-elisabetta-ginevra-iida",
@@ -924,13 +965,15 @@
       "id": "p-erdem-ozluk",
       "type": "person",
       "name": "Prof Erdem Ozluk",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-esra-merve-boztosun-caliskan",
       "type": "person",
       "name": "Dr Esra Merve Boztosun Caliskan",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-fatiha-djebbar",
@@ -942,7 +985,8 @@
       "id": "p-felipe-pathe-duarte",
       "type": "person",
       "name": "Prof Felipe Pathé Duarte",
-      "country": "Portugal"
+      "country": "Portugal",
+      "itc": true
     },
     {
       "id": "p-fitim-kastrati",
@@ -954,7 +998,8 @@
       "id": "p-furkan-sarper-koseoglu",
       "type": "person",
       "name": "Mr Furkan Sarper Koseoglu",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-georgian-marius-ghincea",
@@ -966,7 +1011,8 @@
       "id": "p-grigor-vardanyan",
       "type": "person",
       "name": "Dr Grigor Vardanyan",
-      "country": "Armenia"
+      "country": "Armenia",
+      "itc": true
     },
     {
       "id": "p-gurkan-gur",
@@ -978,7 +1024,8 @@
       "id": "p-halil-kanadikirik",
       "type": "person",
       "name": "Dr Halil Kanadikirik",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-hugo-meijer",
@@ -990,43 +1037,50 @@
       "id": "p-i-aytac-kadioglu",
       "type": "person",
       "name": "Dr I. Aytac Kadioglu",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-ice-ilijevski",
       "type": "person",
       "name": "Prof Ice Ilijevski",
-      "country": "North Macedonia"
+      "country": "North Macedonia",
+      "itc": true
     },
     {
       "id": "p-ilke-gocmen",
       "type": "person",
       "name": "Prof Ilke Gocmen",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-ilyas-ferhat-demirbas",
       "type": "person",
       "name": "Dr Ilyas Ferhat Demirbas",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-iztok-prezelj",
       "type": "person",
       "name": "Prof Iztok Prezelj",
-      "country": "Slovenia"
+      "country": "Slovenia",
+      "itc": true
     },
     {
       "id": "p-jessica-pereira",
       "type": "person",
       "name": "Ms Jéssica Pereira",
-      "country": "Portugal"
+      "country": "Portugal",
+      "itc": true
     },
     {
       "id": "p-kalina-lubas",
       "type": "person",
       "name": "Dr Kalina Lubas",
-      "country": "Poland"
+      "country": "Poland",
+      "itc": true
     },
     {
       "id": "p-keara-barrett",
@@ -1038,25 +1092,29 @@
       "id": "p-kenan-hodzic",
       "type": "person",
       "name": "Dr Kenan Hodžić",
-      "country": "Bosnia & Herzegovina"
+      "country": "Bosnia & Herzegovina",
+      "itc": true
     },
     {
       "id": "p-kujtim-zeka",
       "type": "person",
       "name": "Mr Kujtim Zeka",
-      "country": "Albania"
+      "country": "Albania",
+      "itc": true
     },
     {
       "id": "p-laura-inigo-alvarez",
       "type": "person",
       "name": "Dr Laura Íñigo Álvarez",
-      "country": "Portugal"
+      "country": "Portugal",
+      "itc": true
     },
     {
       "id": "p-laurena-kalaja",
       "type": "person",
       "name": "Ms Laurena Kalaja",
-      "country": "Albania"
+      "country": "Albania",
+      "itc": true
     },
     {
       "id": "p-liliana-pasquale",
@@ -1098,55 +1156,64 @@
       "id": "p-martin-chovancik",
       "type": "person",
       "name": "Dr Martin Chovancik",
-      "country": "Czechia"
+      "country": "Czechia",
+      "itc": true
     },
     {
       "id": "p-mehmet-gokay-ozerim",
       "type": "person",
       "name": "Prof Mehmet Gokay Ozerim",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-mehmet-recai-uygur",
       "type": "person",
       "name": "Dr Mehmet Recai Uygur",
-      "country": "Lithuania"
+      "country": "Lithuania",
+      "itc": true
     },
     {
       "id": "p-mentor-beqa",
       "type": "person",
       "name": "Dr Mentor Beqa",
-      "country": "Albania"
+      "country": "Albania",
+      "itc": true
     },
     {
       "id": "p-mia-abdic",
       "type": "person",
       "name": "Ms Mia Abdic",
-      "country": "Serbia"
+      "country": "Serbia",
+      "itc": true
     },
     {
       "id": "p-milan-varda",
       "type": "person",
       "name": "Mr Milan Varda",
-      "country": "Serbia"
+      "country": "Serbia",
+      "itc": true
     },
     {
       "id": "p-mile-obrenovic",
       "type": "person",
       "name": "Mr Mile Obrenović",
-      "country": "Serbia"
+      "country": "Serbia",
+      "itc": true
     },
     {
       "id": "p-miranda-tedeshvili",
       "type": "person",
       "name": "Ms Miranda Tedeshvili",
-      "country": "Georgia"
+      "country": "Georgia",
+      "itc": true
     },
     {
       "id": "p-mirela-imsirovic",
       "type": "person",
       "name": "Dr Mirela Imsirovic",
-      "country": "Bosnia & Herzegovina"
+      "country": "Bosnia & Herzegovina",
+      "itc": true
     },
     {
       "id": "p-monica-grau-sarabia",
@@ -1164,13 +1231,15 @@
       "id": "p-muammer-ozturk",
       "type": "person",
       "name": "Dr Muammer Öztürk",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-muhammet-ozcan",
       "type": "person",
       "name": "Mr Muhammet Ozcan",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-nar-akgul",
@@ -1178,13 +1247,15 @@
       "name": "Dr Pınar Akgül",
       "country": "Türkiye",
       "slug": "p-nar-akgul",
-      "photo": "assets/images/people/map/p-nar-akgul.webp"
+      "photo": "assets/images/people/map/p-nar-akgul.webp",
+      "itc": true
     },
     {
       "id": "p-nemanja-dzuverovic",
       "type": "person",
       "name": "Dr Nemanja Džuverović",
-      "country": "Serbia"
+      "country": "Serbia",
+      "itc": true
     },
     {
       "id": "p-nicolas-krieger",
@@ -1202,25 +1273,29 @@
       "id": "p-noela-mahmutaj",
       "type": "person",
       "name": "Dr Noela Mahmutaj",
-      "country": "Albania"
+      "country": "Albania",
+      "itc": true
     },
     {
       "id": "p-pinar-akgul",
       "type": "person",
       "name": "Dr Pinar Akgül",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-pinar-caglayan",
       "type": "person",
       "name": "Dr Pinar Caglayan",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-ruzica-cubela-bajramovic",
       "type": "person",
       "name": "Dr Ruzica Cubela Bajramovic",
-      "country": "Bosnia & Herzegovina"
+      "country": "Bosnia & Herzegovina",
+      "itc": true
     },
     {
       "id": "p-samuel-zilincik",
@@ -1232,7 +1307,8 @@
       "id": "p-sandra-cvikic",
       "type": "person",
       "name": "Dr Sandra Cvikić",
-      "country": "Croatia"
+      "country": "Croatia",
+      "itc": true
     },
     {
       "id": "p-sanne-verschuren",
@@ -1244,31 +1320,36 @@
       "id": "p-savas-bicer",
       "type": "person",
       "name": "Prof Savas Bicer",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-senada-selo-sabic",
       "type": "person",
       "name": "Dr Senada Šelo Šabić",
-      "country": "Croatia"
+      "country": "Croatia",
+      "itc": true
     },
     {
       "id": "p-serghei-sprincean",
       "type": "person",
       "name": "Prof Serghei Sprincean",
-      "country": "Moldova"
+      "country": "Moldova",
+      "itc": true
     },
     {
       "id": "p-sergiu-gabriel-berindea",
       "type": "person",
       "name": "Mr Sergiu Gabriel Berindea",
-      "country": "Romania"
+      "country": "Romania",
+      "itc": true
     },
     {
       "id": "p-simge-pelit",
       "type": "person",
       "name": "Ms Simge Pelit",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-tahir-azad",
@@ -1280,13 +1361,15 @@
       "id": "p-tamer-kasikci",
       "type": "person",
       "name": "Mr Tamer Kasikci",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-tanase-tasente",
       "type": "person",
       "name": "Prof Tănase Tasențe",
-      "country": "Romania"
+      "country": "Romania",
+      "itc": true
     },
     {
       "id": "p-teemu-hakkinen",
@@ -1298,7 +1381,8 @@
       "id": "p-theo-zacharis",
       "type": "person",
       "name": "Mr Theo Zacharis",
-      "country": "Greece"
+      "country": "Greece",
+      "itc": true
     },
     {
       "id": "p-tijana-karic",
@@ -1310,7 +1394,8 @@
       "id": "p-tijana-recevic",
       "type": "person",
       "name": "Dr Tijana Recevic",
-      "country": "Serbia"
+      "country": "Serbia",
+      "itc": true
     },
     {
       "id": "p-tim-thies",
@@ -1322,7 +1407,8 @@
       "id": "p-valderi-leithardt",
       "type": "person",
       "name": "Dr Valderi Leithardt",
-      "country": "Portugal"
+      "country": "Portugal",
+      "itc": true
     },
     {
       "id": "p-vanessa-newby",
@@ -1334,19 +1420,22 @@
       "id": "p-vasil-pavlov",
       "type": "person",
       "name": "Dr Vasil Pavlov",
-      "country": "Bulgaria"
+      "country": "Bulgaria",
+      "itc": true
     },
     {
       "id": "p-vedat-coskun",
       "type": "person",
       "name": "Prof Vedat Coskun",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-veronica-russu",
       "type": "person",
       "name": "Dr Veronica Russu",
-      "country": "Poland"
+      "country": "Poland",
+      "itc": true
     },
     {
       "id": "p-veronika-nagy",
@@ -1358,25 +1447,29 @@
       "id": "p-vesna-nikolic",
       "type": "person",
       "name": "Dr Vesna Nikolić",
-      "country": "Serbia"
+      "country": "Serbia",
+      "itc": true
     },
     {
       "id": "p-violeta-vasiliauskiene",
       "type": "person",
       "name": "Prof Violeta Vasiliauskienė",
-      "country": "Lithuania"
+      "country": "Lithuania",
+      "itc": true
     },
     {
       "id": "p-vladimir-sterpu",
       "type": "person",
       "name": "Dr Vladimir Sterpu",
-      "country": "Moldova"
+      "country": "Moldova",
+      "itc": true
     },
     {
       "id": "p-walid-blila",
       "type": "person",
       "name": "Mr Walid Blila",
-      "country": "Lithuania"
+      "country": "Lithuania",
+      "itc": true
     },
     {
       "id": "p-yagnyashri-kodaru",
@@ -1388,19 +1481,22 @@
       "id": "p-yasemin-necmiye-tutar",
       "type": "person",
       "name": "Dr Yasemin Necmiye Tutar",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-yigit-cem-eskicioglu",
       "type": "person",
       "name": "Mr Yigit Cem Eskicioglu",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "p-yusuf-ozer",
       "type": "person",
       "name": "Dr Yusuf Özer",
-      "country": "Türkiye"
+      "country": "Türkiye",
+      "itc": true
     },
     {
       "id": "pablo-arriazu",
@@ -1423,7 +1519,8 @@
       "photo": "assets/images/people/map/paulina-polko.webp",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "pavlosioannis-koktsidis",
@@ -1434,7 +1531,8 @@
       "photo": "assets/images/people/map/pavlosioannis-koktsidis.webp",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "pieter-zhao",
@@ -1453,7 +1551,8 @@
       "name": "Dr Revecca Pedi",
       "country": "Greece",
       "slug": "revecca-pedi",
-      "photo": "assets/images/people/map/revecca-pedi.webp"
+      "photo": "assets/images/people/map/revecca-pedi.webp",
+      "itc": true
     },
     {
       "id": "rusudan-zabakhidze",
@@ -1480,7 +1579,8 @@
       "name": "Dr Sarka Kolmasova",
       "country": "Czechia",
       "slug": "sarka-kolmasova",
-      "photo": "assets/images/people/map/sarka-kolmasova.webp"
+      "photo": "assets/images/people/map/sarka-kolmasova.webp",
+      "itc": true
     },
     {
       "id": "saurav-narain",
@@ -1502,7 +1602,8 @@
       "photo": "assets/images/people/map/seyithan-ahmet-ates.webp",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "silvia-damato",
@@ -1529,7 +1630,8 @@
       "mentorship": [
         "matched",
         "mentor-full"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "tanja-pavleska",
@@ -1540,7 +1642,8 @@
       "photo": "assets/images/people/map/tanja-pavleska.webp",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "teodora-stoicescu",
@@ -1551,7 +1654,8 @@
       "photo": "assets/images/people/map/teodora-stoicescu.webp",
       "mentorship": [
         "mentee"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "tolga-c-kr-kc",
@@ -1561,7 +1665,8 @@
       "slug": "tolga-c-kr-kc",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "vasiliki-plessia-aravani",
@@ -1591,7 +1696,8 @@
       "photo": "assets/images/people/map/yanina-shved-dogrul.webp",
       "mentorship": [
         "mentee"
-      ]
+      ],
+      "itc": true
     },
     {
       "id": "yijun-xu",
@@ -1612,7 +1718,8 @@
       "photo": "assets/images/people/map/zane-sime.webp",
       "mentorship": [
         "mentor"
-      ]
+      ],
+      "itc": true
     }
   ],
   "edges": [
