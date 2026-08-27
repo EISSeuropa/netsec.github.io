@@ -206,3 +206,13 @@
 /* The profile gap, stated under the figures it follows from (#1647). */
 .network-map-gap{margin:9px 2px 0;font-size:.82rem;color:var(--muted)}
 .network-map-gap a{color:var(--accent-2)}
+
+/* Findings (#1646): what the map's own structure knows, under the figures that
+   count the roster. The two that name a hub open it, so they are buttons. */
+.network-map-findings{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;margin:9px 2px 0;font-size:.82rem;color:var(--muted)}
+.network-map-findings:empty{margin:0}
+.network-map-finding{font:inherit;font-size:.82rem;padding:0;cursor:pointer;text-align:left;
+  color:var(--accent-2);background:none;border:0;border-bottom:1px solid transparent}
+.network-map-finding:hover{border-bottom-color:currentColor}
+.network-map-finding:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
+@media (pointer:coarse){ .network-map-finding{padding:6px 0} }

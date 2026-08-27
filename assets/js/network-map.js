@@ -921,6 +921,73 @@
     draw();
   }
 
+  // ── Findings (#1646) ───────────────────────────────────────────────────────
+  // The statistics count the roster, which is what the Directory is for. These
+  // are the things only the map's own structure knows, computed client-side
+  // from data already loaded, and the two that name a hub open it.
+  let findingsEl = null;
+
+  function buildFindings() {
+    findingsEl = document.createElement('p');
+    findingsEl.className = 'network-map-findings';
+    const gap = document.querySelector('.network-map-gap');
+    const after = gap || statsEl;
+    after.parentNode.insertBefore(findingsEl, after.nextSibling);
+  }
+
+  function findingButton(text, onClick) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'network-map-finding';
+    b.textContent = text;
+    b.addEventListener('click', onClick);
+    return b;
+  }
+
+  function syncFindings() {
+    if (!findingsEl) return;
+    findingsEl.replaceChildren();
+    const hs = hubs();
+    if (hs.length < 2) return;
+
+    // The busiest pair. sharedWith() already computes this for the panel, so
+    // the finding and the panel can never name different numbers. The pair is
+    // joined with a slash rather than an "and": theme names carry their own,
+    // and "Foreign policy and diplomacy and Security and defence" is four of
+    // them in one sentence.
+    let best = null;
+    hs.forEach(h => {
+      const top = sharedWith(h)[0];
+      if (top && (!best || top.n > best.n)) best = { a: h, b: top.hub, n: top.n };
+    });
+    if (best) {
+      const name = (h) => (h.type === 'wg' ? 'WG' + h.number : T(h.name));
+      findingsEl.appendChild(findingButton(
+        T('{a} / {b} share the most people, {n} of them.')
+          .replace('{a}', name(best.a)).replace('{b}', name(best.b)).replace('{n}', best.n),
+        () => openHubPanel(best.a)));
+    }
+
+    const multi = people.filter(p => p.links[lens].length > 1).length;
+    if (multi) {
+      const line = document.createElement('span');
+      line.className = 'network-map-finding-plain';
+      line.textContent = T(lens === 'wg'
+        ? '{n} people sit in more than one Working Group.'
+        : '{n} people work on more than one research theme.').replace('{n}', multi);
+      findingsEl.appendChild(line);
+    }
+
+    const smallest = hs.slice().sort((a, b) =>
+      a.memberCount - b.memberCount || a.id.localeCompare(b.id))[0];
+    if (smallest) {
+      findingsEl.appendChild(findingButton(
+        T('{name} has the fewest people on the map.')
+          .replace('{name}', smallest.type === 'wg' ? 'WG' + smallest.number : T(smallest.name)),
+        () => openHubPanel(smallest)));
+    }
+  }
+
   // ── What the map actually draws (#1651, #1647) ─────────────────────────────
   let lensDrawnEl = null;
 
@@ -1252,6 +1319,7 @@
     buildHubChips();
     syncFilters();
     syncLensDrawn();
+    syncFindings();
     seedPositions();
     // The pinned person may not exist on the new lens, so the search is
     // answered again rather than carried across.
@@ -1335,6 +1403,7 @@
         });
       statsEl.appendChild(lensDrawnEl);
       buildProfileGap(data.stats.people_with_bios);
+      buildFindings();
 
       [['wg', 'Working Groups'], ['theme', 'Research themes']].forEach(([v, label]) => {
         const b = chip(T(label), v === lens, () => switchLens(v));
