@@ -390,14 +390,23 @@ in the legend, so the lede now says what the map is and stops.
 The statistics strip moved below the canvas. Six tiles cost 70 px and
 229 px respectively, and they are a thing to read rather than a control.
 
-The hub chips fold into a `<details>`, closed by the renderer on load and
-open in the markup so a reader without scripting still gets them. That
-row is the one that grows with the lens, four chips on Working Groups and
-fifteen on research themes. Its summary reports how many hubs are showing,
-since a filtered map behind a closed disclosure is otherwise a state with
-nothing on screen to explain it.
+The hub chips and the overlays fold into a `<details>`, closed by the
+renderer on load and open in the markup so a reader without scripting
+still gets them. The hub row is the one that grows with the lens, four
+chips on Working Groups and fifteen on research themes, and the overlays
+row wraps to three lines on a phone.
 
-Map top is now y=470 and y=638. The Find row added in #1642 costs 77 px of
+The overlays were deliberately left outside at first, so a first visit met
+the ESSC co-panel and mentorship layers without opening anything. Each
+chip added above the map costs a phone screen about 40 px, and #1674's
+profile filter was the one that made that arithmetic visible (#1677), so
+they went in with the rest.
+
+Its summary carries both: how many hubs are showing, and how many overlays
+are on. Either state behind a closed disclosure is otherwise a change to
+the map with nothing on screen accounting for it.
+
+Map top is now y=469 on a desktop and y=594 on an English phone. The Find row added in #1642 costs 77 px of
 that, taking it to y=545 and y=684.
 
 **The translated pages are measured too** (#1657). The first pass of this
@@ -421,10 +430,8 @@ reading "Groupes de travail" and "Thèmes de recherche" under the lede do
 not need the word "Angle" above them. The Find row keeps its `<label>`,
 since hiding that one would leave the input with no accessible name.
 
-Map top on a phone is now y=639 in English and y=688 in French and German.
-The overlays row is still two rows in both translations, which is the
-length of "Mentoring-Angebote und -Gesuche" rather than anything
-structural.
+Map top on a phone is now y=594 in English and y=620 in French and German,
+after the overlays followed the hub chips into the disclosure (#1677).
 
 ## Without JavaScript
 

@@ -184,9 +184,11 @@
    de recherche" under the lede do not need the word "Angle" above them. */
 @media (max-width:640px){
   .network-map-controls .network-map-wg-chip{font-size:.78rem;padding:6px 10px}
-  /* The Find row keeps its <label>: hiding it would leave the input with no
-     accessible name, where the other rows carry an aria-label on the group. */
-  .network-map-controls:not(.network-map-find-row) .lbl{display:none}
+  /* Only the rows outside the disclosure. The Find row keeps its <label>,
+     since hiding it would leave the input with no accessible name, and the
+     Overlays row inside the disclosure keeps its own, since two unlabelled
+     chip groups sitting next to each other are one long row of chips. */
+  .network-map-shell > .network-map-controls:not(.network-map-find-row) .lbl{display:none}
 }
 
 /* ── Zoom controls ───────────────────────────────────────────────────────────
