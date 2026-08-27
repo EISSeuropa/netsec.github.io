@@ -186,7 +186,7 @@
       // The fifteenth theme shipped untranslated when it was promoted, so it
       // rendered in English on the FR and DE filter rows and map hubs.
       'Democracy, governance and political change': 'Démocratie, gouvernance et changement politique',
-      'Climate and environmental security': 'Sécurité climatique et environnementale',
+      'Climate, energy and environmental security': 'Sécurité climatique, énergétique et environnementale',
       'Research regions': 'Régions de recherche',
       'Filter by research region': 'Filtrer par région de recherche',
       'Europe': 'Europe',
@@ -478,7 +478,7 @@
       'Crisis management and critical systems resilience': 'Krisenmanagement und Resilienz kritischer Systeme',
       'Political psychology, public opinion and decision-making': 'Politische Psychologie, öffentliche Meinung und Entscheidungsfindung',
       'Democracy, governance and political change': 'Demokratie, Regierungsführung und politischer Wandel',
-      'Climate and environmental security': 'Klima- und Umweltsicherheit',
+      'Climate, energy and environmental security': 'Klima-, Energie- und Umweltsicherheit',
       'Research regions': 'Forschungsregionen',
       'Filter by research region': 'Nach Forschungsregion filtern',
       'Europe': 'Europa',
