@@ -34,6 +34,9 @@
   const filtersNEl = document.getElementById('network-map-filters-n');
   const listBodyEl = document.getElementById('network-map-list-body');
   const listHintEl = document.getElementById('network-map-list-hint');
+  const findEl = document.getElementById('network-map-find');
+  const findListEl = document.getElementById('network-map-find-list');
+  const findMsgEl = document.getElementById('network-map-find-msg');
   if (!canvas || !canvas.getContext) return;
   const ctx = canvas.getContext('2d');
 
@@ -83,6 +86,13 @@
   const activeHubs = new Set();           // hub ids active in the current lens
   const overlays = { panels: false, mentorship: false, coauthors: false };
   let hovered = null, draggingHub = null;
+  // A person pinned by the Find control (#1642). It outlives a pointer move,
+  // which is what separates it from `hovered`, and it is what the ?find= in
+  // the URL restores.
+  let spotlight = null;
+  // Read from the query string at boot and applied once the lens is known,
+  // since the hub ids only make sense inside a lens (#1602).
+  let urlHubs = null, urlFind = null;
   let W = 0, H = 0, dpr = 1;
   const avatars = {};                     // person id -> loaded Image
 
@@ -186,16 +196,19 @@
   // ── Paint ──
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    const hoverIds = hovered
-      ? new Set([hovered.id].concat(hovered.links ? hovered.links[lens] : [],
-          hovered.people || [], hovered.panelPeers || [], hovered.coPeers || []))
+    // Find pins a node, hovering points at one. Either way the paint dims
+    // everything that is not connected to it, so one focus chain serves both.
+    const focus = hovered || spotlight;
+    const hoverIds = focus
+      ? new Set([focus.id].concat(focus.links ? focus.links[lens] : [],
+          focus.people || [], focus.panelPeers || [], focus.coPeers || []))
       : null;
 
     edges().forEach(e => {
       const p = byId[e.source], h = byId[e.target];
       if (!personVisible(p) || !activeHubs.has(h.id)) return;
       const lit = hoverIds && hoverIds.has(p.id)
-        && (hovered.type === 'person' || h.id === hovered.id);
+        && (focus.type === 'person' || h.id === focus.id);
       ctx.strokeStyle = hubColour(h);
       ctx.globalAlpha = lit ? 0.55 : (hoverIds ? 0.04 : (theme.dark ? 0.15 : 0.12));
       ctx.lineWidth = lit ? 1.4 : 1;
@@ -245,7 +258,7 @@
     people.forEach(p => {
       if (!personVisible(p)) return;
       const dim = hoverIds && !hoverIds.has(p.id);
-      const r = (p.id === (hovered && hovered.id)) ? p.r + 2 : p.r;
+      const r = (p.id === (focus && focus.id)) ? p.r + 2 : p.r;
       ctx.globalAlpha = dim ? 0.15 : 1;
       const img = avatars[p.id];
       if (img && img.complete && img.naturalWidth) {
@@ -327,8 +340,27 @@
     return best;
   }
 
+  // The hovered node wins while the pointer is over one, and the pinned node
+  // takes the card back when it is not.
+  function paintCard(mx, my) {
+    if (hovered) showCard(hovered, mx, my);
+    else if (spotlight) showCard(spotlight, spotlight.x, spotlight.y);
+    else showCard(null);
+  }
+
+  // The node the card is currently describing. A pinned card follows its dot
+  // through the layout settling, which is 300 frames of repositioning, and
+  // rebuilding the markup on each of them would be work for nothing.
+  let cardNode = null;
+
   function showCard(node, mx, my) {
-    if (!node) { card.classList.remove('is-on'); card.setAttribute('aria-hidden', 'true'); return; }
+    if (!node) {
+      cardNode = null;
+      card.classList.remove('is-on'); card.setAttribute('aria-hidden', 'true');
+      return;
+    }
+    if (node !== cardNode) {
+    cardNode = node;
     if (node.type !== 'person') {
       card.innerHTML = '<div class="nm"></div><div class="meta"></div>';
       // A hub node, so the name is a WG title or a theme, both catalogue
@@ -363,6 +395,7 @@
       if (themes.length) card.querySelector('.themes').textContent =
         themes.slice(0, 3).map(t => T(t.name)).join(' · ') + (themes.length > 3 ? ' +' + (themes.length - 3) : '');
     }
+    }
     const stage = canvas.parentElement.getBoundingClientRect();
     card.style.left = Math.min(mx + 16, stage.width - 300) + 'px';
     card.style.top = Math.max(8, my - 14) + 'px';
@@ -378,10 +411,10 @@
     // Cursor set inline rather than through a class: `.is-link` is already
     // claimed by site.css, and one property is not worth a second name.
     canvas.style.cursor = (hovered && hovered.slug) ? 'pointer' : 'default';
-    showCard(hovered, mx, my);
+    paintCard(mx, my);
     draw();
   });
-  canvas.addEventListener('pointerleave', () => { hovered = null; showCard(null); draw(); });
+  canvas.addEventListener('pointerleave', () => { hovered = null; paintCard(0, 0); draw(); });
   canvas.addEventListener('pointerdown', (e) => {
     const r = canvas.getBoundingClientRect();
     const n = nodeAt(e.clientX - r.left, e.clientY - r.top);
@@ -398,7 +431,13 @@
     // node to a fingertip is often the neighbour. First tap previews, second
     // tap on the same node follows through, and a tap on empty space clears.
     if (touch) {
-      if (!n) { hovered = null; showCard(null); draw(); return; }
+      if (!n) {
+        hovered = null;
+        if (spotlight) { if (findEl) findEl.value = ''; say(''); setSpotlight(null); }
+        else showCard(null);
+        draw();
+        return;
+      }
       if (hovered !== n) { hovered = n; showCard(n, mx, my); draw(); return; }
     }
     if (n && n.slug) location.href = 'people/' + n.slug + '.html';
@@ -441,12 +480,115 @@
       row.querySelectorAll('button').forEach(x =>
         x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
       recomputePanelPeers();
-      hovered = null; showCard(null);
+      hovered = null; paintCard(0, 0);
+      syncUrl();
       draw();
     };
-    row.appendChild(chip(T('All editions'), true, choose('all')));
-    editions.forEach(y => row.appendChild(chip(y, false, choose(y))));
+    row.appendChild(chip(T('All editions'), panelEdition === 'all', choose('all')));
+    editions.forEach(y => row.appendChild(chip(y, panelEdition === y, choose(y))));
     overlaysEl.parentNode.insertBefore(row, overlaysEl.nextSibling);
+  }
+
+  // ── Find and spotlight (#1642) ─────────────────────────────────────────────
+  // 191 people on one canvas and no way to reach one of them: a member looking
+  // for themselves, or for the two others working on their theme, had to hover
+  // dots until one was the right name. The datalist is built from the same
+  // person nodes the canvas paints.
+  function buildFindOptions() {
+    if (!findListEl) return;
+    findListEl.replaceChildren();
+    people.slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .forEach(p => {
+        const o = document.createElement('option');
+        o.value = p.name;
+        findListEl.appendChild(o);
+      });
+  }
+
+  // Exact name first, then a substring, so typing a surname lands on the one
+  // person who carries it and a full name picked from the datalist is never
+  // beaten by someone whose name contains it.
+  function resolveFind(q) {
+    const s = String(q || '').trim().toLowerCase();
+    if (!s) return null;
+    // byId also holds the hubs, and a hub has no lens links, so pinning one
+    // would break personVisible() rather than answer the search.
+    const direct = byId[s];
+    if (direct && direct.type === 'person') return direct;
+    return people.find(p => p.name.toLowerCase() === s)
+      || people.find(p => p.name.toLowerCase().indexOf(s) !== -1)
+      || null;
+  }
+
+  function say(msg) {
+    if (findMsgEl) findMsgEl.textContent = msg;
+  }
+
+  function setSpotlight(node) {
+    spotlight = node;
+    paintCard(0, 0);
+    draw();
+    syncUrl();
+  }
+
+  // A search that finds nobody and a search that finds someone the filters are
+  // hiding are different answers, and a reader who gets the second one needs to
+  // know the map holds the person rather than that they typed the name wrong.
+  function applyFind(q) {
+    if (!String(q || '').trim()) { setSpotlight(null); say(''); return; }
+    const node = resolveFind(q);
+    if (!node) {
+      setSpotlight(null);
+      say(T('No one on the map matches {q}.').replace('{q}', String(q).trim()));
+      return;
+    }
+    if (!personVisible(node)) {
+      setSpotlight(null);
+      say(T('{name} is on the map but hidden by the filters in use.')
+        .replace('{name}', node.name));
+      return;
+    }
+    setSpotlight(node);
+    say(T('Showing {name}.').replace('{name}', node.name));
+  }
+
+  // ── URL state (#1602) ──────────────────────────────────────────────────────
+  // The lens, the hub chips, the overlays, the edition and the pinned person
+  // all ride in the query string, so a narrowed view is a link somebody can
+  // send. replaceState rather than pushState: a filter is not a page, and
+  // twenty chip clicks should not be twenty presses of the back button.
+  function hubParam(id) { return id.replace(/^(wg|theme)-/, ''); }
+
+  function syncUrl() {
+    const all = hubs();
+    const on = all.filter(h => activeHubs.has(h.id));
+    const q = new URLSearchParams();
+    if (lens !== 'wg') q.set('lens', lens);
+    if (on.length !== all.length) {
+      // "none" rather than an empty value, which would read back as "no
+      // filter" and quietly restore the full map.
+      q.set('hubs', on.length ? on.map(h => hubParam(h.id)).join(',') : 'none');
+    }
+    const overlaysOn = Object.keys(overlays).filter(k => overlays[k]);
+    if (overlaysOn.length) q.set('overlays', overlaysOn.join(','));
+    if (panelEdition !== 'all') q.set('edition', panelEdition);
+    if (spotlight) q.set('find', spotlight.id);
+    const query = q.toString();
+    history.replaceState(null, '', location.pathname + (query ? '?' + query : ''));
+  }
+
+  function applyUrlState() {
+    const q = new URLSearchParams(location.search);
+    const l = q.get('lens');
+    if (l === 'wg' || l === 'theme') lens = l;
+    (q.get('overlays') || '').split(',').filter(Boolean).forEach(k => {
+      if (Object.prototype.hasOwnProperty.call(overlays, k)) overlays[k] = true;
+    });
+    const edition = q.get('edition');
+    if (edition) panelEdition = edition;
+    urlHubs = q.get('hubs');
+    urlFind = q.get('find');
   }
 
   // ── Controls ──
@@ -475,6 +617,10 @@
           else activeHubs.add(h.id);
           b.setAttribute('aria-pressed', activeHubs.has(h.id) ? 'true' : 'false');
           syncFilters();
+          // A chip can hide the pinned person, which turns the spotlight into
+          // a card pointing at a dot nobody can see.
+          if (spotlight && !personVisible(spotlight)) applyFind(findEl ? findEl.value : '');
+          syncUrl();
           draw();
         },
         hubColour(h)));
@@ -516,6 +662,7 @@
     if (wasRunning) return;
     (function loop() {
       tick(); draw();
+      if (spotlight && !hovered) paintCard(0, 0);
       if (--animFrames > 0) requestAnimationFrame(loop);
     })();
   }
@@ -523,12 +670,36 @@
   function switchLens(next) {
     lens = next;
     activeHubs.clear();
-    hubs().forEach(h => activeHubs.add(h.id));
+    // A ?hubs= applies once, on the lens it was written for. Switching lens
+    // afterwards starts from every hub on, since a hub id means nothing in
+    // the other lens.
+    if (urlHubs !== null) {
+      const none = urlHubs === 'none';
+      if (!none) {
+        const wanted = new Set(urlHubs.split(',').filter(Boolean));
+        hubs().forEach(h => { if (wanted.has(hubParam(h.id))) activeHubs.add(h.id); });
+      }
+      urlHubs = null;
+      // "none" is somebody deliberately switching every chip off, and the
+      // summary and the list both report that, so it is honoured. A ?hubs=
+      // that matches nothing is a stale or mistyped link, which would open an
+      // empty map that nothing on the page accounts for.
+      if (!none && !activeHubs.size) {
+        hubs().forEach(h => activeHubs.add(h.id));
+        say(T('That link filtered the map to hubs it does not hold, so the whole map is shown.'));
+      }
+    } else {
+      hubs().forEach(h => activeHubs.add(h.id));
+    }
     lensEl.querySelectorAll('button').forEach(b =>
       b.setAttribute('aria-pressed', b.dataset.lens === lens ? 'true' : 'false'));
     buildHubChips();
     syncFilters();
     seedPositions();
+    // The pinned person may not exist on the new lens, so the search is
+    // answered again rather than carried across.
+    if (findEl && findEl.value) applyFind(findEl.value);
+    syncUrl();
     reheat(300);
   }
 
@@ -564,6 +735,11 @@
       people.forEach(p => {
         p.coPeers = p.coPeers.filter((id, i, a) => a.indexOf(id) === i);
       });
+      // Before anything renders: the overlay chips, the edition chips and the
+      // lens chips all paint their own pressed state from this, and reading
+      // the URL after them left a chip saying "off" over an overlay that was
+      // on.
+      applyUrlState();
       recomputePanelPeers();
 
       // Faces: lazy-load headshots; each arrival repaints once.
@@ -613,6 +789,7 @@
         overlaysEl.appendChild(chip(T(label), overlays[k], (b) => {
           overlays[k] = !overlays[k];
           b.setAttribute('aria-pressed', overlays[k] ? 'true' : 'false');
+          syncUrl();
           draw();
         }));
       });
@@ -621,12 +798,32 @@
       // the map itself is the first thing on screen. On a 375px phone the
       // canvas used to start at y=998, below the whole first screen.
       if (filtersEl) filtersEl.open = false;
+      buildFindOptions();
+      if (findEl) {
+        // change fires on a datalist pick and on blur, keydown catches Enter
+        // before either, and input clears a stale answer as soon as the text
+        // stops matching it.
+        findEl.addEventListener('change', () => applyFind(findEl.value));
+        findEl.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') { e.preventDefault(); applyFind(findEl.value); }
+        });
+        findEl.addEventListener('input', () => {
+          if (!findEl.value.trim()) { say(''); if (spotlight) setSpotlight(null); }
+        });
+      }
       listRows.forEach(row => {
         const cell = row.querySelector('[data-country]');
         if (cell) cell.textContent = localCountry(cell.dataset.country);
       });
       resize();
-      switchLens('wg');
+      switchLens(lens);
+      // After the layout, so the card lands on the node's settled position
+      // rather than on its seed.
+      if (urlFind) {
+        const node = resolveFind(urlFind);
+        if (node && findEl) findEl.value = node.name;
+        applyFind(urlFind);
+      }
     })
     .catch(() => { statsEl.textContent = T('The network map data could not be loaded.'); });
 

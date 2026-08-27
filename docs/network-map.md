@@ -228,6 +228,58 @@ hover names, one click opens.
 The same bug was found and fixed on the EISS Atlas
 (EISSeuropa/EISSeuropa.github.io#1431).
 
+## Find, and the URL
+
+The map draws 191 people and, until #1642, offered no way to reach one of
+them. A member opening the page to find themselves, or the two others
+working on their theme, had to hover dots until one was the right name,
+which at phone density is roughly 29 px between neighbours.
+
+A search row above the map is backed by a native `<datalist>` built from
+the same person nodes the canvas paints. The browser's own picker is
+keyboard-navigable, announced, and filters as it is typed, so there is no
+custom listbox here. A match pins the person as `spotlight`, which joins
+`hovered` in one focus chain in `draw()`: the pinned card outlives a
+pointer move, and everything not connected to the person dims.
+
+The answer is written into a visible `role="status"` line under the box.
+Three states are separate on purpose, since a reader who searched a name
+that the filters are hiding needs to know the map holds the person rather
+than that they typed it wrong:
+
+- nothing matches what was typed,
+- somebody matches but the current filters hide them,
+- somebody matches and is now pinned.
+
+**The URL carries the view** (#1602). The lens, the hub chips, the
+overlays, the edition and the pinned person all ride in the query string,
+written with `replaceState` rather than `pushState`, since a filter is not
+a page and twenty chip clicks should not be twenty presses of the back
+button. `applyUrlState()` runs before any control renders: reading it
+after them left a chip painted "off" over an overlay that was on.
+
+`?hubs=` is read once, on the lens it was written for, because a hub id
+means nothing in the other lens. Two failure modes are told apart. A
+`hubs=none` is somebody deliberately switching every chip off, and the
+disclosure summary and the list under the map both report the empty
+result, so it is honoured. A `?hubs=` matching nothing this lens holds is
+a stale or mistyped link, so the whole map is restored and the status
+line says why.
+
+**Every profile is an entry point.** `build-profile-pages.py` renders a
+link to `network-map.html?find=<slug>` beside the way back to the
+directory, in all three locales, so a profile leads into the network
+rather than ending at itself. The `?find=` value resolves as a node id
+first, then an exact name, then a substring, and a hub id is refused
+since pinning one would break `personVisible()` rather than answer the
+search.
+
+A copy-link button is not here. The address bar is the share affordance on
+a desktop, and the EISS Atlas only added its own button
+(EISSeuropa/EISSeuropa.github.io#1445) once the view had more state than a
+reader could see. Worth revisiting for the phone, where the URL is
+truncated and awkward to copy.
+
 ## The page order
 
 The map is the reason a visitor opens the page, so it comes first. It did
@@ -251,7 +303,9 @@ fifteen on research themes. Its summary reports how many hubs are showing,
 since a filtered map behind a closed disclosure is otherwise a state with
 nothing on screen to explain it.
 
-Map top is now y=470 and y=638.
+Map top is now y=470 and y=638. The Find row added in #1642 costs 77 px of
+that, taking it to y=547 and y=715, which still leaves the canvas inside
+the first screen on a phone. #1643 is where the rest comes back.
 
 ## Without JavaScript
 

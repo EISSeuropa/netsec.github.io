@@ -141,6 +141,12 @@ maintainer-facing audience.
 
 #### Added
 
+- You can find a person on the Network Map. A search box above the map takes a name, or part of one, and lights that person up with everyone they are connected to, dimming the rest. It says so plainly when nobody matches, and it tells you when the person is on the map but hidden by the filters you have set, which are different answers to different problems. Hand-translated for FR and DE.
+
+- Every directory profile now links to that person on the Network Map, so a profile leads into the network rather than ending at itself.
+
+- A filtered Network Map is a link you can send. The lens, the hub filters, the overlays, the conference edition and the person you have picked all live in the address bar now, so a Working Group chair can send their corner of the map to their group and it opens the way they left it ([#1602](https://github.com/EISSeuropa/netsec.github.io/issues/1602)).
+
 - Everyone the Network Map draws is now listed as a table under the map, with their Working Groups and their country, and a link to each profile the Directory holds. It narrows as the map does, so a filtered map and the list under it always agree, and it is written into the page rather than drawn by the browser, so it is there for anyone whose browser does not run the map at all. Hand-translated for FR and DE.
 
 - The Network Map is now reachable from the site. The Working Groups page and the Directory each carry a card pointing to it, it appears in the sitemap in all three locales, and the site search finds it. It keeps its Prototype label while the co-authored-publications layer is still empty. Hand-translated for FR and DE.

@@ -109,3 +109,22 @@
 .dark .network-map-list__table thead th{background:#121a2c}
 .network-map-list__table tbody th{font-weight:500;color:var(--ink)}
 .network-map-list__table a{color:var(--accent-2)}
+
+/* ── Find ────────────────────────────────────────────────────────────────────
+   A search box over 191 people, backed by a native <datalist> rather than a
+   custom listbox: the browser's own picker is keyboard-navigable, announced,
+   and filters as you type without a line of script. */
+.network-map-find-row{margin:0 0 8px}
+/* site.css sets every input to width:100%, which in this flex row put the
+   label on a line of its own above a 1140px box. */
+.network-map-find{font:inherit;font-size:.86rem;padding:7px 13px;border-radius:999px;
+  width:auto;flex:0 1 320px;min-width:min(220px,55vw);
+  color:var(--ink);background:rgba(255,255,255,.6);border:1px solid rgba(11,18,32,.14)}
+.dark .network-map-find{background:rgba(255,255,255,.06);border-color:var(--glass-border)}
+.network-map-find::placeholder{color:var(--muted);opacity:.85}
+.network-map-find:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+@media (pointer:coarse){ .network-map-find{padding:11px 13px} }
+/* At 375px a 320px box plus its label is two rows. Let it shrink instead. */
+@media (max-width:640px){ .network-map-find{flex:1 1 auto;min-width:0} }
+.network-map-find-msg{margin:0 0 10px 2px;font-size:.8rem;color:var(--muted);min-height:1.2em}
+.network-map-find-msg:empty{margin:0;min-height:0}
