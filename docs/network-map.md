@@ -596,6 +596,27 @@ produces the data:
   the Action is an unmatched author and always will be, so no threshold
   separates one from a mistyped member. Reporting makes a formatting
   problem visible without a check that would cry wolf on most papers.
+- **Outputs per Working Group** derive from the `workingGroups` tag array
+  every entry in `data/publications.json` carries, the same mechanism
+  `events.json` uses to surface an item under a WG section (#1587). The map
+  read the file for `authors` only, so an output tagged to WG2 contributed
+  nothing to the WG2 hub, and a single-author output contributed nothing
+  anywhere, since the co-authorship pass needs two matched names before it
+  emits an edge. A policy brief with one author is a normal shape, so that
+  was a structural blind spot rather than a missing nicety.
+
+  The tag is counted onto the hub as an `outputs` field, which is option 2
+  from that issue. Option 1, weighting the person-to-WG edge, was not taken:
+  the renderer draws hub edges at a constant width, so it would have needed
+  edge-weight rendering for the bipartite layer before it showed anything,
+  and it cannot represent an output whose authors the matcher never places.
+
+  The field is stamped only when the count is non-zero, so an empty
+  `publications.json` produces a byte-identical graph and the layer arrives
+  with the data. The hub's hover card and its panel gain a "{n} outputs"
+  clause, and the statistics strip gains a tile, both the way the
+  co-authorship chip waits for its first edge.
+
 - **Server-side layout coordinates** are a deliberate follow-up. The
   renderer lays out client-side for now, which is fine at this size.
 

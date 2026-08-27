@@ -384,3 +384,45 @@ def test_list_region_splice_is_idempotent():
 def test_list_region_splice_refuses_a_page_without_sentinels():
     with pytest.raises(ValueError):
         build_network_map.replace_list_region("<main></main>", "x")
+
+
+# ── Outputs tagged to a Working Group (#1587) ──────────────────────────────
+
+def _pub(wgs, authors):
+    return {"title": {"en": "x"}, "authors": authors, "workingGroups": wgs}
+
+
+def test_wg_outputs_count_the_tag_not_the_authors():
+    graph = build(
+        _wg({"number": 1, "name": "One", "colour": "wg-1", "memberCount": 1,
+             "members": [{"name": "Dr Ada Lovelace", "slug": "ada-lovelace"}]},
+            {"number": 2, "name": "Two", "colour": "wg-2", "memberCount": 0,
+             "members": []}),
+        None, None,
+        {"publications": [
+            # One matched author, so no co-authorship edge, and still an output
+            # against both hubs it is tagged to.
+            _pub([1, 2], ["Dr Ada Lovelace"]),
+            # Nobody the matcher can place, which is the case the tag rescues.
+            _pub([2], ["Someone Outside"]),
+        ]},
+    )
+    hubs = {n["id"]: n for n in graph["nodes"] if n["type"] == "wg"}
+    assert hubs["wg-1"]["outputs"] == 1
+    assert hubs["wg-2"]["outputs"] == 2
+    assert graph["stats"]["outputs_tagged"] == 2
+    assert graph["stats"]["coauthor_edges"] == 0
+
+
+def test_untagged_publications_leave_the_hubs_alone():
+    graph = build(
+        _wg({"number": 1, "name": "One", "colour": "wg-1", "memberCount": 0,
+             "members": []}),
+        None, None,
+        {"publications": [{"title": {"en": "x"}, "authors": ["Dr Ada Lovelace"]}]},
+    )
+    hub = next(n for n in graph["nodes"] if n["type"] == "wg")
+    # Absent rather than zero, so an empty publications.json leaves the
+    # committed graph byte-identical.
+    assert "outputs" not in hub
+    assert "outputs_tagged" not in graph["stats"]

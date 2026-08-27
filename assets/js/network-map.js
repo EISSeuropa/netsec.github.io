@@ -28,6 +28,7 @@
   // Singular and plural are separate catalogue keys rather than an English
   // "member" + "s", which no other language would build the same way.
   const peerLine = (one, many, n) => T(n === 1 ? one : many).replace('{n}', n);
+  const outputLine = (n) => peerLine('{n} output', '{n} outputs', n);
   const canvas = document.getElementById('network-map-canvas');
   const card = document.getElementById('network-map-card');
   const statsEl = document.getElementById('network-map-stats');
@@ -464,7 +465,10 @@
       card.querySelector('.nm').textContent = T(node.name);
       card.querySelector('.meta').textContent =
         T(node.type === 'wg' ? '{n} members' : '{n} people work here')
-          .replace('{n}', node.memberCount);
+          .replace('{n}', node.memberCount)
+        // The workingGroups tag on each publication, counted onto the hub
+        // (#1587). Absent until the first output is entered.
+        + (node.outputs ? ' · ' + outputLine(node.outputs) : '');
     } else {
       const wgs = node.links.wg.map(id => byId[id]);
       const themes = node.links.theme.map(id => byId[id]);
@@ -855,7 +859,8 @@
     const meta = document.createElement('p');
     meta.className = 'nmhp-meta';
     meta.textContent = T(hub.type === 'wg' ? '{n} members' : '{n} people work here')
-      .replace('{n}', hub.memberCount);
+      .replace('{n}', hub.memberCount)
+      + (hub.outputs ? ' · ' + outputLine(hub.outputs) : '');
     hubPanelEl.appendChild(meta);
 
     const bridges = sharedWith(hub);
@@ -1392,6 +1397,8 @@
        ['' + allHubs.theme.length, 'research themes'],
        ['' + panelEdges.length, 'ESSC co-panel ties'],
        ...(coauthorEdges.length ? [['' + coauthorEdges.length, 'co-authored outputs']] : []),
+       ...(data.stats.outputs_tagged
+         ? [['' + data.stats.outputs_tagged, 'outputs tagged to a Working Group']] : []),
        [data.stats.people_with_bios + ' / ' + people.length, 'with a directory profile']]
         .forEach(([b, s]) => {
           const el = document.createElement('div');
