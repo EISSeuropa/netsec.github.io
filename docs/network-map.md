@@ -430,8 +430,11 @@ reading "Groupes de travail" and "Thèmes de recherche" under the lede do
 not need the word "Angle" above them. The Find row keeps its `<label>`,
 since hiding that one would leave the input with no accessible name.
 
-Map top on a phone is now y=594 in English and y=620 in French and German,
-after the overlays followed the hub chips into the disclosure (#1677).
+Map top on a phone is now y=622 in English and y=648 in French and German,
+after the overlays followed the hub chips into the disclosure (#1677) and the
+chips themselves went to 45 px under a thumb (#1603's sweep). The 28 px that
+last one costs is the right trade: a target a thumb can hit beats 28 px more
+map above it.
 
 ## Without JavaScript
 

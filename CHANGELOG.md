@@ -201,6 +201,7 @@ maintainer-facing audience.
 #### Fixed
 
 - The ESSC 2026 conference photographs load about a quarter of the data they used to. The four pictures in the gallery were full-size camera exports, 1.23 MB between them, shown in a grid that displays each one at about the size of a postcard. They are now served at the size they are actually shown, which takes them to 290 KB and brings the page inside its image budget, the last one that was over.
+- The buttons that lead somewhere are easier to hit on a phone. The "See the roadmap" and "Open the Network Map" signposts, the feedback buttons at the foot of the roadmap, and the Network Map's own filter chips were all under the size a thumb is comfortable with, the signposts by a single pixel. They now clear it.
 
 - The Network Map explains itself when there is nothing to draw. Switching every filter chip off used to leave a blank rectangle, and a failure to load the map's data wrote a single line into the statistics, which now sit below the map and would have put the message out of sight. Both now say what happened on the map itself, and the empty map names the control that emptied it. Hand-translated for FR and DE.
 
