@@ -63,7 +63,7 @@
   })();
 </script>
 <link rel="stylesheet" href="assets/css/site.css?v=6c176c1f">
-<link rel="stylesheet" href="assets/css/network-map.css?v=4db7847f">
+<link rel="stylesheet" href="assets/css/network-map.css?v=125c6ddd">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -205,6 +205,10 @@
     <canvas id="network-map-canvas" aria-label="Dynamische Karte des NetSec-Netzwerks: Arbeitsgruppen-Zugehörigkeit, Forschungsthemen, gemeinsame Konferenzpanels und Mentoring. Alle dargestellten Personen stehen in der Tabelle unter der Karte."></canvas>
     <div class="network-map-card" id="network-map-card" aria-hidden="true"></div>
   </div>
+  <!-- A hub answers a click here rather than in an overlay: at 375px a
+       floating panel covers the cluster it is describing. Built by
+       network-map.js, which also owns its language. -->
+  <div class="network-map-hub-panel" id="network-map-hub-panel" hidden></div>
   <div class="network-map-legend" id="network-map-legend">
     <span>Gesichter und <span class="sw" style="background:var(--accent-2)"></span>blaue Punkte führen zu einem Verzeichnisprofil</span>
     <span><span class="sw" style="background:#9aa7bd"></span>Mitglied der Liste (noch kein Profil)</span>
@@ -458,7 +462,7 @@
     </div>
   </div>
 </footer>
-<script src="assets/js/site.js?v=125ca5ac" defer></script>
-<script src="assets/js/network-map.js?v=1eae2bf1" defer></script>
+<script src="assets/js/site.js?v=d12a3cb1" defer></script>
+<script src="assets/js/network-map.js?v=948fd62e" defer></script>
 </body>
 </html>

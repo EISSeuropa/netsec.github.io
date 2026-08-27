@@ -128,3 +128,60 @@
 @media (max-width:640px){ .network-map-find{flex:1 1 auto;min-width:0} }
 .network-map-find-msg{margin:0 0 10px 2px;font-size:.8rem;color:var(--muted);min-height:1.2em}
 .network-map-find-msg:empty{margin:0;min-height:0}
+
+/* ── Bulk actions on the chip rows ───────────────────────────────────────────
+   Every chip starts pressed, so isolating one research theme was fourteen
+   clicks off and fourteen back. All and None lead the row, and Clear sits on
+   the filter summary, which is the one filter control still visible while the
+   row is folded away. */
+.network-map-bulk{font:inherit;font-size:.76rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  padding:6px 11px;border-radius:999px;cursor:pointer;color:var(--muted);
+  background:transparent;border:1px solid rgba(11,18,32,.16)}
+.dark .network-map-bulk{border-color:var(--glass-border)}
+.network-map-bulk:hover:not(:disabled){color:var(--ink);border-color:var(--accent-2)}
+.network-map-bulk:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.network-map-bulk:disabled{opacity:.38;cursor:default}
+.network-map-clear{margin-left:auto}
+
+/* ── The hub panel ───────────────────────────────────────────────────────────
+   Under the map rather than over it: at 375px an overlay covers the cluster it
+   is describing. */
+.network-map-hub-panel{margin:14px 0 0;padding:16px 18px;border-radius:14px;
+  background:rgba(255,255,255,.6);border:1px solid rgba(11,18,32,.10)}
+.dark .network-map-hub-panel{background:rgba(255,255,255,.05);border-color:var(--glass-border)}
+.network-map-hub-panel[hidden]{display:none}
+.nmhp-head{display:flex;align-items:flex-start;gap:12px}
+.nmhp-title{font-family:'Lexend','Inter',sans-serif;font-size:1.02rem;font-weight:600;color:var(--ink);margin:0;flex:1 1 auto}
+.nmhp-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:1px}
+.nmhp-close{font:inherit;font-size:1.1rem;line-height:1;flex:none;width:32px;height:32px;border-radius:50%;
+  cursor:pointer;color:var(--muted);background:transparent;border:1px solid transparent}
+.nmhp-close:hover{color:var(--ink);border-color:rgba(11,18,32,.16)}
+.nmhp-close:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+@media (pointer:coarse){ .nmhp-close{width:44px;height:44px} }
+.nmhp-meta{font-size:.82rem;color:var(--muted);margin:2px 0 0}
+.nmhp-label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 7px}
+.nmhp-bridges{display:flex;gap:8px;flex-wrap:wrap}
+.nmhp-bridge{font:inherit;font-size:.82rem;padding:6px 13px;border-radius:999px;cursor:pointer;
+  color:var(--ink-2);background:rgba(11,18,32,.05);border:1px solid rgba(11,18,32,.10)}
+.dark .nmhp-bridge{background:rgba(255,255,255,.06);border-color:var(--glass-border)}
+.nmhp-bridge:hover{border-color:var(--accent-2)}
+.nmhp-bridge:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.nmhp-bridge b{font-weight:700;margin-left:6px;color:var(--muted)}
+.nmhp-actions{display:flex;gap:10px 18px;flex-wrap:wrap;align-items:center;margin:15px 0 0}
+.nmhp-solo{font:inherit;font-size:.82rem;font-weight:600;padding:7px 15px;border-radius:999px;cursor:pointer;
+  color:#fff;background:var(--accent-2);border:1px solid transparent}
+.nmhp-solo:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.nmhp-link{font-size:.82rem;color:var(--accent-2)}
+@media (pointer:coarse){ .nmhp-solo,.nmhp-bridge{padding-top:11px;padding-bottom:11px} }
+
+/* The two lens chips fit one row in English and wrapped to two in French and
+   German, which is 43px of a phone screen (#1643). Smaller chips were not
+   enough on their own, so the row label goes too: each row carries an
+   aria-label already, and two chips reading "Groupes de travail" and "Thèmes
+   de recherche" under the lede do not need the word "Angle" above them. */
+@media (max-width:640px){
+  .network-map-controls .network-map-wg-chip{font-size:.78rem;padding:6px 10px}
+  /* The Find row keeps its <label>: hiding it would leave the input with no
+     accessible name, where the other rows carry an aria-label on the group. */
+  .network-map-controls:not(.network-map-find-row) .lbl{display:none}
+}

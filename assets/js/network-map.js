@@ -37,6 +37,9 @@
   const findEl = document.getElementById('network-map-find');
   const findListEl = document.getElementById('network-map-find-list');
   const findMsgEl = document.getElementById('network-map-find-msg');
+  const hubPanelEl = document.getElementById('network-map-hub-panel');
+  const filtersSummaryEl = filtersEl
+    ? filtersEl.querySelector('.network-map-filters__summary') : null;
   if (!canvas || !canvas.getContext) return;
   const ctx = canvas.getContext('2d');
 
@@ -86,10 +89,14 @@
   const activeHubs = new Set();           // hub ids active in the current lens
   const overlays = { panels: false, mentorship: false, coauthors: false };
   let hovered = null, draggingHub = null;
+  let dragFrom = { x: 0, y: 0 }, dragMoved = false;
   // A person pinned by the Find control (#1642). It outlives a pointer move,
   // which is what separates it from `hovered`, and it is what the ?find= in
   // the URL restores.
   let spotlight = null;
+  // The hub whose panel is open. It joins the focus chain in draw(), which is
+  // the hover highlight made to stay put.
+  let pinnedHub = null;
   // Read from the query string at boot and applied once the lens is known,
   // since the hub ids only make sense inside a lens (#1602).
   let urlHubs = null, urlFind = null;
@@ -198,7 +205,7 @@
     ctx.clearRect(0, 0, W, H);
     // Find pins a node, hovering points at one. Either way the paint dims
     // everything that is not connected to it, so one focus chain serves both.
-    const focus = hovered || spotlight;
+    const focus = hovered || spotlight || pinnedHub;
     const hoverIds = focus
       ? new Set([focus.id].concat(focus.links ? focus.links[lens] : [],
           focus.people || [], focus.panelPeers || [], focus.coPeers || []))
@@ -406,22 +413,44 @@
   canvas.addEventListener('pointermove', (e) => {
     const r = canvas.getBoundingClientRect();
     const mx = e.clientX - r.left, my = e.clientY - r.top;
-    if (draggingHub) { draggingHub.x = mx; draggingHub.y = my; draw(); return; }
+    if (draggingHub) {
+      // Past a few pixels this is a drag, and the pointerup that ends it must
+      // not also open the hub's panel.
+      if (Math.hypot(mx - dragFrom.x, my - dragFrom.y) > 4) dragMoved = true;
+      draggingHub.x = mx; draggingHub.y = my; draw(); return;
+    }
     hovered = nodeAt(mx, my);
     // Cursor set inline rather than through a class: `.is-link` is already
     // claimed by site.css, and one property is not worth a second name.
-    canvas.style.cursor = (hovered && hovered.slug) ? 'pointer' : 'default';
+    canvas.style.cursor = (hovered && (hovered.slug || hovered.type !== 'person'))
+      ? 'pointer' : 'default';
     paintCard(mx, my);
     draw();
   });
   canvas.addEventListener('pointerleave', () => { hovered = null; paintCard(0, 0); draw(); });
   canvas.addEventListener('pointerdown', (e) => {
     const r = canvas.getBoundingClientRect();
-    const n = nodeAt(e.clientX - r.left, e.clientY - r.top);
-    if (n && n.type !== 'person') { draggingHub = n; canvas.setPointerCapture(e.pointerId); }
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    const n = nodeAt(mx, my);
+    if (n && n.type !== 'person') {
+      draggingHub = n;
+      dragFrom = { x: mx, y: my };
+      dragMoved = false;
+      canvas.setPointerCapture(e.pointerId);
+    }
   });
   canvas.addEventListener('pointerup', (e) => {
-    if (draggingHub) { draggingHub = null; return; }
+    if (draggingHub) {
+      const hub = draggingHub;
+      draggingHub = null;
+      // A press that never moved is a click, and a hub opens its panel. A
+      // second click on the same hub closes it.
+      if (!dragMoved) {
+        if (pinnedHub === hub) closeHubPanel();
+        else openHubPanel(hub);
+      }
+      return;
+    }
     const r = canvas.getBoundingClientRect();
     const mx = e.clientX - r.left, my = e.clientY - r.top;
     const touch = e.pointerType !== 'mouse';
@@ -430,6 +459,7 @@
     // profile they never saw the name of, and at phone density the nearest
     // node to a fingertip is often the neighbour. First tap previews, second
     // tap on the same node follows through, and a tap on empty space clears.
+    if (!n) closeHubPanel();
     if (touch) {
       if (!n) {
         hovered = null;
@@ -603,8 +633,184 @@
     return b;
   }
 
+  // ── The hub panel (#1643) ──────────────────────────────────────────────────
+  // A hub is the biggest target on the canvas and answered nothing when it was
+  // clicked, the click falling through to the drag handler. On a touchscreen,
+  // where there is no hover card either, it answered nothing at all.
+  const localeSuffix = () => {
+    const lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
+    return lang === 'en' ? '' : '.' + lang;
+  };
+
+  // The directory builds its #themes= hash from the theme NAME with this rule.
+  // The hub id comes from a different slugifier in the build (it strips
+  // diacritics, which this does not), so the link is derived from the name
+  // rather than from the id, and cannot drift from the directory's own.
+  const themeSlug = (name) => String(name || '').toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '');
+
+  // Which hubs this one shares the most people with. Computed over the whole
+  // hub rather than the current view: the panel describes the hub, and a
+  // filtered map should not change what a Working Group is.
+  function sharedWith(hub) {
+    const mine = new Set(hub.people);
+    const counts = [];
+    hubs().forEach(other => {
+      if (other.id === hub.id) return;
+      let n = 0;
+      other.people.forEach(id => { if (mine.has(id)) n += 1; });
+      if (n) counts.push({ hub: other, n: n });
+    });
+    counts.sort((a, b) => b.n - a.n || a.hub.id.localeCompare(b.hub.id));
+    return counts.slice(0, 3);
+  }
+
+  function closeHubPanel() {
+    if (!pinnedHub) return;
+    pinnedHub = null;
+    if (hubPanelEl) { hubPanelEl.hidden = true; hubPanelEl.replaceChildren(); }
+    draw();
+  }
+
+  function openHubPanel(hub) {
+    if (!hubPanelEl) return;
+    pinnedHub = hub;
+    hubPanelEl.replaceChildren();
+
+    const head = document.createElement('div');
+    head.className = 'nmhp-head';
+    const title = document.createElement('h2');
+    title.className = 'nmhp-title';
+    const dot = document.createElement('span');
+    dot.className = 'nmhp-dot';
+    dot.style.background = hubColour(hub);
+    title.appendChild(dot);
+    title.appendChild(document.createTextNode(
+      hub.type === 'wg' ? 'WG' + hub.number + ' · ' + T(hub.name) : T(hub.name)));
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'nmhp-close';
+    close.setAttribute('aria-label', T('Close this panel'));
+    close.textContent = '\u00d7';
+    close.addEventListener('click', closeHubPanel);
+    head.appendChild(title);
+    head.appendChild(close);
+    hubPanelEl.appendChild(head);
+
+    const meta = document.createElement('p');
+    meta.className = 'nmhp-meta';
+    meta.textContent = T(hub.type === 'wg' ? '{n} members' : '{n} people work here')
+      .replace('{n}', hub.memberCount);
+    hubPanelEl.appendChild(meta);
+
+    const bridges = sharedWith(hub);
+    if (bridges.length) {
+      const label = document.createElement('p');
+      label.className = 'nmhp-label';
+      label.textContent = T('Shares members with');
+      hubPanelEl.appendChild(label);
+      const row = document.createElement('div');
+      row.className = 'nmhp-bridges';
+      bridges.forEach(b => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'nmhp-bridge';
+        btn.appendChild(document.createTextNode(
+          b.hub.type === 'wg' ? 'WG' + b.hub.number : T(b.hub.name)));
+        // A space before the count, so a screen reader reads "WG3 40" rather
+        // than running the two together into one token.
+        btn.appendChild(document.createTextNode(' '));
+        const n = document.createElement('b');
+        n.textContent = b.n;
+        btn.appendChild(n);
+        // A bridge moves the panel across rather than filtering, so walking
+        // the network costs nothing to undo.
+        btn.addEventListener('click', () => openHubPanel(b.hub));
+        row.appendChild(btn);
+      });
+      hubPanelEl.appendChild(row);
+    }
+
+    const actions = document.createElement('div');
+    actions.className = 'nmhp-actions';
+    const solo = document.createElement('button');
+    solo.type = 'button';
+    solo.className = 'nmhp-solo';
+    solo.textContent = T('Show only this hub');
+    // Filtering stays behind a button rather than riding on the click, so a
+    // stray click on a hub costs nothing.
+    solo.addEventListener('click', () => {
+      activeHubs.clear();
+      activeHubs.add(hub.id);
+      buildHubChips();
+      syncFilters();
+      if (spotlight && !personVisible(spotlight)) applyFind(findEl ? findEl.value : '');
+      syncUrl();
+      draw();
+    });
+    actions.appendChild(solo);
+
+    const link = document.createElement('a');
+    link.className = 'nmhp-link';
+    if (hub.type === 'wg') {
+      link.href = 'working-groups' + localeSuffix() + '.html#wg' + hub.number;
+      link.textContent = T('Open the Working Group page');
+    } else {
+      link.href = 'people' + localeSuffix() + '.html#themes=' + encodeURIComponent(themeSlug(hub.name));
+      link.textContent = T('Open in the Directory');
+    }
+    actions.appendChild(link);
+    hubPanelEl.appendChild(actions);
+
+    hubPanelEl.hidden = false;
+    draw();
+  }
+
+  // ── Bulk actions on the chip row (#1643) ───────────────────────────────────
+  // Every chip starts pressed, so isolating one research theme cost fourteen
+  // clicks off and fourteen back.
+  function bulkBtn(label, onClick) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'network-map-bulk';
+    b.textContent = label;
+    b.addEventListener('click', () => onClick());
+    return b;
+  }
+
+  function setAllHubs(on) {
+    activeHubs.clear();
+    if (on) hubs().forEach(h => activeHubs.add(h.id));
+    hubChipsEl.querySelectorAll('.network-map-wg-chip').forEach(b =>
+      b.setAttribute('aria-pressed', on ? 'true' : 'false'));
+    if (spotlight && !personVisible(spotlight)) applyFind(findEl ? findEl.value : '');
+    syncFilters();
+    syncUrl();
+    draw();
+  }
+
+  // Clear lives on the summary rather than in the row, since the summary is
+  // the one filter control still on screen while the row is folded away. A
+  // button inside a <summary> toggles the disclosure on both pointer and
+  // keyboard unless both are stopped.
+  let clearBtn = null;
+  function buildClear() {
+    if (!filtersSummaryEl || clearBtn) return;
+    clearBtn = bulkBtn(T('Clear the filters'), () => {});
+    clearBtn.classList.add('network-map-clear');
+    clearBtn.hidden = true;
+    const swallow = (e) => { e.preventDefault(); e.stopPropagation(); };
+    clearBtn.addEventListener('click', (e) => { swallow(e); setAllHubs(true); });
+    clearBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { swallow(e); setAllHubs(true); }
+    });
+    filtersSummaryEl.appendChild(clearBtn);
+  }
+
   function buildHubChips() {
     hubChipsEl.replaceChildren();
+    hubChipsEl.appendChild(bulkBtn(T('All'), () => setAllHubs(true)));
+    hubChipsEl.appendChild(bulkBtn(T('None'), () => setAllHubs(false)));
     hubs().forEach(h => {
       hubChipsEl.appendChild(chip(
         // The 14 theme names are already in the shared catalogue (the
@@ -633,6 +839,10 @@
   function syncFilters() {
     const total = hubs().length;
     const on = hubs().filter(h => activeHubs.has(h.id)).length;
+    const bulk = hubChipsEl.querySelectorAll('.network-map-bulk');
+    if (bulk[0]) bulk[0].disabled = on === total;
+    if (bulk[1]) bulk[1].disabled = on === 0;
+    if (clearBtn) clearBtn.hidden = on === total;
     if (filtersNEl) {
       filtersNEl.textContent = on === total
         ? T('showing all {n}').replace('{n}', total)
@@ -669,6 +879,7 @@
 
   function switchLens(next) {
     lens = next;
+    closeHubPanel();
     activeHubs.clear();
     // A ?hubs= applies once, on the lens it was written for. Switching lens
     // afterwards starts from every hub on, since a hub id means nothing in
@@ -799,6 +1010,7 @@
       // canvas used to start at y=998, below the whole first screen.
       if (filtersEl) filtersEl.open = false;
       buildFindOptions();
+      buildClear();
       if (findEl) {
         // change fires on a datalist pick and on blur, keydown catches Enter
         // before either, and input clears a stale answer as soon as the text
@@ -827,6 +1039,9 @@
     })
     .catch(() => { statsEl.textContent = T('The network map data could not be loaded.'); });
 
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && pinnedHub) closeHubPanel();
+  });
   window.addEventListener('resize', () => { resize(); seedPositions(); reheat(120); });
   new MutationObserver(() => { readTheme(); draw(); })
     .observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
