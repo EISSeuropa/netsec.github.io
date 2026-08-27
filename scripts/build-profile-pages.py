@@ -70,6 +70,10 @@ LOCALES = {
 # theme + region *display* names are already in that catalog (the directory
 # filter chips translate them), so chips carry data-i18n for free.
 T_BACK = "Back to the directory"
+# The Network Map draws 191 people and, until #1642, offered no way to reach
+# one of them. ?find= arrives on the map with this person already pinned, so
+# a profile is now an entry point into the network rather than a leaf.
+T_MAP = "See this member on the Network Map"
 T_PUBS = "Recent publications"
 T_THEMES = "Research themes"
 T_REGIONS = "Research regions"
@@ -748,8 +752,11 @@ def build_page(m: dict, works: list, similar: list, mentors: list, loc_key: str,
 {person_jsonld(m, canonical)}
 </script>"""
     card = render_card(m, works, similar, mentors, loc, prize)
-    back = (f'<p class="profile-back"><a href="people{loc["suffix"]}.html#{esc(slug)}" '
-            f'data-i18n="{esc(T_BACK)}">&larr; {esc(T_BACK)}</a></p>')
+    back = (f'<p class="profile-back">'
+            f'<a href="people{loc["suffix"]}.html#{esc(slug)}" '
+            f'data-i18n="{esc(T_BACK)}">&larr; {esc(T_BACK)}</a>'
+            f'<a class="profile-back-map" href="network-map{loc["suffix"]}.html?find={esc(slug)}" '
+            f'data-i18n="{esc(T_MAP)}">{esc(T_MAP)}</a></p>')
     # site.js localises [data-i18n] chrome strings on load from the shared
     # catalog, the same window.netsecT the directory uses.
     i18n_script = (

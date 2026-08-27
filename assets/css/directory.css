@@ -621,9 +621,12 @@ html:not(.dark) .mentorship-showall button{ background:rgba(255,255,255,.65); }
    page. Reuses the .member-card styling; this just frames it. */
 .profile-page{ padding:120px 0 80px; }
 .profile-container{ max-width:1000px; }
-.profile-back{ margin:22px 2px 0; font-size:.92rem; }
+.profile-back{ margin:22px 2px 0; font-size:.92rem; display:flex; flex-wrap:wrap; gap:8px 22px; }
 .profile-back a{ color:var(--accent-2); }
 .profile-back a:hover{ text-decoration:underline; }
+/* The Network Map entry point (#1642) sits beside the way back to the
+   directory, the second of two ways on rather than a second heading. */
+.profile-back-map::before{ content:'\2197'; margin-right:5px; }
 
 /* ── Enriched individual profile page (#762 follow-up) ──
    The profile reuses the directory's .member-* chips and badges, but lays

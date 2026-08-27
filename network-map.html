@@ -63,7 +63,7 @@
   })();
 </script>
 <link rel="stylesheet" href="assets/css/site.css?v=6c176c1f">
-<link rel="stylesheet" href="assets/css/network-map.css?v=594349ed">
+<link rel="stylesheet" href="assets/css/network-map.css?v=4db7847f">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -177,6 +177,15 @@
     <span class="lbl">Overlays</span>
     <!-- overlay toggles injected by network-map.js -->
   </div>
+  <div class="network-map-controls network-map-find-row" role="search" aria-label="Find a person on the map">
+    <label class="lbl" for="network-map-find">Find</label>
+    <input class="network-map-find" id="network-map-find" type="search" list="network-map-find-list"
+      placeholder="Name of a member" autocomplete="off" spellcheck="false">
+    <datalist id="network-map-find-list"><!-- options injected by network-map.js --></datalist>
+  </div>
+  <!-- The answer to a search, and the map's live region. Visible, since a
+       reader who searched wants to read why nothing lit up. -->
+  <p class="network-map-find-msg" id="network-map-find-msg" role="status"></p>
   <details class="network-map-filters" id="network-map-filters" open>
     <summary class="network-map-filters__summary">
       <span class="network-map-filters__label">Filter the map</span>
@@ -462,7 +471,7 @@
     </div>
   </div>
 </footer>
-<script src="assets/js/site.js?v=af99308f" defer></script>
-<script src="assets/js/network-map.js?v=f47ab927" defer></script>
+<script src="assets/js/site.js?v=125ca5ac" defer></script>
+<script src="assets/js/network-map.js?v=1eae2bf1" defer></script>
 </body>
 </html>
