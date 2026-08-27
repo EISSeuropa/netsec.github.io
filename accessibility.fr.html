@@ -209,6 +209,7 @@
       <li><strong>Diagramme de Gantt de la feuille de route.</strong> Visualisation de données dense. Sur les écrans étroits, le diagramme nécessite un défilement horizontal. La zone de défilement peut être focalisée au clavier pour permettre la navigation avec les touches fléchées (WCAG 2.1.1), mais un résumé textuel alternatif n'est pas encore fourni.</li>
       <li><strong>Animations décoratives.</strong> Les blobs « aurore » d'arrière-plan et les fondus d'apparition au défilement sont <em>automatiquement</em> désactivés lorsque le système d'exploitation ou le navigateur signale <code>prefers-reduced-motion</code>. Aucune surcharge dédiée au site n'est exposée pour l'instant.</li>
       <li><strong>Ressources tierces.</strong> Les vignettes de drapeaux sont servies par <code>flagcdn.com</code> et les portraits par <code>eiss-europa.com</code>. Leur disponibilité à long terme échappe au contrôle direct de l'Action. Si une image devient indisponible, le texte environnant reste intact et informatif.</li>
+      <li><strong>Canevas de la carte du réseau.</strong> Un dessin dynamique de l'ensemble de l'Action. Le canevas rend les regroupements de façon visuelle et ne peut pas les transmettre aux technologies d'assistance. Toutes les personnes qu'il dessine figurent dans un tableau sous la carte, écrit dans la page et non produit par un script, et le canevas lui-même reçoit le focus clavier. Un résumé textuel des regroupements n'est pas encore proposé.</li>
       <li><strong>Emblème UE en SVG.</strong> L'emblème <em>« Financé par l'Union européenne »</em> porte un <code>aria-label</code> et <code>role="img"</code>, mais pas de description longue. Il est décrit par le texte standard qui l'entoure.</li>
     </ul>
     <p>Nous prévoyons de traiter ces limitations dans les versions à venir.</p>
@@ -225,6 +226,7 @@
       <li>La grille Gantt utilise les rôles ARIA tabulaires (<code>role="table"</code>, <code>role="row"</code>, <code>role="columnheader"</code>, <code>role="cell"</code>) pour que les technologies d'assistance la parsent comme un tableau. La zone défilante elle-même peut recevoir le focus clavier.</li>
       <li>Les puces d'appartenance aux groupes de travail sur chaque membre sont regroupées avec <code>role="group"</code> et un <code>aria-label</code> pour que les lecteurs d'écran les annoncent comme un groupe (par ex. <em>« Appartenance aux groupes de travail : WG1, WG3 »</em>) plutôt que comme des jetons isolés.</li>
       <li>Formulaire de contact : validation en ligne, signalement d'erreurs accessible et toast de confirmation annoncé via <code>role="status" aria-live="polite"</code>.</li>
+      <li>Le canevas de la carte du réseau reçoit le focus clavier : les flèches parcourent les groupes de travail, les thèmes de recherche et les personnes, <kbd>Entrée</kbd> ouvre un profil et <kbd>Échap</kbd> annule la sélection, avec une zone <code>role="status"</code> discrète qui annonce ce que la sélection atteint. Les mêmes personnes figurent dans un tableau sous la carte qui ne dépend d'aucun script, et la carte répond par des mots lorsqu'un filtre l'a vidée ou que ses données ne se chargent pas.</li>
       <li>Les conteneurs du logotype COST et de l'emblème UE respectent le Guide d'identité visuelle COST (conteneur blanc, zone de respect, taille minimale).</li>
     </ul>
 
@@ -254,7 +256,7 @@
     <h2>Procédure d'exécution</h2>
     <p>Si vous n'êtes pas satisfait·e de notre réponse, vous pouvez contacter l'organisme de promotion de l'égalité ou l'organisme de mise en conformité d'accessibilité de votre pays. Au sein de l'Union européenne, chaque État membre désigne son propre organisme d'exécution en vertu de la <a href="https://eur-lex.europa.eu/eli/dir/2016/2102/oj" target="_blank" rel="noopener">Directive sur l'accessibilité des sites internet 2016/2102</a>.</p>
 
-    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Déclaration d'accessibilité v1.3 · préparée le 2 juin 2026 (réévaluation de juin) · remplace la v1.2 du 22 mai 2026 (passe finale avant lancement), la v1.1 du 22 mai 2026 (revue QA pré-lancement) et la v1.0 du 14 mai 2026 · prochaine révision prévue le 22 mai 2027.</p>
+    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Déclaration d'accessibilité v1.4 · préparée le 27 août 2026 (accès clavier et liste de la carte du réseau) · remplace la v1.3 du 2 juin 2026 (réévaluation de juin), la v1.2 du 22 mai 2026 (passe finale avant lancement), la v1.1 du 22 mai 2026 (revue QA pré-lancement) et la v1.0 du 14 mai 2026 · prochaine révision prévue le 22 mai 2027.</p>
   </div>
 </section>
 </main>
@@ -315,7 +317,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=226f7ad0" defer></script>
+<script src="assets/js/site.js?v=653f54b0" defer></script>
 
 </body>
 </html>

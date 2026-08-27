@@ -210,6 +210,7 @@
       <li><strong>Gantt-Diagramm der Roadmap.</strong> Eine dichte Datenvisualisierung. Auf schmalen Bildschirmen erfordert das Diagramm horizontales Scrollen. Der Scroll-Bereich ist tastaturfokussierbar, sodass Nutzer mit den Pfeiltasten navigieren können (WCAG 2.1.1), eine reine Text-Alternative ist jedoch noch nicht bereitgestellt.</li>
       <li><strong>Dekorative Animationen.</strong> Aurora-Hintergrund-Blobs und Einblend-Effekte beim Scrollen werden <em>automatisch</em> deaktiviert, sobald das Betriebssystem oder der Browser <code>prefers-reduced-motion</code> signalisiert. Eine seitenspezifische Überschreibung wird derzeit nicht angeboten.</li>
       <li><strong>Inhalte von Drittanbietern.</strong> Länderflaggen werden von <code>flagcdn.com</code> geladen und Porträtfotos von <code>eiss-europa.com</code>. Ihre langfristige Verfügbarkeit liegt außerhalb der direkten Kontrolle der Aktion. Sollte ein Bild nicht mehr verfügbar sein, bleibt der umgebende Text unbeeinträchtigt und informativ.</li>
+      <li><strong>Canvas der Netzwerkkarte.</strong> Eine dynamische Zeichnung der gesamten Aktion. Das Canvas stellt Gruppierungen visuell dar und kann sie assistiven Technologien nicht vermitteln. Alle dargestellten Personen stehen in einer Tabelle unter der Karte, die in die Seite geschrieben und nicht per Skript erzeugt wird, und das Canvas selbst erhält den Tastaturfokus. Eine textliche Zusammenfassung der Gruppierungen gibt es noch nicht.</li>
       <li><strong>EU-Emblem als SVG.</strong> Das Emblem <em>„Gefördert von der Europäischen Union"</em> trägt ein <code>aria-label</code> und <code>role="img"</code>, aber keine ausführliche Beschreibung. Es wird durch den umgebenden Standardtext beschrieben.</li>
     </ul>
     <p>Wir planen, diese Einschränkungen in künftigen Iterationen zu beheben.</p>
@@ -226,6 +227,7 @@
       <li>Das Gantt-Raster verwendet ARIA-Tabellenrollen (<code>role="table"</code>, <code>role="row"</code>, <code>role="columnheader"</code>, <code>role="cell"</code>), sodass assistive Technologien es als tabellarische Daten interpretieren. Der scrollbare Bereich selbst ist tastaturfokussierbar.</li>
       <li>Arbeitsgruppen-Chips an jedem Mitglied sind mit <code>role="group"</code> und einem <code>aria-label</code> zusammengefasst, sodass Screenreader sie als Gruppe ansagen (z. B. <em>„Arbeitsgruppen-Mitgliedschaft: WG1, WG3"</em>) statt als lose Marken.</li>
       <li>Kontaktformular: Inline-Validierung, barrierefreie Fehlermeldung und ein Bestätigungs-Toast, der über <code>role="status" aria-live="polite"</code> angesagt wird.</li>
+      <li>Das Canvas der Netzwerkkarte erhält den Tastaturfokus: Die Pfeiltasten führen durch Arbeitsgruppen, Forschungsthemen und Personen, <kbd>Enter</kbd> öffnet ein Profil und <kbd>Esc</kbd> hebt die Auswahl auf, begleitet von einem zurückhaltenden <code>role="status"</code>-Bereich, der ansagt, worauf die Auswahl trifft. Dieselben Personen stehen in einer Tabelle unter der Karte, die ohne Skript auskommt, und die Karte antwortet mit Worten, wenn ein Filter sie geleert hat oder ihre Daten nicht laden.</li>
       <li>Die Container für das COST-Logo und das EU-Emblem entsprechen dem COST Visual Identity Guide (weißer Container, Schutzzone, Mindestgröße).</li>
     </ul>
 
@@ -255,7 +257,7 @@
     <h2>Durchsetzungsverfahren</h2>
     <p>Sollten Sie mit unserer Antwort nicht zufrieden sein, können Sie sich an die Gleichbehandlungsstelle oder die für Barrierefreiheit zuständige Stelle in Ihrem Land wenden. Innerhalb der Europäischen Union benennt jeder Mitgliedstaat seine eigene Durchsetzungsstelle gemäß der <a href="https://eur-lex.europa.eu/eli/dir/2016/2102/oj" target="_blank" rel="noopener">Richtlinie über den barrierefreien Zugang zu Websites 2016/2102</a>.</p>
 
-    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Erklärung zur Barrierefreiheit v1.3 · erstellt am 2. Juni 2026 (erneute Bewertung im Juni) · ersetzt v1.2 vom 22. Mai 2026 (letzter Durchgang vor dem Start), v1.1 vom 22. Mai 2026 (QA-Durchgang vor dem Start) und v1.0 vom 14. Mai 2026 · nächste planmäßige Überprüfung am 22. Mai 2027.</p>
+    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Erklärung zur Barrierefreiheit v1.4 · erstellt am 27. August 2026 (Tastaturzugang und Liste der Netzwerkkarte) · ersetzt v1.3 vom 2. Juni 2026 (erneute Bewertung im Juni), v1.2 vom 22. Mai 2026 (letzter Durchgang vor dem Start), v1.1 vom 22. Mai 2026 (QA-Durchgang vor dem Start) und v1.0 vom 14. Mai 2026 · nächste planmäßige Überprüfung am 22. Mai 2027.</p>
   </div>
 </section>
 </main>
@@ -316,7 +318,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=226f7ad0" defer></script>
+<script src="assets/js/site.js?v=653f54b0" defer></script>
 
 </body>
 </html>
