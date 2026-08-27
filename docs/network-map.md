@@ -23,9 +23,9 @@ The whole map is **derived from the same data that already drives the
 [Directory](../people.html)**, so it never carries its own copy of who
 is who. It is a reading of the existing data, not a new source of it.
 
-## Status: a signposted prototype
+## Status: a signposted beta
 
-The page is reachable and indexable. It carries a *Prototype* pill, is
+The page is reachable and indexable. It carries a *Beta* pill, is
 linked from the Working Groups page and the Directory, sits in
 `sitemap.xml` and the visual sitemap in all three locales, and its
 `<main>` carries `data-pagefind-body` so on-site search finds it.
@@ -35,8 +35,18 @@ There is no primary-nav entry. The header is at the capacity rule in
 whose data it draws, using the shared signpost callout that
 `/about.html` already uses for the roadmap.
 
-The *Prototype* pill stays until the co-authorship layer has edges,
-which gives it a defined removal trigger rather than a judgement call.
+The pill read *Prototype* until August 2026, and its removal trigger was
+the first co-authorship edge. That trigger belonged to D6 rather than to
+the map: the layer is built, tested against a planted entry, and waiting
+on publications the Action has not produced yet, so the label was pinned
+to someone else's schedule. It now reads *Beta*, and goes when the UX
+issues filed alongside it have landed (#1643 to #1646), which is a
+trigger the maintainer controls. The EISS Atlas made the same move for
+the same reason (EISSeuropa/EISSeuropa.github.io#1427).
+
+The pill's class is still `.network-map-proto-pill`. Renaming it would
+restamp the `?v=` hash on every page of the site, which is a large diff
+for a word that appears in no user-facing surface.
 
 The page is held to the same Lighthouse assertions as every other
 audited page. It used to carry the one exemption `lighthouserc.json` ever
