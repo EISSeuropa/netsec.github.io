@@ -175,6 +175,8 @@ maintainer-facing audience.
 
 #### Changed
 
+- The mentorship panel says how getting in touch actually works. Reaching a mentor here means writing to them yourself, and an answer is not always quick, which is worth knowing before you send. The same note tells a mentor already at capacity, or a mentee who has found someone, where to say so, so the badges on the directory can stay honest. Hand-translated for FR and DE.
+
 - The Network Map's overlays now sit with its filters, behind the same control above the map. Each row of chips above the map costs a phone screen about forty pixels, and the map was being pushed down the page a chip at a time. The control says how many overlays are switched on while it is closed, so nothing changes the map without the page saying so. The map now starts about a hundred pixels higher on a phone in all three languages. Hand-translated for FR and DE.
 
 - The accessibility statement covers the Network Map, at version 1.4. It names the map's canvas among the parts of the site that do not fully meet the standard, since a drawing of clusters cannot be conveyed to a screen reader, and it names the table under the map and the map's keyboard controls among the features in place. Hand-translated for FR and DE.

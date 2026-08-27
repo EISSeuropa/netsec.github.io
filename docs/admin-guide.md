@@ -725,6 +725,28 @@ Without `--incomplete` the same script answers the opposite question, which
 is who appears on the cost.eu roster or the ESSC programme but is absent
 from the directory entirely.
 
+### The two mentorship states nobody sets
+
+`parse_mentorship` in `sync-bios.py` defines four states, two of which
+exist to retire the first two: `mentor-full` for a mentor at capacity, and
+`matched` for a mentee who has found one. Against the committed
+`data/bios.json`, one member of 82 carries either, while 27 offer
+mentoring and 27 seek it. The panel therefore ranks mentors who may have
+taken on three mentees already and mentors who have taken none, without
+being able to tell them apart (#1627).
+
+The cause is the cost of saying otherwise. The only way to set either
+state is a fresh form submission, which is a five-minute task to
+communicate one word, so nobody does it.
+
+The mentorship panel now says so in the page, under both its views: how
+the first contact works, and where to record a full roster or a completed
+match. Copy does not refresh anything by itself. What does is a round of
+maintainer mail to the 27 mentors carrying their form edit link and one
+question, still available or at capacity, which a fresh submission answers
+with a single checkbox. Worth re-running whenever the roster grows enough
+to matter, rather than building a reminder for it.
+
 ## Escalation
 
 If something breaks:
