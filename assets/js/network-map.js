@@ -90,6 +90,7 @@
   const overlays = { panels: false, mentorship: false, coauthors: false };
   let hovered = null, draggingHub = null;
   let dragFrom = { x: 0, y: 0 }, dragMoved = false;
+  let panning = false, panFrom = { x: 0, y: 0 };
   // A person pinned by the Find control (#1642). It outlives a pointer move,
   // which is what separates it from `hovered`, and it is what the ?find= in
   // the URL restores.
@@ -101,6 +102,15 @@
   // since the hub ids only make sense inside a lens (#1602).
   let urlHubs = null, urlFind = null;
   let W = 0, H = 0, dpr = 1;
+  // A view transform applied at paint time (#1644). The force layout never
+  // learns about it: hit-testing converts screen coordinates to world ones, so
+  // the paint and the pointer stay in agreement. k is floored at 1, so the map
+  // is never smaller than the stage and the pan clamp below then pins it.
+  const view = { k: 1, x: 0, y: 0 };
+  const toWorldX = (sx) => (sx - view.x) / view.k;
+  const toWorldY = (sy) => (sy - view.y) / view.k;
+  const toScreenX = (wx) => wx * view.k + view.x;
+  const toScreenY = (wy) => wy * view.k + view.y;
   const avatars = {};                     // person id -> loaded Image
 
   // The list under the map is rendered at build time by build-network-map.py.
@@ -124,6 +134,9 @@
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // The pan bound is a function of the stage size, so a rotation or a
+    // window resize can leave the view outside it.
+    clampPan();
   }
 
   function hubColour(h) {
@@ -203,6 +216,9 @@
   // ── Paint ──
   function draw() {
     ctx.clearRect(0, 0, W, H);
+    ctx.save();
+    ctx.translate(view.x, view.y);
+    ctx.scale(view.k, view.k);
     // Find pins a node, hovering points at one. Either way the paint dims
     // everything that is not connected to it, so one focus chain serves both.
     const focus = hovered || spotlight || pinnedHub;
@@ -320,25 +336,86 @@
         ctx.fillText(String(h.memberCount), h.x, h.y + 4);
       }
       ctx.globalAlpha = 1;
-      ctx.font = '600 11px Inter, sans-serif';
-      ctx.fillStyle = theme.muted;
-      // Both the WG titles and the 14 theme names are catalogue keys, so the
-      // labels under each hub follow the page language. Truncation runs on
-      // the translated string, since a translation can be the longer one.
-      const name = T(h.name);
-      const label = h.type === 'wg' ? name
-        : (name.length > 26 ? name.slice(0, 25) + '…' : name);
-      ctx.fillText(label, h.x, h.y + h.r + 15);
     });
+
+    drawHubLabels(hoverIds);
+    ctx.restore();
+  }
+
+  // Labels are a pass of their own, after the circles, so they can be placed
+  // against each other rather than one at a time (#1644). Fifteen theme hubs
+  // on a ring put their labels through each other at narrow widths.
+  //
+  // Two rules, no layout library. Radial ordering: on a ring of more than six
+  // hubs the label goes on the side away from the centre, which is where the
+  // space is. Then greedy de-confliction, biggest hub first, and a hub under
+  // twelve people gives up its label rather than overlap, since the hover
+  // card, the chips and the panel all still name it.
+  function drawHubLabels(hoverIds) {
+    const hs = hubs();
+    const radial = hs.length > 6;
+    ctx.font = '600 11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    // The hub circles are obstacles too. A label crossing a neighbour's disc
+    // is as unreadable as one crossing another label, and on a phone that was
+    // the overlap left after the label-versus-label pass.
+    const discs = hs.map(h => ({
+      id: h.id, l: h.x - h.r, r: h.x + h.r, t: h.y - h.r, b: h.y + h.r,
+    }));
+    const placed = [];
+    hs.slice()
+      .sort((a, b) => b.memberCount - a.memberCount || a.id.localeCompare(b.id))
+      .forEach(h => {
+        // Both the WG titles and the theme names are catalogue keys, so the
+        // labels follow the page language. Truncation runs on the translated
+        // string, since a translation can be the longer one.
+        const name = T(h.name);
+        const label = h.type === 'wg' ? name
+          : (name.length > 26 ? name.slice(0, 25) + '…' : name);
+        const w = ctx.measureText(label).width;
+        const boxAt = (y) => ({ l: h.x - w / 2 - 3, r: h.x + w / 2 + 3, t: y - 9, b: y + 3 });
+        const hits = (box, o) =>
+          !(box.r < o.l || box.l > o.r || box.b < o.t || box.t > o.b);
+        const clashes = (box) => placed.some(o => hits(box, o))
+          || discs.some(d => d.id !== h.id && hits(box, d));
+        // Four candidates, tried in order: the side away from the centre, the
+        // other side, then one line further out on each. Two neighbours on the
+        // ring both wanting the same side is the common case, and one of them
+        // stepping over its hub or out a line settles it while the label stays
+        // centred on the hub it belongs to.
+        const up = radial && h.y < H / 2;
+        const prefer = up ? h.y - h.r - 8 : h.y + h.r + 15;
+        const other = up ? h.y + h.r + 15 : h.y - h.r - 8;
+        const candidates = radial
+          ? [prefer, other, prefer + (up ? -14 : 14), other + (up ? 14 : -14)]
+          : [prefer];
+        let y = candidates.find(c => !clashes(boxAt(c)));
+        if (y === undefined) y = prefer;
+        const box = boxAt(y);
+        // Only a small hub gives up. A label the map cannot place without an
+        // overlap is still better than a hub of thirty-five people with no
+        // name on it, and the hover card, the chips and the panel all name
+        // the ones that drop out.
+        if (clashes(box) && h.memberCount < 12) return;
+        placed.push(box);
+        const dim = (hoverIds && !hoverIds.has(h.id)) || !activeHubs.has(h.id);
+        ctx.globalAlpha = dim ? 0.22 : 1;
+        ctx.fillStyle = theme.muted;
+        ctx.fillText(label, h.x, y);
+      });
+    ctx.globalAlpha = 1;
   }
 
   // ── Interaction ──
   // `touch` widens the pick radius: a fingertip covers far more than a mouse
   // point, and the preview tap above means a wrong pick is now seen before it
   // is acted on rather than after.
-  function nodeAt(mx, my, touch) {
+  function nodeAt(sx, sy, touch) {
+    const mx = toWorldX(sx), my = toWorldY(sy);
     for (const h of hubs()) if (Math.hypot(mx - h.x, my - h.y) <= h.r) return h;
-    let best = null, bd = touch ? 20 : 13;
+    // Divided by the scale, so the target stays the same size under a
+    // fingertip however far the map is zoomed in.
+    let best = null, bd = (touch ? 20 : 13) / view.k;
     for (const p of people) {
       if (!personVisible(p)) continue;
       const d = Math.hypot(mx - p.x, my - p.y);
@@ -351,7 +428,7 @@
   // takes the card back when it is not.
   function paintCard(mx, my) {
     if (hovered) showCard(hovered, mx, my);
-    else if (spotlight) showCard(spotlight, spotlight.x, spotlight.y);
+    else if (spotlight) showCard(spotlight, toScreenX(spotlight.x), toScreenY(spotlight.y));
     else showCard(null);
   }
 
@@ -359,8 +436,10 @@
   // through the layout settling, which is 300 frames of repositioning, and
   // rebuilding the markup on each of them would be work for nothing.
   let cardNode = null;
+  let cardW = 0, cardH = 0;
 
   function showCard(node, mx, my) {
+    const measure = node !== cardNode;
     if (!node) {
       cardNode = null;
       card.classList.remove('is-on'); card.setAttribute('aria-hidden', 'true');
@@ -403,11 +482,32 @@
         themes.slice(0, 3).map(t => T(t.name)).join(' · ') + (themes.length > 3 ? ' +' + (themes.length - 3) : '');
     }
     }
-    const stage = canvas.parentElement.getBoundingClientRect();
-    card.style.left = Math.min(mx + 16, stage.width - 300) + 'px';
-    card.style.top = Math.max(8, my - 14) + 'px';
+    // .network-map-stage clips its overflow, and the card was anchored below
+    // and to the right of the pointer with a clamp on the right edge only. A
+    // node in the lower third lost the bottom of its card, which is where the
+    // themes, the co-panel line and "View profile" sit, and one near the right
+    // edge got a card sitting on top of its own dot. It now flips rather than
+    // clamps, on both axes (#1644).
     card.classList.add('is-on');
     card.setAttribute('aria-hidden', 'false');
+    const stage = canvas.parentElement.getBoundingClientRect();
+    if (measure) {
+      // Measured from the corner. The card is absolutely positioned with a
+      // max-width, so measuring it where it currently sits would let the
+      // distance to the stage's right edge decide how the text wraps, and a
+      // card near that edge would report itself narrower and taller than the
+      // one about to be drawn.
+      card.style.left = '0px';
+      card.style.top = '0px';
+      cardW = card.offsetWidth;
+      cardH = card.offsetHeight;
+    }
+    const right = mx + 16 + cardW;
+    const bottom = my - 14 + cardH;
+    const left = right > stage.width ? mx - 16 - cardW : mx + 16;
+    const top = bottom > stage.height ? my + 14 - cardH : my - 14;
+    card.style.left = Math.max(4, Math.min(left, stage.width - cardW - 4)) + 'px';
+    card.style.top = Math.max(4, Math.min(top, stage.height - cardH - 4)) + 'px';
   }
 
   canvas.addEventListener('pointermove', (e) => {
@@ -417,7 +517,18 @@
       // Past a few pixels this is a drag, and the pointerup that ends it must
       // not also open the hub's panel.
       if (Math.hypot(mx - dragFrom.x, my - dragFrom.y) > 4) dragMoved = true;
-      draggingHub.x = mx; draggingHub.y = my; draw(); return;
+      draggingHub.x = toWorldX(mx); draggingHub.y = toWorldY(my); draw(); return;
+    }
+    if (panning) {
+      if (Math.hypot(mx - dragFrom.x, my - dragFrom.y) > 4) dragMoved = true;
+      if (dragMoved) {
+        view.x = panFrom.x + (mx - dragFrom.x);
+        view.y = panFrom.y + (my - dragFrom.y);
+        clampPan();
+        paintCard(0, 0);
+        draw();
+      }
+      return;
     }
     hovered = nodeAt(mx, my);
     // Cursor set inline rather than through a class: `.is-link` is already
@@ -427,7 +538,10 @@
     paintCard(mx, my);
     draw();
   });
-  canvas.addEventListener('pointerleave', () => { hovered = null; paintCard(0, 0); draw(); });
+  canvas.addEventListener('pointerleave', () => {
+    panning = false;
+    hovered = null; paintCard(0, 0); draw();
+  });
   canvas.addEventListener('pointerdown', (e) => {
     const r = canvas.getBoundingClientRect();
     const mx = e.clientX - r.left, my = e.clientY - r.top;
@@ -437,9 +551,22 @@
       dragFrom = { x: mx, y: my };
       dragMoved = false;
       canvas.setPointerCapture(e.pointerId);
+    } else if (!n) {
+      // Empty canvas: a press that moves pans the map, one that does not is
+      // still the tap that clears the card.
+      panning = true;
+      dragFrom = { x: mx, y: my };
+      panFrom = { x: view.x, y: view.y };
+      dragMoved = false;
+      canvas.setPointerCapture(e.pointerId);
     }
   });
   canvas.addEventListener('pointerup', (e) => {
+    if (panning) {
+      panning = false;
+      // A pan is not a tap, so it must not clear the card or follow a link.
+      if (dragMoved) return;
+    }
     if (draggingHub) {
       const hub = draggingHub;
       draggingHub = null;
@@ -459,7 +586,17 @@
     // profile they never saw the name of, and at phone density the nearest
     // node to a fingertip is often the neighbour. First tap previews, second
     // tap on the same node follows through, and a tap on empty space clears.
-    if (!n) closeHubPanel();
+    if (!n) {
+      closeHubPanel();
+      // Clicking away clears the pinned person too, on a mouse as well as
+      // under a finger. Only the touch branch used to do it, so on a desktop
+      // a spotlight could only be dismissed by emptying the search box.
+      if (spotlight) {
+        if (findEl) findEl.value = '';
+        say('');
+        setSpotlight(null);
+      }
+    }
     if (touch) {
       if (!n) {
         hovered = null;
@@ -766,6 +903,70 @@
     draw();
   }
 
+  // ── Zoom and pan (#1644) ───────────────────────────────────────────────────
+  // 191 nodes share a 640px canvas and a face draws at about 16px, so a busy
+  // cluster cannot be resolved into people at any window size.
+  function clampPan() {
+    // The map is never smaller than the stage, so the pan is bounded by the
+    // overhang. At k = 1 that pins it to zero and the view cannot drift.
+    view.x = Math.min(0, Math.max(W - W * view.k, view.x));
+    view.y = Math.min(0, Math.max(H - H * view.k, view.y));
+  }
+
+  function zoomAt(sx, sy, factor) {
+    const k = Math.min(6, Math.max(1, view.k * factor));
+    if (k === view.k) return;
+    const f = k / view.k;
+    view.x = sx - (sx - view.x) * f;
+    view.y = sy - (sy - view.y) * f;
+    view.k = k;
+    clampPan();
+    // A finger pans the map once there is somewhere to pan to, and gives the
+    // page its scroll back at rest.
+    canvas.style.touchAction = view.k > 1 ? 'none' : '';
+    paintCard(0, 0);
+    draw();
+  }
+
+  function resetView() {
+    view.k = 1; view.x = 0; view.y = 0;
+    canvas.style.touchAction = '';
+    // Reset puts a dragged hub back too, which is the other half of "the map
+    // is not where I left it".
+    seedPositions();
+    reheat(200);
+  }
+
+  // Plain wheel keeps scrolling the page. Claiming every wheel event over the
+  // canvas turns 640px of the page into a scroll trap, which is the phone
+  // problem arriving by the other door, and ctrl-wheel is what a trackpad
+  // pinch sends anyway.
+  canvas.addEventListener('wheel', (e) => {
+    if (!e.ctrlKey && !e.metaKey) return;
+    e.preventDefault();
+    const r = canvas.getBoundingClientRect();
+    zoomAt(e.clientX - r.left, e.clientY - r.top, Math.exp(-e.deltaY * 0.002));
+  }, { passive: false });
+
+  function buildZoomControls() {
+    const wrap = document.createElement('div');
+    wrap.className = 'network-map-zoom';
+    const btn = (glyph, label, onClick) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'network-map-zoom-btn';
+      b.textContent = glyph;
+      b.setAttribute('aria-label', T(label));
+      b.title = T(label);
+      b.addEventListener('click', onClick);
+      return b;
+    };
+    wrap.appendChild(btn('+', 'Zoom in', () => zoomAt(W / 2, H / 2, 1.5)));
+    wrap.appendChild(btn('\u2212', 'Zoom out', () => zoomAt(W / 2, H / 2, 1 / 1.5)));
+    wrap.appendChild(btn('\u21ba', 'Reset the view', resetView));
+    canvas.parentElement.appendChild(wrap);
+  }
+
   // ── Bulk actions on the chip row (#1643) ───────────────────────────────────
   // Every chip starts pressed, so isolating one research theme cost fourteen
   // clicks off and fourteen back.
@@ -1011,6 +1212,7 @@
       if (filtersEl) filtersEl.open = false;
       buildFindOptions();
       buildClear();
+      buildZoomControls();
       if (findEl) {
         // change fires on a datalist pick and on blur, keydown catches Enter
         // before either, and input clears a stale answer as soon as the text

@@ -185,3 +185,15 @@
      accessible name, where the other rows carry an aria-label on the group. */
   .network-map-controls:not(.network-map-find-row) .lbl{display:none}
 }
+
+/* ── Zoom controls ───────────────────────────────────────────────────────────
+   Over the stage rather than under it: they act on what is behind them, and a
+   row of buttons below the map reads as another filter. */
+.network-map-zoom{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:6px;z-index:2}
+.network-map-zoom-btn{font:inherit;font-size:1rem;line-height:1;width:34px;height:34px;border-radius:10px;cursor:pointer;
+  color:var(--ink-2);background:rgba(255,255,255,.78);border:1px solid rgba(11,18,32,.12);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.dark .network-map-zoom-btn{color:var(--ink);background:rgba(18,26,44,.78);border-color:var(--glass-border)}
+.network-map-zoom-btn:hover{border-color:var(--accent-2)}
+.network-map-zoom-btn:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+@media (pointer:coarse){ .network-map-zoom-btn{width:44px;height:44px;font-size:1.15rem} }
