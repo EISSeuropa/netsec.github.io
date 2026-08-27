@@ -280,6 +280,59 @@ a desktop, and the EISS Atlas only added its own button
 reader could see. Worth revisiting for the phone, where the URL is
 truncated and awkward to copy.
 
+## Reading the detail: zoom, the card, and the labels
+
+Three legibility defects, all found by measuring the served page (#1644).
+
+**Zoom and pan.** 191 nodes share a 640 px canvas and a face draws at
+about 16 px, so a busy cluster could not be resolved into people at any
+window size. A view transform (scale plus translate) is applied at paint
+time, with ctrl or command plus wheel to zoom about the cursor, buttons
+over the stage, drag-to-pan on empty canvas, and a Reset. The force layout
+never learns about it: `nodeAt()` converts screen coordinates to world
+ones and divides the pick radius by the scale, so the paint and the
+pointer stay in agreement and a target stays the same size under a
+fingertip however far the map is zoomed.
+
+A plain wheel keeps scrolling the page. Claiming every wheel event over
+the canvas turns 640 px of the page into a scroll trap, which is the
+phone problem arriving by the other door, and ctrl-wheel is what a
+trackpad pinch sends anyway. `touch-action` flips to `none` while zoomed
+so a finger pans the map, and back at rest so the page scrolls.
+
+Zoom is floored at 1, so the map is never smaller than the stage, and the
+pan is clamped to the overhang, which pins it to zero at rest. Reset also
+puts a dragged hub back, since that is the other half of "the map is not
+where I left it".
+
+**The hover card flips rather than clamps.** `.network-map-stage` clips
+its overflow and the card was anchored below and to the right of the
+pointer with a clamp on the right edge only. Probing a grid of 45 hovers
+across the map, four of them produced a card hanging up to 50 px outside
+the stage, taking the themes, the co-panel line and "View profile" with
+it. The card now flips above the pointer when it would run past the
+bottom and to its left when it would run past the right. The same probe
+now reports none outside. Its size is measured from the corner, once per
+node, because a card measured where it sits near the right edge reports
+itself narrower and taller than the one about to be drawn.
+
+**Label de-confliction.** Fifteen theme hubs on a ring put their labels
+through each other, worst at phone width. Labels are now a pass of their
+own after the circles, so they can be placed against each other, with two
+rules and no layout library. Radial ordering: on a ring of more than six
+hubs the label goes on the side away from the centre, which is where the
+space is. Then greedy placement, biggest hub first, trying four positions
+(the outward side, the other side, then one line further out on each)
+against the labels already placed and against every other hub's disc. A
+hub under twelve people gives up its label rather than overlap when none
+of the four is clear, since the hover card, the chips and the panel all
+still name it. A larger hub keeps its label even when it has to overlap,
+because a hub of thirty-five people with no name on it is worse.
+
+The Working Groups lens is untouched: four hubs is not more than six, so
+the radial rule never fires and the labels sit under their hubs as
+before.
+
 ## The chip rows, and what a hub answers
 
 Every hub chip starts pressed, so isolating one research theme cost
