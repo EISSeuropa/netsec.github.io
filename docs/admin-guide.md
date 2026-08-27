@@ -386,6 +386,28 @@ in-browser print stylesheet still works (panels expand, abstracts
 drop), but the download is the reliable path for Chrome users. Tracked
 in [#364](https://github.com/EISSeuropa/netsec.github.io/issues/364).
 
+### Adding a photograph to a conference gallery
+
+Drop the JPEG into `assets/images/essc-<year>/`, then run:
+
+```bash
+python3 scripts/build-photo-derivatives.py
+```
+
+That writes a 1000 px `.webp` beside it and prints what it saved. Wrap the
+new `<img>` in the `<picture>` the others use, with the webp as the
+`<source>` and the JPEG as the fallback, in all three locale pages.
+
+The gallery renders each photograph at most 327x240 CSS px, so a
+full-resolution camera export is a hundredfold more detail than the page
+can show. Four of them put `/essc-2026.html` 1.38 MB over the 500 KB image
+budget until this landed (#1615), which is the same reading as the Network
+Map's faces in #1480.
+
+`seo-asset-check.yml` runs the script's `--check` mode on every PR, so a
+photograph added without its derivative fails there rather than surfacing
+later as a Lighthouse warning nobody reads.
+
 ### Rolling over to next year's ESSC edition
 
 Most of the site refreshes itself once `scripts/sync-indico.py` is
