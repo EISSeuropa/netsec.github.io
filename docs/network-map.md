@@ -304,8 +304,24 @@ since a filtered map behind a closed disclosure is otherwise a state with
 nothing on screen to explain it.
 
 Map top is now y=470 and y=638. The Find row added in #1642 costs 77 px of
-that, taking it to y=547 and y=715, which still leaves the canvas inside
-the first screen on a phone. #1643 is where the rest comes back.
+that, taking it to y=545 and y=684.
+
+**The translated pages are measured too** (#1657). The first pass of this
+work was measured against the English page alone, and the FR and DE
+phones were sitting at y=830 and y=855, which is where the English page
+had been before any of it. Three things separate them from English at
+375 px: the beta-translation ribbon is an 80 px block above the header,
+the lens chips wrap to two rows against English's one, and a faithful
+translation of the English lede runs longer in both languages.
+
+The FR and DE ledes are now cut shorter than the English one rather than
+translated from it, since they are carrying an extra 80 px of ribbon. The
+lede goes from 243 px and 267 px to 146 px in both, and the map top in
+both is y=733. What it drops is the expansion of the Action's name, which
+the footer carries on every page anyway.
+
+The 43 px the wrapping lens row costs is still there, and belongs with
+the chip-row work in #1643 rather than with the copy.
 
 ## Without JavaScript
 
