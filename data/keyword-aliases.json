@@ -8,7 +8,7 @@
     "UN", "EU", "NATO", "UK", "US", "USA", "UNDP", "EEAS", "OSCE",
     "ASEAN", "OECD", "IMF", "WTO", "WHO", "UNHCR", "UNESCO",
     "ICC", "ICJ", "IAEA", "IPCC", "EBRD", "ECB", "EIB",
-    "CFSP", "CSDP", "PESCO", "ESDP", "EDA", "EDF",
+    "CFSP", "CSDP", "PESCO", "ESDP", "EDA", "EDF", "FIMI",
     "SCO", "CSTO", "BRICS", "MENA",
     "AI", "ML", "NLP", "IoT", "GDPR", "ICT",
     "R&D", "NPT", "WMD", "CBRN", "R2P", "G7", "G20"
@@ -33,6 +33,8 @@
 
   "aliases": {
     "Cybersecurity": ["cyber security"],
+    "Human security": ["human securirty"],
+    "Hybrid threats": ["hybrid threats."],
     "Diplomacy studies": ["dipomacy studies"],
     "Transnational criminal organisations (TCOs)": ["transnational criminal organisations (tcos)", "transnational criminal organizations (tcos)", "transnational organised crime (tcos)", "transnational organized crime (tcos)", "transnational organised crime", "transnational organized crime"],
     "EU": ["european union"],
@@ -95,7 +97,7 @@
   "themes": {
     "Foreign policy and diplomacy": ["EU foreign policy", "German security policy", "Foreign policy analysis", "Russian foreign policy", "Indian foreign policy", "India", "Geopolitics", "Eastern Europe", "Western Balkans", "Regional cooperation", "US-China relations", "Diplomacy", "Diplomacy studies", "East central Europe", "Nordic countries", "Nordic-Baltic space", "Small states", "Small states' foreign and security policy", "Regional security cooperation and governance", "Comparative foreign policy analysis", "Common foreign and security policy", "Domestic politics of foreign and security policy", "Great power competition", "European union türkiye relations", "Foreign policy", "China's foreign policy", "Turkish foreign policy", "Strategic competition", "Regionalism", "Cooperation", "Geopolitics of the Indo-Pacific", "Middle East studies", "US foreign policy"],
     "Security and defence": ["European security", "Defence", "International security", "Power", "Civil defence", "Civil-military relations", "Militarisation", "Irregular warfare", "National security", "Capability planning", "Military innovation", "Black sea security", "Security and defence", "Security studies", "Security politics", "Security", "Black sea region", "Drones", "Future of warfare", "Counter-uav detection", "Thermal imaging", "Visual threat detection", "Security sector governance", "Security sector reforms", "Defence resources management", "Green defence industry", "British army", "Counter-insurgency", "Military history", "Maritime", "War", "Proxy warfare", "Interventions", "Malicious drones"],
-    "Strategy and deterrence": ["Grand strategy", "Strategy", "Maritime strategy", "Nuclear strategy", "Nuclear politics", "Arms control", "Deterrence", "Nuclear deterrence", "Strategic culture"],
+    "Strategy and deterrence": ["Strategy and deterrence", "Grand strategy", "Strategy", "Maritime strategy", "Nuclear strategy", "Nuclear politics", "Arms control", "Deterrence", "Nuclear deterrence", "Strategic culture"],
     "European and transatlantic security order": ["EU–NATO relations", "European strategic autonomy", "Transatlantic relations", "Transatlantic security", "Alliance politics", "NATO", "Military neutrality", "European defence", "Collective defence", "Alliances", "Euro-Atlantic foreign policy"],
     "Intelligence, information and influence": ["Disinformation", "Election interference", "Subversion", "Digital media", "Intelligence studies", "Influence", "Cognitive warfare", "Hybrid threats", "Information integrity", "Social media", "Intelligence", "Covert action"],
     "Identity, narratives and ideational security": ["Identity", "Narratives", "Ontological security"],
