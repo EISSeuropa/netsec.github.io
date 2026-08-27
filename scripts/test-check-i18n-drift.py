@@ -136,6 +136,36 @@ class TestSha1:
         ).hexdigest()
         assert mod.sha1(a) == bare
 
+    def test_network_map_list_region_normalised(self, tmp_path):
+        """A member joining moves the generated list region in all three
+        locale pages, which used to flag the FR and DE translations as
+        stale on the bios sync's own auto-PR (#1686)."""
+        a = tmp_path / "a.html"
+        b = tmp_path / "b.html"
+        head = "<h1>The map</h1>\n<!-- network-map:list start -->\n"
+        tail = "\n<!-- network-map:list end -->\n<p>after</p>"
+        a.write_text(head + "<tr>Ada Lovelace</tr>" + tail, encoding="utf-8")
+        b.write_text(
+            head + "<tr>Ada Lovelace</tr><tr>Pablo Arriazu</tr>" + tail,
+            encoding="utf-8",
+        )
+        assert mod.sha1(a) == mod.sha1(b)
+
+    def test_prose_outside_the_list_region_still_flagged(self, tmp_path):
+        """The region is the only exempt part of the page."""
+        a = tmp_path / "a.html"
+        b = tmp_path / "b.html"
+        region = "<!-- network-map:list start --><tr>x</tr><!-- network-map:list end -->"
+        a.write_text("<h1>Network Map</h1>" + region, encoding="utf-8")
+        b.write_text("<h1>Network Chart</h1>" + region, encoding="utf-8")
+        assert mod.sha1(a) != mod.sha1(b)
+
+    def test_page_without_the_sentinels_is_untouched(self, tmp_path):
+        """Every other page hashes exactly as before."""
+        a = tmp_path / "a.html"
+        a.write_text("<h1>Glossary</h1>", encoding="utf-8")
+        assert mod.sha1(a) == hashlib.sha1(b"<h1>Glossary</h1>").hexdigest()
+
     def test_meaningful_markup_change_still_flagged(self, tmp_path):
         """Only the cache-bust is exempt; any other edit changes the hash."""
         a = tmp_path / "a.html"
