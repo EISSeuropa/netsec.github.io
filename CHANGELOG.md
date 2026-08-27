@@ -141,6 +141,10 @@ maintainer-facing audience.
 
 #### Added
 
+- Clicking a hub on the Network Map now tells you about it. A Working Group or a research theme opens a panel under the map with how many people it holds, the three hubs it shares the most people with, a button to show only that hub, and a link through to the Working Groups page or to the Directory filtered to that theme. Each of the shared hubs is a button that moves the panel across, so you can walk from one part of the network to the next. On a phone, where the hover card never appears, this is the first thing a hub has ever done. Hand-translated for FR and DE.
+
+- The Network Map's filter chips have All and None, and the filter control has a Clear. Isolating one research theme used to be fourteen clicks off and fourteen back. Hand-translated for FR and DE.
+
 - You can find a person on the Network Map. A search box above the map takes a name, or part of one, and lights that person up with everyone they are connected to, dimming the rest. It says so plainly when nobody matches, and it tells you when the person is on the map but hidden by the filters you have set, which are different answers to different problems. Hand-translated for FR and DE.
 
 - Every directory profile now links to that person on the Network Map, so a profile leads into the network rather than ending at itself.
@@ -158,6 +162,8 @@ maintainer-facing audience.
 - The site search overlay can now separate people from pages. When a query matches both, a row of chips appears under the search box reading All, Pages and People, each carrying its own count, so a name that also turns up in prose no longer has to be picked out of a mixed list. The chips filter the results already on screen rather than running a fresh search, which keeps the ranking intact and the response immediate, and the row stays hidden when everything found is of one kind. Available in English, French and German.
 
 #### Changed
+
+- More of the Network Map fits on a phone screen. The row labels above the chips are hidden at phone width, where each row already announces itself to assistive technology and the chips say what they are, which stops the two lens chips wrapping onto a second line in French and German. The map now starts about 45 pixels higher in all three languages.
 
 - The French and German Network Map opens on the map, the way the English one does. Both pages carry the manual-translation ribbon above the header, which is 80 pixels a phone screen does not have to spare, so their opening paragraph is now written shorter rather than translated from the English one. On a phone the map moves up by about a hundred pixels on both.
 

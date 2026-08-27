@@ -280,6 +280,47 @@ a desktop, and the EISS Atlas only added its own button
 reader could see. Worth revisiting for the phone, where the URL is
 truncated and awkward to copy.
 
+## The chip rows, and what a hub answers
+
+Every hub chip starts pressed, so isolating one research theme cost
+fourteen clicks off and fourteen back. Each row now leads with **All** and
+**None**, both disabled at the ends of their range, and the filter summary
+grows a **Clear** whenever anything is filtering, since the summary is the
+one filter control still on screen while the row is folded away. A button
+inside a `<summary>` toggles the disclosure on pointer and on keyboard
+unless both are stopped, which is why Clear swallows its own events.
+
+**A hub answers a click.** The four WG hubs and the fifteen theme hubs are
+the largest targets on the canvas, and a click on one fell through to the
+drag handler and did nothing. On a touchscreen, where there is no hover
+card either, a hub did nothing at all.
+
+A click or a tap opens a panel **under** the map, since at 375 px an
+overlay covers the cluster it is describing. It carries the hub's member
+count, the three hubs it shares the most people with, a button that solos
+it, and a link into the matching surface: `working-groups.html#wg<N>` for a
+Working Group, `people.html#themes=<slug>` for a theme. Each bridge is a
+button that moves the panel across, so walking the network costs nothing
+to undo. Filtering stays behind its own button rather than riding on the
+click, so a stray click on a hub costs nothing.
+
+`pinnedHub` joins `hovered` and `spotlight` in one focus chain in
+`draw()`, which is the hover highlight made to stay put. Nothing else in
+the paint changed.
+
+A press that moves more than four pixels is a drag rather than a click, so
+rearranging a hub does not also open its panel. A second click on the same
+hub closes it, and so do Escape, the close button, a click on empty canvas
+and a lens switch. A hub id means nothing in the other lens, which is why
+the switch closes it rather than carrying it across.
+
+The theme link is built from the theme **name** with the directory's own
+slug rule, not from the hub id. The build slugifies theme ids with
+`_directory_common.slugify`, which strips diacritics, and the directory
+builds its `#themes=` hash with a rule that does not. They agree on all
+fifteen themes today and would part company on the first theme name
+carrying an accent.
+
 ## The page order
 
 The map is the reason a visitor opens the page, so it comes first. It did
@@ -320,8 +361,17 @@ lede goes from 243 px and 267 px to 146 px in both, and the map top in
 both is y=733. What it drops is the expansion of the Action's name, which
 the footer carries on every page anyway.
 
-The 43 px the wrapping lens row costs is still there, and belongs with
-the chip-row work in #1643 rather than with the copy.
+The 43 px the wrapping lens row cost came back with the chip-row work.
+Smaller chips under 640 px were not enough on their own, so the row labels
+go too: each row carries an `aria-label` on the group, and two chips
+reading "Groupes de travail" and "Thèmes de recherche" under the lede do
+not need the word "Angle" above them. The Find row keeps its `<label>`,
+since hiding that one would leave the input with no accessible name.
+
+Map top on a phone is now y=639 in English and y=688 in French and German.
+The overlays row is still two rows in both translations, which is the
+length of "Mentoring-Angebote und -Gesuche" rather than anything
+structural.
 
 ## Without JavaScript
 
