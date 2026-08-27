@@ -159,6 +159,8 @@ maintainer-facing audience.
 
 #### Changed
 
+- The French and German Network Map opens on the map, the way the English one does. Both pages carry the manual-translation ribbon above the header, which is 80 pixels a phone screen does not have to spare, so their opening paragraph is now written shorter rather than translated from the English one. On a phone the map moves up by about a hundred pixels on both.
+
 - The Network Map is labelled Beta rather than Prototype. The map has been live, signposted and stable since it was linked from the Working Groups page and the Directory, and the old label was waiting on the Action's first co-authored publication, which is a date nobody on the website side controls. Hand-translated for FR and DE.
 
 - The Network Map opens on the map. On a phone the canvas used to begin below the whole first screen, behind an introduction that explained the controls, six statistics and three rows of chips. The introduction now says what the map is and leaves the mechanics to the chips and the legend, the statistics moved under the map, and the hub filters fold into a control that reports how many hubs are showing. The map now starts a third of the way down a desktop screen and inside the first screen of a phone. Hand-translated for FR and DE.
