@@ -20,7 +20,10 @@ fetching bios.json.
 
 Co-authorship edges (type "coauthor") derive from data/publications.json's
 `authors` arrays the same way; the file is empty until D6 ships its first
-output, so the layer starts at zero edges and grows with the data.
+output, so the layer starts at zero edges and grows with the data. The same
+file's `workingGroups` tag array is counted onto the WG hubs as an `outputs`
+field (#1587), which is the reading that survives an author the matcher cannot
+place and a single-author output that emits no co-authorship edge at all.
 
 Not here yet, on purpose (follow-ups):
   - x/y layout coordinates (the renderer lays out client-side for now)
@@ -325,9 +328,25 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
     # so the overlay lights up on its own as publications are entered.
     coauthor_weights: dict[tuple, int] = {}
     publications_matched = 0
+    # Every entry carries a workingGroups tag array, the same mechanism
+    # events.json uses to surface an item under a WG section. The map read the
+    # file for authors only, so an output tagged to WG2 contributed nothing to
+    # the WG2 hub, and a single-author output contributed nothing anywhere,
+    # since the co-authorship pass needs two matched names before it emits an
+    # edge (#1587). The tag is counted onto the hub, which is the reading that
+    # survives an author the matcher cannot place.
+    wg_outputs: dict = {}
+    outputs_tagged = 0
     unmatched_authors: set = set()
     if publications is not None:
         for pub in publications.get("publications") or []:
+            tagged = False
+            for number in pub.get("workingGroups") or []:
+                wg_id = f"wg-{number}"
+                wg_outputs[wg_id] = wg_outputs.get(wg_id, 0) + 1
+                tagged = True
+            if tagged:
+                outputs_tagged += 1
             keys = set()
             for author in pub.get("authors") or []:
                 raw = author if isinstance(author, str) else author.get("name", "")
@@ -343,6 +362,13 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
                     for j in range(i + 1, len(ordered)):
                         pair = (ordered[i], ordered[j])
                         coauthor_weights[pair] = coauthor_weights.get(pair, 0) + 1
+
+    # Stamped on the hub rather than emitted as a key that is always there:
+    # with no publications on file the graph is byte-identical to the one
+    # before this landed, so the layer arrives with the data.
+    for hub in wg_nodes:
+        if wg_outputs.get(hub["id"]):
+            hub["outputs"] = wg_outputs[hub["id"]]
 
     person_nodes = sorted(people.values(), key=lambda p: p["id"])
     nodes = wg_nodes + theme_nodes + person_nodes
@@ -385,6 +411,8 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
         stats["panel_editions"] = sorted({y for (y, _a, _b) in panel_weights})
     if publications is not None:
         stats["publications_matched"] = publications_matched
+        if outputs_tagged:
+            stats["outputs_tagged"] = outputs_tagged
         stats["coauthor_edges"] = len(coauthor_weights)
         # Every author string that resolved to nobody. A co-author from
         # outside the Action belongs here and is not a problem. A member

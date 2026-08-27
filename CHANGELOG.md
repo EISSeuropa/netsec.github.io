@@ -141,6 +141,8 @@ maintainer-facing audience.
 
 #### Added
 
+- The Network Map will count each Working Group's outputs once the Action has some. Every publication the site holds is already tagged to the groups it belongs to, and the map ignored that tag, so a brief written by one person was invisible to it. The tag now counts towards the group, which shows on the group when you hover or open it, and as a figure beside the map. Nothing appears until the first output is entered. Hand-translated for FR and DE.
+
 - The Network Map says what its own shape shows. Under the figures sits a line naming the two Working Groups or research themes that share the most people, how many people belong to more than one of them, and which one has the fewest, with the first and last opening the group they name. It follows whichever view you are in. Hand-translated for FR and DE.
 
 - The Network Map says how many people each of its two views can draw. The figures beside the map counted everyone in the Action while the map itself drew 142 of them under Working Groups and 70 under research themes, because a member who is on no working-group roster, or whose research themes are not recorded, has nothing to be drawn towards. A new figure reports that and follows the view you are in. Hand-translated for FR and DE.
