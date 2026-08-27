@@ -141,6 +141,8 @@ maintainer-facing audience.
 
 #### Added
 
+- The Network Map says what its own shape shows. Under the figures sits a line naming the two Working Groups or research themes that share the most people, how many people belong to more than one of them, and which one has the fewest, with the first and last opening the group they name. It follows whichever view you are in. Hand-translated for FR and DE.
+
 - The Network Map says how many people each of its two views can draw. The figures beside the map counted everyone in the Action while the map itself drew 142 of them under Working Groups and 70 under research themes, because a member who is on no working-group roster, or whose research themes are not recorded, has nothing to be drawn towards. A new figure reports that and follows the view you are in. Hand-translated for FR and DE.
 
 - The Network Map names the members it cannot link to a profile, and can hide them. 108 of the 191 people on the map are drawn as small grey dots with nowhere to click through to, and the map now says so under its figures with a link to the profile form, and offers a filter for the part of the network the Directory documents. Hand-translated for FR and DE.

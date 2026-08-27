@@ -443,6 +443,35 @@ started mattering the moment it was linked and indexed. The block now
 points at the table below the map rather than at another page, which is
 an alternative the reader already has in front of them.
 
+## Findings
+
+The statistics count the roster, which is what the Directory is for.
+Under them sits a line of things only the map's own structure knows
+(#1646), computed client-side from data already loaded and recomputed
+with the lens:
+
+- the pair of hubs sharing the most people, which opens the first of
+  them,
+- how many people sit in more than one hub of the current lens, which is
+  the "bridges of the Action" claim the lede makes, with a number on it,
+- the hub with the fewest people, which opens it.
+
+The busiest pair reuses `sharedWith()`, the function the hub panel
+already calls, so the finding and the panel can never name different
+numbers. The pair is joined with a slash rather than an "and", since
+theme names carry their own: "Foreign policy and diplomacy and Security
+and defence" is four of them in one sentence. The EISS Atlas settled the
+same question the same way (EISSeuropa/EISSeuropa.github.io#1480).
+
+The smallest-hub finding carries no number, so there is no singular to
+get wrong when a theme is down to one person. The count is on the hub
+itself.
+
+**Still open in #1646:** the Inclusiveness Target Country overlay, which
+is parked on the maintainer confirming the ITC list. It is a COST policy
+fact aimed at an evaluator, and a list one country wrong is a wrong
+public claim about a member's institution.
+
 ## What the map actually draws
 
 The statistics strip counted the whole roster while the canvas beside it
