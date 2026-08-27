@@ -747,6 +747,30 @@ Without `--incomplete` the same script answers the opposite question, which
 is who appears on the cost.eu roster or the ESSC programme but is absent
 from the directory entirely.
 
+### When a keyword reaches no research theme
+
+`sync-bios.py` prints, to stderr, every canonical keyword that resolves to
+no theme. Such a keyword does not cluster, its card pill renders
+display-only, and its holder is missing from that filter and from the
+Network Map's themes lens. The August 2026 review (#1701) took the count
+from 29 to zero, and the four mechanisms it used are the ones to reach for
+again:
+
+- **A typo or a stray full stop** away from a keyword already in the
+  taxonomy goes in `aliases`, which maps the submitted form onto the
+  canonical one.
+- **A word the sentence-case normaliser mangles**, like FIMI arriving as
+  "Fimi", goes in `acronyms`.
+- **A country or sub-region name** typed into the keyword box goes in
+  `drop_keywords`. Geography belongs to the regions facet.
+- **A phrase rather than a tag**, like "AI cyber security geopolitics",
+  goes in `splits`, which expands it into the keywords it actually names.
+
+Anything left is a genuine keyword that needs a theme, or a cluster with
+no theme to join. `_watch` at the top of the file carries the rule for
+promoting a cluster to a new theme, at roughly four members, along with
+the record of when that rule was followed and when it was not.
+
 ### The two mentorship states nobody sets
 
 `parse_mentorship` in `sync-bios.py` defines four states, two of which

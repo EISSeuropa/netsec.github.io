@@ -179,6 +179,8 @@ maintainer-facing audience.
 
 #### Changed
 
+- Country names typed into the Directory's research-keyword box are filed as geography rather than as research interests, the way the broader region names already were. "Ireland", "Ukraine" and "MENA region" were standing alone in the theme filter meaning nothing, while the research regions filter beside them is the control for that.
+
 - The mentorship panel says how getting in touch actually works. Reaching a mentor here means writing to them yourself, and an answer is not always quick, which is worth knowing before you send. The same note tells a mentor already at capacity, or a mentee who has found someone, where to say so, so the badges on the directory can stay honest. Hand-translated for FR and DE.
 
 - The Network Map's overlays now sit with its filters, behind the same control above the map. Each row of chips above the map costs a phone screen about forty pixels, and the map was being pushed down the page a chip at a time. The control says how many overlays are switched on while it is closed, so nothing changes the map without the page saying so. The map now starts about a hundred pixels higher on a phone in all three languages. Hand-translated for FR and DE.
@@ -204,7 +206,7 @@ maintainer-facing audience.
 
 #### Fixed
 
-- Twenty-two more research keywords reach a theme at the next sync, so nine members join filters they were missing from. Religion, research ethics, political bioethics, space security, migration, medium powers, EU–China relations, foreign interference and the EU's Common Security and Defence Policy are among them, and only four keywords on the whole roster now reach no theme at all, down from twenty-nine.
+- Every research keyword in the Directory now reaches a research theme, where twenty-nine of them reached none. Ten members join filters they were missing from, among them one whose entire research interest was written as a single phrase and who therefore had no theme at all. Religion, research ethics, political bioethics, space security, migration, medium powers, EU–China relations, foreign interference and the EU's Common Security and Defence Policy are among the keywords that now cluster.
 
 - The fifteenth research theme, Democracy, governance and political change, appears in French and German rather than in English. It shipped untranslated when it was promoted, so it read in English on the filter row and on the map.
 

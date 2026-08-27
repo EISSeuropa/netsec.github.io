@@ -176,6 +176,38 @@ def test_region_names_dropped_from_keywords() -> None:
     expect("real keyword not in vocab (kept)", "Maritime security".lower() in vocab, False)
 
 
+def test_place_names_dropped_from_keywords() -> None:
+    """A country or sub-region name is the same problem one level finer than
+    a region name, and `regions` only holds the eight broad ones, so those
+    carry their own list (#1701). Matched on the whole canonical form, never
+    on a word inside one."""
+    print("\nplace-name keyword drop:")
+    drops = sync_bios.load_keyword_drops()
+    expect("country name is dropped", "Ireland".lower() in drops, True)
+    expect("sub-region name is dropped", "MENA region".lower() in drops, True)
+    # The two that would break if the match ever went to substrings: a themed
+    # keyword that is a country, and a keyword that contains one.
+    expect("themed country keyword survives", "India".lower() in drops, False)
+    expect("keyword containing a country survives",
+           "Russia-Ukraine war".lower() in drops, False)
+
+
+def test_phrase_keywords_split_into_their_parts() -> None:
+    """A submission that is a phrase rather than a tag becomes the several
+    canonical keywords it names. Aliasing cannot do this: an alias maps many
+    forms onto one and this needs the opposite (#1701)."""
+    print("\nphrase keyword split:")
+    splits = sync_bios.load_keyword_splits()
+    parts = splits.get("ai cyber security geopolitics")
+    expect("phrase is split", parts is not None, True)
+    expect("into three parts", len(parts or []), 3)
+    theme_of = sync_bios.load_keyword_themes()
+    # The point of the split: each part reaches a theme, where the phrase
+    # reached none and left its author with no research theme at all.
+    for part in parts or []:
+        expect(f"{part!r} reaches a theme", part.lower() in theme_of, True)
+
+
 def test_country_key() -> None:
     print("\ncountry_key():")
     expect("lowercased", country_key("United Kingdom"), "united kingdom")

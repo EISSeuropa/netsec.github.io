@@ -537,6 +537,49 @@ def load_region_vocab() -> dict[str, str]:
     return vocab
 
 
+def load_keyword_drops() -> set[str]:
+    """Lowercased forms of every entry in `drop_keywords`.
+
+    Country and sub-region names typed into the keyword box. The regions
+    facet owns that axis, and `regions` only holds the eight broad
+    controlled regions, so a bare "Ireland" or "MENA region" passed
+    straight through and stood alone in the theme filter meaning nothing
+    (#1701). Matched on the whole canonical form, never on a word inside
+    one, so "Russia-Ukraine war" and the themed keyword "India" survive.
+    """
+    drops: set[str] = set()
+    if ALIAS_FILE.exists():
+        try:
+            doc = json.loads(ALIAS_FILE.read_text(encoding="utf-8"))
+            for k in doc.get("drop_keywords", []):
+                if isinstance(k, str) and k.strip():
+                    drops.add(k.strip().lower())
+        except (json.JSONDecodeError, OSError):
+            pass
+    return drops
+
+
+def load_keyword_splits() -> dict[str, list[str]]:
+    """Lowercased submitted form → the canonical keywords it becomes.
+
+    For a submission that is a phrase rather than a tag: "AI cyber
+    security geopolitics" is three concepts the taxonomy already holds
+    separately, and as one string it clustered with nothing and left its
+    author with no research theme at all (#1701). Aliasing cannot help,
+    since an alias maps many forms onto one and this needs the opposite.
+    """
+    splits: dict[str, list[str]] = {}
+    if ALIAS_FILE.exists():
+        try:
+            doc = json.loads(ALIAS_FILE.read_text(encoding="utf-8"))
+            for raw, parts in (doc.get("splits") or {}).items():
+                if isinstance(parts, list) and parts:
+                    splits[raw.strip().lower()] = [p for p in parts if isinstance(p, str) and p.strip()]
+        except (json.JSONDecodeError, OSError):
+            pass
+    return splits
+
+
 def parse_regions(raw: str) -> list[str]:
     """Map a Research-regions form cell (comma- or semicolon-separated
     checkbox values) to a sorted list of canonical region names from the
@@ -2173,12 +2216,16 @@ def main() -> None:
     acronyms, alias_map, spelling_map = load_keyword_aliases()
     theme_of = load_keyword_themes()
     region_vocab = load_region_vocab()
+    keyword_drops = load_keyword_drops()
+    keyword_splits = load_keyword_splits()
     aggregate: dict[str, int] = {}
     theme_member_counts: dict[str, int] = {}  # theme → distinct members
     keyword_theme_map: dict[str, str] = {}    # canonical keyword → theme
     uncategorised: set[str] = set()
     dropped_regions: set[str] = set()         # region names typed as keywords
     dropped_wg_tags: set[str] = set()         # WG memberships typed as keywords
+    dropped_places: set[str] = set()          # country names typed as keywords
+    split_keywords: set[str] = set()          # phrases expanded into their parts
     for m in merged:
         raw_kws = m.get("keywords") or []
         seen: dict[str, str] = {}  # lowercase canonical → canonical
@@ -2186,23 +2233,39 @@ def main() -> None:
             canon = normalise_keyword(raw, acronyms, alias_map, spelling_map)
             if not canon:
                 continue
-            # Geography belongs to the regions facet, not the topical keyword
-            # pills. A region name typed into the keyword box (e.g. "The
-            # Americas") would otherwise stand alone in the theme filter; drop
-            # it here so the controlled regions vocabulary owns that axis.
-            if canon.lower() in region_vocab:
-                dropped_regions.add(canon)
-                continue
-            # Working-group memberships typed into the keywords field ("Wg1",
-            # "WG 2") already have a home in the wgs facet and would never
-            # cluster into a research theme; drop them the same way (#1308).
-            if re.fullmatch(r"wg\s*\d+", canon.lower()):
-                dropped_wg_tags.add(canon)
-                continue
-            key = canon.lower()
-            if key in seen:
-                continue
-            seen[key] = canon
+            # A submission that is a phrase rather than a tag becomes the
+            # several canonical keywords it actually names (#1701). Expanded
+            # here so everything below, the drops included, sees ordinary
+            # keywords rather than a special case.
+            parts = keyword_splits.get(canon.lower())
+            if parts:
+                split_keywords.add(canon)
+            for kw in (parts or [canon]):
+                # Geography belongs to the regions facet, not the topical
+                # keyword pills. A region name typed into the keyword box
+                # (e.g. "The Americas") would otherwise stand alone in the
+                # theme filter; drop it here so the controlled regions
+                # vocabulary owns that axis.
+                if kw.lower() in region_vocab:
+                    dropped_regions.add(kw)
+                    continue
+                # Country and sub-region names are the same problem one level
+                # finer, and `regions` only holds the eight broad ones, so
+                # they carry their own list (#1701).
+                if kw.lower() in keyword_drops:
+                    dropped_places.add(kw)
+                    continue
+                # Working-group memberships typed into the keywords field
+                # ("Wg1", "WG 2") already have a home in the wgs facet and
+                # would never cluster into a research theme; drop them the
+                # same way (#1308).
+                if re.fullmatch(r"wg\s*\d+", kw.lower()):
+                    dropped_wg_tags.add(kw)
+                    continue
+                key = kw.lower()
+                if key in seen:
+                    continue
+                seen[key] = kw
         # Stable order: alphabetical by canonical display form.
         canonicals = sorted(seen.values(), key=str.lower)
         if canonicals:
@@ -2247,6 +2310,16 @@ def main() -> None:
         print(
             "  · dropped working-group tags from keywords (they belong to "
             "the wgs facet): " + ", ".join(sorted(dropped_wg_tags))
+        )
+    if dropped_places:
+        print(
+            "  · dropped place names from keywords (they belong to the "
+            "regions facet): " + ", ".join(sorted(dropped_places))
+        )
+    if split_keywords:
+        print(
+            "  · split phrase keywords into their parts: "
+            + ", ".join(sorted(split_keywords))
         )
     if uncategorised:
         # Keep the taxonomy complete: any canonical keyword without a theme
