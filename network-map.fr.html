@@ -63,7 +63,7 @@
   })();
 </script>
 <link rel="stylesheet" href="assets/css/site.css?v=6c176c1f">
-<link rel="stylesheet" href="assets/css/network-map.css?v=72b45408">
+<link rel="stylesheet" href="assets/css/network-map.css?v=a490f6c5">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -178,10 +178,6 @@
     <span class="lbl">Angle</span>
     <!-- lens buttons injected by network-map.js -->
   </div>
-  <div class="network-map-controls" id="network-map-overlays" role="group" aria-label="Superpositions">
-    <span class="lbl">Superpositions</span>
-    <!-- overlay toggles injected by network-map.js -->
-  </div>
   <div class="network-map-controls network-map-find-row" role="search" aria-label="Trouver une personne sur la carte">
     <label class="lbl" for="network-map-find">Trouver</label>
     <input class="network-map-find" id="network-map-find" type="search" list="network-map-find-list"
@@ -193,9 +189,13 @@
   <p class="network-map-find-msg" id="network-map-find-msg" role="status"></p>
   <details class="network-map-filters" id="network-map-filters" open>
     <summary class="network-map-filters__summary">
-      <span class="network-map-filters__label">Filtrer la carte</span>
+      <span class="network-map-filters__label">Filtres et superpositions</span>
       <span class="network-map-filters__n" id="network-map-filters-n"></span>
     </summary>
+    <div class="network-map-controls" id="network-map-overlays" role="group" aria-label="Superpositions">
+      <span class="lbl">Superpositions</span>
+      <!-- overlay toggles injected by network-map.js -->
+    </div>
     <div class="network-map-controls" id="network-map-hub-chips" role="group" aria-label="Filtrer par pôle">
       <!-- one chip per hub in the active lens, injected by network-map.js -->
     </div>
@@ -462,7 +462,7 @@
     </div>
   </div>
 </footer>
-<script src="assets/js/site.js?v=39a5d68f" defer></script>
-<script src="assets/js/network-map.js?v=ce8dcf20" defer></script>
+<script src="assets/js/site.js?v=b4f3fa5d" defer></script>
+<script src="assets/js/network-map.js?v=0a04fb8a" defer></script>
 </body>
 </html>

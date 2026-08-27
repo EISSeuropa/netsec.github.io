@@ -1179,9 +1179,19 @@
     if (clearBtn) clearBtn.hidden = on === total;
     updateNotice();
     if (filtersNEl) {
-      filtersNEl.textContent = on === total
+      // The overlays moved inside the disclosure (#1677), so the summary has
+      // to speak for them too: an overlay switched on behind a closed
+      // disclosure is otherwise a change to the map with nothing on screen
+      // accounting for it.
+      const overlaysOn = Object.keys(overlays).filter(k => overlays[k]).length
+        + (profilesOnly ? 1 : 0);
+      const hubs_ = on === total
         ? T('showing all {n}').replace('{n}', total)
         : T('showing {n} of {m}').replace('{n}', on).replace('{m}', total);
+      filtersNEl.textContent = overlaysOn
+        ? hubs_ + ' · ' + T(overlaysOn === 1 ? '{n} overlay on' : '{n} overlays on')
+          .replace('{n}', overlaysOn)
+        : hubs_;
     }
     if (!listRows.length) return;
     let shown = 0;
@@ -1349,6 +1359,7 @@
         overlaysEl.appendChild(chip(T(label), overlays[k], (b) => {
           overlays[k] = !overlays[k];
           b.setAttribute('aria-pressed', overlays[k] ? 'true' : 'false');
+          syncFilters();
           syncUrl();
           draw();
         }));
