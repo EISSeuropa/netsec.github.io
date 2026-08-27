@@ -21,6 +21,10 @@
   // English key when site.js has not loaded, which keeps the map working if
   // the page is ever opened on its own again.
   const T = (s) => (window.netsecT ? window.netsecT(s) : s);
+  // The bios form the Directory is built from, the same link the home page
+  // carries. Here rather than in the three locale pages: it appears inside a
+  // sentence the renderer composes.
+  const BIOS_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform';
   // Singular and plural are separate catalogue keys rather than an English
   // "member" + "s", which no other language would build the same way.
   const peerLine = (one, many, n) => T(n === 1 ? one : many).replace('{n}', n);
@@ -143,7 +147,12 @@
     if (h.type === 'wg') return theme.wg[h.number] || theme.accent;
     return THEME_WHEEL[h.wheel % THEME_WHEEL.length];
   }
+  // A view filter rather than an overlay: it changes who is on the map, so it
+  // has to run through the one rule the canvas, the list and the keyboard
+  // traversal all read (#1647).
+  let profilesOnly = false;
   function personVisible(p) {
+    if (profilesOnly && !p.slug) return false;
     return p.links[lens].some(id => activeHubs.has(id));
   }
 
@@ -747,6 +756,7 @@
     const overlaysOn = Object.keys(overlays).filter(k => overlays[k]);
     if (overlaysOn.length) q.set('overlays', overlaysOn.join(','));
     if (panelEdition !== 'all') q.set('edition', panelEdition);
+    if (profilesOnly) q.set('profiles', '1');
     if (spotlight) q.set('find', spotlight.id);
     const query = q.toString();
     history.replaceState(null, '', location.pathname + (query ? '?' + query : ''));
@@ -761,6 +771,7 @@
     });
     const edition = q.get('edition');
     if (edition) panelEdition = edition;
+    if (q.get('profiles') === '1') profilesOnly = true;
     urlHubs = q.get('hubs');
     urlFind = q.get('find');
   }
@@ -908,6 +919,40 @@
 
     hubPanelEl.hidden = false;
     draw();
+  }
+
+  // ── What the map actually draws (#1651, #1647) ─────────────────────────────
+  let lensDrawnEl = null;
+
+  function syncLensDrawn() {
+    if (!lensDrawnEl) return;
+    // Membership of the lens, not of the current filter: this answers "who can
+    // this lens draw at all", which is the gap the statistics strip was silent
+    // about. The chips are reported by the filter summary and the list hint.
+    const drawn = people.filter(p => p.links[lens].length).length;
+    lensDrawnEl.hidden = drawn === people.length;
+    lensDrawnEl.querySelector('b').textContent = drawn + ' / ' + people.length;
+    lensDrawnEl.querySelector('span').textContent = T('drawn on this lens');
+  }
+
+  // 108 of 191 people render as small grey dots that link nowhere, and nothing
+  // said why they were grey or what would change it (#1647). The map is the
+  // clearest picture the site has of who is missing from the Directory, so it
+  // says so and points at the form.
+  function buildProfileGap(withBios) {
+    const missing = people.length - withBios;
+    if (!missing || !statsEl.parentNode) return;
+    const line = document.createElement('p');
+    line.className = 'network-map-gap';
+    line.appendChild(document.createTextNode(
+      T('{n} people on the map have no directory profile yet.').replace('{n}', missing) + ' '));
+    const a = document.createElement('a');
+    a.href = BIOS_FORM;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = T('Add yours');
+    line.appendChild(a);
+    statsEl.parentNode.insertBefore(line, statsEl.nextSibling);
   }
 
   // ── The keyboard path, and the states that said nothing (#1645) ────────────
@@ -1196,6 +1241,7 @@
       b.setAttribute('aria-pressed', b.dataset.lens === lens ? 'true' : 'false'));
     buildHubChips();
     syncFilters();
+    syncLensDrawn();
     seedPositions();
     // The pinned person may not exist on the new lens, so the search is
     // answered again rather than carried across.
@@ -1251,6 +1297,17 @@
         img.onload = () => { avatars[p.id] = img; draw(); };
       });
 
+      // A tile the lens keeps current (#1651). The strip counted the whole
+      // roster while the canvas beside it drew 142 of them on the Working
+      // Groups lens and 70 on the themes lens, because a member on no roster
+      // and a member with no themes recorded have nothing to be drawn towards.
+      // The number the reader can see now has a number beside it.
+      lensDrawnEl = document.createElement('div');
+      lensDrawnEl.className = 'network-map-stat';
+      lensDrawnEl.hidden = true;
+      lensDrawnEl.appendChild(document.createElement('b'));
+      lensDrawnEl.appendChild(document.createElement('span'));
+
       const countries = new Set(people.map(p => p.country).filter(Boolean));
       [['' + people.length, 'people in the network'],
        ['' + countries.size, 'countries'],
@@ -1266,6 +1323,8 @@
           el.appendChild(bb); el.appendChild(ss);
           statsEl.appendChild(el);
         });
+      statsEl.appendChild(lensDrawnEl);
+      buildProfileGap(data.stats.people_with_bios);
 
       [['wg', 'Working Groups'], ['theme', 'Research themes']].forEach(([v, label]) => {
         const b = chip(T(label), v === lens, () => switchLens(v));
@@ -1294,6 +1353,16 @@
           draw();
         }));
       });
+      // Last in the row, after the two paint overlays: this one changes who is
+      // on the map rather than what is drawn over them.
+      overlaysEl.appendChild(chip(T('Only members with a profile'), profilesOnly, (b) => {
+        profilesOnly = !profilesOnly;
+        b.setAttribute('aria-pressed', profilesOnly ? 'true' : 'false');
+        if (spotlight && !personVisible(spotlight)) applyFind(findEl ? findEl.value : '');
+        syncFilters();
+        syncUrl();
+        draw();
+      }));
 
       // Rendered open so the no-script reader gets the chips, closed here so
       // the map itself is the first thing on screen. On a 375px phone the

@@ -200,3 +200,7 @@
 .network-map-zoom-btn:hover{border-color:var(--accent-2)}
 .network-map-zoom-btn:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
 @media (pointer:coarse){ .network-map-zoom-btn{width:44px;height:44px;font-size:1.15rem} }
+
+/* The profile gap, stated under the figures it follows from (#1647). */
+.network-map-gap{margin:9px 2px 0;font-size:.82rem;color:var(--muted)}
+.network-map-gap a{color:var(--accent-2)}
