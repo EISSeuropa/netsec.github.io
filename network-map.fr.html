@@ -61,7 +61,7 @@
   })();
 </script>
 <link rel="stylesheet" href="assets/css/site.css?v=6c176c1f">
-<link rel="stylesheet" href="assets/css/network-map.css?v=c8f401e9">
+<link rel="stylesheet" href="assets/css/network-map.css?v=594349ed">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -165,15 +165,13 @@
     <h1>La carte du réseau NetSec</h1>
     <span class="network-map-proto-pill">Prototype</span>
   </div>
-  <p class="network-map-lede">Une carte vivante du réseau qui porte Networking European Security Knowledge. Deux angles sur les mêmes personnes : les <strong>groupes de travail</strong> auxquels elles appartiennent, et les <strong>thèmes de recherche</strong> sur lesquels elles travaillent. Superposez qui a partagé un panel lors d’une conférence ESSC, ou qui propose et recherche un mentorat. Les co-signatures rejoindront la carte d’elles-mêmes à mesure que les publications de l’Action seront ajoutées. Les personnes situées entre deux pôles sont les passerelles de l’Action. Survolez un visage ou un point pour savoir de qui il s’agit, et cliquez pour rejoindre son profil dans l’annuaire lorsqu’il existe. Tout est généré à partir des données qui alimentent la <a href="working-groups.fr.html">page Groupes de travail</a> et l’<a href="people.fr.html">annuaire</a>.</p>
+  <p class="network-map-lede">Une carte vivante du réseau qui porte Networking European Security Knowledge. Chaque personne de l’Action y figure sous forme de point, attiré vers les groupes de travail auxquels elle appartient ou les thèmes de recherche sur lesquels elle travaille, ce qui rend visibles les regroupements et les personnes qui font le lien entre eux. Tout est généré à partir des données qui alimentent la <a href="working-groups.fr.html">page Groupes de travail</a> et l’<a href="people.fr.html">annuaire</a>.</p>
 
   <noscript>
     <div class="network-map-noscript">
-      La carte elle-même est dessinée avec JavaScript. Les mêmes informations sont disponibles sous forme de listes : l’appartenance aux groupes de travail sur la <a href="working-groups.fr.html">page Groupes de travail</a>, et toutes les personnes de l’Action, avec leur pays et leurs thèmes de recherche, dans l’<a href="people.fr.html">annuaire</a>.
+      La carte elle-même est dessinée avec JavaScript. Toutes les personnes qu’elle dessine figurent dans le tableau ci-dessous, avec leurs groupes de travail et leur pays, et l’<a href="people.fr.html">annuaire</a> contient les profils complets.
     </div>
   </noscript>
-  <div class="network-map-stats" id="network-map-stats" aria-label="Statistiques du réseau"></div>
-
   <div class="network-map-controls" id="network-map-lens" role="group" aria-label="Choisir l’angle de la carte">
     <span class="lbl">Angle</span>
     <!-- lens buttons injected by network-map.js -->
@@ -182,12 +180,18 @@
     <span class="lbl">Superpositions</span>
     <!-- overlay toggles injected by network-map.js -->
   </div>
-  <div class="network-map-controls" id="network-map-hub-chips" role="group" aria-label="Filtrer par pôle">
-    <!-- one chip per hub in the active lens, injected by network-map.js -->
-  </div>
+  <details class="network-map-filters" id="network-map-filters" open>
+    <summary class="network-map-filters__summary">
+      <span class="network-map-filters__label">Filtrer la carte</span>
+      <span class="network-map-filters__n" id="network-map-filters-n"></span>
+    </summary>
+    <div class="network-map-controls" id="network-map-hub-chips" role="group" aria-label="Filtrer par pôle">
+      <!-- one chip per hub in the active lens, injected by network-map.js -->
+    </div>
+  </details>
 
   <div class="network-map-stage">
-    <canvas id="network-map-canvas" aria-label="Carte dynamique du réseau NetSec : appartenance aux groupes de travail, thèmes de recherche, panels partagés en conférence et mentorat. Les mêmes informations sont disponibles sous forme de listes sur la page Groupes de travail et dans l’annuaire."></canvas>
+    <canvas id="network-map-canvas" aria-label="Carte dynamique du réseau NetSec : appartenance aux groupes de travail, thèmes de recherche, panels partagés en conférence et mentorat. Toutes les personnes qu’elle dessine figurent dans le tableau sous la carte."></canvas>
     <div class="network-map-card" id="network-map-card" aria-hidden="true"></div>
   </div>
   <div class="network-map-legend" id="network-map-legend">
@@ -198,6 +202,213 @@
     <span><span class="sw sw-ring" style="border-color:#f59e0b"></span>recherche un mentor</span>
     <span>faites glisser un pôle pour réorganiser la carte</span>
   </div>
+
+  <div class="network-map-stats" id="network-map-stats" aria-label="Statistiques du réseau"></div>
+
+  <!-- network-map:list start -->
+  <details class="network-map-list" id="network-map-list" data-pagefind-ignore>
+    <summary class="network-map-list__summary">Parcourir cette carte sous forme de liste</summary>
+    <p class="network-map-list__hint" id="network-map-list-hint">Toutes les personnes que la carte dessine, soit 191.</p>
+    <div class="network-map-list__scroll" tabindex="0">
+      <table class="network-map-list__table">
+        <thead><tr><th scope="col">Nom</th><th scope="col">Groupes de travail</th><th scope="col">Pays</th></tr></thead>
+        <tbody id="network-map-list-body">
+          <tr data-person="alexander-lanoszka"><th scope="row"><a href="people/alexander-lanoszka.html">Dr Alexander Lanoszka</a></th><td>Aucun</td><td data-country="Canada">Canada</td></tr>
+          <tr data-person="alexandra-brankova"><th scope="row"><a href="people/alexandra-brankova.html">Dr Alexandra Brankova</a></th><td>Aucun</td><td data-country="Sweden">Sweden</td></tr>
+          <tr data-person="alin-barbantan"><th scope="row"><a href="people/alin-barbantan.html">Dr Alin Barbantan</a></th><td>WG1, WG3</td><td data-country="Romania">Romania</td></tr>
+          <tr data-person="alisa-kerschbaum"><th scope="row"><a href="people/alisa-kerschbaum.html">Ms Alisa Kerschbaum</a></th><td>Aucun</td><td data-country="Netherlands">Netherlands</td></tr>
+          <tr data-person="andriy-tyushka"><th scope="row"><a href="people/andriy-tyushka.html">Dr Andriy Tyushka</a></th><td>Aucun</td><td data-country="Poland">Poland</td></tr>
+          <tr data-person="anna-pagnacco"><th scope="row"><a href="people/anna-pagnacco.html">Anna Pagnacco</a></th><td>Aucun</td><td data-country="Switzerland">Switzerland</td></tr>
+          <tr data-person="anna-seliverstova"><th scope="row"><a href="people/anna-seliverstova.html">Ms Anna Seliverstova</a></th><td>Aucun</td><td data-country="Sweden">Sweden</td></tr>
+          <tr data-person="archishman-goswami"><th scope="row"><a href="people/archishman-goswami.html">Mr Archishman Goswami</a></th><td>Aucun</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="arthur-laudrain"><th scope="row"><a href="people/arthur-laudrain.html">Dr Arthur Laudrain</a></th><td>WG1, WG2, WG3</td><td data-country="Switzerland">Switzerland</td></tr>
+          <tr data-person="athanasios-skraparlis"><th scope="row"><a href="people/athanasios-skraparlis.html">Dr Athanasios Skraparlis</a></th><td>Aucun</td><td data-country="Greece">Greece</td></tr>
+          <tr data-person="avnihan-k-r-s-k"><th scope="row"><a href="people/avnihan-k-r-s-k.html">Mr Avnihan Kırışık</a></th><td>Aucun</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="carla-sofia-ferreira-fernandes"><th scope="row"><a href="people/carla-sofia-ferreira-fernandes.html">Carla Sofia Ferreira Fernandes</a></th><td>Aucun</td><td data-country="Portugal">Portugal</td></tr>
+          <tr data-person="chiara-libiseller"><th scope="row"><a href="people/chiara-libiseller.html">Dr Chiara Libiseller</a></th><td>WG3</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="chiara-ruffa"><th scope="row"><a href="people/chiara-ruffa.html">Dr Chiara Ruffa</a></th><td>Aucun</td><td data-country="France">France</td></tr>
+          <tr data-person="clara-jammot"><th scope="row"><a href="people/clara-jammot.html">Ms Clara Jammot</a></th><td>WG1, WG2</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="daniela-mechkaroska"><th scope="row"><a href="people/daniela-mechkaroska.html">Dr Daniela Mechkaroska</a></th><td>WG2, WG3</td><td data-country="North Macedonia">North Macedonia</td></tr>
+          <tr data-person="danilo-kalezic"><th scope="row"><a href="people/danilo-kalezic.html">Mr Danilo Kalezic</a></th><td>WG1, WG2</td><td data-country="Montenegro">Montenegro</td></tr>
+          <tr data-person="david-matsaberidze"><th scope="row"><a href="people/david-matsaberidze.html">Dr David Matsaberidze</a></th><td>WG1, WG3</td><td data-country="Georgia">Georgia</td></tr>
+          <tr data-person="david-morgan-owen"><th scope="row"><a href="people/david-morgan-owen.html">Dr David Morgan-Owen</a></th><td>Aucun</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="eda-kusku-sonmez"><th scope="row"><a href="people/eda-kusku-sonmez.html">Dr Eda Kuşku Sönmez</a></th><td>WG1, WG3</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="eliza-gheorghe"><th scope="row"><a href="people/eliza-gheorghe.html">Dr Eliza Gheorghe</a></th><td>Aucun</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="esra-merve-boztosun-cal-skan"><th scope="row"><a href="people/esra-merve-boztosun-cal-skan.html">Dr Esra Merve Boztosun-Çalışkan</a></th><td>Aucun</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="eugenio-sanchez"><th scope="row"><a href="people/eugenio-sanchez.html">Mr Eugenio Sánchez</a></th><td>WG3</td><td data-country="France">France</td></tr>
+          <tr data-person="fabio-iguavita-duarte"><th scope="row"><a href="people/fabio-iguavita-duarte.html">Mr Fabio Iguavita Duarte</a></th><td>Aucun</td><td data-country="Czechia">Czechia</td></tr>
+          <tr data-person="felix-kosterke"><th scope="row"><a href="people/felix-kosterke.html">Mr Felix Kösterke</a></th><td>Aucun</td><td data-country="Belgium">Belgium</td></tr>
+          <tr data-person="filip-ejdus"><th scope="row"><a href="people/filip-ejdus.html">Prof Filip Ejdus</a></th><td>WG2, WG3, WG4</td><td data-country="Serbia">Serbia</td></tr>
+          <tr data-person="francesco-canossi"><th scope="row"><a href="people/francesco-canossi.html">Mr Francesco Canossi</a></th><td>Aucun</td><td data-country="Italy">Italy</td></tr>
+          <tr data-person="francisco-javier-montilla-aguilera"><th scope="row"><a href="people/francisco-javier-montilla-aguilera.html">Mr Francisco Javier Montilla Aguilera</a></th><td>Aucun</td><td data-country="Spain">Spain</td></tr>
+          <tr data-person="gayane-harutyunyan"><th scope="row"><a href="people/gayane-harutyunyan.html">Dr Gayane Harutyunyan</a></th><td>WG2, WG3</td><td data-country="Armenia">Armenia</td></tr>
+          <tr data-person="gesine-weber"><th scope="row"><a href="people/gesine-weber.html">Dr Gesine Weber</a></th><td>Aucun</td><td data-country="Switzerland">Switzerland</td></tr>
+          <tr data-person="gil-baram"><th scope="row"><a href="people/gil-baram.html">Dr Gil Baram</a></th><td>Aucun</td><td data-country="United States">United States</td></tr>
+          <tr data-person="giulia-biselli"><th scope="row"><a href="people/giulia-biselli.html">Ms Giulia Biselli</a></th><td>WG1, WG2, WG3, WG4</td><td data-country="Italy">Italy</td></tr>
+          <tr data-person="huw-bennett"><th scope="row"><a href="people/huw-bennett.html">Prof. Huw Bennett</a></th><td>Aucun</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="immanuel-rummel"><th scope="row"><a href="people/immanuel-rummel.html">Mr Immanuel Rummel</a></th><td>Aucun</td><td data-country="Switzerland">Switzerland</td></tr>
+          <tr data-person="isabelle-haynes"><th scope="row"><a href="people/isabelle-haynes.html">Ms Isabelle Haynes</a></th><td>WG1</td><td data-country="Czechia">Czechia</td></tr>
+          <tr data-person="islam-jusufi"><th scope="row"><a href="people/islam-jusufi.html">Prof Islam Jusufi</a></th><td>WG1, WG2, WG3</td><td data-country="North Macedonia">North Macedonia</td></tr>
+          <tr data-person="ivan-zaccagnini"><th scope="row"><a href="people/ivan-zaccagnini.html">Dr Ivan Zaccagnini</a></th><td>Aucun</td><td data-country="Switzerland">Switzerland</td></tr>
+          <tr data-person="joe-burton"><th scope="row"><a href="people/joe-burton.html">Prof. Joe Burton</a></th><td>Aucun</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="johannes-lucht"><th scope="row"><a href="people/johannes-lucht.html">Mr Johannes Lucht</a></th><td>Aucun</td><td data-country="Switzerland">Switzerland</td></tr>
+          <tr data-person="john-helferich"><th scope="row"><a href="people/john-helferich.html">Dr John Helferich</a></th><td>WG1</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="julia-carver"><th scope="row"><a href="people/julia-carver.html">Dr Julia Carver</a></th><td>WG1, WG2, WG4</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="kara-schneider"><th scope="row"><a href="people/kara-schneider.html">Ms Kara Schneider</a></th><td>Aucun</td><td data-country="France">France</td></tr>
+          <tr data-person="ken-mcdonagh"><th scope="row"><a href="people/ken-mcdonagh.html">Dr Ken McDonagh</a></th><td>Aucun</td><td data-country="Ireland">Ireland</td></tr>
+          <tr data-person="kire-babanoski"><th scope="row"><a href="people/kire-babanoski.html">Dr Kire Babanoski</a></th><td>WG1, WG3, WG4</td><td data-country="North Macedonia">North Macedonia</td></tr>
+          <tr data-person="laura-lisboa"><th scope="row"><a href="people/laura-lisboa.html">Ms Laura Lisboa</a></th><td>Aucun</td><td data-country="France">France</td></tr>
+          <tr data-person="leonardo-pesci"><th scope="row"><a href="people/leonardo-pesci.html">Mr Leonardo Pesci</a></th><td>Aucun</td><td data-country="France">France</td></tr>
+          <tr data-person="li-yang"><th scope="row"><a href="people/li-yang.html">Dr Li Yang</a></th><td>Aucun</td><td data-country="Belgium">Belgium</td></tr>
+          <tr data-person="linde-desmaele"><th scope="row"><a href="people/linde-desmaele.html">Dr Linde Desmaele</a></th><td>Aucun</td><td data-country="Netherlands">Netherlands</td></tr>
+          <tr data-person="lucian-bumeder"><th scope="row"><a href="people/lucian-bumeder.html">Lucian Bumeder</a></th><td>Aucun</td><td data-country="Germany">Germany</td></tr>
+          <tr data-person="marco-cifra"><th scope="row"><a href="people/marco-cifra.html">Mr Marco Cifra</a></th><td>Aucun</td><td data-country="Italy">Italy</td></tr>
+          <tr data-person="marie-robin"><th scope="row"><a href="people/marie-robin.html">Dr Marie Robin</a></th><td>WG2, WG3</td><td data-country="Netherlands">Netherlands</td></tr>
+          <tr data-person="marius-ghincea"><th scope="row"><a href="people/marius-ghincea.html">Dr Marius Ghincea</a></th><td>Aucun</td><td data-country="Switzerland">Switzerland</td></tr>
+          <tr data-person="mark-rhinard"><th scope="row"><a href="people/mark-rhinard.html">Prof. Mark Rhinard</a></th><td>Aucun</td><td data-country="Sweden">Sweden</td></tr>
+          <tr data-person="marko-kovacevic"><th scope="row"><a href="people/marko-kovacevic.html">Dr Marko Kovacevic</a></th><td>WG1, WG2, WG3, WG4</td><td data-country="Serbia">Serbia</td></tr>
+          <tr data-person="martin-havacek"><th scope="row"><a href="people/martin-havacek.html">Mr Martin Haváček</a></th><td>WG1, WG3</td><td data-country="Czechia">Czechia</td></tr>
+          <tr data-person="mattia-sguazzini"><th scope="row"><a href="people/mattia-sguazzini.html">Mr Mattia Sguazzini</a></th><td>WG1</td><td data-country="Italy">Italy</td></tr>
+          <tr data-person="mehmet-babacan"><th scope="row"><a href="people/mehmet-babacan.html">Dr Mehmet Babacan</a></th><td>WG2</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="meret-steybe"><th scope="row"><a href="people/meret-steybe.html">Ms Meret Steybe</a></th><td>Aucun</td><td data-country="Switzerland">Switzerland</td></tr>
+          <tr data-person="monika-sus"><th scope="row"><a href="people/monika-sus.html">Prof. Monika Sus</a></th><td>Aucun</td><td data-country="Poland">Poland</td></tr>
+          <tr data-person="moritz-weiss"><th scope="row"><a href="people/moritz-weiss.html">Dr Moritz Weiss</a></th><td>WG1, WG3</td><td data-country="Germany">Germany</td></tr>
+          <tr data-person="niklas-karlen"><th scope="row"><a href="people/niklas-karlen.html">Dr Niklas Karlén</a></th><td>Aucun</td><td data-country="Sweden">Sweden</td></tr>
+          <tr data-person="nikolaos-tzifakis"><th scope="row"><a href="people/nikolaos-tzifakis.html">Prof. Nikolaos Tzifakis</a></th><td>Aucun</td><td data-country="Greece">Greece</td></tr>
+          <tr data-person="p-abdelouahid-ezzarfi"><th scope="row">Prof Abdelouahid Ezzarfi</th><td>WG4</td><td data-country="Morocco">Morocco</td></tr>
+          <tr data-person="p-ajsela-toci"><th scope="row">Ms Ajsela Toci</th><td>WG3</td><td data-country="Albania">Albania</td></tr>
+          <tr data-person="p-aleksandar-ivanov"><th scope="row">Prof Aleksandar Ivanov</th><td>WG1, WG2</td><td data-country="North Macedonia">North Macedonia</td></tr>
+          <tr data-person="p-alessandro-indelicato"><th scope="row">Dr Alessandro Indelicato</th><td>WG3, WG4</td><td data-country="Spain">Spain</td></tr>
+          <tr data-person="p-ana-santos-pinto"><th scope="row">Prof Ana Santos Pinto</th><td>WG2, WG3</td><td data-country="Portugal">Portugal</td></tr>
+          <tr data-person="p-andreea-dragomir"><th scope="row">Prof Andreea Dragomir</th><td>WG1, WG3</td><td data-country="Romania">Romania</td></tr>
+          <tr data-person="p-antonio-calcara"><th scope="row">Prof Antonio Calcara</th><td>WG3</td><td data-country="Belgium">Belgium</td></tr>
+          <tr data-person="p-anzelika-baneviciene"><th scope="row">Dr Anželika Banevičienė</th><td>WG2, WG3</td><td data-country="Lithuania">Lithuania</td></tr>
+          <tr data-person="p-aurelija-puraite"><th scope="row">Ms Aurelija Pūraitė</th><td>WG2, WG3</td><td data-country="Lithuania">Lithuania</td></tr>
+          <tr data-person="p-benoit-josset"><th scope="row">Mr Benoit Josset</th><td>WG4</td><td data-country="France">France</td></tr>
+          <tr data-person="p-benoit-pelopidas"><th scope="row">Prof Benoît Pelopidas</th><td>WG3</td><td data-country="France">France</td></tr>
+          <tr data-person="p-bora-iyiat"><th scope="row">Mr Bora İyiat</th><td>WG1, WG2, WG4</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-brynjolfur-stefansson"><th scope="row">Mr Brynjolfur Stefansson</th><td>WG2</td><td data-country="Iceland">Iceland</td></tr>
+          <tr data-person="p-burak-toraman"><th scope="row">Mr Burak Toraman</th><td>WG2</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-carmen-marquez-carrasco"><th scope="row">Prof Carmen Márquez Carrasco</th><td>WG2, WG3</td><td data-country="Spain">Spain</td></tr>
+          <tr data-person="p-catherine-menon"><th scope="row">Dr Catherine Menon</th><td>WG1, WG2</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="p-cigdem-ustun"><th scope="row">Prof Cigdem Ustun</th><td>WG1, WG3</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-constantinos-adamides"><th scope="row">Dr Constantinos Adamides</th><td>WG1, WG2</td><td data-country="Cyprus">Cyprus</td></tr>
+          <tr data-person="p-daniel-otoole"><th scope="row">Dr Daniel O&#x27;Toole</th><td>WG1</td><td data-country="Ireland">Ireland</td></tr>
+          <tr data-person="p-daniela-castilhos"><th scope="row">Prof Daniela Castilhos</th><td>WG4</td><td data-country="Portugal">Portugal</td></tr>
+          <tr data-person="p-david-curran"><th scope="row">Dr David Curran</th><td>WG1, WG2, WG3, WG4</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="p-dimitar-atanasov"><th scope="row">Mr Dimitar Atanasov</th><td>WG2</td><td data-country="Portugal">Portugal</td></tr>
+          <tr data-person="p-draga-gajic"><th scope="row">Ms Draga Gajic</th><td>WG2, WG3, WG4</td><td data-country="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</td></tr>
+          <tr data-person="p-edlira-titini"><th scope="row">Dr Edlira Titini</th><td>WG2, WG3, WG4</td><td data-country="Albania">Albania</td></tr>
+          <tr data-person="p-ekrem-ok"><th scope="row">Dr Ekrem Ok</th><td>WG3</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-eleni-christodoulou"><th scope="row">Dr Eleni Christodoulou</th><td>WG1</td><td data-country="Cyprus">Cyprus</td></tr>
+          <tr data-person="p-eleri-lillemae"><th scope="row">Dr Eleri Lillemäe</th><td>WG1</td><td data-country="Estonia">Estonia</td></tr>
+          <tr data-person="p-elif-kara"><th scope="row">Dr Elif Kara</th><td>WG4</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-elisabetta-ginevra-iida"><th scope="row">Ms Elisabetta Ginevra Iida</th><td>WG3</td><td data-country="Italy">Italy</td></tr>
+          <tr data-person="p-erdem-ozluk"><th scope="row">Prof Erdem Ozluk</th><td>WG3</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-esra-merve-boztosun-caliskan"><th scope="row">Dr Esra Merve Boztosun Caliskan</th><td>WG1, WG3</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-fatiha-djebbar"><th scope="row">Dr Fatiha Djebbar</th><td>WG1, WG3</td><td data-country="Sweden">Sweden</td></tr>
+          <tr data-person="p-felipe-pathe-duarte"><th scope="row">Prof Felipe Pathé Duarte</th><td>WG1, WG2, WG3</td><td data-country="Portugal">Portugal</td></tr>
+          <tr data-person="p-fitim-kastrati"><th scope="row">Dr Fitim Kastrati</th><td>WG4</td><td data-country="Kosovo*">Kosovo*</td></tr>
+          <tr data-person="p-furkan-sarper-koseoglu"><th scope="row">Mr Furkan Sarper Koseoglu</th><td>WG1, WG2, WG3</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-georgian-marius-ghincea"><th scope="row">Dr Georgian Marius Ghincea</th><td>WG1, WG2, WG3, WG4</td><td data-country="Switzerland">Switzerland</td></tr>
+          <tr data-person="p-grigor-vardanyan"><th scope="row">Dr Grigor Vardanyan</th><td>WG1, WG2, WG3, WG4</td><td data-country="Armenia">Armenia</td></tr>
+          <tr data-person="p-gurkan-gur"><th scope="row">Dr Gürkan Gür</th><td>WG1</td><td data-country="Switzerland">Switzerland</td></tr>
+          <tr data-person="p-halil-kanadikirik"><th scope="row">Dr Halil Kanadikirik</th><td>WG1, WG4</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-hugo-meijer"><th scope="row">Dr Hugo Meijer</th><td>WG1</td><td data-country="France">France</td></tr>
+          <tr data-person="p-i-aytac-kadioglu"><th scope="row">Dr I. Aytac Kadioglu</th><td>WG1, WG3, WG4</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-ice-ilijevski"><th scope="row">Prof Ice Ilijevski</th><td>WG2, WG3</td><td data-country="North Macedonia">North Macedonia</td></tr>
+          <tr data-person="p-ilke-gocmen"><th scope="row">Prof Ilke Gocmen</th><td>WG1</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-ilyas-ferhat-demirbas"><th scope="row">Dr Ilyas Ferhat Demirbas</th><td>WG3</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-iztok-prezelj"><th scope="row">Prof Iztok Prezelj</th><td>WG1, WG2, WG3</td><td data-country="Slovenia">Slovenia</td></tr>
+          <tr data-person="p-jessica-pereira"><th scope="row">Ms Jéssica Pereira</th><td>WG3, WG4</td><td data-country="Portugal">Portugal</td></tr>
+          <tr data-person="p-kalina-lubas"><th scope="row">Dr Kalina Lubas</th><td>WG2</td><td data-country="Poland">Poland</td></tr>
+          <tr data-person="p-keara-barrett"><th scope="row">Dr Keara Barrett</th><td>WG1, WG2, WG3, WG4</td><td data-country="Ireland">Ireland</td></tr>
+          <tr data-person="p-kenan-hodzic"><th scope="row">Dr Kenan Hodžić</th><td>WG3, WG4</td><td data-country="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</td></tr>
+          <tr data-person="p-kujtim-zeka"><th scope="row">Mr Kujtim Zeka</th><td>WG3, WG4</td><td data-country="Albania">Albania</td></tr>
+          <tr data-person="p-laura-inigo-alvarez"><th scope="row">Dr Laura Íñigo Álvarez</th><td>WG3, WG4</td><td data-country="Portugal">Portugal</td></tr>
+          <tr data-person="p-laurena-kalaja"><th scope="row">Ms Laurena Kalaja</th><td>WG1, WG3</td><td data-country="Albania">Albania</td></tr>
+          <tr data-person="p-liliana-pasquale"><th scope="row">Dr Liliana Pasquale</th><td>WG1</td><td data-country="Ireland">Ireland</td></tr>
+          <tr data-person="p-lorenz-sommer"><th scope="row">Mr Lorenz Sommer</th><td>WG1</td><td data-country="Germany">Germany</td></tr>
+          <tr data-person="p-ludovica-castelli"><th scope="row">Dr Ludovica Castelli</th><td>WG1, WG3</td><td data-country="Italy">Italy</td></tr>
+          <tr data-person="p-magnus-petersson"><th scope="row">Prof Magnus Petersson</th><td>WG1</td><td data-country="Sweden">Sweden</td></tr>
+          <tr data-person="p-marco-wyss"><th scope="row">Dr Marco Wyss</th><td>WG1, WG3</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="p-marina-bartolome-valenzuela"><th scope="row">Prof Marina Bartolomé Valenzuela</th><td>WG2</td><td data-country="Spain">Spain</td></tr>
+          <tr data-person="p-martin-chovancik"><th scope="row">Dr Martin Chovancik</th><td>WG1, WG2, WG3</td><td data-country="Czechia">Czechia</td></tr>
+          <tr data-person="p-mehmet-gokay-ozerim"><th scope="row">Prof Mehmet Gokay Ozerim</th><td>WG1, WG4</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-mehmet-recai-uygur"><th scope="row">Dr Mehmet Recai Uygur</th><td>WG2, WG3</td><td data-country="Lithuania">Lithuania</td></tr>
+          <tr data-person="p-mentor-beqa"><th scope="row">Dr Mentor Beqa</th><td>WG1, WG2, WG3</td><td data-country="Albania">Albania</td></tr>
+          <tr data-person="p-mia-abdic"><th scope="row">Ms Mia Abdic</th><td>WG4</td><td data-country="Serbia">Serbia</td></tr>
+          <tr data-person="p-milan-varda"><th scope="row">Mr Milan Varda</th><td>WG1, WG3</td><td data-country="Serbia">Serbia</td></tr>
+          <tr data-person="p-mile-obrenovic"><th scope="row">Mr Mile Obrenović</th><td>WG3</td><td data-country="Serbia">Serbia</td></tr>
+          <tr data-person="p-miranda-tedeshvili"><th scope="row">Ms Miranda Tedeshvili</th><td>WG2, WG3</td><td data-country="Georgia">Georgia</td></tr>
+          <tr data-person="p-mirela-imsirovic"><th scope="row">Dr Mirela Imsirovic</th><td>WG1, WG3</td><td data-country="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</td></tr>
+          <tr data-person="p-monica-grau-sarabia"><th scope="row">Ms Monica Grau Sarabia</th><td>WG4</td><td data-country="Spain">Spain</td></tr>
+          <tr data-person="p-monika-gabriela-bartoszewicz"><th scope="row">Prof Monika Gabriela Bartoszewicz</th><td>WG1, WG2, WG3</td><td data-country="Norway">Norway</td></tr>
+          <tr data-person="p-muammer-ozturk"><th scope="row">Dr Muammer Öztürk</th><td>WG3</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-muhammet-ozcan"><th scope="row">Mr Muhammet Ozcan</th><td>WG1, WG3, WG4</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-nar-akgul"><th scope="row"><a href="people/p-nar-akgul.html">Dr Pınar Akgül</a></th><td>Aucun</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-nemanja-dzuverovic"><th scope="row">Dr Nemanja Džuverović</th><td>WG1, WG4</td><td data-country="Serbia">Serbia</td></tr>
+          <tr data-person="p-nicolas-krieger"><th scope="row">Mr Nicolas Krieger</th><td>WG1</td><td data-country="Germany">Germany</td></tr>
+          <tr data-person="p-nicolas-lemay-hebert"><th scope="row">Prof Nicolas Lemay-Hebert</th><td>WG3</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="p-noela-mahmutaj"><th scope="row">Dr Noela Mahmutaj</th><td>WG1, WG2, WG3</td><td data-country="Albania">Albania</td></tr>
+          <tr data-person="p-pinar-akgul"><th scope="row">Dr Pinar Akgül</th><td>WG1, WG2</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-pinar-caglayan"><th scope="row">Dr Pinar Caglayan</th><td>WG1, WG4</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-ruzica-cubela-bajramovic"><th scope="row">Dr Ruzica Cubela Bajramovic</th><td>WG1, WG2</td><td data-country="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</td></tr>
+          <tr data-person="p-samuel-zilincik"><th scope="row">Dr Samuel Zilincik</th><td>WG1, WG2, WG3</td><td data-country="Denmark">Denmark</td></tr>
+          <tr data-person="p-sandra-cvikic"><th scope="row">Dr Sandra Cvikić</th><td>WG2</td><td data-country="Croatia">Croatia</td></tr>
+          <tr data-person="p-sanne-verschuren"><th scope="row">Dr Sanne Verschuren</th><td>WG1, WG2</td><td data-country="United States">United States</td></tr>
+          <tr data-person="p-savas-bicer"><th scope="row">Prof Savas Bicer</th><td>WG2</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-senada-selo-sabic"><th scope="row">Dr Senada Šelo Šabić</th><td>WG2, WG4</td><td data-country="Croatia">Croatia</td></tr>
+          <tr data-person="p-serghei-sprincean"><th scope="row">Prof Serghei Sprincean</th><td>WG2</td><td data-country="Moldova">Moldova</td></tr>
+          <tr data-person="p-sergiu-gabriel-berindea"><th scope="row">Mr Sergiu Gabriel Berindea</th><td>WG3</td><td data-country="Romania">Romania</td></tr>
+          <tr data-person="p-simge-pelit"><th scope="row">Ms Simge Pelit</th><td>WG3</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-tahir-azad"><th scope="row">Dr Tahir Azad</th><td>WG2</td><td data-country="United Kingdom">United Kingdom</td></tr>
+          <tr data-person="p-tamer-kasikci"><th scope="row">Mr Tamer Kasikci</th><td>WG1, WG3, WG4</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-tanase-tasente"><th scope="row">Prof Tănase Tasențe</th><td>WG1, WG2, WG3, WG4</td><td data-country="Romania">Romania</td></tr>
+          <tr data-person="p-teemu-hakkinen"><th scope="row">Dr Teemu Häkkinen</th><td>WG1, WG2</td><td data-country="Finland">Finland</td></tr>
+          <tr data-person="p-theo-zacharis"><th scope="row">Mr Theo Zacharis</th><td>WG1</td><td data-country="Greece">Greece</td></tr>
+          <tr data-person="p-tijana-karic"><th scope="row">Dr Tijana Karić</th><td>WG1, WG2</td><td data-country="Germany">Germany</td></tr>
+          <tr data-person="p-tijana-recevic"><th scope="row">Dr Tijana Recevic</th><td>WG2, WG3, WG4</td><td data-country="Serbia">Serbia</td></tr>
+          <tr data-person="p-tim-thies"><th scope="row">Mr Tim Thies</th><td>WG3</td><td data-country="Germany">Germany</td></tr>
+          <tr data-person="p-valderi-leithardt"><th scope="row">Dr Valderi Leithardt</th><td>WG4</td><td data-country="Portugal">Portugal</td></tr>
+          <tr data-person="p-vanessa-newby"><th scope="row">Dr Vanessa Newby</th><td>WG3</td><td data-country="Italy">Italy</td></tr>
+          <tr data-person="p-vasil-pavlov"><th scope="row">Dr Vasil Pavlov</th><td>WG1, WG3</td><td data-country="Bulgaria">Bulgaria</td></tr>
+          <tr data-person="p-vedat-coskun"><th scope="row">Prof Vedat Coskun</th><td>WG2</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-veronica-russu"><th scope="row">Dr Veronica Russu</th><td>WG1, WG2</td><td data-country="Poland">Poland</td></tr>
+          <tr data-person="p-veronika-nagy"><th scope="row">Dr Veronika Nagy</th><td>WG1, WG4</td><td data-country="Netherlands">Netherlands</td></tr>
+          <tr data-person="p-vesna-nikolic"><th scope="row">Dr Vesna Nikolić</th><td>WG2, WG4</td><td data-country="Serbia">Serbia</td></tr>
+          <tr data-person="p-violeta-vasiliauskiene"><th scope="row">Prof Violeta Vasiliauskienė</th><td>WG1</td><td data-country="Lithuania">Lithuania</td></tr>
+          <tr data-person="p-vladimir-sterpu"><th scope="row">Dr Vladimir Sterpu</th><td>WG1, WG2, WG3</td><td data-country="Moldova">Moldova</td></tr>
+          <tr data-person="p-walid-blila"><th scope="row">Mr Walid Blila</th><td>WG1, WG2</td><td data-country="Lithuania">Lithuania</td></tr>
+          <tr data-person="p-yagnyashri-kodaru"><th scope="row">Ms Yagnyashri Kodaru</th><td>WG2</td><td data-country="Germany">Germany</td></tr>
+          <tr data-person="p-yasemin-necmiye-tutar"><th scope="row">Dr Yasemin Necmiye Tutar</th><td>WG3</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-yigit-cem-eskicioglu"><th scope="row">Mr Yigit Cem Eskicioglu</th><td>WG3, WG4</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="p-yusuf-ozer"><th scope="row">Dr Yusuf Özer</th><td>WG2, WG3</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="paulina-polko"><th scope="row"><a href="people/paulina-polko.html">Prof Paulina Polko</a></th><td>WG2</td><td data-country="Poland">Poland</td></tr>
+          <tr data-person="pavlosioannis-koktsidis"><th scope="row"><a href="people/pavlosioannis-koktsidis.html">Prof Pavlosioannis Koktsidis</a></th><td>WG1, WG2, WG3</td><td data-country="Greece">Greece</td></tr>
+          <tr data-person="pieter-zhao"><th scope="row"><a href="people/pieter-zhao.html">Mr Pieter Zhao</a></th><td>WG3</td><td data-country="Netherlands">Netherlands</td></tr>
+          <tr data-person="revecca-pedi"><th scope="row"><a href="people/revecca-pedi.html">Dr Revecca Pedi</a></th><td>WG1</td><td data-country="Greece">Greece</td></tr>
+          <tr data-person="rusudan-zabakhidze"><th scope="row"><a href="people/rusudan-zabakhidze.html">Ms Rusudan Zabakhidze</a></th><td>Aucun</td><td data-country="Sweden">Sweden</td></tr>
+          <tr data-person="sara-russo"><th scope="row"><a href="people/sara-russo.html">Ms sara russo</a></th><td>WG2</td><td data-country="Italy">Italy</td></tr>
+          <tr data-person="sarka-kolmasova"><th scope="row"><a href="people/sarka-kolmasova.html">Dr Sarka Kolmasova</a></th><td>WG1, WG2, WG3</td><td data-country="Czechia">Czechia</td></tr>
+          <tr data-person="saurav-narain"><th scope="row"><a href="people/saurav-narain.html">Mr Saurav Narain</a></th><td>WG1, WG4</td><td data-country="Netherlands">Netherlands</td></tr>
+          <tr data-person="seyithan-ahmet-ates"><th scope="row"><a href="people/seyithan-ahmet-ates.html">Dr Seyithan Ahmet Ateş</a></th><td>WG1</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="silvia-damato"><th scope="row"><a href="people/silvia-damato.html">Dr Silvia D&#x27;Amato</a></th><td>Aucun</td><td></td></tr>
+          <tr data-person="sophie-enos-attali"><th scope="row"><a href="people/sophie-enos-attali.html">Dr Sophie Enos-Attali</a></th><td>Aucun</td><td data-country="France">France</td></tr>
+          <tr data-person="sprincean-serghei"><th scope="row"><a href="people/sprincean-serghei.html">Prof. Sprincean Serghei</a></th><td>Aucun</td><td data-country="Moldova">Moldova</td></tr>
+          <tr data-person="tanja-pavleska"><th scope="row"><a href="people/tanja-pavleska.html">Dr Tanja Pavleska</a></th><td>WG1, WG3, WG4</td><td data-country="Slovenia">Slovenia</td></tr>
+          <tr data-person="teodora-stoicescu"><th scope="row"><a href="people/teodora-stoicescu.html">Ms Teodora Stoicescu</a></th><td>Aucun</td><td data-country="Romania">Romania</td></tr>
+          <tr data-person="tolga-c-kr-kc"><th scope="row"><a href="people/tolga-c-kr-kc.html">Dr Tolga Çıkrıkçı</a></th><td>Aucun</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="vasiliki-plessia-aravani"><th scope="row"><a href="people/vasiliki-plessia-aravani.html">Ms Vasiliki Plessia Aravani</a></th><td>WG2</td><td data-country="Austria">Austria</td></tr>
+          <tr data-person="wendy-he"><th scope="row"><a href="people/wendy-he.html">Dr Wendy He</a></th><td>Aucun</td><td data-country="Germany">Germany</td></tr>
+          <tr data-person="yanina-shved-dogrul"><th scope="row"><a href="people/yanina-shved-dogrul.html">Ms Yanina Shved-Dogrul</a></th><td>Aucun</td><td data-country="Türkiye">Türkiye</td></tr>
+          <tr data-person="yijun-xu"><th scope="row"><a href="people/yijun-xu.html">Ms Yijun Xu</a></th><td>WG3</td><td data-country="Germany">Germany</td></tr>
+          <tr data-person="zane-sime"><th scope="row"><a href="people/zane-sime.html">Dr Zane Šime</a></th><td>Aucun</td><td data-country="Latvia">Latvia</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+  <!-- network-map:list end -->
 </div>
 </main>
 <footer class="footer" role="contentinfo">
@@ -236,7 +447,7 @@
     </div>
   </div>
 </footer>
-<script src="assets/js/site.js?v=0580313a" defer></script>
-<script src="assets/js/network-map.js?v=dd1ff218" defer></script>
+<script src="assets/js/site.js?v=af99308f" defer></script>
+<script src="assets/js/network-map.js?v=f47ab927" defer></script>
 </body>
 </html>

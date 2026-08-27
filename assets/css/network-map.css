@@ -19,7 +19,10 @@
 .dark .network-map-proto-pill{color:#ffd489}
 .network-map-lede{color:var(--muted);max-width:74ch;margin:0 0 18px;font-size:.98rem}
 .network-map-lede a{color:var(--accent-2)}
-.network-map-stats{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+/* The statistics sit under the map now, not above it: six tiles cost 70px on a
+   desktop and 229px on a phone, and they were the last thing between a visitor
+   and the thing they came for. */
+.network-map-stats{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
 .network-map-stat{padding:10px 16px;border-radius:14px;background:rgba(255,255,255,.55);border:1px solid rgba(11,18,32,.08)}
 .dark .network-map-stat{background:rgba(255,255,255,.05);border-color:var(--glass-border)}
 .network-map-stat b{display:block;font-family:'Lexend',sans-serif;font-size:1.3rem;color:var(--ink);line-height:1.1}
@@ -64,3 +67,45 @@
 .network-map-card .coauth{font-size:.76rem;color:#0aa2c0;margin-top:4px}
 .dark .network-map-card .coauth{color:#5fd4e8}
 @media (max-width:640px){ #network-map-canvas{height:480px} }
+
+/* ── The filter disclosure ───────────────────────────────────────────────────
+   The hub chips are the row that grows with the lens, four on Working Groups
+   and fifteen on research themes, so they fold into a disclosure that reports
+   what it is holding while closed. Styled as a control rather than as a
+   heading, since a flex <summary> drops the browser's own triangle and the one
+   element saying "the filters are in here" would otherwise be a word above a
+   rule. */
+.network-map-filters{margin:0 0 12px;border:1px solid rgba(11,18,32,.10);border-radius:12px;background:rgba(255,255,255,.5)}
+.dark .network-map-filters{background:rgba(255,255,255,.04);border-color:var(--glass-border)}
+.network-map-filters__summary{display:flex;align-items:center;gap:9px;padding:9px 14px;cursor:pointer;list-style:none;border-radius:12px}
+.network-map-filters__summary::-webkit-details-marker{display:none}
+.network-map-filters__summary:hover{background:rgba(11,18,32,.04)}
+.dark .network-map-filters__summary:hover{background:rgba(255,255,255,.06)}
+.network-map-filters__summary:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.network-map-filters__summary::before{content:'';width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .18s;flex:none;margin-left:2px}
+.network-map-filters[open] .network-map-filters__summary::before{transform:rotate(45deg)}
+.network-map-filters__label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.network-map-filters__n{font-size:.78rem;color:var(--muted);opacity:.85}
+.network-map-filters .network-map-controls{margin:0;padding:2px 14px 12px}
+@media (pointer:coarse){ .network-map-filters__summary{padding:13px 14px} }
+
+/* ── The list under the map ──────────────────────────────────────────────────
+   Rendered at build time by scripts/build-network-map.py, narrowed by
+   network-map.js as the filters move. Closed by default: a hidden link is a
+   focusable link a sighted keyboard user cannot see, and a closed disclosure
+   keeps its 191 rows out of the tab order. */
+.network-map-list{margin:18px 0 0;border-top:1px solid rgba(11,18,32,.10);padding-top:14px}
+.dark .network-map-list{border-top-color:var(--glass-border)}
+.network-map-list__summary{cursor:pointer;font-size:.86rem;font-weight:600;color:var(--accent-2);padding:4px 0}
+.network-map-list__summary:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
+.network-map-list__hint{font-size:.78rem;color:var(--muted);margin:6px 0 10px}
+.network-map-list__scroll{max-height:460px;overflow:auto;border:1px solid rgba(11,18,32,.10);border-radius:12px}
+.dark .network-map-list__scroll{border-color:var(--glass-border)}
+.network-map-list__scroll:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.network-map-list__table{width:100%;border-collapse:collapse;font-size:.84rem}
+.network-map-list__table th,.network-map-list__table td{text-align:left;padding:7px 12px;border-bottom:1px solid rgba(11,18,32,.06);font-weight:400;color:var(--ink-2)}
+.dark .network-map-list__table th,.dark .network-map-list__table td{border-bottom-color:rgba(255,255,255,.07)}
+.network-map-list__table thead th{position:sticky;top:0;background:var(--bg-1);font-weight:700;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);z-index:1}
+.dark .network-map-list__table thead th{background:#121a2c}
+.network-map-list__table tbody th{font-weight:500;color:var(--ink)}
+.network-map-list__table a{color:var(--accent-2)}

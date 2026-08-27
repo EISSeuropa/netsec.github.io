@@ -104,7 +104,8 @@ since `--check` can only detect staleness in inputs the script already
 reads. `sync-indico.yml` now regenerates the graph in the same auto-PR
 that refreshes `indico.json`.
 
-`scripts/build-network-map.py` builds `data/network-map.json`, a node/edge graph.
+`scripts/build-network-map.py` builds `data/network-map.json`, a node/edge graph,
+and rewrites the list region of the three locale pages from the same graph.
 The renderer, `assets/js/network-map.js`, is a **pure consumer**: it reads
 the committed JSON and never fetches `bios.json` or reaches the network.
 
@@ -184,10 +185,8 @@ build it, which is how the page came to ship 5.6 MB of headshots
 unnoticed. The first measured run caught exactly that.
 
 It shares the performance and accessibility floors with every other
-audited page, which it passes without relaxation. The one exemption is
-`categories:seo`: the page scores 0.58 there because of its deliberate
-`noindex` (see *Status* above), so asserting on it would warn on every
-run forever. Restore that assertion when the prototype graduates.
+audited page, which it passes without relaxation, and since #1605 it
+carries no exemption at all (see *Status* above).
 
 The image budget passes, confirmed by measurement rather than by
 arithmetic: the run on the signposted page reports no budget warning for
@@ -219,23 +218,66 @@ hover names, one click opens.
 The same bug was found and fixed on the EISS Atlas
 (EISSeuropa/EISSeuropa.github.io#1431).
 
+## The page order
+
+The map is the reason a visitor opens the page, so it comes first. It did
+not: measured on the served page, the canvas started at y=622 on a
+1280x900 desktop and y=998 on a 375x812 phone, which put the whole map
+below the first screen on a phone. Three things were sitting in front of
+it, and each moved.
+
+The lede taught the mechanics (the two lenses, the overlays, the hover,
+the click-through) at 170 px on a desktop and 340 px on a phone. Those
+mechanics are all on the page already, named on the chips and spelled out
+in the legend, so the lede now says what the map is and stops.
+
+The statistics strip moved below the canvas. Six tiles cost 70 px and
+229 px respectively, and they are a thing to read rather than a control.
+
+The hub chips fold into a `<details>`, closed by the renderer on load and
+open in the markup so a reader without scripting still gets them. That
+row is the one that grows with the lens, four chips on Working Groups and
+fifteen on research themes. Its summary reports how many hubs are showing,
+since a filtered map behind a closed disclosure is otherwise a state with
+nothing on screen to explain it.
+
+Map top is now y=470 and y=638.
+
 ## Without JavaScript
 
-`<main>` carries a `<noscript>` block naming the list-based equivalents,
-matching the convention the ESSC pages already use. The canvas, the
-statistics strip and the control rows are all script-rendered, so without
-it the page was a heading, a lede and three empty boxes. That did not
-matter while the page was unlisted and started mattering the moment it was
-linked and indexed.
+`<main>` carries a `<noscript>` block, matching the convention the ESSC
+pages already use. The canvas, the statistics strip and the control rows
+are all script-rendered, so without it the page was a heading, a lede and
+three empty boxes. That did not matter while the page was unlisted and
+started mattering the moment it was linked and indexed. The block now
+points at the table below the map rather than at another page, which is
+an alternative the reader already has in front of them.
 
 ## Accessibility
 
 The canvas is a visual convenience, not the only way to the
-information. Its `aria-label` says what the map shows and points to the
-list-based equivalents: WG membership lives on the Working Groups page
-and everything person-level lives on the Directory, both fully
-navigable without the canvas. The legend spells out what every colour
-and ring means in text.
+information. Under the map sits a table of everyone it draws, with their
+Working Groups and their country, and the canvas `aria-label` points at
+it. The legend spells out what every colour and ring means in text.
+
+That table is rendered at build time by `build-network-map.py`, between
+the `network-map:list` sentinels, the same splice `build-field-guide.py`
+uses on the glossary pages. Rendering it in the browser would have given
+the alternative the same dependency as the barrier it answers, which is
+the defect the EISS Atlas found in its own list
+(EISSeuropa/EISSeuropa.github.io#1496).
+
+It sits inside a closed `<details>`, because 83 profile links that a
+sighted keyboard user cannot see are 83 stops in the tab order that
+appear to lead nowhere. `network-map.js` hides and shows the same rows as
+the filters move, off the same `personVisible()` the canvas paints with,
+so one rule decides who is on the map and the two surfaces cannot
+disagree.
+
+Countries are stored as English exonyms, the way the Directory stores
+them, and the renderer localises each cell through `window.netsecCountry`
+from a `data-country` attribute. Without scripting the FR and DE tables
+carry the English name, which is the information rather than an error.
 
 ## Growing with the data
 
