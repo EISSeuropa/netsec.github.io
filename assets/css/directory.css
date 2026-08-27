@@ -585,6 +585,11 @@ html:not(.dark) .mentorship-card{ background:rgba(255,255,255,.6); }
 }
 html:not(.dark) .mentorship-why-chip.is-stage{ background:rgba(11,18,32,.05); }
 .mentorship-showall{ margin:14px 0 0; text-align:center; }
+/* What the matcher cannot show, said in words (#1627). Under both views,
+   since a mentee arrives at the email step from either one. */
+.mentorship-note{ margin:18px 0 0; padding-top:14px; border-top:1px solid var(--line);
+  font-size:.85rem; line-height:1.6; color:var(--muted); max-width:70ch; }
+.mentorship-note a{ color:var(--accent-2); }
 .mentorship-showall button{
   font:inherit; font-size:.82rem; font-weight:600; color:var(--ink-2); cursor:pointer;
   background:rgba(255,255,255,.05); border:1px solid var(--line); border-radius:999px; padding:7px 18px;

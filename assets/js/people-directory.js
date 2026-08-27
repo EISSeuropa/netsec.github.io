@@ -2489,6 +2489,40 @@
 
     if (view === 'grid') renderMentorshipGrid(panel, ctx);
     else renderMentorshipWizard(panel, ctx);
+
+    panel.appendChild(mentorshipExpectations());
+  }
+
+  // The matcher's last act is opening an email client, and nothing after that
+  // point is observable to anyone (#1627). A mentee is sending a cold email on
+  // the strength of a badge, and a mentor at capacity has no cheap way to say
+  // so, which is why 1 of 82 members carries either of the two states that
+  // exist to retire the first two. Copy is not the whole fix, and it is the
+  // part that does not wait on a round of maintainer mail.
+  const BIOS_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform';
+
+  function mentorshipExpectations() {
+    const note = document.createElement('p');
+    note.className = 'mentorship-note';
+    note.appendChild(document.createTextNode(window.netsecT(
+      'Mentorship here starts with an email you send yourself, and an answer is not always quick.'
+    ) + ' '));
+    // The catalogue holds plain text, so the link is spliced at the {link}
+    // marker rather than assembled from two half-sentences, which no other
+    // language would break in the same place.
+    const sentence = window.netsecT(
+      'If you are already mentoring as many people as you can take, or you have found your mentor, say so on the {link} and your badge here will follow.'
+    );
+    const [before, after] = sentence.split('{link}');
+    note.appendChild(document.createTextNode(before));
+    const a = document.createElement('a');
+    a.href = BIOS_FORM;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = window.netsecT('directory form');
+    note.appendChild(a);
+    note.appendChild(document.createTextNode(after === undefined ? '' : after));
+    return note;
   }
 
   // ─────────── Research-interest filter (Phase 3) ───────────
