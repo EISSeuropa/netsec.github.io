@@ -153,6 +153,8 @@ maintainer-facing audience.
 
 #### Changed
 
+- The Network Map is labelled Beta rather than Prototype. The map has been live, signposted and stable since it was linked from the Working Groups page and the Directory, and the old label was waiting on the Action's first co-authored publication, which is a date nobody on the website side controls. Hand-translated for FR and DE.
+
 - The Network Map opens on the map. On a phone the canvas used to begin below the whole first screen, behind an introduction that explained the controls, six statistics and three rows of chips. The introduction now says what the map is and leaves the mechanics to the chips and the legend, the statistics moved under the map, and the hub filters fold into a control that reports how many hubs are showing. The map now starts a third of the way down a desktop screen and inside the first screen of a phone. Hand-translated for FR and DE.
 
 - The Network Map shows a member's country in the language of the page, on the hover card and in the list under the map, the way the Directory already does.
