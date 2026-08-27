@@ -2846,10 +2846,13 @@ body.search-open{overflow:hidden}
   font-size:.95rem;color:var(--ink-2);line-height:1.5;
 }
 .deliverables-roadmap-link-text strong{color:var(--ink)}
+/* 11px rather than 9px takes this to 47px, clearing the 44px in WCAG 2.5.5
+   Target Size (Enhanced). It rendered at 43px, one pixel under, on three
+   pages in three locales (#1603). */
 .deliverables-roadmap-link-cta{
   flex-shrink:0;
   display:inline-flex;align-items:center;gap:8px;
-  padding:9px 16px;border-radius:10px;
+  padding:11px 16px;border-radius:10px;
   font-size:.92rem;font-weight:600;color:#fff;
   background:var(--accent);border:1px solid var(--accent);
   text-decoration:none;
@@ -2884,9 +2887,11 @@ body.search-open{overflow:hidden}
 .rm-feedback-actions{
   display:flex;flex-wrap:wrap;gap:10px;
 }
+/* The sibling the #1603 sweep found: the same in-body CTA shape, the same
+   9px padding, the same 43px. */
 .rm-feedback-action{
   display:inline-flex;align-items:center;gap:8px;
-  padding:9px 16px;border-radius:10px;
+  padding:11px 16px;border-radius:10px;
   font-size:.92rem;font-weight:600;color:var(--ink);
   background:var(--glass-bg);border:1px solid var(--glass-border);
   text-decoration:none;

@@ -40,6 +40,8 @@
 .network-map-wg-chip:hover{transform:translateY(-1px)}
 .network-map-wg-chip[aria-pressed="false"]{opacity:.32}
 .network-map-wg-chip:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+/* Height under a thumb lives in the max-width block below, whose descendant
+   selector out-specifies a bare .network-map-wg-chip here (#1603 sweep). */
 .network-map-stage{position:relative;border-radius:var(--radius);overflow:hidden;background:radial-gradient(120% 90% at 50% 0%,rgba(10,132,255,.07),transparent 60%),var(--bg-1);border:1px solid rgba(11,18,32,.08)}
 .dark .network-map-stage{background:radial-gradient(120% 90% at 50% 0%,rgba(110,161,255,.09),transparent 60%),rgba(255,255,255,.03);border-color:var(--glass-border)}
 #network-map-canvas{display:block;width:100%;height:640px;cursor:default}
@@ -144,6 +146,7 @@
 .network-map-bulk:hover:not(:disabled){color:var(--ink);border-color:var(--accent-2)}
 .network-map-bulk:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
 .network-map-bulk:disabled{opacity:.38;cursor:default}
+@media (pointer:coarse){ .network-map-bulk{padding:12px 13px} }
 .network-map-clear{margin-left:auto}
 
 /* ── The hub panel ───────────────────────────────────────────────────────────
@@ -183,7 +186,9 @@
    aria-label already, and two chips reading "Groupes de travail" and "Thèmes
    de recherche" under the lede do not need the word "Angle" above them. */
 @media (max-width:640px){
-  .network-map-controls .network-map-wg-chip{font-size:.78rem;padding:6px 10px}
+  /* Narrow horizontally so the two lens chips stay on one row in French and
+     German, and tall enough to clear 44px under a thumb (#1603 sweep). */
+  .network-map-controls .network-map-wg-chip{font-size:.78rem;padding:12px 10px}
   /* Only the rows outside the disclosure. The Find row keeps its <label>,
      since hiding it would leave the input with no accessible name, and the
      Overlays row inside the disclosure keeps its own, since two unlabelled

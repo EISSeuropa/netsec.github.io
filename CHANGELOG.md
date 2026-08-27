@@ -200,6 +200,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The buttons that lead somewhere are easier to hit on a phone. The "See the roadmap" and "Open the Network Map" signposts, the feedback buttons at the foot of the roadmap, and the Network Map's own filter chips were all under the size a thumb is comfortable with, the signposts by a single pixel. They now clear it.
+
 - The Network Map explains itself when there is nothing to draw. Switching every filter chip off used to leave a blank rectangle, and a failure to load the map's data wrote a single line into the statistics, which now sit below the map and would have put the message out of sight. Both now say what happened on the map itself, and the empty map names the control that emptied it. Hand-translated for FR and DE.
 
 - The Network Map's hover card no longer loses its bottom edge. Hovering a person in the lower third of the map cut the card off where it met the edge of the map, taking the research themes, the shared-panel line and the link to their profile with it. It now opens above the pointer when there is no room below, and to the left when there is none to the right.
