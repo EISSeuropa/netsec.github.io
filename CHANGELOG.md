@@ -200,6 +200,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- Four research keywords in the Directory reach their research theme again at the next sync. Two members' entries missed an existing keyword by a typo and a trailing full stop, one keyword was spelled exactly like a theme the taxonomy had not listed under itself, and FIMI was rendering as "Fimi". Until now each of them sat outside every theme, so its holder was missing from that filter.
+
 - The ESSC 2026 conference photographs load about a quarter of the data they used to. The four pictures in the gallery were full-size camera exports, 1.23 MB between them, shown in a grid that displays each one at about the size of a postcard. They are now served at the size they are actually shown, which takes them to 290 KB and brings the page inside its image budget, the last one that was over.
 
 - The buttons that lead somewhere are easier to hit on a phone. The "See the roadmap" and "Open the Network Map" signposts, the feedback buttons at the foot of the roadmap, and the Network Map's own filter chips were all under the size a thumb is comfortable with, the signposts by a single pixel. They now clear it.
