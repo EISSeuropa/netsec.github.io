@@ -141,7 +141,7 @@ maintainer-facing audience.
 
 #### Added
 
-- The Directory gains a sixteenth research theme, Climate and environmental security. Two members work on climate change, environmental degradation and the greening of defence industry, and until now none of that reached a theme, so their work was missing from the filter row and from the Network Map's themes lens. Hand-translated for FR and DE.
+- The Directory gains a sixteenth research theme, Climate, energy and environmental security. Three members work on climate change, environmental degradation, energy security and the greening of defence industry, and most of that reached no theme at all, so their work was missing from the filter row and from the Network Map's themes lens. Hand-translated for FR and DE.
 
 - The Network Map reports how much of the Action comes from an Inclusiveness Target Country, which is the figure COST weighs most heavily when it looks at an Action's inclusiveness. 106 of the 192 people on the map do, and a new overlay rings them. The figure counts by country, which the page says plainly, since a member based in an EU Outermost Region is not visible in the data behind it. Hand-translated for FR and DE.
 
@@ -204,7 +204,7 @@ maintainer-facing audience.
 
 #### Fixed
 
-- Seven more research keywords reach a theme at the next sync, so seven members join a filter they were missing from: religion, research ethics, political bioethics, space security and the EU's Common Security and Defence Policy, alongside the two climate keywords above. Nobody loses a theme they already had.
+- Twenty-two more research keywords reach a theme at the next sync, so nine members join filters they were missing from. Religion, research ethics, political bioethics, space security, migration, medium powers, EU–China relations, foreign interference and the EU's Common Security and Defence Policy are among them, and only four keywords on the whole roster now reach no theme at all, down from twenty-nine.
 
 - The fifteenth research theme, Democracy, governance and political change, appears in French and German rather than in English. It shipped untranslated when it was promoted, so it read in English on the filter row and on the map.
 
