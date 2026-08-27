@@ -33,6 +33,10 @@ def test_wg_hubs_and_person_nodes():
     )
     assert graph["stats"] == {
         "working_groups": 1, "people": 1, "people_with_bios": 0, "edges": 1,
+        # UK is not an Inclusiveness Target Country (#1646). The count is
+        # always emitted, unlike outputs_tagged: it is a headline figure for
+        # COST reporting, and a zero there is a fact rather than noise.
+        "itc_people": 0,
     }
     hub = next(n for n in graph["nodes"] if n["type"] == "wg")
     assert hub["id"] == "wg-1" and hub["name"] == "One"
@@ -426,3 +430,46 @@ def test_untagged_publications_leave_the_hubs_alone():
     # committed graph byte-identical.
     assert "outputs" not in hub
     assert "outputs_tagged" not in graph["stats"]
+
+
+# ── Inclusiveness Target Countries (#1646) ─────────────────────────────────
+
+def test_the_list_holds_the_twenty_five_cost_names():
+    """Pinned against Annex I - Level A v1.7. A change here is a change to a
+    public claim about a member's institution, so it should be deliberate."""
+    assert len(build_network_map.ITC_COUNTRIES) == 25
+    assert "hungary" in build_network_map.ITC_COUNTRIES
+    # Not ITC, and both are easy to add by mistake: Luxembourg is a COST Full
+    # Member, Kosovo and Morocco are Near Neighbour Countries.
+    for outside in ("luxembourg", "kosovo", "morocco", "spain", "france"):
+        assert outside not in build_network_map.ITC_COUNTRIES
+
+
+@pytest.mark.parametrize("written", [
+    "Czechia", "Czech Republic", "czech republic",
+    "Bosnia & Herzegovina", "Bosnia and Herzegovina",
+    "Türkiye", "Turkiye", "Turkey",
+    "Republic of Moldova", "Moldova",
+])
+def test_directory_spellings_resolve_to_the_cost_list(written):
+    """bios.json does not spell every country the way COST does, and a near
+    miss is a silent undercount rather than an error."""
+    assert build_network_map.is_itc(written)
+
+
+@pytest.mark.parametrize("outside", ["Spain", "France", "Kosovo*", "Morocco", "", None])
+def test_non_itc_countries_are_not_counted(outside):
+    assert not build_network_map.is_itc(outside)
+
+
+def test_itc_flag_and_count_land_on_the_graph():
+    graph = build(
+        _wg({"number": 1, "name": "One", "colour": "wg-1", "memberCount": 2,
+             "members": [{"name": "Dr Ada Lovelace", "country": "Czechia"},
+                         {"name": "Dr Grace Hopper", "country": "Spain"}]})
+    )
+    people = {n["name"]: n for n in graph["nodes"] if n["type"] == "person"}
+    assert people["Dr Ada Lovelace"]["itc"] is True
+    # Absent rather than false, so the field stays off every other node.
+    assert "itc" not in people["Dr Grace Hopper"]
+    assert graph["stats"]["itc_people"] == 1

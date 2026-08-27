@@ -446,6 +446,45 @@ started mattering the moment it was linked and indexed. The block now
 points at the table below the map rather than at another page, which is
 an alternative the reader already has in front of them.
 
+## The inclusiveness figure
+
+COST evaluates an Action on its inclusiveness, and Inclusiveness Target
+Country participation is the number that carries most weight there. The
+map now reports it: 106 of 192 people, with a dashed ring on those
+members behind an overlay chip (#1646).
+
+**Where the list comes from.** The Annotated Rules (Level C v3.0, 25
+September 2025) do not hold it. They say twice that it lives in the
+Country and Organisations Table, so the 25 names in `ITC_COUNTRIES` are
+quoted from *Annex I - Level A: Country and Organisations Table, version
+1.7, 1 November 2023*, checked on 27 August 2026 and cross-checked
+against the Excellence and Inclusiveness page on cost.eu, which lists the
+same 25. The constant carries that provenance in a comment beside it.
+Re-check it when COST publishes a new version of the annex: this is a
+policy fact aimed at an evaluator, and a list one country wrong is a
+wrong public claim about a member's institution.
+
+**Spelling is where this breaks silently.** The directory writes
+"Czechia" and "Bosnia & Herzegovina" where COST writes "Czech Republic"
+and "Bosnia and Herzegovina". A plain membership test would drop two real
+ITCs and understate the figure with nothing going red, so
+`normalise_country()` strips diacritics, spells out the ampersand and
+runs a small alias map, and the tests pin every spelling the roster
+currently uses. Kosovo and Morocco are on the roster and are Near
+Neighbour Countries rather than ITCs, so they are correctly outside.
+
+**What the figure cannot see.** The same table designates the EU
+Outermost Regions as ITC, so a member in the Canary Islands or Guadeloupe
+is ITC while Spain and France are not. `bios.json` carries a country and
+nothing finer, so the count understates them. The page says so under the
+figure rather than burying it here.
+
+**The ring is dashed on purpose.** `--wg-3` is `#8457ea` and `--wg-4` is
+`#f59e0b`, so the four Working Group hues already claim violet and amber,
+and the theme wheel claims more. Rather than hunt for a free hue, the ring
+is dashed, which tells it apart from every solid fill and solid ring on
+the map whatever the hue does.
+
 ## Findings
 
 The statistics count the roster, which is what the Directory is for.

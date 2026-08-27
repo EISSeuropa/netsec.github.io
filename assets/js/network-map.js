@@ -75,6 +75,12 @@
       accent: cssVar('--accent-2') || '#0a84ff',
       offer: '#2e9e6a',
       seek: '#f59e0b',
+      // --wg-3 is #8457ea and --wg-4 is #f59e0b, so the four WG hues already
+      // claim violet and amber, and the theme wheel claims more. Rather than
+      // hunt for a free hue, this ring is dashed: that tells it apart from
+      // every solid fill and solid ring on the map whatever the hue does
+      // (#1646).
+      itc: '#c026d3',
       dark: document.documentElement.classList.contains('dark'),
     };
   }
@@ -92,7 +98,7 @@
   let coauthorEdges = [];                 // person<->person, from publications
   let lens = 'wg';
   const activeHubs = new Set();           // hub ids active in the current lens
-  const overlays = { panels: false, mentorship: false, coauthors: false };
+  const overlays = { panels: false, mentorship: false, coauthors: false, itc: false };
   let hovered = null, draggingHub = null;
   let dragFrom = { x: 0, y: 0 }, dragMoved = false;
   let panning = false, panFrom = { x: 0, y: 0 };
@@ -311,6 +317,15 @@
         ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
         ctx.fillStyle = p.slug ? theme.accent : '#9aa7bd';
         ctx.fill();
+      }
+      // Outside both mentorship rings, at a fixed radius, so the two overlays
+      // never draw over each other whichever combination is on.
+      if (overlays.itc && p.itc) {
+        ctx.save();
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.arc(p.x, p.y, r + 9, 0, Math.PI * 2);
+        ctx.strokeStyle = theme.itc; ctx.lineWidth = 2; ctx.stroke();
+        ctx.restore();
       }
       if (overlays.mentorship && p.mentorship) {
         if (p.mentorship.indexOf('mentor') !== -1) {
@@ -926,6 +941,20 @@
     draw();
   }
 
+  // The COST Country and Organisations Table designates the EU Outermost
+  // Regions as ITC alongside the 25 countries. bios.json carries a country and
+  // nothing finer, so the figure understates a member in one of them, and the
+  // page says so where it shows the figure rather than in a doc nobody reads.
+  function buildItcNote(itcPeople) {
+    if (!itcPeople || !statsEl.parentNode) return;
+    const line = document.createElement('p');
+    line.className = 'network-map-gap';
+    line.textContent = T('Counted by country, so a member in an EU Outermost Region is not included.');
+    const gap = document.querySelector('.network-map-gap');
+    const after = gap || statsEl;
+    after.parentNode.insertBefore(line, after.nextSibling);
+  }
+
   // ── Findings (#1646) ───────────────────────────────────────────────────────
   // The statistics count the roster, which is what the Directory is for. These
   // are the things only the map's own structure knows, computed client-side
@@ -1399,6 +1428,11 @@
        ...(coauthorEdges.length ? [['' + coauthorEdges.length, 'co-authored outputs']] : []),
        ...(data.stats.outputs_tagged
          ? [['' + data.stats.outputs_tagged, 'outputs tagged to a Working Group']] : []),
+       // COST evaluates an Action on its inclusiveness, and this is the figure
+       // that carries most weight there (#1646).
+       ...(data.stats.itc_people
+         ? [[data.stats.itc_people + ' / ' + people.length,
+             'from an Inclusiveness Target Country']] : []),
        [data.stats.people_with_bios + ' / ' + people.length, 'with a directory profile']]
         .forEach(([b, s]) => {
           const el = document.createElement('div');
@@ -1410,6 +1444,7 @@
         });
       statsEl.appendChild(lensDrawnEl);
       buildProfileGap(data.stats.people_with_bios);
+      buildItcNote(data.stats.itc_people);
       buildFindings();
 
       [['wg', 'Working Groups'], ['theme', 'Research themes']].forEach(([v, label]) => {
@@ -1417,7 +1452,8 @@
         b.dataset.lens = v;
         lensEl.appendChild(b);
       });
-      const overlayDefs = [['panels', 'ESSC co-panels'], ['mentorship', 'Mentorship offers & requests']];
+      const overlayDefs = [['panels', 'ESSC co-panels'], ['mentorship', 'Mentorship offers & requests'],
+        ['itc', 'Inclusiveness Target Countries']];
       // Co-authorship starts at zero edges (publications.json is empty until
       // D6 ships its first output) and the chip appears with the first one.
       if (coauthorEdges.length) {

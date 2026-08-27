@@ -267,6 +267,12 @@
       'drawn on this lens': 'affichées sur cet angle',
       '{n} people on the map have no directory profile yet.': '{n} personnes sur la carte n\u2019ont pas encore de profil dans l\u2019annuaire.',
       'Add yours': 'Ajoutez le vôtre',
+      // Inclusiveness Target Countries (#1646). The COST term is kept as COST
+      // writes it, since that is what an evaluator is looking for.
+      'Inclusiveness Target Countries': 'Pays cibles d\u2019inclusion (ITC)',
+      'from an Inclusiveness Target Country': 'issues d\u2019un pays cible d\u2019inclusion',
+      'Counted by country, so a member in an EU Outermost Region is not included.': 'Le décompte se fait par pays, une personne dans une région ultrapériphérique de l\u2019UE n\u2019est donc pas incluse.',
+      'from an Inclusiveness Target Country (ITC)': 'issue d\u2019un pays cible d\u2019inclusion (ITC)',
       'Only members with a profile': 'Seulement les membres avec un profil',
       '{n} overlay on': '{n} superposition active',
       '{n} overlays on': '{n} superpositions actives',
@@ -539,6 +545,10 @@
       'drawn on this lens': 'in dieser Perspektive dargestellt',
       '{n} people on the map have no directory profile yet.': '{n} Personen auf der Karte haben noch kein Profil im Verzeichnis.',
       'Add yours': 'Fügen Sie Ihres hinzu',
+      'Inclusiveness Target Countries': 'Inclusiveness Target Countries (ITC)',
+      'from an Inclusiveness Target Country': 'aus einem Inclusiveness Target Country',
+      'Counted by country, so a member in an EU Outermost Region is not included.': 'Gezählt wird nach Land, eine Person in einer EU-Region in äußerster Randlage ist daher nicht enthalten.',
+      'from an Inclusiveness Target Country (ITC)': 'aus einem Inclusiveness Target Country (ITC)',
       'Only members with a profile': 'Nur Mitglieder mit Profil',
       '{n} overlay on': '{n} Überlagerung aktiv',
       '{n} overlays on': '{n} Überlagerungen aktiv',
