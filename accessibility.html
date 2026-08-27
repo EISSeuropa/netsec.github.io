@@ -203,6 +203,7 @@
       <li><strong>Roadmap Gantt chart.</strong> A dense data visualisation. On narrow viewports the chart requires horizontal scrolling. The scroll region is keyboard-focusable so users can pan with arrow keys (WCAG 2.1.1), but a text-only alternative summary is not yet provided.</li>
       <li><strong>Decorative animations.</strong> Aurora background blobs and reveal-on-scroll fades are <em>automatically</em> disabled when the operating system or browser signals <code>prefers-reduced-motion</code>. We do not currently expose a separate per-site override.</li>
       <li><strong>Third-party assets.</strong> Country flag thumbnails are served from <code>flagcdn.com</code> and headshot photos from <code>eiss-europa.com</code>. Their long-term availability is outside the Action's direct control. If any image becomes unavailable, the surrounding text content remains intact and informative.</li>
+      <li><strong>Network Map canvas.</strong> A force-directed drawing of the whole Action. The canvas conveys clustering visually and cannot express that to assistive technology. Everyone it draws is listed as a table under the map, rendered into the page rather than by script, and the canvas itself takes keyboard focus. A text summary of the clustering is not yet provided.</li>
       <li><strong>EU emblem SVG.</strong> The <em>Funded by the European Union</em> emblem carries an <code>aria-label</code> and <code>role="img"</code>, but no long description. It is described by the surrounding boilerplate text.</li>
     </ul>
     <p>We plan to address these limitations in future iterations.</p>
@@ -219,6 +220,7 @@
       <li>The Gantt grid uses ARIA grid roles (<code>role="table"</code>, <code>role="row"</code>, <code>role="columnheader"</code>, <code>role="cell"</code>) so assistive technology parses it as tabular data. The scrollable region itself is keyboard-focusable.</li>
       <li>Working-group membership chips on each member are grouped with <code>role="group"</code> and an <code>aria-label</code> so screen readers announce them as a group (e.g. <em>"Working-group membership: WG1, WG3"</em>) rather than as loose tokens.</li>
       <li>Contact form: inline validation, accessible error reporting, and a confirmation toast announced via <code>role="status" aria-live="polite"</code>.</li>
+      <li>The Network Map canvas is keyboard-focusable: arrow keys walk its Working Groups, research themes and people, <kbd>Enter</kbd> opens a profile and <kbd>Esc</kbd> clears the selection, with a polite <code>role="status"</code> region announcing what the selection lands on. The same people are listed in a table under the map that does not depend on scripting, and the map answers in words when a filter has emptied it or its data fails to load.</li>
       <li>The COST logotype and EU emblem containers respect the COST Visual Identity Guide (white container, clear-space, minimum size).</li>
     </ul>
 
@@ -248,7 +250,7 @@
     <h2>Enforcement procedure</h2>
     <p>If you are not satisfied with our response, you may contact the equality body or accessibility-compliance body in your country. Within the European Union, each Member State designates its own enforcement body under the <a href="https://eur-lex.europa.eu/eli/dir/2016/2102/oj" target="_blank" rel="noopener">Web Accessibility Directive 2016/2102</a>.</p>
 
-    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Accessibility Statement v1.3 · prepared 2 June 2026 (June re-assessment) · supersedes v1.2 of 22 May 2026 (final pre-launch pass), v1.1 of 22 May 2026 (launch-QA review) and v1.0 of 14 May 2026 · next scheduled review 22 May 2027.</p>
+    <p style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)">Accessibility Statement v1.4 · prepared 27 August 2026 (Network Map keyboard path and list alternative) · supersedes v1.3 of 2 June 2026 (June re-assessment), v1.2 of 22 May 2026 (final pre-launch pass), v1.1 of 22 May 2026 (launch-QA review) and v1.0 of 14 May 2026 · next scheduled review 22 May 2027.</p>
   </div>
 </section>
 </main>
@@ -309,7 +311,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=226f7ad0" defer></script>
+<script src="assets/js/site.js?v=653f54b0" defer></script>
 
 </body>
 </html>

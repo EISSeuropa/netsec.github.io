@@ -436,6 +436,38 @@ started mattering the moment it was linked and indexed. The block now
 points at the table below the map rather than at another page, which is
 an alternative the reader already has in front of them.
 
+## The keyboard, and the states that said nothing
+
+`document.querySelector('#network-map-canvas').tabIndex` was -1, measured.
+There was no focus, no traversal and no announcement, and the canvas
+`aria-label` answered by pointing at two other pages. The list under the
+map is the conformance answer; this is what makes the map itself usable
+rather than only skippable (#1645).
+
+The canvas takes focus and the arrow keys walk it. Traversal order is the
+hubs of the current lens followed by the visible people in the order the
+graph holds them, which is the order the table under the map lists them,
+so the two surfaces agree. Landing on a hub opens its panel, landing on a
+person pins them the way Find does, Enter follows a profile and Escape
+clears. It reuses `spotlight` and `pinnedHub` rather than introducing a
+third kind of selection.
+
+Announcements go through the Find control's status line rather than a
+second live region, so a screen reader hears one voice for the map. A tap
+that pins a person announces it too.
+
+Three states used to say nothing:
+
+- every hub switched off drew an empty canvas, and the notice now names
+  the control that emptied it rather than saying "nothing to show",
+- a data-load failure wrote one line into the statistics strip, which
+  moved below the map in the fold work and would have stranded the
+  message off the fold, so it paints on the stage,
+- a search that matched nothing, which the Find work already answered.
+
+Notices are painted in screen space, after the view transform is unwound,
+so a notice is never scaled or panned off the canvas.
+
 ## Accessibility
 
 The canvas is a visual convenience, not the only way to the
@@ -461,6 +493,13 @@ Countries are stored as English exonyms, the way the Directory stores
 them, and the renderer localises each cell through `window.netsecCountry`
 from a `data-country` attribute. Without scripting the FR and DE tables
 carry the English name, which is the information rather than an error.
+
+The accessibility statement carries the map in both of its lists as of
+v1.4 (#1652): the canvas under *Non-accessible or limited content*, since
+it conveys clustering visually and cannot express that to assistive
+technology, and the table plus the keyboard path under *Accessibility
+features in place*. Hand-translated for FR and DE, with the version
+footer bumped and the review date left where it was.
 
 ## Growing with the data
 

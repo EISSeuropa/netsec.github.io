@@ -43,6 +43,9 @@
 .network-map-stage{position:relative;border-radius:var(--radius);overflow:hidden;background:radial-gradient(120% 90% at 50% 0%,rgba(10,132,255,.07),transparent 60%),var(--bg-1);border:1px solid rgba(11,18,32,.08)}
 .dark .network-map-stage{background:radial-gradient(120% 90% at 50% 0%,rgba(110,161,255,.09),transparent 60%),rgba(255,255,255,.03);border-color:var(--glass-border)}
 #network-map-canvas{display:block;width:100%;height:640px;cursor:default}
+/* The canvas takes focus (#1645), so it needs a ring like every other
+   interactive control. Inset, since the stage clips its overflow. */
+#network-map-canvas:focus-visible{outline:2px solid var(--accent-2);outline-offset:-3px}
 .network-map-card{position:absolute;pointer-events:none;max-width:280px;padding:12px 15px;border-radius:14px;
   background:rgba(255,255,255,.92);border:1px solid rgba(11,18,32,.10);box-shadow:0 10px 28px rgba(11,18,32,.16);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s}

@@ -141,6 +141,8 @@ maintainer-facing audience.
 
 #### Added
 
+- The Network Map can be used from the keyboard. Tab to the map, then the arrow keys walk its Working Groups, research themes and people, Enter opens a profile and Esc clears the selection, with each step read out to a screen reader. Hand-translated for FR and DE.
+
 - The Network Map zooms. Hold Ctrl or Command and scroll, or use the buttons on the map, to magnify a crowded cluster until the faces in it can be told apart, then drag the background to move around and press the reset button to come back. Scrolling without the key still scrolls the page, and on a phone a finger pans the map only once it is zoomed in. Hand-translated for FR and DE.
 
 - Clicking a hub on the Network Map now tells you about it. A Working Group or a research theme opens a panel under the map with how many people it holds, the three hubs it shares the most people with, a button to show only that hub, and a link through to the Working Groups page or to the Directory filtered to that theme. Each of the shared hubs is a button that moves the panel across, so you can walk from one part of the network to the next. On a phone, where the hover card never appears, this is the first thing a hub has ever done. Hand-translated for FR and DE.
@@ -165,6 +167,8 @@ maintainer-facing audience.
 
 #### Changed
 
+- The accessibility statement covers the Network Map, at version 1.4. It names the map's canvas among the parts of the site that do not fully meet the standard, since a drawing of clusters cannot be conveyed to a screen reader, and it names the table under the map and the map's keyboard controls among the features in place. Hand-translated for FR and DE.
+
 - More of the Network Map fits on a phone screen. The row labels above the chips are hidden at phone width, where each row already announces itself to assistive technology and the chips say what they are, which stops the two lens chips wrapping onto a second line in French and German. The map now starts about 45 pixels higher in all three languages.
 
 - The French and German Network Map opens on the map, the way the English one does. Both pages carry the manual-translation ribbon above the header, which is 80 pixels a phone screen does not have to spare, so their opening paragraph is now written shorter rather than translated from the English one. On a phone the map moves up by about a hundred pixels on both.
@@ -183,6 +187,8 @@ maintainer-facing audience.
 - The mentorship matching panel now works with one research area at a time. Picking an area from the guided sentence, or a theme chip in the browse-all scope bar, replaces the previous selection instead of adding to it, so switching area is a single click rather than deselect-then-select, and picking the selected area again clears it. The "add an area" token is retired with its FR and DE strings, and the area picker no longer announces itself to assistive technology as a multi-select list. The directory's own research-theme filter chips outside the panel keep their multi-select behaviour, and areas they select all stay visible in the sentence. The interaction test suite covers the replace and clear journeys.
 
 #### Fixed
+
+- The Network Map explains itself when there is nothing to draw. Switching every filter chip off used to leave a blank rectangle, and a failure to load the map's data wrote a single line into the statistics, which now sit below the map and would have put the message out of sight. Both now say what happened on the map itself, and the empty map names the control that emptied it. Hand-translated for FR and DE.
 
 - The Network Map's hover card no longer loses its bottom edge. Hovering a person in the lower third of the map cut the card off where it met the edge of the map, taking the research themes, the shared-panel line and the link to their profile with it. It now opens above the pointer when there is no room below, and to the left when there is none to the right.
 

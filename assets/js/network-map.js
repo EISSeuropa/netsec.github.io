@@ -340,6 +340,7 @@
 
     drawHubLabels(hoverIds);
     ctx.restore();
+    paintNotice();
   }
 
   // Labels are a pass of their own, after the circles, so they can be placed
@@ -605,7 +606,13 @@
         draw();
         return;
       }
-      if (hovered !== n) { hovered = n; showCard(n, mx, my); draw(); return; }
+      if (hovered !== n) {
+        hovered = n;
+        showCard(n, mx, my);
+        announce(n);
+        draw();
+        return;
+      }
     }
     if (n && n.slug) location.href = 'people/' + n.slug + '.html';
   });
@@ -903,6 +910,87 @@
     draw();
   }
 
+  // ── The keyboard path, and the states that said nothing (#1645) ────────────
+  // The canvas was tabIndex -1 with no focus, no traversal and no
+  // announcement, and its aria-label answered by pointing at two other pages.
+  // The list under the map is the conformance answer; this makes the map
+  // itself usable rather than only skippable.
+  //
+  // Traversal order is the hubs of the current lens followed by the visible
+  // people in the order the graph holds them, which is the order the table
+  // under the map lists them, so the two surfaces agree.
+  function keyboardOrder() {
+    return hubs().filter(h => activeHubs.has(h.id))
+      .concat(people.filter(personVisible));
+  }
+
+  // Reuses the Find control's status line rather than adding a second live
+  // region, so a screen reader hears one voice for the map.
+  function announce(node) {
+    if (!node) return;
+    if (node.type === 'person') { say(T('Showing {name}.').replace('{name}', node.name)); return; }
+    const name = node.type === 'wg' ? 'WG' + node.number + ' ' + T(node.name) : T(node.name);
+    say(name + ', ' + T(node.type === 'wg' ? '{n} members' : '{n} people work here')
+      .replace('{n}', node.memberCount));
+  }
+
+  function focusNode(node) {
+    if (!node) return;
+    spotlight = node.type === 'person' ? node : null;
+    if (node.type !== 'person') openHubPanel(node);
+    else { paintCard(0, 0); draw(); syncUrl(); }
+    announce(node);
+  }
+
+  canvas.addEventListener('keydown', (e) => {
+    const order = keyboardOrder();
+    if (!order.length) return;
+    const current = spotlight || pinnedHub;
+    const at = current ? order.indexOf(current) : -1;
+    let next = null;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = order[(at + 1) % order.length];
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = order[(at <= 0 ? order.length : at) - 1];
+    else if (e.key === 'Home') next = order[0];
+    else if (e.key === 'End') next = order[order.length - 1];
+    else if (e.key === 'Enter' && current && current.slug) { location.href = 'people/' + current.slug + '.html'; return; }
+    else if (e.key === 'Escape') {
+      closeHubPanel();
+      if (spotlight) { if (findEl) findEl.value = ''; say(''); setSpotlight(null); }
+      return;
+    } else return;
+    e.preventDefault();
+    if (pinnedHub && next.type === 'person') closeHubPanel();
+    focusNode(next);
+  });
+
+  // Three states that used to say nothing. Painted on the stage in screen
+  // space, after the view transform is unwound, so a notice is never scaled or
+  // panned off the canvas.
+  let notice = null;
+  function paintNotice() {
+    if (!notice) return;
+    ctx.save();
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = theme.muted;
+    ctx.font = '600 14px Lexend, Inter, sans-serif';
+    ctx.fillText(notice[0], W / 2, H / 2 - 6);
+    if (notice[1]) {
+      ctx.font = '400 12.5px Inter, sans-serif';
+      ctx.fillText(notice[1], W / 2, H / 2 + 16);
+    }
+    ctx.restore();
+  }
+
+  function updateNotice() {
+    // Only the cause the reader can act on. "No hub is on" names the control
+    // that emptied the map, where a generic "nothing to show" would not.
+    notice = hubs().every(h => !activeHubs.has(h.id))
+      ? [T('Every hub is switched off, so the map is empty.'),
+         T('Use All on the filter row to bring it back.')]
+      : null;
+  }
+
   // ── Zoom and pan (#1644) ───────────────────────────────────────────────────
   // 191 nodes share a 640px canvas and a face draws at about 16px, so a busy
   // cluster cannot be resolved into people at any window size.
@@ -1044,6 +1132,7 @@
     if (bulk[0]) bulk[0].disabled = on === total;
     if (bulk[1]) bulk[1].disabled = on === 0;
     if (clearBtn) clearBtn.hidden = on === total;
+    updateNotice();
     if (filtersNEl) {
       filtersNEl.textContent = on === total
         ? T('showing all {n}').replace('{n}', total)
@@ -1239,7 +1328,15 @@
         applyFind(urlFind);
       }
     })
-    .catch(() => { statsEl.textContent = T('The network map data could not be loaded.'); });
+    .catch(() => {
+      // Painted on the stage rather than in the statistics strip, which now
+      // sits below the map and would have stranded the message off the fold.
+      notice = [T('The network map data could not be loaded.'),
+        T('The same people are listed on the Working Groups page and the Directory.')];
+      resize();
+      ctx.clearRect(0, 0, W, H);
+      paintNotice();
+    });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && pinnedHub) closeHubPanel();
