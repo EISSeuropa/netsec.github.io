@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-08-25T05:46:32+00:00",
+  "generated_at": "2026-08-27T16:30:08+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-08-25T05:46:32+00:00"
+    "last_synced": "2026-08-27T16:30:08+00:00"
   },
   "members": [
     {
@@ -3800,6 +3800,53 @@
       "themes": [
         "Transnational and human security"
       ]
+    },
+    {
+      "id": "pablo-arriazu",
+      "name": "Mr Pablo Arriazu",
+      "country": "Spain",
+      "country_code": "es",
+      "affiliation": "National University of Distance Education (UNED)",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor",
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "wg_leadership": {},
+      "bio": "Pablo Arriazu is a Space Operations professional and PhD researcher in International Security at UNED, where his work examines how the shifting world order influences national space security strategies, particularly those of medium and small powers. His earlier research focused on the protection of space assets. This research is supported by an ongoing decade of inter-agency and international cooperation in space operations and engineering. He is currently contributing to the implementation of the future European resilient satellite navigation systems. He previously worked in the operations of the European system for meteorological and climate monitoring from space and its global integration. This included serving as the service manager of Telespazio operations at EUMETSAT and extensive involvement in the EU Copernicus Programme.",
+      "keywords": [
+        "Space Security",
+        "European Security and Defence",
+        "Strategy and Deterrence",
+        "Medium powers",
+        "Small States"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "0009-0000-5391-3143",
+      "linkedin": "https://www.linkedin.com/in/pablo-arriazu-ruiz/",
+      "twitter": "",
+      "bluesky": "https://bsky.app/profile/arriazu.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/pablo-arriazu.jpg",
+      "source": "form",
+      "photo_source_sha256": "5acc9917bfa4aacc11077df328593a287b807a2f38b20df863dc1221018bee97",
+      "canonical_keywords": [
+        "European security and defence",
+        "Medium powers",
+        "Small states",
+        "Space security",
+        "Strategy and deterrence"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3977,6 +4024,10 @@
     },
     {
       "keyword": "Security and defence",
+      "count": 2
+    },
+    {
+      "keyword": "Small states",
       "count": 2
     },
     {
@@ -4252,6 +4303,10 @@
       "count": 1
     },
     {
+      "keyword": "European security and defence",
+      "count": 1
+    },
+    {
       "keyword": "European strategic autonomy",
       "count": 1
     },
@@ -4425,6 +4480,10 @@
     },
     {
       "keyword": "Maritime strategy",
+      "count": 1
+    },
+    {
+      "keyword": "Medium powers",
       "count": 1
     },
     {
@@ -4604,10 +4663,6 @@
       "count": 1
     },
     {
-      "keyword": "Small states",
-      "count": 1
-    },
-    {
       "keyword": "Small states' foreign and security policy",
       "count": 1
     },
@@ -4616,11 +4671,19 @@
       "count": 1
     },
     {
+      "keyword": "Space security",
+      "count": 1
+    },
+    {
       "keyword": "Strategic autonomy",
       "count": 1
     },
     {
       "keyword": "Strategic culture",
+      "count": 1
+    },
+    {
+      "keyword": "Strategy and deterrence",
       "count": 1
     },
     {
@@ -4707,7 +4770,7 @@
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 28
+      "count": 29
     },
     {
       "theme": "Cyber and emerging technology",
@@ -4966,11 +5029,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 51
+      "count": 52
     },
     {
       "region": "Global and cross-regional",
-      "count": 40
+      "count": 41
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
