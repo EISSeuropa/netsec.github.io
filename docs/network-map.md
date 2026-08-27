@@ -436,6 +436,36 @@ started mattering the moment it was linked and indexed. The block now
 points at the table below the map rather than at another page, which is
 an alternative the reader already has in front of them.
 
+## What the map actually draws
+
+The statistics strip counted the whole roster while the canvas beside it
+drew 142 of 191 on the Working Groups lens and 70 of 191 on the research
+themes lens. A member on no WG roster has nothing to be drawn towards on
+one lens, and a member with no research themes recorded has nothing on
+the other, so the map has never drawn them while the figure above them
+counted all 191.
+
+A tile now reports it, and follows the lens (#1651). It counts membership
+of the lens rather than of the current filter, since that is the gap the
+strip was silent about, and the chips are already reported by the filter
+summary and by the list hint.
+
+The other half of the same gap is the 108 people with no directory
+profile, who render as small grey dots that link nowhere (#1647). The map
+is the clearest picture the site has of who is missing from the
+Directory, so a line under the figures says so and points at the bios
+form, and an **Only members with a profile** chip narrows the map to the
+part the Directory documents. It is a view filter rather than an overlay,
+so it runs through `personVisible()`, which is the one rule the canvas,
+the table and the keyboard traversal all read.
+
+On the themes lens that chip is a no-op, since research themes come from
+the bios and every person carrying one therefore has a profile. On the
+Working Groups lens it goes from 142 to 34.
+
+The country-map view and the members-over-time series stay in #765, where
+they were moved: they are a statistics page rather than a network view.
+
 ## The keyboard, and the states that said nothing
 
 `document.querySelector('#network-map-canvas').tabIndex` was -1, measured.

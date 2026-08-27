@@ -141,6 +141,10 @@ maintainer-facing audience.
 
 #### Added
 
+- The Network Map says how many people each of its two views can draw. The figures beside the map counted everyone in the Action while the map itself drew 142 of them under Working Groups and 70 under research themes, because a member who is on no working-group roster, or whose research themes are not recorded, has nothing to be drawn towards. A new figure reports that and follows the view you are in. Hand-translated for FR and DE.
+
+- The Network Map names the members it cannot link to a profile, and can hide them. 108 of the 191 people on the map are drawn as small grey dots with nowhere to click through to, and the map now says so under its figures with a link to the profile form, and offers a filter for the part of the network the Directory documents. Hand-translated for FR and DE.
+
 - The Network Map can be used from the keyboard. Tab to the map, then the arrow keys walk its Working Groups, research themes and people, Enter opens a profile and Esc clears the selection, with each step read out to a screen reader. Hand-translated for FR and DE.
 
 - The Network Map zooms. Hold Ctrl or Command and scroll, or use the buttons on the map, to magnify a crowded cluster until the faces in it can be told apart, then drag the background to move around and press the reset button to come back. Scrolling without the key still scrolls the page, and on a phone a finger pans the map only once it is zoomed in. Hand-translated for FR and DE.
