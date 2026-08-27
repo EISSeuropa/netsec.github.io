@@ -63,7 +63,16 @@ with overlays layered on top:
 - **Working Groups lens.** The four WG hubs, with each person linked to
   the WGs they belong to.
 - **Research themes lens.** One hub per research theme drawn from the
-  bios, the map of what the Action works on.
+  bios, the map of what the Action works on. The taxonomy is the sixteen
+  themes in `data/keyword-aliases.json`, and a hub appears once a member
+  carries a keyword under it, so the lens grows with the roster rather
+  than with the taxonomy.
+
+  `THEME_WHEEL` in the renderer holds eighteen colours. It held fourteen
+  against fifteen themes, so the fifteenth hub wrapped onto the first
+  one's blue, and the sixteenth would have made a second such pair. Hue
+  is a grouping aid rather than an identifier here: the label, the hover
+  card and the panel each name the hub.
 - **ESSC co-panels overlay.** Person-to-person arcs for a shared
   conference panel, the arc weighted by how many panels two people
   shared in that edition. Works on either lens. Each arc carries the

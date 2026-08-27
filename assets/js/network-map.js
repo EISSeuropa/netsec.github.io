@@ -4,7 +4,7 @@
    graph layers, rendered as two lenses plus two overlays:
 
      Lens "Working Groups"  — 4 WG hubs, roster-membership edges.
-     Lens "Research themes" — 14 theme hubs from the bios: the map of the field.
+     Lens "Research themes" — one hub per research theme in the bios.
      Overlay "ESSC co-panels" — person-to-person arcs for shared conference
        panels (weight = shared panels), on either lens.
      Overlay "Mentorship"   — rings on the dots: offering and/or seeking.
@@ -63,9 +63,14 @@
 
   // A stable colour per theme hub, drawn from a small brand-adjacent wheel
   // (the four WG hues plus rotations), so the theme lens is not a monochrome.
+  // The wheel held 14 against 15 themes, so the fifteenth hub already wrapped
+  // onto the first one's blue, and the sixteenth theme would have made two
+  // such pairs. Eighteen leaves headroom for the two clusters on the watch
+  // list in data/keyword-aliases.json. Hue is a grouping aid here rather than
+  // an identifier: the label, the hover card and the panel each name the hub.
   const THEME_WHEEL = ['#0973de', '#10b981', '#8457ea', '#f59e0b', '#e2568c',
     '#0aa2c0', '#7a9a01', '#b3562e', '#5867dd', '#2e9e6a', '#a855f7', '#d97706',
-    '#3b82f6', '#14b8a6'];
+    '#3b82f6', '#14b8a6', '#dc2626', '#0f766e', '#db2777', '#65a30d'];
 
   let theme = {};
   function readTheme() {
@@ -1248,7 +1253,7 @@
     hubChipsEl.appendChild(bulkBtn(T('None'), () => setAllHubs(false)));
     hubs().forEach(h => {
       hubChipsEl.appendChild(chip(
-        // The 14 theme names are already in the shared catalogue (the
+        // The theme names are already in the shared catalogue (the
         // directory's theme filter chips use the same keys), so the hub
         // chips translate without a single new string.
         h.type === 'wg' ? 'WG' + h.number : T(h.name),

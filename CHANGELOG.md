@@ -141,6 +141,8 @@ maintainer-facing audience.
 
 #### Added
 
+- The Directory gains a sixteenth research theme, Climate and environmental security. Two members work on climate change, environmental degradation and the greening of defence industry, and until now none of that reached a theme, so their work was missing from the filter row and from the Network Map's themes lens. Hand-translated for FR and DE.
+
 - The Network Map reports how much of the Action comes from an Inclusiveness Target Country, which is the figure COST weighs most heavily when it looks at an Action's inclusiveness. 106 of the 192 people on the map do, and a new overlay rings them. The figure counts by country, which the page says plainly, since a member based in an EU Outermost Region is not visible in the data behind it. Hand-translated for FR and DE.
 
 - The Network Map will count each Working Group's outputs once the Action has some. Every publication the site holds is already tagged to the groups it belongs to, and the map ignored that tag, so a brief written by one person was invisible to it. The tag now counts towards the group, which shows on the group when you hover or open it, and as a figure beside the map. Nothing appears until the first output is entered. Hand-translated for FR and DE.
@@ -201,6 +203,10 @@ maintainer-facing audience.
 - The mentorship matching panel now works with one research area at a time. Picking an area from the guided sentence, or a theme chip in the browse-all scope bar, replaces the previous selection instead of adding to it, so switching area is a single click rather than deselect-then-select, and picking the selected area again clears it. The "add an area" token is retired with its FR and DE strings, and the area picker no longer announces itself to assistive technology as a multi-select list. The directory's own research-theme filter chips outside the panel keep their multi-select behaviour, and areas they select all stay visible in the sentence. The interaction test suite covers the replace and clear journeys.
 
 #### Fixed
+
+- Seven more research keywords reach a theme at the next sync, so seven members join a filter they were missing from: religion, research ethics, political bioethics, space security and the EU's Common Security and Defence Policy, alongside the two climate keywords above. Nobody loses a theme they already had.
+
+- The fifteenth research theme, Democracy, governance and political change, appears in French and German rather than in English. It shipped untranslated when it was promoted, so it read in English on the filter row and on the map.
 
 - Four research keywords in the Directory reach their research theme again at the next sync. Two members' entries missed an existing keyword by a typo and a trailing full stop, one keyword was spelled exactly like a theme the taxonomy had not listed under itself, and FIMI was rendering as "Fimi". Until now each of them sat outside every theme, so its holder was missing from that filter.
 

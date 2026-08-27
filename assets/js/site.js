@@ -183,6 +183,10 @@
       'EU, UN and other international organisations': 'UE, ONU et autres organisations internationales',
       'Crisis management and critical systems resilience': 'Gestion de crise et résilience des systèmes critiques',
       'Political psychology, public opinion and decision-making': 'Psychologie politique, opinion publique et prise de décision',
+      // The fifteenth theme shipped untranslated when it was promoted, so it
+      // rendered in English on the FR and DE filter rows and map hubs.
+      'Democracy, governance and political change': 'Démocratie, gouvernance et changement politique',
+      'Climate and environmental security': 'Sécurité climatique et environnementale',
       'Research regions': 'Régions de recherche',
       'Filter by research region': 'Filtrer par région de recherche',
       'Europe': 'Europe',
@@ -219,9 +223,9 @@
       'Step %1 of %2': 'Étape %1 sur %2',
       'Close tour': 'Fermer la visite',
       // NetSec Network Map (#764): the controls, the statistics strip, and the
-      // hover card, all injected by assets/js/network-map.js. The 14 theme
-      // names the hub chips carry are already translated further up, since
-      // the directory's theme filter uses the same keys.
+      // hover card, all injected by assets/js/network-map.js. The theme names
+      // the hub chips carry are translated further up, since the directory's
+      // theme filter uses the same keys.
       'Working Groups': 'Groupes de travail',
       // The four WG titles, drawn on the canvas under each hub. Lifted from
       // the hand-translated headings on working-groups.fr.html so the two
@@ -473,6 +477,8 @@
       'EU, UN and other international organisations': 'EU, UN und andere internationale Organisationen',
       'Crisis management and critical systems resilience': 'Krisenmanagement und Resilienz kritischer Systeme',
       'Political psychology, public opinion and decision-making': 'Politische Psychologie, öffentliche Meinung und Entscheidungsfindung',
+      'Democracy, governance and political change': 'Demokratie, Regierungsführung und politischer Wandel',
+      'Climate and environmental security': 'Klima- und Umweltsicherheit',
       'Research regions': 'Forschungsregionen',
       'Filter by research region': 'Nach Forschungsregion filtern',
       'Europe': 'Europa',
