@@ -8,6 +8,10 @@ conference panels they shared, and the mentorship they offer or seek.
 People sitting between two hubs are the bridges of the network. Issue
 #764.
 
+> Before changing the map, read
+> [`force-map-lessons.md`](./force-map-lessons.md). The EISS Anthology Atlas is the
+> same kind of canvas and has hit most of these bugs already.
+
 **Formerly the NetSec Atlas.** EISS publishes an Atlas of its own at
 `/anthology-atlas.html`, a force-directed map of the Anthology corpus,
 and the EISS brand work goes further by making the constellation graph

@@ -766,6 +766,23 @@ again:
 - **A phrase rather than a tag**, like "AI cyber security geopolitics",
   goes in `splits`, which expands it into the keywords it actually names.
 
+**See the effect before the sync does.** The sync runs daily, so an edit to
+`data/keyword-aliases.json` is otherwise invisible until the next morning:
+
+```bash
+python3 scripts/sync-bios.py --dry-run
+```
+
+It replays the same enrichment the sync runs, over the raw keywords already
+in `data/bios.json`, and reports which canonical keywords would move and
+which members would gain or lose a research theme. No network, no writes.
+
+Read the theme lines twice. A member **losing** a theme means the keyword you
+moved was that member's only route into it, which is a re-characterisation of
+their work rather than a tidy-up. That is how moving `Energy security`
+between themes turned out to take a member out of *Economic security and
+geoeconomics* rather than adding her to another.
+
 Anything left is a genuine keyword that needs a theme, or a cluster with
 no theme to join. `_watch` at the top of the file carries the rule for
 promoting a cluster to a new theme, at roughly four members, along with
