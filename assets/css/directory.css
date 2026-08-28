@@ -1927,3 +1927,13 @@ html.dir-welcome .welcome-strip[hidden]{display:block}
   .country-flag{transition:none}
   .country-flag:hover{transform:none}
 }
+
+/* Target size floor (#1689). See the block in site.css for the rule and the
+   exemptions; these are the directory's own controls. .members-filter-chip is
+   not here: it is defined in site.css and used on pages such as events.html
+   that never load this file, so its rule lives beside its definition. */
+@media (pointer: coarse) {
+  .members-filter-toggle-btn { padding-top: 12px; padding-bottom: 12px; }
+  .welcome-strip-dismiss { padding-top: 12px; padding-bottom: 12px; }
+  .tour-trigger { width: 44px; height: 44px; }
+}

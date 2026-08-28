@@ -4945,3 +4945,27 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   .faces-marquee{overflow-x:auto}
 }
 
+/* ── Target size floor (#1689) ───────────────────────────────────────────────
+   Every control in <main> that a person taps to do something clears 44px under
+   a coarse pointer, which is WCAG 2.5.5 Target Size (Enhanced). The site is
+   held to the 24px minimum in 2.5.8 and clears it everywhere; this is the
+   higher bar, adopted because three controls sat at 44px and five under it,
+   which is worse than either rule applied consistently.
+
+   Exempt, and listed in NOT_A_TARGET in scripts/measure.mjs so the rule can be
+   run rather than remembered: labels and pills that describe rather than act,
+   inline links in prose, and links whose hit area is a stretched overlay on a
+   larger card.
+
+   Padding rather than min-height, so a control grows around its text instead
+   of centring a short label in a tall box. */
+@media (pointer: coarse) {
+  .event-atc-trigger { padding-top: 11px; padding-bottom: 11px; }
+  .wg-claim-cta { padding-top: 12px; padding-bottom: 12px; }
+  .programme-anthology-cta { padding-top: 13px; padding-bottom: 13px; }
+  .tour-btn { padding-top: 12px; padding-bottom: 12px; }
+  .programme-contribs > summary { padding-top: 12px; padding-bottom: 12px; }
+  .members-filter-chip { padding-top: 11px; padding-bottom: 11px; }
+  /* 43.5px, so it rounds to the floor without reaching it. */
+  .btn { padding-top: 14px; padding-bottom: 14px; }
+}

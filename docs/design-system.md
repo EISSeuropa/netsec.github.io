@@ -106,6 +106,40 @@ Heading hierarchy across the site is currently:
 
 Never skip a level (no `h2` → `h4`).
 
+## Target size
+
+**Every control in `<main>` that a person taps to do something clears 44 px
+under a coarse pointer.** Buttons, disclosure summaries, inputs, and links
+styled as buttons. That is WCAG 2.5.5 *Target Size (Enhanced)*.
+
+The site is held to the 24 px minimum in 2.5.8 and clears it everywhere. The
+higher bar is adopted here because the alternative was worse than either rule:
+three controls sat at exactly 44 px and eight sat under it, so a person adding
+a button had nothing to follow and an auditor had nothing to be told (#1689).
+
+Three things are exempt, because they are not targets:
+
+- **Labels and pills that describe rather than act.** A WG pill on an event
+  card, a mentorship badge, a country flag.
+- **Inline links in prose**, which WCAG 2.5.8 exempts explicitly.
+- **Links whose hit area is a stretched overlay**, `.card-stretch` and its
+  kin, where the thing a finger lands on is the whole card and the measured
+  box is only the text.
+
+The exemptions are not a list in prose. They are `NOT_A_TARGET` in
+`scripts/measure.mjs`, so the rule can be run:
+
+```bash
+node scripts/measure.mjs targets people.html events.html --width 375x812 --fail
+```
+
+`--fail` exits non-zero on anything under the floor, and also on a run where
+the coarse pointer was not emulated, since that run proves nothing.
+
+**Reach for padding, not `min-height`.** A control should grow around its text
+rather than centre a short label in a tall box, and the coarse-pointer blocks
+at the foot of each stylesheet do exactly that.
+
 ## Components
 
 The site is built from a small kit of components. Core components live

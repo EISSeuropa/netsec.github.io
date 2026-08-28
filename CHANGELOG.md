@@ -179,6 +179,8 @@ maintainer-facing audience.
 
 #### Changed
 
+- Every button on the site is comfortable to tap on a phone. Thirteen were smaller than the size a thumb reliably hits, among them the add-to-calendar control on the events page, the filter chips, the guided-tour buttons and the send button on the contact form. The rule they now follow is written down, so the next one added follows it too.
+
 - The version stamp that stops a browser serving a stale stylesheet is now applied when the site is published rather than being written into every page in the repository. Nothing changes for a visitor. For the people working on the site, a change to two lines of styling used to rewrite three hundred and fifteen pages it had not touched, which made the record of what actually changed impossible to read and meant two styling changes could never be in progress at once.
 
 - The roadmap's own bookkeeping stops running on every merge. Refreshing the release notes count and the milestone progress bars happened on each merged change and each issue filed, which on a busy day meant thirty-six automated pull requests against twenty-one real ones. Both figures are refreshed once a day now, in a single pull request, and the release script refreshes them itself so cutting a release never waits for the schedule.

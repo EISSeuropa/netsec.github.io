@@ -89,6 +89,7 @@ const widths = argv.reduce((acc, a, i) => {
 }, []);
 if (!widths.length) widths.push({ w: 1280, h: 900 }, { w: 375, h: 812 });
 
+const shouldFail = flag('fail');
 const themeArg = opt('theme', 'light');
 const themes = themeArg === 'both' ? ['light', 'dark'] : [themeArg];
 const asJson = flag('json');
@@ -163,26 +164,46 @@ async function fold(page) {
   });
 }
 
+// What the floor applies to, written down here because a list in prose is a
+// list nobody can run (#1689). The rule: a control in <main> that a person taps
+// to *do* something clears the floor under a coarse pointer. These are the
+// things that look like controls to a selector but are not targets.
+const NOT_A_TARGET = [
+  // Labels, not controls. They describe the card they sit on.
+  'event-wg-pill', 'mentorship-badge', 'stsm-badge', 'country-flag',
+  'programme-contrib-published',
+  // The hit area is a stretched ::after covering the whole card, so the box
+  // measured here is the text rather than the thing a finger lands on.
+  'card-stretch', 'event-link',
+  // Inline links in prose. WCAG 2.5.8 exempts these explicitly, and the
+  // display check below misses them when a wrapper makes them block-level.
+  'news-readmore', 'news-seeall', 'mc-mail', 'notes-link', 'event-desc-toggle',
+  'ecs-faculty-card-link', 'members-clear-all',
+];
+
 /** Interactive boxes below the enhanced target size. */
 async function targets(page, floor) {
-  return page.evaluate((floorPx) => {
+  return page.evaluate(({ floorPx, exempt }) => {
     const out = [];
     document.querySelectorAll('main a, main button, main summary, main input').forEach((e) => {
       const r = e.getBoundingClientRect();
       if (!r.width || !r.height) return;
-      // Inline links inside prose are exempt under WCAG 2.5.8 and are not
-      // targets in the sense this is measuring.
       if (getComputedStyle(e).display === 'inline') return;
+      const classes = String(e.className || '').split(/\s+/);
+      if (classes.some((c) => exempt.includes(c))) return;
+      // A bare <a> with no class is a navigation or prose link rather than a
+      // control the design system owns.
+      if (!e.className && e.tagName === 'A') return;
       if (r.height >= floorPx) return;
       out.push({
-        what: (e.className && String(e.className).split(/\s+/)[0]) || e.tagName.toLowerCase(),
+        what: classes[0] || e.tagName.toLowerCase(),
         h: Math.round(r.height),
         w: Math.round(r.width),
         text: (e.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 28),
       });
     });
     return out;
-  }, floor);
+  }, { floorPx: floor, exempt: NOT_A_TARGET });
 }
 
 /** What the page transferred, grouped by type. */
@@ -318,4 +339,22 @@ if (failed.length) {
   console.error('\nPage errors:');
   failed.forEach((r) => console.error(`  ${r.page} @${r.width}: ${r.errors.join('; ')}`));
   process.exit(1);
+}
+
+// --fail turns the report into a gate. Only `targets` has a pass/fail meaning:
+// fold and bytes are numbers to compare between sessions, not thresholds.
+if (shouldFail && check === 'targets') {
+  const under = results.reduce((n, r) => n + r.value.under.length, 0);
+  const uncoarse = results.filter((r) => !r.value.coarse);
+  if (uncoarse.length) {
+    console.error('\nCoarse pointer was not emulated, so this proves nothing.');
+    process.exit(1);
+  }
+  if (under) {
+    console.error(`\n${under} control(s) under ${TARGET_FLOOR}px. The floor and its`
+      + ' exemptions are documented in docs/design-system.md and encoded in'
+      + ' NOT_A_TARGET in this file.');
+    process.exit(1);
+  }
+  console.log(`\n✓ every control clears ${TARGET_FLOOR}px under a coarse pointer`);
 }
