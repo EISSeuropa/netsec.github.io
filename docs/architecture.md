@@ -389,10 +389,12 @@ the matching `people.*.html` shell so it never drifts. The page enriches
 the member's record into a hero band over a two-column body (themes and
 region chips that deep-link into the directory filter, a similar-people
 facepile, the actionable mentor/STSM buttons, the recent-publications
-list). It owns the `?v=` hashes on `people/*`, so it runs **after**
-`inject-seo.py`, and a CI gate (`build-profile-pages.py --check` in
-`data-shape-check.yml`) fails if the committed pages drift from a fresh
-build.
+list). The 252 pages are built by the Pages deploy and are not committed
+(#1716); `people/` is gitignored, and the deploy refuses to publish if the
+page count and the member count disagree. It used to own the `?v=` hashes on
+`people/*` and had to run after `inject-seo.py`, an ordering nothing recorded
+until it broke. The tokens are stamped at deploy time now (#1725), and
+`pages-deploy.yml` names the sequence.
 
 Two cross-site links surface on the page, both joined on the canonical
 name key (`name_key()`, shared with the EISS Anthology). The "In the
@@ -521,7 +523,7 @@ sweep (rule §11).
 │   ├── sync-bios.py                 # Pulls Google Form submissions
 │   ├── bios-source.json             # CSV URL + form URL + column mapping
 │   ├── inject-seo.py                # Canonical/OG/JSON-LD generator (committed) + ?v= cache-bust stamper (--stamp-only, applied at deploy)
-│   ├── build-profile-pages.py       # Server-renders /people/<slug>.{html,fr,de} from bios.json: enriched profile (themes/regions, similar-people facepile, mentor/STSM CTAs, prize pill, runtime anthology link); owns people/* ?v=, run LAST; --check drift gate (#762)
+│   ├── build-profile-pages.py       # Server-renders /people/<slug>.{html,fr,de} from bios.json: enriched profile (themes/regions, similar-people facepile, mentor/STSM CTAs, prize pill, runtime anthology link); run by the Pages deploy, output gitignored (#762, #1716)
 │   ├── build-directory-index.py     # Generates directory-index.json, the cross-site contract published for the EISS Anthology (members keyed by name_key → profile URL); --check drift gate
 │   ├── build-sitemap.py             # Regenerates sitemap.xml from the top-level page list + the committed profile pages; --check drift gate
 │   ├── build-og-cards.py            # Headless-Chrome per-member OG card PNGs (1200×630) from bios.json; run by the Pages deploy, output gitignored (see og-cards.md, #1023, #1716)
@@ -550,7 +552,7 @@ sweep (rule §11).
 ├── .github/workflows/
 │   ├── pages-deploy.yml             # Build → deploy on push-to-main (builds /pagefind/, the OG cards and the ?v= tokens here)
 │   ├── sync-cost.yml                # Weekly cron — opens PR on any cost.eu change (WG_MAP, leadership, MC roster, stats, reconciled WGs); reruns every bios-derived generator incl. search stubs; PR body leads with a one-line change summary
-│   ├── sync-bios.yml                # Daily cron — opens PR if bios.json changed; reruns every bios-derived generator (profile pages, search stubs, sitemap, index, network map, field guide); PR body leads with a one-line change summary
+│   ├── sync-bios.yml                # Daily cron — opens PR if bios.json changed; reruns every bios-derived generator (search stubs, sitemap, index, network map, field guide); PR body leads with a one-line change summary
 │   ├── spotlight-rotate.yml         # Weekly cron (Tue 10:00 Europe/Paris) — rotates data/spotlight.json and posts the spotlight to Bluesky + LinkedIn, ungated (#341, #1072)
 │   ├── social-bluesky.yml           # Approval-gated news / thread posting to Bluesky + LinkedIn on a news.xml change or manual dispatch (#1072)
 │   ├── linkedin-version-check.yml   # Monthly cron — bumps data/linkedin-api-version.json before LinkedIn sunsets the pinned API version; auto-merging PR (#1223)
@@ -562,7 +564,7 @@ sweep (rule §11).
 │   ├── roadmap-refresh.yml          # Daily: the [Unreleased] autostamp + data/roadmap-progress.json
 │   ├── external-link-arrows.yml    # Lint: trailing → on external links
 │   ├── search-drift.yml             # Build sanity check on PRs (per-locale page count > 0)
-│   ├── data-shape-check.yml         # Shape lint + headless render smoke on data/** PRs; runs the --check drift gates (profile pages, sitemap, directory index, network map, bio search stubs) (#724, #1428)
+│   ├── data-shape-check.yml         # Shape lint + headless render smoke on data/** PRs; runs the --check drift gates (sitemap, directory index, network map, bio search stubs) (#724, #1428)
 │   ├── launch-qa-link-check.yml     # Internal+external link check + a11y-statement review-date check (weekly + root-HTML PRs)
 │   └── lighthouse.yml               # Lighthouse budget assertions per lighthouserc.json on HTML/CSS/JS PRs (#270; non-required)
 │

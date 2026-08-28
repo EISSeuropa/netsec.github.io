@@ -46,19 +46,22 @@ def test_bios_only_change_reports_no_derived_files():
     assert line == "**Summary: member data changed upstream, no derived files rebuilt.**"
 
 
+# These two cover the collapsing logic itself, and used the profile pages as
+# the vehicle until those stopped being committed (#1716). search/bios/ is the
+# per-member bucket the sync still writes.
 def test_large_change_collapses_to_counts():
-    paths = [f"people/member-{i}.html" for i in range(12)]
+    paths = [f"search/bios/member-{i}.html" for i in range(12)]
     line = mod.summarise(paths)
-    assert "profile pages (12 files, 12 members)" in line
+    assert "search stubs (12 files, 12 members)" in line
 
 
 def test_locale_variants_collapse_to_one_member():
     paths = [
-        "people/ada-lovelace.html",
-        "people/ada-lovelace.fr.html",
-        "people/ada-lovelace.de.html",
+        "search/bios/ada-lovelace.html",
+        "search/bios/ada-lovelace.fr.html",
+        "search/bios/ada-lovelace.de.html",
     ]
-    assert "profile pages (ada-lovelace)" in mod.summarise(paths)
+    assert "search stubs (ada-lovelace)" in mod.summarise(paths)
 
 
 def test_buckets_are_labelled_not_dumped_as_paths():

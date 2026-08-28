@@ -50,7 +50,6 @@ BUCKETS: list[tuple[str, str, bool]] = [
     ("search/bios/", "search stubs", True),
     ("assets/og/flags/", "flag assets", True),
     ("assets/images/people/", "headshots", True),
-    ("people/", "profile pages", True),
     ("data/orcid-works.json", "ORCID publications", False),
     ("data/network-map.json", "Network Map graph", False),
     ("data/cost-wg-state.json", "WG state", False),
