@@ -6,7 +6,7 @@ the committed-state invariants without rendering (no Chrome needed):
   * card_hash is deterministic and input-sensitive
   * card_markup escapes member text and includes the bundled flag
   * a flag SVG exists for every country_code used in bios.json
-  * --check passes against the committed cards + manifest
+  * every member who gets a profile page also gets a card
 
 Run standalone:  /usr/bin/python3 scripts/test-build-og-cards.py
 Or under pytest: python3 -m pytest scripts/test-build-og-cards.py -q
@@ -118,8 +118,19 @@ def test_minify_flag_strips_id_and_collapses_whitespace():
     assert out.startswith('<svg xmlns="http://www.w3.org/2000/svg" viewBox=')
 
 
-def test_check_passes_against_committed_cards():
-    assert boc.check() == 0
+def test_every_profile_page_gets_a_card():
+    # build-profile-pages.py names {SITE}/assets/og/people/<slug>.png as the
+    # og:image for every page it builds, without testing the file, because the
+    # cards are rendered at deploy time and are not in the tree (#1716). The
+    # two therefore have to agree on who gets one: a member with a page but no
+    # card is 252 pages' worth of og:image pointing at a 404 to a crawler.
+    _p = Path(__file__).resolve().parent / "build-profile-pages.py"
+    _s = importlib.util.spec_from_file_location("build_profile_pages", _p)
+    bpp = importlib.util.module_from_spec(_s)
+    _s.loader.exec_module(bpp)
+    paged = {rel.split("/")[1].split(".")[0] for rel in bpp.generate()}
+    carded = {m["id"] for m in boc.members()}
+    assert paged == carded
 
 
 def _standalone() -> int:

@@ -108,25 +108,19 @@ jobs:
           # file rides this same auto-PR. Idempotent: no change, no diff.
           python3 scripts/sync-orcid.py
 
-      - name: Bundle any missing country flag before rendering cards
+      - name: Bundle any missing country flag
         run: |
           # A new member from a new country used to trip
           # test_every_country_code_has_a_bundled_flag until someone hand-added
           # the flag SVG (Romania #1213, Poland #1271, Georgia #1316). This
           # fetches a missing flag from lipis/flag-icons (the source of the
-          # bundled set) so the SVG rides this same auto-PR and the card below
-          # renders with the flag instead of a blank. Idempotent: no missing
-          # flag, no diff. The pytest backstop stays as belt-and-braces.
+          # bundled set) so the SVG rides this same auto-PR. Idempotent: no
+          # missing flag, no diff. The pytest backstop stays as belt-and-braces.
+          #
+          # A flag is an input, so it stays committed. The cards it is drawn
+          # onto are rendered at deploy time now (#1716), which is why the card
+          # render that used to follow this step is gone.
           python3 scripts/build-og-cards.py --ensure-flags
-
-      - name: Regenerate per-member OG cards (#1023)
-        run: |
-          # Render the OG card image for any member whose card inputs changed
-          # (manifest-keyed, so unchanged cards are not re-rendered and the PR
-          # stays churn-free). Runs BEFORE the profile-page rebuild so a new
-          # member's og:image points at their freshly built card. Chrome is
-          # preinstalled on the runner (same as the render smoke test).
-          python3 scripts/build-og-cards.py
 
       - name: Rebuild member profile pages from the refreshed bios
         run: |
