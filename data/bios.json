@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-08-27T16:30:08+00:00",
+  "generated_at": "2026-08-28T17:26:17+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-08-27T16:30:08+00:00"
+    "last_synced": "2026-08-28T17:26:17+00:00"
   },
   "members": [
     {
@@ -2463,7 +2463,7 @@
         "Regionalism"
       ],
       "themes": [
-        "Economic security and geoeconomics",
+        "Climate, energy and environmental security",
         "Foreign policy and diplomacy",
         "Security and defence"
       ],
@@ -3109,6 +3109,7 @@
         "Green defence industry"
       ],
       "themes": [
+        "Climate, energy and environmental security",
         "Cyber and emerging technology",
         "Economic security and geoeconomics",
         "Security and defence"
@@ -3436,11 +3437,12 @@
       "canonical_keywords": [
         "CSDP",
         "EU foreign policy",
-        "EU security and defence",
-        "Ireland"
+        "EU security and defence"
       ],
       "themes": [
-        "Foreign policy and diplomacy"
+        "EU, UN and other international organisations",
+        "Foreign policy and diplomacy",
+        "Security and defence"
       ]
     },
     {
@@ -3479,10 +3481,13 @@
       "source": "form",
       "photo_source_sha256": "4494cdc0435ec0e897127cba08b16085d678c44b72335c3072ab043be8c874d2",
       "canonical_keywords": [
-        "Fimi",
+        "FIMI",
         "Foreign interference",
-        "Hybrid threats.",
+        "Hybrid threats",
         "Information manipulation"
+      ],
+      "themes": [
+        "Intelligence, information and influence"
       ]
     },
     {
@@ -3517,7 +3522,13 @@
       "source": "form",
       "photo_source_sha256": "25751b2cb7d6ce9f074ba4c706626568f03b58694ebe80335b21bf9bd181d241",
       "canonical_keywords": [
-        "AI cyber security geopolitics"
+        "Artificial intelligence",
+        "Cybersecurity",
+        "Geopolitics"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Foreign policy and diplomacy"
       ]
     },
     {
@@ -3557,8 +3568,11 @@
       "canonical_keywords": [
         "Climate change",
         "Environmental degradation",
-        "MENA region",
         "Migration"
+      ],
+      "themes": [
+        "Climate, energy and environmental security",
+        "Transnational and human security"
       ]
     },
     {
@@ -3599,8 +3613,7 @@
         "Deterrence",
         "Eastern Europe",
         "European security",
-        "Russia-Ukraine war",
-        "Ukraine"
+        "Russia-Ukraine war"
       ],
       "themes": [
         "Foreign policy and diplomacy",
@@ -3648,14 +3661,17 @@
       "source": "form",
       "photo_source_sha256": "d0b6be6b400a650443daddcafc07f50e3c22be60b4637e94cc4beeae8f05ea02",
       "canonical_keywords": [
-        "Human securirty",
+        "Human security",
         "National security",
         "Political bioethics",
         "Pressure groups",
         "Research ethics"
       ],
       "themes": [
-        "Security and defence"
+        "Democracy, governance and political change",
+        "Security and defence",
+        "Theory and methods",
+        "Transnational and human security"
       ]
     },
     {
@@ -3704,6 +3720,8 @@
       ],
       "themes": [
         "Economic security and geoeconomics",
+        "European and transatlantic security order",
+        "Foreign policy and diplomacy",
         "Security and defence"
       ]
     },
@@ -3798,6 +3816,8 @@
         "Religion"
       ],
       "themes": [
+        "Identity, narratives and ideational security",
+        "Theory and methods",
         "Transnational and human security"
       ]
     },
@@ -3845,7 +3865,9 @@
         "Strategy and deterrence"
       ],
       "themes": [
-        "Foreign policy and diplomacy"
+        "Foreign policy and diplomacy",
+        "Security and defence",
+        "Strategy and deterrence"
       ]
     }
   ],
@@ -3856,7 +3878,11 @@
     },
     {
       "keyword": "Cybersecurity",
-      "count": 6
+      "count": 7
+    },
+    {
+      "keyword": "Geopolitics",
+      "count": 5
     },
     {
       "keyword": "AI",
@@ -3872,10 +3898,6 @@
     },
     {
       "keyword": "Foreign policy analysis",
-      "count": 4
-    },
-    {
-      "keyword": "Geopolitics",
       "count": 4
     },
     {
@@ -3912,6 +3934,14 @@
     },
     {
       "keyword": "Foreign policy",
+      "count": 3
+    },
+    {
+      "keyword": "Human security",
+      "count": 3
+    },
+    {
+      "keyword": "Hybrid threats",
       "count": 3
     },
     {
@@ -3983,14 +4013,6 @@
       "count": 2
     },
     {
-      "keyword": "Human security",
-      "count": 2
-    },
-    {
-      "keyword": "Hybrid threats",
-      "count": 2
-    },
-    {
       "keyword": "International law",
       "count": 2
     },
@@ -4047,10 +4069,6 @@
       "count": 1
     },
     {
-      "keyword": "AI cyber security geopolitics",
-      "count": 1
-    },
-    {
       "keyword": "AI governance",
       "count": 1
     },
@@ -4064,6 +4082,10 @@
     },
     {
       "keyword": "Arms control",
+      "count": 1
+    },
+    {
+      "keyword": "Artificial intelligence",
       "count": 1
     },
     {
@@ -4327,7 +4349,7 @@
       "count": 1
     },
     {
-      "keyword": "Fimi",
+      "keyword": "FIMI",
       "count": 1
     },
     {
@@ -4376,14 +4398,6 @@
     },
     {
       "keyword": "Human rights and technology",
-      "count": 1
-    },
-    {
-      "keyword": "Human securirty",
-      "count": 1
-    },
-    {
-      "keyword": "Hybrid threats.",
       "count": 1
     },
     {
@@ -4455,10 +4469,6 @@
       "count": 1
     },
     {
-      "keyword": "Ireland",
-      "count": 1
-    },
-    {
       "keyword": "Irregular warfare",
       "count": 1
     },
@@ -4484,10 +4494,6 @@
     },
     {
       "keyword": "Medium powers",
-      "count": 1
-    },
-    {
-      "keyword": "MENA region",
       "count": 1
     },
     {
@@ -4735,10 +4741,6 @@
       "count": 1
     },
     {
-      "keyword": "Ukraine",
-      "count": 1
-    },
-    {
       "keyword": "UN",
       "count": 1
     },
@@ -4766,58 +4768,62 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 35
+      "count": 37
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 29
-    },
-    {
-      "theme": "Cyber and emerging technology",
-      "count": 19
+      "count": 31
     },
     {
       "theme": "Theory and methods",
-      "count": 19
+      "count": 21
+    },
+    {
+      "theme": "Cyber and emerging technology",
+      "count": 20
     },
     {
       "theme": "Transnational and human security",
-      "count": 14
+      "count": 16
     },
     {
       "theme": "Strategy and deterrence",
-      "count": 13
+      "count": 14
     },
     {
       "theme": "European and transatlantic security order",
-      "count": 11
-    },
-    {
-      "theme": "Economic security and geoeconomics",
-      "count": 9
+      "count": 12
     },
     {
       "theme": "Intelligence, information and influence",
-      "count": 9
+      "count": 10
+    },
+    {
+      "theme": "Economic security and geoeconomics",
+      "count": 8
+    },
+    {
+      "theme": "EU, UN and other international organisations",
+      "count": 8
     },
     {
       "theme": "Peace, mediation and reconciliation",
       "count": 8
     },
     {
-      "theme": "EU, UN and other international organisations",
-      "count": 7
-    },
-    {
       "theme": "Democracy, governance and political change",
-      "count": 4
-    },
-    {
-      "theme": "Crisis management and critical systems resilience",
-      "count": 3
+      "count": 5
     },
     {
       "theme": "Identity, narratives and ideational security",
+      "count": 4
+    },
+    {
+      "theme": "Climate, energy and environmental security",
+      "count": 3
+    },
+    {
+      "theme": "Crisis management and critical systems resilience",
       "count": 3
     },
     {
@@ -4833,10 +4839,12 @@
     "Alliance politics": "European and transatlantic security order",
     "Alliances": "European and transatlantic security order",
     "Arms control": "Strategy and deterrence",
+    "Artificial intelligence": "Cyber and emerging technology",
     "Black sea region": "Security and defence",
     "Black sea security": "Security and defence",
     "Border security": "Transnational and human security",
     "British army": "Security and defence",
+    "CSDP": "EU, UN and other international organisations",
     "Capability planning": "Security and defence",
     "China's foreign policy": "Foreign policy and diplomacy",
     "Civil conflict": "Peace, mediation and reconciliation",
@@ -4844,6 +4852,7 @@
     "Civil protection": "Crisis management and critical systems resilience",
     "Civil wars": "Peace, mediation and reconciliation",
     "Civil-military relations": "Security and defence",
+    "Climate change": "Climate, energy and environmental security",
     "Cloud and edge systems": "Cyber and emerging technology",
     "Cognitive warfare": "Intelligence, information and influence",
     "Collective defence": "European and transatlantic security order",
@@ -4860,6 +4869,7 @@
     "Crisis management": "Crisis management and critical systems resilience",
     "Critical infrastructure protection": "Crisis management and critical systems resilience",
     "Critical infrastructure security": "Crisis management and critical systems resilience",
+    "Critical security": "Theory and methods",
     "Critical security studies": "Theory and methods",
     "Cyber defence": "Cyber and emerging technology",
     "Cyber statecraft": "Cyber and emerging technology",
@@ -4890,6 +4900,8 @@
     "EU enlargement": "EU, UN and other international organisations",
     "EU foreign policy": "Foreign policy and diplomacy",
     "EU security": "EU, UN and other international organisations",
+    "EU security and defence": "Security and defence",
+    "EU–China relations": "Foreign policy and diplomacy",
     "EU–NATO relations": "European and transatlantic security order",
     "East central Europe": "Foreign policy and diplomacy",
     "Eastern Europe": "Foreign policy and diplomacy",
@@ -4899,19 +4911,25 @@
     "Emerging and disruptive technologies": "Cyber and emerging technology",
     "Emerging technologies in military domain": "Cyber and emerging technology",
     "Emerging technology": "Cyber and emerging technology",
-    "Energy security": "Economic security and geoeconomics",
+    "Energy security": "Climate, energy and environmental security",
+    "Environmental degradation": "Climate, energy and environmental security",
+    "Epistemic communities": "Theory and methods",
     "Euro-Atlantic foreign policy": "European and transatlantic security order",
     "European defence": "European and transatlantic security order",
     "European integration": "EU, UN and other international organisations",
     "European security": "Security and defence",
+    "European security and defence": "Security and defence",
     "European strategic autonomy": "European and transatlantic security order",
     "European union türkiye relations": "Foreign policy and diplomacy",
     "Extremism": "Transnational and human security",
+    "FIMI": "Intelligence, information and influence",
     "Feminist studies": "Theory and methods",
+    "Foreign interference": "Intelligence, information and influence",
     "Foreign policy": "Foreign policy and diplomacy",
     "Foreign policy analysis": "Foreign policy and diplomacy",
     "Future of warfare": "Security and defence",
     "Gender-based violence": "Transnational and human security",
+    "Geoeconomic competition": "Economic security and geoeconomics",
     "Geopolitics": "Foreign policy and diplomacy",
     "Geopolitics of the indo-Pacific": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
@@ -4920,7 +4938,7 @@
     "Governance": "Democracy, governance and political change",
     "Grand strategy": "Strategy and deterrence",
     "Great power competition": "Foreign policy and diplomacy",
-    "Green defence industry": "Security and defence",
+    "Green defence industry": "Climate, energy and environmental security",
     "History": "Theory and methods",
     "Human rights": "Transnational and human security",
     "Human rights and technology": "Cyber and emerging technology",
@@ -4933,6 +4951,7 @@
     "Influence": "Intelligence, information and influence",
     "Informality": "EU, UN and other international organisations",
     "Information integrity": "Intelligence, information and influence",
+    "Information manipulation": "Intelligence, information and influence",
     "Infrastructure": "Cyber and emerging technology",
     "Intelligence": "Intelligence, information and influence",
     "Intelligence studies": "Intelligence, information and influence",
@@ -4952,7 +4971,9 @@
     "Maritime": "Security and defence",
     "Maritime security": "Transnational and human security",
     "Maritime strategy": "Strategy and deterrence",
+    "Medium powers": "Security and defence",
     "Middle east studies": "Foreign policy and diplomacy",
+    "Migration": "Transnational and human security",
     "Migration-security nexus": "Transnational and human security",
     "Militarisation": "Security and defence",
     "Military history": "Security and defence",
@@ -4977,23 +4998,29 @@
     "Plural peace": "Peace, mediation and reconciliation",
     "Policy evaluation": "Theory and methods",
     "Policy frameworks": "Theory and methods",
+    "Political bioethics": "Theory and methods",
     "Political economy": "Economic security and geoeconomics",
     "Political psychology": "Political psychology, public opinion and decision-making",
     "Positive peace": "Peace, mediation and reconciliation",
     "Post-cold war international relations": "Theory and methods",
     "Power": "Security and defence",
+    "Pressure groups": "Democracy, governance and political change",
     "Proxy warfare": "Security and defence",
     "Public opinion": "Political psychology, public opinion and decision-making",
     "Regional cooperation": "Foreign policy and diplomacy",
     "Regional security cooperation and governance": "Foreign policy and diplomacy",
     "Regionalism": "Foreign policy and diplomacy",
+    "Religion": "Identity, narratives and ideational security",
+    "Research ethics": "Theory and methods",
     "Research methods": "Theory and methods",
     "Role theory": "Theory and methods",
+    "Russia-Ukraine war": "Security and defence",
     "Russian foreign policy": "Foreign policy and diplomacy",
     "Science and innovation policies": "Cyber and emerging technology",
     "Securitisation": "Theory and methods",
     "Security": "Security and defence",
     "Security and defence": "Security and defence",
+    "Security knowledge": "Theory and methods",
     "Security politics": "Security and defence",
     "Security risk assessment": "Crisis management and critical systems resilience",
     "Security sector governance": "Security and defence",
@@ -5002,9 +5029,12 @@
     "Small states": "Foreign policy and diplomacy",
     "Small states' foreign and security policy": "Foreign policy and diplomacy",
     "Social media": "Intelligence, information and influence",
+    "Space security": "Security and defence",
+    "Strategic autonomy": "European and transatlantic security order",
     "Strategic competition": "Foreign policy and diplomacy",
     "Strategic culture": "Strategy and deterrence",
     "Strategy": "Strategy and deterrence",
+    "Strategy and deterrence": "Strategy and deterrence",
     "Subversion": "Intelligence, information and influence",
     "Systems resilience": "Crisis management and critical systems resilience",
     "Technology spillovers": "Cyber and emerging technology",

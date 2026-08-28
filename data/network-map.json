@@ -4,8 +4,8 @@
     "working_groups": 4,
     "people": 192,
     "people_with_bios": 84,
-    "edges": 503,
-    "themes": 15,
+    "edges": 520,
+    "themes": 16,
     "panels_matched": 14,
     "panel_edges": 54,
     "panel_editions": [
@@ -50,6 +50,12 @@
       "memberCount": 42
     },
     {
+      "id": "theme-climate-energy-and-environmental-security",
+      "type": "theme",
+      "name": "Climate, energy and environmental security",
+      "memberCount": 3
+    },
+    {
       "id": "theme-crisis-management-and-critical-systems-resilience",
       "type": "theme",
       "name": "Crisis management and critical systems resilience",
@@ -59,49 +65,49 @@
       "id": "theme-cyber-and-emerging-technology",
       "type": "theme",
       "name": "Cyber and emerging technology",
-      "memberCount": 19
+      "memberCount": 20
     },
     {
       "id": "theme-democracy-governance-and-political-change",
       "type": "theme",
       "name": "Democracy, governance and political change",
-      "memberCount": 4
+      "memberCount": 5
     },
     {
       "id": "theme-economic-security-and-geoeconomics",
       "type": "theme",
       "name": "Economic security and geoeconomics",
-      "memberCount": 9
+      "memberCount": 8
     },
     {
       "id": "theme-eu-un-and-other-international-organisations",
       "type": "theme",
       "name": "EU, UN and other international organisations",
-      "memberCount": 7
+      "memberCount": 8
     },
     {
       "id": "theme-european-and-transatlantic-security-order",
       "type": "theme",
       "name": "European and transatlantic security order",
-      "memberCount": 11
+      "memberCount": 12
     },
     {
       "id": "theme-foreign-policy-and-diplomacy",
       "type": "theme",
       "name": "Foreign policy and diplomacy",
-      "memberCount": 29
+      "memberCount": 31
     },
     {
       "id": "theme-identity-narratives-and-ideational-security",
       "type": "theme",
       "name": "Identity, narratives and ideational security",
-      "memberCount": 3
+      "memberCount": 4
     },
     {
       "id": "theme-intelligence-information-and-influence",
       "type": "theme",
       "name": "Intelligence, information and influence",
-      "memberCount": 9
+      "memberCount": 10
     },
     {
       "id": "theme-peace-mediation-and-reconciliation",
@@ -119,25 +125,25 @@
       "id": "theme-security-and-defence",
       "type": "theme",
       "name": "Security and defence",
-      "memberCount": 35
+      "memberCount": 37
     },
     {
       "id": "theme-strategy-and-deterrence",
       "type": "theme",
       "name": "Strategy and deterrence",
-      "memberCount": 13
+      "memberCount": 14
     },
     {
       "id": "theme-theory-and-methods",
       "type": "theme",
       "name": "Theory and methods",
-      "memberCount": 19
+      "memberCount": 21
     },
     {
       "id": "theme-transnational-and-human-security",
       "type": "theme",
       "name": "Transnational and human security",
-      "memberCount": 14
+      "memberCount": 16
     },
     {
       "id": "alexander-lanoszka",
@@ -2880,6 +2886,14 @@
       "target": "theme-theory-and-methods"
     },
     {
+      "source": "carla-sofia-ferreira-fernandes",
+      "target": "theme-climate-energy-and-environmental-security"
+    },
+    {
+      "source": "carla-sofia-ferreira-fernandes",
+      "target": "theme-transnational-and-human-security"
+    },
+    {
       "source": "clara-jammot",
       "target": "theme-cyber-and-emerging-technology"
     },
@@ -2996,6 +3010,14 @@
       "target": "theme-transnational-and-human-security"
     },
     {
+      "source": "francisco-javier-montilla-aguilera",
+      "target": "theme-intelligence-information-and-influence"
+    },
+    {
+      "source": "gayane-harutyunyan",
+      "target": "theme-climate-energy-and-environmental-security"
+    },
+    {
       "source": "gayane-harutyunyan",
       "target": "theme-cyber-and-emerging-technology"
     },
@@ -3096,6 +3118,14 @@
       "target": "theme-security-and-defence"
     },
     {
+      "source": "joe-burton",
+      "target": "theme-cyber-and-emerging-technology"
+    },
+    {
+      "source": "joe-burton",
+      "target": "theme-foreign-policy-and-diplomacy"
+    },
+    {
       "source": "johannes-lucht",
       "target": "theme-peace-mediation-and-reconciliation"
     },
@@ -3145,7 +3175,15 @@
     },
     {
       "source": "ken-mcdonagh",
+      "target": "theme-eu-un-and-other-international-organisations"
+    },
+    {
+      "source": "ken-mcdonagh",
       "target": "theme-foreign-policy-and-diplomacy"
+    },
+    {
+      "source": "ken-mcdonagh",
+      "target": "theme-security-and-defence"
     },
     {
       "source": "kire-babanoski",
@@ -3157,11 +3195,27 @@
     },
     {
       "source": "leonardo-pesci",
+      "target": "theme-identity-narratives-and-ideational-security"
+    },
+    {
+      "source": "leonardo-pesci",
+      "target": "theme-theory-and-methods"
+    },
+    {
+      "source": "leonardo-pesci",
       "target": "theme-transnational-and-human-security"
     },
     {
       "source": "li-yang",
       "target": "theme-economic-security-and-geoeconomics"
+    },
+    {
+      "source": "li-yang",
+      "target": "theme-european-and-transatlantic-security-order"
+    },
+    {
+      "source": "li-yang",
+      "target": "theme-foreign-policy-and-diplomacy"
     },
     {
       "source": "li-yang",
@@ -3329,7 +3383,7 @@
     },
     {
       "source": "p-nar-akgul",
-      "target": "theme-economic-security-and-geoeconomics"
+      "target": "theme-climate-energy-and-environmental-security"
     },
     {
       "source": "p-nar-akgul",
@@ -3342,6 +3396,14 @@
     {
       "source": "pablo-arriazu",
       "target": "theme-foreign-policy-and-diplomacy"
+    },
+    {
+      "source": "pablo-arriazu",
+      "target": "theme-security-and-defence"
+    },
+    {
+      "source": "pablo-arriazu",
+      "target": "theme-strategy-and-deterrence"
     },
     {
       "source": "paulina-polko",
@@ -3425,7 +3487,19 @@
     },
     {
       "source": "sprincean-serghei",
+      "target": "theme-democracy-governance-and-political-change"
+    },
+    {
+      "source": "sprincean-serghei",
       "target": "theme-security-and-defence"
+    },
+    {
+      "source": "sprincean-serghei",
+      "target": "theme-theory-and-methods"
+    },
+    {
+      "source": "sprincean-serghei",
+      "target": "theme-transnational-and-human-security"
     },
     {
       "source": "tanja-pavleska",
