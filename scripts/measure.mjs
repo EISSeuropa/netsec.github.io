@@ -236,12 +236,25 @@ function bytesCollector(page) {
 }
 
 // ── Run ────────────────────────────────────────────────────────────────────
+// Two attempts at the launch. A cold headless Chrome sometimes never reaches
+// its WS endpoint, which is #1713's failure, and this script is a CI gate as
+// of #1689: a flaky gate is worse than no gate, because it teaches people to
+// rerun rather than to look.
+async function launchBrowser() {
+  const options = { executablePath: findChrome(), headless: 'new', args: ['--no-sandbox'] };
+  try {
+    return await puppeteer.launch(options);
+  } catch (first) {
+    console.error(`  · browser launch failed (${first.message.split('\n')[0]}), retrying once`);
+    await new Promise((r) => setTimeout(r, 2000));
+    const browser = await puppeteer.launch(options);
+    console.error('  · second attempt succeeded (flaky launch)');
+    return browser;
+  }
+}
+
 const server = await serve();
-const browser = await puppeteer.launch({
-  executablePath: findChrome(),
-  headless: 'new',
-  args: ['--no-sandbox'],
-});
+const browser = await launchBrowser();
 
 const results = [];
 try {
