@@ -85,9 +85,9 @@ published `authors-index.json` by canonical name key, and on a hit injects an
 "In the EISS Anthology" link into the sidebar slot. The match runs at runtime
 in the browser, the same posture the ESSC programme uses for its
 published-paper marker. That choice is deliberate: it keeps the static,
-drift-gated profile pages a pure function of local data (no build-time
-network fetch that would make the `--check` gate non-deterministic, and no
-committed copy of a ~500-row index to drift), and the link never goes stale.
+profile pages a pure function of local data, with no build-time network fetch
+in the deploy's path and no committed copy of a ~500-row index to drift, and
+the link never goes stale.
 The script's `nk()` is a faithful port of `sync-bios.py::name_key()`, which is
 the exact key EISS publishes, so the join is exact. It is a silent no-op on
 any fetch or parse failure.
@@ -111,22 +111,43 @@ The schema is in the file's `_documentation` block. If EISS later publishes a
 public prizes JSON, the builder could consume that and the local mirror could
 be retired.
 
-## Build order and the drift gate
+## Where the pages come from
 
-`build-profile-pages.py` owns the `?v=` hashes on `people/*` and must run
-**after** `inject-seo.py`, which stamps the top-level pages. Run it last, or
-the "Profile pages are current" CI gate fails on `main`:
+The 252 pages are **built by the Pages deploy and are not committed** (#1716).
+`people/` is gitignored. Build them locally to preview, and serve the working
+tree:
 
 ```bash
-python3 scripts/inject-seo.py          # stamps top-level *.html
-python3 scripts/build-profile-pages.py # regenerates people/* with matching ?v=
-python3 scripts/build-profile-pages.py --check   # the CI gate
+python3 scripts/build-profile-pages.py   # writes people/*, gitignored
+python3 -m http.server
 ```
 
-The weekly `sync-bios.yml` regenerates the pages whenever `bios.json`
-changes, and `data-shape-check.yml` runs the `--check` gate on any PR
-touching the inputs (`bios.json`, the `people.*.html` shells,
-`build-profile-pages.py`, or `data/prize-winners.json`). The directory's own
+There is no `--check`. A drift gate proves a committed artefact current, and
+the deploy rebuilds the whole set from `data/bios.json` every time, so there
+is nothing left to drift. `data-shape-check.yml` still runs the builder on any
+PR touching its inputs, as a build gate rather than a drift gate: a broken
+render should not first be discovered by a deploy.
+
+### The ordering that used to be folklore
+
+`build-profile-pages.py` owned the `?v=` hashes on `people/*` and had to run
+**after** `inject-seo.py`, which stamped the top-level pages. Getting that
+backwards failed the drift gate on `main`, and the rule was written down
+nowhere except in the memory of whoever last got it wrong.
+
+Both halves are gone. The tokens are stamped at deploy time (#1725), by
+`inject-seo.py --stamp-only`, which covers `people/` as well. The deploy names
+the sequence explicitly, in `pages-deploy.yml`:
+
+```
+build-og-cards.py       # a card is a page's og:image
+build-profile-pages.py  # the pages
+inject-seo.py --stamp-only   # stamps top-level *.html and people/*.html
+```
+
+The weekly `sync-bios.yml` used to regenerate the pages so a new member's
+page rode the same auto-PR. It no longer needs to: the next deploy after that
+PR merges picks the member up. The directory's own
 region filter became URL-addressable (`#regions=`, symmetric to `#themes=`)
 as part of this work, so the profile region chips have somewhere to land; the
 parse/write lives in `assets/js/people-directory.js`.

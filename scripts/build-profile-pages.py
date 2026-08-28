@@ -2,6 +2,11 @@
 """Generate real, shareable member profile pages at /people/<slug>.html
 (+ FR/DE), server-rendered from data/bios.json (#762).
 
+The 252 pages are built by the Pages deploy and are not committed (#1716).
+`people/` is gitignored, so run this to preview them locally and serve the
+working tree. There is no --check: a drift gate exists to prove a committed
+artefact current, and the deploy rebuilds the set from bios.json every time.
+
 Why these exist: the directory at /people.html renders client-side from a
 single JSON file, so a member has no URL of their own to put in an email
 signature, and a shared link unfurls with the generic site card. These
@@ -840,28 +845,8 @@ def sitemap_urls(pages: dict[str, str]) -> list[str]:
 
 def main(argv: list) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--check", action="store_true",
-                    help="exit non-zero if any page on disk has drifted; write nothing")
-    args = ap.parse_args(argv)
+    ap.parse_args(argv)
     pages = generate()
-    if args.check:
-        drifted = []
-        for rel, content in pages.items():
-            path = ROOT / rel
-            if not path.exists() or path.read_text(encoding="utf-8") != content:
-                drifted.append(rel)
-        # Also flag any orphaned page on disk for a member who is gone.
-        if OUT_DIR.exists():
-            on_disk = {f"people/{p.name}" for p in OUT_DIR.glob("*.html")}
-            for orphan in sorted(on_disk - set(pages)):
-                drifted.append(f"{orphan} (orphaned)")
-        if drifted:
-            print("profile pages out of date — run scripts/build-profile-pages.py:")
-            for d in sorted(drifted):
-                print(f"  ✗ {d}")
-            return 1
-        print(f"✓ {len(pages)} profile pages current")
-        return 0
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     # Remove orphaned pages (member removed) before writing the current set.
     current = {ROOT / rel for rel in pages}

@@ -115,18 +115,10 @@ jobs:
       # built at deploy time now (#1716), so the next deploy picks the change
       # up and there is no gate left to fail.
 
-      - name: Rebuild member profile pages from the synced data
-        run: |
-          # sync-cost.py writes a member's reconciled `wgs`, `wg_leadership`
-          # and leadership `roles` into data/bios.json, which the
-          # /people/<slug> profile pages (#762) render their WG chips and
-          # role line from. Regenerate so a WG move or leadership change
-          # reaches the profile page in the same auto-PR; otherwise the
-          # "Profile pages are current (#762)" gate in data-shape-check.yml
-          # fails on every sync that touches a member with a profile page
-          # (#989). Idempotent: unchanged pages produce no diff. inject-seo
-          # is not needed here, the sync touches no ?v= asset hashes.
-          python3 scripts/build-profile-pages.py
+      # A profile-page rebuild used to sit here, for the same reason as in
+      # sync-bios.yml: a WG or leadership move changes the chips on a page,
+      # and the drift gate failed if the sync did not re-render it. Both the
+      # rebuild and the gate are gone with #1716.
 
       - name: Rebuild the Pagefind bio search stubs (#1428)
         run: |

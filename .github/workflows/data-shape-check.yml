@@ -38,7 +38,6 @@ on:
       - 'people.html'
       - 'people.fr.html'
       - 'people.de.html'
-      - 'people/**'
       - 'scripts/build-sitemap.py'
       - 'sitemap.xml'
       - 'scripts/build-directory-index.py'
@@ -78,11 +77,16 @@ jobs:
       - name: Smoke-render the consuming pages
         run: bash scripts/check-render-smoke.sh
 
-      - name: Profile pages are current (#762)
-        # The /people/<slug> profile pages are generated from bios.json +
-        # the people.* shells. Fail if the committed pages have drifted, so
-        # a hand edit or a forgotten regeneration can't reach the site.
-        run: python3 scripts/build-profile-pages.py --check
+      # The "Profile pages are current (#762)" gate lived here, and went the
+      # same way as the OG card gate above (#1716): the pages are built by the
+      # Pages deploy now, so there is nothing committed for it to find stale.
+      # The deploy asserts every member got a page.
+      - name: Profile pages still build (#762)
+        # Not a drift gate, a build gate. A change to the people.* shells or
+        # to build-profile-pages.py can break the render, and the deploy is a
+        # bad place to find that out. The output is gitignored, so building it
+        # here leaves nothing behind.
+        run: python3 scripts/build-profile-pages.py
 
       - name: Sitemap is current (#1027)
         # sitemap.xml is generated from the top-level page table plus the

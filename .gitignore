@@ -44,6 +44,12 @@ pagefind/
 assets/og/people/*.png
 assets/og/people/_manifest.json
 
+# The 252 member profile pages, built by the same deploy (#1716). Generated
+# from data/bios.json + data/orcid-works.json + the people.* shells, they were
+# rewritten by both weekly syncs and by every change to a shell. Build them
+# locally with scripts/build-profile-pages.py; the result is gitignored.
+people/
+
 # Scratch / report directory used by the QA scripts (a11y report,
 # Lighthouse JSON, link-check output). Always regeneratable; never
 # tracked.

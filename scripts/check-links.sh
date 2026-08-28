@@ -209,6 +209,17 @@ for (src, href), (url, frag) in internal_links.items():
         url_no_q = url_no_q.lstrip("/")
         target_path = (repo_root / url_no_q).resolve()
     if not target_path.exists():
+        # Profile pages are built at deploy time and are not in the tree
+        # (#1716), so a people/<slug>.html link has no file to point at here.
+        # Resolve the slug against data/bios.json instead, which is what
+        # build-profile-pages.py builds the page set from. Same trick the
+        # people.{lang}.html#<slug> deep-links already use below, and a
+        # stronger check than the file test: it catches a link to a member
+        # who has left, where a stale committed page would not.
+        if (target_path.parent.name == "people"
+                and target_path.suffix == ".html"
+                and _is_known_bio_slug(repo_root, re.sub(r"\.(fr|de)$", "", target_path.stem))):
+            continue
         broken_internal.append(f"  ✗ {src} → {href}  (file not found: {target_path})")
         continue
     # If there's a fragment, see if any element has id="frag" or name="frag".

@@ -122,15 +122,10 @@ jobs:
           # render that used to follow this step is gone.
           python3 scripts/build-og-cards.py --ensure-flags
 
-      - name: Rebuild member profile pages from the refreshed bios
-        run: |
-          # The /people/<slug> profile pages (#762) are generated from
-          # data/bios.json + data/orcid-works.json + the people.* shells.
-          # Regenerate so a new member, headshot, or works list reaches
-          # their page in the same weekly auto-PR. Idempotent: unchanged
-          # pages produce no diff. A drift gate (data-shape-check.yml)
-          # blocks a stale set from merging.
-          python3 scripts/build-profile-pages.py
+      # A profile-page rebuild used to sit here, so a new member's page rode
+      # the same weekly auto-PR. The pages are built by the Pages deploy now
+      # (#1716), so the next deploy after this PR merges picks the new member
+      # up on its own.
 
       - name: Rebuild the Pagefind bio search stubs
         run: |

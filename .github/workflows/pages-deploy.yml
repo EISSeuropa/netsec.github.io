@@ -11,8 +11,9 @@
 # Inputs / outputs:
 #   - reads:  the working tree on main (HTML, assets, scripts)
 #   - builds: ./pagefind/ via scripts/build-search.sh (which calls
-#             `npx pagefind@1.5.2`; no manual install step needed), and the
-#             84 per-member Open Graph cards under assets/og/people/
+#             `npx pagefind@1.5.2`; no manual install step needed), the
+#             84 per-member Open Graph cards under assets/og/people/, and
+#             the 252 profile pages under people/
 #   - deploys: the entire working tree (with freshly-built ./pagefind/)
 #             to the github-pages environment, custom domain
 #             netsec-cost.eu preserved via the repo-root CNAME file.
@@ -141,6 +142,31 @@ jobs:
           echo "members: $want, cards: $got"
           [ "$want" -eq "$got" ] || {
             echo "::error::rendered $got cards for $want members; refusing to publish"
+            exit 1
+          }
+
+      - name: Build the member profile pages
+        # 252 files, the largest generated set in the tree (#1716). They must
+        # exist for a crawler, and a deploy-time build serves them identically.
+        #
+        # Order matters twice here. After the cards above, because a card is a
+        # page's og:image. Before the ?v= stamping below, which globs people/
+        # and would otherwise find nothing to stamp: that inversion is the
+        # ordering folklore #1716 set out to dissolve, and it now lives in this
+        # file as a sequence rather than in whoever last got it wrong.
+        run: python3 scripts/build-profile-pages.py
+
+      - name: Assert every member got a page
+        # Same reasoning as the card count above. The sitemap names all 84
+        # members and the Network Map links to each of them, so a silent
+        # under-build is 84 slugs of 404 with a green run behind it.
+        run: |
+          set -euo pipefail
+          want=$(python3 -c "import json; d=json.load(open('data/bios.json')); print(len([m for m in d['members'] if m.get('id')]))")
+          got=$(find people -name '*.html' -not -name '*.fr.html' -not -name '*.de.html' | wc -l)
+          echo "members: $want, EN pages: $got"
+          [ "$want" -eq "$got" ] || {
+            echo "::error::built $got pages for $want members; refusing to publish"
             exit 1
           }
 
