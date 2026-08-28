@@ -179,6 +179,8 @@ maintainer-facing audience.
 
 #### Changed
 
+- The roadmap's own bookkeeping stops running on every merge. Refreshing the release notes count and the milestone progress bars happened on each merged change and each issue filed, which on a busy day meant thirty-six automated pull requests against twenty-one real ones. Both figures are refreshed once a day now, in a single pull request, and the release script refreshes them itself so cutting a release never waits for the schedule.
+
 - Country names typed into the Directory's research-keyword box are filed as geography rather than as research interests, the way the broader region names already were. "Ireland", "Ukraine" and "MENA region" were standing alone in the theme filter meaning nothing, while the research regions filter beside them is the control for that.
 
 - The mentorship panel says how getting in touch actually works. Reaching a mentor here means writing to them yourself, and an answer is not always quick, which is worth knowing before you send. The same note tells a mentor already at capacity, or a mentee who has found someone, where to say so, so the badges on the directory can stay honest. Hand-translated for FR and DE.

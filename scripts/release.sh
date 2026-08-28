@@ -221,6 +221,40 @@ fi
 echo "✓ On main, clean, in sync with origin, v$VERSION is fresh."
 
 # ────────────────────────────────────────────────────────────────────
+# Refresh the roadmap's machine-managed surfaces
+#
+# These used to be refreshed by a workflow that fired on every merge, so
+# they were always seconds old by the time a release ran. They are now a
+# daily job (#1720), which means a release could otherwise ship a stamp up
+# to a day stale. Running both here removes the dependency on a scheduled
+# job having fired, which is the right shape regardless: a release should
+# not rely on cron.
+#
+# Both are idempotent and offline apart from the milestone read, so on a
+# machine with no `gh` auth the progress refresh is skipped with a note
+# rather than failing the release.
+# ────────────────────────────────────────────────────────────────────
+
+step "Refresh the roadmap autostamp and milestone progress"
+
+if "$PY3" "$REPO_ROOT/scripts/sync-roadmap.py"; then
+  echo "  ✓ autostamp current."
+else
+  echo "  ! sync-roadmap.py failed; the [Unreleased] autostamp may be stale."
+fi
+
+if "$PY3" "$REPO_ROOT/scripts/sync-roadmap-progress.py"; then
+  echo "  ✓ milestone progress current."
+else
+  echo "  ! sync-roadmap-progress.py failed (gh auth?); the roadmap progress"
+  echo "    bars may be stale. Not fatal to the release."
+fi
+
+if ! git -C "$REPO_ROOT" diff --quiet -- docs/roadmap-2026.md data/roadmap-progress.json; then
+  echo "  · one or both moved; the changes ride in the release commit below."
+fi
+
+# ────────────────────────────────────────────────────────────────────
 # Promote [Unreleased] → [<version>] in CHANGELOG.md
 # ────────────────────────────────────────────────────────────────────
 

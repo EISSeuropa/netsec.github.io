@@ -11,7 +11,7 @@ roadmap stays human-edited.
 
 The point is the maintainer never has to "remember to refresh the
 roadmap" between releases: any PR that touches CHANGELOG.md fires
-.github/workflows/sync-roadmap.yml, which runs this script and
+.github/workflows/roadmap-refresh.yml, which runs this script and
 opens an auto-PR with the stamp delta. Auto-merge ships it.
 
 What this script does NOT do:

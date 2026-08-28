@@ -33,8 +33,9 @@ issue (rule §3) and reference it from the surface itself.
   in-progress card carries `data-milestone="vX.Y.Z"`, and
   `assets/js/roadmap-progress.js` renders a progress bar from
   `data/roadmap-progress.json` (closed / total issues on the matching
-  GitHub milestone, refreshed by the `roadmap-progress.yml` workflow on
-  every issue / milestone change). No manual action at release time.
+  GitHub milestone, refreshed daily by the `roadmap-refresh.yml`
+  workflow, and by `scripts/release.sh` itself before it composes the
+  notes). No manual action at release time.
   One thing to remember when **hand-adding a new planned card** (the
   pre-condition above): give it the matching `data-milestone` so its
   bar appears. Shipped cards keep no bar (the renderer skips them), so
@@ -70,10 +71,11 @@ issue (rule §3) and reference it from the surface itself.
   shipped card still reads accurately.
 - Anything in *Under watch* (the deferred-items section at the
   foot of the page) ready to promote to a dated entry? (Manual.)
-- The autostamp in `docs/roadmap-2026.md` updates separately via
-  `.github/workflows/sync-roadmap.yml` on every `CHANGELOG.md`
-  change, so the *N entries in [Unreleased]* line is always
-  current without manual action. The prose timeline + the
+- The autostamp in `docs/roadmap-2026.md` refreshes daily via
+  `.github/workflows/roadmap-refresh.yml`, and `scripts/release.sh`
+  runs the same script itself before composing the notes, so the
+  *N entries in [Unreleased]* line is current at release time
+  without manual action and without waiting on the schedule. The prose timeline + the
   *Last revised* line in `docs/roadmap-2026.md` are still
   maintainer-edited.
 

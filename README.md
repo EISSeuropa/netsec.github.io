@@ -199,7 +199,7 @@ request rather than pushing directly to `main`.
 | `sync-cost.yml`      | <https://www.cost.eu/actions/CA24154/> | `WG_MAP` in `index.html` · per-bio `wgs` + leadership `roles` in `bios.json` | Mondays 05:00 UTC    |
 | `sync-bios.yml`      | Google Form → published Sheet CSV       | Every field on each member in `bios.json` + downscaled headshots             | Mondays 05:15 UTC    |
 | `sync-indico.yml`    | <https://indico.eiss-europa.com>        | `indico.json` (live programme) + `calendar.ics` + matching fields in `events.json` | Nightly 03:45 UTC |
-| `sync-roadmap.yml`   | `CHANGELOG.md` push                     | Autostamp block in `docs/roadmap-2026.md` (bullet counts + freshness date)    | On `main` push + weekly |
+| `roadmap-refresh.yml`| `CHANGELOG.md` + GitHub milestones      | Autostamp block in `docs/roadmap-2026.md` and `data/roadmap-progress.json`    | Daily 07:00 UTC      |
 
 The Google-Form pipeline is documented in [`docs/bios-setup.md`](docs/bios-setup.md). The Indico read-side at [`docs/indico-sync.md`](docs/indico-sync.md); the write-side (fix-plans, now applied via the `netsec-dispatch` plugin CLI) in [`docs/indico-integration.md`](docs/indico-integration.md) Phase 2, with the retired external tool's history noted in [`docs/indico-patch.md`](docs/indico-patch.md).
 
