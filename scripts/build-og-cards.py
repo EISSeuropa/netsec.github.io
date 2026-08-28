@@ -432,27 +432,68 @@ _READY_JS = (
 )
 
 
-def _capture_cards(chrome: str, jobs: list[tuple[str, Path]]) -> None:
-    """Render each (url, out_path) job to an exact 1200×630 PNG via CDP."""
+def _kill(proc: subprocess.Popen) -> None:
+    proc.terminate()
+    try:
+        proc.wait(timeout=5)
+    except Exception:
+        proc.kill()
+
+
+def _launch_chrome(chrome: str) -> tuple[subprocess.Popen, "_CDP"]:
+    """Start headless Chrome and connect to its DevTools endpoint.
+
+    Raises RuntimeError if the endpoint never appears, which is the caller's
+    cue to try again rather than to give up.
+    """
     port = _free_port()
     proc = subprocess.Popen([
         chrome, "--headless=new", "--disable-gpu", "--no-sandbox", "--hide-scrollbars",
         "--force-device-scale-factor=1", f"--remote-debugging-port={port}",
         "--remote-allow-origins=*", "about:blank",
     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    version = None
+    for _ in range(100):
+        try:
+            version = json.loads(urllib.request.urlopen(
+                f"http://127.0.0.1:{port}/json/version", timeout=1).read())
+            break
+        except Exception:
+            time.sleep(0.1)
+    if not version:
+        _kill(proc)
+        raise RuntimeError("Chrome did not expose the DevTools endpoint within 10s")
+    ws_url = version["webSocketDebuggerUrl"]
+    return proc, _CDP(_ws_connect("127.0.0.1", port, ws_url.split(f":{port}", 1)[1]))
+
+
+def _capture_cards(chrome: str, jobs: list[tuple[str, Path]]) -> None:
+    """Render each (url, out_path) job to an exact 1200×630 PNG via CDP.
+
+    One browser for the whole run, not one per card: the launch is the
+    expensive part, roughly ten seconds against a fraction of a second per
+    card once it is up.
+
+    Two attempts at that launch. A cold headless Chrome sometimes never
+    reaches its DevTools endpoint, which was observed one run in two on a
+    warm laptop and used to abort the whole render (#1726). It is the same
+    failure #1713 fixed in the render-smoke and directory-interaction
+    scripts, and it matters more here: this runs inside the daily bios sync,
+    where a failure leaves a member's share card stale and only the run log
+    says so. Twice was enough for every occurrence seen; a third would be
+    guessing.
+    """
     try:
-        version = None
-        for _ in range(100):
-            try:
-                version = json.loads(urllib.request.urlopen(
-                    f"http://127.0.0.1:{port}/json/version", timeout=1).read())
-                break
-            except Exception:
-                time.sleep(0.1)
-        if not version:
-            raise SystemExit("Chrome did not expose the DevTools endpoint.")
-        ws_url = version["webSocketDebuggerUrl"]
-        cdp = _CDP(_ws_connect("127.0.0.1", port, ws_url.split(f":{port}", 1)[1]))
+        proc, cdp = _launch_chrome(chrome)
+    except RuntimeError as first:
+        print(f"  · Chrome launch failed ({first}), retrying once", file=sys.stderr)
+        time.sleep(2)
+        try:
+            proc, cdp = _launch_chrome(chrome)
+        except RuntimeError as second:
+            raise SystemExit(f"Chrome did not start after two attempts: {second}")
+        print("  · second attempt succeeded (flaky launch)", file=sys.stderr)
+    try:
         for url, out in jobs:
             tgt = cdp.cmd("Target.createTarget", {"url": "about:blank"})["targetId"]
             sid = cdp.cmd("Target.attachToTarget", {"targetId": tgt, "flatten": True})["sessionId"]
@@ -474,11 +515,7 @@ def _capture_cards(chrome: str, jobs: list[tuple[str, Path]]) -> None:
             cdp.cmd("Target.closeTarget", {"targetId": tgt}, session=sid)
             print(f"  ✓ {out.name}")
     finally:
-        proc.terminate()
-        try:
-            proc.wait(timeout=5)
-        except Exception:
-            proc.kill()
+        _kill(proc)
 
 
 def _free_port() -> int:
