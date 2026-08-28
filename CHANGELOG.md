@@ -210,6 +210,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The documentation pack downloads in a third of the data. It was 24.6 MB, of which 22 MB was five screenshots stored at four times the resolution the page can print, and it is 7.7 MB now with the figures unchanged to read. The same five screenshots were also the largest thing in the project's history, so the saving repeats on every future edition rather than happening once.
+
 - The automated checks stop failing for reasons that have nothing to do with the change being checked. Four such failures happened in a single day, each one a browser or a local server that had not finished starting when something began talking to it. The checks now wait for what they need and retry a cold browser once, so a red check means something is genuinely wrong.
 
 - Every research keyword in the Directory now reaches a research theme, where twenty-nine of them reached none. Ten members join filters they were missing from, among them one whose entire research interest was written as a single phrase and who therefore had no theme at all. Religion, research ethics, political bioethics, space security, migration, medium powers, EU–China relations, foreign interference and the EU's Common Security and Defence Policy are among the keywords that now cluster.
