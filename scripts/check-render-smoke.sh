@@ -64,18 +64,45 @@ cd "$ROOT"
 "$py" -m http.server "$PORT" --bind 127.0.0.1 >/dev/null 2>&1 &
 server_pid=$!
 trap 'kill "$server_pid" 2>/dev/null' EXIT
-sleep 1
-if ! kill -0 "$server_pid" 2>/dev/null; then
-  echo "✗ local server failed to start on port $PORT" >&2
+
+# Poll rather than sleep. A fixed wait either wastes a second or loses the
+# race, and losing it audits a page that is not being served yet (#1713).
+for _ in $(seq 1 60); do
+  if curl -fsS -o /dev/null "http://127.0.0.1:${PORT}/index.html" 2>/dev/null; then
+    break
+  fi
+  sleep 0.25
+done
+if ! curl -fsS -o /dev/null "http://127.0.0.1:${PORT}/index.html" 2>/dev/null; then
+  echo "✗ local server never answered on port $PORT" >&2
   exit 1
 fi
 
 render_count() {
   # $1 page path, $2 marker string. Prints the marker count in the
   # post-JS DOM. virtual-time-budget lets the fetch+render settle.
-  "$chrome" --headless --no-sandbox --disable-gpu --dump-dom \
+  #
+  # Two attempts, because a cold headless Chrome on a GitHub runner
+  # occasionally never reaches its WS endpoint and returns an empty DOM,
+  # which is indistinguishable here from a renderer that produced nothing.
+  # Twice was enough for every occurrence seen in #1713; a third would be
+  # guessing. A recovered attempt says so on stderr rather than passing
+  # silently, since the count of them is the signal for whether this needs
+  # revisiting.
+  local n
+  n="$("$chrome" --headless --no-sandbox --disable-gpu --dump-dom \
     --virtual-time-budget=10000 "http://127.0.0.1:${PORT}/$1" 2>/dev/null \
-    | grep -o "$2" | wc -l | tr -d ' '
+    | grep -o "$2" | wc -l | tr -d ' ')"
+  if [ "$n" -eq 0 ]; then
+    sleep 2
+    n="$("$chrome" --headless --no-sandbox --disable-gpu --dump-dom \
+      --virtual-time-budget=10000 "http://127.0.0.1:${PORT}/$1" 2>/dev/null \
+      | grep -o "$2" | wc -l | tr -d ' ')"
+    if [ "$n" -gt 0 ]; then
+      echo "  · $1: first render returned nothing, second succeeded (flaky launch)" >&2
+    fi
+  fi
+  printf '%s' "$n"
 }
 
 fail=0
