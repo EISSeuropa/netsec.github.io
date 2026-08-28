@@ -141,6 +141,8 @@ maintainer-facing audience.
 
 #### Added
 
+- The nightly conference-programme sync now checks that what it received makes sense, not only that it is the right shape. It notices a timezone that belongs to a different city from the venue, a session dated outside the conference, a room left blank, and an edition that has quietly become a different year. Each finding says what to change in Indico, because that is where the correction has to be made.
+
 - The Directory gains a sixteenth research theme, Climate, energy and environmental security. Three members work on climate change, environmental degradation, energy security and the greening of defence industry, and most of that reached no theme at all, so their work was missing from the filter row and from the Network Map's themes lens. Hand-translated for FR and DE.
 
 - The Network Map reports how much of the Action comes from an Inclusiveness Target Country, which is the figure COST weighs most heavily when it looks at an Action's inclusiveness. 106 of the 192 people on the map do, and a new overlay rings them. The figure counts by country, which the page says plainly, since a member based in an EU Outermost Region is not visible in the data behind it. Hand-translated for FR and DE.
