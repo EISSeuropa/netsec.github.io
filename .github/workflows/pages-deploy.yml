@@ -117,6 +117,36 @@ jobs:
         # — it ships to Pages via the artifact upload below.
         run: bash scripts/build-search.sh
 
+      - name: Stamp the ?v= cache-bust on every page
+        # The same reasoning as the Pagefind index above, applied to the asset
+        # tokens (#1712). Committing them meant every front-end pull request
+        # rewrote 315 files it had not touched: 97% of the diff, and a rule in
+        # CLAUDE.md §2 forbidding two such branches at once. The repository now
+        # stores `src="assets/css/site.css"` and the token is applied here,
+        # over the top-level pages and the 252 under people/.
+        run: python3 scripts/inject-seo.py --stamp-only
+
+      - name: Assert the stamping actually happened
+        # The failure mode moved from noisy-but-visible to quiet-and-wrong. If
+        # the step above ever silently no-ops, returning visitors render new
+        # markup against a cached stylesheet, which is the exact thing the
+        # tokens exist to prevent. So the build refuses to publish an unstamped
+        # tree rather than shipping one.
+        run: |
+          set -euo pipefail
+          missing=0
+          for page in index.html people.html network-map.html people/arthur-laudrain.html; do
+            if ! grep -qE 'assets/css/site\.css\?v=[0-9a-f]{8}' "$page"; then
+              echo "::error file=$page::no ?v= token after the stamping step"
+              missing=1
+            fi
+          done
+          [ "$missing" -eq 0 ] || {
+            echo '::error::refusing to publish an unstamped tree; see scripts/inject-seo.py --stamp-only'
+            exit 1
+          }
+          echo "cache-bust tokens present on the sampled pages"
+
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v5 (sha-pinned)
 

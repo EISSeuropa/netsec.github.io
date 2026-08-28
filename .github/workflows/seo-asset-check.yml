@@ -44,8 +44,11 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Run SEO + cache-bust checker
-        run: python3 scripts/inject-seo.py --check
+      - name: Run the SEO block checker
+        # --seo-only since #1712: the ?v= tokens are no longer committed, so
+        # there is nothing here to be stale. They are stamped in
+        # pages-deploy.yml and asserted there before the tree is published.
+        run: python3 scripts/inject-seo.py --check --seo-only
 
       - name: Install Pillow for the photograph check
         run: python3 -m pip install --quiet 'Pillow>=12.3.0,<13'

@@ -67,7 +67,7 @@
     } catch (e) { /* localStorage / matchMedia may be unavailable */ }
   })();
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=8f3d8923">
+<link rel="stylesheet" href="assets/css/site.css">
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -706,20 +706,20 @@
 
 <!-- Shared site script: nav, theme toggle, mobile menu, reveal,
      mc-countries collapse, year stamp. Loaded by every page. -->
-<script src="assets/js/site.js?v=d35ed458" defer></script>
+<script src="assets/js/site.js" defer></script>
 
 <!-- Home-page events renderer (#249). Wipes the hand-coded event
      cards above on success and rebuilds them from data/events.json;
      the hand-coded HTML survives as fail-soft fallback if the fetch
      or parse fails. Each rebuilt card carries the per-card Add to
      calendar dropdown wired against /calendar/<slug>.ics. -->
-<script src="assets/js/home-events.js?v=973849a5" defer></script>
+<script src="assets/js/home-events.js" defer></script>
 <!-- Home-page news renderer + RSS feed (v1.9.0). Same shape as the
      events renderer — hand-coded news cards above survive as fail-
      soft fallback if data/news.json fails to load. The RSS feed at
      /news.xml is the public, machine-readable mirror. -->
-<script src="assets/js/home-news.js?v=4ce15697" defer></script>
-<script src="assets/js/home-spotlight.js?v=67ea5d71" defer></script>
+<script src="assets/js/home-news.js" defer></script>
+<script src="assets/js/home-spotlight.js" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     if (window.NetSec && window.NetSec.renderHomeEvents) {
