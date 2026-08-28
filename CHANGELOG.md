@@ -210,6 +210,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The share cards that appear when a member's profile is posted to social media no longer fail to build because the browser that draws them was slow to start. It happened about one run in two, and it happens inside the overnight directory sync, where the only sign was a line in a log nobody reads.
+
 - The documentation pack downloads in a third of the data. It was 24.6 MB, of which 22 MB was five screenshots stored at four times the resolution the page can print, and it is 7.7 MB now with the figures unchanged to read. The same five screenshots were also the largest thing in the project's history, so the saving repeats on every future edition rather than happening once.
 
 - The automated checks stop failing for reasons that have nothing to do with the change being checked. Four such failures happened in a single day, each one a browser or a local server that had not finished starting when something began talking to it. The checks now wait for what they need and retry a cold browser once, so a red check means something is genuinely wrong.

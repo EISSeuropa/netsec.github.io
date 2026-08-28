@@ -141,3 +141,66 @@ if __name__ == "__main__":
     import sys
 
     sys.exit(_standalone())
+
+
+# ── The Chrome launch retry (#1726) ────────────────────────────────────────
+
+class _FakeProc:
+    """Stands in for the Popen handle _capture_cards is given."""
+
+    def __init__(self):
+        self.killed = False
+
+    def terminate(self):
+        self.killed = True
+
+    def wait(self, timeout=None):
+        return 0
+
+    def kill(self):
+        self.killed = True
+
+
+def test_launch_is_retried_once_and_then_succeeds(monkeypatch, capsys):
+    """A cold headless Chrome sometimes never reaches its DevTools endpoint.
+    One attempt used to abort the whole render, which inside the daily bios
+    sync leaves a member's share card stale with only the run log saying so."""
+    attempts = []
+    proc = _FakeProc()
+
+    def flaky(chrome):
+        attempts.append(chrome)
+        if len(attempts) == 1:
+            raise RuntimeError("Chrome did not expose the DevTools endpoint within 10s")
+        return proc, object()
+
+    monkeypatch.setattr(boc, "_launch_chrome", flaky)
+    monkeypatch.setattr(boc.time, "sleep", lambda _s: None)
+    # No jobs, so nothing renders: the launch path is what is under test.
+    boc._capture_cards("/fake/chrome", [])
+
+    assert len(attempts) == 2, "the failed launch should be retried exactly once"
+    assert proc.killed, "the browser should still be shut down after the run"
+    err = capsys.readouterr().err
+    assert "retrying once" in err
+    assert "second attempt succeeded" in err, "a silent recovery teaches nobody"
+
+
+def test_two_failed_launches_give_up_rather_than_looping(monkeypatch):
+    """Twice was enough for every occurrence seen; a third would be guessing,
+    and an unbounded retry would hang the sync rather than report."""
+    attempts = []
+
+    def always_fails(chrome):
+        attempts.append(chrome)
+        raise RuntimeError("Chrome did not expose the DevTools endpoint within 10s")
+
+    monkeypatch.setattr(boc, "_launch_chrome", always_fails)
+    monkeypatch.setattr(boc.time, "sleep", lambda _s: None)
+    try:
+        boc._capture_cards("/fake/chrome", [])
+    except SystemExit as exc:
+        assert "after two attempts" in str(exc)
+    else:
+        raise AssertionError("a second failure should exit, not continue")
+    assert len(attempts) == 2
