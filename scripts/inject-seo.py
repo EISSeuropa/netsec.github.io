@@ -522,18 +522,44 @@ def is_seo_managed(path: Path) -> bool:
     return base_of(path) in PAGES or path.name == "404.html"
 
 
+def stampable_pages() -> list[Path]:
+    """Every page that references a versioned asset.
+
+    Wider than the SEO pass, which manages only the top-level pages: the 252
+    generated profile pages under people/ inherit their head-asset block from
+    the locale shell and carry the same reference. The deploy-time stamp has
+    to reach them or a third of the site would go unstamped (#1712).
+    """
+    return sorted(ROOT.glob("*.html")) + sorted((ROOT / "people").glob("*.html"))
+
+
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--check", action="store_true", help="Report what would change but don't write.")
+    # The two halves of this script split because they now run in different
+    # places (#1712). The SEO and JSON-LD block is content, reviewed in a pull
+    # request and committed. The ?v= cache-bust is a build artefact of whatever
+    # the assets happen to hash to, and it is stamped at deploy time, the way
+    # the Pagefind index already is. Neither flag means "both", which is what a
+    # maintainer wants locally.
+    p.add_argument("--seo-only", action="store_true",
+                   help="Only the SEO/JSON-LD block. Skip the ?v= stamping.")
+    p.add_argument("--stamp-only", action="store_true",
+                   help="Only the ?v= stamping, including people/. Skip the SEO block.")
     args = p.parse_args()
+    if args.seo_only and args.stamp_only:
+        print("--seo-only and --stamp-only are mutually exclusive; omit both to do both.")
+        return 2
+    do_seo = not args.stamp_only
+    do_stamp = not args.seo_only
 
-    pages = sorted(ROOT.glob("*.html"))
+    pages = stampable_pages() if do_stamp else sorted(ROOT.glob("*.html"))
     if not pages:
         print("No HTML files to process. Is this the right directory?")
         return 1
 
-    versions = compute_asset_versions()
-    if not versions:
+    versions = compute_asset_versions() if do_stamp else {}
+    if do_stamp and not versions:
         print("  WARN: no assets/css or assets/js files found to version")
 
     any_changes = False
@@ -541,10 +567,12 @@ def main() -> int:
         rel = path.relative_to(ROOT)
         original = path.read_text(encoding="utf-8")
         new = original
-        # SEO + JSON-LD only on managed pages; cache-busting everywhere.
-        if is_seo_managed(path):
+        # SEO + JSON-LD only on the managed top-level pages; cache-busting on
+        # every page that references an asset.
+        if do_seo and is_seo_managed(path):
             new, _ = inject(new, base_of(path))
-        new, _ = stamp_assets(new, versions)
+        if do_stamp:
+            new, _ = stamp_assets(new, versions)
 
         if new != original:
             any_changes = True

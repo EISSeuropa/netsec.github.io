@@ -520,7 +520,7 @@ sweep (rule §11).
 │   ├── sync-cost.py                 # Weekly cost.eu sync: WG_MAP, leadership, MC roster + stats, per-WG WG reconciliation
 │   ├── sync-bios.py                 # Pulls Google Form submissions
 │   ├── bios-source.json             # CSV URL + form URL + column mapping
-│   ├── inject-seo.py                # Idempotent canonical/OG/JSON-LD generator + asset cache-bust stamper (?v=hash); run before the profile/sitemap builders
+│   ├── inject-seo.py                # Canonical/OG/JSON-LD generator (committed) + ?v= cache-bust stamper (--stamp-only, applied at deploy)
 │   ├── build-profile-pages.py       # Server-renders /people/<slug>.{html,fr,de} from bios.json: enriched profile (themes/regions, similar-people facepile, mentor/STSM CTAs, prize pill, runtime anthology link); owns people/* ?v=, run LAST; --check drift gate (#762)
 │   ├── build-directory-index.py     # Generates directory-index.json, the cross-site contract published for the EISS Anthology (members keyed by name_key → profile URL); --check drift gate
 │   ├── build-sitemap.py             # Regenerates sitemap.xml from the top-level page list + the committed profile pages; --check drift gate
@@ -554,7 +554,7 @@ sweep (rule §11).
 │   ├── social-bluesky.yml           # Approval-gated news / thread posting to Bluesky + LinkedIn on a news.xml change or manual dispatch (#1072)
 │   ├── linkedin-version-check.yml   # Monthly cron — bumps data/linkedin-api-version.json before LinkedIn sunsets the pinned API version; auto-merging PR (#1223)
 │   ├── i18n-drift.yml               # Drift checker for FR/DE translations
-│   ├── seo-asset-check.yml          # SEO drift + asset cache-bust drift (inject-seo.py --check)
+│   ├── seo-asset-check.yml          # SEO block drift (inject-seo.py --check --seo-only)
 │   ├── calendar-drift.yml           # Drift checker for /calendar.ics + /calendar/*.ics vs. events.json
 │   ├── news-drift.yml               # Drift checker for /news.xml vs. data/news.json
 │   ├── roadmap-refresh.yml          # Daily: the [Unreleased] autostamp + data/roadmap-progress.json
@@ -660,11 +660,13 @@ If you're changing the brand assets (logo, mark, favicon, colours):
    run `scripts/build-brand-assets.py` (crops the lockups, regenerates
    the favicon family), then `scripts/update-brand-html.py` if markup
    paths change.
-2. Run `scripts/inject-seo.py` afterwards so the structured-data
-   `Organization.logo` (`assets/images/brand/android-chrome-512.png`)
-   and the cache-bust hashes stay in sync.
+2. Run `scripts/inject-seo.py --seo-only` afterwards so the
+   structured-data `Organization.logo`
+   (`assets/images/brand/android-chrome-512.png`) stays in sync. The
+   `?v=` cache-bust needs nothing here: it is stamped at deploy time
+   and is not committed (#1712).
 3. For a colour change, edit `--accent` / `--accent-2` in `site.css` and
-   `theme_color` in `manifest.webmanifest`, then re-run `inject-seo.py`.
+   `theme_color` in `manifest.webmanifest`. Nothing to re-stamp.
 4. See `docs/design-system.md` for which asset goes where and
    `docs/admin-guide.md` for the full maintenance procedure.
 
