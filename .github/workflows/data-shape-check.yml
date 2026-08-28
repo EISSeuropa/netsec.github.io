@@ -87,8 +87,8 @@ jobs:
 
       - name: Sitemap is current (#1027)
         # sitemap.xml is generated from the top-level page table plus the
-        # committed people/<slug>.html files. Fail if a new member profile
-        # is missing from the sitemap or the committed file has drifted.
+        # members in data/bios.json (#1716). Fail if a new member profile is
+        # missing from the sitemap or the committed file has drifted.
         run: python3 scripts/build-sitemap.py --check
 
       - name: directory-index.json is current

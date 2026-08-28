@@ -8,6 +8,7 @@ sitemap without touching the committed file:
   * every top-level page and every member profile page appears once
   * each <url> carries the four hreflang alternates (en/fr/de/x-default)
   * --check is consistent with the committed sitemap.xml
+  * the member slugs match the pages build-profile-pages.py actually builds
 
 Run standalone:  /usr/bin/python3 scripts/test-build-sitemap.py
 Or under pytest: python3 -m pytest scripts/test-build-sitemap.py -q
@@ -46,6 +47,19 @@ def test_top_level_and_members_present():
     assert slugs, "expected at least one member profile page"
     for slug in slugs:
         assert f"<loc>{bsm.SITE}/people/{slug}.html</loc>" in out, f"missing member {slug}"
+
+
+def test_slugs_match_the_pages_that_get_built():
+    # The sitemap reads data/bios.json rather than globbing people/ (#1716),
+    # so the two have to be kept honest against each other: a <loc> for a page
+    # nobody builds is a 404 in the sitemap, and a built page missing from it
+    # is invisible to crawlers.
+    _p = Path(__file__).resolve().parent / "build-profile-pages.py"
+    _s = importlib.util.spec_from_file_location("build_profile_pages", _p)
+    bpp = importlib.util.module_from_spec(_s)
+    _s.loader.exec_module(bpp)
+    built = {rel.split("/")[1].split(".")[0] for rel in bpp.generate()}
+    assert built == set(bsm.member_slugs())
 
 
 def test_every_url_has_four_hreflang_alternates():
