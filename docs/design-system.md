@@ -136,6 +136,12 @@ node scripts/measure.mjs targets people.html events.html --width 375x812 --fail
 `--fail` exits non-zero on anything under the floor, and also on a run where
 the coarse pointer was not emulated, since that run proves nothing.
 
+`.github/workflows/target-size.yml` runs exactly that on every pull request
+touching CSS, JS or a page, over the eight pages that actually carry controls.
+It is not a required check yet: it is new and it drives a browser, and a gate
+nobody trusts is worse than no gate. Promote it once it has been quiet for a
+few weeks.
+
 **Reach for padding, not `min-height`.** A control should grow around its text
 rather than centre a short label in a tall box, and the coarse-pointer blocks
 at the foot of each stylesheet do exactly that.

@@ -555,6 +555,7 @@ sweep (rule §11).
 │   ├── linkedin-version-check.yml   # Monthly cron — bumps data/linkedin-api-version.json before LinkedIn sunsets the pinned API version; auto-merging PR (#1223)
 │   ├── i18n-drift.yml               # Drift checker for FR/DE translations
 │   ├── seo-asset-check.yml          # SEO block drift (inject-seo.py --check --seo-only)
+│   ├── target-size.yml              # Every control clears 44px under a coarse pointer (#1689)
 │   ├── calendar-drift.yml           # Drift checker for /calendar.ics + /calendar/*.ics vs. events.json
 │   ├── news-drift.yml               # Drift checker for /news.xml vs. data/news.json
 │   ├── roadmap-refresh.yml          # Daily: the [Unreleased] autostamp + data/roadmap-progress.json

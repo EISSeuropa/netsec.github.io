@@ -1,0 +1,76 @@
+# Target size floor.
+#
+# Every control in <main> that a person taps to do something clears 44px under
+# a coarse pointer, which is WCAG 2.5.5 Target Size (Enhanced). The rule, and
+# the three kinds of thing exempt from it, are in docs/design-system.md; the
+# exemptions are encoded in NOT_A_TARGET in scripts/measure.mjs so this can be
+# run rather than remembered.
+#
+# Why it exists
+#   #1603 fixed one control at 43px. The sweep it asked for found five more,
+#   and #1689 settled the floor rather than nudging them one at a time. Running
+#   that sweep again immediately afterwards found thirteen, three of which had
+#   been added by the same session that was arguing for the floor. A rule
+#   nothing enforces drifts within the hour.
+#
+# What it is not
+#   Not a required check. It is new, it drives a browser, and a gate nobody
+#   trusts is worse than no gate. Promote it once it has been quiet for a few
+#   weeks.
+#
+# The sampled pages are the ones that actually carry controls: the home page,
+# the two filter-heavy directories, the conference programme, the roadmap and
+# the map. Running all 67 would triple the time to tell us about pages that are
+# mostly prose.
+#
+# When this fails: the log names each control, its height and its page. Raise
+# it with padding rather than min-height, in the @media (pointer: coarse) block
+# at the foot of the stylesheet that defines it, and mind that a class defined
+# in site.css needs its rule there too, since pages like events.html never load
+# directory.css.
+name: Target size (44px floor)
+
+on:
+  pull_request:
+    paths:
+      - 'assets/css/**'
+      - 'assets/js/**'
+      - '*.html'
+      - 'scripts/measure.mjs'
+      - '.github/workflows/target-size.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: target-size-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  targets:
+    name: Every control clears 44px
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v4 (sha-pinned)
+        with:
+          node-version: '22'
+
+      - name: Install puppeteer-core
+        run: npm ci --no-audit --no-fund
+
+      # No Pagefind build here, unlike the directory-interactions workflow:
+      # nothing in this check touches search, and the index costs a minute.
+      - name: Measure every control under a coarse pointer
+        run: |
+          node scripts/measure.mjs targets \
+            index.html people.html events.html working-groups.html \
+            roadmap.html essc-2026.html network-map.html grants.html \
+            --width 375x812 --fail
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
