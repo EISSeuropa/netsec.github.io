@@ -404,13 +404,22 @@ different cadence for staying current.
 
 #### Automation note: `docs/roadmap-2026.md` autostamp
 
-`.github/workflows/sync-roadmap.yml` keeps the AUTOSTAMP block
+`.github/workflows/roadmap-refresh.yml` keeps the AUTOSTAMP block
 near the top of `docs/roadmap-2026.md` in sync with `CHANGELOG.md`'s
-`[Unreleased]` section. It counts the bullets per category,
-records the freshness date, and anchors against the most recent
-SemVer tag. Triggers on every push to `main` that touches
-`CHANGELOG.md` (plus weekly Monday 06:00 UTC + manual dispatch),
-opens an auto-PR on `roadmap-sync/auto` with auto-merge armed.
+`[Unreleased]` section, and refreshes `data/roadmap-progress.json`
+from the GitHub milestones in the same run. It counts the bullets
+per category, records the freshness date, and anchors against the
+most recent SemVer tag. Runs daily at 07:00 UTC (plus manual
+dispatch), opens one auto-PR on `roadmap-refresh/auto` with
+auto-merge armed.
+
+It used to fire on every push touching `CHANGELOG.md`, and the
+milestone half on every issue event. Since §4 asks each PR for an
+`[Unreleased]` bullet and §10 asks each issue for a milestone, the
+two rules were feeding the automation: 36 auto-PRs against 21
+substantive ones in a day (#1720). Both surfaces are eventually
+consistent, so a daily run is enough, and `scripts/release.sh`
+refreshes both itself so a release never waits on cron.
 
 So the maintainer never has to manually refresh the count or
 freshness stamp; that's handled. **What the automation does NOT

@@ -1,0 +1,141 @@
+# Refresh the roadmap's two machine-managed surfaces, once a day, in one PR.
+#
+# Replaces sync-roadmap.yml and roadmap-progress.yml, which did the same two
+# jobs on event triggers and between them produced 36 auto-merged pull requests
+# against 21 substantive ones on 27 August 2026, behind 77 workflow runs
+# (#1720). Bookkeeping was 63% of that day's history on main.
+#
+# Why a schedule rather than events
+#   Both outputs are eventually consistent, not real-time. docs/roadmap-2026.md
+#   says so of the autostamp: it is a staleness alarm, and a human writes the
+#   synthesis at release time. The progress figures drive a progress bar on a
+#   roadmap card. Nothing downstream reads either within minutes, so reacting
+#   to events bought nothing and cost a pull request per merge.
+#
+#   The old triggers were also self-feeding in two ways. sync-roadmap.yml ran
+#   on any push to main touching CHANGELOG.md, and rule §4 asks every
+#   substantive PR to add an [Unreleased] bullet, so nearly every merge fired
+#   it. Its own PR then modified docs/roadmap-2026.md, one of its own trigger
+#   paths, so merging it started the workflow again. roadmap-progress.yml ran
+#   on `milestoned`, and rule §10 asks every issue to carry a milestone, so
+#   filing an issue fired it too, with no merge involved.
+#
+#   Both carried concurrency groups with cancel-in-progress. That was never the
+#   missing piece: each run finished and opened its PR before the next merge
+#   arrived, so there was nothing in flight to cancel.
+#
+# What this costs
+#   Up to a day of staleness on both surfaces, which neither has a consumer for
+#   — with one exception, now closed. scripts/release.sh assumed the autostamp
+#   was fresh because a merge had just refreshed it. It now runs both scripts
+#   itself before composing the notes, so a release never depends on a
+#   scheduled job having fired. Use workflow_dispatch for any other "I want it
+#   now" case.
+#
+# What it produces
+#   One PR on `roadmap-refresh/auto`, auto-merge armed, carrying whichever of
+#   the two files actually moved. If neither moved, create-pull-request finds
+#   no diff and opens nothing, which is the ordinary case on a quiet day.
+name: Refresh roadmap surfaces
+
+on:
+  # 07:00 UTC: after the bios sync (05:15) and the Indico sync, so the day's
+  # refresh sees anything they changed rather than trailing it by 24 hours.
+  schedule:
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: roadmap-refresh
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    name: Refresh the autostamp and the milestone progress
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
+        with:
+          # fetch-depth: 0 so `git tag --list --sort=-v:refname` sees the full
+          # tag history. Shallow clones default to depth 1, which loses tags.
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+
+      - name: Refresh the [Unreleased] autostamp
+        run: |
+          set -o pipefail
+          python3 scripts/sync-roadmap.py | tee /tmp/sync-roadmap.txt
+
+      - name: Refresh the milestone progress
+        env:
+          # The script calls `gh api`; gh authenticates from GH_TOKEN.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -o pipefail
+          python3 scripts/sync-roadmap-progress.py | tee /tmp/roadmap-progress.txt
+
+      - name: Compose the PR body
+        run: |
+          {
+            echo "Daily refresh of the roadmap's two machine-managed surfaces."
+            echo ""
+            echo "**\`docs/roadmap-2026.md\`** — the \`[Unreleased]\` autostamp counts"
+            echo "bullets in \`CHANGELOG.md\` per category and freshness-stamps the date."
+            echo "The prose in the timeline rows is untouched: refreshing that synthesis"
+            echo "is a maintainer call at the release-time §5 sweep."
+            echo ""
+            echo '```'
+            cat /tmp/sync-roadmap.txt
+            echo '```'
+            echo ""
+            echo "**\`data/roadmap-progress.json\`** — per-milestone closed/total/percent,"
+            echo "read by the progress bars on \`/roadmap.html\`. Committed rather than"
+            echo "fetched live so the page stays static and survives an API outage."
+            echo ""
+            echo '```'
+            cat /tmp/roadmap-progress.txt
+            echo '```'
+            echo ""
+            echo "---"
+            echo "_Workflow: **Refresh roadmap surfaces**, run_id \`${{ github.run_id }}\`, trigger \`${{ github.event_name }}\`._"
+          } > /tmp/roadmap-refresh-pr-body.md
+
+      - name: Open or update the PR if either surface moved
+        id: create-pr
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)
+        with:
+          token: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
+          branch: roadmap-refresh/auto
+          base: main
+          delete-branch: true
+          title: 'chore(roadmap): daily refresh of the autostamp and milestone progress'
+          commit-message: |
+            chore(roadmap): daily refresh of the autostamp and milestone progress
+
+            Auto-generated by scripts/sync-roadmap.py and
+            scripts/sync-roadmap-progress.py. See the PR body for both deltas.
+          body-path: /tmp/roadmap-refresh-pr-body.md
+          labels: |
+            automated
+            documentation
+
+      # Auto-merge so the refresh ships without manual review. Both diffs are
+      # mechanical; CodeQL still runs and a failing check still blocks.
+      - name: Arm auto-merge on the auto-PR
+        if: steps.create-pr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge \
+            "${{ steps.create-pr.outputs.pull-request-number }}" \
+            --squash --auto \
+            --repo "${{ github.repository }}"

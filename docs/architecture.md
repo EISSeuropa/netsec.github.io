@@ -557,7 +557,7 @@ sweep (rule §11).
 │   ├── seo-asset-check.yml          # SEO drift + asset cache-bust drift (inject-seo.py --check)
 │   ├── calendar-drift.yml           # Drift checker for /calendar.ics + /calendar/*.ics vs. events.json
 │   ├── news-drift.yml               # Drift checker for /news.xml vs. data/news.json
-│   ├── roadmap-progress.yml         # Refreshes data/roadmap-progress.json on issue/milestone events
+│   ├── roadmap-refresh.yml          # Daily: the [Unreleased] autostamp + data/roadmap-progress.json
 │   ├── external-link-arrows.yml    # Lint: trailing → on external links
 │   ├── search-drift.yml             # Build sanity check on PRs (per-locale page count > 0)
 │   ├── data-shape-check.yml         # Shape lint + headless render smoke on data/** PRs; runs the --check drift gates (profile pages, sitemap, directory index, network map, OG cards, bio search stubs) (#724, #1428)
