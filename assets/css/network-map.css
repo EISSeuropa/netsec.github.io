@@ -221,3 +221,10 @@
 .network-map-finding:hover{border-bottom-color:currentColor}
 .network-map-finding:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
 @media (pointer:coarse){ .network-map-finding{padding:6px 0} }
+
+/* Target size floor (#1689). Two controls this session's work added below the
+   floor it was arguing for. See the block in site.css for the rule. */
+@media (pointer: coarse) {
+  .network-map-list__summary { padding-top: 12px; padding-bottom: 12px; }
+  .network-map-finding { padding-top: 12px; padding-bottom: 12px; }
+}

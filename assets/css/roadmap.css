@@ -352,3 +352,8 @@
   .rm-feedback-action:hover,
   .rm-card:hover{transform:none}
 }
+
+/* Target size floor (#1689). See the block in site.css for the rule. */
+@media (pointer: coarse) {
+  .rm-shipped-btn { padding-top: 12px; padding-bottom: 12px; }
+}
