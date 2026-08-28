@@ -54,11 +54,27 @@ const server = http.createServer((req, res) => {
 await new Promise(r => server.listen(0, '127.0.0.1', r));
 const BASE = `http://127.0.0.1:${server.address().port}`;
 
-const browser = await puppeteer.launch({
-  executablePath: CHROME,
-  headless: 'new',
-  args: ['--no-sandbox', '--disable-dev-shm-usage'],
-});
+// Two attempts. A cold headless Chrome on a GitHub runner occasionally never
+// reaches its WS endpoint and throws a TimeoutError, which fails the whole
+// suite for a reason that has nothing to do with the code under test (#1713).
+// A recovered launch says so, since the count of them is the signal for
+// whether this needs revisiting.
+async function launchBrowser() {
+  const options = {
+    executablePath: CHROME,
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-dev-shm-usage'],
+  };
+  try {
+    return await puppeteer.launch(options);
+  } catch (first) {
+    console.error(`  · browser launch failed (${first.message.split('\n')[0]}), retrying once`);
+    await new Promise((r) => setTimeout(r, 2000));
+    return puppeteer.launch(options);
+  }
+}
+
+const browser = await launchBrowser();
 
 // One fresh page per journey. Reduced motion kills the FLIP/scroll animations
 // so geometry is deterministic; the tour key suppresses the first-visit

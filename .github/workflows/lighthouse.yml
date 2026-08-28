@@ -52,7 +52,14 @@ jobs:
         # dependencies, so this costs nothing to install.
         run: |
           node scripts/serve-static.cjs 8080 . &
-          sleep 3
+          # Poll rather than sleep. `sleep 3` lost the race on 27 August 2026
+          # and the audit failed with "Failed to connect to localhost port
+          # 8080", which reads as a broken build rather than a slow start
+          # (#1713).
+          for _ in $(seq 1 60); do
+            curl -fsS -o /dev/null http://localhost:8080/index.html 2>/dev/null && break
+            sleep 0.5
+          done
           # Fail loudly here rather than letting Lighthouse audit six 404s.
           curl -fsS -o /dev/null http://localhost:8080/index.html
           curl -fsS -o /dev/null -H 'Accept-Encoding: gzip' \
