@@ -444,6 +444,17 @@ Cover bump always, section-level catch-up batched every 2-3
 minor releases. The PDF carries its own version stamp and
 appendix, and is built from `docs/pdf/documentation.html`.
 
+**Figures are JPEGs, and stay that way.** `build.sh --shots`
+captures at `--force-device-scale-factor=1` and converts each
+screenshot to JPEG at quality 90. Without the scale-factor flag a
+Mac captures at DPR 2, and the five figures arrived at 2560x6400,
+sixteen megapixels each, embedded whole into a document that caps
+them at 170mm. That took the PDF to 24.6 MB, of which 22.1 MB was
+images, and made `docs/pdf` roughly 80% of the repository's git
+history at 420 MB across 106 objects (#1727). It is 7.7 MB now.
+A figure reintroduced as a full-resolution PNG puts that back at
+about 20 MB per release.
+
 ## 15. Model & effort defaults
 
 The standing model and reasoning-effort defaults live in

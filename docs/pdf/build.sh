@@ -62,12 +62,30 @@ if [[ "${1-}" == "--shots" ]]; then
     # hero but everything below stays hidden with opacity 0. The
     # virtual-time budget also goes up so the reveal transition has
     # room to complete inside the synthetic clock.
+    # force-device-scale-factor=1 so the capture is the 1280 logical pixels
+    # asked for. Without it a Mac screenshots at DPR 2, and the five figures
+    # arrived at 2560x6400: sixteen megapixels each, embedded whole into a
+    # print document that caps them at 170mm. That is what took the PDF to
+    # 24.6 MB, of which 22.1 MB was these images (#1727).
     "$CHROME" --headless --no-sandbox --disable-gpu \
       --window-size=1280,3200 --hide-scrollbars \
+      --force-device-scale-factor=1 \
       --virtual-time-budget=12000 \
       --screenshot="$HERE/snap-$label.png" \
       "http://127.0.0.1:$PORT/$path" 2>/dev/null
-    echo "   $HERE/snap-$label.png"
+    # JPEG for the figures. At 1280px across the 170mm the layout allows,
+    # that is about 190 DPI, and a screenshot of a page is a photograph of
+    # text rather than text: quality 90 keeps it legible at six times less.
+    "$PY3" - "$HERE/snap-$label" <<'CONVERT'
+import sys
+from PIL import Image
+stem = sys.argv[1]
+with Image.open(f"{stem}.png") as im:
+    im.convert("RGB").save(f"{stem}.jpg", "JPEG", quality=90,
+                           optimize=True, progressive=True)
+CONVERT
+    rm -f "$HERE/snap-$label.png"
+    echo "   $HERE/snap-$label.jpg"
   done
   kill $SRV 2>/dev/null || true
   trap - EXIT
