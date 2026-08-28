@@ -208,6 +208,33 @@ def test_phrase_keywords_split_into_their_parts() -> None:
         expect(f"{part!r} reaches a theme", part.lower() in theme_of, True)
 
 
+def test_enrich_keywords_is_callable_on_its_own() -> None:
+    """The keyword enrichment was lifted out of main() so --dry-run can replay
+    it over the committed bios.json without a fetch (#1715). If it ever needs
+    anything from main()'s scope again, this is what notices."""
+    print("\nenrich_keywords() in isolation:")
+    members = [
+        {"id": "a", "name": "Dr Ada Lovelace",
+         "keywords": ["cyber security", "Ireland", "AI cyber security geopolitics"]},
+        {"id": "b", "name": "Dr Grace Hopper", "keywords": ["human securirty"]},
+    ]
+    aggregates: dict = {}
+    sync_bios.enrich_keywords(members, aggregates)
+
+    ada = members[0]["canonical_keywords"]
+    # The alias, the place-name drop and the phrase split, all in one member.
+    expect("alias resolves", "Cybersecurity" in ada, True)
+    expect("place name dropped", "Ireland" in ada, False)
+    expect("phrase split", "Geopolitics" in ada, True)
+    # The typo alias, and a theme derived from it.
+    expect("typo resolves", members[1]["canonical_keywords"], ["Human security"])
+    expect("theme derived",
+           "Transnational and human security" in (members[1].get("themes") or []), True)
+    # The three aggregates the directory's filter rows read.
+    for key in ("keyword_aggregate", "theme_aggregate", "keyword_theme_map"):
+        expect(f"{key} written", key in aggregates, True)
+
+
 def test_country_key() -> None:
     print("\ncountry_key():")
     expect("lowercased", country_key("United Kingdom"), "united kingdom")

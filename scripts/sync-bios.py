@@ -42,6 +42,7 @@ available; if not, photos are saved as-is.
 """
 from __future__ import annotations
 
+import copy
 import csv
 import difflib
 import hashlib
@@ -2138,74 +2139,18 @@ def apply_overrides(members: list[dict]) -> None:
         print(f"  · {fix['id']}.{field}: {old!r} → {new!r}")
 
 
-def main() -> None:
-    config = json.loads(CONFIG.read_text())
-    csv_url = (config.get("sheet", {}).get("csv_url") or "").strip()
-    if not csv_url:
-        print("bios-source.json has no csv_url set — exiting cleanly.")
-        print("See docs/bios-setup.md to wire up the Google Form.")
-        return
+def enrich_keywords(merged: list, bios_data: dict) -> None:
+    """Resolve every member's raw keywords and write the derived fields.
 
-    cols = config.get("columns", {})
-    bios_data = json.loads(BIOS.read_text())
-    old_members = bios_data.get("members", [])
-    # We pass the full prior member list to merge(), not just
-    # source == "seed". The seed/form distinction is informational
-    # only — for merge purposes, "the prior state of the directory"
-    # is what we want to preserve roles, position, and email-match
-    # identity against.
-    #
-    # Index by slug so row_to_member → download_photo can look up
-    # the prior `photo_source_sha256` for each submitter in O(1) and
-    # skip the PIL re-encode when the upstream photo bytes are
-    # unchanged. See download_photo's docstring for the empty-PR
-    # failure mode this guards against.
-    old_by_id = {m["id"]: m for m in old_members}
-    # Two more indexes, mirroring merge()'s email and name+country
-    # collapse signals, so a name-collapse submitter's photo resolves to
-    # its canonical slug + stored hash before download (see
-    # resolve_prior_entry).
-    old_by_email = {
-        m["email"].lower(): m for m in old_members if m.get("email")
-    }
-    old_by_namekey: dict[tuple[str, str, str], dict] = {}
-    for m in old_members:
-        nk = name_key(m.get("name", ""))
-        if nk:
-            old_by_namekey[(nk[0], nk[1], country_key(m.get("country", "")))] = m
+    Mutates `merged` in place (each member gains `canonical_keywords` and
+    `themes`) and `bios_data` (the three aggregates the directory's filter
+    rows read). Pure apart from the vocabulary files it loads, which is what
+    lets --dry-run replay it over the committed bios.json without a fetch
+    (#1715).
 
-    # Fetch the sheet CSV
-    print(f"Fetching {csv_url}")
-    r = requests.get(csv_url, timeout=30)
-    r.raise_for_status()
-    text = r.content.decode("utf-8-sig")
-    reader = csv.DictReader(io.StringIO(text))
-
-    form_entries: list[dict] = []
-    for raw_row in reader:
-        # The CSV from Google Sheets uses the form question text as the
-        # header. Trim whitespace from header keys.
-        row = {(k or "").strip(): v for k, v in raw_row.items()}
-        entry = row_to_member(
-            row, cols, old_by_id, old_by_email, old_by_namekey,
-        )
-        if entry:
-            form_entries.append(entry)
-
-    merged = merge(old_members, form_entries)
-    apply_overrides(merged)
-    print(diff_summary(old_members, merged))
-
-    # Make sure every headshot has a .webp sibling for the directory's
-    # <picture> serving (#269). Idempotent; only writes missing/stale ones.
-    _webp_n = ensure_people_webp()
-    if _webp_n:
-        print(f"Generated {_webp_n} new .webp headshot(s).")
-    # Map-sized derivatives come after, so they encode from the fresh .webp.
-    _map_n = ensure_map_avatars()
-    if _map_n:
-        print(f"Generated {_map_n} new map avatar(s).")
-
+    Lifted out of main() unchanged rather than copied, so the dry run and the
+    real sync can never disagree about what a keyword resolves to.
+    """
     # Resolve raw keywords through the alias map + sentence-case +
     # acronym word-walk normaliser. Emits a `canonical_keywords` field
     # per bio and a top-level `keyword_aggregate` array sorted by use
@@ -2342,6 +2287,77 @@ def main() -> None:
         key=lambda e: (-e["count"], e["theme"].lower()),
     )
     bios_data["keyword_theme_map"] = {k: keyword_theme_map[k] for k in sorted(keyword_theme_map)}
+
+
+def main() -> None:
+    config = json.loads(CONFIG.read_text())
+    csv_url = (config.get("sheet", {}).get("csv_url") or "").strip()
+    if not csv_url:
+        print("bios-source.json has no csv_url set — exiting cleanly.")
+        print("See docs/bios-setup.md to wire up the Google Form.")
+        return
+
+    cols = config.get("columns", {})
+    bios_data = json.loads(BIOS.read_text())
+    old_members = bios_data.get("members", [])
+    # We pass the full prior member list to merge(), not just
+    # source == "seed". The seed/form distinction is informational
+    # only — for merge purposes, "the prior state of the directory"
+    # is what we want to preserve roles, position, and email-match
+    # identity against.
+    #
+    # Index by slug so row_to_member → download_photo can look up
+    # the prior `photo_source_sha256` for each submitter in O(1) and
+    # skip the PIL re-encode when the upstream photo bytes are
+    # unchanged. See download_photo's docstring for the empty-PR
+    # failure mode this guards against.
+    old_by_id = {m["id"]: m for m in old_members}
+    # Two more indexes, mirroring merge()'s email and name+country
+    # collapse signals, so a name-collapse submitter's photo resolves to
+    # its canonical slug + stored hash before download (see
+    # resolve_prior_entry).
+    old_by_email = {
+        m["email"].lower(): m for m in old_members if m.get("email")
+    }
+    old_by_namekey: dict[tuple[str, str, str], dict] = {}
+    for m in old_members:
+        nk = name_key(m.get("name", ""))
+        if nk:
+            old_by_namekey[(nk[0], nk[1], country_key(m.get("country", "")))] = m
+
+    # Fetch the sheet CSV
+    print(f"Fetching {csv_url}")
+    r = requests.get(csv_url, timeout=30)
+    r.raise_for_status()
+    text = r.content.decode("utf-8-sig")
+    reader = csv.DictReader(io.StringIO(text))
+
+    form_entries: list[dict] = []
+    for raw_row in reader:
+        # The CSV from Google Sheets uses the form question text as the
+        # header. Trim whitespace from header keys.
+        row = {(k or "").strip(): v for k, v in raw_row.items()}
+        entry = row_to_member(
+            row, cols, old_by_id, old_by_email, old_by_namekey,
+        )
+        if entry:
+            form_entries.append(entry)
+
+    merged = merge(old_members, form_entries)
+    apply_overrides(merged)
+    print(diff_summary(old_members, merged))
+
+    # Make sure every headshot has a .webp sibling for the directory's
+    # <picture> serving (#269). Idempotent; only writes missing/stale ones.
+    _webp_n = ensure_people_webp()
+    if _webp_n:
+        print(f"Generated {_webp_n} new .webp headshot(s).")
+    # Map-sized derivatives come after, so they encode from the fresh .webp.
+    _map_n = ensure_map_avatars()
+    if _map_n:
+        print(f"Generated {_map_n} new map avatar(s).")
+
+    enrich_keywords(merged, bios_data)
 
     # Research-region aggregate (distinct-member count per region). The
     # per-bio `regions` come from the optional Research-regions form field
@@ -2489,5 +2505,71 @@ def _emit_pr_summary(
         )
 
 
+def dry_run() -> int:
+    """Replay the keyword enrichment over the committed bios.json and report.
+
+    The sync runs daily, so a change to data/keyword-aliases.json is invisible
+    until the next morning's auto-PR. Verifying four such changes in one day
+    meant writing this replay by hand twice, and the two traps it caught would
+    not have been visible by reading the file: the directory writes "Czechia"
+    where COST writes "Czech Republic", so a plain membership test silently
+    understated a figure aimed at an evaluator, and moving one keyword between
+    themes turned out to remove a member from a theme rather than add one,
+    because that keyword was her only route into it (#1715).
+
+    Reads nothing from the network and writes nothing. The raw `keywords` on
+    each committed member are the input, which is exactly what the sync feeds
+    the enrichment after a fetch that changed nobody's answers.
+    """
+    bios_data = json.loads(BIOS.read_text(encoding="utf-8"))
+    before = {m["id"]: m for m in bios_data.get("members", [])}
+    members = copy.deepcopy(bios_data.get("members", []))
+    enrich_keywords(members, {})
+
+    moved_keywords, moved_themes = [], []
+    for m in members:
+        was = before.get(m["id"], {})
+        if (was.get("canonical_keywords") or []) != (m.get("canonical_keywords") or []):
+            moved_keywords.append((m.get("name", "?"),
+                                   was.get("canonical_keywords") or [],
+                                   m.get("canonical_keywords") or []))
+        if set(was.get("themes") or []) != set(m.get("themes") or []):
+            moved_themes.append((m.get("name", "?"),
+                                 sorted(set(was.get("themes") or []) - set(m.get("themes") or [])),
+                                 sorted(set(m.get("themes") or []) - set(was.get("themes") or []))))
+
+    print()
+    if not moved_keywords and not moved_themes:
+        print("✓ nothing would change: the committed bios.json already matches "
+              "the current taxonomy.")
+        return 0
+
+    if moved_keywords:
+        print(f"Keywords that would move at the next sync ({len(moved_keywords)} member(s)):")
+        for name, was, now in moved_keywords:
+            for k in sorted(set(was) - set(now)):
+                print(f"    {name}: -{k!r}")
+            for k in sorted(set(now) - set(was)):
+                print(f"    {name}: +{k!r}")
+    if moved_themes:
+        print()
+        print(f"Research themes that would move ({len(moved_themes)} member(s)):")
+        for name, lost, gained in moved_themes:
+            # A member losing a theme is the line to read twice. It means a
+            # keyword was that member's only route into it.
+            mark = "  ← loses a theme" if lost else ""
+            print(f"    {name}: -{lost} +{gained}{mark}")
+    print()
+    print("Nothing was written. Run without --dry-run inside the sync workflow "
+          "to apply, or wait for the daily run.")
+    return 0
+
+
 if __name__ == "__main__":
+    # --dry-run replays the keyword enrichment over the committed bios.json and
+    # reports what would move, without a fetch and without writing. It exists
+    # because the sync is daily, so a taxonomy edit is otherwise invisible until
+    # the next morning (#1715).
+    if "--dry-run" in sys.argv[1:]:
+        sys.exit(dry_run())
     main()
