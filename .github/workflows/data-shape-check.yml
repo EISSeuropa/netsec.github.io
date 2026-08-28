@@ -41,8 +41,6 @@ on:
       - 'people/**'
       - 'scripts/build-sitemap.py'
       - 'sitemap.xml'
-      - 'scripts/build-og-cards.py'
-      - 'assets/og/people/**'
       - 'scripts/build-directory-index.py'
       - 'directory-index.json'
       - 'scripts/build-network-map.py'
@@ -129,9 +127,7 @@ jobs:
         # someone notices the member absent from a search result.
         run: python3 scripts/build-bio-search-stubs.py --check
 
-      - name: OG cards are current (#1023)
-        # Per-member OG card PNGs are generated from bios.json. This check is
-        # content-keyed (a manifest of each card's inputs), not a pixel diff,
-        # so a member whose name/affiliation/country changed without the card
-        # being regenerated fails the gate. Needs no browser.
-        run: python3 scripts/build-og-cards.py --check
+      # The "OG cards are current (#1023)" gate lived here. It is gone with
+      # the cards themselves (#1716): they are rendered at deploy time now, so
+      # there is no committed artefact for it to find stale. The deploy asserts
+      # that every member got a card, which is the property that matters.

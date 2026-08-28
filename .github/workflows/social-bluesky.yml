@@ -153,6 +153,24 @@ jobs:
           PY
           rm -f branch-ledger.json
 
+      - name: Render the spotlight member's card
+        # social-post.py attaches assets/og/people/<slug>.png to the spotlight
+        # post. The cards are built at deploy time now (#1716), so the tree
+        # this workflow checks out does not carry them, and the script's
+        # fallback would quietly post the generic site card instead of the
+        # member's own. Render the one card it needs, about five seconds.
+        #
+        # Not `|| true`, and not fatal either: --only exits non-zero if Chrome
+        # cannot start, and `continue-on-error` lets the post go out on the
+        # generic card rather than not at all. The step shows red in the run
+        # when that happens, which is the signal.
+        continue-on-error: true
+        env:
+          CHROME: /usr/bin/google-chrome
+        run: |
+          SLUG=$(python3 -c "import json; print(json.load(open('data/spotlight.json')).get('current', ''))")
+          [ -n "$SLUG" ] && python3 scripts/build-og-cards.py --only "$SLUG"
+
       - name: Post to Bluesky + LinkedIn and update the ledger
         env:
           # A news.xml push posts NEWS only; the weekly spotlight is ungated

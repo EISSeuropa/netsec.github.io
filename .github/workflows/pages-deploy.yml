@@ -11,7 +11,8 @@
 # Inputs / outputs:
 #   - reads:  the working tree on main (HTML, assets, scripts)
 #   - builds: ./pagefind/ via scripts/build-search.sh (which calls
-#             `npx pagefind@1.5.2`; no manual install step needed)
+#             `npx pagefind@1.5.2`; no manual install step needed), and the
+#             84 per-member Open Graph cards under assets/og/people/
 #   - deploys: the entire working tree (with freshly-built ./pagefind/)
 #             to the github-pages environment, custom domain
 #             netsec-cost.eu preserved via the repo-root CNAME file.
@@ -109,6 +110,39 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v5 (sha-pinned)
         with:
           python-version: '3.12'
+
+      - name: Render the per-member Open Graph cards
+        # Same reasoning as the Pagefind index and the ?v= tokens: an artefact
+        # nobody hand-edits does not belong in the tree (#1716). 84 PNGs were
+        # rewritten by the weekly bios and COST syncs, each regeneration a new
+        # blob kept forever, and each needed a --check gate to prove it current.
+        #
+        # About 70 seconds for all 84, because Chrome launches once and the
+        # cards are screenshotted in sequence against a local server. There is
+        # no manifest in the tree now, so every deploy renders the full set
+        # rather than the changed ones.
+        #
+        # No --ensure-flags here: a bundled flag is an input, it is fetched and
+        # committed by the weekly bios sync, and a member whose flag is missing
+        # renders a card without one rather than failing.
+        run: python3 scripts/build-og-cards.py
+        env:
+          CHROME: /usr/bin/google-chrome
+
+      - name: Assert every member got a card
+        # The cards are the profile pages' og:image, and build-profile-pages.py
+        # now names that URL unconditionally rather than testing the file
+        # (#1716). So a silent under-render would leave 252 pages pointing at
+        # PNGs that 404 on the crawler, with nothing else to catch it.
+        run: |
+          set -euo pipefail
+          want=$(python3 -c "import json; d=json.load(open('data/bios.json')); print(len([m for m in d['members'] if m.get('id')]))")
+          got=$(find assets/og/people -name '*.png' | wc -l)
+          echo "members: $want, cards: $got"
+          [ "$want" -eq "$got" ] || {
+            echo "::error::rendered $got cards for $want members; refusing to publish"
+            exit 1
+          }
 
       - name: Build Pagefind index (and bio search stubs)
         # scripts/build-search.sh handles both: regenerates the bio

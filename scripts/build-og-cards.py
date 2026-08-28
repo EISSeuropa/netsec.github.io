@@ -13,25 +13,27 @@ card renders. The pills mirror the language of the live profile pages
 (scripts/build-profile-pages.py): WG1..WG4 with a lead / co-lead suffix,
 Mentor / Mentee, and an STSM-hosting badge.
 
-  - Cards are written to assets/og/people/<slug>.png (committed; see #119 for
-    the eventual move to deploy-time build).
+  - Cards are written to assets/og/people/<slug>.png, which is gitignored.
+    They are rendered by the Pages deploy workflow (#1716), not committed:
+    84 binaries rewritten by the weekly syncs were 84 new blobs in the history
+    every time, and each needed a drift gate to prove itself current.
   - Flags are bundled locally under assets/og/flags/<cc>.svg so the render is
     deterministic and needs no network.
   - PNG, not WebP: OG/Twitter scrapers want PNG, and it avoids the x86 cwebp
     limitation in the dev sandbox.
-  - A content manifest (assets/og/people/_manifest.json) records a hash of each
-    card's inputs (name, position, affiliation, country) so --check can tell a
-    card is stale without a flaky pixel diff (PNGs aren't byte-reproducible
-    across Chrome / font versions).
+  - A content manifest (assets/og/people/_manifest.json, also gitignored)
+    records a hash of each card's inputs (name, position, affiliation,
+    country), so a local re-run renders only the members who changed rather
+    than all 84. A clean checkout has no manifest and renders the full set,
+    which is what the deploy does in about seventy seconds.
 
 Usage:
-    python3 scripts/build-og-cards.py            # render all cards + manifest
-    python3 scripts/build-og-cards.py --check     # exit 1 if any card is stale
-    python3 scripts/build-og-cards.py --only SLUG # render one card (debugging)
+    python3 scripts/build-og-cards.py            # render the stale cards
+    python3 scripts/build-og-cards.py --only SLUG # render one card
     python3 scripts/build-og-cards.py --ensure-flags  # fetch any missing country flag
 
-Run from the repo root. Stdlib only. Rendering needs Google Chrome / Chromium
-(set $CHROME, else common paths are tried); --check needs no browser.
+Run from the repo root. Stdlib only. Needs Google Chrome / Chromium (set
+$CHROME, else common paths are tried).
 """
 from __future__ import annotations
 
@@ -601,38 +603,8 @@ def render_all(only: str | None = None, force: bool = False) -> int:
     return 0
 
 
-def check() -> int:
-    if not MANIFEST.exists():
-        print("✗ assets/og/people/_manifest.json missing — run build-og-cards.py", file=sys.stderr)
-        return 1
-    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    stale, missing_png = [], []
-    live_ids = set()
-    for m in members():
-        slug = m["id"]
-        live_ids.add(slug)
-        want = card_hash(card_inputs(m))
-        if manifest.get(slug) != want:
-            stale.append(slug)
-        if not (CARDS_DIR / f"{slug}.png").exists():
-            missing_png.append(slug)
-    orphan = sorted(set(manifest) - live_ids)
-    if stale or missing_png or orphan:
-        if stale:
-            print(f"✗ {len(stale)} card(s) stale (inputs changed): {', '.join(sorted(stale))}", file=sys.stderr)
-        if missing_png:
-            print(f"✗ {len(missing_png)} card PNG(s) missing: {', '.join(sorted(missing_png))}", file=sys.stderr)
-        if orphan:
-            print(f"✗ {len(orphan)} manifest entr(ies) for removed members: {', '.join(orphan)}", file=sys.stderr)
-        print("  run: python3 scripts/build-og-cards.py", file=sys.stderr)
-        return 1
-    print(f"✓ OG cards current ({len(live_ids)} members).")
-    return 0
-
-
 def main() -> int:
     ap = argparse.ArgumentParser(description="Generate per-member OG card images.")
-    ap.add_argument("--check", action="store_true", help="exit 1 if any card is stale")
     ap.add_argument("--only", metavar="SLUG", help="render a single member's card")
     ap.add_argument("--force", action="store_true", help="re-render every card, ignoring the manifest")
     ap.add_argument("--ensure-flags", action="store_true",
@@ -641,8 +613,6 @@ def main() -> int:
     if args.ensure_flags:
         ensure_flags()
         return 0
-    if args.check:
-        return check()
     return render_all(only=args.only, force=args.force)
 
 

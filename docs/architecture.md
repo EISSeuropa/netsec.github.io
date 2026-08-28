@@ -524,7 +524,7 @@ sweep (rule §11).
 │   ├── build-profile-pages.py       # Server-renders /people/<slug>.{html,fr,de} from bios.json: enriched profile (themes/regions, similar-people facepile, mentor/STSM CTAs, prize pill, runtime anthology link); owns people/* ?v=, run LAST; --check drift gate (#762)
 │   ├── build-directory-index.py     # Generates directory-index.json, the cross-site contract published for the EISS Anthology (members keyed by name_key → profile URL); --check drift gate
 │   ├── build-sitemap.py             # Regenerates sitemap.xml from the top-level page list + the committed profile pages; --check drift gate
-│   ├── build-og-cards.py            # Headless-Chrome per-member OG card PNGs (1200×630) from bios.json; churn-free manifest; --check gate (see og-cards.md, #1023)
+│   ├── build-og-cards.py            # Headless-Chrome per-member OG card PNGs (1200×630) from bios.json; run by the Pages deploy, output gitignored (see og-cards.md, #1023, #1716)
 │   ├── build-brand-assets.py        # One-shot: crop designer lockups + rasterise the favicon family into assets/images/brand/ (not in CI)
 │   ├── update-brand-html.py         # One-shot: migrate favicon/logo markup across all HTML to the brand set (not in CI)
 │   ├── check-indico-semantics.py    # Indico values that are well-formed and wrong (timezone vs venue, dates, rooms)
@@ -548,9 +548,9 @@ sweep (rule §11).
 │   └── requirements.txt             # requests, beautifulsoup4, Pillow
 │
 ├── .github/workflows/
-│   ├── pages-deploy.yml             # Build → deploy on push-to-main (builds /pagefind/ here)
+│   ├── pages-deploy.yml             # Build → deploy on push-to-main (builds /pagefind/, the OG cards and the ?v= tokens here)
 │   ├── sync-cost.yml                # Weekly cron — opens PR on any cost.eu change (WG_MAP, leadership, MC roster, stats, reconciled WGs); reruns every bios-derived generator incl. search stubs; PR body leads with a one-line change summary
-│   ├── sync-bios.yml                # Daily cron — opens PR if bios.json changed; reruns every bios-derived generator (profile pages, OG cards, search stubs, sitemap, index, network map, field guide); PR body leads with a one-line change summary
+│   ├── sync-bios.yml                # Daily cron — opens PR if bios.json changed; reruns every bios-derived generator (profile pages, search stubs, sitemap, index, network map, field guide); PR body leads with a one-line change summary
 │   ├── spotlight-rotate.yml         # Weekly cron (Tue 10:00 Europe/Paris) — rotates data/spotlight.json and posts the spotlight to Bluesky + LinkedIn, ungated (#341, #1072)
 │   ├── social-bluesky.yml           # Approval-gated news / thread posting to Bluesky + LinkedIn on a news.xml change or manual dispatch (#1072)
 │   ├── linkedin-version-check.yml   # Monthly cron — bumps data/linkedin-api-version.json before LinkedIn sunsets the pinned API version; auto-merging PR (#1223)
@@ -562,7 +562,7 @@ sweep (rule §11).
 │   ├── roadmap-refresh.yml          # Daily: the [Unreleased] autostamp + data/roadmap-progress.json
 │   ├── external-link-arrows.yml    # Lint: trailing → on external links
 │   ├── search-drift.yml             # Build sanity check on PRs (per-locale page count > 0)
-│   ├── data-shape-check.yml         # Shape lint + headless render smoke on data/** PRs; runs the --check drift gates (profile pages, sitemap, directory index, network map, OG cards, bio search stubs) (#724, #1428)
+│   ├── data-shape-check.yml         # Shape lint + headless render smoke on data/** PRs; runs the --check drift gates (profile pages, sitemap, directory index, network map, bio search stubs) (#724, #1428)
 │   ├── launch-qa-link-check.yml     # Internal+external link check + a11y-statement review-date check (weekly + root-HTML PRs)
 │   └── lighthouse.yml               # Lighthouse budget assertions per lighthouserc.json on HTML/CSS/JS PRs (#270; non-required)
 │

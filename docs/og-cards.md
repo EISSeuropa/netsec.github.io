@@ -6,8 +6,10 @@ profile is shared on Bluesky, LinkedIn, Slack, etc., it unfurls as **that
 person** (headshot, name, role, working-group and mentorship pills, country
 flag, NetSec branding) rather than the generic site card. Issue #1023.
 
-You never touch these by hand. Member data flows in, and the cards are
-**derived and committed** by `scripts/build-og-cards.py`.
+You never touch these by hand. Member data flows in and
+`scripts/build-og-cards.py` draws the cards, which are **not committed**. The
+Pages deploy renders all 84 on its way to publishing, in about seventy seconds
+(#1716). `assets/og/people/` is gitignored.
 
 ## The chain
 
@@ -15,10 +17,19 @@ You never touch these by hand. Member data flows in, and the cards are
 Google Form → Google Sheet → sync-bios.yml (weekly) → data/bios.json
                                           │
                                           ▼  scripts/build-og-cards.py
-                              assets/og/people/<slug>.png  (committed)
-                                          │  build-profile-pages.py then points
-                                          ▼   each profile's og:image at it
+                              data/bios.json
+                                          │
+                                          ▼  pages-deploy.yml, every deploy
+                                 scripts/build-og-cards.py
+                                          │
+                                          ▼
+                              assets/og/people/<slug>.png  (gitignored)
 ```
+
+`build-profile-pages.py` names `{SITE}/assets/og/people/<slug>.png` as each
+profile's `og:image` unconditionally, since the builder above draws a card for
+every member carrying an id. It used to test the file on disk, which would now
+point all 252 pages at the generic card.
 
 ## What's on the card, and what triggers a re-render
 
@@ -48,11 +59,13 @@ re-render it.
 
 ## Why it stays churn-free
 
-`assets/og/people/_manifest.json` stores the input-hash per member. The builder
-**re-renders only the members whose hash changed (or whose PNG is missing)** and
-skips everyone else, so the weekly auto-PR does not churn dozens of binaries
-every run. PNGs are not byte-reproducible across Chrome / font versions, so the
-manifest (not a pixel diff) is the freshness test.
+`assets/og/people/_manifest.json` stores the input-hash per member, and the
+builder **re-renders only the members whose hash changed or whose PNG is
+missing**. That is a local convenience now: edit one member and re-run, and one
+card is drawn rather than 84. A clean checkout has no manifest, which is why the
+deploy renders the full set every time. PNGs are not byte-reproducible across
+Chrome and font versions, so a hash of the inputs is the freshness test rather
+than a pixel diff.
 
 ## Rendering
 
@@ -60,20 +73,32 @@ Cards are captured with headless Google Chrome over the **DevTools Protocol**
 (`Page.captureScreenshot` with an exact 1200×630 clip), not the `--screenshot`
 CLI flag — on macOS the CLI subtracts the window chrome and clips the footer, so
 CDP gives the same exact size on macOS and the Linux CI runner. The render needs
-Chrome/Chromium; `--check` does not.
+Chrome/Chromium.
 
 ## Guard rails and manual use
 
-- `data-shape-check.yml` runs `build-og-cards.py --check` on every relevant PR
-  and **fails if any card is stale or missing**, so a data change cannot merge
-  without its card.
-- `sync-bios.yml` runs the full builder weekly and commits any changed cards.
+There is no drift gate any more. A gate exists to prove a committed artefact is
+current, and there is no committed artefact, so `--check` went with the cards.
+Three things stand in its place:
+
+- `pages-deploy.yml` counts the rendered cards against the members in
+  `data/bios.json` and **refuses to publish** if the two disagree. Under-rendering
+  is the failure that matters, because the profile pages name the card URL
+  without testing it.
+- `test_every_profile_page_gets_a_card` asserts the two predicates agree, so the
+  two builders cannot drift apart on who gets one.
+- The social workflows render the spotlight member's single card before posting
+  (`--only`), since the tree they check out has none. That step is
+  `continue-on-error`, so a Chrome failure posts the generic card rather than
+  nothing.
+
+`sync-bios.yml` still runs `--ensure-flags` weekly and commits any new country
+flag. A flag is an input, not a derived card.
 
 Manual commands (run from the repo root):
 
 ```bash
-python3 scripts/build-og-cards.py            # render all changed cards + manifest
-python3 scripts/build-og-cards.py --check     # exit 1 if any card is stale
+python3 scripts/build-og-cards.py            # render the stale cards + manifest
 python3 scripts/build-og-cards.py --only SLUG # render one member's card
 python3 scripts/build-og-cards.py --force     # re-render everything
 ```

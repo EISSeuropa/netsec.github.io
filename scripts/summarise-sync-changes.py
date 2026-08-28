@@ -48,7 +48,6 @@ UPSTREAM = "data/bios.json"
 # "sitemap (sitemap.xml)" is noise.
 BUCKETS: list[tuple[str, str, bool]] = [
     ("search/bios/", "search stubs", True),
-    ("assets/og/people/", "OG cards", True),
     ("assets/og/flags/", "flag assets", True),
     ("assets/images/people/", "headshots", True),
     ("people/", "profile pages", True),

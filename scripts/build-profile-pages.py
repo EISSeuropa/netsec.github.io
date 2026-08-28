@@ -726,13 +726,16 @@ def build_page(m: dict, works: list, similar: list, mentors: list, loc_key: str,
     hreflang = "\n".join(
         f'<link rel="alternate" hreflang="{hl}" href="{SITE}/people/{slug}{LOCALES[k]["suffix"]}.html">'
         for hl, k in (("en", "en"), ("fr", "fr"), ("de", "de"), ("x-default", "en")))
-    # Per-member OG card (#1023) when one has been generated for this slug,
-    # else the generic people card. The card is locale-independent (name +
-    # affiliation aren't translated), so all three locale pages share it.
-    if (ROOT / "assets" / "og" / "people" / f"{slug}.png").exists():
-        og_image = f"{SITE}/assets/og/people/{slug}.png"
-    else:
-        og_image = f"{SITE}/assets/images/og-image-people.png"
+    # Per-member OG card (#1023). build-og-cards.py renders one for every
+    # member carrying an id, falling back to an initials tile when there is no
+    # headshot, so a member who gets a page also gets a card. The card is
+    # locale-independent (name + affiliation aren't translated), so all three
+    # locale pages share it.
+    #
+    # This used to test the PNG on disk. The cards are built at deploy time
+    # now (#1716) and are not in the tree, so an existence test would point
+    # all 252 pages at the generic card. Same predicate, no filesystem.
+    og_image = f"{SITE}/assets/og/people/{slug}.png"
 
     seo = f"""<link rel="canonical" href="{canonical}">
 <meta property="og:type" content="profile">
