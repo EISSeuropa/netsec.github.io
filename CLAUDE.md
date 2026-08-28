@@ -501,6 +501,20 @@ visitor's device, and every check stays green while the feature
 renders as unstyled plain text. This is exactly how the "Working
 towards" block shipped looking like raw text.
 
+`scripts/measure.mjs` does the measuring, so this is a command rather
+than an improvisation each time (#1714):
+
+```bash
+node scripts/measure.mjs fold network-map.html network-map.fr.html
+node scripts/measure.mjs targets working-groups.html
+node scripts/measure.mjs bytes essc-2026.html
+```
+
+It serves the tree itself (a server started earlier 404s on a file
+written since), and `targets` emulates a coarse pointer through the
+viewport, because `emulateMediaFeatures` rejects `pointer` and every
+`@media (pointer:coarse)` rule otherwise goes untested.
+
 Before calling a visual change done:
 
 1. grep that every class the new markup references is actually
