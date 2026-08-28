@@ -527,6 +527,7 @@ sweep (rule §11).
 │   ├── build-og-cards.py            # Headless-Chrome per-member OG card PNGs (1200×630) from bios.json; churn-free manifest; --check gate (see og-cards.md, #1023)
 │   ├── build-brand-assets.py        # One-shot: crop designer lockups + rasterise the favicon family into assets/images/brand/ (not in CI)
 │   ├── update-brand-html.py         # One-shot: migrate favicon/logo markup across all HTML to the brand set (not in CI)
+│   ├── check-indico-semantics.py    # Indico values that are well-formed and wrong (timezone vs venue, dates, rooms)
 │   ├── check-i18n-drift.py          # Reports stale translations vs. EN source (ignores cache-bust query)
 │   ├── i18n-diff.py                 # Translator helper: EN prose blocks changed since the last fresh-mark (#728)
 │   ├── check-data-shape.py          # Shape-validates synced data/*.json (would-this-blank-a-page invariants); CI gate (#724)

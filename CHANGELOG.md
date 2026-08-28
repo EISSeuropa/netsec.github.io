@@ -141,6 +141,7 @@ maintainer-facing audience.
 
 #### Added
 
+- The nightly conference-programme sync now checks that what it received makes sense, not only that it is the right shape. It notices a timezone that belongs to a different city from the venue, a session dated outside the conference, a room left blank, and an edition that has quietly become a different year. Each finding says what to change in Indico, because that is where the correction has to be made.
 - The directory's keyword vocabulary can be edited and checked in the same minute. Changing which research theme a keyword belongs to used to show its effect only in the next morning's automatic update, so a mistake sat live for a day. A dry run now reports what would move, and says plainly when a change would take a member out of a theme rather than adding them to one.
 
 - The Directory gains a sixteenth research theme, Climate, energy and environmental security. Three members work on climate change, environmental degradation, energy security and the greening of defence industry, and most of that reached no theme at all, so their work was missing from the filter row and from the Network Map's themes lens. Hand-translated for FR and DE.

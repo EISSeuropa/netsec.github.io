@@ -53,6 +53,7 @@ on:
       - 'network-map.fr.html'
       - 'network-map.de.html'
       - 'data/essc-*-programme.json'
+      - 'scripts/check-indico-semantics.py'
       - 'data/publications.json'
       - '.github/workflows/data-shape-check.yml'
   workflow_dispatch:
@@ -97,6 +98,20 @@ jobs:
         # reflected in the committed index, so a consuming site never matches
         # against stale data.
         run: python3 scripts/build-directory-index.py --check
+
+      - name: Indico data means what it says (#1718)
+        # check-data-shape.py validates shape: types, required fields,
+        # referential integrity. It passes a conference held in Stockholm
+        # carrying a Paris timezone, because that value is well-formed. Indico
+        # is an upstream nobody here controls, so a field that is well-formed
+        # and wrong is exactly the failure a shape check cannot see, and the
+        # daily auto-PR is where it should stop.
+        #
+        # A finding that is real, upstream and already tracked is listed in
+        # KNOWN_UPSTREAM in the script: it still prints, it does not fail, and
+        # an allowance that stops matching is reported as stale so it cannot
+        # rot into a check that verifies nothing.
+        run: python3 scripts/check-indico-semantics.py
 
       - name: network-map.json and the map's list region are current (#764)
         # The NetSec Network Map graph is derived from wg.json by build-network-map.py,
