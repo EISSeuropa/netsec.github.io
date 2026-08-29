@@ -142,132 +142,105 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+> The Network Map is the main thing in this release. It draws every member of the Action, the Working Groups they sit in and the research themes they share. You can search it, filter it, walk it from the keyboard, and send someone the view you were looking at. The Directory's research vocabulary also reaches every keyword it holds, and the events listed on the site now match what is actually scheduled. Four themes follow, then a single canonical index at the bottom.
+
+### The Network Map
+
+The map is called the Network Map rather than the Atlas, and lives at `/network-map.html` in English, French and German. It is tagged Beta. The Working Groups page and the Directory both link to it, and every directory profile links to that person's place on it.
+
+The map reports on the network as well as drawing it. It names the two Working Groups or research themes that share the most people. It says how many people each view can draw against how many are in the Action, which is 142 of 192 under Working Groups. It reports how much of the Action comes from an Inclusiveness Target Country, the figure COST weighs. A table of everyone on the map sits underneath it, so the same information is there from a keyboard, with a screen reader, or with JavaScript switched off.
+
+The faces on the page fell from 1.65 MB to 178 KB, and on a phone the map begins inside the first screen in all three languages.
+
+### Every keyword reaches a theme
+
+Twenty-nine research keywords in the Directory reached no research theme, so filtering by theme hid the members who used them. All twenty-nine are now filed, and two new themes hold most of them, *Climate, energy and environmental security* and *Democracy, governance and political change*. Both are hand-translated into French and German.
+
+Editing the vocabulary used to take a day to verify, because the effect appeared only in the next morning's sync. A dry run now reports what would move before it moves.
+
+### September, checked against the Action
+
+Three of the September entries on the site came from an internal working ledger rather than from the Action, and two of them were wrong. A conference that was never scheduled has been removed. A plenary date nobody had confirmed now reads *date to be confirmed*. The Ankara policy workshop, whose date the same ledger had moved by nine days, has its own page.
+
+That is a reporting problem, so the nightly programme sync now reads what Indico returns for sense as well as shape. A finding names what to change and where.
+
+### Underneath
+
+Files a machine writes are written when the site publishes, rather than stored in the repository: the cache-busting version stamp, the 84 member share cards and the 252 profile pages. Each one needed a check proving it was current, and each of those checks could fail an unrelated change. All of them are gone, and a styling change that used to rewrite 315 pages now touches the file it changed.
+
+The site is also easier to use with a thumb and quicker to download. Thirteen buttons sat under the size a thumb reliably hits, and the documentation pack is 7.7 MB where it was 24.6 MB.
+
+### Index of changes
+
+The themed sections above are the story; the index below is the audit trail. Same content, terser.
+
 #### Added
-
-- The nightly conference-programme sync now checks that what it received makes sense, not only that it is the right shape. It notices a timezone that belongs to a different city from the venue, a session dated outside the conference, a room left blank, and an edition that has quietly become a different year. Each finding says what to change in Indico, because that is where the correction has to be made.
-- The directory's keyword vocabulary can be edited and checked in the same minute. Changing which research theme a keyword belongs to used to show its effect only in the next morning's automatic update, so a mistake sat live for a day. A dry run now reports what would move, and says plainly when a change would take a member out of a theme rather than adding them to one.
-
-- The Directory gains a sixteenth research theme, Climate, energy and environmental security. Three members work on climate change, environmental degradation, energy security and the greening of defence industry, and most of that reached no theme at all, so their work was missing from the filter row and from the Network Map's themes lens. Hand-translated for FR and DE.
-
-- The Network Map reports how much of the Action comes from an Inclusiveness Target Country, which is the figure COST weighs most heavily when it looks at an Action's inclusiveness. 106 of the 192 people on the map do, and a new overlay rings them. The figure counts by country, which the page says plainly, since a member based in an EU Outermost Region is not visible in the data behind it. Hand-translated for FR and DE.
-
-- The Network Map will count each Working Group's outputs once the Action has some. Every publication the site holds is already tagged to the groups it belongs to, and the map ignored that tag, so a brief written by one person was invisible to it. The tag now counts towards the group, which shows on the group when you hover or open it, and as a figure beside the map. Nothing appears until the first output is entered. Hand-translated for FR and DE.
-
-- The Network Map says what its own shape shows. Under the figures sits a line naming the two Working Groups or research themes that share the most people, how many people belong to more than one of them, and which one has the fewest, with the first and last opening the group they name. It follows whichever view you are in. Hand-translated for FR and DE.
-
-- The Network Map says how many people each of its two views can draw. The figures beside the map counted everyone in the Action while the map itself drew 142 of them under Working Groups and 70 under research themes, because a member who is on no working-group roster, or whose research themes are not recorded, has nothing to be drawn towards. A new figure reports that and follows the view you are in. Hand-translated for FR and DE.
-
-- The Network Map names the members it cannot link to a profile, and can hide them. 108 of the 191 people on the map are drawn as small grey dots with nowhere to click through to, and the map now says so under its figures with a link to the profile form, and offers a filter for the part of the network the Directory documents. Hand-translated for FR and DE.
-
-- The Network Map can be used from the keyboard. Tab to the map, then the arrow keys walk its Working Groups, research themes and people, Enter opens a profile and Esc clears the selection, with each step read out to a screen reader. Hand-translated for FR and DE.
-
-- The Network Map zooms. Hold Ctrl or Command and scroll, or use the buttons on the map, to magnify a crowded cluster until the faces in it can be told apart, then drag the background to move around and press the reset button to come back. Scrolling without the key still scrolls the page, and on a phone a finger pans the map only once it is zoomed in. Hand-translated for FR and DE.
-
-- Clicking a hub on the Network Map now tells you about it. A Working Group or a research theme opens a panel under the map with how many people it holds, the three hubs it shares the most people with, a button to show only that hub, and a link through to the Working Groups page or to the Directory filtered to that theme. Each of the shared hubs is a button that moves the panel across, so you can walk from one part of the network to the next. On a phone, where the hover card never appears, this is the first thing a hub has ever done. Hand-translated for FR and DE.
-
-- The Network Map's filter chips have All and None, and the filter control has a Clear. Isolating one research theme used to be fourteen clicks off and fourteen back. Hand-translated for FR and DE.
-
-- You can find a person on the Network Map. A search box above the map takes a name, or part of one, and lights that person up with everyone they are connected to, dimming the rest. It says so plainly when nobody matches, and it tells you when the person is on the map but hidden by the filters you have set, which are different answers to different problems. Hand-translated for FR and DE.
-
-- Every directory profile now links to that person on the Network Map, so a profile leads into the network rather than ending at itself.
-
-- A filtered Network Map is a link you can send. The lens, the hub filters, the overlays, the conference edition and the person you have picked all live in the address bar now, so a Working Group chair can send their corner of the map to their group and it opens the way they left it ([#1602](https://github.com/EISSeuropa/netsec.github.io/issues/1602)).
-
-- Everyone the Network Map draws is now listed as a table under the map, with their Working Groups and their country, and a link to each profile the Directory holds. It narrows as the map does, so a filtered map and the list under it always agree, and it is written into the page rather than drawn by the browser, so it is there for anyone whose browser does not run the map at all. Hand-translated for FR and DE.
-
-- The Network Map is now reachable from the site. The Working Groups page and the Directory each carry a card pointing to it, it appears in the sitemap in all three locales, and the site search finds it. It keeps its Prototype label while the co-authored-publications layer is still empty. Hand-translated for FR and DE.
-
-- The Network Map can be filtered to a single conference once it covers more than one. A row of edition chips appears beside the overlays, and picking one shows only the panels shared at that conference, with the hover card counting the people on screen rather than everyone who has ever shared a panel. The row stays hidden while the map holds a single conference, so it will arrive by itself with ESSC 2027 ([#1584](https://github.com/EISSeuropa/netsec.github.io/issues/1584)). Hand-translated for FR and DE.
-
-- A dedicated page for the Working Group 2 policy workshop, Great Power Politics and the Future of Alliances, at Bilkent University, Ankara, on 13 September 2026 (EN, FR, DE). It carries the call, the themes, what is covered, and how to apply, with the application form available to download and a home-page news card and calendar event pointing to it. Applications close 15 August 2026.
-- The Directory's research-theme filter gains a fifteenth chip, Democracy, governance and political change, promoted from the taxonomy's watch list after the domestic-political-change cluster reached four members.
-- The site search overlay can now separate people from pages. When a query matches both, a row of chips appears under the search box reading All, Pages and People, each carrying its own count, so a name that also turns up in prose no longer has to be picked out of a mixed list. The chips filter the results already on screen rather than running a fresh search, which keeps the ranking intact and the response immediate, and the row stays hidden when everything found is of one kind. Available in English, French and German.
+- The nightly programme sync checks what Indico returns for sense as well as shape: a timezone from another city than the venue, a session dated outside the conference, a blank room, an edition that has become a different year.
+- `sync-bios.py --dry-run` reports what a keyword-taxonomy edit would move, and names members it would take out of a theme.
+- A sixteenth research theme, *Climate, energy and environmental security*, covering three members. Hand-translated for FR and DE.
+- The Network Map reports how much of the Action comes from an Inclusiveness Target Country, 106 of 192, counted by country and ringed by an overlay.
+- The Network Map counts each Working Group's outputs from the `workingGroups` tag on publications. Nothing appears until the first output is entered.
+- A line under the Network Map's figures names the two hubs sharing the most people, how many people sit in more than one, and which hub has the fewest.
+- The Network Map's figures say how many people each view can draw, 142 under Working Groups and 70 under research themes, rather than how many exist.
+- The Network Map names the 108 members it cannot link to a profile, links to the profile form, and offers a filter for the part of the network the Directory documents.
+- A keyboard path into the Network Map: Tab to the canvas, arrow keys walk the hubs and people, Enter opens a profile, Esc clears, each step announced.
+- Ctrl or Command with the scroll wheel zooms the Network Map. Drag to pan, a button resets, and a phone pans only once zoomed in.
+- Clicking a hub on the Network Map opens a panel under it: how many people it holds, the three hubs it most overlaps, a filter button, and a link through to the group or theme.
+- All and None on the Network Map's chip rows, and a Clear on the filter summary. Isolating one theme was fourteen clicks off and fourteen back.
+- A search box above the Network Map spotlights a person and their connections, and tells no match apart from a match the filters are hiding.
+- Every directory profile links to that person on the Network Map.
+- The Network Map's lens, hub filters, overlays, conference edition and selected person live in the URL, so a filtered view can be sent to someone ([#1602](https://github.com/EISSeuropa/netsec.github.io/issues/1602)).
+- Everyone the Network Map draws is listed in a table under it, with Working Groups, country and profile link, written into the page at build time.
+- The Network Map is signposted from the Working Groups page and the Directory, listed in the sitemap in all three locales, and found by site search.
+- Edition chips filter the Network Map's shared-panel overlay to one conference. The row stays hidden while the map holds a single conference ([#1584](https://github.com/EISSeuropa/netsec.github.io/issues/1584)).
+- A page for the Working Group 2 policy workshop, *Great Power Politics and the Future of Alliances*, at Bilkent University, Ankara, on 13 September 2026, in English, French and German. It carries the call, the workshop themes, what the organisers cover, and how to apply, with the application form to download. A home-page news card and a calendar event point to it.
+- A fifteenth research theme, *Democracy, governance and political change*, promoted from the taxonomy's watch list at four members.
+- The site search overlay separates people from pages with All, Pages and People chips carrying counts, filtering the results already on screen. English, French and German.
 
 #### Changed
-
-- Every button on the site is comfortable to tap on a phone. Thirteen were smaller than the size a thumb reliably hits, among them the add-to-calendar control on the events page, the filter chips, the guided-tour buttons and the send button on the contact form. The rule they now follow is written down, so the next one added follows it too.
-
-- The version stamp that stops a browser serving a stale stylesheet is now applied when the site is published rather than being written into every page in the repository. Nothing changes for a visitor. For the people working on the site, a change to two lines of styling used to rewrite three hundred and fifteen pages it had not touched, which made the record of what actually changed impossible to read and meant two styling changes could never be in progress at once.
-
-- The roadmap's own bookkeeping stops running on every merge. Refreshing the release notes count and the milestone progress bars happened on each merged change and each issue filed, which on a busy day meant thirty-six automated pull requests against twenty-one real ones. Both figures are refreshed once a day now, in a single pull request, and the release script refreshes them itself so cutting a release never waits for the schedule.
-
-- Country names typed into the Directory's research-keyword box are filed as geography rather than as research interests, the way the broader region names already were. "Ireland", "Ukraine" and "MENA region" were standing alone in the theme filter meaning nothing, while the research regions filter beside them is the control for that.
-
-- The mentorship panel says how getting in touch actually works. Reaching a mentor here means writing to them yourself, and an answer is not always quick, which is worth knowing before you send. The same note tells a mentor already at capacity, or a mentee who has found someone, where to say so, so the badges on the directory can stay honest. Hand-translated for FR and DE.
-
-- The Network Map's overlays now sit with its filters, behind the same control above the map. Each row of chips above the map costs a phone screen about forty pixels, and the map was being pushed down the page a chip at a time. The control says how many overlays are switched on while it is closed, so nothing changes the map without the page saying so. The map now starts about a hundred pixels higher on a phone in all three languages. Hand-translated for FR and DE.
-
-- The accessibility statement covers the Network Map, at version 1.4. It names the map's canvas among the parts of the site that do not fully meet the standard, since a drawing of clusters cannot be conveyed to a screen reader, and it names the table under the map and the map's keyboard controls among the features in place. Hand-translated for FR and DE.
-
-- More of the Network Map fits on a phone screen. The row labels above the chips are hidden at phone width, where each row already announces itself to assistive technology and the chips say what they are, which stops the two lens chips wrapping onto a second line in French and German. The map now starts about 45 pixels higher in all three languages.
-
-- The French and German Network Map opens on the map, the way the English one does. Both pages carry the manual-translation ribbon above the header, which is 80 pixels a phone screen does not have to spare, so their opening paragraph is now written shorter rather than translated from the English one. On a phone the map moves up by about a hundred pixels on both.
-
-- The Network Map is labelled Beta rather than Prototype. The map has been live, signposted and stable since it was linked from the Working Groups page and the Directory, and the old label was waiting on the Action's first co-authored publication, which is a date nobody on the website side controls. Hand-translated for FR and DE.
-
-- The Network Map opens on the map. On a phone the canvas used to begin below the whole first screen, behind an introduction that explained the controls, six statistics and three rows of chips. The introduction now says what the map is and leaves the mechanics to the chips and the legend, the statistics moved under the map, and the hub filters fold into a control that reports how many hubs are showing. The map now starts a third of the way down a desktop screen and inside the first screen of a phone. Hand-translated for FR and DE.
-
-- The Network Map shows a member's country in the language of the page, on the hover card and in the list under the map, the way the Directory already does.
-
-- The network visualisation is now called the Network Map rather than the Atlas, and lives at `/network-map.html` (plus FR and DE, where it reads *La carte du réseau NetSec* and *Die NetSec-Netzwerkkarte*). EISS publishes its own Atlas, a map of the Anthology's published works, and two maps of the same initiative sharing one name was going to confuse readers of both. Each is now named for what it maps: the EISS Atlas covers the literature, and this one covers the people of the Action and the structures they share. The page also drops a parenthetical that described the research-themes lens as a map of the field, which overstated what it draws. Nothing about the map itself changed, and the rename lands while the page is still an unlisted prototype, so no published link breaks ([#764](https://github.com/EISSeuropa/netsec.github.io/issues/764)).
-
-- The Working Group 2 policy workshop in Ankara no longer invites applications. The call closed on 15 August 2026, so the page, the home-page news card, the calendar feed and the per-event `.ics` now say that applications have closed, that applicants have been informed of the outcome and that invitations to take part in person have gone out, with a link for online participation to be circulated ahead of the workshop. The workshop's format reads "one day, in person and online", the hero buttons point at the workshop themes and at what is covered, and the application form stays downloadable as a record of what was asked. Hand-translated for FR and DE.
-
-- The related-events cards in each Working Group section now say where an event happens and what it is about. The Ankara policy workshop carries its theme, Great Power Politics and the Future of Alliances, under the title, every card shows a city-level place (or a line saying the venue is still to be confirmed), and the cards run earliest first so a section reads left to right through the year. Hand-translated for FR and DE.
-- The mentorship matching panel now works with one research area at a time. Picking an area from the guided sentence, or a theme chip in the browse-all scope bar, replaces the previous selection instead of adding to it, so switching area is a single click rather than deselect-then-select, and picking the selected area again clears it. The "add an area" token is retired with its FR and DE strings, and the area picker no longer announces itself to assistive technology as a multi-select list. The directory's own research-theme filter chips outside the panel keep their multi-select behaviour, and areas they select all stay visible in the sentence. The interaction test suite covers the replace and clear journeys.
+- Thirteen buttons sat under the size a thumb reliably hits and now clear it, among them the add-to-calendar control, the filter chips and the contact form's send button.
+- The cache-busting version stamp is applied when the site publishes rather than written into every page in the repository. A two-line styling change used to rewrite 315 pages.
+- Roadmap bookkeeping refreshes once a day in one pull request, where it ran on every merge and every issue filed: 36 automated pull requests against 21 real ones in a day.
+- Country names typed into the Directory's research-keyword box are filed as geography rather than as research interests.
+- The mentorship panel says that contact means writing to the person yourself, and where a mentor at capacity or a mentee who has found someone can say so. Hand-translated for FR and DE.
+- The Network Map's overlays fold into the filter control, which reports how many are switched on while it is closed. The map starts about 100px higher on a phone.
+- The accessibility statement, at version 1.4, names the Network Map's canvas among the site's known limitations, and its table and keyboard path among the features in place.
+- The Network Map's chip-row labels are hidden at phone width, which stops the two lens chips wrapping in French and German. The map starts about 45px higher.
+- The French and German Network Map pages open on the map, with shorter ledes written rather than translated, since the manual-translation ribbon costs 80px.
+- The Network Map is labelled Beta rather than Prototype.
+- The Network Map opens on the map: a shorter lede, the statistics moved below the canvas, and the hub filters folded into one control.
+- The Network Map shows a member's country in the language of the page, on the hover card and in the table.
+- The Atlas is renamed the Network Map and moves to `/network-map.html`, plus FR and DE, since EISS publishes an Atlas of its own ([#764](https://github.com/EISSeuropa/netsec.github.io/issues/764)).
+- The Ankara policy workshop no longer invites applications. The page, the news card, the calendar feed and the `.ics` say the call closed on 15 August and invitations have gone out.
+- The related-events cards in each Working Group section carry a city-level place and the event's theme, and run earliest first.
+- The mentorship panel's research area is single-select: picking one replaces the previous, picking it again clears it. The Directory's own theme chips stay multi-select.
 
 #### Fixed
-
-- The share cards that appear when a member's profile is posted to social media no longer fail to build because the browser that draws them was slow to start. It happened about one run in two, and it happens inside the overnight directory sync, where the only sign was a line in a log nobody reads.
-
-- The documentation pack downloads in a third of the data. It was 24.6 MB, of which 22 MB was five screenshots stored at four times the resolution the page can print, and it is 7.7 MB now with the figures unchanged to read. The same five screenshots were also the largest thing in the project's history, so the saving repeats on every future edition rather than happening once.
-
-- The automated checks stop failing for reasons that have nothing to do with the change being checked. Four such failures happened in a single day, each one a browser or a local server that had not finished starting when something began talking to it. The checks now wait for what they need and retry a cold browser once, so a red check means something is genuinely wrong.
-
-- Every research keyword in the Directory now reaches a research theme, where twenty-nine of them reached none. Ten members join filters they were missing from, among them one whose entire research interest was written as a single phrase and who therefore had no theme at all. Religion, research ethics, political bioethics, space security, migration, medium powers, EU–China relations, foreign interference and the EU's Common Security and Defence Policy are among the keywords that now cluster.
-
-- The fifteenth research theme, Democracy, governance and political change, appears in French and German rather than in English. It shipped untranslated when it was promoted, so it read in English on the filter row and on the map.
-
-- Four research keywords in the Directory reach their research theme again at the next sync. Two members' entries missed an existing keyword by a typo and a trailing full stop, one keyword was spelled exactly like a theme the taxonomy had not listed under itself, and FIMI was rendering as "Fimi". Until now each of them sat outside every theme, so its holder was missing from that filter.
-
-- The ESSC 2026 conference photographs load about a quarter of the data they used to. The four pictures in the gallery were full-size camera exports, 1.23 MB between them, shown in a grid that displays each one at about the size of a postcard. They are now served at the size they are actually shown, which takes them to 290 KB and brings the page inside its image budget, the last one that was over.
-
-- The buttons that lead somewhere are easier to hit on a phone. The "See the roadmap" and "Open the Network Map" signposts, the feedback buttons at the foot of the roadmap, and the Network Map's own filter chips were all under the size a thumb is comfortable with, the signposts by a single pixel. They now clear it.
-
-- The Network Map explains itself when there is nothing to draw. Switching every filter chip off used to leave a blank rectangle, and a failure to load the map's data wrote a single line into the statistics, which now sit below the map and would have put the message out of sight. Both now say what happened on the map itself, and the empty map names the control that emptied it. Hand-translated for FR and DE.
-
-- The Network Map's hover card no longer loses its bottom edge. Hovering a person in the lower third of the map cut the card off where it met the edge of the map, taking the research themes, the shared-panel line and the link to their profile with it. It now opens above the pointer when there is no room below, and to the left when there is none to the right.
-
-- The research-theme names on the Network Map no longer print on top of each other. Fifteen themes sit in a ring and their labels collided, worst on a phone. Each label now takes the side of its circle where there is room, and a very small theme gives up its label rather than overprint a neighbour, since hovering it, its filter chip and its panel all still name it.
-
-- Tapping a face on the Network Map from a phone no longer jumps straight to a profile, and no longer to the wrong person. Touch has no hover, so the first tap had to serve as the click, and on a small screen the nearest point to a fingertip is often somebody's neighbour. A tap now shows the name first and a second tap opens the profile, tapping empty space clears it, and the area a tap has to land in is larger. Using a mouse is unchanged.
-
-- The Network Map explains itself to visitors browsing without JavaScript, pointing to the Working Groups page and the Directory for the same information as lists, instead of showing an empty frame. Hand-translated for FR and DE.
-
-- Co-authored publications will connect the right people on the Network Map even when an author is written the way a reference list renders them. The map matched authors on full first and last names only, so "A. Lovelace" or "Lovelace, Ada" quietly connected nobody, and the result was indistinguishable from the Action having no co-authored work yet. Both forms now resolve, an initial that fits two members is left alone rather than guessed at, and any author name the map cannot place is reported so a typo can be spotted ([#1586](https://github.com/EISSeuropa/netsec.github.io/issues/1586)).
-- Co-authored publications will connect the right people on the Network Map even when an author is written the way a reference list renders them. The map matched authors on full first and last names only, so a bibliographic spelling quietly connected nobody, and the result was indistinguishable from the Action having no co-authored work yet. "A. Lovelace", "Lovelace, Ada", "Lovelace, A.P.B." and the all-capitals "LOVELACE Ada" now all resolve. An initial that fits two members is left alone rather than guessed at, a name that is merely shouted is not mistaken for a surname-first one, and any author the map cannot place is reported so a typo can be spotted ([#1586](https://github.com/EISSeuropa/netsec.github.io/issues/1586)).
-
-- The Network Map loads about a tenth of the images it used to, taking the faces on the page from 1.65 MB to 178 KB and bringing it inside the performance budget that had been warning on every run. The map draws each face as a circle roughly the size of a full stop on a printed page, so it was being sent portraits with far more detail than it can show. It now uses a small map-sized copy of each headshot, generated alongside the existing ones whenever the directory syncs ([#1480](https://github.com/EISSeuropa/netsec.github.io/issues/1480)).
-
-- The Network Map will pick up future conference editions on its own. It read a single frozen copy of the ESSC 2026 programme, so the shared-panel overlay would have kept showing the 2026 conference after ESSC 2027 happened, with nothing to signal that it had gone stale. It now reads every programme the site holds, each shared-panel tie records which conference it came from, and the wording no longer names a single year ([#1584](https://github.com/EISSeuropa/netsec.github.io/issues/1584)). Hand-translated for FR and DE.
-
-- Visitors browsing without JavaScript no longer see the Ankara policy workshop advertised at the wrong date. The home page builds its events from the calendar data and keeps a hand-written copy of the block for anyone whose browser does not run that code, and the hand-written copy still carried the workshop's pre-correction date of 4 September 2026, a topic "to be confirmed" and no venue. It now matches the calendar: 13 September 2026 at Bilkent University, Ankara, with a link through to the workshop page. Hand-translated for FR and DE.
-
-- A member whose job title already names their university no longer sees it printed twice on their profile page and on the profile card that circulates when the page is shared.
-
-- The weekly member spotlight posted to Bluesky no longer risks ending mid-word. A submitted job title long enough to fill the 300-character limit on its own now falls back to the bare introduction and profile link rather than being cut off, and a university already named in the job title is no longer repeated after it.
-
-- The weekly member spotlight no longer brings the same member back after a few weeks. The rotation held out only the six most recent features, so anyone could return once seven weeks had passed, and Saurav Narain was featured again eight weeks after his first turn. Anyone spotlit in the past six months is now kept out of the running, and that cool-off relaxes only when too few members are eligible to fill six months of weeks.
-
-- The inaugural Management Committee plenary no longer advertises a firm date. It now reads September 2026, date to be confirmed, on the home page, the public roadmap and the calendar feed, in all three locales, and its calendar entry is marked tentative so subscribers see it as provisional rather than settled. The 18 September date came from the same event ledger that produced the NetSec ITC Conference, and nothing outside that ledger corroborates it. The date returns as soon as the Action announces it.
-
-- The NetSec ITC Conference, listed for 8 to 11 September 2026, has been removed from the site. The event was never scheduled, so it is gone from the home-page events block, the Working Group related-events cards, the public calendar feed and its per-event `.ics` file, in all three locales. The COST ITC Conference Grant scheme is a separate thing and stays documented on the Grants page, the Glossary and the FAQ.
-
-- The Network Map prototype loads its member headshots about three quarters lighter, taking the page from 5.6 MB of images to 1.65 MB. The faces are drawn as small circles on the map, so the full-size photographs were sending detail the map cannot show. The page also joins the performance budget checks that already cover the rest of the site, which is what surfaced the weight in the first place.
-
-- Eleven directory keywords that sat outside the research-theme taxonomy (War, Intelligence, Maritime, Military history and others) are now filed under their matching themes, so every keyword pill resolves to a filterable theme.
-
-- A further eleven directory keywords surfaced by the weekly taxonomy check (Civil wars, Covert action, Proxy warfare, US foreign policy, Interventions, Border security, Critical infrastructure protection, Malicious drones, Security risk assessment, Science and innovation policies, Diplomacy studies) are now filed under their matching themes, and a typo on a member's "Dipomacy studies" keyword is corrected to "Diplomacy studies".
+- Member share cards no longer fail to build when the browser drawing them is slow to start, which happened about one run in two inside the overnight sync.
+- The documentation pack is 7.7 MB, down from 24.6 MB, with the five figures unchanged to read.
+- Four CI failures in one day were a browser or a server not yet ready. The checks wait for what they need and retry a cold browser once.
+- Twenty-nine research keywords reached no research theme and are now filed, bringing ten members into filters they were missing from.
+- The fifteenth research theme reads in French and German rather than in English.
+- Four keywords reach their theme again: two member typos, one keyword spelled like a theme the taxonomy had not listed under itself, and FIMI rendering as "Fimi".
+- The four ESSC 2026 gallery photographs are served at the size they are shown, 290 KB rather than 1.23 MB, which brings the page inside its image budget.
+- The signpost CTAs, the roadmap feedback buttons and the Network Map's chips now clear the tap-target size, the signposts having missed it by a single pixel.
+- An empty Network Map and a failed data load say so on the map itself, and the empty map names the control that emptied it.
+- The Network Map's hover card opens above the pointer when there is no room below, and to the left when there is none to the right.
+- Network Map theme labels take the side of their circle with room, and a very small theme drops its label rather than overprint a neighbour.
+- A first tap on the Network Map shows a name and a second opens the profile, with a larger tap target. Mouse behaviour is unchanged.
+- Without JavaScript the Network Map points to the Working Groups page and the Directory instead of showing an empty frame.
+- Co-authorship matching resolves "A. Lovelace", "Lovelace, Ada", "Lovelace, A.P.B." and "LOVELACE Ada". An ambiguous initial is left alone, and an unplaceable name is reported ([#1586](https://github.com/EISSeuropa/netsec.github.io/issues/1586)).
+- The Network Map's faces are 178 KB, down from 1.65 MB, served from a map-sized copy generated by the directory sync ([#1480](https://github.com/EISSeuropa/netsec.github.io/issues/1480)).
+- The Network Map reads every conference programme the site holds, so a future edition appears on its own ([#1584](https://github.com/EISSeuropa/netsec.github.io/issues/1584)).
+- The no-JavaScript home page carried the Ankara workshop's pre-correction date. It now matches the calendar: 13 September 2026 at Bilkent University, Ankara.
+- A job title that already names the university no longer prints it twice on the profile page and the share card.
+- The Bluesky spotlight post no longer risks ending mid-word when a job title fills the 300-character limit on its own.
+- The spotlight rotation holds anyone featured in the past six months out of the running, where it held only the last six weeks.
+- The Management Committee plenary reads September 2026, date to be confirmed, across the site, and its calendar entry is marked tentative. The 18 September date came from the same ledger that produced the ITC Conference.
+- The NetSec ITC Conference, listed for 8 to 11 September 2026, is removed. It was never scheduled. The COST ITC Conference Grant scheme is unaffected.
+- The Network Map's headshots went from 5.6 MB to 1.65 MB, and the page joined the performance budget checks that surfaced the weight.
+- Eleven keywords that sat outside the research-theme taxonomy (War, Intelligence, Maritime, Military history and others) are filed under their themes.
+- A further eleven keywords surfaced by the weekly taxonomy check are filed, and a member's "Dipomacy studies" is corrected.
 
 ## [1.13.0] · 2026-07-22 — Introducing Mentorship Matching 2.0
 
