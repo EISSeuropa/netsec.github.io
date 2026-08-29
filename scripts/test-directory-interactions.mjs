@@ -285,13 +285,48 @@ const journeys = {
   async 'area picker scrolls without dismissing'() {
     const page = await openDirectory('#mentorship=mentor');
     await openAreaPopover(page);
-    const box = await (await page.$('.mentorship-pop')).boundingBox();
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await page.mouse.wheel({ deltaY: 240 });
-    await sleep(150);
+    // A wheel can only move a list that already overflows. On a loaded runner
+    // the options can still be laying out when the wheel lands, and the
+    // popover then sits at scrollTop 0 for a reason that has nothing to do
+    // with the guard this journey is about. Wait for the premise, and say so
+    // if it never holds. (This journey flaked in CI on 28 Aug 2026 with
+    // "popover did not scroll", which is what sent us here.)
+    await page.waitForFunction(() => {
+      const el = document.querySelector('.mentorship-pop');
+      return el && el.scrollHeight > el.clientHeight + 8;
+    }, { timeout: 5000 }).catch(() => {});
+    const metrics = await page.evaluate(() => {
+      const el = document.querySelector('.mentorship-pop');
+      return el ? { scrollHeight: el.scrollHeight, clientHeight: el.clientHeight } : null;
+    });
+    assert(metrics, 'popover vanished before the scroll');
+    assert(
+      metrics.scrollHeight > metrics.clientHeight,
+      `popover does not overflow, so nothing could scroll (${metrics.scrollHeight} <= ${metrics.clientHeight}) — ` +
+        'the list is shorter than the viewport, or it has not finished laying out'
+    );
+    // Wheel delivery is asynchronous, and the popover may scroll smoothly, so
+    // poll for the result rather than sampling once after a fixed wait. Three
+    // attempts, because a wheel that arrives before the pointer settles over
+    // the list is simply lost, and one lost wheel is not a defect.
+    let scrollTop = 0;
+    for (let attempt = 0; attempt < 3 && scrollTop === 0; attempt++) {
+      const box = await (await page.$('.mentorship-pop')).boundingBox();
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.wheel({ deltaY: 240 });
+      await page
+        .waitForFunction(() => (document.querySelector('.mentorship-pop')?.scrollTop || 0) > 0, { timeout: 1500 })
+        .catch(() => {});
+      scrollTop = await page.evaluate(() => document.querySelector('.mentorship-pop')?.scrollTop ?? 0);
+      if (!(await page.$('.mentorship-pop'))) break; // closed: the assertion below reports it
+      // Same reasoning as the browser-launch retry above: a recovered flake
+      // announces itself, so the count of them is the signal for whether the
+      // wheel needs a different approach.
+      if (scrollTop === 0) console.error(`  · wheel ${attempt + 1} did not move the popover, retrying`);
+    }
     const state = await page.evaluate(() => {
-      const p = document.querySelector('.mentorship-pop');
-      return p ? { open: true, scrollTop: p.scrollTop } : { open: false };
+      const el = document.querySelector('.mentorship-pop');
+      return el ? { open: true, scrollTop: el.scrollTop } : { open: false };
     });
     assert(state.open, 'popover closed on its own scroll');
     assert(state.scrollTop > 0, `popover did not scroll (scrollTop ${state.scrollTop})`);
