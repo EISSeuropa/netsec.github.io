@@ -262,18 +262,32 @@ what is true now. Say what it replaced only when the reader needs
 the old state, which in release notes and bug reports they often
 do, and then as a plain second sentence.
 
-**No personification of software.** A map does not learn, a page
-does not know, a script does not want or decide or try. "The map
-learned to say what it is showing" is "the map names the two
-groups that share the most people". Naming the actor also forces
-the specifics out: if the sentence cannot say who does what, it
-was decoration.
+**No personification of software standing in for the fact.** The
+tell is a verb of thought used *instead of* the specific change,
+not the verb itself. "The map learned to say what it is showing"
+names nothing, and is "the map names the two groups that share
+the most people". Test it by asking what follows the verb: if the
+concrete change is right there, the idiom is carrying it, and
+git's release notes have used "the command line parser learned
+--end-of-options" for twenty years. If nothing concrete follows,
+the sentence was decoration and the fact is still missing.
 
 Both of the above hide behind evaluative adjectives, so treat
 "cleaner", "smarter", "considerably lighter", "better behaved" as
 the same tell. Nearly always the number is already known: 1.65 MB
 to 178 KB, thirteen buttons, one click instead of fourteen. Use
 it.
+
+**One line per index entry.** The `### Index of changes` bullets
+are an index. One line, one fact, scannable. Measured against the
+release notes of four projects from before 2020, ours ran at a
+median of 70 words and 3.2 sentences per entry, against 8 for
+curl, 15 for Django and 20 for git. At that length the index is a
+second copy of the themes and nobody reads it twice. The
+exception is a brand-new feature or a new page, where the entry
+is the only description a reader will get, and those may run to a
+short paragraph. A fix, a refinement or a copy change gets one
+line.
 
 **No justifying a fact you have just stated.** State the fact and
 stop. The tell is a trailing clause arguing for the decision the
