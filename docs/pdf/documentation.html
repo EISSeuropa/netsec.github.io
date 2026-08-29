@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NetSec — Website & Directory · Documentation Pack v1.12.2</title>
+<title>NetSec — Website & Directory · Documentation Pack v1.13.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -652,7 +652,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.12.2 · August 2026</div>
+        <div class="value">v1.13.0 · August 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -841,7 +841,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.12.2 · August 2026</span>
+    <span class="url">v1.13.0 · August 2026</span>
   </footer>
 
 </section>
@@ -957,7 +957,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
   </div>
 
   <h2>What this site is</h2>
-  <p>The NetSec website is the official front door of <strong>COST Action CA24154 — Networking European Security Knowledge</strong>, served at <a href="https://netsec-cost.eu">netsec-cost.eu</a>. It is a static GitHub Pages deployment with two scheduled data-sync workflows and one third-party form processor. There is no database, no CMS, and no build step.</p>
+  <p>The NetSec website is the official front door of <strong>COST Action CA24154 — Networking European Security Knowledge</strong>, served at <a href="https://netsec-cost.eu">netsec-cost.eu</a>. It is a static GitHub Pages deployment with two scheduled data-sync workflows and one third-party form processor. There is no database and no CMS. There is a build step, and it runs at deploy time rather than in the repository: see <em>What the deploy builds</em> below.</p>
 
   <p>It doubles as <strong>Deliverable D1</strong> of the Action's Memorandum of Understanding — the open community directory that the Action committed to publishing.</p>
 
@@ -1044,9 +1044,22 @@ flowchart LR
     <li><strong>Workflow changes open a PR, never a silent push.</strong> Every change to the directory passes through a human's review.</li>
   </ul>
 
+  <h2>What the deploy builds</h2>
+  <p>Until v1.14.0 the repository held every file the site serves, including the ones a script had written. That meant 582 machine-written files out of 1,193 tracked, each needing a CI check to prove it was current, and a two-line change to the stylesheet rewriting 315 pages it had not touched. Those files are now built by the Pages deploy workflow and are absent from the repository.</p>
+  <p>The deploy runs four steps in a fixed order, and the order is load-bearing:</p>
+  <ol>
+    <li><code>scripts/build-og-cards.py</code> draws the 84 per-member Open Graph cards. About 35 seconds on the runner, because Chrome starts once and the cards are screenshotted in sequence.</li>
+    <li><code>scripts/build-profile-pages.py</code> writes the 252 profile pages. It runs after the cards, because a card is a page's <code>og:image</code>.</li>
+    <li><code>scripts/build-search.sh</code> builds the Pagefind index.</li>
+    <li><code>scripts/inject-seo.py --stamp-only</code> applies the <code>?v=</code> cache-bust tokens across the top-level pages and the 252 under <code>people/</code>. It runs last, because it stamps what the steps above wrote.</li>
+  </ol>
+  <p>After each of the first two steps the workflow counts what was produced against the members in <code>data/bios.json</code> and refuses to publish if the two disagree. That check is not decorative: the profile pages name their card's URL without testing whether the file exists, so a silent under-render would publish 252 pages whose share image returns 404, with a green run behind it.</p>
+  <p>The drift gates that used to guard these artefacts are retired, since a gate exists to prove a committed file is current and there is no committed file. Two things stand in their place: the count assertions above, and a test asserting that the two builders agree on which members get a page and a card. A whole class of failure went with them, where a pull request touching nothing relevant went red because a generated file elsewhere was stale.</p>
+  <p>Member photographs stay committed. Their derived <code>.webp</code> variants were measured at 144 blobs and 1.9 MB across the entire history, one write per file, so moving them would have bought nothing and made Pillow a dependency of the publish path.</p>
+
   <h2>Site structure</h2>
 
-  <p>Eighteen public pages in total (each with FR and DE beta siblings, plus a locale-detecting <code>404.html</code>). The home page is the hub: it hosts most of the static content as anchored sections and signposts the discovery and reference pages and the members' Wiki through two dedicated home-page sections. Phase 1 of the v1.4.0 IA pass split the home page's denser blocks out into standalone pages (<code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code>); v1.6.0 added the live ESSC 2026 programme page (<code>essc-2026.html</code>); v1.10.0 added the dedicated Working Groups page (<code>working-groups.html</code>); v1.12.0 added the NetSec Summer School page (<code>summer-school.html</code>), run jointly with EISS and co-located with the conference, then grew a dedicated Events page (<code>events.html</code>) gathering every NetSec event in one place. The directory also fans out into a generated profile page per member at <code>people/&lt;slug&gt;.html</code> (177 pages at the time of writing, three locales each), built by <code>scripts/build-profile-pages.py</code> and counted separately from the eighteen hand-authored pages. Three full-page applications, four reference pages branched off Home, the live conference programme, the Summer School and the Events page, and four statutory pages branch off the hub.</p>
+  <p>Twenty-two public pages in total (each with FR and DE beta siblings, plus a locale-detecting <code>404.html</code>). One of the twenty-two, <code>essc-2027.html</code>, is parked and not yet linked from anywhere, so it does not appear in the graph below. The home page is the hub: it hosts most of the static content as anchored sections and signposts the discovery and reference pages and the members' Wiki through two dedicated home-page sections. Phase 1 of the v1.4.0 IA pass split the home page's denser blocks out into standalone pages (<code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code>); v1.6.0 added the live ESSC 2026 programme page (<code>essc-2026.html</code>); v1.10.0 added the dedicated Working Groups page (<code>working-groups.html</code>); v1.12.0 added the NetSec Summer School page (<code>summer-school.html</code>), run jointly with EISS and co-located with the conference, then grew a dedicated Events page (<code>events.html</code>) gathering every NetSec event in one place. v1.13.0 added a public slide-templates gallery (<code>slides.html</code>) linked from the footer resource row on every page. v1.14.0 added the NetSec Network Map (<code>network-map.html</code>), signposted from the Directory and the Working Groups page rather than from the top nav, and a page for the Working Group 2 policy workshop in Ankara (<code>policy-workshop-2026.html</code>), reached from the home-page events block. The directory also fans out into a generated profile page per member at <code>people/&lt;slug&gt;.html</code> (177 pages at the time of writing, three locales each), built by <code>scripts/build-profile-pages.py</code> and counted separately from the twenty-two hand-authored pages. Three full-page applications, four reference pages branched off Home, the live conference programme, the Summer School and the Events page, and four statutory pages branch off the hub.</p>
 
   <div class="diagram">
     <div class="mermaid">
@@ -1070,6 +1083,9 @@ flowchart TB
     A["<b>accessibility.html</b>"]
     R["<b>privacy.html</b>"]
     L["<b>licensing.html</b>"]
+    NM["<b>network-map.html</b><br/>Network Map"]
+    PW["<b>policy-workshop-2026.html</b><br/>WG2 policy workshop"]
+    SL["<b>slides.html</b><br/>Slide templates"]
 
     H ==> |"top nav"| P
     H ==> G
@@ -1091,6 +1107,10 @@ flowchart TB
     H ==> WG
     H -.-> |"events block"| SS
     H -.-> |"events block"| EV
+    P -.-> |"signpost card"| NM
+    WG -.-> |"signpost card"| NM
+    H -.-> |"events block"| PW
+    H -.-> |"footer resource row"| SL
 
     style H fill:#0a84ff,stroke:#0a84ff,color:#fff
     style P fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
@@ -1110,6 +1130,9 @@ flowchart TB
     style A fill:#ffffff,stroke:#5a6679,color:#0b1220
     style R fill:#ffffff,stroke:#5a6679,color:#0b1220
     style L fill:#ffffff,stroke:#5a6679,color:#0b1220
+    style NM fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style PW fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    style SL fill:#ffffff,stroke:#5a6679,color:#0b1220
     linkStyle 0,1,2 stroke:#003399,stroke-width:2.2px
     linkStyle 3,4,5,6,7,8,9 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
     linkStyle 10,11,12,13 stroke:#5a6679,stroke-dasharray:3 3,stroke-width:1.4px
@@ -1117,8 +1140,10 @@ flowchart TB
     linkStyle 16 stroke:#003399,stroke-width:2.2px
     linkStyle 17 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
     linkStyle 18 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
+    linkStyle 19,20,21 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
+    linkStyle 22 stroke:#5a6679,stroke-dasharray:3 3,stroke-width:1.4px
     </div>
-    <div class="diagram-caption">Figure 3 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav links to Network, Working Groups, Grants and About from every page). <strong>Dashed blue arrows from Home</strong> reach the v1.4.0 IA-split pages (News, Roadmap, Outputs), the v1.6.0 ESSC 2026 programme page, the v1.12.0 Summer School and Events pages, and the four-card <em>Find out more</em> discovery grid at the end of the About section (FAQ, Glossary, Press kit). The Directory node also fans out into a generated profile page per member at <code>people/&lt;slug&gt;.html</code>, omitted here for legibility. <strong>Dashed grey arrows</strong> are footer-only links (Accessibility, Privacy, Licensing, Site map appear in every page's footer). <strong>Dashed blue arrows between people and grants</strong> are in-page cross-links between the Network and Grants pages.</div>
+    <div class="diagram-caption">Figure 3 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav links to Network, Working Groups, Grants and About from every page). <strong>Dashed blue arrows from Home</strong> reach the v1.4.0 IA-split pages (News, Roadmap, Outputs), the v1.6.0 ESSC 2026 programme page, the v1.12.0 Summer School and Events pages, the v1.14.0 policy-workshop page, and the four-card <em>Find out more</em> discovery grid at the end of the About section (FAQ, Glossary, Press kit). The Directory node also fans out into a generated profile page per member at <code>people/&lt;slug&gt;.html</code>, omitted here for legibility. <strong>The Network Map</strong> is reached from signpost cards on the Directory and the Working Groups page rather than from the top nav, which is why two arrows converge on it. <strong>The slide-templates gallery</strong> sits in the footer resource row, so it is drawn grey like the statutory pages. <strong>Dashed grey arrows</strong> are footer-only links (Accessibility, Privacy, Licensing, Site map appear in every page's footer). <strong>Dashed blue arrows between people and grants</strong> are in-page cross-links between the Network and Grants pages.</div>
   </div>
 
   <h3>Page inventory</h3>
@@ -1127,7 +1152,7 @@ flowchart TB
     <tbody>
       <tr><td><code>index.html</code></td><td>Overview, news lede, WGs, MC, events banner, <em>Find out more</em> discovery grid, <em>For NetSec members</em> Wiki signposting strip, contact. Trimmed by ~25% in v1.4.0 when the standalone About / News / Roadmap / Outputs pages took over the denser blocks.</td><td><code>data/events.json</code> (events banner; added v1.6.0)</td></tr>
       <tr><td><code>people.html</code></td><td>Open community directory with WG / MC / country filters; Join-the-network CTA. <em>Directory research-interest keyword filter added v1.7.0; research-theme and mentorship filters and a native mobile filter sheet added v1.11.0; a quiet "Founding contributor" badge for the founding cohort added v1.12.0.</em></td><td><code>data/bios.json</code> (all), <code>data/keyword-aliases.json</code> (inline fallback normaliser; added v1.7.0)</td></tr>
-      <tr><td><code>people/&lt;slug&gt;.html</code></td><td>One shareable profile page per directory member, generated by <code>scripts/build-profile-pages.py</code> with its own <code>Person</code> structured data, an ORCID-fed recent-publications list, research-theme and region chips, and "works on similar topics" facepiles that cross-link related members and mentors. A CI gate fails any PR whose member data changed without regenerating the pages. <em>Added post-conference in the v1.12.0 cycle.</em></td><td><code>data/authors-index.json</code> (Anthology slot); otherwise static, derived at build time from <code>data/bios.json</code> and <code>data/orcid-works.json</code></td></tr>
+      <tr><td><code>people/&lt;slug&gt;.html</code></td><td>One shareable profile page per directory member, generated by <code>scripts/build-profile-pages.py</code> with its own <code>Person</code> structured data, an ORCID-fed recent-publications list, research-theme and region chips, and "works on similar topics" facepiles that cross-link related members and mentors. Built by the Pages deploy since v1.14.0 and no longer committed. <em>Added post-conference in the v1.12.0 cycle.</em></td><td><code>data/authors-index.json</code> (Anthology slot); otherwise static, derived at build time from <code>data/bios.json</code> and <code>data/orcid-works.json</code></td></tr>
       <tr><td><code>grants.html</code></td><td>Five grant schemes, the e-COST timeline, resources, grant-manager contact cards.</td><td><code>data/bios.json</code> (Grant Awarding Coordinator only)</td></tr>
       <tr><td><code>working-groups.html</code></td><td>The four Working Groups, each an anchored section with its MoU objective, focus areas, lead and co-lead, an expandable member grid rendered live from the COST directory, and a <em>Related events</em> block. Opens with overall stats (people, countries, groups). <em>Added v1.10.0.</em></td><td><code>data/wg.json</code> (leadership + members), <code>data/bios.json</code> (photos + affiliations), <code>data/events.json</code> (related events)</td></tr>
       <tr><td><code>about.html</code></td><td>Standalone About page: mission, deliverables, <em>Find out more</em> discovery grid, milestones. <em>Added v1.4.0.</em></td><td>—</td></tr>
@@ -1160,6 +1185,7 @@ flowchart TB
         <li>Bio collapse: bios over 4 lines auto-add a "Show more" toggle.</li>
         <li>Awarding-process timeline with Before / During / After pills.</li>
         <li><strong>Site-wide Pagefind search</strong> (added v1.4.0). Built at deploy time, separate EN / FR / DE shards, surfaced through a header overlay with keyboard shortcut.</li>
+        <li><strong>The NetSec Network Map</strong> (added v1.14.0, Beta). A force-directed canvas drawing every member, the Working Groups they sit in and the research themes they share, in three locales, with search, zoom, hub panels, a keyboard path and a build-time table of everyone it draws.</li>
         <li><strong>Live ESSC 2026 programme</strong> at <code>/essc-2026.html</code> (added v1.6.0). Rebuilt daily from Indico via <code>sync-indico.py</code>. Day chips, parallel-session cards, livestream badges on plenaries, per-session room badges (v1.6.1), member-aware speaker popovers that resolve to a NetSec member card with photo, role, country, and bio excerpt.</li>
         <li><strong>Directory research-interest keyword pipeline</strong> (added v1.7.0). Canonical chips on bio cards backed by <code>data/keyword-aliases.json</code>, plus a filter chip row above the grid with URL-hash persistence (<code>#keywords=slug-one,slug-two</code>) and OR semantics across selected chips. Top-8 chips shown by count.</li>
         <li><strong>iCalendar feed</strong> at <code>/calendar.ics</code> (added v1.4.0). The events block carries a <code>webcal://</code> Subscribe button. The feed is regenerated whenever <code>events.json</code> changes (v1.6.1).</li>
@@ -1356,7 +1382,7 @@ sequenceDiagram
   </div>
 
   <h2>Data flow: per-member share cards</h2>
-  <p>Every directory member has a personal Open Graph image at <code>assets/og/people/&lt;slug&gt;.png</code>, so sharing their profile unfurls as <em>that person</em> rather than the generic site card. These are never hand-drawn: member data flows in from the weekly bios sync, and <code>scripts/build-og-cards.py</code> derives and commits the cards.</p>
+  <p>Every directory member has a personal Open Graph image at <code>assets/og/people/&lt;slug&gt;.png</code>, so sharing their profile unfurls as <em>that person</em> rather than the generic site card. These are never hand-drawn: member data flows in from the weekly bios sync, and <code>scripts/build-og-cards.py</code> draws the cards during the Pages deploy. They are not committed.</p>
   <p>A card is keyed by a hash of exactly the fields it shows (name, role, affiliation, country and flag, headshot path plus the photo's SHA-256, working-group pills, mentorship, STSM hosting). The builder re-renders only the members whose hash changed or whose PNG is missing, recorded in <code>_manifest.json</code>, so the weekly auto-PR stays churn-free instead of rewriting dozens of binaries. Editing research keywords alone does not re-render a card, because keywords are not on it.</p>
 
   <div class="diagram">
@@ -1394,6 +1420,12 @@ sequenceDiagram
   <div class="snapshot cropped">
     <div class="clip"><img src="snap-network.jpg" alt="The Directory page with the research-interest filter row, WG and country filters, and bio cards with keyword chips."></div>
     <div class="caption">Figure 10 · The Directory. Four filter axes (free-text search, WG / MC chip, country, research-interest chip row) AND together so they can be stacked. The research-interest filter row above the grid (added v1.7.0) shows the top eight canonical keywords by submission count; clicking a chip narrows the directory and persists the selection in the URL hash for sharing. Cropped from the top of the live page to show the filter chrome above the grid; the full member list continues below.</div>
+  </div>
+
+  <h2>The Network Map</h2>
+  <div class="snapshot cropped">
+    <div class="clip"><img src="snap-map.jpg" alt="The NetSec Network Map: member faces arranged around four Working Group hubs, with the lens and filter controls above the canvas and the statistics below it."></div>
+    <div class="caption">Figure 15 &middot; The NetSec Network Map (v1.14.0, Beta). Each member is a dot, pulled towards the Working Groups they sit in or, under the second lens, the research themes they work on. The statistics strip says how many of the 192 people the current lens can actually draw, since a member on no roster has nothing to be drawn towards. People sitting between two hubs are the bridges of the network. Two overlays add who shared a conference panel and who is offering or seeking mentorship. Search finds a person and spotlights their connections, and the whole map is reachable from the keyboard, with a table of everyone it draws written into the page below the canvas. Cropped from the top of the live page.</div>
   </div>
 
   <h2>Repository layout</h2>
@@ -1451,7 +1483,7 @@ sequenceDiagram
 │   ├── test-sync-bios.py            # Pipeline tests
 │   ├── test-sync-indico.py          # Pipeline tests
 │   ├── inject-seo.py                # Canonical + OG + JSON-LD generator
-│   ├── build-profile-pages.py       # Renders people/&lt;slug&gt;.html from bios + ORCID works (v1.12.0)
+│   ├── build-profile-pages.py       # Renders people/&lt;slug&gt;.html from bios + ORCID works (v1.12.0); run by the Pages deploy, output gitignored (v1.14.0)
 │   ├── check-i18n-drift.py          # Reports stale translations
 │   ├── check-css-class-collisions.py # Lints accidental class-name reuse (v1.6.0)
 │   ├── check-a11y.sh                # axe-core scan wrapper
@@ -2419,7 +2451,12 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <div class="changelog-entries">
 
-  <h2 class="current">v1.12.2 · August 2026 · Cover bump for website v1.13.0 and v1.14.0</h2>
+  <h2 class="current">v1.13.0 · August 2026 · Section-level catch-up to website v1.13.0 and v1.14.0</h2>
+  <p class="cl-summary">Closes the catch-up the two previous revisions deferred. Section 02's page graph (Figure 3) and inventory gain the four pages added since the last section pass: the NetSec Network Map (<code>network-map.html</code>), the Working Group 2 policy-workshop page (<code>policy-workshop-2026.html</code>), the slide-templates gallery (<code>slides.html</code>) and the parked <code>essc-2027.html</code>, taking the count from eighteen to twenty-two. The Network Map is drawn with two arrows converging on it rather than one from the nav, which is how it is actually reached, and the parked page is named in the prose and left out of the graph.</p>
+  <p class="cl-summary">Section 04 gains <em>What the deploy builds</em>, describing the change that removed 582 machine-written files from the repository: the 84 Open Graph cards, the 252 profile pages and the <code>?v=</code> cache-bust tokens are built by the Pages deploy in a fixed order, each build step is followed by a count assertion against <code>data/bios.json</code>, and the drift gates that guarded the committed artefacts are retired. The pack previously described those files as committed and gated. Member photographs stay committed, and the section says why.</p>
+  <p class="cl-summary">All five site screenshots were re-captured, and a sixth was added: Figure 15, the Network Map. <code>docs/pdf/build.sh --shots</code> captures it alongside the others now. Worth knowing for whoever reads the filenames next: <code>snap-network.jpg</code> is the Directory, named before the Network Map existed, and the Network Map is <code>snap-map.jpg</code>.</p>
+
+  <h2>v1.12.2 · August 2026 · Cover bump for website v1.13.0 and v1.14.0</h2>
   <p class="cl-summary">Cover bump spanning two website releases. <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.13.0">v1.13.0</a> rebuilt the Directory's mentorship matching around a guided sentence, added LinkedIn beside Bluesky on the social pipeline, and took an editorial design pass over the type scale and the home hero. v1.14.0 brought the NetSec Network Map to Beta at <code>/network-map.html</code> in three languages, with search, zoom, hub panels, a keyboard path and a table of everyone it draws, and it filed the last twenty-nine research keywords that reached no research theme.</p>
   <p class="cl-summary">Section-level catch-up is deferred to the next pack revision, and this is the second bump to defer it. Section 02's page graph and inventory do not yet carry the Network Map or the Working Group 2 policy-workshop page, Section 04 does not describe the move of generated files to deploy time, and the five figures are the July captures. Tracked for the next revision.</p>
 
