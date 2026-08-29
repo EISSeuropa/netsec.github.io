@@ -251,7 +251,16 @@ else
 fi
 
 if ! git -C "$REPO_ROOT" diff --quiet -- docs/roadmap-2026.md data/roadmap-progress.json; then
-  echo "  · one or both moved; the changes ride in the release commit below."
+  if [[ "$DRY_RUN" == "--dry-run" ]]; then
+    # Pre-flight guarantees a clean tree, so anything dirty here was written
+    # by the two refreshes above. Put it back: a preview that mutates the
+    # tree makes the next real run fail its own clean-tree check, which is
+    # exactly what happened cutting v1.14.0.
+    git -C "$REPO_ROOT" checkout -- docs/roadmap-2026.md data/roadmap-progress.json
+    echo "  · one or both moved; reverted, because this is a dry run."
+  else
+    echo "  · one or both moved; the changes ride in the release commit below."
+  fi
 fi
 
 # ────────────────────────────────────────────────────────────────────
@@ -506,7 +515,12 @@ fi
 
 step "Commit, tag, push"
 
-run git add CHANGELOG.md roadmap.html roadmap.fr.html roadmap.de.html data/i18n-state.json
+# docs/roadmap-2026.md and data/roadmap-progress.json are refreshed by the
+# autostamp step above and belong to this release. They were missing from
+# this list, so the step's "the changes ride in the release commit below"
+# was not true and a refreshed file was left dirty after the release.
+run git add CHANGELOG.md roadmap.html roadmap.fr.html roadmap.de.html data/i18n-state.json \
+       docs/roadmap-2026.md data/roadmap-progress.json
 run git commit -m \"Release v$VERSION — $TITLE\" \
        -m \"Promotes the CHANGELOG.md [Unreleased] section to [$VERSION] · $TODAY — $TITLE, resets [Unreleased], promotes the matching public-roadmap card on EN + FR + DE from planned to shipped, and bumps the roadmap last-updated stamp.\"
 run git tag -a \"v$VERSION\" \
