@@ -235,6 +235,17 @@ reader notices.
 If there are five, write five. Manufactured triplets for cadence
 are the most reliable AI tell.
 
+**No second person in the CHANGELOG.** Release notes are a
+record of what changed, so they describe rather than address a
+reader. "The Directory can show you who fits" becomes "The
+Directory shows who fits", and "a view you found is a view you
+can send" becomes "a view that was found is a view that can be
+sent". This covers the lede, the themed sections, the index
+bullets and the release title, which release.sh reuses verbatim
+as the GitHub Release title. The site is a different surface and
+keeps its own voice: a page is spoken to a reader, a changelog is
+not. Same rule and same boundary as EISS §7, agreed there first.
+
 **No synonym cycling.** Pick one referent for an entity and
 reuse it across consecutive sentences. Writing "the script" then
 "the sync" then "the workflow" for the same thing in three
