@@ -5,9 +5,9 @@
 #   1. Spin up a local static server so the HTML can reference local
 #      images (the screenshots in this folder) and Mermaid can load
 #      from the CDN.
-#   2. Optionally refresh the five site screenshots (snap-home.png,
-#      snap-about.png, snap-essc-2026.png, snap-network.png,
-#      snap-grants.png) from the live worktree.
+#   2. Optionally refresh the six site screenshots (snap-home, snap-about,
+#      snap-essc-2026, snap-network (the Directory), snap-grants and
+#      snap-map (the Network Map)) from the live worktree, as JPEGs.
 #   3. Headless Chrome renders documentation.html to A4 PDF with a
 #      generous --virtual-time-budget so Mermaid finishes drawing
 #      all seven diagrams before the print snapshot.
@@ -53,7 +53,9 @@ if [[ "${1-}" == "--shots" ]]; then
   SRV=$!
   trap 'kill $SRV 2>/dev/null || true' EXIT
   sleep 1
-  for page in home:index.html about:about.html essc-2026:essc-2026.html network:people.html grants:grants.html; do
+  # label:path. "network" is the Directory, named before the Network Map
+  # existed; "map" is the Network Map itself, added for pack v1.13.0.
+  for page in home:index.html about:about.html essc-2026:essc-2026.html network:people.html grants:grants.html map:network-map.html; do
     label="${page%%:*}"
     path="${page#*:}"
     # Window height bumped from 1600 to 3200 so the IntersectionObserver-
