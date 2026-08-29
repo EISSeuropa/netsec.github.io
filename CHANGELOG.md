@@ -139,6 +139,40 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+> The Action is named for networking European security knowledge, and this release makes that network something you can look at. The Network Map draws every member, the Working Groups they sit in and the research themes they share, and you can search it for a colleague, walk it from the keyboard, filter it down and send someone the exact view you were reading. Alongside it the Directory's research vocabulary finally reaches every keyword it holds, the public record catches up with what is actually happening in September, and a season of quieter work leaves the site quicker to change. Four themes follow, then a single canonical index at the bottom.
+
+### The Network Map
+
+The map went from a prototype nobody could find to a Beta anyone can use. It is signposted from the Working Groups page and the Directory, it is called the Network Map rather than the Atlas, and it lives at `/network-map.html` in English, French and German. You can type a colleague's name into a search box and land on them, and every directory profile now carries a link into their place on the map, so a profile leads into the network rather than ending at one person.
+
+Using it got easier in the ways that were stopping people. Hold Ctrl or Command and scroll to zoom into a crowded corner. Click a Working Group or a research theme to open a panel saying who is in it and who else those people share. The chip rows gained All and None, so isolating one theme takes a click rather than fourteen. The whole map is reachable from the keyboard, with the arrow keys walking the hubs and their members and a live region speaking what is selected. Everyone the map draws is also listed as a plain table underneath it, built when the page is built rather than by the same script that draws the canvas.
+
+It also learned to say what it is showing rather than leaving a reader to guess. The figures beside the map say how many people each view can actually draw, not how many exist. A line under them names the two Working Groups or research themes that share the most people. It reports how much of the Action comes from an Inclusiveness Target Country, which is the figure COST weighs, counted by country and with the caveat stated. Switching every chip off, searching for nobody, searching for someone the filters are hiding and failing to load the data are four different situations, and the map now says which one you are in.
+
+The map got considerably lighter and better behaved. The faces on the page fell from 1.65 MB to 178 KB. The hover card stopped losing its bottom edge in the lower third of the map, the fifteen theme labels stopped printing on top of each other, and a first tap on a phone previews a person rather than jumping straight to their profile. Visitors browsing without JavaScript are pointed at the Working Groups page and the Directory rather than left with a blank rectangle, and the accessibility statement names the canvas among the parts of the site with a known limitation.
+
+### A vocabulary that reaches every keyword
+
+Every research keyword in the Directory now reaches a research theme. Twenty-nine of them reached none, which meant a member filtering by theme could be looking at a Directory that was quietly hiding people it should have shown. Two new themes carry most of the newly-placed work, *Climate, energy and environmental security* and *Democracy, governance and political change*, both hand-translated into French and German. Country names typed into the keyword box are now filed as geography rather than as research interests, the way the broader taxonomy already treats them.
+
+The vocabulary can also be edited and checked in the same minute. Changing which theme a keyword belongs to used to show its effect only in the next morning's automatic update, so a mistake sat live for a day. A dry run now reports what would move, and says plainly when a change would take a member out of a theme rather than adding them to one.
+
+### The record catches up with September
+
+The Working Group 2 policy workshop in Ankara has its own page, and the call for applications that closed on 15 August no longer invites more. The inaugural Management Committee plenary stopped advertising a firm date and reads *September 2026, date to be confirmed*, which is what is actually known. The NetSec ITC Conference, listed for 8 to 11 September, has been removed, because the event was never scheduled and the entry came from a working ledger rather than from the Action.
+
+The nightly conference-programme sync now checks that what it received makes sense, not only that it is the right shape. It notices a timezone belonging to a different city from the venue, a session dated outside the conference, a room left blank, and an edition that has quietly become a different year. Each finding says what to change in Indico, because that is where the correction has to be made.
+
+### Under the site
+
+Every button is now comfortable to tap on a phone. Thirteen were smaller than the size a thumb reliably hits, and a check in the build keeps the next thirteen from arriving.
+
+The rest of this theme is invisible from the outside. Files a machine writes are now written when the site publishes rather than stored in the repository: the version stamp that stops a browser serving a stale stylesheet, the share cards for each member, and the 252 profile pages. Each of those used to need a check proving it was current, and each of those checks could fail an unrelated change. The documentation pack downloads in under a third of the data it did, the conference photographs in about a quarter, and the automated checks stopped failing for reasons that have nothing to do with the change being checked.
+
+### Index of changes
+
+The themed sections above are the story; the index below is the audit trail. Same content, terser.
+
 #### Added
 
 - The nightly conference-programme sync now checks that what it received makes sense, not only that it is the right shape. It notices a timezone that belongs to a different city from the venue, a session dated outside the conference, a room left blank, and an edition that has quietly become a different year. Each finding says what to change in Indico, because that is where the correction has to be made.
@@ -241,7 +275,6 @@ maintainer-facing audience.
 
 - The Network Map explains itself to visitors browsing without JavaScript, pointing to the Working Groups page and the Directory for the same information as lists, instead of showing an empty frame. Hand-translated for FR and DE.
 
-- Co-authored publications will connect the right people on the Network Map even when an author is written the way a reference list renders them. The map matched authors on full first and last names only, so "A. Lovelace" or "Lovelace, Ada" quietly connected nobody, and the result was indistinguishable from the Action having no co-authored work yet. Both forms now resolve, an initial that fits two members is left alone rather than guessed at, and any author name the map cannot place is reported so a typo can be spotted ([#1586](https://github.com/EISSeuropa/netsec.github.io/issues/1586)).
 - Co-authored publications will connect the right people on the Network Map even when an author is written the way a reference list renders them. The map matched authors on full first and last names only, so a bibliographic spelling quietly connected nobody, and the result was indistinguishable from the Action having no co-authored work yet. "A. Lovelace", "Lovelace, Ada", "Lovelace, A.P.B." and the all-capitals "LOVELACE Ada" now all resolve. An initial that fits two members is left alone rather than guessed at, a name that is merely shouted is not mistaken for a surname-first one, and any author the map cannot place is reported so a typo can be spotted ([#1586](https://github.com/EISSeuropa/netsec.github.io/issues/1586)).
 
 - The Network Map loads about a tenth of the images it used to, taking the faces on the page from 1.65 MB to 178 KB and bringing it inside the performance budget that had been warning on every run. The map draws each face as a circle roughly the size of a full stop on a printed page, so it was being sent portraits with far more detail than it can show. It now uses a small map-sized copy of each headshot, generated alongside the existing ones whenever the directory syncs ([#1480](https://github.com/EISSeuropa/netsec.github.io/issues/1480)).
