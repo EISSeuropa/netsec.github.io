@@ -249,7 +249,31 @@ dash.
 
 **No very short sentences.** Avoid two- or three-word fragments
 standing on their own. Fold them into a fuller sentence so the
-prose flows rather than clipping to a halt.
+prose flows rather than clipping to a halt. This bans fragments,
+not brevity: a plain five-word sentence carrying a fact is fine,
+and a long sentence is not made better by being long.
+
+**No antithesis.** The "went from X to Y", "not X but Y", "less X
+than Y" shape sets two halves against each other for cadence, and
+the contrast usually does work the fact should be doing. "The map
+went from a prototype nobody could find to a Beta anyone can use"
+is "the map is tagged Beta and is linked from two pages". Write
+what is true now. Say what it replaced only when the reader needs
+the old state, which in release notes and bug reports they often
+do, and then as a plain second sentence.
+
+**No personification of software.** A map does not learn, a page
+does not know, a script does not want or decide or try. "The map
+learned to say what it is showing" is "the map names the two
+groups that share the most people". Naming the actor also forces
+the specifics out: if the sentence cannot say who does what, it
+was decoration.
+
+Both of the above hide behind evaluative adjectives, so treat
+"cleaner", "smarter", "considerably lighter", "better behaved" as
+the same tell. Nearly always the number is already known: 1.65 MB
+to 178 KB, thirteen buttons, one click instead of fourteen. Use
+it.
 
 **No justifying a fact you have just stated.** State the fact and
 stop. The tell is a trailing clause arguing for the decision the
