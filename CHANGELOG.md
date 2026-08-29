@@ -143,31 +143,29 @@ maintainer-facing audience.
 
 ### The Network Map
 
-The map is called the Network Map rather than the Atlas. It lives at `/network-map.html` in English, French and German, and is tagged Beta. The Working Groups page and the Directory both link to it, and every directory profile links to that person's place on it.
+The map is called the Network Map rather than the Atlas, and lives at `/network-map.html` in English, French and German. It is tagged Beta. The Working Groups page and the Directory both link to it, and every directory profile links to that person's place on it.
 
-A search box above the map takes a name and spotlights that person. Ctrl or Command with the scroll wheel zooms into a crowded corner. Clicking a Working Group or a research theme opens a panel listing who is in it. The chip rows gained All and None, so isolating one theme takes one click instead of fourteen. Tab reaches the canvas and the arrow keys walk it, with a live region announcing what is selected. A plain table of everyone on the map sits underneath it, built when the page is built.
+The map reports on the network as well as drawing it. It names the two Working Groups or research themes that share the most people. It says how many people each view can draw against how many are in the Action, which is 142 of 192 under Working Groups. It reports how much of the Action comes from an Inclusiveness Target Country, the figure COST weighs. A table of everyone on the map sits underneath it, so the same information is there from a keyboard, with a screen reader, or with JavaScript switched off.
 
-The figures beside the map say how many people each view can draw, not how many exist. A line under them names the two Working Groups or research themes that share the most people. The map reports how much of the Action comes from an Inclusiveness Target Country, counted by country, which is the figure COST weighs. Four situations that used to look identical now read differently: every chip switched off, a search that matches nobody, a search whose match the filters are hiding, and data that failed to load.
-
-The faces on the page fell from 1.65 MB to 178 KB. The hover card no longer loses its bottom edge in the lower third of the map. Fifteen theme labels no longer print on top of each other. A first tap on a phone previews a person instead of opening their profile. Without JavaScript the page points at the Working Groups page and the Directory. The accessibility statement, now at version 1.4, names the canvas among the site's known limitations.
+The faces on the page fell from 1.65 MB to 178 KB, and on a phone the map begins inside the first screen in all three languages.
 
 ### Every keyword reaches a theme
 
-Twenty-nine research keywords in the Directory reached no research theme, so filtering by theme hid the members who used them. All twenty-nine are now filed. Two new themes hold most of them, *Climate, energy and environmental security* and *Democracy, governance and political change*, both hand-translated into French and German. Country names typed into the keyword box are filed as geography rather than as research interests.
+Twenty-nine research keywords in the Directory reached no research theme, so filtering by theme hid the members who used them. All twenty-nine are now filed, and two new themes hold most of them, *Climate, energy and environmental security* and *Democracy, governance and political change*. Both are hand-translated into French and German.
 
-Editing the vocabulary used to take a day to verify, because the effect appeared only in the next morning's sync. A dry run now reports what would move, and says when a change would take a member out of a theme rather than adding them to one.
+Editing the vocabulary used to take a day to verify, because the effect appeared only in the next morning's sync. A dry run now reports what would move before it moves.
 
-### The events on the site
+### September, checked against the Action
 
-The Working Group 2 policy workshop in Ankara has its own page. Its call for applications closed on 15 August and no longer invites more. The Management Committee plenary reads *September 2026, date to be confirmed*, in place of a firm date nobody had confirmed. The NetSec ITC Conference, listed for 8 to 11 September, is gone: it was never scheduled, and the entry came from a working ledger rather than from the Action.
+Three of the September entries on the site came from an internal working ledger rather than from the Action, and two of them were wrong. A conference that was never scheduled has been removed. A plenary date nobody had confirmed now reads *date to be confirmed*. The Ankara policy workshop, whose date the same ledger had moved by nine days, has its own page.
 
-The nightly programme sync now checks what Indico returns for sense, not only for shape. It flags a timezone from a different city than the venue, a session dated outside the conference, a blank room, and an edition that has become a different year. Each finding names the fix, which has to be made in Indico.
+That is a reporting problem, so the nightly programme sync now reads what Indico returns for sense as well as shape. A finding names what to change and where.
 
 ### Underneath
 
-Thirteen buttons were smaller than the size a thumb reliably hits. All thirteen now clear 44px, and a check in the build holds the floor.
+Files a machine writes are written when the site publishes, rather than stored in the repository: the cache-busting version stamp, the 84 member share cards and the 252 profile pages. Each one needed a check proving it was current, and each of those checks could fail an unrelated change. All of them are gone, and a styling change that used to rewrite 315 pages now touches the file it changed.
 
-Files a machine writes are now written when the site publishes, rather than stored in the repository: the cache-busting version stamp, the 84 member share cards, and the 252 profile pages. Each one needed a check proving it was current, and each of those checks could fail an unrelated change. All of them are gone. The documentation pack downloads in under a third of the data it did, and the conference photographs in about a quarter. Automated checks stopped failing for reasons unrelated to the change being checked.
+The site is also easier to use with a thumb and quicker to download. Thirteen buttons sat under the size a thumb reliably hits, and the documentation pack is 7.7 MB where it was 24.6 MB.
 
 ### Index of changes
 
