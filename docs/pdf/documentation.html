@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NetSec — Website & Directory · Documentation Pack v1.13.0</title>
+<title>NetSec — Website & Directory · Documentation Pack v1.13.1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -652,7 +652,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.13.0 · August 2026</div>
+        <div class="value">v1.13.1 · August 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -841,7 +841,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.13.0 · August 2026</span>
+    <span class="url">v1.13.1 · August 2026</span>
   </footer>
 
 </section>
@@ -1034,7 +1034,7 @@ flowchart LR
     style C fill:#0a84ff,stroke:#0a84ff,color:#fff
     style D fill:#eef2fb,stroke:#0a84ff
     </div>
-    <div class="diagram-caption">Figure 2 · End-to-end stack. Solid lines are HTTP requests at user time; dashed lines are scheduled batch jobs.</div>
+    <div class="diagram-caption">Figure 3 · End-to-end stack. Solid lines are HTTP requests at user time; dashed lines are scheduled batch jobs.</div>
   </div>
 
   <p>Three points to take from the diagram:</p>
@@ -1143,7 +1143,7 @@ flowchart TB
     linkStyle 19,20,21 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
     linkStyle 22 stroke:#5a6679,stroke-dasharray:3 3,stroke-width:1.4px
     </div>
-    <div class="diagram-caption">Figure 3 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav links to Network, Working Groups, Grants and About from every page). <strong>Dashed blue arrows from Home</strong> reach the v1.4.0 IA-split pages (News, Roadmap, Outputs), the v1.6.0 ESSC 2026 programme page, the v1.12.0 Summer School and Events pages, the v1.14.0 policy-workshop page, and the four-card <em>Find out more</em> discovery grid at the end of the About section (FAQ, Glossary, Press kit). The Directory node also fans out into a generated profile page per member at <code>people/&lt;slug&gt;.html</code>, omitted here for legibility. <strong>The Network Map</strong> is reached from signpost cards on the Directory and the Working Groups page rather than from the top nav, which is why two arrows converge on it. <strong>The slide-templates gallery</strong> sits in the footer resource row, so it is drawn grey like the statutory pages. <strong>Dashed grey arrows</strong> are footer-only links (Accessibility, Privacy, Licensing, Site map appear in every page's footer). <strong>Dashed blue arrows between people and grants</strong> are in-page cross-links between the Network and Grants pages.</div>
+    <div class="diagram-caption">Figure 4 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav links to Network, Working Groups, Grants and About from every page). <strong>Dashed blue arrows from Home</strong> reach the v1.4.0 IA-split pages (News, Roadmap, Outputs), the v1.6.0 ESSC 2026 programme page, the v1.12.0 Summer School and Events pages, the v1.14.0 policy-workshop page, and the four-card <em>Find out more</em> discovery grid at the end of the About section (FAQ, Glossary, Press kit). The Directory node also fans out into a generated profile page per member at <code>people/&lt;slug&gt;.html</code>, omitted here for legibility. <strong>The Network Map</strong> is reached from signpost cards on the Directory and the Working Groups page rather than from the top nav, which is why two arrows converge on it. <strong>The slide-templates gallery</strong> sits in the footer resource row, so it is drawn grey like the statutory pages. <strong>Dashed grey arrows</strong> are footer-only links (Accessibility, Privacy, Licensing, Site map appear in every page's footer). <strong>Dashed blue arrows between people and grants</strong> are in-page cross-links between the Network and Grants pages.</div>
   </div>
 
   <h3>Page inventory</h3>
@@ -1237,7 +1237,7 @@ sequenceDiagram
         P-->>P: Exit 0
     end
     </div>
-    <div class="diagram-caption">Figure 4 · Bios pipeline. Required consent on the form is what gates what reaches the Sheet. Photos are downscaled with Pillow before commit.</div>
+    <div class="diagram-caption">Figure 5 · Bios pipeline. Required consent on the form is what gates what reaches the Sheet. Photos are downscaled with Pillow before commit.</div>
   </div>
 
   <h2>Data flow — how a cost.eu change propagates</h2>
@@ -1264,7 +1264,7 @@ sequenceDiagram
         P-->>P: Exit 0
     end
     </div>
-    <div class="diagram-caption">Figure 5 · cost.eu pipeline. The Leadership table on cost.eu has a malformed closing tag that breaks BeautifulSoup, so the script falls back to regex over the raw HTML.</div>
+    <div class="diagram-caption">Figure 6 · cost.eu pipeline. The Leadership table on cost.eu has a malformed closing tag that breaks BeautifulSoup, so the script falls back to regex over the raw HTML.</div>
   </div>
 
   <h2>Data flow — contact form</h2>
@@ -1278,7 +1278,7 @@ flowchart LR
     A -->|toast confirmation| A
     style B fill:#003399,stroke:#003399,color:#fff
     </div>
-    <div class="diagram-caption">Figure 6 · Contact submissions never touch our repo. Formspree is the only third party that sees them, acting as data processor under Standard Contractual Clauses.</div>
+    <div class="diagram-caption">Figure 7 · Contact submissions never touch our repo. Formspree is the only third party that sees them, acting as data processor under Standard Contractual Clauses.</div>
   </div>
 
   <h2>Data flow: Indico to live programme</h2>
@@ -1314,7 +1314,7 @@ sequenceDiagram
     B->>R: Fetch data/indico.json at load
     B->>B: Render programme grid<br/>(day chips, session cards, popovers)
     </div>
-    <div class="diagram-caption">Figure 7 &middot; ESSC pipeline. The Indico-to-events.json patch step closes the drift gap between the live programme and the home-page banner. Added v1.6.0; patch step added v1.6.1; PR-based flow (no direct push) added in v1.6.1 for branch-protection compatibility.</div>
+    <div class="diagram-caption">Figure 8 &middot; ESSC pipeline. The Indico-to-events.json patch step closes the drift gap between the live programme and the home-page banner. Added v1.6.0; patch step added v1.6.1; PR-based flow (no direct push) added in v1.6.1 for branch-protection compatibility.</div>
   </div>
 
   <h2>Data flow: roadmap autostamp</h2>
@@ -1345,7 +1345,7 @@ sequenceDiagram
         P-->>P: Exit 0
     end
     </div>
-    <div class="diagram-caption">Figure 8 &middot; Roadmap autostamp. Added v1.7.0. The script never edits CHANGELOG.md or the planned / in-progress / shipped cards on the public <code>roadmap.html</code> directly: it only refreshes the markdown autostamp block read by Action evaluators.</div>
+    <div class="diagram-caption">Figure 9 &middot; Roadmap autostamp. Added v1.7.0. The script never edits CHANGELOG.md or the planned / in-progress / shipped cards on the public <code>roadmap.html</code> directly: it only refreshes the markdown autostamp block read by Action evaluators.</div>
   </div>
 
   <h2>Data flow: news to social media</h2>
@@ -1378,7 +1378,7 @@ sequenceDiagram
     SR->>B: Post the week's member (social-auto)
     SR->>L: Record the ISO-week key
     </div>
-    <div class="diagram-caption">Figure 13 &middot; Social pipeline. Added v1.12.0. The <code>social</code> gate protects both the action (posting) and the access: the Bluesky credentials are environment secrets, released only after a reviewer approves. The dedup key is the news item id (its <code>&lt;guid&gt;</code>), not the link, so two items pointing at the same page never collide.</div>
+    <div class="diagram-caption">Figure 10 &middot; Social pipeline. Added v1.12.0. The <code>social</code> gate protects both the action (posting) and the access: the Bluesky credentials are environment secrets, released only after a reviewer approves. The dedup key is the news item id (its <code>&lt;guid&gt;</code>), not the link, so two items pointing at the same page never collide.</div>
   </div>
 
   <h2>Data flow: per-member share cards</h2>
@@ -1407,25 +1407,25 @@ sequenceDiagram
     end
     Sy->>Pp: Rebuild profiles → og:image points at the card
     </div>
-    <div class="diagram-caption">Figure 14 &middot; Per-member OG cards. Added v1.12.0. Cards render over the Chrome DevTools Protocol with an exact 1200&times;630 clip, not the <code>--screenshot</code> CLI flag, which on macOS subtracts the window chrome and clips the footer. A <code>--check</code> gate in CI fails any PR whose data changed without its card, so a card can never drift behind the data.</div>
+    <div class="diagram-caption">Figure 11 &middot; Per-member OG cards. Added v1.12.0. Cards render over the Chrome DevTools Protocol with an exact 1200&times;630 clip, not the <code>--screenshot</code> CLI flag, which on macOS subtracts the window chrome and clips the footer. A <code>--check</code> gate in CI fails any PR whose data changed without its card, so a card can never drift behind the data.</div>
   </div>
 
   <h2>The ESSC live programme in practice</h2>
   <div class="snapshot cropped">
     <div class="clip"><img src="snap-essc-2026.jpg" alt="The ESSC 2026 live programme page showing day chips, parallel session cards, and member-aware speaker links."></div>
-    <div class="caption">Figure 9 · The European Security Studies Conference 2026 live programme (added v1.6.0, refined through v1.6.1). Day chips at the top; parallel session cards with room badges, livestream pulses on plenaries, and inline-expand abstracts on contributions. Speaker names that resolve to a NetSec member open a glass preview popover on hover. Cropped from the top of the live page; the full programme spans several screen-heights and is best read at <code>netsec-cost.eu/essc-2026.html</code>.</div>
+    <div class="caption">Figure 12 · The European Security Studies Conference 2026 live programme (added v1.6.0, refined through v1.6.1). Day chips at the top; parallel session cards with room badges, livestream pulses on plenaries, and inline-expand abstracts on contributions. Speaker names that resolve to a NetSec member open a glass preview popover on hover. Cropped from the top of the live page; the full programme spans several screen-heights and is best read at <code>netsec-cost.eu/essc-2026.html</code>.</div>
   </div>
 
   <h2>The Directory in practice</h2>
   <div class="snapshot cropped">
     <div class="clip"><img src="snap-network.jpg" alt="The Directory page with the research-interest filter row, WG and country filters, and bio cards with keyword chips."></div>
-    <div class="caption">Figure 10 · The Directory. Four filter axes (free-text search, WG / MC chip, country, research-interest chip row) AND together so they can be stacked. The research-interest filter row above the grid (added v1.7.0) shows the top eight canonical keywords by submission count; clicking a chip narrows the directory and persists the selection in the URL hash for sharing. Cropped from the top of the live page to show the filter chrome above the grid; the full member list continues below.</div>
+    <div class="caption">Figure 13 · The Directory. Four filter axes (free-text search, WG / MC chip, country, research-interest chip row) AND together so they can be stacked. The research-interest filter row above the grid (added v1.7.0) shows the top eight canonical keywords by submission count; clicking a chip narrows the directory and persists the selection in the URL hash for sharing. Cropped from the top of the live page to show the filter chrome above the grid; the full member list continues below.</div>
   </div>
 
   <h2>The Network Map</h2>
   <div class="snapshot cropped">
     <div class="clip"><img src="snap-map.jpg" alt="The NetSec Network Map: member faces arranged around four Working Group hubs, with the lens and filter controls above the canvas and the statistics below it."></div>
-    <div class="caption">Figure 15 &middot; The NetSec Network Map (v1.14.0, Beta). Each member is a dot, pulled towards the Working Groups they sit in or, under the second lens, the research themes they work on. The statistics strip says how many of the 192 people the current lens can actually draw, since a member on no roster has nothing to be drawn towards. People sitting between two hubs are the bridges of the network. Two overlays add who shared a conference panel and who is offering or seeking mentorship. Search finds a person and spotlights their connections, and the whole map is reachable from the keyboard, with a table of everyone it draws written into the page below the canvas. Cropped from the top of the live page.</div>
+    <div class="caption">Figure 14 &middot; The NetSec Network Map (v1.14.0, Beta). Each member is a dot, pulled towards the Working Groups they sit in or, under the second lens, the research themes they work on. The statistics strip says how many of the 192 people the current lens can actually draw, since a member on no roster has nothing to be drawn towards. People sitting between two hubs are the bridges of the network. Two overlays add who shared a conference panel and who is offering or seeking mentorship. Search finds a person and spotlights their connections, and the whole map is reachable from the keyboard, with a table of everyone it draws written into the page below the canvas. Cropped from the top of the live page.</div>
   </div>
 
   <h2>Repository layout</h2>
@@ -1571,7 +1571,7 @@ flowchart LR
     style A fill:#003399,stroke:#003399,color:#fff
     style C fill:#0a84ff,stroke:#0a84ff,color:#fff
     </div>
-    <div class="diagram-caption">Figure 10 · Type pairing. Lexend's high x-height makes for friendly, fast-reading headlines; Inter is the most-tested body face for UI at small sizes.</div>
+    <div class="diagram-caption">Figure 15 · Type pairing. Lexend's high x-height makes for friendly, fast-reading headlines; Inter is the most-tested body face for UI at small sizes.</div>
   </div>
 
   <p>Both faces load once from Google Fonts via a <code>&lt;link rel="preconnect"&gt;</code> + stylesheet pair in every page's <code>&lt;head&gt;</code>. Heading hierarchy across the site:</p>
@@ -1944,7 +1944,7 @@ sequenceDiagram
         A->>A: Fix at source<br/>(Sheet, Indico, or CHANGELOG)<br/>then re-run the workflow
     end
     </div>
-    <div class="diagram-caption">Figure 11 · Soft-review policy. Every automation PR passes through a human's eyes before merge, even when auto-merge is enabled on the workflow.</div>
+    <div class="diagram-caption">Figure 16 · Soft-review policy. Every automation PR passes through a human's eyes before merge, even when auto-merge is enabled on the workflow.</div>
   </div>
 
   <p>The reviewer's job is <strong>not</strong> to fact-check research claims; it is to catch:</p>
@@ -2018,7 +2018,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
   <h2>The Grants page in practice</h2>
   <div class="snapshot">
     <img src="snap-grants.jpg" alt="The Grants & Calls page showing the apply-via-e-COST strip and the first grant card.">
-    <div class="caption">Figure 12 · Grants &amp; Calls. All five NetSec grant schemes, with per-grant e-COST deep links and a vertical awarding-process timeline further down the page.</div>
+    <div class="caption">Figure 17 · Grants &amp; Calls. All five NetSec grant schemes, with per-grant e-COST deep links and a vertical awarding-process timeline further down the page.</div>
   </div>
 
   <h2>Escalation</h2>
@@ -2451,10 +2451,13 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <div class="changelog-entries">
 
-  <h2 class="current">v1.13.0 · August 2026 · Section-level catch-up to website v1.13.0 and v1.14.0</h2>
-  <p class="cl-summary">Closes the catch-up the two previous revisions deferred. Section 02's page graph (Figure 3) and inventory gain the four pages added since the last section pass: the NetSec Network Map (<code>network-map.html</code>), the Working Group 2 policy-workshop page (<code>policy-workshop-2026.html</code>), the slide-templates gallery (<code>slides.html</code>) and the parked <code>essc-2027.html</code>, taking the count from eighteen to twenty-two. The Network Map is drawn with two arrows converging on it rather than one from the nav, which is how it is actually reached, and the parked page is named in the prose and left out of the graph.</p>
+  <h2 class="current">v1.13.1 · August 2026 · Figure numbering</h2>
+  <p class="cl-summary">Every figure is renumbered in document order, one to seventeen. Two numbers were used twice (the About page and the end-to-end stack were both Figure 2, the Directory and the type-pairing plate both Figure 10), and the social and OG-card diagrams carried 13 and 14 while sitting eighth and ninth on the page, so a reader following a number could reach the wrong plate with nothing to tell them. The changelog entries below that point at a figure follow the new numbers, since they point at figures the document still contains: the page graph is Figure 4 and the Network Map is Figure 14. Captions only, no content change.</p>
+
+  <h2>v1.13.0 · August 2026 · Section-level catch-up to website v1.13.0 and v1.14.0</h2>
+  <p class="cl-summary">Closes the catch-up the two previous revisions deferred. Section 02's page graph (Figure 4) and inventory gain the four pages added since the last section pass: the NetSec Network Map (<code>network-map.html</code>), the Working Group 2 policy-workshop page (<code>policy-workshop-2026.html</code>), the slide-templates gallery (<code>slides.html</code>) and the parked <code>essc-2027.html</code>, taking the count from eighteen to twenty-two. The Network Map is drawn with two arrows converging on it rather than one from the nav, which is how it is actually reached, and the parked page is named in the prose and left out of the graph.</p>
   <p class="cl-summary">Section 04 gains <em>What the deploy builds</em>, describing the change that removed 582 machine-written files from the repository: the 84 Open Graph cards, the 252 profile pages and the <code>?v=</code> cache-bust tokens are built by the Pages deploy in a fixed order, each build step is followed by a count assertion against <code>data/bios.json</code>, and the drift gates that guarded the committed artefacts are retired. The pack previously described those files as committed and gated. Member photographs stay committed, and the section says why.</p>
-  <p class="cl-summary">All five site screenshots were re-captured, and a sixth was added: Figure 15, the Network Map. <code>docs/pdf/build.sh --shots</code> captures it alongside the others now. Worth knowing for whoever reads the filenames next: <code>snap-network.jpg</code> is the Directory, named before the Network Map existed, and the Network Map is <code>snap-map.jpg</code>.</p>
+  <p class="cl-summary">All five site screenshots were re-captured, and a sixth was added: Figure 14, the Network Map. <code>docs/pdf/build.sh --shots</code> captures it alongside the others now. Worth knowing for whoever reads the filenames next: <code>snap-network.jpg</code> is the Directory, named before the Network Map existed, and the Network Map is <code>snap-map.jpg</code>.</p>
 
   <h2>v1.12.2 · August 2026 · Cover bump for website v1.13.0 and v1.14.0</h2>
   <p class="cl-summary">Cover bump spanning two website releases. <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.13.0">v1.13.0</a> rebuilt the Directory's mentorship matching around a guided sentence, added LinkedIn beside Bluesky on the social pipeline, and took an editorial design pass over the type scale and the home hero. v1.14.0 brought the NetSec Network Map to Beta at <code>/network-map.html</code> in three languages, with search, zoom, hub panels, a keyboard path and a table of everyone it draws, and it filed the last twenty-nine research keywords that reached no research theme.</p>
@@ -2464,11 +2467,11 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
   <p class="cl-summary">Pack-only revision closing the section-level catch-up the v1.12.0 addendum deferred. Section 02 now carries the post-conference surface: the page graph and the inventory gain the Events page (<code>events.html</code>) and the generated per-member profile pages at <code>people/&lt;slug&gt;.html</code> (177 pages from 59 members at the time of writing), with the hand-authored page count moving to eighteen and the generated profiles counted separately. Section 04's repository layout catches up on the same scope, on two pages it had missed earlier (<code>working-groups.html</code>, <code>summer-school.html</code>), and records the shared <code>assets/js/people-directory.js</code> renderer, the <code>data/orcid-works.json</code> publications cache, and <code>scripts/build-profile-pages.py</code>. The table of contents now carries a page number per section, completing the structural improvement first queued in <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>. This build is also the first PDF to include the news/social and OG-card pipeline sections with Figures 13 and 14, which had landed in the HTML source after the previous build. Site screenshots were re-captured from the live worktree.</p>
 
   <h2>v1.12.0 · June 2026 · Section-level catch-up to website v1.11.0 and v1.12.0</h2>
-  <p class="cl-summary">Cover bump and section-level catch-up spanning website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.11.0">v1.11.0</a> ("Directory filters, mentorship, and a smoother mobile directory") and the v1.12.0 work cut alongside this pack. v1.11.0 gave the directory a research-theme filter and a mentorship axis, rebuilt the mobile filter sheet as a native top-layer <code>&lt;dialog&gt;</code> for Safari-grade responsiveness, and laid the groundwork for the founding cohort. The v1.12.0 cycle adds a dedicated NetSec Summer School page (<code>/summer-school.html</code> + FR + DE), run jointly with EISS, whose faculty roster resolves member headshots live from the directory by name and whose partner block embeds the EISS lockup as an inline SVG. The member-card popover that the ESSC programme and the directory share is now a single <code>window.netsecMemberCard</code> component rather than a copy per page, and the same first-and-last name matcher now also heals the About-page and Working-Group leadership cards, so a card gains its live headshot the first time the person appears in the directory. A quiet "Founding contributor" badge marks the 52 founding proposers on directory cards, computed at sync time from <code>data/founding-proposers.json</code>, with the founding figures (52 contributors across 21 countries) added to About and the press kit. This revision adds <code>summer-school.html</code> to the page graph (Figure 3) and the page inventory and bumps the page count to seventeen, and records the shared member-card component and the founding badge. Site screenshots were re-captured from the live worktree.</p>
+  <p class="cl-summary">Cover bump and section-level catch-up spanning website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.11.0">v1.11.0</a> ("Directory filters, mentorship, and a smoother mobile directory") and the v1.12.0 work cut alongside this pack. v1.11.0 gave the directory a research-theme filter and a mentorship axis, rebuilt the mobile filter sheet as a native top-layer <code>&lt;dialog&gt;</code> for Safari-grade responsiveness, and laid the groundwork for the founding cohort. The v1.12.0 cycle adds a dedicated NetSec Summer School page (<code>/summer-school.html</code> + FR + DE), run jointly with EISS, whose faculty roster resolves member headshots live from the directory by name and whose partner block embeds the EISS lockup as an inline SVG. The member-card popover that the ESSC programme and the directory share is now a single <code>window.netsecMemberCard</code> component rather than a copy per page, and the same first-and-last name matcher now also heals the About-page and Working-Group leadership cards, so a card gains its live headshot the first time the person appears in the directory. A quiet "Founding contributor" badge marks the 52 founding proposers on directory cards, computed at sync time from <code>data/founding-proposers.json</code>, with the founding figures (52 contributors across 21 countries) added to About and the press kit. This revision adds <code>summer-school.html</code> to the page graph (Figure 4) and the page inventory and bumps the page count to seventeen, and records the shared member-card component and the founding badge. Site screenshots were re-captured from the live worktree.</p>
   <p class="cl-summary">Post-conference addendum: the v1.12.0 release grew well beyond what this pack captures, gathering the work merged once the Summer School and the European Security Studies Conference were over. The directory gained real shareable profile pages at <code>/people/&lt;slug&gt;</code> with their own <code>Person</code> structured data, an STSM-hosting signal tied to the grants page, ORCID-fed recent-publications lists on cards, and a mentorship matching panel that pairs offers with requests inside the active filters. A dedicated Events page (<code>/events.html</code> + FR + DE) now gathers every NetSec event in one place, the About page opens with an "In numbers" strip, and the conference pages settled into a fixed archive once Stockholm closed. The bare "MC" abbreviation was spelled out as "Management Committee" across the reader-facing copy, and the triplicated directory renderer became one shared <code>assets/js/people-directory.js</code> module. Section-level catch-up for this post-conference scope (the new pages in the Section 02 page graph and inventory, the shared renderer in Section 04) was deferred to the next pack revision and completed in v1.12.1 above.</p>
 
   <h2>v1.10.0 · May 2026 · Section-level catch-up to website v1.10.0</h2>
-  <p class="cl-summary">Cover bump and section-level catch-up to website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.10.0">v1.10.0</a> ("Working Groups page and milestone-aware roadmap"), cut just before the European Security Conference. The headline is a dedicated Working Groups page (<code>/working-groups.html</code> + FR + DE) rendering each group's objective, leadership, and live membership from a new <code>data/wg.json</code> surface the weekly cost.eu sync writes (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/378">#378</a>), with the Memorandum-of-Understanding titles adopted site-wide and Events cross-linked to the groups they serve in both directions. The public roadmap reads its own GitHub milestones, showing a progress bar per in-flight release and auto-marking the next one in progress. The conference run-up adds non-presenting co-authors to the ESSC programme, an <em>At a NetSec conference</em> FAQ section, a one-click programme PDF, and a chain of print-to-PDF fixes, while the directory keyword pipeline folds American spellings to British English and the weekly member-spotlight engine landed dormant. This revision also refreshes the sections: Section 02 adds <code>working-groups.html</code> to the page graph (Figure 3) and the page inventory and bumps the page count to sixteen, and Section 04's repository layout records the two new data surfaces (<code>data/wg.json</code>, <code>data/roadmap-progress.json</code>) and the <code>sync-cost.py</code> fourth output. Site screenshots were re-captured from the live worktree. This closes the section-level catch-up tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>.</p>
+  <p class="cl-summary">Cover bump and section-level catch-up to website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.10.0">v1.10.0</a> ("Working Groups page and milestone-aware roadmap"), cut just before the European Security Conference. The headline is a dedicated Working Groups page (<code>/working-groups.html</code> + FR + DE) rendering each group's objective, leadership, and live membership from a new <code>data/wg.json</code> surface the weekly cost.eu sync writes (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/378">#378</a>), with the Memorandum-of-Understanding titles adopted site-wide and Events cross-linked to the groups they serve in both directions. The public roadmap reads its own GitHub milestones, showing a progress bar per in-flight release and auto-marking the next one in progress. The conference run-up adds non-presenting co-authors to the ESSC programme, an <em>At a NetSec conference</em> FAQ section, a one-click programme PDF, and a chain of print-to-PDF fixes, while the directory keyword pipeline folds American spellings to British English and the weekly member-spotlight engine landed dormant. This revision also refreshes the sections: Section 02 adds <code>working-groups.html</code> to the page graph (Figure 4) and the page inventory and bumps the page count to sixteen, and Section 04's repository layout records the two new data surfaces (<code>data/wg.json</code>, <code>data/roadmap-progress.json</code>) and the <code>sync-cost.py</code> fourth output. Site screenshots were re-captured from the live worktree. This closes the section-level catch-up tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>.</p>
 
   <h2>v1.9.4 · June 2026 · Cover bump for website v1.9.0</h2>
   <p class="cl-summary">Cover-only bump matching website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.9.0">v1.9.0</a> ("Pre-Stockholm calendar plumbing"), four days before the Summer School and European Security Conference open at Stockholm University. Records the gap to that release: per-event <code>.ics</code> downloads now live at <code>/calendar/&lt;slug&gt;.ics</code> alongside the aggregate subscribable feed; the home-page event cards derive at runtime from <code>data/events.json</code> across all three locales (events-from-JSON refactor, <a href="https://github.com/EISSeuropa/netsec.github.io/issues/249">#249</a>) and each card carries an *Add to calendar* dropdown with Google / Outlook / Apple webcal / direct <code>.ics</code> destinations; the home-page news cards mirror the same pattern from a new <code>data/news.json</code>, with an RSS 2.0 feed at <code>/news.xml</code> exposed for academic and policy aggregators (Feedly / Inoreader / NetNewsWire) via <code>&lt;link rel="alternate"&gt;</code> auto-discovery plus a visible subscribe affordance under the news block. Card descriptions get a five-line clamp with a locale-aware *Read more* toggle. Section-level content not refreshed in this revision; section-level catch-up to website v1.9.0 (Section 02 repo layout adding <code>scripts/build-news-rss.py</code> + the <code>calendar/</code> directory + the new renderers, Section 04 architecture for the runtime-render-from-JSON pattern, the table-of-contents page-numbers structural improvement) remains queued for the next substantive section-level catch-up. Tracked at <a href="https://github.com/EISSeuropa/netsec.github.io/issues/229">#229</a>.</p>
@@ -2500,7 +2503,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
   <h3>Index of changes</h3>
   <h4>Added</h4>
   <ul>
-    <li>Five new pages on the site graph (Figure 3): <code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code>, <code>essc-2026.html</code>. Page inventory rows for each.</li>
+    <li>Five new pages on the site graph (Figure 4): <code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code>, <code>essc-2026.html</code>. Page inventory rows for each.</li>
     <li>Two new data-flow sequence diagrams in Section 02: Indico-to-live-programme and roadmap autostamp.</li>
     <li>Feature inventory entries for Pagefind search, ESSC live programme, directory research-interest keyword pipeline, <code>calendar.ics</code> webcal feed.</li>
     <li>New repository-layout entries: <code>sync-indico.py</code>, <code>sync-roadmap.py</code>, <code>promote-roadmap.py</code>, test files, data files, new workflows.</li>
