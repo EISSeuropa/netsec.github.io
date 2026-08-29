@@ -142,6 +142,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.14.0] · 2026-08-29 — The NetSec Network Map
+
 > The Network Map is the main thing in this release. It draws every member of the Action, the Working Groups they sit in and the research themes they share. You can search it, filter it, walk it from the keyboard, and send someone the view you were looking at. The Directory's research vocabulary also reaches every keyword it holds, and the events listed on the site now match what is actually scheduled. Four themes follow, then a single canonical index at the bottom.
 
 ### The Network Map
@@ -1172,7 +1176,8 @@ Open Graph, Twitter Card, JSON-LD (Organization + WebSite + WebPage), canonical 
 - Members' Wiki seeded with glossary, FAQ, onboarding, meeting-notes convention, decisions log.
 - Dual licensing — MIT for code, CC BY 4.0 for content + docs.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.13.0...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.14.0...HEAD
+[1.14.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.13.0...v1.14.0
 [1.13.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.11.0...v1.12.0
 [1.11.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.10.0...v1.11.0
