@@ -2139,14 +2139,15 @@ def apply_overrides(members: list[dict]) -> None:
         print(f"  · {fix['id']}.{field}: {old!r} → {new!r}")
 
 
-def enrich_keywords(merged: list, bios_data: dict) -> None:
+def enrich_keywords(merged: list, bios_data: dict) -> set[str]:
     """Resolve every member's raw keywords and write the derived fields.
 
     Mutates `merged` in place (each member gains `canonical_keywords` and
     `themes`) and `bios_data` (the three aggregates the directory's filter
-    rows read). Pure apart from the vocabulary files it loads, which is what
-    lets --dry-run replay it over the committed bios.json without a fetch
-    (#1715).
+    rows read), and returns the canonical keywords that resolved to no theme,
+    which main() hands to _emit_pr_summary. Pure apart from the vocabulary
+    files it loads, which is what lets --dry-run replay it over the committed
+    bios.json without a fetch (#1715).
 
     Lifted out of main() unchanged rather than copied, so the dry run and the
     real sync can never disagree about what a keyword resolves to.
@@ -2287,6 +2288,7 @@ def enrich_keywords(merged: list, bios_data: dict) -> None:
         key=lambda e: (-e["count"], e["theme"].lower()),
     )
     bios_data["keyword_theme_map"] = {k: keyword_theme_map[k] for k in sorted(keyword_theme_map)}
+    return uncategorised
 
 
 def main() -> None:
@@ -2357,7 +2359,7 @@ def main() -> None:
     if _map_n:
         print(f"Generated {_map_n} new map avatar(s).")
 
-    enrich_keywords(merged, bios_data)
+    uncategorised = enrich_keywords(merged, bios_data)
 
     # Research-region aggregate (distinct-member count per region). The
     # per-bio `regions` come from the optional Research-regions form field

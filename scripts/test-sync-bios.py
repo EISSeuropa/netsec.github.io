@@ -219,7 +219,7 @@ def test_enrich_keywords_is_callable_on_its_own() -> None:
         {"id": "b", "name": "Dr Grace Hopper", "keywords": ["human securirty"]},
     ]
     aggregates: dict = {}
-    sync_bios.enrich_keywords(members, aggregates)
+    uncategorised = sync_bios.enrich_keywords(members, aggregates)
 
     ada = members[0]["canonical_keywords"]
     # The alias, the place-name drop and the phrase split, all in one member.
@@ -233,6 +233,10 @@ def test_enrich_keywords_is_callable_on_its_own() -> None:
     # The three aggregates the directory's filter rows read.
     for key in ("keyword_aggregate", "theme_aggregate", "keyword_theme_map"):
         expect(f"{key} written", key in aggregates, True)
+    # main() passes this straight to _emit_pr_summary. When the return went
+    # missing the sync died with a NameError on every run that reached the
+    # PR-summary step (#1734 regression).
+    expect("uncategorised returned", isinstance(uncategorised, set), True)
 
 
 def test_country_key() -> None:
