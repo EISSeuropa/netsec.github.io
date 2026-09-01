@@ -142,6 +142,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+#### Added
+
+- A failed scheduled workflow files a tracking issue instead of sitting unread in the Actions tab, and the Python test workflow refuses a pull request that introduces an undefined name.
+
 #### Fixed
 
 - The nightly member-bios sync ran to a crash instead of opening its pull request, so directory updates submitted through the form stopped reaching the site after 28 August 2026.

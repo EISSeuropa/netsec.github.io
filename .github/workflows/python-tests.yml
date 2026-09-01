@@ -37,6 +37,20 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install dependencies
-        run: python -m pip install --quiet -r requirements.txt pytest
+        run: python -m pip install --quiet -r requirements.txt pytest pyflakes
+      # Undefined names only, not the full pyflakes report: the repo has
+      # never been linted, so unused imports and unused locals would fail
+      # the gate on day one for findings nobody is about to fix. An
+      # undefined name is a guaranteed NameError the moment that line runs,
+      # and pytest does not reach most of them. This is the check that
+      # would have caught #1758, where a helper lifted out of main() left
+      # two call sites reading a variable that had gone local with it.
+      - name: Check for undefined names
+        run: |
+          python -m pyflakes $(git ls-files '*.py') > pyflakes.txt || true
+          if grep 'undefined name' pyflakes.txt; then
+            echo "::error::pyflakes found undefined name(s) — see above."
+            exit 1
+          fi
       - name: Run the script test suites
         run: python -m pytest -q
