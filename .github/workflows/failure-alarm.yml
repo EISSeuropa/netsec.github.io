@@ -1,0 +1,86 @@
+# Scheduled-workflow failure alarm.
+#
+# The site's data freshness rides on unattended cron workflows (the bios,
+# WG-membership and Indico syncs, the spotlight rotation, the roadmap
+# autostamp) plus the Pages deploy. A failed run was discoverable only by
+# reading the Actions tab, so a sync could quietly break and nobody would
+# know: the bios sync died on a NameError and failed four nights running
+# before anyone looked. This workflow turns any failure into a tracking
+# issue the maintainer actually sees.
+#
+# Mechanics: `workflow_run` fires when a listed workflow completes (it only
+# triggers for runs on the default branch, which is exactly the scheduled
+# and deploy population). On `conclusion == failure` it opens an issue
+# titled after the failed workflow, or comments on the existing open one so
+# repeat failures thread instead of spamming. Issues carry the `automated`
+# and `bug` labels and the "Backlog — Under watch" milestone (CLAUDE.md
+# §10: no open issue without a milestone). Close the issue once the
+# underlying cause is fixed.
+#
+# Only `failure` fires the alarm, not `cancelled`. CLAUDE.md §16 records a
+# six-day Pages outage that read as `cancelled`, but the Pages deploy
+# cancels superseded runs by design on an ordinary push, so alarming on
+# `cancelled` would file an issue most days. That outage needs the
+# deployments-API check in §16 rather than this workflow.
+#
+# Ported from the EISS repo's equivalent (EISSeuropa/EISSeuropa.github.io#56).
+#
+# No third-party actions, so nothing to SHA-pin: the step uses the
+# preinstalled gh CLI with the runner's GITHUB_TOKEN.
+name: Workflow failure alarm
+
+on:
+  workflow_run:
+    workflows:
+      - Sync member bios from Google Form
+      - Sync WG membership from cost.eu
+      - Sync events from Indico
+      - Rotate member spotlight
+      - Refresh roadmap surfaces
+      - AUTOPR token health
+      - Deploy to GitHub Pages
+    types: [completed]
+
+permissions:
+  issues: write
+
+jobs:
+  alarm:
+    name: Open or update the alarm issue
+    if: github.event.workflow_run.conclusion == 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: File or thread the failure
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WF_NAME: ${{ github.event.workflow_run.name }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          RUN_STARTED: ${{ github.event.workflow_run.run_started_at }}
+          RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+        run: |
+          set -euo pipefail
+          title="CI alarm: \"${WF_NAME}\" failed"
+          body="The **${WF_NAME}** workflow failed.
+
+          - Run: ${RUN_URL} (attempt ${RUN_ATTEMPT})
+          - Started: ${RUN_STARTED}
+
+          Filed automatically by the failure-alarm workflow. Close this issue once the underlying cause is fixed. A later failure of the same workflow opens a fresh issue."
+
+          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" \
+            --state open --label automated \
+            --search "\"$title\" in:title" \
+            --json number --jq '.[0].number // empty')
+
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" \
+              --body "Failed again: ${RUN_URL} (attempt ${RUN_ATTEMPT}, started ${RUN_STARTED})."
+            echo "Threaded onto existing issue #$existing"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" \
+              --title "$title" \
+              --body "$body" \
+              --label automated --label bug \
+              --milestone "Backlog — Under watch"
+            echo "Opened a new alarm issue"
+          fi
