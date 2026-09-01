@@ -148,6 +148,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The Events page told a visitor without JavaScript to see the events block on the home page, and linked to the Events page they were already on. It now links to the home page in the reader's own language.
 - Adding the Ankara policy workshop to a calendar placed it an hour late. Every event was published in the Stockholm time zone, which was the venue for the two June events, and Türkiye is an hour ahead. An event now carries the time zone of its own venue.
 - The nightly member-bios sync re-encoded 31 of the 71 map headshots every run and reported them as changed, which raised a false alarm on each pass.
 - The nightly member-bios sync ran to a crash instead of opening its pull request, so directory updates submitted through the form stopped reaching the site after 28 August 2026.
