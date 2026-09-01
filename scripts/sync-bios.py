@@ -961,8 +961,7 @@ MAP_AVATAR_WIDTH = 128
 def ensure_map_avatars() -> int:
     """Write a map-sized .webp for every headshot, into
     assets/images/people/map/. Idempotent the same way ensure_people_webp
-    is: a derivative newer than its source is left alone. Returns the
-    count written.
+    is, through encode_webp's byte comparison. Returns the count written.
 
     Sourced from the .webp the directory already serves where one exists,
     falling back to the original, so this never re-encodes a JPEG twice.
@@ -980,30 +979,55 @@ def ensure_map_avatars() -> int:
         preferred = src.with_suffix(".webp")
         source = preferred if preferred.exists() else src
         dest = MAP_AVATAR_DIR / f"{src.stem}.webp"
-        if dest.exists() and dest.stat().st_mtime >= source.stat().st_mtime:
-            continue
         try:
-            img = Image.open(source)
-            if img.mode in ("RGBA", "P", "LA"):
-                img = img.convert("RGB")
-            if img.width > MAP_AVATAR_WIDTH:
-                ratio = MAP_AVATAR_WIDTH / img.width
-                img = img.resize(
-                    (MAP_AVATAR_WIDTH, int(img.height * ratio)), Image.LANCZOS,
-                )
-            img.save(dest, format="WEBP", quality=80, method=6)
-            written += 1
-            PHOTOS_CHANGED.append(str(dest.relative_to(ROOT)).replace(os.sep, "/"))
+            if encode_webp(source, dest, MAP_AVATAR_WIDTH):
+                written += 1
+                PHOTOS_CHANGED.append(str(dest.relative_to(ROOT)).replace(os.sep, "/"))
         except Exception as e:
             print(f"  ! map avatar encode failed for {src.name}: {e}", file=sys.stderr)
     return written
 
 
+def encode_webp(source, dest, max_width: int) -> bool:
+    """Encode `source` to `dest` as WebP, downscaled to `max_width`, and
+    report whether the file on disk actually changed.
+
+    Compares the encoded bytes against what is already there rather than
+    comparing mtimes. Git does not store mtimes, so actions/checkout stamps
+    every file with the checkout time in index order, and a source that
+    happens to sort after its derivative looks newer on every single run.
+    That is what made the map avatars re-encode nightly: the derivative
+    lives at assets/images/people/map/<slug>.webp, so every slug sorting at
+    or after "map" had its source written later, and 31 of 71 avatars were
+    rewritten each night. The bytes were identical, so git saw nothing and
+    the auto-PR stayed empty, but PHOTOS_CHANGED filled up and tripped the
+    "data unchanged, photos rewritten" alarm (#1758's log). The encode is
+    deterministic for a given source and Pillow build, so byte equality is
+    the honest test of whether anything changed.
+    """
+    img = Image.open(source)
+    if img.mode in ("RGBA", "P", "LA"):
+        # WebP keeps alpha, but the headshots are opaque circles; flatten to
+        # RGB for the smallest, most predictable output.
+        img = img.convert("RGB")
+    if img.width > max_width:
+        ratio = max_width / img.width
+        img = img.resize((max_width, int(img.height * ratio)), Image.LANCZOS)
+    buf = io.BytesIO()
+    img.save(buf, format="WEBP", quality=80, method=6)
+    encoded = buf.getvalue()
+    if dest.exists() and dest.read_bytes() == encoded:
+        return False
+    dest.write_bytes(encoded)
+    return True
+
+
 def ensure_people_webp() -> int:
     """Make sure every headshot in assets/images/people/ has a sibling
     .webp (the smaller format the directory serves first, with the
-    original as the <picture> fallback). Idempotent: skips a slug whose
-    .webp is already newer than its source. Returns the count written.
+    original as the <picture> fallback). Idempotent: encode_webp leaves a
+    derivative alone when the re-encode is byte-identical. Returns the
+    count written.
 
     Runs over .jpg / .jpeg / .png sources, keyed by basename, so it
     covers both the form-synced .jpg files and the hand-added seed /
@@ -1016,22 +1040,10 @@ def ensure_people_webp() -> int:
         if src.suffix.lower() not in (".jpg", ".jpeg", ".png"):
             continue
         dest = src.with_suffix(".webp")
-        if dest.exists() and dest.stat().st_mtime >= src.stat().st_mtime:
-            continue
         try:
-            img = Image.open(src)
-            if img.mode in ("RGBA", "P", "LA"):
-                # WebP keeps alpha, but the headshots are opaque circles;
-                # flatten to RGB for the smallest, most predictable output.
-                img = img.convert("RGB")
-            if img.width > MAX_PHOTO_WIDTH:
-                ratio = MAX_PHOTO_WIDTH / img.width
-                img = img.resize(
-                    (MAX_PHOTO_WIDTH, int(img.height * ratio)), Image.LANCZOS,
-                )
-            img.save(dest, format="WEBP", quality=80, method=6)
-            written += 1
-            PHOTOS_CHANGED.append(str(dest.relative_to(ROOT)).replace(os.sep, "/"))
+            if encode_webp(src, dest, MAX_PHOTO_WIDTH):
+                written += 1
+                PHOTOS_CHANGED.append(str(dest.relative_to(ROOT)).replace(os.sep, "/"))
         except Exception as e:
             print(f"  ! webp encode failed for {src.name}: {e}", file=sys.stderr)
     return written
