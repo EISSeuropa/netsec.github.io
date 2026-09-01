@@ -450,3 +450,61 @@ def test_main_write_then_check_roundtrip_clean(sandbox, monkeypatch):
     assert bc.main() == 0
     monkeypatch.setattr(bc.sys, "argv", ["build-calendar.py", "--check"])
     assert bc.main() == 0
+
+
+# ─── per-event time zones ─────────────────────────────────────────
+
+def test_event_without_a_tzid_takes_the_calendar_default():
+    assert bc.event_tzid(make_event(), "Europe/Stockholm") == "Europe/Stockholm"
+
+
+def test_event_tzid_wins_over_the_calendar_default():
+    ev = make_event(tzid="Europe/Istanbul")
+    assert bc.event_tzid(ev, "Europe/Stockholm") == "Europe/Istanbul"
+
+
+def test_vevent_stamps_the_events_own_zone():
+    """The Ankara policy workshop starts at 09:00 local. Emitted under the
+    calendar-wide Europe/Stockholm it resolved to 10:00 Ankara, an hour
+    late for anyone who added it to their calendar."""
+    ev = make_event(tzid="Europe/Istanbul", start="2026-09-13T09:00",
+                    end="2026-09-13T18:00")
+    lines = bc.render_vevent(ev, "20260528T120000Z", "Europe/Stockholm")
+    assert "DTSTART;TZID=Europe/Istanbul:20260913T090000" in lines
+    assert "DTEND;TZID=Europe/Istanbul:20260913T180000" in lines
+    assert not [ln for ln in lines if "Europe/Stockholm" in ln]
+
+
+def test_aggregate_inlines_a_vtimezone_for_every_zone_used():
+    """Every TZID an event references has to resolve inside the file, or a
+    calendar client falls back to its own guess."""
+    data = make_data(events=[
+        make_event(uid="a@netsec-cost.eu"),
+        make_event(uid="b@netsec-cost.eu", tzid="Europe/Istanbul"),
+    ])
+    ics = bc.build_ics(data)
+    assert "TZID:Europe/Stockholm" in ics
+    assert "TZID:Europe/Istanbul" in ics
+    assert ics.count("BEGIN:VTIMEZONE") == 2
+
+
+def test_aggregate_does_not_repeat_a_zone_two_events_share():
+    data = make_data(events=[
+        make_event(uid="a@netsec-cost.eu", tzid="Europe/Istanbul"),
+        make_event(uid="b@netsec-cost.eu", tzid="Europe/Istanbul"),
+    ])
+    ics = bc.build_ics(data)
+    assert ics.count("BEGIN:VTIMEZONE") == 2  # the default plus Istanbul, once
+
+
+def test_single_event_file_carries_only_its_own_zone():
+    data = make_data()
+    ev = make_event(tzid="Europe/Istanbul")
+    ics = bc.build_single_event_ics(ev, data)
+    assert "TZID:Europe/Istanbul" in ics
+    assert "Europe/Stockholm" not in ics
+
+
+def test_unknown_zone_is_refused_rather_than_guessed():
+    with pytest.raises(SystemExit):
+        bc.render_vtimezone("Mars/Olympus_Mons")
