@@ -148,6 +148,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The nightly member-bios sync re-encoded 31 of the 71 map headshots every run and reported them as changed, which raised a false alarm on each pass.
 - The nightly member-bios sync ran to a crash instead of opening its pull request, so directory updates submitted through the form stopped reaching the site after 28 August 2026.
 
 ## [1.14.0] · 2026-08-29 — The NetSec Network Map
