@@ -889,7 +889,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   margin:0 0 14px;font-size:.78rem;font-weight:700;
   text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
 }
-.events-empty{margin:0}
+.events-empty{margin:0;color:var(--muted)}
 /* The event cards render inside .prose-page on /events.html, where
    `.prose-page a` (0,1,1) would underline + recolour them. Scope a reset
    at two classes (0,2,0) so the WG pills, the card CTA, and the calendar
