@@ -2,6 +2,7 @@
 
 Covers the freshness rule and the resize, which are the two places a
 mistake would ship either a stale derivative or a needlessly large one.
+The freshness rule compares bytes rather than mtimes since #1761.
 Pillow is a hard requirement here, unlike in the script itself, where its
 absence is a no-op rather than a failure.
 """
@@ -31,13 +32,27 @@ def test_missing_derivative_is_stale(tmp_path):
     assert mod.is_stale(src, tmp_path / "a.webp")
 
 
-def test_derivative_older_than_its_source_is_stale(tmp_path):
+def test_changed_source_makes_the_derivative_stale(tmp_path):
+    src = _jpeg(tmp_path / "a.jpg")
+    out = tmp_path / "a.webp"
+    mod.build(src, out)
+    # Replace the photograph behind the same filename, the case the gate
+    # exists to catch.
+    Image.new("RGB", (1400, 1050), (10, 200, 30)).save(src, "JPEG")
+    assert mod.is_stale(src, out)
+
+
+def test_a_newer_source_mtime_alone_is_not_staleness(tmp_path):
+    """The regression guard for #1761. is_stale compared mtimes until then,
+    and actions/checkout stamps every file with the checkout time in index
+    order, so a source that sorts after its derivative looks newer on every
+    run. Same bytes means current, whatever the timestamps say."""
     src = _jpeg(tmp_path / "a.jpg")
     out = tmp_path / "a.webp"
     mod.build(src, out)
     import os
     os.utime(src, (out.stat().st_mtime + 10, out.stat().st_mtime + 10))
-    assert mod.is_stale(src, out)
+    assert not mod.is_stale(src, out)
 
 
 def test_fresh_derivative_is_left_alone(tmp_path):

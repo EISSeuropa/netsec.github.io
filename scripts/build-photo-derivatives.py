@@ -23,6 +23,7 @@ run that never asked for images.
 """
 from __future__ import annotations
 
+import io
 import sys
 from pathlib import Path
 
@@ -47,21 +48,40 @@ def sources() -> list[Path]:
     return out
 
 
-def is_stale(src: Path, derivative: Path) -> bool:
-    """A derivative older than its source has to be rebuilt. Mirrors the
-    freshness rule ensure_people_webp uses on the headshots."""
-    return (not derivative.exists()
-            or derivative.stat().st_mtime < src.stat().st_mtime)
-
-
-def build(src: Path, derivative: Path) -> None:
+def render(src: Path) -> bytes:
+    """Encode `src` to the derivative's bytes without touching the disk."""
     from PIL import Image
+    buf = io.BytesIO()
     with Image.open(src) as im:
         im = im.convert("RGB")
         if im.width > MAX_WIDTH:
             height = round(im.height * MAX_WIDTH / im.width)
             im = im.resize((MAX_WIDTH, height), Image.LANCZOS)
-        im.save(derivative, "WEBP", quality=QUALITY, method=6)
+        im.save(buf, "WEBP", quality=QUALITY, method=6)
+    return buf.getvalue()
+
+
+def is_stale(src: Path, derivative: Path) -> bool:
+    """A derivative is stale when it is missing, or when re-encoding its
+    source gives different bytes.
+
+    This used to compare mtimes, which is the rule sync-bios.py used until
+    #1761. Git does not store mtimes, so actions/checkout stamps every file
+    with the checkout time in index order, and a source written after its
+    derivative looks newer on every run. It was correct here only because
+    `.webp` sorts after `.jpg`, `.jpeg` and `.png`, so the derivative always
+    happened to be written last. Adding a subdirectory to PHOTO_DIRS whose
+    name sorts before the filenames in it would have broken that, and here
+    the failure mode is a drift gate that fails on every pull request.
+    Comparing bytes does not depend on where a path sorts. The encode is
+    deterministic for a given source and Pillow build, so it is also the
+    honest test of whether the derivative is current.
+    """
+    return not derivative.exists() or derivative.read_bytes() != render(src)
+
+
+def build(src: Path, derivative: Path) -> None:
+    derivative.write_bytes(render(src))
 
 
 def main(argv: list) -> int:
