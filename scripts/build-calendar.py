@@ -111,21 +111,12 @@ def fmt_local(stamp: str) -> str:
     return f"{y}{m}{d}T{hh}{mm}00"
 
 
-def render_vtimezone(tzid: str) -> list[str]:
-    """Inline the Europe/Stockholm VTIMEZONE.
-
-    For now we only ship the one zone (Stockholm is the venue for
-    the current events). If a future event sits elsewhere, add the
-    matching VTIMEZONE block here keyed off `tzid`.
-    """
-    if tzid != "Europe/Stockholm":
-        raise SystemExit(
-            f"VTIMEZONE for {tzid!r} not defined in {__file__}. "
-            "Add a block for the new zone."
-        )
-    return [
-        "BEGIN:VTIMEZONE",
-        "TZID:Europe/Stockholm",
+# VTIMEZONE blocks, keyed by TZID. An event carries its own `tzid` when the
+# venue is not in the calendar's default zone, matching what
+# assets/js/home-events.js already does for the Google and Outlook links.
+# Adding a venue in a new zone means adding its block here.
+VTIMEZONES: dict[str, list[str]] = {
+    "Europe/Stockholm": [
         "X-LIC-LOCATION:Europe/Stockholm",
         "BEGIN:STANDARD",
         "DTSTART:19701025T030000",
@@ -141,23 +132,67 @@ def render_vtimezone(tzid: str) -> list[str]:
         "TZNAME:CEST",
         "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
         "END:DAYLIGHT",
-        "END:VTIMEZONE",
-    ]
+    ],
+    # Türkiye has been on UTC+3 year-round since September 2016, so there is
+    # one component and no RRULE.
+    "Europe/Istanbul": [
+        "X-LIC-LOCATION:Europe/Istanbul",
+        "BEGIN:STANDARD",
+        "DTSTART:19700101T000000",
+        "TZOFFSETFROM:+0300",
+        "TZOFFSETTO:+0300",
+        "TZNAME:+03",
+        "END:STANDARD",
+    ],
+}
+
+
+def event_tzid(ev: dict, default: str) -> str:
+    """The zone an event's wall-clock times are in.
+
+    Venue-local, so an event outside the calendar's default zone carries its
+    own `tzid`. Without this every event inherited Europe/Stockholm, and the
+    Ankara policy workshop's 09:00 start imported an hour late for anyone
+    who added it to their calendar.
+    """
+    return ev.get("tzid") or default
+
+
+def render_vtimezone(tzid: str) -> list[str]:
+    """Inline one VTIMEZONE block."""
+    body = VTIMEZONES.get(tzid)
+    if body is None:
+        raise SystemExit(
+            f"VTIMEZONE for {tzid!r} not defined in {__file__}. "
+            "Add a block for the new zone."
+        )
+    return ["BEGIN:VTIMEZONE", f"TZID:{tzid}"] + body + ["END:VTIMEZONE"]
+
+
+def render_vtimezones(tzids) -> list[str]:
+    """Inline a VTIMEZONE for each zone used, in first-seen order, so every
+    TZID an event references resolves inside the file."""
+    out: list[str] = []
+    for tzid in dict.fromkeys(tzids):
+        out.extend(render_vtimezone(tzid))
+    return out
 
 
 def render_vevent(ev: dict, dtstamp: str, tzid: str) -> list[str]:
-    """Render one VEVENT.
+    """Render one VEVENT. `tzid` is the calendar default; the event's own
+    `tzid` wins where it has one.
 
     Keys honoured on `ev` (the rest are silently ignored):
       uid, summary, description, location, url, start, end,
       organizer{cn,mailto}, categories[], status.
     """
+    ev_tzid = event_tzid(ev, tzid)
     out = [
         "BEGIN:VEVENT",
         f"UID:{ev['uid']}",
         f"DTSTAMP:{dtstamp}",
-        f"DTSTART;TZID={tzid}:{fmt_local(ev['start'])}",
-        f"DTEND;TZID={tzid}:{fmt_local(ev['end'])}",
+        f"DTSTART;TZID={ev_tzid}:{fmt_local(ev['start'])}",
+        f"DTEND;TZID={ev_tzid}:{fmt_local(ev['end'])}",
         f"SUMMARY:{escape_text(ev['summary'])}",
         f"DESCRIPTION:{escape_text(ev['description'])}",
         f"LOCATION:{escape_text(ev['location'])}",
@@ -198,7 +233,8 @@ def build_ics(data: dict) -> str:
         f"REFRESH-INTERVAL;VALUE=DURATION:P{data['refresh_days']}D",
         f"X-PUBLISHED-TTL:P{data['refresh_days']}D",
     ]
-    lines.extend(render_vtimezone(tzid))
+    lines.extend(render_vtimezones(
+        [tzid] + [event_tzid(ev, tzid) for ev in data["events"]]))
     for ev in data["events"]:
         lines.extend(render_vevent(ev, dtstamp, tzid))
     lines.append("END:VCALENDAR")
@@ -221,7 +257,7 @@ def build_single_event_ics(ev: dict, data: dict) -> str:
         "CALSCALE:GREGORIAN",
         "METHOD:PUBLISH",
     ]
-    lines.extend(render_vtimezone(tzid))
+    lines.extend(render_vtimezone(event_tzid(ev, tzid)))
     lines.extend(render_vevent(ev, dtstamp, tzid))
     lines.append("END:VCALENDAR")
     return "\n".join(lines) + "\n"
