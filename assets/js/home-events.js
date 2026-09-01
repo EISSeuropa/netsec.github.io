@@ -51,6 +51,7 @@
       wgAria:          'Working Groups served',
       jointBadge:      'Joint EISS × NetSec',
       jointTitle:      'Jointly organised by EISS and NetSec',
+      noUpcoming:      'No upcoming events right now.',
     },
     fr: {
       type: {
@@ -71,6 +72,7 @@
       wgAria:          'Groupes de travail concernés',
       jointBadge:      'Conjoint EISS × NetSec',
       jointTitle:      'Organisé conjointement par EISS et NetSec',
+      noUpcoming:      'Aucun événement à venir pour le moment.',
     },
     de: {
       type: {
@@ -91,6 +93,7 @@
       wgAria:          'Beteiligte Arbeitsgruppen',
       jointBadge:      'Gemeinsam EISS × NetSec',
       jointTitle:      'Gemeinsam von EISS und NetSec organisiert',
+      noUpcoming:      'Derzeit keine bevorstehenden Veranstaltungen.',
     },
   };
 
@@ -556,11 +559,18 @@
         const bd = zonedTimeToUTC(b.start, b.tzid || TZID);
         return (ad ? ad.getTime() : 0) - (bd ? bd.getTime() : 0);
       });
-    if (!events.length) return;
-
     // Render off-DOM first, then swap to avoid a flash.
     const frag = document.createDocumentFragment();
-    events.forEach(ev => frag.appendChild(buildCard(ev, locale, t)));
+    if (!events.length) {
+      // The fetch succeeded and nothing is upcoming, which is not the same
+      // as the fetch failing. Returning here used to leave the hand-written
+      // fallback cards on screen, so every visitor kept seeing a concluded
+      // event advertised as upcoming. The `events-seeall` link sits directly
+      // below this block and still points at the full catalogue.
+      frag.appendChild(el('p', { class: 'events-empty' }, [t.noUpcoming]));
+    } else {
+      events.forEach(ev => frag.appendChild(buildCard(ev, locale, t)));
+    }
     container.innerHTML = '';
     container.appendChild(frag);
     container.dataset.renderedFromJson = '1';
@@ -640,7 +650,7 @@
 
       const up = el('section', { class: 'events-group events-group--upcoming' },
         [heading(p.upcoming, upcoming.length)]);
-      up.appendChild(upcoming.length ? gridOf(upcoming) : el('p', { class: 'events-empty muted' }, [p.empty]));
+      up.appendChild(upcoming.length ? gridOf(upcoming) : el('p', { class: 'events-empty' }, [p.empty]));
       sections.appendChild(up);
 
       if (past.length) {

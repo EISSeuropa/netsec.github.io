@@ -170,6 +170,18 @@ jobs:
             exit 1
           }
 
+      - name: Expire the home page's fallback event cards
+        # The hand-written cards in `#events .event-list` are what a reader
+        # sees when home-events.js does not run or its fetch fails. Nothing
+        # expired them, so from the morning after an event the fallback
+        # advertised a concluded workshop as upcoming (#1769). This runs here
+        # rather than as a commit-time drift gate because the fact that goes
+        # stale is the date, not the file: a page correct when it merged is
+        # wrong three weeks later, and no pull request need happen in between.
+        # The schedule above deploys every six hours, which is the refresh.
+        # Runs before Pagefind so the index never picks up a concluded card.
+        run: python3 scripts/prune-past-event-cards.py
+
       - name: Build Pagefind index (and bio search stubs)
         # scripts/build-search.sh handles both: regenerates the bio
         # stubs from data/bios.json, then runs pagefind against the

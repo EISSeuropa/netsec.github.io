@@ -148,6 +148,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The home page kept a concluded event in its Events block. Once nothing was upcoming the block held its hand-written cards, so the September policy workshop would have been advertised as forthcoming the morning after it ended. Concluded events now drop off on their own in all three languages, and a block with nothing upcoming says so.
 - The Events page told a visitor without JavaScript to see the events block on the home page, and linked to the Events page they were already on. It now links to the home page in the reader's own language.
 - Adding the Ankara policy workshop to a calendar placed it an hour late. Every event was published in the Stockholm time zone, which was the venue for the two June events, and Türkiye is an hour ahead. An event now carries the time zone of its own venue.
 - The nightly member-bios sync re-encoded 31 of the 71 map headshots every run and reported them as changed, which raised a false alarm on each pass.
