@@ -152,6 +152,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- Link text in light mode sat at 3.43:1 against the page, under the WCAG AA floor, on body links, the see-all links and the audience-router label across the site. Links now carry their own colour, a darker blue reading 4.96:1 on the page and 5.28:1 on a white card. The Apple blue keeps its published value on the surfaces that use it.
 - Dark mode failed the WCAG AA contrast floor in eleven places, among them the skip link a keyboard user reaches first, which rendered white on near-white, and the *Funded by the European Union* attribution in the footer of every page. An accessibility scan counted 176 contrast errors across the 66 pages and now counts 21.
 - The home page kept a concluded event in its Events block. Once nothing was upcoming the block held its hand-written cards, so the September policy workshop would have been advertised as forthcoming the morning after it ended. Concluded events now drop off on their own in all three languages, and a block with nothing upcoming says so.
 - The Events page told a visitor without JavaScript to see the events block on the home page, and linked to the Events page they were already on. It now links to the home page in the reader's own language.

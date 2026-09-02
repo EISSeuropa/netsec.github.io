@@ -18,7 +18,7 @@
 .network-map-proto-pill{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 11px;border-radius:999px;background:rgba(245,158,11,.16);border:1px solid rgba(245,158,11,.45);color:#8a5a00}
 .dark .network-map-proto-pill{color:#ffd489}
 .network-map-lede{color:var(--muted);max-width:74ch;margin:0 0 18px;font-size:.98rem}
-.network-map-lede a{color:var(--accent-2)}
+.network-map-lede a{color:var(--link)}
 /* The statistics sit under the map now, not above it: six tiles cost 70px on a
    desktop and 229px on a phone, and they were the last thing between a visitor
    and the thing they came for. */
@@ -33,7 +33,7 @@
   background:rgba(10,132,255,.06);border:1px solid rgba(10,132,255,.22);
 }
 .dark .network-map-noscript{background:rgba(110,161,255,.10);border-color:rgba(110,161,255,.28)}
-.network-map-noscript a{color:var(--accent-2);font-weight:500}
+.network-map-noscript a{color:var(--link);font-weight:500}
 .network-map-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
 .network-map-controls .lbl{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:2px}
 .network-map-wg-chip{font:inherit;font-size:.82rem;font-weight:600;padding:6px 13px;border-radius:999px;cursor:pointer;border:1px solid transparent;color:#fff;opacity:.94;transition:opacity .15s,transform .15s}
@@ -57,7 +57,7 @@
 .network-map-card .meta{font-size:.8rem;color:var(--muted);margin-top:2px}
 .network-map-card .wgs{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
 .network-map-card .wgp{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;color:#fff}
-.network-map-card .go{font-size:.78rem;color:var(--accent-2);margin-top:7px}
+.network-map-card .go{font-size:.78rem;color:var(--link);margin-top:7px}
 .network-map-legend{display:flex;gap:16px;flex-wrap:wrap;margin:12px 2px 0;font-size:.78rem;color:var(--muted);align-items:center}
 .network-map-legend .sw{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:5px}
 .network-map-legend .sw-ring{background:transparent;border:2px solid}
@@ -101,7 +101,7 @@
    keeps its 191 rows out of the tab order. */
 .network-map-list{margin:18px 0 0;border-top:1px solid rgba(11,18,32,.10);padding-top:14px}
 .dark .network-map-list{border-top-color:var(--glass-border)}
-.network-map-list__summary{cursor:pointer;font-size:.86rem;font-weight:600;color:var(--accent-2);padding:4px 0}
+.network-map-list__summary{cursor:pointer;font-size:.86rem;font-weight:600;color:var(--link);padding:4px 0}
 .network-map-list__summary:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
 .network-map-list__hint{font-size:.78rem;color:var(--muted);margin:6px 0 10px}
 .network-map-list__scroll{max-height:460px;overflow:auto;border:1px solid rgba(11,18,32,.10);border-radius:12px}
@@ -113,7 +113,7 @@
 .network-map-list__table thead th{position:sticky;top:0;background:var(--bg-1);font-weight:700;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);z-index:1}
 .dark .network-map-list__table thead th{background:#121a2c}
 .network-map-list__table tbody th{font-weight:500;color:var(--ink)}
-.network-map-list__table a{color:var(--accent-2)}
+.network-map-list__table a{color:var(--link)}
 
 /* ── Find ────────────────────────────────────────────────────────────────────
    A search box over 191 people, backed by a native <datalist> rather than a
@@ -177,7 +177,7 @@
 .nmhp-solo{font:inherit;font-size:.82rem;font-weight:600;padding:7px 15px;border-radius:999px;cursor:pointer;
   color:#fff;background:var(--accent-2);border:1px solid transparent}
 .nmhp-solo:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-.nmhp-link{font-size:.82rem;color:var(--accent-2)}
+.nmhp-link{font-size:.82rem;color:var(--link)}
 @media (pointer:coarse){ .nmhp-solo,.nmhp-bridge{padding-top:11px;padding-bottom:11px} }
 
 /* The two lens chips fit one row in English and wrapped to two in French and
@@ -210,14 +210,14 @@
 
 /* The profile gap, stated under the figures it follows from (#1647). */
 .network-map-gap{margin:9px 2px 0;font-size:.82rem;color:var(--muted)}
-.network-map-gap a{color:var(--accent-2)}
+.network-map-gap a{color:var(--link)}
 
 /* Findings (#1646): what the map's own structure knows, under the figures that
    count the roster. The two that name a hub open it, so they are buttons. */
 .network-map-findings{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;margin:9px 2px 0;font-size:.82rem;color:var(--muted)}
 .network-map-findings:empty{margin:0}
 .network-map-finding{font:inherit;font-size:.82rem;padding:0;cursor:pointer;text-align:left;
-  color:var(--accent-2);background:none;border:0;border-bottom:1px solid transparent}
+  color:var(--link);background:none;border:0;border-bottom:1px solid transparent}
 .network-map-finding:hover{border-bottom-color:currentColor}
 .network-map-finding:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
 @media (pointer:coarse){ .network-map-finding{padding:6px 0} }
