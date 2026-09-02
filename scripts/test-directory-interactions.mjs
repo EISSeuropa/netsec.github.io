@@ -587,6 +587,72 @@ const journeys = {
     }
   },
 
+  // #1782. The counts on the chips came from bios.json, which is
+  // network-wide, so a theme advertised its sitewide total and then returned
+  // an empty grid once a Working Group was picked. The contract now is that a
+  // chip yields exactly what it says, inside whatever else is already on.
+  async 'a facet count matches what the chip actually yields'() {
+    const page = await openDirectory('#wg=4');
+    // The theme row is a collapsed <details>, so its chips have no box and
+    // page.click would land on nothing. A visitor expands it first.
+    await page.evaluate(() => { document.getElementById('members-keyword-filter').open = true; });
+    const chips = await page.$$eval('#members-keyword-filter-chips [data-slug]',
+      els => els.map(e => ({ slug: e.dataset.slug, n: +e.querySelector('.count').textContent, disabled: e.disabled })));
+    assert(chips.length > 0, 'no theme chips rendered');
+    assert(chips.some(c => c.disabled), 'no theme was disabled inside WG4, so the zero case went untested');
+    for (const c of chips) {
+      if (c.disabled) {
+        assert(c.n === 0, `${c.slug} is disabled but advertises ${c.n}`);
+        continue;
+      }
+      await clickWhenReady(page, `#members-keyword-filter-chips [data-slug="${c.slug}"]`);
+      await sleep(150);
+      const got = await gridCount(page);
+      assert(got === c.n, `${c.slug} promised ${c.n} inside WG4 and rendered ${got}`);
+      await clickWhenReady(page, `#members-keyword-filter-chips [data-slug="${c.slug}"]`);
+      await sleep(150);
+    }
+    await page.close();
+  },
+
+  // #1781. A zero-result filter used to get the no-data card, which told the
+  // visitor the directory was empty. It now names the filters that produced
+  // the zero and lets each be removed from the card.
+  async 'a zero-result filter offers a way out'() {
+    const page = await openDirectory('#wg=4');
+    await page.type('#member-search', 'zzzznotamember');
+    await sleep(400);   // debounce is 120 ms
+    assert(await gridCount(page) === 0, 'the probe query still matched somebody');
+    const seen = await page.evaluate(() => {
+      const e = document.getElementById('members-empty');
+      return {
+        cardShown: !e.hidden,
+        noDataHidden: e.querySelector('[data-empty-nodata]').hidden,
+        noMatchHidden: e.querySelector('[data-empty-nomatch]').hidden,
+        pills: [...e.querySelectorAll('[data-empty-pills] .members-active-filter')].map(b => b.textContent.trim()),
+      };
+    });
+    assert(seen.cardShown, 'the empty card stayed hidden on zero results');
+    assert(seen.noDataHidden, 'a filtered zero showed the no-data message');
+    assert(!seen.noMatchHidden, 'a filtered zero did not show the no-match message');
+    assert(seen.pills.length === 2, `expected the query and WG4 as pills, got ${JSON.stringify(seen.pills)}`);
+    assert(seen.pills.some(p => p === 'WG4'), `the Working-Group pill carried its count into the label: ${JSON.stringify(seen.pills)}`);
+    // The card's own reset returns the full directory, so recovery never
+    // depends on scrolling back to the result bar.
+    await clickWhenReady(page, '#members-empty [data-empty-clear]');
+    await sleep(400);
+    assert(await gridCount(page) > 0, 'Clear all filters left the grid empty');
+    const rest = await page.evaluate(() => {
+      const e = document.getElementById('members-empty');
+      return { cardShown: !e.hidden, noDataHidden: e.querySelector('[data-empty-nodata]').hidden };
+    });
+    assert(!rest.cardShown, 'the empty card stayed up after the reset');
+    // Reconciled even while hidden, so a later no-data zero cannot inherit
+    // the no-match face left behind by this one.
+    assert(!rest.noDataHidden, 'the no-data face was left hidden after the reset');
+    await page.close();
+  },
+
   async 'search narrows the grid'() {
     const page = await openDirectory();
     const before = await gridCount(page);
