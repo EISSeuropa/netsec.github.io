@@ -716,6 +716,10 @@
   // Exact name first, then a substring, so typing a surname lands on the one
   // person who carries it and a full name picked from the datalist is never
   // beaten by someone whose name contains it.
+  // Accent-folded, the same as the Directory's search. The map draws the
+  // same people, so "Pinar" has to reach Pınar here too. The id lookup keeps
+  // the raw lower-cased string, since a slug is already ASCII.
+  const fold = (x) => (window.netsecFold ? window.netsecFold(x) : String(x || '').toLowerCase());
   function resolveFind(q) {
     const s = String(q || '').trim().toLowerCase();
     if (!s) return null;
@@ -723,8 +727,9 @@
     // would break personVisible() rather than answer the search.
     const direct = byId[s];
     if (direct && direct.type === 'person') return direct;
-    return people.find(p => p.name.toLowerCase() === s)
-      || people.find(p => p.name.toLowerCase().indexOf(s) !== -1)
+    const f = fold(s);
+    return people.find(p => fold(p.name) === f)
+      || people.find(p => fold(p.name).indexOf(f) !== -1)
       || null;
   }
 

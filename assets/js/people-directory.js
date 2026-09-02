@@ -789,6 +789,19 @@
   // into Offering / Seeking. `skipAreas` additionally drops the theme and
   // region filters, powering the panel's "show people outside your selected
   // areas" escape hatch.
+  // One-entry cache. The query is the same string for every member in a
+  // render and for every facet count taken from it, so folding and splitting
+  // it once per render is the whole optimisation needed here.
+  let _tokenQuery = null;
+  let _tokens = [];
+  function queryTokens(q) {
+    if (q !== _tokenQuery) {
+      _tokenQuery = q;
+      _tokens = window.netsecFold(q).split(/\s+/).filter(Boolean);
+    }
+    return _tokens;
+  }
+
   //
   // Every axis is read from a state object rather than straight off the
   // module-level `active*` variables, so facet counting can hand in a clone
@@ -824,9 +837,19 @@
     if (st.stsm) {
       if (m.stsm_hosting !== 'yes' && m.stsm_hosting !== 'ask') return false;
     }
+    // Accent-folded, and every whitespace-separated word has to land
+    // somewhere in the member's searchable text. Before this the query was
+    // one raw substring against one raw string, so "Pinar" missed Pınar and
+    // "cyber poland" missed everybody, since no single field holds both
+    // words. The haystack is folded once at load, and the query is folded
+    // once per render, because this runs for every member and again for
+    // every facet count.
     if (q) {
-      const hay = [m.name, m.affiliation, m.country, (m.roles||[]).join(' '), (m.keywords||[]).join(' '), (m.canonical_keywords||[]).join(' ')].join(' ').toLowerCase();
-      if (!hay.includes(q)) return false;
+      const hay = m._searchHay || '';
+      const tokens = queryTokens(q);
+      for (let t = 0; t < tokens.length; t++) {
+        if (hay.indexOf(tokens[t]) === -1) return false;
+      }
     }
     // Theme filter (OR semantics): a bio passes when one of its research
     // themes is in the active set. Empty set = no filter. Skipped for the
@@ -3172,6 +3195,17 @@
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     MEMBERS = data.members || [];
+    // Folded once here rather than per keystroke: the search predicate runs
+    // over every member on every render and again for every facet count, so
+    // an NFD pass per call would be thousands of them a frame.
+    MEMBERS.forEach(m => {
+      m._searchHay = window.netsecFold([
+        m.name, m.affiliation, m.country,
+        (m.roles || []).join(' '),
+        (m.keywords || []).join(' '),
+        (m.canonical_keywords || []).join(' '),
+      ].join(' '));
+    });
     // Aggregate is emitted by sync-bios.py: a count-sorted list of
     // every canonical keyword in use across the directory. Drives the
     // filter chip row. Missing on older snapshots → empty array,
