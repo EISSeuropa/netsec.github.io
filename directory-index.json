@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-08-28T17:26:17+00:00",
+  "generated_at": "2026-09-02T12:32:12+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 84,
+  "count": 85,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -663,6 +663,17 @@
       "role": "Action Chair",
       "affiliation": "LMU Munich",
       "photo": "https://netsec-cost.eu/assets/images/people/moritz-weiss.jpg"
+    },
+    {
+      "name": "Dr Mykhailo Mosora",
+      "name_key": "mykhailo mosora",
+      "aliases": [],
+      "slug": "mykhailo-mosora",
+      "url": "https://netsec-cost.eu/people/mykhailo-mosora.html",
+      "orcid": "0000-0002-5990-9687",
+      "role": null,
+      "affiliation": "Carpathian Institute of Analytics \"FrankoLytics\"",
+      "photo": "https://netsec-cost.eu/assets/images/people/mykhailo-mosora.jpg"
     },
     {
       "name": "Dr Niklas Karlén",

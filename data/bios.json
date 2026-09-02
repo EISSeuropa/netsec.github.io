@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-08-28T17:26:17+00:00",
+  "generated_at": "2026-09-02T12:32:12+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-08-28T17:26:17+00:00"
+    "last_synced": "2026-09-02T12:32:12+00:00"
   },
   "members": [
     {
@@ -3869,6 +3869,49 @@
         "Security and defence",
         "Strategy and deterrence"
       ]
+    },
+    {
+      "id": "mykhailo-mosora",
+      "name": "Dr Mykhailo Mosora",
+      "country": "Ukraine",
+      "country_code": "ua",
+      "affiliation": "Carpathian Institute of Analytics \"FrankoLytics\"",
+      "position": "PhD, Policy Analyst, Researcher, University Lecturer",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Dr. Mykhailo Mosora, Politologist & Regional Policies Analyst at the Carpathian Institute of Analytics FrankoLytics and as a lecturer at the Department of Political Sciences Vasyl Stefanyk Carpathian National University (Ivano-Frankivsk, Ukraine).\nParticipant and scientific coordinator of more than 10 international projects; Co-developer of the analytical part of Strategy of Ivano-Frankivsk 2035; Member of the training working group projects within the framework of the GIZ.\nResearch interests: national minorities, European Union, political conflict, regionalization, regional development, separatism, Ukraine.\nPhD thesis «Separatism as an institutionalized political practice: challenges to the European Union and Ukraine».\nDr. Mykhailo Mosora's research focuses on separatism as an institutionalized political practice and its implications for political stability, territorial integrity, and European integration, particularly in the contexts of Ukraine and the European Union. His broader research interests include ethnopolitics, political conflict, regional development, regional identities, and the interaction between local, national, and European political processes.\nThe researcher lectures at the Center for Advanced Training of Civil Servants and Managers of State Enterprises, Institutions and Organizations and is the developer of several author's courses, one of which, for example, is \"Post-war Recovery and Development of Ukraine.\"\nDr.Mykhailo Mosora also works in the field of environmental safety and its impact on health - the researcher is a scientific coordinator in projects European Linkage of Initiative from Science to Action in Health (ELISAH), INTERACT-EUROPE 100 - European Health and Digital Executive Agency.",
+      "keywords": [
+        "European Union",
+        "political conflict",
+        "regional development",
+        "separatism",
+        "Ukraine."
+      ],
+      "email": "mykhailo.mosora@frankolytics.org",
+      "website": "https://analytics.cnu.edu.ua/",
+      "orcid": "0000-0002-5990-9687",
+      "linkedin": "https://www.linkedin.com/in/mykhailo-mosora-5b3845320/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/mykhailo-mosora.jpg",
+      "source": "form",
+      "photo_source_sha256": "7f2e2915ea84817639597c795ab573f9d8e3a835592fb3c9cc8de77e610e54c4",
+      "canonical_keywords": [
+        "EU",
+        "Political conflict",
+        "Regional development",
+        "Separatism",
+        "Ukraine."
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -4305,6 +4348,10 @@
       "count": 1
     },
     {
+      "keyword": "EU",
+      "count": 1
+    },
+    {
       "keyword": "EU enlargement",
       "count": 1
     },
@@ -4585,6 +4632,10 @@
       "count": 1
     },
     {
+      "keyword": "Political conflict",
+      "count": 1
+    },
+    {
       "keyword": "Political economy",
       "count": 1
     },
@@ -4614,6 +4665,10 @@
     },
     {
       "keyword": "Regional cooperation",
+      "count": 1
+    },
+    {
+      "keyword": "Regional development",
       "count": 1
     },
     {
@@ -4666,6 +4721,10 @@
     },
     {
       "keyword": "Security sector reforms",
+      "count": 1
+    },
+    {
+      "keyword": "Separatism",
       "count": 1
     },
     {
@@ -4738,6 +4797,10 @@
     },
     {
       "keyword": "Turkish foreign policy",
+      "count": 1
+    },
+    {
+      "keyword": "Ukraine.",
       "count": 1
     },
     {
@@ -5059,7 +5122,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 52
+      "count": 53
     },
     {
       "region": "Global and cross-regional",
