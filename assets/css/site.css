@@ -136,6 +136,12 @@ html{scroll-behavior:smooth;color-scheme:light dark;scroll-padding-top:90px}
   transition:top var(--dur) var(--ease);
 }
 .skip-link:focus{top:14px;outline:0;box-shadow:0 0 0 4px rgba(10,132,255,.45);opacity:1}
+/* `--ink` is the body text colour, so it inverts to near-white in dark
+   mode and the pill's `color:#fff` went with it: 1.12:1, on the site's
+   default theme, for the one affordance a keyboard user meets first.
+   Dark text on the light pill, matching how `.dark .btn-primary` already
+   inverts. Measured 16.1:1. */
+.dark .skip-link{color:#0b1220}
 
 /* Global focus-visible — keyboard-only, never on mouse-click */
 :focus{outline:0}
@@ -1942,7 +1948,10 @@ form button:disabled{opacity:.65;cursor:wait}
 .dark .objective-num{background:var(--accent);color:#0b1220}
 .dark .footer{background:linear-gradient(180deg,transparent 0%,rgba(20,30,55,.65) 30%)}
 .dark .cost-mark,.dark .eu-mark{background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.4)}
-.dark .eu-mark .eu-text{color:var(--accent)}
+/* The mark above is pinned to a white plate in dark mode, so the text on
+   it must not follow `--accent`, which lightens to #6ea1ff there and gives
+   2.56:1. The EU blue is the light-mode accent and reads 10.86:1 on white. */
+.dark .eu-mark .eu-text{color:#003399}
 .dark .g-q{background:rgba(255,255,255,.03)}
 .dark .g-year{background:linear-gradient(180deg,rgba(110,161,255,.10),rgba(110,161,255,.04))}
 /* Dark gantt: the quarter grid lines need a brighter line than the
@@ -2966,7 +2975,17 @@ body.search-open{overflow:hidden}
 .dark .tour-btn-primary,
 .dark .tour-trigger-cta,
 .dark .rm-feedback-action.is-primary,
-.dark .deliverables-roadmap-link-cta{
+.dark .deliverables-roadmap-link-cta,
+/* Added after the September 2026 scan. The May pass fixed the CTAs it knew
+   about and the same pattern had spread to six more elements, each pairing
+   `background:var(--accent)` with `color:#fff` and each measuring the same
+   2.56:1 in dark mode. `.programme-download` covers its label and hint
+   children, which inherit the background. */
+.dark .i18n-beta-ribbon-badge,
+.dark .news-subscribe,
+.dark .founding-proposer-badge,
+.dark .programme-download,
+.dark .programme-anthology-cta{
   background:#003399;
   border-color:#003399;
   color:#fff;
