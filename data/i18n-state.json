@@ -55,15 +55,15 @@
     "accessibility.html": {
       "fr": {
         "file": "accessibility.fr.html",
-        "source_sha1": "fbf446229aafcc3be422ec6206ac8402a9f69355",
-        "translated_on": "2026-08-27",
+        "source_sha1": "ed822f61930d9271de2bfc36a6bb9bdfb163d1e9",
+        "translated_on": "2026-09-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "accessibility.de.html",
-        "source_sha1": "fbf446229aafcc3be422ec6206ac8402a9f69355",
-        "translated_on": "2026-08-27",
+        "source_sha1": "ed822f61930d9271de2bfc36a6bb9bdfb163d1e9",
+        "translated_on": "2026-09-02",
         "status": "beta",
         "reviewed_by": null
       }

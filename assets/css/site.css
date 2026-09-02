@@ -2985,7 +2985,11 @@ body.search-open{overflow:hidden}
 .dark .news-subscribe,
 .dark .founding-proposer-badge,
 .dark .programme-download,
-.dark .programme-anthology-cta{
+.dark .programme-anthology-cta,
+/* The licence table's header row is the same pairing again. It was missed
+   in the first sweep because licensing.html was not among the pages read
+   in the browser, and only the full pa11y run surfaced it. */
+.dark .licence-table thead th{
   background:#003399;
   border-color:#003399;
   color:#fff;
