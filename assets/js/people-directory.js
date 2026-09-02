@@ -789,21 +789,39 @@
   // into Offering / Seeking. `skipAreas` additionally drops the theme and
   // region filters, powering the panel's "show people outside your selected
   // areas" escape hatch.
+  //
+  // Every axis is read from a state object rather than straight off the
+  // module-level `active*` variables, so facet counting can hand in a clone
+  // with one axis substituted and ask what that value would yield (#1782).
+  // `currentFilterState()` is the default, which keeps every existing caller
+  // behaving exactly as before.
+  function currentFilterState() {
+    return {
+      wg: activeWG,
+      country: activeCountry,
+      mentorship: activeMentorship,
+      stsm: activeStsm,
+      keywords: activeKeywords,
+      regions: activeRegions,
+    };
+  }
+
   function memberPassesFilters(m, q, opts) {
     opts = opts || {};
-    if (activeWG === 'mc') {
+    const st = opts.state || currentFilterState();
+    if (st.wg === 'mc') {
       if (!isMC(m)) return false;
-    } else if (activeWG !== 'all') {
+    } else if (st.wg !== 'all') {
       const wgs = (m.wgs || []).concat((m.wg_leadership && (m.wg_leadership.lead || [])) || [], (m.wg_leadership && (m.wg_leadership.co_lead || [])) || []);
-      if (!wgs.includes(Number(activeWG))) return false;
+      if (!wgs.includes(Number(st.wg))) return false;
     }
-    if (activeCountry !== 'all') {
-      if ((m.country || '') !== activeCountry) return false;
+    if (st.country !== 'all') {
+      if ((m.country || '') !== st.country) return false;
     }
-    if (!opts.skipMentorship && activeMentorship.size > 0) {
-      if (!(m.mentorship || []).some(t => activeMentorship.has(t))) return false;
+    if (!opts.skipMentorship && st.mentorship.size > 0) {
+      if (!(m.mentorship || []).some(t => st.mentorship.has(t))) return false;
     }
-    if (activeStsm) {
+    if (st.stsm) {
       if (m.stsm_hosting !== 'yes' && m.stsm_hosting !== 'ask') return false;
     }
     if (q) {
@@ -813,18 +831,103 @@
     // Theme filter (OR semantics): a bio passes when one of its research
     // themes is in the active set. Empty set = no filter. Skipped for the
     // panel's relaxed pool.
-    if (!opts.skipAreas && activeKeywords.size > 0) {
+    if (!opts.skipAreas && st.keywords.size > 0) {
       const bioThemeSlugs = (m.themes || []).map(keywordSlug);
-      if (!bioThemeSlugs.some(s => activeKeywords.has(s))) return false;
+      if (!bioThemeSlugs.some(s => st.keywords.has(s))) return false;
     }
     // Research-region filter (#555): a second, independent axis, AND-combined
     // with the theme filter (so "cyber AND Russia" narrows). Also skipped for
     // the relaxed pool.
-    if (!opts.skipAreas && activeRegions.size > 0) {
+    if (!opts.skipAreas && st.regions.size > 0) {
       const bioRegionSlugs = (m.regions || []).map(keywordSlug);
-      if (!bioRegionSlugs.some(s => activeRegions.has(s))) return false;
+      if (!bioRegionSlugs.some(s => st.regions.has(s))) return false;
     }
     return true;
+  }
+
+  /* Live facet counts (#1782).
+
+     Every chip reports what it would actually yield inside the filters that
+     are already switched on, and a value that would yield nobody is
+     disabled. The counts baked into bios.json are network-wide, so a theme
+     used to advertise its sitewide total and then return an empty grid once
+     a Working Group was picked.
+
+     The candidate's own axis is replaced rather than added to, so on a
+     multi-select row the other chips report what they would each yield
+     instead of dropping to zero the moment one of them is pressed. */
+  function facetCount(axis, value, q) {
+    const st = currentFilterState();
+    st[axis] = value;
+    let n = 0;
+    for (let i = 0; i < MEMBERS.length; i++) {
+      if (memberPassesFilters(MEMBERS[i], q, { state: st })) n++;
+    }
+    return n;
+  }
+
+  // A chip's original text, captured before a count badge is appended, so
+  // the active-filter pills keep reading the label rather than "WG1 12".
+  function chipLabel(chip) {
+    if (!chip.dataset.chipLabel) chip.dataset.chipLabel = chip.textContent.trim();
+    return chip.dataset.chipLabel;
+  }
+
+  // Write a count onto a chip and disable it when it would yield nobody. The
+  // theme and region rows ship a `.count` span in their own markup; the
+  // Working-Group, mentorship and STSM chips get one on first use. An active
+  // chip stays clickable at zero, otherwise it could never be switched off.
+  function setChipCount(chip, n) {
+    chipLabel(chip);
+    let el = chip.querySelector('.count');
+    if (!el) {
+      el = document.createElement('span');
+      el.className = 'count';
+      chip.appendChild(el);
+    }
+    el.textContent = n;
+    const pressed = chip.getAttribute('aria-pressed') === 'true';
+    chip.disabled = n === 0 && !pressed;
+  }
+
+  /* ponytail: recomputed from scratch on every render. At ~190 members and a
+     few dozen values that is a few thousand predicate calls, comfortably
+     inside a frame. Memoise per (axis, filter state) if the directory ever
+     grows an order of magnitude.
+
+     Deliberately not reordering the theme and region rows by live count:
+     the rows are already sorted by network-wide size, and resorting them on
+     every keystroke would move a chip out from under the pointer that is
+     reaching for it. */
+  function syncFacetCounts() {
+    const q = _lastQuery;
+    // "All" is the reset rather than a value, so it carries no count and is
+    // never disabled.
+    filterChips.forEach(chip => {
+      if (chip.dataset.wg === 'all') { chipLabel(chip); return; }
+      setChipCount(chip, facetCount('wg', chip.dataset.wg, q));
+    });
+    mentorshipChips.forEach(chip => {
+      setChipCount(chip, facetCount('mentorship', new Set([chip.dataset.mentorship]), q));
+    });
+    if (stsmChip) setChipCount(stsmChip, facetCount('stsm', true, q));
+    document.querySelectorAll('#members-keyword-filter-chips [data-slug]').forEach(chip => {
+      setChipCount(chip, facetCount('keywords', new Set([chip.dataset.slug]), q));
+    });
+    document.querySelectorAll('#members-region-filter-chips [data-slug]').forEach(chip => {
+      setChipCount(chip, facetCount('regions', new Set([chip.dataset.slug]), q));
+    });
+    // A flag carries no text, so its count rides in the accessible name and
+    // the tooltip rather than in a badge.
+    document.querySelectorAll('[data-country-strip] .country-flag').forEach(btn => {
+      const c = btn.getAttribute('data-country');
+      const n = facetCount('country', c, q);
+      const name = window.netsecCountry ? window.netsecCountry(c) : c;
+      const label = name + ', ' + n + ' ' + window.netsecT(n === 1 ? 'member' : 'members');
+      btn.setAttribute('aria-label', label);
+      btn.title = label;
+      btn.disabled = n === 0 && activeCountry !== c;
+    });
   }
 
   function render() {
@@ -1252,7 +1355,9 @@
     _cineLastCount = filtered.length;
     empty.hidden = filtered.length > 0;
     _lastCount = filtered.length;
+    renderEmptyState(!empty.hidden);
     updateFilterChrome();
+    syncFacetCounts();
     syncCountryStrip();
     renderMentorshipPanel();
 
@@ -1514,7 +1619,7 @@
     }
     if (activeWG !== 'all') {
       const chip = Array.from(filterChips).find(c => c.dataset.wg === activeWG);
-      out.push({ label: chip ? chip.textContent.trim() : ('WG' + activeWG), remove: () => {
+      out.push({ label: chip ? chipLabel(chip) : ('WG' + activeWG), remove: () => {
         activeWG = 'all'; filterChips.forEach(o => o.setAttribute('aria-pressed', o.dataset.wg === 'all')); writeHashKeywords(); render();
       }});
     }
@@ -1575,6 +1680,46 @@
       _refocusActiveFilterIdx = -1;
     }
   }
+
+  /* Pick which face of #members-empty to show (#1781).
+
+     The card carried one message, written when the directory had no
+     submissions at all, and a zero-result filter reused it. Filtering to
+     WG3 plus a country with no WG3 member told the visitor that a directory
+     of nearly two hundred people was empty. The no-match face names the
+     filters that produced the zero and lets each one be removed on the
+     spot, reusing the same pill removers as the mobile filter row, so
+     recovery does not mean scrolling back up to the result bar. */
+  function renderEmptyState(shown) {
+    const noData = empty.querySelector('[data-empty-nodata]');
+    const noMatch = empty.querySelector('[data-empty-nomatch]');
+    if (!noData || !noMatch) return;
+    const filtered = anyFilterActive();
+    // Reconciled on every render, including the ones where the card stays
+    // hidden. Leaving the faces as a previous zero-result render left them
+    // would show the no-match message, with an empty pill row, to a visitor
+    // who later hit a genuine no-data zero.
+    noData.hidden = filtered;
+    noMatch.hidden = !filtered;
+    if (!shown || !filtered) return;
+    const wrap = noMatch.querySelector('[data-empty-pills]');
+    if (!wrap) return;
+    wrap.textContent = '';
+    activeFilterPills().forEach(pill => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'members-active-filter';
+      const span = document.createElement('span');
+      span.textContent = pill.label;
+      b.appendChild(span);
+      b.insertAdjacentHTML('beforeend', XMARK);
+      b.setAttribute('aria-label', window.netsecT('Remove filter') + ': ' + pill.label);
+      b.addEventListener('click', pill.remove);
+      wrap.appendChild(b);
+    });
+  }
+  const emptyClearBtn = empty && empty.querySelector('[data-empty-clear]');
+  if (emptyClearBtn) emptyClearBtn.addEventListener('click', () => clearAllFilters());
 
   // Populate the country dropdown from the loaded MEMBERS. Builds an
   // alphabetised, deduplicated list of every country that has at least

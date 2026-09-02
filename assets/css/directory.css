@@ -142,6 +142,27 @@
 .members-empty{padding:36px;text-align:center;margin:24px 0}
 .members-empty h3{margin:0 0 8px}
 .members-empty p{margin:0;color:var(--muted)}
+.members-empty [hidden]{display:none}
+/* No-match face (#1781): the active filters, each removable, then a reset. */
+.members-empty-filters{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  margin:16px 0 0;padding:1px;
+}
+.members-empty-clear{
+  font:inherit;font-size:.82rem;font-weight:600;
+  margin-top:16px;padding:8px 16px;border-radius:999px;
+  background:transparent;color:var(--ink-2);
+  border:1px solid var(--glass-border);
+  cursor:pointer;
+  transition:color .2s var(--ease),border-color .2s var(--ease);
+}
+@media (hover: hover){
+  .members-empty-clear:hover{color:var(--ink);border-color:color-mix(in oklab, var(--accent) 55%, transparent)}
+}
+.members-empty-clear:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (pointer: coarse){
+  .members-empty-clear{padding-top:12px;padding-bottom:12px}
+}
 
 .members-grid{
   display:grid;
@@ -913,15 +934,44 @@ html:not(.dark) .mentorship-showall button{ background:rgba(255,255,255,.65); }
 .members-keyword-filter-chip[aria-pressed="true"]:hover{
   background:color-mix(in oklab, var(--accent) 30%, transparent);
 }
-.members-keyword-filter-chip .count{
+/* Live facet counts (#1782). One rule for every chip that carries a count,
+   kept together so the collision lint sees a single `.count` cluster. The
+   Working-Group and mentorship chips fill white when pressed, so their
+   pressed badge inherits currentColor rather than the theme accent. */
+.members-keyword-filter-chip .count,
+.members-filter-chip .count,
+.members-mentorship-chip .count{
   font-size:.7rem;font-weight:500;
   color:var(--muted);
   padding:0 4px;border-radius:6px;
+  margin-left:6px;
   background:color-mix(in oklab, var(--ink) 8%, transparent);
 }
+.members-keyword-filter-chip .count{margin-left:0}
 .members-keyword-filter-chip[aria-pressed="true"] .count{
   color:var(--ink);
   background:color-mix(in oklab, var(--accent) 22%, transparent);
+}
+.members-filter-chip[aria-pressed="true"] .count,
+.members-mentorship-chip[aria-pressed="true"] .count{
+  color:currentColor;
+  background:color-mix(in oklab, #fff 26%, transparent);
+}
+/* A value that would return nobody is offered as context, not as a target.
+   Disabled buttons leave the tab order, which is the intended behaviour for
+   a facet that cannot be chosen. */
+/* One rule per chip class rather than a shared selector list: the collision
+   lint reads a css-collision-allow marker as covering the very next line, so
+   two stacked markers cannot annotate one combined rule. */
+.members-keyword-filter-chip:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none}
+/* css-collision-allow: .members-filter-chip */
+.members-filter-chip:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none}
+/* css-collision-allow: .members-mentorship-chip */
+.members-mentorship-chip:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none}
+@media (hover: hover){
+  .members-keyword-filter-chip:disabled:hover,
+  .members-filter-chip:disabled:hover,
+  .members-mentorship-chip:disabled:hover{background:transparent;color:var(--ink-2)}
 }
 .members-keyword-filter-toggle{
   margin-top:10px;
@@ -1919,6 +1969,8 @@ html.dir-welcome .welcome-strip[hidden]{display:block}
   box-shadow:0 0 0 1px var(--glass-border);
 }
 .country-flag:hover{opacity:1;transform:translateY(-1px)}
+.country-flag:disabled{opacity:.25;cursor:default;filter:grayscale(1)}
+.country-flag:disabled:hover{opacity:.25;transform:none}
 .country-flag[aria-pressed="true"]{
   opacity:1;
   box-shadow:0 0 0 2px var(--accent);

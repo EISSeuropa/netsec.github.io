@@ -366,9 +366,23 @@
       <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Jump to the join form" aria-label="Jump to the join form">+</button>
     </div>
 
+    <!-- Two states behind one card. `data-empty-nodata` is the original
+         message for a directory with no submissions at all;
+         `data-empty-nomatch` is what an over-narrow filter gets, listing the
+         active filters as removable pills so recovery does not mean
+         scrolling back up to the result bar (#1781). people-directory.js
+         picks between them in renderEmptyState(). -->
     <div id="members-empty" hidden class="members-empty glass">
-      <h3>No members yet</h3>
-      <p>Bios will appear here once members submit the form. Until then, this directory shows leadership and Working Group coordinators.</p>
+      <div data-empty-nodata>
+        <h3>No members yet</h3>
+        <p>Bios will appear here once members submit the form. Until then, this directory shows leadership and Working Group coordinators.</p>
+      </div>
+      <div data-empty-nomatch hidden>
+        <h3>Nobody matches these filters</h3>
+        <p>Remove one to widen the search.</p>
+        <div class="members-empty-filters" data-empty-pills></div>
+        <button type="button" class="members-empty-clear" data-empty-clear>Clear all filters</button>
+      </div>
     </div>
 
     <!-- Mentorship matching panel (#763). Hidden until a mentorship

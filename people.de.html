@@ -356,9 +356,22 @@
       <button class="tour-trigger tour-trigger-cta" type="button" id="join-trigger" title="Zum Anmeldeformular" aria-label="Zum Anmeldeformular">+</button>
     </div>
 
+    <!-- Zwei Zustände in einer Karte. `data-empty-nodata` ist die
+         ursprüngliche Meldung für ein Verzeichnis ganz ohne Einträge,
+         `data-empty-nomatch` erscheint bei zu eng gesetzten Filtern und
+         listet die aktiven Filter als entfernbare Pillen auf (#1781).
+         people-directory.js wählt in renderEmptyState() zwischen beiden. -->
     <div id="members-empty" hidden class="members-empty glass">
-      <h3>Noch keine Mitglieder</h3>
-      <p>Biografien erscheinen hier, sobald Mitglieder das Formular ausfüllen. Bis dahin zeigt das Verzeichnis die Aktionsleitung und die Koordinator·innen der Arbeitsgruppen.</p>
+      <div data-empty-nodata>
+        <h3>Noch keine Mitglieder</h3>
+        <p>Biografien erscheinen hier, sobald Mitglieder das Formular ausfüllen. Bis dahin zeigt das Verzeichnis die Aktionsleitung und die Koordinator·innen der Arbeitsgruppen.</p>
+      </div>
+      <div data-empty-nomatch hidden>
+        <h3>Niemand entspricht diesen Filtern</h3>
+        <p>Entfernen Sie einen davon, um die Suche zu erweitern.</p>
+        <div class="members-empty-filters" data-empty-pills></div>
+        <button type="button" class="members-empty-clear" data-empty-clear>Alle zurücksetzen</button>
+      </div>
     </div>
 
     <!-- Mentorship matching panel (#763). Hidden until a mentorship
