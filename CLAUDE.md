@@ -42,6 +42,8 @@ and costs context.
   arm auto-merge with `gh pr merge --auto --squash`. CI checks (the
   link checker on every HTML-touching PR + CodeQL) will hold the
   merge if anything is wrong.
+- **Milestone on every PR.** Set it as the PR is opened, per rule
+  §10, and ask the maintainer when the right one is unclear.
 - **Two PRs touching `site.css` can be open at once.** They could
   not until #1712, because each regenerated the `?v=` cache-bust
   across every page and the two collided. The tokens are now stamped
@@ -347,7 +349,8 @@ text is being edited anyway.
 
 ## 10. Milestone tagging
 
-Every open issue belongs to exactly one milestone. The milestone
+Every open issue and every pull request belongs to exactly one
+milestone. The milestone
 is the bridge between the `Target` line in the issue template
 (rule §3) and the planned releases on the roadmap; without it,
 the backlog drifts and "queued for v1.7.0" becomes a string
@@ -387,6 +390,11 @@ projections of the same plan.
   open issue is invisible to release planning. The `Backlog —
   Under watch` bucket exists so there's no excuse: items with no
   clear release home still get tagged.
+- **At PR creation.** Every PR carries a milestone as well, the
+  release it will ship in: `gh pr create --milestone v1.15.0 ...`,
+  or `gh pr edit <N> --milestone v1.15.0` if it was opened without
+  one. When no fitting milestone exists, or two look equally
+  plausible, stop and ask the maintainer rather than guessing.
 
 ### Pre-release check
 
