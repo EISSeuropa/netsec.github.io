@@ -61,6 +61,13 @@
   --glass-shadow:0 10px 40px rgba(20,35,80,.10), 0 1px 2px rgba(20,35,80,.06);
   --accent:#003399;          /* EU/COST blue */
   --accent-2:#0a84ff;        /* Apple blue */
+  /* Link text. The Apple blue above is a surface colour: as text on the page
+     background it measures 3.43:1, under the 4.5:1 AA floor (#1773). This is
+     the same hue carried far enough down to clear it, 4.96:1 on the page and
+     5.28:1 on a white card. --accent-2 keeps its published value, which the
+     press kit documents as a brand colour, for backgrounds, borders and
+     shadows. */
+  --link:#0b6bcb;
   --accent-glow:rgba(10,132,255,.35);
   --gold:#ffcc00;            /* EU stars */
   --wg-1:#0973de;            /* Working Group accents (source: data/brand.json), darkened from
@@ -238,7 +245,7 @@ h2{font-size:var(--fs-h2);margin:0 0 var(--sp-3)}
 h3{font-size:var(--fs-h3);margin:0 0 var(--sp-2)}
 h4{font-size:var(--fs-h4)}
 p{margin:0 0 1rem;color:var(--ink-2)}
-a{color:var(--accent-2);text-decoration:none;transition:opacity var(--dur) var(--ease)}
+a{color:var(--link);text-decoration:none;transition:opacity var(--dur) var(--ease)}
 a:hover{opacity:.7}
 img{max-width:100%;display:block}
 .container{max-width:var(--maxw);margin:0 auto;padding:0 24px}
@@ -626,7 +633,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .mc-card .role{font-size:.82rem;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
 .mc-card .org{font-size:.85rem;color:var(--muted);margin:0 0 10px}
 .mc-card a.mc-mail{
-  display:inline-block;margin-top:6px;font-size:.82rem;color:var(--accent-2);
+  display:inline-block;margin-top:6px;font-size:.82rem;color:var(--link);
   word-break:break-all;
 }
 
@@ -697,7 +704,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .wg-claim-cta:hover,.wg-claim-cta:focus-visible{opacity:1;text-decoration:underline}
 .mc-avatar--initials{display:flex;align-items:center;justify-content:center;font-family:'Lexend','Inter',sans-serif;font-weight:600;font-size:1.1rem;letter-spacing:.02em;color:var(--wg-accent,var(--accent-2));background:color-mix(in srgb,var(--wg-accent,var(--accent-2)) 14%,transparent);border-color:color-mix(in srgb,var(--wg-accent,var(--accent-2)) 30%,#fff)}
 .wg-members{margin-top:1rem;border-top:1px solid var(--line);padding-top:.4rem}
-.wg-members > summary{cursor:pointer;font-size:.95rem;font-weight:500;color:var(--accent-2);list-style:none;padding:11px 2px;user-select:none}
+.wg-members > summary{cursor:pointer;font-size:.95rem;font-weight:500;color:var(--link);list-style:none;padding:11px 2px;user-select:none}
 .wg-members > summary::-webkit-details-marker{display:none}
 .wg-members > summary::before{content:"\25B8";display:inline-block;margin-right:.5em;color:var(--wg-accent);transition:transform .2s var(--ease)}
 .wg-members[open] > summary::before{transform:rotate(90deg)}
@@ -913,7 +920,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .event-meta-row strong{color:var(--ink);font-weight:600}
 .event-link{
   display:inline-flex;align-items:center;gap:6px;margin-top:4px;
-  font-size:.88rem;font-weight:600;color:var(--accent-2);
+  font-size:.88rem;font-weight:600;color:var(--link);
 }
 .event-link svg{width:14px;height:14px;transition:transform .2s var(--ease)}
 .event-link:hover svg{transform:translateX(3px)}
@@ -941,7 +948,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   padding:2px 8px;
   border:0;background:transparent;
   font:inherit;font-size:.82rem;font-weight:600;
-  color:var(--accent-2);cursor:pointer;
+  color:var(--link);cursor:pointer;
   border-radius:6px;
 }
 .event-desc-toggle:hover{background:rgba(10,132,255,.08)}
@@ -1054,7 +1061,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .event-subscribe-hint code{font-size:.85em;background:rgba(0,0,0,.04);padding:1px 5px;border-radius:4px}
 .dark .event-subscribe-hint code{background:rgba(255,255,255,.06)}
 
-.output-kind{font-size:.75rem;font-weight:700;color:var(--accent-2);text-transform:uppercase;letter-spacing:.1em}
+.output-kind{font-size:.75rem;font-weight:700;color:var(--link);text-transform:uppercase;letter-spacing:.1em}
 .news-date{font-size:.82rem;color:var(--muted)}
 .news-card a{font-size:.9rem;font-weight:600;margin-top:auto}
 /* Date + category/WG tag row on each news item (EISS-style scanability). */
@@ -1128,7 +1135,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   font-weight:700;
   letter-spacing:.1em;
   text-transform:uppercase;
-  color:var(--accent-2);
+  color:var(--link);
   margin-bottom:8px;
   /* Backing chip so the dot reads as part of a single pill rather
      than as a floating speck next to the label. Background tints
@@ -1275,7 +1282,7 @@ form button:disabled{opacity:.65;cursor:wait}
   margin:0;padding:14px 16px;font-size:.9rem;line-height:1.55;color:var(--ink-2);
   background:rgba(0,51,153,.05);border:1px solid var(--glass-border);border-radius:12px;
 }
-.contact-signpost a{color:var(--accent-2);font-weight:500}
+.contact-signpost a{color:var(--link);font-weight:500}
 
 /* -------- Member spotlight (home, issue #341) -------- */
 .spotlight-card{
@@ -1927,6 +1934,9 @@ form button:disabled{opacity:.65;cursor:wait}
   --accent:#6ea1ff;
   --rm-shipped-check:#5fcf94;
   --accent-2:#82b7ff;
+  /* Dark mode needs no separate value: #82b7ff on the dark page background is
+     9.06:1. Kept as its own token so the two themes stay symmetrical. */
+  --link:#82b7ff;
   --accent-glow:rgba(110,161,255,.30);
   /* Graded photos lift a touch in the dark theme so they don't sink
      into the navy background. */
@@ -2142,7 +2152,7 @@ form button:disabled{opacity:.65;cursor:wait}
   font-size:.62rem;font-weight:700;letter-spacing:.12em;
   padding:2px 8px;border-radius:6px;text-transform:uppercase;
 }
-.i18n-beta-ribbon a{color:var(--accent-2);text-decoration:underline}
+.i18n-beta-ribbon a{color:var(--link);text-decoration:underline}
 /* When the ribbon is present, push the nav and the top of the page
    down so nothing sits underneath.
    `--ribbon-h` is set in JS (site.js) from the ribbon's measured
@@ -2204,7 +2214,7 @@ body{padding-top:var(--whats-new-h, 0px)}
   background:rgba(11,18,32,.06);color:var(--ink);
 }
 .dark .prose-page code{background:rgba(255,255,255,.08)}
-.prose-page a{color:var(--accent-2);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+.prose-page a{color:var(--link);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
 .prose-page a:hover{opacity:.7}
 
 /* Meta strip with status / controller / dates */
@@ -2487,7 +2497,7 @@ body{padding-top:var(--whats-new-h, 0px)}
 }
 .aud-eyebrow{
   display:block;font-family:'Lexend','Inter',sans-serif;font-weight:600;
-  font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;color:var(--accent-2);
+  font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;color:var(--link);
 }
 .aud-title{
   display:block;margin-top:2px;font-family:'Lexend','Inter',sans-serif;
@@ -2927,7 +2937,7 @@ body.search-open{overflow:hidden}
   font-size:.9rem;color:var(--ink-2);line-height:1.55;
 }
 .dark .rm-footnote{background:rgba(110,161,255,.08);border-color:rgba(110,161,255,.22)}
-.rm-footnote a{color:var(--accent-2);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+.rm-footnote a{color:var(--link);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
 
 @media (max-width:640px){
   .roadmap-page{padding:120px 0 60px}
@@ -3069,7 +3079,7 @@ a.essc-quickfact.is-jump{
   color:inherit;
 }
 a.essc-quickfact.is-jump .val{
-  color:var(--accent-2);
+  color:var(--link);
 }
 a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   transform:translateY(2px);
@@ -3129,7 +3139,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 }
 .essc-speaker-callout svg{width:22px;height:22px;color:var(--accent);flex-shrink:0}
 .essc-speaker-callout p{margin:0;font-size:.95rem;color:var(--ink-2)}
-.essc-speaker-callout a{color:var(--accent-2);font-weight:500}
+.essc-speaker-callout a{color:var(--link);font-weight:500}
 @media (max-width:560px){.essc-speaker-callout{align-items:flex-start}}
 .essc-practical h2{
   font-size:clamp(1.8rem,1.4rem+1.8vw,2.5rem);
@@ -3153,7 +3163,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   color:var(--ink);
 }
 .essc-practical-block-title svg{
-  width:20px;height:20px;flex:none;color:var(--accent-2);
+  width:20px;height:20px;flex:none;color:var(--link);
 }
 .essc-practical-lede{
   margin:0 0 1.4rem;
@@ -3269,13 +3279,13 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .ecs-faculty-card-aff{font-size:.85rem;color:var(--muted);margin-top:3px;line-height:1.4}
 .ecs-faculty-card-tag{
   margin-top:9px;font-size:.7rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
-  color:var(--accent-2);
+  color:var(--link);
   background:color-mix(in srgb,var(--accent-2) 12%,transparent);
   border:1px solid color-mix(in srgb,var(--accent-2) 24%,transparent);
   padding:.22rem .62rem;border-radius:999px;
 }
 .ecs-faculty-card-link{
-  margin-top:11px;font-size:.82rem;font-weight:600;color:var(--accent-2);
+  margin-top:11px;font-size:.82rem;font-weight:600;color:var(--link);
   text-decoration:none;border-bottom:1px solid transparent;
 }
 .ecs-faculty-card-link:hover,
@@ -3284,7 +3294,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   display:flex;flex-wrap:wrap;gap:12px;margin:0 0 1.2rem;
 }
 .ecs-contact-line{font-size:.95rem;color:var(--ink-2);margin:0}
-.ecs-contact-line a{color:var(--accent-2);word-break:break-word}
+.ecs-contact-line a{color:var(--link);word-break:break-word}
 
 /* At-a-glance strip in the hero. Reuses .essc-quickfacts; a top margin
    lifts it clear of the hero CTAs. */
@@ -3305,7 +3315,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 }
 .ecs-card p{margin:0 0 .9rem;color:var(--ink-2);line-height:1.65}
 .ecs-card p:last-child{margin-bottom:0}
-.ecs-card a{color:var(--accent-2)}
+.ecs-card a{color:var(--link)}
 
 /* Feature trio (Who / Get / Apply) with an accent icon medallion. */
 .ecs-feature-grid{
@@ -3319,11 +3329,11 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 }
 .ecs-feature p{margin:0;color:var(--ink-2);line-height:1.65;font-size:.97rem}
 .ecs-feature p + p{margin-top:.8rem}
-.ecs-feature a{color:var(--accent-2)}
+.ecs-feature a{color:var(--link)}
 .ecs-feature-icon{
   display:inline-flex;align-items:center;justify-content:center;
   width:46px;height:46px;border-radius:12px;margin-bottom:.4rem;
-  color:var(--accent-2);
+  color:var(--link);
   background:color-mix(in srgb,var(--accent-2) 12%,transparent);
   border:1px solid color-mix(in srgb,var(--accent-2) 22%,transparent);
 }
@@ -3339,7 +3349,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 }
 .member-link:hover,
 .member-link:focus-visible{
-  color:var(--accent-2);
+  color:var(--link);
   border-bottom-color:var(--accent-2);
 }
 .ecs-faculty-name.member-link{font-weight:600}
@@ -3356,8 +3366,8 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 }
 .has-person-card:hover,
 .has-person-card:focus-visible{
-  color:var(--accent-2);
-  text-decoration-color:var(--accent-2);
+  color:var(--link);
+  text-decoration-color:var(--link);
 }
 
 /* Organisers: NetSec + EISS, sized and weighted equally. */
@@ -3599,7 +3609,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 }
 .programme-slot-kind.is-plenary{
   background:rgba(10,132,255,.12);
-  color:var(--accent-2);
+  color:var(--link);
 }
 .programme-slot-room{
   display:inline-flex;
@@ -3630,7 +3640,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   color:var(--ink);
 }
 .programme-slot-title a{color:inherit}
-.programme-slot-title a:hover{color:var(--accent-2);opacity:1}
+.programme-slot-title a:hover{color:var(--link);opacity:1}
 .programme-slot-abstract{
   margin:.6rem 0 0;
   font-size:.92rem;
@@ -3681,7 +3691,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 }
 .programme-person a.name:hover,
 .programme-person a.name:focus-visible{
-  color:var(--accent-2);
+  color:var(--link);
   border-bottom-color:var(--accent-2);
   opacity:1;
 }
@@ -3787,7 +3797,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   padding:2px 7px;
   border-radius:999px;
   background:color-mix(in oklab, var(--accent-2) 14%, transparent);
-  color:var(--accent-2);
+  color:var(--link);
   line-height:1.4;
 }
 .essc-member-card-badge.is-wg{
@@ -3844,7 +3854,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .essc-member-card-contact svg{width:18px;height:18px}
 .essc-member-card-contact:hover,
 .essc-member-card-contact:focus-visible{
-  color:var(--accent-2);
+  color:var(--link);
   background:color-mix(in oklab, var(--accent-2) 12%, transparent);
   opacity:1;
 }
@@ -3887,7 +3897,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   cursor:pointer;
   font-size:.85rem;
   font-weight:500;
-  color:var(--accent-2);
+  color:var(--link);
   user-select:none;
   list-style:none;
 }
@@ -3933,7 +3943,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   color:var(--ink);
 }
 .programme-contrib-title a{color:inherit}
-.programme-contrib-title a:hover{color:var(--accent-2);opacity:1}
+.programme-contrib-title a:hover{color:var(--link);opacity:1}
 .programme-contrib-abstract{
   margin:.4rem 0 0;
   font-size:.86rem;
@@ -3964,7 +3974,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   margin-left:.25rem;
   font:inherit;
   font-size:.82rem;
-  color:var(--accent-2);
+  color:var(--link);
   cursor:pointer;
   text-decoration:underline;
   text-underline-offset:2px;
@@ -3994,7 +4004,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   font-size:.74rem;
   font-weight:600;
   line-height:1.6;
-  color:var(--accent-2);
+  color:var(--link);
   text-decoration:none;
   white-space:nowrap;
 }
@@ -4168,7 +4178,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   display:flex;flex-wrap:wrap;gap:.25rem 1rem;
 }
 .programme-now-item{display:flex;flex-wrap:wrap;align-items:baseline;gap:.15rem .6rem}
-.programme-now-link{font-weight:500;color:var(--accent-2);text-decoration:none}
+.programme-now-link{font-weight:500;color:var(--link);text-decoration:none}
 .programme-now-link:hover,.programme-now-link:focus-visible{text-decoration:underline}
 .programme-now-room,.programme-now-time{color:var(--muted);font-size:.85rem}
 .dark .programme-now-dot{background:#34d775}
@@ -4638,7 +4648,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   color:var(--muted);background:color-mix(in srgb,var(--muted) 18%,var(--bg-0));
 }
 .prose-page .glossary-dl dd .fg-people-link{
-  color:var(--accent-2);font-weight:500;font-size:.9rem;
+  color:var(--link);font-weight:500;font-size:.9rem;
 }
 @media (prefers-reduced-motion: reduce){
   .prose-page .glossary-dl dd .fg-face:hover,
@@ -4661,7 +4671,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
    on summer-school.html. Kept together so the class-collision lint stays
    happy. */
 .ts-next-card{ padding:1.4rem 1.5rem; }
-.ts-next-eyebrow{ margin:0 0 .2rem; font-size:.8rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--accent-2); }
+.ts-next-eyebrow{ margin:0 0 .2rem; font-size:.8rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--link); }
 .ts-next-year{ margin:0 0 .8rem; font-size:1.9rem; line-height:1.1; }
 .ts-deflist{ display:flex; flex-direction:column; gap:.45rem; margin:0 0 1rem; }
 .ts-deflist-row{ display:flex; gap:.6rem; font-size:.95rem; }
@@ -4676,7 +4686,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .ts-edition-head{ display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap; }
 .ts-edition-year{ margin:0; font-size:1.5rem; }
 .ts-edition-where{ color:var(--ink-2); font-size:.95rem; }
-.ts-edition-meta{ margin:.2rem 0 .8rem; font-size:.9rem; color:var(--accent-2); font-weight:500; }
+.ts-edition-meta{ margin:.2rem 0 .8rem; font-size:.9rem; color:var(--link); font-weight:500; }
 .ts-edition-summary{ margin:0 0 .8rem; }
 .ts-edition-coords{ margin:0 0 .8rem; font-size:.92rem; }
 .ts-edition-coords-label{ color:var(--ink-2); }

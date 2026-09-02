@@ -201,7 +201,7 @@
 .rm-shipped-btn:focus-visible{
   background:var(--glass-bg);
   border-color:var(--accent-2);
-  color:var(--accent-2);
+  color:var(--link);
   opacity:1;
 }
 .rm-shipped-chevron{
@@ -262,7 +262,7 @@
 }
 .rm-card .notes-link{
   display:inline-block;margin-top:8px;font-size:.85rem;
-  color:var(--accent-2);text-decoration:none;
+  color:var(--link);text-decoration:none;
   border-bottom:1px solid transparent;transition:border-color .2s var(--ease);
 }
 .rm-card .notes-link:hover{border-bottom-color:currentColor}
@@ -301,7 +301,7 @@
 .rm-features .rmi{
   width:1em;height:1em;flex-shrink:0;
   fill:none;stroke:currentColor;
-  color:var(--accent-2);
+  color:var(--link);
 }
 .dark .rm-features li{
   color:var(--ink-2);
