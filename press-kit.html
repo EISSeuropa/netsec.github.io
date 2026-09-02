@@ -160,10 +160,18 @@
      particularly in §1 ("What's on it" downloads) and §8
      ("Open the documentation pack"). Override to EU blue so the
      CTAs read as branded action rather than as page-weight
-     anchors. Light + dark theme both handled by --accent /
-     --accent-2 (Apple-blue hover) which are theme-invariant. */
+     anchors.
+
+     --accent is NOT theme-invariant, which this comment used to
+     claim: site.css redefines it to #6ea1ff in dark mode, and
+     white text on that measures 2.56:1, below the 4.5:1 AA floor.
+     The dark rule below pins the EU blue, the same fix the
+     site-wide accent CTAs carry. Measured 10.86:1. */
   .prose-page .btn-primary{
     background:var(--accent);color:#fff;
+  }
+  .dark .prose-page .btn-primary{
+    background:#003399;color:#fff;
   }
   .prose-page .btn-primary:hover,
   .prose-page .btn-primary:focus-visible{

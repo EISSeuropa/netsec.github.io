@@ -158,6 +158,13 @@
   .prose-page .btn-primary{
     background:var(--accent);color:#fff;
   }
+  /* --accent is not theme-invariant: site.css redefines it to
+     #6ea1ff in dark mode, where white text on it measures 2.56:1,
+     below the 4.5:1 AA floor. Pin the EU blue, the same fix the
+     site-wide accent CTAs carry. Measured 10.86:1. */
+  .dark .prose-page .btn-primary{
+    background:#003399;color:#fff;
+  }
   .prose-page .btn-primary:hover,
   .prose-page .btn-primary:focus-visible{
     background:var(--accent-2);

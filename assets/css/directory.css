@@ -1294,7 +1294,12 @@ html:not(.dark) .mentorship-showall button{ background:rgba(255,255,255,.65); }
 .tour-trigger-cta:focus-visible{
   background:var(--accent-2);color:#fff;transform:translateY(-1px);
 }
-.dark .tour-trigger-cta{background:var(--accent);color:#fff}
+/* site.css pins this to the EU blue in dark mode, where `--accent`
+   lightens to #6ea1ff and white text on it measures 2.56:1. This file
+   loads after site.css and this rule carries the same specificity, so
+   restating `var(--accent)` here quietly undid that fix on the three
+   directory pages. Pinned to match. */
+.dark .tour-trigger-cta{background:#003399;color:#fff}
 .dark .tour-trigger-cta:hover,
 .dark .tour-trigger-cta:focus-visible{background:var(--accent-2)}
 
