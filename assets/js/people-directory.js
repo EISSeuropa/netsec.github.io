@@ -918,10 +918,11 @@
      inside a frame. Memoise per (axis, filter state) if the directory ever
      grows an order of magnitude.
 
-     Deliberately not reordering the theme and region rows by live count:
-     the rows are already sorted by network-wide size, and resorting them on
-     every keystroke would move a chip out from under the pointer that is
-     reaching for it. */
+     The theme and region rows are rebuilt rather than patched, because they
+     sort themselves by live count and the collapsed top-N is drawn from that
+     same ranking. A chip can therefore move out from under the pointer that
+     is reaching for it, which the maintainer accepted in exchange for the row
+     always leading with the themes that still have people behind them. */
   function syncFacetCounts() {
     const q = _lastQuery;
     // "All" is the reset rather than a value, so it carries no count and is
@@ -934,12 +935,8 @@
       setChipCount(chip, facetCount('mentorship', new Set([chip.dataset.mentorship]), q));
     });
     if (stsmChip) setChipCount(stsmChip, facetCount('stsm', true, q));
-    document.querySelectorAll('#members-keyword-filter-chips [data-slug]').forEach(chip => {
-      setChipCount(chip, facetCount('keywords', new Set([chip.dataset.slug]), q));
-    });
-    document.querySelectorAll('#members-region-filter-chips [data-slug]').forEach(chip => {
-      setChipCount(chip, facetCount('regions', new Set([chip.dataset.slug]), q));
-    });
+    renderKeywordFilter();
+    renderRegionFilter();
     // A flag carries no text, so its count rides in the accessible name and
     // the tooltip rather than in a badge.
     document.querySelectorAll('[data-country-strip] .country-flag').forEach(btn => {
@@ -2833,32 +2830,35 @@
     }
     root.hidden = false;
     chipsWrap.replaceChildren();
-    const total = KEYWORD_AGGREGATE.length;
+    // Ranked by live count, so the row leads with the themes that still have
+    // people behind them inside the filters already switched on. With nothing
+    // filtered this is the network-wide order sync-bios.py emitted. Ties keep
+    // that order, which stops equal-count chips shuffling against each other.
+    const ranked = KEYWORD_AGGREGATE.map((e, i) => {
+      const slug = keywordSlug(e.keyword);
+      return { name: e.keyword, slug: slug, rank: i, n: facetCount('keywords', new Set([slug]), _lastQuery) };
+    }).sort((a, b) => b.n - a.n || a.rank - b.rank);
+    const total = ranked.length;
     const limit = keywordFilterExpanded ? total : Math.min(KEYWORD_FILTER_VISIBLE_TOP_N, total);
     // The collapse hides the long tail, never a live filter: any active theme
     // from below the cut rides along with the top-N. Otherwise selecting a rare
     // theme (or deep-linking to one) filters the grid from a chip that is not
     // on screen to unpick.
-    const shown = KEYWORD_AGGREGATE.slice(0, limit).concat(
-      KEYWORD_AGGREGATE.slice(limit).filter(e => activeKeywords.has(keywordSlug(e.keyword))));
+    const shown = ranked.slice(0, limit).concat(
+      ranked.slice(limit).filter(e => activeKeywords.has(e.slug)));
     shown.forEach(entry => {
-      const slug = keywordSlug(entry.keyword);
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'members-keyword-filter-chip';
-      const isActive = activeKeywords.has(slug);
-      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-      btn.dataset.slug = slug;
-      btn.dataset.canonical = entry.keyword;
+      btn.setAttribute('aria-pressed', activeKeywords.has(entry.slug) ? 'true' : 'false');
+      btn.dataset.slug = entry.slug;
+      btn.dataset.canonical = entry.name;
       const label = document.createElement('span');
       label.className = 'lbl';
-      label.textContent = window.netsecT(entry.keyword);
+      label.textContent = window.netsecT(entry.name);
       btn.appendChild(label);
-      const count = document.createElement('span');
-      count.className = 'count';
-      count.textContent = entry.count;
-      btn.appendChild(count);
-      btn.addEventListener('click', () => toggleKeywordFilter(slug));
+      setChipCount(btn, entry.n);
+      btn.addEventListener('click', () => toggleKeywordFilter(entry.slug));
       chipsWrap.appendChild(btn);
     });
     // Show / hide the "show all" toggle.
@@ -2890,14 +2890,12 @@
     if (keywordDetails && activeKeywords.has(slug)) keywordDetails.open = true;
     _refocusKeywordSlug = slug;
     writeHashKeywords();
-    renderKeywordFilter();
     render();
   }
   function clearKeywordFilter() {
     if (activeKeywords.size === 0) return;
     activeKeywords.clear();
     writeHashKeywords();
-    renderKeywordFilter();
     render();
   }
 
@@ -2933,27 +2931,28 @@
     if (!REGION_AGGREGATE.length) { root.hidden = true; return; }
     root.hidden = false;
     chipsWrap.replaceChildren();
-    const total = REGION_AGGREGATE.length;
+    // Ranked by live count, same rule as the theme row above.
+    const ranked = REGION_AGGREGATE.map((e, i) => {
+      const slug = keywordSlug(e.region);
+      return { name: e.region, slug: slug, rank: i, n: facetCount('regions', new Set([slug]), _lastQuery) };
+    }).sort((a, b) => b.n - a.n || a.rank - b.rank);
+    const total = ranked.length;
     const limit = regionFilterExpanded ? total : Math.min(KEYWORD_FILTER_VISIBLE_TOP_N, total);
     // Same rule as the theme row: an active region is never collapsed away.
-    const shown = REGION_AGGREGATE.slice(0, limit).concat(
-      REGION_AGGREGATE.slice(limit).filter(e => activeRegions.has(keywordSlug(e.region))));
+    const shown = ranked.slice(0, limit).concat(
+      ranked.slice(limit).filter(e => activeRegions.has(e.slug)));
     shown.forEach(entry => {
-      const slug = keywordSlug(entry.region);
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'members-keyword-filter-chip members-region-filter-chip';
-      btn.setAttribute('aria-pressed', activeRegions.has(slug) ? 'true' : 'false');
-      btn.dataset.slug = slug;
+      btn.setAttribute('aria-pressed', activeRegions.has(entry.slug) ? 'true' : 'false');
+      btn.dataset.slug = entry.slug;
       const label = document.createElement('span');
       label.className = 'lbl';
-      label.textContent = window.netsecT(entry.region);
+      label.textContent = window.netsecT(entry.name);
       btn.appendChild(label);
-      const count = document.createElement('span');
-      count.className = 'count';
-      count.textContent = entry.count;
-      btn.appendChild(count);
-      btn.addEventListener('click', () => toggleRegionFilter(slug));
+      setChipCount(btn, entry.n);
+      btn.addEventListener('click', () => toggleRegionFilter(entry.slug));
       chipsWrap.appendChild(btn);
     });
     if (total > KEYWORD_FILTER_VISIBLE_TOP_N) {
@@ -2980,14 +2979,12 @@
     if (regionDetails && activeRegions.has(slug)) regionDetails.open = true;
     _refocusRegionSlug = slug;
     writeHashKeywords();
-    renderRegionFilter();
     render();
   }
   function clearRegionFilter() {
     if (activeRegions.size === 0) return;
     activeRegions.clear();
     writeHashKeywords();
-    renderRegionFilter();
     render();
   }
   const rgToggleBtn = document.getElementById('members-region-filter-toggle');

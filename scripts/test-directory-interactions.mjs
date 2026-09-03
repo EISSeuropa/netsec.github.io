@@ -594,8 +594,12 @@ const journeys = {
   async 'a facet count matches what the chip actually yields'() {
     const page = await openDirectory('#wg=4');
     // The theme row is a collapsed <details>, so its chips have no box and
-    // page.click would land on nothing. A visitor expands it first.
+    // page.click would land on nothing. A visitor expands it first. "Show all"
+    // is needed too since the row began ranking itself by live count: a theme
+    // that yields nobody inside WG4 sorts to the bottom, below the top-N cut,
+    // so the collapsed row holds no disabled chip for the zero case to use.
     await page.evaluate(() => { document.getElementById('members-keyword-filter').open = true; });
+    await clickWhenReady(page, '#members-keyword-filter-toggle');
     const chips = await page.$$eval('#members-keyword-filter-chips [data-slug]',
       els => els.map(e => ({ slug: e.dataset.slug, n: +e.querySelector('.count').textContent, disabled: e.disabled })));
     assert(chips.length > 0, 'no theme chips rendered');
