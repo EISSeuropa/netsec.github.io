@@ -148,6 +148,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The Directory's research-theme and research-region chips now sort by their live count, so the areas that still have people in them lead the row. The eight chips shown while the row is collapsed are drawn from the same ranking, which brings a smaller theme into view when the current filters make it the largest one left.
 - The accessibility statement moves to v1.5, recording the 2 September 2026 assessment: 155 contrast corrections, the three limitations that remain open, and the light-mode link colour that the automated scan does not reach. Published in English, French and German.
 
 #### Fixed
