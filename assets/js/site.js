@@ -643,6 +643,41 @@
     return dict[s] || s;
   };
 
+  /* Fold a string for searching: lower-cased, with accents and the
+     European letters that carry no accent to strip reduced to their plain
+     ASCII base.
+
+     Half of this is Unicode's job. NFD splits an accented letter into its
+     base plus a combining mark, so stripping U+0300-U+036F turns ü into u
+     and č into c, which covers most of what the Directory holds.
+
+     The other half Unicode will not do, because these are letters in their
+     own right rather than decorated bases. The Turkish dotless ı is the one
+     that bites here: eight names in the Directory carry it, among them Pınar
+     and Çıkrıkçı, and "Pinar" typed on any keyboard missed them. The rest of
+     the map is the same class of letter from the alphabets a pan-European
+     network draws on, so a Łukasz or a Førland is findable the day they
+     join rather than after somebody reports it.
+
+     The dashes and quotes are folded for the same reason at the other end
+     of the string: a keyword published as "EU-NATO Relations" carries an
+     en dash, and a hyphen is what a reader types. */
+  const FOLD_MAP = {
+    'ı': 'i', 'ł': 'l', 'ø': 'o', 'đ': 'd', 'ð': 'd', 'ß': 'ss',
+    'æ': 'ae', 'œ': 'oe', 'þ': 'th', 'ħ': 'h', 'ŧ': 't',
+    '\u2013': '-', '\u2014': '-', '\u2018': "'", '\u2019': "'",
+    '\u201c': '"', '\u201d': '"',
+  };
+  const FOLD_RE = new RegExp('[' + Object.keys(FOLD_MAP).join('') + ']', 'g');
+  window.netsecFold = function (s) {
+    if (typeof s !== 'string') return '';
+    return s
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(FOLD_RE, ch => FOLD_MAP[ch]);
+  };
+
   /* Country-name translator. COUNTRY_I18N is module-scoped, so page
      scripts (the directory flag strip, for one) reach a translated
      country name through this accessor rather than the ' · ' composite

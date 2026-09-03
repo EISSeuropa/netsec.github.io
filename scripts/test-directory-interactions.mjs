@@ -653,6 +653,57 @@ const journeys = {
     await page.close();
   },
 
+  // The search was a raw substring against a raw string, so an accented name
+  // was reachable only by typing the accent. Twelve of the 85 members carry
+  // one, and the Turkish dotless i in Pınar and Çıkrıkçı is on no keyboard a
+  // British or German reader is using.
+  async 'search folds accents out of the query and the name'() {
+    const page = await openDirectory();
+    const names = (q) => page.evaluate(async (query) => {
+      const s = document.getElementById('member-search');
+      s.value = query;
+      s.dispatchEvent(new Event('input', { bubbles: true }));
+      await new Promise(r => setTimeout(r, 400));   // debounce is 120 ms
+      return [...document.querySelectorAll('#members-grid .member-name')].map(e => e.textContent.trim());
+    }, q);
+    for (const [typed, expected] of [
+      ['Pinar', 'Pınar'],
+      ['Cikrikci', 'Çıkrıkçı'],
+      ['Kolmasova', 'Kolmašová'],
+      ['Karlen', 'Karlén'],
+      ['Kosterke', 'Kösterke'],
+    ]) {
+      const hits = await names(typed);
+      assert(hits.some(n => n.includes(expected)),
+        `"${typed}" did not reach ${expected}, got ${JSON.stringify(hits)}`);
+    }
+    // Typing the accent still works, so the fold is on both sides.
+    assert((await names('Pınar')).some(n => n.includes('Pınar')), 'the accented spelling stopped matching');
+    await page.close();
+  },
+
+  // Every word has to land somewhere, rather than the whole query having to
+  // appear as one substring. No single field holds a surname and a country,
+  // so this query used to match nobody.
+  async 'search matches words across different fields'() {
+    const page = await openDirectory();
+    const run = (q) => page.evaluate(async (query) => {
+      const s = document.getElementById('member-search');
+      s.value = query;
+      s.dispatchEvent(new Event('input', { bubbles: true }));
+      await new Promise(r => setTimeout(r, 400));
+      return [...document.querySelectorAll('#members-grid .member-name')].map(e => e.textContent.trim());
+    }, q);
+    const both = await run('akgul turkiye');
+    assert(both.some(n => n.includes('Akgül')), `"akgul turkiye" got ${JSON.stringify(both)}`);
+    const wide = await run('turkiye');
+    assert(wide.length > both.length, 'the second word did not narrow anything');
+    // A word that matches nobody rules the whole query out, so the tokens
+    // are combined with AND rather than OR.
+    assert((await run('akgul zzzznotamember')).length === 0, 'an unmatched word still returned hits');
+    await page.close();
+  },
+
   async 'search narrows the grid'() {
     const page = await openDirectory();
     const before = await gridCount(page);
