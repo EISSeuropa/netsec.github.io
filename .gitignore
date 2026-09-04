@@ -10,11 +10,10 @@
 # invocation instead of costing context every session. CLAUDE.md points at
 # them, so they are checked in for the same reason it is.
 !.claude/skills/
-# ...but not netsec-design: a 33 MB local design bundle (fonts, a .pptx,
-# screenshots, scraps) that belongs on disk rather than in git history.
-# Re-excluded after the un-ignore above, since git cannot re-include a path
-# whose parent directory is still excluded.
-.claude/skills/netsec-design/
+# The local design bundle (fonts, a .pptx, screenshots, scraps) lives at
+# .claude/design/, which the .claude/* rule above already excludes. It sat
+# in .claude/skills/ until September 2026, where every session scanned it
+# as a skill directory even though it has no SKILL.md.
 scripts/__pycache__/
 
 # macOS Finder metadata

@@ -1,6 +1,6 @@
 ---
 name: release-cross-check
-description: Release-time six-point cross-check for NetSec: the surfaces to verify before cutting a minor or major release, plus milestone hygiene. Use when cutting a release, running the release script, or asked what to check before a release. Skip for patch releases.
+description: "Release-time six-point cross-check for NetSec: the surfaces to verify before cutting a minor or major release, plus milestone hygiene. Use when cutting a release, running the release script, or asked what to check before a release. Skip for patch releases."
 ---
 
 # 5. Release-time six-point cross-check (minor / major only)

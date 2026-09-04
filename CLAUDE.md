@@ -169,23 +169,17 @@ See PRs #115 and #124 for the canonical pattern.
 
 ## 4. Release-notes format
 
-The hybrid format is documented at the top of `CHANGELOG.md`,
-mirrored in `docs/admin-guide.md` *Cutting a release*, and
-restated in `scripts/release.sh`'s header. Every release section
-follows it; v1.0.0 → v1.5.0 were retrofitted to match.
+The hybrid format (lede + 2-4 themed `### sub-sections` + canonical
+`### Index of changes`, with patch releases shipping the index only)
+is spelt out at the top of `CHANGELOG.md`, which you are editing
+anyway whenever it applies. `docs/admin-guide.md` *Cutting a release*
+and `scripts/release.sh`'s header carry the same text.
 
-Short version: **lede + 2-4 themed `### sub-sections` + canonical
-`### Index of changes`**. Self-policing tier — patch releases skip
-the lede + themes and ship the index only.
-
-**Minor vs patch: the feature test** (see `README.md` → *Versioning*
-for the full table). A minor (`X.Y.0` where `Y > prev`) ships at
-least one new user-visible feature or a significantly improved
-existing feature. Anything else (content additions on an
-existing page, copy edits, translation refreshes, accessibility
-passes, dependency bumps) is a patch. Read the lede aloud: *"we
-polished / fixed / refreshed X"* → patch; *"you can now do X"* →
-minor. When in doubt, patch.
+**Minor vs patch: the feature test** (full table in `README.md` →
+*Versioning*). A minor ships at least one new or significantly
+improved user-visible feature. Everything else is a patch. Read the
+lede aloud: *"we polished / fixed / refreshed X"* → patch; *"you can
+now do X"* → minor. When in doubt, patch.
 
 Hard rule: **no hard wraps in prose.** One source line per
 paragraph / bullet / blockquote. GitHub Releases renders soft `\n`
@@ -350,76 +344,16 @@ text is being edited anyway.
 ## 10. Milestone tagging
 
 Every open issue and every pull request belongs to exactly one
-milestone. The milestone
-is the bridge between the `Target` line in the issue template
-(rule §3) and the planned releases on the roadmap; without it,
-the backlog drifts and "queued for v1.7.0" becomes a string
+milestone, set as it is created: `gh issue create --milestone v1.7.0
+...` and `gh pr create --milestone v1.15.0 ...`. When no fitting
+milestone exists, or two look equally plausible, stop and ask the
+maintainer rather than guessing or leaving it blank. Without the
+milestone the backlog drifts and "queued for v1.7.0" becomes a string
 floating in prose rather than a queryable commitment.
 
-### The milestone set
-
-Milestones are created on GitHub from the version-tagged rows of
-[`docs/roadmap-2026.md`](docs/roadmap-2026.md)'s *At a glance*
-timeline. One milestone per planned release plus a single
-`Backlog — Under watch` bucket for items waiting on external
-triggers (COST-office decisions, post-conference activities,
-larger redesigns with no fixed slot yet).
-
-Two non-versioned milestones predate this convention
-(`Directory Page and Workflow`, `Translations (FR+GE) in Beta`).
-Both are closed; they are pre-versioning history, intentionally
-not on the public roadmap (the roadmap-progress sync skips any
-title that isn't `vX.Y.Z`). Leave them as-is, do not rename them
-to versions (their work spanned several early releases, so no
-single version maps).
-
-Due dates on the milestones come from the same timeline. When the
-roadmap shifts a planned release, **bump the milestone's due date
-in the same commit that updates the roadmap row** — they're two
-projections of the same plan.
-
-### When to set the milestone
-
-- **At issue creation.** Whenever rule §3 fires, set the
-  milestone alongside the title and body. `gh issue create
-  --milestone v1.7.0 ...` keeps it inline.
-- **When an issue moves between releases.** Update the milestone
-  in the same edit that records the slip ("deferred to v1.8.0 —
-  out of scope for v1.7.0 in this PR").
-- **Never leave an open issue without one.** A milestone-less
-  open issue is invisible to release planning. The `Backlog —
-  Under watch` bucket exists so there's no excuse: items with no
-  clear release home still get tagged.
-- **At PR creation.** Every PR carries a milestone as well, the
-  release it will ship in: `gh pr create --milestone v1.15.0 ...`,
-  or `gh pr edit <N> --milestone v1.15.0` if it was opened without
-  one. When no fitting milestone exists, or two look equally
-  plausible, stop and ask the maintainer rather than guessing.
-
-### Pre-release check
-
-Add to the release-cross-check skill's six-point cross-check: before running
-`scripts/release.sh`, confirm that every issue **closed by this
-release** carries the matching milestone, and that any **still-
-open issue tagged with this milestone** has either been ticked off
-in the release notes or moved to the next milestone with a one-
-line reason in the issue thread. The release should not ship with
-its own milestone holding open work.
-
-`scripts/release.sh` lists the currently-open issues tagged with
-the milestone you're about to cut, in the y/n confirmation prompt
-block. Skim it before typing `y`. If the work for an issue actually
-shipped (the PR landed, the bullet sits in `[Unreleased]`, the
-feature works on the live site) but no one wrote `Closes #N` in the
-PR description, that issue is still open and needs explicit closure
-on release day:
-
-```
-gh issue close <N> --comment "Shipped in v<X.Y.Z>"
-```
-
-If the work hasn't shipped, the issue should already have been
-re-milestoned in the PR that decided to defer it.
+The milestone set itself, the due dates that track the roadmap, the
+two pre-versioning milestones to leave alone, and the pre-release
+hygiene check are in the `milestone-tagging` skill.
 
 ## 11. Documentation currency
 
@@ -458,40 +392,22 @@ different cadence for staying current.
 
 #### Automation note: `docs/roadmap-2026.md` autostamp
 
-`.github/workflows/roadmap-refresh.yml` keeps the AUTOSTAMP block
-near the top of `docs/roadmap-2026.md` in sync with `CHANGELOG.md`'s
-`[Unreleased]` section, and refreshes `data/roadmap-progress.json`
-from the GitHub milestones in the same run. It counts the bullets
-per category, records the freshness date, and anchors against the
-most recent SemVer tag. Runs daily at 07:00 UTC (plus manual
-dispatch), opens one auto-PR on `roadmap-refresh/auto` with
-auto-merge armed.
+`.github/workflows/roadmap-refresh.yml` runs daily at 07:00 UTC and
+opens one auto-merging PR on `roadmap-refresh/auto`. It keeps the
+AUTOSTAMP block near the top of `docs/roadmap-2026.md` in sync with
+`CHANGELOG.md`'s `[Unreleased]` section and refreshes
+`data/roadmap-progress.json` from the GitHub milestones, so the
+count and the freshness stamp are never a manual job. Kept daily
+rather than event-driven because §4 and §10 fire on every PR and
+issue, which once produced 36 auto-PRs against 21 substantive ones
+in a day (#1720); `scripts/release.sh` refreshes both itself, so a
+release never waits on cron.
 
-It used to fire on every push touching `CHANGELOG.md`, and the
-milestone half on every issue event. Since §4 asks each PR for an
-`[Unreleased]` bullet and §10 asks each issue for a milestone, the
-two rules were feeding the automation: 36 auto-PRs against 21
-substantive ones in a day (#1720). Both surfaces are eventually
-consistent, so a daily run is enough, and `scripts/release.sh`
-refreshes both itself so a release never waits on cron.
-
-So the maintainer never has to manually refresh the count or
-freshness stamp; that's handled. **What the automation does NOT
-do**: rewrite the prose timeline rows. When the count visibly
-diverges from what the prose says is in flight, the maintainer
-resynthesises by hand (which is also a §5 cross-check item at
-release time). The autostamp is the staleness alarm; humans
-write the synthesis.
-
-**Why per-release instead of every N PRs.** Threshold options
-considered: (a) at every release; (b) every N user-visible PRs
-(N=5 was the candidate); (c) every M days (M=14). Option (a)
-ties to a rhythm the maintainer already runs and never drifts
-into "I forgot when I last swept". Options (b) and (c) decouple
-from cadence but add a counter to remember. (a) wins on the
-"will the maintainer actually do this" metric. If the release
-cadence ever slows to less than monthly, revisit and consider
-adding a calendar fallback.
+**What the automation does NOT do**: rewrite the prose timeline
+rows. When the count visibly diverges from what the prose says is
+in flight, the maintainer resynthesises by hand, which is also a §5
+cross-check item at release time. The autostamp is the staleness
+alarm, and the synthesis stays human.
 
 ### PDF documentation pack: minor / major only
 
@@ -692,7 +608,7 @@ issue so this file stays a reference rather than a tutorial.*
 
 ## Lazy-loaded procedures
 
-Four sections moved out of this file so they load when needed instead of
+Five sections moved out of this file so they load when needed instead of
 costing context every session, the same pattern §15 uses for
 `docs/claude-usage.md`. Section numbers below are unchanged so existing §N
 cross-references keep resolving.
@@ -701,5 +617,8 @@ cross-references keep resolving.
   major release (was §5).
 - `cross-repo-project` skill — the NetSec + EISS GitHub Project (was §13).
 - `whats-new-banner` skill — when to run the announcement banner (was §14).
+- `milestone-tagging` skill — the milestone set, its due dates and the
+  pre-release hygiene check. §10 keeps the resident rule (every issue and
+  PR carries one, set at creation, ask when unclear).
 - [`.github/CLAUDE.md`](.github/CLAUDE.md) — SHA-pinning and release-workflow
   conventions, loaded when working under `.github/` (was §12).
