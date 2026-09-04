@@ -1,6 +1,6 @@
 ---
 name: whats-new-banner
-description: Discipline for the site-wide "What's New" announcement banner: when activating it is justified, when it is not, the cadence, and how to update it. Use when asked to activate, update, or retire the banner.
+description: "Discipline for the site-wide \"What's New\" announcement banner: when activating it is justified, when it is not, the cadence, and how to update it. Use when asked to activate, update, or retire the banner."
 ---
 
 # 14. *What's New* banner: sparingly
