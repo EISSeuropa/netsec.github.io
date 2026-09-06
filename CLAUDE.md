@@ -528,6 +528,16 @@ to be reported separately. This recurred with the home-page card
 deep-links that scrolled to the wrong position and with padding
 miscalculations that surfaced on more than one page.
 
+### Grep the locale triplet rather than reading it
+
+A copy change usually lands in `about.html`, `about.fr.html` and
+`about.de.html` together, which is 2,954 lines read for the three lines
+that actually change, and every following turn resends all of it. One
+`grep -n` across the three finds the string in each file and hands back
+the line numbers the targeted reads then need. All three are over the
+800-line threshold that `.claude/hooks/guard-bulk-read.py` enforces, so
+the whole-file read is refused anyway (#1794).
+
 ### Trace a sitewide change through every drift gate
 
 A change that touches every file (a cache-bust stamp, a shared header,
