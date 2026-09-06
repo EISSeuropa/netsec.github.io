@@ -514,15 +514,12 @@ slipped through before: jprobe.html, rmm.html, swatch.html.
 ### Workflow agents write where you point them, not where they live
 
 An agent spawned with `isolation: worktree` runs in its own fresh
-worktree, but it will still write into the main checkout if the prompt
-hands it an absolute repo path. Give workflow agents only paths relative
-to their working directory, tell them their cwd IS the worktree, and
-forbid absolute paths, `cd`, and any git command. Otherwise parallel
-agents leak files into the shared checkout (and can collide on its git
-state) while you are working in it. This surfaced when a test-writing
-fan-out wrote `scripts/test-*.py` into the main checkout because the
-prompt named the repo by its absolute path. Pair it with the
-scratch-file rule above: when a run is killed, prune its leftover
+worktree and will still write into the main checkout if the prompt hands
+it an absolute repo path, which is how a test-writing fan-out once wrote
+`scripts/test-*.py` into the shared tree. A parallel agent can collide
+on its git state as well. Give an agent only paths relative to its
+working directory, tell it its cwd IS the worktree, and forbid absolute
+paths, `cd`, and any git command. When a run is killed, prune leftover
 worktrees with `git worktree remove -f -f` before continuing.
 
 ### Bind JS to `data-*` hooks, never to a styling class
@@ -535,19 +532,13 @@ is then silently swept into the first one's handler. Reach for the
 attribute selector even when there is only one match today, because the
 collision arrives with the next feature that clones the markup.
 
-The STSM-hosting filter chip reused `class="members-mentorship-chip"` to
-borrow the pill styling, so the mentorship click handler
-(`querySelectorAll('.members-mentorship-chip')`) also fired on it and
-pushed `undefined` into the mentorship set, which then filtered out every
-member. The deep link worked because it never runs the click handlers, so
-the bug read as data-related when it was a selector collision. Fixed in
-[#862](https://github.com/EISSeuropa/netsec.github.io/pull/862) by scoping
-the handler to `.members-mentorship-chip[data-mentorship]`.
-
-The `Lint CSS for class-name collisions` CI check guards the CSS side of
-this (two rules claiming one name). It does not see a JS selector reaching
-an element that only wanted the class for looks. This convention is that
-blind spot's counterpart.
+A chip that borrowed a filter's pill styling was swept into that filter's
+click handler and pushed `undefined` into its set, which then filtered out
+every member. The deep link kept working, since it never runs the click
+handlers, so the bug read as data-related when the cause was a selector
+collision ([#862](https://github.com/EISSeuropa/netsec.github.io/pull/862)).
+The `Lint CSS for class-name collisions` check guards only the CSS side,
+two rules claiming one name, so this convention is its counterpart.
 
 *This file is short on purpose. If you need to add a rule, add it
 here; if you need to add an example, prefer linking a PR / commit /
