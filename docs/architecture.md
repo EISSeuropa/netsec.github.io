@@ -543,6 +543,7 @@ sweep (rule §11).
 │   ├── build-search.sh              # Builds /pagefind/ via `npx pagefind` (gitignored)
 │   ├── build-bio-search-stubs.py    # Renders search/bios/<lang>/<slug>.html — the per-member stubs Pagefind indexes so a member is findable by site search (country + wgs facets); --check drift gate (#1218, #1428)
 │   ├── summarise-sync-changes.py    # Reads the working tree after the sync generators run; prints the one-line "what actually changed" summary that leads each sync PR body (#1427)
+│   ├── what-to-rebuild.py           # Prints which builders a change has made stale, derived from each gate's pull_request `paths:` and its `--check` command rather than a hand-kept list (see the rebuild-gates skill)
 │   ├── social-post.py               # Composes + publishes news / spotlight / thread posts to Bluesky + LinkedIn (see social-publishing.md, #1072)
 │   ├── rotate-spotlight.py          # Picks the weekly home-page member spotlight by balanced-rotation score; writes data/spotlight.json (#341)
 │   ├── check-linkedin-version.py    # Keeps data/linkedin-api-version.json current vs. LinkedIn's published active versions, so the LinkedIn-Version header never sunsets silently (see social-publishing.md, #1223)
