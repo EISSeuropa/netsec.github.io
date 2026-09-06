@@ -11,8 +11,19 @@
             "statusMessage": "branch-first guard"
           }
         ]
+      },
+      {
+        "matcher": "Read|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-bulk-read.py\"",
+            "timeout": 10,
+            "statusMessage": "bulk-read guard"
+          }
+        ]
       }
     ]
   },
-  "_doc": "Committed, shared Claude Code settings for the NetSec repo. The PreToolUse hook blocks `git commit` on the default branch (main/master) so changes always land through a feature branch and a PR. The hook fails open on anything else (non-commit commands, detached HEAD, errors). See CLAUDE.md section 2 (branch-first). Personal, machine-local overrides belong in the gitignored .claude/settings.local.json."
+  "_doc": "Committed, shared Claude Code settings for the NetSec repo. Two PreToolUse guards, both failing open. guard-main-commit.sh blocks `git commit` on the default branch so changes always land through a feature branch and a PR (CLAUDE.md section 2). guard-bulk-read.py refuses a whole-file read of anything over 800 lines and names the targeted alternative, so site.css and bios.json stop landing in the context whole. Personal, machine-local overrides belong in the gitignored .claude/settings.local.json."
 }
