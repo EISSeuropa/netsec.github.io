@@ -437,7 +437,7 @@ matrix and the reasoning behind it are in
 [`docs/claude-usage.md`](docs/claude-usage.md), kept out of this
 file so it costs no per-session context.
 
-Two things a config file cannot do, so they belong here as
+Three things a config file cannot do, so they belong here as
 behaviour:
 
 - **Plan first on multi-surface work.** Anything spanning more
@@ -451,6 +451,14 @@ behaviour:
   say so and recommend bumping or dropping the dial. The live call
   on whether a task is worth Opus or high effort stays with the
   maintainer, the only one who can see the remaining weekly quota.
+- **Delegate read-only exploration.** A broad search (which files
+  define a class, where a string sits across the three locales) goes
+  to an `Explore` subagent at `model: haiku`, so the files it opens
+  never enter this session's context and are never resent. Editing
+  and the decisions stay here, since a cheap reader finds surface
+  patterns and stops. Explore lacks Edit and Write. It does have
+  Bash, so tell it to read and report, never to run git or write,
+  and §16's path rule applies when it runs in a worktree.
 
 The effort floor on this repo is `medium`, not `low`: most edits
 cascade across the locales and the automation layer (cache-bust
