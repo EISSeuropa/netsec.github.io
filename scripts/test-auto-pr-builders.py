@@ -40,8 +40,6 @@ WRITES = {
 }
 
 SKILL = ROOT / ".claude/skills/rebuild-gates/SKILL.md"
-# A row of the skill's copy of WRITES: | `sync-bios.yml` | `a.json`, `b/` |
-SKILL_ROW = re.compile(r"^\| *`([a-z0-9-]+\.yml)` *\| *([^|]+?) *\|", re.M)
 
 # `NAME = ROOT / "data" / "bios.json"`, the way every builder declares a path.
 # Indented too: build-network-map.py reaches data/indico.json from a local
@@ -167,14 +165,8 @@ def test_every_gated_builder_declares_an_input():
 def test_the_skill_carries_the_same_write_sets():
     """The rebuild-gates skill prints WRITES for a reader deciding what a
     workflow change has to rerun. Two copies of a table is how the gaps above
-    got in, so the second one is pinned to the first."""
-    rows = {wf: {c.strip(" `") for c in cells.split(",")}
-            for wf, cells in SKILL_ROW.findall(SKILL.read_text())}
-    assert rows, f"no write-set table found in {SKILL}"
-    assert rows == WRITES, (
-        f"the table in {SKILL.name} and WRITES disagree.\n"
-        f"  only in the skill: {sorted(set(rows) - set(WRITES))}\n"
-        f"  only in WRITES:    {sorted(set(WRITES) - set(rows))}\n"
-        + "\n".join(f"  {w}: skill {sorted(rows[w])} vs WRITES {sorted(WRITES[w])}"
-                     for w in sorted(set(rows) & set(WRITES))
-                     if rows[w] != WRITES[w]))
+    got in, so the second one has to say what the first one says."""
+    text = SKILL.read_text()
+    for workflow, written in sorted(WRITES.items()):
+        row = f"| `{workflow}` | " + ", ".join(f"`{p}`" for p in sorted(written))
+        assert row + " |" in text, f"{SKILL.name} should carry this row:\n{row} |"
