@@ -150,6 +150,16 @@ jobs:
           # Third instance of the same gap, after #1428 and #764.
           python3 scripts/build-directory-index.py
 
+      - name: Rebuild the sitemap (#1804)
+        run: |
+          # sitemap.xml lists one /people/<id>.html URL per bios.json member,
+          # and sync-cost.py seeds a brand-new member when cost.eu appoints a
+          # leader nobody has submitted the form for yet (_make_seed_entry).
+          # That appointment is the same event that went stale on the directory
+          # index in #1803, so the "sitemap.xml is current" gate in
+          # data-shape-check.yml would fail on the next one.
+          python3 scripts/build-sitemap.py
+
       - name: Prepend a one-line summary of what actually changed
         run: |
           # Same reasoning as the matching step in sync-bios.yml: /tmp/pr-body.md
