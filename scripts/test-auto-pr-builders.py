@@ -39,6 +39,10 @@ WRITES = {
     "linkedin-version-check.yml": {"data/linkedin-api-version.json"},
 }
 
+SKILL = ROOT / ".claude/skills/rebuild-gates/SKILL.md"
+# A row of the skill's copy of WRITES: | `sync-bios.yml` | `a.json`, `b/` |
+SKILL_ROW = re.compile(r"^\| *`([a-z0-9-]+\.yml)` *\| *([^|]+?) *\|", re.M)
+
 # `NAME = ROOT / "data" / "bios.json"`, the way every builder declares a path.
 # Indented too: build-network-map.py reaches data/indico.json from a local
 # inside load_programmes(), and that is still an input.
@@ -158,3 +162,19 @@ def test_every_gated_builder_declares_an_input():
     blind = [b for b in gated_builders() if not inputs(b)]
     assert not blind, (
         f"cannot tell what these read, so they are exempt by accident: {blind}")
+
+
+def test_the_skill_carries_the_same_write_sets():
+    """The rebuild-gates skill prints WRITES for a reader deciding what a
+    workflow change has to rerun. Two copies of a table is how the gaps above
+    got in, so the second one is pinned to the first."""
+    rows = {wf: {c.strip(" `") for c in cells.split(",")}
+            for wf, cells in SKILL_ROW.findall(SKILL.read_text())}
+    assert rows, f"no write-set table found in {SKILL}"
+    assert rows == WRITES, (
+        f"the table in {SKILL.name} and WRITES disagree.\n"
+        f"  only in the skill: {sorted(set(rows) - set(WRITES))}\n"
+        f"  only in WRITES:    {sorted(set(WRITES) - set(rows))}\n"
+        + "\n".join(f"  {w}: skill {sorted(rows[w])} vs WRITES {sorted(WRITES[w])}"
+                     for w in sorted(set(rows) & set(WRITES))
+                     if rows[w] != WRITES[w]))
