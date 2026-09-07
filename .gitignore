@@ -6,6 +6,10 @@
 .claude/*
 !.claude/settings.json
 !.claude/hooks/
+# Un-ignoring the hooks directory also un-ignores the bytecode Python
+# leaves there the first time guard-bulk-read.py runs, which then shows
+# up as an untracked directory in every session.
+.claude/hooks/__pycache__/
 # Procedures that used to live in CLAUDE.md, moved out so they load on
 # invocation instead of costing context every session. CLAUDE.md points at
 # them, so they are checked in for the same reason it is.
