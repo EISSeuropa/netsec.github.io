@@ -36,7 +36,7 @@ are written at deploy and must not be committed by hand.
 
 ## What it cannot tell you
 
-Three traps sit outside the path-to-builder mapping.
+Four traps sit outside the path-to-builder mapping.
 
 - A directory member whose photo is only a `.jpg` renders a broken
   headshot, because the `<picture>` source does not fall back. The
@@ -47,3 +47,10 @@ Three traps sit outside the path-to-builder mapping.
 - The Pagefind index is gitignored, so a browser test that drives search
   has to run `scripts/build-search.sh` first. Skip it and the test
   passes locally, then times out in CI.
+- A gate that filters on `data/**` claims every builder behind it, so
+  the answer is a superset when the question is which builders a *sync
+  workflow* has to rerun. Confirm against what the builder actually
+  reads: `build-bio-search-stubs.py`, `build-directory-index.py` and
+  `build-sitemap.py` open only `data/bios.json`, and suggesting them for
+  an `indico.json` change is the filter talking. This matters because a
+  sync script's write set is wider than one file (#1804).
