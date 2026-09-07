@@ -54,3 +54,29 @@ Four traps sit outside the path-to-builder mapping.
   `build-sitemap.py` open only `data/bios.json`, and suggesting them for
   an `indico.json` change is the filter talking. This matters because a
   sync script's write set is wider than one file (#1804).
+
+## What each auto-PR workflow commits
+
+Eight workflows open their own PRs, and each one has to rerun every
+gated builder that reads what it writes. Four times it did not, and the
+PR opened already red: the bio search stubs (#1428), the network map
+(#764), then the directory index and the sitemap on the same workflow
+inside a day (#1803, #1804).
+
+| workflow | commits |
+| --- | --- |
+| `sync-bios.yml` | `data/bios.json`, `assets/images/people/` |
+| `sync-cost.yml` | `data/bios.json`, `data/wg.json`, `data/mc-members.json`, `data/cost-wg-state.json` |
+| `sync-indico.yml` | `data/indico.json`, `data/events.json` |
+| `news-publish.yml` | `data/news.json` |
+| `spotlight-rotate.yml` | `data/spotlight.json`, `data/social-posted.json` |
+| `social-bluesky.yml` | `data/social-posted.json` |
+| `roadmap-refresh.yml` | `data/roadmap-progress.json`, `docs/roadmap-2026.md` |
+| `linkedin-version-check.yml` | `data/linkedin-api-version.json` |
+
+`scripts/test-auto-pr-builders.py` holds the same table as `WRITES` and
+fails when a workflow runs fewer builders than its writes invalidate, so
+reach for the table when you are changing what a workflow commits rather
+than to answer whether today's tree is stale. A test pins this copy
+against that one, and another fails when a new auto-PR workflow is
+missing from both.
