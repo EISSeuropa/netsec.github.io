@@ -140,6 +140,16 @@ jobs:
           # library, idempotent: an unchanged roster produces no diff.
           python3 scripts/build-network-map.py
 
+      - name: Rebuild the public directory index (#1802)
+        run: |
+          # data/directory-index.json derives members[].role from bios.json's
+          # `roles`, and sync-cost.py rewrites `roles` when leadership moves on
+          # cost.eu. sync-bios.yml already runs this builder; the cost sync did
+          # not, so a leadership change failed both the "directory-index.json is
+          # current" gate and test-build-directory-index.py on the auto-PR.
+          # Third instance of the same gap, after #1428 and #764.
+          python3 scripts/build-directory-index.py
+
       - name: Prepend a one-line summary of what actually changed
         run: |
           # Same reasoning as the matching step in sync-bios.yml: /tmp/pr-body.md
