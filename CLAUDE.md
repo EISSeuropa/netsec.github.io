@@ -540,6 +540,17 @@ collision ([#862](https://github.com/EISSeuropa/netsec.github.io/pull/862)).
 The `Lint CSS for class-name collisions` check guards only the CSS side,
 two rules claiming one name, so this convention is its counterpart.
 
+## 17. Naming
+
+Every name you choose, for files, scripts, directories, functions,
+variables, classes, commits, branches, anything, must use precise
+professional vocabulary. Choose the word a 1972 IBM engineer would write
+in a specification. No slang, no casual shorthand, no cute or clever
+names, no words borrowed from chat culture. This applies universally,
+not only to the one example that follows: a script that deploys
+dashboards is `deploy_dashboards.sh`, not `push_dashboards.sh`. That is
+one illustration of the principle, not the extent of it.
+
 *This file is short on purpose. If you need to add a rule, add it
 here; if you need to add an example, prefer linking a PR / commit /
 issue so this file stays a reference rather than a tutorial.*
