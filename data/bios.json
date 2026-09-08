@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-09-04T09:36:24+00:00",
+  "generated_at": "2026-09-08T09:37:52+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-09-04T09:36:24+00:00"
+    "last_synced": "2026-09-08T09:37:52+00:00"
   },
   "members": [
     {
@@ -3913,6 +3913,93 @@
         "Separatism",
         "Ukraine."
       ]
+    },
+    {
+      "id": "rafael-hurtado-valdivieso",
+      "name": "Dr Rafael Hurtado-Valdivieso",
+      "country": "Colombia",
+      "country_code": "co",
+      "affiliation": "Colombian Navy",
+      "position": "Chief R&D&I",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "The Americas"
+      ],
+      "wg_leadership": {},
+      "bio": "Rafael Hurtado Valdivieso is a Colombian-Spanish security studies scholar and Colombian Navy Captain whose research examines the intersections of geopolitics, maritime security, environmental change, and political violence. He holds a PhD in Security Studies from the University of Central Florida, an MSc in Maritime Affairs from the World Maritime University, and undergraduate degrees in Naval Sciences and Administration from the Colombian Naval Academy. His research interests include international security, geopolitics, maritime and environmental security, Latin American security affairs, and relations between Latin America and Europe.",
+      "keywords": [
+        "Political Violence",
+        "Maritime Security",
+        "Latin America",
+        "Environmental Security"
+      ],
+      "email": "rafael.hurtado-valdivieso@fulbrightmail.org",
+      "website": "",
+      "orcid": "0009-0000-8677-7598",
+      "linkedin": "https://www.linkedin.com/in/rafael-hurtado-valdivieso-ph-d-2734b18b",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/rafael-hurtado-valdivieso.jpg",
+      "source": "form",
+      "photo_source_sha256": "9d025329c2ba6581355401eeb9b86313c712fdf9a15a67a66292eaf757e63e87",
+      "canonical_keywords": [
+        "Environmental security",
+        "Latin america",
+        "Maritime security",
+        "Political violence"
+      ],
+      "themes": [
+        "Transnational and human security"
+      ]
+    },
+    {
+      "id": "richard-skalt",
+      "name": "Mr Richard Skalt",
+      "country": "Germany",
+      "country_code": "de",
+      "affiliation": "TÜV SÜD",
+      "position": "Advocacy Manager, Cybersecurity Office",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Richard Skalt is Advocacy Manager at TÜV SÜD’s Cybersecurity Office. Previously he worked he was the Manager of ESMT Berlin’s Digital Society Institute, and held various positions at the German Council on Foreign Relations (DGAP), the University of Munich and Check Point Software Technologies. Richard is a political scientist by training with expertise in cybersecurity, tech policy, and research on critical infrastructure protection and AI. He graduated from the Double Degree Master Program in Political Science at Stockholm University (SU) and Ludwig Maximilian University (LMU) Munich.",
+      "keywords": [
+        "International Security",
+        "Cybersecurity Regulation",
+        "AI Regulation"
+      ],
+      "email": "richard.skalt@tuvsud.com",
+      "website": "https://richardskalt.com",
+      "orcid": "0009-0001-0492-0889",
+      "linkedin": "https://www.linkedin.com/in/richard-skalt/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/richard-skalt.jpg",
+      "source": "form",
+      "photo_source_sha256": "62954c8253c8d54f04afd72c1527bb36d0c342a59dc492c3e65771961667df1e",
+      "canonical_keywords": [
+        "AI regulation",
+        "Cybersecurity regulation",
+        "International security"
+      ],
+      "themes": [
+        "Security and defence"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -3926,6 +4013,10 @@
     },
     {
       "keyword": "Geopolitics",
+      "count": 5
+    },
+    {
+      "keyword": "International security",
       "count": 5
     },
     {
@@ -3946,10 +4037,6 @@
     },
     {
       "keyword": "International relations",
-      "count": 4
-    },
-    {
-      "keyword": "International security",
       "count": 4
     },
     {
@@ -3986,6 +4073,10 @@
     },
     {
       "keyword": "Hybrid threats",
+      "count": 3
+    },
+    {
+      "keyword": "Maritime security",
       "count": 3
     },
     {
@@ -4061,10 +4152,6 @@
       "count": 2
     },
     {
-      "keyword": "Maritime security",
-      "count": 2
-    },
-    {
       "keyword": "Multilateralism",
       "count": 2
     },
@@ -4114,6 +4201,10 @@
     },
     {
       "keyword": "AI governance",
+      "count": 1
+    },
+    {
+      "keyword": "AI regulation",
       "count": 1
     },
     {
@@ -4261,6 +4352,10 @@
       "count": 1
     },
     {
+      "keyword": "Cybersecurity regulation",
+      "count": 1
+    },
+    {
       "keyword": "Defence attitudes",
       "count": 1
     },
@@ -4342,6 +4437,10 @@
     },
     {
       "keyword": "Environmental degradation",
+      "count": 1
+    },
+    {
+      "keyword": "Environmental security",
       "count": 1
     },
     {
@@ -4525,6 +4624,10 @@
       "count": 1
     },
     {
+      "keyword": "Latin america",
+      "count": 1
+    },
+    {
       "keyword": "Machine learning for security",
       "count": 1
     },
@@ -4638,6 +4741,10 @@
     },
     {
       "keyword": "Political economy",
+      "count": 1
+    },
+    {
+      "keyword": "Political violence",
       "count": 1
     },
     {
@@ -4832,7 +4939,7 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 37
+      "count": 38
     },
     {
       "theme": "Foreign policy and diplomacy",
@@ -4848,7 +4955,7 @@
     },
     {
       "theme": "Transnational and human security",
-      "count": 16
+      "count": 17
     },
     {
       "theme": "Strategy and deterrence",
@@ -5123,15 +5230,15 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 53
+      "count": 54
     },
     {
       "region": "Global and cross-regional",
-      "count": 41
+      "count": 42
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 19
+      "count": 20
     },
     {
       "region": "Europe - Western Balkans",
@@ -5139,7 +5246,7 @@
     },
     {
       "region": "The Americas",
-      "count": 12
+      "count": 13
     },
     {
       "region": "Asia",

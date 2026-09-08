@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-09-04T09:36:24+00:00",
+  "generated_at": "2026-09-08T09:37:52+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 85,
+  "count": 87,
   "members": [
     {
       "name": "Dr Alexander Lanoszka",
@@ -753,6 +753,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/pieter-zhao.jpg"
     },
     {
+      "name": "Dr Rafael Hurtado-Valdivieso",
+      "name_key": "rafael valdivieso",
+      "aliases": [],
+      "slug": "rafael-hurtado-valdivieso",
+      "url": "https://netsec-cost.eu/people/rafael-hurtado-valdivieso.html",
+      "orcid": "0009-0000-8677-7598",
+      "role": null,
+      "affiliation": "Colombian Navy",
+      "photo": "https://netsec-cost.eu/assets/images/people/rafael-hurtado-valdivieso.jpg"
+    },
+    {
       "name": "Dr Revecca Pedi",
       "name_key": "revecca pedi",
       "aliases": [],
@@ -762,6 +773,17 @@
       "role": "WG4 Leader · Management Committee · Greece",
       "affiliation": "University of Macedonia",
       "photo": "https://netsec-cost.eu/assets/images/people/revecca-pedi.jpg"
+    },
+    {
+      "name": "Mr Richard Skalt",
+      "name_key": "richard skalt",
+      "aliases": [],
+      "slug": "richard-skalt",
+      "url": "https://netsec-cost.eu/people/richard-skalt.html",
+      "orcid": "0009-0001-0492-0889",
+      "role": null,
+      "affiliation": "TÜV SÜD",
+      "photo": "https://netsec-cost.eu/assets/images/people/richard-skalt.jpg"
     },
     {
       "name": "Ms Rusudan Zabakhidze",
