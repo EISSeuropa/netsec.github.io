@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "pieter-zhao",
-  "featuredSince": "2026-09-01",
+  "current": "mattia-sguazzini",
+  "featuredSince": "2026-09-08",
   "pinned": null,
   "history": [
+    {
+      "id": "mattia-sguazzini",
+      "week": "2026-W37",
+      "date": "2026-09-08"
+    },
     {
       "id": "pieter-zhao",
       "week": "2026-W36",
