@@ -3,8 +3,8 @@
   "stats": {
     "working_groups": 4,
     "people": 195,
-    "people_with_bios": 87,
-    "edges": 522,
+    "people_with_bios": 88,
+    "edges": 523,
     "themes": 16,
     "panels_matched": 14,
     "panel_edges": 54,
@@ -131,7 +131,7 @@
       "id": "theme-strategy-and-deterrence",
       "type": "theme",
       "name": "Strategy and deterrence",
-      "memberCount": 14
+      "memberCount": 15
     },
     {
       "id": "theme-theory-and-methods",
@@ -644,6 +644,17 @@
       ]
     },
     {
+      "id": "ludovica-castelli",
+      "type": "person",
+      "name": "Dr Ludovica Castelli",
+      "country": "Italy",
+      "slug": "ludovica-castelli",
+      "photo": "assets/images/people/map/ludovica-castelli.webp",
+      "mentorship": [
+        "mentor"
+      ]
+    },
+    {
       "id": "marco-cifra",
       "type": "person",
       "name": "Mr Marco Cifra",
@@ -1145,12 +1156,6 @@
       "type": "person",
       "name": "Mr Lorenz Sommer",
       "country": "Germany"
-    },
-    {
-      "id": "p-ludovica-castelli",
-      "type": "person",
-      "name": "Dr Ludovica Castelli",
-      "country": "Italy"
     },
     {
       "id": "p-magnus-petersson",
@@ -1912,6 +1917,14 @@
       "target": "wg-4"
     },
     {
+      "source": "ludovica-castelli",
+      "target": "wg-1"
+    },
+    {
+      "source": "ludovica-castelli",
+      "target": "wg-3"
+    },
+    {
       "source": "marie-robin",
       "target": "wg-2"
     },
@@ -2354,14 +2367,6 @@
     {
       "source": "p-lorenz-sommer",
       "target": "wg-1"
-    },
-    {
-      "source": "p-ludovica-castelli",
-      "target": "wg-1"
-    },
-    {
-      "source": "p-ludovica-castelli",
-      "target": "wg-3"
     },
     {
       "source": "p-magnus-petersson",
@@ -3273,6 +3278,10 @@
     },
     {
       "source": "lucian-bumeder",
+      "target": "theme-strategy-and-deterrence"
+    },
+    {
+      "source": "ludovica-castelli",
       "target": "theme-strategy-and-deterrence"
     },
     {

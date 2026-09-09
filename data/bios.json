@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-09-08T09:37:52+00:00",
+  "generated_at": "2026-09-09T09:41:55+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-09-08T09:37:52+00:00"
+    "last_synced": "2026-09-09T09:41:55+00:00"
   },
   "members": [
     {
@@ -4000,6 +4000,51 @@
       "themes": [
         "Security and defence"
       ]
+    },
+    {
+      "id": "ludovica-castelli",
+      "name": "Dr Ludovica Castelli",
+      "country": "United States",
+      "country_code": "us",
+      "affiliation": "Harvard's Belfer Center",
+      "position": "Associate, Project on Managing the Atom",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional",
+        "Middle East and North Africa"
+      ],
+      "wg_leadership": {},
+      "bio": "Ludovica Castelli (Ph.D.) is Research Fellow and Project Manager of the EU Non-Proliferation and Disarmament Consortium at the Istituto Affari Internazionali (IAI), where she also serves as Interim Managing Editor of The International Spectator. She is also an Associate with the Project on Managing the Atom at Harvard Kennedy School’s Belfer Center for Science and International Affairs. She holds a Ph.D. from the University of Leicester, where she was part of the ERC-funded “Third Nuclear Age” project. Her work focuses on Critical Security Studies, conceptual history, and nuclear politics, with a focus on the Middle East. Ludovica has presented her work at numerous academic and Track 1.5 venues across the US, the Middle East, and Europe, and has published in academic journals as well as in policy papers and commentaries. She is co-author of the book The Global Third Nuclear Age (Routledge, 2025) and is currently working on her first monograph based on her doctoral thesis.",
+      "keywords": [
+        "Nuclear politics",
+        "discourse",
+        "Middle East",
+        "metaphors"
+      ],
+      "email": "castelliludovica@gmail.com",
+      "website": "https://www.belfercenter.org/people/ludovica-castelli",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/ludovica-castelli-phd-48a330115",
+      "twitter": "https://x.com/LudovicaCastel5",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/ludovica-castelli.jpg",
+      "source": "form",
+      "photo_source_sha256": "bdc4de317890b94f002ef8254eeb668cfb51ab859b7aacd0d4add4e118e47531",
+      "canonical_keywords": [
+        "Discourse",
+        "Metaphors",
+        "Middle east",
+        "Nuclear politics"
+      ],
+      "themes": [
+        "Strategy and deterrence"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -4157,6 +4202,10 @@
     },
     {
       "keyword": "National security",
+      "count": 2
+    },
+    {
+      "keyword": "Nuclear politics",
       "count": 2
     },
     {
@@ -4393,6 +4442,10 @@
     },
     {
       "keyword": "Diplomacy studies",
+      "count": 1
+    },
+    {
+      "keyword": "Discourse",
       "count": 1
     },
     {
@@ -4648,6 +4701,14 @@
       "count": 1
     },
     {
+      "keyword": "Metaphors",
+      "count": 1
+    },
+    {
+      "keyword": "Middle east",
+      "count": 1
+    },
+    {
       "keyword": "Middle east studies",
       "count": 1
     },
@@ -4697,10 +4758,6 @@
     },
     {
       "keyword": "Nuclear deterrence",
-      "count": 1
-    },
-    {
-      "keyword": "Nuclear politics",
       "count": 1
     },
     {
@@ -4959,7 +5016,7 @@
     },
     {
       "theme": "Strategy and deterrence",
-      "count": 14
+      "count": 15
     },
     {
       "theme": "European and transatlantic security order",
@@ -5230,11 +5287,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 54
+      "count": 55
     },
     {
       "region": "Global and cross-regional",
-      "count": 42
+      "count": 43
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -5254,7 +5311,7 @@
     },
     {
       "region": "Middle East and North Africa",
-      "count": 10
+      "count": 11
     },
     {
       "region": "Africa",
