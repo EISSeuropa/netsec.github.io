@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-09-09T09:41:55+00:00",
+  "generated_at": "2026-09-11T09:49:08+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-09-09T09:41:55+00:00"
+    "last_synced": "2026-09-11T09:49:08+00:00"
   },
   "members": [
     {
@@ -4045,6 +4045,149 @@
       "themes": [
         "Strategy and deterrence"
       ]
+    },
+    {
+      "id": "henrique-garbino",
+      "name": "Dr Henrique Garbino",
+      "country": "Sweden",
+      "country_code": "se",
+      "affiliation": "Swedish Defence University",
+      "position": "Lecturer",
+      "roles": [
+        "Management Committee · Sweden"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Henrique Garbino is a lecturer at the Department of War Studies at the Swedish Defence University. His research focuses on the dynamics of violence and restraint in armed conflict, explosive weapons, peace operations, civil-military relations, and humanitarian mine action. Henrique holds a PhD in War Studies at the Swedish Defence University (2026), an MSSc in Peace and Conflict Studies at Uppsala University (2019); a PGCert in Military History at the University of Southern Santa Catarina (2017); and a BSc in Military Sciences at the Military Academy of Agulhas Negras (2010).\n\nPrior to this current position, he served in the Brazilian Army as a combat engineer officer from 2006 to 2017. His experience in the military covered a wide range of different activities, such as explosive ordnance disposal, civil-military coordination, and training and education; in contexts as diverse as border control, law enforcement, and United Nations peace operations. Following his military service, Henrique worked in the fields of humanitarian mine action, disarmament, demobilisation, and reintegration of former combatants (DDR), and civil-military coordination in Colombia, Gaza, Haiti, Nagorno-Karabakh, Tajikistan, and Ukraine.\n\nHenrique continues to deploy as an explosive ordnance disposal and civil-military coordination specialist for short-term missions with the International Committee of the Red Cross and several United Nations agencies. He is also an Associate Specialist at the Brazilian Network on Peace Operations (2021-) and an Expert at the Forum on the Arms Trade (2023-).",
+      "keywords": [
+        "violence and restraint",
+        "humanitarian action",
+        "mine action",
+        "peace operations",
+        "civil-military relations"
+      ],
+      "email": "henrique.garbino@fhs.se",
+      "website": "https://www.fhs.se/sc/profile-page.html?identity=400.7283638b17681d6b0eb9f2cb",
+      "orcid": "0000-0002-2544-8683",
+      "linkedin": "https://www.linkedin.com/in/henriquegarbino/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/henrique-garbino.jpg",
+      "source": "form",
+      "photo_source_sha256": "8968ab78da6a1625d3b1657604fe2a0d1ade4674d7220086926b4147055a86ae",
+      "founding_contributor": true,
+      "canonical_keywords": [
+        "Civil-military relations",
+        "Humanitarian action",
+        "Mine action",
+        "Peace operations",
+        "Violence and restraint"
+      ],
+      "themes": [
+        "Security and defence"
+      ]
+    },
+    {
+      "id": "laura-inigo-alvarez",
+      "name": "Dr Laura Íñigo Álvarez",
+      "country": "Portugal",
+      "country_code": "pt",
+      "affiliation": "Universidade Nova de Lisboa",
+      "position": "Assistant Professor",
+      "roles": [
+        "Management Committee · Portugal"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Laura Íñigo Álvarez is an Assistant Professor of International Law and CEDIS Chair in Human Rights, Justice & Security at NOVA School of Law. She co-coordinates the Master’s in Law and Security and serves as Co-coordinator of the NOVA War and Law Lab.\nHer research focuses on international human rights law, international humanitarian law, armed non-state actors, international criminal law, and business and human rights. Since October 2025, she leads the Erasmus+ CBHE project ‘Corporate Respect for Human Rights in Conflict-Affected and High-Risk Areas’ (CAHRA) and serves on the Management Committee of the COST Action NetSec (‘Networking European Security Knowledge’) representing Portugal.",
+      "keywords": [
+        "International humanitarian Law",
+        "non-state armed groups",
+        "CSDP",
+        "EU external action"
+      ],
+      "email": "",
+      "website": "https://novalaw.unl.pt/en/laura-inigo-alvarez/",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/laurainigoalvarez/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/laura-inigo-alvarez.jpg",
+      "source": "form",
+      "photo_source_sha256": "a716382224b5317ecf87df013528af1e253a0db5cefb318a761d91881764d8d9",
+      "founding_contributor": true,
+      "canonical_keywords": [
+        "CSDP",
+        "EU external action",
+        "International humanitarian law",
+        "Non-state armed groups"
+      ],
+      "themes": [
+        "EU, UN and other international organisations",
+        "Transnational and human security"
+      ]
+    },
+    {
+      "id": "adam-hanzel",
+      "name": "Mr Adam Hanzel",
+      "country": "Czechia",
+      "country_code": "cz",
+      "affiliation": "Metropolitan University Prague",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe - Eastern neighbours / Russia",
+        "The Americas"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Adam Hanzel is a PhD candidate in the International Relations and European Studies Department at Metropolitan University Prague. He is also a PhD fellow in the EU-GLOCTER Marie Skłodowska-Curie Action. He holds bachelor's degrees in computational linguistics and Slavic and Eurasian studies and a master's degree in Slavic and Eurasian Studies, all of which were completed at the University of Texas at Austin. His work specializes in mixed methods and interdisciplinary approaches, combining regional expertise and qualitative analysis with natural language processing and machine learning.",
+      "keywords": [
+        "counterterrorism",
+        "assassination",
+        "machine learning",
+        "artificial intelligence",
+        "legal studies"
+      ],
+      "email": "adam.hanzel@mup.cz",
+      "website": "",
+      "orcid": "0000-0002-4602-6199",
+      "linkedin": "https://www.linkedin.com/in/adam-hanzel-a7244492?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "AI",
+        "Assassination",
+        "Counterterrorism",
+        "Legal studies",
+        "ML"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Transnational and human security"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -4057,16 +4200,16 @@
       "count": 7
     },
     {
+      "keyword": "AI",
+      "count": 5
+    },
+    {
       "keyword": "Geopolitics",
       "count": 5
     },
     {
       "keyword": "International security",
       "count": 5
-    },
-    {
-      "keyword": "AI",
-      "count": 4
     },
     {
       "keyword": "Economic security",
@@ -4137,6 +4280,10 @@
       "count": 3
     },
     {
+      "keyword": "Civil-military relations",
+      "count": 2
+    },
+    {
       "keyword": "Comparative politics",
       "count": 2
     },
@@ -4145,7 +4292,15 @@
       "count": 2
     },
     {
+      "keyword": "Counterterrorism",
+      "count": 2
+    },
+    {
       "keyword": "Crisis management",
+      "count": 2
+    },
+    {
+      "keyword": "CSDP",
       "count": 2
     },
     {
@@ -4193,6 +4348,10 @@
       "count": 2
     },
     {
+      "keyword": "International humanitarian law",
+      "count": 2
+    },
+    {
       "keyword": "International law",
       "count": 2
     },
@@ -4202,6 +4361,10 @@
     },
     {
       "keyword": "National security",
+      "count": 2
+    },
+    {
+      "keyword": "Non-state armed groups",
       "count": 2
     },
     {
@@ -4273,6 +4436,10 @@
       "count": 1
     },
     {
+      "keyword": "Assassination",
+      "count": 1
+    },
+    {
       "keyword": "Black sea region",
       "count": 1
     },
@@ -4313,10 +4480,6 @@
       "count": 1
     },
     {
-      "keyword": "Civil-military relations",
-      "count": 1
-    },
-    {
       "keyword": "Climate change",
       "count": 1
     },
@@ -4353,10 +4516,6 @@
       "count": 1
     },
     {
-      "keyword": "Counterterrorism",
-      "count": 1
-    },
-    {
       "keyword": "Covert action",
       "count": 1
     },
@@ -4378,10 +4537,6 @@
     },
     {
       "keyword": "Critical security studies",
-      "count": 1
-    },
-    {
-      "keyword": "CSDP",
       "count": 1
     },
     {
@@ -4509,6 +4664,10 @@
       "count": 1
     },
     {
+      "keyword": "EU external action",
+      "count": 1
+    },
+    {
       "keyword": "EU security",
       "count": 1
     },
@@ -4601,6 +4760,10 @@
       "count": 1
     },
     {
+      "keyword": "Humanitarian action",
+      "count": 1
+    },
+    {
       "keyword": "Identity",
       "count": 1
     },
@@ -4649,10 +4812,6 @@
       "count": 1
     },
     {
-      "keyword": "International humanitarian law",
-      "count": 1
-    },
-    {
       "keyword": "International jurisprudence",
       "count": 1
     },
@@ -4678,6 +4837,10 @@
     },
     {
       "keyword": "Latin america",
+      "count": 1
+    },
+    {
+      "keyword": "Legal studies",
       "count": 1
     },
     {
@@ -4737,15 +4900,19 @@
       "count": 1
     },
     {
+      "keyword": "Mine action",
+      "count": 1
+    },
+    {
+      "keyword": "ML",
+      "count": 1
+    },
+    {
       "keyword": "Narratives",
       "count": 1
     },
     {
       "keyword": "Nationalism",
-      "count": 1
-    },
-    {
-      "keyword": "Non-state armed groups",
       "count": 1
     },
     {
@@ -4766,6 +4933,10 @@
     },
     {
       "keyword": "Organisation studies",
+      "count": 1
+    },
+    {
+      "keyword": "Peace operations",
       "count": 1
     },
     {
@@ -4985,6 +5156,10 @@
       "count": 1
     },
     {
+      "keyword": "Violence and restraint",
+      "count": 1
+    },
+    {
       "keyword": "Visual threat detection",
       "count": 1
     },
@@ -4996,23 +5171,23 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 38
+      "count": 39
     },
     {
       "theme": "Foreign policy and diplomacy",
       "count": 31
     },
     {
+      "theme": "Cyber and emerging technology",
+      "count": 21
+    },
+    {
       "theme": "Theory and methods",
       "count": 21
     },
     {
-      "theme": "Cyber and emerging technology",
-      "count": 20
-    },
-    {
       "theme": "Transnational and human security",
-      "count": 17
+      "count": 19
     },
     {
       "theme": "Strategy and deterrence",
@@ -5027,11 +5202,11 @@
       "count": 10
     },
     {
-      "theme": "Economic security and geoeconomics",
-      "count": 8
+      "theme": "EU, UN and other international organisations",
+      "count": 9
     },
     {
-      "theme": "EU, UN and other international organisations",
+      "theme": "Economic security and geoeconomics",
       "count": 8
     },
     {
@@ -5287,15 +5462,15 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 55
+      "count": 56
     },
     {
       "region": "Global and cross-regional",
-      "count": 43
+      "count": 44
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 20
+      "count": 21
     },
     {
       "region": "Europe - Western Balkans",
@@ -5303,7 +5478,7 @@
     },
     {
       "region": "The Americas",
-      "count": 13
+      "count": 15
     },
     {
       "region": "Asia",
