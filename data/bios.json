@@ -4009,7 +4009,10 @@
       "affiliation": "Harvard's Belfer Center",
       "position": "Associate, Project on Managing the Atom",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        3
+      ],
       "mentorship": [
         "mentor"
       ],
@@ -4102,7 +4105,10 @@
       "roles": [
         "Management Committee · Portugal"
       ],
-      "wgs": [],
+      "wgs": [
+        3,
+        4
+      ],
       "mentorship": [
         "mentor"
       ],
