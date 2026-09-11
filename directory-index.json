@@ -1,9 +1,20 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-09-09T09:41:55+00:00",
+  "generated_at": "2026-09-11T09:49:08+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 88,
+  "count": 91,
   "members": [
+    {
+      "name": "Mr Adam Hanzel",
+      "name_key": "adam hanzel",
+      "aliases": [],
+      "slug": "adam-hanzel",
+      "url": "https://netsec-cost.eu/people/adam-hanzel.html",
+      "orcid": "0000-0002-4602-6199",
+      "role": null,
+      "affiliation": "Metropolitan University Prague",
+      "photo": null
+    },
     {
       "name": "Dr Alexander Lanoszka",
       "name_key": "alexander lanoszka",
@@ -357,6 +368,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/giulia-biselli.jpg"
     },
     {
+      "name": "Dr Henrique Garbino",
+      "name_key": "henrique garbino",
+      "aliases": [],
+      "slug": "henrique-garbino",
+      "url": "https://netsec-cost.eu/people/henrique-garbino.html",
+      "orcid": "0000-0002-2544-8683",
+      "role": "Management Committee · Sweden",
+      "affiliation": "Swedish Defence University",
+      "photo": "https://netsec-cost.eu/assets/images/people/henrique-garbino.jpg"
+    },
+    {
       "name": "Prof. Huw Bennett",
       "name_key": "huw bennett",
       "aliases": [],
@@ -487,6 +509,17 @@
       "role": "Management Committee · North Macedonia",
       "affiliation": "Faculty of Security, Skopje, University \"St. Kliment Ohridski\", Bitola",
       "photo": "https://netsec-cost.eu/assets/images/people/kire-babanoski.jpg"
+    },
+    {
+      "name": "Dr Laura Íñigo Álvarez",
+      "name_key": "laura alvarez",
+      "aliases": [],
+      "slug": "laura-inigo-alvarez",
+      "url": "https://netsec-cost.eu/people/laura-inigo-alvarez.html",
+      "orcid": null,
+      "role": "Management Committee · Portugal",
+      "affiliation": "Universidade Nova de Lisboa",
+      "photo": "https://netsec-cost.eu/assets/images/people/laura-inigo-alvarez.jpg"
     },
     {
       "name": "Ms Laura Lisboa",
