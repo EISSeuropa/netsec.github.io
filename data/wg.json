@@ -181,7 +181,8 @@
         },
         {
           "name": "Dr Ludovica Castelli",
-          "country": "Italy"
+          "country": "Italy",
+          "slug": "ludovica-castelli"
         },
         {
           "name": "Prof Magnus Petersson",
@@ -840,7 +841,8 @@
         },
         {
           "name": "Dr Laura Íñigo Álvarez",
-          "country": "Portugal"
+          "country": "Portugal",
+          "slug": "laura-inigo-alvarez"
         },
         {
           "name": "Ms Laurena Kalaja",
@@ -848,7 +850,8 @@
         },
         {
           "name": "Dr Ludovica Castelli",
-          "country": "Italy"
+          "country": "Italy",
+          "slug": "ludovica-castelli"
         },
         {
           "name": "Dr Marco Wyss",
@@ -1005,7 +1008,7 @@
       "number": 4,
       "name": "Inclusion, Representativeness & Ethics",
       "colour": "wg-4",
-      "memberCount": 42,
+      "memberCount": 41,
       "lead": {
         "slug": "revecca-pedi",
         "name": "Dr Revecca Pedi"
@@ -1057,10 +1060,6 @@
           "slug": "filip-ejdus"
         },
         {
-          "name": "Dr Fitim Kastrati",
-          "country": "Kosovo*"
-        },
-        {
           "name": "Dr Georgian Marius Ghincea",
           "country": "Switzerland"
         },
@@ -1109,7 +1108,8 @@
         },
         {
           "name": "Dr Laura Íñigo Álvarez",
-          "country": "Portugal"
+          "country": "Portugal",
+          "slug": "laura-inigo-alvarez"
         },
         {
           "name": "Dr Marko Kovacevic",
