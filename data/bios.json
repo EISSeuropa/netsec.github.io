@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-09-11T09:49:08+00:00",
+  "generated_at": "2026-09-12T06:40:02+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-09-11T09:49:08+00:00"
+    "last_synced": "2026-09-12T06:40:02+00:00"
   },
   "members": [
     {
@@ -4194,6 +4194,53 @@
         "Cyber and emerging technology",
         "Transnational and human security"
       ]
+    },
+    {
+      "id": "jacob-grech",
+      "name": "Mr Jacob Grech",
+      "country": "Italy",
+      "country_code": "it",
+      "affiliation": "European University Institute",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "I am a PhD researcher in the Department of Political and Social Sciences at the European University Institute in Florence, Italy. My research interests include international hierarchy, borders, geoeconomics, and emerging technologies. My doctoral project takes the concept of the periphery as a starting point to explore how small, formerly colonised countries navigate and narrate economic ruptures and transitions.",
+      "keywords": [
+        "Identity",
+        "narratives and ideational security",
+        "Foreign policy and diplomacy",
+        "Economic security and geoeconomics",
+        "Cyber and emerging technology"
+      ],
+      "email": "jacob.grech@eui.eu",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/jacob-grech-799007217/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Cyber and emerging technology",
+        "Economic security and geoeconomics",
+        "Foreign policy and diplomacy",
+        "Identity",
+        "Narratives and ideational security"
+      ],
+      "themes": [
+        "Identity, narratives and ideational security"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -4351,6 +4398,10 @@
     },
     {
       "keyword": "History",
+      "count": 2
+    },
+    {
+      "keyword": "Identity",
       "count": 2
     },
     {
@@ -4546,6 +4597,10 @@
       "count": 1
     },
     {
+      "keyword": "Cyber and emerging technology",
+      "count": 1
+    },
+    {
       "keyword": "Cyber defence",
       "count": 1
     },
@@ -4631,6 +4686,10 @@
     },
     {
       "keyword": "East central Europe",
+      "count": 1
+    },
+    {
+      "keyword": "Economic security and geoeconomics",
       "count": 1
     },
     {
@@ -4722,6 +4781,10 @@
       "count": 1
     },
     {
+      "keyword": "Foreign policy and diplomacy",
+      "count": 1
+    },
+    {
       "keyword": "Future of warfare",
       "count": 1
     },
@@ -4767,10 +4830,6 @@
     },
     {
       "keyword": "Humanitarian action",
-      "count": 1
-    },
-    {
-      "keyword": "Identity",
       "count": 1
     },
     {
@@ -4915,6 +4974,10 @@
     },
     {
       "keyword": "Narratives",
+      "count": 1
+    },
+    {
+      "keyword": "Narratives and ideational security",
       "count": 1
     },
     {
@@ -5225,7 +5288,7 @@
     },
     {
       "theme": "Identity, narratives and ideational security",
-      "count": 4
+      "count": 5
     },
     {
       "theme": "Climate, energy and environmental security",
@@ -5468,11 +5531,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 56
+      "count": 57
     },
     {
       "region": "Global and cross-regional",
-      "count": 44
+      "count": 45
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -5484,7 +5547,7 @@
     },
     {
       "region": "The Americas",
-      "count": 15
+      "count": 16
     },
     {
       "region": "Asia",
