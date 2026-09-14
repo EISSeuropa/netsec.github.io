@@ -164,6 +164,7 @@ maintainer-facing audience.
 - A member joining the network arrived without a headshot. The rule that hides the generated profile pages from git matched any folder named `people`, so it also hid the member photographs, and the first new member since it landed had a portrait on the runner that never reached the repository. The rule is now anchored to the one folder it was written for.
 - The nightly member-bios sync re-encoded 31 of the 71 map headshots every run and reported them as changed, which raised a false alarm on each pass.
 - The nightly member-bios sync ran to a crash instead of opening its pull request, so directory updates submitted through the form stopped reaching the site after 28 August 2026.
+- Thirty-two research keywords belonged to no theme, so the Directory's theme filter omitted the members who had submitted them, and one member appeared under no theme at all. Those keywords are now filed, and two changes keep the gap from reopening: a bare region name typed into the keyword box is dropped the way a bare country name already was, and trailing punctuation is stripped before the vocabulary is consulted, which had turned a submitted `Ukraine.` into a keyword of its own.
 
 ## [1.14.0] · 2026-08-29 — The NetSec Network Map
 

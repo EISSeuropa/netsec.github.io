@@ -1006,6 +1006,10 @@ def test_normalise_keyword() -> None:
     expect("cyber security → Cybersecurity", norm("Cyber security"), "Cybersecurity")
     expect("cyber defence stays distinct", norm("Cyber defence"), "Cyber defence")
     expect("sentence-case fallback", norm("Grand Strategy"), "Grand strategy")
+    # Trailing sentence punctuation is stripped before every lookup, so a
+    # submitted "Ukraine." reaches drop_keywords as "Ukraine".
+    expect("trailing full stop stripped", norm("Ukraine."), "Ukraine")
+    expect("trailing stop then alias", norm("hybrid threats."), "Hybrid threats")
     # British spelling already correct is left untouched.
     expect("british spelling unchanged", norm("Defence policy"), "Defence policy")
     # Proper nouns (countries / regions) keep their capital mid-phrase,
