@@ -148,6 +148,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The Directory gains a seventeenth research theme, War, military history and armed conflict, carrying seven keywords out of Security and defence. Four members work in the area, which is the threshold the vocabulary uses for a new theme, and Security and defence goes from 39 members to 38. The theme is labelled in French and German on the filter row and the Network Map hubs.
 - The Directory's research-theme and research-region chips now sort by their live count, so the areas that still have people in them lead the row. The eight chips shown while the row is collapsed are drawn from the same ranking, which brings a smaller theme into view when the current filters make it the largest one left.
 - The accessibility statement moves to v1.5, recording the 2 September 2026 assessment: 155 contrast corrections, the three limitations that remain open, and the light-mode link colour that the automated scan does not reach. Published in English, French and German.
 
