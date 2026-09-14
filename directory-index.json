@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-09-12T06:40:02+00:00",
+  "generated_at": "2026-09-14T14:23:42+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 92,
+  "count": 95,
   "members": [
     {
       "name": "Mr Adam Hanzel",
@@ -93,6 +93,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/anna-seliverstova.jpg"
     },
     {
+      "name": "Ms Antonia-Laura Pup",
+      "name_key": "antonia pup",
+      "aliases": [],
+      "slug": "antonia-laura-pup",
+      "url": "https://netsec-cost.eu/people/antonia-laura-pup.html",
+      "orcid": null,
+      "role": null,
+      "affiliation": "European University Institute",
+      "photo": "https://netsec-cost.eu/assets/images/people/antonia-laura-pup.jpg"
+    },
+    {
       "name": "Mr Archishman Goswami",
       "name_key": "archishman goswami",
       "aliases": [],
@@ -135,6 +146,17 @@
       "role": null,
       "affiliation": "Ankara University & Mersin University",
       "photo": "https://netsec-cost.eu/assets/images/people/avnihan-k-r-s-k.jpg"
+    },
+    {
+      "name": "Dr Betul Dogan Akkas",
+      "name_key": "betul akkas",
+      "aliases": [],
+      "slug": "betul-dogan-akkas",
+      "url": "https://netsec-cost.eu/people/betul-dogan-akkas.html",
+      "orcid": "0000-0001-6933-8139",
+      "role": null,
+      "affiliation": "Ankara University",
+      "photo": "https://netsec-cost.eu/assets/images/people/betul-dogan-akkas.jpg"
     },
     {
       "name": "Carla Sofia Ferreira Fernandes",
@@ -597,6 +619,17 @@
       "role": null,
       "affiliation": "Harvard's Belfer Center",
       "photo": "https://netsec-cost.eu/assets/images/people/ludovica-castelli.jpg"
+    },
+    {
+      "name": "Mr Mahmoud Javadi",
+      "name_key": "mahmoud javadi",
+      "aliases": [],
+      "slug": "mahmoud-javadi",
+      "url": "https://netsec-cost.eu/people/mahmoud-javadi.html",
+      "orcid": "0000-0003-1047-8422",
+      "role": null,
+      "affiliation": "Vrije Universiteit Brussel (VUB)",
+      "photo": "https://netsec-cost.eu/assets/images/people/mahmoud-javadi.jpg"
     },
     {
       "name": "Mr Marco Cifra",

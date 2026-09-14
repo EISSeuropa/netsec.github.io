@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-09-12T06:40:02+00:00",
+  "generated_at": "2026-09-14T14:23:42+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-09-12T06:40:02+00:00"
+    "last_synced": "2026-09-14T14:23:42+00:00"
   },
   "members": [
     {
@@ -4241,6 +4241,134 @@
       "themes": [
         "Identity, narratives and ideational security"
       ]
+    },
+    {
+      "id": "betul-dogan-akkas",
+      "name": "Dr Betul Dogan Akkas",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Ankara University",
+      "position": "Assistant Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Betul Dogan Akkas is an assistant professor of international relations and vice president of the Center for Middle Eastern Studies at Ankara University. She is also a co-convenor of the BISA Working Group International Studies of the Mediterranean, Middle East, and Asia. In her research, she examines foreign policy, security strategies, and political culture in the Gulf Cooperation Council states. Dogan Akkas also covers the involvement of the GCC states in the Yemen war and Turkey-GCC relations.",
+      "keywords": [
+        "Middle East security",
+        "Gulf security",
+        "Defense industry",
+        "securitization",
+        "post structural security"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "0000-0001-6933-8139",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/betul-dogan-akkas.jpg",
+      "source": "form",
+      "photo_source_sha256": "57db62daf4b8001ff89816951caecddf4c6172300235031248040c89602a41d0",
+      "canonical_keywords": [
+        "Defence industry",
+        "Gulf security",
+        "Middle east security",
+        "Post structural security",
+        "Securitisation"
+      ],
+      "themes": [
+        "Economic security and geoeconomics",
+        "Theory and methods"
+      ]
+    },
+    {
+      "id": "mahmoud-javadi",
+      "name": "Mr Mahmoud Javadi",
+      "country": "Belgium",
+      "country_code": "be",
+      "affiliation": "Vrije Universiteit Brussel (VUB)",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Europe"
+      ],
+      "wg_leadership": {},
+      "bio": "Mahmoud Javadi is a doctoral researcher at the Vrije Universiteit Brussel (VUB), Belgium, where he is involved in the European Research Council-funded project “Competition in the Digital Era: Geopolitics and Technology in the 21st Century” (CODE). Previously (June 2023 – August 2024), Mahmoud was an AI Governance Researcher at Erasmus University Rotterdam (EUR), contributing to the EU-funded (Horizon Europe) project “Reignite Multilateralism via Technology” (REMIT). He also has experience with the Carnegie Endowment for International Peace, where his research focused on EU external relations. Mahmoud’s work explores the intersection of technology and geopolitics in shaping the 21st-century world order. His research has been published and is forthcoming in academic journals, including the Journal of Common Market Studies, Contemporary Security Policy, European Journal of International Security, European Security, and the Journal of Contemporary European Studies. X (formerly Twitter): @mahmoudjavadi2",
+      "keywords": [
+        "Defence innovation",
+        "Digital military infrastrcutre",
+        "Transatlantic security"
+      ],
+      "email": "mahmoud.javadi@vub.be",
+      "website": "https://www.brussels-school.be/team/javadi-mahmoud",
+      "orcid": "0000-0003-1047-8422",
+      "linkedin": "https://www.linkedin.com/in/mahmoud-javadi/",
+      "twitter": "https://x.com/MahmoudJavadi2",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/mahmoud-javadi.jpg",
+      "source": "form",
+      "photo_source_sha256": "5f2ab4545e6f736c2638f6cdb1ffdfbbde26c331f221f34fe4c6cfb061fd0f6c",
+      "canonical_keywords": [
+        "Defence innovation",
+        "Digital military infrastrcutre",
+        "Transatlantic security"
+      ],
+      "themes": [
+        "European and transatlantic security order"
+      ]
+    },
+    {
+      "id": "antonia-laura-pup",
+      "name": "Ms Antonia-Laura Pup",
+      "country": "Italy",
+      "country_code": "it",
+      "affiliation": "European University Institute",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Antonia-Laura Pup is a doctoral researcher at the European University Institute (EUI), where she examines European strategic autonomy in the technology sector. She is a Fulbright graduate of Georgetown University, where she specialised in technology and national security policy, completing her master's degree with distinction and serving as Graduate Class Marshal. She also holds a master's degree in International Security from Sciences Po Paris.\n\nPreviously, she served as an adviser to the Chair of the Defence Committee in the Romanian Parliament and as an adviser to a Member of the European Parliament. She was also a fellow with the United States Congress's Select Committee on the Strategic Competition between the United States and the Chinese Communist Party.",
+      "keywords": [
+        "European strategic autonomy",
+        "transatlantic affairs",
+        "Romanian foreign policy"
+      ],
+      "email": "antonialaura.pup@eui.eu",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/antoniapup/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/antonia-laura-pup.jpg",
+      "source": "form",
+      "photo_source_sha256": "343905fbb60781da61f3847dcbb5c126a300fce742e13f6b99f813c824a34373",
+      "canonical_keywords": [
+        "European strategic autonomy",
+        "Romanian foreign policy",
+        "Transatlantic affairs"
+      ],
+      "themes": [
+        "European and transatlantic security order"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -4293,6 +4421,10 @@
       "count": 3
     },
     {
+      "keyword": "Defence industry",
+      "count": 3
+    },
+    {
       "keyword": "Deterrence",
       "count": 3
     },
@@ -4326,6 +4458,10 @@
     },
     {
       "keyword": "Ontological security",
+      "count": 3
+    },
+    {
+      "keyword": "Securitisation",
       "count": 3
     },
     {
@@ -4365,10 +4501,6 @@
       "count": 2
     },
     {
-      "keyword": "Defence industry",
-      "count": 2
-    },
-    {
       "keyword": "Digital sovereignty",
       "count": 2
     },
@@ -4382,6 +4514,10 @@
     },
     {
       "keyword": "European integration",
+      "count": 2
+    },
+    {
+      "keyword": "European strategic autonomy",
       "count": 2
     },
     {
@@ -4437,10 +4573,6 @@
       "count": 2
     },
     {
-      "keyword": "Securitisation",
-      "count": 2
-    },
-    {
       "keyword": "Security",
       "count": 2
     },
@@ -4454,6 +4586,10 @@
     },
     {
       "keyword": "Strategic competition",
+      "count": 2
+    },
+    {
+      "keyword": "Transatlantic security",
       "count": 2
     },
     {
@@ -4629,6 +4765,10 @@
       "count": 1
     },
     {
+      "keyword": "Defence innovation",
+      "count": 1
+    },
+    {
       "keyword": "Defence resources management",
       "count": 1
     },
@@ -4642,6 +4782,10 @@
     },
     {
       "keyword": "Digital media",
+      "count": 1
+    },
+    {
+      "keyword": "Digital military infrastrcutre",
       "count": 1
     },
     {
@@ -4753,10 +4897,6 @@
       "count": 1
     },
     {
-      "keyword": "European strategic autonomy",
-      "count": 1
-    },
-    {
       "keyword": "European union türkiye relations",
       "count": 1
     },
@@ -4818,6 +4958,10 @@
     },
     {
       "keyword": "Green defence industry",
+      "count": 1
+    },
+    {
+      "keyword": "Gulf security",
       "count": 1
     },
     {
@@ -4937,6 +5081,10 @@
       "count": 1
     },
     {
+      "keyword": "Middle east security",
+      "count": 1
+    },
+    {
       "keyword": "Middle east studies",
       "count": 1
     },
@@ -5049,6 +5197,10 @@
       "count": 1
     },
     {
+      "keyword": "Post structural security",
+      "count": 1
+    },
+    {
       "keyword": "Post-cold war international relations",
       "count": 1
     },
@@ -5094,6 +5246,10 @@
     },
     {
       "keyword": "Role theory",
+      "count": 1
+    },
+    {
+      "keyword": "Romanian foreign policy",
       "count": 1
     },
     {
@@ -5181,11 +5337,11 @@
       "count": 1
     },
     {
-      "keyword": "Transatlantic relations",
+      "keyword": "Transatlantic affairs",
       "count": 1
     },
     {
-      "keyword": "Transatlantic security",
+      "keyword": "Transatlantic relations",
       "count": 1
     },
     {
@@ -5247,11 +5403,11 @@
       "count": 31
     },
     {
-      "theme": "Cyber and emerging technology",
-      "count": 21
+      "theme": "Theory and methods",
+      "count": 22
     },
     {
-      "theme": "Theory and methods",
+      "theme": "Cyber and emerging technology",
       "count": 21
     },
     {
@@ -5264,19 +5420,19 @@
     },
     {
       "theme": "European and transatlantic security order",
-      "count": 12
+      "count": 14
     },
     {
       "theme": "Intelligence, information and influence",
       "count": 10
     },
     {
-      "theme": "EU, UN and other international organisations",
+      "theme": "Economic security and geoeconomics",
       "count": 9
     },
     {
-      "theme": "Economic security and geoeconomics",
-      "count": 8
+      "theme": "EU, UN and other international organisations",
+      "count": 9
     },
     {
       "theme": "Peace, mediation and reconciliation",
@@ -5531,7 +5687,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 57
+      "count": 59
     },
     {
       "region": "Global and cross-regional",
@@ -5550,11 +5706,11 @@
       "count": 16
     },
     {
-      "region": "Asia",
-      "count": 11
+      "region": "Middle East and North Africa",
+      "count": 12
     },
     {
-      "region": "Middle East and North Africa",
+      "region": "Asia",
       "count": 11
     },
     {
