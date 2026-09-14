@@ -608,7 +608,7 @@ def normalise_keyword(
 ) -> str:
     """Resolve a raw submitted keyword to its canonical display form.
 
-    Two stages:
+    Two stages, after trailing sentence punctuation is stripped:
       1. Whole-keyword alias lookup. Strip + lowercase + check the
          reverse alias map. If hit, return the canonical verbatim.
       2. Word-walk normalisation. For each letter-run, if its lowercase
@@ -619,7 +619,11 @@ def normalise_keyword(
          rest. Separators (hyphens, en-dashes, spaces, slashes) pass
          through untouched."""
     spelling_map = spelling_map or {}
-    trimmed = (raw or "").strip()
+    # Trailing sentence punctuation is submitter noise ("Ukraine.",
+    # "hybrid threats."). Stripping it here rather than aliasing each
+    # offender means the whole-keyword lookups below, `drop_keywords`
+    # and the theme map included, see the same form as a clean entry.
+    trimmed = (raw or "").strip().rstrip(".,;:").strip()
     if not trimmed:
         return ""
 
