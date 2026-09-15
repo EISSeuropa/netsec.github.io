@@ -23,15 +23,15 @@
     "summer-school.html": {
       "fr": {
         "file": "summer-school.fr.html",
-        "source_sha1": "d619a11aa4a0b91c52d3cf7090f1f8699dc92d72",
-        "translated_on": "2026-07-03",
+        "source_sha1": "e11b3e124dda7a301f32f9748524c28f488a2b2d",
+        "translated_on": "2026-09-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "summer-school.de.html",
-        "source_sha1": "d619a11aa4a0b91c52d3cf7090f1f8699dc92d72",
-        "translated_on": "2026-07-03",
+        "source_sha1": "e11b3e124dda7a301f32f9748524c28f488a2b2d",
+        "translated_on": "2026-09-15",
         "status": "beta",
         "reviewed_by": null
       }
@@ -39,15 +39,15 @@
     "policy-workshop-2026.html": {
       "fr": {
         "file": "policy-workshop-2026.fr.html",
-        "source_sha1": "1d0400f479d69375a8d9f00670bcb51f7f17c354",
-        "translated_on": "2026-08-20",
+        "source_sha1": "d628aedc36cf7b7d5fb5286228fdae4ef9b150b3",
+        "translated_on": "2026-09-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "policy-workshop-2026.de.html",
-        "source_sha1": "1d0400f479d69375a8d9f00670bcb51f7f17c354",
-        "translated_on": "2026-08-20",
+        "source_sha1": "d628aedc36cf7b7d5fb5286228fdae4ef9b150b3",
+        "translated_on": "2026-09-15",
         "status": "beta",
         "reviewed_by": null
       }

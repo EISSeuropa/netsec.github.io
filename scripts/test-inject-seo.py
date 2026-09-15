@@ -668,3 +668,71 @@ def test_inject_faq_is_idempotent_with_structured_data():
     assert twice == once
     # the injected JSON-LD must not feed back as new questions on re-run
     assert once.count('"@type": "FAQPage"') == 1
+
+# ── Event structured data (#1768) ────────────────────────────────────
+
+def _event(**over):
+    ev = {
+        "uid": "x@netsec-cost.eu",
+        "summary": "A workshop",
+        "cardTitle": {"en": "Workshop", "fr": "Atelier", "de": "Werkstatt"},
+        "cardDescription": {"en": "English blurb", "fr": "Texte", "de": "Text"},
+        "cardLocation": {"en": "Ankara, Türkiye"},
+        "location": "Bilkent University, Ankara, Türkiye",
+        "url": "https://netsec-cost.eu/policy-workshop-2026.html",
+        "start": "2026-09-13T09:00",
+        "end": "2026-09-13T18:00",
+        "status": "CONFIRMED",
+        "tzid": "Europe/Istanbul",
+    }
+    ev.update(over)
+    return ev
+
+
+def test_event_offset_comes_from_the_event_own_zone():
+    """#1767 shipped an hour late because every event was published in the
+    Stockholm zone. The offset is computed here, never typed."""
+    node = seo.build_event_node(_event(), "en")
+    assert node["startDate"] == "2026-09-13T09:00:00+03:00"
+    assert node["endDate"] == "2026-09-13T18:00:00+03:00"
+
+
+def test_event_without_a_zone_falls_back_to_the_calendar_default():
+    node = seo.build_event_node(_event(tzid=None), "en")
+    assert node["startDate"].endswith("+02:00")      # Europe/Stockholm in September
+
+
+def test_event_name_and_description_follow_the_locale():
+    assert seo.build_event_node(_event(), "fr")["name"] == "Atelier"
+    assert seo.build_event_node(_event(), "de")["description"] == "Text"
+
+
+def test_venue_becomes_a_place_and_online_becomes_a_virtual_location():
+    place = seo.build_event_node(_event(), "en")["location"]
+    assert place["@type"] == "Place"
+    assert place["address"]["addressLocality"] == "Ankara"
+    assert place["address"]["addressCountry"] == "Türkiye"
+
+    online = seo.build_event_node(_event(cardLocation={"en": "Online"}, location="Online"), "en")
+    assert online["location"] == {"@type": "VirtualLocation",
+                                  "url": "https://netsec-cost.eu/policy-workshop-2026.html"}
+    assert online["eventAttendanceMode"] == "https://schema.org/OnlineEventAttendanceMode"
+
+
+def test_tentative_event_asserts_no_status():
+    """schema.org has no equivalent of an unconfirmed date, so claiming
+    EventScheduled for one would be a lie the search result repeats."""
+    assert "eventStatus" not in seo.build_event_node(_event(status="TENTATIVE"), "en")
+    assert seo.build_event_node(_event(), "en")["eventStatus"] == "https://schema.org/EventScheduled"
+
+
+def test_jsonld_passthrough_overrides_the_generated_fields():
+    node = seo.build_event_node(_event(jsonld={"name": "The full formal name",
+                                               "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode"}), "en")
+    assert node["name"] == "The full formal name"
+    assert node["eventAttendanceMode"] == "https://schema.org/MixedEventAttendanceMode"
+
+
+def test_event_page_is_read_off_the_event_url():
+    assert seo._event_page(_event()) == "policy-workshop-2026"
+    assert seo._event_page(_event(url="https://netsec-cost.eu/#events")) == ""
