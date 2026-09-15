@@ -144,6 +144,7 @@ maintainer-facing audience.
 
 #### Added
 
+- Two news items record the September events. The Management Committee held its first plenary online on 11 September 2026, and Working Group 2's policy workshop on great power politics and the future of alliances ran at Bilkent University in Ankara on 13 September. Both appear on the home page, in the news archive and in the RSS feed, in English, French and German.
 - A failed scheduled workflow files a tracking issue instead of sitting unread in the Actions tab, and the Python test workflow refuses a pull request that introduces an undefined name.
 
 #### Changed
