@@ -136,6 +136,54 @@ class TestSha1:
         ).hexdigest()
         assert mod.sha1(a) == bare
 
+    def test_visitor_counter_tag_is_normalised_out(self, tmp_path):
+        """Switching the counter on must not flag all twenty tracked
+        pages stale, so the tag has to hash to the pre-tag file."""
+        import _analytics
+
+        head = '<meta name="robots" content="index, follow">'
+        tail = "<!-- seo:auto END -->"
+        without = head + "\n" + tail
+        with_tag = head + "\n" + "\n".join(_analytics.lines()) + "\n" + tail
+        a = tmp_path / "a.html"
+        b = tmp_path / "b.html"
+        a.write_text(with_tag, encoding="utf-8")
+        b.write_text(without, encoding="utf-8")
+        assert mod.sha1(a) == mod.sha1(b)
+        # And the recorded hashes stay valid: the stripped text is the
+        # file as it stood before the counter landed.
+        assert mod.sha1(a) == hashlib.sha1(without.encode("utf-8")).hexdigest()
+
+    def test_the_hash_ignores_which_account_the_tag_names(
+        self, tmp_path, monkeypatch
+    ):
+        """Moving to a different GoatCounter account rewrites the tag on
+        every page, and must not read as translation drift."""
+        import _analytics
+
+        head = '<meta name="robots" content="index, follow">'
+        tail = "<!-- seo:auto END -->"
+        bare = hashlib.sha1((head + "\n" + tail).encode("utf-8")).hexdigest()
+        for code in ("netsec-cost", "some-other-account"):
+            monkeypatch.setattr(_analytics, "SITE_CODE", code)
+            f = tmp_path / f"{code}.html"
+            f.write_text(
+                head + "\n" + "\n".join(_analytics.lines()) + "\n" + tail,
+                encoding="utf-8",
+            )
+            assert mod.sha1(f) == bare
+
+    def test_an_empty_site_code_strips_nothing(self, tmp_path, monkeypatch):
+        """The guard that matters: with no lines to remove, a bare
+        newline replace would gut every page it hashed."""
+        import _analytics
+
+        monkeypatch.setattr(_analytics, "SITE_CODE", "")
+        text = "line one\nline two\nline three"
+        f = tmp_path / "a.html"
+        f.write_text(text, encoding="utf-8")
+        assert mod.sha1(f) == hashlib.sha1(text.encode("utf-8")).hexdigest()
+
     def test_network_map_list_region_normalised(self, tmp_path):
         """A member joining moves the generated list region in all three
         locale pages, which used to flag the FR and DE translations as

@@ -21,7 +21,7 @@ account land together.
 from __future__ import annotations
 
 # Set to the GoatCounter account subdomain to switch the counter on.
-SITE_CODE = ""
+SITE_CODE = "netsec-cost"
 
 ENDPOINT = "https://{code}.goatcounter.com/count"
 COUNTER_JS = "https://gc.zgo.at/count.js"

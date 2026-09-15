@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """pytest suite for scripts/_analytics.py and its two call sites.
 
-The counter is off until a GoatCounter account is set, and the privacy
-notice describes collection that only happens once it is on. These
-tests pin both halves of that: nothing is emitted while SITE_CODE is
-empty, and the tag reaches both the top-level pages and the generated
-profile pages once it is not.
+The privacy notice describes collection that only happens while the
+counter is on, so the two have to stay in step. These tests pin both
+directions: the committed site code is set, because a counter silently
+switched off would leave the notice describing collection that is not
+happening, and clearing the code emits nothing at all.
 
 Run: python3 -m pytest scripts/test-analytics.py -q
 """
@@ -35,10 +35,18 @@ def code_set(monkeypatch):
     monkeypatch.setattr(_analytics, "SITE_CODE", "netsec-test")
 
 
-def test_no_tag_while_no_account_is_set():
-    """The committed default. A counter shipped ahead of the privacy
-    notice's account would describe collection that is not happening."""
-    assert _analytics.SITE_CODE == ""
+@pytest.fixture
+def code_cleared(monkeypatch):
+    monkeypatch.setattr(_analytics, "SITE_CODE", "")
+
+
+def test_the_committed_site_code_is_set():
+    """/privacy.html describes the counter's collection, so the counter
+    has to be on. Clearing this constant makes the notice wrong."""
+    assert _analytics.SITE_CODE == "netsec-cost"
+
+
+def test_no_tag_while_no_account_is_set(code_cleared):
     assert _analytics.tag() == ""
     assert _analytics.lines() == []
 
@@ -58,7 +66,7 @@ def test_lines_carry_a_comment_so_the_head_block_stays_readable(code_set):
     assert _analytics.lines()[-1] == _analytics.tag()
 
 
-def test_the_managed_head_block_is_unchanged_while_the_counter_is_off():
+def test_the_managed_head_block_is_unchanged_while_the_counter_is_off(code_cleared):
     seo = _load("inject-seo.py", "inject_seo_off")
     block = seo.build_seo_block("privacy", "en", "T", "D")
     assert "goatcounter" not in block
