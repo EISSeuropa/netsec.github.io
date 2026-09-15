@@ -41,6 +41,21 @@ The script is **idempotent** — it looks for sentinel comments
 rewrites the block in place if present, or inserts a new one
 between the hreflang block and `<link rel="icon">`.
 
+### The aggregate visitor counter
+
+The managed block also carries the GoatCounter tag (#727). The site
+code and the tag itself live in
+[`scripts/_analytics.py`](../scripts/_analytics.py), because
+`build-profile-pages.py` writes its own head for each
+`/people/<slug>` page and needs the same tag. While `SITE_CODE` is
+empty the tag is omitted and no page carries a counter, which is what
+keeps `/privacy.html` honest: the notice describes the collection, so
+the notice and the account go live together. Setting the code and
+re-running both generators switches it on everywhere.
+
+Pages outside `PAGES` get no counter, the same way they get no
+canonical or Open Graph block.
+
 ### Asset cache-busting
 
 The same script also stamps every `assets/css/*.css` and

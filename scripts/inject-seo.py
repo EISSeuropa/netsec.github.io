@@ -43,6 +43,9 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import _analytics  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 
 # Brand primitives come from data/brand.json (the single source of truth)
@@ -275,6 +278,10 @@ def build_seo_block(base: str, lang: str, title: str, desc: str) -> str:
         f'<meta name="theme-color" content="{THEME_COLOR}">',
         '<meta name="format-detection" content="telephone=no">',
         '<meta name="robots" content="index, follow, max-image-preview:large">',
+    ]
+    # Empty until a GoatCounter account is set, see scripts/_analytics.py.
+    lines += _analytics.lines()
+    lines += [
         SENTINEL_END,
     ]
     return "\n".join(lines)
