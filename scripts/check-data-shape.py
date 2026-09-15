@@ -30,9 +30,13 @@ schema):
                          five).
   roadmap-progress.json  non-empty milestones map, every entry carries
                          integer closed/total and a state string.
+  year-review.json       non-empty editions list, every edition has a
+                         year, a window, the six integer stats the hero
+                         strip reads, the fact lists, and a hand block
+                         carrying all three locales.
 
 Usage:
-  python3 scripts/check-data-shape.py            # validate all six
+  python3 scripts/check-data-shape.py            # validate every registered file
   python3 scripts/check-data-shape.py data/bios.json   # subset
 
 Exit codes: 0 all valid, 1 any violation (or unparseable JSON).
@@ -367,6 +371,39 @@ def check_network_map(data) -> list:
     return errs
 
 
+def check_year_review(data) -> list:
+    errs: list = []
+    if not isinstance(data, dict):
+        return ["year-review: top level must be an object"]
+    if not _req(data, "editions", list, errs, "year-review", non_empty=True):
+        return errs
+    for i, ed in enumerate(data["editions"]):
+        ctx = f"year-review.editions[{i}]"
+        if not isinstance(ed, dict):
+            errs.append(f"{ctx}: must be an object")
+            continue
+        _req(ed, "year", int, errs, ctx)
+        if _req(ed, "window", dict, errs, ctx):
+            for bound in ("from", "to"):
+                _req(ed["window"], bound, str, errs, f"{ctx}.window", non_empty=True)
+        # The hero strip reads every stat by name, so a missing key
+        # renders a tile reading "undefined" rather than no tile.
+        if _req(ed, "stats", dict, errs, ctx):
+            for key in ("members", "countries", "events", "outputs", "news", "releases"):
+                _req(ed["stats"], key, int, errs, f"{ctx}.stats")
+        _req(ed, "quarters", list, errs, ctx, non_empty=True)
+        for name in ("news", "events", "outputs", "releases", "memberSeries", "themes"):
+            _req(ed, name, list, errs, ctx)
+        # The hand block is the maintainer's prose. An absent locale key
+        # is a silently untranslated paragraph, so require all three.
+        if _req(ed, "hand", dict, errs, ctx):
+            for field in ("lede", "outlook"):
+                if _req(ed["hand"], field, dict, errs, f"{ctx}.hand"):
+                    for loc in ("en", "fr", "de"):
+                        _req(ed["hand"][field], loc, str, errs, f"{ctx}.hand.{field}")
+    return errs
+
+
 CHECKS = {
     "data/indico.json": check_indico,
     "data/bios.json": check_bios,
@@ -378,6 +415,7 @@ CHECKS = {
     "data/field-guide.json": check_field_guide,
     "data/orcid-works.json": check_orcid_works,
     "data/spotlight.json": check_spotlight,
+    "data/year-review.json": check_year_review,
 }
 
 
