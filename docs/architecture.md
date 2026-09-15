@@ -719,4 +719,18 @@ If you're adding a new event to the Events section:
 5. If a new event sits outside `Europe/Stockholm`, add the
    corresponding `VTIMEZONE` block to `render_vtimezone()` in
    `scripts/build-calendar.py` (the script refuses to run without
-   one).
+   one), and set the event's own `tzid`.
+6. **Regenerate the structured data**: `python3 scripts/inject-seo.py
+   --seo-only`. Since #1768 the schema.org `Event` node on an event's
+   own page, and the `ItemList` on `events.html`, are generated from
+   the same `events.json` entry, so a page whose `url` points at it
+   gains its rich-result block with no hand-written JSON-LD. The start
+   and end are resolved against the event's `tzid`, which is what keeps
+   the offset from being typed by hand a third time. A `CONFIRMED`
+   event carries `eventStatus: EventScheduled` and a `TENTATIVE` one
+   carries none, since schema.org has no equivalent of an unconfirmed
+   date. Anything schema.org wants that the calendar record has no
+   field for, such as a co-organiser or an attendance mode, goes in an
+   optional `jsonld` object on the event, which is merged into the
+   generated node. `.github/workflows/seo-asset-check.yml` runs
+   `--check --seo-only` on every PR, so this cannot drift either.

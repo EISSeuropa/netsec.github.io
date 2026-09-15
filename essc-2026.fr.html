@@ -58,48 +58,6 @@
   })();
 </script>
 <link rel="stylesheet" href="assets/css/site.css">
-<!-- Page-specific Event schema for the conference. Hand-maintained;
-     NOT managed by inject-seo (which owns the Organization/WebPage
-     block in the seo:jsonld sentinels below). -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Event",
-  "name": "European Security Studies Conference 2026",
-  "startDate": "2026-06-11T08:00:00+02:00",
-  "endDate": "2026-06-12T20:00:00+02:00",
-  "eventStatus": "https://schema.org/EventScheduled",
-  "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
-  "location": {
-    "@type": "Place",
-    "name": "Stockholm University",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Stockholm",
-      "addressCountry": "SE"
-    }
-  },
-  "organizer": [
-    {
-      "@type": "Organization",
-      "name": "COST Action CA24154 (NetSec)",
-      "url": "https://netsec-cost.eu"
-    },
-    {
-      "@type": "Organization",
-      "name": "European Initiative for Security Studies (EISS)",
-      "url": "https://eiss-europa.com"
-    },
-    {
-      "@type": "Organization",
-      "name": "Stockholm University"
-    }
-  ],
-  "url": "https://netsec-cost.eu/essc-2026.html",
-  "image": "https://netsec-cost.eu/assets/images/og-image.png",
-  "description": "European Security Studies Conference 2026, the annual flagship event."
-}
-</script>
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -142,6 +100,44 @@
       "url": "https://netsec-cost.eu",
       "name": "NetSec"
     }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "European Security Studies Conference 2026",
+    "startDate": "2026-06-11T08:00:00+02:00",
+    "endDate": "2026-06-12T20:00:00+02:00",
+    "location": {
+      "@type": "Place",
+      "name": "Stockholm University",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Stockholm University, Frescativägen, 114 19 Stockholm, Sweden",
+        "addressLocality": "Stockholm",
+        "addressCountry": "Sweden"
+      }
+    },
+    "url": "https://netsec-cost.eu/essc-2026.html",
+    "image": "https://netsec-cost.eu/assets/images/og-image.png",
+    "description": "Rassemblement annuel phare de la communauté NetSec : une conférence interdisciplinaire sur la défense et la sécurité européennes, ouverte aux académiques, décideur·ses politiques et praticien·nes. Organisée à la suite de l'école d'été pour que les chercheur·euses en début de carrière rejoignent la discussion plus large.",
+    "organizer": [
+      {
+        "@type": "Organization",
+        "name": "COST Action CA24154 (NetSec)",
+        "url": "https://netsec-cost.eu"
+      },
+      {
+        "@type": "Organization",
+        "name": "European Initiative for Security Studies (EISS)",
+        "url": "https://eiss-europa.com"
+      },
+      {
+        "@type": "Organization",
+        "name": "Stockholm University"
+      }
+    ],
+    "eventStatus": "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode"
   }
 ]
 </script>
