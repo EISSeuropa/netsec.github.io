@@ -456,6 +456,34 @@ def test_patch_events_json_noop_when_in_step() -> None:
     expect("no change -> False", changed, False)
 
 
+def test_venue_tz_overrides_the_instance_default() -> None:
+    """#1310: every event on the instance reports Europe/Paris whatever
+    country its venue is in, so the venue's own zone is applied here."""
+    print("\ntest_venue_tz_overrides_the_instance_default")
+    expect("Stockholm conference", sync_indico.venue_tz("22", "Europe/Paris"),
+           "Europe/Stockholm")
+    expect("Lisbon edition, an hour off Paris",
+           sync_indico.venue_tz("6", "Europe/Paris"), "Europe/Lisbon")
+    # An unmapped event keeps whatever Indico said rather than guessing.
+    expect("unknown event kept as reported",
+           sync_indico.venue_tz("999", "Europe/Paris"), "Europe/Paris")
+    expect("a zone that is not the default is trusted",
+           sync_indico.venue_tz("999", "Europe/Helsinki"), "Europe/Helsinki")
+
+
+def test_normalise_event_applies_the_venue_zone() -> None:
+    print("\ntest_normalise_event_applies_the_venue_zone")
+    ev = {
+        "id": 22,
+        "title": "2026 European Security Studies Conference",
+        "categoryId": 1,
+        "startDate": {"date": "2026-06-11", "time": "08:00:00", "tz": "Europe/Paris"},
+        "endDate": {"date": "2026-06-12", "time": "20:00:00", "tz": "Europe/Paris"},
+        "location": "Stockholm University",
+    }
+    expect("startTz", normalise_event(ev)["startTz"], "Europe/Stockholm")
+
+
 def main() -> None:
     test_normalise_person_drops_email_hash()
     test_absolutize_indico_url()
@@ -472,6 +500,8 @@ def main() -> None:
     test_event_type_for()
     test_patch_events_json_marks_and_appends()
     test_patch_events_json_noop_when_in_step()
+    test_venue_tz_overrides_the_instance_default()
+    test_normalise_event_applies_the_venue_zone()
     print("\nAll tests passed.")
 
 

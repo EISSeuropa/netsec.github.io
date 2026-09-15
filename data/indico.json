@@ -11,7 +11,7 @@
       "categoryId": 1,
       "start": "2026-06-11T08:00:00",
       "end": "2026-06-12T20:00:00",
-      "startTz": "Europe/Paris",
+      "startTz": "Europe/Stockholm",
       "startDateOnly": "2026-06-11",
       "endDateOnly": "2026-06-12",
       "location": "Stockholm University",
