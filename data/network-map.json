@@ -4,8 +4,8 @@
     "working_groups": 4,
     "people": 200,
     "people_with_bios": 95,
-    "edges": 532,
-    "themes": 16,
+    "edges": 552,
+    "themes": 17,
     "panels_matched": 14,
     "panel_edges": 54,
     "panel_editions": [
@@ -53,7 +53,7 @@
       "id": "theme-climate-energy-and-environmental-security",
       "type": "theme",
       "name": "Climate, energy and environmental security",
-      "memberCount": 3
+      "memberCount": 4
     },
     {
       "id": "theme-crisis-management-and-critical-systems-resilience",
@@ -65,25 +65,25 @@
       "id": "theme-cyber-and-emerging-technology",
       "type": "theme",
       "name": "Cyber and emerging technology",
-      "memberCount": 21
+      "memberCount": 24
     },
     {
       "id": "theme-democracy-governance-and-political-change",
       "type": "theme",
       "name": "Democracy, governance and political change",
-      "memberCount": 5
+      "memberCount": 6
     },
     {
       "id": "theme-economic-security-and-geoeconomics",
       "type": "theme",
       "name": "Economic security and geoeconomics",
-      "memberCount": 9
+      "memberCount": 10
     },
     {
       "id": "theme-eu-un-and-other-international-organisations",
       "type": "theme",
       "name": "EU, UN and other international organisations",
-      "memberCount": 9
+      "memberCount": 10
     },
     {
       "id": "theme-european-and-transatlantic-security-order",
@@ -95,13 +95,13 @@
       "id": "theme-foreign-policy-and-diplomacy",
       "type": "theme",
       "name": "Foreign policy and diplomacy",
-      "memberCount": 31
+      "memberCount": 36
     },
     {
       "id": "theme-identity-narratives-and-ideational-security",
       "type": "theme",
       "name": "Identity, narratives and ideational security",
-      "memberCount": 5
+      "memberCount": 6
     },
     {
       "id": "theme-intelligence-information-and-influence",
@@ -113,7 +113,7 @@
       "id": "theme-peace-mediation-and-reconciliation",
       "type": "theme",
       "name": "Peace, mediation and reconciliation",
-      "memberCount": 8
+      "memberCount": 10
     },
     {
       "id": "theme-political-psychology-public-opinion-and-decision-making",
@@ -125,7 +125,7 @@
       "id": "theme-security-and-defence",
       "type": "theme",
       "name": "Security and defence",
-      "memberCount": 39
+      "memberCount": 38
     },
     {
       "id": "theme-strategy-and-deterrence",
@@ -137,13 +137,19 @@
       "id": "theme-theory-and-methods",
       "type": "theme",
       "name": "Theory and methods",
-      "memberCount": 22
+      "memberCount": 23
     },
     {
       "id": "theme-transnational-and-human-security",
       "type": "theme",
       "name": "Transnational and human security",
-      "memberCount": 19
+      "memberCount": 20
+    },
+    {
+      "id": "theme-war-military-history-and-armed-conflict",
+      "type": "theme",
+      "name": "War, military history and armed conflict",
+      "memberCount": 4
     },
     {
       "id": "adam-hanzel",
@@ -2884,6 +2890,10 @@
     },
     {
       "source": "adam-hanzel",
+      "target": "theme-theory-and-methods"
+    },
+    {
+      "source": "adam-hanzel",
       "target": "theme-transnational-and-human-security"
     },
     {
@@ -2947,6 +2957,10 @@
       "target": "theme-european-and-transatlantic-security-order"
     },
     {
+      "source": "antonia-laura-pup",
+      "target": "theme-foreign-policy-and-diplomacy"
+    },
+    {
       "source": "archishman-goswami",
       "target": "theme-cyber-and-emerging-technology"
     },
@@ -2997,6 +3011,10 @@
     {
       "source": "betul-dogan-akkas",
       "target": "theme-economic-security-and-geoeconomics"
+    },
+    {
+      "source": "betul-dogan-akkas",
+      "target": "theme-security-and-defence"
     },
     {
       "source": "betul-dogan-akkas",
@@ -3052,15 +3070,15 @@
     },
     {
       "source": "david-morgan-owen",
-      "target": "theme-security-and-defence"
-    },
-    {
-      "source": "david-morgan-owen",
       "target": "theme-strategy-and-deterrence"
     },
     {
       "source": "david-morgan-owen",
       "target": "theme-theory-and-methods"
+    },
+    {
+      "source": "david-morgan-owen",
+      "target": "theme-war-military-history-and-armed-conflict"
     },
     {
       "source": "eda-kusku-sonmez",
@@ -3184,7 +3202,15 @@
     },
     {
       "source": "henrique-garbino",
+      "target": "theme-peace-mediation-and-reconciliation"
+    },
+    {
+      "source": "henrique-garbino",
       "target": "theme-security-and-defence"
+    },
+    {
+      "source": "henrique-garbino",
+      "target": "theme-transnational-and-human-security"
     },
     {
       "source": "huw-bennett",
@@ -3192,11 +3218,11 @@
     },
     {
       "source": "huw-bennett",
-      "target": "theme-security-and-defence"
+      "target": "theme-strategy-and-deterrence"
     },
     {
       "source": "huw-bennett",
-      "target": "theme-strategy-and-deterrence"
+      "target": "theme-war-military-history-and-armed-conflict"
     },
     {
       "source": "immanuel-rummel",
@@ -3237,6 +3263,18 @@
     {
       "source": "ivan-zaccagnini",
       "target": "theme-security-and-defence"
+    },
+    {
+      "source": "jacob-grech",
+      "target": "theme-cyber-and-emerging-technology"
+    },
+    {
+      "source": "jacob-grech",
+      "target": "theme-economic-security-and-geoeconomics"
+    },
+    {
+      "source": "jacob-grech",
+      "target": "theme-foreign-policy-and-diplomacy"
     },
     {
       "source": "jacob-grech",
@@ -3324,6 +3362,10 @@
     },
     {
       "source": "laura-inigo-alvarez",
+      "target": "theme-foreign-policy-and-diplomacy"
+    },
+    {
+      "source": "laura-inigo-alvarez",
       "target": "theme-transnational-and-human-security"
     },
     {
@@ -3376,11 +3418,27 @@
     },
     {
       "source": "ludovica-castelli",
+      "target": "theme-foreign-policy-and-diplomacy"
+    },
+    {
+      "source": "ludovica-castelli",
+      "target": "theme-identity-narratives-and-ideational-security"
+    },
+    {
+      "source": "ludovica-castelli",
       "target": "theme-strategy-and-deterrence"
     },
     {
       "source": "mahmoud-javadi",
+      "target": "theme-cyber-and-emerging-technology"
+    },
+    {
+      "source": "mahmoud-javadi",
       "target": "theme-european-and-transatlantic-security-order"
+    },
+    {
+      "source": "mahmoud-javadi",
+      "target": "theme-security-and-defence"
     },
     {
       "source": "marco-cifra",
@@ -3499,6 +3557,18 @@
       "target": "theme-security-and-defence"
     },
     {
+      "source": "mykhailo-mosora",
+      "target": "theme-democracy-governance-and-political-change"
+    },
+    {
+      "source": "mykhailo-mosora",
+      "target": "theme-eu-un-and-other-international-organisations"
+    },
+    {
+      "source": "mykhailo-mosora",
+      "target": "theme-peace-mediation-and-reconciliation"
+    },
+    {
       "source": "niklas-karlen",
       "target": "theme-foreign-policy-and-diplomacy"
     },
@@ -3513,6 +3583,10 @@
     {
       "source": "niklas-karlen",
       "target": "theme-security-and-defence"
+    },
+    {
+      "source": "niklas-karlen",
+      "target": "theme-war-military-history-and-armed-conflict"
     },
     {
       "source": "nikolaos-tzifakis",
@@ -3564,10 +3638,6 @@
     },
     {
       "source": "pieter-zhao",
-      "target": "theme-security-and-defence"
-    },
-    {
-      "source": "pieter-zhao",
       "target": "theme-strategy-and-deterrence"
     },
     {
@@ -3579,8 +3649,24 @@
       "target": "theme-transnational-and-human-security"
     },
     {
+      "source": "pieter-zhao",
+      "target": "theme-war-military-history-and-armed-conflict"
+    },
+    {
+      "source": "rafael-hurtado-valdivieso",
+      "target": "theme-climate-energy-and-environmental-security"
+    },
+    {
+      "source": "rafael-hurtado-valdivieso",
+      "target": "theme-foreign-policy-and-diplomacy"
+    },
+    {
       "source": "rafael-hurtado-valdivieso",
       "target": "theme-transnational-and-human-security"
+    },
+    {
+      "source": "richard-skalt",
+      "target": "theme-cyber-and-emerging-technology"
     },
     {
       "source": "richard-skalt",
