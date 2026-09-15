@@ -5,9 +5,23 @@
     <link>https://netsec-cost.eu/#news</link>
     <description>Announcements, calls, and milestones from the COST Action CA24154 (NetSec).</description>
     <language>en-GB</language>
-    <lastBuildDate>Fri, 24 Jul 2026 16:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 15 Sep 2026 09:00:00 +0200</lastBuildDate>
     <generator>scripts/build-news-rss.py</generator>
     <atom:link href="https://netsec-cost.eu/news.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Policy workshop on alliances concludes in Ankara</title>
+      <link>https://netsec-cost.eu/policy-workshop-2026.html</link>
+      <description><![CDATA[Working Group 2's one-day policy workshop, Great Power Politics and the Future of Alliances, took place at Bilkent University in Ankara on 13 September 2026. Scholars and policy practitioners spent the day examining how alliance politics is evolving under intensifying great power competition, and what that evolution means for European security. Accommodation in Ankara and all meals were provided by Bilkent University and the Royal Danish Defence College.]]></description>
+      <pubDate>Sun, 13 Sep 2026 18:00:00 +0300</pubDate>
+      <guid isPermaLink="false">policy-workshop-2026-concludes-ankara</guid>
+    </item>
+    <item>
+      <title>NetSec holds its first Management Committee plenary</title>
+      <link>https://netsec-cost.eu/events.html</link>
+      <description><![CDATA[The Management Committee of COST Action CA24154 met in plenary for the first time on 11 September 2026, online, from 09:30 to 11:00 CEST. Representatives of the participating COST Member countries joined the Working Group leads to align on the workstreams for the coming cycle, confirm Working Group leadership and fill the roles still open. The Action started on 10 October 2025, and this was its first formal plenary meeting. Attendance was restricted to Management Committee representatives, Working Group leads and invited observers.]]></description>
+      <pubDate>Fri, 11 Sep 2026 11:00:00 +0200</pubDate>
+      <guid isPermaLink="false">mc-plenary-2026-inaugural</guid>
+    </item>
     <item>
       <title>WG2 Policy Workshop: applications have closed</title>
       <link>https://netsec-cost.eu/policy-workshop-2026.html</link>

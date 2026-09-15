@@ -4,8 +4,76 @@
   "channelDescription": "Announcements, calls, and milestones from the COST Action CA24154 (NetSec).",
   "channelLink": "https://netsec-cost.eu/#news",
   "channelLanguage": "en-GB",
-  "lastBuildDate": "2026-07-24T16:00:00+02:00",
+  "lastBuildDate": "2026-09-15T09:00:00+02:00",
   "items": [
+    {
+      "id": "policy-workshop-2026-concludes-ankara",
+      "type": "event",
+      "wg": 2,
+      "pubDate": "2026-09-13T18:00:00+03:00",
+      "displayDate": {
+        "en": "13 September 2026",
+        "fr": "13 septembre 2026",
+        "de": "13. September 2026"
+      },
+      "title": {
+        "en": "Policy workshop on alliances concludes in Ankara",
+        "fr": "L'atelier politique sur les alliances se cl\u00f4ture \u00e0 Ankara",
+        "de": "Politik-Workshop zu B\u00fcndnissen geht in Ankara zu Ende"
+      },
+      "body": {
+        "en": "Working Group 2's one-day policy workshop, Great Power Politics and the Future of Alliances, took place at Bilkent University in Ankara on 13 September 2026. Scholars and policy practitioners spent the day examining how alliance politics is evolving under intensifying great power competition, and what that evolution means for European security. Accommodation in Ankara and all meals were provided by Bilkent University and the Royal Danish Defence College.",
+        "fr": "L'atelier politique d'une journ\u00e9e du Groupe de travail 2, Les grandes puissances et l'avenir des alliances, s'est tenu \u00e0 l'Universit\u00e9 Bilkent d'Ankara le 13 septembre 2026. Chercheur\u00b7euses et praticien\u00b7nes des politiques publiques ont consacr\u00e9 la journ\u00e9e \u00e0 examiner comment la politique des alliances \u00e9volue sous l'effet de l'intensification de la comp\u00e9tition entre grandes puissances, et ce que cette \u00e9volution signifie pour la s\u00e9curit\u00e9 europ\u00e9enne. L'h\u00e9bergement \u00e0 Ankara et l'ensemble des repas ont \u00e9t\u00e9 pris en charge par l'Universit\u00e9 Bilkent et le Coll\u00e8ge de d\u00e9fense royal danois.",
+        "de": "Der eint\u00e4gige Politik-Workshop der Arbeitsgruppe 2, Gro\u00dfmachtpolitik und die Zukunft der B\u00fcndnisse, fand am 13. September 2026 an der Bilkent-Universit\u00e4t in Ankara statt. Forschende und Praktiker\u00b7innen der Politik untersuchten den Tag \u00fcber, wie sich die B\u00fcndnispolitik unter dem sich versch\u00e4rfenden Gro\u00dfmachtwettbewerb ver\u00e4ndert und was diese Entwicklung f\u00fcr die europ\u00e4ische Sicherheit bedeutet. Unterkunft in Ankara und alle Mahlzeiten wurden von der Bilkent-Universit\u00e4t und dem Royal Danish Defence College bereitgestellt."
+      },
+      "cta": {
+        "href": {
+          "en": "policy-workshop-2026.html",
+          "fr": "policy-workshop-2026.fr.html",
+          "de": "policy-workshop-2026.de.html"
+        },
+        "external": false,
+        "i18n": {
+          "en": "Read about the workshop \u2192",
+          "fr": "D\u00e9couvrir l'atelier \u2192",
+          "de": "Mehr zum Workshop \u2192"
+        }
+      }
+    },
+    {
+      "id": "mc-plenary-2026-inaugural",
+      "type": "event",
+      "wg": 1,
+      "pubDate": "2026-09-11T11:00:00+02:00",
+      "displayDate": {
+        "en": "11 September 2026",
+        "fr": "11 septembre 2026",
+        "de": "11. September 2026"
+      },
+      "title": {
+        "en": "NetSec holds its first Management Committee plenary",
+        "fr": "NetSec tient sa premi\u00e8re pl\u00e9ni\u00e8re du Comit\u00e9 de gestion",
+        "de": "NetSec h\u00e4lt seine erste Plenarsitzung des Management Committee ab"
+      },
+      "body": {
+        "en": "The Management Committee of COST Action CA24154 met in plenary for the first time on 11 September 2026, online, from 09:30 to 11:00 CEST. Representatives of the participating COST Member countries joined the Working Group leads to align on the workstreams for the coming cycle, confirm Working Group leadership and fill the roles still open. The Action started on 10 October 2025, and this was its first formal plenary meeting. Attendance was restricted to Management Committee representatives, Working Group leads and invited observers.",
+        "fr": "Le Comit\u00e9 de gestion de l'Action COST CA24154 s'est r\u00e9uni en pl\u00e9ni\u00e8re pour la premi\u00e8re fois le 11 septembre 2026, en ligne, de 9h30 \u00e0 11h00 CEST. Les repr\u00e9sentant\u00b7es des pays membres COST participants ont rejoint les responsables des groupes de travail pour arr\u00eater les chantiers du cycle \u00e0 venir, confirmer la direction des groupes de travail et pourvoir les fonctions encore vacantes. L'Action a d\u00e9but\u00e9 le 10 octobre 2025, et il s'agissait de sa premi\u00e8re pl\u00e9ni\u00e8re formelle. La r\u00e9union \u00e9tait r\u00e9serv\u00e9e aux repr\u00e9sentant\u00b7es du Comit\u00e9 de gestion, aux responsables des groupes de travail et aux observateur\u00b7rices invit\u00e9\u00b7es.",
+        "de": "Das Management Committee der COST-Aktion CA24154 hat am 11. September 2026 zum ersten Mal in einer Plenarsitzung getagt, online, von 9:30 bis 11:00 Uhr MESZ. Die Vertreter\u00b7innen der teilnehmenden COST-Mitgliedsl\u00e4nder kamen mit den Leitungen der Arbeitsgruppen zusammen, um die Arbeitsstr\u00e4nge des kommenden Zyklus abzustimmen, die Leitung der Arbeitsgruppen zu best\u00e4tigen und die noch offenen Funktionen zu besetzen. Die Aktion hat am 10. Oktober 2025 begonnen, und dies war ihre erste f\u00f6rmliche Plenarsitzung. Die Teilnahme war auf die Vertreter\u00b7innen des Management Committee, die Leitungen der Arbeitsgruppen und geladene Beobachter\u00b7innen beschr\u00e4nkt."
+      },
+      "cta": {
+        "href": {
+          "en": "events.html",
+          "fr": "events.fr.html",
+          "de": "events.de.html"
+        },
+        "external": false,
+        "i18n": {
+          "en": "See all events \u2192",
+          "fr": "Voir tous les \u00e9v\u00e9nements \u2192",
+          "de": "Alle Veranstaltungen ansehen \u2192"
+        }
+      }
+    },
     {
       "id": "wg2-policy-workshop-2026-call",
       "type": "announcement",
