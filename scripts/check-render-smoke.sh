@@ -27,6 +27,8 @@
 #   /working-groups.html  >= 1 mc-avatar--initials (roster-only members
 #                     get initials avatars from the shared
 #                     window.netsecInitials helper, #1194)
+#   /year-in-review.html (+ FR + DE) >= 4 yr-quarter cards (the whole
+#                     page body is rendered from data/year-review.json)
 #   /index.html       >= 1 spotlight-chip (the spotlight theme chips run
 #                     through window.netsecTitlecaseTheme, #1194)
 #
@@ -129,5 +131,11 @@ check "people.de.html" 'class="member-card' 2
 check "index.html" 'class="(event-atc|events-empty)' 1
 check "working-groups.html" 'mc-avatar--initials' 1
 check "index.html" 'class="spotlight-chip' 1
+# The whole Year in Review page body is rendered from
+# data/year-review.json, so a blank page here is the entire page. The
+# quarter cards are the last thing the renderer builds.
+check "year-in-review.html" 'class="glass yr-quarter' 4
+check "year-in-review.fr.html" 'class="glass yr-quarter' 4
+check "year-in-review.de.html" 'class="glass yr-quarter' 4
 
 exit "$fail"

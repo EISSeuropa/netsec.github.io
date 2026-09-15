@@ -488,12 +488,14 @@ sweep (rule §11).
 │   ├── css/site.css                 # Core stylesheet, loaded by every page
 │   ├── css/directory.css            # Directory bundle: /people.html + the generated /people/<slug> pages only
 │   ├── css/roadmap.css              # Roadmap bundle: /roadmap.html only
+│   ├── css/year-review.css          # Year in Review bundle: /year-in-review.html (+ FR + DE) only
 │   ├── js/site.js                   # Nav, theme, reveal-on-scroll, accordions, directory, member-card popover
 │   ├── js/home-events.js            # Home Events block (renders from data/events.json)
 │   ├── js/home-news.js              # Home News block (renders from data/news.json)
 │   ├── js/home-spotlight.js         # Home member-spotlight strip (renders from data/spotlight.json)
 │   ├── js/working-groups.js         # /working-groups.html (renders from data/wg.json + publications.json)
 │   ├── js/roadmap-progress.js       # Roadmap progress bars (renders from data/roadmap-progress.json)
+│   ├── js/year-review.js            # Year in Review page: renders data/year-review.json, and holds the page's sentences as whole-sentence templates in EN/FR/DE (#765)
 │   ├── js/roadmap-shipped-toggle.js # Roadmap "show earlier releases" collapse (shared EN/FR/DE; #725)
 │   ├── js/essc-programme.js         # ESSC programme renderer (shared EN/FR/DE; extracted from inline #725)
 │   ├── js/outputs-publications.js   # /outputs.html publications list (shared EN/FR/DE; renders publications.json, #726)
