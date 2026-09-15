@@ -473,3 +473,18 @@ def test_itc_flag_and_count_land_on_the_graph():
     # Absent rather than false, so the field stays off every other node.
     assert "itc" not in people["Dr Grace Hopper"]
     assert graph["stats"]["itc_people"] == 1
+
+
+def test_directory_name_and_country_override_the_roster_spelling():
+    """#1785: a roster row seeds the person node, so its spelling used to win
+    permanently and the map published names without their diacritics."""
+    graph = build(
+        _wg({"number": 1, "name": "One",
+             "members": [{"name": "Dr Sarka Kolmasova", "country": "Czechia",
+                          "slug": "sarka-kolmasova"}]}),
+        bios={"members": [{"id": "sarka-kolmasova", "name": "Dr Šárka Kolmašová",
+                           "country": "Czech Republic"}]},
+    )
+    person = next(n for n in graph["nodes"] if n["type"] == "person")
+    assert person["name"] == "Dr Šárka Kolmašová"
+    assert person["country"] == "Czech Republic"

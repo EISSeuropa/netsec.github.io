@@ -337,6 +337,14 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
                 if m.get("id") and "slug" not in person:
                     person["slug"] = m["id"]
                     person["id"] = m["id"]
+                # #1785: the directory is authoritative for a person's own
+                # details. A roster row seeds the node first and used to keep
+                # its spelling for good, which published names stripped of
+                # their diacritics and titles the member had since corrected.
+                if m.get("name"):
+                    person["name"] = m["name"]
+                if m.get("country"):
+                    person["country"] = m["country"]
             if m.get("photo"):
                 person["photo"] = prefer_webp(m["photo"])
             if m.get("mentorship"):
