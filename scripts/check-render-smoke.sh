@@ -19,7 +19,11 @@
 #                     missing .member-founding element the renderer
 #                     dereferences) blanks one locale while the others
 #                     render. Checking all three catches that.
-#   /index.html       >= 1 event-atc block (the home events cards)
+#   /index.html       >= 1 event-atc block (the home events cards), or
+#                     >= 1 events-empty paragraph. Both prove the renderer
+#                     ran. A site with nothing upcoming is a real state, so
+#                     asserting on the card alone failed the moment the last
+#                     event concluded (#1835).
 #   /working-groups.html  >= 1 mc-avatar--initials (roster-only members
 #                     get initials avatars from the shared
 #                     window.netsecInitials helper, #1194)
@@ -92,12 +96,12 @@ render_count() {
   local n
   n="$("$chrome" --headless --no-sandbox --disable-gpu --dump-dom \
     --virtual-time-budget=10000 "http://127.0.0.1:${PORT}/$1" 2>/dev/null \
-    | grep -o "$2" | wc -l | tr -d ' ')"
+    | grep -oE "$2" | wc -l | tr -d ' ')"
   if [ "$n" -eq 0 ]; then
     sleep 2
     n="$("$chrome" --headless --no-sandbox --disable-gpu --dump-dom \
       --virtual-time-budget=10000 "http://127.0.0.1:${PORT}/$1" 2>/dev/null \
-      | grep -o "$2" | wc -l | tr -d ' ')"
+      | grep -oE "$2" | wc -l | tr -d ' ')"
     if [ "$n" -gt 0 ]; then
       echo "  · $1: first render returned nothing, second succeeded (flaky launch)" >&2
     fi
@@ -122,7 +126,7 @@ check "essc-2026.html" 'class="programme-slot' 1
 check "people.html" 'class="member-card' 2
 check "people.fr.html" 'class="member-card' 2
 check "people.de.html" 'class="member-card' 2
-check "index.html" 'class="event-atc' 1
+check "index.html" 'class="(event-atc|events-empty)' 1
 check "working-groups.html" 'mc-avatar--initials' 1
 check "index.html" 'class="spotlight-chip' 1
 
