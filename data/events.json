@@ -4,7 +4,7 @@
   "caldesc": "Events from the NetSec COST Action (CA24154): annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
   "tzid": "Europe/Stockholm",
   "refresh_days": 7,
-  "dtstamp": "20260801T090000Z",
+  "dtstamp": "20260915T082843Z",
   "events": [
     {
       "uid": "summer-school-2026@netsec-cost.eu",
@@ -248,30 +248,30 @@
     {
       "uid": "mc-plenary-2026-09@netsec-cost.eu",
       "summary": "Inaugural NetSec Management Committee plenary",
-      "description": "The Action's first formal Management Committee plenary, bringing together the MC representatives from the participating COST Member countries to align on workstreams, confirm Working Group leadership for the coming cycle, and elect any remaining roles. Followed by a Core Group working session.\n\nThe date is not yet confirmed. This entry is provisional and will be updated once the Action announces it.\n\nAccess is restricted to MC representatives, Working Group leads, and invited observers.",
-      "location": "To be confirmed",
+      "description": "The Action's first formal Management Committee plenary, held online, bringing together the MC representatives from the participating COST Member countries to align on workstreams, confirm Working Group leadership for the coming cycle, and elect any remaining roles.\n\nAccess was restricted to MC representatives, Working Group leads, and invited observers.",
+      "location": "Online",
       "url": "https://netsec-cost.eu/#events",
-      "start": "2026-09-18T09:00",
-      "end": "2026-09-18T18:00",
+      "start": "2026-09-11T09:30",
+      "end": "2026-09-11T11:00",
       "categories": [
         "MC Plenary",
         "NetSec"
       ],
-      "status": "TENTATIVE",
+      "status": "CONFIRMED",
       "eventType": "mc-plenary",
       "workingGroups": [
         1
       ],
       "featured": false,
       "displayDate": {
-        "en": "September 2026 · date to be confirmed",
-        "fr": "Septembre 2026 · date à confirmer",
-        "de": "September 2026 · Datum wird noch bestätigt"
+        "en": "11 September 2026",
+        "fr": "11 septembre 2026",
+        "de": "11. September 2026"
       },
       "cardDescription": {
-        "en": "The Action's first formal plenary meeting, bringing together Management Committee representatives and Working Group leads to align on workstreams, confirm leadership for the coming cycle, and elect any remaining roles. The Action officially started on 10 October 2025; this is the first in-person plenary.",
-        "fr": "La première réunion plénière formelle de l'Action, rassemblant les représentant·es du Comité de gestion et les responsables des groupes de travail pour s'aligner sur les chantiers, confirmer les positions de direction pour le cycle à venir et élire les rôles restants. L'Action a officiellement débuté le 10 octobre 2025 ; il s'agit de la première plénière en présentiel.",
-        "de": "Die erste formelle Plenarsitzung der Aktion, die die Vertreter·innen des Management-Ausschusses und die Arbeitsgruppen-Leitungen zusammenbringt, um die Arbeitsstränge abzustimmen, die Leitung für den kommenden Zyklus zu bestätigen und verbleibende Rollen zu wählen. Die Aktion startete offiziell am 10. Oktober 2025; dies ist das erste Plenum vor Ort."
+        "en": "The Action's first formal plenary meeting, bringing together Management Committee representatives and Working Group leads to align on workstreams, confirm leadership for the coming cycle, and elect any remaining roles. The Action officially started on 10 October 2025, and this was its first plenary.",
+        "fr": "La première réunion plénière formelle de l'Action, rassemblant les représentant·es du Comité de gestion et les responsables des groupes de travail pour s'aligner sur les chantiers, confirmer les positions de direction pour le cycle à venir et élire les rôles restants. L'Action a officiellement débuté le 10 octobre 2025, et il s'agissait de sa première plénière.",
+        "de": "Die erste formelle Plenarsitzung der Aktion, die die Vertreter·innen des Management-Ausschusses und die Arbeitsgruppen-Leitungen zusammenbrachte, um die Arbeitsstränge abzustimmen, die Leitung für den kommenden Zyklus zu bestätigen und verbleibende Rollen zu wählen. Die Aktion startete offiziell am 10. Oktober 2025, und dies war ihr erstes Plenum."
       },
       "cardTitle": {
         "en": "Inaugural Management Committee Plenary",
@@ -279,17 +279,17 @@
         "de": "Konstituierende Plenarsitzung des Management-Ausschusses"
       },
       "cardLocation": {
-        "en": "Date and venue to be announced",
-        "fr": "Date et lieu à annoncer",
-        "de": "Datum und Ort werden noch bekannt gegeben"
+        "en": "Online",
+        "fr": "En ligne",
+        "de": "Online"
       },
       "meta": [
         {
           "icon": "calendar",
           "i18n": {
-            "en": "Date and venue to be announced. Access is restricted to MC representatives, Working Group leads, and invited observers.",
-            "fr": "Date et lieu à annoncer. L'accès est réservé aux représentant·es du CG, aux responsables des groupes de travail et aux observateur·rices invité·es.",
-            "de": "Datum und Ort werden noch bekannt gegeben. Der Zugang ist auf MC-Vertreter·innen, Arbeitsgruppen-Leitungen und eingeladene Beobachter·innen beschränkt."
+            "en": "<strong>Held online</strong> · 09:30-11:00 CEST. Access was restricted to MC representatives, Working Group leads, and invited observers.",
+            "fr": "<strong>Tenue en ligne</strong> · 09h30-11h00 CEST. L'accès était réservé aux représentant·es du CG, aux responsables des groupes de travail et aux observateur·rices invité·es.",
+            "de": "<strong>Online abgehalten</strong> · 09:30-11:00 CEST. Der Zugang war auf MC-Vertreter·innen, Arbeitsgruppen-Leitungen und eingeladene Beobachter·innen beschränkt."
           }
         }
       ]
