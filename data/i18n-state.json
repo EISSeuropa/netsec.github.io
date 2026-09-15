@@ -71,15 +71,15 @@
     "sitemap.html": {
       "fr": {
         "file": "sitemap.fr.html",
-        "source_sha1": "cc4425f2588f4775cbe092f56bff43b284825ddd",
-        "translated_on": "2026-08-22",
+        "source_sha1": "f20c4e9d9e896297ebd4e7f215f84add4acc2f0c",
+        "translated_on": "2026-09-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "sitemap.de.html",
-        "source_sha1": "cc4425f2588f4775cbe092f56bff43b284825ddd",
-        "translated_on": "2026-08-22",
+        "source_sha1": "f20c4e9d9e896297ebd4e7f215f84add4acc2f0c",
+        "translated_on": "2026-09-15",
         "status": "beta",
         "reviewed_by": null
       }
@@ -320,6 +320,22 @@
         "file": "network-map.de.html",
         "source_sha1": "01268f321b00beafb3d70c27d3ed913752b101fc",
         "translated_on": "2026-08-27",
+        "status": "beta",
+        "reviewed_by": null
+      }
+    },
+    "year-in-review.html": {
+      "fr": {
+        "file": "year-in-review.fr.html",
+        "source_sha1": "56bfe92882ef58e280ca4258f52ca1eb6c522dfe",
+        "translated_on": "2026-09-15",
+        "status": "beta",
+        "reviewed_by": null
+      },
+      "de": {
+        "file": "year-in-review.de.html",
+        "source_sha1": "56bfe92882ef58e280ca4258f52ca1eb6c522dfe",
+        "translated_on": "2026-09-15",
         "status": "beta",
         "reviewed_by": null
       }

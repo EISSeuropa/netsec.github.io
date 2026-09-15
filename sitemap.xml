@@ -252,6 +252,17 @@
   </url>
 
   <url>
+    <loc>https://netsec-cost.eu/year-in-review.html</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://netsec-cost.eu/year-in-review.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/year-in-review.fr.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://netsec-cost.eu/year-in-review.de.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/year-in-review.html"/>
+  </url>
+
+  <url>
     <loc>https://netsec-cost.eu/people/adam-hanzel.html</loc>
     <lastmod>2026-06-18</lastmod>
     <changefreq>monthly</changefreq>

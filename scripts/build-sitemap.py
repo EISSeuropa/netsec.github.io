@@ -64,6 +64,7 @@ TOP_LEVEL = [
     ("policy-workshop-2026", "2026-07-24", "weekly", "0.8"),
     ("network-map",    "2026-08-22", "weekly",  "0.7"),
     ("slides",         "2026-06-18", "yearly",  "0.4"),
+    ("year-in-review", "2026-09-15", "yearly",  "0.5"),
 ]
 
 EN_ONLY = set()

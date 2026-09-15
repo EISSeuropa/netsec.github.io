@@ -1,0 +1,135 @@
+/* Year in Review page bundle (#765).
+ *
+ * Loaded only by year-in-review.{html,fr.html,de.html}, the way
+ * roadmap.css and network-map.css are scoped to their own pages, so no
+ * other visitor downloads it.
+ *
+ * The hero figures reuse .wg-stats / .wg-stat from site.css unchanged,
+ * and the quarter cards sit on .glass. What is left is the sparkline,
+ * the theme bars, the quarter grid and the release list. Everything
+ * here is prefixed yr- and defined once, in one block per name, so the
+ * class-collision lint stays quiet.
+ */
+
+.yr-stats{margin:1.2rem 0 0}
+
+/* ---- Directory size over time ---- */
+.yr-spark-figure{margin:0}
+.yr-spark{
+  display:block;
+  width:100%;
+  height:140px;
+  overflow:visible;
+}
+.yr-spark-line{
+  stroke:var(--accent-2);
+  stroke-width:2.5;
+  stroke-linejoin:round;
+  stroke-linecap:round;
+}
+.yr-spark-dot{
+  fill:var(--accent-2);
+  stroke:var(--card-bg,#fff);
+  stroke-width:2;
+  vector-effect:non-scaling-stroke;
+}
+.dark .yr-spark-dot{stroke:#0b1220}
+.yr-spark-figure figcaption{
+  margin:.7rem 0 0;
+  font-size:.9rem;
+  color:var(--muted);
+}
+
+/* ---- Theme spread ---- */
+.yr-themes{list-style:none;margin:1.2rem 0 0;padding:0;display:grid;gap:10px}
+.yr-theme{
+  display:grid;
+  grid-template-columns:minmax(0,14rem) 1fr auto;
+  align-items:center;
+  gap:14px;
+}
+.yr-theme-name{font-size:.95rem;color:var(--ink)}
+.yr-theme-bar{
+  display:block;
+  height:10px;
+  border-radius:999px;
+  background:var(--line);
+  overflow:hidden;
+}
+.yr-theme-fill{
+  display:block;
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+}
+.yr-theme-n{
+  font-size:.82rem;
+  color:var(--muted);
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+@media (max-width:640px){
+  .yr-theme{grid-template-columns:1fr auto;grid-template-areas:'name n' 'bar bar'}
+  .yr-theme-name{grid-area:name}
+  .yr-theme-n{grid-area:n}
+  .yr-theme-bar{grid-area:bar}
+}
+
+/* ---- Quarter by quarter ---- */
+.yr-quarters{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+  margin:1.2rem 0 0;
+}
+.yr-quarter{padding:20px 22px;border-radius:16px}
+.yr-quarter-h{
+  margin:0;
+  font-family:'Lexend','Inter',sans-serif;
+  font-size:1.1rem;
+  color:var(--ink);
+}
+.yr-quarter-span{margin:.2rem 0 0;font-size:.82rem;color:var(--muted)}
+.yr-quarter-empty{margin:1rem 0 0;font-size:.9rem;color:var(--muted)}
+.yr-group{margin:1.1rem 0 0}
+.yr-group-h{
+  margin:0 0 .5rem;
+  font-size:.74rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.yr-items{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.yr-item{display:grid;gap:2px}
+.yr-item-date{
+  font-size:.78rem;
+  color:var(--muted);
+  font-variant-numeric:tabular-nums;
+}
+.yr-item-title{font-size:.94rem;color:var(--ink);line-height:1.4}
+.yr-item-meta{font-size:.8rem;color:var(--muted)}
+
+/* ---- Releases ---- */
+.yr-releases{
+  list-style:none;
+  margin:1.2rem 0 0;
+  padding:0;
+  display:grid;
+  gap:8px;
+}
+.yr-release{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:12px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--line);
+}
+.yr-release:last-child{border-bottom:0;padding-bottom:0}
+.yr-release-v{
+  flex:0 0 4.5rem;
+  font-family:'Lexend','Inter',sans-serif;
+  font-size:.88rem;
+  font-variant-numeric:tabular-nums;
+}
+.yr-release-t{font-size:.94rem;color:var(--ink)}
