@@ -116,7 +116,11 @@
   .pk-swatch .hex{font-family:'JetBrains Mono', ui-monospace, Menlo, monospace;font-size:.85rem;opacity:.92}
   .pk-swatch .role{font-size:.78rem;margin-top:8px;opacity:.85}
   .pk-swatch.eu{background:#003399}
-  .pk-swatch.apple{background:#0a84ff}
+  /* White on the Apple blue measures 3.65:1, under the AA floor. Dark ink
+     reads 5.13:1 on it and keeps the swatch showing the colour itself,
+     the same per-swatch ink .pk-swatch.bg already carries (#1774). */
+  .pk-swatch.apple{background:#0a84ff;color:#0b1220}
+  .pk-swatch.apple .hex,.pk-swatch.apple .role{opacity:1}
   .pk-swatch.ink{background:#0b1220}
   .pk-swatch.bg{background:#f6f8fc;color:#0b1220;border:1px solid var(--line)}
 
@@ -395,7 +399,7 @@
         </div>
       </div>
       <div class="glass" style="padding:18px;border-radius:12px;display:flex;align-items:center;gap:16px">
-        <span style="width:64px;height:64px;border-radius:14px;background:#f6f8fc;border:1px solid var(--line);display:grid;place-items:center;color:var(--accent);font-size:1.8rem">🛡️</span>
+        <span style="width:64px;height:64px;border-radius:14px;background:#f6f8fc;border:1px solid var(--line);display:grid;place-items:center;color:#003399;font-size:1.8rem" aria-hidden="true">🛡️</span>
         <div>
           <h3 style="margin:0 0 4px;font-size:1rem">Action number</h3>
           <p style="margin:0;font-size:.88rem;color:var(--muted)">Always cite <strong>CA24154</strong> (and <strong>MoU&nbsp;063/25</strong> in formal communications) alongside the NetSec name when referring to the Action in writing.</p>

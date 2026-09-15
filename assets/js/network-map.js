@@ -159,6 +159,26 @@
     if (h.type === 'wg') return theme.wg[h.number] || theme.accent;
     return THEME_WHEEL[h.wheel % THEME_WHEEL.length];
   }
+
+  // #1774: every hub fill used to carry white text, and white on WG4's amber
+  // measures 2.15:1, the worst contrast on the site. Twenty-two fills reach
+  // here (four WG hues and the eighteen-colour theme wheel), so the ink is
+  // chosen from the fill's own luminance rather than pinned per hue, and a
+  // colour added to the wheel later is covered without a second edit.
+  const INK_DARK = '#0b1220';
+  function inkOn(fill) {
+    const hex = /^#([0-9a-f]{6})$/i.exec(String(fill).trim());
+    if (!hex) return '#fff';
+    const lum = (c) => {
+      const v = parseInt(c, 16) / 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    };
+    const L = 0.2126 * lum(hex[1].slice(0, 2))
+            + 0.7152 * lum(hex[1].slice(2, 4))
+            + 0.0722 * lum(hex[1].slice(4, 6));
+    // WCAG relative-luminance ratios, dark ink against white.
+    return (L + 0.05) / (0.00609 + 0.05) > 1.05 / (L + 0.05) ? INK_DARK : '#fff';
+  }
   // A view filter rather than an overlay: it changes who is on the map, so it
   // has to run through the one rule the canvas, the list and the keyboard
   // traversal all read (#1647).
@@ -353,16 +373,21 @@
       ctx.fillStyle = hubColour(h);
       ctx.fill();
       ctx.textAlign = 'center';
+      // The hub label sits on the same fill as the chip, so it takes the same
+      // ink (#1774). A scanner cannot read canvas text and never flagged it,
+      // and WG4's amber carried white here too.
+      const ink = inkOn(hubColour(h));
+      const inkSoft = ink === '#fff' ? 'rgba(255,255,255,.85)' : 'rgba(11,18,32,.85)';
       if (h.type === 'wg') {
         ctx.font = '700 13px Lexend, Inter, sans-serif';
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = ink;
         ctx.fillText('WG' + h.number, h.x, h.y - 2);
         ctx.font = '600 10px Inter, sans-serif';
-        ctx.fillStyle = 'rgba(255,255,255,.85)';
+        ctx.fillStyle = inkSoft;
         ctx.fillText(T('{n} members').replace('{n}', h.memberCount), h.x, h.y + 12);
       } else {
         ctx.font = '700 12px Lexend, Inter, sans-serif';
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = ink;
         ctx.fillText(String(h.memberCount), h.x, h.y + 4);
       }
       ctx.globalAlpha = 1;
@@ -496,7 +521,8 @@
         (node.photo ? '<img class="face" alt="">' : '')
         + '<div class="nm"></div><div class="meta"></div>'
         + '<div class="wgs">' + wgs.map(h =>
-            '<span class="wgp" style="background:' + hubColour(h) + '">WG' + h.number + '</span>').join('') + '</div>'
+            '<span class="wgp" style="background:' + hubColour(h)
+              + ';color:' + inkOn(hubColour(h)) + '">WG' + h.number + '</span>').join('') + '</div>'
         + (themes.length ? '<div class="themes"></div>' : '')
         + (node.panelPeers && node.panelPeers.length
             ? '<div class="panels">' + peerLine(
@@ -810,7 +836,8 @@
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'network-map-wg-chip';
-    if (bg) b.style.background = bg; else b.classList.add('is-plain');
+    if (bg) { b.style.background = bg; b.style.color = inkOn(bg); }
+    else b.classList.add('is-plain');
     b.textContent = label;
     b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
     b.addEventListener('click', () => onClick(b));
