@@ -87,15 +87,15 @@
     "privacy.html": {
       "fr": {
         "file": "privacy.fr.html",
-        "source_sha1": "18d1d471094207604567d2a262f9d564f5e3c8b4",
-        "translated_on": "2026-07-17",
+        "source_sha1": "c337f68bf7f192e099809d7f8674f6663102bc85",
+        "translated_on": "2026-09-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "privacy.de.html",
-        "source_sha1": "18d1d471094207604567d2a262f9d564f5e3c8b4",
-        "translated_on": "2026-07-17",
+        "source_sha1": "c337f68bf7f192e099809d7f8674f6663102bc85",
+        "translated_on": "2026-09-15",
         "status": "beta",
         "reviewed_by": null
       }

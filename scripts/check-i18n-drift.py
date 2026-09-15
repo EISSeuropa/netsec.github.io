@@ -33,6 +33,9 @@ import sys
 from datetime import date
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import _analytics  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "data" / "i18n-state.json"
 
@@ -79,16 +82,32 @@ _MAP_LIST_RE = re.compile(
 )
 
 
+# The aggregate visitor counter's tag (#727) is stamped into the managed
+# head block of every page by scripts/inject-seo.py. It is byte-identical
+# across locales and carries nothing to translate, so switching the
+# counter on or changing its account would otherwise flag all twenty
+# tracked pages stale at once, which is the same shape as the cache-bust
+# queries above. Taken from _analytics rather than matched by a pattern
+# here, so the two cannot drift apart: build_seo_block joins its lines
+# with a newline, and this is the exact substring that insertion adds.
+def _analytics_block() -> str:
+    lines = _analytics.lines()
+    return "\n" + "\n".join(lines) if lines else ""
+
+
 def sha1(path: Path) -> str:
-    """SHA-1 of a file's content, with asset cache-bust queries,
-    data-driven field-guide facepiles and the Network Map's generated
-    list region normalised out. We hash the markup
+    """SHA-1 of a file's content, with asset cache-bust queries, the
+    visitor counter's tag, data-driven field-guide facepiles and the
+    Network Map's generated list region normalised out. We hash the markup
     (not a parsed DOM) because we want any meaningful edit, markup or
-    attribute changes included, flagged for review. The three exceptions
-    are deliberate, and all three are language-agnostic data a generator
-    regenerates rather than translatable prose."""
+    attribute changes included, flagged for review. The four exceptions
+    are deliberate, and all four are language-agnostic markup a generator
+    writes rather than translatable prose."""
     text = path.read_text(encoding="utf-8")
     text = _CACHE_BUST_RE.sub(r"\1", text)
+    block = _analytics_block()
+    if block:
+        text = text.replace(block, "")
     text = _FACEPILE_RE.sub('<div class="fg-people"></div>', text)
     text = _MAP_LIST_RE.sub(
         '<!-- network-map:list start --><!-- network-map:list end -->', text)

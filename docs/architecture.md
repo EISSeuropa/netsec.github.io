@@ -524,6 +524,7 @@ sweep (rule §11).
 │   ├── sync-bios.py                 # Pulls Google Form submissions
 │   ├── bios-source.json             # CSV URL + form URL + column mapping
 │   ├── inject-seo.py                # Canonical/OG/JSON-LD generator (committed) + ?v= cache-bust stamper (--stamp-only, applied at deploy)
+│   ├── _analytics.py                # The GoatCounter tag and its site code, read by inject-seo.py and build-profile-pages.py; empty SITE_CODE means no counter on any page (#727)
 │   ├── build-profile-pages.py       # Server-renders /people/<slug>.{html,fr,de} from bios.json: enriched profile (themes/regions, similar-people facepile, mentor/STSM CTAs, prize pill, runtime anthology link); run by the Pages deploy, output gitignored (#762, #1716)
 │   ├── build-directory-index.py     # Generates directory-index.json, the cross-site contract published for the EISS Anthology (members keyed by name_key → profile URL); --check drift gate
 │   ├── build-sitemap.py             # Regenerates sitemap.xml from the top-level page list + the committed profile pages; --check drift gate
