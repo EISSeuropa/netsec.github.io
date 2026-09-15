@@ -122,6 +122,15 @@ jobs:
         # change ride along in the same auto-PR.
         run: python3 scripts/build-network-map.py
 
+      - name: Regenerate the event structured data (#1768)
+        # The schema.org Event node on each event page, and the ItemList on
+        # events.html, are built from data/events.json. A sync that retimes or
+        # relocates an event leaves those blocks stale and fails
+        # seo-asset-check.yml on the next PR, so refresh them here. --seo-only
+        # keeps the ?v= cache-bust out of the commit: it is stamped at deploy
+        # time and is not committed (#1712).
+        run: python3 scripts/inject-seo.py --seo-only
+
       - name: Open or update PR if indico.json changed
         id: cpr
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)

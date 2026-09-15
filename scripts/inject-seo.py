@@ -39,7 +39,9 @@ import hashlib
 import json
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -333,6 +335,90 @@ def build_definedtermset_node(base: str, lang: str, title: str, html: str) -> di
     }
 
 
+# ─── Event structured data (#1768) ────────────────────────────────
+# data/events.json is the record of the Action's events and already holds
+# everything schema.org's Event type wants. Generating the node from it
+# keeps the start time and its UTC offset in one place: the offset used
+# to be typed by hand on essc-2026.html, which is how #1767's wrong time
+# zone could have been reintroduced on a surface no test reads.
+_EVENTS = json.loads((ROOT / "data" / "events.json").read_text(encoding="utf-8"))
+
+# schema.org has no honest equivalent of an unconfirmed date, so a
+# TENTATIVE event carries no eventStatus rather than being asserted as
+# scheduled.
+_EVENT_STATUS = {"CONFIRMED": "https://schema.org/EventScheduled",
+                 "CANCELLED": "https://schema.org/EventCancelled"}
+
+
+def _event_page(ev: dict) -> str:
+    """The page base-name an event's url points at, or "" when it points
+    at a section of the home page rather than a page of its own."""
+    path = ev.get("url", "").removeprefix(SITE).lstrip("/")
+    return path[:-5] if path.endswith(".html") else ""
+
+
+def _iso_with_offset(stamp: str, tzid: str) -> str:
+    """'2026-09-13T09:00' in Europe/Istanbul -> '2026-09-13T09:00:00+03:00'."""
+    return datetime.fromisoformat(stamp).replace(tzinfo=ZoneInfo(tzid)).isoformat()
+
+
+def _event_location(ev: dict) -> dict:
+    """A Place for a venue, a VirtualLocation for an online meeting.
+
+    The locality and country come from the English cardLocation, which is
+    written as "City, Country"; the full postal line goes in
+    streetAddress rather than being split by a parser that would have to
+    guess where a street name ends.
+    """
+    place = ev.get("location", "")
+    card = ev.get("cardLocation", {}).get("en", "")
+    if "," not in card:
+        return {"@type": "VirtualLocation", "url": ev.get("url", "")}
+    locality, _, country = card.rpartition(",")
+    return {
+        "@type": "Place",
+        "name": place.split(",")[0].strip(),
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": place,
+            "addressLocality": locality.strip(),
+            "addressCountry": country.strip(),
+        },
+    }
+
+
+def build_event_node(ev: dict, lang: str) -> dict:
+    tzid = ev.get("tzid") or _EVENTS["tzid"]
+    place = ev.get("location", "")
+    node = {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": ev.get("cardTitle", {}).get(lang) or ev.get("summary", ""),
+        "startDate": _iso_with_offset(ev["start"], tzid),
+        "endDate": _iso_with_offset(ev["end"], tzid),
+        "location": _event_location(ev),
+        "url": ev.get("url", ""),
+        "image": OG_IMAGE,
+        "description": ev.get("cardDescription", {}).get(lang, ""),
+        "organizer": {
+            "@type": "Organization",
+            "name": "COST Action CA24154 (NetSec)",
+            "url": SITE,
+        },
+    }
+    if node["location"]["@type"] == "VirtualLocation":
+        node["eventAttendanceMode"] = "https://schema.org/OnlineEventAttendanceMode"
+    status = _EVENT_STATUS.get(ev.get("status", ""))
+    if status:
+        node["eventStatus"] = status
+    # Anything schema.org wants that the calendar record has no field for
+    # (a co-organiser, an attendance mode, a fuller formal name) lives in
+    # the event's own optional "jsonld" object, so it stays beside the
+    # rest of the event rather than hand-written into a page.
+    node.update(ev.get("jsonld", {}))
+    return node
+
+
 def build_jsonld_block(base: str, lang: str, title: str, desc: str, html: str = "") -> str:
     """Organization schema on every page; WebSite on index only.
 
@@ -401,6 +487,26 @@ def build_jsonld_block(base: str, lang: str, title: str, desc: str, html: str = 
         glossary_node = build_definedtermset_node(base, lang, title, html)
         if glossary_node is not None:
             nodes.append(glossary_node)
+
+    # An event page carries its own Event node; /events.html carries an
+    # ItemList of every event, because its cards are drawn by
+    # home-events.js after load and a crawler that does not run the
+    # script sees an empty page.
+    if base == "events":
+        listed = [build_event_node(ev, lang) for ev in _EVENTS["events"]]
+        nodes.append({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": title,
+            "itemListElement": [
+                {"@type": "ListItem", "position": i, "item": node}
+                for i, node in enumerate(listed, start=1)
+            ],
+        })
+    else:
+        for ev in _EVENTS["events"]:
+            if _event_page(ev) == base:
+                nodes.append(build_event_node(ev, lang))
 
     body = json.dumps(nodes if len(nodes) > 1 else nodes[0], ensure_ascii=False, indent=2)
     return f'{JSONLD_BEGIN}\n<script type="application/ld+json">\n{body}\n</script>\n{JSONLD_END}'

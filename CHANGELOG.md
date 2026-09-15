@@ -144,6 +144,7 @@ maintainer-facing audience.
 
 #### Added
 
+- Every event page now carries schema.org `Event` data, and the Events page carries the whole calendar as a list, which is what lets a search result show the date, the venue and the status instead of a plain blue link. The policy workshop at Bilkent University and the summer school had none of this, and the conference had a block written by hand. All of it is generated from `data/events.json`, so the start time and its UTC offset are written down once rather than three times, in English, French and German.
 - A failed scheduled workflow files a tracking issue instead of sitting unread in the Actions tab, and the Python test workflow refuses a pull request that introduces an undefined name.
 
 #### Changed
