@@ -52,6 +52,9 @@ import sys
 import urllib.parse
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import _analytics  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 BIOS = ROOT / "data" / "bios.json"
 WORKS = ROOT / "data" / "orcid-works.json"
@@ -742,6 +745,10 @@ def build_page(m: dict, works: list, similar: list, mentors: list, loc_key: str,
     # all 252 pages at the generic card. Same predicate, no filesystem.
     og_image = f"{SITE}/assets/og/people/{slug}.png"
 
+    # Empty until a GoatCounter account is set, see scripts/_analytics.py.
+    counter = _analytics.tag()
+    _counter = f"\n{counter}" if counter else ""
+
     seo = f"""<link rel="canonical" href="{canonical}">
 <meta property="og:type" content="profile">
 <meta property="og:site_name" content="NetSec, COST Action CA24154">
@@ -755,7 +762,7 @@ def build_page(m: dict, works: list, similar: list, mentors: list, loc_key: str,
 <meta name="twitter:title" content="{esc(name)} · NetSec directory">
 <meta name="twitter:description" content="{esc(desc)}">
 <meta name="twitter:image" content="{og_image}">
-<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="robots" content="index, follow, max-image-preview:large">{_counter}
 <script type="application/ld+json">
 {person_jsonld(m, canonical)}
 </script>"""
