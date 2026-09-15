@@ -76,7 +76,10 @@ def test_the_managed_head_block_is_unchanged_while_the_counter_is_off(code_clear
 def test_the_managed_head_block_carries_the_tag_when_the_counter_is_on(code_set):
     seo = _load("inject-seo.py", "inject_seo_on")
     block = seo.build_seo_block("privacy", "en", "T", "D")
-    assert "netsec-test.goatcounter.com" in block
+    # The whole tag, not a hostname substring: a substring assertion
+    # reads to CodeQL as URL sanitisation, and the exact string is the
+    # stronger check anyway.
+    assert _analytics.tag() in block
     # Inside the sentinels, so a re-run rewrites it rather than stacking
     # a second copy.
     assert block.index("goatcounter") < block.index(seo.SENTINEL_END)
