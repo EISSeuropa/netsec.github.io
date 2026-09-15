@@ -344,7 +344,7 @@
     {
       "id": "danilo-kalezic",
       "type": "person",
-      "name": "Mr Danilo Kalezic",
+      "name": "Prof. Danilo Kalezic",
       "country": "Montenegro",
       "slug": "danilo-kalezic",
       "photo": "assets/images/people/map/danilo-kalezic.webp",
@@ -356,7 +356,7 @@
     {
       "id": "david-matsaberidze",
       "type": "person",
-      "name": "Dr David Matsaberidze",
+      "name": "Prof. David Matsaberidze",
       "country": "Georgia",
       "slug": "david-matsaberidze",
       "mentorship": [
@@ -377,7 +377,7 @@
     {
       "id": "eda-kusku-sonmez",
       "type": "person",
-      "name": "Dr Eda Kuşku Sönmez",
+      "name": "Dr Eda KUŞKU SÖNMEZ",
       "country": "Türkiye",
       "slug": "eda-kusku-sonmez",
       "mentorship": [
@@ -433,7 +433,7 @@
     {
       "id": "filip-ejdus",
       "type": "person",
-      "name": "Prof Filip Ejdus",
+      "name": "Prof. Filip Ejdus",
       "country": "Serbia",
       "slug": "filip-ejdus",
       "photo": "assets/images/people/map/filip-ejdus.webp",
@@ -548,7 +548,7 @@
     {
       "id": "islam-jusufi",
       "type": "person",
-      "name": "Prof Islam Jusufi",
+      "name": "Prof. Islam Jusufi",
       "country": "North Macedonia",
       "slug": "islam-jusufi",
       "photo": "assets/images/people/map/islam-jusufi.webp",
@@ -599,7 +599,7 @@
     {
       "id": "john-helferich",
       "type": "person",
-      "name": "Dr John Helferich",
+      "name": "Dr John N.T. Helferich",
       "country": "United Kingdom",
       "slug": "john-helferich",
       "photo": "assets/images/people/map/john-helferich.webp"
@@ -608,7 +608,7 @@
       "id": "julia-carver",
       "type": "person",
       "name": "Dr Julia Carver",
-      "country": "United Kingdom",
+      "country": "Netherlands",
       "slug": "julia-carver",
       "photo": "assets/images/people/map/julia-carver.webp",
       "mentorship": [
@@ -720,7 +720,7 @@
       "id": "ludovica-castelli",
       "type": "person",
       "name": "Dr Ludovica Castelli",
-      "country": "Italy",
+      "country": "United States",
       "slug": "ludovica-castelli",
       "photo": "assets/images/people/map/ludovica-castelli.webp",
       "mentorship": [
@@ -772,7 +772,7 @@
     {
       "id": "marko-kovacevic",
       "type": "person",
-      "name": "Dr Marko Kovacevic",
+      "name": "Dr Marko Kovačević",
       "country": "Serbia",
       "slug": "marko-kovacevic",
       "photo": "assets/images/people/map/marko-kovacevic.webp",
@@ -796,7 +796,7 @@
     {
       "id": "mattia-sguazzini",
       "type": "person",
-      "name": "Mr Mattia Sguazzini",
+      "name": "Dr Mattia Sguazzini",
       "country": "Italy",
       "slug": "mattia-sguazzini",
       "photo": "assets/images/people/map/mattia-sguazzini.webp"
@@ -1604,7 +1604,7 @@
     {
       "id": "paulina-polko",
       "type": "person",
-      "name": "Prof Paulina Polko",
+      "name": "Prof. Paulina Polko",
       "country": "Poland",
       "slug": "paulina-polko",
       "photo": "assets/images/people/map/paulina-polko.webp",
@@ -1616,7 +1616,7 @@
     {
       "id": "pavlosioannis-koktsidis",
       "type": "person",
-      "name": "Prof Pavlosioannis Koktsidis",
+      "name": "Prof. Pavlosioannis Koktsidis",
       "country": "Greece",
       "slug": "pavlosioannis-koktsidis",
       "photo": "assets/images/people/map/pavlosioannis-koktsidis.webp",
@@ -1681,7 +1681,7 @@
     {
       "id": "sara-russo",
       "type": "person",
-      "name": "Ms sara russo",
+      "name": "Ms Sara Russo",
       "country": "Italy",
       "slug": "sara-russo",
       "photo": "assets/images/people/map/sara-russo.webp"
@@ -1689,7 +1689,7 @@
     {
       "id": "sarka-kolmasova",
       "type": "person",
-      "name": "Dr Sarka Kolmasova",
+      "name": "Dr Šárka Kolmašová",
       "country": "Czechia",
       "slug": "sarka-kolmasova",
       "photo": "assets/images/people/map/sarka-kolmasova.webp",
@@ -1709,7 +1709,7 @@
     {
       "id": "seyithan-ahmet-ates",
       "type": "person",
-      "name": "Dr Seyithan Ahmet Ateş",
+      "name": "Prof. Seyithan Ahmet Ates",
       "country": "Türkiye",
       "slug": "seyithan-ahmet-ates",
       "photo": "assets/images/people/map/seyithan-ahmet-ates.webp",
