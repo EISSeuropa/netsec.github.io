@@ -511,7 +511,8 @@ sweep (rule §11).
 │   ├── events.json                  # Authoritative source for /calendar.ics + /calendar/<slug>.ics + Events cards
 │   ├── publications.json            # Action outputs, WG-tagged. Drives /outputs.html + WG-page "Related publications"
 │   ├── field-guide.json             # Field-guide concept entries; rendered into the glossary's "Concepts in European security studies" section by build-field-guide.py (#766)
-│   └── prize-winners.json           # Directory members who won the European Security Studies Prize, keyed by member id; renders the gold prize pill on the full profile page (build-profile-pages.py)
+│   ├── prize-winners.json           # Directory members who won the European Security Studies Prize, keyed by member id; renders the gold prize pill on the full profile page (build-profile-pages.py)
+│   └── year-review.json             # Year in Review editions (one per Action year, 10 Oct to 9 Oct), assembled by build-year-review.py; the `hand` lede + outlook are maintainer-written and survive every rebuild (#765)
 │
 ├── calendar/                        # Per-event .ics downloads (auto-generated)
 │   └── <slug>.ics                   # One file per event in events.json; powers per-card "Add to calendar" buttons
@@ -539,6 +540,8 @@ sweep (rule §11).
 │   ├── build-news-rss.py            # Generates /news.xml (RSS 2.0) from data/news.json
 │   ├── build-field-guide.py         # Renders data/field-guide.json into the glossary "Concepts" section (EN/FR/DE), sentinel-scoped; --check drift gate (#766)
 │   ├── build-network-map.py               # Regenerates data/network-map.json (theme hubs, mentorship flags, headshots) from bios.json + wg.json + every conference programme (indico.json + each frozen essc-<year>-programme.json) for the NetSec Network Map page; --check drift gate (see network-map.md, #764, #1584)
+│   ├── build-year-review.py         # Assembles one Action year into data/year-review.json from news + events + publications + bios git history + CHANGELOG release headers; facts only, no prose; run deliberately, no CI drift gate (#765)
+│   ├── _member_series.py            # Shared helper: monthly Directory size from the git history of data/bios.json (needs fetch-depth: 0). Read by build-year-review.py and the Network Map statistics strip
 │   ├── sync-roadmap-progress.py     # Writes data/roadmap-progress.json from GitHub milestone closed/total
 │   ├── build-search.sh              # Builds /pagefind/ via `npx pagefind` (gitignored)
 │   ├── build-bio-search-stubs.py    # Renders search/bios/<lang>/<slug>.html — the per-member stubs Pagefind indexes so a member is findable by site search (country + wgs facets); --check drift gate (#1218, #1428)
