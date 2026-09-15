@@ -43,8 +43,8 @@ def test_timezone_naming_another_city_is_flagged():
     mod.check_timezone("22", _conf(startTz="Europe/Paris"), f)
     assert len(f) == 1
     assert "Europe/Paris" in f[0] and "Stockholm University" in f[0]
-    # The fix is upstream, so the message has to say where.
-    assert "Fix in Indico" in f[0]
+    # The fix is a VENUE_TZ entry, so the message has to say so.
+    assert "VENUE_TZ" in f[0] and "sync-indico.py" in f[0]
 
 
 def test_a_known_good_event_is_exempt():

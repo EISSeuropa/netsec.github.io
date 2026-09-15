@@ -112,6 +112,43 @@ NETSEC_KEYWORD = "netsec"
 
 LOOK_AHEAD_DAYS = 540  # ~18 months — long enough to capture ESSC N+1
 
+# ── Venue time zones (#1310) ─────────────────────────────────────────
+# Every event on the Indico instance reports "Europe/Paris", whatever
+# country its venue is in: Stockholm, Prague, Thessaloniki, Barcelona,
+# Berlin and Lisbon all come back with the same zone. It is the
+# instance's default rather than a setting anyone chose per event, so
+# correcting one event upstream would leave the others wrong and the
+# next conference created would arrive wrong again.
+#
+# The zone is published: essc-programme.js prints it under the grid as
+# "Times in <zone>", and a personal-programme .ics would pass it through
+# as the TZID (#855). Lisbon is the case that is not merely a mislabel,
+# since Portugal runs an hour behind Paris.
+#
+# Keyed by Indico event id, which is stable. An event absent from the
+# map keeps whatever Indico reported and is warned about, so the next
+# conference is noticed rather than silently inheriting Paris.
+INSTANCE_DEFAULT_TZ = "Europe/Paris"
+VENUE_TZ: dict[str, str] = {
+    "22": "Europe/Stockholm",   # ESSC 2026, Stockholm University
+    "21": "Europe/Athens",      # EISS 2025, University of Macedonia, Thessaloniki
+    "15": "Europe/Prague",      # EISS 2024, Charles University, Prague
+    "6":  "Europe/Lisbon",      # EISS 2021, Iscte, Lisbon
+    "5":  "Europe/Berlin",      # EISS 2022, Hertie School, Berlin
+    "1":  "Europe/Madrid",      # EISS 2023, IBEI, Barcelona
+}
+
+
+def venue_tz(event_id: str, reported: str) -> str:
+    """The venue's own zone, falling back to what Indico reported."""
+    if event_id in VENUE_TZ:
+        return VENUE_TZ[event_id]
+    if reported == INSTANCE_DEFAULT_TZ:
+        print(f"  WARN: event {event_id} reports the instance default "
+              f"{INSTANCE_DEFAULT_TZ!r}. Add it to VENUE_TZ in this script "
+              f"if its venue is somewhere else.")
+    return reported
+
 # Indico API token (read-only, on a dedicated service account shared
 # with the EISS sync). Only used on the newer `/api/*` endpoints —
 # Indico's legacy `/export/*` API rejects Bearer auth with 400 on
@@ -308,7 +345,8 @@ def normalise_event(event: dict) -> dict:
         "categoryId": event.get("categoryId"),
         "start": _combine_indico_datetime(event.get("startDate") or {}),
         "end": _combine_indico_datetime(event.get("endDate") or {}),
-        "startTz": (event.get("startDate") or {}).get("tz", ""),
+        "startTz": venue_tz(str(event.get("id", "")),
+                            (event.get("startDate") or {}).get("tz", "")),
         "startDateOnly": (event.get("startDate") or {}).get("date", ""),
         "endDateOnly": (event.get("endDate") or {}).get("date", ""),
         "location": event.get("location", ""),

@@ -63,11 +63,7 @@ KNOWN_GOOD_TZ: dict[str, str] = {
 #
 # An entry that stops matching is reported as stale, because an exception
 # nobody removes is how a gate quietly stops checking anything.
-KNOWN_UPSTREAM: dict[str, str] = {
-    "timezone 'Europe/Paris' names 'Paris'":
-        "#1310 — the ESSC 2026 Indico event was created with a Paris default; "
-        "only the maintainer can change it upstream",
-}
+KNOWN_UPSTREAM: dict[str, str] = {}
 
 
 def _tz_city(tz: str) -> str:
@@ -86,8 +82,10 @@ def check_timezone(event_id: str, conf: dict, findings: list) -> None:
         findings.append(
             f"timezone {tz!r} names {city!r}, which is not in the venue "
             f"{location!r}.\n"
-            f"      Fix in Indico: event {event_id} → Settings → Timezone. A "
-            f"hand edit here is overwritten by the next sync.\n"
+            f"      Fix it by adding {event_id!r} to VENUE_TZ in "
+            f"scripts/sync-indico.py, which overrides the Indico instance's "
+            f"Europe/Paris default (#1310). A hand edit to data/indico.json "
+            f"alone is overwritten by the next sync.\n"
             f"      If the venue really is in a different city from its zone's "
             f"namesake, add {event_id!r} to KNOWN_GOOD_TZ in this script with "
             f"the reason."
