@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-09-15T08:22:53+00:00",
+  "generated_at": "2026-09-16T09:55:41+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-09-15T08:22:53+00:00"
+    "last_synced": "2026-09-16T09:55:41+00:00"
   },
   "members": [
     {
@@ -4390,6 +4390,101 @@
         "European and transatlantic security order",
         "Foreign policy and diplomacy"
       ]
+    },
+    {
+      "id": "aliaksei-kazharski",
+      "name": "Dr Aliaksei Kazharski",
+      "country": "Czechia",
+      "country_code": "cz",
+      "affiliation": "Charles University",
+      "position": "Associate Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Aliaksei Kazharski received his PhD in European Studies and Policies from Comenius University in Bratislava in 2015. He has subsequently worked as a researcher and lecturer at Comenius University in Bratislava and Charles University in Prague. He has been a visiting researcher at the Universities of Oslo (Norway), Tartu (Estonia), Vienna (Austria), Malmö (Sweden), Uppsala (Sweden), the Institute for Human Sciences in Vienna (IWM), and the Polish Academy of Sciences in Warsaw. In 2022, he was elected to the Executive Council of the Central and East European International Studies Association (CEEISA).  He has also been a contributing fellow at Visegrád Insight and GLOBSEC. Kazharski’s research interests have included Central and Eastern Europe, Russia, regionalism, identity in international relations, critical approaches to security and terrorism studies. His second monograph, Central Europe Thirty Years after the Fall of Communism. A Return to the Margin? (Rowman&Littlefield 2022), won the International Studies Association, Global International Relations Section 2022-2023 Book Award.",
+      "keywords": [
+        "Central and Eastern Europe",
+        "heritage",
+        "identity",
+        "ontological security",
+        "regionalism"
+      ],
+      "email": "aliaksei.kazharski@fsv.cuni.cz",
+      "website": "https://www.researchgate.net/profile/Aliaksei-Kazharski",
+      "orcid": "0000-0002-9782-7746",
+      "linkedin": "https://www.linkedin.com/in/aliaksei-kazharski-6b565536/",
+      "twitter": "https://x.com/mysliar",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Central and eastern Europe",
+        "Heritage",
+        "Identity",
+        "Ontological security",
+        "Regionalism"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Identity, narratives and ideational security"
+      ]
+    },
+    {
+      "id": "pavle-nedic",
+      "name": "Mr Pavle Nedić",
+      "country": "Serbia",
+      "country_code": "rs",
+      "affiliation": "Institute of International Politics and Economics",
+      "position": "Research Assistant",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Asia",
+        "Europe - Western Balkans",
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Pavle has been employed at the Institute of International Politics and Economics since March 2021 and was appointed as a Research Assistant in November 2023. As part of his work within the Centre for Eurasian Studies, he monitors political developments in Southeast Asia. Since 2023, he has also served as Secretary of the academic journal The Review of International Affairs. From 2023 to 2025, he was a member of the project team for the project COMPASS – Contributing to Modern Partnerships: Assessments of Sino-EU-Serbian Relations. He is the author of numerous articles published in academic journals and edited volumes, and has participated in several national and international academic conferences. His main research interests include theories of international relations, international security, foreign policy analysis, and great power relations, with a particular focus on Southeast Asia. He completed his undergraduate studies in International Politics and his master’s studies in International Security at the Faculty of Political Science, University of Belgrade. His MA thesis was titled “Balancing American Power after the Ukraine Crisis: A Case Study of Relations between the Russian Federation and the People’s Republic of China”. He is currently a PhD candidate in International and European Studies at the same faculty. His doctoral dissertation is titled “Application of Kenneth Waltz’s Levels of Analysis in United States Policy toward the Russian Federation from 1993 to 2021”.",
+      "keywords": [
+        "security studies",
+        "international relations",
+        "foreign policy",
+        "realism"
+      ],
+      "email": "pavle.nedic@diplomacy.bg.ac.rs",
+      "website": "https://www.diplomacy.bg.ac.rs/en/",
+      "orcid": "0000-0002-7055-0628",
+      "linkedin": "https://www.linkedin.com/in/pavle-nedic-490465219/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/pavle-nedic.jpg",
+      "source": "form",
+      "photo_source_sha256": "0d1dc7be057a68189325d80bcb749d8c43bc8ff3641153f87e59af7d3bf59c90",
+      "canonical_keywords": [
+        "Foreign policy",
+        "International relations",
+        "Realism",
+        "Security studies"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Security and defence",
+        "Theory and methods"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -4410,6 +4505,10 @@
       "count": 5
     },
     {
+      "keyword": "International relations",
+      "count": 5
+    },
+    {
       "keyword": "International security",
       "count": 5
     },
@@ -4422,15 +4521,23 @@
       "count": 4
     },
     {
+      "keyword": "Foreign policy",
+      "count": 4
+    },
+    {
       "keyword": "Foreign policy analysis",
       "count": 4
     },
     {
-      "keyword": "International relations",
+      "keyword": "NATO",
       "count": 4
     },
     {
-      "keyword": "NATO",
+      "keyword": "Ontological security",
+      "count": 4
+    },
+    {
+      "keyword": "Security studies",
       "count": 4
     },
     {
@@ -4458,15 +4565,15 @@
       "count": 3
     },
     {
-      "keyword": "Foreign policy",
-      "count": 3
-    },
-    {
       "keyword": "Human security",
       "count": 3
     },
     {
       "keyword": "Hybrid threats",
+      "count": 3
+    },
+    {
+      "keyword": "Identity",
       "count": 3
     },
     {
@@ -4478,15 +4585,11 @@
       "count": 3
     },
     {
-      "keyword": "Ontological security",
+      "keyword": "Regionalism",
       "count": 3
     },
     {
       "keyword": "Securitisation",
-      "count": 3
-    },
-    {
-      "keyword": "Security studies",
       "count": 3
     },
     {
@@ -4558,10 +4661,6 @@
       "count": 2
     },
     {
-      "keyword": "Identity",
-      "count": 2
-    },
-    {
       "keyword": "International humanitarian law",
       "count": 2
     },
@@ -4587,10 +4686,6 @@
     },
     {
       "keyword": "Political psychology",
-      "count": 2
-    },
-    {
-      "keyword": "Regionalism",
       "count": 2
     },
     {
@@ -4671,6 +4766,10 @@
     },
     {
       "keyword": "Capability planning",
+      "count": 1
+    },
+    {
+      "keyword": "Central and eastern Europe",
       "count": 1
     },
     {
@@ -4986,6 +5085,10 @@
       "count": 1
     },
     {
+      "keyword": "Heritage",
+      "count": 1
+    },
+    {
       "keyword": "Human rights",
       "count": 1
     },
@@ -5242,6 +5345,10 @@
       "count": 1
     },
     {
+      "keyword": "Realism",
+      "count": 1
+    },
+    {
       "keyword": "Regional cooperation",
       "count": 1
     },
@@ -5413,11 +5520,11 @@
   "theme_aggregate": [
     {
       "theme": "Security and defence",
-      "count": 38
+      "count": 39
     },
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 36
+      "count": 38
     },
     {
       "theme": "Cyber and emerging technology",
@@ -5425,7 +5532,7 @@
     },
     {
       "theme": "Theory and methods",
-      "count": 23
+      "count": 24
     },
     {
       "theme": "Transnational and human security",
@@ -5456,11 +5563,11 @@
       "count": 10
     },
     {
-      "theme": "Democracy, governance and political change",
-      "count": 6
+      "theme": "Identity, narratives and ideational security",
+      "count": 7
     },
     {
-      "theme": "Identity, narratives and ideational security",
+      "theme": "Democracy, governance and political change",
       "count": 6
     },
     {
@@ -5739,31 +5846,31 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 59
+      "count": 60
     },
     {
       "region": "Global and cross-regional",
-      "count": 45
+      "count": 47
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 21
+      "count": 22
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 18
+      "count": 19
     },
     {
       "region": "The Americas",
-      "count": 16
+      "count": 17
+    },
+    {
+      "region": "Asia",
+      "count": 12
     },
     {
       "region": "Middle East and North Africa",
       "count": 12
-    },
-    {
-      "region": "Asia",
-      "count": 11
     },
     {
       "region": "Africa",
