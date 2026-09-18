@@ -38,6 +38,7 @@
     "Critical security studies": ["critical security"],
     "US–China relations": ["us-china relations"],
     "Chinese foreign policy": ["china's foreign policy"],
+    "Defence industry": ["green defence industry", "green defense industry"],
     "Latin America": ["latin america"],
     "Middle East": ["middle east"],
     "Middle East security": ["middle east security"],
@@ -126,7 +127,7 @@
     "Crisis management and critical systems resilience": ["Crisis management", "Crises", "Critical infrastructure security", "Systems resilience", "Civil protection", "Critical infrastructure protection", "Security risk assessment"],
     "Political psychology, public opinion and decision-making": ["Political psychology", "Judgment and decision-making", "Public opinion", "Defence attitudes"],
     "Democracy, governance and political change": ["Democratisation", "Transformation", "Comparative politics", "Governance", "Pressure groups", "Nationalism", "Regional development"],
-    "Climate, energy and environmental security": ["Climate change", "Environmental degradation", "Green defence industry", "Energy security", "Environmental security"]
+    "Climate, energy and environmental security": ["Climate change", "Environmental degradation", "Energy security", "Environmental security"]
   },
 
   "affiliation_aliases": {
