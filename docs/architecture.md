@@ -633,9 +633,10 @@ If you're adding a new page:
    (and `... de`) to stamp the translations.
 5. Add the slug to the `PAGES` list in `scripts/inject-seo.py` and
    run it to inject canonical / OG / Twitter Card / JSON-LD blocks.
-6. Add the page (with `<xhtml:link>` siblings for FR/DE) to
-   `sitemap.xml`, and list it in `sitemap.html` (+ FR/DE) under the
-   right branch.
+6. Add a row to `TOP_LEVEL` in `scripts/build-sitemap.py` and run it
+   to regenerate `sitemap.xml`, and list the page in `sitemap.html`
+   (+ FR/DE) under the right branch. `scripts/check-page-registration.py`
+   fails CI when a top-level page is missing from either list.
 7. Add a footer link on every other page (`grep` for an existing
    footer-link pattern and replicate it across the 24 page × locale
    permutations).

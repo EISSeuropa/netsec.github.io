@@ -296,16 +296,16 @@
       "de": {
         "file": "slides.de.html",
         "reviewed_by": null,
-        "source_sha1": "7e5290a4c4dec0508d3406d59f896bf79963634b",
+        "source_sha1": "c14d4ae8820aba6a987d6b94595c7ed476f060bb",
         "status": "beta",
-        "translated_on": "2026-07-03"
+        "translated_on": "2026-09-18"
       },
       "fr": {
         "file": "slides.fr.html",
         "reviewed_by": null,
-        "source_sha1": "7e5290a4c4dec0508d3406d59f896bf79963634b",
+        "source_sha1": "c14d4ae8820aba6a987d6b94595c7ed476f060bb",
         "status": "beta",
-        "translated_on": "2026-07-03"
+        "translated_on": "2026-09-18"
       }
     },
     "network-map.html": {
