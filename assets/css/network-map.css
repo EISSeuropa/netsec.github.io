@@ -39,9 +39,8 @@
 /* The label colour is set per chip in network-map.js, from the fill's own
    luminance (#1774). The fill was also held at .94, which faded it toward
    the page and cost about half a point of contrast on the darker hues. */
-.network-map-wg-chip{font:inherit;font-size:.82rem;font-weight:600;padding:6px 13px;border-radius:999px;cursor:pointer;border:1px solid transparent;color:#fff;transition:opacity .15s,transform .15s}
+.network-map-wg-chip{font:inherit;font-size:.82rem;font-weight:600;padding:6px 13px;border-radius:999px;cursor:pointer;border:1px solid transparent;background:var(--chip-bg);color:var(--chip-ink,#fff);transition:background-color .15s,transform .15s}
 .network-map-wg-chip:hover{transform:translateY(-1px)}
-.network-map-wg-chip[aria-pressed="false"]{opacity:.32}
 .network-map-wg-chip:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
 /* Height under a thumb lives in the max-width block below, whose descendant
    selector out-specifies a bare .network-map-wg-chip here (#1603 sweep). */
@@ -68,6 +67,10 @@
    enough to clear AA at 13px. .55 blended to roughly 4.2:1 against the page. */
 .network-map-wg-chip.is-plain{background:rgba(11,18,32,.72);color:#fff}
 .dark .network-map-wg-chip.is-plain{background:rgba(255,255,255,.14)}
+/* Off reads as a hollow chip outlined in its own colour, with the label in page
+   ink. The whole button used to fade to .32, which took the label down with it
+   to well under AA (#1840). */
+.network-map-wg-chip[aria-pressed="false"],.dark .network-map-wg-chip[aria-pressed="false"]{background:transparent;color:var(--ink);border-color:var(--chip-bg,var(--muted))}
 .network-map-card .face{width:44px;height:44px;border-radius:50%;object-fit:cover;float:right;margin:0 0 6px 10px}
 .network-map-card .themes{font-size:.76rem;color:var(--muted);margin-top:6px}
 .network-map-card .panels{font-size:.76rem;color:#d23a68;margin-top:6px}

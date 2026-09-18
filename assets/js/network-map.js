@@ -836,7 +836,7 @@
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'network-map-wg-chip';
-    if (bg) { b.style.background = bg; b.style.color = inkOn(bg); }
+    if (bg) { b.style.setProperty('--chip-bg', bg); b.style.setProperty('--chip-ink', inkOn(bg)); }
     else b.classList.add('is-plain');
     b.textContent = label;
     b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
