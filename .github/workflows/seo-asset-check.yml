@@ -50,6 +50,12 @@ jobs:
         # pages-deploy.yml and asserted there before the tree is published.
         run: python3 scripts/inject-seo.py --check --seo-only
 
+      - name: Every top-level page is registered (#1850)
+        # A page missing from inject-seo's PAGES or build-sitemap's TOP_LEVEL
+        # passes both of their --check runs, since each only inspects what it
+        # already lists.
+        run: python3 scripts/check-page-registration.py
+
       - name: Install Pillow for the photograph check
         run: python3 -m pip install --quiet 'Pillow>=12.3.0,<13'
 
