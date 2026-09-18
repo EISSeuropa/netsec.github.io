@@ -49,6 +49,7 @@ UPSTREAM = "data/bios.json"
 BUCKETS: list[tuple[str, str, bool]] = [
     ("search/bios/", "search stubs", True),
     ("assets/og/flags/", "flag assets", True),
+    ("assets/images/flags/", "flag thumbnails", True),
     ("assets/images/people/", "headshots", True),
     ("data/orcid-works.json", "ORCID publications", False),
     ("data/network-map.json", "Network Map graph", False),

@@ -1837,7 +1837,7 @@
     const url = canonicalBioUrl(hit.url) || hit.url;
 
     const flagImg = country
-      ? `<img class="search-bio-flag" src="https://flagcdn.com/h20/${country}.png" alt="" loading="lazy">`
+      ? `<img class="search-bio-flag" src="assets/images/flags/${country}.png" alt="" loading="lazy">`
       : '';
     const photoEl = photo
       ? `<img class="search-bio-photo" src="${escapeHtml(photo)}" alt="" loading="lazy">`
@@ -2315,7 +2315,7 @@ window.netsecMemberCard = (function () {
     }
     if (m.country) {
       const c = el('p', { class: 'essc-member-card-country' });
-      if (m.country_code) c.appendChild(el('img', { src: `https://flagcdn.com/h20/${m.country_code}.png`, alt: '', width: '18', height: '12', loading: 'lazy' }));
+      if (m.country_code) c.appendChild(el('img', { src: `assets/images/flags/${m.country_code}.png`, alt: '', width: '18', height: '12', loading: 'lazy' }));
       c.appendChild(document.createTextNode(m.country));
       text.appendChild(c);
     }
