@@ -106,6 +106,13 @@ def test_every_country_code_has_a_bundled_flag():
             assert (boc.FLAGS_DIR / f"{cc}.svg").exists(), f"missing bundled flag for {cc}"
 
 
+def test_every_country_code_has_a_flag_thumbnail():
+    # The site serves its own flag thumbnails (#1424), so a country with no
+    # PNG renders a broken image. --ensure-flags fetches a missing one.
+    for cc in boc.thumb_codes():
+        assert (boc.THUMBS_DIR / f"{cc}.png").exists(), f"missing flag thumbnail for {cc}"
+
+
 def test_minify_flag_strips_id_and_collapses_whitespace():
     # A raw flag-icons SVG (multi-line, carries an id) becomes the one-line,
     # id-free form the ensure_flags step writes to disk.

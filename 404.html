@@ -615,7 +615,7 @@
     var wgs = (hit.meta.wgs || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
     var url = canonicalBioUrl(hit.url) || hit.url;
     var flagImg = country
-      ? '<img class="search-bio-flag" src="https://flagcdn.com/h20/' + country + '.png" alt="" loading="lazy">'
+      ? '<img class="search-bio-flag" src="/assets/images/flags/' + country + '.png" alt="" loading="lazy">'
       : '';
     var photoEl = photo
       ? '<img class="search-bio-photo" src="' + escapeHtml(photo) + '" alt="" loading="lazy">'

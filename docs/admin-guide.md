@@ -87,7 +87,7 @@ For the rationale, see the PDF documentation pack, Section 07
 | EU emblem         | Inlined SVG in every page footer                      | Used per the [EU visual identity manual](https://commission.europa.eu/communication/visual-identity-and-branding_en) for *Funded by the EU* communication |
 | NetSec logo       | Lockups + mark in `assets/images/brand/` (favicon family derived from the mark) | © COST Action NetSec                                              |
 | Member headshots  | `assets/images/people/<slug>.{jpg,png,jpeg,webp}`     | © the individual member, displayed with their consent                                |
-| Country flags     | <https://flagcdn.com> (loaded at runtime)             | Flags themselves public domain; CDN MIT                                              |
+| Country flags     | <https://flagcdn.com>, self-hosted in `assets/images/flags/` | Flags themselves public domain; CDN MIT                                              |
 
 #### Maintaining brand assets
 

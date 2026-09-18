@@ -606,7 +606,7 @@ def render_card(m: dict, works: list, similar: list, mentors: list, loc: dict, p
     if aff_parts:
         flag = ""
         if m.get("country_code"):
-            flag = (f'<img class="member-flag" src="https://flagcdn.com/h20/'
+            flag = (f'<img class="member-flag" src="assets/images/flags/'
                     f'{esc(m["country_code"])}.png" alt="" loading="lazy"> ')
         p.append(f'<p class="member-affiliation">{flag}'
                  f'<span class="aff-full">{esc(" · ".join(aff_parts))}</span></p>')

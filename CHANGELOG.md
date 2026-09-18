@@ -152,6 +152,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- Country flags are served from the site itself, 41 PNG thumbnails of about 1 KB each, so the About page makes 52 fewer requests to a third-party host and a FlagCDN outage no longer blanks every flag. The privacy notice drops FlagCDN and Google Fonts from its list of third parties, since the fonts were already self-hosted, and names the one file the conference programme page still reads from eiss-europa.com. The accessibility statement retires its third-party assets limitation. Both are updated in English, French and German.
 - Four Directory keywords that named one concept twice or broke a naming pattern are merged into one form: *EU security and defence* into *European security and defence*, *Critical security* into *Critical security studies*, *US-China relations* into *US–China relations* with the en dash its EU siblings use, and *China's foreign policy* into *Chinese foreign policy*. The old forms still resolve, so no submission needs editing.
 - The Directory keyword *Post structural security* is retired, since it carried one member's own phrasing rather than a curated tag. That member keeps the Theory and methods theme through *Securitisation*.
 - The Directory keyword *Green defence industry* is merged into *Defence industry*. Its one holder already carried both, and leaves the Climate, energy and environmental security theme, which it was her only route into.

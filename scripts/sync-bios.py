@@ -1231,7 +1231,7 @@ def row_to_member(
 
 
 # Country-name → ISO 3166-1 alpha-2 code, used by /people.html to render
-# FlagCDN thumbnails (https://flagcdn.com/h20/<code>.png).
+# the self-hosted flag thumbnails (assets/images/flags/<code>.png, #1424).
 #
 # Grouped by region for diffability — when the form's country dropdown
 # gains an entry, add it to the matching region table below. The names

@@ -159,11 +159,29 @@ def members() -> list[dict]:
 # instead of failing pytest and waiting for a person to bundle it by hand.
 FLAG_SRC = "https://raw.githubusercontent.com/lipis/flag-icons/main/flags/4x3/{cc}.svg"
 
+# The site's flag thumbnails (the About grids, Directory cards, profile pages,
+# site search) are small PNGs served from our own origin (#1424). They are not
+# the SVGs above: several flag-icons SVGs carry a coat of arms and weigh 50 to
+# 80 KB, against about 1 KB for a 40px-high PNG, and the largest thumbnail on
+# the site renders at 28x19.
+THUMBS_DIR = ROOT / "assets" / "images" / "flags"
+THUMB_SRC = "https://flagcdn.com/h40/{cc}.png"
+FOUNDING = ROOT / "data" / "founding-proposers.json"
+
 
 def _minify_flag(svg: str) -> str:
     """Collapse a flag-icons SVG to the one-line, id-free form used on disk."""
     svg = re.sub(r'\s+id="[^"]*"', "", svg, count=1)
     return re.sub(r">\s+<", "><", svg).strip() + "\n"
+
+
+def thumb_codes() -> set[str]:
+    """Every country code a flag thumbnail is drawn for at runtime: the
+    Directory members plus the founding contributors on /about. The static
+    Management Committee grid is covered by the link checker instead."""
+    founding = json.loads(FOUNDING.read_text(encoding="utf-8"))["proposers"]
+    rows = members() + founding
+    return {(r.get("country_code") or "").strip().lower() for r in rows} - {""}
 
 
 def ensure_flags() -> int:
@@ -181,6 +199,12 @@ def ensure_flags() -> int:
             svg = r.read().decode("utf-8")
         (FLAGS_DIR / f"{cc}.svg").write_text(_minify_flag(svg), encoding="utf-8")
         print(f"bundled flag: {cc}.svg")
+        fetched += 1
+    have = {p.stem for p in THUMBS_DIR.glob("*.png")}
+    for cc in sorted(thumb_codes() - have):
+        with urllib.request.urlopen(THUMB_SRC.format(cc=cc), timeout=30) as r:
+            (THUMBS_DIR / f"{cc}.png").write_bytes(r.read())
+        print(f"bundled flag thumbnail: {cc}.png")
         fetched += 1
     if not fetched:
         print("all country flags already bundled")

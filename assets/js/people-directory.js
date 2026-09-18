@@ -1065,7 +1065,7 @@
         if (m.country_code) {
           const flag = document.createElement('img');
           flag.className = 'member-flag';
-          flag.src = `https://flagcdn.com/h20/${m.country_code}.png`;
+          flag.src = `assets/images/flags/${m.country_code}.png`;
           flag.alt = ''; flag.loading = 'lazy';
           aff.appendChild(flag);
           aff.appendChild(document.createTextNode(' '));
@@ -3164,7 +3164,7 @@
       btn.setAttribute('aria-label', name);
       btn.title = name;
       const img = document.createElement('img');
-      img.src = 'https://flagcdn.com/h20/' + counts[country].code + '.png';
+      img.src = 'assets/images/flags/' + counts[country].code + '.png';
       img.alt = ''; img.loading = 'lazy'; img.width = 28; img.height = 20;
       btn.appendChild(img);
       btn.addEventListener('click', () => {

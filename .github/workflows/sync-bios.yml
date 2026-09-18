@@ -116,6 +116,8 @@ jobs:
           # fetches a missing flag from lipis/flag-icons (the source of the
           # bundled set) so the SVG rides this same auto-PR. Idempotent: no
           # missing flag, no diff. The pytest backstop stays as belt-and-braces.
+          # The same step fetches the small PNG thumbnail the site itself
+          # shows (assets/images/flags/, #1424).
           #
           # A flag is an input, so it stays committed. The cards it is drawn
           # onto are rendered at deploy time now (#1716), which is why the card
