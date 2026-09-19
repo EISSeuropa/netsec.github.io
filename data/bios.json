@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-09-16T09:55:41+00:00",
+  "generated_at": "2026-09-19T09:28:29+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-09-16T09:55:41+00:00"
+    "last_synced": "2026-09-19T09:28:29+00:00"
   },
   "members": [
     {
@@ -1265,7 +1265,7 @@
         "International security",
         "Judgment and decision-making",
         "Political psychology",
-        "US-China relations"
+        "US–China relations"
       ],
       "themes": [
         "Foreign policy and diplomacy",
@@ -2957,7 +2957,7 @@
       "source": "form",
       "photo_source_sha256": "69bad1fe62aa5b13471a2294246e66ac712a2895bba1638dbd52d98eafae65bf",
       "canonical_keywords": [
-        "China's foreign policy",
+        "Chinese foreign policy",
         "Economic security",
         "Geopolitics of the indo-Pacific",
         "Strategic competition"
@@ -3106,11 +3106,9 @@
         "Defence economics",
         "Defence industry",
         "Defence resources management",
-        "Emerging technologies in military domain",
-        "Green defence industry"
+        "Emerging technologies in military domain"
       ],
       "themes": [
-        "Climate, energy and environmental security",
         "Cyber and emerging technology",
         "Economic security and geoeconomics",
         "Security and defence"
@@ -3439,7 +3437,7 @@
       "canonical_keywords": [
         "CSDP",
         "EU foreign policy",
-        "EU security and defence"
+        "European security and defence"
       ],
       "themes": [
         "EU, UN and other international organisations",
@@ -3813,7 +3811,7 @@
       "source": "form",
       "photo_source_sha256": "45bdd4675a1f991be8daa53f4da28e259d95b60a0b5d7b4f7c21d34eff0bf54d",
       "canonical_keywords": [
-        "Critical security",
+        "Critical security studies",
         "Non-state actors",
         "Religion"
       ],
@@ -4298,7 +4296,6 @@
         "Defence industry",
         "Gulf security",
         "Middle East security",
-        "Post structural security",
         "Securitisation"
       ],
       "themes": [
@@ -4485,6 +4482,53 @@
         "Security and defence",
         "Theory and methods"
       ]
+    },
+    {
+      "id": "giray-sadik",
+      "name": "Prof. Giray SADIK",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Ankara Yildirim Beyazit University (AYBU)",
+      "position": "Director of European Studies Research Center at AYBU",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Europe - Western Balkans",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Prof. Dr. Giray SADIK is Chair of the Department of International Relations and Director of the European Studies Research Center, both at Ankara Yıldırım Beyazıt University, Türkiye. Previously, he was Eisenhower Fellow at NATO Defense College, Rome, Italy, and Swedish Institute Postdoctoral Fellow in the Department of Global Political Studies at Malmö University, Sweden. Prof. Sadik earned his Ph.D. in Political Science from the School of Public and International Affairs at the University of Georgia, USA. He has researched and published extensively on matters of foreign policy and strategy, hybrid threats, counterterrorism, border and maritime security with a focus on European security, transatlantic relations, Eurasian connectivity and security architectures.",
+      "keywords": [
+        "strategy and foreign policy",
+        "hybrid threats",
+        "border and maritime security",
+        "Emerging Disruptive Technologies (EDTs)"
+      ],
+      "email": "giray.sadik@aybu.edu.tr",
+      "website": "",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "https://x.com/GirayPhD",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/giray-sadik.jpg",
+      "source": "form",
+      "photo_source_sha256": "eea188955d3a49b282faf36c35347b8c6459882998ea967c411d8703e0c66624",
+      "canonical_keywords": [
+        "Border and maritime security",
+        "Emerging disruptive technologies (edts)",
+        "Hybrid threats",
+        "Strategy and foreign policy"
+      ],
+      "themes": [
+        "Intelligence, information and influence"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -4529,6 +4573,10 @@
       "count": 4
     },
     {
+      "keyword": "Hybrid threats",
+      "count": 4
+    },
+    {
       "keyword": "NATO",
       "count": 4
     },
@@ -4566,10 +4614,6 @@
     },
     {
       "keyword": "Human security",
-      "count": 3
-    },
-    {
-      "keyword": "Hybrid threats",
       "count": 3
     },
     {
@@ -4613,6 +4657,10 @@
       "count": 2
     },
     {
+      "keyword": "Critical security studies",
+      "count": 2
+    },
+    {
       "keyword": "CSDP",
       "count": 2
     },
@@ -4638,6 +4686,10 @@
     },
     {
       "keyword": "European integration",
+      "count": 2
+    },
+    {
+      "keyword": "European security and defence",
       "count": 2
     },
     {
@@ -4757,6 +4809,10 @@
       "count": 1
     },
     {
+      "keyword": "Border and maritime security",
+      "count": 1
+    },
+    {
       "keyword": "Border security",
       "count": 1
     },
@@ -4773,7 +4829,7 @@
       "count": 1
     },
     {
-      "keyword": "China's foreign policy",
+      "keyword": "Chinese foreign policy",
       "count": 1
     },
     {
@@ -4842,14 +4898,6 @@
     },
     {
       "keyword": "Critical infrastructure security",
-      "count": 1
-    },
-    {
-      "keyword": "Critical security",
-      "count": 1
-    },
-    {
-      "keyword": "Critical security studies",
       "count": 1
     },
     {
@@ -4965,6 +5013,10 @@
       "count": 1
     },
     {
+      "keyword": "Emerging disruptive technologies (edts)",
+      "count": 1
+    },
+    {
       "keyword": "Emerging technologies in military domain",
       "count": 1
     },
@@ -5001,19 +5053,11 @@
       "count": 1
     },
     {
-      "keyword": "EU security and defence",
-      "count": 1
-    },
-    {
       "keyword": "Euro-Atlantic foreign policy",
       "count": 1
     },
     {
       "keyword": "European defence",
-      "count": 1
-    },
-    {
-      "keyword": "European security and defence",
       "count": 1
     },
     {
@@ -5074,10 +5118,6 @@
     },
     {
       "keyword": "Governance",
-      "count": 1
-    },
-    {
-      "keyword": "Green defence industry",
       "count": 1
     },
     {
@@ -5321,10 +5361,6 @@
       "count": 1
     },
     {
-      "keyword": "Post structural security",
-      "count": 1
-    },
-    {
       "keyword": "Post-cold war international relations",
       "count": 1
     },
@@ -5441,6 +5477,10 @@
       "count": 1
     },
     {
+      "keyword": "Strategy and foreign policy",
+      "count": 1
+    },
+    {
       "keyword": "Subversion",
       "count": 1
     },
@@ -5501,7 +5541,7 @@
       "count": 1
     },
     {
-      "keyword": "US-China relations",
+      "keyword": "US–China relations",
       "count": 1
     },
     {
@@ -5547,15 +5587,15 @@
       "count": 14
     },
     {
+      "theme": "Intelligence, information and influence",
+      "count": 11
+    },
+    {
       "theme": "Economic security and geoeconomics",
       "count": 10
     },
     {
       "theme": "EU, UN and other international organisations",
-      "count": 10
-    },
-    {
-      "theme": "Intelligence, information and influence",
       "count": 10
     },
     {
@@ -5571,12 +5611,12 @@
       "count": 6
     },
     {
-      "theme": "Climate, energy and environmental security",
+      "theme": "War, military history and armed conflict",
       "count": 4
     },
     {
-      "theme": "War, military history and armed conflict",
-      "count": 4
+      "theme": "Climate, energy and environmental security",
+      "count": 3
     },
     {
       "theme": "Crisis management and critical systems resilience",
@@ -5604,7 +5644,7 @@
     "British army": "War, military history and armed conflict",
     "CSDP": "EU, UN and other international organisations",
     "Capability planning": "Security and defence",
-    "China's foreign policy": "Foreign policy and diplomacy",
+    "Chinese foreign policy": "Foreign policy and diplomacy",
     "Civil conflict": "Peace, mediation and reconciliation",
     "Civil defence": "Security and defence",
     "Civil protection": "Crisis management and critical systems resilience",
@@ -5627,7 +5667,6 @@
     "Crisis management": "Crisis management and critical systems resilience",
     "Critical infrastructure protection": "Crisis management and critical systems resilience",
     "Critical infrastructure security": "Crisis management and critical systems resilience",
-    "Critical security": "Theory and methods",
     "Critical security studies": "Theory and methods",
     "Cyber and emerging technology": "Cyber and emerging technology",
     "Cyber defence": "Cyber and emerging technology",
@@ -5665,7 +5704,6 @@
     "EU external action": "Foreign policy and diplomacy",
     "EU foreign policy": "Foreign policy and diplomacy",
     "EU security": "EU, UN and other international organisations",
-    "EU security and defence": "Security and defence",
     "EU–China relations": "Foreign policy and diplomacy",
     "EU–NATO relations": "European and transatlantic security order",
     "East central Europe": "Foreign policy and diplomacy",
@@ -5706,7 +5744,6 @@
     "Governance": "Democracy, governance and political change",
     "Grand strategy": "Strategy and deterrence",
     "Great power competition": "Foreign policy and diplomacy",
-    "Green defence industry": "Climate, energy and environmental security",
     "Gulf security": "Security and defence",
     "History": "Theory and methods",
     "Human rights": "Transnational and human security",
@@ -5783,7 +5820,6 @@
     "Political psychology": "Political psychology, public opinion and decision-making",
     "Political violence": "Transnational and human security",
     "Positive peace": "Peace, mediation and reconciliation",
-    "Post structural security": "Theory and methods",
     "Post-cold war international relations": "Theory and methods",
     "Power": "Security and defence",
     "Pressure groups": "Democracy, governance and political change",
@@ -5836,7 +5872,7 @@
     "Turkish foreign policy": "Foreign policy and diplomacy",
     "UN": "EU, UN and other international organisations",
     "US foreign policy": "Foreign policy and diplomacy",
-    "US-China relations": "Foreign policy and diplomacy",
+    "US–China relations": "Foreign policy and diplomacy",
     "Unification": "Peace, mediation and reconciliation",
     "Violence and restraint": "Transnational and human security",
     "Visual threat detection": "Security and defence",
@@ -5846,19 +5882,19 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 60
+      "count": 61
     },
     {
       "region": "Global and cross-regional",
-      "count": 47
+      "count": 48
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 22
+      "count": 23
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 19
+      "count": 20
     },
     {
       "region": "The Americas",
