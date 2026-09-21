@@ -409,6 +409,85 @@
         4
       ],
       "form_changed_on": "2026-09-11"
+    },
+    "linde desmaele": {
+      "cost_first_seen": {
+        "2": "2026-09-21"
+      },
+      "form_wgs": [
+        2
+      ],
+      "form_changed_on": "2026-09-21"
+    },
+    "fabio iguavita duarte": {
+      "cost_first_seen": {
+        "1": "2026-09-21",
+        "2": "2026-09-21"
+      },
+      "form_wgs": [
+        1,
+        2
+      ],
+      "form_changed_on": "2026-09-21"
+    },
+    "zane sime": {
+      "cost_first_seen": {
+        "1": "2026-09-21",
+        "2": "2026-09-21",
+        "3": "2026-09-21",
+        "4": "2026-09-21"
+      },
+      "form_wgs": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "form_changed_on": "2026-09-21"
+    },
+    "carla sofia ferreira fernandes": {
+      "cost_first_seen": {
+        "2": "2026-09-21"
+      },
+      "form_wgs": [
+        2
+      ],
+      "form_changed_on": "2026-09-21"
+    },
+    "andriy tyushka": {
+      "cost_first_seen": {
+        "1": "2026-09-21",
+        "2": "2026-09-21",
+        "3": "2026-09-21"
+      },
+      "form_wgs": [
+        1,
+        2,
+        3
+      ],
+      "form_changed_on": "2026-09-21"
+    },
+    "henrique garbino": {
+      "cost_first_seen": {
+        "3": "2026-09-21"
+      },
+      "form_wgs": [
+        3
+      ],
+      "form_changed_on": "2026-09-21"
+    },
+    "giray sadik": {
+      "cost_first_seen": {
+        "1": "2026-09-21",
+        "2": "2026-09-21",
+        "3": "2026-09-21"
+      },
+      "form_wgs": [
+        1,
+        2,
+        3
+      ],
+      "form_changed_on": "2026-09-21"
     }
   }
 }

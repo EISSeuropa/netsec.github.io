@@ -1412,7 +1412,9 @@
       "affiliation": "Leiden University",
       "position": "Assistant Professor of Intelligence and Security",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        2
+      ],
       "mentorship": [
         "mentor"
       ],
@@ -1848,7 +1850,10 @@
       "affiliation": "Czech Technical University",
       "position": "Strategic Intelligence Analyst",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        2
+      ],
       "mentorship": [],
       "regions": [
         "Europe",
@@ -3361,7 +3366,12 @@
       "affiliation": "Rīga Stradiņš University, RSU",
       "position": "alumna (doctoral degree holder) at the Norwegian University of Science and Technology, NTNU; guest lecturer at Rīga Stradiņš University, RSU",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        2,
+        3,
+        4
+      ],
       "mentorship": [
         "mentor"
       ],
@@ -3539,7 +3549,9 @@
       "affiliation": "Centre for Functional Ecology",
       "position": "Researcher",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        2
+      ],
       "mentorship": [
         "mentee"
       ],
@@ -3583,7 +3595,11 @@
       "affiliation": "College of Europe (Natolin)",
       "position": "Senior Research Fellow",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        2,
+        3
+      ],
       "mentorship": [],
       "regions": [
         "Europe",
@@ -4067,7 +4083,9 @@
       "roles": [
         "Management Committee · Sweden"
       ],
-      "wgs": [],
+      "wgs": [
+        3
+      ],
       "mentorship": [
         "mentor"
       ],
@@ -4491,7 +4509,11 @@
       "affiliation": "Ankara Yildirim Beyazit University (AYBU)",
       "position": "Director of European Studies Research Center at AYBU",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        2,
+        3
+      ],
       "mentorship": [
         "mentor"
       ],
