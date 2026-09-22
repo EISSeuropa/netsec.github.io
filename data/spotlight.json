@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "vasiliki-plessia-aravani",
-  "featuredSince": "2026-09-15",
+  "current": "clara-jammot",
+  "featuredSince": "2026-09-22",
   "pinned": null,
   "history": [
+    {
+      "id": "clara-jammot",
+      "week": "2026-W39",
+      "date": "2026-09-22"
+    },
     {
       "id": "vasiliki-plessia-aravani",
       "week": "2026-W38",
