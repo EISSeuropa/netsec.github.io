@@ -40,7 +40,7 @@
       {
         "icon": "press",
         "h3": "I'm covering the Action",
-        "p": "Logos, boilerplate, and the latest news in one place.",
+        "p": "Logos, boilerplate and the latest news.",
         "links": [
           { "label": "Press kit", "href": "press-kit.html" },
           { "label": "News", "href": "index.html#news" }
