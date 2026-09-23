@@ -83,7 +83,7 @@
       {
         "icon": "press",
         "h3": "Vous couvrez l'Action ?",
-        "p": "Logos, argumentaire type et dernières actualités, réunis au même endroit.",
+        "p": "Logos, argumentaire type et dernières actualités.",
         "links": [
           { "label": "Kit presse", "href": "press-kit.fr.html" },
           { "label": "Actualités", "href": "index.fr.html#news" }
@@ -126,7 +126,7 @@
       {
         "icon": "press",
         "h3": "Sie berichten über die Aktion?",
-        "p": "Logos, Standardtexte und die neuesten Meldungen an einem Ort.",
+        "p": "Logos, Standardtexte und die neuesten Meldungen.",
         "links": [
           { "label": "Pressemappe", "href": "press-kit.de.html" },
           { "label": "Aktuelles", "href": "index.de.html#news" }
