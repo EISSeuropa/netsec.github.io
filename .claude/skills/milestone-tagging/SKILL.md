@@ -43,9 +43,9 @@ plan.
 - **When an issue moves between releases.** Update the milestone in the
   same edit that records the slip ("deferred to v1.8.0, out of scope
   for v1.7.0 in this PR").
-- **Never leave an open issue without one.** A milestone-less open
-  issue is invisible to release planning, and the
-  `Backlog — Under watch` bucket exists so there is no excuse.
+- **Every open issue carries one.** A milestone-less open issue is
+  invisible to release planning. Work with no release slot goes in
+  `Backlog — Under watch`.
 
 ## Pre-release check
 

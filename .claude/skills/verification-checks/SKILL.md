@@ -5,12 +5,6 @@ description: "What CI does not prove on NetSec, and how to verify a change inste
 
 # 16. Lessons learned: the verification checks
 
-Moved out of CLAUDE.md §16 so they load when a change needs
-verifying rather than costing context every session. The reflexes
-that have to fire unprompted (grep for a bug's siblings, the locale
-triplet, the drift gates, staging named paths, workflow agents,
-`data-*` hooks) stay resident in §16.
-
 ### A cancelled run is not a passing run
 
 Auditing CI by listing failures misses the worst outages, because a run
