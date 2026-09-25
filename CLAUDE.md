@@ -34,26 +34,21 @@ and costs context.
   commit, which `scripts/release.sh` writes on `main` on purpose. A
   committed guard hook (`.claude/hooks/guard-main-commit.sh`, wired in
   the shared `.claude/settings.json`) blocks a stray `git commit` on
-  `main` as a backstop. It is the only part of `.claude/` that is not
-  gitignored, so the guard travels with the repo. Also prefer explicit
-  `git add <paths>` over `git add -A`, so stray scratch files never get
-  swept into a commit.
+  `main` as a backstop. Also prefer explicit `git add <paths>` over
+  `git add -A`, so stray scratch files never get swept into a commit.
 - **Auto-merge by default.** Open the PR with `gh pr create`, then
   arm auto-merge with `gh pr merge --auto --squash`. CI checks (the
   link checker on every HTML-touching PR + CodeQL) will hold the
   merge if anything is wrong.
 - **Milestone on every PR.** Set it as the PR is opened, per rule
   §10, and ask the maintainer when the right one is unclear.
-- **Two PRs touching `site.css` can be open at once.** They could
-  not until #1712, because each regenerated the `?v=` cache-bust
-  across every page and the two collided. The tokens are now stamped
-  at deploy time and are not committed, so a CSS change is a CSS
-  change. Anything a *page builder* writes into the tree still
-  collides the old way, so `build-field-guide.py` and
-  `build-network-map.py`'s list region keep the sequential rule:
-  after one lands on `main`, merge `main` into the next branch and
-  re-run the builder once over the combined tree. A bounded wait for
-  a merge the next step genuinely depends on is fine.
+- **Concurrent PRs collide only on page-builder output.** The `?v=`
+  cache-bust tokens are stamped at deploy and never committed, so two
+  `site.css` PRs can be open at once. `build-field-guide.py` and
+  `build-network-map.py`'s list region write into the tree, so they
+  run sequentially: after one lands on `main`, merge `main` into the
+  next branch and re-run the builder once over the combined tree. A
+  bounded wait for a merge the next step genuinely depends on is fine.
 - **Stack the PRs when the work is dependent and you were never
   going to auto-merge it.** Both conditions have to hold. The
   changes build on each other, the batch above being the canonical
@@ -443,8 +438,9 @@ behaviour:
 - **Plan first on multi-surface work.** Anything spanning more
   than one or two files (a feature touching the three locale
   HTMLs plus CSS, a script, the CHANGELOG) goes through plan mode
-  before the first edit. Front-loading the plan is what avoids
-  expensive rework across locales and CI.
+  before the first edit. Under `opusplan`, plan mode is where Opus
+  runs, and it puts the approach in front of the maintainer before
+  the locale and CI fan-out starts.
 - **Flag an effort mismatch, do not silently absorb it.** When a
   task plainly needs deeper reasoning (cross-file debugging, a
   structural change) or plainly does not (a one-line copy fix),

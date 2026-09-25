@@ -1,9 +1,5 @@
 # Release infrastructure (`.github/`)
 
-Loaded when working under `.github/`. Moved out of the root `CLAUDE.md` so it
-costs no per-session context, following the pattern §15 already uses for
-`docs/claude-usage.md`.
-
 ## Release-infrastructure hygiene
 
 Three conventions on the `.github/` tree, codified together so the
