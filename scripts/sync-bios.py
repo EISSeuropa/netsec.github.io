@@ -1486,8 +1486,14 @@ COUNTRY_TO_CODE = {
 
 
 def fill_country_code(member: dict) -> None:
-    if not member.get("country_code") and member.get("country"):
-        member["country_code"] = COUNTRY_TO_CODE.get(member["country"], "")
+    # Re-derived on every sync, not only when empty: a member who changes
+    # country on the form otherwise keeps the old flag. An unmapped country
+    # leaves any existing code alone.
+    code = COUNTRY_TO_CODE.get(member.get("country", ""))
+    if code:
+        member["country_code"] = code
+    elif not member.get("country_code"):
+        member["country_code"] = ""
 
 
 # ─── Management Committee lookup ──────────────────────────────────

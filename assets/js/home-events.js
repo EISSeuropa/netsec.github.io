@@ -52,6 +52,7 @@
       jointBadge:      'Joint EISS × NetSec',
       jointTitle:      'Jointly organised by EISS and NetSec',
       noUpcoming:      'No upcoming events right now.',
+      recent:          'Recent events',
     },
     fr: {
       type: {
@@ -73,6 +74,7 @@
       jointBadge:      'Conjoint EISS × NetSec',
       jointTitle:      'Organisé conjointement par EISS et NetSec',
       noUpcoming:      'Aucun événement à venir pour le moment.',
+      recent:          'Événements récents',
     },
     de: {
       type: {
@@ -94,6 +96,7 @@
       jointBadge:      'Gemeinsam EISS × NetSec',
       jointTitle:      'Gemeinsam von EISS und NetSec organisiert',
       noUpcoming:      'Derzeit keine bevorstehenden Veranstaltungen.',
+      recent:          'Letzte Veranstaltungen',
     },
   };
 
@@ -568,6 +571,17 @@
       // event advertised as upcoming. The `events-seeall` link sits directly
       // below this block and still points at the full catalogue.
       frag.appendChild(el('p', { class: 'events-empty' }, [t.noUpcoming]));
+      // A bare empty line reads as an inactive Action, so the two most
+      // recently finished events follow it.
+      const recent = (data.events || [])
+        .map(ev => ({ ev, end: zonedTimeToUTC(ev.end || ev.start, ev.tzid || TZID) }))
+        .filter(x => x.end)
+        .sort((a, b) => b.end - a.end)
+        .slice(0, 2);
+      if (recent.length) {
+        frag.appendChild(el('h3', { class: 'events-recent-head' }, [t.recent]));
+        recent.forEach(x => frag.appendChild(buildCard(x.ev, locale, t)));
+      }
     } else {
       events.forEach(ev => frag.appendChild(buildCard(ev, locale, t)));
     }

@@ -164,6 +164,12 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The home page's Events block showed a single line reading *No upcoming events right now* once the September events had ended. The two most recent events now follow that line, in English, French and German.
+- A call for applications stayed on the home page after its event had taken place, so two of the three news cards covered the Ankara workshop. A news item can now carry an end date for the home page, and the closed workshop call and the closed summer-school call drop off it while staying in the archive and the RSS feed.
+- The home page's news cards for readers without JavaScript, which the site search also indexes, dated from June. They are now rewritten from the news file at every deploy.
+- A member who changed country on the Directory form kept the flag of the old one, so the home-page spotlight showed a French flag beside *United Kingdom*. The flag is now derived from the country at every sync.
+- On a phone the *Find your way in* tab sat over the right edge of the text. It is now a round button in the bottom-right corner.
+- The home page's members' Wiki panel no longer mentions repository write access and pull requests. It says that members with editing rights can update any page in their browser, in English, French and German.
 - Five out-of-date statements are corrected: the FAQ's visa answer named a past conference by the wrong name, its plenary answer pointed to a home-page section that no longer exists, its leadership-cards answer placed the cards on the home page instead of About, the home-page card for the Ankara policy workshop still read as upcoming, and the Grants page sent readers "below" to grants listed above.
 - A Network Map filter chip that is switched off shows an outline in its own colour with the label at full strength. The whole chip used to fade to a third of its opacity, which took its label to well under the WCAG AA floor, so a reader who had switched every hub off could not tell WG2 from WG3. The label now measures about 17:1 in both themes.
 - The slide-templates page carries the generated search and social-card metadata and the visitor counter in English, French and German. It had been left out of the list of pages the metadata generator manages, so its hand-written copy could drift from the title and description unnoticed, and a new check now fails a pull request that adds a top-level page without registering it.

@@ -147,6 +147,9 @@
   }
 
   function withinDecay(item, now) {
+    // `homeUntil` retires a time-bound item (a call, a deadline) from the
+    // home page once it has passed. The archive keeps it.
+    if (item.homeUntil && Date.parse(item.homeUntil) < now) return false;
     if (!item.pubDate) return true; // undated items never decay off
     const t = Date.parse(item.pubDate);
     if (isNaN(t)) return true;

@@ -247,6 +247,16 @@ def test_country_key() -> None:
     expect("None safely empty", country_key(None), "")  # type: ignore[arg-type]
 
 
+def test_fill_country_code_follows_country() -> None:
+    print("\nfill_country_code():")
+    m = {"country": "United Kingdom", "country_code": "fr"}
+    sync_bios.fill_country_code(m)
+    expect("stale code re-derived", m["country_code"], "gb")
+    m = {"country": "Atlantis", "country_code": "xx"}
+    sync_bios.fill_country_code(m)
+    expect("unmapped country keeps code", m["country_code"], "xx")
+
+
 def test_title_only_name_skipped() -> None:
     """A form row whose name is only a title ("Mr") with nothing after it is
     an incomplete submission. row_to_member must drop it: slugify/name_key
@@ -1483,6 +1493,7 @@ def main() -> None:
     test_suggest_theme()
     test_region_names_dropped_from_keywords()
     test_country_key()
+    test_fill_country_code_follows_country()
     test_title_only_name_skipped()
     test_merge_helferich()
     test_merge_country_guards_false_positive()
