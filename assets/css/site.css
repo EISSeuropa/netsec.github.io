@@ -505,6 +505,9 @@ img{max-width:100%;display:block}
 }
 .chip:not(:last-child)::after{content:'\00B7';position:absolute;right:-15px;color:var(--muted);opacity:.6}
 .hero-cta{display:flex;gap:12px;margin-top:2rem;flex-wrap:wrap}
+.hero-keywords a.chip{color:var(--muted);text-decoration:none}
+.hero-keywords a.chip:hover,.hero-keywords a.chip:focus-visible{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.hero-cta-note{margin-top:.7rem;font-size:.85rem;color:var(--muted)}
 .btn{
   display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:13px;
   font-weight:600;font-size:.95rem;cursor:pointer;border:0;transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease);
