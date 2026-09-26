@@ -165,6 +165,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The *Joint EISS × NetSec* and *Save the date* pills on event cards, and the prize badge on the conference programme, took their dark colours from the operating system's setting instead of the site's theme toggle. A reader in dark mode on the system who had chosen the light theme saw light-blue text on a light card. All three now follow the toggle.
 - The home page's Events block showed a single line reading *No upcoming events right now* once the September events had ended. The two most recent events now follow that line, in English, French and German.
 - A call for applications stayed on the home page after its event had taken place, so two of the three news cards covered the Ankara workshop. A news item can now carry an end date for the home page, and the closed workshop call and the closed summer-school call drop off it while staying in the archive and the RSS feed.
 - The home page's news cards for readers without JavaScript, which the site search also indexes, dated from June. They are now rewritten from the news file at every deploy.
