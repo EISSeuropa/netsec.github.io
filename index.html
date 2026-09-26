@@ -207,15 +207,13 @@
   </div>
 </section>
 
-<!-- Action details strip -->
-<section class="details-strip" aria-label="Action details">
-  <div class="container reveal">
-    <div class="details-grid glass reveal reveal-stagger">
-      <div class="item"><div class="label">Action Number</div><div class="value">CA24154</div></div>
-      <div class="item"><div class="label">MoU</div><div class="value">063/25</div></div>
-      <div class="item"><div class="label">CSO Approval</div><div class="value">19 May 2025</div></div>
-      <div class="item"><div class="label">Duration</div><div class="value">10 Oct 2025 – 09 Oct 2029</div></div>
-    </div>
+<!-- Now row: what is on, what is open, what is new. Filled by
+     assets/js/home-now.js from data/events.json and data/news.json. Hidden
+     without JavaScript and kept out of the search index, since what it
+     shows depends on the date. -->
+<section id="now" class="now-row" aria-label="What's happening now" data-home-now data-pagefind-ignore hidden>
+  <div class="container">
+    <div class="now-grid" data-home-now-grid></div>
   </div>
 </section>
 
@@ -722,6 +720,7 @@
      soft fallback if data/news.json fails to load. The RSS feed at
      /news.xml is the public, machine-readable mirror. -->
 <script src="assets/js/home-news.js" defer></script>
+<script src="assets/js/home-now.js" defer></script>
 <script src="assets/js/home-spotlight.js" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -730,6 +729,9 @@
     }
     if (window.NetSec && window.NetSec.renderHomeNews) {
       window.NetSec.renderHomeNews({ container: '#news .news-list', locale: 'en' });
+    }
+    if (window.NetSec && window.NetSec.renderHomeNow) {
+      window.NetSec.renderHomeNow({ locale: 'en' });
     }
   });
 </script>

@@ -845,8 +845,8 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 /* Co-host badge: marks a jointly-run EISS × NetSec event (e.g. the
    ESSC) apart from NetSec's own events. Outlined accent pill so it
    reads as a provenance tag, not a status. */
-.event-cohost{display:inline-flex;align-self:flex-start;align-items:center;font-size:.7rem;font-weight:700;letter-spacing:.02em;color:var(--accent);background:rgba(0,51,153,.07);border:1px solid rgba(0,51,153,.25);padding:3px 9px;border-radius:999px;line-height:1.4}
-@media (prefers-color-scheme:dark){.event-cohost{color:#9db8ff;background:rgba(120,150,255,.12);border-color:rgba(120,150,255,.35)}}
+.event-cohost,.event-tentative{display:inline-flex;align-self:flex-start;align-items:center;font-size:.7rem;font-weight:700;letter-spacing:.02em;color:var(--accent);background:rgba(0,51,153,.07);border:1px solid rgba(0,51,153,.25);padding:3px 9px;border-radius:999px;line-height:1.4}
+@media (prefers-color-scheme:dark){.event-cohost,.event-tentative{color:#9db8ff;background:rgba(120,150,255,.12);border-color:rgba(120,150,255,.35)}}
 /* Working-Group pills on an event card (rendered by home-events.js from
    the event's `workingGroups`). Each links to its section on the
    Working Groups page; colours follow the WG palette. */
@@ -1450,26 +1450,35 @@ form button:disabled{opacity:.65;cursor:wait}
 .ca-badge .dot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.18)}
 .ca-badge strong{color:var(--accent);font-weight:700}
 
-/* -------- Action details strip -------- */
-.details-strip{padding:24px 0 0}
+/* -------- Now row (home) --------
+   Three tiles under the hero, filled by assets/js/home-now.js. The dot
+   pulses only in the "live" state, the same cue and colours as the
+   upcoming-event card's live pill (ue-pulse); the global reduced-motion
+   rule stops the loop. */
+.now-row{padding:24px 0 0}
+.now-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.now-tile{position:relative;display:flex;flex-direction:column;gap:6px;padding:18px 20px;border-radius:var(--radius)}
+.now-eyebrow{
+  display:flex;align-items:center;gap:8px;margin:0;
+  font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--link);
+}
+.now-dot{flex:none;width:7px;height:7px;border-radius:50%;background:currentColor}
+.now-tile[data-state="live"] .now-eyebrow{color:#15803d}
+.dark .now-tile[data-state="live"] .now-eyebrow{color:#52d775}
+.now-tile[data-state="live"] .now-dot{animation:ue-pulse 1.8s ease-out infinite}
+.now-tile[data-state="recent"] .now-eyebrow,.now-tile[data-state="none"] .now-eyebrow{color:var(--muted)}
+.now-title{margin:0;font-family:'Lexend','Inter',sans-serif;font-size:1.02rem;font-weight:600;line-height:1.3;letter-spacing:-.01em}
+.now-title a{color:var(--ink);text-decoration:none}
+.now-detail{margin:0;font-size:.86rem;color:var(--muted)}
+.now-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.now-list li{display:flex;flex-direction:column;gap:2px}
+.now-call{font-family:'Lexend','Inter',sans-serif;font-weight:600;font-size:.95rem;line-height:1.3;color:var(--ink);text-decoration:none}
+.now-call:hover,.now-call:focus-visible{color:var(--link);text-decoration:underline}
+.now-more{font-size:.86rem;font-weight:600;color:var(--link)}
 @media (max-width: 720px){
-  .details-strip{padding:12px 0 0}
+  .now-row{padding:12px 0 0}
+  .now-grid{grid-template-columns:1fr;gap:12px}
 }
-.details-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
-  padding:20px 8px;border-radius:var(--radius);
-}
-.details-grid .item{padding:8px 24px;text-align:center;border-right:1px solid var(--line)}
-.details-grid .item:last-child{border-right:0}
-.details-grid .label{
-  font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--muted);margin-bottom:4px;
-}
-.details-grid .value{
-  font-family:'Lexend','Inter',sans-serif;font-weight:600;color:var(--ink);
-  font-size:1.05rem;letter-spacing:-.01em;
-}
-
 /* -------- Roadmap Gantt -------- */
 .gantt-intro{
   display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;
@@ -1869,17 +1878,6 @@ form button:disabled{opacity:.65;cursor:wait}
   .about-grid,.contact-wrap{grid-template-columns:1fr}
   .form-row{grid-template-columns:1fr}
   .hero{padding:120px 0 60px}
-  .details-grid{grid-template-columns:repeat(2,1fr);gap:8px}
-  /* Mobile separator pattern: items lose the desktop's vertical
-     `border-right` and only the top row carries a horizontal
-     border-bottom. The previous rule (every item gets a
-     border-bottom, then strip from `:nth-child(2n)` + `:last-child`)
-     left a half-line under the bottom-left item because that one
-     matched neither stripping selector. `:nth-last-child(-n+2)`
-     targets the final row (the last two items in a 2-col grid) so
-     they shed the border regardless of item count. */
-  .details-grid .item{border-right:0;border-bottom:1px solid var(--line);padding:14px}
-  .details-grid .item:nth-last-child(-n+2){border-bottom:0}
   /* Gantt mobile tweaks.
      Year row uses `minmax(184px, 1fr)` so each year column is
      guaranteed to be exactly 4 × quarter min (46 × 4 = 184). Without

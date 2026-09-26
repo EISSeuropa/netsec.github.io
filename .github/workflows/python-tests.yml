@@ -23,6 +23,7 @@ on:
       - 'pytest.ini'
       - 'requirements.txt'
       - '.github/workflows/python-tests.yml'
+      - 'assets/js/home-*.js'
   pull_request:
 
 permissions:
@@ -54,3 +55,7 @@ jobs:
           fi
       - name: Run the script test suites
         run: python -m pytest -q
+      # The home Now row's selection logic, in plain node against the
+      # runner's preinstalled Node. No dependencies, so no npm ci.
+      - name: Run the home Now row selection test
+        run: node scripts/test-home-now.mjs

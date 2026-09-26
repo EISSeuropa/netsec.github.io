@@ -53,6 +53,7 @@
       jointTitle:      'Jointly organised by EISS and NetSec',
       noUpcoming:      'No upcoming events right now.',
       recent:          'Recent events',
+      saveTheDate:     'Save the date',
     },
     fr: {
       type: {
@@ -75,6 +76,7 @@
       jointTitle:      'Organisé conjointement par EISS et NetSec',
       noUpcoming:      'Aucun événement à venir pour le moment.',
       recent:          'Événements récents',
+      saveTheDate:     "À noter dans l'agenda",
     },
     de: {
       type: {
@@ -97,6 +99,7 @@
       jointTitle:      'Gemeinsam von EISS und NetSec organisiert',
       noUpcoming:      'Derzeit keine bevorstehenden Veranstaltungen.',
       recent:          'Letzte Veranstaltungen',
+      saveTheDate:     'Vormerken',
     },
   };
 
@@ -416,6 +419,13 @@
       card.appendChild(el('span', { class: 'event-type' }, [typeLabel]));
     }
 
+    // A TENTATIVE entry is an announced date that is not yet final (see
+    // docs/architecture.md, Announcing a conference). Same pill as the
+    // Now row's "Save the date" eyebrow, so the two surfaces agree.
+    if (ev.status === 'TENTATIVE') {
+      card.appendChild(el('span', { class: 'event-tentative' }, [t.saveTheDate]));
+    }
+
     // Co-host badge: jointly-run EISS × NetSec events (e.g. the ESSC)
     // carry coHost: 'joint' so a reader can tell them from NetSec's own
     // events. Standalone NetSec events get no badge (the default on
@@ -697,4 +707,6 @@
   window.NetSec = window.NetSec || {};
   window.NetSec.renderHomeEvents = renderHomeEvents;
   window.NetSec.renderEventsPage = renderEventsPage;
+  // Shared with home-now.js so the Now row resolves times the same way.
+  window.NetSec.zonedTimeToUTC = zonedTimeToUTC;
 })();

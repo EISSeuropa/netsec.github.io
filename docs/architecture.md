@@ -741,3 +741,33 @@ If you're adding a new event to the Events section:
    optional `jsonld` object on the event, which is merged into the
    generated node. `.github/workflows/seo-asset-check.yml` runs
    `--check --seo-only` on every PR, so this cannot drift either.
+
+### Announcing a conference (the home Now row)
+
+The Now row under the home hero (`assets/js/home-now.js`) reads
+`data/events.json` and `data/news.json` at page load, so announcing needs
+no page edit. Its event tile shows the event in progress, else the next
+one, else the last one held. Its Open calls tile lists the news items of
+type `call`. Three routes, whichever comes first:
+
+- **The Indico event goes public.** `scripts/sync-indico.py` appends it
+  as an `autoDiscovered` entry with Indico's dates and times, and the tile
+  reads *Next up*. Enrich the copy and add FR / DE as for any
+  auto-discovered entry. The anonymous Indico export only returns public
+  events, so an event still being prepared cannot appear early.
+- **The dates are announced before Indico is public.** Add the entry by
+  hand with `status: "TENTATIVE"`, the announced dates in `start` / `end`,
+  and a `displayDate` such as *11–12 June 2027*. The tile and the event
+  card both read *Save the date*, the calendar feeds carry
+  `STATUS:TENTATIVE`, and the JSON-LD carries no `eventStatus`. Once the
+  Indico event exists, add its `indicoEventId` to the same entry and set
+  `status` to `CONFIRMED`, so the sync updates it instead of appending a
+  second one. Step 4 above still applies: no entry before the dates are
+  firm.
+- **A call for papers opens.** Publish a news issue with `Type: Call` and
+  `Closes: YYYY-MM-DD` (see `docs/news-publishing.md`). It counts down in
+  the Open calls tile and leaves the home page after that day.
+
+`scripts/test-home-now.mjs` covers which event and which calls the row
+picks on a given date. `NetSec.renderHomeNow({ now: Date.parse(...) })`
+in the browser console forces any state for a visual check.
