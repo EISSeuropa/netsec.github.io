@@ -846,7 +846,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
    ESSC) apart from NetSec's own events. Outlined accent pill so it
    reads as a provenance tag, not a status. */
 .event-cohost,.event-tentative{display:inline-flex;align-self:flex-start;align-items:center;font-size:.7rem;font-weight:700;letter-spacing:.02em;color:var(--accent);background:rgba(0,51,153,.07);border:1px solid rgba(0,51,153,.25);padding:3px 9px;border-radius:999px;line-height:1.4}
-@media (prefers-color-scheme:dark){.event-cohost,.event-tentative{color:#9db8ff;background:rgba(120,150,255,.12);border-color:rgba(120,150,255,.35)}}
+.dark .event-cohost,.dark .event-tentative{color:#9db8ff;background:rgba(120,150,255,.12);border-color:rgba(120,150,255,.35)}
 /* Working-Group pills on an event card (rendered by home-events.js from
    the event's `workingGroups`). Each links to its section on the
    Working Groups page; colours follow the WG palette. */
@@ -4056,12 +4056,10 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   width:100%;
   height:100%;
 }
-@media (prefers-color-scheme: dark){
-  .programme-contrib-prize{
-    border-color:color-mix(in srgb, #e6be5a 50%, transparent);
-    background:color-mix(in srgb, #e6be5a 16%, transparent);
-    color:#e8c869;
-  }
+.dark .programme-contrib-prize{
+  border-color:color-mix(in srgb, #e6be5a 50%, transparent);
+  background:color-mix(in srgb, #e6be5a 16%, transparent);
+  color:#e8c869;
 }
 /* Anthology signpost under the programme grid: its own card, with a heading,
    a line of context, and a button to the Anthology's published-papers view.
