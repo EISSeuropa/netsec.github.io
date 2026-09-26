@@ -903,6 +903,13 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
 }
 .events-empty{margin:0;color:var(--muted)}
+/* Home Events with nothing upcoming: the empty line and the "Recent events"
+   label span the grid, and the recent cards fill the row below them. */
+.event-list > .events-empty,.events-recent-head{grid-column:1 / -1}
+.events-recent-head{
+  margin:8px 0 -6px;font-size:.78rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
+}
 /* The event cards render inside .prose-page on /events.html, where
    `.prose-page a` (0,1,1) would underline + recolour them. Scope a reset
    at two classes (0,2,0) so the WG pills, the card CTA, and the calendar
@@ -2522,8 +2529,16 @@ body{padding-top:var(--whats-new-h, 0px)}
 .aud-drawer .audience-links{flex-direction:row;flex-wrap:wrap;gap:6px 16px;margin-top:6px}
 .aud-drawer .audience-links a{display:inline-flex;align-items:center;gap:5px}
 .aud-drawer .audience-links a svg{width:14px;height:14px}
+/* On a phone the mid-edge tab sat over the text column, so it becomes an
+   icon-only button in the bottom-right corner. The label stays in the
+   accessibility tree as the button's name. */
 @media (max-width:480px){
-  .aud-tab-label{font-size:.68rem}
+  .aud-tab{
+    top:auto;bottom:max(16px,env(safe-area-inset-bottom));right:16px;transform:none;
+    padding:11px;border-right:1px solid var(--glass-border);border-radius:50%;
+  }
+  .aud-tab:hover,.aud-tab:focus-visible{padding-right:11px}
+  .aud-tab-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .aud-drawer{width:100vw;max-width:100vw}
 }
 @media (prefers-reduced-motion:reduce){

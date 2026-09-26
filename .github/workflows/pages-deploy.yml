@@ -182,6 +182,13 @@ jobs:
         # Runs before Pagefind so the index never picks up a concluded card.
         run: python3 scripts/prune-past-event-cards.py
 
+      - name: Rewrite the home page's fallback news cards
+        # Same reasoning as the step above, for `#news .news-list`: the
+        # hand-written cards lagged data/news.json by months, and `homeUntil`
+        # makes the right set depend on the date. Before Pagefind for the
+        # same reason.
+        run: python3 scripts/render-news-fallback.py
+
       - name: Build Pagefind index (and bio search stubs)
         # scripts/build-search.sh handles both: regenerates the bio
         # stubs from data/bios.json, then runs pagefind against the

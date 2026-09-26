@@ -70,5 +70,8 @@ Edit `data/news.json` directly (full per-locale items), then run
 | `title` | yes | `{en, fr?, de?}` |
 | `body` | yes | `{en, fr?, de?}` |
 | `displayDate` | yes | `{en, fr?, de?}` — the date pill text |
+| `homeUntil` | no | ISO datetime; after it the item leaves the home page but stays in the archive and the RSS feed. Set it on calls and deadlines |
 | `cta` | no | `{href, external, i18n:{en, fr?, de?}}`; `href` may be a string or per-locale map |
 | `_source_issue` | no | set by the publisher; lets a re-labelled issue update its item |
+
+The home page's fallback cards, shown without JavaScript and indexed by the site search, are rewritten from `data/news.json` at every deploy by `scripts/render-news-fallback.py`, so they need no hand editing.
