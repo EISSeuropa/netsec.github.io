@@ -4758,10 +4758,9 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 /* ═══════════════════════════════════════════════════════════════════
    Cinematic homepage bundle
    ───────────────────────────────────────────────────────────────────
-   Five presentational layers added to the home page: the hero network
-   constellation canvas, a richer reveal vocabulary, ghost section
-   numerals, card tilt with glare and a border trace, and a faces
-   marquee on the members strip. Every animation here has a
+   Four presentational layers added to the home page: the hero network
+   constellation canvas, a richer reveal vocabulary, card tilt with
+   glare and a border trace, and a faces marquee on the members strip. Every animation here has a
    prefers-reduced-motion off-switch. The global reduced-motion reset
    near the top of this file already nukes transitions and animations,
    so the blocks below add only the extra neutralising that reset
@@ -4824,42 +4823,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .js-reveal .reveal-left:not(.in){opacity:0;transform:translateX(-24px)}
 .js-reveal .reveal-right:not(.in){opacity:0;transform:translateX(24px)}
 
-/* ── C. Ghost section numerals ──────────────────────────────────────
-   A huge, ultra-light numeral sits behind the section heading. It is
-   clipped to the section head box and offset upward so it reads as a
-   watermark, not a label. Kept low-opacity in both themes and pinned
-   with pointer-events:none so it never intercepts clicks. The base
-   .section-head rule sits with the other layout primitives near the top
-   of this file; these data-sec-num variants are a separate presentational
-   feature, so the cross-cluster split is intentional. */
-/* css-collision-allow: .section-head */
-.section-head[data-sec-num]{position:relative}
-/* css-collision-allow: .section-head */
-.section-head[data-sec-num]::before{
-  content:attr(data-sec-num);
-  position:absolute;
-  left:50%;
-  top:-.35em;
-  transform:translateX(-50%);
-  z-index:0;
-  pointer-events:none;
-  font-family:'Lexend','Inter',sans-serif;
-  font-weight:300;
-  font-variant-numeric:tabular-nums;
-  letter-spacing:.06em;
-  font-size:clamp(5rem, 14vw, 9rem);
-  line-height:1;
-  color:var(--ink);
-  opacity:.05;
-  /* Keep the oversized glyph from pushing the page wide on phones. */
-  max-width:100%;
-  overflow:hidden;
-  white-space:nowrap;
-}
-.dark .section-head[data-sec-num]::before{color:var(--ink);opacity:.07}
-.section-head[data-sec-num] > *{position:relative;z-index:1}
-
-/* ── D. Card tilt, glare and border trace ───────────────────────────
+/* ── C. Card tilt, glare and border trace ───────────────────────────
    Scoped entirely to [data-tilt] so .glass elsewhere is untouched. The
    tilt IIFE sets --tx / --ty (degrees) and --mx / --my (glare centre).
    The perspective wrapper stays on the element itself. Both pseudo
@@ -4931,7 +4895,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 [data-tilt]:hover::before{opacity:.9;animation:tilt-border-spin 4s linear infinite}
 @keyframes tilt-border-spin{to{--angle:360deg}}
 
-/* ── E. Faces marquee ───────────────────────────────────────────────
+/* ── D. Faces marquee ───────────────────────────────────────────────
    A single row of circular headshots scrolling seamlessly. The JS
    builds two identical halves inside .faces-track and the track slides
    -50% forever, so the loop has no visible seam. Grayscale at rest,
