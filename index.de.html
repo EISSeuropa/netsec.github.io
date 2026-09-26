@@ -200,15 +200,13 @@
   </div>
 </section>
 
-<!-- Aktions-Details -->
-<section class="details-strip" aria-label="Details der Aktion">
-  <div class="container reveal">
-    <div class="details-grid glass reveal reveal-stagger">
-      <div class="item"><div class="label">Aktionsnummer</div><div class="value">CA24154</div></div>
-      <div class="item"><div class="label">MoU</div><div class="value">063/25</div></div>
-      <div class="item"><div class="label">CSO-Genehmigung</div><div class="value">19. Mai 2025</div></div>
-      <div class="item"><div class="label">Laufzeit</div><div class="value">10. Okt. 2025 – 09. Okt. 2029</div></div>
-    </div>
+<!-- Reihe „Aktuell“: was stattfindet, was offen ist, was neu ist. Befüllt
+     von assets/js/home-now.js aus data/events.json und data/news.json. Ohne
+     JavaScript ausgeblendet und nicht im Suchindex, da der Inhalt vom Datum
+     abhängt. -->
+<section id="now" class="now-row" aria-label="Aktuell" data-home-now data-pagefind-ignore hidden>
+  <div class="container">
+    <div class="now-grid" data-home-now-grid></div>
   </div>
 </section>
 
@@ -657,6 +655,7 @@
      Veranstaltungs-Renderer; die handgepflegten News-Karten bleiben
      als Fallback, falls data/news.json nicht geladen werden kann. -->
 <script src="assets/js/home-news.js" defer></script>
+<script src="assets/js/home-now.js" defer></script>
 <script src="assets/js/home-spotlight.js" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -665,6 +664,9 @@
     }
     if (window.NetSec && window.NetSec.renderHomeNews) {
       window.NetSec.renderHomeNews({ container: '#news .news-list', locale: 'de' });
+    }
+    if (window.NetSec && window.NetSec.renderHomeNow) {
+      window.NetSec.renderHomeNow({ locale: 'de' });
     }
   });
 </script>

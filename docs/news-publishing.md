@@ -30,6 +30,7 @@ Type: Announcement
 WG: 3
 URL: https://example.org/more
 Date: 2026-06-20
+Closes: 2026-11-15
 
 The first paragraph here is the excerpt shown on the card. Keep it to a
 sentence or two; the home card and the archive both show this text.
@@ -38,11 +39,18 @@ sentence or two; the home card and the archive both show this text.
 - **`Type:`** — a category tag shown as a small pill beside the date
   (`Event`, `Publication`, `Announcement`). Any other word still renders,
   Title-cased. The three standard ones are translated on the FR / DE pages.
+  `Call` marks an open call for applications or papers: it appears in the
+  home page's Open calls tile as well as in the news list, and is
+  translated too.
 - **`WG:`** — a Working-Group activity tag (`1`–`4`), rendered as a
   WG-coloured pill (e.g. `WG3`). Out-of-range values are ignored.
 - **`URL:`** — adds a "Read more" call-to-action (opens in a new tab).
 - **`Date:`** — ISO `YYYY-MM-DD`. Defaults to today. The archive groups
   items under a year heading from this date.
+- **`Closes:`** — ISO `YYYY-MM-DD`. Sets `homeUntil` to 23:59 Brussels
+  time that day, after which the item leaves the home page (the archive and
+  the RSS feed keep it). On a `Call` it drives the countdown in the Open
+  calls tile; a call without it shows as a rolling call.
 
 Only the first paragraph after the headers is used; anything below it is
 ignored, so you can keep notes in the issue.

@@ -99,3 +99,15 @@ if __name__ == "__main__":
     import sys
 
     sys.exit(_standalone())
+
+
+def test_build_item_call_with_closing_date():
+    p = pn.parse_issue("ESSC call for papers", "Type: Call\nCloses: 2026-11-15\n\nSubmit an abstract.")
+    item = pn.build_item(p, "11", dt.date(2026, 10, 1))
+    assert item["type"] == "call"
+    assert item["homeUntil"] == "2026-11-15T23:59:00+01:00"  # CET in November
+
+
+def test_build_item_bad_closing_date_is_dropped():
+    p = pn.parse_issue("Call", "Closes: mid-November\n\nText.")
+    assert "homeUntil" not in pn.build_item(p, "12", dt.date(2026, 10, 1))

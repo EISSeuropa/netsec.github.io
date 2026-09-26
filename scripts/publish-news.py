@@ -15,6 +15,10 @@ optional header lines at the very top (any order, case-insensitive):
     Type: Announcement          # free-text label, shown as the date-pill prefix
     URL: https://example.org    # adds a "Read more" CTA (external)
     Date: 2026-06-20            # ISO date; defaults to today
+    Closes: 2026-11-15          # ISO date; the item leaves the home page after
+                                # 23:59 Brussels time that day (`homeUntil`).
+                                # With `Type: Call` it counts down in the
+                                # home page's Open calls tile.
 
     The first paragraph after the headers is the excerpt shown on the card.
 
@@ -34,6 +38,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+from zoneinfo import ZoneInfo
 import json
 import os
 import re
@@ -43,7 +48,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 NEWS = ROOT / "data" / "news.json"
 
-HEADER_RE = re.compile(r"^\s*(type|url|date|wg)\s*:\s*(.+?)\s*$", re.IGNORECASE)
+HEADER_RE = re.compile(r"^\s*(type|url|date|wg|closes)\s*:\s*(.+?)\s*$", re.IGNORECASE)
 _MONTHS = ["January", "February", "March", "April", "May", "June", "July",
            "August", "September", "October", "November", "December"]
 
@@ -54,7 +59,7 @@ def slugify(text: str) -> str:
 
 
 def parse_issue(title: str, body: str) -> dict:
-    """Pure parse: (title, body) -> {type, url, date, wg, excerpt}. No IO."""
+    """Pure parse: (title, body) -> {type, url, date, wg, closes, excerpt}. No IO."""
     lines = (body or "").replace("\r\n", "\n").split("\n")
     headers = {}
     i = 0
@@ -78,6 +83,7 @@ def parse_issue(title: str, body: str) -> dict:
         "url": headers.get("url", "").strip(),
         "date": headers.get("date", "").strip(),
         "wg": headers.get("wg", "").strip(),
+        "closes": headers.get("closes", "").strip(),
         "excerpt": excerpt,
     }
 
@@ -113,6 +119,14 @@ def build_item(parsed: dict, issue_number: str, today: dt.date) -> dict:
     # Optional Working-Group activity tag (1-4); ignored if out of range.
     if parsed.get("wg", "").isdigit() and 1 <= int(parsed["wg"]) <= 4:
         item["wg"] = int(parsed["wg"])
+    # Optional closing date: end of that day in Brussels, as `homeUntil`.
+    # An unparseable date is dropped rather than publishing a wrong one.
+    try:
+        closes = dt.date.fromisoformat(parsed.get("closes", ""))
+        end = dt.datetime.combine(closes, dt.time(23, 59), ZoneInfo("Europe/Brussels"))
+        item["homeUntil"] = end.isoformat()
+    except ValueError:
+        pass
     if parsed["url"]:
         item["cta"] = {
             "href": parsed["url"],
