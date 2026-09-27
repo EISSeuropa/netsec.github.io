@@ -498,13 +498,20 @@ img{max-width:100%;display:block}
 /* Keyword chips read as a quiet editorial keyword line (muted text
    separated by middots) rather than a row of glass pills, so the
    lockup carries the band. */
-.hero-keywords{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:1.4rem}
+/* Each chip carries its middot on its left, inside a 26px margin. The row
+   is pulled 26px left and clipped at its visual edge, so the middot of
+   whichever chip starts a line is cut off and wrapped lines never end or
+   begin with a stray dot. The clip leaves room for the focus ring. */
+.hero-keywords{display:flex;flex-wrap:wrap;gap:8px 0;margin:1.4rem 0 0 -26px;clip-path:inset(-8px -8px -8px 20px)}
 .chip{
   font-size:.8rem;font-weight:500;letter-spacing:.02em;color:var(--muted);
-  padding:.15rem 0;position:relative;
+  padding:.15rem 0;position:relative;margin-left:26px;
 }
-.chip:not(:last-child)::after{content:'\00B7';position:absolute;right:-15px;color:var(--muted);opacity:.6}
+.chip::before{content:'\00B7';position:absolute;left:-15px;color:var(--muted);opacity:.6}
 .hero-cta{display:flex;gap:12px;margin-top:2rem;flex-wrap:wrap}
+.hero-keywords a.chip{color:var(--muted);text-decoration:none}
+.hero-keywords a.chip:hover,.hero-keywords a.chip:focus-visible{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.hero-cta-note{margin-top:.7rem;font-size:.85rem;color:var(--muted)}
 .btn{
   display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:13px;
   font-weight:600;font-size:.95rem;cursor:pointer;border:0;transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease);
