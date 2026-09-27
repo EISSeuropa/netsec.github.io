@@ -154,6 +154,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- Home page news cards show a one-sentence summary instead of the full 68 to 107-word body, so the mobile *Read more* button is gone, and the News page and RSS feed keep the full text. News items take an optional `summary`, set from a `Summary:` line in a news issue, and the first Management Committee plenary loses its WG1 tag ([#1889](https://github.com/EISSeuropa/netsec.github.io/issues/1889)).
 - The home page's Network section links the Network Map from a signpost under the member faces, and *Find out more* keeps its Roadmap card ([#1886](https://github.com/EISSeuropa/netsec.github.io/issues/1886)).
 - The top navigation's News link opens the News page on all 69 pages instead of the home page's news section, and the home page drops two duplicate links: the Press kit card in *Find out more* and the Wiki link in the members' audience card ([#1884](https://github.com/EISSeuropa/netsec.github.io/issues/1884)).
 - Public copy on fifteen English pages is edited against a list of AI-writing patterns: 16 run-on sentences left behind by em-dash removal are repaired, the privacy notice's 18 field labels get their colons back, the Directory's seven emoji bullets are removed, and stock phrases such as "in one place", "one thing worth highlighting" and "the trade-off is real" are cut. The French and German pages carry the same edits.
