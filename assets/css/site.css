@@ -583,6 +583,7 @@ section{padding:var(--section-pad) 0;position:relative}
 .about-card{padding:36px}
 .about-card p{font-size:1.02rem;max-width:var(--measure)}
 .objectives{display:grid;gap:14px;margin-top:8px}
+.objectives-row{grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))}
 .objective{
   display:flex;gap:14px;padding:18px;border-radius:var(--radius-sm);
   background:rgba(255,255,255,.45);border:1px solid var(--glass-border);
@@ -2405,50 +2406,8 @@ body{padding-top:var(--whats-new-h, 0px)}
 
 /* Reduced motion: instant transitions for both spotlight and backdrop. */
 
-/* -------- About > Find out more cards --------
-   A four-card grid appended to the About section: short signposts
-   to the FAQ, glossary, press kit, and members' Wiki. Lighter
-   visual weight than .wg-card — these are reference shortcuts. */
-.find-out-more{
-  margin-top:48px;
-  padding-top:32px;
-  border-top:1px solid var(--line);
-}
-.find-out-more-head{
-  margin:0 0 18px;
-  font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--muted);font-weight:700;text-align:center;
-}
-.find-out-more-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));
-  gap:16px;
-}
-.find-card{
-  padding:22px 22px 24px;
-  display:flex;flex-direction:column;gap:10px;
-  text-decoration:none;color:inherit;
-  transition:transform .2s var(--ease),background .2s var(--ease);
-}
-.find-card:hover{
-  transform:translateY(-2px);
-  background:rgba(255,255,255,.78);
-}
-.dark .find-card:hover{background:rgba(28,32,46,.78)}
-.find-card-icon{
-  width:36px;height:36px;border-radius:10px;display:grid;place-items:center;
-  background:linear-gradient(135deg,rgba(0,51,153,.10),rgba(10,132,255,.10));
-  color:var(--accent);
-}
-.find-card-icon svg{width:18px;height:18px}
-.find-card h3{
-  margin:0;font-size:1rem;letter-spacing:-.005em;
-  font-family:'Lexend','Inter',sans-serif;
-}
-.find-card p{margin:0;font-size:.86rem;color:var(--muted);line-height:1.5}
-
 /* -------- Home > Audience tracks --------
-   Static link strip between the details strip and News: four compact
+   Static link strip under the figures strip: four compact
    cards routing researchers, policy readers, Action members, and press
    to the part of the site most relevant to them. Reuses .glass for the
    card surface/hover and .section-head/.eyebrow for the heading, same
