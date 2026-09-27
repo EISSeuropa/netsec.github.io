@@ -19,8 +19,11 @@ optional header lines at the very top (any order, case-insensitive):
                                 # 23:59 Brussels time that day (`homeUntil`).
                                 # With `Type: Call` it counts down in the
                                 # home page's Open calls tile.
+    Summary: One plain sentence.  # the home card's text; without it the
+                                # card shows the excerpt's first sentence.
 
-    The first paragraph after the headers is the excerpt shown on the card.
+    The first paragraph after the headers is the excerpt shown in the /news
+    archive and the RSS feed.
 
 Items are authored in English only (like the EISS Anthology): the home and
 archive renderers fall back to EN for FR/DE, so a hand translation can be added
@@ -48,7 +51,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 NEWS = ROOT / "data" / "news.json"
 
-HEADER_RE = re.compile(r"^\s*(type|url|date|wg|closes)\s*:\s*(.+?)\s*$", re.IGNORECASE)
+HEADER_RE = re.compile(r"^\s*(type|url|date|wg|closes|summary)\s*:\s*(.+?)\s*$", re.IGNORECASE)
 _MONTHS = ["January", "February", "March", "April", "May", "June", "July",
            "August", "September", "October", "November", "December"]
 
@@ -59,7 +62,7 @@ def slugify(text: str) -> str:
 
 
 def parse_issue(title: str, body: str) -> dict:
-    """Pure parse: (title, body) -> {type, url, date, wg, closes, excerpt}. No IO."""
+    """Pure parse: (title, body) -> {type, url, date, wg, closes, summary, excerpt}. No IO."""
     lines = (body or "").replace("\r\n", "\n").split("\n")
     headers = {}
     i = 0
@@ -84,6 +87,7 @@ def parse_issue(title: str, body: str) -> dict:
         "date": headers.get("date", "").strip(),
         "wg": headers.get("wg", "").strip(),
         "closes": headers.get("closes", "").strip(),
+        "summary": headers.get("summary", "").strip(),
         "excerpt": excerpt,
     }
 
@@ -112,6 +116,9 @@ def build_item(parsed: dict, issue_number: str, today: dt.date) -> dict:
         "title": {"en": parsed["title"]},
         "body": {"en": parsed["excerpt"]},
     }
+    # Optional one-line summary for the home card (the archive shows `body`).
+    if parsed.get("summary"):
+        item["summary"] = {"en": parsed["summary"]}
     # Optional category tag (rendered as a pill beside the date; the home and
     # archive renderers Title-case and translate it).
     if parsed.get("type"):

@@ -7,7 +7,8 @@
  *
  * News items are sorted newest first (by `pubDate`). Each card
  * carries: a date / status pill, the localised title, the localised
- * body, and an optional CTA link.
+ * text, and an optional CTA link. The home card shows a one-line
+ * summary (homeSummary), the /news archive the full body.
  *
  * Entry point: window.NetSec.renderHomeNews({ container, locale }).
  */
@@ -18,6 +19,16 @@
     if (!obj) return fallback;
     if (typeof obj === 'string') return obj;
     return obj[locale] || obj.en || fallback;
+  }
+
+  // The item's `summary` when set, else the first sentence of its body.
+  // Same rule as summary() in scripts/render-news-fallback.py.
+  // ponytail: naive sentence split, "Dr." ends it early; set `summary` then.
+  function homeSummary(item, locale) {
+    if (item.summary) return pickLocale(item.summary, locale, '');
+    const body = pickLocale(item.body, locale, '');
+    const m = body.match(/^[\s\S]*?[.!?](?=\s|$)/);
+    return m ? m[0] : body;
   }
 
   // Locale lookup for the small set of fixed UI strings (category labels),
@@ -95,28 +106,8 @@
     }
     const title = pickLocale(item.title, locale, '');
     card.appendChild(el('h3', null, [title]));
-    const body = pickLocale(item.body, locale, '');
-    card.appendChild(el('p', null, [body]));
-    // Mobile-only "Read more": the body is line-clamped on narrow viewports
-    // (CSS), and this button toggles the clamp. Rendered only for the home
-    // block, and only when the body is long enough to actually clamp (a cheap
-    // length heuristic avoids a no-op toggle on short items). Hidden on desktop
-    // via CSS. The button sits above the card's stretched-link overlay
-    // (.card-clickable button → z-index:2), so it never triggers the card CTA.
-    if (opts.readMore && body.length > 140) {
-      const btn = el('button', {
-        type: 'button',
-        class: 'news-readmore',
-        'aria-expanded': 'false',
-      }, [T('Read more')]);
-      btn.addEventListener('click', function (e) {
-        e.preventDefault();
-        const open = card.classList.toggle('is-expanded');
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        btn.textContent = T(open ? 'Read less' : 'Read more');
-      });
-      card.appendChild(btn);
-    }
+    const text = opts.summary ? homeSummary(item, locale) : pickLocale(item.body, locale, '');
+    card.appendChild(el('p', null, [text]));
     if (item.cta && item.cta.href) {
       const href = typeof item.cta.href === 'string'
         ? item.cta.href
@@ -195,7 +186,7 @@
       return;
     }
     const frag = document.createDocumentFragment();
-    items.forEach(item => frag.appendChild(buildCard(item, locale, { readMore: true })));
+    items.forEach(item => frag.appendChild(buildCard(item, locale, { summary: true })));
     container.innerHTML = '';
     container.appendChild(frag);
     container.dataset.renderedFromJson = '1';

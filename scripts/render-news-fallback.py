@@ -9,7 +9,8 @@ the same reason: `homeUntil` makes the right set of cards a function of the
 date, not only of the file.
 
 The selection mirrors renderHomeNews in home-news.js: newest first, drop items
-past their `homeUntil` or older than the decay window, keep three.
+past their `homeUntil` or older than the decay window, keep three. Each card
+carries the item's one-line summary, not its full body.
 
 Usage:
   python3 scripts/render-news-fallback.py            # rewrite in place
@@ -29,6 +30,7 @@ NEWS = ROOT / "data" / "news.json"
 PAGES = {"en": ROOT / "index.html", "fr": ROOT / "index.fr.html", "de": ROOT / "index.de.html"}
 HOME_MAX = 3
 DECAY = timedelta(days=548)  # ponytail: ~18 months, the JS uses calendar months
+SENTENCE = re.compile(r"[\s\S]*?[.!?](?=\s|$)")  # ponytail: naive, "Dr." ends it early
 LIST = re.compile(r'(<div class="news-list[^"]*">)(.*?)(\n    </div>)', re.S)
 
 
@@ -51,6 +53,15 @@ def _pick(value, locale: str) -> str:
     return value or ""
 
 
+def summary(item: dict, locale: str) -> str:
+    """The item's `summary`, else the first sentence of its body (as homeSummary in home-news.js)."""
+    if item.get("summary"):
+        return _pick(item["summary"], locale)
+    body = _pick(item.get("body"), locale)
+    m = SENTENCE.match(body)
+    return m.group(0) if m else body
+
+
 def card(item: dict, locale: str) -> str:
     e = lambda s: html.escape(s, quote=True)
     cta = item.get("cta") or {}
@@ -60,7 +71,7 @@ def card(item: dict, locale: str) -> str:
     if date:
         lines.append(f'        <span class="news-date">{e(date)}</span>')
     lines.append(f'        <h3>{e(_pick(item.get("title"), locale))}</h3>')
-    lines.append(f'        <p>{e(_pick(item.get("body"), locale))}</p>')
+    lines.append(f'        <p>{e(summary(item, locale))}</p>')
     if cta.get("href"):
         ext = ' target="_blank" rel="noopener"' if cta.get("external") else ""
         lines.append(f'        <a class="card-stretch" href="{e(_pick(cta["href"], locale))}"{ext}>'

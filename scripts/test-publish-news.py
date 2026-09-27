@@ -80,6 +80,14 @@ def test_committed_news_json_valid():
     assert pn.check() == 0
 
 
+def test_summary_header_sets_summary():
+    p = pn.parse_issue("T", "Summary: One line for the home card.\nType: Event\n\nThe full excerpt.")
+    assert p["summary"] == "One line for the home card." and p["excerpt"] == "The full excerpt."
+    item = pn.build_item(p, "1", dt.date(2026, 1, 1))
+    assert item["summary"] == {"en": "One line for the home card."}
+    assert "summary" not in pn.build_item(pn.parse_issue("T", "Body."), "2", dt.date(2026, 1, 1))
+
+
 def _standalone() -> int:
     failures = []
     tests = [(n, f) for n, f in sorted(globals().items())

@@ -50,3 +50,13 @@ def test_render_replaces_only_the_list():
 def test_real_pages_have_the_block():
     for path in mod.PAGES.values():
         assert mod.LIST.search(path.read_text(encoding="utf-8")), path.name
+
+
+def test_summary_prefers_field_then_first_sentence():
+    body = {"en": "First line here. Second line.", "fr": "Premier. Second."}
+    assert mod.summary({"body": body}, "en") == "First line here."
+    assert mod.summary({"body": body}, "fr") == "Premier."
+    assert mod.summary({"body": body}, "de") == "First line here."
+    item = {"body": body, "summary": {"en": "Short.", "de": "Kurz."}}
+    assert mod.summary(item, "de") == "Kurz." and mod.summary(item, "fr") == "Short."
+    assert mod.summary({"body": {"en": "Version 1.5 ships"}}, "en") == "Version 1.5 ships"

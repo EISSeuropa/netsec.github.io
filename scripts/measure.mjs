@@ -177,7 +177,7 @@ const NOT_A_TARGET = [
   'card-stretch', 'event-link',
   // Inline links in prose. WCAG 2.5.8 exempts these explicitly, and the
   // display check below misses them when a wrapper makes them block-level.
-  'news-readmore', 'news-seeall', 'mc-mail', 'notes-link', 'event-desc-toggle',
+  'news-seeall', 'mc-mail', 'notes-link', 'event-desc-toggle',
   'ecs-faculty-card-link', 'members-clear-all',
 ];
 
