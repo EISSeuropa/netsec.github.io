@@ -4989,6 +4989,9 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   .programme-contribs > summary { padding-top: 12px; padding-bottom: 12px; }
   .members-filter-chip { padding-top: 11px; padding-bottom: 11px; }
   .now-call { padding-top: 13px; padding-bottom: 13px; }
+  .chip { padding-top: 13px; padding-bottom: 13px; }
+  /* The padding now spaces the rows, so the row gap would only double it. */
+  .hero-keywords { row-gap: 0; }
   /* 43.5px, so it rounds to the floor without reaching it. */
   .btn { padding-top: 14px; padding-bottom: 14px; }
 }
