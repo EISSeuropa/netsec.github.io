@@ -268,16 +268,21 @@ def check_external(url):
         req = urllib.request.Request(url, headers=headers, method=method)
         with urllib.request.urlopen(req, timeout=15, context=ctx) as resp:
             return resp.status
+    def _fetch(ctx):
+        # Some hosts 403/405 on HEAD but 200 on GET, so retry with GET.
+        # Shared by the verified and unverified paths: the unverified
+        # retry once skipped it, so every macOS run flagged GoatCounter
+        # while CI passed (#1896).
+        try:
+            return _do(method, ctx)
+        except urllib.error.HTTPError as e:
+            if method == "HEAD" and e.code in (403, 405):
+                return _do("GET", ctx)
+            raise
     try:
-        return (url, _do(method, _make_ssl_ctx(verify=True)))
+        return (url, _fetch(_make_ssl_ctx(verify=True)))
     except urllib.error.HTTPError as e:
         # 4xx + 5xx are errors; 3xx is followed by urllib by default.
-        # Some hosts 403/405 on HEAD but 200 on GET — retry with GET.
-        if method == "HEAD" and e.code in (403, 405) and parsed.hostname not in GET_HOSTS:
-            try:
-                return (url, _do("GET", _make_ssl_ctx(verify=True)))
-            except Exception as e2:
-                return (url, f"err: {e2}")
         return (url, f"HTTP {e.code}")
     except urllib.error.URLError as e:
         # On macOS the default Python install often ships with an
@@ -301,7 +306,7 @@ def check_external(url):
                     file=sys.stderr,
                 )
             try:
-                return (url, _do(method, _make_ssl_ctx(verify=False)))
+                return (url, _fetch(_make_ssl_ctx(verify=False)))
             except Exception as e2:
                 return (url, f"err: {e2.__class__.__name__}: {e2}")
         return (url, f"err: {e.__class__.__name__}: {e}")
