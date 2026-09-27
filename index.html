@@ -186,20 +186,18 @@
   <div class="container reveal reveal-stagger">
     <span class="eyebrow">COST Action · European Cooperation in Science &amp; Technology</span>
     <h1>Networking European Security Knowledge</h1>
-    <p class="lede">An inclusive, multidisciplinary network integrating diverse perspectives on European defence and security, bridging the academia–policy divide and cultivating the next generation of security scholars.</p>
-    <div class="hero-keywords">
-      <span class="chip">Security Studies</span>
-      <span class="chip">European Defence</span>
-      <span class="chip">Strategic Autonomy</span>
-      <span class="chip">Policy Impact</span>
+    <p class="lede">The Action brings together scholars and policy practitioners of European defence and security in four Working Groups. Members list their research in an open directory that anyone can search by theme or country.</p>
+    <div class="hero-keywords" role="group" aria-label="Browse members by theme">
+      <a class="chip" href="people.html#themes=security-and-defence">Security and defence</a>
+      <a class="chip" href="people.html#themes=foreign-policy-and-diplomacy">Foreign policy and diplomacy</a>
+      <a class="chip" href="people.html#themes=cyber-and-emerging-technology">Cyber and emerging technology</a>
+      <a class="chip" href="people.html#themes=european-and-transatlantic-security-order">European and transatlantic security order</a>
     </div>
     <div class="hero-cta">
-      <a class="btn btn-primary" href="#about">Discover the Action</a>
-      <!-- Sends visitors straight to the open Google Form (bio submission).
-           The form URL is the same one published in data/bios.json's source
-           block. Opens in a new tab so the home page stays as a context. -->
-      <a class="btn btn-ghost" href="https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform" target="_blank" rel="noopener">Join the network</a>
+      <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform" target="_blank" rel="noopener" aria-describedby="hero-join-note">Join the network</a>
+      <a class="btn btn-ghost" href="people.html">Browse the directory</a>
     </div>
+    <p class="hero-cta-note" id="hero-join-note">Joining adds your profile to the open directory.</p>
     <a class="ca-badge" href="https://www.cost.eu/actions/CA24154/" target="_blank" rel="noopener" aria-label="View Action CA24154 on cost.eu">
       <span class="dot" aria-hidden="true"></span>
       COST Action <strong>CA24154</strong> · running 10 Oct 2025 – 09 Oct 2029
@@ -361,12 +359,12 @@
           <h3>Glossary</h3>
           <p>MC, STSM, ITC, MoU, e-COST… every acronym you'll meet in your first month, explained.</p>
         </a>
-        <a class="find-card glass" href="network-map.html">
+        <a class="find-card glass" href="roadmap.html">
           <span class="find-card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M7 6h10"/><path d="M6 8l5 8.3"/><path d="M18 8l-5 8.3"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15"/><path d="M15 6v15"/></svg>
           </span>
-          <h3>Network Map</h3>
-          <p>Every person in the Action, the Working Groups and themes they share, and the panels that brought them together.</p>
+          <h3>Roadmap</h3>
+          <p>What's shipped, what's underway, and what comes next for the website and the open directory.</p>
         </a>
       </div>
     </div>
@@ -392,6 +390,16 @@
     <section id="member-spotlight" class="network-spotlight" aria-labelledby="spotlight-title" hidden></section>
     <div class="faces-marquee" data-faces-marquee aria-hidden="true"></div>
     <p class="faces-seeall"><a href="people.html">Browse the directory &rarr;</a></p>
+    <aside class="deliverables-roadmap-link" aria-labelledby="network-map-signpost-text">
+      <span class="deliverables-roadmap-link-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2.4"/><circle cx="19" cy="7" r="2.4"/><circle cx="12" cy="17.5" r="2.4"/><path d="M6.9 7.3 10.6 15.6"/><path d="M17.3 8.6 13.6 15.9"/><path d="M7.4 6.4 16.6 6.8"/></svg>
+      </span>
+      <p class="deliverables-roadmap-link-text" id="network-map-signpost-text">The <strong>Network Map</strong> shows how these members connect, through the Working Groups and research themes they share and the conference panels that brought them together.</p>
+      <a class="deliverables-roadmap-link-cta" href="network-map.html">
+        Open the Network Map
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </aside>
   </div>
 </section>
 
