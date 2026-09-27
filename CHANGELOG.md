@@ -153,6 +153,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The top navigation's News link opens the News page on all 69 pages instead of the home page's news section, and the home page drops three duplicate links: the Press kit card in *Find out more*, the Wiki link in the members' audience card, and the website Roadmap card, which the Network Map replaces ([#1884](https://github.com/EISSeuropa/netsec.github.io/issues/1884)).
 - Public copy on fifteen English pages is edited against a list of AI-writing patterns: 16 run-on sentences left behind by em-dash removal are repaired, the privacy notice's 18 field labels get their colons back, the Directory's seven emoji bullets are removed, and stock phrases such as "in one place", "one thing worth highlighting" and "the trade-off is real" are cut. The French and German pages carry the same edits.
 - Country flags are served from the site itself, 41 PNG thumbnails of about 1 KB each, so the About page makes 52 fewer requests to a third-party host and a FlagCDN outage no longer blanks every flag. The privacy notice drops FlagCDN and Google Fonts from its list of third parties, since the fonts were already self-hosted, and names the one file the conference programme page still reads from eiss-europa.com. The accessibility statement retires its third-party assets limitation. Both are updated in English, French and German.
 - Four Directory keywords that named one concept twice or broke a naming pattern are merged into one form: *EU security and defence* into *European security and defence*, *Critical security* into *Critical security studies*, *US-China relations* into *US–China relations* with the en dash its EU siblings use, and *China's foreign policy* into *Chinese foreign policy*. The old forms still resolve, so no submission needs editing.
@@ -163,6 +164,7 @@ maintainer-facing audience.
 - The Directory's research-theme and research-region chips now sort by their live count, so the areas that still have people in them lead the row. The eight chips shown while the row is collapsed are drawn from the same ranking, which brings a smaller theme into view when the current filters make it the largest one left.
 - The accessibility statement moves to v1.6, recording the 2 September 2026 assessment and the 15 September rescan that followed it: 155 contrast corrections, no contrast failure left open, and the light-mode link colour that the automated scan does not reach. Published in English, French and German.
 - The home page hero leads with *Join the network*, noted as adding a profile to the open directory, and *Browse the directory* in place of *Discover the Action*. Its four keyword chips link to the Directory filtered by theme, and the lede names the four Working Groups and the directory. Changed in English, French and German.
+- The home page section headings no longer carry the faded numerals 01 to 06, which skipped the Network section and the members strip.
 
 #### Fixed
 
