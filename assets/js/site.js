@@ -47,6 +47,8 @@
       'No open calls right now.': 'Aucun appel ouvert pour le moment.',
       'See the grants': 'Voir les subventions',
       'Latest': 'Dernière actualité',
+      // Home figures strip (home-figures.js)
+      'events held': 'événements organisés',
       'Working Group participant': 'Participant·e au groupe de travail',
       'Bio coming soon.': 'Biographie à venir.',
       'View full profile': 'Voir le profil complet',
@@ -356,6 +358,8 @@
       'No open calls right now.': 'Derzeit keine offenen Ausschreibungen.',
       'See the grants': 'Zu den Förderungen',
       'Latest': 'Neueste Meldung',
+      // Home figures strip (home-figures.js)
+      'events held': 'durchgeführte Veranstaltungen',
       'Working Group participant': 'Arbeitsgruppen-Mitglied',
       'Bio coming soon.': 'Biografie folgt.',
       'View full profile': 'Vollständiges Profil ansehen',

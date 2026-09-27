@@ -1,5 +1,5 @@
 {
-  "_documentation": "Single source of truth for the home-page news cards (#249 parallel for news) AND the public RSS feed at /news.xml (v1.9.0). Two consumers: (a) the inline JS renderer in `index.html` (+ FR + DE) reads this on `DOMContentLoaded`, picks the locale from <html lang>, and rebuilds the `#news .news-list` cards from structured data. The hand-coded HTML in each home page survives as a `<noscript>`-style fail-soft fallback that the renderer empties on success. (b) `scripts/build-news-rss.py` reads this and emits `/news.xml` (RSS 2.0). The feed is single-language (EN) by RSS convention; per-locale feeds (/news.fr.xml, /news.de.xml) are a deferred follow-up if there's reader demand. When you add or edit an item: bump `lastBuildDate`, run `python3 scripts/build-news-rss.py`, confirm the FR / DE i18n blocks track any EN copy changes. CI runs a drift checker on every PR touching this file or news.xml. Optional per-item `social` field controls the Bluesky auto single-post (scripts/social-post.py): omit it (or `\"auto\"`) to let the gated workflow offer the item; `\"skip\"` to never auto-post it; `\"thread:<slug>\"` when the item is announced as a curated thread (data/social-threads/<slug>.json) so the single-post stands down. It does not affect the website or the RSS feed. Optional per-item `homeUntil` (ISO timestamp) retires a time-bound item, such as a call for applications, from the home page once it passes; the /news archive and the RSS feed keep it. Items with `type: \"call\"` fill the home page's Open calls tile, soonest `homeUntil` first; a call with no `homeUntil` shows as rolling.",
+  "_documentation": "Single source of truth for the home-page news cards (#249 parallel for news) AND the public RSS feed at /news.xml (v1.9.0). Two consumers: (a) the inline JS renderer in `index.html` (+ FR + DE) reads this on `DOMContentLoaded`, picks the locale from <html lang>, and rebuilds the `#news .news-list` cards from structured data. The hand-coded HTML in each home page survives as a `<noscript>`-style fail-soft fallback that the renderer empties on success. (b) `scripts/build-news-rss.py` reads this and emits `/news.xml` (RSS 2.0). The feed is single-language (EN) by RSS convention; per-locale feeds (/news.fr.xml, /news.de.xml) are a deferred follow-up if there's reader demand. When you add or edit an item: bump `lastBuildDate`, run `python3 scripts/build-news-rss.py`, confirm the FR / DE i18n blocks track any EN copy changes. CI runs a drift checker on every PR touching this file or news.xml. Optional per-item `social` field controls the Bluesky auto single-post (scripts/social-post.py): omit it (or `\"auto\"`) to let the gated workflow offer the item; `\"skip\"` to never auto-post it; `\"thread:<slug>\"` when the item is announced as a curated thread (data/social-threads/<slug>.json) so the single-post stands down. It does not affect the website or the RSS feed. Optional per-item `homeUntil` (ISO timestamp) retires a time-bound item, such as a call for applications, from the home page once it passes; the /news archive and the RSS feed keep it. Items with `type: \"call\"` fill the home page's Open calls tile, soonest `homeUntil` first; a call with no `homeUntil` shows as rolling. Optional per-item `summary` (`{en, fr?, de?}`, one sentence) is the home card text; without it the home card shows the first sentence of `body`. The /news archive and the RSS feed always show the full `body`.",
   "channelTitle": "NetSec — Latest news",
   "channelDescription": "Announcements, calls, and milestones from the COST Action CA24154 (NetSec).",
   "channelLink": "https://netsec-cost.eu/#news",
@@ -20,6 +20,11 @@
         "en": "Policy workshop on alliances concludes in Ankara",
         "fr": "L'atelier politique sur les alliances se cl\u00f4ture \u00e0 Ankara",
         "de": "Politik-Workshop zu B\u00fcndnissen geht in Ankara zu Ende"
+      },
+      "summary": {
+        "en": "Working Group 2 met at Bilkent University in Ankara for a one-day workshop on great power politics and the future of alliances.",
+        "fr": "Le Groupe de travail 2 s'est réuni à l'Université Bilkent d'Ankara pour un atelier d'une journée sur les grandes puissances et l'avenir des alliances.",
+        "de": "Die Arbeitsgruppe 2 kam an der Bilkent-Universität in Ankara zu einem eintägigen Workshop über Großmachtpolitik und die Zukunft der Bündnisse zusammen."
       },
       "body": {
         "en": "Working Group 2's one-day policy workshop, Great Power Politics and the Future of Alliances, took place at Bilkent University in Ankara on 13 September 2026. Scholars and policy practitioners spent the day examining how alliance politics is evolving under intensifying great power competition, and what that evolution means for European security. Accommodation in Ankara and all meals were provided by Bilkent University and the Royal Danish Defence College.",
@@ -43,7 +48,6 @@
     {
       "id": "mc-plenary-2026-inaugural",
       "type": "event",
-      "wg": 1,
       "pubDate": "2026-09-11T11:00:00+02:00",
       "displayDate": {
         "en": "11 September 2026",
@@ -54,6 +58,11 @@
         "en": "NetSec holds its first Management Committee plenary",
         "fr": "NetSec tient sa premi\u00e8re pl\u00e9ni\u00e8re du Comit\u00e9 de gestion",
         "de": "NetSec h\u00e4lt seine erste Plenarsitzung des Management Committee ab"
+      },
+      "summary": {
+        "en": "The Management Committee met online for its first plenary to agree the workstreams and confirm Working Group leadership.",
+        "fr": "Le Comité de gestion s'est réuni en ligne pour sa première plénière afin d'arrêter les chantiers et de confirmer la direction des groupes de travail.",
+        "de": "Das Management Committee kam online zu seiner ersten Plenarsitzung zusammen, um die Arbeitsstränge abzustimmen und die Leitung der Arbeitsgruppen zu bestätigen."
       },
       "body": {
         "en": "The Management Committee of COST Action CA24154 met in plenary for the first time on 11 September 2026, online, from 09:30 to 11:00 CEST. Representatives of the participating COST Member countries joined the Working Group leads to align on the workstreams for the coming cycle, confirm Working Group leadership and fill the roles still open. The Action started on 10 October 2025, and this was its first formal plenary meeting. Attendance was restricted to Management Committee representatives, Working Group leads and invited observers.",
@@ -124,6 +133,11 @@
         "en": "European Security Studies Prize awarded",
         "fr": "Le Prix européen des études de sécurité décerné",
         "de": "Europäischer Preis für Sicherheitsstudien verliehen"
+      },
+      "summary": {
+        "en": "Anna Seliverstova and Mattia Sguazzini received the 2026 European Security Studies Prize at the conference in Stockholm.",
+        "fr": "Anna Seliverstova et Mattia Sguazzini ont reçu le Prix européen des études de sécurité 2026 lors de la conférence de Stockholm.",
+        "de": "Anna Seliverstova und Mattia Sguazzini erhielten den Europäischen Preis für Sicherheitsstudien 2026 auf der Konferenz in Stockholm."
       },
       "body": {
         "en": "The European Security Studies Prize 2026 has gone to Anna Seliverstova (Linnaeus University) and Mattia Sguazzini (University of Genova). Awarded in partnership with the Journal of Strategic Studies, the prize marks outstanding research in security studies. Anna Seliverstova won for \"Telegram in Russia's Information Strategy: Evidence from Serbia\", and Mattia Sguazzini for \"Do Parliaments Dream of Cyber Power? Parliamentary Scrutiny in the Strategic Domain of Cyberspace\". The awards were presented at the European Security Studies Conference in Stockholm, co-organised by the European Initiative for Security Studies (EISS), NetSec, and Stockholm University.",

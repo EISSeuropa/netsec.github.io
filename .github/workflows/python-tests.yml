@@ -59,3 +59,5 @@ jobs:
       # runner's preinstalled Node. No dependencies, so no npm ci.
       - name: Run the home Now row selection test
         run: node scripts/test-home-now.mjs
+      - name: Run the home figures strip counting test
+        run: node scripts/test-home-figures.mjs
