@@ -173,6 +173,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The first Management Committee plenary no longer carries a WG1 tag on its event card or in Working Group 1's related events ([#1915](https://github.com/EISSeuropa/netsec.github.io/issues/1915)).
 - On touch screens the home hero's CA24154 badge is 46px tall at desktop width, up from 38px, and the four theme chips are 44px or more, up from 25px (chips in [#1907](https://github.com/EISSeuropa/netsec.github.io/pull/1907), badge in [#1905](https://github.com/EISSeuropa/netsec.github.io/issues/1905)).
 - The home page Now row's open-call links are at least 46px tall on touch screens, up from 20px for a one-line title and 40px for two lines, clearing the 44px target size ([#1897](https://github.com/EISSeuropa/netsec.github.io/issues/1897)).
 - The four theme links under the home page hero are 45px tall on touch screens, up from 25px, clearing the 44px target size.
