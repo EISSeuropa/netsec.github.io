@@ -46,7 +46,9 @@ catastrophic operations:
 
 - **`protect-main`** — targets the default branch. Restricts
   deletions and force-pushes, requires linear history, requires a
-  pull request with all four CodeQL checks green before merging,
+  pull request with these checks green before merging: the four
+  CodeQL contexts, `Check SEO + asset version drift`, `pytest`,
+  `smoke` and `i18n-drift / check` (added in #1904),
   restricts merge methods to squash. **Bypass: Repository Admin**
   (so `scripts/release.sh` can push the changelog-promotion commit
   directly).
