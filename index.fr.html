@@ -211,6 +211,15 @@
   </div>
 </section>
 
+<!-- Bandeau de chiffres : membres, pays, groupes de travail, événements
+     organisés. Compté par assets/js/home-figures.js au chargement, masqué
+     sans JavaScript et exclu de l'index de recherche. -->
+<section id="figures" class="figures-row" aria-label="NetSec en chiffres" data-home-figures data-pagefind-ignore hidden>
+  <div class="container">
+    <dl class="figures-grid" data-home-figures-grid></dl>
+  </div>
+</section>
+
 <!-- Parcours par public — quatre cartes-liens compactes qui orientent les
      visiteur·euses vers la partie du site la plus pertinente pour elleux.
      Placé entre le bandeau de détails et Actualités pour capter les
@@ -659,6 +668,7 @@
      la main restent en repli si data/news.json ne se charge pas. -->
 <script src="assets/js/home-news.js" defer></script>
 <script src="assets/js/home-now.js" defer></script>
+<script src="assets/js/home-figures.js" defer></script>
 <script src="assets/js/home-spotlight.js" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -670,6 +680,9 @@
     }
     if (window.NetSec && window.NetSec.renderHomeNow) {
       window.NetSec.renderHomeNow({ locale: 'fr' });
+    }
+    if (window.NetSec && window.NetSec.renderHomeFigures) {
+      window.NetSec.renderHomeFigures({ locale: 'fr' });
     }
   });
 </script>
