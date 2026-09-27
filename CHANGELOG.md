@@ -169,6 +169,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The home page Now row's open-call links are at least 46px tall on touch screens, up from 20px for a one-line title and 40px for two lines, clearing the 44px target size ([#1897](https://github.com/EISSeuropa/netsec.github.io/issues/1897)).
 - The *Joint EISS × NetSec* and *Save the date* pills on event cards, and the prize badge on the conference programme, took their dark colours from the operating system's setting instead of the site's theme toggle. A reader in dark mode on the system who had chosen the light theme saw light-blue text on a light card. All three now follow the toggle.
 - The home page's Events block showed a single line reading *No upcoming events right now* once the September events had ended. The two most recent events now follow that line, in English, French and German.
 - A call for applications stayed on the home page after its event had taken place, so two of the three news cards covered the Ankara workshop. A news item can now carry an end date for the home page, and the closed workshop call and the closed summer-school call drop off it while staying in the archive and the RSS feed.
