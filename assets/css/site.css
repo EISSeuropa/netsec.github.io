@@ -4731,6 +4731,11 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .essc-photos{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:.7rem; }
 .essc-photos-item{ margin:0; }
 .essc-photos-img{ width:100%; height:240px; object-fit:cover; border-radius:12px; display:block; filter:var(--photo-grade); }
+/* Home page strip (index.html #essc-photos): four across, two on a phone.
+   aspect-ratio reserves each box before the lazy image arrives. */
+.home-photos .essc-photos{ grid-template-columns:repeat(4, 1fr); }
+.home-photos .essc-photos-img{ height:auto; aspect-ratio:4/3; }
+@media (max-width:640px){ .home-photos .essc-photos{ grid-template-columns:repeat(2, 1fr); } }
 
 /* ============================================================
    Slide-templates gallery (/slides.html)
