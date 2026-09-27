@@ -16,8 +16,9 @@
 # A required status check on main since #1904, reported as
 # `i18n-drift / check`. It has no paths filter, because a required check
 # that never reports leaves a PR pending forever, and the job takes about
-# 9 seconds. The job id is unique so the context cannot be confused with
-# calendar-drift.yml or news-drift.yml, which report as `drift / check`.
+# 9 seconds. The job id is unique so the context names this workflow
+# alone. calendar-drift.yml and news-drift.yml follow the same pattern
+# since #1911.
 name: i18n drift check
 
 on:

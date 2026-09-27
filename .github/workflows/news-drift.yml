@@ -1,7 +1,6 @@
 # News-RSS drift check.
 #
-# Runs scripts/build-news-rss.py --check on every PR that touches
-# data/news.json, news.xml, or the generator itself. If the committed
+# Runs scripts/build-news-rss.py --check on every PR. If the committed
 # news.xml doesn't match what the script would produce from
 # data/news.json, this check fails and the PR can't be merged until
 # the maintainer runs `python3 scripts/build-news-rss.py` and commits
@@ -12,21 +11,23 @@
 # CI gate prevents silent drift.
 #
 # Zero cost: no third-party services, no API keys.
+#
+# A required status check on main since #1911, reported as
+# `news-drift / check`. It has no paths filter, because a required check that
+# never reports leaves a PR pending forever. The job id is unique so
+# the context names this workflow alone (#1904 did the same for
+# i18n-drift.yml).
 name: News RSS drift check
 
 on:
   pull_request:
-    paths:
-      - 'data/news.json'
-      - 'news.xml'
-      - 'scripts/build-news-rss.py'
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  drift:
+  news-drift:
     uses: ./.github/workflows/_pycheck.yml
     with:
       command: python3 scripts/build-news-rss.py --check
