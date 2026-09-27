@@ -1,7 +1,6 @@
 # Translation drift check.
 #
-# Runs scripts/check-i18n-drift.py on every PR that touches any HTML
-# file at the repo root or the i18n manifest. If the script exits
+# Runs scripts/check-i18n-drift.py on every PR. If the script exits
 # non-zero (any registered translation's English source has changed
 # since the translation was stamped), this check fails and the PR
 # can't be merged until either the translations are refreshed or the
@@ -13,21 +12,23 @@
 # English page without remembering its FR/DE siblings.
 #
 # Zero cost: no third-party services, no API keys.
+#
+# A required status check on main since #1904, reported as
+# `i18n-drift / check`. It has no paths filter, because a required check
+# that never reports leaves a PR pending forever, and the job takes about
+# 9 seconds. The job id is unique so the context cannot be confused with
+# calendar-drift.yml or news-drift.yml, which report as `drift / check`.
 name: i18n drift check
 
 on:
   pull_request:
-    paths:
-      - '*.html'
-      - 'data/i18n-state.json'
-      - 'scripts/check-i18n-drift.py'
   workflow_dispatch:       # Allow manual runs from the Actions tab
 
 permissions:
   contents: read
 
 jobs:
-  drift:
+  i18n-drift:
     uses: ./.github/workflows/_pycheck.yml
     with:
       command: python3 scripts/check-i18n-drift.py
