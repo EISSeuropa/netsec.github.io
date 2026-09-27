@@ -130,14 +130,17 @@ The exemptions are not a list in prose. They are `NOT_A_TARGET` in
 `scripts/measure.mjs`, so the rule can be run:
 
 ```bash
-node scripts/measure.mjs targets people.html events.html --width 375x812 --fail
+node scripts/measure.mjs targets people.html events.html --width 375x812 --width 1280x900 --fail
 ```
 
 `--fail` exits non-zero on anything under the floor, and also on a run where
 the coarse pointer was not emulated, since that run proves nothing.
 
 `.github/workflows/target-size.yml` runs exactly that on every pull request
-touching CSS, JS or a page, over the eight pages that actually carry controls.
+touching CSS, JS or a page, over the eight pages that actually carry
+controls. It measures at 375px and 1280px, since a control that wraps to two
+lines on a phone can fit on one line at desktop width and fall under the
+floor on a touch-screen laptop (#1913).
 It is not a required check yet: it is new and it drives a browser, and a gate
 nobody trusts is worse than no gate. Promote it once it has been quiet for a
 few weeks.

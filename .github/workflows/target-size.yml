@@ -71,6 +71,6 @@ jobs:
           node scripts/measure.mjs targets \
             index.html people.html events.html working-groups.html \
             roadmap.html essc-2026.html network-map.html grants.html \
-            --width 375x812 --fail
+            --width 375x812 --width 1280x900 --fail
         env:
           CHROME_PATH: /usr/bin/google-chrome

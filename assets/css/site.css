@@ -4954,6 +4954,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   .members-filter-chip { padding-top: 11px; padding-bottom: 11px; }
   .now-call { padding-top: 13px; padding-bottom: 13px; }
   .ca-badge { padding-top: 12px; padding-bottom: 12px; }
+  .programme-download { padding-top: 13px; padding-bottom: 13px; }
   .chip { padding-top: 13px; padding-bottom: 13px; }
   /* The padding now spaces the rows, so the row gap would only double it,
      and the margins give back the padding above the first row and below

@@ -990,6 +990,16 @@ html:not(.dark) .mentorship-showall button{ background:rgba(255,255,255,.65); }
   .members-keyword-filter-chips{ gap:6px; }
   .members-keyword-filter-chip{ padding:4px 9px; font-size:.74rem; }
 }
+/* 44px under a thumb at any width (#1913). After the 640px block, so the
+   chips keep this height in the mobile filter sheet too. The Clear button
+   pulls its padding back with a negative margin, so it clears 44px without
+   stacking on the head's own padding. */
+@media (pointer: coarse){
+  .members-keyword-filter-head{ padding-top:13px; padding-bottom:13px; }
+  .members-keyword-filter-clear{ padding:15px 8px; margin-block:-15px; }
+  .members-keyword-filter-chip{ padding-top:13px; padding-bottom:13px; }
+  .members-keyword-filter-toggle{ margin-top:0; padding-top:15px; padding-bottom:15px; }
+}
 
 /* Mentorship filter row. A separate AND dimension, single-select
    (All / Mentors / Seeking a mentor). Wrapped in its own tinted band
@@ -1046,6 +1056,7 @@ html:not(.dark) .mentorship-showall button{ background:rgba(255,255,255,.65); }
 @media (max-width: 640px){
   .members-mentorship-filter{ padding:0; margin:0; gap:8px; }
 }
+@media (pointer: coarse){ .members-mentorship-chip{ padding-top:12px; padding-bottom:12px; } }
 
 /* ── Mobile filter bottom sheet ──────────────────────────────────────
    The wrapper is a native <dialog>. On desktop it is never opened modally,
@@ -1669,6 +1680,7 @@ html.dir-welcome .welcome-strip[hidden]{display:block}
 }
 .view-toggle button:hover:not([aria-pressed="true"]){color:var(--ink-2)}
 .view-toggle button svg{width:16px;height:16px}
+@media (pointer: coarse){ .view-toggle button{width:44px;height:44px} }
 
 @media (max-width:540px){
   .people-page{padding:100px 0 60px}
