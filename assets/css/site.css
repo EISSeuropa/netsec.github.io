@@ -4997,8 +4997,9 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   .ca-badge { padding-top: 12px; padding-bottom: 12px; }
   .chip { padding-top: 13px; padding-bottom: 13px; }
   /* The padding now spaces the rows, so the row gap would only double it,
-     and the top margin gives back the padding above the first row. */
-  .hero-keywords { row-gap: 0; margin-top: calc(1.4rem - 13px); }
+     and the margins give back the padding above the first row and below
+     the last. */
+  .hero-keywords { row-gap: 0; margin-top: calc(1.4rem - 13px); margin-bottom: -13px; }
   /* 43.5px, so it rounds to the floor without reaching it. */
   .btn { padding-top: 14px; padding-bottom: 14px; }
 }
