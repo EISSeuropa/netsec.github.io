@@ -85,3 +85,14 @@ def test_derivative_is_smaller_than_its_source(tmp_path):
     out = tmp_path / "a.webp"
     mod.build(src, out)
     assert out.stat().st_size < src.stat().st_size
+
+
+def test_small_variant_is_resized_to_its_own_width(tmp_path):
+    """The 600px variant the home page strip's srcset serves (#1919)."""
+    src = _jpeg(tmp_path / "a.jpg", (1400, 1050))
+    out = tmp_path / "a-600.webp"
+    mod.build(src, out, 600)
+    with Image.open(out) as im:
+        assert im.size == (600, round(1050 * 600 / 1400))
+    assert not mod.is_stale(src, out, 600)
+    assert mod.is_stale(src, out)

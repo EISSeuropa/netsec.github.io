@@ -397,9 +397,12 @@ Drop the JPEG into `assets/images/essc-<year>/`, then run:
 python3 scripts/build-photo-derivatives.py
 ```
 
-That writes a 1000 px `.webp` beside it and prints what it saved. Wrap the
-new `<img>` in the `<picture>` the others use, with the webp as the
-`<source>` and the JPEG as the fallback, in all three locale pages.
+That writes a 1000 px `.webp` and a 600 px `-600.webp` beside it and prints
+what it saved. Wrap the new `<img>` in the `<picture>` the others use, with the
+webp as the `<source>` and the JPEG as the fallback, in all three locale pages.
+Where the photograph renders at 300 CSS px or less, list both files in the
+`<source>` `srcset` with `600w` and `1000w` descriptors and a `sizes`
+attribute, as the home page strip does (#1919).
 
 The gallery renders each photograph at most 327x240 CSS px, so a
 full-resolution camera export is a hundredfold more detail than the page

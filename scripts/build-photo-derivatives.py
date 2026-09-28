@@ -10,6 +10,10 @@ Same reading as the Network Map's faces (#1480): generate a derivative sized
 to how the image actually renders, and prefer it where it exists. 1000px wide
 covers the widest case, a 327px slot on a 3x phone, with room to spare.
 
+A 600px variant, `<name>-600.webp`, sits beside it for smaller slots (#1919).
+The home page strip renders these photographs at most 275 CSS px wide, and its
+`srcset` picks the 600px file there at 142 KB for four against 290 KB.
+
 These are hand-added editorial photographs rather than form submissions, so
 they do not belong in sync-bios.py. This runs on demand, and in CI as a drift
 gate, the same way build-calendar.py and build-network-map.py do.
@@ -34,6 +38,8 @@ REPO = Path(__file__).resolve().parent.parent
 PHOTO_DIRS = [REPO / "assets" / "images" / "essc-2026"]
 
 MAX_WIDTH = 1000
+# (width, filename suffix) for each derivative written beside a source.
+VARIANTS = ((MAX_WIDTH, ""), (600, "-600"))
 QUALITY = 80
 SOURCE_SUFFIXES = (".jpg", ".jpeg", ".png")
 
@@ -48,20 +54,20 @@ def sources() -> list[Path]:
     return out
 
 
-def render(src: Path) -> bytes:
+def render(src: Path, width: int = MAX_WIDTH) -> bytes:
     """Encode `src` to the derivative's bytes without touching the disk."""
     from PIL import Image
     buf = io.BytesIO()
     with Image.open(src) as im:
         im = im.convert("RGB")
-        if im.width > MAX_WIDTH:
-            height = round(im.height * MAX_WIDTH / im.width)
-            im = im.resize((MAX_WIDTH, height), Image.LANCZOS)
+        if im.width > width:
+            height = round(im.height * width / im.width)
+            im = im.resize((width, height), Image.LANCZOS)
         im.save(buf, "WEBP", quality=QUALITY, method=6)
     return buf.getvalue()
 
 
-def is_stale(src: Path, derivative: Path) -> bool:
+def is_stale(src: Path, derivative: Path, width: int = MAX_WIDTH) -> bool:
     """A derivative is stale when it is missing, or when re-encoding its
     source gives different bytes.
 
@@ -77,11 +83,11 @@ def is_stale(src: Path, derivative: Path) -> bool:
     deterministic for a given source and Pillow build, so it is also the
     honest test of whether the derivative is current.
     """
-    return not derivative.exists() or derivative.read_bytes() != render(src)
+    return not derivative.exists() or derivative.read_bytes() != render(src, width)
 
 
-def build(src: Path, derivative: Path) -> None:
-    derivative.write_bytes(render(src))
+def build(src: Path, derivative: Path, width: int = MAX_WIDTH) -> None:
+    derivative.write_bytes(render(src, width))
 
 
 def main(argv: list) -> int:
@@ -95,16 +101,17 @@ def main(argv: list) -> int:
 
     stale = []
     for src in sources():
-        derivative = src.with_suffix(".webp")
-        if not is_stale(src, derivative):
-            continue
-        if check:
-            stale.append(derivative.relative_to(REPO).as_posix())
-        else:
-            build(src, derivative)
-            print(f"✓ wrote {derivative.relative_to(REPO).as_posix()} "
-                  f"({derivative.stat().st_size // 1024} KB from "
-                  f"{src.stat().st_size // 1024} KB)")
+        for width, suffix in VARIANTS:
+            derivative = src.with_name(f"{src.stem}{suffix}.webp")
+            if not is_stale(src, derivative, width):
+                continue
+            if check:
+                stale.append(derivative.relative_to(REPO).as_posix())
+            else:
+                build(src, derivative, width)
+                print(f"✓ wrote {derivative.relative_to(REPO).as_posix()} "
+                      f"({derivative.stat().st_size // 1024} KB from "
+                      f"{src.stat().st_size // 1024} KB)")
 
     if check:
         if stale:
