@@ -417,13 +417,15 @@ def extract_chrome(shell_html: str) -> dict:
     nav = grab(r"(<header class=\"nav\".*?</header>)", "nav")
     footer = grab(r"(<footer class=\"footer\".*?</footer>)", "footer")
     sitejs = grab(r"(<script src=\"assets/js/site\.js[^\"]*\"[^>]*></script>)", "site.js tag")
+    # The shell's skip link, so its label is already in the locale's language.
+    skip = grab(r'(<a class="skip-link" href="#main">[^<]*</a>)', "skip link")
     # Optional: the manual-translation beta ribbon. Present only in the
     # FR/DE shells (the EN shell has none). Spliced so a localised profile
     # page carries the same "manual translation, English authoritative"
     # cue as every other translated page (CLAUDE.md §1).
     rib = re.search(r'(<div class="i18n-beta-ribbon".*?</div>)', shell_html, re.S)
     return {"head_assets": head_assets.strip("\n"), "nav": nav,
-            "footer": footer, "sitejs": sitejs,
+            "footer": footer, "sitejs": sitejs, "skip": skip,
             "ribbon": rib.group(1) if rib else ""}
 
 
@@ -797,6 +799,7 @@ def build_page(m: dict, works: list, similar: list, mentors: list, loc_key: str,
 {chrome['head_assets']}
 </head>
 <body>
+{chrome['skip']}
 {ribbon}{chrome['nav']}
 <main id="main" class="profile-page">
   <div class="container profile-container">
