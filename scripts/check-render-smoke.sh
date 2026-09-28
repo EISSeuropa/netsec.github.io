@@ -85,12 +85,16 @@ if ! curl -fsS -o /dev/null "http://127.0.0.1:${PORT}/index.html" 2>/dev/null; t
 fi
 
 render_count() {
-  # $1 page path, $2 marker string. Prints the marker count in the
-  # post-JS DOM. virtual-time-budget lets the fetch+render settle.
+  # $1 page path, $2 marker string, $3 minimum count. Prints the marker
+  # count in the post-JS DOM. virtual-time-budget lets the fetch+render
+  # settle.
   #
   # Two attempts, because a cold headless Chrome on a GitHub runner
   # occasionally never reaches its WS endpoint and returns an empty DOM,
   # which is indistinguishable here from a renderer that produced nothing.
+  # A partial render counts too: people.html once came back with one member
+  # card of the two required (#1929), so the retry fires below the minimum
+  # rather than only at zero.
   # Twice was enough for every occurrence seen in #1713; a third would be
   # guessing. A recovered attempt says so on stderr rather than passing
   # silently, since the count of them is the signal for whether this needs
@@ -99,13 +103,13 @@ render_count() {
   n="$("$chrome" --headless --no-sandbox --disable-gpu --dump-dom \
     --virtual-time-budget=10000 "http://127.0.0.1:${PORT}/$1" 2>/dev/null \
     | grep -oE "$2" | wc -l | tr -d ' ')"
-  if [ "$n" -eq 0 ]; then
+  if [ "$n" -lt "$3" ]; then
     sleep 2
     n="$("$chrome" --headless --no-sandbox --disable-gpu --dump-dom \
       --virtual-time-budget=10000 "http://127.0.0.1:${PORT}/$1" 2>/dev/null \
       | grep -oE "$2" | wc -l | tr -d ' ')"
-    if [ "$n" -gt 0 ]; then
-      echo "  · $1: first render returned nothing, second succeeded (flaky launch)" >&2
+    if [ "$n" -ge "$3" ]; then
+      echo "  · $1: first render came back short, second succeeded (flaky launch)" >&2
     fi
   fi
   printf '%s' "$n"
@@ -115,7 +119,7 @@ fail=0
 check() {
   # $1 page, $2 marker, $3 minimum count
   local n
-  n="$(render_count "$1" "$2")"
+  n="$(render_count "$1" "$2" "$3")"
   if [ "$n" -ge "$3" ]; then
     echo "✓ $1: $n × '$2' (need >= $3)"
   else
