@@ -8,8 +8,8 @@
 # A branch is swept when ALL of these hold:
 #   * no new commit in STALE_AFTER_DAYS (14) days,
 #   * no open pull request points at it,
-#   * it is not the default branch, gh-pages, or an automation
-#     branch (anything ending in `/auto`, plus `social/ledger`).
+#   * it is not the default branch or an automation branch
+#     (anything ending in `/auto`, plus `social/ledger`).
 #
 # A second pass covers the automation branches the rule above skips.
 # `create-pull-request` sets `delete-branch: true`, but the branch
@@ -55,10 +55,9 @@ jobs:
             const defaultBranch = context.payload.repository?.default_branch || 'main';
 
             // Never sweep these. Automation branches re-create themselves,
-            // gh-pages is the deploy target, the default branch is sacred.
+            // and the default branch is sacred.
             const isExempt = (name) =>
               name === defaultBranch ||
-              name === 'gh-pages' ||
               name === 'social/ledger' ||
               /\/auto$/.test(name);
 
