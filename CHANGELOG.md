@@ -155,6 +155,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The home page ESSC 2026 photo strip serves 600px WebP copies of its four photographs through `srcset`, 140 KB against 290 KB for the 1000px files it loaded before.
 - The home page runs hero, Now row, figures, audience cards, Network, Working Groups, About, Events, News, photographs, members strip and contact. About keeps its heading and three objectives and drops its two paragraphs and the *Find out more* cards (FAQ, Glossary and Roadmap, all still linked from the footer or the audience cards). Events starts at 4,421px on a desktop, up from 6,386px, and at 7,128px on a phone, up from 10,376px, and the page is 9,280px and 14,282px tall, down from 9,804px and 15,600px ([#1888](https://github.com/EISSeuropa/netsec.github.io/issues/1888)).
 - Home page news cards show a one-sentence summary instead of the full 68 to 107-word body, so the mobile *Read more* button is gone, and the News page and RSS feed keep the full text. News items take an optional `summary`, set from a `Summary:` line in a news issue, and the first Management Committee plenary loses its WG1 tag ([#1889](https://github.com/EISSeuropa/netsec.github.io/issues/1889)).
 - The home page's Network section links the Network Map from a signpost under the member faces ([#1886](https://github.com/EISSeuropa/netsec.github.io/issues/1886)).
