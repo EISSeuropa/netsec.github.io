@@ -174,6 +174,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The skip link is the first stop for the Tab key on 44 French and German pages, where the translation ribbon's link came first, and the French FAQ and the French and German press kits label it in their own language.
 - The skip link on French and German pages stays on one line on a phone, so it no longer shows a 5px sliver at the top of every page before it is focused.
 - On touch screens, 35 controls on the Directory, the Network Map and the ESSC 2026 page clear 44px at desktop width, up from 19px to 42px, and the Directory's phone filter sheet chips clear it too, up from 27px and 32px ([#1913](https://github.com/EISSeuropa/netsec.github.io/issues/1913)).
 - The first Management Committee plenary no longer carries a WG1 tag on its event card or in Working Group 1's related events ([#1915](https://github.com/EISSeuropa/netsec.github.io/issues/1915)).
