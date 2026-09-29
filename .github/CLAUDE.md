@@ -53,17 +53,17 @@ shape on external contributors.
 
 ### Lifecycle-label vocabulary
 
-Four labels drive the automated lifecycle workflows:
+Three labels drive the automated lifecycle workflows:
 
 | Label | Applied when | What fires |
 | --- | --- | --- |
-| `needs-info` | The maintainer asks the reporter for more details. | `issue-lifecycle-comment.yml` posts the standard ask + the 14-day clock notice. `issue-sweep.yml` closes the issue if no human comment lands in 14 days. |
-| `stale` | An open issue has 60+ days of no activity. | Auto-applied by `issue-sweep.yml`. `issue-lifecycle-comment.yml` posts the 14-day-to-close warning. Closes after another 14 days unless someone comments. |
+| `needs-info` | The maintainer asks the reporter for more details. | `issue-lifecycle-comment.yml` posts the standard ask + the 60-day clock notice. `issue-sweep.yml` closes the issue if no human comment lands in 60 days. |
 | `duplicate` | The maintainer closes a duplicate of another issue. | `issue-lifecycle-comment.yml` posts the standard close message pointing at the original. |
 | `wontfix` | The maintainer closes without acting on the request. | `issue-lifecycle-comment.yml` posts the standard close message recording the reasoning context. |
 
-Issues stay open under `needs-info` and `stale` while the
-clocks run. The `issue-sweep.yml` workflow runs once daily and
+Nothing else expires: an open issue is never closed for inactivity
+(the 60-day `stale` close was removed after it shut real backlog
+items). Issues stay open under `needs-info` while its clock runs. The `issue-sweep.yml` workflow runs once daily and
 the `lock-closed-issues.yml` workflow locks any closed issue
 14 days after closure (drive-by comment prevention).
 
