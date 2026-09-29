@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "clara-jammot",
-  "featuredSince": "2026-09-22",
+  "current": "giulia-biselli",
+  "featuredSince": "2026-09-29",
   "pinned": null,
   "history": [
+    {
+      "id": "giulia-biselli",
+      "week": "2026-W40",
+      "date": "2026-09-29"
+    },
     {
       "id": "clara-jammot",
       "week": "2026-W39",
