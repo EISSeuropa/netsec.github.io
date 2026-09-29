@@ -1438,7 +1438,8 @@
       applyUrlState();
       recomputePanelPeers();
 
-      // Faces: lazy-load headshots; each arrival repaints once.
+      // Faces: fetch every headshot up front (128px derivatives keep the
+      // whole set small, #1480); each arrival repaints once.
       people.forEach(p => {
         if (!p.photo) return;
         const img = new Image();
