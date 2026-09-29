@@ -1,25 +1,12 @@
-# Lock closed issues after a quiet period.
-#
-# Once an issue closes, the conversation should ideally end there.
-# Drive-by comments on long-closed threads tend to be off-topic
-# (someone hits a similar-looking problem via Google, drops a "+1
-# still happens to me" without context). The locked issue still
-# renders publicly; the only thing the lock prevents is new
-# comments, exactly the noise we want to filter.
-#
-# Threshold tuned softer than upstream claude-code's 7 days because
-# our release cadence is slower and the maintainer reads every
-# notification by hand. 14 days is "enough time for the reporter
-# to come back and say it didn't actually fix it" without keeping
-# threads alive long after they're settled.
-#
-# Zero cost: no third-party services, no API keys.
+# Lock issues closed 14+ days ago with no activity since, so a closed
+# thread takes no new comments. The issue stays readable and can still
+# be reopened. Locks silently: a bot comment on each notified the
+# maintainer as if the issue had been closed again (7 at once on
+# 29 September 2026).
 name: Lock closed issues
 
 on:
   schedule:
-    # Daily 13:00 UTC. Picks up everything closed in the last day
-    # plus older issues that crossed the 14-day threshold today.
     - cron: '0 13 * * *'
   workflow_dispatch:
 
@@ -42,12 +29,6 @@ jobs:
             const cutoff = new Date();
             cutoff.setDate(cutoff.getDate() - THRESHOLD_DAYS);
 
-            const lockComment =
-              `This issue was closed ${THRESHOLD_DAYS}+ days ago and has not had recent activity, ` +
-              `so it's being locked to keep the conversation focused. ` +
-              `If you're hitting a similar problem, please open a fresh issue ` +
-              `(referencing this one if useful).`;
-
             let page = 1;
             let locked = 0;
             while (true) {
@@ -67,12 +48,6 @@ jobs:
                 if (issue.pull_request) continue;       // PRs handled separately
                 if (new Date(issue.updated_at) > cutoff) continue;
 
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issue.number,
-                  body: lockComment,
-                });
                 await github.rest.issues.lock({
                   owner: context.repo.owner,
                   repo: context.repo.repo,

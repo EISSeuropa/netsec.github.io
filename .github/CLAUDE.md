@@ -64,8 +64,8 @@ Three labels drive the automated lifecycle workflows:
 Nothing else expires: an open issue is never closed for inactivity
 (the 60-day `stale` close was removed after it shut real backlog
 items). Issues stay open under `needs-info` while its clock runs. The `issue-sweep.yml` workflow runs once daily and
-the `lock-closed-issues.yml` workflow locks any closed issue
-14 days after closure (drive-by comment prevention).
+the `lock-closed-issues.yml` workflow silently locks any closed
+issue after 14 days without activity (no bot comment).
 
 When adding a new lifecycle label, update the `messages`
 dictionary in `issue-lifecycle-comment.yml` and the table
