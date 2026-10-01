@@ -54,23 +54,29 @@ const server = http.createServer((req, res) => {
 await new Promise(r => server.listen(0, '127.0.0.1', r));
 const BASE = `http://127.0.0.1:${server.address().port}`;
 
-// Two attempts. A cold headless Chrome on a GitHub runner occasionally never
+// Three attempts. A cold headless Chrome on a GitHub runner occasionally never
 // reaches its WS endpoint and throws a TimeoutError, which fails the whole
 // suite for a reason that has nothing to do with the code under test (#1713).
 // A recovered launch says so, since the count of them is the signal for
-// whether this needs revisiting.
+// whether this needs revisiting. The third attempt matches build-og-cards.py,
+// where both of two attempts failed on the 2026-10-01 deploy (#1946).
 async function launchBrowser() {
   const options = {
     executablePath: CHROME,
     headless: 'new',
     args: ['--no-sandbox', '--disable-dev-shm-usage'],
   };
-  try {
-    return await puppeteer.launch(options);
-  } catch (first) {
-    console.error(`  · browser launch failed (${first.message.split('\n')[0]}), retrying once`);
-    await new Promise((r) => setTimeout(r, 2000));
-    return puppeteer.launch(options);
+  const attempts = 3;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      const browser = await puppeteer.launch(options);
+      if (attempt > 1) console.error(`  · attempt ${attempt} succeeded (flaky launch)`);
+      return browser;
+    } catch (err) {
+      if (attempt === attempts) throw err;
+      console.error(`  · browser launch failed (${err.message.split('\n')[0]}), retrying (${attempt}/${attempts})`);
+      await new Promise((r) => setTimeout(r, 2000));
+    }
   }
 }
 
