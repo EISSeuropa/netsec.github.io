@@ -236,20 +236,24 @@ function bytesCollector(page) {
 }
 
 // ── Run ────────────────────────────────────────────────────────────────────
-// Two attempts at the launch. A cold headless Chrome sometimes never reaches
+// Three attempts at the launch. A cold headless Chrome sometimes never reaches
 // its WS endpoint, which is #1713's failure, and this script is a CI gate as
 // of #1689: a flaky gate is worse than no gate, because it teaches people to
-// rerun rather than to look.
+// rerun rather than to look. The third attempt matches build-og-cards.py,
+// where both of two attempts failed on the 2026-10-01 deploy (#1946).
 async function launchBrowser() {
   const options = { executablePath: findChrome(), headless: 'new', args: ['--no-sandbox'] };
-  try {
-    return await puppeteer.launch(options);
-  } catch (first) {
-    console.error(`  · browser launch failed (${first.message.split('\n')[0]}), retrying once`);
-    await new Promise((r) => setTimeout(r, 2000));
-    const browser = await puppeteer.launch(options);
-    console.error('  · second attempt succeeded (flaky launch)');
-    return browser;
+  const attempts = 3;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      const browser = await puppeteer.launch(options);
+      if (attempt > 1) console.error(`  · attempt ${attempt} succeeded (flaky launch)`);
+      return browser;
+    } catch (err) {
+      if (attempt === attempts) throw err;
+      console.error(`  · browser launch failed (${err.message.split('\n')[0]}), retrying (${attempt}/${attempts})`);
+      await new Promise((r) => setTimeout(r, 2000));
+    }
   }
 }
 
