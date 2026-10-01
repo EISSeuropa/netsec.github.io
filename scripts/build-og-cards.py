@@ -500,25 +500,28 @@ def _capture_cards(chrome: str, jobs: list[tuple[str, Path]]) -> None:
     expensive part, roughly ten seconds against a fraction of a second per
     card once it is up.
 
-    Two attempts at that launch. A cold headless Chrome sometimes never
+    Three attempts at that launch. A cold headless Chrome sometimes never
     reaches its DevTools endpoint, which was observed one run in two on a
     warm laptop and used to abort the whole render (#1726). It is the same
     failure #1713 fixed in the render-smoke and directory-interaction
     scripts, and it matters more here: this runs inside the daily bios sync,
     where a failure leaves a member's share card stale and only the run log
-    says so. Twice was enough for every occurrence seen; a third would be
-    guessing.
+    says so. Two attempts held until the 2026-10-01 scheduled deploy, where
+    both failed on the runner and the deploy was skipped, so a third was
+    added.
     """
-    try:
-        proc, cdp = _launch_chrome(chrome)
-    except RuntimeError as first:
-        print(f"  · Chrome launch failed ({first}), retrying once", file=sys.stderr)
-        time.sleep(2)
+    attempts = 3
+    for attempt in range(1, attempts + 1):
         try:
             proc, cdp = _launch_chrome(chrome)
-        except RuntimeError as second:
-            raise SystemExit(f"Chrome did not start after two attempts: {second}")
-        print("  · second attempt succeeded (flaky launch)", file=sys.stderr)
+            break
+        except RuntimeError as err:
+            if attempt == attempts:
+                raise SystemExit(f"Chrome did not start after {attempts} attempts: {err}")
+            print(f"  · Chrome launch failed ({err}), retrying ({attempt}/{attempts})", file=sys.stderr)
+            time.sleep(2)
+    if attempt > 1:
+        print(f"  · attempt {attempt} succeeded (flaky launch)", file=sys.stderr)
     try:
         for url, out in jobs:
             tgt = cdp.cmd("Target.createTarget", {"url": "about:blank"})["targetId"]

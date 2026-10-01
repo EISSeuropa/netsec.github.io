@@ -179,16 +179,17 @@ class _FakeProc:
         self.killed = True
 
 
-def test_launch_is_retried_once_and_then_succeeds(monkeypatch, capsys):
+def test_launch_is_retried_and_then_succeeds(monkeypatch, capsys):
     """A cold headless Chrome sometimes never reaches its DevTools endpoint.
     One attempt used to abort the whole render, which inside the daily bios
-    sync leaves a member's share card stale with only the run log saying so."""
+    sync leaves a member's share card stale with only the run log saying so.
+    Two failures before a success is the case the third attempt was added for."""
     attempts = []
     proc = _FakeProc()
 
     def flaky(chrome):
         attempts.append(chrome)
-        if len(attempts) == 1:
+        if len(attempts) < 3:
             raise RuntimeError("Chrome did not expose the DevTools endpoint within 10s")
         return proc, object()
 
@@ -197,16 +198,16 @@ def test_launch_is_retried_once_and_then_succeeds(monkeypatch, capsys):
     # No jobs, so nothing renders: the launch path is what is under test.
     boc._capture_cards("/fake/chrome", [])
 
-    assert len(attempts) == 2, "the failed launch should be retried exactly once"
+    assert len(attempts) == 3, "both failed launches should be retried"
     assert proc.killed, "the browser should still be shut down after the run"
     err = capsys.readouterr().err
-    assert "retrying once" in err
-    assert "second attempt succeeded" in err, "a silent recovery teaches nobody"
+    assert "retrying (1/3)" in err and "retrying (2/3)" in err
+    assert "attempt 3 succeeded" in err, "a silent recovery teaches nobody"
 
 
-def test_two_failed_launches_give_up_rather_than_looping(monkeypatch):
-    """Twice was enough for every occurrence seen; a third would be guessing,
-    and an unbounded retry would hang the sync rather than report."""
+def test_three_failed_launches_give_up_rather_than_looping(monkeypatch):
+    """Three attempts covers every occurrence seen, and an unbounded retry
+    would hang the sync rather than report."""
     attempts = []
 
     def always_fails(chrome):
@@ -218,7 +219,7 @@ def test_two_failed_launches_give_up_rather_than_looping(monkeypatch):
     try:
         boc._capture_cards("/fake/chrome", [])
     except SystemExit as exc:
-        assert "after two attempts" in str(exc)
+        assert "after 3 attempts" in str(exc)
     else:
-        raise AssertionError("a second failure should exit, not continue")
-    assert len(attempts) == 2
+        raise AssertionError("a third failure should exit, not continue")
+    assert len(attempts) == 3
