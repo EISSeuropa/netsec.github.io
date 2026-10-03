@@ -26,10 +26,19 @@ esac
 # in, not the session's current directory (which may be a worktree).
 dir="$(printf '%s\n' "$cmd" \
   | sed -n 's/^[[:space:]]*cd[[:space:]]\{1,\}\([^&;|]*\).*/\1/p' | head -1)"
-dir="$(printf '%s' "$dir" | sed 's/[[:space:]]*$//')"
+# Strip trailing space, then the quotes a path containing a space needs
+# (this checkout lives under "Local Documents"), or the -d test fails and
+# the guard falls back to the session's directory.
+dir="$(printf '%s' "$dir" | sed 's/[[:space:]]*$//; s/^["'"'"']//; s/["'"'"']$//')"
 if [ -n "$dir" ] && [ -d "$dir" ]; then
   cd "$dir" 2>/dev/null || exit 0
 fi
+
+# A GitHub Wiki publishes only from master and takes no pull requests,
+# so the branch-first rule cannot apply there.
+case "$(git remote get-url origin 2>/dev/null)" in
+  *.wiki.git) exit 0 ;;
+esac
 
 branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)" || exit 0
 
