@@ -548,7 +548,7 @@ sweep (rule §11).
 │   ├── sync-roadmap-progress.py     # Writes data/roadmap-progress.json from GitHub milestone closed/total
 │   ├── build-search.sh              # Builds /pagefind/ via `npx pagefind` (gitignored)
 │   ├── build-bio-search-stubs.py    # Renders search/bios/<lang>/<slug>.html — the per-member stubs Pagefind indexes so a member is findable by site search (country + wgs facets); --check drift gate (#1218, #1428)
-│   ├── summarise-sync-changes.py    # Reads the working tree after the sync generators run; prints the one-line "what actually changed" summary that leads each sync PR body (#1427)
+│   ├── summarise-sync-changes.py    # Reads the working tree after the sync generators run; prints the one-line "what actually changed" summary that leads each sync PR body (#1427), plus the works each member gained or dropped when ORCID publications moved
 │   ├── what-to-rebuild.py           # Prints which builders a change has made stale, derived from each gate's pull_request `paths:` and its `--check` command rather than a hand-kept list (see the rebuild-gates skill)
 │   ├── social-post.py               # Composes + publishes news / spotlight / thread posts to Bluesky + LinkedIn (see social-publishing.md, #1072)
 │   ├── rotate-spotlight.py          # Picks the weekly home-page member spotlight by balanced-rotation score; writes data/spotlight.json (#341)
