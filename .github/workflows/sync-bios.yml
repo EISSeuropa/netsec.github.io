@@ -70,28 +70,28 @@ jobs:
         run: |
           set -o pipefail
           python3 scripts/sync-bios.py | tee /tmp/sync-bios.txt
-          # sync-bios edits data/bios.json (not the HTML files) so it
-          # rarely drifts the HTML translations directly. The drift
-          # report is included for completeness, and to surface cases
-          # where someone edited an HTML file in the same auto-branch
-          # as a sync (e.g. ad-hoc admin work).
-          python3 scripts/check-i18n-drift.py > /tmp/drift-bios.txt 2>&1 || true
+          # The keyword normaliser prints ~110 "possible alias candidate"
+          # lines that are identical from one run to the next, which buried
+          # the rest of the log. The body keeps a count and points at the
+          # command that lists them. The translation drift snapshot that used
+          # to follow is gone: this sync writes data, not HTML, and the i18n
+          # drift gate already runs on any PR that touches a page.
+          aliases=$(grep -c 'possible alias candidate' /tmp/sync-bios.txt || true)
           {
             if [ -s /tmp/sync-bios-pr-overview.md ]; then
               cat /tmp/sync-bios-pr-overview.md
               echo ""
             fi
-            echo "## Run log"
+            echo "<details><summary>Run log</summary>"
             echo ""
             echo '```'
-            cat /tmp/sync-bios.txt
+            grep -v 'possible alias candidate' /tmp/sync-bios.txt || true
+            if [ "${aliases:-0}" -gt 0 ]; then
+              echo "  (${aliases} keyword alias candidates omitted; run scripts/sync-bios.py locally to list them)"
+            fi
             echo '```'
             echo ""
-            echo "## Translation drift snapshot"
-            echo ""
-            echo '```'
-            cat /tmp/drift-bios.txt
-            echo '```'
+            echo "</details>"
             echo ""
             echo "---"
             echo "_Source: linked Google Sheet via \`scripts/bios-source.json\`._"

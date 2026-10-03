@@ -87,3 +87,21 @@ def test_porcelain_parsing_handles_status_codes_and_renames():
         "search/bios/en/new-person.html",
         "people/new.html",
     ]
+
+
+def test_orcid_change_names_member_and_works():
+    """PR #1951 said only "ORCID publications"; the reviewer needs who and what."""
+    a = {"title": "Old work", "year": "2024"}
+    b = {"title": "Kept work", "year": "2025"}
+    c = {"title": "New work", "year": "2026"}
+    old = {"works": {"x": [b, a], "y": [b]}}
+    new = {"works": {"x": [c, b], "y": [b]}}
+    out = mod.describe_orcid(old, new, {"x": "Dr X"})
+    assert "for 1 member." in out
+    assert "**Dr X**: Added “New work” (2026). Dropped “Old work” (2024)." in out
+    assert "y" not in out.split("\n", 2)[2]
+
+
+def test_orcid_unchanged_lists_nothing():
+    w = {"works": {"x": [{"title": "T", "year": "2025"}]}}
+    assert mod.describe_orcid(w, w, {}) == ""

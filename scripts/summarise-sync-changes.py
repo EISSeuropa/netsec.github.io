@@ -33,6 +33,7 @@ unconditionally.
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -139,9 +140,68 @@ def summarise(paths: list[str]) -> str:
 
     noun = "file" if len(derived) == 1 else "files"
     return (
-        f"**Summary: {lede}. {len(derived)} derived {noun} rebuilt "
-        f"— {'; '.join(parts)}.**"
+        f"**Summary: {lede}. {len(derived)} derived {noun} rebuilt: "
+        f"{'; '.join(parts)}.**"
     )
+
+
+ORCID = "data/orcid-works.json"
+
+
+def _work(w: dict) -> str:
+    year = f" ({w['year']})" if w.get("year") else ""
+    return f"\u201c{w.get('title', '').strip()}\u201d{year}"
+
+
+def describe_orcid(old: dict, new: dict, names: dict[str, str]) -> str:
+    """Name each member whose ORCID list changed, and the works in and out.
+
+    "ORCID publications" alone says a file moved, not whose page changes or
+    how, which is the question the reviewer actually has.
+    """
+    old_w, new_w = old.get("works", {}), new.get("works", {})
+    lines = []
+    for slug in sorted(set(old_w) | set(new_w)):
+        before = {_work(w) for w in old_w.get(slug, [])}
+        after = {_work(w) for w in new_w.get(slug, [])}
+        added, dropped = sorted(after - before), sorted(before - after)
+        if not (added or dropped):
+            continue
+        bits = []
+        if added:
+            bits.append("Added " + "; ".join(added))
+        if dropped:
+            bits.append("Dropped " + "; ".join(dropped))
+        lines.append(f"- **{names.get(slug, slug)}**: {'. '.join(bits)}.")
+    if not lines:
+        return ""
+    noun = "member" if len(lines) == 1 else "members"
+    return "\n".join(
+        [
+            f"ORCID publications changed for {len(lines)} {noun}. A profile "
+            "lists the 3 most recent works, so a new work drops the oldest.",
+            "",
+            *lines,
+        ]
+    )
+
+
+def orcid_details() -> str:
+    try:
+        old = json.loads(
+            subprocess.run(
+                ["git", "show", f"HEAD:{ORCID}"],
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout
+        )
+        new = json.loads(Path(ORCID).read_text())
+        bios = json.loads(Path(UPSTREAM).read_text())
+    except (subprocess.CalledProcessError, OSError, ValueError):
+        return ""
+    names = {m["id"]: m.get("name") or m["id"] for m in bios.get("members", [])}
+    return describe_orcid(old, new, names)
 
 
 def main(argv: list[str]) -> int:
@@ -154,9 +214,15 @@ def main(argv: list[str]) -> int:
             text=True,
             check=True,
         ).stdout
-    line = summarise(parse_porcelain(text))
+    paths = parse_porcelain(text)
+    line = summarise(paths)
     if line:
         print(line)
+    if ORCID in paths:
+        detail = orcid_details()
+        if detail:
+            print()
+            print(detail)
     return 0
 
 
