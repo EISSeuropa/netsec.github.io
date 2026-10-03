@@ -1858,6 +1858,48 @@ _FIELD_LABELS = {
 }
 
 
+def describe_field_change(field: str, before, after) -> str:
+    """One reviewable line saying how a field moved, not only that it did.
+
+    Lists show what was added and removed. Long text shows each edited
+    span with a few words either side, so a typo fix reads as a typo fix.
+    A text rewritten past recognition is quoted whole, since a span diff
+    of it would be longer than the text.
+    """
+    if isinstance(before, list) or isinstance(after, list):
+        b, a = before or [], after or []
+        added = [str(x) for x in a if x not in b]
+        removed = [str(x) for x in b if x not in a]
+        bits = []
+        if added:
+            bits.append("added " + ", ".join(added))
+        if removed:
+            bits.append("removed " + ", ".join(removed))
+        return "; ".join(bits) or "reordered"
+    b, a = str(before or ""), str(after or "")
+    if not b:
+        return f"set to `{a}`" if len(a) <= 120 else "set (new text below)\n\n    > " + " ".join(a.split())
+    if not a:
+        return "cleared"
+    if len(b) <= 120 and len(a) <= 120:
+        return f"`{b}` → `{a}`"
+    bw, aw = b.split(), a.split()
+    sm = difflib.SequenceMatcher(a=bw, b=aw, autojunk=False)
+    if sm.ratio() < 0.6:
+        return f"rewritten, {len(bw)} → {len(aw)} words (new text below)\n\n    > " + " ".join(a.split())
+    ctx = 4
+    spans = []
+    for tag, i1, i2, j1, j2 in sm.get_opcodes():
+        if tag == "equal":
+            continue
+        pre = " ".join(bw[max(0, i1 - ctx):i1])
+        post = " ".join(bw[i2:i2 + ctx])
+        old = " ".join(filter(None, [pre, " ".join(bw[i1:i2]), post]))
+        new = " ".join(filter(None, [pre, " ".join(aw[j1:j2]), post]))
+        spans.append(f"`…{old}…` → `…{new}…`")
+    return "; ".join(spans)
+
+
 def classify_diff(
     old_members: list[dict],
     new_members: list[dict],
@@ -1907,6 +1949,7 @@ def classify_diff(
             "data_only": bool(user_content_fields) and not photo_changed_for_member,
             "both": photo_changed_for_member and bool(user_content_fields),
             "fields": user_content_fields,
+            "changes": {f: (old.get(f), new.get(f)) for f in user_content_fields},
         })
 
     return {
@@ -2059,6 +2102,10 @@ def render_pr_body_overview(
             else:
                 fields = ", ".join(_label(f) for f in u["fields"]) or "metadata"
                 lines.append(f"- **{u['name']}**: {fields}")
+            for f, (before, after) in u.get("changes", {}).items():
+                lines.append(
+                    f"  - {_label(f)}: {describe_field_change(f, before, after)}"
+                )
         lines.append("")
 
     if rm:

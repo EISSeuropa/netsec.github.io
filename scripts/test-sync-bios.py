@@ -1517,3 +1517,23 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+def test_field_change_shows_before_and_after():
+    """An updated member used to read only "**Name**: bio"; the reviewer
+    could not tell a typo fix from a rewrite without opening the diff."""
+    d = sync_bios.describe_field_change
+    long_old = "I have bee working on European security for several years now, " * 3
+    long_new = long_old.replace("bee working", "been working", 1)
+    assert "`…I have bee working on European security…` → `…I have been working on European security…`" in d("bio", long_old, long_new)
+    assert d("keywords", ["A", "B"], ["B", "C"]) == "added C; removed A"
+    assert d("position", "Researcher", "Professor") == "`Researcher` → `Professor`"
+    assert d("bio", long_old, "Something else entirely. " * 20).startswith("rewritten")
+    assert d("website", "https://x.org", "") == "cleared"
+
+
+def test_overview_lists_field_changes_under_member():
+    old = [{"id": "x", "name": "Dr X", "position": "Researcher"}]
+    new = [{"id": "x", "name": "Dr X", "position": "Professor"}]
+    out = render_pr_body_overview(classify_diff(old, new, []))
+    assert "- **Dr X**: position\n  - position: `Researcher` → `Professor`" in out
