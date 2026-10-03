@@ -4,7 +4,7 @@
     "working_groups": 4,
     "people": 219,
     "people_with_bios": 98,
-    "edges": 606,
+    "edges": 601,
     "themes": 17,
     "panels_matched": 14,
     "panel_edges": 54,
@@ -59,19 +59,25 @@
       "id": "theme-crisis-management-and-critical-systems-resilience",
       "type": "theme",
       "name": "Crisis management and critical systems resilience",
-      "memberCount": 3
+      "memberCount": 4
     },
     {
       "id": "theme-cyber-and-emerging-technology",
       "type": "theme",
       "name": "Cyber and emerging technology",
-      "memberCount": 24
+      "memberCount": 26
     },
     {
       "id": "theme-democracy-governance-and-political-change",
       "type": "theme",
       "name": "Democracy, governance and political change",
       "memberCount": 6
+    },
+    {
+      "id": "theme-disciplines-theory-and-methods",
+      "type": "theme",
+      "name": "Disciplines, theory and methods",
+      "memberCount": 24
     },
     {
       "id": "theme-economic-security-and-geoeconomics",
@@ -89,13 +95,13 @@
       "id": "theme-european-and-transatlantic-security-order",
       "type": "theme",
       "name": "European and transatlantic security order",
-      "memberCount": 14
+      "memberCount": 19
     },
     {
       "id": "theme-foreign-policy-and-diplomacy",
       "type": "theme",
       "name": "Foreign policy and diplomacy",
-      "memberCount": 38
+      "memberCount": 34
     },
     {
       "id": "theme-identity-narratives-and-ideational-security",
@@ -113,7 +119,7 @@
       "id": "theme-peace-mediation-and-reconciliation",
       "type": "theme",
       "name": "Peace, mediation and reconciliation",
-      "memberCount": 10
+      "memberCount": 5
     },
     {
       "id": "theme-political-psychology-public-opinion-and-decision-making",
@@ -125,31 +131,25 @@
       "id": "theme-security-and-defence",
       "type": "theme",
       "name": "Security and defence",
-      "memberCount": 39
+      "memberCount": 25
     },
     {
       "id": "theme-strategy-and-deterrence",
       "type": "theme",
       "name": "Strategy and deterrence",
-      "memberCount": 15
-    },
-    {
-      "id": "theme-theory-and-methods",
-      "type": "theme",
-      "name": "Theory and methods",
-      "memberCount": 24
+      "memberCount": 16
     },
     {
       "id": "theme-transnational-and-human-security",
       "type": "theme",
       "name": "Transnational and human security",
-      "memberCount": 20
+      "memberCount": 21
     },
     {
       "id": "theme-war-military-history-and-armed-conflict",
       "type": "theme",
       "name": "War, military history and armed conflict",
-      "memberCount": 4
+      "memberCount": 12
     },
     {
       "id": "adam-hanzel",
@@ -3227,19 +3227,23 @@
     },
     {
       "source": "adam-hanzel",
-      "target": "theme-theory-and-methods"
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "adam-hanzel",
       "target": "theme-transnational-and-human-security"
     },
     {
+      "source": "adam-hanzel",
+      "target": "theme-war-military-history-and-armed-conflict"
+    },
+    {
       "source": "alexander-lanoszka",
       "target": "theme-european-and-transatlantic-security-order"
     },
     {
-      "source": "alexander-lanoszka",
-      "target": "theme-foreign-policy-and-diplomacy"
+      "source": "alexandra-brankova",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "alexandra-brankova",
@@ -3250,16 +3254,16 @@
       "target": "theme-intelligence-information-and-influence"
     },
     {
-      "source": "alexandra-brankova",
-      "target": "theme-theory-and-methods"
-    },
-    {
       "source": "aliaksei-kazharski",
       "target": "theme-foreign-policy-and-diplomacy"
     },
     {
       "source": "aliaksei-kazharski",
       "target": "theme-identity-narratives-and-ideational-security"
+    },
+    {
+      "source": "alin-barbantan",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "alin-barbantan",
@@ -3270,20 +3274,16 @@
       "target": "theme-strategy-and-deterrence"
     },
     {
-      "source": "alin-barbantan",
-      "target": "theme-theory-and-methods"
-    },
-    {
       "source": "andriy-tyushka",
-      "target": "theme-foreign-policy-and-diplomacy"
-    },
-    {
-      "source": "andriy-tyushka",
-      "target": "theme-security-and-defence"
+      "target": "theme-european-and-transatlantic-security-order"
     },
     {
       "source": "andriy-tyushka",
       "target": "theme-strategy-and-deterrence"
+    },
+    {
+      "source": "andriy-tyushka",
+      "target": "theme-war-military-history-and-armed-conflict"
     },
     {
       "source": "anna-pagnacco",
@@ -3292,10 +3292,6 @@
     {
       "source": "anna-seliverstova",
       "target": "theme-eu-un-and-other-international-organisations"
-    },
-    {
-      "source": "anna-seliverstova",
-      "target": "theme-foreign-policy-and-diplomacy"
     },
     {
       "source": "antonia-laura-pup",
@@ -3335,11 +3331,15 @@
     },
     {
       "source": "athanasios-skraparlis",
-      "target": "theme-security-and-defence"
+      "target": "theme-cyber-and-emerging-technology"
     },
     {
       "source": "athanasios-skraparlis",
       "target": "theme-transnational-and-human-security"
+    },
+    {
+      "source": "avnihan-k-r-s-k",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "avnihan-k-r-s-k",
@@ -3350,8 +3350,8 @@
       "target": "theme-identity-narratives-and-ideational-security"
     },
     {
-      "source": "avnihan-k-r-s-k",
-      "target": "theme-theory-and-methods"
+      "source": "betul-dogan-akkas",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "betul-dogan-akkas",
@@ -3360,10 +3360,6 @@
     {
       "source": "betul-dogan-akkas",
       "target": "theme-security-and-defence"
-    },
-    {
-      "source": "betul-dogan-akkas",
-      "target": "theme-theory-and-methods"
     },
     {
       "source": "carla-sofia-ferreira-fernandes",
@@ -3407,19 +3403,19 @@
     },
     {
       "source": "david-matsaberidze",
-      "target": "theme-peace-mediation-and-reconciliation"
+      "target": "theme-security-and-defence"
     },
     {
       "source": "david-matsaberidze",
-      "target": "theme-security-and-defence"
+      "target": "theme-war-military-history-and-armed-conflict"
+    },
+    {
+      "source": "david-morgan-owen",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "david-morgan-owen",
       "target": "theme-strategy-and-deterrence"
-    },
-    {
-      "source": "david-morgan-owen",
-      "target": "theme-theory-and-methods"
     },
     {
       "source": "david-morgan-owen",
@@ -3515,10 +3511,6 @@
     },
     {
       "source": "gesine-weber",
-      "target": "theme-security-and-defence"
-    },
-    {
-      "source": "gesine-weber",
       "target": "theme-strategy-and-deterrence"
     },
     {
@@ -3535,7 +3527,23 @@
     },
     {
       "source": "giray-sadik",
+      "target": "theme-cyber-and-emerging-technology"
+    },
+    {
+      "source": "giray-sadik",
+      "target": "theme-foreign-policy-and-diplomacy"
+    },
+    {
+      "source": "giray-sadik",
       "target": "theme-intelligence-information-and-influence"
+    },
+    {
+      "source": "giray-sadik",
+      "target": "theme-strategy-and-deterrence"
+    },
+    {
+      "source": "giray-sadik",
+      "target": "theme-transnational-and-human-security"
     },
     {
       "source": "giulia-biselli",
@@ -3575,10 +3583,6 @@
     },
     {
       "source": "immanuel-rummel",
-      "target": "theme-security-and-defence"
-    },
-    {
-      "source": "immanuel-rummel",
       "target": "theme-strategy-and-deterrence"
     },
     {
@@ -3591,11 +3595,11 @@
     },
     {
       "source": "islam-jusufi",
-      "target": "theme-security-and-defence"
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "islam-jusufi",
-      "target": "theme-theory-and-methods"
+      "target": "theme-security-and-defence"
     },
     {
       "source": "ivan-zaccagnini",
@@ -3607,7 +3611,7 @@
     },
     {
       "source": "ivan-zaccagnini",
-      "target": "theme-security-and-defence"
+      "target": "theme-war-military-history-and-armed-conflict"
     },
     {
       "source": "jacob-grech",
@@ -3635,15 +3639,19 @@
     },
     {
       "source": "johannes-lucht",
-      "target": "theme-peace-mediation-and-reconciliation"
-    },
-    {
-      "source": "johannes-lucht",
       "target": "theme-strategy-and-deterrence"
     },
     {
       "source": "johannes-lucht",
       "target": "theme-transnational-and-human-security"
+    },
+    {
+      "source": "johannes-lucht",
+      "target": "theme-war-military-history-and-armed-conflict"
+    },
+    {
+      "source": "john-helferich",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "john-helferich",
@@ -3656,10 +3664,6 @@
     {
       "source": "john-helferich",
       "target": "theme-political-psychology-public-opinion-and-decision-making"
-    },
-    {
-      "source": "john-helferich",
-      "target": "theme-theory-and-methods"
     },
     {
       "source": "julia-carver",
@@ -3715,11 +3719,11 @@
     },
     {
       "source": "leonardo-pesci",
-      "target": "theme-identity-narratives-and-ideational-security"
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "leonardo-pesci",
-      "target": "theme-theory-and-methods"
+      "target": "theme-identity-narratives-and-ideational-security"
     },
     {
       "source": "leonardo-pesci",
@@ -3738,19 +3742,11 @@
       "target": "theme-foreign-policy-and-diplomacy"
     },
     {
-      "source": "li-yang",
-      "target": "theme-security-and-defence"
-    },
-    {
       "source": "linde-desmaele",
       "target": "theme-european-and-transatlantic-security-order"
     },
     {
       "source": "linde-desmaele",
-      "target": "theme-security-and-defence"
-    },
-    {
-      "source": "linde-desmaele",
       "target": "theme-strategy-and-deterrence"
     },
     {
@@ -3760,10 +3756,6 @@
     {
       "source": "lucian-bumeder",
       "target": "theme-strategy-and-deterrence"
-    },
-    {
-      "source": "ludovica-castelli",
-      "target": "theme-foreign-policy-and-diplomacy"
     },
     {
       "source": "ludovica-castelli",
@@ -3782,16 +3774,12 @@
       "target": "theme-european-and-transatlantic-security-order"
     },
     {
-      "source": "mahmoud-javadi",
-      "target": "theme-security-and-defence"
+      "source": "marco-cifra",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "marco-cifra",
       "target": "theme-security-and-defence"
-    },
-    {
-      "source": "marco-cifra",
-      "target": "theme-theory-and-methods"
     },
     {
       "source": "marco-cifra",
@@ -3811,11 +3799,15 @@
     },
     {
       "source": "mark-rhinard",
-      "target": "theme-foreign-policy-and-diplomacy"
+      "target": "theme-european-and-transatlantic-security-order"
     },
     {
       "source": "mark-rhinard",
-      "target": "theme-security-and-defence"
+      "target": "theme-foreign-policy-and-diplomacy"
+    },
+    {
+      "source": "marko-kovacevic",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "marko-kovacevic",
@@ -3826,20 +3818,16 @@
       "target": "theme-security-and-defence"
     },
     {
-      "source": "marko-kovacevic",
-      "target": "theme-theory-and-methods"
-    },
-    {
       "source": "martin-havacek",
       "target": "theme-cyber-and-emerging-technology"
-    },
-    {
-      "source": "martin-havacek",
-      "target": "theme-security-and-defence"
     },
     {
       "source": "mattia-sguazzini",
       "target": "theme-cyber-and-emerging-technology"
+    },
+    {
+      "source": "mattia-sguazzini",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "mattia-sguazzini",
@@ -3847,11 +3835,11 @@
     },
     {
       "source": "mattia-sguazzini",
-      "target": "theme-security-and-defence"
+      "target": "theme-european-and-transatlantic-security-order"
     },
     {
-      "source": "mattia-sguazzini",
-      "target": "theme-theory-and-methods"
+      "source": "mehmet-babacan",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "mehmet-babacan",
@@ -3862,16 +3850,12 @@
       "target": "theme-security-and-defence"
     },
     {
-      "source": "mehmet-babacan",
-      "target": "theme-theory-and-methods"
+      "source": "meret-steybe",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "meret-steybe",
       "target": "theme-foreign-policy-and-diplomacy"
-    },
-    {
-      "source": "meret-steybe",
-      "target": "theme-theory-and-methods"
     },
     {
       "source": "monika-sus",
@@ -3880,10 +3864,6 @@
     {
       "source": "monika-sus",
       "target": "theme-european-and-transatlantic-security-order"
-    },
-    {
-      "source": "monika-sus",
-      "target": "theme-security-and-defence"
     },
     {
       "source": "monika-sus",
@@ -3911,7 +3891,7 @@
     },
     {
       "source": "mykhailo-mosora",
-      "target": "theme-peace-mediation-and-reconciliation"
+      "target": "theme-war-military-history-and-armed-conflict"
     },
     {
       "source": "niklas-karlen",
@@ -3923,14 +3903,6 @@
     },
     {
       "source": "niklas-karlen",
-      "target": "theme-peace-mediation-and-reconciliation"
-    },
-    {
-      "source": "niklas-karlen",
-      "target": "theme-security-and-defence"
-    },
-    {
-      "source": "niklas-karlen",
       "target": "theme-war-military-history-and-armed-conflict"
     },
     {
@@ -3947,11 +3919,11 @@
     },
     {
       "source": "p-nar-akgul",
-      "target": "theme-foreign-policy-and-diplomacy"
+      "target": "theme-european-and-transatlantic-security-order"
     },
     {
       "source": "p-nar-akgul",
-      "target": "theme-security-and-defence"
+      "target": "theme-foreign-policy-and-diplomacy"
     },
     {
       "source": "pablo-arriazu",
@@ -3967,7 +3939,7 @@
     },
     {
       "source": "paulina-polko",
-      "target": "theme-theory-and-methods"
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "paulina-polko",
@@ -3975,6 +3947,10 @@
     },
     {
       "source": "pavle-nedic",
+      "target": "theme-disciplines-theory-and-methods"
+    },
+    {
+      "source": "pavle-nedic",
       "target": "theme-foreign-policy-and-diplomacy"
     },
     {
@@ -3982,24 +3958,20 @@
       "target": "theme-security-and-defence"
     },
     {
-      "source": "pavle-nedic",
-      "target": "theme-theory-and-methods"
-    },
-    {
       "source": "pavlosioannis-koktsidis",
       "target": "theme-foreign-policy-and-diplomacy"
     },
     {
       "source": "pavlosioannis-koktsidis",
-      "target": "theme-peace-mediation-and-reconciliation"
+      "target": "theme-war-military-history-and-armed-conflict"
+    },
+    {
+      "source": "pieter-zhao",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "pieter-zhao",
       "target": "theme-strategy-and-deterrence"
-    },
-    {
-      "source": "pieter-zhao",
-      "target": "theme-theory-and-methods"
     },
     {
       "source": "pieter-zhao",
@@ -4015,11 +3987,11 @@
     },
     {
       "source": "rafael-hurtado-valdivieso",
-      "target": "theme-foreign-policy-and-diplomacy"
+      "target": "theme-transnational-and-human-security"
     },
     {
       "source": "rafael-hurtado-valdivieso",
-      "target": "theme-transnational-and-human-security"
+      "target": "theme-war-military-history-and-armed-conflict"
     },
     {
       "source": "richard-skalt",
@@ -4031,6 +4003,10 @@
     },
     {
       "source": "rusudan-zabakhidze",
+      "target": "theme-crisis-management-and-critical-systems-resilience"
+    },
+    {
+      "source": "rusudan-zabakhidze",
       "target": "theme-security-and-defence"
     },
     {
@@ -4039,11 +4015,11 @@
     },
     {
       "source": "sara-russo",
-      "target": "theme-intelligence-information-and-influence"
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "sara-russo",
-      "target": "theme-theory-and-methods"
+      "target": "theme-intelligence-information-and-influence"
     },
     {
       "source": "saurav-narain",
@@ -4083,11 +4059,11 @@
     },
     {
       "source": "sprincean-serghei",
-      "target": "theme-security-and-defence"
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "sprincean-serghei",
-      "target": "theme-theory-and-methods"
+      "target": "theme-security-and-defence"
     },
     {
       "source": "sprincean-serghei",
@@ -4103,7 +4079,11 @@
     },
     {
       "source": "tanja-pavleska",
-      "target": "theme-theory-and-methods"
+      "target": "theme-disciplines-theory-and-methods"
+    },
+    {
+      "source": "teodora-stoicescu",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "teodora-stoicescu",
@@ -4111,19 +4091,15 @@
     },
     {
       "source": "teodora-stoicescu",
-      "target": "theme-theory-and-methods"
-    },
-    {
-      "source": "teodora-stoicescu",
       "target": "theme-transnational-and-human-security"
     },
     {
       "source": "tolga-c-kr-kc",
-      "target": "theme-eu-un-and-other-international-organisations"
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "tolga-c-kr-kc",
-      "target": "theme-theory-and-methods"
+      "target": "theme-eu-un-and-other-international-organisations"
     },
     {
       "source": "tolga-c-kr-kc",
@@ -4140,6 +4116,10 @@
     {
       "source": "vasiliki-plessia-aravani",
       "target": "theme-security-and-defence"
+    },
+    {
+      "source": "wendy-he",
+      "target": "theme-disciplines-theory-and-methods"
     },
     {
       "source": "wendy-he",
@@ -4154,8 +4134,12 @@
       "target": "theme-security-and-defence"
     },
     {
-      "source": "wendy-he",
-      "target": "theme-theory-and-methods"
+      "source": "yanina-shved-dogrul",
+      "target": "theme-disciplines-theory-and-methods"
+    },
+    {
+      "source": "yanina-shved-dogrul",
+      "target": "theme-european-and-transatlantic-security-order"
     },
     {
       "source": "yanina-shved-dogrul",
@@ -4164,10 +4148,6 @@
     {
       "source": "yanina-shved-dogrul",
       "target": "theme-security-and-defence"
-    },
-    {
-      "source": "yanina-shved-dogrul",
-      "target": "theme-theory-and-methods"
     },
     {
       "source": "yijun-xu",
