@@ -185,11 +185,14 @@ def test_place_names_dropped_from_keywords() -> None:
     drops = sync_bios.load_keyword_drops()
     expect("country name is dropped", "Ireland".lower() in drops, True)
     expect("sub-region name is dropped", "MENA region".lower() in drops, True)
-    # The two that would break if the match ever went to substrings: a themed
-    # keyword that is a country, and a keyword that contains one.
-    expect("themed country keyword survives", "India".lower() in drops, False)
+    # India sat in a theme until the October 2026 audit moved every place
+    # name to the regions facet, so it is dropped too. What would break if
+    # the match ever went to substrings is a keyword containing a place.
+    expect("formerly themed country is dropped", "India".lower() in drops, True)
     expect("keyword containing a country survives",
            "Russia-Ukraine war".lower() in drops, False)
+    expect("keyword containing a place survives",
+           "Black Sea security".lower() in drops, False)
 
 
 def test_phrase_keywords_split_into_their_parts() -> None:
@@ -1317,8 +1320,8 @@ def test_load_keyword_themes() -> None:
            theme_of.get("disinformation"), "Intelligence, information and influence")
     expect("eu foreign policy → Foreign policy and diplomacy",
            theme_of.get("eu foreign policy"), "Foreign policy and diplomacy")
-    expect("policy evaluation → Theory and methods",
-           theme_of.get("policy evaluation"), "Theory and methods")
+    expect("policy evaluation → Disciplines, theory and methods",
+           theme_of.get("policy evaluation"), "Disciplines, theory and methods")
     expect("economic statecraft → Economic security and geoeconomics",
            theme_of.get("economic statecraft"), "Economic security and geoeconomics")
     # Every keyword maps to at most one theme (the loader keeps the last
