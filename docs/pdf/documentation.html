@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NetSec — Website & Directory · Documentation Pack v1.13.1</title>
+<title>NetSec — Website & Directory · Documentation Pack v1.13.2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -652,7 +652,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.13.1 · August 2026</div>
+        <div class="value">v1.13.2 · October 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -799,7 +799,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
         </svg>
       </span>
       <div class="t">Auto-sync</div>
-      <div class="d">Weekly GitHub Actions pull bios from a Google Form and MC roster from cost.eu.</div>
+      <div class="d">Scheduled GitHub Actions pull bios from a Google Form and MC roster from cost.eu.</div>
     </div>
 
     <div class="feat">
@@ -841,7 +841,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.13.1 · August 2026</span>
+    <span class="url">v1.13.2 · October 2026</span>
   </footer>
 
 </section>
@@ -1025,7 +1025,7 @@ flowchart LR
     F["cost.eu/actions/CA24154"] -.->|weekly cron| G["sync-cost.yml"]
     G -->|PR| C
     H["Google Form"] -->|writes| I["Google Sheet"]
-    I -.->|weekly cron| J["sync-bios.yml"]
+    I -.->|daily cron| J["sync-bios.yml"]
     J -->|PR| C
     K["Contact form"] -->|POST| L["Formspree<br/>meenwyrb"]
     L -->|email| M["Action mailbox"]
@@ -1195,7 +1195,8 @@ flowchart TB
     <div class="card">
       <h4>Operator-facing</h4>
       <ul>
-        <li><strong>Three weekly sync workflows</strong> that open PRs rather than push: <code>sync-bios.yml</code> (Google Form to <code>bios.json</code>), <code>sync-indico.yml</code> (Indico to <code>indico.json</code> with <code>events.json</code> and <code>calendar.ics</code> patched in the same PR), and <code>sync-roadmap.yml</code> (autostamp on <code>docs/roadmap-2026.md</code> after changelog merges). All three auto-merge once review passes.</li>
+        <li><strong>Four sync workflows</strong> that open PRs rather than push: <code>sync-bios.yml</code> (daily, Google Form to <code>bios.json</code>), <code>sync-cost.yml</code> (weekly, cost.eu Working Group membership), <code>sync-indico.yml</code> (daily, Indico to <code>indico.json</code> with <code>events.json</code> patched in the same PR) and <code>roadmap-refresh.yml</code> (daily, the roadmap autostamp and milestone progress). Each PR auto-merges once the required checks pass.</li>
+        <li><strong>A failure alarm</strong> (<code>failure-alarm.yml</code>): when a scheduled workflow or the Pages deploy fails, times out or cannot start, it opens an issue assigned to the maintainers, or comments on the open one for that workflow.</li>
         <li><code>data-bios-roles</code> attribute pattern: any element with it gets hydrated from <code>bios.json</code> at load.</li>
         <li>MC-member auto-tagging via <code>mc-members.json</code>.</li>
         <li>Brand-accurate social icons (Simple Icons SVGs).</li>
@@ -1217,10 +1218,9 @@ sequenceDiagram
     participant M as Member
     participant F as Google Form
     participant S as Google Sheet
-    participant W as sync-bios.yml<br/>(Mondays 05:15 UTC)
+    participant W as sync-bios.yml<br/>(daily 05:15 UTC)
     participant P as sync-bios.py
     participant R as Repo<br/>(bios-sync/auto)
-    participant A as Admin
 
     M->>F: Submit bio
     F->>S: Append row<br/>(required consent ticked)
@@ -1231,7 +1231,7 @@ sequenceDiagram
     P->>R: git diff bios.json + photos
     alt Diff non-empty
         P->>R: Open PR
-        A->>R: Review + merge
+        R->>R: Auto-merge once checks pass
         R-->>F: Live on /people.html
     else No diff
         P-->>P: Exit 0
@@ -1249,17 +1249,16 @@ sequenceDiagram
     participant W as sync-cost.yml<br/>(Mondays 05:00 UTC)
     participant P as sync-cost.py
     participant R as Repo<br/>(cost-sync/auto)
-    participant A as Admin
 
     W->>P: Run sync-cost.py
     P->>C: GET HTML
     P->>P: Parse Membership table → WG_MAP
     P->>P: Regex over malformed<br/>Leadership table → roles
     P->>P: Reconcile into bios.json seed entries
-    P->>R: git diff index.html + bios.json
+    P->>R: git diff wg.json, mc-members.json,<br/>bios.json
     alt Diff non-empty
         P->>R: Open PR
-        A->>R: Review + merge
+        R->>R: Auto-merge once checks pass
     else No diff
         P-->>P: Exit 0
     end
@@ -1318,50 +1317,46 @@ sequenceDiagram
   </div>
 
   <h2>Data flow: roadmap autostamp</h2>
-  <p>Whenever the changelog gains a new entry on <code>main</code>, the public roadmap's autostamped block in <code>docs/roadmap-2026.md</code> is rewritten to reflect the new release surface.</p>
+  <p>Once a day, the autostamped block in <code>docs/roadmap-2026.md</code> is rewritten from the changelog's <code>[Unreleased]</code> section, and <code>data/roadmap-progress.json</code> is refreshed from the GitHub milestones. The workflow runs on a schedule and not on every changelog change, which once produced 36 automated PRs in a day. <code>scripts/release.sh</code> refreshes both itself, so a release never waits on the schedule.</p>
 
   <div class="diagram">
     <div class="mermaid">
 sequenceDiagram
-    participant Dev as PR touching<br/>CHANGELOG.md
-    participant M as main branch
-    participant W as sync-roadmap.yml
-    participant P as sync-roadmap.py
-    participant D as docs/roadmap-2026.md
-    participant R as Repo<br/>(roadmap-sync/auto)
-    participant A as Admin
+    participant C as Cron<br/>(daily 07:00 UTC)
+    participant W as roadmap-refresh.yml
+    participant P as The two<br/>roadmap scripts
+    participant D as roadmap-2026.md +<br/>roadmap-progress.json
+    participant R as Repo<br/>(roadmap-refresh/auto)
 
-    Dev->>M: Merge
-    M->>W: Fire on push
-    W->>P: Run sync-roadmap.py
-    P->>P: Read CHANGELOG [Unreleased]<br/>count bullets per category
-    P->>P: Find latest SemVer tag
-    P->>D: Rewrite AUTOSTAMP block
-    P->>R: git diff docs/roadmap-2026.md
+    C->>W: Fire
+    W->>P: Run both scripts
+    P->>P: Count [Unreleased] bullets per category,<br/>find the latest SemVer tag
+    P->>P: Read open and closed issues<br/>per GitHub milestone
+    P->>D: Rewrite AUTOSTAMP block<br/>and the progress file
     alt Diff non-empty
-        P->>R: Open PR on roadmap-sync/auto
-        A->>R: Review + auto-merge
+        W->>R: Open or update one PR
+        R->>R: Auto-merge once checks pass
     else No diff
-        P-->>P: Exit 0
+        W-->>W: Exit 0
     end
     </div>
-    <div class="diagram-caption">Figure 9 &middot; Roadmap autostamp. Added v1.7.0. The script never edits CHANGELOG.md or the planned / in-progress / shipped cards on the public <code>roadmap.html</code> directly: it only refreshes the markdown autostamp block read by Action evaluators.</div>
+    <div class="diagram-caption">Figure 9 &middot; Roadmap autostamp. Added v1.7.0, made a daily refresh in v1.14.0. The scripts never edit CHANGELOG.md or the planned / in-progress / shipped cards on the public <code>roadmap.html</code> directly. They refresh only the markdown autostamp block read by Action evaluators and the milestone progress file.</div>
   </div>
 
   <h2>Data flow: news to social media</h2>
-  <p>News on the site (and the weekly member spotlight) can be reposted to Bluesky, with a human approval step before anything goes public. The pipeline is a <em>consumer</em> of surfaces that are already published, so it never invents content: it reposts the RSS feed and the rotated spotlight. Two posting paths run side by side, with different risk profiles.</p>
+  <p>News on the site (and the weekly member spotlight) can be reposted to Bluesky and LinkedIn, with a human approval step before anything goes public. The pipeline is a <em>consumer</em> of surfaces that are already published, so it never invents content: it reposts the RSS feed and the rotated spotlight. Two posting paths run side by side, with different risk profiles.</p>
   <p>The <strong>news / curated-thread path</strong> is approval-gated: a job pauses inside the <code>social</code> environment until a required reviewer reads the exact post and approves it. A news item can opt out, or hand itself to a hand-written multi-post thread, through a <code>social</code> field in <code>data/news.json</code>. The <strong>weekly spotlight path</strong> is treated as low-risk and posts ungated from the rotation workflow inside a separate <code>social-auto</code> environment. Both paths share one dedup ledger (<code>data/social-posted.json</code>), so nothing is ever posted twice.</p>
 
   <div class="diagram">
     <div class="mermaid">
 sequenceDiagram
-    participant Ed as Editor / news label
+    participant Ed as Editor (PR)
     participant N as news.xml + data/news.json
     participant SB as social-bluesky.yml
     participant A as Reviewer
-    participant SR as spotlight-rotate.yml<br/>(Mon 06:00)
+    participant SR as spotlight-rotate.yml<br/>(Tue 10:00 Paris)
     participant L as data/social-posted.json
-    participant B as Bluesky
+    participant B as Bluesky + LinkedIn
 
     Note over Ed,A: News + curated threads (gated)
     Ed->>N: Add item (honours the `social` field)
@@ -1378,11 +1373,11 @@ sequenceDiagram
     SR->>B: Post the week's member (social-auto)
     SR->>L: Record the ISO-week key
     </div>
-    <div class="diagram-caption">Figure 10 &middot; Social pipeline. Added v1.12.0. The <code>social</code> gate protects both the action (posting) and the access: the Bluesky credentials are environment secrets, released only after a reviewer approves. The dedup key is the news item id (its <code>&lt;guid&gt;</code>), not the link, so two items pointing at the same page never collide.</div>
+    <div class="diagram-caption">Figure 10 &middot; Social pipeline. Added v1.12.0. The <code>social</code> gate protects both the action (posting) and the access: the Bluesky and LinkedIn credentials are environment secrets, released only after a reviewer approves. The dedup key is the news item id (its <code>&lt;guid&gt;</code>), not the link, so two items pointing at the same page never collide.</div>
   </div>
 
   <h2>Data flow: per-member share cards</h2>
-  <p>Every directory member has a personal Open Graph image at <code>assets/og/people/&lt;slug&gt;.png</code>, so sharing their profile unfurls as <em>that person</em> rather than the generic site card. These are never hand-drawn: member data flows in from the weekly bios sync, and <code>scripts/build-og-cards.py</code> draws the cards during the Pages deploy. They are not committed.</p>
+  <p>Every directory member has a personal Open Graph image at <code>assets/og/people/&lt;slug&gt;.png</code>, so sharing their profile unfurls as <em>that person</em> rather than the generic site card. These are never hand-drawn: member data flows in from the daily bios sync, and <code>scripts/build-og-cards.py</code> draws the cards during the Pages deploy. They are not committed.</p>
   <p>A card is keyed by a hash of exactly the fields it shows (name, role, affiliation, country and flag, headshot path plus the photo's SHA-256, working-group pills, mentorship, STSM hosting). The builder re-renders only the members whose hash changed or whose PNG is missing, recorded in <code>_manifest.json</code>, so the weekly auto-PR stays churn-free instead of rewriting dozens of binaries. Editing research keywords alone does not re-render a card, because keywords are not on it.</p>
 
   <div class="diagram">
@@ -1390,7 +1385,7 @@ sequenceDiagram
 sequenceDiagram
     participant F as Google Form
     participant Bi as data/bios.json
-    participant Sy as sync-bios.yml<br/>(weekly)
+    participant Sy as sync-bios.yml<br/>(daily)
     participant OG as build-og-cards.py
     participant Mf as _manifest.json
     participant Png as assets/og/people/&lt;slug&gt;.png
@@ -1479,6 +1474,7 @@ sequenceDiagram
 │   │                                #   canonical_keywords + keyword_aggregate v1.7.0)
 │   ├── sync-indico.py               # Indico → indico.json + events.json + calendar.ics (v1.6.0)
 │   ├── sync-roadmap.py              # CHANGELOG → docs/roadmap-2026.md autostamp (v1.7.0)
+│   ├── sync-roadmap-progress.py     # GitHub milestones → data/roadmap-progress.json
 │   ├── promote-roadmap.py           # Flips public roadmap cards planned→shipped on release (v1.7.0)
 │   ├── test-sync-bios.py            # Pipeline tests
 │   ├── test-sync-indico.py          # Pipeline tests
@@ -1493,16 +1489,22 @@ sequenceDiagram
 │   └── requirements.txt
 │
 ├── .github/workflows/
-│   ├── sync-cost.yml                # Weekly cron
-│   ├── sync-bios.yml                # Weekly cron, opens PR + auto-merges
+│   ├── pages-deploy.yml             # Builds generated files, deploys to Pages (push + every 6 h)
+│   ├── sync-bios.yml                # Daily cron, opens PR + auto-merges
+│   ├── sync-cost.yml                # Weekly cron, opens PR + auto-merges
 │   ├── sync-indico.yml              # Daily cron, opens PR + auto-merges (v1.6.0; PR-based v1.6.1)
-│   ├── sync-roadmap.yml             # Fires on CHANGELOG.md changes to main (v1.7.0)
-│   └── i18n-drift.yml               # Runs drift checker on HTML PRs
+│   ├── roadmap-refresh.yml          # Daily autostamp + milestone progress (v1.14.0)
+│   ├── spotlight-rotate.yml         # Weekly member spotlight + social post
+│   ├── social-bluesky.yml           # Approval-gated news posts to Bluesky + LinkedIn
+│   ├── failure-alarm.yml            # Files an assigned issue when a scheduled run fails
+│   ├── launch-qa-link-check.yml     # Link check on HTML PRs + weekly
+│   ├── i18n-drift.yml               # Runs drift checker on HTML PRs
+│   └── …                            # 20 further lints, gates and housekeeping jobs
 │
 ├── docs/                            # Internal documentation
 │   ├── architecture.md  design-system.md  admin-guide.md
 │   ├── i18n.md  seo.md  bios-setup.md
-│   ├── roadmap-2026.md              # AUTOSTAMP block written by sync-roadmap.py
+│   ├── roadmap-2026.md              # AUTOSTAMP block written by roadmap-refresh.yml
 │   ├── pdf/                         # Source for this documentation pack
 │   └── promo/                       # Promotional poster (A3) + card-size
 │
@@ -1912,15 +1914,16 @@ python3 scripts/inject-seo.py --check    # report-only mode (non-zero exit on dr
     </tbody>
   </table>
 
-  <h2>Reviewing a weekly sync PR</h2>
-  <p>Three sync workflows now open pull requests against <code>main</code> on dedicated automation branches. Any of them may be empty in a given run; that is a feature, not a bug.</p>
+  <h2>Reviewing a sync PR</h2>
+  <p>Four sync workflows open pull requests against <code>main</code> on dedicated automation branches, and each PR auto-merges once the required checks pass. A run with nothing to change opens no PR.</p>
 
   <table>
     <thead><tr><th>Workflow</th><th>Cadence</th><th>Branch</th><th>What the diff covers</th></tr></thead>
     <tbody>
-      <tr><td><code>sync-bios.yml</code></td><td>Weekly (Mondays 05:15 UTC)</td><td><code>bios-sync/auto</code></td><td>New or edited bios in <code>data/bios.json</code> plus any photo updates under <code>assets/images/people/</code>. Reviewer attention focuses here, since every new bio passes through a human's eyes.</td></tr>
+      <tr><td><code>sync-bios.yml</code></td><td>Daily (05:15 UTC)</td><td><code>bios-sync/auto</code></td><td>New or edited bios in <code>data/bios.json</code> plus any photo updates under <code>assets/images/people/</code>. Reviewer attention focuses here, since every new bio passes through a human's eyes.</td></tr>
       <tr><td><code>sync-indico.yml</code></td><td>Daily</td><td><code>indico-sync/auto</code></td><td>Refresh of <code>data/indico.json</code> from the Indico instance; when <code>events.json</code> carries a matching <code>indicoEventId</code>, the home-page banner summary / start / end and <code>calendar.ics</code> are patched in the same PR. Skim the diff for sensible session titles, room names, and speaker spellings.</td></tr>
-      <tr><td><code>sync-roadmap.yml</code></td><td>On <code>CHANGELOG.md</code> changes to <code>main</code></td><td><code>roadmap-sync/auto</code></td><td>Rewrite of the AUTOSTAMP block in <code>docs/roadmap-2026.md</code>: counts of bullets per category in <code>[Unreleased]</code> plus the latest SemVer tag. No public-page impact; safe to auto-merge once it looks coherent.</td></tr>
+      <tr><td><code>sync-cost.yml</code></td><td>Weekly (Mondays 05:00 UTC)</td><td><code>cost-sync/auto</code></td><td>Working Group membership, leadership and the MC roster from cost.eu, in <code>data/wg.json</code>, <code>data/mc-members.json</code> and <code>data/bios.json</code>. The PR body leads with a one-line change summary.</td></tr>
+      <tr><td><code>roadmap-refresh.yml</code></td><td>Daily (07:00 UTC)</td><td><code>roadmap-refresh/auto</code></td><td>The AUTOSTAMP block in <code>docs/roadmap-2026.md</code> (bullet counts per category in <code>[Unreleased]</code> plus the latest SemVer tag) and <code>data/roadmap-progress.json</code> from the GitHub milestones.</td></tr>
     </tbody>
   </table>
 
@@ -1933,18 +1936,15 @@ sequenceDiagram
     participant W as Workflow
     participant R as main branch
 
-    W->>G: Open PR on bios-sync/auto,<br/>indico-sync/auto, or roadmap-sync/auto
-    G->>A: Notify
-    A->>G: Read PR body (human-readable diff)
-    alt Looks right
-        A->>G: Approve + merge
-        G->>R: Squash-merge
-    else Something off
-        A->>G: Comment / close
-        A->>A: Fix at source<br/>(Sheet, Indico, or CHANGELOG)<br/>then re-run the workflow
+    W->>G: Open PR on an */auto branch,<br/>auto-merge armed
+    G->>G: Required checks run
+    G->>R: Squash-merge once green
+    A->>G: Read the PR body (human-readable diff)
+    alt Something off
+        A->>A: Fix at source<br/>(Sheet, cost.eu, Indico or CHANGELOG)<br/>then re-run the workflow
     end
     </div>
-    <div class="diagram-caption">Figure 16 · Soft-review policy. Every automation PR passes through a human's eyes before merge, even when auto-merge is enabled on the workflow.</div>
+    <div class="diagram-caption">Figure 16 · Soft-review policy. Automation PRs merge on green checks, and the admin reads the PR body after the fact, fixing anything wrong at its source.</div>
   </div>
 
   <p>The reviewer's job is <strong>not</strong> to fact-check research claims; it is to catch:</p>
@@ -1962,9 +1962,9 @@ sequenceDiagram
   <h3>Manually triggering a sync</h3>
   <ol>
     <li>Go to <em>Actions</em> in the GitHub repo.</li>
-    <li>Pick the workflow you need: <em>Sync member bios from Google Form</em>, <em>Sync WG membership from cost.eu</em>, <em>Sync ESSC 2026 programme from Indico</em>, or <em>Autostamp roadmap-2026.md</em>.</li>
+    <li>Pick the workflow you need: <em>Sync member bios from Google Form</em>, <em>Sync WG membership from cost.eu</em>, <em>Sync events from Indico</em>, or <em>Refresh roadmap surfaces</em>.</li>
     <li>Click <strong>Run workflow</strong> → <strong>main</strong> → <strong>Run</strong>.</li>
-    <li>Watch the run; if it opens a PR, review and merge.</li>
+    <li>Watch the run. If it opens a PR, the PR merges itself once the required checks pass.</li>
   </ol>
 
   <h3>Removing a member at their request</h3>
@@ -2026,9 +2026,9 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
     <thead><tr><th>Symptom</th><th>First port of call</th></tr></thead>
     <tbody>
       <tr><td>Site returns 404 / 500</td><td><a href="https://www.githubstatus.com">githubstatus.com</a></td></tr>
-      <tr><td>Sync workflow fails</td><td>Actions tab → click the failed run → scroll to the red step</td></tr>
+      <tr><td>Sync workflow fails</td><td>The <em>CI alarm</em> issue the failure alarm assigned to you links the run. Open it and scroll to the red step.</td></tr>
       <tr><td>Form submissions stop arriving</td><td>Formspree dashboard</td></tr>
-      <tr><td>New bio doesn't appear after Monday's sync</td><td>Check Google Sheet (row present? consent ticked?) → manually trigger <em>Sync member bios</em></td></tr>
+      <tr><td>New bio doesn't appear after the daily sync</td><td>Check Google Sheet (row present? consent ticked?) → manually trigger <em>Sync member bios</em></td></tr>
       <tr><td>Suspected security issue</td><td>Follow <code>SECURITY.md</code> — <strong>do not open a public issue</strong></td></tr>
       <tr><td>DNS / domain issue</td><td>Registrar admin; GitHub Pages settings as sanity check</td></tr>
     </tbody>
@@ -2166,11 +2166,11 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <h2>Supply-chain and CI hardening</h2>
   <ul>
-    <li><strong>Pinned third-party Actions.</strong> All <code>uses:</code> references in <code>.github/workflows/</code> are pinned to a major version tag (and where practical, to a commit SHA), so an upstream tag retag cannot inject new code without our review.</li>
+    <li><strong>Pinned third-party Actions.</strong> All <code>uses:</code> references in <code>.github/workflows/</code> are pinned to a full commit SHA, with the version in a trailing comment, so an upstream tag retag cannot inject new code without our review. Dependabot proposes each bump as a PR.</li>
     <li><strong>Least-privilege <code>GITHUB_TOKEN</code>.</strong> Each workflow declares the narrowest <code>permissions:</code> block it needs (<code>contents: write</code> for the sync jobs, <code>contents: read</code> elsewhere). The default token is read-only at the repository level.</li>
-    <li><strong>Two-person review on <code>main</code>.</strong> Sync workflows do not auto-merge; they open a pull request and wait for a human reviewer. New bios are explicitly reviewed before going public.</li>
+    <li><strong>Protected <code>main</code>.</strong> Every change, the sync workflows' included, reaches <code>main</code> through a pull request, and a ruleset holds the merge until the required checks pass (CodeQL, the link checker and the drift gates). Sync PRs then auto-merge, and the maintainer reviews them from the PR body.</li>
     <li><strong>No long-lived deploy keys.</strong> Deployment is handled by GitHub Pages itself, using the repository's own short-lived OIDC token, so there is no external secret to rotate.</li>
-    <li><strong>Source-of-truth visibility.</strong> Both data files (<code>data/bios.json</code>, <code>data/mc-members.json</code>) are version-controlled. Any malicious or accidental change is one <code>git revert</code> away.</li>
+    <li><strong>Version-controlled data.</strong> Both data files (<code>data/bios.json</code>, <code>data/mc-members.json</code>) are version-controlled. Any malicious or accidental change is one <code>git revert</code> away.</li>
   </ul>
 
   <h2>Branch and tag protection (GitHub rulesets)</h2>
@@ -2451,7 +2451,11 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <div class="changelog-entries">
 
-  <h2 class="current">v1.13.1 · August 2026 · Figure numbering</h2>
+  <h2 class="current">v1.13.2 · October 2026 · Automation catch-up</h2>
+  <p class="cl-summary">Pack-only revision correcting the automation described across Sections 02, 06 and 07, which had fallen behind the workflows. The roadmap autostamp (Figure 9) is the daily <code>roadmap-refresh.yml</code>, which replaced <code>sync-roadmap.yml</code> and also refreshes milestone progress. The bios sync runs daily, <code>sync-cost.yml</code> joins the sync table, and every sync PR auto-merges on green checks, so Figure 16 and the security section no longer describe a human approval before merge. Third-party Actions are recorded as SHA-pinned.</p>
+  <p class="cl-summary">The social pipeline (Figure 10) posts to LinkedIn as well as Bluesky, the spotlight runs on Tuesdays at 10:00 Paris time, and news enters by PR, since the issue-driven news publisher was removed. The new failure alarm, which files an assigned issue when a scheduled workflow fails, appears in Section 02 and in the escalation table. The website version on the cover moves with the next release.</p>
+
+  <h2>v1.13.1 · August 2026 · Figure numbering</h2>
   <p class="cl-summary">Every figure is renumbered in document order, one to seventeen. Two numbers were used twice (the About page and the end-to-end stack were both Figure 2, the Directory and the type-pairing plate both Figure 10), and the social and OG-card diagrams carried 13 and 14 while sitting eighth and ninth on the page, so a reader following a number could reach the wrong plate with nothing to tell them. The changelog entries below that point at a figure follow the new numbers, since they point at figures the document still contains: the page graph is Figure 4 and the Network Map is Figure 14. Captions only, no content change.</p>
 
   <h2>v1.13.0 · August 2026 · Section-level catch-up to website v1.13.0 and v1.14.0</h2>
