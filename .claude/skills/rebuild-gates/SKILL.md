@@ -68,7 +68,6 @@ inside a day (#1803, #1804).
 | `sync-bios.yml` | `assets/images/people/`, `data/bios.json` |
 | `sync-cost.yml` | `data/bios.json`, `data/cost-wg-state.json`, `data/mc-members.json`, `data/wg.json` |
 | `sync-indico.yml` | `data/events.json`, `data/indico.json` |
-| `news-publish.yml` | `data/news.json` |
 | `spotlight-rotate.yml` | `data/social-posted.json`, `data/spotlight.json` |
 | `social-bluesky.yml` | `data/social-posted.json` |
 | `roadmap-refresh.yml` | `data/roadmap-progress.json`, `docs/roadmap-2026.md` |

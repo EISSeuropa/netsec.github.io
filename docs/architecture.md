@@ -573,9 +573,22 @@ sweep (rule §11).
 │   ├── search-drift.yml             # Build sanity check on PRs (per-locale page count > 0)
 │   ├── data-shape-check.yml         # Shape lint + headless render smoke on data/** PRs; runs the --check drift gates (sitemap, directory index, network map, bio search stubs) (#724, #1428)
 │   ├── launch-qa-link-check.yml     # Internal+external link check + a11y-statement review-date check (weekly + root-HTML PRs)
-│   └── lighthouse.yml               # Lighthouse budget assertions per lighthouserc.json on HTML/CSS/JS PRs (#270; non-required)
+│   ├── lighthouse.yml               # Lighthouse budget assertions per lighthouserc.json on HTML/CSS/JS PRs (#270; non-required)
+│   ├── sync-indico.yml              # Daily cron + Indico plugin dispatch: data/indico.json and the ESSC events in data/events.json
+│   ├── python-tests.yml             # The scripts/test-*.py pytest suites, on push and PR
+│   ├── directory-interactions.yml   # Headless-Chrome interaction smoke tests for the Directory (people.html)
+│   ├── brand-lint.yml               # Brand tokens in site.css and the web manifest match data/brand.json
+│   ├── css-class-collisions.yml     # Lint: one class's rules claimed twice, or split >200 lines apart, in site.css
+│   ├── _pycheck.yml                 # Reusable: checkout + Python 3.12 + one check command, called by the single-command lints
+│   ├── codeql-dependabot-shim.yml   # Posts the required CodeQL contexts on Dependabot PRs, which CodeQL default setup skips
+│   ├── failure-alarm.yml            # Opens or threads an assigned issue when a scheduled workflow or the deploy fails
+│   ├── autopr-token-health.yml      # Weekly: opens an issue when AUTOPR_TOKEN is missing, rejected, or near expiry
+│   ├── issue-lifecycle-comment.yml  # Posts the standard comment when a needs-info / duplicate / wontfix label lands
+│   ├── issue-sweep.yml              # Daily: closes needs-info issues with no reply in 60 days
+│   ├── lock-closed-issues.yml       # Daily: locks issues closed 14+ days with no activity
+│   └── branch-sweep.yml             # Daily: archives stale, unmerged branches
 │
-├── docs/                            # ← you are here
+├── docs/                            # ← you are here (a selection; README.md indexes every doc)
 │   ├── README.md                    # ToC for this folder
 │   ├── architecture.md              # this file
 │   ├── design-system.md
@@ -764,9 +777,9 @@ type `call`. Three routes, whichever comes first:
   `status` to `CONFIRMED`, so the sync updates it instead of appending a
   second one. Step 4 above still applies: no entry before the dates are
   firm.
-- **A call for papers opens.** Publish a news issue with `Type: Call` and
-  `Closes: YYYY-MM-DD` (see `docs/news-publishing.md`). It counts down in
-  the Open calls tile and leaves the home page after that day.
+- **A call for papers opens.** Add a news item with `type: "call"` and a
+  `homeUntil` on the closing date (see `docs/news-publishing.md`). It counts
+  down in the Open calls tile and leaves the home page after that day.
 
 `scripts/test-home-now.mjs` covers which event and which calls the row
 picks on a given date. `NetSec.renderHomeNow({ now: Date.parse(...) })`
