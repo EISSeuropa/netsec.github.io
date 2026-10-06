@@ -313,7 +313,7 @@ variants) renders its programme grid from `data/indico.json`,
 which is mirrored daily from the shared EISS Indico instance at
 `indico.eiss-europa.com`. The full pipeline:
 
-1. `scripts/sync-indico.py` runs at 03:45 UTC each day via
+1. `scripts/sync-indico.py` runs at 03:15 UTC each day via
    `.github/workflows/sync-indico.yml`. It calls Indico's
    `/export/categ/1.json` and `/export/timetable/{event_id}.json`,
    normalises the response, and writes `data/indico.json`.
