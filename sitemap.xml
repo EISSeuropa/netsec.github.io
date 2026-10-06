@@ -208,6 +208,17 @@
   </url>
 
   <url>
+    <loc>https://netsec-cost.eu/essc-2027.html</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://netsec-cost.eu/essc-2027.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/essc-2027.fr.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://netsec-cost.eu/essc-2027.de.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://netsec-cost.eu/essc-2027.html"/>
+  </url>
+
+  <url>
     <loc>https://netsec-cost.eu/summer-school.html</loc>
     <lastmod>2026-06-08</lastmod>
     <changefreq>monthly</changefreq>

@@ -25,7 +25,6 @@ ROOT = Path(__file__).resolve().parent.parent
 # Top-level pages deliberately outside both lists, with the reason.
 EXEMPT = {
     "404": "single error page, not indexed; inject-seo handles it by name",
-    "essc-2027": "parked with noindex until #1560 un-parks it",
 }
 
 

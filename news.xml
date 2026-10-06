@@ -5,9 +5,16 @@
     <link>https://netsec-cost.eu/#news</link>
     <description>Announcements, calls, and milestones from the COST Action CA24154 (NetSec).</description>
     <language>en-GB</language>
-    <lastBuildDate>Tue, 15 Sep 2026 09:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 06 Oct 2026 12:00:00 +0200</lastBuildDate>
     <generator>scripts/build-news-rss.py</generator>
     <atom:link href="https://netsec-cost.eu/news.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Save the date: ESSC 2027 and the NetSec Training School in Belgrade</title>
+      <link>https://netsec-cost.eu/essc-2027.html</link>
+      <description><![CDATA[The European Initiative for Security Studies (EISS) and COST Action CA24154 NetSec invite you to two back-to-back events at the University of Belgrade, Faculty of Political Science. The European Security Studies Conference (ESSC) runs on 10 and 11 June 2027, and the NetSec Training School runs in parallel, from 8 to 11 June 2027. Thank you to everyone who took part in the 2026 edition at Stockholm University. The ESSC call for papers will be published on eiss-europa.com in early November 2026 at the latest, setting out the themes and the submission deadline. Details of the Training School will follow. Please share this announcement with colleagues who may wish to take part.]]></description>
+      <pubDate>Tue, 06 Oct 2026 12:00:00 +0200</pubDate>
+      <guid isPermaLink="false">essc-2027-belgrade-save-the-date</guid>
+    </item>
     <item>
       <title>Policy workshop on alliances concludes in Ankara</title>
       <link>https://netsec-cost.eu/policy-workshop-2026.html</link>

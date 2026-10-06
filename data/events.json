@@ -4,7 +4,7 @@
   "caldesc": "Events from the NetSec COST Action (CA24154): annual conferences, training schools, policy workshops, MC plenaries. Authoritative source: https://netsec-cost.eu/#events",
   "tzid": "Europe/Stockholm",
   "refresh_days": 7,
-  "dtstamp": "20260915T082843Z",
+  "dtstamp": "20261006T093326Z",
   "events": [
     {
       "uid": "summer-school-2026@netsec-cost.eu",
@@ -93,9 +93,20 @@
         "name": "European Security Studies Conference 2026",
         "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
         "organizer": [
-          { "@type": "Organization", "name": "COST Action CA24154 (NetSec)", "url": "https://netsec-cost.eu" },
-          { "@type": "Organization", "name": "European Initiative for Security Studies (EISS)", "url": "https://eiss-europa.com" },
-          { "@type": "Organization", "name": "Stockholm University" }
+          {
+            "@type": "Organization",
+            "name": "COST Action CA24154 (NetSec)",
+            "url": "https://netsec-cost.eu"
+          },
+          {
+            "@type": "Organization",
+            "name": "European Initiative for Security Studies (EISS)",
+            "url": "https://eiss-europa.com"
+          },
+          {
+            "@type": "Organization",
+            "name": "Stockholm University"
+          }
         ]
       },
       "summary": "2026 European Security Studies Conference",
@@ -299,6 +310,177 @@
           }
         }
       ]
+    },
+    {
+      "uid": "summer-school-2027@netsec-cost.eu",
+      "summary": "NetSec Training School",
+      "description": "Training and mentoring for early-career researchers in European security, run by NetSec and the European Initiative for Security Studies at the University of Belgrade, Faculty of Political Science, alongside the European Security Studies Conference. Details of the school and the call for applications will follow.\n\nFull details: https://netsec-cost.eu/summer-school.html",
+      "location": "University of Belgrade, Faculty of Political Science, Belgrade, Serbia",
+      "url": "https://netsec-cost.eu/summer-school.html",
+      "start": "2027-06-08T09:00",
+      "end": "2027-06-11T18:00",
+      "tzid": "Europe/Belgrade",
+      "organizer": {
+        "cn": "NetSec Training School",
+        "mailto": "ecs.netsec@eiss-europa.com"
+      },
+      "categories": [
+        "Training School",
+        "NetSec"
+      ],
+      "status": "TENTATIVE",
+      "eventType": "training-school",
+      "workingGroups": [
+        2,
+        3,
+        4
+      ],
+      "featured": true,
+      "displayDate": {
+        "en": "8–11 June 2027",
+        "fr": "8–11 juin 2027",
+        "de": "8.–11. Juni 2027"
+      },
+      "cardDescription": {
+        "en": "Training and mentoring for early-career researchers in European security, run alongside the European Security Studies Conference. Details of the school and the call for applications will follow.",
+        "fr": "Formation et mentorat pour les chercheur·euses en début de carrière en sécurité européenne, en parallèle de la European Security Studies Conference. Les détails de l'école et l'appel à candidatures suivront.",
+        "de": "Ausbildung und Mentoring für Nachwuchsforschende in der europäischen Sicherheitsforschung, parallel zur European Security Studies Conference. Einzelheiten zur Schule und der Aufruf zur Bewerbung folgen."
+      },
+      "cardTitle": {
+        "en": "NetSec Training School",
+        "fr": "École de formation NetSec",
+        "de": "NetSec-Ausbildungsschule"
+      },
+      "cardLocation": {
+        "en": "Belgrade, Serbia",
+        "fr": "Belgrade, Serbie",
+        "de": "Belgrad, Serbien"
+      },
+      "meta": [
+        {
+          "icon": "pin",
+          "i18n": {
+            "en": "<strong>University of Belgrade</strong> · Faculty of Political Science, Belgrade, Serbia",
+            "fr": "<strong>Université de Belgrade</strong> · Faculté de sciences politiques, Belgrade, Serbie",
+            "de": "<strong>Universität Belgrad</strong> · Fakultät für Politikwissenschaften, Belgrad, Serbien"
+          }
+        },
+        {
+          "icon": "calendar",
+          "i18n": {
+            "en": "<strong>Call for applications</strong> to follow.",
+            "fr": "<strong>Appel à candidatures</strong> à venir.",
+            "de": "<strong>Aufruf zur Bewerbung</strong> folgt."
+          }
+        }
+      ],
+      "cta": {
+        "href": {
+          "en": "summer-school.html",
+          "fr": "summer-school.fr.html",
+          "de": "summer-school.de.html"
+        },
+        "external": false,
+        "i18n": {
+          "en": "Full details",
+          "fr": "Détails complets",
+          "de": "Vollständige Details"
+        }
+      }
+    },
+    {
+      "uid": "european-security-conference-2027@netsec-cost.eu",
+      "jsonld": {
+        "name": "European Security Studies Conference 2027",
+        "organizer": [
+          {
+            "@type": "Organization",
+            "name": "COST Action CA24154 (NetSec)",
+            "url": "https://netsec-cost.eu"
+          },
+          {
+            "@type": "Organization",
+            "name": "European Initiative for Security Studies (EISS)",
+            "url": "https://eiss-europa.com"
+          },
+          {
+            "@type": "Organization",
+            "name": "University of Belgrade, Faculty of Political Science"
+          }
+        ]
+      },
+      "summary": "2027 European Security Studies Conference",
+      "description": "The annual conference of the NetSec community and the European Initiative for Security Studies, at the University of Belgrade, Faculty of Political Science. The NetSec Training School runs alongside it, from 8 to 11 June. The call for papers will be published on eiss-europa.com by early November 2026.\n\nDetails: https://netsec-cost.eu/essc-2027.html",
+      "location": "University of Belgrade, Faculty of Political Science, Belgrade, Serbia",
+      "url": "https://netsec-cost.eu/essc-2027.html",
+      "start": "2027-06-10T09:00",
+      "end": "2027-06-11T18:00",
+      "tzid": "Europe/Belgrade",
+      "categories": [
+        "Annual Conference",
+        "NetSec"
+      ],
+      "status": "TENTATIVE",
+      "eventType": "annual-conference",
+      "coHost": "joint",
+      "workingGroups": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "featured": true,
+      "displayDate": {
+        "en": "10–11 June 2027",
+        "fr": "10–11 juin 2027",
+        "de": "10.–11. Juni 2027"
+      },
+      "cardDescription": {
+        "en": "The annual conference of the NetSec community, organised with the European Initiative for Security Studies. The NetSec Training School runs alongside it, from 8 to 11 June. The call for papers will be published on eiss-europa.com by early November 2026.",
+        "fr": "La conférence annuelle de la communauté NetSec, organisée avec la European Initiative for Security Studies. L'École de formation NetSec se tient en parallèle, du 8 au 11 juin. L'appel à communications sera publié sur eiss-europa.com d'ici début novembre 2026.",
+        "de": "Die Jahreskonferenz der NetSec-Community, gemeinsam mit der European Initiative for Security Studies ausgerichtet. Parallel dazu findet vom 8. bis 11. Juni die NetSec-Ausbildungsschule statt. Der Call for Papers erscheint bis Anfang November 2026 auf eiss-europa.com."
+      },
+      "cardTitle": {
+        "en": "European Security Studies Conference",
+        "fr": "European Security Studies Conference",
+        "de": "European Security Studies Conference"
+      },
+      "cardLocation": {
+        "en": "Belgrade, Serbia",
+        "fr": "Belgrade, Serbie",
+        "de": "Belgrad, Serbien"
+      },
+      "meta": [
+        {
+          "icon": "pin",
+          "i18n": {
+            "en": "<strong>University of Belgrade</strong> · Faculty of Political Science, Belgrade, Serbia",
+            "fr": "<strong>Université de Belgrade</strong> · Faculté de sciences politiques, Belgrade, Serbie",
+            "de": "<strong>Universität Belgrad</strong> · Fakultät für Politikwissenschaften, Belgrad, Serbien"
+          }
+        },
+        {
+          "icon": "calendar",
+          "i18n": {
+            "en": "<strong>Call for papers</strong> on eiss-europa.com by early November 2026.",
+            "fr": "<strong>Appel à communications</strong> sur eiss-europa.com d'ici début novembre 2026.",
+            "de": "<strong>Call for Papers</strong> bis Anfang November 2026 auf eiss-europa.com."
+          }
+        }
+      ],
+      "cta": {
+        "href": {
+          "en": "essc-2027.html",
+          "fr": "essc-2027.fr.html",
+          "de": "essc-2027.de.html"
+        },
+        "external": false,
+        "i18n": {
+          "en": "Conference page →",
+          "fr": "Page de la conférence →",
+          "de": "Zur Konferenzseite →"
+        }
+      }
     }
   ]
 }

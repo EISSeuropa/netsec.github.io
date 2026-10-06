@@ -23,15 +23,15 @@
     "summer-school.html": {
       "fr": {
         "file": "summer-school.fr.html",
-        "source_sha1": "e56a45985515d15b44e44c690a01b55ceae920b9",
-        "translated_on": "2026-09-26",
+        "source_sha1": "3cc8dc5a43b3171524dce0dc4198ed2552e34337",
+        "translated_on": "2026-10-06",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "summer-school.de.html",
-        "source_sha1": "e56a45985515d15b44e44c690a01b55ceae920b9",
-        "translated_on": "2026-09-26",
+        "source_sha1": "3cc8dc5a43b3171524dce0dc4198ed2552e34337",
+        "translated_on": "2026-10-06",
         "status": "beta",
         "reviewed_by": null
       }
@@ -71,15 +71,15 @@
     "sitemap.html": {
       "fr": {
         "file": "sitemap.fr.html",
-        "source_sha1": "24819e0ddf863370542424db1c93790dbad4b6cf",
-        "translated_on": "2026-09-26",
+        "source_sha1": "9f5dc7f9ae9fdb8d42ca7bd34a6b8a44ef98a0a0",
+        "translated_on": "2026-10-06",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "sitemap.de.html",
-        "source_sha1": "24819e0ddf863370542424db1c93790dbad4b6cf",
-        "translated_on": "2026-09-26",
+        "source_sha1": "9f5dc7f9ae9fdb8d42ca7bd34a6b8a44ef98a0a0",
+        "translated_on": "2026-10-06",
         "status": "beta",
         "reviewed_by": null
       }
@@ -336,6 +336,22 @@
         "file": "year-in-review.de.html",
         "source_sha1": "c052477b8b3bb6f05fe32785a7140630345d766b",
         "translated_on": "2026-09-26",
+        "status": "beta",
+        "reviewed_by": null
+      }
+    },
+    "essc-2027.html": {
+      "fr": {
+        "file": "essc-2027.fr.html",
+        "source_sha1": "d4017f6b98f09057d857fa0c3bb7f232496b8640",
+        "translated_on": "2026-10-06",
+        "status": "beta",
+        "reviewed_by": null
+      },
+      "de": {
+        "file": "essc-2027.de.html",
+        "source_sha1": "d4017f6b98f09057d857fa0c3bb7f232496b8640",
+        "translated_on": "2026-10-06",
         "status": "beta",
         "reviewed_by": null
       }

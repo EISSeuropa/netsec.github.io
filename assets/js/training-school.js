@@ -47,6 +47,9 @@
     },
   };
   const t = I18N[lang] || I18N.en;
+  // A text field is either a plain string or a {en, fr, de} map, falling
+  // back to English when the page's locale has no entry.
+  const loc = (v) => (v && typeof v === 'object') ? (v[lang] || v.en) : v;
   const peopleUrl = lang === 'fr' ? 'people.fr.html' : lang === 'de' ? 'people.de.html' : 'people.html';
 
   function el(tag, attrs, ...kids) {
@@ -101,11 +104,12 @@
     card.append(el('p', { class: 'ts-next-eyebrow' }, t.nextCall));
     card.append(el('h3', { class: 'ts-next-year' }, String(ed.year)));
     const dl = el('div', { class: 'ts-deflist' });
-    dl.append(defRow(t.location, ed.city && ed.city !== 'To be announced' ? (ed.host ? `${ed.host}, ${ed.city}` : ed.city) : t.toBeAnnounced));
-    dl.append(defRow(t.dates, ed.dates && ed.dates !== 'To be announced' ? ed.dates : t.toBeAnnounced));
+    const city = loc(ed.city), host = loc(ed.host), dates = loc(ed.dates);
+    dl.append(defRow(t.location, city && city !== 'To be announced' ? (host ? `${host}, ${city}` : city) : t.toBeAnnounced));
+    dl.append(defRow(t.dates, dates && dates !== 'To be announced' ? dates : t.toBeAnnounced));
     if (ed.deadline) dl.append(defRow(t.deadline, ed.deadline));
     card.append(dl);
-    if (ed.summary) card.append(el('p', { class: 'ts-next-summary' }, ed.summary));
+    if (ed.summary) card.append(el('p', { class: 'ts-next-summary' }, loc(ed.summary)));
     // Calendar only when a real start date is set (an announced, dated edition).
     if (ed.start && ed.ics) {
       card.append(el('a', { class: 'btn btn-ghost ts-next-cal', href: 'calendar/' + ed.ics + '.ics' }, t.addToCalendar));
@@ -123,12 +127,12 @@
       const card = el('article', { class: 'ts-edition glass' });
       card.append(el('header', { class: 'ts-edition-head' },
         el('h3', { class: 'ts-edition-year' }, String(ed.year)),
-        el('span', { class: 'ts-edition-where' }, ed.host ? `${ed.host}, ${ed.city}` : ed.city)));
+        el('span', { class: 'ts-edition-where' }, ed.host ? `${loc(ed.host)}, ${loc(ed.city)}` : loc(ed.city))));
       const meta = el('p', { class: 'ts-edition-meta' });
-      meta.append(ed.dates);
+      meta.append(loc(ed.dates));
       if (ed.cohort) meta.append(` · ${ed.cohort} ${t.funded}`);
       card.append(meta);
-      if (ed.summary) card.append(el('p', { class: 'ts-edition-summary' }, ed.summary));
+      if (ed.summary) card.append(el('p', { class: 'ts-edition-summary' }, loc(ed.summary)));
       const co = coordinatorLine(ed.coordinators);
       if (co) card.append(co);
       if (ed.topics && ed.topics.length) {
