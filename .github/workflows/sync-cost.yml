@@ -198,7 +198,7 @@ jobs:
             automated
             data-sync
           # Assign the maintainer as reviewer so GitHub emails +
-          # mobile push the auto-PR opening. The PR auto-merges
-          # via the next step regardless; the reviewer line is
-          # purely for the change-awareness signal.
+          # mobile push the auto-PR opening. The PR is not
+          # auto-merged: like the bios sync, it changes member data,
+          # so the maintainer merges it by hand once checks pass.
           reviewers: APB-LDN
