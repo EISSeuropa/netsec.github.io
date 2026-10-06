@@ -1,7 +1,7 @@
 # Daily sync of data/indico.json from the EISS Indico instance.
 #
 # What this does
-#   1. Every day at 03:45 UTC (on manual dispatch, and on a
+#   1. Every day at 03:15 UTC (on manual dispatch, and on a
 #      repository_dispatch fired by the netsec-dispatch Indico plugin
 #      when the programme changes), runs scripts/sync-indico.py which
 #      hits the public Indico export API and writes data/indico.json.
@@ -43,10 +43,10 @@ name: Sync events from Indico
 
 on:
   schedule:
-    # 03:45 UTC daily. EISS runs at the same time (we share the
-    # Indico instance but the two workflows don't coordinate; each
-    # makes its own ~2 HTTP calls so the instance load is trivial).
-    - cron: "45 3 * * *"
+    # 03:15 UTC daily, half an hour before the EISS sync at 03:45, so
+    # the two never hit the shared Indico instance in the same minute
+    # (docs/cross-repo-workflow.md, Indico sync alignment; #325).
+    - cron: "15 3 * * *"
   workflow_dispatch:      # Manual run from the Actions tab
   repository_dispatch:
     # Push path (Phase 1 of docs/indico-integration.md, #823). The
