@@ -1,0 +1,169 @@
+# TEMPORARY probe for #1966: runs the Pages deploy build (no upload, no
+# deploy) on Ubuntu 24.04 and 26.04 side by side, and keeps sample OG cards
+# from each for comparison. Delete with the probe branch; never merge.
+name: Ubuntu 26.04 probe
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/ubuntu-2604-probe.yml
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Deploy build on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-26.04]
+    runs-on: ${{ matrix.os }}
+    # Ceiling, not a target. A healthy build finishes in about three
+    # minutes, so anything approaching this is a hung Pagefind crawl
+    # rather than a slow one, and the run should die instead of sitting
+    # on the `pages` concurrency slot.
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v4 (sha-pinned)
+        with:
+          node-version: '20'
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+
+      - name: Render the per-member Open Graph cards
+        # Same reasoning as the Pagefind index and the ?v= tokens: an artefact
+        # nobody hand-edits does not belong in the tree (#1716). 84 PNGs were
+        # rewritten by the weekly bios and COST syncs, each regeneration a new
+        # blob kept forever, and each needed a --check gate to prove it current.
+        #
+        # About 70 seconds for all 84, because Chrome launches once and the
+        # cards are screenshotted in sequence against a local server. There is
+        # no manifest in the tree now, so every deploy renders the full set
+        # rather than the changed ones.
+        #
+        # No --ensure-flags here: a bundled flag is an input, it is fetched and
+        # committed by the weekly bios sync, and a member whose flag is missing
+        # renders a card without one rather than failing.
+        run: python3 scripts/build-og-cards.py
+        env:
+          CHROME: /usr/bin/google-chrome
+
+      - name: Assert every member got a card
+        # The cards are the profile pages' og:image, and build-profile-pages.py
+        # now names that URL unconditionally rather than testing the file
+        # (#1716). So a silent under-render would leave 252 pages pointing at
+        # PNGs that 404 on the crawler, with nothing else to catch it.
+        run: |
+          set -euo pipefail
+          want=$(python3 -c "import json; d=json.load(open('data/bios.json')); print(len([m for m in d['members'] if m.get('id')]))")
+          got=$(find assets/og/people -name '*.png' | wc -l)
+          echo "members: $want, cards: $got"
+          [ "$want" -eq "$got" ] || {
+            echo "::error::rendered $got cards for $want members; refusing to publish"
+            exit 1
+          }
+
+      - name: Build the member profile pages
+        # 252 files, the largest generated set in the tree (#1716). They must
+        # exist for a crawler, and a deploy-time build serves them identically.
+        #
+        # Order matters twice here. After the cards above, because a card is a
+        # page's og:image. Before the ?v= stamping below, which globs people/
+        # and would otherwise find nothing to stamp: that inversion is the
+        # ordering folklore #1716 set out to dissolve, and it now lives in this
+        # file as a sequence rather than in whoever last got it wrong.
+        run: python3 scripts/build-profile-pages.py
+
+      - name: Assert every member got a page
+        # Same reasoning as the card count above. The sitemap names all 84
+        # members and the Network Map links to each of them, so a silent
+        # under-build is 84 slugs of 404 with a green run behind it.
+        run: |
+          set -euo pipefail
+          want=$(python3 -c "import json; d=json.load(open('data/bios.json')); print(len([m for m in d['members'] if m.get('id')]))")
+          got=$(find people -name '*.html' -not -name '*.fr.html' -not -name '*.de.html' | wc -l)
+          echo "members: $want, EN pages: $got"
+          [ "$want" -eq "$got" ] || {
+            echo "::error::built $got pages for $want members; refusing to publish"
+            exit 1
+          }
+
+      - name: Expire the home page's fallback event cards
+        # The hand-written cards in `#events .event-list` are what a reader
+        # sees when home-events.js does not run or its fetch fails. Nothing
+        # expired them, so from the morning after an event the fallback
+        # advertised a concluded workshop as upcoming (#1769). This runs here
+        # rather than as a commit-time drift gate because the fact that goes
+        # stale is the date, not the file: a page correct when it merged is
+        # wrong three weeks later, and no pull request need happen in between.
+        # The schedule above deploys every six hours, which is the refresh.
+        # Runs before Pagefind so the index never picks up a concluded card.
+        run: python3 scripts/prune-past-event-cards.py
+
+      - name: Rewrite the home page's fallback news cards
+        # Same reasoning as the step above, for `#news .news-list`: the
+        # hand-written cards lagged data/news.json by months, and `homeUntil`
+        # makes the right set depend on the date. Before Pagefind for the
+        # same reason.
+        run: python3 scripts/render-news-fallback.py
+
+      - name: Build Pagefind index (and bio search stubs)
+        # scripts/build-search.sh handles both: regenerates the bio
+        # stubs from data/bios.json, then runs pagefind against the
+        # repo root. Output lands in ./pagefind/ which is gitignored
+        # — it ships to Pages via the artifact upload below.
+        run: bash scripts/build-search.sh
+
+      - name: Stamp the ?v= cache-bust on every page
+        # The same reasoning as the Pagefind index above, applied to the asset
+        # tokens (#1712). Committing them meant every front-end pull request
+        # rewrote 315 files it had not touched: 97% of the diff, and a rule in
+        # CLAUDE.md §2 forbidding two such branches at once. The repository now
+        # stores `src="assets/css/site.css"` and the token is applied here,
+        # over the top-level pages and the 252 under people/.
+        run: python3 scripts/inject-seo.py --stamp-only
+
+      - name: Assert the stamping actually happened
+        # The failure mode moved from noisy-but-visible to quiet-and-wrong. If
+        # the step above ever silently no-ops, returning visitors render new
+        # markup against a cached stylesheet, which is the exact thing the
+        # tokens exist to prevent. So the build refuses to publish an unstamped
+        # tree rather than shipping one.
+        run: |
+          set -euo pipefail
+          missing=0
+          for page in index.html people.html network-map.html people/arthur-laudrain.html; do
+            if ! grep -qE 'assets/css/site\.css\?v=[0-9a-f]{8}' "$page"; then
+              echo "::error file=$page::no ?v= token after the stamping step"
+              missing=1
+            fi
+          done
+          [ "$missing" -eq 0 ] || {
+            echo '::error::refusing to publish an unstamped tree; see scripts/inject-seo.py --stamp-only'
+            exit 1
+          }
+          echo "cache-bust tokens present on the sampled pages"
+
+      - name: Report the toolchain
+        run: |
+          lsb_release -ds
+          /usr/bin/google-chrome --version
+          fc-match sans-serif
+          python3 -c "import PIL; print('Pillow', PIL.__version__)"
+          sha256sum assets/og/people/arthur-laudrain.png
+
+      - name: Keep sample cards
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4 (sha-pinned)
+        with:
+          name: og-${{ matrix.os }}
+          path: |
+            assets/og/people/arthur-laudrain.png
+            people/arthur-laudrain.html
