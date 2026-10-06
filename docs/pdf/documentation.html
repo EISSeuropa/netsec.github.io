@@ -1195,7 +1195,7 @@ flowchart TB
     <div class="card">
       <h4>Operator-facing</h4>
       <ul>
-        <li><strong>Four sync workflows</strong> that open PRs rather than push: <code>sync-bios.yml</code> (daily, Google Form to <code>bios.json</code>), <code>sync-cost.yml</code> (weekly, cost.eu Working Group membership), <code>sync-indico.yml</code> (daily, Indico to <code>indico.json</code> with <code>events.json</code> patched in the same PR) and <code>roadmap-refresh.yml</code> (daily, the roadmap autostamp and milestone progress). Each PR auto-merges once the required checks pass.</li>
+        <li><strong>Four sync workflows</strong> that open PRs rather than push: <code>sync-bios.yml</code> (daily, Google Form to <code>bios.json</code>), <code>sync-cost.yml</code> (weekly, cost.eu Working Group membership), <code>sync-indico.yml</code> (daily, Indico to <code>indico.json</code> with <code>events.json</code> patched in the same PR) and <code>roadmap-refresh.yml</code> (daily, the roadmap autostamp and milestone progress). The Indico and roadmap PRs auto-merge once the required checks pass. The bios and cost.eu PRs change member data, so they wait for the maintainer to merge them.</li>
         <li><strong>A failure alarm</strong> (<code>failure-alarm.yml</code>): when a scheduled workflow or the Pages deploy fails, times out or cannot start, it opens an issue assigned to the maintainers, or comments on the open one for that workflow.</li>
         <li><code>data-bios-roles</code> attribute pattern: any element with it gets hydrated from <code>bios.json</code> at load.</li>
         <li>MC-member auto-tagging via <code>mc-members.json</code>.</li>
@@ -1221,6 +1221,7 @@ sequenceDiagram
     participant W as sync-bios.yml<br/>(daily 05:15 UTC)
     participant P as sync-bios.py
     participant R as Repo<br/>(bios-sync/auto)
+    participant A as Admin
 
     M->>F: Submit bio
     F->>S: Append row<br/>(required consent ticked)
@@ -1231,7 +1232,7 @@ sequenceDiagram
     P->>R: git diff bios.json + photos
     alt Diff non-empty
         P->>R: Open PR
-        R->>R: Auto-merge once checks pass
+        A->>R: Review + merge
         R-->>F: Live on /people.html
     else No diff
         P-->>P: Exit 0
@@ -1249,6 +1250,7 @@ sequenceDiagram
     participant W as sync-cost.yml<br/>(Mondays 05:00 UTC)
     participant P as sync-cost.py
     participant R as Repo<br/>(cost-sync/auto)
+    participant A as Admin
 
     W->>P: Run sync-cost.py
     P->>C: GET HTML
@@ -1258,7 +1260,7 @@ sequenceDiagram
     P->>R: git diff wg.json, mc-members.json,<br/>bios.json
     alt Diff non-empty
         P->>R: Open PR
-        R->>R: Auto-merge once checks pass
+        A->>R: Review + merge
     else No diff
         P-->>P: Exit 0
     end
@@ -1490,8 +1492,8 @@ sequenceDiagram
 │
 ├── .github/workflows/
 │   ├── pages-deploy.yml             # Builds generated files, deploys to Pages (push + every 6 h)
-│   ├── sync-bios.yml                # Daily cron, opens PR + auto-merges
-│   ├── sync-cost.yml                # Weekly cron, opens PR + auto-merges
+│   ├── sync-bios.yml                # Daily cron, opens PR, merged by hand
+│   ├── sync-cost.yml                # Weekly cron, opens PR, merged by hand
 │   ├── sync-indico.yml              # Daily cron, opens PR + auto-merges (v1.6.0; PR-based v1.6.1)
 │   ├── roadmap-refresh.yml          # Daily autostamp + milestone progress (v1.14.0)
 │   ├── spotlight-rotate.yml         # Weekly member spotlight + social post
@@ -1915,7 +1917,7 @@ python3 scripts/inject-seo.py --check    # report-only mode (non-zero exit on dr
   </table>
 
   <h2>Reviewing a sync PR</h2>
-  <p>Four sync workflows open pull requests against <code>main</code> on dedicated automation branches, and each PR auto-merges once the required checks pass. A run with nothing to change opens no PR.</p>
+  <p>Four sync workflows open pull requests against <code>main</code> on dedicated automation branches. The bios and cost.eu PRs wait for the maintainer to merge them, and the Indico and roadmap PRs auto-merge once the required checks pass. A run with nothing to change opens no PR.</p>
 
   <table>
     <thead><tr><th>Workflow</th><th>Cadence</th><th>Branch</th><th>What the diff covers</th></tr></thead>
@@ -1936,15 +1938,20 @@ sequenceDiagram
     participant W as Workflow
     participant R as main branch
 
-    W->>G: Open PR on an */auto branch,<br/>auto-merge armed
+    W->>G: Open PR on an */auto branch
     G->>G: Required checks run
-    G->>R: Squash-merge once green
-    A->>G: Read the PR body (human-readable diff)
-    alt Something off
+    alt bios-sync or cost-sync
+        G->>A: Notify (maintainer is the reviewer)
+        A->>G: Read the PR body (human-readable diff)
+        A->>R: Squash-merge
+    else indico-sync or roadmap-refresh
+        G->>R: Auto-merge once green
+    end
+    opt Something off
         A->>A: Fix at source<br/>(Sheet, cost.eu, Indico or CHANGELOG)<br/>then re-run the workflow
     end
     </div>
-    <div class="diagram-caption">Figure 16 · Soft-review policy. Automation PRs merge on green checks, and the admin reads the PR body after the fact, fixing anything wrong at its source.</div>
+    <div class="diagram-caption">Figure 16 · Soft-review policy. A PR that changes member data waits for the maintainer's merge. The Indico and roadmap PRs merge themselves on green checks, and anything wrong is fixed at its source.</div>
   </div>
 
   <p>The reviewer's job is <strong>not</strong> to fact-check research claims; it is to catch:</p>
@@ -1964,7 +1971,7 @@ sequenceDiagram
     <li>Go to <em>Actions</em> in the GitHub repo.</li>
     <li>Pick the workflow you need: <em>Sync member bios from Google Form</em>, <em>Sync WG membership from cost.eu</em>, <em>Sync events from Indico</em>, or <em>Refresh roadmap surfaces</em>.</li>
     <li>Click <strong>Run workflow</strong> → <strong>main</strong> → <strong>Run</strong>.</li>
-    <li>Watch the run. If it opens a PR, the PR merges itself once the required checks pass.</li>
+    <li>Watch the run. A bios or cost.eu PR then waits for you to merge it, and an Indico or roadmap PR merges itself once the required checks pass.</li>
   </ol>
 
   <h3>Removing a member at their request</h3>
@@ -2168,7 +2175,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
   <ul>
     <li><strong>Pinned third-party Actions.</strong> All <code>uses:</code> references in <code>.github/workflows/</code> are pinned to a full commit SHA, with the version in a trailing comment, so an upstream tag retag cannot inject new code without our review. Dependabot proposes each bump as a PR.</li>
     <li><strong>Least-privilege <code>GITHUB_TOKEN</code>.</strong> Each workflow declares the narrowest <code>permissions:</code> block it needs (<code>contents: write</code> for the sync jobs, <code>contents: read</code> elsewhere). The default token is read-only at the repository level.</li>
-    <li><strong>Protected <code>main</code>.</strong> Every change, the sync workflows' included, reaches <code>main</code> through a pull request, and a ruleset holds the merge until the required checks pass (CodeQL, the link checker and the drift gates). Sync PRs then auto-merge, and the maintainer reviews them from the PR body.</li>
+    <li><strong>Protected <code>main</code>.</strong> Every change, the sync workflows' included, reaches <code>main</code> through a pull request, and a ruleset holds the merge until the required checks pass (CodeQL, the link checker and the drift gates). The bios and cost.eu PRs, which change member data, also wait for the maintainer to merge them.</li>
     <li><strong>No long-lived deploy keys.</strong> Deployment is handled by GitHub Pages itself, using the repository's own short-lived OIDC token, so there is no external secret to rotate.</li>
     <li><strong>Version-controlled data.</strong> Both data files (<code>data/bios.json</code>, <code>data/mc-members.json</code>) are version-controlled. Any malicious or accidental change is one <code>git revert</code> away.</li>
   </ul>
@@ -2452,7 +2459,7 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
   <div class="changelog-entries">
 
   <h2 class="current">v1.13.2 · October 2026 · Automation catch-up</h2>
-  <p class="cl-summary">Pack-only revision correcting the automation described across Sections 02, 06 and 07, which had fallen behind the workflows. The roadmap autostamp (Figure 9) is the daily <code>roadmap-refresh.yml</code>, which replaced <code>sync-roadmap.yml</code> and also refreshes milestone progress. The bios sync runs daily, <code>sync-cost.yml</code> joins the sync table, and every sync PR auto-merges on green checks, so Figure 16 and the security section no longer describe a human approval before merge. Third-party Actions are recorded as SHA-pinned.</p>
+  <p class="cl-summary">Pack-only revision correcting the automation described across Sections 02, 06 and 07, which had fallen behind the workflows. The roadmap autostamp (Figure 9) is the daily <code>roadmap-refresh.yml</code>, which replaced <code>sync-roadmap.yml</code> and also refreshes milestone progress. The bios sync runs daily, <code>sync-cost.yml</code> joins the sync table, and Figure 16 separates the bios and cost.eu PRs, which the maintainer merges by hand, from the Indico and roadmap PRs, which merge on green checks. The security section no longer claims a two-person review. Third-party Actions are recorded as SHA-pinned.</p>
   <p class="cl-summary">The social pipeline (Figure 10) posts to LinkedIn as well as Bluesky, the spotlight runs on Tuesdays at 10:00 Paris time, and news enters by PR, since the issue-driven news publisher was removed. The new failure alarm, which files an assigned issue when a scheduled workflow fails, appears in Section 02 and in the escalation table. The website version on the cover moves with the next release.</p>
 
   <h2>v1.13.1 · August 2026 · Figure numbering</h2>
