@@ -13,7 +13,8 @@
 # and deploy population). It does not fire for a run another workflow
 # started with its GITHUB_TOKEN, so every listed workflow must be started by
 # push, schedule, a person or a PAT. Every workflow with a `schedule:`
-# trigger belongs in the list. On a failure it opens an issue titled after
+# trigger belongs in the list, and so does the Bluesky publisher, whose
+# runs start on a push to main. On a failure it opens an issue titled after
 # the failed workflow, or comments on the existing open one so repeat
 # failures thread instead of spamming. Issues carry the `automated` and
 # `bug` labels and the "Backlog — Under watch" milestone (CLAUDE.md §10: no
@@ -50,6 +51,7 @@ on:
       - Branch sweep
       - Issue sweep
       - Lock closed issues
+      - Publish to Bluesky (approval-gated)
     types: [completed]
 
 permissions:
