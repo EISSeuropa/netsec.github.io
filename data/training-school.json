@@ -4,9 +4,9 @@
     "schema": {
       "year": "number. The edition year.",
       "status": "'past' | 'announced' | 'call-open'. 'past' renders in the archive with no calendar. 'announced'/'call-open' render the Next-call module; the Add-to-calendar affordance shows only when a real start date is present (an announced-but-undated edition shows 'To be announced' and no calendar).",
-      "city": "string, or 'To be announced'.",
-      "host": "string host institution, or 'To be announced'.",
-      "dates": "human dates string, or 'To be announced'.",
+      "city": "string or {en, fr, de} map, or 'To be announced'.",
+      "host": "host institution, as a string or {en, fr, de} map, or 'To be announced'.",
+      "dates": "human dates, as a string or {en, fr, de} map, or 'To be announced'.",
       "start": "optional ISO date (YYYY-MM-DD). Presence gates the calendar affordance + links the events.json .ics.",
       "ics": "optional calendar slug under /calendar/<slug>.ics (only meaningful with a start date).",
       "deadline": "optional human application-deadline string.",
@@ -14,7 +14,7 @@
       "coordinators": "optional array of { name, affiliation, member_id? } — member_id deep-links to the directory.",
       "topics": "optional array of strings (themes covered).",
       "photos": "optional array of { src, alt } for the edition gallery; the renderer omits any src that 404s.",
-      "summary": "optional one-paragraph blurb for the edition card."
+      "summary": "optional one-paragraph blurb for the edition card, as a string or {en, fr, de} map."
     },
     "note": "Photos for 2026 live under assets/images/summer-school/2026/. Add new editions by appending a record; flip an upcoming edition's status + fill start/ics when it is announced."
   },
@@ -22,10 +22,16 @@
     {
       "year": 2027,
       "status": "announced",
-      "city": "To be announced",
-      "host": "To be announced",
-      "dates": "To be announced",
-      "summary": "The next edition of the NetSec Training School. Location and dates will be announced here; sign up below to hear when the call for applications opens."
+      "city": { "en": "Belgrade", "fr": "Belgrade", "de": "Belgrad" },
+      "host": { "en": "University of Belgrade, Faculty of Political Science", "fr": "Université de Belgrade, Faculté de sciences politiques", "de": "Universität Belgrad, Fakultät für Politikwissenschaften" },
+      "dates": { "en": "8 to 11 June 2027", "fr": "du 8 au 11 juin 2027", "de": "8. bis 11. Juni 2027" },
+      "start": "2027-06-08",
+      "ics": "summer-school-2027",
+      "summary": {
+        "en": "The 2027 school runs alongside the European Security Studies Conference, which follows on 10 and 11 June. Details of the school and the call for applications will follow.",
+        "fr": "L'édition 2027 se tient en parallèle de la European Security Studies Conference, qui a lieu les 10 et 11 juin. Les détails de l'école et l'appel à candidatures suivront.",
+        "de": "Die Ausgabe 2027 findet parallel zur European Security Studies Conference am 10. und 11. Juni statt. Einzelheiten zur Schule und der Aufruf zur Bewerbung folgen."
+      }
     },
     {
       "year": 2026,

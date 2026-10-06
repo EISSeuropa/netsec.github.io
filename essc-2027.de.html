@@ -1,34 +1,10 @@
 <!DOCTYPE html>
 <html lang="de" data-i18n-status="beta">
 <head>
-<!-- ===================================================================
-     HIDDEN TEMPLATE — ESSC 2027 (not yet published)
-
-     Copied from essc-2026.* as a head-start for next year. It is
-     noindex/nofollow, absent from sitemap.xml and the visual sitemap,
-     and not linked from the nav or the home page, so visitors cannot
-     reach it. The programme renderer reads data-year="2027" on
-     #programme-root and shows the "not published yet" state until a
-     2027 conference exists in data/indico.json.
-
-     Before publishing next year:
-       1. Update the real dates, city, and venue (carried over from
-          2026 as placeholders: 11-12 June, Stockholm).
-       2. Update the JSON-LD Event block (startDate/endDate/location).
-       3. Confirm assets/programme/eiss-2027-programme.pdf exists, or
-          adjust the download button.
-       4. Flip robots to index,follow below, add "essc-2027" to the
-          PAGES list in scripts/inject-seo.py and drop it from EXEMPT in
-          scripts/check-page-registration.py, then re-run inject-seo so
-          the SEO block + sitemap.xml pick the page up.
-       5. Add it to sitemap.html and the nav. The home page needs no edit:
-          its Events block and Now row read data/events.json (see
-          docs/architecture.md, Announcing a conference).
-================================================================== -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="European Security Studies Conference 2027, 11.–12. Juni 2027 an der Universität Stockholm. Gemeinsam organisiert von der COST-Aktion CA24154 NetSec, der European Initiative for Security Studies (EISS) und der Universität Stockholm. Live-Programm, täglich mit Indico abgeglichen.">
-<title>ESSC 2027 · Stockholm · NetSec, COST-Aktion CA24154</title>
+<meta name="description" content="European Security Studies Conference 2027, 10.–11. Juni 2027 an der Universität Belgrad, Fakultät für Politikwissenschaften. Gemeinsam ausgerichtet von der COST-Aktion CA24154 NetSec und der European Initiative for Security Studies (EISS), parallel zur NetSec-Ausbildungsschule (8.–11. Juni).">
+<title>ESSC 2027 · Belgrad · NetSec, COST-Aktion CA24154</title>
 <link rel="alternate" hreflang="en" href="https://netsec-cost.eu/essc-2027.html">
 <link rel="alternate" hreflang="fr" href="https://netsec-cost.eu/essc-2027.fr.html">
 <link rel="alternate" hreflang="de" href="https://netsec-cost.eu/essc-2027.de.html">
@@ -42,8 +18,8 @@
 <meta property="og:locale" content="de_DE">
 <meta property="og:locale:alternate" content="en_GB">
 <meta property="og:locale:alternate" content="fr_FR">
-<meta property="og:title" content="ESSC 2027 · Stockholm · NetSec, COST-Aktion CA24154">
-<meta property="og:description" content="European Security Studies Conference 2027, 11.–12. Juni 2027 an der Universität Stockholm. Gemeinsam organisiert von der COST-Aktion CA24154 NetSec, der European Initiative for Security Studies (EISS) und der Universität Stockholm. Live-Programm, täglich mit Indico abgeglichen.">
+<meta property="og:title" content="ESSC 2027 · Belgrad · NetSec, COST-Aktion CA24154">
+<meta property="og:description" content="European Security Studies Conference 2027, 10.–11. Juni 2027 an der Universität Belgrad, Fakultät für Politikwissenschaften. Gemeinsam ausgerichtet von der COST-Aktion CA24154 NetSec und der European Initiative for Security Studies (EISS), parallel zur NetSec-Ausbildungsschule (8.–11. Juni).">
 <meta property="og:url" content="https://netsec-cost.eu/essc-2027.de.html">
 <meta property="og:image" content="https://netsec-cost.eu/assets/images/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -52,15 +28,18 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="ESSC 2027 · Stockholm · NetSec, COST-Aktion CA24154">
-<meta name="twitter:description" content="European Security Studies Conference 2027, 11.–12. Juni 2027 an der Universität Stockholm. Gemeinsam organisiert von der COST-Aktion CA24154 NetSec, der European Initiative for Security Studies (EISS) und der Universität Stockholm. Live-Programm, täglich mit Indico abgeglichen.">
+<meta name="twitter:title" content="ESSC 2027 · Belgrad · NetSec, COST-Aktion CA24154">
+<meta name="twitter:description" content="European Security Studies Conference 2027, 10.–11. Juni 2027 an der Universität Belgrad, Fakultät für Politikwissenschaften. Gemeinsam ausgerichtet von der COST-Aktion CA24154 NetSec und der European Initiative for Security Studies (EISS), parallel zur NetSec-Ausbildungsschule (8.–11. Juni).">
 <meta name="twitter:image" content="https://netsec-cost.eu/assets/images/og-image.png">
 
 <!-- General SEO + UA hints -->
 <meta name="author" content="Dr Arthur Laudrain">
 <meta name="theme-color" content="#003399">
 <meta name="format-detection" content="telephone=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow, max-image-preview:large">
+
+<!-- Aggregate visitor statistics (cookieless) -->
+<script data-goatcounter="https://netsec-cost.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <!-- seo:auto END -->
 <link rel="icon" type="image/png" sizes="32x32" href="assets/images/brand/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/images/brand/favicon-16.png">
@@ -82,48 +61,6 @@
   })();
 </script>
 <link rel="stylesheet" href="assets/css/site.css">
-<!-- Page-specific Event schema for the conference. Hand-maintained;
-     NOT managed by inject-seo (which owns the Organization/WebPage
-     block in the seo:jsonld sentinels below). -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Event",
-  "name": "European Security Studies Conference 2027",
-  "startDate": "2027-06-11T08:00:00+02:00",
-  "endDate": "2027-06-12T20:00:00+02:00",
-  "eventStatus": "https://schema.org/EventScheduled",
-  "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
-  "location": {
-    "@type": "Place",
-    "name": "Stockholm University",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Stockholm",
-      "addressCountry": "SE"
-    }
-  },
-  "organizer": [
-    {
-      "@type": "Organization",
-      "name": "COST Action CA24154 (NetSec)",
-      "url": "https://netsec-cost.eu"
-    },
-    {
-      "@type": "Organization",
-      "name": "European Initiative for Security Studies (EISS)",
-      "url": "https://eiss-europa.com"
-    },
-    {
-      "@type": "Organization",
-      "name": "Stockholm University"
-    }
-  ],
-  "url": "https://netsec-cost.eu/essc-2027.html",
-  "image": "https://netsec-cost.eu/assets/images/og-image.png",
-  "description": "European Security Studies Conference 2027, the annual flagship event."
-}
-</script>
 <!-- seo:jsonld BEGIN -->
 <script type="application/ld+json">
 [
@@ -157,8 +94,8 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "ESSC 2027 · Stockholm · NetSec, COST-Aktion CA24154",
-    "description": "European Security Studies Conference 2027, 11.–12. Juni 2027 an der Universität Stockholm. Gemeinsam organisiert von der COST-Aktion CA24154 NetSec, der European Initiative for Security Studies (EISS) und der Universität Stockholm. Live-Programm, täglich mit Indico abgeglichen.",
+    "name": "ESSC 2027 · Belgrad · NetSec, COST-Aktion CA24154",
+    "description": "European Security Studies Conference 2027, 10.–11. Juni 2027 an der Universität Belgrad, Fakultät für Politikwissenschaften. Gemeinsam ausgerichtet von der COST-Aktion CA24154 NetSec und der European Initiative for Security Studies (EISS), parallel zur NetSec-Ausbildungsschule (8.–11. Juni).",
     "url": "https://netsec-cost.eu/essc-2027.de.html",
     "inLanguage": "de-DE",
     "isPartOf": {
@@ -166,6 +103,42 @@
       "url": "https://netsec-cost.eu",
       "name": "NetSec"
     }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "European Security Studies Conference 2027",
+    "startDate": "2027-06-10T09:00:00+02:00",
+    "endDate": "2027-06-11T18:00:00+02:00",
+    "location": {
+      "@type": "Place",
+      "name": "University of Belgrade",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "University of Belgrade, Faculty of Political Science, Belgrade, Serbia",
+        "addressLocality": "Belgrade",
+        "addressCountry": "Serbia"
+      }
+    },
+    "url": "https://netsec-cost.eu/essc-2027.html",
+    "image": "https://netsec-cost.eu/assets/images/og-image.png",
+    "description": "Die Jahreskonferenz der NetSec-Community, gemeinsam mit der European Initiative for Security Studies ausgerichtet. Parallel dazu findet vom 8. bis 11. Juni die NetSec-Ausbildungsschule statt. Der Call for Papers erscheint bis Anfang November 2026 auf eiss-europa.com.",
+    "organizer": [
+      {
+        "@type": "Organization",
+        "name": "COST Action CA24154 (NetSec)",
+        "url": "https://netsec-cost.eu"
+      },
+      {
+        "@type": "Organization",
+        "name": "European Initiative for Security Studies (EISS)",
+        "url": "https://eiss-europa.com"
+      },
+      {
+        "@type": "Organization",
+        "name": "University of Belgrade, Faculty of Political Science"
+      }
+    ]
   }
 ]
 </script>
@@ -270,176 +243,54 @@
 
 <main id="main" data-pagefind-body>
 
-<!-- Druck-Kopfzeile: nur beim Drucken sichtbar (`display:none`
-     am Bildschirm). Siehe essc-2027.html für Details.
-     Verfolgt in #208. -->
 <header class="essc-print-masthead" aria-hidden="true">
   <p class="title">European Security Studies Conference 2027</p>
-  <p class="when-where">11.–12. Juni 2027 · Universität Stockholm · D House, Hörsäle 8 &amp; 9</p>
-  <p class="organisers">Gemeinsam organisiert von der COST-Aktion NetSec (CA24154), der European Initiative for Security Studies (EISS) und der Universität Stockholm.</p>
+  <p class="when-where">10.–11. Juni 2027 · Universität Belgrad, Fakultät für Politikwissenschaften</p>
+  <p class="organisers">Gemeinsam ausgerichtet von der COST-Aktion NetSec (CA24154) und der European Initiative for Security Studies (EISS).</p>
 </header>
 
 <section class="essc-hero">
   <div class="container reveal">
-    <span class="eyebrow">Jahreskonferenz</span>
+    <span class="eyebrow">Jahreskonferenz · Save the Date</span>
     <h1>European Security Studies Conference 2027</h1>
-    <p class="lede">
-      Gemeinsam organisiert von der <a href="about.de.html">COST-Aktion NetSec</a>, der
-      <a href="https://eiss-europa.com" target="_blank" rel="noopener">European Initiative for Security Studies (EISS)</a>
-      und der <strong>Universität Stockholm</strong>.
-    </p>
-
-    <!-- Quick facts. Dates / location / Indico link rendered by inline
-         JS from data/indico.json. Until the fetch resolves, the slot
-         is empty (no flash of broken layout). -->
-    <div class="essc-quickfacts" id="essc-quickfacts" data-state="loading" aria-busy="true">
-      <div class="essc-quickfact"><span class="lbl">Termin</span><span class="val" data-field="dates">—</span></div>
-      <div class="essc-quickfact"><span class="lbl">Ort</span><span class="val" data-field="venue">—</span></div>
-      <div class="essc-quickfact"><span class="lbl">Raum</span><span class="val" data-field="room">—</span></div>
-      <div class="essc-quickfact"><span class="lbl">Auf Indico</span><span class="val" data-field="indico">—</span></div>
-      <a class="essc-quickfact is-jump" href="#practical">
-        <span class="lbl">Praktische Infos</span>
-        <span class="val">Stockholm-Tipps <span class="essc-quickfact-arrow" aria-hidden="true">↓</span></span>
+    <p class="lede">Die <a href="https://eiss-europa.com" target="_blank" rel="noopener">European Initiative for Security Studies (EISS)</a> und die <a href="about.de.html">COST-Aktion NetSec</a> laden zu zwei aufeinanderfolgenden Veranstaltungen an der Universität Belgrad, Fakultät für Politikwissenschaften, ein: zur Konferenz am 10. und 11. Juni 2027 und zur NetSec-Ausbildungsschule vom 8. bis 11. Juni.</p>
+    <div class="essc-quickfacts" data-state="ready">
+      <div class="essc-quickfact"><span class="lbl">Termine</span><span class="val">10.–11. Juni 2027</span></div>
+      <div class="essc-quickfact"><span class="lbl">Ort</span><span class="val">Universität Belgrad</span></div>
+      <div class="essc-quickfact"><span class="lbl">Stadt</span><span class="val">Belgrad, Serbien</span></div>
+      <a class="essc-quickfact is-jump" href="summer-school.de.html">
+        <span class="lbl">Ausbildungsschule</span>
+        <span class="val">8.–11. Juni <span class="essc-quickfact-arrow" aria-hidden="true">→</span></span>
       </a>
     </div>
   </div>
 </section>
 
-<!-- Compact speakers & chairs callout, placed high for its target audience. -->
-<aside class="essc-speaker-callout-wrap" aria-label="Nach der Konferenz">
-  <div class="container">
-    <div class="essc-speaker-callout">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-        <path d="M12 19v4M8 23h8"/>
-      </svg>
-      <p><strong>Die ESSC 2027 ist abgeschlossen.</strong> Danke an alle, die vorgetragen, moderiert und teilgenommen haben. Das vollständige Programm bleibt auf dieser Seite.</p>
-    </div>
-  </div>
-</aside>
-
-<section class="essc-programme" id="programme" aria-labelledby="programme-title">
-  <div class="container">
-    <span class="eyebrow">Programm</span>
-    <h2 id="programme-title">
-      <span class="programme-live-dot" aria-hidden="true"></span>
-      Live-Programm
-    </h2>
-    <p class="muted" style="max-width:46rem">
-      Zeiten in <span id="programme-tz">Europe/Paris</span>. Vollständige Abstracts und
-      Anmeldung auf
-      <a href="https://indico.eiss-europa.com/event/22/" target="_blank" rel="noopener">Indico</a>.
-      <span id="programme-synced" class="programme-synced" hidden></span>
-    </p>
-
-    <!-- Day chips and grid live here. Rendered by the inline JS at
-         the foot of the page. While the fetch is in flight the
-         loading state below is what visitors see; on error, the
-         error state replaces it. Both are styled in site.css. -->
-    <nav class="programme-day-chips" id="programme-day-chips" aria-label="Tagesnavigation" hidden></nav>
-    <div id="programme-root" data-year="2027" data-state="loading">
-      <p class="programme-loading">Live-Programm wird von Indico geladen…</p>
-    </div>
-
-    <noscript>
-      <div class="programme-error">
-        Das Programm wird mit JavaScript angezeigt. Lesen Sie es auf
-        <a href="https://indico.eiss-europa.com/event/22/" target="_blank" rel="noopener">Indico</a>.
-      </div>
-    </noscript>
+<section id="call-for-papers" class="about-section">
+  <div class="container reveal">
+    <h2>Call for Papers</h2>
+    <article class="glass ecs-card ecs-card-wide">
+      <p>Der Call for Papers erscheint spätestens Anfang November 2026 auf <a href="https://eiss-europa.com" target="_blank" rel="noopener">eiss-europa.com</a>. Er nennt die Themen und die Einreichungsfrist.</p>
+      <p>Bitte leiten Sie diese Seite an Kolleginnen und Kollegen weiter, die teilnehmen möchten.</p>
+    </article>
   </div>
 </section>
 
-<!-- Praktische Informationen.
-     Statische, von den Veranstaltern vor Ort gelieferte Inhalte
-     (kein Indico-Sync). In `.essc-practical-block`-Karten unterteilt,
-     damit weitere Themen (Verpflegung, Wissenswertes …) ohne Umbau
-     ergänzt werden können. -->
-<section class="essc-practical" id="practical" aria-labelledby="practical-title">
-  <div class="container">
-    <span class="eyebrow">Praktische Informationen</span>
-    <h2 id="practical-title">Ihren Besuch planen</h2>
+<section id="training-school" class="about-section">
+  <div class="container reveal">
+    <h2>NetSec-Ausbildungsschule</h2>
+    <article class="glass ecs-card ecs-card-wide">
+      <p>Die NetSec-Ausbildungsschule für Nachwuchsforschende findet parallel zur Konferenz vom 8. bis 11. Juni 2027 am selben Ort statt. Einzelheiten folgen auf der <a href="summer-school.de.html">Seite der Ausbildungsschule</a>.</p>
+    </article>
+  </div>
+</section>
 
-    <section class="essc-practical-block" aria-labelledby="practical-stay-title">
-      <h3 id="practical-stay-title" class="essc-practical-block-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M3 21V8l9-5 9 5v13"/>
-          <path d="M9 21V12h6v9"/>
-        </svg>
-        Unterkunft
-      </h3>
-      <p class="essc-practical-lede">
-        Suchen Sie sich eine Unterkunft in der Innenstadt. Aus jedem der
-        unten genannten Stadtteile erreichen Sie die Universität Stockholm
-        in wenigen Minuten. Södermalm ist meist am günstigsten und bietet
-        die größte Auswahl an Hostels.
-      </p>
-      <ul class="essc-area-grid">
-        <li class="essc-area">
-          <h4 class="essc-area-name">Södermalm</h4>
-          <p class="essc-area-note">Der günstigere Teil des Zentrums, viele Hostels.</p>
-          <ul class="essc-stop-chips" aria-label="Nächstgelegene U-Bahn-Stationen">
-            <li class="essc-stop-chip">Hornstull</li>
-            <li class="essc-stop-chip">Zinkensdamm</li>
-            <li class="essc-stop-chip">Mariatorget</li>
-            <li class="essc-stop-chip">Slussen</li>
-          </ul>
-        </li>
-        <li class="essc-area">
-          <h4 class="essc-area-name">Gamla stan</h4>
-          <p class="essc-area-note">Die Altstadt auf einer eigenen Insel im Zentrum.</p>
-          <ul class="essc-stop-chips" aria-label="Nächstgelegene U-Bahn-Stationen">
-            <li class="essc-stop-chip">Gamla stan</li>
-          </ul>
-        </li>
-        <li class="essc-area">
-          <h4 class="essc-area-name">T-Centralen</h4>
-          <p class="essc-area-note">Stockholm City, der zentrale Umsteigepunkt.</p>
-          <ul class="essc-stop-chips" aria-label="Nächstgelegene U-Bahn-Stationen">
-            <li class="essc-stop-chip">T-Centralen</li>
-          </ul>
-        </li>
-        <li class="essc-area">
-          <h4 class="essc-area-name">Östermalm</h4>
-          <p class="essc-area-note">Ruhiger, leicht gehoben.</p>
-          <ul class="essc-stop-chips" aria-label="Nächstgelegene U-Bahn-Stationen">
-            <li class="essc-stop-chip">Östermalmstorg</li>
-          </ul>
-        </li>
-        <li class="essc-area">
-          <h4 class="essc-area-name">Stadion</h4>
-          <p class="essc-area-note">In der Nähe des Olympiastadions von 1912.</p>
-          <ul class="essc-stop-chips" aria-label="Nächstgelegene U-Bahn-Stationen">
-            <li class="essc-stop-chip">Stadion</li>
-          </ul>
-        </li>
-      </ul>
-    </section>
-
-    <section class="essc-practical-block" aria-labelledby="practical-transport-title">
-      <h3 id="practical-transport-title" class="essc-practical-block-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="4" y="3" width="16" height="16" rx="2"/>
-          <path d="M4 12h16"/>
-          <path d="M8 19l-2 3"/>
-          <path d="M16 19l2 3"/>
-          <circle cx="8.5" cy="15.5" r=".8" fill="currentColor" stroke="none"/>
-          <circle cx="15.5" cy="15.5" r=".8" fill="currentColor" stroke="none"/>
-        </svg>
-        Vor Ort unterwegs
-      </h3>
-      <p class="essc-practical-lede">
-        Die rote U-Bahn-Linie (T13) verbindet den Süden mit dem äußersten
-        Norden Stockholms. Alle oben empfohlenen Stadtteile liegen an ihr,
-        die Fahrt zur Universität Stockholm ist kurz und direkt.
-      </p>
-      <p class="essc-practical-foot">
-        Routenplanung und Ticketkauf auf
-        <a href="https://sl.se/en/in-english" target="_blank" rel="noopener">sl.se</a>.
-      </p>
-    </section>
-
+<section id="stockholm-2026" class="about-section">
+  <div class="container reveal">
+    <h2>Stockholm 2026</h2>
+    <article class="glass ecs-card ecs-card-wide">
+      <p>Vielen Dank an alle, die an der Ausgabe 2026 an der Universität Stockholm teilgenommen haben. Ihr vollständiges Programm bleibt auf der <a href="essc-2026.de.html">Seite der ESSC 2026</a> online.</p>
+    </article>
   </div>
 </section>
 
@@ -502,16 +353,6 @@
 
 <script src="assets/js/site.js" defer></script>
 
-<!-- ========================================================
-     Live programme renderer.
-     Reads data/indico.json (synced daily by sync-indico.py)
-     and renders the ESSC 2027 programme grid into #programme-root.
-     Mirrors EISS's programme-grid.njk visual grammar but in vanilla
-     DOM rather than Nunjucks, since NetSec stays on plain HTML
-     (Wiki Decisions log, 22 May 2027). Schema-compatible with EISS's
-     indico.json so a future port to a build-time generator drops in.
-     ======================================================== -->
-<script src="assets/js/essc-programme.js" defer></script>
 
 </body>
 </html>

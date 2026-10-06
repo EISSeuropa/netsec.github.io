@@ -133,6 +133,23 @@ VTIMEZONES: dict[str, list[str]] = {
         "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
         "END:DAYLIGHT",
     ],
+    "Europe/Belgrade": [
+        "X-LIC-LOCATION:Europe/Belgrade",
+        "BEGIN:STANDARD",
+        "DTSTART:19701025T030000",
+        "TZOFFSETFROM:+0200",
+        "TZOFFSETTO:+0100",
+        "TZNAME:CET",
+        "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU",
+        "END:STANDARD",
+        "BEGIN:DAYLIGHT",
+        "DTSTART:19700329T020000",
+        "TZOFFSETFROM:+0100",
+        "TZOFFSETTO:+0200",
+        "TZNAME:CEST",
+        "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
+        "END:DAYLIGHT",
+    ],
     # Türkiye has been on UTC+3 year-round since September 2016, so there is
     # one component and no RRULE.
     "Europe/Istanbul": [

@@ -36,9 +36,27 @@ TZOFFSETTO:+0300
 TZNAME:+03
 END:STANDARD
 END:VTIMEZONE
+BEGIN:VTIMEZONE
+TZID:Europe/Belgrade
+X-LIC-LOCATION:Europe/Belgrade
+BEGIN:STANDARD
+DTSTART:19701025T030000
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19700329T020000
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+END:VTIMEZONE
 BEGIN:VEVENT
 UID:summer-school-2026@netsec-cost.eu
-DTSTAMP:20260915T082843Z
+DTSTAMP:20261006T093326Z
 DTSTART;TZID=Europe/Stockholm:20260609T090000
 DTEND;TZID=Europe/Stockholm:20260611T180000
 SUMMARY:NetSec Early-Career Scholars Summer School
@@ -51,7 +69,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:european-security-conference-2026@netsec-cost.eu
-DTSTAMP:20260915T082843Z
+DTSTAMP:20261006T093326Z
 DTSTART;TZID=Europe/Stockholm:20260611T080000
 DTEND;TZID=Europe/Stockholm:20260612T200000
 SUMMARY:2026 European Security Studies Conference
@@ -63,7 +81,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:policy-workshop-2026-09@netsec-cost.eu
-DTSTAMP:20260915T082843Z
+DTSTAMP:20261006T093326Z
 DTSTART;TZID=Europe/Istanbul:20260913T090000
 DTEND;TZID=Europe/Istanbul:20260913T180000
 SUMMARY:NetSec Policy Workshop: Great Power Politics and the Future of Alliances
@@ -75,7 +93,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:mc-plenary-2026-09@netsec-cost.eu
-DTSTAMP:20260915T082843Z
+DTSTAMP:20261006T093326Z
 DTSTART;TZID=Europe/Stockholm:20260911T093000
 DTEND;TZID=Europe/Stockholm:20260911T110000
 SUMMARY:Inaugural NetSec Management Committee plenary
@@ -84,5 +102,30 @@ LOCATION:Online
 URL;VALUE=URI:https://netsec-cost.eu/#events
 CATEGORIES:MC Plenary,NetSec
 STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:summer-school-2027@netsec-cost.eu
+DTSTAMP:20261006T093326Z
+DTSTART;TZID=Europe/Belgrade:20270608T090000
+DTEND;TZID=Europe/Belgrade:20270611T180000
+SUMMARY:NetSec Training School
+DESCRIPTION:Training and mentoring for early-career researchers in European security\, run by NetSec and the European Initiative for Security Studies at the University of Belgrade\, Faculty of Political Science\, alongside the European Security Studies Conference. Details of the school and the call for applications will follow.\n\nFull details: https://netsec-cost.eu/summer-school.html
+LOCATION:University of Belgrade\, Faculty of Political Science\, Belgrade\, Serbia
+URL;VALUE=URI:https://netsec-cost.eu/summer-school.html
+ORGANIZER;CN=NetSec Training School:mailto:ecs.netsec@eiss-europa.com
+CATEGORIES:Training School,NetSec
+STATUS:TENTATIVE
+END:VEVENT
+BEGIN:VEVENT
+UID:european-security-conference-2027@netsec-cost.eu
+DTSTAMP:20261006T093326Z
+DTSTART;TZID=Europe/Belgrade:20270610T090000
+DTEND;TZID=Europe/Belgrade:20270611T180000
+SUMMARY:2027 European Security Studies Conference
+DESCRIPTION:The annual conference of the NetSec community and the European Initiative for Security Studies\, at the University of Belgrade\, Faculty of Political Science. The NetSec Training School runs alongside it\, from 8 to 11 June. The call for papers will be published on eiss-europa.com by early November 2026.\n\nDetails: https://netsec-cost.eu/essc-2027.html
+LOCATION:University of Belgrade\, Faculty of Political Science\, Belgrade\, Serbia
+URL;VALUE=URI:https://netsec-cost.eu/essc-2027.html
+CATEGORIES:Annual Conference,NetSec
+STATUS:TENTATIVE
 END:VEVENT
 END:VCALENDAR

@@ -4,8 +4,46 @@
   "channelDescription": "Announcements, calls, and milestones from the COST Action CA24154 (NetSec).",
   "channelLink": "https://netsec-cost.eu/#news",
   "channelLanguage": "en-GB",
-  "lastBuildDate": "2026-09-15T09:00:00+02:00",
+  "lastBuildDate": "2026-10-06T12:00:00+02:00",
   "items": [
+    {
+      "id": "essc-2027-belgrade-save-the-date",
+      "type": "announcement",
+      "pubDate": "2026-10-06T12:00:00+02:00",
+      "displayDate": {
+        "en": "6 October 2026",
+        "fr": "6 octobre 2026",
+        "de": "6. Oktober 2026"
+      },
+      "title": {
+        "en": "Save the date: ESSC 2027 and the NetSec Training School in Belgrade",
+        "fr": "À vos agendas : l'ESSC 2027 et l'École de formation NetSec à Belgrade",
+        "de": "Save the Date: ESSC 2027 und NetSec-Ausbildungsschule in Belgrad"
+      },
+      "summary": {
+        "en": "The European Security Studies Conference runs on 10 and 11 June 2027 at the University of Belgrade, with the NetSec Training School from 8 to 11 June.",
+        "fr": "La European Security Studies Conference se tient les 10 et 11 juin 2027 à l'Université de Belgrade, et l'École de formation NetSec du 8 au 11 juin.",
+        "de": "Die European Security Studies Conference findet am 10. und 11. Juni 2027 an der Universität Belgrad statt, die NetSec-Ausbildungsschule vom 8. bis 11. Juni."
+      },
+      "body": {
+        "en": "The European Initiative for Security Studies (EISS) and COST Action CA24154 NetSec invite you to two back-to-back events at the University of Belgrade, Faculty of Political Science. The European Security Studies Conference (ESSC) runs on 10 and 11 June 2027, and the NetSec Training School runs in parallel, from 8 to 11 June 2027. Thank you to everyone who took part in the 2026 edition at Stockholm University. The ESSC call for papers will be published on eiss-europa.com in early November 2026 at the latest, setting out the themes and the submission deadline. Details of the Training School will follow. Please share this announcement with colleagues who may wish to take part.",
+        "fr": "L'European Initiative for Security Studies (EISS) et l'Action COST CA24154 NetSec vous invitent à deux événements consécutifs à l'Université de Belgrade, Faculté de sciences politiques. La European Security Studies Conference (ESSC) se tient les 10 et 11 juin 2027, et l'École de formation NetSec se déroule en parallèle, du 8 au 11 juin 2027. Merci à toutes celles et ceux qui ont participé à l'édition 2026 à l'Université de Stockholm. L'appel à communications de l'ESSC sera publié sur eiss-europa.com début novembre 2026 au plus tard, avec les thèmes et la date limite de soumission. Les détails de l'École de formation suivront. N'hésitez pas à partager cette annonce avec les collègues susceptibles de participer.",
+        "de": "Die European Initiative for Security Studies (EISS) und die COST-Aktion CA24154 NetSec laden zu zwei aufeinanderfolgenden Veranstaltungen an der Universität Belgrad, Fakultät für Politikwissenschaften, ein. Die European Security Studies Conference (ESSC) findet am 10. und 11. Juni 2027 statt, parallel dazu die NetSec-Ausbildungsschule vom 8. bis 11. Juni 2027. Vielen Dank an alle, die an der Ausgabe 2026 an der Universität Stockholm teilgenommen haben. Der Call for Papers der ESSC erscheint spätestens Anfang November 2026 auf eiss-europa.com und nennt die Themen und die Einreichungsfrist. Einzelheiten zur Ausbildungsschule folgen. Bitte leiten Sie diese Ankündigung an Kolleginnen und Kollegen weiter, die teilnehmen möchten."
+      },
+      "cta": {
+        "href": {
+          "en": "essc-2027.html",
+          "fr": "essc-2027.fr.html",
+          "de": "essc-2027.de.html"
+        },
+        "external": false,
+        "i18n": {
+          "en": "See the conference page →",
+          "fr": "Voir la page de la conférence →",
+          "de": "Zur Konferenzseite →"
+        }
+      }
+    },
     {
       "id": "policy-workshop-2026-concludes-ankara",
       "type": "event",
