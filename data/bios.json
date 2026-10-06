@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-09-19T09:28:29+00:00",
+  "generated_at": "2026-10-06T12:02:06+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-09-19T09:28:29+00:00"
+    "last_synced": "2026-10-06T12:02:06+00:00"
   },
   "members": [
     {
@@ -4533,6 +4533,92 @@
         "Strategy and deterrence",
         "Transnational and human security"
       ]
+    },
+    {
+      "id": "alexander-evans",
+      "name": "Prof. Alexander Evans",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "affiliation": "London School of Economics",
+      "position": "Associate Dean",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Professor Alexander Evans OBE FRHistS is Associate Dean at the LSE School of Public Policy. He joined the British Diplomatic Service in 2003 and has served as an Adviser to the Prime Minister, as Strategy Director in the Cabinet Office, and Director Cyber in the Foreign Office. His overseas roles include serving as Deputy and Acting High Commissioner to India and (briefly) Pakistan, leading the United Nations Security Council expert group on Daesh, Al Qaida and the Taliban, and serving as a senior advisor to the late Ambassador Richard Holbrooke in the U.S. Department of State. Alexander is a former Henry Kissinger Chair at the Library of Congress, Senior Fellow at Yale, and Gwilym Gibbon Fellow at Nuffield College Oxford. He is a Senior Research Fellow at the British Centre for Army Leadership. He has written for Foreign Affairs, International Affairs, The Economist and in books, journals and newspapers.",
+      "keywords": [
+        "National Security",
+        "AI",
+        "Strategy"
+      ],
+      "email": "a.i.evans@lse.ac.uk",
+      "website": "",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/alexander-evans.jpg",
+      "source": "form",
+      "photo_source_sha256": "8d1d91a1472720fb9dfc9aa867c24f6bb9007e5d704c9f35cafbeb92fb7ce000",
+      "canonical_keywords": [
+        "AI",
+        "National security",
+        "Strategy"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Security and defence",
+        "Strategy and deterrence"
+      ]
+    },
+    {
+      "id": "ana-e-juncos",
+      "name": "Prof. Ana E. Juncos",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "affiliation": "University of Bristol",
+      "position": "Professor of European Politics",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor-full"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Europe - Western Balkans",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Ana E. Juncos is a of Professor European Politics at the School of Sociology, Politics and International Studies, University of Bristol. Her primary research interest lies in European foreign and security policy, with a particular focus on EU conflict prevention and peacebuiding. She is also known for her work on diplomatic negotiations in EU foreign policy, including processes of socialisation and populist contestation. She has been a visiting fellow at The Amsterdam Centre for Contemporary European Studies (ACCESS Europe), the Université Catholique de Louvain, and the Croatian Institute of International Relations (IMO), among others. She's currently a visiting Professor at the College of Europe in Bruges. Ana E. Juncos has widely published on European foreign, security and defence policies. She is author of EU Foreign and Security Policy in Bosnia: The Politics of Coherence and Effectiveness (Manchester University Press, 2013) and co-editor of EU Conﬂict Prevention and Crisis Management (with E. Gross, Routledge, 2011). She has published articles in high-ranking journals such as International Affairs, Journal of European Public Policy and Journal of Common Market Studies. She is currently an  Editor of the Journal of European Integration.",
+      "keywords": [
+        "CSDP",
+        "peacebuilding",
+        "resilience",
+        "populism"
+      ],
+      "email": "a.e.juncos@bristol.ac.uk",
+      "website": "https://www.bristol.ac.uk/people/person/Ana%20E-Juncos%20Garcia-cd4b7c2f-8f13-4e97-a1c6-a4c0df930095/",
+      "orcid": "0000-0002-6913-351X",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "CSDP",
+        "Peacebuilding",
+        "Populism",
+        "Resilience"
+      ],
+      "themes": [
+        "EU, UN and other international organisations",
+        "Peace, mediation and reconciliation"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -4541,11 +4627,15 @@
       "count": 10
     },
     {
+      "keyword": "AI",
+      "count": 7
+    },
+    {
       "keyword": "Cybersecurity",
       "count": 7
     },
     {
-      "keyword": "AI",
+      "keyword": "Strategy",
       "count": 6
     },
     {
@@ -4562,10 +4652,6 @@
     },
     {
       "keyword": "International security",
-      "count": 5
-    },
-    {
-      "keyword": "Strategy",
       "count": 5
     },
     {
@@ -4609,6 +4695,10 @@
       "count": 4
     },
     {
+      "keyword": "CSDP",
+      "count": 3
+    },
+    {
       "keyword": "Defence industry",
       "count": 3
     },
@@ -4630,6 +4720,10 @@
     },
     {
       "keyword": "Maritime security",
+      "count": 3
+    },
+    {
+      "keyword": "National security",
       "count": 3
     },
     {
@@ -4674,10 +4768,6 @@
     },
     {
       "keyword": "Critical security studies",
-      "count": 2
-    },
-    {
-      "keyword": "CSDP",
       "count": 2
     },
     {
@@ -4734,10 +4824,6 @@
     },
     {
       "keyword": "Multilateralism",
-      "count": 2
-    },
-    {
-      "keyword": "National security",
       "count": 2
     },
     {
@@ -5257,6 +5343,10 @@
       "count": 1
     },
     {
+      "keyword": "Peacebuilding",
+      "count": 1
+    },
+    {
       "keyword": "Peacekeeping",
       "count": 1
     },
@@ -5286,6 +5376,10 @@
     },
     {
       "keyword": "Political violence",
+      "count": 1
+    },
+    {
+      "keyword": "Populism",
       "count": 1
     },
     {
@@ -5338,6 +5432,10 @@
     },
     {
       "keyword": "Research methods",
+      "count": 1
+    },
+    {
+      "keyword": "Resilience",
       "count": 1
     },
     {
@@ -5480,11 +5578,11 @@
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 26
+      "count": 27
     },
     {
       "theme": "Security and defence",
-      "count": 25
+      "count": 26
     },
     {
       "theme": "Disciplines, theory and methods",
@@ -5500,11 +5598,15 @@
     },
     {
       "theme": "Strategy and deterrence",
-      "count": 16
+      "count": 17
     },
     {
       "theme": "War, military history and armed conflict",
       "count": 12
+    },
+    {
+      "theme": "EU, UN and other international organisations",
+      "count": 11
     },
     {
       "theme": "Intelligence, information and influence",
@@ -5512,10 +5614,6 @@
     },
     {
       "theme": "Economic security and geoeconomics",
-      "count": 10
-    },
-    {
-      "theme": "EU, UN and other international organisations",
       "count": 10
     },
     {
@@ -5528,7 +5626,7 @@
     },
     {
       "theme": "Peace, mediation and reconciliation",
-      "count": 5
+      "count": 6
     },
     {
       "theme": "Crisis management and critical systems resilience",
@@ -5712,6 +5810,7 @@
     "Organisation studies": "Disciplines, theory and methods",
     "Peace operations": "Peace, mediation and reconciliation",
     "Peace vision": "Peace, mediation and reconciliation",
+    "Peacebuilding": "Peace, mediation and reconciliation",
     "Peacekeeping": "Peace, mediation and reconciliation",
     "Plural peace": "Peace, mediation and reconciliation",
     "Policy evaluation": "Disciplines, theory and methods",
@@ -5782,19 +5881,19 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 61
+      "count": 62
     },
     {
       "region": "Global and cross-regional",
-      "count": 48
+      "count": 49
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 23
+      "count": 24
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 20
+      "count": 21
     },
     {
       "region": "The Americas",
