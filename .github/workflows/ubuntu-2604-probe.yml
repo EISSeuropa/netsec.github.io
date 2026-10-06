@@ -157,7 +157,6 @@ jobs:
           lsb_release -ds
           /usr/bin/google-chrome --version
           fc-match sans-serif
-          python3 -c "import PIL; print('Pillow', PIL.__version__)"
           sha256sum assets/og/people/arthur-laudrain.png
 
       - name: Keep sample cards
