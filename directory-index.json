@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-10-06T12:02:06+00:00",
+  "generated_at": "2026-10-07T11:46:50+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 100,
+  "count": 102,
   "members": [
     {
       "name": "Mr Adam Hanzel",
@@ -200,6 +200,17 @@
       "orcid": "0000-0002-2650-9759",
       "role": null,
       "affiliation": "Centre for Functional Ecology",
+      "photo": null
+    },
+    {
+      "name": "Dr Céline Rodrigues",
+      "name_key": "celine rodrigues",
+      "aliases": [],
+      "slug": "celine-rodrigues",
+      "url": "https://netsec-cost.eu/people/celine-rodrigues.html",
+      "orcid": "0009-0002-2924-4984",
+      "role": null,
+      "affiliation": "Universidade Portucalense, IPRI-NOVA",
       "photo": null
     },
     {
@@ -674,6 +685,17 @@
       "role": null,
       "affiliation": "Vrije Universiteit Brussel (VUB)",
       "photo": "https://netsec-cost.eu/assets/images/people/mahmoud-javadi.jpg"
+    },
+    {
+      "name": "Dr Marcel Berni",
+      "name_key": "marcel berni",
+      "aliases": [],
+      "slug": "marcel-berni",
+      "url": "https://netsec-cost.eu/people/marcel-berni.html",
+      "orcid": "0000-0002-2932-8654",
+      "role": null,
+      "affiliation": "Military Academy at the Swiss Federal Institute of Technology (ETH) in Zurich",
+      "photo": null
     },
     {
       "name": "Mr Marco Cifra",
