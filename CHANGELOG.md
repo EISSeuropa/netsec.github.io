@@ -142,6 +142,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+#### Added
+
+- The Year in Review carries its first edition for the Action's year one, 10 October 2025 to 9 October 2026, with an opening paragraph and a paragraph on year two in English, French and German. Its figures are refreshed to 100 members, 10 news items and 18 releases, and a news item on the home page and in the RSS feed links to it.
+
 #### Changed
 
 - The roadmap cards for v1.11.0 to v1.15.0 read in French and German. They had shown the English release summary with a translation marker since June.
