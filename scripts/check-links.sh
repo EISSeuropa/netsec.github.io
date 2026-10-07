@@ -117,6 +117,11 @@ SKIP_DOMAIN_SUFFIXES = {
                                 # sl.se/en/in-english). Returns HTTP 403 to the
                                 # Actions-runner IP on HEAD and GET, but loads in
                                 # a real browser. Confirmed reachable 2026-06-05.
+    "linkedin.com",             # LinkedIn throttles the Actions-runner IP with
+                                # HTTP 429 (and 999 to some clients) on pages
+                                # that load in a real browser. Failed #1980's
+                                # check on the company page linked from the
+                                # About pages; confirmed reachable 2026-10-07.
 }
 
 def host_skipped(hostname):
