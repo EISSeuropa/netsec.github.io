@@ -122,6 +122,26 @@ class Post:
         return "\n".join(p for p in parts if p is not None)
 
 
+# LinkedIn reads `commentary` as "little text": these characters are markup,
+# and the API silently drops everything from the first unescaped one. The
+# October 2026 news posts stopped at "(University of Belgrade)" and "(EISS)".
+_LI_RESERVED = re.compile(r"([\\|{}@\[\]()<>#*_~])")
+_LI_HASHTAG = re.compile(r"(?<!\S)#(\w+)")
+
+
+def li_little_text(text: str) -> str:
+    """Escape LinkedIn's reserved characters with a backslash, and write each
+    hashtag (a # at the start of a word, so never a URL fragment) as
+    {hashtag|\\#|Name} so it stays a clickable tag."""
+    out, last = [], 0
+    for m in _LI_HASHTAG.finditer(text):
+        out.append(_LI_RESERVED.sub(r"\\\1", text[last:m.start()]))
+        out.append("{hashtag|\\#|" + m.group(1) + "}")
+        last = m.end()
+    out.append(_LI_RESERVED.sub(r"\\\1", text[last:]))
+    return "".join(out)
+
+
 def _truncate(text: str, limit: int) -> str:
     text = text.strip()
     if len(text) <= limit:
@@ -811,7 +831,7 @@ class LinkedInChannel(Channel):
     def _do_publish(self, post: Post) -> str:
         body = {
             "author": f"urn:li:organization:{self._org()}",
-            "commentary": post.render("linkedin"),
+            "commentary": li_little_text(post.render("linkedin")),
             "visibility": "PUBLIC",
             "distribution": {
                 "feedDistribution": "MAIN_FEED",
