@@ -197,6 +197,27 @@ jobs:
             python3 scripts/social-post.py --live --channel all --kind "$KIND"
           fi
 
+      - name: Move the ledger onto the current main
+        # The approval gate can hold this job for a day, and the weekly
+        # spotlight rotation appends to the same ledger meanwhile. A ledger PR
+        # cut from the triggering commit then conflicts with main (#1986, held
+        # 21 hours). Reset to main's tip and re-add only the keys this run
+        # holds that main lacks, so the PR is a pure append to today's file.
+        run: |
+          cp data/social-posted.json /tmp/ledger.json
+          git fetch --depth=1 origin main
+          git reset --hard --quiet FETCH_HEAD
+          python3 - <<'PY'
+          import json, pathlib
+          led = pathlib.Path("data/social-posted.json")
+          cur = json.loads(led.read_text(encoding="utf-8"))
+          extra = [k for k in json.loads(pathlib.Path("/tmp/ledger.json").read_text(encoding="utf-8"))["posted"]
+                   if k not in cur["posted"]]
+          cur["posted"] += extra
+          led.write_text(json.dumps(cur, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+          print(f"::notice::Carried {len(extra)} new key(s) onto main's ledger.")
+          PY
+
       - name: Persist the dedup ledger via an auto-merging PR
         id: create-pr
         # The post has already gone out by this point, so a lost ledger means

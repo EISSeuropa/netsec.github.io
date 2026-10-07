@@ -397,5 +397,9 @@ to reach both channels again.
   a news push arriving in the gap would offer the reviewer a post that has
   already gone out (run 30129049311 on 24 July 2026 is the case that prompted
   this).
+- The publish job resets to the tip of `main` before opening the ledger PR,
+  carrying over only the keys main lacks. The approval gate can hold the job
+  for a day, and a spotlight rotation that merges in the meantime appends to
+  the same file, so a PR cut from the triggering commit conflicted (#1986).
 - Account creation, app registration, entering credentials, and granting
   OAuth are done by a person, never by the website code.
