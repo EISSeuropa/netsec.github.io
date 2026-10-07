@@ -194,8 +194,7 @@
       "affiliation": "University of Oxford",
       "position": "Lecturer in Politics",
       "roles": [
-        "WG2 Leader",
-        "Science Communication Coordinator Co-Leader"
+        "WG2 Leader"
       ],
       "wgs": [
         1
@@ -398,20 +397,14 @@
       "country_code": "cz",
       "affiliation": "Metropolitan University Prague",
       "position": "",
-      "roles": [
-        "WG4 Co-Leader"
-      ],
+      "roles": [],
       "wgs": [
         1,
         2,
         3,
         4
       ],
-      "wg_leadership": {
-        "co_lead": [
-          4
-        ]
-      },
+      "wg_leadership": {},
       "bio": "",
       "keywords": [],
       "email": "",
@@ -433,7 +426,8 @@
       "affiliation": "ETH Zürich, Center for Security Studies",
       "position": "Team Lead & Senior Researcher, Cyber Security",
       "roles": [
-        "Management Committee · Switzerland"
+        "Management Committee · Switzerland",
+        "Science Communication Coordinator Co-Leader"
       ],
       "wgs": [
         1,

@@ -1195,10 +1195,7 @@
         "slug": "revecca-pedi",
         "name": "Dr Revecca Pedi"
       },
-      "coLead": {
-        "slug": "sarka-kolmasova",
-        "name": "Dr Šárka Kolmašová"
-      },
+      "coLead": null,
       "members": [
         {
           "name": "Prof Abdelouahid Ezzarfi",
@@ -1341,6 +1338,11 @@
         {
           "name": "Dr Pinar Caglayan",
           "country": "Türkiye"
+        },
+        {
+          "name": "Dr Sarka Kolmasova",
+          "country": "Czechia",
+          "slug": "sarka-kolmasova"
         },
         {
           "name": "Mr Saurav Narain",
