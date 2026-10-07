@@ -421,6 +421,28 @@ def test_linkedin_text_post_shape_and_headers(monkeypatch):
     assert c["headers"]["Authorization"] == "Bearer tok-abc"
 
 
+def test_linkedin_little_text_escapes_reserved_and_keeps_hashtags():
+    """LinkedIn drops a post's text from the first unescaped reserved
+    character, which cut the October 2026 news posts at their first "("."""
+    text = ("Prof. Filip Ejdus (University of Belgrade) leads [WG1] @x_y *z* ~w <a|b> {c} a\\b."
+            "\n\nhttps://netsec-cost.eu/about.html#leadership\n\n#EuropeanSecurity #COSTAction")
+    out = sp.li_little_text(text)
+    assert r"Ejdus \(University of Belgrade\) leads \[WG1\]" in out
+    assert r"\@x\_y \*z\* \~w \<a\|b\> \{c\} a\\b." in out
+    assert r"about.html\#leadership" in out
+    assert out.endswith(r"{hashtag|\#|EuropeanSecurity} {hashtag|\#|COSTAction}")
+
+
+def test_linkedin_commentary_is_escaped(monkeypatch):
+    monkeypatch.setenv("LINKEDIN_ORG_ID", "12345")
+    monkeypatch.setenv("LINKEDIN_ACCESS_TOKEN", "tok-abc")
+    fake, calls = _li_recorder([(201, {"x-restli-id": "urn:li:share:99"}, {})])
+    monkeypatch.setattr(sp, "_li_request", fake)
+    post = sp.Post(kind="news", key="k", title="T", summary="A (B) C", link="https://x/")
+    sp.LinkedInChannel("linkedin").publish(post)
+    assert "A \\(B\\) C" in calls[0]["json"]["commentary"]
+
+
 def test_linkedin_image_post_uploads_then_posts(monkeypatch, tmp_path):
     img = tmp_path / "card.png"
     img.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 32)

@@ -182,6 +182,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- LinkedIn posts carry their full text. LinkedIn treats characters such as parentheses as markup and dropped everything from the first one, so the October 2026 news posts stopped at "(University of Belgrade)" and "(EISS)". The text is now escaped, and the hashtags are sent as LinkedIn hashtags.
 - A landscape photo now fills its round avatar instead of sitting in it with a gap above and below. Dr Moritz Weiss's and Mr Eugenio Sánchez's photos on the About page showed this, and the About page now points at Mr Sánchez's photo by its real file name.
 - A leadership role that cost.eu stops listing now leaves the Directory, the Working Groups page and the Network Map at the next weekly sync, and the sync report names it. The WG4 Co-Leader role had stayed on the site for a month after it left cost.eu in September.
 - The member profile pages have a skip link to the profile, the first stop for the Tab key in all three languages ([#1926](https://github.com/EISSeuropa/netsec.github.io/issues/1926)).
