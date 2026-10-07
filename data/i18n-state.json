@@ -151,15 +151,15 @@
     "index.html": {
       "fr": {
         "file": "index.fr.html",
-        "source_sha1": "b5efa4cccbe352e30176d45ec90cc32fac7d204e",
-        "translated_on": "2026-09-28",
+        "source_sha1": "a56507b1d91bfbb576618376184dd11fd5fc11fe",
+        "translated_on": "2026-10-07",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "index.de.html",
-        "source_sha1": "b5efa4cccbe352e30176d45ec90cc32fac7d204e",
-        "translated_on": "2026-09-28",
+        "source_sha1": "a56507b1d91bfbb576618376184dd11fd5fc11fe",
+        "translated_on": "2026-10-07",
         "status": "beta",
         "reviewed_by": null
       }
@@ -199,15 +199,15 @@
     "glossary.html": {
       "fr": {
         "file": "glossary.fr.html",
-        "source_sha1": "801ead353bcaf1f7cec905008cb028ac85fa3932",
-        "translated_on": "2026-09-26",
+        "source_sha1": "b624bacd3f797eb24757a7bab411b725bf28c35a",
+        "translated_on": "2026-10-07",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "glossary.de.html",
-        "source_sha1": "801ead353bcaf1f7cec905008cb028ac85fa3932",
-        "translated_on": "2026-09-26",
+        "source_sha1": "b624bacd3f797eb24757a7bab411b725bf28c35a",
+        "translated_on": "2026-10-07",
         "status": "beta",
         "reviewed_by": null
       }
@@ -215,15 +215,15 @@
     "about.html": {
       "fr": {
         "file": "about.fr.html",
-        "source_sha1": "ebb41ae498722307bec8e0647a381f4cea292309",
-        "translated_on": "2026-09-26",
+        "source_sha1": "5e4f64ce8bacecc08ec1f40c9ac9a8cc58367fdf",
+        "translated_on": "2026-10-07",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "about.de.html",
-        "source_sha1": "ebb41ae498722307bec8e0647a381f4cea292309",
-        "translated_on": "2026-09-26",
+        "source_sha1": "5e4f64ce8bacecc08ec1f40c9ac9a8cc58367fdf",
+        "translated_on": "2026-10-07",
         "status": "beta",
         "reviewed_by": null
       }
@@ -279,15 +279,15 @@
     "working-groups.html": {
       "fr": {
         "file": "working-groups.fr.html",
-        "source_sha1": "37c89c0e6fb1877ba358a8715cd86572a819f2d2",
-        "translated_on": "2026-09-26",
+        "source_sha1": "391043365af2697441a5dc7f50bcfb77e57dbac5",
+        "translated_on": "2026-10-07",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "working-groups.de.html",
-        "source_sha1": "37c89c0e6fb1877ba358a8715cd86572a819f2d2",
-        "translated_on": "2026-09-26",
+        "source_sha1": "391043365af2697441a5dc7f50bcfb77e57dbac5",
+        "translated_on": "2026-10-07",
         "status": "beta",
         "reviewed_by": null
       }
