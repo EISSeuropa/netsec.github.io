@@ -142,7 +142,9 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+#### Changed
+
+- The roadmap cards for v1.11.0 to v1.15.0 read in French and German. They had shown the English release summary with a translation marker since June.
 
 ## [1.15.0] · 2026-10-07 — Preparing for the Year in Review
 
