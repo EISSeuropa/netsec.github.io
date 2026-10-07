@@ -632,7 +632,10 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   overflow:hidden;
 }
 .mc-avatar img{
-  width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;
+  /* aspect-ratio keeps a landscape photo square: inside the grid the
+     percentage height resolves to auto, which left a 600x398 photo at
+     80x67 and a gap above and below it in the circle. */
+  width:100%;height:100%;aspect-ratio:1;object-fit:cover;display:block;border-radius:50%;
 }
 /* <picture> wrapper (WebP source + JPEG/PNG fallback img) is layout-neutral:
    the sizing lives on the inner <img>. */

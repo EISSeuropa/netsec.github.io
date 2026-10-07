@@ -215,14 +215,14 @@
     "about.html": {
       "fr": {
         "file": "about.fr.html",
-        "source_sha1": "89bfc4d6eab3ccec07afbe42329c32e78e096b63",
+        "source_sha1": "d1d90fb51c653b0b1a6c6b84003c79664f6757d4",
         "translated_on": "2026-10-07",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "about.de.html",
-        "source_sha1": "89bfc4d6eab3ccec07afbe42329c32e78e096b63",
+        "source_sha1": "d1d90fb51c653b0b1a6c6b84003c79664f6757d4",
         "translated_on": "2026-10-07",
         "status": "beta",
         "reviewed_by": null
