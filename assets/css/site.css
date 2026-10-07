@@ -3308,16 +3308,56 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .ecs-card p{margin:0 0 .9rem;color:var(--ink-2);line-height:1.65}
 .ecs-card p:last-child{margin-bottom:0}
 .ecs-card a{color:var(--link)}
-/* Lists and the hotel table in the ESSC 2027 practical information cards. */
-.ecs-card-span{grid-column:1/-1}
-.ecs-card ul{margin:0;padding-left:1.2rem;color:var(--ink-2);line-height:1.65}
-.ecs-card li + li{margin-top:.45rem}
-.ecs-card dl{margin:0;color:var(--ink-2);line-height:1.65}
+/* ESSC 2027 practical information. The short cards flow into as many
+   columns as fit, so uneven heights pack without row gaps. On phones
+   they become a swipeable row, and the places to stay always scroll
+   sideways as a snap slider. */
+.ecs-practical-cards{columns:3 270px;column-gap:16px}
+.ecs-practical-cards > .ecs-card{
+  break-inside:avoid;margin-bottom:16px;padding:18px 20px;font-size:.94rem;
+}
+@media (max-width:640px){
+  .ecs-practical-cards{
+    columns:auto;display:grid;grid-auto-flow:column;grid-auto-columns:86%;
+    gap:12px;margin-bottom:16px;padding-bottom:8px;
+    overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
+  }
+  .ecs-practical-cards > .ecs-card{margin-bottom:0;scroll-snap-align:start}
+}
+.ecs-card h3:has(.ecs-card-icon){display:flex;align-items:center;gap:.55rem}
+.ecs-card-icon{
+  display:inline-flex;align-items:center;justify-content:center;flex:none;
+  width:30px;height:30px;border-radius:9px;color:var(--link);
+  background:color-mix(in srgb,var(--accent-2) 12%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent-2) 22%,transparent);
+}
+.ecs-card-icon svg{width:17px;height:17px}
+.ecs-card ul{margin:0;padding-left:1.1rem;color:var(--ink-2);line-height:1.6}
+.ecs-card li + li{margin-top:.35rem}
+.ecs-card dl{margin:0;color:var(--ink-2);line-height:1.6}
 .ecs-card dt{font-weight:600;color:var(--ink)}
-.ecs-card dd{margin:0 0 .7rem}
+.ecs-card dd{margin:0 0 .6rem}
 .ecs-card dd:last-child{margin-bottom:0}
-.ecs-table-scroll{overflow-x:auto}
-.ecs-practical-checked{margin:1.2rem 0 0;font-size:.88rem;color:var(--muted)}
+.ecs-stay-slider{
+  list-style:none;margin:0 0 .9rem;padding:2px 2px 10px;
+  display:grid;grid-auto-flow:column;grid-auto-columns:200px;gap:10px;
+  overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
+  scrollbar-width:thin;
+}
+.ecs-card .ecs-stay-slider li + li{margin-top:0}
+.ecs-stay{
+  scroll-snap-align:start;display:flex;flex-direction:column;gap:.15rem;
+  padding:12px 14px;border-radius:12px;border:1px solid var(--line);
+  background:color-mix(in srgb,var(--accent-2) 5%,transparent);
+}
+.ecs-stay strong{color:var(--ink);font-weight:600;line-height:1.3}
+.ecs-stay-range{
+  font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);
+}
+.ecs-stay-area{font-size:.88rem;color:var(--ink-2)}
+.ecs-stay-links{margin-top:auto;padding-top:.35rem;font-size:.88rem}
+.ecs-practical-checked{margin:.4rem 0 0;font-size:.88rem;color:var(--muted)}
 
 /* Feature trio (Who / Get / Apply) with an accent icon medallion. */
 .ecs-feature-grid{
