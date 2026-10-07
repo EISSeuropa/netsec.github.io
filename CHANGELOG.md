@@ -142,6 +142,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+#### Added
+
+- The ESSC 2027 page carries practical information for Belgrade in all three locales: the venue, visas and entry, the routes from the airport, local transport, fourteen places to stay with their area and price range, money and emergency numbers. The Training School page and the hero's Venue fact link to it.
+
 #### Changed
 
 - The roadmap cards for v1.11.0 to v1.15.0 read in French and German. They had shown the English release summary with a translation marker since June.

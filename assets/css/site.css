@@ -3308,6 +3308,16 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .ecs-card p{margin:0 0 .9rem;color:var(--ink-2);line-height:1.65}
 .ecs-card p:last-child{margin-bottom:0}
 .ecs-card a{color:var(--link)}
+/* Lists and the hotel table in the ESSC 2027 practical information cards. */
+.ecs-card-span{grid-column:1/-1}
+.ecs-card ul{margin:0;padding-left:1.2rem;color:var(--ink-2);line-height:1.65}
+.ecs-card li + li{margin-top:.45rem}
+.ecs-card dl{margin:0;color:var(--ink-2);line-height:1.65}
+.ecs-card dt{font-weight:600;color:var(--ink)}
+.ecs-card dd{margin:0 0 .7rem}
+.ecs-card dd:last-child{margin-bottom:0}
+.ecs-table-scroll{overflow-x:auto}
+.ecs-practical-checked{margin:1.2rem 0 0;font-size:.88rem;color:var(--muted)}
 
 /* Feature trio (Who / Get / Apply) with an accent icon medallion. */
 .ecs-feature-grid{
