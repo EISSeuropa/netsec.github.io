@@ -4,7 +4,7 @@
     "working_groups": 4,
     "people": 221,
     "people_with_bios": 100,
-    "edges": 606,
+    "edges": 607,
     "themes": 17,
     "panels_matched": 14,
     "panel_edges": 54,
@@ -3190,6 +3190,10 @@
     {
       "source": "sarka-kolmasova",
       "target": "wg-3"
+    },
+    {
+      "source": "sarka-kolmasova",
+      "target": "wg-4"
     },
     {
       "source": "saurav-narain",
