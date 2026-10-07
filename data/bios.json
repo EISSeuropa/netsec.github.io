@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-06T12:02:06+00:00",
+  "generated_at": "2026-10-07T11:46:50+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-06T12:02:06+00:00"
+    "last_synced": "2026-10-07T11:46:50+00:00"
   },
   "members": [
     {
@@ -4613,6 +4613,80 @@
         "EU, UN and other international organisations",
         "Peace, mediation and reconciliation"
       ]
+    },
+    {
+      "id": "celine-rodrigues",
+      "name": "Dr Céline Rodrigues",
+      "country": "Portugal",
+      "country_code": "pt",
+      "affiliation": "Universidade Portucalense, IPRI-NOVA",
+      "position": "Assistant Professor, associate Researcher, policy Advisor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Céline Rodrigues is an Assistant Professor at Universidade Portucalense and Invited Assistant Professor at Universidade da Beira Interior. She holds a PhD in International Relations, Specialisation in Globalisation and Environment at Nova University Lisbon, Portugal, demonstrating the rapprochement of the North Atlantic and Arctic developing scenarios to confirm the importance of the Arctic for Portugal. She also has research on human security of Arctic Indigenous, ocean governance, maritime security. She participates at international conferences, publishes articles and policy briefs. She is invited for lectures/open classes. Céline participated in the RPT 1 (The Role of the Arctic in the Global Earth System) co-leading the research theme 5 at ICARP/IASC and spent three months in the Arctic at the Arctic Centre, University of Lapland, Rovaniemi, Finland, and is an Associate Researcher at many national and international research centres/think tanks. Céline is also an Arctic and Governance policy Advisor at Global Choices. She is the co-founder of Latin Polar Science, co-organising annually the Latin Polar Science Workshop.",
+      "keywords": [
+        "Arctic security/governance",
+        "maritime security",
+        "defence North Atlantic and Arctic"
+      ],
+      "email": "celineceli@hotmail.com",
+      "website": "",
+      "orcid": "0009-0002-2924-4984",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Arctic security/governance",
+        "Defence north Atlantic and Arctic",
+        "Maritime security"
+      ],
+      "themes": [
+        "Transnational and human security"
+      ]
+    },
+    {
+      "id": "marcel-berni",
+      "name": "Dr Marcel Berni",
+      "country": "Switzerland",
+      "country_code": "ch",
+      "affiliation": "Military Academy at the Swiss Federal Institute of Technology (ETH) in Zurich",
+      "position": "Head of the Department of Strategic Studies",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Marcel Berni is the Head of the Department of Strategic Studies of the Military Academy at the Swiss Federal Institute of Technology (ETH) in Zurich. He studied history, political science and ecology at the University of Berne. In 2019, he completed his doctorate at the University of Hamburg with a thesis on the treatment on Communist prisoners during the Vietnam War. The study, which was published in 2020, won the André Corvisier Prize for the best dissertation in military history. Marcel Berni is an alumnus of the S. Rajaratnam School of International Studies at Nanyang Technological University, Singapore, and serves on the editorial avisory board of the academic journal Defense & Security Analysis.",
+      "keywords": [
+        "Strategic Studies"
+      ],
+      "email": "",
+      "website": "https://www.vtg.admin.ch/en/strategic-studies",
+      "orcid": "0000-0002-2932-8654",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Strategic studies"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -4677,6 +4751,10 @@
       "count": 4
     },
     {
+      "keyword": "Maritime security",
+      "count": 4
+    },
+    {
       "keyword": "NATO",
       "count": 4
     },
@@ -4710,10 +4788,6 @@
     },
     {
       "keyword": "Identity",
-      "count": 3
-    },
-    {
-      "keyword": "Maritime security",
       "count": 3
     },
     {
@@ -4877,6 +4951,10 @@
       "count": 1
     },
     {
+      "keyword": "Arctic security/governance",
+      "count": 1
+    },
+    {
       "keyword": "Arms control",
       "count": 1
     },
@@ -4990,6 +5068,10 @@
     },
     {
       "keyword": "Defence innovation",
+      "count": 1
+    },
+    {
+      "keyword": "Defence north Atlantic and Arctic",
       "count": 1
     },
     {
@@ -5493,6 +5575,10 @@
       "count": 1
     },
     {
+      "keyword": "Strategic studies",
+      "count": 1
+    },
+    {
       "keyword": "Strategy and deterrence",
       "count": 1
     },
@@ -5584,7 +5670,7 @@
     },
     {
       "theme": "Transnational and human security",
-      "count": 21
+      "count": 22
     },
     {
       "theme": "European and transatlantic security order",
@@ -5875,11 +5961,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 62
+      "count": 63
     },
     {
       "region": "Global and cross-regional",
-      "count": 49
+      "count": 51
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
