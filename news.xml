@@ -5,9 +5,16 @@
     <link>https://netsec-cost.eu/#news</link>
     <description>Announcements, calls, and milestones from the COST Action CA24154 (NetSec).</description>
     <language>en-GB</language>
-    <lastBuildDate>Tue, 06 Oct 2026 12:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 07 Oct 2026 12:00:00 +0200</lastBuildDate>
     <generator>scripts/build-news-rss.py</generator>
     <atom:link href="https://netsec-cost.eu/news.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>New Working Group and Science Communication leads</title>
+      <link>https://netsec-cost.eu/about.html#leadership</link>
+      <description><![CDATA[Several leadership roles in COST Action CA24154 NetSec have new holders. Prof. Filip Ejdus (University of Belgrade) leads Working Group 1, Building the Network, and Prof. Nikolaos Tzifakis (University of the Peloponnese) joined him as co-lead in July. Dr Eliza Gheorghe (Bilkent University), also the Action's Grant Awarding Coordinator, has co-led Working Group 2, Transfer of Knowledge, since July. Since 6 October, Dr Arthur Laudrain (ETH Zürich) co-leads Science Communication with Mr Eugenio Sánchez. The full leadership of the Action is on the About page.]]></description>
+      <pubDate>Wed, 07 Oct 2026 12:00:00 +0200</pubDate>
+      <guid isPermaLink="false">leadership-roles-october-2026</guid>
+    </item>
     <item>
       <title>Save the date: ESSC 2027 and the NetSec Training School in Belgrade</title>
       <link>https://netsec-cost.eu/essc-2027.html</link>

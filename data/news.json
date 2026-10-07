@@ -4,8 +4,46 @@
   "channelDescription": "Announcements, calls, and milestones from the COST Action CA24154 (NetSec).",
   "channelLink": "https://netsec-cost.eu/#news",
   "channelLanguage": "en-GB",
-  "lastBuildDate": "2026-10-06T12:00:00+02:00",
+  "lastBuildDate": "2026-10-07T12:00:00+02:00",
   "items": [
+    {
+      "id": "leadership-roles-october-2026",
+      "type": "announcement",
+      "pubDate": "2026-10-07T12:00:00+02:00",
+      "displayDate": {
+        "en": "7 October 2026",
+        "fr": "7 octobre 2026",
+        "de": "7. Oktober 2026"
+      },
+      "title": {
+        "en": "New Working Group and Science Communication leads",
+        "fr": "Nouvelles responsabilités dans les groupes de travail et la communication scientifique",
+        "de": "Neue Leitungen in den Arbeitsgruppen und der Wissenschaftskommunikation"
+      },
+      "summary": {
+        "en": "Prof. Filip Ejdus now leads Working Group 1 with Prof. Nikolaos Tzifakis, Dr Eliza Gheorghe co-leads Working Group 2, and Dr Arthur Laudrain co-leads Science Communication.",
+        "fr": "Le Pr Filip Ejdus dirige désormais le Groupe de travail 1 avec le Pr Nikolaos Tzifakis, la Dre Eliza Gheorghe codirige le Groupe de travail 2 et le Dr Arthur Laudrain codirige la communication scientifique.",
+        "de": "Prof. Filip Ejdus leitet nun die Arbeitsgruppe 1 gemeinsam mit Prof. Nikolaos Tzifakis, Dr. Eliza Gheorghe ist Co-Leiterin der Arbeitsgruppe 2, und Dr. Arthur Laudrain ist Co-Leiter der Wissenschaftskommunikation."
+      },
+      "body": {
+        "en": "Several leadership roles in COST Action CA24154 NetSec have new holders. Prof. Filip Ejdus (University of Belgrade) leads Working Group 1, Building the Network, and Prof. Nikolaos Tzifakis (University of the Peloponnese) joined him as co-lead in July. Dr Eliza Gheorghe (Bilkent University), also the Action's Grant Awarding Coordinator, has co-led Working Group 2, Transfer of Knowledge, since July. Since 6 October, Dr Arthur Laudrain (ETH Zürich) co-leads Science Communication with Mr Eugenio Sánchez. The full leadership of the Action is on the About page.",
+        "fr": "Plusieurs fonctions de direction de l'Action COST CA24154 NetSec ont de nouveaux titulaires. Le Pr Filip Ejdus (Université de Belgrade) dirige le Groupe de travail 1, Bâtir le réseau, et le Pr Nikolaos Tzifakis (Université du Péloponnèse) l'a rejoint comme codirecteur en juillet. La Dre Eliza Gheorghe (Université Bilkent), également coordinatrice d'attribution des subventions de l'Action, codirige le Groupe de travail 2, Transfert des connaissances, depuis juillet. Depuis le 6 octobre, le Dr Arthur Laudrain (ETH Zurich) codirige la communication scientifique avec M. Eugenio Sánchez. L'ensemble de la direction de l'Action figure sur la page À propos.",
+        "de": "Mehrere Leitungsfunktionen der COST-Aktion CA24154 NetSec sind neu besetzt. Prof. Filip Ejdus (Universität Belgrad) leitet die Arbeitsgruppe 1, Aufbau des Netzwerks, und Prof. Nikolaos Tzifakis (Universität des Peloponnes) ist im Juli als Co-Leiter hinzugekommen. Dr. Eliza Gheorghe (Bilkent-Universität), zugleich Koordinatorin der Fördervergabe der Aktion, ist seit Juli Co-Leiterin der Arbeitsgruppe 2, Wissenstransfer. Seit dem 6. Oktober leitet Dr. Arthur Laudrain (ETH Zürich) gemeinsam mit Eugenio Sánchez die Wissenschaftskommunikation. Die vollständige Leitung der Aktion steht auf der Seite Über uns."
+      },
+      "cta": {
+        "href": {
+          "en": "about.html#leadership",
+          "fr": "about.fr.html#leadership",
+          "de": "about.de.html#leadership"
+        },
+        "external": false,
+        "i18n": {
+          "en": "See the Action's leadership →",
+          "fr": "Voir la direction de l'Action →",
+          "de": "Zur Leitung der Aktion →"
+        }
+      }
+    },
     {
       "id": "essc-2027-belgrade-save-the-date",
       "type": "announcement",
