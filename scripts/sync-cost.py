@@ -55,7 +55,7 @@ Run from the repo root. Requires: requests, beautifulsoup4.
 """
 from __future__ import annotations
 
-import json, re, sys, unicodedata
+import json, re, sys, time, unicodedata
 from pathlib import Path
 from _directory_common import name_key, slugify
 
@@ -940,7 +940,18 @@ def restamp_index_i18n() -> list[str]:
 
 
 def main() -> None:
-    r = requests.get(URL, headers={"User-Agent": "netsec-sync/1.0"}, timeout=30)
+    # cost.eu serves the Action page from a cache that can lag an e-COST
+    # change by many hours: on 7 October 2026 the plain URL still showed
+    # the previous Science Communication Co-Leader while a fresh fetch
+    # showed the new one. A throwaway query string plus no-cache headers
+    # gets the current page.
+    r = requests.get(
+        URL,
+        params={"_": int(time.time())},
+        headers={"User-Agent": "netsec-sync/1.0",
+                 "Cache-Control": "no-cache", "Pragma": "no-cache"},
+        timeout=30,
+    )
     r.raise_for_status()
     bs = BeautifulSoup(r.text, "html.parser")
 
