@@ -387,6 +387,53 @@ def test_apply_leadership_reconciles_wg_leadership() -> None:
                "WG3 Co-Leader" in bios["new-colead"]["roles"], True)
 
 
+def test_apply_leadership_drops_roles_cost_no_longer_lists() -> None:
+    """A role that disappears from cost.eu altogether (a vacated co-lead
+    post) is removed from its last holder and named in the report, while
+    a custom form role and the roles cost.eu still lists are kept. A run
+    where many roles vanish at once, or none parse, removes nothing."""
+    print("\napply_leadership() — drops roles cost.eu no longer lists:")
+    seeds = [
+        {"id": "sarka-kolmasova", "name": "Dr Šárka Kolmašová",
+         "roles": ["WG4 Co-Leader", "Management Committee · Czechia"],
+         "wg_leadership": {"co_lead": [4]}, "source": "seed"},
+        {"id": "revecca-pedi", "name": "Dr Revecca Pedi",
+         "roles": ["WG4 Leader"], "wg_leadership": {"lead": [4]}, "source": "seed"},
+    ]
+    with tempfile.TemporaryDirectory() as td:
+        path = _seed_bios(Path(td), seeds)
+        saved = sync_cost.BIOS
+        sync_cost.BIOS = path
+        try:
+            report = apply_leadership([("WG4 Leader", "Dr Revecca PEDI")])
+        finally:
+            sync_cost.BIOS = saved
+        bios = {m["id"]: m for m in _read_bios(path)}
+        expect("vacated WG4 Co-Leader removed",
+               bios["sarka-kolmasova"]["roles"], ["Management Committee · Czechia"])
+        expect("wg_leadership follows the removal",
+               bios["sarka-kolmasova"].get("wg_leadership"), {})
+        expect("listed role kept", bios["revecca-pedi"]["roles"], ["WG4 Leader"])
+        expect("report names the vacated role",
+               any("no longer listed on cost.eu" in l and "WG4 Co-Leader" in l for l in report), True)
+
+    for label, scraped in (("empty scrape", []),
+                           ("mass vanish", [("Action Chair", "Dr A CHAIR")])):
+        many = [{"id": f"p{i}", "name": f"Dr P{i}", "roles": [role], "source": "seed"}
+                for i, role in enumerate(["WG1 Leader", "WG2 Leader", "WG3 Leader", "WG4 Leader"])]
+        with tempfile.TemporaryDirectory() as td:
+            path = _seed_bios(Path(td), many)
+            saved = sync_cost.BIOS
+            sync_cost.BIOS = path
+            try:
+                report = apply_leadership(scraped)
+            finally:
+                sync_cost.BIOS = saved
+            kept = [r for m in _read_bios(path) if m["id"].startswith("p") for r in m["roles"]]
+            expect(f"{label}: nothing removed", len(kept), 4)
+            expect(f"{label}: report warns", any("NOT removed" in l for l in report), True)
+
+
 # ─── apply_mc_roles() — Issue 2: MC roster → bios.json ─────────────
 
 def test_apply_mc_roles_tags_matching_bios() -> None:
@@ -622,6 +669,7 @@ def main() -> None:
     test_extract_leadership_matches_standalone_lead()
     test_apply_leadership_reconciles_form_entries()
     test_apply_leadership_reconciles_wg_leadership()
+    test_apply_leadership_drops_roles_cost_no_longer_lists()
     test_build_wg_json_resolves_leaders_and_members()
     test_fetch_mc_parses_malformed_table()
     test_build_mc_json_reports_and_idempotent()
