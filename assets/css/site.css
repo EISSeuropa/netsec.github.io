@@ -640,6 +640,9 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .mc-card h3{font-size:1rem;margin:0 0 4px}
 .mc-card .role{font-size:.82rem;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
 .mc-card .org{font-size:.85rem;color:var(--muted);margin:0 0 10px}
+/* A lead card's co-lead line carries the co-lead's photo beside the name. */
+.mc-card .mc-colead{display:flex;align-items:center;justify-content:center;gap:8px}
+.mc-colead-avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;flex:none;border:1.5px solid rgba(255,255,255,.8)}
 .mc-card a.mc-mail{
   display:inline-block;margin-top:6px;font-size:.82rem;color:var(--link);
   word-break:break-all;

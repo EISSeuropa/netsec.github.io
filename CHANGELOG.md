@@ -157,6 +157,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- On the About page, each leadership card that names a co-lead shows the co-lead's photo beside the name, and the Working Group Co-Leaders grid lists only Working Group co-leads. The Grant Awarding and Science Communication co-leads appear on their coordinators' cards.
 - The About, home, Working Groups and glossary pages show the Action's leadership as e-COST records it on 7 October 2026: Prof. Filip Ejdus leads WG1 with Prof. Nikolaos Tzifakis as co-lead, Dr Eliza Gheorghe co-leads WG2, WG4 has no co-lead, and Dr Arthur Laudrain is Science Communication Co-Leader. The hand-written copies still showed the May line-up.
 - The issue-driven news publisher is removed: the `news` label, `news-publish.yml` and `scripts/publish-news.py`. It never published an item after it shipped in June, and news is added to `data/news.json` by PR.
 - The ESSC 2026 gallery serves its 600px WebP copies through `srcset` on 1x screens, 140 KB against 290 KB. 2x and 3x screens keep the 1000px files.
