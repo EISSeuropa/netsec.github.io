@@ -142,6 +142,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.15.0] · 2026-10-07 — Preparing for the Year in Review
+
 > The home page now opens on what is happening in the Action: the event in progress or the next one, the calls that are open, the latest news and the size of the network in four figures. The European Security Studies Conference 2027 has its page, set for 10 and 11 June 2027 in Belgrade with the NetSec Training School alongside it, and a Year in Review page assembles the Action's first year from records the site already holds. The September accessibility assessment's 155 contrast corrections are in, with no contrast failure left open.
 
 ### The home page shows what is on
@@ -1280,7 +1284,8 @@ Open Graph, Twitter Card, JSON-LD (Organization + WebSite + WebPage), canonical 
 - Members' Wiki seeded with glossary, FAQ, onboarding, meeting-notes convention, decisions log.
 - Dual licensing — MIT for code, CC BY 4.0 for content + docs.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.14.0...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.15.0...HEAD
+[1.15.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.14.0...v1.15.0
 [1.14.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.13.0...v1.14.0
 [1.13.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.11.0...v1.12.0
