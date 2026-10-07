@@ -142,6 +142,34 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+> The home page now opens on what is happening in the Action: the event in progress or the next one, the calls that are open, the latest news and the size of the network in four figures. The European Security Studies Conference 2027 has its page, set for 10 and 11 June 2027 in Belgrade with the NetSec Training School alongside it, and a Year in Review page assembles the Action's first year from records the site already holds. The September accessibility assessment's 155 contrast corrections are in, with no contrast failure left open.
+
+### The home page shows what is on
+
+A row of three tiles under the hero shows the event in progress or the next one, the calls that are open and the latest news, in English, French and German. A strip below gives the size of the Action in four figures counted from the Directory and the event record: members, countries, Working Groups and events held. The hero leads with *Join the network* and *Browse the directory*, and its four theme chips open the Directory already filtered.
+
+News cards carry a one-sentence summary in place of a body of 68 to 107 words, and four photographs from the 2026 conference follow the News section. An event that has ended leaves the Events block, and the two most recent events follow when nothing is upcoming.
+
+### ESSC 2027, the leadership and the Action's first year
+
+The European Security Studies Conference 2027 has a page at `/essc-2027.html`: 10 and 11 June 2027 at the University of Belgrade, Faculty of Political Science, with the NetSec Training School alongside it from 8 to 11 June. Both events are in the calendar feeds and on the home page as *Save the date*. The call for papers follows on eiss-europa.com by early November.
+
+The Year in Review page covers the Action year from 10 October 2025 to 9 October 2026. The About, home, Working Groups and glossary pages show the leadership as e-COST records it in October, and a news item names the new holders. Every event page carries schema.org `Event` data, so a search result can show the date, the venue and the status.
+
+### Contrast, touch targets and the keyboard
+
+Link text in light mode measures 4.96:1 against the page, up from 3.43:1, and dark mode clears eleven contrast failures, the skip link among them. The accessibility statement moves to v1.6. On touch screens, 35 controls on the Directory, the Network Map and the ESSC 2026 page clear 44px, as do the home page's hero badge, theme chips and open-call links. The skip link is the first stop for the Tab key on 44 French and German pages and on every member profile.
+
+### The Directory, and underneath
+
+The Directory finds a name typed without its accents, which twelve of its 85 members carry. Each filter chip reports what it yields given the filters already set. An audit of all 256 keywords added a seventeenth research theme, *War, military history and armed conflict*, and took *Security and defence* from 39 members to 25.
+
+The site counts page views with GoatCounter, which sets no cookie and stores no IP address. Country flags are served from the site, which removes 52 third-party requests from the About page. Two failures that had gone unnoticed are fixed: the nightly bios sync had crashed since 28 August, and LinkedIn posts lost their text after the first bracket. A failed scheduled workflow now files an issue.
+
+### Index of changes
+
+The index below is the audit trail for the sections above.
+
 #### Added
 
 - A news item names the Action's new leadership holders: Prof. Filip Ejdus as Working Group 1 lead with Prof. Nikolaos Tzifakis as co-lead, Dr Eliza Gheorghe as Working Group 2 co-lead, and Dr Arthur Laudrain as Science Communication co-lead.
