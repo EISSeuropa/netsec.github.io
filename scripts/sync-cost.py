@@ -27,7 +27,10 @@ Five things kept in step with cost.eu:
      when the Action Chair, Grant Awarding Coordinator, WG Lead, etc.
      change, the change propagates here. Each leadership role is
      enforced to have exactly one current holder; previous holders
-     keep their seed entry (and bio data) but lose the role tag.
+     keep their seed entry (and bio data) but lose the role tag. A role
+     cost.eu stops listing altogether (a vacated post) is removed from
+     its last holder and named in the report, unless more than three
+     vanish in one run, which reads as a broken scrape and removes none.
 
   4. data/wg.json
      The per-Working-Group view: for each of the four WGs, its lead and
@@ -399,6 +402,20 @@ def wg_leadership_from_roles(roles: list[str]) -> dict:
     return out
 
 
+# A role label cost.eu tracks: it ends in one of the leadership suffixes
+# _ROLE_LABEL_RE matches. Form-provided custom roles such as
+# "Management Committee · Switzerland" carry a middle dot and never match.
+_TRACKED_ROLE_RE = re.compile(
+    r"^[A-Z][A-Za-z0-9 ./()\-]+"
+    r"(?:Chair|Coordinator|Co-Lead|Co-lead|Leader|Lead|Representative)$"
+)
+
+# More tracked roles than this vanishing from cost.eu in one run reads as
+# a broken scrape (a page redesign, a partial fetch) rather than real
+# vacancies, so none are removed and the report says why.
+_MAX_VANISHED_ROLES = 3
+
+
 def apply_leadership(leadership: list[tuple[str, str]]) -> list[str]:
     """Mutate data/bios.json so each leadership role from cost.eu is
     held by exactly one person there.
@@ -433,6 +450,23 @@ def apply_leadership(leadership: list[tuple[str, str]]) -> list[str]:
 
     leadership_roles = set(desired.keys())
 
+    # Roles someone here holds that cost.eu no longer lists at all, such
+    # as a co-lead post left vacant. Removal used to fire only for a role
+    # cost.eu had given to someone else, so a vacated role stayed on its
+    # last holder and the report said "(no changes)": WG4 Co-Leader stayed
+    # on the site for a month after it left cost.eu in September 2026.
+    vanished = sorted({
+        r for m in members for r in (m.get("roles") or [])
+        if _TRACKED_ROLE_RE.match(r) and r not in leadership_roles
+    })
+    if vanished and (not leadership or len(vanished) > _MAX_VANISHED_ROLES):
+        diffs.append(
+            f"  ! {len(vanished)} role(s) no longer on cost.eu, NOT removed "
+            f"(looks like a broken scrape, check the page): {', '.join(vanished)}"
+        )
+        vanished = []
+    removable = leadership_roles | set(vanished)
+
     # Reconcile roles on every entry, seed or form-submitted. The
     # role-level guard below (only labels in `leadership_roles` are ever
     # removed) is what protects form-provided custom roles, so the old
@@ -444,8 +478,9 @@ def apply_leadership(leadership: list[tuple[str, str]]) -> list[str]:
         # Non-leadership roles (form-provided custom labels) are never
         # in `leadership_roles`, so they always fall through to `kept`.
         for r in current:
-            if r in leadership_roles and desired.get(r) != m["id"]:
-                diffs.append(f"  - {m['name']}: -{r!s}")
+            if r in removable and desired.get(r) != m["id"]:
+                note = "" if r in leadership_roles else " (no longer listed on cost.eu)"
+                diffs.append(f"  - {m['name']}: -{r!s}{note}")
                 continue
             kept.append(r)
         # Add leadership roles that now point to this person and that

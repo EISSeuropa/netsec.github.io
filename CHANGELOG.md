@@ -179,6 +179,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- A leadership role that cost.eu stops listing now leaves the Directory, the Working Groups page and the Network Map at the next weekly sync, and the sync report names it. The WG4 Co-Leader role had stayed on the site for a month after it left cost.eu in September.
 - The member profile pages have a skip link to the profile, the first stop for the Tab key in all three languages ([#1926](https://github.com/EISSeuropa/netsec.github.io/issues/1926)).
 - The skip link is the first stop for the Tab key on 44 French and German pages, where the translation ribbon's link came first, and the French FAQ and the French and German press kits label it in their own language.
 - The skip link on French and German pages stays on one line on a phone, so it no longer shows a 5px sliver at the top of every page before it is focused.
