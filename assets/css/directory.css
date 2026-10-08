@@ -578,7 +578,7 @@ html:not(.dark) .mentorship-view-toggle{ background:rgba(255,255,255,.55); }
 }
 .mentorship-order svg{ flex:none; opacity:.85; }
 .mentorship-grid{
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(255px,1fr)); gap:12px;
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(min(255px,100%),1fr)); gap:12px;
 }
 .mentorship-card{
   display:flex; flex-direction:column; gap:8px; padding:14px 14px 12px; border-radius:14px;
@@ -1407,7 +1407,7 @@ html.dir-welcome .welcome-strip[hidden]{display:block}
 }
 .welcome-strip-tips{
   list-style:none;margin:0;padding:0;
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));
   gap:4px 18px;
   font-size:.88rem;color:var(--ink-2);line-height:1.45;
 }
