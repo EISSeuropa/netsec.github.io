@@ -3308,21 +3308,24 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .ecs-card p{margin:0 0 .9rem;color:var(--ink-2);line-height:1.65}
 .ecs-card p:last-child{margin-bottom:0}
 .ecs-card a{color:var(--link)}
-/* ESSC 2027 practical information. The short cards flow into as many
-   columns as fit, so uneven heights pack without row gaps. On phones
-   they become a swipeable row, and the places to stay always scroll
-   sideways as a snap slider. */
-.ecs-practical-cards{columns:3 270px;column-gap:16px}
-.ecs-practical-cards > .ecs-card{
-  break-inside:avoid;margin-bottom:16px;padding:18px 20px;font-size:.94rem;
+/* ESSC 2027 practical information. The short cards sit in a grid (three
+   across on desktop), on phones they become a swipeable row, and the
+   places to stay always scroll sideways as a snap slider. Not CSS
+   columns: Safari mispaints .glass cards (backdrop-filter plus the
+   hover transform) inside a multi-column box, leaving blank slots and
+   a ghost panel over the content below (#1996 follow-up). */
+.ecs-practical-cards{
+  display:grid;gap:16px;margin-bottom:16px;
+  grid-template-columns:repeat(auto-fit,minmax(min(270px,100%),1fr));
 }
+.ecs-practical-cards > .ecs-card{padding:18px 20px;font-size:.94rem}
 @media (max-width:640px){
   .ecs-practical-cards{
-    columns:auto;display:grid;grid-auto-flow:column;grid-auto-columns:86%;
-    gap:12px;margin-bottom:16px;padding-bottom:8px;
+    grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:86%;
+    gap:12px;padding-bottom:8px;
     overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
   }
-  .ecs-practical-cards > .ecs-card{margin-bottom:0;scroll-snap-align:start}
+  .ecs-practical-cards > .ecs-card{scroll-snap-align:start}
 }
 .ecs-card h3:has(.ecs-card-icon){display:flex;align-items:center;gap:.55rem}
 .ecs-card-icon{
