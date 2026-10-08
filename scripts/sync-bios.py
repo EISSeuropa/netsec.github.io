@@ -2183,6 +2183,10 @@ def apply_overrides(members: list[dict]) -> None:
     no longer occurs (the submitter corrected it upstream) prints a prune
     hint rather than failing, so the overrides file stays a short list of
     live corrections instead of accumulating fossils.
+
+    When `from` is a list, the entry replaces the whole field instead. That
+    is how a mentor's emailed "I'm at capacity" becomes `mentor-full`
+    without a form resubmission (#1627).
     """
     path = ROOT / "data" / "bios-overrides.json"
     if not path.exists():
@@ -2200,11 +2204,16 @@ def apply_overrides(members: list[dict]) -> None:
             continue
         field, old, new = fix["field"], fix["from"], fix["to"]
         text = m.get(field)
-        if not isinstance(text, str) or old not in text:
+        # A list field (mentorship) is replaced whole, and only while it
+        # still equals `from`, so a later form submission wins (#1627).
+        if isinstance(old, list) and text == old:
+            m[field] = new
+        elif isinstance(text, str) and isinstance(old, str) and old in text:
+            m[field] = text.replace(old, new)
+        else:
             print(f"  · {fix['id']}.{field}: {old!r} not present (fixed at "
                   "source?) — override can be pruned.")
             continue
-        m[field] = text.replace(old, new)
         print(f"  · {fix['id']}.{field}: {old!r} → {new!r}")
 
 

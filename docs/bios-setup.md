@@ -205,6 +205,17 @@ Editing the Sheet is the right fix when you can reach the value, but sometimes y
 
 The sync logs each override it applies. When it reports one as *"not present (fixed at source?)"*, the respondent has since corrected it upstream and you can delete that entry. Prefer fixing at source when you can, and reserve the overrides file for corrections that need to stick without touching the respondent's submission.
 
+An entry whose `from` is a list replaces the whole field instead, and only while the field still equals that list. This is the cheap route to the two mentorship states nobody sets by form (#1627): when a mentor replies by email that they are at capacity, or a mentee that they have found a mentor, one entry records it.
+
+```json
+{
+  "id": "jane-doe", "field": "mentorship",
+  "from": ["mentor"], "to": ["mentor-full"]
+}
+```
+
+If the member later resubmits the form with a different answer, the list no longer equals `from`, the form answer stands, and the sync reports the entry as prunable.
+
 ### Optional: `name_aliases` for hard-to-match speakers
 
 The ESSC live programme page (`essc-2026.html`) tries to link any Indico speaker who is one of our members straight to their `/people.html` card. Matching is name-based, with diacritics, honorifics, post-nominals, and particles stripped, then keyed on (first surviving token, last surviving token). That handles most cases automatically, but a few patterns slip through: nickname vs legal name, married vs maiden, transliteration variants, reversed name order on Hungarian or East-Asian conventions.
