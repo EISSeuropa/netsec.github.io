@@ -4,7 +4,7 @@
     "working_groups": 4,
     "people": 223,
     "people_with_bios": 102,
-    "edges": 608,
+    "edges": 612,
     "themes": 17,
     "panels_matched": 14,
     "panel_edges": 54,
@@ -59,7 +59,7 @@
       "id": "theme-crisis-management-and-critical-systems-resilience",
       "type": "theme",
       "name": "Crisis management and critical systems resilience",
-      "memberCount": 4
+      "memberCount": 5
     },
     {
       "id": "theme-cyber-and-emerging-technology",
@@ -71,7 +71,7 @@
       "id": "theme-democracy-governance-and-political-change",
       "type": "theme",
       "name": "Democracy, governance and political change",
-      "memberCount": 6
+      "memberCount": 7
     },
     {
       "id": "theme-disciplines-theory-and-methods",
@@ -131,13 +131,13 @@
       "id": "theme-security-and-defence",
       "type": "theme",
       "name": "Security and defence",
-      "memberCount": 26
+      "memberCount": 27
     },
     {
       "id": "theme-strategy-and-deterrence",
       "type": "theme",
       "name": "Strategy and deterrence",
-      "memberCount": 17
+      "memberCount": 18
     },
     {
       "id": "theme-transnational-and-human-security",
@@ -3327,6 +3327,14 @@
     },
     {
       "source": "ana-e-juncos",
+      "target": "theme-crisis-management-and-critical-systems-resilience"
+    },
+    {
+      "source": "ana-e-juncos",
+      "target": "theme-democracy-governance-and-political-change"
+    },
+    {
+      "source": "ana-e-juncos",
       "target": "theme-eu-un-and-other-international-organisations"
     },
     {
@@ -3428,6 +3436,10 @@
     {
       "source": "carla-sofia-ferreira-fernandes",
       "target": "theme-transnational-and-human-security"
+    },
+    {
+      "source": "celine-rodrigues",
+      "target": "theme-security-and-defence"
     },
     {
       "source": "celine-rodrigues",
@@ -3836,6 +3848,10 @@
     {
       "source": "mahmoud-javadi",
       "target": "theme-european-and-transatlantic-security-order"
+    },
+    {
+      "source": "marcel-berni",
+      "target": "theme-strategy-and-deterrence"
     },
     {
       "source": "marco-cifra",
