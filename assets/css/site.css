@@ -134,6 +134,12 @@
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;color-scheme:light dark;scroll-padding-top:90px}
+/* On phones, headings hyphenate long words in the page's own language
+   (lang="de" / "fr" / "en") rather than splitting them at an arbitrary
+   letter. Desktop headings are left alone. */
+@media (max-width:480px){
+  h1,h2,h3,h4{-webkit-hyphens:auto;hyphens:auto}
+}
 
 /* Skip-to-content link — visible only when keyboard-focused */
 .skip-link{
@@ -232,6 +238,10 @@ body{
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
   line-height:1.55;
+  /* A word longer than its line (a German compound in a heading, a file
+     path) breaks instead of pushing the page wider than a 320px screen
+     (#2003). Only words that do not fit are broken. */
+  overflow-wrap:break-word;
   /* `clip`, not `hidden`: `overflow-x:hidden` forces the cross axis to compute
      as a scroll container, which on iOS Safari breaks `position:fixed`
      descendants (they scroll with the page). `clip` curbs horizontal overflow
@@ -739,7 +749,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
    a link; the trailing → on the date is the go affordance, so the
    global external-link icon is suppressed to avoid a detached glyph. */
 .wg-events{margin-top:1rem}
-.wg-event-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:.9rem}
+.wg-event-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:14px;margin-top:.9rem}
 .wg-event-card{display:flex;flex-direction:column;gap:5px;padding:16px 18px;text-decoration:none;color:inherit;border-radius:14px;border-left:3px solid var(--wg-accent);transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
 .wg-event-card:hover{transform:translateY(-2px)}
 .wg-event-card::after{content:none !important}
@@ -776,7 +786,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
    a dashed-border placeholder shown per WG until the first outputs land
    (data/publications.json, first outputs scheduled October 2026). */
 .wg-publications{margin-top:.4rem}
-.wg-pub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:.9rem}
+.wg-pub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:14px;margin-top:.9rem}
 .wg-pub-card{display:flex;flex-direction:column;gap:5px;padding:16px 18px;text-decoration:none;color:inherit;border-radius:14px;border-left:3px solid var(--wg-accent);transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
 .wg-pub-card:hover{transform:translateY(-2px)}
 .wg-pub-card::after{content:none !important}
@@ -919,7 +929,7 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   background:var(--glass-bg);border:1px solid var(--line);
   border-radius:999px;padding:0 9px;
 }
-.events-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.events-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:20px}
 .events-year{margin:0 0 30px}
 .events-year:last-child{margin-bottom:0}
 .events-year > h3{
@@ -2231,6 +2241,13 @@ body{padding-top:var(--whats-new-h, 0px)}
 }
 .dark .licence-table tbody td{background:rgba(22,32,55,.55);color:var(--ink-2)}
 .licence-table tbody tr:last-child td{border-bottom:0}
+@media (max-width:480px){
+  /* Table cells size to their longest word, so long words hyphenate in
+     the page's language and the cells tighten for three columns to fit
+     a phone. */
+  .licence-table{font-size:.84rem}
+  .licence-table th,.licence-table td{padding:8px 7px;-webkit-hyphens:auto;hyphens:auto}
+}
 
 /* -------- Prose pages (Accessibility Statement, Privacy Notice) --------
    Shared layout for content-heavy informational pages. */
@@ -2248,6 +2265,8 @@ body{padding-top:var(--whats-new-h, 0px)}
   font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.88rem;
   padding:1px 6px;border-radius:5px;
   background:rgba(11,18,32,.06);color:var(--ink);
+  /* File paths have no spaces, so let them break at any character. */
+  overflow-wrap:anywhere;
 }
 .dark .prose-page code{background:rgba(255,255,255,.08)}
 .prose-page a{color:var(--link);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
@@ -3111,7 +3130,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
    (9:16) and sits in a fixed-width side column, not stretched across the
    page; it stacks under the prose on narrow viewports. */
 .essc-recap-grid{display:flex;flex-wrap:wrap;align-items:flex-start;gap:28px 48px}
-.essc-recap-copy{flex:1 1 320px;min-width:280px}
+.essc-recap-copy{flex:1 1 320px;min-width:min(280px,100%)}
 .essc-recap-copy p{max-width:42rem}
 /* width + min-width:0 are load-bearing: without them a flex item takes its
    min-content width, and a <video> reports its intrinsic 1080px there, so
@@ -4104,6 +4123,10 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   color:#9a7414;
   white-space:nowrap;
 }
+/* A German prize name is wider than a 320px programme card. */
+@media (max-width:480px){
+  .programme-contrib-prize{white-space:normal}
+}
 .programme-contrib-prize .programme-prize-cup{
   display:inline-flex;
   width:.82em;
@@ -4158,6 +4181,10 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   line-height:1.3;
   box-shadow:0 6px 18px rgba(0,51,153,.18);
   transition:transform .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease);
+}
+@media (max-width:480px){
+  /* Lets the button wrap its label instead of overflowing the card. */
+  .programme-anthology-cta{flex:0 1 auto}
 }
 .programme-anthology-cta:hover,
 .programme-anthology-cta:focus-visible{
@@ -4745,6 +4772,12 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .ts-deflist-row{ display:flex; gap:.6rem; font-size:.95rem; }
 .ts-deflist-label{ flex:0 0 8.5rem; color:var(--ink-2); }
 .ts-deflist-value{ font-weight:500; }
+@media (max-width:480px){
+  /* The 8.5rem label column leaves too little room beside it on a phone,
+     so the value moves under its label. */
+  .ts-deflist-row{ display:block; }
+  .ts-deflist-label{ display:block; }
+}
 .ts-next-summary{ margin:0 0 1rem; color:var(--ink-2); }
 .ts-next-notify{ margin:0; font-size:.92rem; color:var(--ink-2); }
 .ts-next-cal{ margin-top:.2rem; }
@@ -4761,7 +4794,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .ts-edition-topics-label{ margin:0 0 .25rem; font-size:.9rem; color:var(--ink-2); }
 .ts-edition-topics{ margin:0 0 1rem; padding-left:1.1rem; font-size:.92rem; }
 .ts-edition-topics li{ margin:0 0 .2rem; }
-.ts-gallery{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:.7rem; }
+.ts-gallery{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(220px,100%), 1fr)); gap:.7rem; }
 .ts-gallery-item{ margin:0; }
 /* --photo-grade: the shared grade for content photography, so
    mixed-source event photos read as one set in both themes.
@@ -4771,7 +4804,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 
 /* ── ESSC archive "In pictures" gallery (essc-2026.html) ─────────────── */
 .essc-photos-section{ padding:1.5rem 0; }
-.essc-photos{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:.7rem; }
+.essc-photos{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(240px,100%), 1fr)); gap:.7rem; }
 .essc-photos-item{ margin:0; }
 .essc-photos-img{ width:100%; height:240px; object-fit:cover; border-radius:12px; display:block; filter:var(--photo-grade); }
 /* Home page strip (index.html #essc-photos): four across, two on a phone.
@@ -4801,7 +4834,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .slides-help{ max-width:70ch; color:var(--ink-2); line-height:1.6; margin:0 0 2.5rem; }
 .slides-note{ max-width:72ch; color:var(--muted); font-size:.9rem; line-height:1.6; margin:2.5rem 0 0; }
 
-.slide-gallery{ display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:28px; }
+.slide-gallery{ display:grid; grid-template-columns:repeat(auto-fill,minmax(min(360px,100%),1fr)); gap:28px; }
 .slide-card{ padding:0; overflow:hidden; display:flex; flex-direction:column; }
 .slide-stage{ position:relative; width:100%; aspect-ratio:16 / 9; overflow:hidden; background:#dce6f5; border-bottom:1px solid var(--line); }
 .slide-stage .slide{ transform-origin:top left; transform:scale(var(--scale,.22)); }

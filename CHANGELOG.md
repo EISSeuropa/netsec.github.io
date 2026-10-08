@@ -153,6 +153,7 @@ maintainer-facing audience.
 #### Fixed
 
 - On 320px screens the header logo shows at full size on every page. It had been squeezed to an 8px sliver beside the language switcher and menu button.
+- On 320px screens no page is wider than the screen any more. Long German words in headings hyphenate, file paths and table cells wrap, and grids, cards and buttons on twelve pages shrink to fit. Content had been cut off at the right edge.
 
 ## [1.15.0] · 2026-10-07 — Preparing for the Year in Review
 
