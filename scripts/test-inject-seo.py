@@ -736,3 +736,31 @@ def test_jsonld_passthrough_overrides_the_generated_fields():
 def test_event_page_is_read_off_the_event_url():
     assert seo._event_page(_event()) == "policy-workshop-2026"
     assert seo._event_page(_event(url="https://netsec-cost.eu/#events")) == ""
+
+
+# ── Event dates in page copy (#1769) ─────────────────────────────
+
+def test_marked_event_date_is_written_from_events_json():
+    uid, ev = next(iter(seo._EVENTS_BY_UID.items()))
+    html = f'<p class="when-where"><span data-event-date="{uid}">stale</span> · Venue</p>'
+    out = seo.derive_event_dates(html, "en", "x")
+    assert f'>{ev["displayDate"]["en"]}</span> · Venue' in out
+
+
+def test_unknown_event_uid_is_reported_and_left_alone():
+    seo.PROBLEMS.clear()
+    html = '<span data-event-date="nope@x">kept</span>'
+    assert seo.derive_event_dates(html, "en", "x") == html
+    assert seo.PROBLEMS and "nope@x" in seo.PROBLEMS[0]
+    seo.PROBLEMS.clear()
+
+
+def test_meta_description_with_the_year_but_an_old_date_is_reported():
+    ev = next(e for e in seo._EVENTS_BY_UID.values() if seo._event_page(e) and e.get("displayDate"))
+    year = ev["start"][:4]
+    seo.PROBLEMS.clear()
+    seo.check_event_description(f"Held in {year}, on some other date.", "en", seo._event_page(ev))
+    assert seo.PROBLEMS
+    seo.PROBLEMS.clear()
+    seo.check_event_description(f"Held on {ev['displayDate']['en']}.", "en", seo._event_page(ev))
+    assert not seo.PROBLEMS
