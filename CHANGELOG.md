@@ -152,6 +152,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- Three members missing from a research-theme filter in the Directory now appear under it, after five of their keywords were placed in the taxonomy. A keyword with no theme now blocks the weekly bios update until it is placed.
 - On 320px screens the header logo shows at full size on every page. It had been squeezed to an 8px sliver beside the language switcher and menu button.
 - On 320px screens no page is wider than the screen any more. Long German words in headings hyphenate, file paths and table cells wrap, and grids, cards and buttons on twelve pages shrink to fit. Content had been cut off at the right edge.
 
