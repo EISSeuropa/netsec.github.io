@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-07T11:46:50+00:00",
+  "generated_at": "2026-10-08T12:01:37+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-07T11:46:50+00:00"
+    "last_synced": "2026-10-08T12:01:37+00:00"
   },
   "members": [
     {
@@ -4610,6 +4610,8 @@
         "Resilience"
       ],
       "themes": [
+        "Crisis management and critical systems resilience",
+        "Democracy, governance and political change",
         "EU, UN and other international organisations",
         "Peace, mediation and reconciliation"
       ]
@@ -4653,6 +4655,7 @@
         "Maritime security"
       ],
       "themes": [
+        "Security and defence",
         "Transnational and human security"
       ]
     },
@@ -4686,6 +4689,9 @@
       "source": "form",
       "canonical_keywords": [
         "Strategic studies"
+      ],
+      "themes": [
+        "Strategy and deterrence"
       ]
     }
   ],
@@ -5662,7 +5668,7 @@
     },
     {
       "theme": "Security and defence",
-      "count": 26
+      "count": 27
     },
     {
       "theme": "Disciplines, theory and methods",
@@ -5678,7 +5684,7 @@
     },
     {
       "theme": "Strategy and deterrence",
-      "count": 17
+      "count": 18
     },
     {
       "theme": "War, military history and armed conflict",
@@ -5697,12 +5703,12 @@
       "count": 10
     },
     {
-      "theme": "Identity, narratives and ideational security",
+      "theme": "Democracy, governance and political change",
       "count": 7
     },
     {
-      "theme": "Democracy, governance and political change",
-      "count": 6
+      "theme": "Identity, narratives and ideational security",
+      "count": 7
     },
     {
       "theme": "Peace, mediation and reconciliation",
@@ -5710,7 +5716,7 @@
     },
     {
       "theme": "Crisis management and critical systems resilience",
-      "count": 4
+      "count": 5
     },
     {
       "theme": "Climate, energy and environmental security",
@@ -5728,6 +5734,7 @@
     "Adversarial robustness": "Cyber and emerging technology",
     "Algorithms and AI": "Cyber and emerging technology",
     "Alliance politics": "European and transatlantic security order",
+    "Arctic security/governance": "Security and defence",
     "Arms control": "Strategy and deterrence",
     "Assassination": "War, military history and armed conflict",
     "Black Sea security": "Security and defence",
@@ -5770,6 +5777,7 @@
     "Defence industrial policy": "Economic security and geoeconomics",
     "Defence industry": "Economic security and geoeconomics",
     "Defence innovation": "Cyber and emerging technology",
+    "Defence north Atlantic and Arctic": "Security and defence",
     "Defence resources management": "Security and defence",
     "Democratisation": "Democracy, governance and political change",
     "Deterrence": "Strategy and deterrence",
@@ -5900,6 +5908,7 @@
     "Political economy": "Economic security and geoeconomics",
     "Political psychology": "Political psychology, public opinion and decision-making",
     "Political violence": "War, military history and armed conflict",
+    "Populism": "Democracy, governance and political change",
     "Positive peace": "Peace, mediation and reconciliation",
     "Post-Cold War international relations": "Disciplines, theory and methods",
     "Power": "Security and defence",
@@ -5914,6 +5923,7 @@
     "Religion": "Identity, narratives and ideational security",
     "Research ethics": "Disciplines, theory and methods",
     "Research methods": "Disciplines, theory and methods",
+    "Resilience": "Crisis management and critical systems resilience",
     "Role theory": "Disciplines, theory and methods",
     "Romanian foreign policy": "Foreign policy and diplomacy",
     "Russia-Ukraine war": "War, military history and armed conflict",
@@ -5935,6 +5945,7 @@
     "Space security": "Security and defence",
     "Strategic competition": "Foreign policy and diplomacy",
     "Strategic culture": "Strategy and deterrence",
+    "Strategic studies": "Strategy and deterrence",
     "Strategy": "Strategy and deterrence",
     "Strategy and deterrence": "Strategy and deterrence",
     "Subversion": "Intelligence, information and influence",
