@@ -291,7 +291,11 @@
 <section id="practical" class="about-section">
   <div class="container reveal">
     <h2>Informations pratiques</h2>
-    <div class="ecs-practical-cards">
+    <div class="ecs-slider-nav" data-slider-nav hidden>
+      <button type="button" class="ecs-slider-btn" data-slider-step="-1" aria-controls="practical-cards" aria-label="Précédent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button type="button" class="ecs-slider-btn" data-slider-step="1" aria-controls="practical-cards" aria-label="Suivant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+    <div class="ecs-practical-cards" id="practical-cards" data-slider-autoheight>
       <article class="glass ecs-card">
         <h3><span class="ecs-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span>Lieu</h3>
         <p>La conférence et l'École de formation se tiennent toutes deux à l'Université de Belgrade, Faculté de sciences politiques, <a href="https://www.google.com/maps/search/?api=1&amp;query=Faculty%20of%20Political%20Science%20University%20of%20Belgrade%20Jove%20Ilica%20165" target="_blank" rel="noopener">Jove Ilića 165, 11042 Belgrade</a>, dans le quartier de Voždovac.</p>
@@ -352,7 +356,11 @@
       <h3><span class="ecs-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg></span>Où loger</h3>
       <p>La faculté se trouve en dehors du centre historique. Vračar, autour de la place Slavija, est tout proche, et Stari Grad (place de la République et rue Knez Mihailova) est plus animé le soir. Voždovac, le quartier de la faculté, compte quelques maisons d'hôtes simples.</p>
       <p>À titre indicatif, les prix 2026 par nuit vont de 50 à 80 euros en catégorie économique, de 80 à 130 euros en milieu de gamme et dépassent 130 euros en haut de gamme. Les organisateurs n'ont conclu aucun accord avec ces hôtels.</p>
-      <ul class="ecs-stay-slider" tabindex="0" aria-label="Hébergements">
+      <div class="ecs-slider-nav" data-slider-nav hidden>
+        <button type="button" class="ecs-slider-btn" data-slider-step="-1" aria-controls="practical-stay" aria-label="Précédent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+        <button type="button" class="ecs-slider-btn" data-slider-step="1" aria-controls="practical-stay" aria-label="Suivant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+      <ul class="ecs-stay-slider" id="practical-stay" tabindex="0" aria-label="Hébergements">
         <li class="ecs-stay"><span class="ecs-stay-range">Économique</span><strong>Apartman 25</strong><span class="ecs-stay-area">Voždovac</span><span class="ecs-stay-links"><a href="https://maps.google.com/?cid=14185090662081311920" target="_blank" rel="noopener">Carte</a> · <a href="http://www.apartman25.rs/" target="_blank" rel="noopener">Site web</a></span></li>
         <li class="ecs-stay"><span class="ecs-stay-range">Économique</span><strong>Sun Hostel</strong><span class="ecs-stay-area">Vračar</span><span class="ecs-stay-links"><a href="https://maps.google.com/?cid=17350248966781834590" target="_blank" rel="noopener">Carte</a></span></li>
         <li class="ecs-stay"><span class="ecs-stay-range">Économique</span><strong>Antico I.N.</strong><span class="ecs-stay-area">Voždovac</span><span class="ecs-stay-links"><a href="https://maps.google.com/?cid=8443379738186788185" target="_blank" rel="noopener">Carte</a> · <a href="https://prenociste-rooms.rs/" target="_blank" rel="noopener">Site web</a></span></li>

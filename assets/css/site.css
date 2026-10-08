@@ -3322,10 +3322,14 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 @media (max-width:640px){
   .ecs-practical-cards{
     grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:86%;
-    gap:12px;padding-bottom:8px;
+    gap:12px;padding-bottom:8px;align-items:start;overflow-y:hidden;
+    transition:height .25s ease;
     overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
   }
   .ecs-practical-cards > .ecs-card{scroll-snap-align:start}
+}
+@media (max-width:640px) and (prefers-reduced-motion:reduce){
+  .ecs-practical-cards{transition:none}
 }
 .ecs-card h3:has(.ecs-card-icon){display:flex;align-items:center;gap:.55rem}
 .ecs-card-icon{
@@ -3341,7 +3345,18 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .ecs-card dt{font-weight:600;color:var(--ink)}
 .ecs-card dd{margin:0 0 .6rem}
 .ecs-card dd:last-child{margin-bottom:0}
-.ecs-stay-slider{
+.ecs-slider-nav{display:flex;justify-content:flex-end;gap:8px;margin:0 0 10px}
+.ecs-slider-nav[hidden]{display:none}
+.ecs-slider-btn{
+  display:inline-grid;place-items:center;width:44px;height:44px;padding:0;
+  border-radius:50%;border:1px solid var(--glass-border);cursor:pointer;
+  background:var(--glass-bg);color:var(--ink);
+  transition:color .15s ease,border-color .15s ease,opacity .15s ease;
+}
+.ecs-slider-btn:hover{color:var(--link);border-color:color-mix(in srgb,var(--accent-2) 45%,transparent)}
+.ecs-slider-btn[aria-disabled="true"]{opacity:.4;cursor:default}
+.ecs-slider-btn svg{width:20px;height:20px}
+.ecs-card .ecs-stay-slider{
   list-style:none;margin:0 0 .9rem;padding:2px 2px 10px;
   display:grid;grid-auto-flow:column;grid-auto-columns:200px;gap:10px;
   overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
