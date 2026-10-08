@@ -23,15 +23,15 @@
     "summer-school.html": {
       "fr": {
         "file": "summer-school.fr.html",
-        "source_sha1": "669e52a2d24b9cc5dd3a9466b602475c980fdb33",
-        "translated_on": "2026-10-07",
+        "source_sha1": "af88fb84fab2120c606e5156e5a26fd7ae01670c",
+        "translated_on": "2026-10-08",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "summer-school.de.html",
-        "source_sha1": "669e52a2d24b9cc5dd3a9466b602475c980fdb33",
-        "translated_on": "2026-10-07",
+        "source_sha1": "af88fb84fab2120c606e5156e5a26fd7ae01670c",
+        "translated_on": "2026-10-08",
         "status": "beta",
         "reviewed_by": null
       }
@@ -39,15 +39,15 @@
     "policy-workshop-2026.html": {
       "fr": {
         "file": "policy-workshop-2026.fr.html",
-        "source_sha1": "374e8ce5ab11c4180d6403c76b13a36897de1288",
-        "translated_on": "2026-09-26",
+        "source_sha1": "e0cdaaf09714d9cc28cfb80efbf4e309997980da",
+        "translated_on": "2026-10-08",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "policy-workshop-2026.de.html",
-        "source_sha1": "374e8ce5ab11c4180d6403c76b13a36897de1288",
-        "translated_on": "2026-09-26",
+        "source_sha1": "e0cdaaf09714d9cc28cfb80efbf4e309997980da",
+        "translated_on": "2026-10-08",
         "status": "beta",
         "reviewed_by": null
       }
@@ -151,15 +151,15 @@
     "index.html": {
       "fr": {
         "file": "index.fr.html",
-        "source_sha1": "a56507b1d91bfbb576618376184dd11fd5fc11fe",
-        "translated_on": "2026-10-07",
+        "source_sha1": "a1b56d791cf28dbb55c47e6016513d0824ec534e",
+        "translated_on": "2026-10-08",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "index.de.html",
-        "source_sha1": "a56507b1d91bfbb576618376184dd11fd5fc11fe",
-        "translated_on": "2026-10-07",
+        "source_sha1": "a1b56d791cf28dbb55c47e6016513d0824ec534e",
+        "translated_on": "2026-10-08",
         "status": "beta",
         "reviewed_by": null
       }
@@ -343,14 +343,14 @@
     "essc-2027.html": {
       "fr": {
         "file": "essc-2027.fr.html",
-        "source_sha1": "dd4358cbd4178a366265727928d219d3e040e189",
+        "source_sha1": "e71117c818f8074972c29d0b016063f901e8fcb4",
         "translated_on": "2026-10-08",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "essc-2027.de.html",
-        "source_sha1": "dd4358cbd4178a366265727928d219d3e040e189",
+        "source_sha1": "e71117c818f8074972c29d0b016063f901e8fcb4",
         "translated_on": "2026-10-08",
         "status": "beta",
         "reviewed_by": null

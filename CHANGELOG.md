@@ -152,6 +152,9 @@ maintainer-facing audience.
 
 #### Fixed
 
+- Without JavaScript, the home page lists the two 2027 events again. Its fallback event cards are rendered from the events data at every deploy, where they had been hand-written and showed "No upcoming events" once the 2026 events ended.
+- The Training School page describes the 2027 school in Belgrade to search engines and link previews, in English, French and German. Its description still gave the 2026 dates in Stockholm, in English on all three pages.
+- Event dates on the event pages are written from the events data, so a moved date is changed in one place.
 - Three members missing from a research-theme filter in the Directory now appear under it, after five of their keywords were placed in the taxonomy. A keyword with no theme now blocks the weekly bios update until it is placed.
 - On 320px screens the header logo shows at full size on every page. It had been squeezed to an 8px sliver beside the language switcher and menu button.
 - On 320px screens no page is wider than the screen any more. Long German words in headings hyphenate, file paths and table cells wrap, and grids, cards and buttons on twelve pages shrink to fit. Content had been cut off at the right edge.

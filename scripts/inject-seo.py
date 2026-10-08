@@ -17,6 +17,10 @@ Walks every HTML page in the repo and:
      rather than serving a stale cached copy. The hash is the first 8
      hex chars of the file's SHA-256, so it only changes when the file
      does (issue #416).
+  4. Writes each event's displayDate from data/events.json into every
+     element marked data-event-date="<uid>", and checks that an event
+     page's meta description carries the same date when it names the
+     event's year (#1769).
 
 Idempotent: SEO blocks live between sentinel comments and are rewritten
 in place; asset stamps are recomputed from the files on disk, so a
@@ -364,6 +368,37 @@ def _event_page(ev: dict) -> str:
     return path[:-5] if path.endswith(".html") else ""
 
 
+# ── Event dates in page copy (#1769) ─────────────────────────────
+# data/events.json holds each event's displayDate per locale, hand-written in
+# each language. An element marked data-event-date="<uid>" has its text
+# rewritten from it, so a moved date is edited once, in the JSON. The meta
+# description is a hand-written sentence, so it is checked rather than
+# rewritten: when it names an event's year, it must carry that event's date.
+_EVENTS_BY_UID = {ev["uid"]: ev for ev in _EVENTS["events"]}
+_EVENT_DATE_RE = re.compile(
+    r'(<(?P<tag>[a-z0-9]+)\b[^>]*\bdata-event-date="(?P<uid>[^"]+)"[^>]*>)(?P<text>[^<]*)(</(?P=tag)>)')
+PROBLEMS: list[str] = []
+
+
+def derive_event_dates(html: str, lang: str, base: str) -> str:
+    def fill(m: re.Match) -> str:
+        ev = _EVENTS_BY_UID.get(m["uid"])
+        date = ((ev or {}).get("displayDate") or {}).get(lang)
+        if not date:
+            PROBLEMS.append(f"{base}: data-event-date={m['uid']!r} has no {lang} displayDate in data/events.json")
+            return m.group(0)
+        return m.group(1) + _attr_escape(date) + m.group(5)
+    return _EVENT_DATE_RE.sub(fill, html)
+
+
+def check_event_description(desc: str, lang: str, base: str) -> None:
+    for ev in _EVENTS_BY_UID.values():
+        date = (ev.get("displayDate") or {}).get(lang, "")
+        if _event_page(ev) == base and ev["start"][:4] in desc and date not in desc:
+            PROBLEMS.append(f"{base} ({lang}): the meta description names {ev['start'][:4]} "
+                            f"but not {date!r}, the date data/events.json gives {ev['uid']}")
+
+
 def _iso_with_offset(stamp: str, tzid: str) -> str:
     """'2026-09-13T09:00' in Europe/Istanbul -> '2026-09-13T09:00:00+03:00'."""
     return datetime.fromisoformat(stamp).replace(tzinfo=ZoneInfo(tzid)).isoformat()
@@ -579,6 +614,13 @@ def inject(html: str, base: str) -> tuple[str, bool]:
             new = new[:idx] + jsonld_block + "\n" + new[idx:]
             changed = True
 
+    # ── Event dates (#1769) ──────────────────────────────────────
+    new_after = derive_event_dates(new, lang, base)
+    if new_after != new:
+        new = new_after
+        changed = True
+    check_event_description(desc, lang, base)
+
     return new, changed
 
 
@@ -697,7 +739,12 @@ def main() -> int:
         else:
             print(f"unchanged:    {rel}")
 
-    if args.check and any_changes:
+    # A meta description that disagrees with data/events.json is fixed by
+    # hand, so it fails --check (the PR gate) but not a write run: the Indico
+    # sync writes and then opens its PR, and the gate holds that PR.
+    for problem in PROBLEMS:
+        print(f"{'✗' if args.check else 'WARN:'} {problem}")
+    if args.check and (any_changes or PROBLEMS):
         return 1
     return 0
 

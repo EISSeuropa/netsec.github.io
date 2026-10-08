@@ -4,7 +4,7 @@
 The cards in `#news .news-list` are what a reader sees when
 `assets/js/home-news.js` does not run, and what Pagefind indexes. They were
 hand-written and nothing refreshed them, so the fallback lagged the JSON by
-months. The companion to prune-past-event-cards.py, and it runs at deploy for
+months. The companion to render-event-fallback.py, and it runs at deploy for
 the same reason: `homeUntil` makes the right set of cards a function of the
 date, not only of the file.
 

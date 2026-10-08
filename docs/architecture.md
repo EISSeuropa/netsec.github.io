@@ -726,12 +726,18 @@ If you're adding a new event to the Events section:
    reads `cardTitle`, `cardDescription`, `meta[]`, and `cta`, plus
    `eventType` / `featured` / `displayDate`, each carrying an
    `{en, fr, de}` block where the copy is locale-specific. The
-   hand-coded `<article class="event-card">` markup in `index.html`
-   (and the FR + DE siblings) now survives only as a fail-soft
-   fallback that the renderer empties on success, so you no longer
-   hand-author one card per locale: fill in the JSON and all three
-   locales follow. Re-stamp i18n drift only if you edited the
-   fallback markup.
+   `<article class="event-card">` markup in `index.html` (and the FR +
+   DE siblings) is the fail-soft fallback for a reader without
+   JavaScript, and `scripts/render-event-fallback.py` renders it from
+   the same fields at every deploy, with the same "end still ahead"
+   selection (#1769). Fill in the JSON and all three locales follow,
+   with no card to write by hand.
+   If the event has a page of its own, mark each copy of its date in
+   that page's body with `data-event-date="<uid>"` (the element's text
+   is the date and nothing else). `scripts/inject-seo.py` writes the
+   locale's `displayDate` into it, and its `--check`, which runs on
+   every PR, fails when the page's meta description names the event's
+   year without its current date. The description stays hand-written.
 4. TBA / undated events are deliberately **not** added to
    `data/events.json` until they have firm dates — calendar
    subscribers should not see placeholders. The TBA HTML card on
