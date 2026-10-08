@@ -26,6 +26,7 @@ on:
     paths:
       - 'data/indico.json'
       - 'data/bios.json'
+      - 'data/keyword-aliases.json'
       - 'data/wg.json'
       - 'data/mc-members.json'
       - 'data/events.json'

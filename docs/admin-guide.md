@@ -756,7 +756,9 @@ from the directory entirely.
 ### When a keyword reaches no research theme
 
 `sync-bios.py` prints, to stderr, every canonical keyword that resolves to
-no theme. Such a keyword does not cluster, its card pill renders
+no theme, and `scripts/check-data-shape.py` fails the *data shape* check on
+any PR while one remains (#1955), so a sync PR that brings one in cannot
+merge until it is placed. Such a keyword does not cluster, its card pill renders
 display-only, and its holder is missing from that filter and from the
 Network Map's themes lens. The August 2026 review (#1701) took the count
 from 29 to zero, and the four mechanisms it used are the ones to reach for
