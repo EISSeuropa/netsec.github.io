@@ -42,6 +42,7 @@ load_keyword_themes = sync_bios.load_keyword_themes
 resolve_prior_entry = sync_bios.resolve_prior_entry
 load_founding_slugs = sync_bios.load_founding_slugs
 apply_founding_flag = sync_bios.apply_founding_flag
+apply_overrides = sync_bios.apply_overrides
 
 
 def expect(label: str, got, want) -> None:
@@ -1477,6 +1478,32 @@ def test_link_rewrites_captured() -> None:
         sync_bios.LINK_REWRITES.clear()
 
 
+def test_apply_overrides_list_field() -> None:
+    print("\napply_overrides() on a list field (#1627):")
+    import json, tempfile
+    real_root = sync_bios.ROOT
+    with tempfile.TemporaryDirectory() as tmp:
+        sync_bios.ROOT = Path(tmp)
+        (Path(tmp) / "data").mkdir()
+        (Path(tmp) / "data" / "bios-overrides.json").write_text(json.dumps({"text_fixes": [
+            {"id": "a", "field": "mentorship", "from": ["mentor"], "to": ["mentor-full"]},
+            {"id": "b", "field": "mentorship", "from": ["mentee"], "to": ["matched"]},
+            {"id": "c", "field": "bio", "from": "teh", "to": "the"},
+        ]}))
+        members = [
+            {"id": "a", "mentorship": ["mentor"]},
+            {"id": "b", "mentorship": ["mentor", "mentee"]},
+            {"id": "c", "bio": "teh end"},
+        ]
+        try:
+            apply_overrides(members)
+        finally:
+            sync_bios.ROOT = real_root
+    expect("list equal to from is replaced", members[0]["mentorship"], ["mentor-full"])
+    expect("list changed at source is left alone", members[1]["mentorship"], ["mentor", "mentee"])
+    expect("string fix still substitutes", members[2]["bio"], "the end")
+
+
 def main() -> None:
     test_name_key()
     test_normalise_keyword()
@@ -1515,6 +1542,7 @@ def main() -> None:
     test_pr_title_and_overview()
     test_pr_overview_review_flags()
     test_link_rewrites_captured()
+    test_apply_overrides_list_field()
     print("\nAll tests passed.")
 
 
