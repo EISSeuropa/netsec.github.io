@@ -397,6 +397,16 @@ img{max-width:100%;display:block}
      on the parent <a> keeps AT users covered. */
   .brand-logo--light,
   .dark .brand-logo--dark{display:none}
+  /* The mark never gives way, or a full action row squeezes it to a
+     sliver (#2000). */
+  .nav-inner .brand{flex-shrink:0}
+}
+@media (max-width:359.98px){
+  /* At 320px the mark (32) and the action row (236) need 24px more than
+     the bar's 18px side padding leaves, so the slack comes from the
+     padding and gaps rather than from the 44px-checked controls. */
+  .nav-inner{padding:10px 10px;gap:8px}
+  .nav-actions{gap:0}
 }
 /* The original `.brand-mark` rule lives on for any place still
    using the old NS-square pattern (defensive — nothing in repo

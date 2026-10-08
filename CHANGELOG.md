@@ -150,6 +150,10 @@ maintainer-facing audience.
 
 - The roadmap cards for v1.11.0 to v1.15.0 read in French and German. They had shown the English release summary with a translation marker since June.
 
+#### Fixed
+
+- On 320px screens the header logo shows at full size on every page. It had been squeezed to an 8px sliver beside the language switcher and menu button.
+
 ## [1.15.0] · 2026-10-07 — Preparing for the Year in Review
 
 > The home page now opens on what is happening in the Action: the event in progress or the next one, the calls that are open, the latest news and the size of the network in four figures. The European Security Studies Conference 2027 has its page, set for 10 and 11 June 2027 in Belgrade with the NetSec Training School alongside it, and a Year in Review page assembles the Action's first year from records the site already holds. The September accessibility assessment's 155 contrast corrections are in, with no contrast failure left open.
