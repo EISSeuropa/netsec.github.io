@@ -343,15 +343,15 @@
     "essc-2027.html": {
       "fr": {
         "file": "essc-2027.fr.html",
-        "source_sha1": "a3416f075180b9d2552b16c95a59823afb3d62e2",
-        "translated_on": "2026-10-07",
+        "source_sha1": "dd4358cbd4178a366265727928d219d3e040e189",
+        "translated_on": "2026-10-08",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "essc-2027.de.html",
-        "source_sha1": "a3416f075180b9d2552b16c95a59823afb3d62e2",
-        "translated_on": "2026-10-07",
+        "source_sha1": "dd4358cbd4178a366265727928d219d3e040e189",
+        "translated_on": "2026-10-08",
         "status": "beta",
         "reviewed_by": null
       }

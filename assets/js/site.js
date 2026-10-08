@@ -3195,3 +3195,53 @@ window.netsecMemberCard = (function () {
     });
   }
 })();
+
+/* Prev / next arrows for horizontal scroll-snap sliders. The nav ships
+   hidden and is shown only while its track overflows, so the arrows
+   never appear for a row that already fits (the practical cards on
+   desktop). aria-disabled rather than disabled keeps focus on the
+   button when a track reaches its end. A track marked
+   data-slider-autoheight takes the height of the item in view once
+   scrolling settles, so a short card is not stretched to the tallest. */
+(function () {
+  document.querySelectorAll('[data-slider-nav]').forEach(function (nav) {
+    var btns = nav.querySelectorAll('[data-slider-step]');
+    var track = btns.length && document.getElementById(btns[0].getAttribute('aria-controls'));
+    if (!track) return;
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var autoHeight = track.hasAttribute('data-slider-autoheight');
+    var settle;
+    function fitHeight() {
+      if (track.scrollWidth - track.clientWidth < 8) { track.style.height = ''; return; }
+      var left = track.getBoundingClientRect().left, item = track.firstElementChild, gap = Infinity;
+      Array.prototype.forEach.call(track.children, function (c) {
+        var d = Math.abs(c.getBoundingClientRect().left - left);
+        if (d < gap) { gap = d; item = c; }
+      });
+      var cs = getComputedStyle(track);
+      track.style.height = (item.offsetHeight + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)) + 'px';
+    }
+    function update() {
+      var max = track.scrollWidth - track.clientWidth;
+      nav.hidden = max < 8;
+      btns.forEach(function (b) {
+        var atEnd = b.dataset.sliderStep < 0 ? track.scrollLeft < 8 : track.scrollLeft > max - 8;
+        b.setAttribute('aria-disabled', String(atEnd));
+      });
+      if (autoHeight) { clearTimeout(settle); settle = setTimeout(fitHeight, 120); }
+    }
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        // ponytail: steps 90% of the visible width and lets scroll-snap
+        // settle on the nearest item, rather than measuring items.
+        track.scrollBy({
+          left: track.clientWidth * 0.9 * Number(b.dataset.sliderStep),
+          behavior: still.matches ? 'auto' : 'smooth'
+        });
+      });
+    });
+    track.addEventListener('scroll', update, { passive: true });
+    if ('ResizeObserver' in window) new ResizeObserver(update).observe(track);
+    update();
+  });
+})();
