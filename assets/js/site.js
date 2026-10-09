@@ -35,19 +35,8 @@
       'Announcement': 'Annonce',
       'Read more': 'Lire la suite',
       'Read less': 'Réduire',
-      // Home Now row (home-now.js)
       'Call': 'Appel',
-      'Next up': 'Prochainement',
-      'Happening now': 'En cours',
       'Save the date': "À noter dans l'agenda",
-      'Most recent': 'Dernier événement',
-      'Open calls': 'Appels ouverts',
-      'Rolling applications': 'Candidatures en continu',
-      'Closes': 'Clôture',
-      'Closes on': 'Clôture le',
-      'No open calls right now.': 'Aucun appel ouvert pour le moment.',
-      'See the grants': 'Voir les subventions',
-      'Latest': 'Dernière actualité',
       // Home figures strip (home-figures.js)
       'events held': 'événements organisés',
       'Working Group participant': 'Participant·e au groupe de travail',
@@ -347,19 +336,8 @@
       'Announcement': 'Ankündigung',
       'Read more': 'Mehr lesen',
       'Read less': 'Weniger anzeigen',
-      // Home Now row (home-now.js)
       'Call': 'Ausschreibung',
-      'Next up': 'Als Nächstes',
-      'Happening now': 'Findet gerade statt',
       'Save the date': 'Vormerken',
-      'Most recent': 'Zuletzt',
-      'Open calls': 'Offene Ausschreibungen',
-      'Rolling applications': 'Laufende Bewerbung',
-      'Closes': 'Endet',
-      'Closes on': 'Endet am',
-      'No open calls right now.': 'Derzeit keine offenen Ausschreibungen.',
-      'See the grants': 'Zu den Förderungen',
-      'Latest': 'Neueste Meldung',
       // Home figures strip (home-figures.js)
       'events held': 'durchgeführte Veranstaltungen',
       'Working Group participant': 'Arbeitsgruppen-Mitglied',
@@ -2763,8 +2741,8 @@ window.netsecMemberCard = (function () {
 
 /* Audiences side-drawer — the recurring "Start where you are" role-router.
    ──────────────────────────────────────────────────────────────────────
-   The homepage carries an inline #audiences section; this makes the same
-   role-router available site-wide as a right-edge tab that opens a drawer.
+   The role-router lives only here, site-wide, as a right-edge tab that
+   opens a drawer. The homepage has no inline copy of it.
    Reads /data/audiences.json, picks the locale off <html lang>, injects a
    fixed edge tab + a native <dialog> on every page. Native <dialog> gives
    Esc-to-close, focus trapping, and a ::backdrop for free.

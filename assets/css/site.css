@@ -531,7 +531,6 @@ img{max-width:100%;display:block}
 .hero-cta{display:flex;gap:12px;margin-top:2rem;flex-wrap:wrap}
 .hero-keywords a.chip{color:var(--muted);text-decoration:none}
 .hero-keywords a.chip:hover,.hero-keywords a.chip:focus-visible{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
-.hero-cta-note{margin-top:.7rem;font-size:.85rem;color:var(--muted)}
 .btn{
   display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:13px;
   font-weight:600;font-size:.95rem;cursor:pointer;border:0;transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease);
@@ -1061,14 +1060,13 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   .event-atc{display:none}
 }
 
-/* Subscribe-to-calendar affordance under the events grid, and
-   subscribe-to-RSS affordance under the news grid. Same shape: a
-   centred CTA + supporting hint sentence beneath. */
-.event-subscribe-line,
+/* Feed line under the merged events and news section: the archive link
+   and the two subscribe CTAs (calendar, RSS) on one wrapping row. */
+.news-block{margin-top:64px}
+.news-block-title{margin:0 0 20px}
 .news-subscribe-line{
   margin:36px auto 0;
-  max-width:560px;
-  display:flex;flex-direction:column;align-items:center;gap:10px;
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px 20px;
   text-align:center;
   font-size:.9rem;color:var(--muted);
 }
@@ -1093,14 +1091,6 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
 .event-subscribe svg,
 .news-subscribe svg{width:18px;height:18px;color:#fff}
-.event-subscribe-hint,
-.news-subscribe-hint{line-height:1.5;max-width:48ch}
-.event-subscribe-hint a,
-.news-subscribe-hint a{color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--line)}
-.event-subscribe-hint a:hover,
-.news-subscribe-hint a:hover{color:var(--accent);text-decoration-color:var(--accent)}
-.event-subscribe-hint code{font-size:.85em;background:rgba(0,0,0,.04);padding:1px 5px;border-radius:4px}
-.dark .event-subscribe-hint code{background:rgba(255,255,255,.06)}
 
 .output-kind{font-size:.75rem;font-weight:700;color:var(--link);text-transform:uppercase;letter-spacing:.1em}
 .news-date{font-size:.82rem;color:var(--muted)}
@@ -1475,39 +1465,10 @@ form button:disabled{opacity:.65;cursor:wait}
 .ca-badge .dot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.18)}
 .ca-badge strong{color:var(--accent);font-weight:700}
 
-/* -------- Now row (home) --------
-   Three tiles under the hero, filled by assets/js/home-now.js. The dot
-   pulses only in the "live" state, the same cue and colours as the
-   upcoming-event card's live pill (ue-pulse); the global reduced-motion
-   rule stops the loop. */
-.now-row{padding:24px 0 0}
-.now-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.now-tile{position:relative;display:flex;flex-direction:column;gap:6px;padding:18px 20px;border-radius:var(--radius)}
-.now-eyebrow{
-  display:flex;align-items:center;gap:8px;margin:0;
-  font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--link);
-}
-.now-dot{flex:none;width:7px;height:7px;border-radius:50%;background:currentColor}
-.now-tile[data-state="live"] .now-eyebrow{color:#15803d}
-.dark .now-tile[data-state="live"] .now-eyebrow{color:#52d775}
-.now-tile[data-state="live"] .now-dot{animation:ue-pulse 1.8s ease-out infinite}
-.now-tile[data-state="recent"] .now-eyebrow,.now-tile[data-state="none"] .now-eyebrow{color:var(--muted)}
-.now-title{margin:0;font-family:'Lexend','Inter',sans-serif;font-size:1.02rem;font-weight:600;line-height:1.3;letter-spacing:-.01em}
-.now-title a{color:var(--ink);text-decoration:none}
-.now-detail{margin:0;font-size:.86rem;color:var(--muted)}
-.now-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
-.now-list li{display:flex;flex-direction:column;gap:2px}
-.now-call{font-family:'Lexend','Inter',sans-serif;font-weight:600;font-size:.95rem;line-height:1.3;color:var(--ink);text-decoration:none}
-.now-call:hover,.now-call:focus-visible{color:var(--link);text-decoration:underline}
-.now-more{font-size:.86rem;font-weight:600;color:var(--link)}
-@media (max-width: 720px){
-  .now-row{padding:12px 0 0}
-  .now-grid{grid-template-columns:1fr;gap:12px}
-}
 /* -------- Figures strip (home) --------
-   Four counts under the Now row, filled by assets/js/home-figures.js.
+   Four counts at the foot of the hero, filled by assets/js/home-figures.js.
    Tabular figures keep the width steady while the numbers count up. */
-.figures-row{padding:20px 0 0}
+.figures-row{margin-top:36px;max-width:720px}
 .figures-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:0}
 .figures-item{display:flex;flex-direction:column;gap:4px;padding:4px 0 4px 16px;border-left:2px solid var(--accent)}
 .figures-item dd{
@@ -1516,7 +1477,7 @@ form button:disabled{opacity:.65;cursor:wait}
 }
 .figures-item dt{font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 @media (max-width: 720px){
-  .figures-row{padding:16px 0 0}
+  .figures-row{margin-top:24px}
   .figures-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
   .figures-item dd{font-size:1.6rem}
 }
@@ -2473,7 +2434,7 @@ body{padding-top:var(--whats-new-h, 0px)}
 
 /* -------- Audiences side-drawer (site-wide role-router) --------
    A fixed right-edge tab opens a native <dialog> drawer carrying the
-   same four audience cards as the inline #audiences home section.
+   four audience cards, read from data/audiences.json.
    Injected on every page by the IIFE at the foot of site.js. The tab
    sits at z-index 110 (below the Directory member-preview panel, z:120,
    so the preview covers it on people.html); the drawer uses showModal(),
@@ -2549,74 +2510,6 @@ body{padding-top:var(--whats-new-h, 0px)}
 }
 @media (prefers-reduced-motion:reduce){
   .aud-tab,.aud-drawer{transition:none}
-}
-
-/* -------- For NetSec members (Wiki signposting) --------
-   Sits between Outputs and Contact on the home page. Visually
-   distinct (lightly tinted) so members notice it on first scroll. */
-.members-strip{padding:60px 0}
-.members-strip .members-card{
-  padding:36px 40px;
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:24px;align-items:center;
-  background:
-    linear-gradient(135deg,rgba(0,51,153,.06),rgba(10,132,255,.04)),
-    var(--glass-bg-strong);
-  border:1px solid var(--line);
-  border-radius:16px;
-}
-.dark .members-strip .members-card{
-  background:
-    linear-gradient(135deg,rgba(10,132,255,.10),rgba(0,51,153,.05)),
-    rgba(28,32,46,.6);
-}
-.members-strip .eyebrow{
-  display:inline-block;
-  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--accent);font-weight:700;margin:0 0 8px;
-}
-.members-strip h2{
-  margin:0 0 .4rem;
-  font-size:clamp(1.3rem,2.2vw,1.6rem);
-  letter-spacing:-.015em;
-}
-.members-strip p{
-  margin:0;color:var(--ink-2);font-size:.97rem;line-height:1.55;
-  max-width:62ch;
-}
-.members-strip .members-actions{
-  display:flex;flex-direction:column;gap:8px;align-items:stretch;
-  min-width:200px;
-}
-.members-strip .members-actions a{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:11px 18px;border-radius:10px;
-  font-size:.92rem;font-weight:600;text-decoration:none;
-  white-space:nowrap;
-  transition:transform .15s var(--ease),background .15s var(--ease);
-}
-.members-strip .members-actions a.primary{
-  background:var(--accent);color:#fff;
-}
-.members-strip .members-actions a.primary:hover{
-  background:var(--accent-2);transform:translateY(-1px);
-}
-.members-strip .members-actions a.secondary{
-  background:rgba(255,255,255,.6);color:var(--ink);
-  border:1px solid var(--line);
-}
-.dark .members-strip .members-actions a.secondary{background:rgba(255,255,255,.05);color:var(--ink)}
-.members-strip .members-actions a.secondary:hover{
-  background:rgba(255,255,255,.85);
-}
-.dark .members-strip .members-actions a.secondary:hover{background:rgba(255,255,255,.12)}
-@media (max-width: 700px){
-  .members-strip .members-card{
-    grid-template-columns:1fr;
-    padding:28px 24px;
-  }
-  .members-strip .members-actions{min-width:0}
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -3002,7 +2895,6 @@ body.search-open{overflow:hidden}
    docs/launch-qa-2026.md Phase 2. */
 .dark .event-card.featured .event-date,
 .dark .event-subscribe,
-.dark #for-members .members-actions .primary,
 .dark .tour-btn-primary,
 .dark .tour-trigger-cta,
 .dark .rm-feedback-action.is-primary,
@@ -3026,7 +2918,6 @@ body.search-open{overflow:hidden}
   color:#fff;
 }
 .dark .event-subscribe:hover,
-.dark #for-members .members-actions .primary:hover,
 .dark .tour-btn-primary:hover,
 .dark .rm-feedback-action.is-primary:hover,
 .dark .deliverables-roadmap-link-cta:hover{
@@ -4809,9 +4700,6 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .essc-photos-img{ width:100%; height:240px; object-fit:cover; border-radius:12px; display:block; filter:var(--photo-grade); }
 /* Home page strip (index.html #essc-photos): four across, two on a phone.
    aspect-ratio reserves each box before the lazy image arrives. */
-.home-photos .essc-photos{ grid-template-columns:repeat(4, 1fr); }
-.home-photos .essc-photos-img{ height:auto; aspect-ratio:4/3; }
-@media (max-width:640px){ .home-photos .essc-photos{ grid-template-columns:repeat(2, 1fr); } }
 
 /* ============================================================
    Slide-templates gallery (/slides.html)
@@ -5029,6 +4917,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
    centred under the marquee rather than right-aligned. */
 .faces-seeall{margin:22px 0 0;text-align:center}
 .faces-seeall a{font-weight:600;color:var(--accent)}
+.faces-seeall a + a{margin-left:1.5em}
 
 /* ── Reduced-motion off-switches for the cinematic bundle ───────────
    The global reset already flattens transition and animation timings.

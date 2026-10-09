@@ -707,6 +707,6 @@
   window.NetSec = window.NetSec || {};
   window.NetSec.renderHomeEvents = renderHomeEvents;
   window.NetSec.renderEventsPage = renderEventsPage;
-  // Shared with home-now.js so the Now row resolves times the same way.
+  // Shared with home-figures.js so its event count resolves times the same way.
   window.NetSec.zonedTimeToUTC = zonedTimeToUTC;
 })();
