@@ -159,6 +159,7 @@ maintainer-facing audience.
 - Three members missing from a research-theme filter in the Directory now appear under it, after five of their keywords were placed in the taxonomy. A keyword with no theme now blocks the weekly bios update until it is placed.
 - On 320px screens the header logo shows at full size on every page. It had been squeezed to an 8px sliver beside the language switcher and menu button.
 - On 320px screens no page is wider than the screen any more. Long German words in headings hyphenate, file paths and table cells wrap, and grids, cards and buttons on twelve pages shrink to fit. Content had been cut off at the right edge.
+- The roadmap shows the inaugural Management Committee plenary as held on 11 September 2026, adds the 13 September policy workshop in Ankara, and gives ESSC 2027 its dates and venue, 10 and 11 June 2027 in Belgrade. v1.17.0 moves to 10 January 2027 to match its milestone, the v1.16.0 card describes the call for papers and the five-section home page, and the v1.13.0 to v1.15.0 cards link to their release notes.
 
 ## [1.15.0] · 2026-10-07 — Preparing for the Year in Review
 
