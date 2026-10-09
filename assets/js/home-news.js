@@ -232,7 +232,4 @@
   window.NetSec = window.NetSec || {};
   window.NetSec.renderHomeNews = renderHomeNews;
   window.NetSec.renderNewsArchive = renderNewsArchive;
-  // The home selection (newest first, decay and `homeUntil` applied),
-  // shared with home-now.js.
-  window.NetSec.homeNewsItems = (data, now) => sortedItems(data).filter(it => withinDecay(it, now));
 })();
