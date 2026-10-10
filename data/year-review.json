@@ -1,7 +1,7 @@
 {
   "_documentation": "Year in Review editions (#765), assembled by scripts/build-year-review.py from data/news.json, data/events.json, data/publications.json, the git history of data/bios.json and CHANGELOG.md. Rendered at runtime by assets/js/year-review.js on /year-in-review.html (+ FR + DE). Everything outside the `hand` block is generated and a rebuild overwrites it. The `hand` block is written by the maintainer in all three locales, one lede and one optional outlook paragraph per edition, and the builder carries it forward on every run rather than regenerating it. Editions are regenerated deliberately (when preparing an edition and again at publish time), not by a CI drift gate: the window is closed by publication day, so the numbers are final.",
   "actionStart": "2025-10-10",
-  "generatedAt": "2026-09-15",
+  "generatedAt": "2026-10-10",
   "editions": [
     {
       "year": 1,
@@ -10,12 +10,12 @@
         "to": "2026-10-09"
       },
       "stats": {
-        "members": 95,
+        "members": 102,
         "countries": 29,
         "events": 4,
         "outputs": 0,
-        "news": 8,
-        "releases": 17
+        "news": 10,
+        "releases": 18
       },
       "memberSeries": [
         {
@@ -40,73 +40,78 @@
         },
         {
           "month": "2026-09",
-          "date": "2026-09-15",
-          "members": 95
+          "date": "2026-09-26",
+          "members": 98
+        },
+        {
+          "month": "2026-10",
+          "date": "2026-10-08",
+          "members": 102
         }
       ],
       "themes": [
         {
-          "name": "Security and defence",
-          "members": 38
-        },
-        {
           "name": "Foreign policy and diplomacy",
-          "members": 36
+          "members": 34
         },
         {
           "name": "Cyber and emerging technology",
+          "members": 27
+        },
+        {
+          "name": "Security and defence",
+          "members": 27
+        },
+        {
+          "name": "Disciplines, theory and methods",
           "members": 24
         },
         {
-          "name": "Theory and methods",
-          "members": 23
-        },
-        {
           "name": "Transnational and human security",
-          "members": 20
-        },
-        {
-          "name": "Strategy and deterrence",
-          "members": 15
+          "members": 22
         },
         {
           "name": "European and transatlantic security order",
-          "members": 14
+          "members": 19
+        },
+        {
+          "name": "Strategy and deterrence",
+          "members": 18
+        },
+        {
+          "name": "War, military history and armed conflict",
+          "members": 12
         },
         {
           "name": "EU, UN and other international organisations",
-          "members": 10
+          "members": 11
+        },
+        {
+          "name": "Intelligence, information and influence",
+          "members": 11
         },
         {
           "name": "Economic security and geoeconomics",
           "members": 10
         },
         {
-          "name": "Intelligence, information and influence",
-          "members": 10
-        },
-        {
-          "name": "Peace, mediation and reconciliation",
-          "members": 10
-        },
-        {
           "name": "Democracy, governance and political change",
-          "members": 6
+          "members": 7
         },
         {
           "name": "Identity, narratives and ideational security",
+          "members": 7
+        },
+        {
+          "name": "Peace, mediation and reconciliation",
           "members": 6
         },
         {
-          "name": "Climate, energy and environmental security",
-          "members": 4
-        },
-        {
-          "name": "War, military history and armed conflict",
-          "members": 4
-        },
-        {
           "name": "Crisis management and critical systems resilience",
+          "members": 5
+        },
+        {
+          "name": "Climate, energy and environmental security",
           "members": 3
         },
         {
@@ -154,7 +159,9 @@
           "news": [
             "wg2-policy-workshop-2026-call",
             "mc-plenary-2026-inaugural",
-            "policy-workshop-2026-concludes-ankara"
+            "policy-workshop-2026-concludes-ankara",
+            "essc-2027-belgrade-save-the-date",
+            "leadership-roles-october-2026"
           ],
           "events": [
             "mc-plenary-2026-09@netsec-cost.eu",
@@ -208,7 +215,7 @@
             "fr": "Subventions NetSec : candidatures ouvertes",
             "de": "NetSec-Förderungen: Anträge jetzt geöffnet"
           },
-          "type": "announcement",
+          "type": "call",
           "wg": 3
         },
         {
@@ -273,7 +280,7 @@
             "de": "NetSec hält seine erste Plenarsitzung des Management Committee ab"
           },
           "type": "event",
-          "wg": 1
+          "wg": null
         },
         {
           "id": "policy-workshop-2026-concludes-ankara",
@@ -290,6 +297,38 @@
           },
           "type": "event",
           "wg": 2
+        },
+        {
+          "id": "essc-2027-belgrade-save-the-date",
+          "date": "2026-10-06",
+          "displayDate": {
+            "en": "6 October 2026",
+            "fr": "6 octobre 2026",
+            "de": "6. Oktober 2026"
+          },
+          "title": {
+            "en": "Save the date: ESSC 2027 and the NetSec Training School in Belgrade",
+            "fr": "À vos agendas : l'ESSC 2027 et l'École de formation NetSec à Belgrade",
+            "de": "Save the Date: ESSC 2027 und NetSec-Ausbildungsschule in Belgrad"
+          },
+          "type": "announcement",
+          "wg": null
+        },
+        {
+          "id": "leadership-roles-october-2026",
+          "date": "2026-10-07",
+          "displayDate": {
+            "en": "7 October 2026",
+            "fr": "7 octobre 2026",
+            "de": "7. Oktober 2026"
+          },
+          "title": {
+            "en": "New Working Group and Science Communication leads",
+            "fr": "Nouvelles responsabilités dans les groupes de travail et la communication scientifique",
+            "de": "Neue Leitungen in den Arbeitsgruppen und der Wissenschaftskommunikation"
+          },
+          "type": "announcement",
+          "wg": null
         }
       ],
       "events": [
@@ -454,18 +493,23 @@
           "version": "1.14.0",
           "date": "2026-08-29",
           "title": "The NetSec Network Map"
+        },
+        {
+          "version": "1.15.0",
+          "date": "2026-10-07",
+          "title": "Preparing for the Year in Review"
         }
       ],
       "hand": {
         "lede": {
-          "en": "",
-          "fr": "",
-          "de": ""
+          "en": "NetSec's first year began on 10 October 2025, when COST Action CA24154 launched with its leadership and Working Group structure in place. Applications for the Action's five grant categories opened in May 2026. In June the Action gathered at Stockholm University, where the Early-Career Scholars Summer School ran from 9 to 11 June and the European Security Studies Conference followed on 11 and 12 June. Anna Seliverstova and Mattia Sguazzini received the European Security Studies Prize at the conference. The Management Committee held its first plenary online on 11 September, and two days later Working Group 2 met at Bilkent University in Ankara for a workshop on great power politics and the future of alliances.",
+          "fr": "La première année de NetSec a commencé le 10 octobre 2025, avec le lancement de l'Action COST CA24154 et la mise en place de sa direction et de ses groupes de travail. Les candidatures aux cinq catégories de subventions de l'Action ont ouvert en mai 2026. En juin, l'Action s'est réunie à l'Université de Stockholm, où l'École d'été NetSec des chercheur·euses en début de carrière s'est tenue du 9 au 11 juin, suivie de la European Security Studies Conference les 11 et 12 juin. Anna Seliverstova et Mattia Sguazzini ont reçu le Prix européen des études de sécurité lors de la conférence. Le Comité de gestion a tenu sa première plénière en ligne le 11 septembre et, deux jours plus tard, le Groupe de travail 2 s'est réuni à l'Université Bilkent d'Ankara pour un atelier sur les grandes puissances et l'avenir des alliances.",
+          "de": "Das erste Jahr von NetSec begann am 10. Oktober 2025, als die COST-Aktion CA24154 mit ihrer Leitung und ihren Arbeitsgruppen startete. Im Mai 2026 öffneten die Anträge für die fünf Förderkategorien der Aktion. Im Juni kam die Aktion an der Universität Stockholm zusammen, wo vom 9. bis 11. Juni die NetSec-Summer-School für Nachwuchsforschende stattfand und am 11. und 12. Juni die European Security Studies Conference folgte. Anna Seliverstova und Mattia Sguazzini erhielten auf der Konferenz den Europäischen Preis für Sicherheitsstudien. Der Management-Ausschuss hielt am 11. September seine erste Plenarsitzung online ab, und zwei Tage später traf sich die Arbeitsgruppe 2 an der Bilkent-Universität in Ankara zu einem Workshop über Großmachtpolitik und die Zukunft der Bündnisse."
         },
         "outlook": {
-          "en": "",
-          "fr": "",
-          "de": ""
+          "en": "Year two starts with new leads in several roles. Prof. Filip Ejdus leads Working Group 1 with Prof. Nikolaos Tzifakis, Dr Eliza Gheorghe co-leads Working Group 2, and Dr Arthur Laudrain co-leads Science Communication with Mr Eugenio Sánchez. The Action next gathers at the University of Belgrade, which hosts the NetSec Training School from 8 to 11 June 2027 and the European Security Studies Conference on 10 and 11 June.",
+          "fr": "La deuxième année s'ouvre avec de nouveaux titulaires à plusieurs fonctions. Le Pr Filip Ejdus dirige le Groupe de travail 1 avec le Pr Nikolaos Tzifakis, la Dre Eliza Gheorghe codirige le Groupe de travail 2 et le Dr Arthur Laudrain codirige la communication scientifique avec M. Eugenio Sánchez. L'Action se réunira ensuite à l'Université de Belgrade, qui accueille l'École de formation NetSec du 8 au 11 juin 2027 et la European Security Studies Conference les 10 et 11 juin.",
+          "de": "Das zweite Jahr beginnt mit neuen Leitungen in mehreren Funktionen. Prof. Filip Ejdus leitet die Arbeitsgruppe 1 gemeinsam mit Prof. Nikolaos Tzifakis, Dr. Eliza Gheorghe ist Co-Leiterin der Arbeitsgruppe 2, und Dr. Arthur Laudrain leitet gemeinsam mit Eugenio Sánchez die Wissenschaftskommunikation. Als Nächstes kommt die Aktion an der Universität Belgrad zusammen, die vom 8. bis 11. Juni 2027 die NetSec-Ausbildungsschule und am 10. und 11. Juni die European Security Studies Conference ausrichtet."
         }
       }
     }

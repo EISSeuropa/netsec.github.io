@@ -144,6 +144,7 @@ maintainer-facing audience.
 
 #### Added
 
+- The Year in Review carries its first edition for the Action's year one, 10 October 2025 to 9 October 2026, with an opening paragraph and a paragraph on year two in English, French and German. Its figures cover the closed year: 102 members from 29 countries, 4 events, 10 news items and 18 releases, and a news item on the home page and in the RSS feed links to it.
 - The ESSC 2027 page carries practical information for Belgrade in all three locales: the venue, visas and entry, the routes from the airport, local transport, fourteen places to stay with their area and price range, money and emergency numbers. Each card carries an icon, the places to stay scroll sideways as a slider with previous and next arrows, and on phones the other cards swipe sideways too, each at its own height, which cuts the section from 4,237 to 1,965 pixels at 375 wide. The Training School page and the hero's Venue fact link to it.
 
 #### Changed
