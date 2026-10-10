@@ -48,6 +48,7 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
+ALIASES = REPO / "data" / "keyword-aliases.json"
 
 
 def _req(obj: dict, key: str, types, errs: list, ctx: str, non_empty: bool = False) -> bool:
@@ -106,7 +107,19 @@ def check_indico(data) -> list:
     return errs
 
 
-def check_bios(data) -> list:
+def _themed_keywords() -> set:
+    """Every keyword placed under a research theme, lower-cased the way
+    sync-bios.py's load_keyword_themes keys its lookup."""
+    doc = json.loads(ALIASES.read_text(encoding="utf-8"))
+    return {
+        kw.strip().lower()
+        for kws in (doc.get("themes") or {}).values()
+        for kw in kws or []
+        if isinstance(kw, str) and kw.strip()
+    }
+
+
+def check_bios(data, themed: set | None = None) -> list:
     errs: list = []
     if not isinstance(data, dict):
         return ["bios: top level must be an object"]
@@ -139,6 +152,25 @@ def check_bios(data) -> list:
             errs.append(
                 f"{ctx}: 'stsm_hosting' must be 'yes' or 'ask' (or absent), got {sh!r}"
             )
+    # A canonical keyword with no research theme leaves its member out of
+    # that interest's theme filter. sync-bios.py only flags it in the run
+    # that adds it, so it went quiet after one day (#1955). Checked against
+    # the curated taxonomy rather than bios.json's derived keyword_theme_map,
+    # so placing the keyword passes at once and the next sync derives the rest.
+    if themed is None:
+        themed = _themed_keywords()
+    unthemed: dict = {}
+    for m in data["members"]:
+        if not isinstance(m, dict):
+            continue
+        for kw in m.get("canonical_keywords") or []:
+            if isinstance(kw, str) and kw.strip().lower() not in themed:
+                unthemed.setdefault(kw, []).append(m.get("name", "?"))
+    for kw, names in sorted(unthemed.items(), key=lambda e: e[0].lower()):
+        errs.append(
+            f"bios: keyword {kw!r} ({', '.join(names)}) has no research theme. "
+            "Place it under `themes` in data/keyword-aliases.json."
+        )
     return errs
 
 

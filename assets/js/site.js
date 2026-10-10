@@ -35,19 +35,8 @@
       'Announcement': 'Annonce',
       'Read more': 'Lire la suite',
       'Read less': 'Réduire',
-      // Home Now row (home-now.js)
       'Call': 'Appel',
-      'Next up': 'Prochainement',
-      'Happening now': 'En cours',
       'Save the date': "À noter dans l'agenda",
-      'Most recent': 'Dernier événement',
-      'Open calls': 'Appels ouverts',
-      'Rolling applications': 'Candidatures en continu',
-      'Closes': 'Clôture',
-      'Closes on': 'Clôture le',
-      'No open calls right now.': 'Aucun appel ouvert pour le moment.',
-      'See the grants': 'Voir les subventions',
-      'Latest': 'Dernière actualité',
       // Home figures strip (home-figures.js)
       'events held': 'événements organisés',
       'Working Group participant': 'Participant·e au groupe de travail',
@@ -347,19 +336,8 @@
       'Announcement': 'Ankündigung',
       'Read more': 'Mehr lesen',
       'Read less': 'Weniger anzeigen',
-      // Home Now row (home-now.js)
       'Call': 'Ausschreibung',
-      'Next up': 'Als Nächstes',
-      'Happening now': 'Findet gerade statt',
       'Save the date': 'Vormerken',
-      'Most recent': 'Zuletzt',
-      'Open calls': 'Offene Ausschreibungen',
-      'Rolling applications': 'Laufende Bewerbung',
-      'Closes': 'Endet',
-      'Closes on': 'Endet am',
-      'No open calls right now.': 'Derzeit keine offenen Ausschreibungen.',
-      'See the grants': 'Zu den Förderungen',
-      'Latest': 'Neueste Meldung',
       // Home figures strip (home-figures.js)
       'events held': 'durchgeführte Veranstaltungen',
       'Working Group participant': 'Arbeitsgruppen-Mitglied',
@@ -2763,8 +2741,8 @@ window.netsecMemberCard = (function () {
 
 /* Audiences side-drawer — the recurring "Start where you are" role-router.
    ──────────────────────────────────────────────────────────────────────
-   The homepage carries an inline #audiences section; this makes the same
-   role-router available site-wide as a right-edge tab that opens a drawer.
+   The role-router lives only here, site-wide, as a right-edge tab that
+   opens a drawer. The homepage has no inline copy of it.
    Reads /data/audiences.json, picks the locale off <html lang>, injects a
    fixed edge tab + a native <dialog> on every page. Native <dialog> gives
    Esc-to-close, focus trapping, and a ::backdrop for free.
@@ -3194,4 +3172,54 @@ window.netsecMemberCard = (function () {
       track.appendChild(pic);
     });
   }
+})();
+
+/* Prev / next arrows for horizontal scroll-snap sliders. The nav ships
+   hidden and is shown only while its track overflows, so the arrows
+   never appear for a row that already fits (the practical cards on
+   desktop). aria-disabled rather than disabled keeps focus on the
+   button when a track reaches its end. A track marked
+   data-slider-autoheight takes the height of the item in view once
+   scrolling settles, so a short card is not stretched to the tallest. */
+(function () {
+  document.querySelectorAll('[data-slider-nav]').forEach(function (nav) {
+    var btns = nav.querySelectorAll('[data-slider-step]');
+    var track = btns.length && document.getElementById(btns[0].getAttribute('aria-controls'));
+    if (!track) return;
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var autoHeight = track.hasAttribute('data-slider-autoheight');
+    var settle;
+    function fitHeight() {
+      if (track.scrollWidth - track.clientWidth < 8) { track.style.height = ''; return; }
+      var left = track.getBoundingClientRect().left, item = track.firstElementChild, gap = Infinity;
+      Array.prototype.forEach.call(track.children, function (c) {
+        var d = Math.abs(c.getBoundingClientRect().left - left);
+        if (d < gap) { gap = d; item = c; }
+      });
+      var cs = getComputedStyle(track);
+      track.style.height = (item.offsetHeight + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)) + 'px';
+    }
+    function update() {
+      var max = track.scrollWidth - track.clientWidth;
+      nav.hidden = max < 8;
+      btns.forEach(function (b) {
+        var atEnd = b.dataset.sliderStep < 0 ? track.scrollLeft < 8 : track.scrollLeft > max - 8;
+        b.setAttribute('aria-disabled', String(atEnd));
+      });
+      if (autoHeight) { clearTimeout(settle); settle = setTimeout(fitHeight, 120); }
+    }
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        // ponytail: steps 90% of the visible width and lets scroll-snap
+        // settle on the nearest item, rather than measuring items.
+        track.scrollBy({
+          left: track.clientWidth * 0.9 * Number(b.dataset.sliderStep),
+          behavior: still.matches ? 'auto' : 'smooth'
+        });
+      });
+    });
+    track.addEventListener('scroll', update, { passive: true });
+    if ('ResizeObserver' in window) new ResizeObserver(update).observe(track);
+    update();
+  });
 })();

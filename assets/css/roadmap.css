@@ -327,7 +327,7 @@
   margin:0 0 16px;font-size:.92rem;color:var(--ink-2);line-height:1.55;max-width:60ch;
 }
 .rm-later-list{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));
   gap:14px;margin:0;padding:0;list-style:none;
 }
 .rm-later-item{

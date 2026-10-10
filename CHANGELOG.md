@@ -145,10 +145,22 @@ maintainer-facing audience.
 #### Added
 
 - The Year in Review carries its first edition for the Action's year one, 10 October 2025 to 9 October 2026, with an opening paragraph and a paragraph on year two in English, French and German. Its figures are refreshed to 100 members, 10 news items and 18 releases, and a news item on the home page and in the RSS feed links to it.
+- The ESSC 2027 page carries practical information for Belgrade in all three locales: the venue, visas and entry, the routes from the airport, local transport, fourteen places to stay with their area and price range, money and emergency numbers. Each card carries an icon, the places to stay scroll sideways as a slider with previous and next arrows, and on phones the other cards swipe sideways too, each at its own height, which cuts the section from 4,237 to 1,965 pixels at 375 wide. The Training School page and the hero's Venue fact link to it.
 
 #### Changed
 
+- The home page has five sections where it had twelve: the hero, Meet the network, Four Working Groups, Events and news, and Contact. The member counts sit at the foot of the hero, and the Working Groups section opens with the short introduction to the Action. The Now row, the audience cards, the ESSC 2026 photos and the members' Wiki strip are gone from the page, and the audience cards stay available from the Find your way in tab on every page, where the member card now links to the Wiki and the e-COST portal.
 - The roadmap cards for v1.11.0 to v1.15.0 read in French and German. They had shown the English release summary with a translation marker since June.
+
+#### Fixed
+
+- Without JavaScript, the home page lists the two 2027 events again. Its fallback event cards are rendered from the events data at every deploy, where they had been hand-written and showed "No upcoming events" once the 2026 events ended.
+- The Training School page describes the 2027 school in Belgrade to search engines and link previews, in English, French and German. Its description still gave the 2026 dates in Stockholm, in English on all three pages.
+- Event dates on the event pages are written from the events data, so a moved date is changed in one place.
+- Three members missing from a research-theme filter in the Directory now appear under it, after five of their keywords were placed in the taxonomy. A keyword with no theme now blocks the weekly bios update until it is placed.
+- On 320px screens the header logo shows at full size on every page. It had been squeezed to an 8px sliver beside the language switcher and menu button.
+- On 320px screens no page is wider than the screen any more. Long German words in headings hyphenate, file paths and table cells wrap, and grids, cards and buttons on twelve pages shrink to fit. Content had been cut off at the right edge.
+- The roadmap shows the inaugural Management Committee plenary as held on 11 September 2026, adds the 13 September policy workshop in Ankara, and gives ESSC 2027 its dates and venue, 10 and 11 June 2027 in Belgrade. v1.17.0 moves to 10 January 2027 to match its milestone, the v1.16.0 card describes the call for papers and the five-section home page, and the v1.13.0 to v1.15.0 cards link to their release notes.
 
 ## [1.15.0] · 2026-10-07 — Preparing for the Year in Review
 

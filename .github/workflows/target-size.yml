@@ -13,10 +13,16 @@
 #   been added by the same session that was arguing for the floor. A rule
 #   nothing enforces drifts within the hour.
 #
-# What it is not
-#   Not a required check. It is new, it drives a browser, and a gate nobody
-#   trusts is worse than no gate. Promote it once it has been quiet for a few
-#   weeks.
+# Required on main
+#   "Every control clears 44px" is a required status check in the protect-main
+#   ruleset (#1920), promoted after 32 green runs in a row from 27 September
+#   to 8 October 2026. A required check must report on every PR or the PR
+#   waits forever, so there is no paths filter. The job's first step reads
+#   the PR's file list instead, and when nothing rendered changed it passes
+#   without starting a browser. That costs one API call, against the 40 to
+#   55 seconds of a full run. One job reports the context either way, so no
+#   companion "satisfy" job is needed (codeql-dependabot-shim.yml is the
+#   two-workflow version of the same idea).
 #
 # The sampled pages are the ones that actually carry controls: the home page,
 # the two filter-heavy directories, the conference programme, the roadmap and
@@ -32,16 +38,11 @@ name: Target size (44px floor)
 
 on:
   pull_request:
-    paths:
-      - 'assets/css/**'
-      - 'assets/js/**'
-      - '*.html'
-      - 'scripts/measure.mjs'
-      - '.github/workflows/target-size.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
   group: target-size-${{ github.ref }}
@@ -53,20 +54,46 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # Same scope the old paths filter had. A manual dispatch always runs.
+      - name: Decide whether the PR touches a rendered file
+        id: scope
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          if [ "$EVENT" != "pull_request" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          # Listed into a variable first: under the runner's pipefail, gh
+          # piped straight into grep -q can die of SIGPIPE and read as no match.
+          files=$(gh api "repos/$REPO/pulls/$PR/files" --paginate --jq '.[].filename')
+          if printf '%s\n' "$files" | grep -qE '^(assets/(css|js)/|[^/]+\.html$|scripts/measure\.mjs$|\.github/workflows/target-size\.yml$)'; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "No CSS, JS, page or measure.mjs change, so there is nothing to measure."
+          fi
+
       - name: Check out repository
+        if: steps.scope.outputs.run == 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
 
       - name: Set up Node
+        if: steps.scope.outputs.run == 'true'
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v4 (sha-pinned)
         with:
           node-version: '22'
 
       - name: Install puppeteer-core
+        if: steps.scope.outputs.run == 'true'
         run: npm ci --no-audit --no-fund
 
       # No Pagefind build here, unlike the directory-interactions workflow:
       # nothing in this check touches search, and the index costs a minute.
       - name: Measure every control under a coarse pointer
+        if: steps.scope.outputs.run == 'true'
         run: |
           node scripts/measure.mjs targets \
             index.html people.html events.html working-groups.html \

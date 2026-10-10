@@ -756,7 +756,9 @@ from the directory entirely.
 ### When a keyword reaches no research theme
 
 `sync-bios.py` prints, to stderr, every canonical keyword that resolves to
-no theme. Such a keyword does not cluster, its card pill renders
+no theme, and `scripts/check-data-shape.py` fails the *data shape* check on
+any PR while one remains (#1955), so a sync PR that brings one in cannot
+merge until it is placed. Such a keyword does not cluster, its card pill renders
 display-only, and its holder is missing from that filter and from the
 Network Map's themes lens. The August 2026 review (#1701) took the count
 from 29 to zero, and the four mechanisms it used are the ones to reach for
@@ -812,9 +814,12 @@ The mentorship panel now says so in the page, under both its views: how
 the first contact works, and where to record a full roster or a completed
 match. Copy does not refresh anything by itself. What does is a round of
 maintainer mail to the 27 mentors carrying their form edit link and one
-question, still available or at capacity, which a fresh submission answers
-with a single checkbox. Worth re-running whenever the roster grows enough
-to matter, rather than building a reminder for it.
+question, still available or at capacity. A reply by email is enough: the
+maintainer records it as one list entry in `data/bios-overrides.json`
+(see *Durable corrections* in `docs/bios-setup.md`), which sets
+`mentor-full` or `matched` without the member touching the form. Worth
+re-running whenever the roster grows enough to matter, rather than
+building a reminder for it.
 
 ## Escalation
 
