@@ -1,7 +1,7 @@
 {
   "_documentation": "Year in Review editions (#765), assembled by scripts/build-year-review.py from data/news.json, data/events.json, data/publications.json, the git history of data/bios.json and CHANGELOG.md. Rendered at runtime by assets/js/year-review.js on /year-in-review.html (+ FR + DE). Everything outside the `hand` block is generated and a rebuild overwrites it. The `hand` block is written by the maintainer in all three locales, one lede and one optional outlook paragraph per edition, and the builder carries it forward on every run rather than regenerating it. Editions are regenerated deliberately (when preparing an edition and again at publish time), not by a CI drift gate: the window is closed by publication day, so the numbers are final.",
   "actionStart": "2025-10-10",
-  "generatedAt": "2026-10-07",
+  "generatedAt": "2026-10-10",
   "editions": [
     {
       "year": 1,
@@ -10,7 +10,7 @@
         "to": "2026-10-09"
       },
       "stats": {
-        "members": 100,
+        "members": 102,
         "countries": 29,
         "events": 4,
         "outputs": 0,
@@ -45,8 +45,8 @@
         },
         {
           "month": "2026-10",
-          "date": "2026-10-07",
-          "members": 100
+          "date": "2026-10-08",
+          "members": 102
         }
       ],
       "themes": [
@@ -60,7 +60,7 @@
         },
         {
           "name": "Security and defence",
-          "members": 26
+          "members": 27
         },
         {
           "name": "Disciplines, theory and methods",
@@ -68,7 +68,7 @@
         },
         {
           "name": "Transnational and human security",
-          "members": 21
+          "members": 22
         },
         {
           "name": "European and transatlantic security order",
@@ -76,7 +76,7 @@
         },
         {
           "name": "Strategy and deterrence",
-          "members": 17
+          "members": 18
         },
         {
           "name": "War, military history and armed conflict",
@@ -95,12 +95,12 @@
           "members": 10
         },
         {
-          "name": "Identity, narratives and ideational security",
+          "name": "Democracy, governance and political change",
           "members": 7
         },
         {
-          "name": "Democracy, governance and political change",
-          "members": 6
+          "name": "Identity, narratives and ideational security",
+          "members": 7
         },
         {
           "name": "Peace, mediation and reconciliation",
@@ -108,7 +108,7 @@
         },
         {
           "name": "Crisis management and critical systems resilience",
-          "members": 4
+          "members": 5
         },
         {
           "name": "Climate, energy and environmental security",
