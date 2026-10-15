@@ -100,6 +100,11 @@ SKIP_HOSTS = {
                                 # users (GET 200 from a browser) and
                                 # the handle netsec-cost.eu resolves to
                                 # a real DID; confirmed 2026-06-03.
+    "www.apartman25.rs",        # ESSC 2027 accommodation links. Both
+    "hotelzavicaj.rs",          # answer in 3-10 s from Europe and time
+                                # out at 15 s from the Actions runner,
+                                # which failed #2026 twice. Reachable
+                                # in a browser; confirmed 2026-10-15.
 }
 
 # Domains skipped together with every subdomain (suffix match, not exact

@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-08T12:01:37+00:00",
+  "generated_at": "2026-10-15T09:53:06+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-08T12:01:37+00:00"
+    "last_synced": "2026-10-15T09:53:06+00:00"
   },
   "members": [
     {
@@ -2513,11 +2513,11 @@
     },
     {
       "id": "tolga-c-kr-kc",
-      "name": "Dr Tolga Çıkrıkçı",
+      "name": "Dr Tolga Cikrikci",
       "country": "Türkiye",
       "country_code": "tr",
       "affiliation": "Giresun University",
-      "position": "Assistant Professor",
+      "position": "Assistant Professor of International Relations",
       "roles": [],
       "wgs": [],
       "mentorship": [
@@ -2525,39 +2525,42 @@
       ],
       "regions": [
         "Europe",
-        "Global and cross-regional"
+        "Global and cross-regional",
+        "Middle East and North Africa"
       ],
       "stsm_hosting": "ask",
       "wg_leadership": {},
-      "bio": "I am an Assistant Professor in the Department of International Relations at Giresun University, Türkiye, where I teach undergraduate and graduate courses in Public International Law, International Human Rights Law, International Organizations, and Private International Law. I hold a PhD in International Relations, and my academic work focuses on the intersection of international law and international politics.\n\nMy research interests include international law, human rights, human security, global governance, international organizations, and contemporary security challenges. In my recent work, I have examined topics such as vaccine hesitancy and human security, discrimination and intolerance in the European Union, global justice, and the role of international law in responding to armed conflicts and international crises.\n\nAlongside my research and teaching, I regularly present my work at national and international conferences and serve as a reviewer for academic journals in the fields of international relations and international law. I also participate in international research collaborations and contribute to academic quality assurance and accreditation processes.\n\nThrough my research, teaching, and international engagement, I aim to contribute to a deeper understanding of contemporary global challenges and the evolving role of international law and global governance in addressing them.",
+      "bio": "Dr Tolga Cikrikci is an Assistant Professor of International Relations at Giresun University, Türkiye. His research focuses on international law, human rights, global governance and international security.\n\nHis recent work examines the legal and normative dimensions of the use of force, the relationship between international law and security, and the resilience of international organisations under changing political conditions. He is particularly interested in how international institutions respond to geopolitical challenges and how international legal norms are interpreted and applied during international crises.\n\nHis broader research interests include human security, discrimination and the role of international organisations in global governance. He also teaches courses on international law, international human rights law and international organisations.\n\nWithin NetSec, he is interested in interdisciplinary academic collaboration, knowledge exchange and strengthening the relationship between academic research and policy discussions on contemporary security challenges.",
       "keywords": [
         "International Law",
-        "Human Security",
+        "International Security",
+        "Human Rights",
         "Global Governance",
-        "International Organizations",
-        "Human Rights"
+        "International Organisations"
       ],
-      "email": "tcikrikci92@gmail.com",
-      "website": "https://ulus.giresun.edu.tr/",
+      "email": "tolga.cikrikci@giresun.edu.tr",
+      "website": "https://unis.giresun.edu.tr/akademisyen-detay/ozgecmis/tolga.cikrikci",
       "orcid": "0000-0001-5102-0907",
       "linkedin": "",
       "twitter": "",
       "bluesky": "",
       "mastodon": "",
-      "photo": "",
+      "photo": "assets/images/people/tolga-c-kr-kc.jpg",
       "source": "form",
       "canonical_keywords": [
         "Global governance",
         "Human rights",
-        "Human security",
         "International law",
-        "International organisations"
+        "International organisations",
+        "International security"
       ],
       "themes": [
         "Disciplines, theory and methods",
         "EU, UN and other international organisations",
+        "Security and defence",
         "Transnational and human security"
-      ]
+      ],
+      "photo_source_sha256": "e3b7c31627ba001ac77bec930527d8e5521f9d2a0103cd279ea8b7769f92cd44"
     },
     {
       "id": "martin-havacek",
@@ -4693,6 +4696,97 @@
       "themes": [
         "Strategy and deterrence"
       ]
+    },
+    {
+      "id": "sonja-stojanovic-gajic",
+      "name": "Dr Sonja Stojanovic Gajic",
+      "country": "Croatia",
+      "country_code": "hr",
+      "affiliation": "Center for Advanced Studies, the University of Rijeka",
+      "position": "Senior Researcher at CAS SEE and Associate Fellow at Centre for International Security, Faculty of Political Science",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Europe - Western Balkans"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Sonja Stojanović Gajić is a Senior Research Fellow at the Center for Advanced Studies South East Europe, University of Rijeka. Her research examines how geopolitical competition and autocratisation transform security governance, democratic resistance to autocracy and inter-ethnic conflict in the Western Balkans and the Eastern Neighbourhood. She currently co-coordinates the work package on geopolitical competition and EU strategic autonomy in the Horizon Europe project GeoPower-EU. Her publications include articles in the Journal of Intervention and Statebuilding and the Journal of Regional Security, a co-edited special issue on state capture and security (2021) and the co-edited volume Security Community Practices in the Western Balkans (Routledge, 2018). She teaches security and illiberalism, critical geopolitics and EU enlargement, serves on the editorial boards of the Journal of Regional Security and Security and Human Rights, and holds a PhD in International Relations from the University of Belgrade. Her scholarship is grounded in practice. From 2006 to 2019 she directed the Belgrade Centre for Security Policy, building it into a leading think tank on democratic oversight of the security sector and co-founding the Belgrade Security Forum. As an independent consultant, she translated research into practice for international and national public sector organisations, including the OSCE and DCAF, through commissioned policy assessments, scenario-based crisis-management exercises, executive training, and mediated dialogue between security institutions and civil society.",
+      "keywords": [
+        "security practices",
+        "autocratisation",
+        "policing",
+        "democratic resistance"
+      ],
+      "email": "",
+      "website": "https://cas.uniri.hr/who-we-are/sonja-stojanovic-gajic-2/",
+      "orcid": "0009-0000-4232-8133",
+      "linkedin": "https://share.google/9JIaYAWXJbquE6BdJ",
+      "twitter": "https://share.google/gkG3iPz9OA4xTY6k0",
+      "bluesky": "https://bsky.app/profile/sonjasg.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/sonja-stojanovic-gajic.jpg",
+      "source": "form",
+      "photo_source_sha256": "8ba2f4359b051c7a1fc5c96416ba44404849f61da98a1247d8110ee3847c742a",
+      "canonical_keywords": [
+        "Autocratisation",
+        "Democratic resistance",
+        "Policing",
+        "Security practices"
+      ]
+    },
+    {
+      "id": "lukas-wahden",
+      "name": "Mr Lukas Wahden",
+      "country": "France",
+      "country_code": "fr",
+      "affiliation": "Sciences Po Paris (CERI)",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "matched"
+      ],
+      "regions": [
+        "Europe - Eastern neighbours / Russia",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Lukas Wahden is a PhD candidate in International Relations at Sciences Po’s Centre for International Studies (CERI), and an Associate Fellow with the Russia Program at George Washington University. His doctoral research examines how status-seeking, military strategy, and resource appropriation have shaped Russian approaches to spaces beyond traditional territorial sovereignty, including the polar regions, oceans, and outer space. He also writes 66° North, a monthly Substack newsletter analysing developments in Arctic security and politics.",
+      "keywords": [
+        "International security",
+        "Great power relations",
+        "Russian foreign policy",
+        "Arctic security",
+        "Global Commons governance"
+      ],
+      "email": "lukas.wahden@gmail.com",
+      "website": "https://www.sciencespo.fr/ceri/en/directory/wahden-lukas/",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/lukas-wahden/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/lukas-wahden.jpg",
+      "source": "form",
+      "photo_source_sha256": "8276e4d5d5b45d51d9458ca7d4d2accdd2d032d80f138c2d540f2918496cf226",
+      "canonical_keywords": [
+        "Arctic security",
+        "Global commons governance",
+        "Great power relations",
+        "International security",
+        "Russian foreign policy"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Security and defence"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -4709,6 +4803,10 @@
       "count": 7
     },
     {
+      "keyword": "International security",
+      "count": 7
+    },
+    {
       "keyword": "Strategy",
       "count": 6
     },
@@ -4722,10 +4820,6 @@
     },
     {
       "keyword": "International relations",
-      "count": 5
-    },
-    {
-      "keyword": "International security",
       "count": 5
     },
     {
@@ -4786,10 +4880,6 @@
     },
     {
       "keyword": "European strategic autonomy",
-      "count": 3
-    },
-    {
-      "keyword": "Human security",
       "count": 3
     },
     {
@@ -4885,6 +4975,10 @@
       "count": 2
     },
     {
+      "keyword": "Human security",
+      "count": 2
+    },
+    {
       "keyword": "Intelligence studies",
       "count": 2
     },
@@ -4910,6 +5004,10 @@
     },
     {
       "keyword": "Political psychology",
+      "count": 2
+    },
+    {
+      "keyword": "Russian foreign policy",
       "count": 2
     },
     {
@@ -4957,6 +5055,10 @@
       "count": 1
     },
     {
+      "keyword": "Arctic security",
+      "count": 1
+    },
+    {
       "keyword": "Arctic security/governance",
       "count": 1
     },
@@ -4966,6 +5068,10 @@
     },
     {
       "keyword": "Assassination",
+      "count": 1
+    },
+    {
+      "keyword": "Autocratisation",
       "count": 1
     },
     {
@@ -5082,6 +5188,10 @@
     },
     {
       "keyword": "Defence resources management",
+      "count": 1
+    },
+    {
+      "keyword": "Democratic resistance",
       "count": 1
     },
     {
@@ -5241,6 +5351,10 @@
       "count": 1
     },
     {
+      "keyword": "Global commons governance",
+      "count": 1
+    },
+    {
       "keyword": "Global governance",
       "count": 1
     },
@@ -5250,6 +5364,10 @@
     },
     {
       "keyword": "Governance",
+      "count": 1
+    },
+    {
+      "keyword": "Great power relations",
       "count": 1
     },
     {
@@ -5437,6 +5555,10 @@
       "count": 1
     },
     {
+      "keyword": "Policing",
+      "count": 1
+    },
+    {
       "keyword": "Policy evaluation",
       "count": 1
     },
@@ -5533,10 +5655,6 @@
       "count": 1
     },
     {
-      "keyword": "Russian foreign policy",
-      "count": 1
-    },
-    {
       "keyword": "Science and innovation policies",
       "count": 1
     },
@@ -5546,6 +5664,10 @@
     },
     {
       "keyword": "Security politics",
+      "count": 1
+    },
+    {
+      "keyword": "Security practices",
       "count": 1
     },
     {
@@ -5660,14 +5782,14 @@
   "theme_aggregate": [
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 34
-    },
-    {
-      "theme": "Cyber and emerging technology",
-      "count": 27
+      "count": 35
     },
     {
       "theme": "Security and defence",
+      "count": 29
+    },
+    {
+      "theme": "Cyber and emerging technology",
       "count": 27
     },
     {
@@ -5972,30 +6094,30 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 63
+      "count": 64
     },
     {
       "region": "Global and cross-regional",
-      "count": 51
+      "count": 52
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 24
+      "count": 26
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 21
+      "count": 22
     },
     {
       "region": "The Americas",
       "count": 17
     },
     {
-      "region": "Asia",
-      "count": 12
+      "region": "Middle East and North Africa",
+      "count": 13
     },
     {
-      "region": "Middle East and North Africa",
+      "region": "Asia",
       "count": 12
     },
     {
