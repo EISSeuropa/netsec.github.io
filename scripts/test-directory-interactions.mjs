@@ -678,7 +678,7 @@ const journeys = {
     }, q);
     for (const [typed, expected] of [
       ['Pinar', 'Pınar'],
-      ['Cikrikci', 'Çıkrıkçı'],
+      ['Caliskan', 'Çalışkan'],
       ['Kolmasova', 'Kolmašová'],
       ['Karlen', 'Karlén'],
       ['Kosterke', 'Kösterke'],
