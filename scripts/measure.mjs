@@ -242,7 +242,13 @@ function bytesCollector(page) {
 // rerun rather than to look. The third attempt matches build-og-cards.py,
 // where both of two attempts failed on the 2026-10-01 deploy (#1946).
 async function launchBrowser() {
-  const options = { executablePath: findChrome(), headless: 'new', args: ['--no-sandbox'] };
+  // GoatCounter's count.js is the only off-host request the pages make. From
+  // the runners it has stalled since 2026-10-12, holding networkidle0 open
+  // past the 30 s goto timeout on every page, so it is never resolved here.
+  const options = {
+    executablePath: findChrome(), headless: 'new',
+    args: ['--no-sandbox', '--host-resolver-rules=MAP gc.zgo.at ~NOTFOUND'],
+  };
   const attempts = 3;
   for (let attempt = 1; ; attempt++) {
     try {
