@@ -2009,10 +2009,9 @@ def suggest_theme(keyword: str, theme_of: dict[str, str]) -> tuple[str, str] | N
     when nothing is close. A shared significant word ("cyber", "maritime")
     counts for a lot; otherwise it falls back to overall string similarity.
 
-    This automates the *review* of the no-theme flags, not the taxonomy: the
-    sync prints the suggestion in the PR body so the maintainer confirms or
-    overrides it, but never edits ``keyword-aliases.json`` automatically (a
-    wrong auto-assignment would be invisible and sticky)."""
+    place_unthemed_keywords() writes this pick into ``keyword-aliases.json``
+    and the PR body lists every placement, so a wrong guess is visible to the
+    maintainer who merges the auto-PR by hand."""
     kw = (keyword or "").lower().strip()
     if not kw or not theme_of:
         return None
@@ -2029,10 +2028,50 @@ def suggest_theme(keyword: str, theme_of: dict[str, str]) -> tuple[str, str] | N
     return best if best_score >= 0.5 else None
 
 
+def place_unthemed_keywords(uncategorised) -> dict[str, tuple[str, str]]:
+    """Place each unthemed keyword under suggest_theme's pick, in place.
+
+    Every bios-sync PR that brought a new keyword failed the data-shape gate
+    (#2006) until someone placed it by hand. The sync now appends the keyword
+    to its theme's array in ``keyword-aliases.json`` and returns
+    ``{keyword: (theme, nearest)}`` for the PR body to list. A keyword with
+    no close theme stays unthemed, so the gate still holds that PR for a
+    human. Edits the one array line rather than re-dumping the file, which
+    would reflow the hand-kept layout."""
+    if not uncategorised or not ALIAS_FILE.exists():
+        return {}
+    theme_of = load_keyword_themes()
+    text = ALIAS_FILE.read_text(encoding="utf-8")
+    start = text.find('\n  "themes": {')
+    end = text.find("\n  }", start)
+    if start < 0 or end < 0:
+        return {}
+    block = text[start:end]
+    placed: dict[str, tuple[str, str]] = {}
+    for kw in sorted(uncategorised, key=str.lower):
+        hint = suggest_theme(kw, theme_of)
+        if not hint:
+            continue
+        line = re.compile(
+            r"^(    %s: \[.+)\](,?)$" % re.escape(json.dumps(hint[0], ensure_ascii=False)),
+            re.M,
+        )
+        entry = json.dumps(kw, ensure_ascii=False)
+        block, n = line.subn(lambda m: f"{m.group(1)}, {entry}]{m.group(2)}", block, count=1)
+        if n:
+            placed[kw] = hint
+    if placed:
+        text = text[:start] + block + text[end:]
+        json.loads(text)  # never write a file the next run cannot read
+        ALIAS_FILE.write_text(text, encoding="utf-8")
+    return placed
+
+
 def render_pr_body_overview(
     diff: dict,
     uncategorised: set[str] | list[str] | None = None,
     link_rewrites: list[dict] | None = None,
+    placed: dict[str, tuple[str, str]] | None = None,
 ) -> str:
     """Markdown overview block to embed in the auto-PR body, ahead
     of the raw run log. Returns an empty string when there's nothing
@@ -2064,7 +2103,7 @@ def render_pr_body_overview(
         flag_rewrites.append(r)
 
     has_changes = bool(new or upd or rm or photos)
-    has_flags = bool(flag_keywords or flag_rewrites)
+    has_flags = bool(flag_keywords or flag_rewrites or placed)
     if not (has_changes or has_flags):
         return ""
 
@@ -2149,6 +2188,19 @@ def render_pr_body_overview(
                     )
                 else:
                     lines.append(f"- {k} → no close theme; pick one")
+            lines.append("")
+        if placed:
+            lines.append(f"### Keywords placed in a theme by the sync ({len(placed)})")
+            lines.append("")
+            lines.append(
+                "The sync added these to `themes` in `data/keyword-aliases.json`, "
+                "each under the theme of its nearest mapped keyword. Confirm each "
+                "placement or move the keyword before merging."
+            )
+            lines.append("")
+            for k in sorted(placed, key=str.lower):
+                theme, nearest = placed[k]
+                lines.append(f"- {k} → **{theme}** (nearest: _{nearest}_)")
             lines.append("")
         if flag_rewrites:
             lines.append(f"### Link fields rewritten ({len(flag_rewrites)})")
@@ -2438,6 +2490,10 @@ def main() -> None:
         print(f"Generated {_map_n} new map avatar(s).")
 
     uncategorised = enrich_keywords(merged, bios_data)
+    placed = place_unthemed_keywords(uncategorised)
+    if placed:
+        # Rerun so the members' themes and the aggregates see the placements.
+        uncategorised = enrich_keywords(merged, bios_data)
 
     # Research-region aggregate (distinct-member count per region). The
     # per-bio `regions` come from the optional Research-regions form field
@@ -2533,7 +2589,7 @@ def main() -> None:
         # the photo paths, and render_pr_title routes that to the
         # "investigate" title.
         alarm_diff = classify_diff(old_members, merged, PHOTOS_CHANGED)
-        _emit_pr_summary(alarm_diff, uncategorised, LINK_REWRITES)
+        _emit_pr_summary(alarm_diff, uncategorised, LINK_REWRITES, placed)
         # Keep bios.json untouched: data genuinely didn't change. The
         # photo files on disk are already updated; the PR will reflect
         # them. We just want the log to scream rather than mislead.
@@ -2562,13 +2618,14 @@ def main() -> None:
     # can pick up via env-pointed files. Skipped silently when the
     # env vars aren't set (local runs).
     diff = classify_diff(old_members, merged, PHOTOS_CHANGED)
-    _emit_pr_summary(diff, uncategorised, LINK_REWRITES)
+    _emit_pr_summary(diff, uncategorised, LINK_REWRITES, placed)
 
 
 def _emit_pr_summary(
     diff: dict,
     uncategorised: set[str] | list[str] | None = None,
     link_rewrites: list[dict] | None = None,
+    placed: dict[str, tuple[str, str]] | None = None,
 ) -> None:
     """Write the dynamic PR title + structured overview to the paths
     pointed at by `SYNC_BIOS_PR_TITLE_PATH` + `SYNC_BIOS_PR_OVERVIEW_PATH`
@@ -2580,7 +2637,7 @@ def _emit_pr_summary(
         Path(title_path).write_text(render_pr_title(diff) + "\n", encoding="utf-8")
     if overview_path:
         Path(overview_path).write_text(
-            render_pr_body_overview(diff, uncategorised, link_rewrites),
+            render_pr_body_overview(diff, uncategorised, link_rewrites, placed),
             encoding="utf-8",
         )
 
