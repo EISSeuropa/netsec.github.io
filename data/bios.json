@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-15T09:53:06+00:00",
+  "generated_at": "2026-10-17T09:19:50+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-15T09:53:06+00:00"
+    "last_synced": "2026-10-17T09:19:50+00:00"
   },
   "members": [
     {
@@ -4738,6 +4738,11 @@
         "Democratic resistance",
         "Policing",
         "Security practices"
+      ],
+      "themes": [
+        "Democracy, governance and political change",
+        "Disciplines, theory and methods",
+        "Security and defence"
       ]
     },
     {
@@ -4784,8 +4789,62 @@
         "Russian foreign policy"
       ],
       "themes": [
+        "EU, UN and other international organisations",
         "Foreign policy and diplomacy",
         "Security and defence"
+      ]
+    },
+    {
+      "id": "roie-yellinek",
+      "name": "Dr Roie Yellinek",
+      "country": "Israel",
+      "country_code": "il",
+      "affiliation": "The Geopolitics Lab",
+      "position": "Geopolitics Lab (G-Lab), Co-Director; Geopolitical advisor to the Israeli National AI Directorate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Asia",
+        "Global and cross-regional",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Dr. Roie Yellinek is Co-Director of Geopolitics Lab (G-Lab), a geopolitical consultancy, and geopolitical advisor to the Israeli National AI Directorate. He previously served as a security and strategic consultant and researcher for the Israeli government; as a research associate at the Begin-Sadat Center for Strategic Studies (BESA); as a non-resident scholar at the Middle East Institute (MEI) in Washington, D.C.; and has published extensively on China–Middle East relations, regional security, and great-power competition.",
+      "keywords": [
+        "Middle East security",
+        "geopolitics of AI",
+        "China–Middle East",
+        "great-power competition",
+        "strategic studies",
+        "Israel foreign policy",
+        "regional security"
+      ],
+      "email": "roie@geopoliticslab.com",
+      "website": "",
+      "orcid": "0000-0002-2966-1801",
+      "linkedin": "https://www.linkedin.com/in/roieyellinek/?isSelfProfile=true",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/roie-yellinek.jpg",
+      "source": "form",
+      "photo_source_sha256": "adadebe76629ef18cf85a0395698df4c6e73cf5060e9d53874681c37a888297e",
+      "canonical_keywords": [
+        "China–middle east",
+        "Geopolitics of AI",
+        "Great-power competition",
+        "Israel foreign policy",
+        "Middle East security",
+        "Regional security",
+        "Strategic studies"
+      ],
+      "themes": [
+        "Security and defence",
+        "Strategy and deterrence"
       ]
     }
   ],
@@ -4991,6 +5050,10 @@
       "count": 2
     },
     {
+      "keyword": "Middle East security",
+      "count": 2
+    },
+    {
       "keyword": "Multilateralism",
       "count": 2
     },
@@ -5024,6 +5087,10 @@
     },
     {
       "keyword": "Strategic competition",
+      "count": 2
+    },
+    {
+      "keyword": "Strategic studies",
       "count": 2
     },
     {
@@ -5092,6 +5159,10 @@
     },
     {
       "keyword": "Capability planning",
+      "count": 1
+    },
+    {
+      "keyword": "China–middle east",
       "count": 1
     },
     {
@@ -5343,6 +5414,10 @@
       "count": 1
     },
     {
+      "keyword": "Geopolitics of AI",
+      "count": 1
+    },
+    {
       "keyword": "Geopolitics of the Indo-Pacific",
       "count": 1
     },
@@ -5368,6 +5443,10 @@
     },
     {
       "keyword": "Great power relations",
+      "count": 1
+    },
+    {
+      "keyword": "Great-power competition",
       "count": 1
     },
     {
@@ -5443,6 +5522,10 @@
       "count": 1
     },
     {
+      "keyword": "Israel foreign policy",
+      "count": 1
+    },
+    {
       "keyword": "Judgment and decision-making",
       "count": 1
     },
@@ -5472,10 +5555,6 @@
     },
     {
       "keyword": "Metaphors",
-      "count": 1
-    },
-    {
-      "keyword": "Middle East security",
       "count": 1
     },
     {
@@ -5623,6 +5702,10 @@
       "count": 1
     },
     {
+      "keyword": "Regional security",
+      "count": 1
+    },
+    {
       "keyword": "Regional security cooperation and governance",
       "count": 1
     },
@@ -5700,10 +5783,6 @@
     },
     {
       "keyword": "Strategic culture",
-      "count": 1
-    },
-    {
-      "keyword": "Strategic studies",
       "count": 1
     },
     {
@@ -5786,7 +5865,7 @@
     },
     {
       "theme": "Security and defence",
-      "count": 29
+      "count": 31
     },
     {
       "theme": "Cyber and emerging technology",
@@ -5794,7 +5873,7 @@
     },
     {
       "theme": "Disciplines, theory and methods",
-      "count": 24
+      "count": 25
     },
     {
       "theme": "Transnational and human security",
@@ -5806,15 +5885,15 @@
     },
     {
       "theme": "Strategy and deterrence",
-      "count": 18
+      "count": 19
+    },
+    {
+      "theme": "EU, UN and other international organisations",
+      "count": 12
     },
     {
       "theme": "War, military history and armed conflict",
       "count": 12
-    },
-    {
-      "theme": "EU, UN and other international organisations",
-      "count": 11
     },
     {
       "theme": "Intelligence, information and influence",
@@ -5826,7 +5905,7 @@
     },
     {
       "theme": "Democracy, governance and political change",
-      "count": 7
+      "count": 8
     },
     {
       "theme": "Identity, narratives and ideational security",
@@ -5856,9 +5935,11 @@
     "Adversarial robustness": "Cyber and emerging technology",
     "Algorithms and AI": "Cyber and emerging technology",
     "Alliance politics": "European and transatlantic security order",
+    "Arctic security": "Security and defence",
     "Arctic security/governance": "Security and defence",
     "Arms control": "Strategy and deterrence",
     "Assassination": "War, military history and armed conflict",
+    "Autocratisation": "Democracy, governance and political change",
     "Black Sea security": "Security and defence",
     "Border and maritime security": "Transnational and human security",
     "Border security": "Transnational and human security",
@@ -5901,6 +5982,7 @@
     "Defence innovation": "Cyber and emerging technology",
     "Defence north Atlantic and Arctic": "Security and defence",
     "Defence resources management": "Security and defence",
+    "Democratic resistance": "Democracy, governance and political change",
     "Democratisation": "Democracy, governance and political change",
     "Deterrence": "Strategy and deterrence",
     "Digital governance": "Cyber and emerging technology",
@@ -5955,11 +6037,13 @@
     "Geopolitics": "Foreign policy and diplomacy",
     "Geopolitics of the Indo-Pacific": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
+    "Global commons governance": "EU, UN and other international organisations",
     "Global governance": "EU, UN and other international organisations",
     "Global order": "EU, UN and other international organisations",
     "Governance": "Democracy, governance and political change",
     "Grand strategy": "Strategy and deterrence",
     "Great power competition": "Foreign policy and diplomacy",
+    "Great power relations": "Foreign policy and diplomacy",
     "Gulf security": "Security and defence",
     "Heritage": "Identity, narratives and ideational security",
     "History": "Disciplines, theory and methods",
@@ -6023,6 +6107,7 @@
     "Peacebuilding": "Peace, mediation and reconciliation",
     "Peacekeeping": "Peace, mediation and reconciliation",
     "Plural peace": "Peace, mediation and reconciliation",
+    "Policing": "Security and defence",
     "Policy evaluation": "Disciplines, theory and methods",
     "Policy frameworks": "Disciplines, theory and methods",
     "Political bioethics": "Disciplines, theory and methods",
@@ -6056,6 +6141,7 @@
     "Security and defence": "Security and defence",
     "Security knowledge": "Disciplines, theory and methods",
     "Security politics": "Security and defence",
+    "Security practices": "Disciplines, theory and methods",
     "Security risk assessment": "Crisis management and critical systems resilience",
     "Security sector governance": "Security and defence",
     "Security sector reforms": "Security and defence",
@@ -6098,7 +6184,7 @@
     },
     {
       "region": "Global and cross-regional",
-      "count": 52
+      "count": 53
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -6114,11 +6200,11 @@
     },
     {
       "region": "Middle East and North Africa",
-      "count": 13
+      "count": 14
     },
     {
       "region": "Asia",
-      "count": 12
+      "count": 13
     },
     {
       "region": "Africa",

@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-10-15T09:53:06+00:00",
+  "generated_at": "2026-10-17T09:19:50+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 104,
+  "count": 105,
   "members": [
     {
       "name": "Mr Adam Hanzel",
@@ -960,6 +960,17 @@
       "role": null,
       "affiliation": "TÜV SÜD",
       "photo": "https://netsec-cost.eu/assets/images/people/richard-skalt.jpg"
+    },
+    {
+      "name": "Dr Roie Yellinek",
+      "name_key": "roie yellinek",
+      "aliases": [],
+      "slug": "roie-yellinek",
+      "url": "https://netsec-cost.eu/people/roie-yellinek.html",
+      "orcid": "0000-0002-2966-1801",
+      "role": null,
+      "affiliation": "The Geopolitics Lab",
+      "photo": "https://netsec-cost.eu/assets/images/people/roie-yellinek.jpg"
     },
     {
       "name": "Ms Rusudan Zabakhidze",
