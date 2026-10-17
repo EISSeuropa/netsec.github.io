@@ -100,11 +100,6 @@ SKIP_HOSTS = {
                                 # users (GET 200 from a browser) and
                                 # the handle netsec-cost.eu resolves to
                                 # a real DID; confirmed 2026-06-03.
-    "www.apartman25.rs",        # ESSC 2027 accommodation links. Both
-    "hotelzavicaj.rs",          # answer in 3-10 s from Europe and time
-                                # out at 15 s from the Actions runner,
-                                # which failed #2026 twice. Reachable
-                                # in a browser; confirmed 2026-10-15.
 }
 
 # Domains skipped together with every subdomain (suffix match, not exact
@@ -325,6 +320,13 @@ def check_external(url):
 
 _ssl_warned = None  # forward declaration; first SSL failure flips it
 
+# A timeout or a reset says the host is slow or throttling the runner, not
+# that the link is dead. Three ESSC 2027 hotel sites failed PRs this way in a
+# week (#2026, #2030) while loading in a browser, so these are listed but do
+# not fail the run. An HTTP error or a name that no longer resolves still does.
+UNREACHABLE = re.compile(r"timed out|Connection reset|RemoteDisconnected")
+unreachable_external = []
+
 if not internal_only and external_links:
     print(f"  external targets: {len(external_links)}")
     # Concurrency set to 3, not 8 — GitHub rate-limits unauth'd
@@ -342,6 +344,10 @@ if not internal_only and external_links:
             elif isinstance(status, int) and 200 <= status < 400:
                 if not quiet:
                     print(f"  ✓ {url}  ({status})")
+            elif UNREACHABLE.search(str(status)):
+                unreachable_external.append(
+                    f"  ? {external_links[url]} → {url}  ({status})"
+                )
             else:
                 broken_external.append(
                     f"  ✗ {external_links[url]} → {url}  ({status})"
@@ -356,6 +362,10 @@ if broken_internal:
 if broken_external:
     print(f"EXTERNAL BROKEN ({len(broken_external)}):")
     for line in broken_external:
+        print(line)
+if unreachable_external:
+    print(f"EXTERNAL UNREACHABLE FROM HERE, NOT FAILING ({len(unreachable_external)}):")
+    for line in unreachable_external:
         print(line)
 if not broken_internal and not broken_external:
     print(f"✓ All links resolved ({len(internal_links)} internal, "
