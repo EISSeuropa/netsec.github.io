@@ -166,6 +166,37 @@ def test_suggest_theme() -> None:
     expect("empty -> None", st("", theme_of), None)
 
 
+def test_place_unthemed_keywords() -> None:
+    """A keyword with a close theme is appended to that theme's array line,
+    one with none is left for the gate, and the rest of the file is kept."""
+    print("\nplace_unthemed_keywords():")
+    import json, tempfile
+    original = (
+        '{\n  "acronyms": ["EU"],\n  "themes": {\n'
+        '    "Cyber and emerging technology": ["Cyber security"],\n'
+        '    "Security and defence": ["National security"]\n  },\n'
+        '  "regions": ["Europe"]\n}\n'
+    )
+    saved = sync_bios.ALIAS_FILE
+    with tempfile.TemporaryDirectory() as d:
+        sync_bios.ALIAS_FILE = Path(d) / "keyword-aliases.json"
+        sync_bios.ALIAS_FILE.write_text(original, encoding="utf-8")
+        try:
+            placed = sync_bios.place_unthemed_keywords({"Cyber resilience", "Banana bread"})
+            doc = json.loads(sync_bios.ALIAS_FILE.read_text(encoding="utf-8"))
+            text = sync_bios.ALIAS_FILE.read_text(encoding="utf-8")
+        finally:
+            sync_bios.ALIAS_FILE = saved
+    expect("close keyword placed", placed.get("Cyber resilience", [None])[0],
+           "Cyber and emerging technology")
+    expect("far keyword left alone", "Banana bread" in placed, False)
+    expect("written into the theme",
+           doc["themes"]["Cyber and emerging technology"], ["Cyber security", "Cyber resilience"])
+    expect("other theme untouched", doc["themes"]["Security and defence"], ["National security"])
+    expect("layout kept", text.count("\n"), original.count("\n"))
+    expect("nothing to place -> {}", sync_bios.place_unthemed_keywords(set()), {})
+
+
 def test_region_names_dropped_from_keywords() -> None:
     """A region name typed into the keyword box is excluded from keywords:
     geography belongs to the regions facet. The sync drops any normalised
@@ -1521,6 +1552,7 @@ def main() -> None:
     test_build_name()
     test_parse_keywords()
     test_suggest_theme()
+    test_place_unthemed_keywords()
     test_region_names_dropped_from_keywords()
     test_country_key()
     test_fill_country_code_follows_country()

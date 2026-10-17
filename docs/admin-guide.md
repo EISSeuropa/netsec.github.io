@@ -755,10 +755,16 @@ from the directory entirely.
 
 ### When a keyword reaches no research theme
 
-`sync-bios.py` prints, to stderr, every canonical keyword that resolves to
-no theme, and `scripts/check-data-shape.py` fails the *data shape* check on
-any PR while one remains (#1955), so a sync PR that brings one in cannot
-merge until it is placed. Such a keyword does not cluster, its card pill renders
+`sync-bios.py` places a new unthemed keyword itself: `suggest_theme` finds
+the nearest keyword already in the taxonomy, and the sync appends the new one
+to that theme's array in `data/keyword-aliases.json`. The sync PR lists each
+placement under *Review flags → Keywords placed in a theme by the sync*, and
+moving a wrong one is a one-line edit on the PR branch before merging. The
+guess leans on shared words, so "Quantum key distribution policy" lands in
+Foreign policy and diplomacy through "policy". A keyword with nothing close
+stays unthemed, and `scripts/check-data-shape.py` fails the *data shape*
+check on any PR while one remains (#1955), so that sync PR cannot merge
+until someone places it. Such a keyword does not cluster, its card pill renders
 display-only, and its holder is missing from that filter and from the
 Network Map's themes lens. The August 2026 review (#1701) took the count
 from 29 to zero, and the four mechanisms it used are the ones to reach for
