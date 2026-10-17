@@ -286,7 +286,15 @@ try {
         await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: theme }]);
 
         const readBytes = check === 'bytes' ? bytesCollector(page) : null;
-        await page.goto(`${server.base}/${pageName}`, { waitUntil: 'networkidle0' });
+        // Named before the goto so a hang says which page it was.
+        console.error(`  · ${pageName} at ${w}px, ${theme}`);
+        // `load` is the hard gate. networkidle0 on top is best effort: one
+        // request that never settles (count.js on 2026-10-12, an unknown one
+        // on 2026-10-17) used to fail the whole run at the 30 s goto timeout.
+        await page.goto(`${server.base}/${pageName}`, { waitUntil: 'load' });
+        await page.waitForNetworkIdle({ idleTime: 500, timeout: 10000 }).catch(() => {
+          console.error(`  · ${pageName}: network never went idle, measuring anyway`);
+        });
         // Client-rendered surfaces need a beat after networkidle.
         await new Promise((r) => setTimeout(r, 2200));
 
