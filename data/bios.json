@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-17T09:19:50+00:00",
+  "generated_at": "2026-10-18T09:33:03+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-17T09:19:50+00:00"
+    "last_synced": "2026-10-18T09:33:03+00:00"
   },
   "members": [
     {
@@ -4843,6 +4843,8 @@
         "Strategic studies"
       ],
       "themes": [
+        "Cyber and emerging technology",
+        "Foreign policy and diplomacy",
         "Security and defence",
         "Strategy and deterrence"
       ]
@@ -5861,7 +5863,7 @@
   "theme_aggregate": [
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 35
+      "count": 36
     },
     {
       "theme": "Security and defence",
@@ -5869,7 +5871,7 @@
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 27
+      "count": 28
     },
     {
       "theme": "Disciplines, theory and methods",
@@ -5946,6 +5948,7 @@
     "British army": "War, military history and armed conflict",
     "CSDP": "EU, UN and other international organisations",
     "Capability planning": "Security and defence",
+    "China–middle east": "Security and defence",
     "Chinese foreign policy": "Foreign policy and diplomacy",
     "Civil defence": "Crisis management and critical systems resilience",
     "Civil protection": "Crisis management and critical systems resilience",
@@ -6035,6 +6038,7 @@
     "Gender-based violence": "Transnational and human security",
     "Geoeconomic competition": "Economic security and geoeconomics",
     "Geopolitics": "Foreign policy and diplomacy",
+    "Geopolitics of AI": "Cyber and emerging technology",
     "Geopolitics of the Indo-Pacific": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
     "Global commons governance": "EU, UN and other international organisations",
@@ -6044,6 +6048,7 @@
     "Grand strategy": "Strategy and deterrence",
     "Great power competition": "Foreign policy and diplomacy",
     "Great power relations": "Foreign policy and diplomacy",
+    "Great-power competition": "Foreign policy and diplomacy",
     "Gulf security": "Security and defence",
     "Heritage": "Identity, narratives and ideational security",
     "History": "Disciplines, theory and methods",
@@ -6071,6 +6076,7 @@
     "Interventions": "War, military history and armed conflict",
     "IoT": "Cyber and emerging technology",
     "Irregular warfare": "War, military history and armed conflict",
+    "Israel foreign policy": "Foreign policy and diplomacy",
     "Judgment and decision-making": "Political psychology, public opinion and decision-making",
     "Legal studies": "Disciplines, theory and methods",
     "ML": "Cyber and emerging technology",
@@ -6125,6 +6131,7 @@
     "Realism": "Disciplines, theory and methods",
     "Regional cooperation": "Foreign policy and diplomacy",
     "Regional development": "Democracy, governance and political change",
+    "Regional security": "Security and defence",
     "Regional security cooperation and governance": "Foreign policy and diplomacy",
     "Regionalism": "Foreign policy and diplomacy",
     "Religion": "Identity, narratives and ideational security",
