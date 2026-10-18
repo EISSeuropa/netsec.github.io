@@ -4,7 +4,7 @@
     "working_groups": 4,
     "people": 225,
     "people_with_bios": 105,
-    "edges": 625,
+    "edges": 627,
     "themes": 17,
     "panels_matched": 14,
     "panel_edges": 58,
@@ -65,7 +65,7 @@
       "id": "theme-cyber-and-emerging-technology",
       "type": "theme",
       "name": "Cyber and emerging technology",
-      "memberCount": 27
+      "memberCount": 28
     },
     {
       "id": "theme-democracy-governance-and-political-change",
@@ -101,7 +101,7 @@
       "id": "theme-foreign-policy-and-diplomacy",
       "type": "theme",
       "name": "Foreign policy and diplomacy",
-      "memberCount": 35
+      "memberCount": 36
     },
     {
       "id": "theme-identity-narratives-and-ideational-security",
@@ -4120,6 +4120,14 @@
     {
       "source": "richard-skalt",
       "target": "theme-security-and-defence"
+    },
+    {
+      "source": "roie-yellinek",
+      "target": "theme-cyber-and-emerging-technology"
+    },
+    {
+      "source": "roie-yellinek",
+      "target": "theme-foreign-policy-and-diplomacy"
     },
     {
       "source": "roie-yellinek",
