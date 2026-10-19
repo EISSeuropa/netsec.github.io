@@ -54,6 +54,19 @@ python3 "$REPO_ROOT/scripts/build-bio-search-stubs.py"
 
 echo "→ Rebuilding search index to ./pagefind/"
 rm -rf "$REPO_ROOT/pagefind"
-npx -y "pagefind@$PAGEFIND_VERSION" --site . --output-path "$REPO_ROOT/pagefind"
+# Three attempts. On 2026-10-15 npm dropped the linux-x64 binary package
+# without an error, and three workflows on two PRs went red until a rerun.
+# npx keeps the broken install in its cache and would reuse it, so the cache
+# is cleared between attempts.
+for attempt in 1 2 3; do
+  npx -y "pagefind@$PAGEFIND_VERSION" --site . --output-path "$REPO_ROOT/pagefind" && break
+  if [[ $attempt == 3 ]]; then
+    echo "✗ Pagefind failed three times." >&2
+    exit 1
+  fi
+  echo "  · Pagefind attempt $attempt failed, clearing the npx cache and retrying" >&2
+  rm -rf "$(npm config get cache)/_npx"
+  sleep 10
+done
 strip_cache "$REPO_ROOT/pagefind"
 echo "✓ Done."
