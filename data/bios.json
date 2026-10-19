@@ -2519,7 +2519,10 @@
       "affiliation": "Giresun University",
       "position": "Assistant Professor of International Relations",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        2
+      ],
       "mentorship": [
         "mentor"
       ],
