@@ -764,7 +764,9 @@ guess leans on shared words, so "Quantum key distribution policy" lands in
 Foreign policy and diplomacy through "policy". A keyword with nothing close
 stays unthemed, and `scripts/check-data-shape.py` fails the *data shape*
 check on any PR while one remains (#1955), so that sync PR cannot merge
-until someone places it. Such a keyword does not cluster, its card pill renders
+until someone places it. The sync runs that check itself before opening the PR
+(`scripts/prepend-data-shape-verdict.sh`), so a failure opens the PR body
+as a warning naming the keyword. Such a keyword does not cluster, its card pill renders
 display-only, and its holder is missing from that filter and from the
 Network Map's themes lens. The August 2026 review (#1701) took the count
 from 29 to zero, and the four mechanisms it used are the ones to reach for

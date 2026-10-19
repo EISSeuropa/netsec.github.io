@@ -204,6 +204,13 @@ jobs:
           title=${title:0:240}
           echo "title=$title" >> "$GITHUB_OUTPUT"
 
+      - name: Run the data shape check and flag a failure in the PR body
+        run: |
+          # The same check gates the PR once it opens, but only as a red check
+          # after the review email. This puts the reason in the email. Never
+          # fails the job.
+          bash scripts/prepend-data-shape-verdict.sh /tmp/bios-pr-body.md
+
       - name: Open or update PR if bios.json changed
         id: create-pr
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)
