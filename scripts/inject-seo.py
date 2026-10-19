@@ -284,7 +284,7 @@ def build_seo_block(base: str, lang: str, title: str, desc: str) -> str:
         '<meta name="robots" content="index, follow, max-image-preview:large">',
     ]
     # Empty until a GoatCounter account is set, see scripts/_analytics.py.
-    lines += _analytics.lines()
+    lines += _analytics.lines(not_found=base == "404")
     lines += [
         SENTINEL_END,
     ]

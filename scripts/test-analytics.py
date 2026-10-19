@@ -91,3 +91,10 @@ def test_the_profile_page_head_carries_the_tag_when_the_counter_is_on(code_set):
     src = (_HERE / "build-profile-pages.py").read_text(encoding="utf-8")
     assert "_analytics.tag()" in src
     assert "{_counter}" in src
+
+
+def test_the_404_page_reports_the_requested_path_before_the_counter_loads(code_set):
+    out = _analytics.lines(not_found=True)
+    assert out.index(_analytics.NOT_FOUND_PATH) < out.index(_analytics.tag())
+    assert "location.search" not in _analytics.NOT_FOUND_PATH
+    assert _analytics.NOT_FOUND_PATH not in _analytics.lines()
