@@ -108,6 +108,17 @@ class TestSha1:
         bare = hashlib.sha1("x assets/js/site.js y".encode("utf-8")).hexdigest()
         assert mod.sha1(f) == bare
 
+    def test_cost_stat_digits_do_not_change_hash(self, tmp_path):
+        """The cost.eu sync rewrites MC counts in every locale (#2042)."""
+        a = tmp_path / "a.html"
+        b = tmp_path / "b.html"
+        c = tmp_path / "c.html"
+        a.write_text('<span class="n" data-cost-stat="mc-count">51</span> across', encoding="utf-8")
+        b.write_text('<span class="n" data-cost-stat="mc-count">49</span> across', encoding="utf-8")
+        c.write_text('<span class="n" data-cost-stat="mc-count">49</span> in', encoding="utf-8")
+        assert mod.sha1(a) == mod.sha1(b)
+        assert mod.sha1(b) != mod.sha1(c)
+
     def test_changing_cache_bust_value_does_not_change_hash(self, tmp_path):
         a = tmp_path / "a.html"
         b = tmp_path / "b.html"

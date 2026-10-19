@@ -81,6 +81,13 @@ _MAP_LIST_RE = re.compile(
     r'<!-- network-map:list start -->.*?<!-- network-map:list end -->', re.S
 )
 
+# The MC and country counts on about.html and press-kit.html sit in
+# data-cost-stat spans that the cost.eu sync rewrites in all three locales
+# at once. A rep leaving moved the English number and failed the drift check
+# on the sync's own auto-PR (#2042), with nothing to translate. Only the
+# digits are blanked: the span and the prose around it are still hashed.
+_COST_STAT_RE = re.compile(r'(<span[^>]*\bdata-cost-stat="[^"]*"[^>]*>)\d+(</span>)')
+
 
 # The aggregate visitor counter's tag (#727) is stamped into the managed
 # head block of every page by scripts/inject-seo.py. It is byte-identical
@@ -97,11 +104,11 @@ def _analytics_block() -> str:
 
 def sha1(path: Path) -> str:
     """SHA-1 of a file's content, with asset cache-bust queries, the
-    visitor counter's tag, data-driven field-guide facepiles and the
-    Network Map's generated list region normalised out. We hash the markup
-    (not a parsed DOM) because we want any meaningful edit, markup or
-    attribute changes included, flagged for review. The four exceptions
-    are deliberate, and all four are language-agnostic markup a generator
+    visitor counter's tag, data-driven field-guide facepiles, the Network
+    Map's generated list region and the cost.eu stat digits normalised
+    out. We hash the markup (not a parsed DOM) because we want any meaningful edit, markup or
+    attribute changes included, flagged for review. The five exceptions
+    are deliberate, and all five are language-agnostic markup a generator
     writes rather than translatable prose."""
     text = path.read_text(encoding="utf-8")
     text = _CACHE_BUST_RE.sub(r"\1", text)
@@ -111,6 +118,7 @@ def sha1(path: Path) -> str:
     text = _FACEPILE_RE.sub('<div class="fg-people"></div>', text)
     text = _MAP_LIST_RE.sub(
         '<!-- network-map:list start --><!-- network-map:list end -->', text)
+    text = _COST_STAT_RE.sub(r"\1\2", text)
     return hashlib.sha1(text.encode("utf-8")).hexdigest()
 
 
