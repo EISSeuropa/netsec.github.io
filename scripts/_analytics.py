@@ -26,6 +26,15 @@ SITE_CODE = "netsec-cost"
 ENDPOINT = "https://{code}.goatcounter.com/count"
 COUNTER_JS = "https://gc.zgo.at/count.js"
 
+# count.js prefers the canonical link, so every miss would count as
+# /404.html. GitHub Pages serves the 404 page at the requested URL, so
+# location.pathname is the broken address. The query string is left
+# out because it can carry whatever a referring link put there.
+NOT_FOUND_PATH = (
+    "<script>window.goatcounter = "
+    "{path: '/404' + location.pathname}</script>"
+)
+
 
 def tag() -> str:
     """The script tag, or an empty string while no account is set."""
@@ -37,13 +46,17 @@ def tag() -> str:
     )
 
 
-def lines() -> list[str]:
+def lines(not_found: bool = False) -> list[str]:
     """The tag as head lines, ready to splice into a generated block.
 
     Empty while no account is set, so a generator can extend its line
-    list unconditionally.
+    list unconditionally. `not_found` reports the requested path, for
+    the 404 page.
     """
     snippet = tag()
     if not snippet:
         return []
-    return ["", "<!-- Aggregate visitor statistics (cookieless) -->", snippet]
+    head = ["", "<!-- Aggregate visitor statistics (cookieless) -->"]
+    if not_found:
+        head.append(NOT_FOUND_PATH)
+    return head + [snippet]
