@@ -21,6 +21,20 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
+// Accent folding done here rather than through the page's own netsecFold, so
+// a broken fold on the page fails the journey instead of agreeing with itself.
+// Returns null for a word that does not fold to plain ASCII (ø, ß, ł).
+function foldAscii(s) {
+  const f = String(s).normalize('NFD').replace(/\p{M}/gu, '').replace(/ı/g, 'i').toLowerCase();
+  return /^[\x20-\x7e]+$/.test(f) ? f : null;
+}
+const BIOS = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'bios.json'), 'utf8'));
+const MEMBERS = Array.isArray(BIOS) ? BIOS : BIOS.members;
+// One entry per accented word in a member's name, e.g. Pınar → pinar.
+const ACCENTED = MEMBERS.flatMap(m => String(m.name).split(/[\s-]+/)
+  .filter(w => /[^\x00-\x7f]/.test(w) && foldAscii(w))
+  .map(w => ({ word: w, typed: foldAscii(w), country: m.country })));
+
 const CHROME_CANDIDATES = [
   process.env.CHROME_PATH,
   '/usr/bin/google-chrome',
@@ -64,7 +78,9 @@ async function launchBrowser() {
   const options = {
     executablePath: CHROME,
     headless: 'new',
-    args: ['--no-sandbox', '--disable-dev-shm-usage'],
+    // GoatCounter's count.js is the only off-host request, kept out as in
+    // measure.mjs (#2029).
+    args: ['--no-sandbox', '--disable-dev-shm-usage', '--host-resolver-rules=MAP gc.zgo.at ~NOTFOUND'],
   };
   const attempts = 3;
   for (let attempt = 1; ; attempt++) {
@@ -95,7 +111,11 @@ async function openDirectory(hash = '', { width = 1280, height = 900, dark = fal
   await page.evaluateOnNewDocument(() => {
     localStorage.setItem('netsec-directory-tour-seen', '1');
   });
-  await page.goto(`${BASE}/people.html${hash}`, { waitUntil: 'networkidle0' });
+  // `load` is the hard gate and network idle is best effort, as in
+  // measure.mjs (#2033): one request that never settles used to fail the
+  // journey at the 30 s goto timeout. The selector below is the real signal.
+  await page.goto(`${BASE}/people.html${hash}`, { waitUntil: 'load' });
+  await page.waitForNetworkIdle({ idleTime: 500, timeout: 10000 }).catch(() => {});
   // A deep link can legitimately land on zero cards; the chip row renders on
   // every load, so it is the page-ready signal for those journeys.
   await page.waitForSelector(
@@ -664,10 +684,13 @@ const journeys = {
   },
 
   // The search was a raw substring against a raw string, so an accented name
-  // was reachable only by typing the accent. Twelve of the 85 members carry
-  // one, and the Turkish dotless i in Pınar and Çıkrıkçı is on no keyboard a
-  // British or German reader is using.
+  // was reachable only by typing the accent. The Turkish dotless i is on no
+  // keyboard a British or German reader is using. The names come from
+  // bios.json, because a pinned list broke CI the day Dr Cikrikci resubmitted
+  // without diacritics (#2026).
   async 'search folds accents out of the query and the name'() {
+    const cases = ACCENTED.map(a => [a.typed, a.word]);
+    assert(cases.length >= 3, `only ${cases.length} accented names in bios.json`);
     const page = await openDirectory();
     const names = (q) => page.evaluate(async (query) => {
       const s = document.getElementById('member-search');
@@ -676,19 +699,14 @@ const journeys = {
       await new Promise(r => setTimeout(r, 400));   // debounce is 120 ms
       return [...document.querySelectorAll('#members-grid .member-name')].map(e => e.textContent.trim());
     }, q);
-    for (const [typed, expected] of [
-      ['Pinar', 'Pınar'],
-      ['Caliskan', 'Çalışkan'],
-      ['Kolmasova', 'Kolmašová'],
-      ['Karlen', 'Karlén'],
-      ['Kosterke', 'Kösterke'],
-    ]) {
+    for (const [typed, expected] of cases) {
       const hits = await names(typed);
       assert(hits.some(n => n.includes(expected)),
         `"${typed}" did not reach ${expected}, got ${JSON.stringify(hits)}`);
     }
     // Typing the accent still works, so the fold is on both sides.
-    assert((await names('Pınar')).some(n => n.includes('Pınar')), 'the accented spelling stopped matching');
+    const [, accented] = cases[0];
+    assert((await names(accented)).some(n => n.includes(accented)), 'the accented spelling stopped matching');
     await page.close();
   },
 
@@ -704,9 +722,15 @@ const journeys = {
       await new Promise(r => setTimeout(r, 400));
       return [...document.querySelectorAll('#members-grid .member-name')].map(e => e.textContent.trim());
     }, q);
-    const both = await run('akgul turkiye');
-    assert(both.some(n => n.includes('Akgül')), `"akgul turkiye" got ${JSON.stringify(both)}`);
-    const wide = await run('turkiye');
+    // An accented member whose country is shared, so the country alone
+    // matches more people than surname plus country.
+    const pick = ACCENTED.find(a => a.country && foldAscii(a.country)
+      && MEMBERS.filter(m => m.country === a.country).length > 1);
+    assert(pick, 'no accented member shares a country with anyone');
+    const country = foldAscii(pick.country);
+    const both = await run(`${pick.typed} ${country}`);
+    assert(both.some(n => n.includes(pick.word)), `"${pick.typed} ${country}" got ${JSON.stringify(both)}`);
+    const wide = await run(country);
     assert(wide.length > both.length, 'the second word did not narrow anything');
     // A word that matches nobody rules the whole query out, so the tokens
     // are combined with AND rather than OR.
