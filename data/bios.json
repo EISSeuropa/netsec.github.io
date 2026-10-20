@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-18T09:33:03+00:00",
+  "generated_at": "2026-10-20T10:01:02+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-18T09:33:03+00:00"
+    "last_synced": "2026-10-20T10:01:02+00:00"
   },
   "members": [
     {
@@ -4851,12 +4851,59 @@
         "Security and defence",
         "Strategy and deterrence"
       ]
+    },
+    {
+      "id": "arzu-demirel",
+      "name": "Dr Arzu Demirel",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Hacettepe University",
+      "position": "Research Assistant",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Asia",
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Arzu Demirel holds a PhD in International Relations (European Union Studies) from Ankara University. Her research interests lie at the intersection of international relations theory, European security and defence, and the transformation of the international order.\n\nHer research explores questions of radical uncertainty, political order, and the evolving relationship between security, power, and global governance. She is also interested in the European Union's role in a changing international environment, with particular attention to EU–China relations, Europe–Asia relations, and the evolving security dynamics of the Indo-Pacific.",
+      "keywords": [
+        "Radical Uncertainty",
+        "International Relations Theory",
+        "International Order",
+        "European Security"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "0000-0002-8544-7041",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "European security",
+        "International order",
+        "International relations theory",
+        "Radical uncertainty"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Disciplines, theory and methods",
+        "European and transatlantic security order"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "European security",
-      "count": 10
+      "count": 11
     },
     {
       "keyword": "AI",
@@ -5511,7 +5558,15 @@
       "count": 1
     },
     {
+      "keyword": "International order",
+      "count": 1
+    },
+    {
       "keyword": "International organisations",
+      "count": 1
+    },
+    {
+      "keyword": "International relations theory",
       "count": 1
     },
     {
@@ -5695,6 +5750,10 @@
       "count": 1
     },
     {
+      "keyword": "Radical uncertainty",
+      "count": 1
+    },
+    {
       "keyword": "Realism",
       "count": 1
     },
@@ -5874,11 +5933,11 @@
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 28
+      "count": 29
     },
     {
       "theme": "Disciplines, theory and methods",
-      "count": 25
+      "count": 26
     },
     {
       "theme": "Transnational and human security",
@@ -5886,7 +5945,7 @@
     },
     {
       "theme": "European and transatlantic security order",
-      "count": 19
+      "count": 20
     },
     {
       "theme": "Strategy and deterrence",
@@ -6073,8 +6132,10 @@
     "International humanitarian law": "Transnational and human security",
     "International jurisprudence": "Transnational and human security",
     "International law": "Disciplines, theory and methods",
+    "International order": "Disciplines, theory and methods",
     "International organisations": "EU, UN and other international organisations",
     "International relations": "Disciplines, theory and methods",
+    "International relations theory": "Disciplines, theory and methods",
     "International security": "Security and defence",
     "Interventions": "War, military history and armed conflict",
     "IoT": "Cyber and emerging technology",
@@ -6131,6 +6192,7 @@
     "Pressure groups": "Democracy, governance and political change",
     "Proxy warfare": "War, military history and armed conflict",
     "Public opinion": "Political psychology, public opinion and decision-making",
+    "Radical uncertainty": "Cyber and emerging technology",
     "Realism": "Disciplines, theory and methods",
     "Regional cooperation": "Foreign policy and diplomacy",
     "Regional development": "Democracy, governance and political change",
@@ -6190,11 +6252,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 64
+      "count": 65
     },
     {
       "region": "Global and cross-regional",
-      "count": 53
+      "count": 54
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -6209,12 +6271,12 @@
       "count": 17
     },
     {
-      "region": "Middle East and North Africa",
+      "region": "Asia",
       "count": 14
     },
     {
-      "region": "Asia",
-      "count": 13
+      "region": "Middle East and North Africa",
+      "count": 14
     },
     {
       "region": "Africa",

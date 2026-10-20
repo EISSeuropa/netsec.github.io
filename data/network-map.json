@@ -3,8 +3,8 @@
   "stats": {
     "working_groups": 4,
     "people": 225,
-    "people_with_bios": 105,
-    "edges": 627,
+    "people_with_bios": 106,
+    "edges": 630,
     "themes": 17,
     "panels_matched": 14,
     "panel_edges": 58,
@@ -65,7 +65,7 @@
       "id": "theme-cyber-and-emerging-technology",
       "type": "theme",
       "name": "Cyber and emerging technology",
-      "memberCount": 28
+      "memberCount": 29
     },
     {
       "id": "theme-democracy-governance-and-political-change",
@@ -77,7 +77,7 @@
       "id": "theme-disciplines-theory-and-methods",
       "type": "theme",
       "name": "Disciplines, theory and methods",
-      "memberCount": 25
+      "memberCount": 26
     },
     {
       "id": "theme-economic-security-and-geoeconomics",
@@ -95,7 +95,7 @@
       "id": "theme-european-and-transatlantic-security-order",
       "type": "theme",
       "name": "European and transatlantic security order",
-      "memberCount": 19
+      "memberCount": 20
     },
     {
       "id": "theme-foreign-policy-and-diplomacy",
@@ -282,6 +282,17 @@
       "mentorship": [
         "mentor"
       ]
+    },
+    {
+      "id": "arzu-demirel",
+      "type": "person",
+      "name": "Dr Arzu Demirel",
+      "country": "Türkiye",
+      "slug": "arzu-demirel",
+      "mentorship": [
+        "mentee"
+      ],
+      "itc": true
     },
     {
       "id": "athanasios-skraparlis",
@@ -1018,13 +1029,6 @@
       "type": "person",
       "name": "Dr Armela Xhaho",
       "country": "Albania",
-      "itc": true
-    },
-    {
-      "id": "p-arzu-demirel",
-      "type": "person",
-      "name": "Dr Arzu Demirel",
-      "country": "Türkiye",
       "itc": true
     },
     {
@@ -2074,6 +2078,18 @@
       "target": "wg-3"
     },
     {
+      "source": "arzu-demirel",
+      "target": "wg-1"
+    },
+    {
+      "source": "arzu-demirel",
+      "target": "wg-2"
+    },
+    {
+      "source": "arzu-demirel",
+      "target": "wg-3"
+    },
+    {
       "source": "carla-sofia-ferreira-fernandes",
       "target": "wg-2"
     },
@@ -2363,18 +2379,6 @@
     },
     {
       "source": "p-armela-xhaho",
-      "target": "wg-3"
-    },
-    {
-      "source": "p-arzu-demirel",
-      "target": "wg-1"
-    },
-    {
-      "source": "p-arzu-demirel",
-      "target": "wg-2"
-    },
-    {
-      "source": "p-arzu-demirel",
       "target": "wg-3"
     },
     {
@@ -3420,6 +3424,18 @@
     {
       "source": "arthur-laudrain",
       "target": "theme-intelligence-information-and-influence"
+    },
+    {
+      "source": "arzu-demirel",
+      "target": "theme-cyber-and-emerging-technology"
+    },
+    {
+      "source": "arzu-demirel",
+      "target": "theme-disciplines-theory-and-methods"
+    },
+    {
+      "source": "arzu-demirel",
+      "target": "theme-european-and-transatlantic-security-order"
     },
     {
       "source": "athanasios-skraparlis",
