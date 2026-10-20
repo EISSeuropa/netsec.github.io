@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "tanja-pavleska",
-  "featuredSince": "2026-10-13",
+  "current": "eugenio-sanchez",
+  "featuredSince": "2026-10-20",
   "pinned": null,
   "history": [
+    {
+      "id": "eugenio-sanchez",
+      "week": "2026-W43",
+      "date": "2026-10-20"
+    },
     {
       "id": "tanja-pavleska",
       "week": "2026-W42",
