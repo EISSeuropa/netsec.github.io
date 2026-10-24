@@ -3,8 +3,8 @@
   "stats": {
     "working_groups": 4,
     "people": 225,
-    "people_with_bios": 106,
-    "edges": 630,
+    "people_with_bios": 107,
+    "edges": 634,
     "themes": 17,
     "panels_matched": 14,
     "panel_edges": 58,
@@ -59,13 +59,13 @@
       "id": "theme-crisis-management-and-critical-systems-resilience",
       "type": "theme",
       "name": "Crisis management and critical systems resilience",
-      "memberCount": 5
+      "memberCount": 6
     },
     {
       "id": "theme-cyber-and-emerging-technology",
       "type": "theme",
       "name": "Cyber and emerging technology",
-      "memberCount": 29
+      "memberCount": 30
     },
     {
       "id": "theme-democracy-governance-and-political-change",
@@ -113,7 +113,7 @@
       "id": "theme-intelligence-information-and-influence",
       "type": "theme",
       "name": "Intelligence, information and influence",
-      "memberCount": 11
+      "memberCount": 12
     },
     {
       "id": "theme-peace-mediation-and-reconciliation",
@@ -143,7 +143,7 @@
       "id": "theme-transnational-and-human-security",
       "type": "theme",
       "name": "Transnational and human security",
-      "memberCount": 22
+      "memberCount": 23
     },
     {
       "id": "theme-war-military-history-and-armed-conflict",
@@ -627,6 +627,18 @@
       "mentorship": [
         "mentor"
       ]
+    },
+    {
+      "id": "iztok-prezelj",
+      "type": "person",
+      "name": "Prof. Iztok Prezelj",
+      "country": "Slovenia",
+      "slug": "iztok-prezelj",
+      "photo": "assets/images/people/map/iztok-prezelj.webp",
+      "mentorship": [
+        "mentor"
+      ],
+      "itc": true
     },
     {
       "id": "jacob-grech",
@@ -1282,13 +1294,6 @@
       "type": "person",
       "name": "Dr Ilyas Ferhat Demirbas",
       "country": "Türkiye",
-      "itc": true
-    },
-    {
-      "id": "p-iztok-prezelj",
-      "type": "person",
-      "name": "Prof Iztok Prezelj",
-      "country": "Slovenia",
       "itc": true
     },
     {
@@ -2218,6 +2223,18 @@
       "target": "wg-3"
     },
     {
+      "source": "iztok-prezelj",
+      "target": "wg-1"
+    },
+    {
+      "source": "iztok-prezelj",
+      "target": "wg-2"
+    },
+    {
+      "source": "iztok-prezelj",
+      "target": "wg-3"
+    },
+    {
       "source": "john-helferich",
       "target": "wg-1"
     },
@@ -2667,18 +2684,6 @@
     },
     {
       "source": "p-ilyas-ferhat-demirbas",
-      "target": "wg-3"
-    },
-    {
-      "source": "p-iztok-prezelj",
-      "target": "wg-1"
-    },
-    {
-      "source": "p-iztok-prezelj",
-      "target": "wg-2"
-    },
-    {
-      "source": "p-iztok-prezelj",
       "target": "wg-3"
     },
     {
@@ -3732,6 +3737,22 @@
     {
       "source": "ivan-zaccagnini",
       "target": "theme-war-military-history-and-armed-conflict"
+    },
+    {
+      "source": "iztok-prezelj",
+      "target": "theme-crisis-management-and-critical-systems-resilience"
+    },
+    {
+      "source": "iztok-prezelj",
+      "target": "theme-cyber-and-emerging-technology"
+    },
+    {
+      "source": "iztok-prezelj",
+      "target": "theme-intelligence-information-and-influence"
+    },
+    {
+      "source": "iztok-prezelj",
+      "target": "theme-transnational-and-human-security"
     },
     {
       "source": "jacob-grech",
