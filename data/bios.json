@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-20T10:01:02+00:00",
+  "generated_at": "2026-10-24T09:30:52+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-20T10:01:02+00:00"
+    "last_synced": "2026-10-24T09:30:52+00:00"
   },
   "members": [
     {
@@ -4898,6 +4898,59 @@
         "Disciplines, theory and methods",
         "European and transatlantic security order"
       ]
+    },
+    {
+      "id": "iztok-prezelj",
+      "name": "Prof. Iztok Prezelj",
+      "country": "Slovenia",
+      "country_code": "si",
+      "affiliation": "University of Ljubljana",
+      "position": "Head of Defence Research Centre",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Western Balkans",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Iztok Prezelj is a Head of Defence Research Centre at the University of Ljubljana. He served as Dean of the Faculty of Social Sciences (2021–2025) and previously as Vice-Dean for Research (2017–2021) and Head of the Institute of Social Sciences, University of Ljubljana. From 2015 to 2017, he was the pedagogical Head of the Chair of Defence Studies. He earned his PhD in 2004 at the University of Ljubljana with a dissertation on crisis management. \n\nDr. Prezelj published extensively on threat and risk assessment, national security, crisis management, counter-terrorism, intelligence studies, critical infrastructure, etc. He has served as a guest researcher or lecturer at several renowned institutions, including Princeton University, Leiden University, the University of Sarajevo, the University of Vienna, and the WEU Institute for Security Studies in Paris. In 2014, he was Adjunct Professor in the Program on Terrorism and Counter-Terrorism (PTSS) at the George C. Marshall European Center for Security Studies in Garmisch-Partenkirchen. He has also led multiple research projects in the above mentioned fields.",
+      "keywords": [
+        "threat and risk assessment",
+        "counter-terrorism",
+        "crisis management",
+        "intelligence",
+        "critical infrastructure",
+        "AI"
+      ],
+      "email": "iztok.prezelj@fdv.uni-lj.si",
+      "website": "https://www.fdv.uni-lj.si/en/news-and-information/contacts/teachers/info/iztok-prezelj",
+      "orcid": "0000-0003-2725-7298",
+      "linkedin": "https://www.linkedin.com/in/iztok-prezelj-b4256214a/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/iztok-prezelj.jpg",
+      "source": "form",
+      "photo_source_sha256": "03b7c294e0429d2e0593f51556aba21d994f64431ede97abfb725c20ead23136",
+      "canonical_keywords": [
+        "AI",
+        "Counter-terrorism",
+        "Crisis management",
+        "Critical infrastructure",
+        "Intelligence studies",
+        "Threat and risk assessment"
+      ],
+      "themes": [
+        "Crisis management and critical systems resilience",
+        "Cyber and emerging technology",
+        "Intelligence, information and influence",
+        "Transnational and human security"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -4907,7 +4960,7 @@
     },
     {
       "keyword": "AI",
-      "count": 7
+      "count": 8
     },
     {
       "keyword": "Cybersecurity",
@@ -4978,6 +5031,10 @@
       "count": 4
     },
     {
+      "keyword": "Crisis management",
+      "count": 3
+    },
+    {
       "keyword": "CSDP",
       "count": 3
     },
@@ -4995,6 +5052,10 @@
     },
     {
       "keyword": "Identity",
+      "count": 3
+    },
+    {
+      "keyword": "Intelligence studies",
       "count": 3
     },
     {
@@ -5031,10 +5092,6 @@
     },
     {
       "keyword": "Counterterrorism",
-      "count": 2
-    },
-    {
-      "keyword": "Crisis management",
       "count": 2
     },
     {
@@ -5087,10 +5144,6 @@
     },
     {
       "keyword": "Human security",
-      "count": 2
-    },
-    {
-      "keyword": "Intelligence studies",
       "count": 2
     },
     {
@@ -5262,11 +5315,19 @@
       "count": 1
     },
     {
+      "keyword": "Counter-terrorism",
+      "count": 1
+    },
+    {
       "keyword": "Counter-UAV detection",
       "count": 1
     },
     {
       "keyword": "Covert action",
+      "count": 1
+    },
+    {
+      "keyword": "Critical infrastructure",
       "count": 1
     },
     {
@@ -5878,6 +5939,10 @@
       "count": 1
     },
     {
+      "keyword": "Threat and risk assessment",
+      "count": 1
+    },
+    {
       "keyword": "Transformation",
       "count": 1
     },
@@ -5933,7 +5998,7 @@
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 29
+      "count": 30
     },
     {
       "theme": "Disciplines, theory and methods",
@@ -5941,7 +6006,7 @@
     },
     {
       "theme": "Transnational and human security",
-      "count": 22
+      "count": 23
     },
     {
       "theme": "European and transatlantic security order",
@@ -5956,12 +6021,12 @@
       "count": 12
     },
     {
-      "theme": "War, military history and armed conflict",
+      "theme": "Intelligence, information and influence",
       "count": 12
     },
     {
-      "theme": "Intelligence, information and influence",
-      "count": 11
+      "theme": "War, military history and armed conflict",
+      "count": 12
     },
     {
       "theme": "Economic security and geoeconomics",
@@ -5976,12 +6041,12 @@
       "count": 7
     },
     {
-      "theme": "Peace, mediation and reconciliation",
+      "theme": "Crisis management and critical systems resilience",
       "count": 6
     },
     {
-      "theme": "Crisis management and critical systems resilience",
-      "count": 5
+      "theme": "Peace, mediation and reconciliation",
+      "count": 6
     },
     {
       "theme": "Climate, energy and environmental security",
@@ -6027,9 +6092,11 @@
     "Cooperation": "Foreign policy and diplomacy",
     "Counter-UAV detection": "Cyber and emerging technology",
     "Counter-insurgency": "War, military history and armed conflict",
+    "Counter-terrorism": "Transnational and human security",
     "Counterterrorism": "Transnational and human security",
     "Covert action": "Intelligence, information and influence",
     "Crisis management": "Crisis management and critical systems resilience",
+    "Critical infrastructure": "Cyber and emerging technology",
     "Critical infrastructure protection": "Crisis management and critical systems resilience",
     "Critical security studies": "Disciplines, theory and methods",
     "Cyber and emerging technology": "Cyber and emerging technology",
@@ -6234,6 +6301,7 @@
     "Text as data": "Disciplines, theory and methods",
     "Theory": "Disciplines, theory and methods",
     "Thermal imaging": "Cyber and emerging technology",
+    "Threat and risk assessment": "Crisis management and critical systems resilience",
     "Transatlantic relations": "European and transatlantic security order",
     "Transatlantic security": "European and transatlantic security order",
     "Transformation": "Democracy, governance and political change",
@@ -6252,11 +6320,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 65
+      "count": 66
     },
     {
       "region": "Global and cross-regional",
-      "count": 54
+      "count": 55
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -6264,7 +6332,7 @@
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 22
+      "count": 23
     },
     {
       "region": "The Americas",
