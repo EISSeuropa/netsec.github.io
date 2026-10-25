@@ -497,6 +497,7 @@ sweep (rule §11).
 │   ├── js/roadmap-progress.js       # Roadmap progress bars (renders from data/roadmap-progress.json)
 │   ├── js/year-review.js            # Year in Review page: renders data/year-review.json, and holds the page's sentences as whole-sentence templates in EN/FR/DE (#765)
 │   ├── js/roadmap-shipped-toggle.js # Roadmap "show earlier releases" collapse (shared EN/FR/DE; #725)
+│   ├── js/roadmap-nav.js            # Roadmap quarter navigator: jump rail / chip bar built from the .rm-quarter[id] headings (shared EN/FR/DE)
 │   ├── js/essc-programme.js         # ESSC programme renderer (shared EN/FR/DE; extracted from inline #725)
 │   ├── js/outputs-publications.js   # /outputs.html publications list (shared EN/FR/DE; renders publications.json, #726)
 │   ├── images/people/*.{jpg,png,webp} # Member headshots + WebP siblings (sync-bios)
