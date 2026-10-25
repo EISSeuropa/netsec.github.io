@@ -218,6 +218,98 @@
   .rm-timeline[data-shipped-state="collapsed"] > .rm-entry.rm-shipped-collapsible{display:list-item}
 }
 
+/* -------- Quarter navigator (assets/js/roadmap-nav.js) --------
+   Inserted by JS at the top of [data-rm-body]. Below 1320px it is a
+   sticky chip bar under the header. From 1320px it becomes a sticky
+   rail in the left gutter, with the card column kept at full width.
+   Node colours repeat the timeline dots above. */
+.rm-nav{
+  position:sticky;top:var(--rm-nav-top,72px);z-index:20;
+  margin:28px -24px 0;padding:8px 24px;
+  background:color-mix(in srgb,var(--bg-0) 84%,transparent);
+  -webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);
+  border-bottom:1px solid var(--line);
+}
+.rm-nav-list{
+  display:flex;gap:8px;margin:0;padding:2px 0;list-style:none;
+  overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;
+}
+.rm-nav-list::-webkit-scrollbar{display:none}
+.rm-nav-item{flex:0 0 auto}
+.rm-nav-item a{
+  display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:5px 12px;
+  border:1px solid var(--line);border-radius:999px;background:var(--glass-bg);
+  color:var(--ink-2);font-size:.84rem;font-weight:600;white-space:nowrap;
+  text-decoration:none;font-variant-numeric:tabular-nums;
+  transition:color .15s var(--ease),border-color .15s var(--ease),background .15s var(--ease);
+}
+.rm-nav-item a:hover{color:var(--ink);border-color:var(--accent-2);opacity:1}
+.rm-nav-item a:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+.rm-nav-item a[aria-current]{color:var(--ink);border-color:var(--accent-2);background:var(--glass-bg-strong)}
+.rm-nav-dot{
+  flex-shrink:0;width:10px;height:10px;border-radius:50%;background:#8b8fe8;
+  transition:transform .2s var(--ease);
+}
+.rm-nav-item[data-status="shipped"] .rm-nav-dot{background:#22c55e}
+.rm-nav-item[data-status="progress"] .rm-nav-dot{background:#0a84ff;box-shadow:0 0 0 3px rgba(10,132,255,.2)}
+.rm-nav-item[data-status="watch"] .rm-nav-dot{background:#f59e0b}
+.rm-nav-count{
+  min-width:1.6em;padding:0 .4em;border-radius:99px;background:var(--line);
+  color:var(--muted);font-size:.72rem;line-height:1.6;text-align:center;
+}
+.rm-nav-now{
+  padding:1px 7px;border-radius:99px;background:rgba(10,132,255,.14);color:#0a6fd6;
+  font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+}
+.dark .rm-nav-now{color:#7dd3fc;background:rgba(10,132,255,.22)}
+/* Jump targets clear the sticky bar as well as the header. */
+[data-rm-body] > [id]{scroll-margin-top:60px}
+
+@media (min-width:1320px){
+  [data-rm-body]{
+    display:grid;grid-template-columns:188px minmax(0,1fr);column-gap:20px;
+    margin-left:-208px;
+  }
+  [data-rm-body] > *{grid-column:2}
+  [data-rm-body] > [id]{scroll-margin-top:0}
+  .rm-nav{
+    grid-column:1;grid-row:1 / span 99;align-self:start;
+    top:calc(var(--rm-nav-top,72px) + 28px);
+    margin:44px 0 0;padding:0;background:none;border:0;
+    -webkit-backdrop-filter:none;backdrop-filter:none;
+  }
+  .rm-nav-list{flex-direction:column;gap:2px;padding:0;overflow:visible;position:relative}
+  /* The rail line, and its fill down to the quarter on screen. */
+  .rm-nav-list::before,
+  .rm-nav-list::after{
+    content:'';position:absolute;left:8px;top:18px;width:2px;border-radius:2px;
+  }
+  .rm-nav-list::before{bottom:18px;background:var(--line)}
+  .rm-nav-list::after{
+    height:calc((100% - 36px) * var(--rm-fill,0));
+    background:linear-gradient(180deg,#8b8fe8,#0a84ff);
+    transition:height .35s var(--ease);
+  }
+  .rm-nav-item a{
+    display:flex;width:100%;min-height:36px;gap:8px;padding:4px 6px 4px 0;
+    border:0;border-radius:8px;background:none;color:var(--muted);font-size:.86rem;
+  }
+  .rm-nav-item a:hover,
+  .rm-nav-item a[aria-current]{background:none;color:var(--ink)}
+  .rm-nav-item a[aria-current] .rm-nav-label{font-weight:700}
+  .rm-nav-dot{
+    position:relative;z-index:1;width:18px;height:18px;
+    border:3px solid var(--bg-0);box-shadow:0 0 0 1px var(--line);
+  }
+  .rm-nav-item[data-status="progress"] .rm-nav-dot{box-shadow:0 0 0 1px var(--line),0 0 0 4px rgba(10,132,255,.18)}
+  .rm-nav-item a[aria-current] .rm-nav-dot{transform:scale(1.2)}
+  .rm-nav-count{margin-left:auto}
+}
+@media (prefers-reduced-motion:reduce){
+  .rm-nav-item a,.rm-nav-dot,.rm-nav-list::after{transition:none}
+}
+@media print{.rm-nav{display:none}}
+
 .rm-card{
   padding:16px 20px;border-radius:14px;
   background:var(--glass-bg-strong);border:1px solid var(--line);
