@@ -149,6 +149,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The A3 promotional poster sets "Net" and "Sec" in its title in the logo gradient, matching the home page, and its print PNG, small PNG and WebP previews are re-rendered.
 - The roadmap places the Year 1 anniversary in December 2026, and the roadmap and Outputs page expect the first policy briefs (D6) in December rather than October 2026, in all three locales.
 - The roadmap lists the newest entries first, in all three locales. The quarters run from Q2 2027 down to Q2 2026, and within each quarter the latest date sits at the top.
 - The member figure on the home page counts the Action's roster from cost.eu, every Working Group member, Management Committee representative and holder of a leadership role, each once: 181 members in 39 countries, where it had counted the 107 people with a Directory bio. The countries figure counts the same people.
