@@ -514,6 +514,11 @@ img{max-width:100%;display:block}
    readability evidence for a fixed left return edge applies most
    where the text wraps most, and the phone hero wraps worst. */
 .hero h1{margin:0 0 1.2rem;max-width:15ch;font-size:var(--fs-display);letter-spacing:-.04em;color:var(--ink)}
+/* "Net" and "Sec" carry the logo-star gradient. Dark mode spreads the stops
+   wider, since the two dark accents sit too close to read as a gradient. */
+.hero-acronym{color:var(--accent);background:linear-gradient(135deg,#003399,#0a84ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.dark .hero-acronym{background:linear-gradient(135deg,#4d8bff,#a9d4ff);-webkit-background-clip:text;background-clip:text}
+@media (forced-colors:active){.hero-acronym{background:none;-webkit-text-fill-color:currentColor}}
 .hero .lede{max-width:var(--measure-narrow);font-size:var(--fs-lede);line-height:1.6;color:var(--ink-2)}
 /* Keyword chips read as a quiet editorial keyword line (muted text
    separated by middots) rather than a row of glass pills, so the
