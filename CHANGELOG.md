@@ -144,6 +144,7 @@ maintainer-facing audience.
 
 #### Added
 
+- Each Directory card links to the member on the Network Map, in the same locale, from the detailed card and from the preview panel.
 - The roadmap has a quarter navigator in all three locales, a rail beside the timeline on wide screens and a bar of chips under the header on smaller ones. It jumps to any quarter or to Under watch, marks the quarter on screen and tags the current quarter as Now. Each quarter can be linked directly, for example `roadmap.html#q4-2026`.
 - The ESSC 2027 page has a Conference Chairs section in all three locales, with the Directory headshot, affiliation and roles of Prof. Filip Ejdus and Dr Arthur Laudrain.
 - The ESSC 2027 page carries practical information for Belgrade in all three locales: the venue, visas and entry, the routes from the airport, local transport, fourteen places to stay with their area and price range, money and emergency numbers. Each card carries an icon, the places to stay scroll sideways as a slider with previous and next arrows, and on phones the other cards swipe sideways too, each at its own height, which cuts the section from 4,237 to 1,965 pixels at 375 wide. The Training School page and the hero's Venue fact link to it.
@@ -151,6 +152,8 @@ maintainer-facing audience.
 
 #### Changed
 
+- The Directory STSM filter chip reads "Can or may host STSM visitors" in all three locales. Its count of 77 covers the 34 members who can host and the 43 who are open to hosting.
+- The Directory welcome panel for first-time visitors is one line, with its guidance behind a "How the directory works" disclosure, and the Network Map signpost sits below the member grid. On a 375px phone the search box starts 554px down the page. It had started at 1,390px.
 - The A3 promotional poster sets "Net" and "Sec" in its title in the logo gradient, matching the home page, and its print PNG, small PNG and WebP previews are re-rendered.
 - The home page figures sit without the blue rule before each one. The member spotlight card aligns the photo with the name, shows the research keywords as tinted chips like the Directory, caps the bio at 68 characters a line, and uses an outlined button in place of the solid black one.
 - The roadmap places the Year 1 anniversary in December 2026, and the roadmap and Outputs page expect the first policy briefs (D6) in December rather than October 2026, in all three locales.
@@ -164,6 +167,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The Directory country flags have a Country caption like the other filter rows and wrap onto a second line. At 1024px the last flag had been cut off. A shortened affiliation on a card shows the full text on hover.
+- At 1024px the Find your way in tab and the Directory tools no longer cover the right-hand column of Directory cards. Beside the grid the tools stand in an upright pill, and the grid keeps a margin clear for it.
 - On phones the roadmap quarter bar floats 10px below the header as its own rounded panel, and the home page member spotlight card has 26px of side padding instead of 20px, with 16px between its heading and the card.
 - The v1.17.0 roadmap card shows its Visa letters and Early-career prize chips again, in all three locales. They had been left under the v1.16.0 card as two loose items when the card moved to Q1 2027.
 - Without JavaScript, the home page lists the two 2027 events again. Its fallback event cards are rendered from the events data at every deploy, where they had been hand-written and showed "No upcoming events" once the 2026 events ended.

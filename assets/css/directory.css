@@ -138,6 +138,13 @@
 @media (max-width:540px){
   .members-utilitybar{right:14px;bottom:14px;gap:6px;padding:6px 8px}
 }
+/* Beside the multi-column grid the pill stands upright, so it takes a
+   narrow strip of the right margin that .members-grid keeps clear. */
+@media (min-width:641px){
+  .members-utilitybar,
+  .members-utilitybar .view-toggle{flex-direction:column}
+  .members-utilitybar{border-radius:28px}
+}
 
 .members-empty{padding:36px;text-align:center;margin:24px 0}
 .members-empty h3{margin:0 0 8px}
@@ -174,6 +181,18 @@
 }
 @media (max-width:540px){
   .members-grid{padding-bottom:76px}
+}
+/* Right-hand safe area for the upright utility pill (right:24px, about
+   56px wide, 70px on touch) and the Find your way in tab. The container
+   gutter already supplies part of it, and all of it on wide screens. */
+@media (min-width:641px){
+  .members-grid{
+    --dir-safe-right:92px;
+    padding-right:max(0px, calc(var(--dir-safe-right) - max(24px, (100vw - var(--maxw)) / 2 + 24px)));
+  }
+}
+@media (min-width:641px) and (pointer: coarse){
+  .members-grid{--dir-safe-right:106px}
 }
 
 .member-card{
@@ -1372,7 +1391,7 @@ html:not(.dark) .mentorship-showall button{ background:rgba(255,255,255,.65); }
 .welcome-strip{
   position:relative;
   margin:0 0 18px;
-  padding:18px 56px 18px 22px;
+  padding:12px 22px;
   border-radius:14px;
   border-left:3px solid var(--accent-2);
   /* Subtle EU-blue tinted background so it reads as a temporary
@@ -1380,6 +1399,7 @@ html:not(.dark) .mentorship-showall button{ background:rgba(255,255,255,.65); }
   background:linear-gradient(180deg, rgba(10,132,255,.07), rgba(10,132,255,.02));
   animation:welcome-fade-in .28s var(--ease) both;
 }
+.welcome-strip:not([hidden]){display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px}
 .welcome-strip[hidden]{display:none}
 /* First-visit pre-paint reveal. The inline head script on the people
    pages stamps html.dir-welcome before first paint when the strip has
@@ -1388,7 +1408,7 @@ html:not(.dark) .mentorship-showall button{ background:rgba(255,255,255,.65); }
    (that pop-in shifted the whole toolbar and cost people.html its
    Lighthouse CLS budget). people-directory.js removes the class once
    it reconciles the hidden attribute, and on dismissal. */
-html.dir-welcome .welcome-strip[hidden]{display:block}
+html.dir-welcome .welcome-strip[hidden]{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px}
 .dark .welcome-strip{
   background:linear-gradient(180deg, rgba(10,132,255,.14), rgba(10,132,255,.05));
 }
@@ -1399,8 +1419,17 @@ html.dir-welcome .welcome-strip[hidden]{display:block}
 .welcome-strip-title{
   font-family:'Lexend','Inter',sans-serif;
   font-size:1.05rem;font-weight:600;letter-spacing:-.01em;
-  margin:0 0 4px;color:var(--ink);
+  margin:0;color:var(--ink);
 }
+/* The guidance sits behind a one-line disclosure so the search box
+   stays near the top of the page. Open, it takes a full row. */
+.welcome-strip-more{flex:1 1 100%;order:1}
+.welcome-strip-more summary{
+  cursor:pointer;width:max-content;max-width:100%;
+  font-size:.86rem;font-weight:600;color:var(--link);
+}
+.welcome-strip-more summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.welcome-strip-more[open] summary{margin-bottom:8px}
 .welcome-strip-lede{
   margin:0 0 10px;color:var(--ink-2);font-size:.92rem;line-height:1.5;
   max-width:62ch;
@@ -1416,7 +1445,6 @@ html.dir-welcome .welcome-strip[hidden]{display:block}
 .welcome-strip-tips strong{color:var(--ink);font-weight:600}
 .welcome-strip-actions{
   display:flex;gap:8px;align-items:center;
-  margin-top:14px;
   flex-wrap:wrap;
 }
 .welcome-strip-dismiss{
@@ -1519,6 +1547,7 @@ html.dir-welcome .welcome-strip[hidden]{display:block}
 .members-grid.is-compact .member-card .member-bio-toggle,
 .members-grid.is-compact .member-card .member-pubs,
 .members-grid.is-compact .member-card .member-profile-cta,
+.members-grid.is-compact .member-card .member-map-link,
 .members-grid.is-compact .member-card .member-contact{
   display:none !important;
 }
@@ -1538,6 +1567,14 @@ html.dir-welcome .welcome-strip[hidden]{display:block}
 }
 .member-profile-cta:hover,
 .member-profile-cta:focus-visible{ text-decoration:underline; text-underline-offset:2px; }
+/* "Show on the map" deep link into the Network Map, under the profile CTA. */
+.member-map-link{
+  display:inline-flex; margin-top:6px;
+  font-family:var(--font-sans); font-weight:600; font-size:.84rem;
+  color:var(--link); text-decoration:none;
+}
+.member-map-link:hover,
+.member-map-link:focus-visible{ text-decoration:underline; text-underline-offset:2px; }
 
 /* "More" affordance on compact directory cards. Without it, visitors
    don't know that a compact card can be clicked to open its preview
@@ -1940,21 +1977,18 @@ html.dir-welcome .welcome-strip[hidden]{display:block}
 }
 
 /* ── B. Country flag strip (drives activeCountry) ───────────────────
-   A slim single-row ribbon of flags above the active-filter chips. It
-   scrolls horizontally when it overflows, with a mask fade at both ends.
-   The pressed flag carries an accent ring. */
+   A row of flags above the active-filter chips, led by a Country caption
+   like the other facet rows, wrapping onto further lines rather than
+   clipping. The pressed flag carries an accent ring. */
 .country-strip{
   display:flex;
+  flex-wrap:wrap;
   gap:6px;
   align-items:center;
   margin:0 0 12px;
-  padding:2px 0;
-  overflow-x:auto;
-  scrollbar-width:none;
-  -webkit-mask-image:linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
-  mask-image:linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  padding:2px;
 }
-.country-strip::-webkit-scrollbar{display:none}
+.country-strip .members-filter-label{margin-right:6px}
 .country-flag{
   flex:0 0 auto;
   padding:0;
