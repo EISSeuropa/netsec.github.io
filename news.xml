@@ -5,9 +5,16 @@
     <link>https://netsec-cost.eu/#news</link>
     <description>Announcements, calls, and milestones from the COST Action CA24154 (NetSec).</description>
     <language>en-GB</language>
-    <lastBuildDate>Wed, 07 Oct 2026 12:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 10 Oct 2026 09:00:00 +0200</lastBuildDate>
     <generator>scripts/build-news-rss.py</generator>
     <atom:link href="https://netsec-cost.eu/news.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Year in Review: NetSec's first year</title>
+      <link>https://netsec-cost.eu/year-in-review.html</link>
+      <description><![CDATA[COST Action CA24154 NetSec completed its first year on 9 October 2026. The Year in Review page records the year as the Action's data shows it: the Summer School and the European Security Studies Conference in Stockholm in June, the first Management Committee plenary and the Working Group 2 policy workshop in Ankara in September, the news published along the way, and the growth of the member Directory month by month.]]></description>
+      <pubDate>Sat, 10 Oct 2026 09:00:00 +0200</pubDate>
+      <guid isPermaLink="false">year-in-review-2025-26</guid>
+    </item>
     <item>
       <title>New Working Group and Science Communication leads</title>
       <link>https://netsec-cost.eu/about.html#leadership</link>

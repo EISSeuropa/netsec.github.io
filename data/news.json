@@ -4,8 +4,46 @@
   "channelDescription": "Announcements, calls, and milestones from the COST Action CA24154 (NetSec).",
   "channelLink": "https://netsec-cost.eu/#news",
   "channelLanguage": "en-GB",
-  "lastBuildDate": "2026-10-07T12:00:00+02:00",
+  "lastBuildDate": "2026-10-10T09:00:00+02:00",
   "items": [
+    {
+      "id": "year-in-review-2025-26",
+      "type": "announcement",
+      "pubDate": "2026-10-10T09:00:00+02:00",
+      "displayDate": {
+        "en": "10 October 2026",
+        "fr": "10 octobre 2026",
+        "de": "10. Oktober 2026"
+      },
+      "title": {
+        "en": "Year in Review: NetSec's first year",
+        "fr": "Bilan de l'année : la première année de NetSec",
+        "de": "Jahresrückblick: das erste Jahr von NetSec"
+      },
+      "summary": {
+        "en": "The Year in Review gathers the events, news and Directory figures from the Action's first year, 10 October 2025 to 9 October 2026.",
+        "fr": "Le bilan de l'année rassemble les événements, les actualités et les chiffres de l'annuaire de la première année de l'Action, du 10 octobre 2025 au 9 octobre 2026.",
+        "de": "Der Jahresrückblick fasst die Veranstaltungen, Neuigkeiten und Verzeichniszahlen aus dem ersten Jahr der Aktion zusammen, vom 10. Oktober 2025 bis zum 9. Oktober 2026."
+      },
+      "body": {
+        "en": "COST Action CA24154 NetSec completed its first year on 9 October 2026. The Year in Review page records the year as the Action's data shows it: the Summer School and the European Security Studies Conference in Stockholm in June, the first Management Committee plenary and the Working Group 2 policy workshop in Ankara in September, the news published along the way, and the growth of the member Directory month by month.",
+        "fr": "L'Action COST CA24154 NetSec a achevé sa première année le 9 octobre 2026. La page Bilan de l'année retrace l'année à partir des données de l'Action : l'École d'été et la European Security Studies Conference à Stockholm en juin, la première plénière du Comité de gestion et l'atelier politique du Groupe de travail 2 à Ankara en septembre, les actualités publiées au fil de l'année et la croissance mensuelle de l'annuaire des membres.",
+        "de": "Die COST-Aktion CA24154 NetSec hat am 9. Oktober 2026 ihr erstes Jahr abgeschlossen. Die Seite Jahresrückblick zeichnet das Jahr anhand der Daten der Aktion nach: die Summer School und die European Security Studies Conference in Stockholm im Juni, die erste Plenarsitzung des Management-Ausschusses und den Politik-Workshop der Arbeitsgruppe 2 in Ankara im September, die im Laufe des Jahres veröffentlichten Neuigkeiten und das monatliche Wachstum des Mitgliederverzeichnisses."
+      },
+      "cta": {
+        "href": {
+          "en": "year-in-review.html",
+          "fr": "year-in-review.fr.html",
+          "de": "year-in-review.de.html"
+        },
+        "external": false,
+        "i18n": {
+          "en": "Read the Year in Review →",
+          "fr": "Lire le bilan de l'année →",
+          "de": "Zum Jahresrückblick →"
+        }
+      }
+    },
     {
       "id": "leadership-roles-october-2026",
       "type": "announcement",
