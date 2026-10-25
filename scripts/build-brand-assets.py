@@ -7,9 +7,9 @@ dark, monochrome) and produces the deployment set the site needs:
 cleaned lockups (cropped to content bbox, no transparent padding),
 a favicon family at standard sizes, and the manifest icons.
 
-The OG / social cards are hand-designed marketing graphics, kept as
-design assets (assets/images/og-image.png and og-image-people.png)
-rather than generated here, so this script never overwrites them.
+The OG / social cards (assets/images/og-image.png and og-image-people.png)
+are rendered by build-general-og.py and build-directory-og.py, not here,
+so this script never overwrites them.
 
 The designer sent PNG only. SVG masters would be better for favicon
 and high-DPI rendering; tracked as a follow-up. Until then,
@@ -134,12 +134,12 @@ def build_favicons(source: Path) -> None:
     print(f"  wrote {ico_path.relative_to(ROOT)} ({ico_path.stat().st_size:,} bytes, sizes={ico_sizes})")
 
 
-# build_og_card() was removed. The OG / social cards are now
-# hand-designed marketing graphics, not auto-generated from the lockup:
+# build_og_card() was removed. The OG / social cards are rendered from their
+# own HTML templates (build-general-og.py, build-directory-og.py), not from
+# the lockup:
 # assets/images/og-image.png (the general card, used on every page) and
 # assets/images/og-image-people.png (the directory card, used on
-# /people.html). They are maintained as design assets, so this script no
-# longer touches them and a brand rebuild cannot clobber them.
+# /people.html). This script no longer touches them and a brand rebuild cannot clobber them.
 # scripts/inject-seo.py selects which card each page advertises.
 
 
