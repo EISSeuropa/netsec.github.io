@@ -3221,6 +3221,9 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 }
 .ecs-card{padding:24px 26px;border-radius:16px}
 .ecs-card-wide{max-width:74ch}
+/* ESSC 2027 Conference Chairs: Directory headshot above each name. */
+.ecs-chair-photo{width:96px;height:96px;border-radius:50%;object-fit:cover;display:block;margin:0 0 1rem}
+.ecs-card .ecs-chair-meta{font-size:.9rem;color:var(--muted)}
 .ecs-card h3{
   margin:0 0 .7rem;font-family:'Lexend','Inter',sans-serif;
   font-size:1.15rem;color:var(--ink);
