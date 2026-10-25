@@ -349,6 +349,13 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
                 person["photo"] = prefer_webp(m["photo"])
             if m.get("mentorship"):
                 person["mentorship"] = sorted(m["mentorship"])
+            # A WG leader or co-leader is not always on the cost.eu roster of
+            # the group they lead, and the Directory lists them under it all
+            # the same, so the bio's groups draw edges too.
+            lead = m.get("wg_leadership") or {}
+            for number in set(m.get("wgs") or []) | set(lead.get("lead") or []) | set(lead.get("co_lead") or []):
+                if f"wg-{number}" in {n["id"] for n in wg_nodes}:
+                    edge_pairs.add((key, f"wg-{number}"))
             for theme in m.get("themes") or []:
                 t_slug = slugify(theme)
                 theme_names[t_slug] = theme

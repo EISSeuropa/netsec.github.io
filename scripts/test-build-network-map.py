@@ -488,3 +488,16 @@ def test_directory_name_and_country_override_the_roster_spelling():
     person = next(n for n in graph["nodes"] if n["type"] == "person")
     assert person["name"] == "Dr Šárka Kolmašová"
     assert person["country"] == "Czech Republic"
+
+
+def test_bio_wg_leadership_draws_an_edge_without_a_roster_seat():
+    # A WG3 leader missing from the WG3 roster still sits on the WG3 hub, and a
+    # group number the roster does not know draws nothing.
+    graph = build(
+        _wg({"number": 3, "name": "Three", "colour": "wg-3", "memberCount": 0,
+             "members": []}),
+        bios={"members": [{"id": "lead", "name": "Dr Lead", "wgs": [],
+                           "wg_leadership": {"lead": [3], "co_lead": [9]}}]},
+    )
+    wg_edges = [e for e in graph["edges"] if e["target"].startswith("wg-")]
+    assert wg_edges == [{"source": "lead", "target": "wg-3"}]
