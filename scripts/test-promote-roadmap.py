@@ -453,12 +453,38 @@ def test_body_untouched_without_card_body() -> None:
            "Pre-written description that the script should not touch." in out, True)
 
 
-# Multi-quarter fixture for relocation tests. A Q2 timeline with one
-# shipped card, then a Q3 timeline carrying the planned v1.7.0 release
-# and a non-release milestone.
+# Multi-quarter fixture for relocation tests, newest first like the
+# live page: a Q3 timeline carrying the planned v1.8.0 and the shipped
+# v1.7.0, then a Q2 timeline with one shipped card.
 def _multi_quarter_fixture(prefix: str) -> str:
     return f"""<!DOCTYPE html>
 <html><body>
+    <div class="rm-quarter">
+      <h2>{prefix}3 2026</h2>
+    </div>
+    <ol class="rm-timeline">
+      <li class="rm-entry planned">
+        <article class="rm-card">
+          <div class="rm-head">
+            <span class="rm-pill planned"><span class="dot" aria-hidden="true"></span>Planned</span>
+            <span class="when">Late 2026 &middot; v1.8.0</span>
+          </div>
+          <h3>Future</h3>
+          <p>Planned.</p>
+        </article>
+      </li>
+      <li class="rm-entry shipped">
+        <article class="rm-card">
+          <div class="rm-head">
+            <span class="rm-pill shipped"><span class="dot" aria-hidden="true"></span>Shipped</span>
+            <span class="when">8 September 2026 &middot; v1.7.0</span>
+          </div>
+          <h3>The release</h3>
+          <p>Body.</p>
+        </article>
+      </li>
+    </ol>
+
     <div class="rm-quarter">
       <h2>{prefix}2 2026</h2>
     </div>
@@ -474,32 +500,6 @@ def _multi_quarter_fixture(prefix: str) -> str:
         </article>
       </li>
     </ol>
-
-    <div class="rm-quarter">
-      <h2>{prefix}3 2026</h2>
-    </div>
-    <ol class="rm-timeline">
-      <li class="rm-entry shipped">
-        <article class="rm-card">
-          <div class="rm-head">
-            <span class="rm-pill shipped"><span class="dot" aria-hidden="true"></span>Shipped</span>
-            <span class="when">8 September 2026 &middot; v1.7.0</span>
-          </div>
-          <h3>The release</h3>
-          <p>Body.</p>
-        </article>
-      </li>
-      <li class="rm-entry planned">
-        <article class="rm-card">
-          <div class="rm-head">
-            <span class="rm-pill planned"><span class="dot" aria-hidden="true"></span>Planned</span>
-            <span class="when">Late 2026 &middot; v1.8.0</span>
-          </div>
-          <h3>Future</h3>
-          <p>Planned.</p>
-        </article>
-      </li>
-    </ol>
 </body></html>
 """
 
@@ -511,16 +511,16 @@ def test_relocate_across_quarters() -> None:
     # v1.7.0 lives in Q3 but ship date 2026-05-15 is Q2 → should move.
     out, moved = relocate_card_to_quarter(html, "1.7.0", "2026-05-15", locale)
     expect("moved flag is True", moved, True)
-    # The v1.7.0 card should now precede the Q3 heading.
-    expect("v1.7.0 card now sits before Q3 heading",
-           out.index("v1.7.0") < out.index("<h2>Q3 2026</h2>"), True)
-    # And land after the existing Q2 shipped card (v1.0.0) but before
-    # the Q3 div — i.e. inside the first <ol>.
-    expect("v1.0.0 still precedes v1.7.0 (appended after shipped)",
-           out.index("v1.0.0") < out.index("v1.7.0"), True)
+    # The v1.7.0 card should now follow the Q2 heading.
+    expect("v1.7.0 card now sits after Q2 heading",
+           out.index("v1.7.0") > out.index("<h2>Q2 2026</h2>"), True)
+    # And land before the existing Q2 shipped card (v1.0.0), since the
+    # timeline reads newest first.
+    expect("v1.7.0 precedes v1.0.0 (inserted before shipped)",
+           out.index("v1.7.0") < out.index("v1.0.0"), True)
     # Q3 planned card must stay put.
     expect("planned v1.8.0 untouched in Q3",
-           out.index("v1.8.0") > out.index("<h2>Q3 2026</h2>"), True)
+           out.index("v1.8.0") < out.index("<h2>Q2 2026</h2>"), True)
 
 
 def test_relocate_same_quarter_noop() -> None:
@@ -539,8 +539,8 @@ def test_relocate_fr_quarter_prefix() -> None:
     html = _multi_quarter_fixture("T")
     out, moved = relocate_card_to_quarter(html, "1.7.0", "2026-05-15", locale)
     expect("moved with FR trimestre headings", moved, True)
-    expect("v1.7.0 now before T3 heading",
-           out.index("v1.7.0") < out.index("<h2>T3 2026</h2>"), True)
+    expect("v1.7.0 now after T2 heading",
+           out.index("v1.7.0") > out.index("<h2>T2 2026</h2>"), True)
 
 
 def test_needs_translation_marker_count() -> None:

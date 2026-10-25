@@ -61,8 +61,9 @@
   }
 
   // Systematically mark the next incoming release as In progress. The
-  // first still-planned version card (event-marker cards, which carry
-  // .rm-milestone, are skipped) is the next-up release, so whichever
+  // timeline reads newest first, so the last still-planned version card
+  // in document order (event-marker cards, which carry .rm-milestone,
+  // are skipped) is the next-up release, so whichever
   // card that is gets promoted, with no per-release edit: when a release
   // ships and promote-roadmap.py flips its card to shipped, the
   // following one becomes In progress on the next render. The static
@@ -70,8 +71,9 @@
   // is a presentational promotion only. Runs synchronously, independent
   // of the progress-bar fetch below, so it works even if that fails.
   (function promoteNextInProgress() {
-    var next = document.querySelector('.rm-entry.planned:not(.rm-milestone)');
-    if (!next) return;
+    var planned = document.querySelectorAll('.rm-entry.planned:not(.rm-milestone)');
+    if (!planned.length) return;
+    var next = planned[planned.length - 1];
     var legend = document.querySelector('.rm-legend .rm-pill.in-progress');
     var label = (legend && legend.textContent.trim()) || 'In progress';
     next.classList.remove('planned');
