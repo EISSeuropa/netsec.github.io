@@ -149,6 +149,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The member figure on the home page counts the Action's roster from cost.eu, every Working Group member, Management Committee representative and holder of a leadership role, each once: 181 members in 39 countries, where it had counted the 107 people with a Directory bio. The countries figure counts the same people.
 - The press kit typography sample sets "Net" and "Sec" in the full name in the logo gradient, in all three locales, and describes the treatment.
 - The social card shown when a page is shared sets "Net" and "Sec" in the title in the logo-star gradient, matching the home page. It is now rendered from an HTML template and weighs 292 KB, down from 848 KB.
 - The home page title sets "Net" in Networking and "Sec" in Security in the blue gradient of the logo star, in all three locales, so the title spells out NetSec.
