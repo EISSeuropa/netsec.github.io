@@ -860,13 +860,17 @@
     };
     document.addEventListener('click', (e) => {
       const a = e.target.closest && e.target.closest(
-        '.nav-links a[href], .wg-jump a[href]');
+        '.nav-links a[href], .wg-jump a[href], [data-jump-nav] a[href]');
       if (!a) return;
       const target = inPageTarget(a);
       if (!target) return;             // cross-page or no such section: let it navigate
       e.preventDefault();
+      // A [data-jump-nav] target's scroll-margin-top clears that page's
+      // own sticky bar (the roadmap quarter navigator) as well.
+      const extra = a.closest('[data-jump-nav]')
+        ? (parseFloat(getComputedStyle(target).scrollMarginTop) || 0) : 0;
       const y = window.scrollY + target.getBoundingClientRect().top
-        - headerBottom() - 14;
+        - headerBottom() - 14 - extra;
       const reduce = window.matchMedia
         && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({ top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth' });

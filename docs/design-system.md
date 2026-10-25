@@ -293,6 +293,11 @@ ahead of plan, the only green), and `.is-ghost` (the original planned
 month when a deliverable shipped early). The roadmap's "show earlier
 releases" collapse is a separate component driven by
 `assets/js/roadmap-shipped-toggle.js`.
+The quarter navigator (`.rm-nav`) is built by `assets/js/roadmap-nav.js`
+from the quarter headings inside `[data-rm-body]`. It is a sticky rail
+in the left gutter from 1320px and a sticky chip bar under the header
+below that. A new quarter needs only its `.rm-quarter` heading with an
+`id` of the form `q4-2026`, and the navigator picks it up.
 
 ### `.members-toolbar`, `.members-filter-chip`, `.members-country`
 

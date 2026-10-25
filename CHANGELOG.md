@@ -144,6 +144,7 @@ maintainer-facing audience.
 
 #### Added
 
+- The roadmap has a quarter navigator in all three locales, a rail beside the timeline on wide screens and a bar of chips under the header on smaller ones. It jumps to any quarter or to Under watch, marks the quarter on screen and tags the current quarter as Now. Each quarter can be linked directly, for example `roadmap.html#q4-2026`.
 - The ESSC 2027 page has a Conference Chairs section in all three locales, with the Directory headshot, affiliation and roles of Prof. Filip Ejdus and Dr Arthur Laudrain.
 - The ESSC 2027 page carries practical information for Belgrade in all three locales: the venue, visas and entry, the routes from the airport, local transport, fourteen places to stay with their area and price range, money and emergency numbers. Each card carries an icon, the places to stay scroll sideways as a slider with previous and next arrows, and on phones the other cards swipe sideways too, each at its own height, which cuts the section from 4,237 to 1,965 pixels at 375 wide. The Training School page and the hero's Venue fact link to it.
 
