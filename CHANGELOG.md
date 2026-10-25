@@ -149,6 +149,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The roadmap lists the newest entries first, in all three locales. The quarters run from Q2 2027 down to Q2 2026, and within each quarter the latest date sits at the top.
 - The member figure on the home page counts the Action's roster from cost.eu, every Working Group member, Management Committee representative and holder of a leadership role, each once: 181 members in 39 countries, where it had counted the 107 people with a Directory bio. The countries figure counts the same people.
 - The press kit typography sample sets "Net" and "Sec" in the full name in the logo gradient, in all three locales, and describes the treatment.
 - The social card shown when a page is shared sets "Net" and "Sec" in the title in the logo-star gradient, matching the home page. It is now rendered from an HTML template and weighs 292 KB, down from 848 KB.
@@ -158,6 +159,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The v1.17.0 roadmap card shows its Visa letters and Early-career prize chips again, in all three locales. They had been left under the v1.16.0 card as two loose items when the card moved to Q1 2027.
 - Without JavaScript, the home page lists the two 2027 events again. Its fallback event cards are rendered from the events data at every deploy, where they had been hand-written and showed "No upcoming events" once the 2026 events ended.
 - The Training School page describes the 2027 school in Belgrade to search engines and link previews, in English, French and German. Its description still gave the 2026 dates in Stockholm, in English on all three pages.
 - Event dates on the event pages are written from the events data, so a moved date is changed in one place.

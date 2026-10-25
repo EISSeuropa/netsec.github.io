@@ -2,7 +2,7 @@
  *
  * Extracted from the identical inline scripts of roadmap.html /
  * .fr.html / .de.html (issue #725). Collapses all but the most recent
- * shipped releases behind a "Show N earlier releases" button; labels
+ * shipped release (the first in each newest-first timeline) behind a "Show N earlier releases" button; labels
  * come from the lang-keyed table below via <html lang>.
  */
 (function () {
@@ -48,7 +48,7 @@
     // earlier ones. With one shipped card (or none) there is nothing to
     // collapse, so no toggle is injected.
     if (shipped.length <= 1) return;
-    const collapsible = Array.prototype.slice.call(shipped, 0, -1);
+    const collapsible = Array.prototype.slice.call(shipped, 1);
     collapsible.forEach((el) => el.classList.add('rm-shipped-collapsible'));
     const n = collapsible.length;
 
@@ -65,7 +65,7 @@
     btn.appendChild(lbl);
     li.appendChild(btn);
 
-    ol.insertBefore(li, shipped[0]);
+    ol.insertBefore(li, shipped[1]);
     ol.dataset.shippedState = 'collapsed';
 
     btn.addEventListener('click', () => {

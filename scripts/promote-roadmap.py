@@ -332,8 +332,9 @@ def relocate_card_to_quarter(
     html: str, version: str, iso_date: str, locale: dict,
 ) -> tuple[str, bool]:
     """Move the just-shipped `v<version>` card into the `<ol>` for the
-    quarter matching its ship date, inserting after that quarter's
-    existing shipped cards and before its first planned card.
+    quarter matching its ship date. The timeline reads newest first, so
+    the card goes after that quarter's planned cards and before its
+    first shipped card.
 
     No-op (returns (html, False)) when the card already sits in the
     right quarter, when no shipped card for the version exists yet,
@@ -376,9 +377,9 @@ def relocate_card_to_quarter(
         if _heading_before(without, s[0]) == target_heading
     )
     ol_text = without[dest[0]: dest[1]]
-    planned = re.search(r'[ \t]*<li class="rm-entry planned', ol_text)
-    if planned:
-        insert_at = dest[0] + planned.start()
+    shipped = re.search(r'[ \t]*<li class="rm-entry shipped', ol_text)
+    if shipped:
+        insert_at = dest[0] + shipped.start()
     else:
         insert_at = dest[0] + re.search(r"[ \t]*</ol>", ol_text).start()
     return without[:insert_at] + card_text + without[insert_at:], True
