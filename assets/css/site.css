@@ -1345,18 +1345,18 @@ form button:disabled{opacity:.65;cursor:wait}
 .spotlight-action-row:not(.spotlight-action-other)+.spotlight-action-other{padding-top:12px;border-top:1px solid var(--line)}
 @media (max-width:960px){
   .spotlight-card{grid-template-columns:auto minmax(0,1fr)}
-  .spotlight-action{grid-column:2;width:auto;padding:20px 0 0;border-left:0;border-top:1px solid var(--line)}
+  .spotlight-action{grid-column:2;width:auto;padding:24px 0 0;border-left:0;border-top:1px solid var(--line)}
 }
 @media (max-width:640px){
   .spotlight-action{grid-column:auto;width:100%;text-align:left}
-  .spotlight-card{grid-template-columns:1fr;text-align:center;justify-items:center;gap:20px;padding:28px 20px}
+  .spotlight-card{grid-template-columns:1fr;text-align:center;justify-items:center;gap:22px;padding:34px 26px 30px}
   .spotlight-keywords{justify-content:center}
 }
 
 /* Spotlight nested inside "Meet the network" as a subsection above the
    faces marquee: a lighter heading than a full section-head, with room
    before the marquee below it. */
-.spotlight-heading{font-size:1.2rem;margin:0 0 6px}
+.spotlight-heading{font-size:1.2rem;margin:0 0 16px}
 /* No display declaration here: a bare section is already block, so the
    hidden attribute still collapses the empty state to nothing. */
 .network-spotlight{margin-bottom:40px}
