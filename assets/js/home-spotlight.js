@@ -19,9 +19,12 @@
 
   var lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);
   var T = {
-    en: { eyebrow: 'Community', title: 'Member spotlight', view: 'View full profile →' },
-    fr: { eyebrow: 'Communauté', title: 'Coup de projecteur sur un membre', view: 'Voir le profil complet →' },
-    de: { eyebrow: 'Gemeinschaft', title: 'Mitglied im Fokus', view: 'Vollständiges Profil ansehen →' }
+    en: { eyebrow: 'Community', title: 'Member spotlight', view: 'View full profile →',
+          action: 'In the Action', lead: 'Leader', coLead: 'Co-leader', member: 'Member' },
+    fr: { eyebrow: 'Communauté', title: 'Coup de projecteur sur un membre', view: 'Voir le profil complet →',
+          action: "Dans l'Action", lead: 'Responsable', coLead: 'Co-responsable', member: 'Membre' },
+    de: { eyebrow: 'Gemeinschaft', title: 'Mitglied im Fokus', view: 'Vollständiges Profil ansehen →',
+          action: 'In der Action', lead: 'Leitung', coLead: 'Co-Leitung', member: 'Mitglied' }
   };
   var t = T[lang] || T.en;
   var peopleUrl = lang === 'fr' ? 'people.fr.html' : lang === 'de' ? 'people.de.html' : 'people.html';
@@ -46,6 +49,38 @@
   // page (defer scripts run in document order).
   var initials = window.netsecInitials;
   var titlecaseTheme = window.netsecTitlecaseTheme;
+  var tr = function (s) { return (window.netsecT && window.netsecT(s)) || s; };
+  var WG_NAMES = { 1: 'Building the Network', 2: 'Transfer of Knowledge',
+    3: 'Fostering the Next Generation of Scholars', 4: 'Inclusion, Representativeness & Ethics' };
+
+  // The member's place in the Action: one row per Working Group with their
+  // role in it, then any role outside the WGs (coordinator, MC seat). WG
+  // leadership comes from wg_leadership, so the "WG2 Leader" role labels
+  // are skipped to avoid listing it twice.
+  function actionRoles(member) {
+    var lead = (member.wg_leadership || {});
+    var role = {};
+    (member.wgs || []).forEach(function (w) { role[w] = t.member; });
+    (lead.co_lead || []).forEach(function (w) { role[w] = t.coLead; });
+    (lead.lead || []).forEach(function (w) { role[w] = t.lead; });
+    var rows = Object.keys(role).sort().map(function (w) {
+      return el('li', { class: 'spotlight-action-row' }, [
+        el('span', { class: 'spotlight-action-tag', style: 'background:var(--wg-' + w + ');color:var(--wg-' + w + '-ink)', text: 'WG' + w }),
+        el('span', { class: 'spotlight-action-text' }, [
+          el('span', { class: 'spotlight-action-name', text: tr(WG_NAMES[w] || '') }),
+          el('span', { class: 'spotlight-action-role', text: role[w] })
+        ])
+      ]);
+    });
+    (member.roles || []).filter(function (r) { return !/^WG\d/.test(r); }).forEach(function (r) {
+      rows.push(el('li', { class: 'spotlight-action-row spotlight-action-other', text: tr(r) }));
+    });
+    if (!rows.length) return null;
+    return el('aside', { class: 'spotlight-action', 'aria-label': t.action }, [
+      el('p', { class: 'spotlight-action-title', text: t.action }),
+      el('ul', { class: 'spotlight-action-list' }, rows)
+    ]);
+  }
 
   function flag(cc) {
     cc = (cc || '').toLowerCase();
@@ -68,11 +103,6 @@
     var country = [flag(member.country_code), member.country].filter(Boolean).join(' ');
     if (country) metaBits.push(country);
 
-    var wgs = el('div', { class: 'spotlight-wgs' });
-    (member.wgs || []).forEach(function (w) {
-      wgs.appendChild(el('span', { class: 'spotlight-wg', text: 'WG' + w }));
-    });
-
     var chips = el('div', { class: 'spotlight-keywords' });
     (member.canonical_keywords || []).slice(0, 4).forEach(function (k) {
       chips.appendChild(el('span', { class: 'spotlight-chip', text: titlecaseTheme(k) }));
@@ -81,15 +111,15 @@
     var body = el('div', { class: 'spotlight-body' }, [
       el('h3', { class: 'spotlight-name', text: member.name || '' }),
       metaBits.length ? el('p', { class: 'spotlight-role', text: metaBits.join(' · ') }) : null,
-      (member.wgs || []).length ? wgs : null,
       member.bio ? el('p', { class: 'spotlight-bio', text: member.bio }) : null,
       (member.canonical_keywords || []).length ? chips : null,
-      el('a', { class: 'btn btn-primary spotlight-cta', href: peopleUrl + '#' + member.id, text: t.view })
+      el('a', { class: 'btn btn-ghost spotlight-cta', href: peopleUrl + '#' + member.id, text: t.view })
     ]);
 
     var card = el('article', { class: 'spotlight-card glass' }, [
       el('div', { class: 'spotlight-photo' }, [photo]),
-      body
+      body,
+      actionRoles(member)
     ]);
 
     var head = el('h3', { class: 'spotlight-heading', id: 'spotlight-title', text: t.title });

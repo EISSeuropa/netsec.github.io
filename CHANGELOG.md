@@ -146,9 +146,11 @@ maintainer-facing audience.
 
 - The ESSC 2027 page has a Conference Chairs section in all three locales, with the Directory headshot, affiliation and roles of Prof. Filip Ejdus and Dr Arthur Laudrain.
 - The ESSC 2027 page carries practical information for Belgrade in all three locales: the venue, visas and entry, the routes from the airport, local transport, fourteen places to stay with their area and price range, money and emergency numbers. Each card carries an icon, the places to stay scroll sideways as a slider with previous and next arrows, and on phones the other cards swipe sideways too, each at its own height, which cuts the section from 4,237 to 1,965 pixels at 375 wide. The Training School page and the hero's Venue fact link to it.
+- The member spotlight card on the home page lists the member's place in the Action on its right: each Working Group with their role in it, in the group's colour, then any coordinator or Management Committee role, in all three locales. The WG pill under the name is gone, since the panel carries it.
 
 #### Changed
 
+- The home page figures sit without the blue rule before each one. The member spotlight card aligns the photo with the name, shows the research keywords as tinted chips like the Directory, caps the bio at 68 characters a line, and uses an outlined button in place of the solid black one.
 - The roadmap places the Year 1 anniversary in December 2026, and the roadmap and Outputs page expect the first policy briefs (D6) in December rather than October 2026, in all three locales.
 - The roadmap lists the newest entries first, in all three locales. The quarters run from Q2 2027 down to Q2 2026, and within each quarter the latest date sits at the top.
 - The member figure on the home page counts the Action's roster from cost.eu, every Working Group member, Management Committee representative and holder of a leadership role, each once: 181 members in 39 countries, where it had counted the 107 people with a Directory bio. The countries figure counts the same people.
