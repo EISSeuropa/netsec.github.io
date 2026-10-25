@@ -107,9 +107,10 @@ paths, by what changes:
   `python3 scripts/update-brand-html.py` if any markup paths change,
   then `python3 scripts/inject-seo.py`, and spot-check all three
   locales. Both brand scripts are one-shot and run locally, not in CI.
-- **A social card.** Replace `assets/images/og-image.png` (general) or
-  `assets/images/og-image-people.png` (directory) in place. These are
-  hand-designed and deliberately not auto-generated.
+- **A social card.** Edit the HTML template in
+  `scripts/build-general-og.py` (general card, `og-image.png`) or
+  `scripts/build-directory-og.py` (directory card, `og-image-people.png`),
+  run it, and commit the PNG. Both are one-shot and run locally, not in CI.
 
 The developer-facing index of which asset goes where is in
 [`docs/design-system.md`](design-system.md); the public-facing rules

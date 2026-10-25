@@ -149,6 +149,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The social card shown when a page is shared sets "Net" and "Sec" in the title in the logo-star gradient, matching the home page. It is now rendered from an HTML template and weighs 292 KB, down from 848 KB.
 - The home page title sets "Net" in Networking and "Sec" in Security in the blue gradient of the logo star, in all three locales, so the title spells out NetSec.
 - The home page has five sections where it had twelve: the hero, Meet the network, Four Working Groups, Events and news, and Contact. The member counts sit at the foot of the hero, and the Working Groups section opens with the short introduction to the Action. The Now row, the audience cards, the ESSC 2026 photos and the members' Wiki strip are gone from the page, and the audience cards stay available from the Find your way in tab on every page, where the member card now links to the Wiki and the e-COST portal.
 - The roadmap cards for v1.11.0 to v1.15.0 read in French and German. They had shown the English release summary with a translation marker since June.
