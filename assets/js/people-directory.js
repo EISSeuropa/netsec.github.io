@@ -1074,6 +1074,8 @@
         full.className = 'aff-full';
         full.textContent = affParts.join(' · ');
         aff.appendChild(full);
+        // Both spans truncate with an ellipsis on narrow cards.
+        aff.title = full.textContent;
         if (m.affiliation) {
           const compact = document.createElement('span');
           compact.className = 'aff-compact';
@@ -1348,6 +1350,15 @@
         cta.href = _phref;
         cta.textContent = window.netsecT('View full profile') + ' →';
         node.querySelector('.member-body').appendChild(cta);
+      }
+      // ponytail: every bios.json member is a Network Map node (the map is
+      // built from bios.json), so no lookup in network-map.json.
+      if (m.id) {
+        const mapLink = document.createElement('a');
+        mapLink.className = 'member-map-link';
+        mapLink.href = 'network-map' + PSUF + '.html?find=' + encodeURIComponent(m.id);
+        mapLink.textContent = window.netsecT('Show on the map') + ' →';
+        node.querySelector('.member-body').appendChild(mapLink);
       }
       // Recent publications (lazy): fills from the in-memory cache if the
       // deferred ORCID fetch has already resolved, otherwise backfillPubs()
@@ -3154,6 +3165,11 @@
     strip.setAttribute('data-country-strip', '');
     strip.setAttribute('role', 'group');
     strip.setAttribute('aria-label', window.netsecT('Filter by country'));
+    const label = document.createElement('span');
+    label.className = 'members-filter-label';
+    label.setAttribute('aria-hidden', 'true');
+    label.textContent = window.netsecT('Country');
+    strip.appendChild(label);
     countries.forEach(country => {
       const name = window.netsecCountry ? window.netsecCountry(country) : country;
       const btn = document.createElement('button');
