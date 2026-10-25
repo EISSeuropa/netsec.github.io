@@ -17,13 +17,27 @@ for (const f of ['home-events.js', 'home-figures.js']) {
 const { countFigures } = window.NetSec;
 const at = (iso) => Date.parse(iso);
 
+// The Directory counts only for leadership roles and a WG lead's country.
 const bios = {
   members: [
-    { country: 'Sweden' }, { country: 'Sweden' }, { country: ' Türkiye ' },
-    { country: 'Türkiye' }, { country: '' }, {},
+    { id: 'filip-ejdus', name: 'Filip Ejdus', country: 'Serbia', roles: ['WG1 Leader'] },
+    { id: 'ana-silva', name: 'Ana Silva', country: 'Portugal', roles: ['Action Vice-Chair'] },
+    { id: 'eva-berg', name: 'Eva Berg', country: 'Norway', roles: ['Management Committee · Norway'] },
+    { id: 'no-role', name: 'No Role', country: 'Malta' },
   ],
 };
-const wg = { groups: [{}, {}, {}, {}] };
+const wg = {
+  groups: [
+    // The lead has no country in wg.json and takes it from the bio.
+    { lead: { slug: 'filip-ejdus', name: 'Prof. Filip Ejdus' },
+      members: [{ name: 'Dr Jan Novák', country: 'Sweden' }, { name: 'Prof Ece Kaya', country: ' Türkiye ' }] },
+    // The same person in a second group, written without the accent.
+    { members: [{ name: 'Jan Novak', country: 'Sweden' }, { name: 'Dr John N.T. Helferich', country: '' }] },
+    {}, {},
+  ],
+};
+// One MC representative also sits in a WG, one does not.
+const mc = { members: [{ name: 'Ece Kaya', country: 'Türkiye' }, { name: 'Dr Lea Weber', country: 'Austria' }] };
 const events = {
   tzid: 'Europe/Stockholm',
   events: [
@@ -35,8 +49,9 @@ const events = {
   ],
 };
 
-let c = countFigures(bios, wg, events, at('2026-09-26T12:00:00Z'));
-assert.deepEqual({ ...c }, { members: 6, countries: 2, groups: 4, held: 2 });
+// Filip Ejdus, Jan Novák, Ece Kaya, John Helferich, Lea Weber, Ana Silva.
+let c = countFigures(bios, wg, events, at('2026-09-26T12:00:00Z'), mc);
+assert.deepEqual({ ...c }, { members: 6, countries: 5, groups: 4, held: 2 });
 
 // The Istanbul event counts only once its own end has passed.
 assert.equal(countFigures(bios, wg, events, at('2026-09-13T14:59:00Z')).held, 1);
