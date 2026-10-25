@@ -169,6 +169,10 @@ maintainer-facing audience.
 
 - The Directory country flags have a Country caption like the other filter rows and wrap onto a second line. At 1024px the last flag had been cut off. A shortened affiliation on a card shows the full text on hover.
 - At 1024px the Find your way in tab and the Directory tools no longer cover the right-hand column of Directory cards. Beside the grid the tools stand in an upright pill, and the grid keeps a margin clear for it.
+- The Network Map draws four Working Group leaders and co-leaders on the hub of the group they lead. Chiara Ruffa (WG3), Silvia D'Amato (WG3), Eliza Gheorghe (WG2) and Nikolaos Tzifakis (WG1) were missing from it because they are not on that group's cost.eu roster, and Ruffa was not drawn at all. The Working Groups lens now draws 168 of 225 people, up from 164.
+- Searching the Network Map for someone the current lens does not draw names the lens that does, or says that no Working Group or research theme is on file. It used to say the person was hidden by the filters even with every filter on.
+- The Network Map shows six figure tiles in one row on a desktop. The seventh, the count of directory profiles, repeated the line beneath it and wrapped alone onto a second row.
+- The Network Map introduction links the Working Groups page and the Directory without describing how the map is generated, in all three locales.
 - On phones the roadmap quarter bar floats 10px below the header as its own rounded panel, and the home page member spotlight card has 26px of side padding instead of 20px, with 16px between its heading and the card.
 - The v1.17.0 roadmap card shows its Visa letters and Early-career prize chips again, in all three locales. They had been left under the v1.16.0 card as two loose items when the card moved to Q1 2027.
 - Without JavaScript, the home page lists the two 2027 events again. Its fallback event cards are rendered from the events data at every deploy, where they had been hand-written and showed "No upcoming events" once the 2026 events ended.

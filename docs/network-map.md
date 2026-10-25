@@ -142,7 +142,8 @@ lets the renderer draw headshots, mentorship rings, and profile links
 without any further data.
 
 **Edges** are bipartite person-to-hub memberships (person-to-WG from the
-rosters, person-to-theme from the bio themes) plus person-to-person
+rosters and from each bio's `wgs` and `wg_leadership`, person-to-theme from
+the bio themes) plus person-to-person
 ESSC co-panel ties matched by `name_key` against the conference
 programmes. The hub form is chosen over pairwise co-membership on
 purpose: pairwise would be a roughly nine-thousand-edge hairball, while
@@ -535,6 +536,12 @@ themes lens. A member on no WG roster has nothing to be drawn towards on
 one lens, and a member with no research themes recorded has nothing on
 the other, so the map has never drawn them while the figure above them
 counted all 191.
+
+A WG leader is not always on the cost.eu roster of the group they lead,
+and four of them (the WG3 leader among them) had no edge to their own hub
+until the builder also read the bio's groups. A search for a person the
+lens does not draw says so and names the lens that does, where it used to
+blame the filters.
 
 A tile now reports it, and follows the lens (#1651). It counts membership
 of the lens rather than of the current filter, since that is the gap the

@@ -23,7 +23,7 @@
    desktop and 229px on a phone, and they were the last thing between a visitor
    and the thing they came for. */
 .network-map-stats{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
-.network-map-stat{padding:10px 16px;border-radius:14px;background:rgba(255,255,255,.55);border:1px solid rgba(11,18,32,.08)}
+.network-map-stat{flex:1 1 auto;padding:10px 16px;border-radius:14px;background:rgba(255,255,255,.55);border:1px solid rgba(11,18,32,.08)}
 .dark .network-map-stat{background:rgba(255,255,255,.05);border-color:var(--glass-border)}
 .network-map-stat b{display:block;font-family:'Lexend',sans-serif;font-size:1.3rem;color:var(--ink);line-height:1.1}
 .network-map-stat span{font-size:.76rem;color:var(--muted)}
