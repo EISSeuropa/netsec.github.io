@@ -781,6 +781,19 @@
       say(T('No one on the map matches {q}.').replace('{q}', String(q).trim()));
       return;
     }
+    // Nobody drawn on this lens is a third answer: no filter would bring the
+    // person back, so the message names the lens that does, if any.
+    if (!node.links[lens].length) {
+      setSpotlight(null);
+      const other = lens === 'wg' ? 'theme' : 'wg';
+      say(T(!node.links[other].length
+        ? '{name} has no Working Group or research theme on file yet.'
+        : lens === 'wg'
+          ? '{name} is in no Working Group, so this lens leaves them out. The Research themes lens shows them.'
+          : '{name} lists no research themes, so this lens leaves them out. The Working Groups lens shows them.')
+        .replace('{name}', node.name));
+      return;
+    }
     if (!personVisible(node)) {
       setSpotlight(null);
       say(T('{name} is on the map but hidden by the filters in use.')
@@ -1471,7 +1484,9 @@
        ...(data.stats.itc_people
          ? [[data.stats.itc_people + ' / ' + people.length,
              'from an Inclusiveness Target Country']] : []),
-       [data.stats.people_with_bios + ' / ' + people.length, 'with a directory profile']]
+       // No profile tile: the line under the strip already counts the people
+       // without one, and the seventh tile wrapped alone onto a second row.
+      ]
         .forEach(([b, s]) => {
           const el = document.createElement('div');
           el.className = 'network-map-stat';

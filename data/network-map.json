@@ -4,7 +4,7 @@
     "working_groups": 4,
     "people": 225,
     "people_with_bios": 107,
-    "edges": 634,
+    "edges": 641,
     "themes": 17,
     "panels_matched": 14,
     "panel_edges": 58,
@@ -2103,6 +2103,10 @@
       "target": "wg-3"
     },
     {
+      "source": "chiara-ruffa",
+      "target": "wg-3"
+    },
+    {
       "source": "clara-jammot",
       "target": "wg-1"
     },
@@ -2141,6 +2145,10 @@
     {
       "source": "eda-kusku-sonmez",
       "target": "wg-3"
+    },
+    {
+      "source": "eliza-gheorghe",
+      "target": "wg-2"
     },
     {
       "source": "eugenio-sanchez",
@@ -2153,6 +2161,10 @@
     {
       "source": "fabio-iguavita-duarte",
       "target": "wg-2"
+    },
+    {
+      "source": "filip-ejdus",
+      "target": "wg-1"
     },
     {
       "source": "filip-ejdus",
@@ -2237,6 +2249,10 @@
     {
       "source": "john-helferich",
       "target": "wg-1"
+    },
+    {
+      "source": "john-helferich",
+      "target": "wg-2"
     },
     {
       "source": "julia-carver",
@@ -2329,6 +2345,10 @@
     {
       "source": "moritz-weiss",
       "target": "wg-3"
+    },
+    {
+      "source": "nikolaos-tzifakis",
+      "target": "wg-1"
     },
     {
       "source": "p-abdelouahid-ezzarfi",
@@ -3223,6 +3243,10 @@
       "target": "wg-1"
     },
     {
+      "source": "revecca-pedi",
+      "target": "wg-4"
+    },
+    {
       "source": "sara-russo",
       "target": "wg-2"
     },
@@ -3253,6 +3277,10 @@
     {
       "source": "seyithan-ahmet-ates",
       "target": "wg-1"
+    },
+    {
+      "source": "silvia-damato",
+      "target": "wg-3"
     },
     {
       "source": "tanja-pavleska",

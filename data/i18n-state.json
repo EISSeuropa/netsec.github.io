@@ -311,15 +311,15 @@
     "network-map.html": {
       "fr": {
         "file": "network-map.fr.html",
-        "source_sha1": "469d72ef70b2e329488d144a39cfc862e86a6b60",
-        "translated_on": "2026-09-26",
+        "source_sha1": "3cdc0aa0c9daa54155ce471636fbd30f15cba21b",
+        "translated_on": "2026-10-25",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "network-map.de.html",
-        "source_sha1": "469d72ef70b2e329488d144a39cfc862e86a6b60",
-        "translated_on": "2026-09-26",
+        "source_sha1": "3cdc0aa0c9daa54155ce471636fbd30f15cba21b",
+        "translated_on": "2026-10-25",
         "status": "beta",
         "reviewed_by": null
       }
