@@ -164,6 +164,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- On phones the roadmap quarter bar floats 10px below the header as its own rounded panel, and the home page member spotlight card has 26px of side padding instead of 20px, with 16px between its heading and the card.
 - The v1.17.0 roadmap card shows its Visa letters and Early-career prize chips again, in all three locales. They had been left under the v1.16.0 card as two loose items when the card moved to Q1 2027.
 - Without JavaScript, the home page lists the two 2027 events again. Its fallback event cards are rendered from the events data at every deploy, where they had been hand-written and showed "No upcoming events" once the 2026 events ended.
 - The Training School page describes the 2027 school in Belgrade to search engines and link previews, in English, French and German. Its description still gave the 2026 dates in Stockholm, in English on all three pages.

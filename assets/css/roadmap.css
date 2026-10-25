@@ -224,11 +224,12 @@
    rail in the left gutter, with the card column kept at full width.
    Node colours repeat the timeline dots above. */
 .rm-nav{
-  position:sticky;top:var(--rm-nav-top,72px);z-index:20;
-  margin:28px -24px 0;padding:8px 24px;
+  position:sticky;top:calc(var(--rm-nav-top,72px) + 10px);z-index:20;
+  margin:28px -8px 0;padding:10px 12px;
   background:color-mix(in srgb,var(--bg-0) 84%,transparent);
   -webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);
-  border-bottom:1px solid var(--line);
+  border:1px solid var(--line);border-radius:20px;
+  box-shadow:0 8px 24px rgba(20,35,80,.08);
 }
 .rm-nav-list{
   display:flex;gap:8px;margin:0;padding:2px 0;list-style:none;
@@ -263,7 +264,7 @@
 }
 .dark .rm-nav-now{color:#7dd3fc;background:rgba(10,132,255,.22)}
 /* Jump targets clear the sticky bar as well as the header. */
-[data-rm-body] > [id]{scroll-margin-top:60px}
+[data-rm-body] > [id]{scroll-margin-top:84px}
 
 @media (min-width:1320px){
   [data-rm-body]{
@@ -275,7 +276,7 @@
   .rm-nav{
     grid-column:1;grid-row:1 / span 99;align-self:start;
     top:calc(var(--rm-nav-top,72px) + 28px);
-    margin:44px 0 0;padding:0;background:none;border:0;
+    margin:44px 0 0;padding:0;background:none;border:0;border-radius:0;box-shadow:none;
     -webkit-backdrop-filter:none;backdrop-filter:none;
   }
   .rm-nav-list{flex-direction:column;gap:2px;padding:0;overflow:visible;position:relative}

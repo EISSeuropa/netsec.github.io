@@ -106,7 +106,7 @@
     document.documentElement.style.setProperty('--rm-nav-top', (headerLine() - 14) + 'px');
     // In bar mode the sticky bar sits under the header and hides
     // its own height of content, so the reading line moves down.
-    const line = headerLine() + (rail.matches ? 0 : nav.offsetHeight) + 24;
+    const line = headerLine() + (rail.matches ? 0 : nav.offsetHeight + 10) + 24;
     let i = 0;
     sections.forEach((s, k) => { if (s.el.getBoundingClientRect().top <= line) i = k; });
     // The last section may never reach the line on a tall screen.
