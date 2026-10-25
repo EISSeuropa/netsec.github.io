@@ -173,10 +173,18 @@
 <main id="main" data-pagefind-body>
 <section class="people-page">
   <div class="container reveal">
-    <div class="section-head">
+    <div class="section-head people-head">
       <span class="eyebrow">Directory</span>
       <h1>The Directory</h1>
       <p class="lede">An open directory of researchers, policy-makers, and practitioners working in or alongside European security studies: Action leadership, Working Group participants and the wider community. Anyone engaged with the field is welcome to <a href="#join">add their bio</a>.</p>
+      <a class="directory-map-card glass" href="network-map.html">
+        <svg class="directory-map-card-art" viewBox="0 0 200 120" aria-hidden="true" focusable="false">
+          <g stroke="currentColor" stroke-opacity=".22" stroke-width="1"><path d="M48 36 100 62M152 34 100 62M56 94 100 62M146 92 100 62M48 36 152 34M56 94 146 92"/></g>
+          <g fill="currentColor" fill-opacity=".35"><circle cx="24" cy="22" r="2.5"/><circle cx="74" cy="18" r="2.5"/><circle cx="30" cy="62" r="2.5"/><circle cx="78" cy="44" r="2.5"/><circle cx="100" cy="62" r="3"/><circle cx="122" cy="44" r="2.5"/><circle cx="128" cy="16" r="2.5"/><circle cx="178" cy="22" r="2.5"/><circle cx="174" cy="62" r="2.5"/><circle cx="120" cy="80" r="2.5"/><circle cx="82" cy="82" r="2.5"/><circle cx="30" cy="104" r="2.5"/><circle cx="100" cy="106" r="2.5"/><circle cx="176" cy="104" r="2.5"/><circle cx="64" cy="64" r="2.5"/><circle cx="138" cy="64" r="2.5"/></g>
+          <circle cx="48" cy="36" r="11" style="fill:var(--wg-1)"/><circle cx="152" cy="34" r="11" style="fill:var(--wg-2)"/><circle cx="56" cy="94" r="11" style="fill:var(--wg-3)"/><circle cx="146" cy="92" r="11" style="fill:var(--wg-4)"/>
+        </svg>
+        <span class="directory-map-card-text">Open the Network Map →</span>
+      </a>
     </div>
 
     <!-- One-time orientation strip for first-time visitors. The
@@ -222,6 +230,11 @@
         <span>Filters</span>
         <span class="members-filter-toggle-count" id="members-filter-toggle-count" hidden></span>
       </button>
+      <a class="members-map-link" data-directory-map-link href="network-map.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="6" r="2.4"/><circle cx="19" cy="7" r="2.4"/><circle cx="12" cy="17.5" r="2.4"/><path d="M6.9 7.3 10.6 15.6"/><path d="M17.3 8.6 13.6 15.9"/><path d="M7.4 6.4 16.6 6.8"/></svg>
+        <span class="members-map-link-label" data-directory-map-label>Map</span>
+        <svg class="members-map-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><polyline points="8 7 17 7 17 16"/></svg>
+      </a>
       <!-- On desktop this is display:contents, so the Working-Group, country
            and theme/region/mentorship controls flow inline in the toolbar.
            On mobile (≤640px) it becomes a bottom sheet opened by the button
@@ -389,16 +402,6 @@
 
     <div id="members-grid" class="members-grid is-compact" aria-label="Member directory"></div>
 
-    <aside class="deliverables-roadmap-link" aria-labelledby="network-map-signpost-text">
-      <span class="deliverables-roadmap-link-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2.4"/><circle cx="19" cy="7" r="2.4"/><circle cx="12" cy="17.5" r="2.4"/><path d="M6.9 7.3 10.6 15.6"/><path d="M17.3 8.6 13.6 15.9"/><path d="M7.4 6.4 16.6 6.8"/></svg>
-      </span>
-      <p class="deliverables-roadmap-link-text" id="network-map-signpost-text">The <strong>Network Map</strong> lays out the same people by the Working Groups and research themes they share, and by the conference panels that brought them together.</p>
-      <a class="deliverables-roadmap-link-cta" href="network-map.html">
-        Open the Network Map
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-      </a>
-    </aside>
 
     <!-- Open-directory CTA. The form URL is filled in once the Google
          Form is live; until then the link falls back to the contact

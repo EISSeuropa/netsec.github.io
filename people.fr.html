@@ -175,10 +175,18 @@
 <main id="main" data-pagefind-body>
 <section class="people-page">
   <div class="container reveal">
-    <div class="section-head">
+    <div class="section-head people-head">
       <span class="eyebrow">Annuaire</span>
       <h1>L'Annuaire</h1>
       <p class="lede">Un annuaire ouvert de chercheur·euses, décideur·ses politiques et praticien·nes travaillant dans ou aux côtés des études de sécurité européennes&nbsp;: direction de l'Action, participant·es des groupes de travail et communauté élargie. Toute personne engagée dans le domaine est invitée à <a href="#join">ajouter sa biographie</a>.</p>
+      <a class="directory-map-card glass" href="network-map.fr.html">
+        <svg class="directory-map-card-art" viewBox="0 0 200 120" aria-hidden="true" focusable="false">
+          <g stroke="currentColor" stroke-opacity=".22" stroke-width="1"><path d="M48 36 100 62M152 34 100 62M56 94 100 62M146 92 100 62M48 36 152 34M56 94 146 92"/></g>
+          <g fill="currentColor" fill-opacity=".35"><circle cx="24" cy="22" r="2.5"/><circle cx="74" cy="18" r="2.5"/><circle cx="30" cy="62" r="2.5"/><circle cx="78" cy="44" r="2.5"/><circle cx="100" cy="62" r="3"/><circle cx="122" cy="44" r="2.5"/><circle cx="128" cy="16" r="2.5"/><circle cx="178" cy="22" r="2.5"/><circle cx="174" cy="62" r="2.5"/><circle cx="120" cy="80" r="2.5"/><circle cx="82" cy="82" r="2.5"/><circle cx="30" cy="104" r="2.5"/><circle cx="100" cy="106" r="2.5"/><circle cx="176" cy="104" r="2.5"/><circle cx="64" cy="64" r="2.5"/><circle cx="138" cy="64" r="2.5"/></g>
+          <circle cx="48" cy="36" r="11" style="fill:var(--wg-1)"/><circle cx="152" cy="34" r="11" style="fill:var(--wg-2)"/><circle cx="56" cy="94" r="11" style="fill:var(--wg-3)"/><circle cx="146" cy="92" r="11" style="fill:var(--wg-4)"/>
+        </svg>
+        <span class="directory-map-card-text">Ouvrir la carte du réseau →</span>
+      </a>
     </div>
 
     <!-- Bandeau d'orientation à usage unique pour les nouveaux
@@ -225,6 +233,11 @@
         <span>Filtres</span>
         <span class="members-filter-toggle-count" id="members-filter-toggle-count" hidden></span>
       </button>
+      <a class="members-map-link" data-directory-map-link href="network-map.fr.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="6" r="2.4"/><circle cx="19" cy="7" r="2.4"/><circle cx="12" cy="17.5" r="2.4"/><path d="M6.9 7.3 10.6 15.6"/><path d="M17.3 8.6 13.6 15.9"/><path d="M7.4 6.4 16.6 6.8"/></svg>
+        <span class="members-map-link-label" data-directory-map-label>Carte</span>
+        <svg class="members-map-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><polyline points="8 7 17 7 17 16"/></svg>
+      </a>
       <!-- Sur grand écran : display:contents (les filtres s'affichent dans
            la barre). Sous 640 px : volet inférieur ouvert par le bouton. -->
       <dialog class="members-filterset" id="members-filterset" aria-labelledby="members-sheet-title">
@@ -385,17 +398,6 @@
 
 
     <div id="members-grid" class="members-grid is-compact" aria-label="Annuaire des membres"></div>
-
-    <aside class="deliverables-roadmap-link" aria-labelledby="network-map-signpost-text">
-      <span class="deliverables-roadmap-link-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2.4"/><circle cx="19" cy="7" r="2.4"/><circle cx="12" cy="17.5" r="2.4"/><path d="M6.9 7.3 10.6 15.6"/><path d="M17.3 8.6 13.6 15.9"/><path d="M7.4 6.4 16.6 6.8"/></svg>
-      </span>
-      <p class="deliverables-roadmap-link-text" id="network-map-signpost-text">La <strong>carte du réseau</strong> dispose les mêmes personnes selon les groupes de travail et les thèmes de recherche qu’elles partagent, et selon les panels de conférence qui les ont réunies.</p>
-      <a class="deliverables-roadmap-link-cta" href="network-map.fr.html">
-        Ouvrir la carte du réseau
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-      </a>
-    </aside>
 
     <aside id="join" class="join-card glass">
       <div class="join-card-body">

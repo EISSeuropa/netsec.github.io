@@ -1387,6 +1387,7 @@
     empty.hidden = filtered.length > 0;
     _lastCount = filtered.length;
     renderEmptyState(!empty.hidden);
+    syncMapLink(filtered.length);
     updateFilterChrome();
     syncFacetCounts();
     syncCountryStrip();
@@ -1523,6 +1524,40 @@
   function anyFilterActive() {
     return search.value.trim() !== '' || activeWG !== 'all' || activeCountry !== 'all'
       || activeMentorship.size > 0 || activeStsm || activeKeywords.size > 0 || activeRegions.size > 0;
+  }
+  // Toolbar link to the Network Map, carrying over every filter the map's URL
+  // can express (network-map.js applyUrlState). The count only shows when all
+  // of them carry over, because only then does the map draw the same people.
+  // The mentorship overlay rings people without narrowing the map, and a WG
+  // hub also draws data/wg.json roster members whose bio lacks that WG (#2074), so
+  // both carry over without a count. The map's theme hub ids strip
+  // diacritics and keywordSlug() keeps them, so only an ASCII slug is known
+  // to match.
+  const mapLinkEl = document.querySelector('[data-directory-map-link]');
+  const mapLabelEl = mapLinkEl && mapLinkEl.querySelector('[data-directory-map-label]');
+  function syncMapLink(n) {
+    if (!mapLinkEl) return;
+    mapLinkEl.hidden = n === 0;
+    const q = new URLSearchParams();
+    let exact = !search.value.trim() && activeCountry === 'all' && !activeStsm
+      && !activeRegions.size && !activeMentorship.size && activeWG === 'all';
+    const themes = [...activeKeywords];
+    const wgHub = activeWG !== 'all' && activeWG !== 'mc';
+    if (wgHub) q.set('hubs', activeWG);
+    if (themes.length) {
+      if (!wgHub && themes.every(t => /^[a-z0-9-]+$/.test(t))) {
+        q.set('lens', 'theme');
+        q.set('hubs', themes.join(','));
+      } else exact = false;
+    }
+    if (activeMentorship.size) q.set('overlays', 'mentorship');
+    const filtered = anyFilterActive();
+    if (filtered) q.set('profiles', '1');
+    mapLinkEl.href = 'network-map' + PSUF + '.html' + (filtered ? '?' + q : '');
+    mapLabelEl.textContent = !filtered ? window.netsecT('Map')
+      : exact && n > 1 ? window.netsecT('These {n} on the map').replace('{n}', n)
+      : exact ? window.netsecT('Show on the map')
+      : window.netsecT('Open on the map');
   }
   function updateFilterChrome() {
     if (clearAllBtn) clearAllBtn.disabled = !anyFilterActive();
