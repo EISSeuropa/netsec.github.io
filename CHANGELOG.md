@@ -151,6 +151,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The A3 promotional poster sets "Net" and "Sec" in its title in the logo gradient, matching the home page, and its print PNG, small PNG and WebP previews are re-rendered.
 - The home page figures sit without the blue rule before each one. The member spotlight card aligns the photo with the name, shows the research keywords as tinted chips like the Directory, caps the bio at 68 characters a line, and uses an outlined button in place of the solid black one.
 - The roadmap places the Year 1 anniversary in December 2026, and the roadmap and Outputs page expect the first policy briefs (D6) in December rather than October 2026, in all three locales.
 - The roadmap lists the newest entries first, in all three locales. The quarters run from Q2 2027 down to Q2 2026, and within each quarter the latest date sits at the top.
