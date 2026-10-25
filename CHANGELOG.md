@@ -149,6 +149,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The home page figures sit without the blue rule before each one. The member spotlight card aligns the photo with the name, shows the research keywords as tinted chips like the Directory, caps the bio at 68 characters a line, and uses an outlined button in place of the solid black one.
 - The roadmap lists the newest entries first, in all three locales. The quarters run from Q2 2027 down to Q2 2026, and within each quarter the latest date sits at the top.
 - The member figure on the home page counts the Action's roster from cost.eu, every Working Group member, Management Committee representative and holder of a leadership role, each once: 181 members in 39 countries, where it had counted the 107 people with a Directory bio. The countries figure counts the same people.
 - The press kit typography sample sets "Net" and "Sec" in the full name in the logo gradient, in all three locales, and describes the treatment.

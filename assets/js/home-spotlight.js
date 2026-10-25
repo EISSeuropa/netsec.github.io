@@ -84,7 +84,7 @@
       (member.wgs || []).length ? wgs : null,
       member.bio ? el('p', { class: 'spotlight-bio', text: member.bio }) : null,
       (member.canonical_keywords || []).length ? chips : null,
-      el('a', { class: 'btn btn-primary spotlight-cta', href: peopleUrl + '#' + member.id, text: t.view })
+      el('a', { class: 'btn btn-ghost spotlight-cta', href: peopleUrl + '#' + member.id, text: t.view })
     ]);
 
     var card = el('article', { class: 'spotlight-card glass' }, [
