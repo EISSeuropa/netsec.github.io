@@ -4860,7 +4860,11 @@
       "affiliation": "Hacettepe University",
       "position": "Research Assistant",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        2,
+        3
+      ],
       "mentorship": [
         "mentee"
       ],
@@ -4907,7 +4911,11 @@
       "affiliation": "University of Ljubljana",
       "position": "Head of Defence Research Centre",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        2,
+        3
+      ],
       "mentorship": [
         "mentor"
       ],

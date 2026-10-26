@@ -45,7 +45,8 @@
         },
         {
           "name": "Dr Arzu Demirel",
-          "country": "Türkiye"
+          "country": "Türkiye",
+          "slug": "arzu-demirel"
         },
         {
           "name": "Mr Avnihan Kirisik",
@@ -182,7 +183,8 @@
         },
         {
           "name": "Prof Iztok Prezelj",
-          "country": "Slovenia"
+          "country": "Slovenia",
+          "slug": "iztok-prezelj"
         },
         {
           "name": "Dr John Helferich",
@@ -455,7 +457,8 @@
         },
         {
           "name": "Dr Arzu Demirel",
-          "country": "Türkiye"
+          "country": "Türkiye",
+          "slug": "arzu-demirel"
         },
         {
           "name": "Ms Aurelija Pūraitė",
@@ -577,7 +580,8 @@
         },
         {
           "name": "Prof Iztok Prezelj",
-          "country": "Slovenia"
+          "country": "Slovenia",
+          "slug": "iztok-prezelj"
         },
         {
           "name": "Dr Julia Carver",
@@ -840,7 +844,8 @@
         },
         {
           "name": "Dr Arzu Demirel",
-          "country": "Türkiye"
+          "country": "Türkiye",
+          "slug": "arzu-demirel"
         },
         {
           "name": "Ms Aurelija Pūraitė",
@@ -987,7 +992,8 @@
         },
         {
           "name": "Prof Iztok Prezelj",
-          "country": "Slovenia"
+          "country": "Slovenia",
+          "slug": "iztok-prezelj"
         },
         {
           "name": "Ms Jéssica Pereira",
