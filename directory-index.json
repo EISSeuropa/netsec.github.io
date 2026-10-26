@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-10-24T09:30:52+00:00",
+  "generated_at": "2026-10-26T11:03:35+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 107,
+  "count": 110,
   "members": [
     {
       "name": "Mr Adam Hanzel",
@@ -885,6 +885,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/nikolaos-tzifakis.jpg"
     },
     {
+      "name": "Dr Noela Mahmutaj",
+      "name_key": "noela mahmutaj",
+      "aliases": [],
+      "slug": "noela-mahmutaj",
+      "url": "https://netsec-cost.eu/people/noela-mahmutaj.html",
+      "orcid": null,
+      "role": "Management Committee · Albania",
+      "affiliation": "University of Tirana",
+      "photo": "https://netsec-cost.eu/assets/images/people/noela-mahmutaj.jpg"
+    },
+    {
       "name": "Dr Pınar Akgül",
       "name_key": "p akgul",
       "aliases": [],
@@ -1006,6 +1017,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/rusudan-zabakhidze.jpg"
     },
     {
+      "name": "Dr Sandra Cvikić",
+      "name_key": "sandra cvikic",
+      "aliases": [],
+      "slug": "sandra-cvikic",
+      "url": "https://netsec-cost.eu/people/sandra-cvikic.html",
+      "orcid": null,
+      "role": "Management Committee · Croatia",
+      "affiliation": "Ivo Pilar Institut of Social Sciences, Regional Center Vukovar",
+      "photo": "https://netsec-cost.eu/assets/images/people/sandra-cvikic.jpg"
+    },
+    {
       "name": "Ms Sara Russo",
       "name_key": "sara russo",
       "aliases": [],
@@ -1114,6 +1136,17 @@
       "role": null,
       "affiliation": "National University of Political Studies and Public Administration",
       "photo": "https://netsec-cost.eu/assets/images/people/teodora-stoicescu.jpg"
+    },
+    {
+      "name": "Dr Tim Sweijs",
+      "name_key": "tim sweijs",
+      "aliases": [],
+      "slug": "tim-sweijs",
+      "url": "https://netsec-cost.eu/people/tim-sweijs.html",
+      "orcid": null,
+      "role": null,
+      "affiliation": "The Hague Centre for Strategic Studies",
+      "photo": "https://netsec-cost.eu/assets/images/people/tim-sweijs.jpg"
     },
     {
       "name": "Dr Tolga Cikrikci",
