@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-24T09:30:52+00:00",
+  "generated_at": "2026-10-26T11:03:35+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-24T09:30:52+00:00"
+    "last_synced": "2026-10-26T11:03:35+00:00"
   },
   "members": [
     {
@@ -4959,6 +4959,153 @@
         "Intelligence, information and influence",
         "Transnational and human security"
       ]
+    },
+    {
+      "id": "noela-mahmutaj",
+      "name": "Dr Noela Mahmutaj",
+      "country": "Albania",
+      "country_code": "al",
+      "affiliation": "University of Tirana",
+      "position": "Associate Professor",
+      "roles": [
+        "Management Committee · Albania"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Europe - Western Balkans"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "I am an Associate Professor and Researcher at the Institute of European Studies, University of Tirana, where I teach and conduct research on international relations, geopolitics, European integration, and regional security.",
+      "keywords": [
+        "Security Studies",
+        "Geopolitics",
+        "Foreign Policy"
+      ],
+      "email": "mahmutajnoela@gmail.com",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/noela-mahmutaj-phd-5b4794203/?isSelfProfile=true",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/noela-mahmutaj.jpg",
+      "source": "form",
+      "photo_source_sha256": "9098f5ecbc5ef0f4707eb9d22ff2b76ef1de998b45033e2f6b6c56fb8b713f62",
+      "canonical_keywords": [
+        "Foreign policy",
+        "Geopolitics",
+        "Security studies"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Security and defence"
+      ]
+    },
+    {
+      "id": "sandra-cvikic",
+      "name": "Dr Sandra Cvikić",
+      "country": "Croatia",
+      "country_code": "hr",
+      "affiliation": "Ivo Pilar Institut of Social Sciences, Regional Center Vukovar",
+      "position": "Research Associate/Adjunct assistant professor",
+      "roles": [
+        "Management Committee · Croatia"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Western Balkans",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Sandra Cvikić holds a BA from the University of Western Ontario, London, Canada, an MA from the University of Sussex, Brighton, UK, and a PhD from the University of Zagreb, Faculty of Croatian Studies. Since 2008, she has been employed at the Ivo Pilar Institute of Social Sciences, Regional Centre Vukovar, Croatia. Her academic interests include qualitative methodology, the sociology of knowledge and security, the sociology of war, communism/socialism, transitional justice, the sociology of migration, and digital transformation. Since 2026, she has been a Management Committee Member of COST Action CA24154 Networking European Security Knowledge, WG2: Transfer of Knowledge.",
+      "keywords": [
+        "sociology of war",
+        "transitional justice",
+        "knowledge transfer",
+        "digital transformatioin",
+        "sociology of migration and security"
+      ],
+      "email": "sandra.cvikic@pilar.hr",
+      "website": "https://www.pilar.hr/en/     and   https://www.croris.hr/osobe/profil/32839?lang=en",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/sandra-cvikic.jpg",
+      "source": "form",
+      "photo_source_sha256": "437b86583ad0a2e05872dd76ae58f9f4054e5326012e2ddfabbc276d442be870",
+      "canonical_keywords": [
+        "Digital transformatioin",
+        "Knowledge transfer",
+        "Sociology of migration and security",
+        "Sociology of war",
+        "Transitional justice"
+      ],
+      "themes": [
+        "Democracy, governance and political change",
+        "Disciplines, theory and methods",
+        "Peace, mediation and reconciliation",
+        "Transnational and human security",
+        "War, military history and armed conflict"
+      ]
+    },
+    {
+      "id": "tim-sweijs",
+      "name": "Dr Tim Sweijs",
+      "country": "Netherlands",
+      "country_code": "nl",
+      "affiliation": "The Hague Centre for Strategic Studies",
+      "position": "Research Director",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor-full"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Dr. Tim Sweijs is the Director of Research at The Hague Centre for Strategic Studies (HCSS). His work is multidisciplinary in nature and straddles political science, science and technology, strategic studies, and war studies. He is the initiator, creator and author of numerous books, articles and studies on strategic foresight, interstate coercion (compellence and deterrence), war’s past, present and future, emerging technologies, international norms and regimes, alliances and alignments, defence and national security planning for small and middle powers, and strategy and capability development.\n\nAt HCSS, he is responsible for the overall research portfolio of the institute, spearheading a staff of over 30 researchers and a large network of affiliated subject matter experts, working on international and national security. He has advised international organisations, governments and defence departments across the globe. He has provided expert testimony to the United Nations Security Council, the European Parliament, the Dutch Parliament, as well as to NATO’s Parliamentary Assembly. He regularly comments on international affairs in national and international media and guest-lectures at Leiden University and King’s College London, amongst others.",
+      "keywords": [
+        "coercion",
+        "war",
+        "strategy",
+        "defence",
+        "security"
+      ],
+      "email": "",
+      "website": "https://hcss.nl/expert/tim-sweijs/",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/t-tim-sweijs-658aba3/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/tim-sweijs.jpg",
+      "source": "form",
+      "photo_source_sha256": "eda2a24785f28f4a95fbda16c1984903563778b34dceeb695f49fcccbc5b1c84",
+      "canonical_keywords": [
+        "Coercion",
+        "Defence",
+        "Security",
+        "Strategy",
+        "War"
+      ],
+      "themes": [
+        "Intelligence, information and influence",
+        "Security and defence",
+        "Strategy and deterrence",
+        "War, military history and armed conflict"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -4980,18 +5127,22 @@
     },
     {
       "keyword": "Strategy",
-      "count": 6
+      "count": 7
     },
     {
       "keyword": "Foreign policy",
-      "count": 5
+      "count": 6
     },
     {
       "keyword": "Geopolitics",
-      "count": 5
+      "count": 6
     },
     {
       "keyword": "International relations",
+      "count": 5
+    },
+    {
+      "keyword": "Security studies",
       "count": 5
     },
     {
@@ -5035,15 +5186,15 @@
       "count": 4
     },
     {
-      "keyword": "Security studies",
-      "count": 4
-    },
-    {
       "keyword": "Crisis management",
       "count": 3
     },
     {
       "keyword": "CSDP",
+      "count": 3
+    },
+    {
+      "keyword": "Defence",
       "count": 3
     },
     {
@@ -5083,6 +5234,14 @@
       "count": 3
     },
     {
+      "keyword": "Security",
+      "count": 3
+    },
+    {
+      "keyword": "Transitional justice",
+      "count": 3
+    },
+    {
       "keyword": "Civil wars",
       "count": 2
     },
@@ -5108,10 +5267,6 @@
     },
     {
       "keyword": "Critical security studies",
-      "count": 2
-    },
-    {
-      "keyword": "Defence",
       "count": 2
     },
     {
@@ -5187,10 +5342,6 @@
       "count": 2
     },
     {
-      "keyword": "Security",
-      "count": 2
-    },
-    {
       "keyword": "Security and defence",
       "count": 2
     },
@@ -5215,7 +5366,7 @@
       "count": 2
     },
     {
-      "keyword": "Transitional justice",
+      "keyword": "War",
       "count": 2
     },
     {
@@ -5296,6 +5447,10 @@
     },
     {
       "keyword": "Cloud and edge systems",
+      "count": 1
+    },
+    {
+      "keyword": "Coercion",
       "count": 1
     },
     {
@@ -5412,6 +5567,10 @@
     },
     {
       "keyword": "Digital security",
+      "count": 1
+    },
+    {
+      "keyword": "Digital transformatioin",
       "count": 1
     },
     {
@@ -5656,6 +5815,10 @@
     },
     {
       "keyword": "Judgment and decision-making",
+      "count": 1
+    },
+    {
+      "keyword": "Knowledge transfer",
       "count": 1
     },
     {
@@ -5911,6 +6074,14 @@
       "count": 1
     },
     {
+      "keyword": "Sociology of migration and security",
+      "count": 1
+    },
+    {
+      "keyword": "Sociology of war",
+      "count": 1
+    },
+    {
       "keyword": "Space security",
       "count": 1
     },
@@ -5989,20 +6160,16 @@
     {
       "keyword": "Visual threat detection",
       "count": 1
-    },
-    {
-      "keyword": "War",
-      "count": 1
     }
   ],
   "theme_aggregate": [
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 36
+      "count": 37
     },
     {
       "theme": "Security and defence",
-      "count": 31
+      "count": 33
     },
     {
       "theme": "Cyber and emerging technology",
@@ -6010,11 +6177,11 @@
     },
     {
       "theme": "Disciplines, theory and methods",
-      "count": 26
+      "count": 27
     },
     {
       "theme": "Transnational and human security",
-      "count": 23
+      "count": 24
     },
     {
       "theme": "European and transatlantic security order",
@@ -6022,18 +6189,18 @@
     },
     {
       "theme": "Strategy and deterrence",
-      "count": 19
-    },
-    {
-      "theme": "EU, UN and other international organisations",
-      "count": 12
-    },
-    {
-      "theme": "Intelligence, information and influence",
-      "count": 12
+      "count": 20
     },
     {
       "theme": "War, military history and armed conflict",
+      "count": 14
+    },
+    {
+      "theme": "Intelligence, information and influence",
+      "count": 13
+    },
+    {
+      "theme": "EU, UN and other international organisations",
       "count": 12
     },
     {
@@ -6042,18 +6209,18 @@
     },
     {
       "theme": "Democracy, governance and political change",
-      "count": 8
+      "count": 9
     },
     {
       "theme": "Identity, narratives and ideational security",
       "count": 7
     },
     {
-      "theme": "Crisis management and critical systems resilience",
-      "count": 6
+      "theme": "Peace, mediation and reconciliation",
+      "count": 7
     },
     {
-      "theme": "Peace, mediation and reconciliation",
+      "theme": "Crisis management and critical systems resilience",
       "count": 6
     },
     {
@@ -6091,6 +6258,7 @@
     "Civil-military relations": "Security and defence",
     "Climate change": "Climate, energy and environmental security",
     "Cloud and edge systems": "Cyber and emerging technology",
+    "Coercion": "Intelligence, information and influence",
     "Cognitive warfare": "Intelligence, information and influence",
     "Collective defence": "European and transatlantic security order",
     "Common foreign and security policy": "Foreign policy and diplomacy",
@@ -6132,6 +6300,7 @@
     "Digital resilience": "Cyber and emerging technology",
     "Digital security": "Cyber and emerging technology",
     "Digital sovereignty": "Cyber and emerging technology",
+    "Digital transformatioin": "Democracy, governance and political change",
     "Diplomacy": "Foreign policy and diplomacy",
     "Discourse": "Identity, narratives and ideational security",
     "Disinformation": "Intelligence, information and influence",
@@ -6217,6 +6386,7 @@
     "Irregular warfare": "War, military history and armed conflict",
     "Israel foreign policy": "Foreign policy and diplomacy",
     "Judgment and decision-making": "Political psychology, public opinion and decision-making",
+    "Knowledge transfer": "Disciplines, theory and methods",
     "Legal studies": "Disciplines, theory and methods",
     "ML": "Cyber and emerging technology",
     "Machine learning for security": "Cyber and emerging technology",
@@ -6297,6 +6467,8 @@
     "Small states": "Foreign policy and diplomacy",
     "Small states' foreign and security policy": "Foreign policy and diplomacy",
     "Social media": "Intelligence, information and influence",
+    "Sociology of migration and security": "Transnational and human security",
+    "Sociology of war": "War, military history and armed conflict",
     "Space security": "Security and defence",
     "Strategic competition": "Foreign policy and diplomacy",
     "Strategic culture": "Strategy and deterrence",
@@ -6328,19 +6500,19 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 66
+      "count": 68
     },
     {
       "region": "Global and cross-regional",
-      "count": 55
+      "count": 56
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 26
+      "count": 27
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 23
+      "count": 25
     },
     {
       "region": "The Americas",
