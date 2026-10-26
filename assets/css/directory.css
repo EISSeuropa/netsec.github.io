@@ -39,16 +39,15 @@
 .members-map-link{
   display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;min-height:44px;
   padding:0 14px;border-radius:12px;
-  font-size:.88rem;font-weight:600;color:var(--ink);text-decoration:none;white-space:nowrap;
-  background:rgba(255,255,255,.92);border:1px solid rgba(11,18,32,.14);
+  font-size:.88rem;font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap;
+  background:color-mix(in srgb,var(--accent) 9%,#fff);border:1.5px solid var(--accent);
   touch-action:manipulation;-webkit-tap-highlight-color:transparent;
-  transition:border-color .2s var(--ease),background .2s var(--ease);
+  transition:color .2s var(--ease),background .2s var(--ease);
 }
 .members-map-link[hidden]{display:none}
-.dark .members-map-link{background:rgba(255,255,255,.06);border-color:var(--glass-border)}
-@media (hover: hover){ .members-map-link:hover{border-color:var(--accent)} }
+.dark .members-map-link{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+@media (hover: hover){ .members-map-link:hover{background:var(--accent);color:#fff} .dark .members-map-link:hover{color:#0b1220} }
 .members-map-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.members-map-link-arrow{opacity:.65}
 @media (max-width:640px){
   .members-map-link{
     flex:1 1 0;min-width:0;justify-content:center;
@@ -57,31 +56,6 @@
   .members-map-link svg{flex:0 0 auto}
 }
 
-/* Heading with the map card beside it on wide screens. Below 960px the card
-   is hidden and the heading keeps its centred single column. */
-.directory-map-card{display:none}
-@media (min-width:960px){
-  .people-head{
-    display:grid;grid-template-columns:minmax(0,1fr) 250px;column-gap:48px;align-items:center;
-    text-align:left;
-  }
-  .people-head > .eyebrow,.people-head > h1,.people-head > .lede{grid-column:1}
-  .people-page .people-head h1{text-align:left}
-  .people-page .people-head .lede{margin:0;text-align:left}
-  .directory-map-card{
-    display:flex;flex-direction:column;align-items:stretch;gap:10px;
-    grid-column:2;grid-row:1 / span 3;
-    padding:14px 16px 16px;border-radius:18px;
-    color:var(--ink);text-decoration:none;
-    transition:transform .2s var(--ease),border-color .2s var(--ease);
-  }
-  .directory-map-card-art{width:100%;height:auto;color:var(--muted)}
-  .directory-map-card-text{font-size:.92rem;font-weight:600;color:var(--accent)}
-  .directory-map-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-}
-@media (min-width:960px) and (hover: hover){
-  .directory-map-card:hover{transform:translateY(-2px)}
-}
 /* Tap responsiveness on the directory's tap-only controls. `manipulation`
    drops the iOS double-tap-zoom wait (the ~300ms delay that reads as a sticky
    tap), and a transparent tap highlight removes the grey flash on every press.
