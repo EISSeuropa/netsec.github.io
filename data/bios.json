@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-26T11:03:35+00:00",
+  "generated_at": "2026-10-27T10:31:53+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-26T11:03:35+00:00"
+    "last_synced": "2026-10-27T10:31:53+00:00"
   },
   "members": [
     {
@@ -5106,12 +5106,250 @@
         "Strategy and deterrence",
         "War, military history and armed conflict"
       ]
+    },
+    {
+      "id": "constantinos-adamides",
+      "name": "Dr Constantinos Adamides",
+      "country": "Cyprus",
+      "country_code": "cy",
+      "affiliation": "University of Nicosia",
+      "position": "Associate Professor",
+      "roles": [
+        "Management Committee · Cyprus"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Dr. Constantinos Adamides is Associate Professor of International Relations and the Head of the Department of Politics and Governance at the University of Nicosia (UNIC). \nHe is also the Director of the Institute of Studies for Politics and Democracy, and a visiting professor at the University of Malta’s Center for Conflict Resolution. He currently serves on the Executive Academic Board of the European Security and Defense College (ESDC) and he was a member of the Republic of Cyprus’ first Geostrategic Council (2014–2018).  His current research is on conflicts, Eastern Mediterranean geopolitics and how AI affects disinformation and cognitive warfare.",
+      "keywords": [
+        "AI and disinformation",
+        "cognitive warfare",
+        "hybrid threats",
+        "eastern Mediterranean geopolitcs"
+      ],
+      "email": "adamides.c@unic.ac.cy",
+      "website": "https://www.unic.ac.cy",
+      "orcid": "0000-0001-5823-0552",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/constantinos-adamides.jpg",
+      "source": "form",
+      "photo_source_sha256": "df4e62df0eb39268eced8456d42095bc533e5fff618b76e4e16c2eee7290b52a",
+      "founding_contributor": true,
+      "canonical_keywords": [
+        "AI and disinformation",
+        "Cognitive warfare",
+        "Eastern Mediterranean geopolitcs",
+        "Hybrid threats"
+      ],
+      "themes": [
+        "European and transatlantic security order",
+        "Intelligence, information and influence"
+      ]
+    },
+    {
+      "id": "gurkan-gur",
+      "name": "Dr Gürkan Gür",
+      "country": "Switzerland",
+      "country_code": "ch",
+      "affiliation": "Zurich University of Applied Sciences (ZHAW)",
+      "position": "Senior Lecturer",
+      "roles": [
+        "Management Committee · Switzerland"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor-full"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Dr. Gürkan Gür is a senior lecturer at Zurich University of Applied Sciences (ZHAW), InIT Information Security Group in Winterthur, Switzerland. He received his B.S. degree in electrical engineering in 2001 and Ph.D. in computer engineering in 2013 from Bogazici University in Istanbul, Turkey. His research interests include Future Internet, information security, 5G and Beyond networks, and critical infrastructure protection. Currently, he is involved in Horizon Europe NATWORK (https://natwork-project.eu/) and SNSF-NSF co-funded SATUQ (https://www.zhaw.ch/en/research/project/76264) projects. He is a member of IEEE 3394 S2CY - Space System Cybersecurity and IEEE 1920.2 Vehicle-to-Vehicle Communications for Unmanned Aircraft Systems standardization work groups. He is a senior member of IEEE and a member of ACM.",
+      "keywords": [
+        "Future Internet",
+        "information security",
+        "and critical infrastructure protection."
+      ],
+      "email": "",
+      "website": "https://www.zhaw.ch/en/about-us/person/gueu",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/gurkan-gur.jpg",
+      "source": "form",
+      "photo_source_sha256": "ba0a75e53d855058f4131d0988b2203dbeb96cea574aa42c5dfeff8ec0fa8329",
+      "canonical_keywords": [
+        "And critical infrastructure protection",
+        "Future internet",
+        "Information security"
+      ],
+      "themes": [
+        "Crisis management and critical systems resilience",
+        "Intelligence, information and influence",
+        "War, military history and armed conflict"
+      ]
+    },
+    {
+      "id": "olivier-schmitt",
+      "name": "Prof. Olivier Schmitt",
+      "country": "Denmark",
+      "country_code": "dk",
+      "affiliation": "Institute for Military Operations, Royal Danish Defence College",
+      "position": "Professor",
+      "roles": [
+        "Management Committee · Denmark"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor-full"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "wg_leadership": {},
+      "bio": "I am professor and head of research at the Institute for Military Operations at the Royal Danish Defence College.  \nI am also a senior non-resident associate fellow at the NATO Defence College, and an associate at RAND Europe.\nI am currently an associate editor of the European Journal of International Security and a board member of the Journal of Strategic Studies and of the Review of International Studies.",
+      "keywords": [
+        "Alliance politics",
+        "military operations",
+        "strategic studies",
+        "european security",
+        "economic security"
+      ],
+      "email": "olsc@fak.dk",
+      "website": "https://olivier-schmitt.com/",
+      "orcid": "0000-0003-1366-6621",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/olivier-schmitt.jpg",
+      "source": "form",
+      "photo_source_sha256": "1d32d8416ec6410c64544bb5833fa663d1753d651f01f2f2ff75bdd3f2de5a43",
+      "founding_contributor": true,
+      "canonical_keywords": [
+        "Alliance politics",
+        "Economic security",
+        "European security",
+        "Military operations",
+        "Strategic studies"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Economic security and geoeconomics",
+        "European and transatlantic security order",
+        "Strategy and deterrence"
+      ]
+    },
+    {
+      "id": "p-nar-bilgin",
+      "name": "Prof. Pınar Bilgin",
+      "country": "Türkiye",
+      "country_code": "tr",
+      "affiliation": "Bilkent University",
+      "position": "Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Global and cross-regional",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Pinar Bilgin is Professor of International Relations at Bilkent University, Ankara. She is the author of Regional Security in the Middle East: A Critical Perspective (Routledge, 2005, 2nd\ned. 2019) and The International in Security, Security in the International (Routledge, 2016), and Thinking Globally About World Politics: Beyond Global IR (with Karen Smith, Palgrave Macmillan, 2024). She is co-editor of two volumes: Decolonising Asia (with L.H.M. Ling, Ashgate, 2017) and Routledge Handbook of International Political Sociology (with Xavier Guillaume, Routledge, 2017). Her articles have appeared in Security Dialogue, Political Geography, Geopolitics, European Journal of Political Research, Review of International Studies, Third World Quarterly, International Theory, International Relations, and Foreign Policy Analysis, among others. Pınar Bilgin specialises in critical security studies.",
+      "keywords": [
+        "critical security studies",
+        "security and space",
+        "critical IR",
+        "postcolonial IR"
+      ],
+      "email": "pbilgin@bilkent.edu.tr",
+      "website": "https://www.pinarbilgin.me",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Critical ir",
+        "Critical security studies",
+        "Postcolonial ir",
+        "Security and space"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Disciplines, theory and methods",
+        "Identity, narratives and ideational security",
+        "Security and defence"
+      ]
+    },
+    {
+      "id": "sanne-cornelia-j-verschuren",
+      "name": "Prof. Sanne Cornelia J. Verschuren",
+      "country": "United States",
+      "country_code": "us",
+      "affiliation": "Boston University",
+      "position": "Assistant Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "The Americas"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Sanne Cornelia J. Verschuren is an Assistant Professor of International Security at the Pardee School of Global Studies of Boston University. Her research interests lie at the intersection of international relations, the domestic determinants of security policy, and the role of ideas, norms, and institutions in national security decision-making. She focusses on how states fight war, examining why they construct novel weapon technologies, how they envision fielding such technologies, and why they choose to abandon certain technologies and practices. Before joining Boston University, Professor Verschuren was a Marie Sklodowska-Curie Postdoctoral Fellow at Sciences Po’s Center for International Studies, a Stanton Nuclear Security Postdoctoral Fellow at Stanford University’s Center for International Security and Cooperation, and a predoctoral research fellow with the Harvard Kennedy School’s Belfer Center for Science and International Affairs.",
+      "keywords": [
+        "military technology",
+        "strategic thinking",
+        "nuclear weapons"
+      ],
+      "email": "sverschu@bu.edu",
+      "website": "https://www.sanneverschuren.com",
+      "orcid": "0000-0001-7977-361X",
+      "linkedin": "https://www.linkedin.com/in/verschurensanne/",
+      "twitter": "",
+      "bluesky": "https://bsky.app/profile/sannecjv.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/sanne-cornelia-j-verschuren.jpg",
+      "source": "form",
+      "photo_source_sha256": "87ea4fe513e6101c52f8dc59e0276ddeeb89a663b9c56124a576b989f692764c",
+      "canonical_keywords": [
+        "Military technology",
+        "Nuclear weapons",
+        "Strategic thinking"
+      ],
+      "themes": [
+        "Strategy and deterrence",
+        "War, military history and armed conflict"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "European security",
-      "count": 11
+      "count": 12
     },
     {
       "keyword": "AI",
@@ -5138,6 +5376,18 @@
       "count": 6
     },
     {
+      "keyword": "Alliance politics",
+      "count": 5
+    },
+    {
+      "keyword": "Economic security",
+      "count": 5
+    },
+    {
+      "keyword": "Hybrid threats",
+      "count": 5
+    },
+    {
       "keyword": "International relations",
       "count": 5
     },
@@ -5146,15 +5396,7 @@
       "count": 5
     },
     {
-      "keyword": "Alliance politics",
-      "count": 4
-    },
-    {
       "keyword": "Diplomacy",
-      "count": 4
-    },
-    {
-      "keyword": "Economic security",
       "count": 4
     },
     {
@@ -5167,10 +5409,6 @@
     },
     {
       "keyword": "Foreign policy analysis",
-      "count": 4
-    },
-    {
-      "keyword": "Hybrid threats",
       "count": 4
     },
     {
@@ -5187,6 +5425,10 @@
     },
     {
       "keyword": "Crisis management",
+      "count": 3
+    },
+    {
+      "keyword": "Critical security studies",
       "count": 3
     },
     {
@@ -5238,6 +5480,10 @@
       "count": 3
     },
     {
+      "keyword": "Strategic studies",
+      "count": 3
+    },
+    {
       "keyword": "Transitional justice",
       "count": 3
     },
@@ -5247,6 +5493,10 @@
     },
     {
       "keyword": "Civil-military relations",
+      "count": 2
+    },
+    {
+      "keyword": "Cognitive warfare",
       "count": 2
     },
     {
@@ -5263,10 +5513,6 @@
     },
     {
       "keyword": "Critical infrastructure protection",
-      "count": 2
-    },
-    {
-      "keyword": "Critical security studies",
       "count": 2
     },
     {
@@ -5354,10 +5600,6 @@
       "count": 2
     },
     {
-      "keyword": "Strategic studies",
-      "count": 2
-    },
-    {
       "keyword": "Transatlantic relations",
       "count": 2
     },
@@ -5374,6 +5616,10 @@
       "count": 1
     },
     {
+      "keyword": "AI and disinformation",
+      "count": 1
+    },
+    {
       "keyword": "AI governance",
       "count": 1
     },
@@ -5383,6 +5629,10 @@
     },
     {
       "keyword": "Algorithms and AI",
+      "count": 1
+    },
+    {
+      "keyword": "And critical infrastructure protection",
       "count": 1
     },
     {
@@ -5454,10 +5704,6 @@
       "count": 1
     },
     {
-      "keyword": "Cognitive warfare",
-      "count": 1
-    },
-    {
       "keyword": "Collective defence",
       "count": 1
     },
@@ -5491,6 +5737,10 @@
     },
     {
       "keyword": "Critical infrastructure",
+      "count": 1
+    },
+    {
+      "keyword": "Critical ir",
       "count": 1
     },
     {
@@ -5598,6 +5848,10 @@
       "count": 1
     },
     {
+      "keyword": "Eastern Mediterranean geopolitcs",
+      "count": 1
+    },
+    {
       "keyword": "Economic security and geoeconomics",
       "count": 1
     },
@@ -5679,6 +5933,10 @@
     },
     {
       "keyword": "Foreign policy and diplomacy",
+      "count": 1
+    },
+    {
+      "keyword": "Future internet",
       "count": 1
     },
     {
@@ -5771,6 +6029,10 @@
     },
     {
       "keyword": "Information manipulation",
+      "count": 1
+    },
+    {
+      "keyword": "Information security",
       "count": 1
     },
     {
@@ -5874,6 +6136,14 @@
       "count": 1
     },
     {
+      "keyword": "Military operations",
+      "count": 1
+    },
+    {
+      "keyword": "Military technology",
+      "count": 1
+    },
+    {
       "keyword": "Mine action",
       "count": 1
     },
@@ -5899,6 +6169,10 @@
     },
     {
       "keyword": "Nuclear strategy",
+      "count": 1
+    },
+    {
+      "keyword": "Nuclear weapons",
       "count": 1
     },
     {
@@ -5963,6 +6237,10 @@
     },
     {
       "keyword": "Post-Cold War international relations",
+      "count": 1
+    },
+    {
+      "keyword": "Postcolonial ir",
       "count": 1
     },
     {
@@ -6038,6 +6316,10 @@
       "count": 1
     },
     {
+      "keyword": "Security and space",
+      "count": 1
+    },
+    {
       "keyword": "Security knowledge",
       "count": 1
     },
@@ -6087,6 +6369,10 @@
     },
     {
       "keyword": "Strategic culture",
+      "count": 1
+    },
+    {
+      "keyword": "Strategic thinking",
       "count": 1
     },
     {
@@ -6169,15 +6455,15 @@
     },
     {
       "theme": "Security and defence",
-      "count": 33
+      "count": 34
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 30
+      "count": 32
     },
     {
       "theme": "Disciplines, theory and methods",
-      "count": 27
+      "count": 28
     },
     {
       "theme": "Transnational and human security",
@@ -6185,19 +6471,19 @@
     },
     {
       "theme": "European and transatlantic security order",
-      "count": 20
+      "count": 22
     },
     {
       "theme": "Strategy and deterrence",
-      "count": 20
+      "count": 22
     },
     {
       "theme": "War, military history and armed conflict",
-      "count": 14
+      "count": 16
     },
     {
       "theme": "Intelligence, information and influence",
-      "count": 13
+      "count": 15
     },
     {
       "theme": "EU, UN and other international organisations",
@@ -6205,7 +6491,7 @@
     },
     {
       "theme": "Economic security and geoeconomics",
-      "count": 10
+      "count": 11
     },
     {
       "theme": "Democracy, governance and political change",
@@ -6213,15 +6499,15 @@
     },
     {
       "theme": "Identity, narratives and ideational security",
+      "count": 8
+    },
+    {
+      "theme": "Crisis management and critical systems resilience",
       "count": 7
     },
     {
       "theme": "Peace, mediation and reconciliation",
       "count": 7
-    },
-    {
-      "theme": "Crisis management and critical systems resilience",
-      "count": 6
     },
     {
       "theme": "Climate, energy and environmental security",
@@ -6234,11 +6520,13 @@
   ],
   "keyword_theme_map": {
     "AI": "Cyber and emerging technology",
+    "AI and disinformation": "Intelligence, information and influence",
     "AI governance": "Cyber and emerging technology",
     "AI regulation": "Cyber and emerging technology",
     "Adversarial robustness": "Cyber and emerging technology",
     "Algorithms and AI": "Cyber and emerging technology",
     "Alliance politics": "European and transatlantic security order",
+    "And critical infrastructure protection": "Crisis management and critical systems resilience",
     "Arctic security": "Security and defence",
     "Arctic security/governance": "Security and defence",
     "Arms control": "Strategy and deterrence",
@@ -6274,6 +6562,7 @@
     "Crisis management": "Crisis management and critical systems resilience",
     "Critical infrastructure": "Cyber and emerging technology",
     "Critical infrastructure protection": "Crisis management and critical systems resilience",
+    "Critical ir": "Cyber and emerging technology",
     "Critical security studies": "Disciplines, theory and methods",
     "Cyber and emerging technology": "Cyber and emerging technology",
     "Cyber defence": "Cyber and emerging technology",
@@ -6316,6 +6605,7 @@
     "EU–China relations": "Foreign policy and diplomacy",
     "EU–NATO relations": "European and transatlantic security order",
     "EU–Türkiye relations": "Foreign policy and diplomacy",
+    "Eastern Mediterranean geopolitcs": "European and transatlantic security order",
     "Economic security": "Economic security and geoeconomics",
     "Economic security and geoeconomics": "Economic security and geoeconomics",
     "Economic statecraft": "Economic security and geoeconomics",
@@ -6340,6 +6630,7 @@
     "Foreign policy": "Foreign policy and diplomacy",
     "Foreign policy analysis": "Foreign policy and diplomacy",
     "Foreign policy and diplomacy": "Foreign policy and diplomacy",
+    "Future internet": "War, military history and armed conflict",
     "Future of warfare": "War, military history and armed conflict",
     "Gender-based violence": "Transnational and human security",
     "Geoeconomic competition": "Economic security and geoeconomics",
@@ -6370,6 +6661,7 @@
     "Informality": "EU, UN and other international organisations",
     "Information integrity": "Intelligence, information and influence",
     "Information manipulation": "Intelligence, information and influence",
+    "Information security": "Intelligence, information and influence",
     "Infrastructure": "Cyber and emerging technology",
     "Intelligence studies": "Intelligence, information and influence",
     "International human rights law": "Transnational and human security",
@@ -6403,6 +6695,8 @@
     "Military history": "War, military history and armed conflict",
     "Military innovation": "Cyber and emerging technology",
     "Military neutrality": "European and transatlantic security order",
+    "Military operations": "Cyber and emerging technology",
+    "Military technology": "War, military history and armed conflict",
     "Mine action": "Peace, mediation and reconciliation",
     "Multilateralism": "EU, UN and other international organisations",
     "NATO": "European and transatlantic security order",
@@ -6415,6 +6709,7 @@
     "Nuclear deterrence": "Strategy and deterrence",
     "Nuclear politics": "Strategy and deterrence",
     "Nuclear strategy": "Strategy and deterrence",
+    "Nuclear weapons": "Strategy and deterrence",
     "Ontological security": "Identity, narratives and ideational security",
     "Organisation studies": "Disciplines, theory and methods",
     "Peace operations": "Peace, mediation and reconciliation",
@@ -6433,6 +6728,7 @@
     "Populism": "Democracy, governance and political change",
     "Positive peace": "Peace, mediation and reconciliation",
     "Post-Cold War international relations": "Disciplines, theory and methods",
+    "Postcolonial ir": "Identity, narratives and ideational security",
     "Power": "Security and defence",
     "Pressure groups": "Democracy, governance and political change",
     "Proxy warfare": "War, military history and armed conflict",
@@ -6456,6 +6752,7 @@
     "Securitisation": "Disciplines, theory and methods",
     "Security": "Security and defence",
     "Security and defence": "Security and defence",
+    "Security and space": "Security and defence",
     "Security knowledge": "Disciplines, theory and methods",
     "Security politics": "Security and defence",
     "Security practices": "Disciplines, theory and methods",
@@ -6473,6 +6770,7 @@
     "Strategic competition": "Foreign policy and diplomacy",
     "Strategic culture": "Strategy and deterrence",
     "Strategic studies": "Strategy and deterrence",
+    "Strategic thinking": "Strategy and deterrence",
     "Strategy": "Strategy and deterrence",
     "Strategy and deterrence": "Strategy and deterrence",
     "Subversion": "Intelligence, information and influence",
@@ -6500,15 +6798,15 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 68
+      "count": 72
     },
     {
       "region": "Global and cross-regional",
-      "count": 56
+      "count": 58
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 27
+      "count": 28
     },
     {
       "region": "Europe - Western Balkans",
@@ -6516,14 +6814,14 @@
     },
     {
       "region": "The Americas",
-      "count": 17
-    },
-    {
-      "region": "Asia",
-      "count": 14
+      "count": 18
     },
     {
       "region": "Middle East and North Africa",
+      "count": 15
+    },
+    {
+      "region": "Asia",
       "count": 14
     },
     {

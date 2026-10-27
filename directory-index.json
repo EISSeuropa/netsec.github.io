@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-10-26T11:03:35+00:00",
+  "generated_at": "2026-10-27T10:31:53+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 110,
+  "count": 115,
   "members": [
     {
       "name": "Mr Adam Hanzel",
@@ -258,6 +258,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/clara-jammot.jpg"
     },
     {
+      "name": "Dr Constantinos Adamides",
+      "name_key": "constantinos adamides",
+      "aliases": [],
+      "slug": "constantinos-adamides",
+      "url": "https://netsec-cost.eu/people/constantinos-adamides.html",
+      "orcid": "0000-0001-5823-0552",
+      "role": "Management Committee · Cyprus",
+      "affiliation": "University of Nicosia",
+      "photo": "https://netsec-cost.eu/assets/images/people/constantinos-adamides.jpg"
+    },
+    {
       "name": "Dr Daniela Mechkaroska",
       "name_key": "daniela mechkaroska",
       "aliases": [],
@@ -454,6 +465,17 @@
       "role": null,
       "affiliation": "CASD",
       "photo": "https://netsec-cost.eu/assets/images/people/giulia-biselli.jpg"
+    },
+    {
+      "name": "Dr Gürkan Gür",
+      "name_key": "gurkan gur",
+      "aliases": [],
+      "slug": "gurkan-gur",
+      "url": "https://netsec-cost.eu/people/gurkan-gur.html",
+      "orcid": null,
+      "role": "Management Committee · Switzerland",
+      "affiliation": "Zurich University of Applied Sciences (ZHAW)",
+      "photo": "https://netsec-cost.eu/assets/images/people/gurkan-gur.jpg"
     },
     {
       "name": "Dr Henrique Garbino",
@@ -896,6 +918,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/noela-mahmutaj.jpg"
     },
     {
+      "name": "Prof. Olivier Schmitt",
+      "name_key": "olivier schmitt",
+      "aliases": [],
+      "slug": "olivier-schmitt",
+      "url": "https://netsec-cost.eu/people/olivier-schmitt.html",
+      "orcid": "0000-0003-1366-6621",
+      "role": "Management Committee · Denmark",
+      "affiliation": "Institute for Military Operations, Royal Danish Defence College",
+      "photo": "https://netsec-cost.eu/assets/images/people/olivier-schmitt.jpg"
+    },
+    {
       "name": "Dr Pınar Akgül",
       "name_key": "p akgul",
       "aliases": [],
@@ -905,6 +938,17 @@
       "role": null,
       "affiliation": "Giresun University",
       "photo": "https://netsec-cost.eu/assets/images/people/p-nar-akgul.jpg"
+    },
+    {
+      "name": "Prof. Pınar Bilgin",
+      "name_key": "p bilgin",
+      "aliases": [],
+      "slug": "p-nar-bilgin",
+      "url": "https://netsec-cost.eu/people/p-nar-bilgin.html",
+      "orcid": null,
+      "role": null,
+      "affiliation": "Bilkent University",
+      "photo": null
     },
     {
       "name": "Mr Pablo Arriazu",
@@ -1026,6 +1070,17 @@
       "role": "Management Committee · Croatia",
       "affiliation": "Ivo Pilar Institut of Social Sciences, Regional Center Vukovar",
       "photo": "https://netsec-cost.eu/assets/images/people/sandra-cvikic.jpg"
+    },
+    {
+      "name": "Prof. Sanne Cornelia J. Verschuren",
+      "name_key": "sanne verschuren",
+      "aliases": [],
+      "slug": "sanne-cornelia-j-verschuren",
+      "url": "https://netsec-cost.eu/people/sanne-cornelia-j-verschuren.html",
+      "orcid": "0000-0001-7977-361X",
+      "role": null,
+      "affiliation": "Boston University",
+      "photo": "https://netsec-cost.eu/assets/images/people/sanne-cornelia-j-verschuren.jpg"
     },
     {
       "name": "Ms Sara Russo",
