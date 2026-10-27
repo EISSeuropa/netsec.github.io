@@ -58,6 +58,10 @@ assets/og/people/_manifest.json
 # tracked.
 tmp/
 
+# Understand-Anything analysis cache (knowledge graph, fingerprints,
+# scan inventory). The published snapshot lives in netsec-codemap.
+/.understand-anything/
+
 /ogcards-*/
 
 # npm (directory interaction tests)
