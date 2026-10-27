@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "eugenio-sanchez",
-  "featuredSince": "2026-10-20",
+  "current": "andriy-tyushka",
+  "featuredSince": "2026-10-27",
   "pinned": null,
   "history": [
+    {
+      "id": "andriy-tyushka",
+      "week": "2026-W44",
+      "date": "2026-10-27"
+    },
     {
       "id": "eugenio-sanchez",
       "week": "2026-W43",
