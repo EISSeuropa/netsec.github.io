@@ -4,7 +4,7 @@
     "working_groups": 4,
     "people": 230,
     "people_with_bios": 118,
-    "edges": 677,
+    "edges": 676,
     "themes": 17,
     "panels_matched": 14,
     "panel_edges": 58,
@@ -65,7 +65,7 @@
       "id": "theme-cyber-and-emerging-technology",
       "type": "theme",
       "name": "Cyber and emerging technology",
-      "memberCount": 32
+      "memberCount": 33
     },
     {
       "id": "theme-democracy-governance-and-political-change",
@@ -119,7 +119,7 @@
       "id": "theme-peace-mediation-and-reconciliation",
       "type": "theme",
       "name": "Peace, mediation and reconciliation",
-      "memberCount": 9
+      "memberCount": 8
     },
     {
       "id": "theme-political-psychology-public-opinion-and-decision-making",
@@ -131,7 +131,7 @@
       "id": "theme-security-and-defence",
       "type": "theme",
       "name": "Security and defence",
-      "memberCount": 35
+      "memberCount": 34
     },
     {
       "id": "theme-strategy-and-deterrence",
@@ -3531,6 +3531,10 @@
     },
     {
       "source": "arthur-laudrain",
+      "target": "theme-cyber-and-emerging-technology"
+    },
+    {
+      "source": "arthur-laudrain",
       "target": "theme-intelligence-information-and-influence"
     },
     {
@@ -3984,14 +3988,6 @@
     {
       "source": "khaoula-boukir",
       "target": "theme-cyber-and-emerging-technology"
-    },
-    {
-      "source": "khaoula-boukir",
-      "target": "theme-peace-mediation-and-reconciliation"
-    },
-    {
-      "source": "khaoula-boukir",
-      "target": "theme-security-and-defence"
     },
     {
       "source": "kire-babanoski",

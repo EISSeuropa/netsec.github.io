@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-28T11:20:01+00:00",
+  "generated_at": "2026-10-28T11:56:22+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-28T11:20:01+00:00"
+    "last_synced": "2026-10-28T11:56:22+00:00"
   },
   "members": [
     {
@@ -439,7 +439,8 @@
       "keywords": [
         "election interference",
         "disinformation",
-        "subversion"
+        "subversion",
+        "cyber statecraft"
       ],
       "email": "arthur.laudrain@sipo.gess.ethz.ch",
       "website": "https://gess.ethz.ch/en/the-department/people/person-detail.apb-laudrain.html",
@@ -452,6 +453,7 @@
       "source": "form",
       "photo_source_sha256": "d6927b276ccffbbb2bc5bccf38502563a079862a500fbde9e79941f4851cae6a",
       "canonical_keywords": [
+        "Cyber statecraft",
         "Disinformation",
         "Election interference",
         "Subversion"
@@ -460,6 +462,7 @@
         "mentor-full"
       ],
       "themes": [
+        "Cyber and emerging technology",
         "Intelligence, information and influence"
       ],
       "regions": [
@@ -5437,9 +5440,7 @@
       ],
       "themes": [
         "Crisis management and critical systems resilience",
-        "Cyber and emerging technology",
-        "Peace, mediation and reconciliation",
-        "Security and defence"
+        "Cyber and emerging technology"
       ]
     },
     {
@@ -5912,6 +5913,10 @@
     },
     {
       "keyword": "Cyber resilience",
+      "count": 1
+    },
+    {
+      "keyword": "Cyber statecraft",
       "count": 1
     },
     {
@@ -6622,11 +6627,11 @@
     },
     {
       "theme": "Security and defence",
-      "count": 35
+      "count": 34
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 32
+      "count": 33
     },
     {
       "theme": "Disciplines, theory and methods",
@@ -6674,7 +6679,7 @@
     },
     {
       "theme": "Peace, mediation and reconciliation",
-      "count": 9
+      "count": 8
     },
     {
       "theme": "Climate, energy and environmental security",
@@ -6699,7 +6704,7 @@
     "Arms control": "Strategy and deterrence",
     "Assassination": "War, military history and armed conflict",
     "Autocratisation": "Democracy, governance and political change",
-    "Biocultural evolution": "Peace, mediation and reconciliation",
+    "Biocultural evolution": "Disciplines, theory and methods",
     "Black Sea security": "Security and defence",
     "Border and maritime security": "Transnational and human security",
     "Border security": "Transnational and human security",
@@ -6735,7 +6740,8 @@
     "Critical security studies": "Disciplines, theory and methods",
     "Cyber and emerging technology": "Cyber and emerging technology",
     "Cyber defence": "Cyber and emerging technology",
-    "Cyber resilience": "Crisis management and critical systems resilience",
+    "Cyber resilience": "Cyber and emerging technology",
+    "Cyber statecraft": "Cyber and emerging technology",
     "Cybercrime": "Cyber and emerging technology",
     "Cybersecurity": "Cyber and emerging technology",
     "Cybersecurity governance": "Cyber and emerging technology",
@@ -6800,7 +6806,7 @@
     "Foreign policy": "Foreign policy and diplomacy",
     "Foreign policy analysis": "Foreign policy and diplomacy",
     "Foreign policy and diplomacy": "Foreign policy and diplomacy",
-    "Formal verification": "Peace, mediation and reconciliation",
+    "Formal verification": "Cyber and emerging technology",
     "Future internet": "War, military history and armed conflict",
     "Future of warfare": "War, military history and armed conflict",
     "Gender-based violence": "Transnational and human security",
@@ -6938,7 +6944,7 @@
     "Social media": "Intelligence, information and influence",
     "Sociology of migration and security": "Transnational and human security",
     "Sociology of war": "War, military history and armed conflict",
-    "Software security": "Security and defence",
+    "Software security": "Cyber and emerging technology",
     "Space security": "Security and defence",
     "Strategic competition": "Foreign policy and diplomacy",
     "Strategic culture": "Strategy and deterrence",
