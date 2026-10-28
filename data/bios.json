@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-27T10:31:53+00:00",
+  "generated_at": "2026-10-28T11:56:22+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-27T10:31:53+00:00"
+    "last_synced": "2026-10-28T11:56:22+00:00"
   },
   "members": [
     {
@@ -423,7 +423,7 @@
       "name": "Dr Arthur Laudrain",
       "country": "Switzerland",
       "country_code": "ch",
-      "affiliation": "ETH Zürich, Center for Security Studies",
+      "affiliation": "ETH Zurich, Center for Security Studies",
       "position": "Team Lead & Senior Researcher, Cyber Security",
       "roles": [
         "Management Committee · Switzerland",
@@ -459,7 +459,7 @@
         "Subversion"
       ],
       "mentorship": [
-        "mentor"
+        "mentor-full"
       ],
       "themes": [
         "Cyber and emerging technology",
@@ -5344,6 +5344,150 @@
         "Strategy and deterrence",
         "War, military history and armed conflict"
       ]
+    },
+    {
+      "id": "hugo-meijer",
+      "name": "Dr Hugo Meijer",
+      "country": "France",
+      "country_code": "fr",
+      "affiliation": "Sciences Po, Paris",
+      "position": "CNRS Research Fellow",
+      "roles": [
+        "Management Committee · France"
+      ],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Hugo Meijer is CNRS Research Fellow at the Center for International Studies (CERI) at Sciences Po, Paris. He is also the Founding and Honorary Director of the European Initiative for Security Studies, the largest European network of security studies scholars. Italian, French and Dutch (trinational), his research focuses on the deep history of war and peace and long-term processes of biocultural evolution. Recent and forthcoming publications include: The Origins of War and Peace in the Human Species (Cambridge University Press, 2026); with Richard Wrangham, “The Evolutionary Roots of War and Peace,” Journal of Strategic Studies, 48(6-7) (2026), pp. 1134–1222; “Janus faced: The Co-Evolution of War and Peace in the Human Species,” Evolutionary Anthropology 33/3 (2024), pp. 1-14; “The Origins of War: A Global Archaeological Review,” Human Nature, 35(3) (2024), pp. 225–288. For more details on his profile, see: https://www.hugomeijer.com.",
+      "keywords": [
+        "Deep history",
+        "war",
+        "peace",
+        "diplomacy",
+        "biocultural evolution"
+      ],
+      "email": "hugo.meijer@sciencespo.fr",
+      "website": "https://www.hugomeijer.com",
+      "orcid": "0000-0001-6745-9914",
+      "linkedin": "https://www.linkedin.com/in/hugo-meijer-73683943/",
+      "twitter": "https://x.com/Hg_Meijer",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/hugo-meijer.jpg",
+      "source": "form",
+      "photo_source_sha256": "9ffc5d7bed5ca1dc0a533c61aa2eeff9d8766e6a51ef9f520056b4d0549e3c1b",
+      "founding_contributor": true,
+      "canonical_keywords": [
+        "Biocultural evolution",
+        "Deep history",
+        "Diplomacy",
+        "Peace",
+        "War"
+      ],
+      "themes": [
+        "Disciplines, theory and methods",
+        "Foreign policy and diplomacy",
+        "Peace, mediation and reconciliation",
+        "War, military history and armed conflict"
+      ]
+    },
+    {
+      "id": "khaoula-boukir",
+      "name": "Dr Khaoula Boukir",
+      "country": "Morocco",
+      "country_code": "ma",
+      "affiliation": "Ibn Tofail University",
+      "position": "Associate professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor",
+        "mentee"
+      ],
+      "regions": [
+        "Africa",
+        "Europe"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Khaoula Boukir is an Associate Professor of Computer Science at Ibn Tofail University, Morocco. She holds a PhD in Computer Science from the University of Nantes, France, specializing in formal methods and software verification, with applications in cybersecurity and safety-critical systems. Prior to joining Ibn Tofail University, she gained international research and teaching experience at several French institutions, including CEA Paris-Saclay and Polytech Nantes. At CEA, her research focused on software safety and formal verification using Frama-C.\n\nHer research interests include formal verification, software security, real-time and embedded systems, IoT cybersecurity, and trustworthy autonomous systems. Her current work focuses on developing rigorous methods to ensure the correctness, security, and reliability of critical software, particularly operating systems and autonomous applications.\n\nShe is interested in interdisciplinary collaborations that bridge formal methods, cybersecurity, and critical infrastructure protection, contributing to the development of secure, reliable, and trustworthy digital systems.",
+      "keywords": [
+        "Cybersecurity",
+        "Formal Verification",
+        "Software Security",
+        "Cyber Resilience",
+        "Critical Infrastructure Protection"
+      ],
+      "email": "khaoula.boukir@uit.ac.ma",
+      "website": "https://khaoulaboukir.github.io/",
+      "orcid": "0000-0003-1845-6308",
+      "linkedin": "https://www.linkedin.com/in/khaoula-boukir-44101065/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Critical infrastructure protection",
+        "Cyber resilience",
+        "Cybersecurity",
+        "Formal verification",
+        "Software security"
+      ],
+      "themes": [
+        "Crisis management and critical systems resilience",
+        "Cyber and emerging technology"
+      ]
+    },
+    {
+      "id": "nadine-klopf",
+      "name": "Ms Nadine Klopf",
+      "country": "Germany",
+      "country_code": "de",
+      "affiliation": "Kiel University",
+      "position": "PhD Researcher",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Europe",
+        "The Americas"
+      ],
+      "wg_leadership": {},
+      "bio": "Nadine Klopf is a PhD Researcher in the Research Group on International Political Sociology at Kiel University, specializing in crisis and ontological security. From May 2025 to April 2026, she was a Visiting PhD Researcher at the University of Copenhagen. Nadine studied Political Science, Sociology, North American Studies, and Asian and African Studies at Kiel University and the University of Queensland. Her research focuses on theoretical perspectives on the conceptualization and narration of crises in the context of ontological in/security. Her monograph “Global Crisis: Theory, Method and the Covid-19 Pandemic” (Palgrave Macmillan, 2023) develops a discourse theory of crisis. It theorizes crises as structural constants in social and political life and examines how they are politically mobilized to justify political interventions.",
+      "keywords": [
+        "Crisis",
+        "Ontological Security",
+        "Identity",
+        "Discourse",
+        "International Relations Theory"
+      ],
+      "email": "klopf@ips.uni-kiel.de",
+      "website": "https://www.nadineklopf.com/",
+      "orcid": "0000-0001-7642-4369",
+      "linkedin": "https://www.linkedin.com/in/nadineklopf/",
+      "twitter": "",
+      "bluesky": "https://bsky.app/profile/nadineklopf.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/nadine-klopf.jpg",
+      "source": "form",
+      "photo_source_sha256": "c2a8eb76ee2d41f7ce42b7c85aa47e3e80f2d542fee28db528f485f38f658217",
+      "canonical_keywords": [
+        "Crisis",
+        "Discourse",
+        "Identity",
+        "International relations theory",
+        "Ontological security"
+      ],
+      "themes": [
+        "Crisis management and critical systems resilience",
+        "Disciplines, theory and methods",
+        "Identity, narratives and ideational security"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -5357,7 +5501,7 @@
     },
     {
       "keyword": "Cybersecurity",
-      "count": 7
+      "count": 8
     },
     {
       "keyword": "International security",
@@ -5380,6 +5524,10 @@
       "count": 5
     },
     {
+      "keyword": "Diplomacy",
+      "count": 5
+    },
+    {
       "keyword": "Economic security",
       "count": 5
     },
@@ -5392,12 +5540,12 @@
       "count": 5
     },
     {
-      "keyword": "Security studies",
+      "keyword": "Ontological security",
       "count": 5
     },
     {
-      "keyword": "Diplomacy",
-      "count": 4
+      "keyword": "Security studies",
+      "count": 5
     },
     {
       "keyword": "Emerging and disruptive technologies",
@@ -5412,6 +5560,10 @@
       "count": 4
     },
     {
+      "keyword": "Identity",
+      "count": 4
+    },
+    {
       "keyword": "Maritime security",
       "count": 4
     },
@@ -5420,11 +5572,11 @@
       "count": 4
     },
     {
-      "keyword": "Ontological security",
-      "count": 4
+      "keyword": "Crisis management",
+      "count": 3
     },
     {
-      "keyword": "Crisis management",
+      "keyword": "Critical infrastructure protection",
       "count": 3
     },
     {
@@ -5449,10 +5601,6 @@
     },
     {
       "keyword": "European strategic autonomy",
-      "count": 3
-    },
-    {
-      "keyword": "Identity",
       "count": 3
     },
     {
@@ -5488,6 +5636,10 @@
       "count": 3
     },
     {
+      "keyword": "War",
+      "count": 3
+    },
+    {
       "keyword": "Civil wars",
       "count": 2
     },
@@ -5512,15 +5664,15 @@
       "count": 2
     },
     {
-      "keyword": "Critical infrastructure protection",
-      "count": 2
-    },
-    {
       "keyword": "Defence economics",
       "count": 2
     },
     {
       "keyword": "Digital sovereignty",
+      "count": 2
+    },
+    {
+      "keyword": "Discourse",
       "count": 2
     },
     {
@@ -5561,6 +5713,10 @@
     },
     {
       "keyword": "International law",
+      "count": 2
+    },
+    {
+      "keyword": "International relations theory",
       "count": 2
     },
     {
@@ -5608,10 +5764,6 @@
       "count": 2
     },
     {
-      "keyword": "War",
-      "count": 2
-    },
-    {
       "keyword": "Adversarial robustness",
       "count": 1
     },
@@ -5653,6 +5805,10 @@
     },
     {
       "keyword": "Autocratisation",
+      "count": 1
+    },
+    {
+      "keyword": "Biocultural evolution",
       "count": 1
     },
     {
@@ -5736,6 +5892,10 @@
       "count": 1
     },
     {
+      "keyword": "Crisis",
+      "count": 1
+    },
+    {
       "keyword": "Critical infrastructure",
       "count": 1
     },
@@ -5752,6 +5912,10 @@
       "count": 1
     },
     {
+      "keyword": "Cyber resilience",
+      "count": 1
+    },
+    {
       "keyword": "Cyber statecraft",
       "count": 1
     },
@@ -5765,6 +5929,10 @@
     },
     {
       "keyword": "Cybersecurity regulation",
+      "count": 1
+    },
+    {
+      "keyword": "Deep history",
       "count": 1
     },
     {
@@ -5821,10 +5989,6 @@
     },
     {
       "keyword": "Digital transformatioin",
-      "count": 1
-    },
-    {
-      "keyword": "Discourse",
       "count": 1
     },
     {
@@ -5933,6 +6097,10 @@
     },
     {
       "keyword": "Foreign policy and diplomacy",
+      "count": 1
+    },
+    {
+      "keyword": "Formal verification",
       "count": 1
     },
     {
@@ -6056,10 +6224,6 @@
       "count": 1
     },
     {
-      "keyword": "International relations theory",
-      "count": 1
-    },
-    {
       "keyword": "Interventions",
       "count": 1
     },
@@ -6177,6 +6341,10 @@
     },
     {
       "keyword": "Organisation studies",
+      "count": 1
+    },
+    {
+      "keyword": "Peace",
       "count": 1
     },
     {
@@ -6364,6 +6532,10 @@
       "count": 1
     },
     {
+      "keyword": "Software security",
+      "count": 1
+    },
+    {
       "keyword": "Space security",
       "count": 1
     },
@@ -6451,7 +6623,7 @@
   "theme_aggregate": [
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 37
+      "count": 38
     },
     {
       "theme": "Security and defence",
@@ -6459,11 +6631,11 @@
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 32
+      "count": 33
     },
     {
       "theme": "Disciplines, theory and methods",
-      "count": 28
+      "count": 30
     },
     {
       "theme": "Transnational and human security",
@@ -6479,7 +6651,7 @@
     },
     {
       "theme": "War, military history and armed conflict",
-      "count": 16
+      "count": 17
     },
     {
       "theme": "Intelligence, information and influence",
@@ -6494,20 +6666,20 @@
       "count": 11
     },
     {
+      "theme": "Crisis management and critical systems resilience",
+      "count": 9
+    },
+    {
       "theme": "Democracy, governance and political change",
       "count": 9
     },
     {
       "theme": "Identity, narratives and ideational security",
-      "count": 8
-    },
-    {
-      "theme": "Crisis management and critical systems resilience",
-      "count": 7
+      "count": 9
     },
     {
       "theme": "Peace, mediation and reconciliation",
-      "count": 7
+      "count": 8
     },
     {
       "theme": "Climate, energy and environmental security",
@@ -6532,6 +6704,7 @@
     "Arms control": "Strategy and deterrence",
     "Assassination": "War, military history and armed conflict",
     "Autocratisation": "Democracy, governance and political change",
+    "Biocultural evolution": "Disciplines, theory and methods",
     "Black Sea security": "Security and defence",
     "Border and maritime security": "Transnational and human security",
     "Border security": "Transnational and human security",
@@ -6559,6 +6732,7 @@
     "Counter-terrorism": "Transnational and human security",
     "Counterterrorism": "Transnational and human security",
     "Covert action": "Intelligence, information and influence",
+    "Crisis": "Crisis management and critical systems resilience",
     "Crisis management": "Crisis management and critical systems resilience",
     "Critical infrastructure": "Cyber and emerging technology",
     "Critical infrastructure protection": "Crisis management and critical systems resilience",
@@ -6566,11 +6740,13 @@
     "Critical security studies": "Disciplines, theory and methods",
     "Cyber and emerging technology": "Cyber and emerging technology",
     "Cyber defence": "Cyber and emerging technology",
+    "Cyber resilience": "Cyber and emerging technology",
     "Cyber statecraft": "Cyber and emerging technology",
     "Cybercrime": "Cyber and emerging technology",
     "Cybersecurity": "Cyber and emerging technology",
     "Cybersecurity governance": "Cyber and emerging technology",
     "Cybersecurity regulation": "Cyber and emerging technology",
+    "Deep history": "Disciplines, theory and methods",
     "Defence": "Security and defence",
     "Defence attitudes": "Political psychology, public opinion and decision-making",
     "Defence economics": "Economic security and geoeconomics",
@@ -6630,6 +6806,7 @@
     "Foreign policy": "Foreign policy and diplomacy",
     "Foreign policy analysis": "Foreign policy and diplomacy",
     "Foreign policy and diplomacy": "Foreign policy and diplomacy",
+    "Formal verification": "Cyber and emerging technology",
     "Future internet": "War, military history and armed conflict",
     "Future of warfare": "War, military history and armed conflict",
     "Gender-based violence": "Transnational and human security",
@@ -6712,6 +6889,7 @@
     "Nuclear weapons": "Strategy and deterrence",
     "Ontological security": "Identity, narratives and ideational security",
     "Organisation studies": "Disciplines, theory and methods",
+    "Peace": "Peace, mediation and reconciliation",
     "Peace operations": "Peace, mediation and reconciliation",
     "Peace vision": "Peace, mediation and reconciliation",
     "Peacebuilding": "Peace, mediation and reconciliation",
@@ -6766,6 +6944,7 @@
     "Social media": "Intelligence, information and influence",
     "Sociology of migration and security": "Transnational and human security",
     "Sociology of war": "War, military history and armed conflict",
+    "Software security": "Cyber and emerging technology",
     "Space security": "Security and defence",
     "Strategic competition": "Foreign policy and diplomacy",
     "Strategic culture": "Strategy and deterrence",
@@ -6798,11 +6977,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 72
+      "count": 74
     },
     {
       "region": "Global and cross-regional",
-      "count": 58
+      "count": 59
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -6814,7 +6993,7 @@
     },
     {
       "region": "The Americas",
-      "count": 18
+      "count": 19
     },
     {
       "region": "Middle East and North Africa",
@@ -6826,7 +7005,7 @@
     },
     {
       "region": "Africa",
-      "count": 6
+      "count": 7
     }
   ]
 }

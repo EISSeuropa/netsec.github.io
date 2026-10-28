@@ -5,6 +5,7 @@
     { "id": "sophie-enos-attali", "field": "bio", "from": "a associate researcher", "to": "an associate researcher" },
     { "id": "sophie-enos-attali", "field": "bio", "from": "bee working", "to": "been working" },
     { "id": "moritz-weiss", "field": "bio", "from": "; and also Principal Investigator", "to": ", and also Principal Investigator" },
-    { "id": "felix-kosterke", "field": "position", "from": "PhD candidate; Research Fellow", "to": "PhD candidate and Research Fellow" }
+    { "id": "felix-kosterke", "field": "position", "from": "PhD candidate; Research Fellow", "to": "PhD candidate and Research Fellow" },
+    { "id": "arthur-laudrain", "field": "keywords", "from": ["election interference", "disinformation", "subversion"], "to": ["election interference", "disinformation", "subversion", "cyber statecraft"] }
   ]
 }
