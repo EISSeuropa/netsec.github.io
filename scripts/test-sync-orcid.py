@@ -74,6 +74,12 @@ def test_parse_works() -> None:
     out3 = parse_works(titleless)
     expect("titleless work is dropped", [w["title"] for w in out3], ["Real"])
 
+    # Publisher markup in the title is stripped and entities decoded.
+    marked = {"group": [_work_group(
+        "<div> Cha(lle)nging: </div> <div> &nbsp;Gaps &amp; Elites </div>", "2026")]}
+    expect("title markup is stripped", parse_works(marked)[0]["title"],
+           "Cha(lle)nging: Gaps & Elites")
+
     # Empty / malformed payloads never raise.
     expect("empty payload yields empty list", parse_works({}), [])
     expect("None payload yields empty list", parse_works(None), [])

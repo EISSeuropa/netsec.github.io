@@ -25,7 +25,9 @@ Requires: requests. See scripts/requirements.txt.
 from __future__ import annotations
 
 import datetime as dt
+import html
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -72,6 +74,15 @@ def _doi(group: dict) -> str:
     return ""
 
 
+def _plain(text: str) -> str:
+    """Publishers deposit some titles with HTML or JATS markup, which ORCID
+    passes through verbatim (e.g. "<p>Title</p>", "&nbsp;"). The directory
+    renders titles as text, so strip tags, decode entities and collapse
+    whitespace."""
+    text = html.unescape(re.sub(r"<[^>]+>", " ", text or ""))
+    return " ".join(text.split())
+
+
 def parse_works(payload: dict, limit: int = MAX_WORKS) -> list[dict]:
     """Turn an ORCID /works response into a trimmed, newest-first list of
     {title, year, journal, doi} records. Pure: no network, no I/O, so the
@@ -86,10 +97,10 @@ def parse_works(payload: dict, limit: int = MAX_WORKS) -> list[dict]:
         if not summaries:
             continue
         ws = summaries[0]
-        title = (((ws.get("title") or {}).get("title") or {}).get("value") or "").strip()
+        title = _plain(((ws.get("title") or {}).get("title") or {}).get("value"))
         if not title:
             continue
-        journal = ((ws.get("journal-title") or {}).get("value") or "").strip()
+        journal = _plain((ws.get("journal-title") or {}).get("value"))
         records.append(
             {
                 "title": title,
