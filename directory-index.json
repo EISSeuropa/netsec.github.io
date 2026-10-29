@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-10-28T11:56:22+00:00",
+  "generated_at": "2026-10-29T11:31:09+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 118,
+  "count": 120,
   "members": [
     {
       "name": "Mr Adam Hanzel",
@@ -643,6 +643,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/ken-mcdonagh.jpg"
     },
     {
+      "name": "Mr Khalil Talhaoui",
+      "name_key": "khalil talhaoui",
+      "aliases": [],
+      "slug": "khalil-talhaoui",
+      "url": "https://netsec-cost.eu/people/khalil-talhaoui.html",
+      "orcid": null,
+      "role": null,
+      "affiliation": "University of Exeter",
+      "photo": null
+    },
+    {
       "name": "Dr Khaoula Boukir",
       "name_key": "khaoula boukir",
       "aliases": [],
@@ -795,6 +806,17 @@
       "role": "Action Vice-Chair · Grant Holder Scientific Representative · Management Committee · Netherlands",
       "affiliation": "Leiden University",
       "photo": "https://netsec-cost.eu/assets/images/people/marie-robin.png"
+    },
+    {
+      "name": "Prof. Marina Henke",
+      "name_key": "marina henke",
+      "aliases": [],
+      "slug": "marina-henke",
+      "url": "https://netsec-cost.eu/people/marina-henke.html",
+      "orcid": null,
+      "role": "Management Committee · Germany",
+      "affiliation": "Hertie School",
+      "photo": "https://netsec-cost.eu/assets/images/people/marina-henke.jpg"
     },
     {
       "name": "Dr Marius Ghincea",

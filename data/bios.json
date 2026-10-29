@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-28T11:56:22+00:00",
+  "generated_at": "2026-10-29T11:31:09+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-28T11:56:22+00:00"
+    "last_synced": "2026-10-29T11:31:09+00:00"
   },
   "members": [
     {
@@ -5488,6 +5488,96 @@
         "Disciplines, theory and methods",
         "Identity, narratives and ideational security"
       ]
+    },
+    {
+      "id": "khalil-talhaoui",
+      "name": "Mr Khalil Talhaoui",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "affiliation": "University of Exeter",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Global and cross-regional",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "PhD candidate in Security, Conflict, and Human Rights at University of Exeter. I hold a Master in War Studies at the Swedish Defence University and a Master in Critical Criminology and Penitentiary Law at the University of Barcelona.\n My research is situated at the nexus of Critical Security Studies, Queer Studies, Settler-Colonial Studies and Surveillance Studies with a particular focus on settler colonial practices of (in)security and surveillance.",
+      "keywords": [
+        "Critical Security",
+        "Settler-Colonial Studies",
+        "Surveillance"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "canonical_keywords": [
+        "Critical security studies",
+        "Settler-colonial studies",
+        "Surveillance"
+      ],
+      "themes": [
+        "Disciplines, theory and methods",
+        "Intelligence, information and influence",
+        "Security and defence"
+      ]
+    },
+    {
+      "id": "marina-henke",
+      "name": "Prof. Marina Henke",
+      "country": "Germany",
+      "country_code": "de",
+      "affiliation": "Hertie School",
+      "position": "Professor",
+      "roles": [
+        "Management Committee · Germany"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "wg_leadership": {},
+      "bio": "I am a researcher and author on  military interventions, nuclear security and European security and defense policy. I currently work as Professor of International Relations at the Hertie School (Berlin, Germany). I am also the director of the ​Hertie Centre for International Security.",
+      "keywords": [
+        "Nuclear security",
+        "grand strategy",
+        "military interventions"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/marina-henke.jpg",
+      "source": "form",
+      "photo_source_sha256": "8117f46f9d6c49d6a7a58727e88e445b4586e5af994c00e480861634c096318b",
+      "founding_contributor": true,
+      "canonical_keywords": [
+        "Grand strategy",
+        "Military interventions",
+        "Nuclear security"
+      ],
+      "themes": [
+        "Climate, energy and environmental security",
+        "Cyber and emerging technology",
+        "Strategy and deterrence"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -5548,6 +5638,10 @@
       "count": 5
     },
     {
+      "keyword": "Critical security studies",
+      "count": 4
+    },
+    {
       "keyword": "Emerging and disruptive technologies",
       "count": 4
     },
@@ -5580,10 +5674,6 @@
       "count": 3
     },
     {
-      "keyword": "Critical security studies",
-      "count": 3
-    },
-    {
       "keyword": "CSDP",
       "count": 3
     },
@@ -5601,6 +5691,10 @@
     },
     {
       "keyword": "European strategic autonomy",
+      "count": 3
+    },
+    {
+      "keyword": "Grand strategy",
       "count": 3
     },
     {
@@ -5689,10 +5783,6 @@
     },
     {
       "keyword": "EU–NATO relations",
-      "count": 2
-    },
-    {
-      "keyword": "Grand strategy",
       "count": 2
     },
     {
@@ -6296,6 +6386,10 @@
       "count": 1
     },
     {
+      "keyword": "Military interventions",
+      "count": 1
+    },
+    {
       "keyword": "Military neutrality",
       "count": 1
     },
@@ -6329,6 +6423,10 @@
     },
     {
       "keyword": "Nuclear deterrence",
+      "count": 1
+    },
+    {
+      "keyword": "Nuclear security",
       "count": 1
     },
     {
@@ -6516,6 +6614,10 @@
       "count": 1
     },
     {
+      "keyword": "Settler-colonial studies",
+      "count": 1
+    },
+    {
       "keyword": "Small states' foreign and security policy",
       "count": 1
     },
@@ -6553,6 +6655,10 @@
     },
     {
       "keyword": "Subversion",
+      "count": 1
+    },
+    {
+      "keyword": "Surveillance",
       "count": 1
     },
     {
@@ -6627,26 +6733,26 @@
     },
     {
       "theme": "Security and defence",
-      "count": 34
+      "count": 35
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 33
+      "count": 34
     },
     {
       "theme": "Disciplines, theory and methods",
-      "count": 30
+      "count": 31
     },
     {
       "theme": "Transnational and human security",
       "count": 24
     },
     {
-      "theme": "European and transatlantic security order",
-      "count": 22
+      "theme": "Strategy and deterrence",
+      "count": 23
     },
     {
-      "theme": "Strategy and deterrence",
+      "theme": "European and transatlantic security order",
       "count": 22
     },
     {
@@ -6655,7 +6761,7 @@
     },
     {
       "theme": "Intelligence, information and influence",
-      "count": 15
+      "count": 16
     },
     {
       "theme": "EU, UN and other international organisations",
@@ -6683,7 +6789,7 @@
     },
     {
       "theme": "Climate, energy and environmental security",
-      "count": 3
+      "count": 4
     },
     {
       "theme": "Political psychology, public opinion and decision-making",
@@ -6871,6 +6977,7 @@
     "Militarisation": "Security and defence",
     "Military history": "War, military history and armed conflict",
     "Military innovation": "Cyber and emerging technology",
+    "Military interventions": "Cyber and emerging technology",
     "Military neutrality": "European and transatlantic security order",
     "Military operations": "Cyber and emerging technology",
     "Military technology": "War, military history and armed conflict",
@@ -6885,6 +6992,7 @@
     "Non-state armed groups": "Transnational and human security",
     "Nuclear deterrence": "Strategy and deterrence",
     "Nuclear politics": "Strategy and deterrence",
+    "Nuclear security": "Climate, energy and environmental security",
     "Nuclear strategy": "Strategy and deterrence",
     "Nuclear weapons": "Strategy and deterrence",
     "Ontological security": "Identity, narratives and ideational security",
@@ -6939,6 +7047,7 @@
     "Security sector reforms": "Security and defence",
     "Security studies": "Security and defence",
     "Separatism": "War, military history and armed conflict",
+    "Settler-colonial studies": "Security and defence",
     "Small states": "Foreign policy and diplomacy",
     "Small states' foreign and security policy": "Foreign policy and diplomacy",
     "Social media": "Intelligence, information and influence",
@@ -6953,6 +7062,7 @@
     "Strategy": "Strategy and deterrence",
     "Strategy and deterrence": "Strategy and deterrence",
     "Subversion": "Intelligence, information and influence",
+    "Surveillance": "Intelligence, information and influence",
     "Systems resilience": "Crisis management and critical systems resilience",
     "Technology spillovers": "Cyber and emerging technology",
     "Text as data": "Disciplines, theory and methods",
@@ -6977,11 +7087,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 74
+      "count": 75
     },
     {
       "region": "Global and cross-regional",
-      "count": 59
+      "count": 60
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -6997,7 +7107,7 @@
     },
     {
       "region": "Middle East and North Africa",
-      "count": 15
+      "count": 16
     },
     {
       "region": "Asia",
