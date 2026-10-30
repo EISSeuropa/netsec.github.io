@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-29T11:31:09+00:00",
+  "generated_at": "2026-10-30T11:23:11+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-29T11:31:09+00:00"
+    "last_synced": "2026-10-30T11:23:11+00:00"
   },
   "members": [
     {
@@ -306,8 +306,8 @@
       "name": "Prof. Filip Ejdus",
       "country": "Serbia",
       "country_code": "rs",
-      "affiliation": "University of Belgrade",
-      "position": "",
+      "affiliation": "Faculty of Political Science, University of Belgrade",
+      "position": "Full Professor",
       "roles": [
         "Management Committee · Serbia",
         "WG1 Leader"
@@ -323,18 +323,44 @@
           1
         ]
       },
-      "bio": "",
-      "keywords": [],
-      "email": "",
-      "website": "",
-      "orcid": "",
-      "linkedin": "",
-      "twitter": "",
-      "bluesky": "",
+      "bio": "Filip Ejdus is a professor of security studies at the Faculty of Political Science, University of Belgrade. His research primarily explores how identity, memory, and emotions influence security dynamics in world politics. He has studied a wide range of topics, including foreign and security policy, international interventions, civil-military relations, security sector reform, regional cooperation, geopolitics, neutrality, peacebuilding, extremism, and social mobilization, as well as serious games and the role of play in international politics. His geographic focus includes the Western Balkans (particularly Serbia and Kosovo), the European Union, Israel/Palestine, and Somalia. He is currently working on several projects about gaming, geo-politics and Serbia’s European integration,\n\nFilip Ejdus is currently serving the (co)Editor-in-Chief of the Journal of Regional Security) co-chair of the Regional Stability Study Group at the Partnership for Peace Consortium, and WP1 leader of the Cost Action Networking European Security Knowledge.",
+      "keywords": [
+        "critical security studies",
+        "security sector governance",
+        "interventions",
+        "serious games"
+      ],
+      "email": "filip.ejdus@fpn.bg.ac.rs",
+      "website": "https://filipejdus.com/",
+      "orcid": "0000-0001-7443-1661",
+      "linkedin": "https://www.linkedin.com/in/filip-ejdus-0b931b15/",
+      "twitter": "https://x.com/FilipEjdus",
+      "bluesky": "https://bsky.app/profile/filipejdus.bsky.social",
       "mastodon": "",
       "photo": "assets/images/people/filip-ejdus.jpg",
-      "source": "seed",
-      "founding_contributor": true
+      "source": "form",
+      "founding_contributor": true,
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Western Balkans",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "yes",
+      "photo_source_sha256": "9e9f7d8c22b609e363ef242c939f829a9707f2274365fc59cea235ccb4d115ec",
+      "canonical_keywords": [
+        "Critical security studies",
+        "Interventions",
+        "Security sector governance",
+        "Serious games"
+      ],
+      "themes": [
+        "Disciplines, theory and methods",
+        "Security and defence",
+        "War, military history and armed conflict"
+      ]
     },
     {
       "id": "alisa-kerschbaum",
@@ -5578,6 +5604,46 @@
         "Cyber and emerging technology",
         "Strategy and deterrence"
       ]
+    },
+    {
+      "id": "tawhidur-rahman",
+      "name": "Mr Tawhidur Rahman",
+      "country": "Bangladesh",
+      "country_code": "bd",
+      "affiliation": "Bangladesh",
+      "position": "Policy analyst",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Asia"
+      ],
+      "wg_leadership": {},
+      "bio": "Senior Technical Specialist leading national cybersecurity initiatives with senior-level expertise in incident response and security operations. Delivered a 50% reduction in incident response time for the Bangladesh Government CIRT and built high-performance CSIRT teams across South Asia. Expert in SIEM, threat detection, digital forensics, and security architecture, driving enterprise-scale security solutions. Seeking to apply proven leadership to enhance organizational resilience and protect critical assets.",
+      "keywords": [
+        "cybersecurity",
+        "Policy and AI Ethics"
+      ],
+      "email": "pial007.un@gmail.com",
+      "website": "",
+      "orcid": "0000-0002-0985-6417",
+      "linkedin": "https://linkedin.com/in/tawhidence",
+      "twitter": "",
+      "bluesky": "https://bsky.app/profile/venomous007.bsky.social",
+      "mastodon": "",
+      "photo": "assets/images/people/tawhidur-rahman.jpg",
+      "source": "form",
+      "photo_source_sha256": "6c4c55bb787e324f9d4b0b6353aa666990f3cc06b9fb10c55473370d7d09cb94",
+      "canonical_keywords": [
+        "Cybersecurity",
+        "Policy and AI ethics"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Foreign policy and diplomacy"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -5586,11 +5652,11 @@
       "count": 12
     },
     {
-      "keyword": "AI",
-      "count": 8
+      "keyword": "Cybersecurity",
+      "count": 9
     },
     {
-      "keyword": "Cybersecurity",
+      "keyword": "AI",
       "count": 8
     },
     {
@@ -5611,6 +5677,10 @@
     },
     {
       "keyword": "Alliance politics",
+      "count": 5
+    },
+    {
+      "keyword": "Critical security studies",
       "count": 5
     },
     {
@@ -5636,10 +5706,6 @@
     {
       "keyword": "Security studies",
       "count": 5
-    },
-    {
-      "keyword": "Critical security studies",
-      "count": 4
     },
     {
       "keyword": "Emerging and disruptive technologies",
@@ -5810,6 +5876,10 @@
       "count": 2
     },
     {
+      "keyword": "Interventions",
+      "count": 2
+    },
+    {
       "keyword": "Middle East security",
       "count": 2
     },
@@ -5835,6 +5905,10 @@
     },
     {
       "keyword": "Security and defence",
+      "count": 2
+    },
+    {
+      "keyword": "Security sector governance",
       "count": 2
     },
     {
@@ -6314,10 +6388,6 @@
       "count": 1
     },
     {
-      "keyword": "Interventions",
-      "count": 1
-    },
-    {
       "keyword": "IoT",
       "count": 1
     },
@@ -6470,6 +6540,10 @@
       "count": 1
     },
     {
+      "keyword": "Policy and AI ethics",
+      "count": 1
+    },
+    {
       "keyword": "Policy evaluation",
       "count": 1
     },
@@ -6602,15 +6676,15 @@
       "count": 1
     },
     {
-      "keyword": "Security sector governance",
-      "count": 1
-    },
-    {
       "keyword": "Security sector reforms",
       "count": 1
     },
     {
       "keyword": "Separatism",
+      "count": 1
+    },
+    {
+      "keyword": "Serious games",
       "count": 1
     },
     {
@@ -6729,19 +6803,19 @@
   "theme_aggregate": [
     {
       "theme": "Foreign policy and diplomacy",
-      "count": 38
+      "count": 39
     },
     {
       "theme": "Security and defence",
-      "count": 35
+      "count": 36
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 34
+      "count": 35
     },
     {
       "theme": "Disciplines, theory and methods",
-      "count": 31
+      "count": 32
     },
     {
       "theme": "Transnational and human security",
@@ -6757,7 +6831,7 @@
     },
     {
       "theme": "War, military history and armed conflict",
-      "count": 17
+      "count": 18
     },
     {
       "theme": "Intelligence, information and influence",
@@ -7004,6 +7078,7 @@
     "Peacekeeping": "Peace, mediation and reconciliation",
     "Plural peace": "Peace, mediation and reconciliation",
     "Policing": "Security and defence",
+    "Policy and AI ethics": "Foreign policy and diplomacy",
     "Policy evaluation": "Disciplines, theory and methods",
     "Policy frameworks": "Disciplines, theory and methods",
     "Political bioethics": "Disciplines, theory and methods",
@@ -7047,6 +7122,7 @@
     "Security sector reforms": "Security and defence",
     "Security studies": "Security and defence",
     "Separatism": "War, military history and armed conflict",
+    "Serious games": "War, military history and armed conflict",
     "Settler-colonial studies": "Security and defence",
     "Small states": "Foreign policy and diplomacy",
     "Small states' foreign and security policy": "Foreign policy and diplomacy",
@@ -7087,7 +7163,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 75
+      "count": 76
     },
     {
       "region": "Global and cross-regional",
@@ -7099,7 +7175,7 @@
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 25
+      "count": 26
     },
     {
       "region": "The Americas",
@@ -7107,11 +7183,11 @@
     },
     {
       "region": "Middle East and North Africa",
-      "count": 16
+      "count": 17
     },
     {
       "region": "Asia",
-      "count": 14
+      "count": 15
     },
     {
       "region": "Africa",
