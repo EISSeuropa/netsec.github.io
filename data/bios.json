@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-30T11:23:11+00:00",
+  "generated_at": "2026-10-31T10:56:06+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-30T11:23:11+00:00"
+    "last_synced": "2026-10-31T10:56:06+00:00"
   },
   "members": [
     {
@@ -5644,6 +5644,56 @@
         "Cyber and emerging technology",
         "Foreign policy and diplomacy"
       ]
+    },
+    {
+      "id": "liliana-pasquale",
+      "name": "Dr Liliana Pasquale",
+      "country": "Ireland",
+      "country_code": "ie",
+      "affiliation": "University College Dublin",
+      "position": "Associate Professor",
+      "roles": [
+        "Management Committee · Ireland"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Liliana Pasquale received her Ph.D. degree from Politecnico di Milano, Italy, in 2011. She is currently an Associate Professor at\nUniversity College Dublin (UCD), Ireland. She is\nthe founder and director of the MSc in Cybersecurity at UCD. Her research interests include requirements engineering and adaptive\nsystems, with a focus on security and digital forensics. She will be the General Co-chair of ICSE 2027 and has served as PC Co-Chair of\nSEAMS 2024 and REFSQ 2020. She has served in the program and organising committee for prestigious software engineering\nconferences, such as ICSE, FSE, ASE, RE, and SEAMS. She is an Associate Editor-in-Chief of IEEE Transactions on Software Engineering, the\nDepartment Editor of IEEE Security & Privacy Magazine, and Associate Editor of the Requirements Engineering journal.",
+      "keywords": [
+        "software engineering",
+        "cybersecurity",
+        "AI",
+        "requirements",
+        "design"
+      ],
+      "email": "",
+      "website": "https://lpasquale.github.io",
+      "orcid": "0000-0001-9673-3054",
+      "linkedin": "https://www.linkedin.com/in/liliana-pasquale-0b7a052/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/liliana-pasquale.jpg",
+      "source": "form",
+      "photo_source_sha256": "fafec311404add1b7fc41b3f4175db7799a2600f276902079835941fe847788b",
+      "canonical_keywords": [
+        "AI",
+        "Cybersecurity",
+        "Design",
+        "Requirements",
+        "Software engineering"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Disciplines, theory and methods",
+        "Identity, narratives and ideational security"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -5653,11 +5703,11 @@
     },
     {
       "keyword": "Cybersecurity",
-      "count": 9
+      "count": 10
     },
     {
       "keyword": "AI",
-      "count": 8
+      "count": 9
     },
     {
       "keyword": "International security",
@@ -6125,6 +6175,10 @@
     },
     {
       "keyword": "Democratisation",
+      "count": 1
+    },
+    {
+      "keyword": "Design",
       "count": 1
     },
     {
@@ -6628,6 +6682,10 @@
       "count": 1
     },
     {
+      "keyword": "Requirements",
+      "count": 1
+    },
+    {
       "keyword": "Research ethics",
       "count": 1
     },
@@ -6705,6 +6763,10 @@
     },
     {
       "keyword": "Sociology of war",
+      "count": 1
+    },
+    {
+      "keyword": "Software engineering",
       "count": 1
     },
     {
@@ -6806,16 +6868,16 @@
       "count": 39
     },
     {
+      "theme": "Cyber and emerging technology",
+      "count": 36
+    },
+    {
       "theme": "Security and defence",
       "count": 36
     },
     {
-      "theme": "Cyber and emerging technology",
-      "count": 35
-    },
-    {
       "theme": "Disciplines, theory and methods",
-      "count": 32
+      "count": 33
     },
     {
       "theme": "Transnational and human security",
@@ -6846,15 +6908,15 @@
       "count": 11
     },
     {
+      "theme": "Identity, narratives and ideational security",
+      "count": 10
+    },
+    {
       "theme": "Crisis management and critical systems resilience",
       "count": 9
     },
     {
       "theme": "Democracy, governance and political change",
-      "count": 9
-    },
-    {
-      "theme": "Identity, narratives and ideational security",
       "count": 9
     },
     {
@@ -6937,6 +6999,7 @@
     "Defence resources management": "Security and defence",
     "Democratic resistance": "Democracy, governance and political change",
     "Democratisation": "Democracy, governance and political change",
+    "Design": "Identity, narratives and ideational security",
     "Deterrence": "Strategy and deterrence",
     "Digital governance": "Cyber and emerging technology",
     "Digital media": "Intelligence, information and influence",
@@ -7102,6 +7165,7 @@
     "Regional security cooperation and governance": "Foreign policy and diplomacy",
     "Regionalism": "Foreign policy and diplomacy",
     "Religion": "Identity, narratives and ideational security",
+    "Requirements": "Disciplines, theory and methods",
     "Research ethics": "Disciplines, theory and methods",
     "Research methods": "Disciplines, theory and methods",
     "Resilience": "Crisis management and critical systems resilience",
@@ -7129,6 +7193,7 @@
     "Social media": "Intelligence, information and influence",
     "Sociology of migration and security": "Transnational and human security",
     "Sociology of war": "War, military history and armed conflict",
+    "Software engineering": "Cyber and emerging technology",
     "Software security": "Cyber and emerging technology",
     "Space security": "Security and defence",
     "Strategic competition": "Foreign policy and diplomacy",
@@ -7163,7 +7228,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 76
+      "count": 77
     },
     {
       "region": "Global and cross-regional",
