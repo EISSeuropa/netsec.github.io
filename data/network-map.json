@@ -3,8 +3,8 @@
   "stats": {
     "working_groups": 4,
     "people": 233,
-    "people_with_bios": 121,
-    "edges": 687,
+    "people_with_bios": 122,
+    "edges": 690,
     "themes": 17,
     "panels_matched": 14,
     "panel_edges": 58,
@@ -65,7 +65,7 @@
       "id": "theme-cyber-and-emerging-technology",
       "type": "theme",
       "name": "Cyber and emerging technology",
-      "memberCount": 35
+      "memberCount": 36
     },
     {
       "id": "theme-democracy-governance-and-political-change",
@@ -77,7 +77,7 @@
       "id": "theme-disciplines-theory-and-methods",
       "type": "theme",
       "name": "Disciplines, theory and methods",
-      "memberCount": 32
+      "memberCount": 33
     },
     {
       "id": "theme-economic-security-and-geoeconomics",
@@ -107,7 +107,7 @@
       "id": "theme-identity-narratives-and-ideational-security",
       "type": "theme",
       "name": "Identity, narratives and ideational security",
-      "memberCount": 9
+      "memberCount": 10
     },
     {
       "id": "theme-intelligence-information-and-influence",
@@ -822,6 +822,17 @@
       ]
     },
     {
+      "id": "liliana-pasquale",
+      "type": "person",
+      "name": "Dr Liliana Pasquale",
+      "country": "Ireland",
+      "slug": "liliana-pasquale",
+      "photo": "assets/images/people/map/liliana-pasquale.webp",
+      "mentorship": [
+        "mentor"
+      ]
+    },
+    {
       "id": "linde-desmaele",
       "type": "person",
       "name": "Dr Linde Desmaele",
@@ -1414,12 +1425,6 @@
       "name": "Ms Laurena Kalaja",
       "country": "Albania",
       "itc": true
-    },
-    {
-      "id": "p-liliana-pasquale",
-      "type": "person",
-      "name": "Dr Liliana Pasquale",
-      "country": "Ireland"
     },
     {
       "id": "p-lorenz-sommer",
@@ -2417,6 +2422,10 @@
       "target": "wg-4"
     },
     {
+      "source": "liliana-pasquale",
+      "target": "wg-1"
+    },
+    {
       "source": "linde-desmaele",
       "target": "wg-2"
     },
@@ -2883,10 +2892,6 @@
     {
       "source": "p-laurena-kalaja",
       "target": "wg-3"
-    },
-    {
-      "source": "p-liliana-pasquale",
-      "target": "wg-1"
     },
     {
       "source": "p-lorenz-sommer",
@@ -4091,6 +4096,18 @@
     {
       "source": "li-yang",
       "target": "theme-foreign-policy-and-diplomacy"
+    },
+    {
+      "source": "liliana-pasquale",
+      "target": "theme-cyber-and-emerging-technology"
+    },
+    {
+      "source": "liliana-pasquale",
+      "target": "theme-disciplines-theory-and-methods"
+    },
+    {
+      "source": "liliana-pasquale",
+      "target": "theme-identity-narratives-and-ideational-security"
     },
     {
       "source": "linde-desmaele",
