@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-10-31T10:56:06+00:00",
+  "generated_at": "2026-11-01T11:50:34+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-10-31T10:56:06+00:00"
+    "last_synced": "2026-11-01T11:50:34+00:00"
   },
   "members": [
     {
@@ -5694,6 +5694,53 @@
         "Disciplines, theory and methods",
         "Identity, narratives and ideational security"
       ]
+    },
+    {
+      "id": "hussein-fawaz",
+      "name": "Mr Hussein Fawaz",
+      "country": "Switzerland",
+      "country_code": "ch",
+      "affiliation": "University of Applied Sciences and Arts of Southern Switzerland (SUPSI)",
+      "position": "PhD Candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "Hussein is a PhD student at the University of Applied Sciences and Arts of Southern Switzerland (SUPSI) and the Università della Svizzera italiana (USI) in Lugano, Switzerland. He works in the Trustworthy and Secure Information Networks and Society group at the Institute of Information Systems and Networking (ISIN), supervised by Prof. Silvia Giordano and Dr. Omran Ayoub. His research is funded by the Swiss Government Excellence Scholarship.\n\nHis research focuses on trustworthy and responsible AI for network security, particularly detecting intrusions and phishing attacks. He studies how to make these AI systems reliable in real-world use, not just accurate in tests: able to express how confident they are, explain their decisions, resist deliberate manipulation, and keep up as threats change. He also looks at their energy cost, so they can run on small, resource-limited devices.\n\nHe is interested in how AI-based security systems can be made transparent, accountable, and dependable, and he is keen to exchange ideas and collaborate across the European community.",
+      "keywords": [
+        "Network Security",
+        "Network Intrusion Detection",
+        "Trustworthy AI",
+        "Agentic AI"
+      ],
+      "email": "hussein.fawaz@supsi.ch",
+      "website": "https://husseinfawaz.com",
+      "orcid": "0009-0003-9366-0904",
+      "linkedin": "https://www.linkedin.com/in/hussein--fawaz/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/hussein-fawaz.jpg",
+      "source": "form",
+      "photo_source_sha256": "326965b54026e4e348164db90c0830359031102b2b0a01e1b7e4d15096f724a4",
+      "canonical_keywords": [
+        "Agentic AI",
+        "Network intrusion detection",
+        "Network security",
+        "Trustworthy AI"
+      ],
+      "themes": [
+        "Climate, energy and environmental security",
+        "Cyber and emerging technology",
+        "Democracy, governance and political change"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -5979,6 +6026,10 @@
     },
     {
       "keyword": "Adversarial robustness",
+      "count": 1
+    },
+    {
+      "keyword": "Agentic AI",
       "count": 1
     },
     {
@@ -6546,6 +6597,14 @@
       "count": 1
     },
     {
+      "keyword": "Network intrusion detection",
+      "count": 1
+    },
+    {
+      "keyword": "Network security",
+      "count": 1
+    },
+    {
       "keyword": "Nuclear deterrence",
       "count": 1
     },
@@ -6834,6 +6893,10 @@
       "count": 1
     },
     {
+      "keyword": "Trustworthy AI",
+      "count": 1
+    },
+    {
       "keyword": "Turkish foreign policy",
       "count": 1
     },
@@ -6869,7 +6932,7 @@
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 36
+      "count": 37
     },
     {
       "theme": "Security and defence",
@@ -6908,6 +6971,10 @@
       "count": 11
     },
     {
+      "theme": "Democracy, governance and political change",
+      "count": 10
+    },
+    {
       "theme": "Identity, narratives and ideational security",
       "count": 10
     },
@@ -6916,16 +6983,12 @@
       "count": 9
     },
     {
-      "theme": "Democracy, governance and political change",
-      "count": 9
-    },
-    {
       "theme": "Peace, mediation and reconciliation",
       "count": 8
     },
     {
       "theme": "Climate, energy and environmental security",
-      "count": 4
+      "count": 5
     },
     {
       "theme": "Political psychology, public opinion and decision-making",
@@ -6938,6 +7001,7 @@
     "AI governance": "Cyber and emerging technology",
     "AI regulation": "Cyber and emerging technology",
     "Adversarial robustness": "Cyber and emerging technology",
+    "Agentic AI": "Cyber and emerging technology",
     "Algorithms and AI": "Cyber and emerging technology",
     "Alliance politics": "European and transatlantic security order",
     "And critical infrastructure protection": "Crisis management and critical systems resilience",
@@ -7125,6 +7189,8 @@
     "Narratives and ideational security": "Identity, narratives and ideational security",
     "National security": "Security and defence",
     "Nationalism": "Democracy, governance and political change",
+    "Network intrusion detection": "Cyber and emerging technology",
+    "Network security": "Climate, energy and environmental security",
     "Non-state actors": "Transnational and human security",
     "Non-state armed groups": "Transnational and human security",
     "Nuclear deterrence": "Strategy and deterrence",
@@ -7216,6 +7282,7 @@
     "Transitional justice": "Peace, mediation and reconciliation",
     "Transnational and human security": "Transnational and human security",
     "Transnational criminal organisations (TCOs)": "Transnational and human security",
+    "Trustworthy AI": "Democracy, governance and political change",
     "Turkish foreign policy": "Foreign policy and diplomacy",
     "UN": "EU, UN and other international organisations",
     "US foreign policy": "Foreign policy and diplomacy",
@@ -7228,7 +7295,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 77
+      "count": 78
     },
     {
       "region": "Global and cross-regional",
@@ -7248,7 +7315,7 @@
     },
     {
       "region": "Middle East and North Africa",
-      "count": 17
+      "count": 18
     },
     {
       "region": "Asia",
