@@ -54,7 +54,8 @@
       "regions": [
         "Europe"
       ],
-      "founding_contributor": true
+      "founding_contributor": true,
+      "joined": "2026-05-15"
     },
     {
       "id": "marie-robin",
@@ -84,7 +85,8 @@
       "mastodon": "",
       "photo": "assets/images/people/marie-robin.png",
       "source": "seed",
-      "founding_contributor": true
+      "founding_contributor": true,
+      "joined": "2026-05-15"
     },
     {
       "id": "eugenio-sanchez",
@@ -127,7 +129,8 @@
       "regions": [
         "Europe"
       ],
-      "founding_contributor": true
+      "founding_contributor": true,
+      "joined": "2026-05-15"
     },
     {
       "id": "eliza-gheorghe",
@@ -158,7 +161,8 @@
       "mastodon": "",
       "photo": "assets/images/people/eliza-gheorghe.jpg",
       "source": "seed",
-      "founding_contributor": true
+      "founding_contributor": true,
+      "joined": "2026-05-15"
     },
     {
       "id": "chiara-libiseller",
@@ -184,7 +188,8 @@
       "bluesky": "",
       "mastodon": "",
       "photo": "assets/images/people/chiara-libiseller.webp",
-      "source": "seed"
+      "source": "seed",
+      "joined": "2026-05-15"
     },
     {
       "id": "john-helferich",
@@ -236,7 +241,8 @@
       "regions": [
         "Europe"
       ],
-      "founding_contributor": true
+      "founding_contributor": true,
+      "joined": "2026-05-15"
     },
     {
       "id": "chiara-ruffa",
@@ -266,7 +272,8 @@
       "mastodon": "",
       "photo": "assets/images/people/chiara-ruffa.jpg",
       "source": "seed",
-      "founding_contributor": true
+      "founding_contributor": true,
+      "joined": "2026-05-15"
     },
     {
       "id": "revecca-pedi",
@@ -299,7 +306,8 @@
       "mastodon": "",
       "photo": "assets/images/people/revecca-pedi.jpg",
       "source": "seed",
-      "founding_contributor": true
+      "founding_contributor": true,
+      "joined": "2026-05-15"
     },
     {
       "id": "filip-ejdus",
@@ -360,7 +368,8 @@
         "Disciplines, theory and methods",
         "Security and defence",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-05-15"
     },
     {
       "id": "alisa-kerschbaum",
@@ -385,7 +394,8 @@
       "mastodon": "",
       "photo": "assets/images/people/alisa-kerschbaum.jpeg",
       "source": "seed",
-      "founding_contributor": true
+      "founding_contributor": true,
+      "joined": "2026-05-15"
     },
     {
       "id": "silvia-damato",
@@ -414,7 +424,8 @@
       "mastodon": "",
       "photo": "assets/images/people/silvia-damato.jpeg",
       "source": "seed",
-      "founding_contributor": true
+      "founding_contributor": true,
+      "joined": "2026-05-15"
     },
     {
       "id": "sarka-kolmasova",
@@ -442,7 +453,8 @@
       "mastodon": "",
       "photo": "assets/images/people/sarka-kolmasova.jpeg",
       "source": "seed",
-      "founding_contributor": true
+      "founding_contributor": true,
+      "joined": "2026-05-15"
     },
     {
       "id": "arthur-laudrain",
@@ -494,7 +506,8 @@
       "regions": [
         "Global and cross-regional"
       ],
-      "stsm_hosting": "ask"
+      "stsm_hosting": "ask",
+      "joined": "2026-05-16"
     },
     {
       "id": "felix-kosterke",
@@ -530,7 +543,8 @@
         "Foreign policy and diplomacy",
         "Security and defence",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-05-29"
     },
     {
       "id": "meret-steybe",
@@ -572,7 +586,8 @@
       ],
       "regions": [
         "Middle East and North Africa"
-      ]
+      ],
+      "joined": "2026-06-03"
     },
     {
       "id": "anna-pagnacco",
@@ -608,7 +623,8 @@
       ],
       "themes": [
         "Cyber and emerging technology"
-      ]
+      ],
+      "joined": "2026-06-10"
     },
     {
       "id": "rusudan-zabakhidze",
@@ -656,7 +672,8 @@
         "Crisis management and critical systems resilience",
         "Security and defence",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-06-12"
     },
     {
       "id": "alexandra-brankova",
@@ -704,7 +721,8 @@
         "Disciplines, theory and methods",
         "Identity, narratives and ideational security",
         "Intelligence, information and influence"
-      ]
+      ],
+      "joined": "2026-06-12"
     },
     {
       "id": "lucian-bumeder",
@@ -750,7 +768,8 @@
       "themes": [
         "Foreign policy and diplomacy",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-06-12"
     },
     {
       "id": "pieter-zhao",
@@ -803,7 +822,8 @@
         "Strategy and deterrence",
         "Transnational and human security",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-06-13"
     },
     {
       "id": "saurav-narain",
@@ -856,7 +876,8 @@
         "EU, UN and other international organisations",
         "Peace, mediation and reconciliation",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-06-13"
     },
     {
       "id": "archishman-goswami",
@@ -902,7 +923,8 @@
         "Foreign policy and diplomacy",
         "Intelligence, information and influence",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-06-13"
     },
     {
       "id": "mattia-sguazzini",
@@ -953,7 +975,8 @@
         "Disciplines, theory and methods",
         "Economic security and geoeconomics",
         "European and transatlantic security order"
-      ]
+      ],
+      "joined": "2026-06-13"
     },
     {
       "id": "francesco-canossi",
@@ -1004,7 +1027,8 @@
         "European and transatlantic security order",
         "Security and defence",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-06-15"
     },
     {
       "id": "gil-baram",
@@ -1055,7 +1079,8 @@
         "Cyber and emerging technology",
         "Foreign policy and diplomacy",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-06-15"
     },
     {
       "id": "sara-russo",
@@ -1102,7 +1127,8 @@
       "themes": [
         "Disciplines, theory and methods",
         "Intelligence, information and influence"
-      ]
+      ],
+      "joined": "2026-06-15"
     },
     {
       "id": "yanina-shved-dogrul",
@@ -1152,7 +1178,8 @@
         "European and transatlantic security order",
         "Foreign policy and diplomacy",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-06-15"
     },
     {
       "id": "marco-cifra",
@@ -1192,7 +1219,8 @@
         "Disciplines, theory and methods",
         "Security and defence",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-06-15"
     },
     {
       "id": "seyithan-ahmet-ates",
@@ -1241,7 +1269,8 @@
       "themes": [
         "Cyber and emerging technology",
         "Economic security and geoeconomics"
-      ]
+      ],
+      "joined": "2026-06-15"
     },
     {
       "id": "wendy-he",
@@ -1292,7 +1321,8 @@
         "Foreign policy and diplomacy",
         "Political psychology, public opinion and decision-making",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-06-16"
     },
     {
       "id": "laura-lisboa",
@@ -1323,7 +1353,8 @@
       "mastodon": "",
       "photo": "assets/images/people/laura-lisboa.jpg",
       "source": "form",
-      "photo_source_sha256": "3eee85016dbf2254ccd742af2447f9f449088549347d43c70b6addf0e4c75a82"
+      "photo_source_sha256": "3eee85016dbf2254ccd742af2447f9f449088549347d43c70b6addf0e4c75a82",
+      "joined": "2026-06-16"
     },
     {
       "id": "nikolaos-tzifakis",
@@ -1375,7 +1406,8 @@
       "themes": [
         "Foreign policy and diplomacy",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-06-16"
     },
     {
       "id": "mark-rhinard",
@@ -1420,7 +1452,8 @@
         "Crisis management and critical systems resilience",
         "European and transatlantic security order",
         "Foreign policy and diplomacy"
-      ]
+      ],
+      "joined": "2026-06-16"
     },
     {
       "id": "linde-desmaele",
@@ -1468,7 +1501,8 @@
       "themes": [
         "European and transatlantic security order",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-06-16"
     },
     {
       "id": "alexander-lanoszka",
@@ -1510,7 +1544,8 @@
       ],
       "themes": [
         "European and transatlantic security order"
-      ]
+      ],
+      "joined": "2026-06-16"
     },
     {
       "id": "julia-carver",
@@ -1561,7 +1596,8 @@
       "themes": [
         "Cyber and emerging technology",
         "Foreign policy and diplomacy"
-      ]
+      ],
+      "joined": "2026-06-17"
     },
     {
       "id": "sophie-enos-attali",
@@ -1605,7 +1641,8 @@
         "European and transatlantic security order",
         "Foreign policy and diplomacy",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-06-17"
     },
     {
       "id": "yijun-xu",
@@ -1652,7 +1689,8 @@
       ],
       "themes": [
         "Peace, mediation and reconciliation"
-      ]
+      ],
+      "joined": "2026-06-20"
     },
     {
       "id": "vasiliki-plessia-aravani",
@@ -1701,7 +1739,8 @@
         "Cyber and emerging technology",
         "European and transatlantic security order",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-06-20"
     },
     {
       "id": "teodora-stoicescu",
@@ -1747,7 +1786,8 @@
         "Disciplines, theory and methods",
         "Peace, mediation and reconciliation",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-06-21"
     },
     {
       "id": "marko-kovacevic",
@@ -1802,7 +1842,8 @@
         "Disciplines, theory and methods",
         "Foreign policy and diplomacy",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-06-21"
     },
     {
       "id": "gesine-weber",
@@ -1852,7 +1893,8 @@
         "EU, UN and other international organisations",
         "European and transatlantic security order",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-06-22"
     },
     {
       "id": "fabio-iguavita-duarte",
@@ -1902,7 +1944,8 @@
         "Crisis management and critical systems resilience",
         "Intelligence, information and influence",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-06-22"
     },
     {
       "id": "isabelle-haynes",
@@ -1950,7 +1993,8 @@
       "themes": [
         "European and transatlantic security order",
         "Political psychology, public opinion and decision-making"
-      ]
+      ],
+      "joined": "2026-06-22"
     },
     {
       "id": "anna-seliverstova",
@@ -1991,7 +2035,8 @@
       ],
       "themes": [
         "EU, UN and other international organisations"
-      ]
+      ],
+      "joined": "2026-06-23"
     },
     {
       "id": "kara-schneider",
@@ -2042,7 +2087,8 @@
         "Cyber and emerging technology",
         "Intelligence, information and influence",
         "Peace, mediation and reconciliation"
-      ]
+      ],
+      "joined": "2026-06-23"
     },
     {
       "id": "clara-jammot",
@@ -2096,7 +2142,8 @@
         "Identity, narratives and ideational security",
         "Intelligence, information and influence",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-06-25"
     },
     {
       "id": "marius-ghincea",
@@ -2145,7 +2192,8 @@
       "themes": [
         "EU, UN and other international organisations",
         "Foreign policy and diplomacy"
-      ]
+      ],
+      "joined": "2026-06-26"
     },
     {
       "id": "monika-sus",
@@ -2193,7 +2241,8 @@
         "EU, UN and other international organisations",
         "European and transatlantic security order",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-06-26"
     },
     {
       "id": "ivan-zaccagnini",
@@ -2242,7 +2291,8 @@
         "Cyber and emerging technology",
         "Foreign policy and diplomacy",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-06-30"
     },
     {
       "id": "kire-babanoski",
@@ -2293,7 +2343,8 @@
       "themes": [
         "Security and defence",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-07-01"
     },
     {
       "id": "alin-barbantan",
@@ -2344,7 +2395,8 @@
         "Disciplines, theory and methods",
         "European and transatlantic security order",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-07-03"
     },
     {
       "id": "daniela-mechkaroska",
@@ -2390,7 +2442,8 @@
       ],
       "themes": [
         "Cyber and emerging technology"
-      ]
+      ],
+      "joined": "2026-07-03"
     },
     {
       "id": "eda-kusku-sonmez",
@@ -2436,7 +2489,8 @@
       "themes": [
         "Democracy, governance and political change",
         "Foreign policy and diplomacy"
-      ]
+      ],
+      "joined": "2026-07-03"
     },
     {
       "id": "p-nar-akgul",
@@ -2481,7 +2535,8 @@
         "European and transatlantic security order",
         "Foreign policy and diplomacy"
       ],
-      "stsm_hosting": "yes"
+      "stsm_hosting": "yes",
+      "joined": "2026-07-03"
     },
     {
       "id": "tanja-pavleska",
@@ -2535,7 +2590,8 @@
         "Cyber and emerging technology",
         "Democracy, governance and political change",
         "Disciplines, theory and methods"
-      ]
+      ],
+      "joined": "2026-07-03"
     },
     {
       "id": "tolga-c-kr-kc",
@@ -2589,7 +2645,8 @@
         "Security and defence",
         "Transnational and human security"
       ],
-      "photo_source_sha256": "e3b7c31627ba001ac77bec930527d8e5521f9d2a0103cd279ea8b7769f92cd44"
+      "photo_source_sha256": "e3b7c31627ba001ac77bec930527d8e5521f9d2a0103cd279ea8b7769f92cd44",
+      "joined": "2026-07-03"
     },
     {
       "id": "martin-havacek",
@@ -2639,7 +2696,8 @@
       ],
       "themes": [
         "Cyber and emerging technology"
-      ]
+      ],
+      "joined": "2026-07-03"
     },
     {
       "id": "esra-merve-boztosun-cal-skan",
@@ -2685,7 +2743,8 @@
       "themes": [
         "Cyber and emerging technology",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-07-03"
     },
     {
       "id": "david-matsaberidze",
@@ -2739,7 +2798,8 @@
         "Foreign policy and diplomacy",
         "Security and defence",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-07-03"
     },
     {
       "id": "islam-jusufi",
@@ -2786,7 +2846,8 @@
       "themes": [
         "Disciplines, theory and methods",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-07-03"
     },
     {
       "id": "danilo-kalezic",
@@ -2833,7 +2894,8 @@
       ],
       "themes": [
         "Democracy, governance and political change"
-      ]
+      ],
+      "joined": "2026-07-04"
     },
     {
       "id": "immanuel-rummel",
@@ -2881,7 +2943,8 @@
       "themes": [
         "European and transatlantic security order",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-07-05"
     },
     {
       "id": "pavlosioannis-koktsidis",
@@ -2932,7 +2995,8 @@
       "themes": [
         "Foreign policy and diplomacy",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-07-05"
     },
     {
       "id": "giulia-biselli",
@@ -2982,7 +3046,8 @@
       "themes": [
         "Economic security and geoeconomics",
         "Foreign policy and diplomacy"
-      ]
+      ],
+      "joined": "2026-07-06"
     },
     {
       "id": "paulina-polko",
@@ -3028,7 +3093,8 @@
       "themes": [
         "Disciplines, theory and methods",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-07-06"
     },
     {
       "id": "mehmet-babacan",
@@ -3081,7 +3147,8 @@
         "Disciplines, theory and methods",
         "Foreign policy and diplomacy",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-07-10"
     },
     {
       "id": "gayane-harutyunyan",
@@ -3128,7 +3195,8 @@
         "Cyber and emerging technology",
         "Economic security and geoeconomics",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-07-14"
     },
     {
       "id": "huw-bennett",
@@ -3177,7 +3245,8 @@
         "Intelligence, information and influence",
         "Strategy and deterrence",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-07-16"
     },
     {
       "id": "david-morgan-owen",
@@ -3222,7 +3291,8 @@
         "Disciplines, theory and methods",
         "Strategy and deterrence",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-07-16"
     },
     {
       "id": "johannes-lucht",
@@ -3263,7 +3333,8 @@
         "Strategy and deterrence",
         "Transnational and human security",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-07-23"
     },
     {
       "id": "niklas-karlen",
@@ -3312,7 +3383,8 @@
         "Foreign policy and diplomacy",
         "Intelligence, information and influence",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-07-24"
     },
     {
       "id": "athanasios-skraparlis",
@@ -3365,7 +3437,8 @@
         "Crisis management and critical systems resilience",
         "Cyber and emerging technology",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-07-28"
     },
     {
       "id": "zane-sime",
@@ -3416,7 +3489,8 @@
         "Cyber and emerging technology",
         "EU, UN and other international organisations",
         "Foreign policy and diplomacy"
-      ]
+      ],
+      "joined": "2026-07-29"
     },
     {
       "id": "ken-mcdonagh",
@@ -3462,7 +3536,8 @@
         "EU, UN and other international organisations",
         "Foreign policy and diplomacy",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-08-06"
     },
     {
       "id": "francisco-javier-montilla-aguilera",
@@ -3507,7 +3582,8 @@
       ],
       "themes": [
         "Intelligence, information and influence"
-      ]
+      ],
+      "joined": "2026-08-06"
     },
     {
       "id": "joe-burton",
@@ -3548,7 +3624,8 @@
       "themes": [
         "Cyber and emerging technology",
         "Foreign policy and diplomacy"
-      ]
+      ],
+      "joined": "2026-08-06"
     },
     {
       "id": "carla-sofia-ferreira-fernandes",
@@ -3594,7 +3671,8 @@
       "themes": [
         "Climate, energy and environmental security",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-08-08"
     },
     {
       "id": "andriy-tyushka",
@@ -3643,7 +3721,8 @@
         "European and transatlantic security order",
         "Strategy and deterrence",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-08-08"
     },
     {
       "id": "sprincean-serghei",
@@ -3696,7 +3775,8 @@
         "Disciplines, theory and methods",
         "Security and defence",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-08-16"
     },
     {
       "id": "li-yang",
@@ -3746,7 +3826,8 @@
         "Economic security and geoeconomics",
         "European and transatlantic security order",
         "Foreign policy and diplomacy"
-      ]
+      ],
+      "joined": "2026-08-17"
     },
     {
       "id": "avnihan-k-r-s-k",
@@ -3796,7 +3877,8 @@
         "Disciplines, theory and methods",
         "Foreign policy and diplomacy",
         "Identity, narratives and ideational security"
-      ]
+      ],
+      "joined": "2026-08-23"
     },
     {
       "id": "leonardo-pesci",
@@ -3842,7 +3924,8 @@
         "Disciplines, theory and methods",
         "Identity, narratives and ideational security",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-08-25"
     },
     {
       "id": "pablo-arriazu",
@@ -3891,7 +3974,8 @@
         "Foreign policy and diplomacy",
         "Security and defence",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-08-27"
     },
     {
       "id": "mykhailo-mosora",
@@ -3938,7 +4022,8 @@
         "Democracy, governance and political change",
         "EU, UN and other international organisations",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-09-02"
     },
     {
       "id": "rafael-hurtado-valdivieso",
@@ -3982,7 +4067,8 @@
         "Climate, energy and environmental security",
         "Transnational and human security",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-09-08"
     },
     {
       "id": "richard-skalt",
@@ -4027,7 +4113,8 @@
       "themes": [
         "Cyber and emerging technology",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-09-08"
     },
     {
       "id": "ludovica-castelli",
@@ -4075,7 +4162,8 @@
       "themes": [
         "Identity, narratives and ideational security",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-09-09"
     },
     {
       "id": "henrique-garbino",
@@ -4125,7 +4213,8 @@
         "Peace, mediation and reconciliation",
         "Security and defence",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-09-11"
     },
     {
       "id": "laura-inigo-alvarez",
@@ -4179,7 +4268,8 @@
         "EU, UN and other international organisations",
         "Foreign policy and diplomacy",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-09-11"
     },
     {
       "id": "adam-hanzel",
@@ -4228,7 +4318,8 @@
         "Disciplines, theory and methods",
         "Transnational and human security",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-09-11"
     },
     {
       "id": "jacob-grech",
@@ -4278,7 +4369,8 @@
         "Economic security and geoeconomics",
         "Foreign policy and diplomacy",
         "Identity, narratives and ideational security"
-      ]
+      ],
+      "joined": "2026-09-12"
     },
     {
       "id": "betul-dogan-akkas",
@@ -4325,7 +4417,8 @@
         "Disciplines, theory and methods",
         "Economic security and geoeconomics",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-09-14"
     },
     {
       "id": "mahmoud-javadi",
@@ -4365,7 +4458,8 @@
       "themes": [
         "Cyber and emerging technology",
         "European and transatlantic security order"
-      ]
+      ],
+      "joined": "2026-09-14"
     },
     {
       "id": "antonia-laura-pup",
@@ -4408,7 +4502,8 @@
       "themes": [
         "European and transatlantic security order",
         "Foreign policy and diplomacy"
-      ]
+      ],
+      "joined": "2026-09-14"
     },
     {
       "id": "aliaksei-kazharski",
@@ -4453,7 +4548,8 @@
       "themes": [
         "Foreign policy and diplomacy",
         "Identity, narratives and ideational security"
-      ]
+      ],
+      "joined": "2026-09-16"
     },
     {
       "id": "pavle-nedic",
@@ -4502,7 +4598,8 @@
         "Disciplines, theory and methods",
         "Foreign policy and diplomacy",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-09-16"
     },
     {
       "id": "giray-sadik",
@@ -4558,7 +4655,8 @@
         "Intelligence, information and influence",
         "Strategy and deterrence",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-09-19"
     },
     {
       "id": "alexander-evans",
@@ -4597,7 +4695,8 @@
         "Cyber and emerging technology",
         "Security and defence",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-10-07"
     },
     {
       "id": "ana-e-juncos",
@@ -4646,7 +4745,8 @@
         "Democracy, governance and political change",
         "EU, UN and other international organisations",
         "Peace, mediation and reconciliation"
-      ]
+      ],
+      "joined": "2026-10-07"
     },
     {
       "id": "celine-rodrigues",
@@ -4689,7 +4789,8 @@
       "themes": [
         "Security and defence",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-10-07"
     },
     {
       "id": "marcel-berni",
@@ -4724,7 +4825,8 @@
       ],
       "themes": [
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-10-07"
     },
     {
       "id": "sonja-stojanovic-gajic",
@@ -4772,7 +4874,8 @@
         "Democracy, governance and political change",
         "Disciplines, theory and methods",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-10-15"
     },
     {
       "id": "lukas-wahden",
@@ -4821,7 +4924,8 @@
         "EU, UN and other international organisations",
         "Foreign policy and diplomacy",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-10-15"
     },
     {
       "id": "roie-yellinek",
@@ -4876,7 +4980,8 @@
         "Foreign policy and diplomacy",
         "Security and defence",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-10-17"
     },
     {
       "id": "arzu-demirel",
@@ -4927,7 +5032,8 @@
         "Cyber and emerging technology",
         "Disciplines, theory and methods",
         "European and transatlantic security order"
-      ]
+      ],
+      "joined": "2026-10-20"
     },
     {
       "id": "iztok-prezelj",
@@ -4984,7 +5090,8 @@
         "Cyber and emerging technology",
         "Intelligence, information and influence",
         "Transnational and human security"
-      ]
+      ],
+      "joined": "2026-10-24"
     },
     {
       "id": "noela-mahmutaj",
@@ -5031,7 +5138,8 @@
       "themes": [
         "Foreign policy and diplomacy",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-10-26"
     },
     {
       "id": "sandra-cvikic",
@@ -5085,7 +5193,8 @@
         "Peace, mediation and reconciliation",
         "Transnational and human security",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-10-26"
     },
     {
       "id": "tim-sweijs",
@@ -5131,7 +5240,8 @@
         "Security and defence",
         "Strategy and deterrence",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-10-26"
     },
     {
       "id": "constantinos-adamides",
@@ -5180,7 +5290,8 @@
       "themes": [
         "European and transatlantic security order",
         "Intelligence, information and influence"
-      ]
+      ],
+      "joined": "2026-10-27"
     },
     {
       "id": "gurkan-gur",
@@ -5227,7 +5338,8 @@
         "Crisis management and critical systems resilience",
         "Intelligence, information and influence",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-10-27"
     },
     {
       "id": "olivier-schmitt",
@@ -5278,7 +5390,8 @@
         "Economic security and geoeconomics",
         "European and transatlantic security order",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-10-27"
     },
     {
       "id": "p-nar-bilgin",
@@ -5325,7 +5438,8 @@
         "Disciplines, theory and methods",
         "Identity, narratives and ideational security",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-10-27"
     },
     {
       "id": "sanne-cornelia-j-verschuren",
@@ -5369,7 +5483,8 @@
       "themes": [
         "Strategy and deterrence",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-10-27"
     },
     {
       "id": "hugo-meijer",
@@ -5419,7 +5534,8 @@
         "Foreign policy and diplomacy",
         "Peace, mediation and reconciliation",
         "War, military history and armed conflict"
-      ]
+      ],
+      "joined": "2026-10-28"
     },
     {
       "id": "khaoula-boukir",
@@ -5467,7 +5583,8 @@
       "themes": [
         "Crisis management and critical systems resilience",
         "Cyber and emerging technology"
-      ]
+      ],
+      "joined": "2026-10-28"
     },
     {
       "id": "nadine-klopf",
@@ -5513,7 +5630,8 @@
         "Crisis management and critical systems resilience",
         "Disciplines, theory and methods",
         "Identity, narratives and ideational security"
-      ]
+      ],
+      "joined": "2026-10-28"
     },
     {
       "id": "khalil-talhaoui",
@@ -5557,7 +5675,8 @@
         "Disciplines, theory and methods",
         "Intelligence, information and influence",
         "Security and defence"
-      ]
+      ],
+      "joined": "2026-10-29"
     },
     {
       "id": "marina-henke",
@@ -5603,7 +5722,8 @@
         "Climate, energy and environmental security",
         "Cyber and emerging technology",
         "Strategy and deterrence"
-      ]
+      ],
+      "joined": "2026-10-29"
     },
     {
       "id": "tawhidur-rahman",
@@ -5643,7 +5763,8 @@
       "themes": [
         "Cyber and emerging technology",
         "Foreign policy and diplomacy"
-      ]
+      ],
+      "joined": "2026-10-30"
     },
     {
       "id": "liliana-pasquale",
@@ -5693,7 +5814,8 @@
         "Cyber and emerging technology",
         "Disciplines, theory and methods",
         "Identity, narratives and ideational security"
-      ]
+      ],
+      "joined": "2026-10-31"
     },
     {
       "id": "hussein-fawaz",
@@ -5740,7 +5862,8 @@
         "Climate, energy and environmental security",
         "Cyber and emerging technology",
         "Democracy, governance and political change"
-      ]
+      ],
+      "joined": "2026-11-01"
     }
   ],
   "keyword_aggregate": [

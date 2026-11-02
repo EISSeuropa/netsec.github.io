@@ -1775,8 +1775,16 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
                 existing["wgs"] = sorted(set(existing.get("wgs", []) + entry["wgs"]))
             existing["source"] = "form"
         else:
-            # New entry from form with no prior match.
-            by_slug[entry["id"]] = {k: v for k, v in entry.items() if not k.startswith("_")}
+            # New entry from form with no prior match. `joined` is the UTC
+            # date the member first lands in data/bios.json, and the
+            # Directory rolls recent joiners from it. Only this branch
+            # stamps it, so a returning member keeps theirs and re-runs
+            # leave the file unchanged. Members who predate the field were
+            # backfilled from this file's git history (first commit holding
+            # each id).
+            new_member = {k: v for k, v in entry.items() if not k.startswith("_")}
+            new_member["joined"] = datetime.now(timezone.utc).date().isoformat()
+            by_slug[entry["id"]] = new_member
 
     # Final ordering: prior entries keep their position (leadership
     # first, as encoded in the prior bios.json), new entries fall
@@ -1833,7 +1841,7 @@ def diff_summary(old: list[dict], new: list[dict]) -> str:
 # value?". `canonical_keywords` is derived from `keywords` by this
 # script; `country_code` is auto-filled from `country`; `_*` fields
 # are internal anyway and stripped by merge().
-_DERIVED_FIELDS = {"canonical_keywords", "country_code", "roles", "wg_leadership", "founding_contributor"}
+_DERIVED_FIELDS = {"canonical_keywords", "country_code", "roles", "wg_leadership", "founding_contributor", "joined"}
 _PHOTO_FIELDS = {"photo", "photo_source_sha256"}
 
 # Pretty labels for fields, used in the per-member "what changed"

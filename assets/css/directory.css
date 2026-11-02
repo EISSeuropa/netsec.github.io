@@ -2071,3 +2071,63 @@ html.dir-welcome .welcome-strip[hidden]{display:flex;flex-wrap:wrap;align-items:
   .welcome-strip-dismiss { padding-top: 12px; padding-bottom: 12px; }
   .tour-trigger { width: 44px; height: 44px; }
 }
+
+/* ─── Recent joiners on the directory ─────────────────────────
+   Members who joined in the last 30 days roll through one at a time,
+   like end credits (the EISS internal dashboard's Today box): each line
+   rises in, holds, then drifts up and fades as the next arrives
+   (.is-on, then .is-past). The box folds open on a grid row once the
+   directory has loaded. Without motion it is a plain list. */
+.joiners{ display:grid; grid-template-rows:1fr; margin:0 0 18px; }
+.joiners[hidden]{ display:none; }
+.joiners.is-out{ grid-template-rows:0fr; opacity:0; margin-bottom:0; }
+.joiners-clip{ min-height:0; overflow:hidden; }
+.joiners-box{
+  padding:12px 18px 12px 22px;
+  border-radius:14px;
+  border-left:3px solid var(--accent-2);
+  background:linear-gradient(180deg, rgba(10,132,255,.07), rgba(10,132,255,.02));
+}
+.dark .joiners-box{ background:linear-gradient(180deg, rgba(10,132,255,.14), rgba(10,132,255,.05)); }
+.joiners-text{ margin:0; font-size:.9rem; color:var(--ink-2); }
+.joiners-stage{ display:flex; align-items:center; gap:10px; margin-top:8px; }
+.joiners-list{ position:relative; flex:1; min-width:0; height:2rem; margin:0; padding:0; list-style:none; overflow:hidden; }
+.joiners-item{ position:absolute; inset:0; display:flex; align-items:center; gap:10px; opacity:0; transform:translateY(100%); pointer-events:none; }
+.joiners-item.is-on{ opacity:1; transform:none; pointer-events:auto; }
+.joiners-item.is-past{ opacity:0; transform:translateY(-100%); }
+.joiners-item.is-reset{ transition:none !important; }
+.joiners-avatar{ position:relative; flex:none; display:grid; place-items:center; width:1.75rem; height:1.75rem; }
+.joiners-face{
+  display:grid; place-items:center; width:1.375rem; height:1.375rem; border-radius:50%; overflow:hidden;
+  background:rgba(10,132,255,.18); color:var(--link); font-size:.62rem; font-weight:650;
+}
+.joiners-face img{ width:100%; height:100%; object-fit:cover; filter:var(--photo-grade); }
+.joiners-ring{ position:absolute; inset:0; width:100%; height:100%; fill:none; stroke:var(--accent-2); stroke-width:1.75; transform:rotate(-90deg); }
+.joiners-item a{ flex:1; min-width:0; overflow:hidden; color:var(--ink); text-decoration:none; text-overflow:ellipsis; white-space:nowrap; font-size:.92rem; }
+.joiners-item a:hover .joiners-name{ text-decoration:underline; }
+.joiners-name{ font-weight:600; }
+.joiners-aff{ color:var(--muted); }
+.joiners-when{ flex:none; color:var(--muted); font-size:.8rem; font-variant-numeric:tabular-nums; }
+.joiners-pause{
+  flex:none; display:grid; place-items:center; width:2rem; height:2rem; padding:0;
+  border:1px solid var(--line); border-radius:50%; background:none; color:var(--muted); cursor:pointer;
+}
+.joiners-pause:hover{ color:var(--ink); border-color:var(--muted); }
+.joiners-pause svg{ width:.875rem; height:.875rem; fill:currentColor; }
+.joiners-pause .joiners-play,
+.joiners-pause[aria-pressed="true"] .joiners-hold{ display:none; }
+.joiners-pause[aria-pressed="true"] .joiners-play{ display:inline; }
+/* Without motion: every line in view. */
+.joiners-list.is-static{ height:auto; overflow:visible; }
+.joiners-list.is-static .joiners-item{ position:static; padding-top:4px; opacity:1; transform:none; pointer-events:auto; }
+@media (prefers-reduced-motion: no-preference){
+  .joiners{ transition:grid-template-rows var(--dur-slow) var(--ease), opacity var(--dur-slow) var(--ease), margin var(--dur-slow) var(--ease); }
+  .joiners-item{ transition:opacity 700ms var(--ease), transform 700ms var(--ease); }
+  /* The ring draws itself round the face each time its line comes up. */
+  .joiners-item.is-on .joiners-ring circle{ stroke-dasharray:79; stroke-dashoffset:79; animation:joiners-ring var(--dur-slow) var(--ease) 450ms forwards; }
+}
+@keyframes joiners-ring{ to{ stroke-dashoffset:0; } }
+@media (max-width:640px){
+  .joiners-box{ padding:10px 12px 10px 16px; }
+  .joiners-when{ display:none; }
+}
