@@ -5103,7 +5103,11 @@
       "roles": [
         "Management Committee · Albania"
       ],
-      "wgs": [],
+      "wgs": [
+        1,
+        2,
+        3
+      ],
       "mentorship": [
         "mentor"
       ],
@@ -5151,7 +5155,9 @@
       "roles": [
         "Management Committee · Croatia"
       ],
-      "wgs": [],
+      "wgs": [
+        2
+      ],
       "mentorship": [
         "mentor"
       ],
@@ -5253,7 +5259,10 @@
       "roles": [
         "Management Committee · Cyprus"
       ],
-      "wgs": [],
+      "wgs": [
+        1,
+        2
+      ],
       "mentorship": [
         "mentor"
       ],
@@ -5303,7 +5312,9 @@
       "roles": [
         "Management Committee · Switzerland"
       ],
-      "wgs": [],
+      "wgs": [
+        1
+      ],
       "mentorship": [
         "mentor-full"
       ],
@@ -5449,7 +5460,10 @@
       "affiliation": "Boston University",
       "position": "Assistant Professor",
       "roles": [],
-      "wgs": [],
+      "wgs": [
+        1,
+        2
+      ],
       "mentorship": [
         "mentor"
       ],
@@ -5496,7 +5510,9 @@
       "roles": [
         "Management Committee · France"
       ],
-      "wgs": [],
+      "wgs": [
+        1
+      ],
       "mentorship": [],
       "regions": [
         "Global and cross-regional"
@@ -5776,7 +5792,9 @@
       "roles": [
         "Management Committee · Ireland"
       ],
-      "wgs": [],
+      "wgs": [
+        1
+      ],
       "mentorship": [
         "mentor"
       ],

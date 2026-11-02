@@ -6,7 +6,7 @@
       "number": 1,
       "name": "Building the Network",
       "colour": "wg-1",
-      "memberCount": 94,
+      "memberCount": 93,
       "lead": {
         "slug": "filip-ejdus",
         "name": "Prof. Filip Ejdus"
@@ -71,7 +71,8 @@
         },
         {
           "name": "Dr Constantinos Adamides",
-          "country": "Cyprus"
+          "country": "Cyprus",
+          "slug": "constantinos-adamides"
         },
         {
           "name": "Dr Daniel O'Toole",
@@ -153,7 +154,8 @@
         },
         {
           "name": "Dr Gürkan Gür",
-          "country": "Switzerland"
+          "country": "Switzerland",
+          "slug": "gurkan-gur"
         },
         {
           "name": "Dr Halil Kanadikirik",
@@ -161,7 +163,8 @@
         },
         {
           "name": "Dr Hugo Meijer",
-          "country": "France"
+          "country": "France",
+          "slug": "hugo-meijer"
         },
         {
           "name": "Dr I. Aytac Kadioglu",
@@ -210,7 +213,8 @@
         },
         {
           "name": "Dr Liliana Pasquale",
-          "country": "Ireland"
+          "country": "Ireland",
+          "slug": "liliana-pasquale"
         },
         {
           "name": "Mr Lorenz Sommer",
@@ -295,7 +299,8 @@
         },
         {
           "name": "Dr Noela Mahmutaj",
-          "country": "Albania"
+          "country": "Albania",
+          "slug": "noela-mahmutaj"
         },
         {
           "name": "Prof Pavlosioannis Koktsidis",
@@ -362,10 +367,6 @@
         {
           "name": "Dr Teemu Häkkinen",
           "country": "Finland"
-        },
-        {
-          "name": "Mr Theo Zacharis",
-          "country": "Greece"
         },
         {
           "name": "Dr Thomas Bonnie James",
@@ -496,7 +497,8 @@
         },
         {
           "name": "Dr Constantinos Adamides",
-          "country": "Cyprus"
+          "country": "Cyprus",
+          "slug": "constantinos-adamides"
         },
         {
           "name": "Dr Daniela Mechkaroska",
@@ -658,7 +660,8 @@
         },
         {
           "name": "Dr Noela Mahmutaj",
-          "country": "Albania"
+          "country": "Albania",
+          "slug": "noela-mahmutaj"
         },
         {
           "name": "Prof Paulina Polko",
@@ -688,7 +691,8 @@
         },
         {
           "name": "Dr Sandra Cvikić",
-          "country": "Croatia"
+          "country": "Croatia",
+          "slug": "sandra-cvikic"
         },
         {
           "name": "Dr Sanne Verschuren",
@@ -1104,7 +1108,8 @@
         },
         {
           "name": "Dr Noela Mahmutaj",
-          "country": "Albania"
+          "country": "Albania",
+          "slug": "noela-mahmutaj"
         },
         {
           "name": "Prof Pavlosioannis Koktsidis",
