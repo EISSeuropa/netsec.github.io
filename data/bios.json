@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-11-01T11:50:34+00:00",
+  "generated_at": "2026-11-02T13:29:13+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-11-01T11:50:34+00:00"
+    "last_synced": "2026-11-02T13:29:13+00:00"
   },
   "members": [
     {
@@ -5864,6 +5864,107 @@
         "Democracy, governance and political change"
       ],
       "joined": "2026-11-01"
+    },
+    {
+      "id": "megghi-pengili",
+      "name": "Dr Megghi Pengili",
+      "country": "Italy",
+      "country_code": "it",
+      "affiliation": "CeFLI-Rome / University of Leeds",
+      "position": "Adjunct Lecturer- Crisis Management and Scenario Forecasting",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe - Western Balkans",
+        "Global and cross-regional",
+        "Middle East and North Africa"
+      ],
+      "wg_leadership": {},
+      "bio": "Megghi specialises in defence innovation governance, defence ecosystems and knowledge management, energy defence resources and cybersecurity in the Eastern Mediterranean, AI-Public Private Partnerships and Anticipatory Governance in defence, and other defence issues. Currently, she is a Visiting Fellow at the University of Leeds, wherefrom she obtained her PhD in Innovation’s Governance and Defence Studies (2024).Since March 2025 Megghi started as a Senior Advisor at TRENDS US in Washington D.C., and in January 2026 she is engaged as Adjunct Faculty to the Master Program \" Security and Emergency Logistics\" CeFLI/ Centro Alti Studi Difesa Rome (CASD), Italy. She has presented  and published her research within Europe and beyond, while also designing and arranging editorial roundtables and academic entrepreneurship workshops. A recipient of various scholarships within and beyond Europe, she is “George C.Marshall Centre” Alumna and Scholar (2007 and 2025), Chevening Scholar (2011), and was a Visiting Non-Resident researcher at the Blavatnik Centre for Interdisciplinary Cyber Studies, University of Tel Aviv, (2021-2025). Megghi’s working experience was in national defence institutions, and regional environmental organisations. She has also attended numerous trainings and professional courses in military and defence institutions within and beyond Italy, her country. She has been the Assistant Editor of Civil Wars Journal since 2022. Since January 2025 she is external staff at EUConnect Programme, CIFE Berlin; also served as adjunct faculty at the “George C.Marshall Centre” for the Program on Cyber Security Studies in March-May 2025.",
+      "keywords": [
+        "defence innovation governance",
+        "public-private ecosystems",
+        "crisis response",
+        "scenario foresight and planning",
+        "knowledge quality"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "0000-0002-7218-799X",
+      "linkedin": "https://linkedin.com/in/megghi-pengili-ph-d-707a29143",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "joined": "2026-11-02",
+      "canonical_keywords": [
+        "Crisis response",
+        "Defence innovation governance",
+        "Knowledge quality",
+        "Public-private ecosystems",
+        "Scenario foresight and planning"
+      ],
+      "themes": [
+        "Crisis management and critical systems resilience",
+        "Cyber and emerging technology",
+        "Disciplines, theory and methods",
+        "Political psychology, public opinion and decision-making",
+        "Security and defence"
+      ]
+    },
+    {
+      "id": "anna-danielsson",
+      "name": "Prof. Anna Danielsson",
+      "country": "Sweden",
+      "country_code": "se",
+      "affiliation": "Swedish Defence University",
+      "position": "Professor of War Studies",
+      "roles": [
+        "Management Committee · Sweden"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor-full"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Western Balkans",
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Professor Anna Danielsson's research is situated at the nexus of war studies, the sociology of war, international political sociology, social theory, critical peacebuilding studies, and the history and sociology of knowledge. Thematically, she currently conducts research in two main areas. First, Anna works on issues pertaining to urban security and urban war, urban warfare, and urbicide. Second, she conducts research on the epistemics of international interventions and military operations – with a specific focus on urban peacebuilding and the entangled production of knowledge and space in urban peacebuilding interventions.",
+      "keywords": [
+        "War",
+        "Cities",
+        "Knowledge"
+      ],
+      "email": "anna.danielsson@fhs.se",
+      "website": "",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "joined": "2026-11-02",
+      "founding_contributor": true,
+      "canonical_keywords": [
+        "Cities",
+        "Knowledge",
+        "War"
+      ],
+      "themes": [
+        "Crisis management and critical systems resilience",
+        "Disciplines, theory and methods",
+        "War, military history and armed conflict"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -5952,6 +6053,10 @@
       "count": 4
     },
     {
+      "keyword": "War",
+      "count": 4
+    },
+    {
       "keyword": "Crisis management",
       "count": 3
     },
@@ -6013,10 +6118,6 @@
     },
     {
       "keyword": "Transitional justice",
-      "count": 3
-    },
-    {
-      "keyword": "War",
       "count": 3
     },
     {
@@ -6228,6 +6329,10 @@
       "count": 1
     },
     {
+      "keyword": "Cities",
+      "count": 1
+    },
+    {
       "keyword": "Civil defence",
       "count": 1
     },
@@ -6284,6 +6389,10 @@
       "count": 1
     },
     {
+      "keyword": "Crisis response",
+      "count": 1
+    },
+    {
       "keyword": "Critical infrastructure",
       "count": 1
     },
@@ -6333,6 +6442,10 @@
     },
     {
       "keyword": "Defence innovation",
+      "count": 1
+    },
+    {
+      "keyword": "Defence innovation governance",
       "count": 1
     },
     {
@@ -6632,6 +6745,14 @@
       "count": 1
     },
     {
+      "keyword": "Knowledge",
+      "count": 1
+    },
+    {
+      "keyword": "Knowledge quality",
+      "count": 1
+    },
+    {
       "keyword": "Knowledge transfer",
       "count": 1
     },
@@ -6836,6 +6957,10 @@
       "count": 1
     },
     {
+      "keyword": "Public-private ecosystems",
+      "count": 1
+    },
+    {
       "keyword": "Radical uncertainty",
       "count": 1
     },
@@ -6889,6 +7014,10 @@
     },
     {
       "keyword": "Russia-Ukraine war",
+      "count": 1
+    },
+    {
+      "keyword": "Scenario foresight and planning",
       "count": 1
     },
     {
@@ -7055,15 +7184,15 @@
     },
     {
       "theme": "Cyber and emerging technology",
-      "count": 37
+      "count": 38
     },
     {
       "theme": "Security and defence",
-      "count": 36
+      "count": 37
     },
     {
       "theme": "Disciplines, theory and methods",
-      "count": 33
+      "count": 35
     },
     {
       "theme": "Transnational and human security",
@@ -7079,7 +7208,7 @@
     },
     {
       "theme": "War, military history and armed conflict",
-      "count": 18
+      "count": 19
     },
     {
       "theme": "Intelligence, information and influence",
@@ -7088,6 +7217,10 @@
     {
       "theme": "EU, UN and other international organisations",
       "count": 12
+    },
+    {
+      "theme": "Crisis management and critical systems resilience",
+      "count": 11
     },
     {
       "theme": "Economic security and geoeconomics",
@@ -7102,10 +7235,6 @@
       "count": 10
     },
     {
-      "theme": "Crisis management and critical systems resilience",
-      "count": 9
-    },
-    {
       "theme": "Peace, mediation and reconciliation",
       "count": 8
     },
@@ -7115,7 +7244,7 @@
     },
     {
       "theme": "Political psychology, public opinion and decision-making",
-      "count": 3
+      "count": 4
     }
   ],
   "keyword_theme_map": {
@@ -7142,6 +7271,7 @@
     "Capability planning": "Security and defence",
     "China–middle east": "Security and defence",
     "Chinese foreign policy": "Foreign policy and diplomacy",
+    "Cities": "Crisis management and critical systems resilience",
     "Civil defence": "Crisis management and critical systems resilience",
     "Civil protection": "Crisis management and critical systems resilience",
     "Civil wars": "War, military history and armed conflict",
@@ -7163,6 +7293,7 @@
     "Covert action": "Intelligence, information and influence",
     "Crisis": "Crisis management and critical systems resilience",
     "Crisis management": "Crisis management and critical systems resilience",
+    "Crisis response": "Crisis management and critical systems resilience",
     "Critical infrastructure": "Cyber and emerging technology",
     "Critical infrastructure protection": "Crisis management and critical systems resilience",
     "Critical ir": "Cyber and emerging technology",
@@ -7182,6 +7313,7 @@
     "Defence industrial policy": "Economic security and geoeconomics",
     "Defence industry": "Economic security and geoeconomics",
     "Defence innovation": "Cyber and emerging technology",
+    "Defence innovation governance": "Cyber and emerging technology",
     "Defence north Atlantic and Arctic": "Security and defence",
     "Defence resources management": "Security and defence",
     "Democratic resistance": "Democracy, governance and political change",
@@ -7285,6 +7417,8 @@
     "Irregular warfare": "War, military history and armed conflict",
     "Israel foreign policy": "Foreign policy and diplomacy",
     "Judgment and decision-making": "Political psychology, public opinion and decision-making",
+    "Knowledge": "Disciplines, theory and methods",
+    "Knowledge quality": "Disciplines, theory and methods",
     "Knowledge transfer": "Disciplines, theory and methods",
     "Legal studies": "Disciplines, theory and methods",
     "ML": "Cyber and emerging technology",
@@ -7346,6 +7480,7 @@
     "Pressure groups": "Democracy, governance and political change",
     "Proxy warfare": "War, military history and armed conflict",
     "Public opinion": "Political psychology, public opinion and decision-making",
+    "Public-private ecosystems": "Political psychology, public opinion and decision-making",
     "Radical uncertainty": "Cyber and emerging technology",
     "Realism": "Disciplines, theory and methods",
     "Regional cooperation": "Foreign policy and diplomacy",
@@ -7362,6 +7497,7 @@
     "Romanian foreign policy": "Foreign policy and diplomacy",
     "Russia-Ukraine war": "War, military history and armed conflict",
     "Russian foreign policy": "Foreign policy and diplomacy",
+    "Scenario foresight and planning": "Security and defence",
     "Science and innovation policies": "Cyber and emerging technology",
     "Securitisation": "Disciplines, theory and methods",
     "Security": "Security and defence",
@@ -7418,11 +7554,11 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 78
+      "count": 79
     },
     {
       "region": "Global and cross-regional",
-      "count": 60
+      "count": 62
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
@@ -7430,15 +7566,15 @@
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 26
+      "count": 28
     },
     {
       "region": "The Americas",
-      "count": 19
+      "count": 20
     },
     {
       "region": "Middle East and North Africa",
-      "count": 18
+      "count": 19
     },
     {
       "region": "Asia",
