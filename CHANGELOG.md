@@ -172,6 +172,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- French and German pages no longer jump 42 pixels on phones as they load. The translation notice at the top reserves its height before the page draws (#2105).
 - The Directory country flags have a Country caption like the other filter rows and wrap onto a second line. At 1024px the last flag had been cut off. A shortened affiliation on a card shows the full text on hover.
 - At 1024px the Find your way in tab and the Directory tools no longer cover the right-hand column of Directory cards. Beside the grid the tools stand in an upright pill, and the grid keeps a margin clear for it.
 - The Network Map draws four Working Group leaders and co-leaders on the hub of the group they lead. Chiara Ruffa (WG3), Silvia D'Amato (WG3), Eliza Gheorghe (WG2) and Nikolaos Tzifakis (WG1) were missing from it because they are not on that group's cost.eu roster, and Ruffa was not drawn at all. The Working Groups lens now draws 168 of 225 people, up from 164.

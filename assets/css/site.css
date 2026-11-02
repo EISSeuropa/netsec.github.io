@@ -2186,20 +2186,25 @@ form button:disabled{opacity:.65;cursor:wait}
    matches reality regardless of whether the ribbon wraps to one
    line (desktop) or two-plus lines (mobile, where the long
    "Traduction automatique…" sentence + link wrap).
-   The fallback 38px matches a single-line desktop ribbon and only
-   applies if the JS hasn't run yet. */
+   Before the JS runs, the defaults below hold the measured heights. */
 /* Top stack — banner / ribbon / nav. Both --whats-new-h and
    --ribbon-h are set in JS (site.js) from the relevant element's
    measured `offsetHeight`. They default to 0px when not set so the
-   calc holds regardless of which combination is active. The 38px
-   fallback on --ribbon-h is retained on the beta-status rule so
-   FR/DE pages don't flash content under the ribbon during the
-   pre-JS paint window. */
+   calc holds regardless of which combination is active. --ribbon-h
+   has per-width defaults on beta pages so FR/DE pages neither flash
+   content under the ribbon nor shift when the JS measures it. */
+/* Pre-paint defaults for --ribbon-h (#2105): the ribbon's measured height,
+   one line (33px) from 600px up and two lines (80px) below, in FR and DE.
+   site.js sets the measured value inline on <html>, which overrides these,
+   so they only need to be right before it runs. With the old single 38px
+   fallback, every FR/DE page jumped 42px on phones (CLS 0.05). */
+[data-i18n-status="beta"]{--ribbon-h:33px}
+@media (max-width:599px){ [data-i18n-status="beta"]{--ribbon-h:80px} }
 body{padding-top:var(--whats-new-h, 0px)}
-[data-i18n-status="beta"] body{padding-top:calc(var(--whats-new-h, 0px) + var(--ribbon-h,38px))}
+[data-i18n-status="beta"] body{padding-top:calc(var(--whats-new-h, 0px) + var(--ribbon-h,33px))}
 /* css-collision-allow: .nav */
 .nav{top:calc(var(--whats-new-h, 0px) + 14px)}
-[data-i18n-status="beta"] .nav{top:calc(var(--whats-new-h, 0px) + var(--ribbon-h,38px) + 14px)}
+[data-i18n-status="beta"] .nav{top:calc(var(--whats-new-h, 0px) + var(--ribbon-h,33px) + 14px)}
 
 /* -------- Licensing table (licensing page §1) --------
    A simple 3-column responsive table. Reuses prose-page typography
