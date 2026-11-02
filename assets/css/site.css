@@ -4934,12 +4934,21 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
   transition:filter .3s var(--ease), transform .3s var(--ease), opacity .3s var(--ease);
 }
 .faces-track img:hover{filter:grayscale(0);opacity:1;transform:scale(1.06)}
+/* Members who joined in the last 30 days lead the row in full colour, with
+   an accent ring in place of the glass border. */
+.faces-track .faces-new img{filter:var(--photo-grade);opacity:1;border-color:var(--accent-2);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-2) 35%,transparent)}
 @keyframes faces-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 /* Mirrors .events-seeall, the site's established "see all" link, but
    centred under the marquee rather than right-aligned. */
 .faces-seeall{margin:22px 0 0;text-align:center}
 .faces-seeall a{font-weight:600;color:var(--accent)}
 .faces-seeall a + a{margin-left:1.5em}
+/* The recent-joiners count sits on its own line above the two links. The
+   empty line is held from first paint so nothing below moves when site.js
+   fills it, and it folds away only when nobody joined in 30 days. */
+.faces-joined{display:block;min-height:1.5em;margin:0 0 6px}
+.faces-joined[hidden]{display:none}
+.faces-joined + a{margin-left:0}
 
 /* ── Reduced-motion off-switches for the cinematic bundle ───────────
    The global reset already flattens transition and animation timings.
