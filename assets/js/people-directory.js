@@ -3315,23 +3315,23 @@
 
     const lines = () => Array.prototype.slice.call(list.children);
     const roll = { i: 0, hover: false, focus: false, held: false };
-    list.classList.toggle('is-static', calm);
+    list.classList.toggle('joiners-static', calm);
     pauseBtn.hidden = calm || lines().length < 2;
 
     function go(k) {
       const ls = lines(), cur = ls[roll.i], next = ls[k];
       roll.i = k;
-      if (cur && cur !== next) { cur.classList.remove('is-on'); cur.classList.add('is-past'); }
-      if (next) { next.classList.remove('is-past', 'is-reset'); next.classList.add('is-on'); }
+      if (cur && cur !== next) { cur.classList.remove('joiners-on'); cur.classList.add('joiners-past'); }
+      if (next) { next.classList.remove('joiners-past', 'joiners-reset'); next.classList.add('joiners-on'); }
     }
     // A line that has drifted out goes back below, unseen, for its next turn.
     list.addEventListener('transitionend', function (e) {
       const li = e.target;
-      if (li.parentNode !== list || e.propertyName !== 'opacity' || !li.classList.contains('is-past')) return;
-      li.classList.add('is-reset');
-      li.classList.remove('is-past');
+      if (li.parentNode !== list || e.propertyName !== 'opacity' || !li.classList.contains('joiners-past')) return;
+      li.classList.add('joiners-reset');
+      li.classList.remove('joiners-past');
       void li.offsetWidth;
-      li.classList.remove('is-reset');
+      li.classList.remove('joiners-reset');
     });
     stage.addEventListener('pointerenter', function () { roll.hover = true; });
     stage.addEventListener('pointerleave', function () { roll.hover = false; });
@@ -3349,10 +3349,10 @@
     // The box folds open on a grid row (CSS), so the toolbar below glides
     // rather than jumps, and the first line rises in once it has opened.
     if (calm) { box.hidden = false; return; }
-    box.classList.add('is-out');
+    box.classList.add('joiners-out');
     box.hidden = false;
     void box.offsetWidth;
-    box.classList.remove('is-out');
+    box.classList.remove('joiners-out');
     setTimeout(function () { go(0); }, 250);
     setInterval(function () {
       const n = lines().length;
