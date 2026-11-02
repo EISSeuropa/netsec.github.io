@@ -3188,7 +3188,9 @@ window.netsecMemberCard = (function () {
     if (!n) { slot.hidden = true; return; }
     var t = function (k) { return (window.netsecT && window.netsecT(k)) || k; };
     var a = document.createElement('a');
-    a.href = slot.getAttribute('data-href') || 'people.html';
+    // The locale's Directory, from the page language (fixed strings only).
+    var lang = (document.documentElement.lang || 'en').slice(0, 2);
+    a.href = lang === 'fr' ? 'people.fr.html' : lang === 'de' ? 'people.de.html' : 'people.html';
     a.textContent = (n === 1 ? t('1 new member in the last 30 days')
       : t('{0} new members in the last 30 days').replace('{0}', n)) + ' \u2192';
     slot.appendChild(a);
