@@ -2109,6 +2109,11 @@ html.dir-welcome .welcome-strip[hidden]{display:flex;flex-wrap:wrap;align-items:
    directory has loaded. Without motion it is a plain list. */
 .joiners{ display:grid; grid-template-rows:1fr; margin:0 0 18px; }
 .joiners[hidden]{ display:none; }
+/* Pre-paint reservation (html.dir-joiners, set by the inline head script):
+   the empty shell holds the filled box's height until the data arrives, so
+   the toolbar below never shifts. The empty text line keeps one line box. */
+html.dir-joiners .joiners[hidden]{ display:grid; }
+.joiners-text:empty::before{ content:'\00a0'; }
 .joiners.joiners-out{ grid-template-rows:0fr; opacity:0; margin-bottom:0; }
 .joiners-clip{ min-height:0; overflow:hidden; }
 .joiners-box{
@@ -2158,5 +2163,7 @@ html.dir-welcome .welcome-strip[hidden]{display:flex;flex-wrap:wrap;align-items:
 @keyframes joiners-ring{ to{ stroke-dashoffset:0; } }
 @media (max-width:640px){
   .joiners-box{ padding:10px 14px; }
+  /* The sentence wraps to two lines at phone width in every locale. */
+  .joiners-text:empty::before{ content:'\00a0\A\00a0'; white-space:pre; }
   .joiners-when{ display:none; }
 }

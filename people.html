@@ -71,6 +71,10 @@
         document.documentElement.classList.add('dir-welcome');
       }
     } catch (e) {}
+    /* The recent-joiners box keeps its place from the first paint too, for
+       the same reason. people-directory.js fills it once bios.json loads, and
+       removes this class (folding the box away) when nobody joined lately. */
+    document.documentElement.classList.add('dir-joiners');
   })();
 </script>
 <link rel="stylesheet" href="assets/css/site.css">
