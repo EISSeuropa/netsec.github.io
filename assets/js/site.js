@@ -72,6 +72,8 @@
       'Directory last updated {0}.': 'Annuaire mis à jour le {0}.',
       'Joined the network in the last 30 days: {0} members.': 'Ont rejoint le réseau ces 30 derniers jours : {0} membres.',
       'Joined the network in the last 30 days: 1 member.': 'A rejoint le réseau ces 30 derniers jours : 1 membre.',
+      '{0} new members in the last 30 days': '{0} nouveaux membres ces 30 derniers jours',
+      '1 new member in the last 30 days': '1 nouveau membre ces 30 derniers jours',
       'Available to mentor': 'Disponible comme mentor',
       'Seeking mentorship': 'En recherche de mentorat',
       'Mentoring, at capacity': 'Mentor, plus de disponibilité',
@@ -382,6 +384,8 @@
       'Directory last updated {0}.': 'Verzeichnis zuletzt aktualisiert am {0}.',
       'Joined the network in the last 30 days: {0} members.': 'In den letzten 30 Tagen dem Netzwerk beigetreten: {0} Mitglieder.',
       'Joined the network in the last 30 days: 1 member.': 'In den letzten 30 Tagen dem Netzwerk beigetreten: 1 Mitglied.',
+      '{0} new members in the last 30 days': '{0} neue Mitglieder in den letzten 30 Tagen',
+      '1 new member in the last 30 days': '1 neues Mitglied in den letzten 30 Tagen',
       'Available to mentor': 'Als Mentor verfügbar',
       'Seeking mentorship': 'Sucht Mentoring',
       'Mentoring, at capacity': 'Mentor, derzeit ausgelastet',
@@ -3149,6 +3153,11 @@ window.netsecMemberCard = (function () {
    seamless. Purely decorative: the container is aria-hidden and every
    image has an empty alt. Silent no-op if the fetch fails, matching the
    site's other data-driven blocks. */
+/* Recent joiners (bios.json `joined` in the last 30 days, the same window
+   as the Directory's roll) lead the row, so they are the faces in view on
+   load, and carry .faces-new: full colour and an accent ring among the
+   greyscale rest. The count, photo or not, fills the data-faces-joined
+   link beside "Browse the directory", which stays hidden at zero. */
 (function () {
   var box = document.querySelector('[data-faces-marquee]');
   if (!box) return;
@@ -3156,26 +3165,48 @@ window.netsecMemberCard = (function () {
   fetch('data/bios.json', { cache: 'no-cache' })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (data) {
-      if (!data) return;
+      if (!data) { showJoined(0); return; }
       var members = Array.isArray(data.members) ? data.members : [];
+      // `joined` is a UTC date (sync-bios.py), so today is counted in UTC.
+      var now = new Date();
+      var today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+      var at = function (m) { return Date.parse((m && m.joined || '') + 'T00:00:00Z'); };
+      var isNew = function (m) { var t = at(m); return !isNaN(t) && today - t < 30 * 864e5; };
+      var recent = members.filter(isNew);
+      showJoined(recent.length);
       var withPhoto = members.filter(function (m) { return m && m.photo; });
       if (!withPhoto.length) return;
-      render(withPhoto);
+      // Newest first, then everyone else in their usual order.
+      var fresh = withPhoto.filter(isNew).sort(function (a, b) { return at(b) - at(a); });
+      render(fresh.concat(withPhoto.filter(function (m) { return !isNew(m); })), isNew);
     })
-    .catch(function () { /* JSON 404 or parse error — silent no-op */ });
+    .catch(function () { showJoined(0); /* JSON 404 or parse error: otherwise a silent no-op */ });
 
-  function render(list) {
+  function showJoined(n) {
+    var slot = document.querySelector('[data-faces-joined]');
+    if (!slot) return;
+    if (!n) { slot.hidden = true; return; }
+    var t = function (k) { return (window.netsecT && window.netsecT(k)) || k; };
+    var a = document.createElement('a');
+    a.href = slot.getAttribute('data-href') || 'people.html';
+    a.textContent = (n === 1 ? t('1 new member in the last 30 days')
+      : t('{0} new members in the last 30 days').replace('{0}', n)) + ' \u2192';
+    slot.appendChild(a);
+  }
+
+  function render(list, isNew) {
     var track = document.createElement('div');
     track.className = 'faces-track';
     // Two identical halves for the seamless -50% loop.
-    appendRow(track, list);
-    appendRow(track, list);
+    appendRow(track, list, isNew);
+    appendRow(track, list, isNew);
     box.appendChild(track);
   }
 
-  function appendRow(track, list) {
+  function appendRow(track, list, isNew) {
     list.forEach(function (m) {
       var pic = document.createElement('picture');
+      if (isNew(m)) pic.className = 'faces-new';
       var webp = window.netsecWebp ? window.netsecWebp(m.photo) : null;
       if (webp) {
         var src = document.createElement('source');
