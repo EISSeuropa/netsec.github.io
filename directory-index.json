@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-11-01T11:50:34+00:00",
+  "generated_at": "2026-11-02T13:29:13+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 123,
+  "count": 125,
   "members": [
     {
       "name": "Mr Adam Hanzel",
@@ -102,6 +102,17 @@
       "role": null,
       "affiliation": "College of Europe (Natolin)",
       "photo": "https://netsec-cost.eu/assets/images/people/andriy-tyushka.jpg"
+    },
+    {
+      "name": "Prof. Anna Danielsson",
+      "name_key": "anna danielsson",
+      "aliases": [],
+      "slug": "anna-danielsson",
+      "url": "https://netsec-cost.eu/people/anna-danielsson.html",
+      "orcid": null,
+      "role": "Management Committee · Sweden",
+      "affiliation": "Swedish Defence University",
+      "photo": null
     },
     {
       "name": "Anna Pagnacco",
@@ -894,6 +905,17 @@
       "role": null,
       "affiliation": "University of Genoa",
       "photo": "https://netsec-cost.eu/assets/images/people/mattia-sguazzini.jpg"
+    },
+    {
+      "name": "Dr Megghi Pengili",
+      "name_key": "megghi pengili",
+      "aliases": [],
+      "slug": "megghi-pengili",
+      "url": "https://netsec-cost.eu/people/megghi-pengili.html",
+      "orcid": "0000-0002-7218-799X",
+      "role": null,
+      "affiliation": "CeFLI-Rome / University of Leeds",
+      "photo": null
     },
     {
       "name": "Dr Mehmet Babacan",
