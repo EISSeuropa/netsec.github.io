@@ -101,6 +101,10 @@ Each bio's `wgs` field is sourced from cost.eu's authoritative Membership table,
 
 When the maintainer (or COST admin) updates a member's WG list on cost.eu, the change reaches the directory on the next sync run. No respondent action required.
 
+### The `joined` date
+
+Every `bios.json` record carries `joined`, the UTC date (`YYYY-MM-DD`) on which the member first landed in the file. `scripts/sync-bios.py` stamps it only on a genuinely new member, the branch of `merge()` with no prior match, so a returning respondent keeps the date already stored and an idempotent re-run leaves the file unchanged. It is listed in `_DERIVED_FIELDS`. The records that predate the field were backfilled in November 2026 from the git history of `data/bios.json`, taking the date of the first commit holding each id. The Directory reads it for the recent-joiners box above the search, which rolls the members whose `joined` falls in the last 30 days and stays hidden when there are none. Editing a member's `joined` by hand moves them in or out of that box.
+
 ### The `founding_contributor` flag
 
 `scripts/sync-bios.py` cross-references each bio's name against `data/founding-proposers.json`, the hand-curated list of the 52 researchers named in the COST Open Call proposal that established the Action. A match sets `"founding_contributor": true` on that member's `bios.json` record. The flag is computed at sync time using the same first-and-last name key the directory uses elsewhere, so it is not a form field a respondent can set, and it is rebuilt (cleared then re-applied) on every run so a stale flag never lingers. It is listed in the sync's `_DERIVED_FIELDS`, which keeps the auto-PR from reading it as a respondent edit.

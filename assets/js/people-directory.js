@@ -3237,6 +3237,130 @@
     });
   }
 
+  /* Recent joiners: the members whose bios.json `joined` date falls in the
+     last 30 days roll through one at a time, like end credits, newest first,
+     and the roll loops (the design of the EISS internal dashboard's Today
+     box). Hovering, focusing a link or the pause button holds the roll
+     (RGAA 13.8: motion past five seconds needs a pause control), and tabbing
+     to a link brings its line up. Without motion every line stays in view.
+     The box stays hidden when nobody joined in the window. */
+  function initJoiners(members) {
+    const box = document.querySelector('[data-joiners]');
+    const list = document.querySelector('[data-joiners-list]');
+    const text = document.querySelector('[data-joiners-text]');
+    const stage = document.querySelector('[data-joiners-stage]');
+    const pauseBtn = document.querySelector('[data-joiners-pause]');
+    if (!box || !list || !text || !stage || !pauseBtn) return;
+    const WINDOW_DAYS = 30, SHOWN = 8, DAY = 864e5;
+    const now = new Date();
+    // `joined` is a UTC date (sync-bios.py), so today is counted in UTC too.
+    const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+    const recent = members
+      .map(m => ({ m: m, at: Date.parse((m.joined || '') + 'T00:00:00Z') }))
+      .filter(x => !isNaN(x.at) && today - x.at < WINDOW_DAYS * DAY)
+      .sort((a, b) => b.at - a.at || a.m.name.localeCompare(b.m.name));
+    if (!recent.length) return;
+    const calm = cinePrefersReducedMotion();
+    const locale = { fr: 'fr-FR', de: 'de-DE' }[PLANG] || 'en-GB';
+    let rel = null;
+    try { rel = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }); } catch (e) { /* older engines skip the date */ }
+
+    text.textContent = recent.length === 1
+      ? window.netsecT('Joined the network in the last 30 days: 1 member.')
+      : window.netsecT('Joined the network in the last 30 days: {0} members.').replace('{0}', recent.length);
+
+    const RING = '<svg class="joiners-ring" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12.5"/></svg>';
+    // Without motion the lines stack, so fewer of them show.
+    recent.slice(0, calm ? 4 : SHOWN).forEach(function (x) {
+      const m = x.m;
+      const li = document.createElement('li');
+      li.className = 'joiners-item';
+      const av = document.createElement('span');
+      av.className = 'joiners-avatar';
+      av.setAttribute('aria-hidden', 'true');
+      const face = document.createElement('span');
+      face.className = 'joiners-face';
+      if (m.photo) {
+        const img = document.createElement('img');
+        img.src = m.photo; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+        face.appendChild(img);
+      } else {
+        face.textContent = initials(m.name);
+      }
+      av.appendChild(face);
+      av.insertAdjacentHTML('beforeend', RING);
+      const a = document.createElement('a');
+      a.href = profileHref(m.id) || ('#' + m.id);
+      a.title = m.affiliation ? m.name + ' · ' + m.affiliation : m.name;
+      const name = document.createElement('span');
+      name.className = 'joiners-name';
+      name.textContent = m.name;
+      a.appendChild(name);
+      if (m.affiliation) {
+        const aff = document.createElement('span');
+        aff.className = 'joiners-aff';
+        aff.textContent = ', ' + m.affiliation;
+        a.appendChild(aff);
+      }
+      li.appendChild(av);
+      li.appendChild(a);
+      if (rel) {
+        const when = document.createElement('span');
+        when.className = 'joiners-when';
+        when.textContent = rel.format(-Math.max(0, Math.round((today - x.at) / DAY)), 'day');
+        li.appendChild(when);
+      }
+      list.appendChild(li);
+    });
+
+    const lines = () => Array.prototype.slice.call(list.children);
+    const roll = { i: 0, hover: false, focus: false, held: false };
+    list.classList.toggle('joiners-static', calm);
+    pauseBtn.hidden = calm || lines().length < 2;
+
+    function go(k) {
+      const ls = lines(), cur = ls[roll.i], next = ls[k];
+      roll.i = k;
+      if (cur && cur !== next) { cur.classList.remove('joiners-on'); cur.classList.add('joiners-past'); }
+      if (next) { next.classList.remove('joiners-past', 'joiners-reset'); next.classList.add('joiners-on'); }
+    }
+    // A line that has drifted out goes back below, unseen, for its next turn.
+    list.addEventListener('transitionend', function (e) {
+      const li = e.target;
+      if (li.parentNode !== list || e.propertyName !== 'opacity' || !li.classList.contains('joiners-past')) return;
+      li.classList.add('joiners-reset');
+      li.classList.remove('joiners-past');
+      void li.offsetWidth;
+      li.classList.remove('joiners-reset');
+    });
+    stage.addEventListener('pointerenter', function () { roll.hover = true; });
+    stage.addEventListener('pointerleave', function () { roll.hover = false; });
+    list.addEventListener('focusin', function (e) {
+      roll.focus = true;
+      const k = lines().indexOf(e.target.closest('li'));
+      if (k > -1 && k !== roll.i) go(k);
+    });
+    list.addEventListener('focusout', function (e) { roll.focus = list.contains(e.relatedTarget); });
+    pauseBtn.addEventListener('click', function () {
+      roll.held = !roll.held;
+      pauseBtn.setAttribute('aria-pressed', String(roll.held));
+    });
+
+    // The box folds open on a grid row (CSS), so the toolbar below glides
+    // rather than jumps, and the first line rises in once it has opened.
+    if (calm) { box.hidden = false; return; }
+    box.classList.add('joiners-out');
+    box.hidden = false;
+    void box.offsetWidth;
+    box.classList.remove('joiners-out');
+    setTimeout(function () { go(0); }, 250);
+    setInterval(function () {
+      const n = lines().length;
+      if (n < 2 || roll.hover || roll.focus || roll.held || document.hidden) return;
+      go((roll.i + 1) % n);
+    }, 3200);
+  }
+
   // Load data
   try {
     const res = await fetch('data/bios.json', { cache: 'no-cache' });
@@ -3296,6 +3420,7 @@
     buildCountryStrip();
     render();
     initPeopleConstellation(MEMBERS.length);
+    initJoiners(MEMBERS);
     // Surface how current the directory is, driven by bios.json's
     // `generated_at` stamp (#271). The stamp only moves when the sync
     // produces a substantive change, so this date stays honest across

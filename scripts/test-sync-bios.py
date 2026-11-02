@@ -439,6 +439,28 @@ def test_merge_name_match_same_country_collapses() -> None:
     expect("role preserved", merged[0]["roles"], ["WG3 Leader"])
 
 
+def test_merge_stamps_joined_on_new_members_only() -> None:
+    """`joined` drives the Directory's recent-joiners roll. A genuinely new
+    member is stamped with today's UTC date. A returning member keeps the
+    date already stored, so a re-submission never makes them look new."""
+    from datetime import datetime, timezone
+    print("\nmerge() — joined stamped on new members only:")
+    today = datetime.now(timezone.utc).date().isoformat()
+    prior = [{"id": "maria-garcia", "name": "Dr Maria Garcia", "country": "Spain",
+              "email": "maria@uni.es", "wgs": [3], "joined": "2026-05-15"}]
+    form_entries = [
+        {"id": "maria-garcia", "name": "Dr Maria Garcia", "country": "Spain",
+         "country_code": "", "email": "maria@uni.es", "_email_key": "maria@uni.es",
+         "_timestamp": "2026-11-01 10:00:00", "wgs": [3], "bio": "Updated."},
+        {"id": "nora-newcomer", "name": "Dr Nora Newcomer", "country": "Finland",
+         "country_code": "", "_email_key": "nora@x.org",
+         "_timestamp": "2026-11-01 10:00:00", "wgs": [1]},
+    ]
+    merged = {m["id"]: m for m in merge(prior, form_entries)}
+    expect("returning member keeps their joined date", merged["maria-garcia"]["joined"], "2026-05-15")
+    expect("new member is stamped today", merged["nora-newcomer"]["joined"], today)
+
+
 def test_merge_mentorship_propagates() -> None:
     """A form submission carrying a mentorship facet must overwrite the
     matched prior entry's mentorship, the same way keywords do. Regression
@@ -1568,6 +1590,7 @@ def main() -> None:
     test_row_to_member_resolves_photo_to_canonical_slug()
     test_merge_keeps_webp_when_photo_already_canonical()
     test_founding_contributor_flag()
+    test_merge_stamps_joined_on_new_members_only()
     test_download_photo_idempotent_on_unchanged_upstream()
     test_ensure_people_webp()
     test_substance_check_catches_photo_only_change()

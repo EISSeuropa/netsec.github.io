@@ -145,6 +145,7 @@ maintainer-facing audience.
 
 #### Added
 
+- The Directory names the members who joined in the last 30 days, in all three locales. A box above the search gives the count, and under it the eight newest roll through one at a time like end credits, newest first, each rising in with a ring that draws round the photo, holding, then drifting up and fading as the next arrives. Each line links to the member's profile and says how long ago they joined. Hovering, focusing a link or the pause button holds the roll, and tabbing to a link brings its line up. With reduced motion the four newest stay in view as a plain list. The design follows the Today box on the EISS internal dashboard.
 - Each Directory card links to the member on the Network Map, in the same locale, from the detailed card and from the preview panel.
 - The Directory links to the Network Map from the top of the page in all three locales. A Map button beside the search, outlined in the accent colour, opens the map with the Working Group, research-theme and mentorship filters carried over, and names the number of people ("These 36 on the map") when the map draws exactly the people listed. The Network Map panel that sat below the member cards is gone.
 - The roadmap has a quarter navigator in all three locales, a rail beside the timeline on wide screens and a bar of chips under the header on smaller ones. It jumps to any quarter or to Under watch, marks the quarter on screen and tags the current quarter as Now. Each quarter can be linked directly, for example `roadmap.html#q4-2026`.
