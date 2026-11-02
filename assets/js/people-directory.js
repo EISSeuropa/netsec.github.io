@@ -104,6 +104,8 @@
     // facet would spotlight an off-screen rectangle. There, a single step
     // points at the Filters button that opens the sheet instead.
     const isPhone = window.matchMedia('(max-width: 640px)').matches;
+    // The desktop steps visit each facet row, so unfold them first.
+    if (!isPhone) setFacetsOpen(true);
     const searchStep = { target: '#member-search',
       title: window.netsecT('Search'),
       body:  window.netsecT('Free-text search across names, affiliations, and countries. Combines with the filters.') };
@@ -1572,6 +1574,7 @@
       sheetApplyBtn.textContent = window.netsecT('Show {0} members').replace('{0}', _lastCount);
     }
     renderActiveFilters();
+    syncMoreFilters();
   }
   function clearAllFilters() {
     search.value = '';
@@ -1607,6 +1610,34 @@
   const sheetResetBtn = document.getElementById('members-sheet-reset');
   const sheetApplyBtn = document.getElementById('members-sheet-apply');
   const activeFiltersEl = document.getElementById('members-active-filters');
+
+  // Desktop "More filters": the secondary facets (mentorship, STSM hosting,
+  // research themes and regions) start folded under the search row. The
+  // button's badge counts the active ones, and the facets open by themselves
+  // while any is on, so a deep link or a theme pill on a card never applies
+  // a filter that cannot be seen. They are never folded again automatically.
+  const toolbarEl = document.querySelector('[data-members-toolbar]');
+  const moreFiltersBtn = document.querySelector('[data-more-filters]');
+  const moreFiltersCount = document.querySelector('[data-more-filters-count]');
+  function secondaryFilterCount() {
+    return activeMentorship.size + (activeStsm ? 1 : 0) + activeKeywords.size + activeRegions.size;
+  }
+  function setFacetsOpen(open) {
+    if (!toolbarEl || !moreFiltersBtn) return;
+    toolbarEl.toggleAttribute('data-facets-open', open);
+    moreFiltersBtn.setAttribute('aria-expanded', String(open));
+  }
+  function syncMoreFilters() {
+    if (!moreFiltersBtn) return;
+    const n = secondaryFilterCount();
+    if (moreFiltersCount) { moreFiltersCount.hidden = n === 0; moreFiltersCount.textContent = n; }
+    if (n > 0 && !toolbarEl.hasAttribute('data-facets-open')) setFacetsOpen(true);
+  }
+  if (moreFiltersBtn) {
+    moreFiltersBtn.addEventListener('click', function () {
+      setFacetsOpen(!toolbarEl.hasAttribute('data-facets-open'));
+    });
+  }
 
   // Filters held inside the sheet (the free-text search has its own field
   // and is excluded from the badge count).

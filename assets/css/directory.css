@@ -143,6 +143,35 @@
   border-top:1px solid var(--glass-border);
   display:flex;flex-direction:column;gap:8px;
 }
+/* Desktop: the secondary facets start folded behind "More filters", which
+   sits in the search row between the search and Map. people-directory.js
+   sets data-facets-open while they show, and opens them itself whenever one
+   of their filters is active (a deep link, or a theme pill on a card). The
+   phone sheet keeps every facet in view, so the button is desktop only. */
+.members-more-filters{
+  display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;min-height:44px;
+  padding:0 14px;border-radius:12px;
+  font:inherit;font-size:.88rem;font-weight:600;color:var(--ink);white-space:nowrap;cursor:pointer;
+  background:rgba(255,255,255,.92);border:1px solid rgba(11,18,32,.14);
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  transition:background .2s var(--ease),border-color .2s var(--ease);
+}
+.dark .members-more-filters{ background:rgba(255,255,255,.06);border-color:var(--glass-border); }
+@media (hover: hover){ .members-more-filters:hover{ border-color:var(--accent); } }
+.members-more-filters:focus-visible{ outline:2px solid var(--accent);outline-offset:2px; }
+.members-more-filters[aria-expanded="true"]{ border-color:var(--accent);color:var(--accent); }
+.members-more-filters-count{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:18px;height:18px;padding:0 5px;border-radius:9px;
+  font-size:.72rem;font-weight:700;color:#fff;background:var(--accent);
+}
+.members-more-filters-count[hidden]{ display:none; }
+@media (min-width:641px){
+  .members-toolbar:not([data-facets-open]) .members-facets{ display:none; }
+}
+@media (max-width:640px){
+  .members-more-filters{ display:none; }
+}
 
 /* Pinned directory tools: density toggle, guided tour, and the add-your-bio
    CTA. Fixed to the bottom-right so they stay reachable while the grid
@@ -2083,9 +2112,8 @@ html.dir-welcome .welcome-strip[hidden]{display:flex;flex-wrap:wrap;align-items:
 .joiners.joiners-out{ grid-template-rows:0fr; opacity:0; margin-bottom:0; }
 .joiners-clip{ min-height:0; overflow:hidden; }
 .joiners-box{
-  padding:12px 18px 12px 22px;
+  padding:12px 18px;
   border-radius:14px;
-  border-left:3px solid var(--accent-2);
   background:linear-gradient(180deg, rgba(10,132,255,.07), rgba(10,132,255,.02));
 }
 .dark .joiners-box{ background:linear-gradient(180deg, rgba(10,132,255,.14), rgba(10,132,255,.05)); }
@@ -2129,6 +2157,6 @@ html.dir-welcome .welcome-strip[hidden]{display:flex;flex-wrap:wrap;align-items:
 }
 @keyframes joiners-ring{ to{ stroke-dashoffset:0; } }
 @media (max-width:640px){
-  .joiners-box{ padding:10px 12px 10px 16px; }
+  .joiners-box{ padding:10px 14px; }
   .joiners-when{ display:none; }
 }

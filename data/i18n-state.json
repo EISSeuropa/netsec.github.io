@@ -119,14 +119,14 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "8aff5fd607409835f3308a7c005c5e53b8385e23",
+        "source_sha1": "c10b5c7485f4826135f4108c28a1ab731ad2da0d",
         "translated_on": "2026-11-02",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "8aff5fd607409835f3308a7c005c5e53b8385e23",
+        "source_sha1": "c10b5c7485f4826135f4108c28a1ab731ad2da0d",
         "translated_on": "2026-11-02",
         "status": "beta",
         "reviewed_by": null

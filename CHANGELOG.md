@@ -155,6 +155,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The Directory search box is 136 pixels tall on desktop, down from 279. The mentorship, STSM hosting, research theme and research region filters sit behind a More filters button beside the search, in all three locales, with a badge counting the active ones, and they open on their own when one of them is applied from a link or a theme pill on a card. Phones keep the Filters sheet.
 - The Directory STSM filter chip reads "Can or may host STSM visitors" in all three locales. Its count of 77 covers the 34 members who can host and the 43 who are open to hosting.
 - The Directory welcome panel for first-time visitors is one line, with its guidance behind a "How the directory works" disclosure, and the Network Map signpost sits below the member grid. On a 375px phone the search box starts 554px down the page. It had started at 1,390px.
 - The A3 promotional poster sets "Net" and "Sec" in its title in the logo gradient, matching the home page, and its print PNG, small PNG and WebP previews are re-rendered.
