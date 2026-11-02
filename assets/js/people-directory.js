@@ -104,6 +104,8 @@
     // facet would spotlight an off-screen rectangle. There, a single step
     // points at the Filters button that opens the sheet instead.
     const isPhone = window.matchMedia('(max-width: 640px)').matches;
+    // The desktop steps visit each facet row, so unfold them first.
+    if (!isPhone) setFacetsOpen(true);
     const searchStep = { target: '#member-search',
       title: window.netsecT('Search'),
       body:  window.netsecT('Free-text search across names, affiliations, and countries. Combines with the filters.') };
@@ -1572,6 +1574,7 @@
       sheetApplyBtn.textContent = window.netsecT('Show {0} members').replace('{0}', _lastCount);
     }
     renderActiveFilters();
+    syncMoreFilters();
   }
   function clearAllFilters() {
     search.value = '';
@@ -1607,6 +1610,34 @@
   const sheetResetBtn = document.getElementById('members-sheet-reset');
   const sheetApplyBtn = document.getElementById('members-sheet-apply');
   const activeFiltersEl = document.getElementById('members-active-filters');
+
+  // Desktop "More filters": the secondary facets (mentorship, STSM hosting,
+  // research themes and regions) start folded under the search row. The
+  // button's badge counts the active ones, and the facets open by themselves
+  // while any is on, so a deep link or a theme pill on a card never applies
+  // a filter that cannot be seen. They are never folded again automatically.
+  const toolbarEl = document.querySelector('[data-members-toolbar]');
+  const moreFiltersBtn = document.querySelector('[data-more-filters]');
+  const moreFiltersCount = document.querySelector('[data-more-filters-count]');
+  function secondaryFilterCount() {
+    return activeMentorship.size + (activeStsm ? 1 : 0) + activeKeywords.size + activeRegions.size;
+  }
+  function setFacetsOpen(open) {
+    if (!toolbarEl || !moreFiltersBtn) return;
+    toolbarEl.toggleAttribute('data-facets-open', open);
+    moreFiltersBtn.setAttribute('aria-expanded', String(open));
+  }
+  function syncMoreFilters() {
+    if (!moreFiltersBtn) return;
+    const n = secondaryFilterCount();
+    if (moreFiltersCount) { moreFiltersCount.hidden = n === 0; moreFiltersCount.textContent = n; }
+    if (n > 0 && !toolbarEl.hasAttribute('data-facets-open')) setFacetsOpen(true);
+  }
+  if (moreFiltersBtn) {
+    moreFiltersBtn.addEventListener('click', function () {
+      setFacetsOpen(!toolbarEl.hasAttribute('data-facets-open'));
+    });
+  }
 
   // Filters held inside the sheet (the free-text search has its own field
   // and is excluded from the badge count).
@@ -3250,7 +3281,12 @@
     const text = document.querySelector('[data-joiners-text]');
     const stage = document.querySelector('[data-joiners-stage]');
     const pauseBtn = document.querySelector('[data-joiners-pause]');
-    if (!box || !list || !text || !stage || !pauseBtn) return;
+    // The inline head script reserved the box's space before first paint
+    // (html.dir-joiners), so it fills in place rather than pushing the
+    // toolbar down. Releasing the class folds the box away when it stays empty.
+    const reserved = document.documentElement.classList.contains('dir-joiners');
+    const release = () => document.documentElement.classList.remove('dir-joiners');
+    if (!box || !list || !text || !stage || !pauseBtn) { release(); return; }
     const WINDOW_DAYS = 30, SHOWN = 8, DAY = 864e5;
     const now = new Date();
     // `joined` is a UTC date (sync-bios.py), so today is counted in UTC too.
@@ -3259,7 +3295,7 @@
       .map(m => ({ m: m, at: Date.parse((m.joined || '') + 'T00:00:00Z') }))
       .filter(x => !isNaN(x.at) && today - x.at < WINDOW_DAYS * DAY)
       .sort((a, b) => b.at - a.at || a.m.name.localeCompare(b.m.name));
-    if (!recent.length) return;
+    if (!recent.length) { release(); return; }
     const calm = cinePrefersReducedMotion();
     const locale = { fr: 'fr-FR', de: 'de-DE' }[PLANG] || 'en-GB';
     let rel = null;
@@ -3346,11 +3382,13 @@
       pauseBtn.setAttribute('aria-pressed', String(roll.held));
     });
 
-    // The box folds open on a grid row (CSS), so the toolbar below glides
-    // rather than jumps, and the first line rises in once it has opened.
-    if (calm) { box.hidden = false; return; }
-    box.classList.add('joiners-out');
+    // A reserved box is already at its full height, so it fills in place.
+    // Otherwise it folds open on a grid row (CSS), so the toolbar below
+    // glides rather than jumps. The first line rises in once it is open.
+    if (calm) { box.hidden = false; release(); return; }
+    if (!reserved) box.classList.add('joiners-out');
     box.hidden = false;
+    release();
     void box.offsetWidth;
     box.classList.remove('joiners-out');
     setTimeout(function () { go(0); }, 250);
@@ -3562,6 +3600,8 @@
     filterChips.forEach(b => b.addEventListener('click', dismissLanded));
     if (countrySelect) countrySelect.addEventListener('change', dismissLanded);
   } catch (err) {
+    // No data, so no recent joiners: drop the box's reserved space.
+    document.documentElement.classList.remove('dir-joiners');
     // Locale-aware contact link so a French / German visitor lands
     // on the FR / DE index page if it exists (else falls back to EN).
     const lang = (document.documentElement.lang || 'en').toLowerCase().slice(0, 2);

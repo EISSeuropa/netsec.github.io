@@ -71,6 +71,10 @@
         document.documentElement.classList.add('dir-welcome');
       }
     } catch (e) {}
+    /* The recent-joiners box keeps its place from the first paint too, for
+       the same reason. people-directory.js fills it once bios.json loads, and
+       removes this class (folding the box away) when nobody joined lately. */
+    document.documentElement.classList.add('dir-joiners');
   })();
 </script>
 <link rel="stylesheet" href="assets/css/site.css">
@@ -229,7 +233,7 @@
       </div>
     </aside>
 
-    <div class="members-toolbar glass">
+    <div class="members-toolbar glass" data-members-toolbar>
       <label class="members-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <input id="member-search" type="search" placeholder="Search name, affiliation, country…" aria-label="Search members">
@@ -240,6 +244,15 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
         <span>Filters</span>
         <span class="members-filter-toggle-count" id="members-filter-toggle-count" hidden></span>
+      </button>
+      <!-- Desktop only: shows and hides the secondary facets (mentorship, STSM
+           hosting, research themes and regions), which start folded. They
+           open by themselves while one of them is active. Phones use the
+           Filters sheet above instead. -->
+      <button type="button" class="members-more-filters" data-more-filters aria-expanded="false" aria-controls="members-facets">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+        <span>More filters</span>
+        <span class="members-more-filters-count" data-more-filters-count hidden></span>
       </button>
       <a class="members-map-link" data-directory-map-link href="network-map.html">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="6" r="2.4"/><circle cx="19" cy="7" r="2.4"/><circle cx="12" cy="17.5" r="2.4"/><path d="M6.9 7.3 10.6 15.6"/><path d="M17.3 8.6 13.6 15.9"/><path d="M7.4 6.4 16.6 6.8"/></svg>
@@ -271,7 +284,7 @@
            second tier under the primary search + Working-Group row. A deep-link
            (#themes=…) or a card-pill click selects a theme; the rows stay
            visible. -->
-      <div class="members-facets">
+      <div class="members-facets" id="members-facets">
         <!-- Mentorship filter. Two opt-in toggle chips; hidden until a member
              opts in. -->
         <!-- Mentorship + STSM hosting share one row to keep the

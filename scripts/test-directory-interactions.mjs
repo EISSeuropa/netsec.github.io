@@ -101,6 +101,15 @@ const browser = await launchBrowser();
 // One fresh page per journey. Reduced motion kills the FLIP/scroll animations
 // so geometry is deterministic; the tour key suppresses the first-visit
 // overlay that would otherwise intercept clicks.
+// On desktop the theme row sits among the secondary facets, folded behind
+// "More filters" until a visitor opens them. Open those first, then expand
+// the row's <details>, which is collapsed by default too.
+async function openThemeRow(page) {
+  const folded = await page.$eval('[data-more-filters]', b => b.getAttribute('aria-expanded') !== 'true');
+  if (folded) await clickWhenReady(page, '[data-more-filters]');
+  await page.evaluate(() => { document.getElementById('members-keyword-filter').open = true; });
+}
+
 async function openDirectory(hash = '', { width = 1280, height = 900, dark = false, expectCards = true } = {}) {
   const page = await browser.newPage();
   await page.setViewport({ width, height });
@@ -392,7 +401,7 @@ const journeys = {
   // and no pressed chip anywhere on screen.
   async 'deep link to a rare theme shows its pressed chip'() {
     let page = await openDirectory();
-    await page.evaluate(() => { document.getElementById('members-keyword-filter').open = true; });
+    await openThemeRow(page);
     await clickWhenReady(page, '#members-keyword-filter-toggle');
     const rareSlug = await page.$$eval('#members-keyword-filter-chips .members-keyword-filter-chip',
       els => els[els.length - 1].dataset.slug);
@@ -408,7 +417,7 @@ const journeys = {
   // carried on filtering the grid.
   async 'collapsing the theme row keeps the active chip visible'() {
     const page = await openDirectory();
-    await page.evaluate(() => { document.getElementById('members-keyword-filter').open = true; });
+    await openThemeRow(page);
     await clickWhenReady(page, '#members-keyword-filter-toggle');   // Show all
     const rareSlug = await page.$$eval('#members-keyword-filter-chips .members-keyword-filter-chip',
       els => els[els.length - 1].dataset.slug);
@@ -624,7 +633,7 @@ const journeys = {
     // is needed too since the row began ranking itself by live count: a theme
     // that yields nobody inside WG4 sorts to the bottom, below the top-N cut,
     // so the collapsed row holds no disabled chip for the zero case to use.
-    await page.evaluate(() => { document.getElementById('members-keyword-filter').open = true; });
+    await openThemeRow(page);
     await clickWhenReady(page, '#members-keyword-filter-toggle');
     const chips = await page.$$eval('#members-keyword-filter-chips [data-slug]',
       els => els.map(e => ({ slug: e.dataset.slug, n: +e.querySelector('.count').textContent, disabled: e.disabled })));
