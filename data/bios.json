@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-11-02T13:29:13+00:00",
+  "generated_at": "2026-11-03T12:46:32+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-11-02T13:29:13+00:00"
+    "last_synced": "2026-11-03T12:46:32+00:00"
   },
   "members": [
     {
@@ -4879,10 +4879,10 @@
     },
     {
       "id": "lukas-wahden",
-      "name": "Mr Lukas Wahden",
+      "name": "Mr Lukas Benjamin Wahden",
       "country": "France",
       "country_code": "fr",
-      "affiliation": "Sciences Po Paris (CERI)",
+      "affiliation": "Sciences Po Paris",
       "position": "PhD candidate",
       "roles": [],
       "wgs": [],
@@ -4890,20 +4890,20 @@
         "matched"
       ],
       "regions": [
+        "Europe",
         "Europe - Eastern neighbours / Russia",
         "Global and cross-regional"
       ],
-      "stsm_hosting": "yes",
+      "stsm_hosting": "ask",
       "wg_leadership": {},
-      "bio": "Lukas Wahden is a PhD candidate in International Relations at Sciences Po’s Centre for International Studies (CERI), and an Associate Fellow with the Russia Program at George Washington University. His doctoral research examines how status-seeking, military strategy, and resource appropriation have shaped Russian approaches to spaces beyond traditional territorial sovereignty, including the polar regions, oceans, and outer space. He also writes 66° North, a monthly Substack newsletter analysing developments in Arctic security and politics.",
+      "bio": "Lukas Wahden is a PhD candidate in International Relations at Sciences Po’s Centre for International Studies (CERI) and an Associate Fellow with the Russia Program at George Washington University. His research examines how status-seeking, military strategy, and resource appropriation have shaped Russian approaches to spaces beyond traditional territorial sovereignty, including the polar regions, oceans, and outer space.\n\nHe holds a BA from University College London, a dual master’s degree from the London School of Economics and Sciences Po, and a master’s degree in China Studies from the Yenching Academy at Peking University. He previously worked at the European External Action Service and the Institute for Strategic Research of the École Militaire in Paris, and held visiting fellowships at the Royal Danish Defence College in Copenhagen and the Arctic University of Norway (UiT) in Tromsø. He also writes 66° North, a monthly Substack newsletter analysing Arctic security.",
       "keywords": [
-        "International security",
-        "Great power relations",
         "Russian foreign policy",
         "Arctic security",
-        "Global Commons governance"
+        "Northern European security",
+        "Maritime security"
       ],
-      "email": "lukas.wahden@gmail.com",
+      "email": "lukas.wahden@sciencespo.fr",
       "website": "https://www.sciencespo.fr/ceri/en/directory/wahden-lukas/",
       "orcid": "",
       "linkedin": "https://www.linkedin.com/in/lukas-wahden/",
@@ -4915,15 +4915,15 @@
       "photo_source_sha256": "8276e4d5d5b45d51d9458ca7d4d2accdd2d032d80f138c2d540f2918496cf226",
       "canonical_keywords": [
         "Arctic security",
-        "Global commons governance",
-        "Great power relations",
-        "International security",
+        "Maritime security",
+        "Northern european security",
         "Russian foreign policy"
       ],
       "themes": [
-        "EU, UN and other international organisations",
+        "European and transatlantic security order",
         "Foreign policy and diplomacy",
-        "Security and defence"
+        "Security and defence",
+        "Transnational and human security"
       ],
       "joined": "2026-10-15"
     },
@@ -5999,10 +5999,6 @@
       "count": 9
     },
     {
-      "keyword": "International security",
-      "count": 7
-    },
-    {
       "keyword": "Strategy",
       "count": 7
     },
@@ -6012,6 +6008,10 @@
     },
     {
       "keyword": "Geopolitics",
+      "count": 6
+    },
+    {
+      "keyword": "International security",
       "count": 6
     },
     {
@@ -6039,6 +6039,10 @@
       "count": 5
     },
     {
+      "keyword": "Maritime security",
+      "count": 5
+    },
+    {
       "keyword": "Ontological security",
       "count": 5
     },
@@ -6060,10 +6064,6 @@
     },
     {
       "keyword": "Identity",
-      "count": 4
-    },
-    {
-      "keyword": "Maritime security",
       "count": 4
     },
     {
@@ -6655,10 +6655,6 @@
       "count": 1
     },
     {
-      "keyword": "Global commons governance",
-      "count": 1
-    },
-    {
       "keyword": "Global governance",
       "count": 1
     },
@@ -6668,10 +6664,6 @@
     },
     {
       "keyword": "Governance",
-      "count": 1
-    },
-    {
-      "keyword": "Great power relations",
       "count": 1
     },
     {
@@ -6864,6 +6856,10 @@
     },
     {
       "keyword": "Network security",
+      "count": 1
+    },
+    {
+      "keyword": "Northern european security",
       "count": 1
     },
     {
@@ -7214,15 +7210,15 @@
     },
     {
       "theme": "Transnational and human security",
-      "count": 24
+      "count": 25
+    },
+    {
+      "theme": "European and transatlantic security order",
+      "count": 23
     },
     {
       "theme": "Strategy and deterrence",
       "count": 23
-    },
-    {
-      "theme": "European and transatlantic security order",
-      "count": 22
     },
     {
       "theme": "War, military history and armed conflict",
@@ -7233,15 +7229,15 @@
       "count": 16
     },
     {
-      "theme": "EU, UN and other international organisations",
-      "count": 12
-    },
-    {
       "theme": "Crisis management and critical systems resilience",
       "count": 11
     },
     {
       "theme": "Economic security and geoeconomics",
+      "count": 11
+    },
+    {
+      "theme": "EU, UN and other international organisations",
       "count": 11
     },
     {
@@ -7395,13 +7391,11 @@
     "Geopolitics of AI": "Cyber and emerging technology",
     "Geopolitics of the Indo-Pacific": "Foreign policy and diplomacy",
     "German security policy": "Foreign policy and diplomacy",
-    "Global commons governance": "EU, UN and other international organisations",
     "Global governance": "EU, UN and other international organisations",
     "Global order": "EU, UN and other international organisations",
     "Governance": "Democracy, governance and political change",
     "Grand strategy": "Strategy and deterrence",
     "Great power competition": "Foreign policy and diplomacy",
-    "Great power relations": "Foreign policy and diplomacy",
     "Great-power competition": "Foreign policy and diplomacy",
     "Gulf security": "Security and defence",
     "Heritage": "Identity, narratives and ideational security",
@@ -7468,6 +7462,7 @@
     "Network security": "Climate, energy and environmental security",
     "Non-state actors": "Transnational and human security",
     "Non-state armed groups": "Transnational and human security",
+    "Northern european security": "European and transatlantic security order",
     "Nuclear deterrence": "Strategy and deterrence",
     "Nuclear politics": "Strategy and deterrence",
     "Nuclear security": "Climate, energy and environmental security",
@@ -7572,7 +7567,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 79
+      "count": 80
     },
     {
       "region": "Global and cross-regional",
