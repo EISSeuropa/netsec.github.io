@@ -1,6 +1,6 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-11-02T13:29:13+00:00",
+  "generated_at": "2026-11-03T12:46:32+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
   "count": 125,
   "members": [
@@ -786,14 +786,14 @@
       "photo": "https://netsec-cost.eu/assets/images/people/ludovica-castelli.jpg"
     },
     {
-      "name": "Mr Lukas Wahden",
+      "name": "Mr Lukas Benjamin Wahden",
       "name_key": "lukas wahden",
       "aliases": [],
       "slug": "lukas-wahden",
       "url": "https://netsec-cost.eu/people/lukas-wahden.html",
       "orcid": null,
       "role": null,
-      "affiliation": "Sciences Po Paris (CERI)",
+      "affiliation": "Sciences Po Paris",
       "photo": "https://netsec-cost.eu/assets/images/people/lukas-wahden.jpg"
     },
     {

@@ -4,7 +4,7 @@
     "working_groups": 4,
     "people": 235,
     "people_with_bios": 125,
-    "edges": 700,
+    "edges": 701,
     "themes": 17,
     "panels_matched": 14,
     "panel_edges": 58,
@@ -89,13 +89,13 @@
       "id": "theme-eu-un-and-other-international-organisations",
       "type": "theme",
       "name": "EU, UN and other international organisations",
-      "memberCount": 12
+      "memberCount": 11
     },
     {
       "id": "theme-european-and-transatlantic-security-order",
       "type": "theme",
       "name": "European and transatlantic security order",
-      "memberCount": 22
+      "memberCount": 23
     },
     {
       "id": "theme-foreign-policy-and-diplomacy",
@@ -143,7 +143,7 @@
       "id": "theme-transnational-and-human-security",
       "type": "theme",
       "name": "Transnational and human security",
-      "memberCount": 24
+      "memberCount": 25
     },
     {
       "id": "theme-war-military-history-and-armed-conflict",
@@ -889,7 +889,7 @@
     {
       "id": "lukas-wahden",
       "type": "person",
-      "name": "Mr Lukas Wahden",
+      "name": "Mr Lukas Benjamin Wahden",
       "country": "France",
       "slug": "lukas-wahden",
       "photo": "assets/images/people/map/lukas-wahden.webp",
@@ -4179,7 +4179,7 @@
     },
     {
       "source": "lukas-wahden",
-      "target": "theme-eu-un-and-other-international-organisations"
+      "target": "theme-european-and-transatlantic-security-order"
     },
     {
       "source": "lukas-wahden",
@@ -4188,6 +4188,10 @@
     {
       "source": "lukas-wahden",
       "target": "theme-security-and-defence"
+    },
+    {
+      "source": "lukas-wahden",
+      "target": "theme-transnational-and-human-security"
     },
     {
       "source": "mahmoud-javadi",
