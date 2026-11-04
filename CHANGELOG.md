@@ -172,6 +172,10 @@ maintainer-facing audience.
 
 #### Fixed
 
+- `/licensing.html` lists the third-party assets the site actually ships. Inter and Lexend are self-hosted, not loaded from Google Fonts. Feather icons (MIT), the flag-icons share-card flags (MIT) and Pagefind (MIT) are now credited. The FlagCDN thumbnails are recorded as public domain, as Flagpedia publishes them, not as MIT. The EISS logo joins the trademarks. Each licence text is linked from `assets/licences/`. EN, FR and DE.
+- `LICENSE-CONTENT` states its scope. Member and faculty photographs and biographies, event photographs and video, the COST, EU and EISS marks and the third-party fonts, icons and software sit outside CC BY 4.0, as `/licensing.html` already said.
+- The press kit labels the three posters "CC BY 4.0 except the photographs and logos", since the directory posters carry member headshots and every poster carries the COST logo and EU emblem. EN, FR and DE.
+- The unused Socicon icon font, the leftover Mobirise project file and a rendered directory wallpaper with 33 member headshots are no longer published.
 - French and German pages no longer jump 42 pixels on phones as they load. The translation notice at the top reserves its height before the page draws (#2105).
 - The Directory country flags have a Country caption like the other filter rows and wrap onto a second line. At 1024px the last flag had been cut off. A shortened affiliation on a card shows the full text on hover.
 - At 1024px the Find your way in tab and the Directory tools no longer cover the right-hand column of Directory cards. Beside the grid the tools stand in an upright pill, and the grid keeps a margin clear for it.
