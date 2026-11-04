@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-11-03T12:46:32+00:00",
+  "generated_at": "2026-11-04T12:59:38+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-11-03T12:46:32+00:00"
+    "last_synced": "2026-11-04T12:59:38+00:00"
   },
   "members": [
     {
@@ -5983,16 +5983,111 @@
         "Disciplines, theory and methods",
         "War, military history and armed conflict"
       ]
+    },
+    {
+      "id": "jukka-ruohonen",
+      "name": "Dr Jukka Ruohonen",
+      "country": "Denmark",
+      "country_code": "dk",
+      "affiliation": "University of Southern Denmark",
+      "position": "Assistant Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Eastern neighbours / Russia"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "I am a computer scientist and software engineering by education and trade, but doing generally and increasingly interdisciplinary research. Broadly, my research areas cover cyber security, software engineering, technology policy, European studies, and the European Union, among other things.",
+      "keywords": [
+        "Cyber security",
+        "European Union",
+        "European security"
+      ],
+      "email": "juk@mmmi.sdu.dk",
+      "website": "https://portal.findresearcher.sdu.dk/en/persons/juk/",
+      "orcid": "0000-0001-5147-3084",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "joined": "2026-11-04",
+      "canonical_keywords": [
+        "Cybersecurity",
+        "EU",
+        "European security"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "EU, UN and other international organisations",
+        "European and transatlantic security order"
+      ]
+    },
+    {
+      "id": "kenan-hodzic",
+      "name": "Prof. Kenan Hodžić",
+      "country": "Bosnia and Herzegovina",
+      "country_code": "ba",
+      "affiliation": "University of Sarajevo, Faculty of Criminal Justice and Security Studies",
+      "position": "Assistant Professor",
+      "roles": [
+        "Management Committee · Bosnia and Herzegovina"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor",
+        "mentee"
+      ],
+      "regions": [
+        "Europe",
+        "Europe - Western Balkans",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Dr. Kenan Hodžić is an Assistant Professor at the Faculty of Criminal Justice and Security Studies, University of Sarajevo, where he teaches courses including Fundamentals of Security, Crisis Management, and Critical Infrastructure Protection. His research focuses on contemporary national security, energy security, and cross-domain physical and IT/OT security convergence. Dr. Hodžić has extensive international project experience, serving as a national expert on EU-funded initiatives across South East and Eastern Europe, Central Asia, and the Middle East, as well as contributing as a research assistant on NATO-supported projects. He actively leads advanced capacity-building programs and specialized academic schools dedicated to enhancing critical infrastructure protection.",
+      "keywords": [
+        "Energy security",
+        "Critical Infrastructure",
+        "Crisis Management"
+      ],
+      "email": "khodzic@fkn.unsa.ba",
+      "website": "https://www.fkn.edu.ba/",
+      "orcid": "0000-0002-4966-1905",
+      "linkedin": "https://www.linkedin.com/in/kenan-hod%C5%BEi%C4%87-0637482a7/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/kenan-hodzic.jpg",
+      "source": "form",
+      "photo_source_sha256": "2fc95d03be1c92d69955b157378e34931aa2e037e9a83d902c8b1ec0b3e70187",
+      "joined": "2026-11-04",
+      "canonical_keywords": [
+        "Crisis management",
+        "Critical infrastructure",
+        "Energy security"
+      ],
+      "themes": [
+        "Climate, energy and environmental security",
+        "Crisis management and critical systems resilience",
+        "Cyber and emerging technology"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "European security",
-      "count": 12
+      "count": 13
     },
     {
       "keyword": "Cybersecurity",
-      "count": 10
+      "count": 11
     },
     {
       "keyword": "AI",
@@ -6051,6 +6146,10 @@
       "count": 5
     },
     {
+      "keyword": "Crisis management",
+      "count": 4
+    },
+    {
       "keyword": "Emerging and disruptive technologies",
       "count": 4
     },
@@ -6073,10 +6172,6 @@
     {
       "keyword": "War",
       "count": 4
-    },
-    {
-      "keyword": "Crisis management",
-      "count": 3
     },
     {
       "keyword": "Critical infrastructure protection",
@@ -6163,6 +6258,10 @@
       "count": 2
     },
     {
+      "keyword": "Critical infrastructure",
+      "count": 2
+    },
+    {
       "keyword": "Defence economics",
       "count": 2
     },
@@ -6176,6 +6275,14 @@
     },
     {
       "keyword": "Emerging technology",
+      "count": 2
+    },
+    {
+      "keyword": "Energy security",
+      "count": 2
+    },
+    {
+      "keyword": "EU",
       "count": 2
     },
     {
@@ -6411,10 +6518,6 @@
       "count": 1
     },
     {
-      "keyword": "Critical infrastructure",
-      "count": 1
-    },
-    {
       "keyword": "Critical ir",
       "count": 1
     },
@@ -6555,10 +6658,6 @@
       "count": 1
     },
     {
-      "keyword": "Energy security",
-      "count": 1
-    },
-    {
       "keyword": "Environmental degradation",
       "count": 1
     },
@@ -6568,10 +6667,6 @@
     },
     {
       "keyword": "Epistemic communities",
-      "count": 1
-    },
-    {
-      "keyword": "EU",
       "count": 1
     },
     {
@@ -7193,12 +7288,12 @@
   ],
   "theme_aggregate": [
     {
-      "theme": "Foreign policy and diplomacy",
-      "count": 39
+      "theme": "Cyber and emerging technology",
+      "count": 40
     },
     {
-      "theme": "Cyber and emerging technology",
-      "count": 38
+      "theme": "Foreign policy and diplomacy",
+      "count": 39
     },
     {
       "theme": "Security and defence",
@@ -7214,7 +7309,7 @@
     },
     {
       "theme": "European and transatlantic security order",
-      "count": 23
+      "count": 24
     },
     {
       "theme": "Strategy and deterrence",
@@ -7230,14 +7325,14 @@
     },
     {
       "theme": "Crisis management and critical systems resilience",
-      "count": 11
-    },
-    {
-      "theme": "Economic security and geoeconomics",
-      "count": 11
+      "count": 12
     },
     {
       "theme": "EU, UN and other international organisations",
+      "count": 12
+    },
+    {
+      "theme": "Economic security and geoeconomics",
       "count": 11
     },
     {
@@ -7254,7 +7349,7 @@
     },
     {
       "theme": "Climate, energy and environmental security",
-      "count": 5
+      "count": 6
     },
     {
       "theme": "Political psychology, public opinion and decision-making",
@@ -7567,7 +7662,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 80
+      "count": 82
     },
     {
       "region": "Global and cross-regional",
@@ -7575,19 +7670,19 @@
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 28
+      "count": 29
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 28
+      "count": 29
+    },
+    {
+      "region": "Middle East and North Africa",
+      "count": 20
     },
     {
       "region": "The Americas",
       "count": 20
-    },
-    {
-      "region": "Middle East and North Africa",
-      "count": 19
     },
     {
       "region": "Asia",
