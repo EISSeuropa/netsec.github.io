@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-11-03T12:46:32+00:00",
+  "generated_at": "2026-11-04T12:59:38+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 125,
+  "count": 127,
   "members": [
     {
       "name": "Mr Adam Hanzel",
@@ -632,6 +632,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/john-helferich.jpg"
     },
     {
+      "name": "Dr Jukka Ruohonen",
+      "name_key": "jukka ruohonen",
+      "aliases": [],
+      "slug": "jukka-ruohonen",
+      "url": "https://netsec-cost.eu/people/jukka-ruohonen.html",
+      "orcid": "0000-0001-5147-3084",
+      "role": null,
+      "affiliation": "University of Southern Denmark",
+      "photo": null
+    },
+    {
       "name": "Dr Julia Carver",
       "name_key": "julia carver",
       "aliases": [],
@@ -663,6 +674,17 @@
       "role": null,
       "affiliation": "Dublin City University",
       "photo": "https://netsec-cost.eu/assets/images/people/ken-mcdonagh.jpg"
+    },
+    {
+      "name": "Prof. Kenan Hodžić",
+      "name_key": "kenan hodzic",
+      "aliases": [],
+      "slug": "kenan-hodzic",
+      "url": "https://netsec-cost.eu/people/kenan-hodzic.html",
+      "orcid": "0000-0002-4966-1905",
+      "role": "Management Committee · Bosnia and Herzegovina",
+      "affiliation": "University of Sarajevo, Faculty of Criminal Justice and Security Studies",
+      "photo": "https://netsec-cost.eu/assets/images/people/kenan-hodzic.jpg"
     },
     {
       "name": "Mr Khalil Talhaoui",
