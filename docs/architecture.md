@@ -115,7 +115,8 @@ flowchart TD
   to "always visible" if JS is disabled or the observer fails.
 - **Glass cards** with `backdrop-filter`; graceful fallback under
   `@supports not (backdrop-filter)`.
-- **Country flags** thumbnails via FlagCDN for every ISO country
+- **Country flags** thumbnails from FlagCDN, self-hosted in
+  `assets/images/flags/`, for every ISO country
   code (~200), used in the MC-by-country grid and member cards.
 - **Network directory filters** — free-text search × WG/MC chip ×
   country dropdown, all AND-combined client-side.
@@ -502,6 +503,7 @@ sweep (rule §11).
 │   ├── js/outputs-publications.js   # /outputs.html publications list (shared EN/FR/DE; renders publications.json, #726)
 │   ├── images/people/*.{jpg,png,webp} # Member headshots + WebP siblings (sync-bios)
 │   ├── images/cost-logo.jpg         # COST logotype
+│   ├── licences/                    # Licence texts of bundled third-party assets (see licensing.html §3)
 │   ├── images/og-image.png          # Open Graph card (1200 × 630)
 │   └── images/logo.png              # Favicon / NS mark
 │
@@ -608,7 +610,7 @@ sweep (rule §11).
 │
 ├── CHANGELOG.md                     # Keep a Changelog format, SemVer 2.0.0
 ├── LICENSE                          # MIT (code)
-├── LICENSE-CONTENT                  # CC BY 4.0 (prose) with carve-outs
+├── LICENSE-CONTENT                  # CC BY 4.0, with a scope statement listing what it excludes
 ├── README.md                        # Project entry point
 └── SECURITY.md                      # Coordinated-disclosure policy
 ```

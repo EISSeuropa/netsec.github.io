@@ -23,7 +23,7 @@ vendor rather than to us:
 - **Formspree** (contact-form processing) — <https://formspree.io/security/>
 - **Google** (Forms + Sheets used for the bios pipeline) —
   <https://www.google.com/about/appsecurity/>
-- **FlagCDN**, **Google Fonts** (passive CDN assets)
+- **GoatCounter** (page-view counter). Fonts and flags are self-hosted.
 
 ## Reporting a vulnerability
 
@@ -99,7 +99,8 @@ A short list of the security hygiene we maintain on this repository:
   PR-review workflow before any new bio appears on the public site.
 - **Content-Security-Policy**: the site loads no inline analytics,
   no advertising, and no third-party tracking pixels. External
-  assets are limited to Google Fonts, FlagCDN, and the Formspree
-  endpoint; see `privacy.html` for the full list.
+  requests are limited to GoatCounter and the Formspree
+  endpoint, since fonts and flags are self-hosted. See `privacy.html`
+  for the full list.
 
 Thank you for helping keep NetSec safe.

@@ -89,8 +89,24 @@ For the rationale, see the PDF documentation pack, Section 07
 | COST logo         | `assets/images/cost-logo.jpg`                         | © COST Association — used per COST visual-identity guidance for funded Actions       |
 | EU emblem         | Inlined SVG in every page footer                      | Used per the [EU visual identity manual](https://commission.europa.eu/communication/visual-identity-and-branding_en) for *Funded by the EU* communication |
 | NetSec logo       | Lockups + mark in `assets/images/brand/` (favicon family derived from the mark) | © COST Action NetSec                                              |
-| Member headshots  | `assets/images/people/<slug>.{jpg,png,jpeg,webp}`     | © the individual member, displayed with their consent                                |
-| Country flags     | <https://flagcdn.com>, self-hosted in `assets/images/flags/` | Flags themselves public domain; CDN MIT                                              |
+| Member headshots  | `assets/images/people/<slug>.{jpg,png,jpeg,webp}`     | © the member or their photographer, displayed with the member's consent. Outside CC BY 4.0 |
+| Country flags     | From <https://flagcdn.com>, self-hosted in `assets/images/flags/` | Public domain, as Flagpedia (which runs FlagCDN) publishes them             |
+| Share-card flags  | `assets/og/flags/*.svg`, from lipis/flag-icons (fetched by `build-og-cards.py`) | MIT, text in `assets/licences/flag-icons-MIT.txt`                |
+| EISS logo         | `assets/images/eiss-logo.svg`, inlined on the Training School pages | © European Initiative for Security Studies. Outside CC BY 4.0          |
+
+#### Third-party licences
+
+The licence texts of the bundled fonts, icons, flags and Pagefind sit in
+`assets/licences/` (Inter and Lexend OFL 1.1, Lucide ISC, Feather MIT,
+flag-icons MIT, Pagefind MIT). ISC, MIT and OFL require the notice to travel
+with the files. Adding a third-party asset therefore takes three edits in the
+same PR: its licence text in `assets/licences/`, an entry in
+`licensing.html` §3 (EN, FR, DE) linking that text, and, if it falls
+outside CC BY 4.0, a line in the scope statement at the top of
+`LICENSE-CONTENT`. Anything a photograph or a logo appears in (posters,
+wallpapers, social cards) is labelled "CC BY 4.0 except the photographs
+and logos" in the press kit. `pages-deploy.yml` publishes the whole tree,
+so an unused file is still public: delete it rather than leave it.
 
 #### Maintaining brand assets
 
@@ -123,8 +139,7 @@ network calls when someone loads the site.
 
 | Service        | What it serves               | Privacy implication                                                                   |
 | -------------- | ---------------------------- | ------------------------------------------------------------------------------------- |
-| Google Fonts   | Inter + Lexend webfonts      | IP + UA logged by Google; declared in `privacy.html`.                                 |
-| FlagCDN        | Country flag PNGs            | IP + UA logged by FlagCDN; declared in `privacy.html`.                                |
+| GoatCounter    | Page-view counter            | No cookies, IP not stored. Declared in `privacy.html`.                                |
 | Formspree      | Contact-form POST endpoint   | Only on submit. Acts as data processor under SCC; declared in `privacy.html`.         |
 
 ## Routine admin tasks
