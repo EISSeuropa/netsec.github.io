@@ -103,15 +103,15 @@
     "licensing.html": {
       "fr": {
         "file": "licensing.fr.html",
-        "source_sha1": "f3361e7e265b3753b95150fa8e3e4cdf62d4095e",
-        "translated_on": "2026-09-26",
+        "source_sha1": "9eb7e8e0a014eb0f847c2d7348bbd69e34f3c503",
+        "translated_on": "2026-11-04",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "licensing.de.html",
-        "source_sha1": "f3361e7e265b3753b95150fa8e3e4cdf62d4095e",
-        "translated_on": "2026-09-26",
+        "source_sha1": "9eb7e8e0a014eb0f847c2d7348bbd69e34f3c503",
+        "translated_on": "2026-11-04",
         "status": "beta",
         "reviewed_by": null
       }
@@ -167,15 +167,15 @@
     "press-kit.html": {
       "fr": {
         "file": "press-kit.fr.html",
-        "source_sha1": "bc3dbfe08abf484161f427242069317607f82698",
-        "translated_on": "2026-10-25",
+        "source_sha1": "4e832779d6961055e2e3badf7276b56ee412e06a",
+        "translated_on": "2026-11-04",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "press-kit.de.html",
-        "source_sha1": "bc3dbfe08abf484161f427242069317607f82698",
-        "translated_on": "2026-10-25",
+        "source_sha1": "4e832779d6961055e2e3badf7276b56ee412e06a",
+        "translated_on": "2026-11-04",
         "status": "beta",
         "reviewed_by": null
       }
