@@ -100,6 +100,7 @@ the EN page; the FR/DE variants sit alongside.
 │   ├── css/site.css        # Shared stylesheet (theme tokens, glass, components, responsive)
 │   ├── js/site.js          # Shared scripts (nav, theme toggle, reveal-on-scroll, MC accordion)
 │   ├── fonts/              # Self-hosted Inter + Lexend WOFF2 with critical-subset preloads
+│   ├── licences/           # Licence texts of bundled third-party fonts, icons, flags and Pagefind
 │   ├── images/brand/       # NetSec logo family (lockup + dark variant + mark, favicon set)
 │   └── images/people/      # Member headshots downloaded + downscaled by sync-bios.py
 ├── data/
@@ -325,8 +326,9 @@ This repository uses **dual licensing**:
 | --------------------------------------------------- | ------------------------------------------ |
 | Source code (HTML/CSS/JS, Python, Actions)          | [MIT](LICENSE)                             |
 | Site content (prose, page copy, documentation)      | [CC BY 4.0](LICENSE-CONTENT)               |
-| Member bios and photos                              | © contributors, used with permission       |
-| Third-party assets (icons, fonts, flags, COST/EU)   | their own licences — see `LICENSE-CONTENT` |
+| Member bios and photos, event photos and video      | © their rights holders, used with permission |
+| Third-party assets (icons, fonts, flags, Pagefind)  | their own licences, texts in `assets/licences/` |
+| COST, EU and EISS marks                             | trademarks of their owners                 |
 
 If you reuse the site content under CC BY, please attribute it as:
 
