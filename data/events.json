@@ -314,7 +314,7 @@
     {
       "uid": "summer-school-2027@netsec-cost.eu",
       "summary": "NetSec Training School",
-      "description": "Training and mentoring for early-career researchers in European security, run by NetSec and the European Initiative for Security Studies at the University of Belgrade, Faculty of Political Science, alongside the European Security Studies Conference. Details of the school and the call for applications will follow.\n\nFull details: https://netsec-cost.eu/summer-school.html",
+      "description": "Training and mentoring for early-career researchers in European security, run by NetSec and the European Initiative for Security Studies at the University of Belgrade, Faculty of Political Science, alongside the European Security Studies Conference. Applications close on 7 December 2026.\n\nFull details: https://netsec-cost.eu/summer-school.html",
       "location": "University of Belgrade, Faculty of Political Science, Belgrade, Serbia",
       "url": "https://netsec-cost.eu/summer-school.html",
       "start": "2027-06-08T09:00",
@@ -342,9 +342,9 @@
         "de": "8.–11. Juni 2027"
       },
       "cardDescription": {
-        "en": "Training and mentoring for early-career researchers in European security, run alongside the European Security Studies Conference. Details of the school and the call for applications will follow.",
-        "fr": "Formation et mentorat pour les chercheur·euses en début de carrière en sécurité européenne, en parallèle de la European Security Studies Conference. Les détails de l'école et l'appel à candidatures suivront.",
-        "de": "Ausbildung und Mentoring für Nachwuchsforschende in der europäischen Sicherheitsforschung, parallel zur European Security Studies Conference. Einzelheiten zur Schule und der Aufruf zur Bewerbung folgen."
+        "en": "Training and mentoring for early-career researchers in security studies, run alongside the European Security Studies Conference. Applications close on 7 December 2026.",
+        "fr": "Formation et mentorat pour les chercheur·euses en début de carrière en études de sécurité, en parallèle de la European Security Studies Conference. Candidatures jusqu'au 7 décembre 2026.",
+        "de": "Ausbildung und Mentoring für Nachwuchsforschende in den Sicherheitsstudien, parallel zur European Security Studies Conference. Bewerbungen bis zum 7. Dezember 2026."
       },
       "cardTitle": {
         "en": "NetSec Training School",

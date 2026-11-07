@@ -97,6 +97,13 @@
     return wrap;
   }
 
+  function topicList(topics) {
+    if (!topics || !topics.length) return null;
+    const ul = el('ul', { class: 'ts-edition-topics' });
+    for (const top of topics) ul.append(el('li', null, loc(top)));
+    return [el('p', { class: 'ts-edition-topics-label' }, t.topics + ':'), ul];
+  }
+
   function renderNextCall(ed) {
     if (!nextRoot || !ed) return;
     nextRoot.replaceChildren();
@@ -107,9 +114,11 @@
     const city = loc(ed.city), host = loc(ed.host), dates = loc(ed.dates);
     dl.append(defRow(t.location, city && city !== 'To be announced' ? (host ? `${host}, ${city}` : city) : t.toBeAnnounced));
     dl.append(defRow(t.dates, dates && dates !== 'To be announced' ? dates : t.toBeAnnounced));
-    if (ed.deadline) dl.append(defRow(t.deadline, ed.deadline));
+    if (ed.deadline) dl.append(defRow(t.deadline, loc(ed.deadline)));
     card.append(dl);
     if (ed.summary) card.append(el('p', { class: 'ts-next-summary' }, loc(ed.summary)));
+    const nextTopics = topicList(ed.topics);
+    if (nextTopics) card.append(...nextTopics);
     // Calendar only when a real start date is set (an announced, dated edition).
     if (ed.start && ed.ics) {
       card.append(el('a', { class: 'btn btn-ghost ts-next-cal', href: 'calendar/' + ed.ics + '.ics' }, t.addToCalendar));
@@ -135,12 +144,8 @@
       if (ed.summary) card.append(el('p', { class: 'ts-edition-summary' }, loc(ed.summary)));
       const co = coordinatorLine(ed.coordinators);
       if (co) card.append(co);
-      if (ed.topics && ed.topics.length) {
-        card.append(el('p', { class: 'ts-edition-topics-label' }, t.topics + ':'));
-        const ul = el('ul', { class: 'ts-edition-topics' });
-        for (const top of ed.topics) ul.append(el('li', null, top));
-        card.append(ul);
-      }
+      const topics = topicList(ed.topics);
+      if (topics) card.append(...topics);
       const g = gallery(ed.photos);
       if (g) card.append(g);
       edRoot.appendChild(card);

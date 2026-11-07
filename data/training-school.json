@@ -9,10 +9,10 @@
       "dates": "human dates, as a string or {en, fr, de} map, or 'To be announced'.",
       "start": "optional ISO date (YYYY-MM-DD). Presence gates the calendar affordance + links the events.json .ics.",
       "ics": "optional calendar slug under /calendar/<slug>.ics (only meaningful with a start date).",
-      "deadline": "optional human application-deadline string.",
+      "deadline": "optional human application-deadline, as a string or {en, fr, de} map.",
       "cohort": "optional number of funded participants.",
       "coordinators": "optional array of { name, affiliation, member_id? } — member_id deep-links to the directory.",
-      "topics": "optional array of strings (themes covered).",
+      "topics": "optional array of themes covered, each a string or {en, fr, de} map. Rendered on the next-call card and the edition archive.",
       "photos": "optional array of { src, alt } for the edition gallery; the renderer omits any src that 404s.",
       "summary": "optional one-paragraph blurb for the edition card, as a string or {en, fr, de} map."
     },
@@ -21,16 +21,23 @@
   "editions": [
     {
       "year": 2027,
-      "status": "announced",
+      "status": "call-open",
       "city": { "en": "Belgrade", "fr": "Belgrade", "de": "Belgrad" },
       "host": { "en": "University of Belgrade, Faculty of Political Science", "fr": "Université de Belgrade, Faculté de sciences politiques", "de": "Universität Belgrad, Fakultät für Politikwissenschaften" },
       "dates": { "en": "8 to 11 June 2027", "fr": "du 8 au 11 juin 2027", "de": "8. bis 11. Juni 2027" },
       "start": "2027-06-08",
       "ics": "summer-school-2027",
+      "deadline": { "en": "7 December 2026", "fr": "7 décembre 2026", "de": "7. Dezember 2026" },
+      "topics": [
+        { "en": "How to research in security studies", "fr": "Comment mener une recherche en études de sécurité", "de": "Forschen in den Sicherheitsstudien" },
+        { "en": "Understanding war, security, strategy, military operations and military organisations from a plurality of approaches", "fr": "Comprendre la guerre, la sécurité, la stratégie, les opérations militaires et les organisations militaires à partir d'une pluralité d'approches", "de": "Krieg, Sicherheit, Strategie, Militäroperationen und militärische Organisationen aus einer Vielfalt von Ansätzen verstehen" },
+        { "en": "Methods and fieldwork", "fr": "Méthodes et terrain", "de": "Methoden und Feldforschung" },
+        { "en": "Publishing and the academic career", "fr": "La publication et la carrière universitaire", "de": "Publizieren und die akademische Laufbahn" }
+      ],
       "summary": {
-        "en": "The 2027 school runs alongside the European Security Studies Conference, which follows on 10 and 11 June. Details of the school and the call for applications will follow.",
-        "fr": "L'édition 2027 se tient en parallèle de la European Security Studies Conference, qui a lieu les 10 et 11 juin. Les détails de l'école et l'appel à candidatures suivront.",
-        "de": "Die Ausgabe 2027 findet parallel zur European Security Studies Conference am 10. und 11. Juni statt. Einzelheiten zur Schule und der Aufruf zur Bewerbung folgen."
+        "en": "The 2027 school runs alongside the European Security Studies Conference on 10 and 11 June. Applicants send a motivation letter, a CV of at most two pages and a 500-word abstract of their research proposal to ecs.netsec@eiss-europa.com.",
+        "fr": "L'édition 2027 se tient en parallèle de la European Security Studies Conference, les 10 et 11 juin. Les candidat·es envoient une lettre de motivation, un CV de deux pages au plus et un résumé de 500 mots de leur projet de recherche à ecs.netsec@eiss-europa.com.",
+        "de": "Die Ausgabe 2027 findet parallel zur European Security Studies Conference am 10. und 11. Juni statt. Bewerber·innen senden ein Motivationsschreiben, einen Lebenslauf von höchstens zwei Seiten und eine Zusammenfassung ihres Forschungsvorhabens von 500 Wörtern an ecs.netsec@eiss-europa.com."
       }
     },
     {
