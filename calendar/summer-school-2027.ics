@@ -27,7 +27,7 @@ DTSTAMP:20261006T093326Z
 DTSTART;TZID=Europe/Belgrade:20270608T090000
 DTEND;TZID=Europe/Belgrade:20270611T180000
 SUMMARY:NetSec Training School
-DESCRIPTION:Training and mentoring for early-career researchers in European security\, run by NetSec and the European Initiative for Security Studies at the University of Belgrade\, Faculty of Political Science\, alongside the European Security Studies Conference. Details of the school and the call for applications will follow.\n\nFull details: https://netsec-cost.eu/summer-school.html
+DESCRIPTION:Training and mentoring for early-career researchers in European security\, run by NetSec and the European Initiative for Security Studies at the University of Belgrade\, Faculty of Political Science\, alongside the European Security Studies Conference. Applications close on 7 December 2026.\n\nFull details: https://netsec-cost.eu/summer-school.html
 LOCATION:University of Belgrade\, Faculty of Political Science\, Belgrade\, Serbia
 URL;VALUE=URI:https://netsec-cost.eu/summer-school.html
 ORGANIZER;CN=NetSec Training School:mailto:ecs.netsec@eiss-europa.com
