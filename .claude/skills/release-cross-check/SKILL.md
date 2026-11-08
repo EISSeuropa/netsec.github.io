@@ -58,7 +58,7 @@ issue (rule §3) and reference it from the surface itself.
   sentence for index-only patch releases). EN gets the CHANGELOG
   copy directly; FR + DE get the EN copy plus a `[à traduire]` /
   `[zu übersetzen]` marker on the lede, so `check-i18n-drift.py` flags the card for a
-  hand translation (no machine translation, rule §1). Translate the
+  translation (by hand or by machine, rule §1). Translate the
   FR + DE card bodies in a follow-up before the marker lingers.
 - **The script also relocates the card into the quarter matching its
   ship date** (issue #233): if a release shipped earlier or later
@@ -91,8 +91,8 @@ issue (rule §3) and reference it from the surface itself.
 - Run `python3 scripts/check-i18n-drift.py` locally. CI catches
   drift on HTML-touching PRs, but a release moment is the right
   place to confirm zero drift before stamping a version.
-- Did any EN copy change in this release? FR / DE need manual
-  updates (no machine translation — rule §1).
+- Did any EN copy change in this release? FR / DE need updates
+  (machine translation is fine, and merging approves it, rule §1).
 - Ribbon stamps on `*.fr.html` / `*.de.html` carry
   `data-i18n-status="beta"`; if a translation has been
   re-verified against current EN, consider whether the *beta*

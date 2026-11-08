@@ -52,10 +52,10 @@ Design principles:
 - **Apple-style glassmorphism** with a manual light/dark theme toggle
   (default follows `prefers-color-scheme`, override stored in
   `localStorage`).
-- **Authoritative British English** with **manually-translated French
-  and German variants** at `*.fr.html` and `*.de.html`. No machine
-  translation; FR/DE pages carry a beta ribbon stating the English
-  version is canonical. Drift between EN and the translations is
+- **Authoritative British English** with **French and German
+  variants** at `*.fr.html` and `*.de.html`, by hand or by machine
+  translation, approved by merging the PR. FR/DE pages carry a beta
+  ribbon stating the English version is canonical. Drift between EN and the translations is
   enforced by `scripts/check-i18n-drift.py` in CI on every PR
   touching HTML.
 - **Accessible by default**: skip links, ARIA landmarks, no
@@ -71,7 +71,7 @@ Design principles:
 ## Repository layout
 
 Sixteen public pages, each with an authoritative EN version and
-manually-translated FR + DE siblings (e.g. `about.html` /
+translated FR + DE siblings (e.g. `about.html` /
 `about.fr.html` / `about.de.html`). The listing below shows only
 the EN page; the FR/DE variants sit alongside.
 
@@ -242,7 +242,7 @@ External contributions are welcome but small. We're a static site, not a framewo
 - **File via the issue forms.** Blank issues are disabled; pick *Bug report*, *Enhancement*, or *Documentation issue* on the [new-issue chooser](https://github.com/EISSeuropa/netsec.github.io/issues/new/choose). External questions go through the contact form, the FAQ, or the Wiki onboarding page (linked from the chooser).
 - **One PR per logical change.** Reference any related issue.
 - **Run the page in light *and* dark mode** before submitting visual changes. Run it at mobile width too (375 px is the lower-bound viewport we test).
-- **For FR/DE edits**, mirror the EN change manually (no machine translation), then run `python3 scripts/check-i18n-drift.py --mark-fresh <source> <lang>` before merging.
+- **For FR/DE edits**, mirror the EN change (machine translation is fine, and merging approves it), then run `python3 scripts/check-i18n-drift.py --mark-fresh <source> <lang>` before merging.
 - **Don't add a build step or a JS framework** without discussion. The "stay on plain HTML" decision is recorded on the [members' Wiki Decisions log](https://github.com/EISSeuropa/netsec.github.io/wiki/Decisions).
 - **Don't add tracking pixels, analytics, or third-party scripts.**
 - **The MIT + CC-BY dual licence applies to every accepted contribution.**

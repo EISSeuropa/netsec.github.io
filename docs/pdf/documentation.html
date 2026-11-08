@@ -1682,7 +1682,7 @@ flowchart LR
 
   <div class="card callout">
     <h4>Budget posture</h4>
-    <p style="margin:0">The Action has <strong>no recurring translation budget</strong> and no plan for a paid translation API. Translations are authored by hand, once, and refreshed only when English drifts meaningfully. The site never makes a translation API call at build or runtime.</p>
+    <p style="margin:0">The Action has <strong>no recurring translation budget</strong> and no plan for a paid translation API. Translations are committed once, by hand or with a machine-translation tool, approved by merging the pull request, and refreshed only when English drifts meaningfully. The site never makes a translation API call at build or runtime.</p>
   </div>
 
   <h2>How a language switch happens</h2>
@@ -1744,7 +1744,7 @@ python3 scripts/check-i18n-drift.py --stamp fr # mark FR refreshed for changed p
   <div class="card callout">
     <h4>What we deliberately don't do</h4>
     <ul style="margin:.2rem 0 0">
-      <li><strong>No machine translation at build or runtime.</strong> Quality is too uneven for an official COST deliverable, and we have no budget for an API.</li>
+      <li><strong>No translation at build or runtime.</strong> Every translation is committed through a pull request, and merging it is the approval. There is no budget for an API.</li>
       <li><strong>No URL-based locale negotiation</strong> (e.g. <code>/fr/people</code>). The static sibling-files approach keeps GitHub Pages routing simple, lets us version each translation independently, and removes any need for server-side logic.</li>
       <li><strong>No language gateway page.</strong> The visitor lands on whichever URL they typed; client-side JS may redirect them to a saved preference, but only on the home page.</li>
     </ul>
