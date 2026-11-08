@@ -1,5 +1,12 @@
 # Cross-repo workflow: NetSec + EISS sites
 
+The map of all three EISS repositories (the two sites and the private
+`workspace-ops`), every data contract between them and the team
+workflow is
+[`docs/repositories-and-workflow.md`](https://github.com/EISSeuropa/EISSeuropa.github.io/blob/master/docs/repositories-and-workflow.md)
+in the EISS repository. This note keeps the detail of how the two sites
+port work between them.
+
 **Audience: the maintainer.** Two repositories under the EISSeuropa
 account share infrastructure and features that routinely port between
 them: `netsec.github.io` (this site) and `EISSeuropa.github.io` (the

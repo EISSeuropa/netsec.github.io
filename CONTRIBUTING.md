@@ -53,9 +53,11 @@ Two paths, in increasing order of effort:
 
 ## I want to translate or improve the French / German pages
 
-The site is trilingual: EN (authoritative) + FR + DE (manual
-translations marked as *beta*). Machine translation is explicitly
-not used (see [CLAUDE.md §1](CLAUDE.md#1-language--translation)).
+The site is trilingual: EN (authoritative) + FR + DE (translations
+marked as *beta*). Machine translation is allowed, and merging the
+pull request approves the translation (see
+[CLAUDE.md §1](CLAUDE.md#1-language--translation)). Say in the pull
+request which strings are machine translations.
 
 If you're a native or near-native FR / DE speaker and want to help
 lift either pair out of beta, open an enhancement issue with the
