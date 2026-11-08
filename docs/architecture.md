@@ -643,7 +643,7 @@ If you're adding a new page:
    11th). If not, signpost it via the home page's *Find out more*
    discovery grid at the end of the About section.
 3. Create FR + DE beta siblings (`page.fr.html`, `page.de.html`).
-   Translate chrome and content manually — no machine translation.
+   Translate chrome and content, by hand or by machine (CLAUDE.md §1).
 4. Add the page to `data/i18n-state.json` (the SHA-1 drift manifest)
    and run `python3 scripts/check-i18n-drift.py --mark-fresh page.html fr`
    (and `... de`) to stamp the translations.

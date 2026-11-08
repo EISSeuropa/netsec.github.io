@@ -32,7 +32,7 @@ What it does:
      entries (those with `indicoEventId`), sets a `coHost` field
      (`"joint"` or `"standalone"`), and appends newly-discovered NetSec
      events as `autoDiscovered: true` entries (EN copy only, pending
-     hand-translation, no machine translation per CLAUDE.md §1).
+     translation, CLAUDE.md §1).
   6. Writes data/indico.json. Idempotent: if the new payload is
      byte-identical to what's on disk, the file isn't touched.
 
@@ -733,7 +733,7 @@ def _en_display_date(start: str, end: str) -> str:
     hand-written `displayDate.en` style already in events.json
     ('9–11 June 2026', '4 September 2026', '30 June – 2 July 2026').
     Returns '' if start can't be parsed. FR/DE are left to the
-    maintainer (no machine translation, CLAUDE.md §1) — the renderer
+    maintainer (by hand or by machine, CLAUDE.md §1). The renderer
     falls back to the EN string until they are filled in."""
     def parse(s: str):
         m = re.match(r"^(\d{4})-(\d{2})-(\d{2})", s or "")
@@ -783,7 +783,7 @@ def _discovered_entry(norm: dict) -> dict:
     Only EN copy is synthesised (from the Indico title + URL); the
     renderers fall back to EN for FR/DE, and the `autoDiscovered` flag
     flags the entry for a maintainer to enrich by hand (richer
-    description, hand-translated FR/DE, working groups). The entry
+    description, FR/DE translations, working groups). The entry
     carries `indicoEventId` so subsequent syncs keep its summary/dates
     in step, exactly like the hand-authored ESSC entry."""
     eid = norm.get("id")

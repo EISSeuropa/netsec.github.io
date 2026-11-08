@@ -20,7 +20,7 @@ The site is a static *output*, but it sits on a real automation layer:
 
 - A cache-bust hash (`scripts/inject-seo.py`) means editing one
   stylesheet restamps every HTML file in the repo.
-- Hand-translated FR and DE variants with a drift checker
+- FR and DE variants with a drift checker
   (`scripts/check-i18n-drift.py`) mean an English copy change pulls
   manual translation work and a fresh-mark behind it.
 - Generators and sync scripts (`promote-roadmap.py`, `sync-cost.py`,

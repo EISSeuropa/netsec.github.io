@@ -585,7 +585,7 @@ def main() -> None:
         # Localise the body: EN gets the CHANGELOG content directly;
         # FR + DE get the EN content plus a [needs translation] marker
         # appended to the lede, so check-i18n-drift.py flags the card
-        # for a hand translation (no machine translation — CLAUDE.md §1).
+        # for translation (by hand or by machine, CLAUDE.md §1).
         card_body = base_body
         if base_body is not None and locale["needs_translation"]:
             title, lede_html = base_body
