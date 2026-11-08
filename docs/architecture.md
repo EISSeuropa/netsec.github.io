@@ -750,12 +750,28 @@ If you're adding a new event to the Events section:
    reads every day-and-month expression on the managed pages and in
    `events.json` itself, and fails when a range in an event's month is
    not an event's start and end, or when a single day on an event's own
-   page falls outside every event. It also fails when a `displayDate`
-   does not read as its own event's `start` and `end`, which is what
-   catches an Indico sync that moves an event (it rewrites `start` and
-   `end`, never `displayDate`). Dates in a month with no event, such as
-   an application deadline, are left alone, and abbreviated months
-   ("11 Jun") are not read.
+   page falls outside every event and is not its application deadline.
+   It also fails when a `displayDate` is not the form
+   `scripts/_event_dates.py` writes for the event's `start` and `end`.
+   Dates in a month with no event or deadline are left alone, and
+   abbreviated months ("11 Jun") are not read.
+   An event that takes applications carries `applicationDeadline`
+   (an ISO date). Mark each copy of the deadline on the site with
+   `data-event-deadline="<uid>"`, and `inject-seo.py` writes it in the
+   page's locale ("7 December 2026", "7 décembre 2026",
+   "7. Dezember 2026"). The EISS site reads the same field (#2133).
+   **Where the dates come from.** An event on Indico (`indicoEventId`)
+   takes `start` and `end` from Indico (`docs/indico-sync.md`). Any
+   other event takes them from the "EISS dates" Google Calendar: give
+   the calendar date the description line `uid: <uid>`, and its
+   application deadline a date of its own with `deadline: <uid>`.
+   `scripts/sync-calendar-dates.py` runs in the daily Indico sync
+   workflow and rewrites `start`, `end` and `applicationDeadline` from
+   the calendar, keeping the times of day. Both syncs rewrite
+   `displayDate` in every locale when `start` or `end` moves. Prose
+   dates are not rewritten: the sync's pull request fails `--check`
+   until a person edits them on that branch. An event the calendar does
+   not name keeps its hand-edited dates (#2133).
 4. TBA / undated events are deliberately **not** added to
    `data/events.json` until they have firm dates — calendar
    subscribers should not see placeholders. The TBA HTML card on

@@ -773,6 +773,7 @@ _FIXTURE_EVENTS = [
      "url": "https://netsec-cost.eu/conf.html",
      "displayDate": {"en": "10–11 June 2027", "fr": "10–11 juin 2027", "de": "10.–11. Juni 2027"}},
     {"uid": "school@x", "start": "2027-06-08T09:00", "end": "2027-06-11T18:00",
+     "applicationDeadline": "2026-12-07",
      "url": "https://netsec-cost.eu/school.html",
      "displayDate": {"en": "8–11 June 2027", "fr": "8–11 juin 2027", "de": "8.–11. Juni 2027"}},
 ]
@@ -850,3 +851,20 @@ def test_find_event_dates_reads_cross_month_ranges():
     assert [f[:5] for f in seo.find_event_dates("30 June – 2 July 2026", "en")] == [(30, 6, 2, 7, 2026)]
     assert [f[:5] for f in seo.find_event_dates("1er mars 2026", "fr")] == [(1, 3, 0, 3, 2026)]
     assert seo.find_event_dates("v1.6 of 18 June", "en")[0][:2] == (18, 6)
+
+
+@pytest.mark.parametrize("lang,want", [("en", "7 December 2026"), ("fr", "7 décembre 2026"), ("de", "7. Dezember 2026")])
+def test_marked_deadline_is_written_in_the_page_locale(fixture_events, lang, want):
+    html = '<p>Apply by <span data-event-deadline="school@x">stale</span>.</p>'
+    assert seo.derive_event_dates(html, lang, "school") == f'<p>Apply by <span data-event-deadline="school@x">{want}</span>.</p>'
+
+
+def test_marked_deadline_without_one_in_events_json_is_reported(fixture_events):
+    html = '<span data-event-deadline="conf@x">kept</span>'
+    assert seo.derive_event_dates(html, "en", "conf") == html
+    assert "applicationDeadline" in seo.PROBLEMS[0]
+
+
+def test_a_moved_deadline_flags_the_old_date_on_the_events_page(fixture_events):
+    assert _prose("Applications close on 7 December 2026.", page="school") == []
+    assert len(_prose("Applications close on 14 December 2026.", page="school")) == 1

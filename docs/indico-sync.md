@@ -83,7 +83,14 @@ by carrying a single field:
 
 For each entry with `indicoEventId`, `_patch_events_json`
 overwrites `summary`, `start`, and `end` from the fresh Indico
-payload. Everything else is preserved.
+payload. When `start` or `end` moves, it also rewrites `displayDate`
+in every locale with `scripts/_event_dates.py` (#2133). Everything
+else is preserved.
+
+Entries with no `indicoEventId` take their dates from the "EISS
+dates" Google Calendar instead. `scripts/sync-calendar-dates.py` runs
+in the same workflow, after this script, and puts its changes in the
+same pull request (`docs/architecture.md`, *Adding a new event*).
 
 The allow-list is tight on purpose. Specifically, `location` is
 **not** auto-synced: events.json carries the full postal address

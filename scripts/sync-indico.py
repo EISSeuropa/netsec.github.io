@@ -70,6 +70,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _event_dates import display_dates  # noqa: E402
+
 try:
     import requests
 except ImportError:
@@ -722,39 +725,14 @@ def extract_programme(timetable_results: dict, event_id: str) -> dict:
 # ──────────────────────────── main ────────────────────────────
 
 
-_MONTHS_EN = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
-]
-
-
 def _en_display_date(start: str, end: str) -> str:
-    """Human-readable EN date range from two ISO stamps. Mirrors the
-    hand-written `displayDate.en` style already in events.json
-    ('9–11 June 2026', '4 September 2026', '30 June – 2 July 2026').
-    Returns '' if start can't be parsed. FR/DE are left to the
-    maintainer (by hand or by machine, CLAUDE.md §1). The renderer
-    falls back to the EN string until they are filled in."""
-    def parse(s: str):
-        m = re.match(r"^(\d{4})-(\d{2})-(\d{2})", s or "")
-        return (int(m.group(1)), int(m.group(2)), int(m.group(3))) if m else None
-
-    a = parse(start)
-    if not a:
+    """Human-readable EN date range from two ISO stamps, in the form
+    displayDate.en uses ('9–11 June 2026', '4 September 2026',
+    '30 June – 2 July 2026'). Returns '' if start can't be parsed."""
+    try:
+        return display_dates(start, end or start)["en"]
+    except ValueError:
         return ""
-    b = parse(end) or a
-    ay, am, ad = a
-    by, bm, bd = b
-    if (ay, am, ad) == (by, bm, bd):
-        return f"{ad} {_MONTHS_EN[am - 1]} {ay}"
-    if ay == by and am == bm:
-        return f"{ad}–{bd} {_MONTHS_EN[am - 1]} {ay}"
-    if ay == by:
-        return f"{ad} {_MONTHS_EN[am - 1]} – {bd} {_MONTHS_EN[bm - 1]} {ay}"
-    return (
-        f"{ad} {_MONTHS_EN[am - 1]} {ay} – "
-        f"{bd} {_MONTHS_EN[bm - 1]} {by}"
-    )
 
 
 def _event_type_for(title: str) -> str:
@@ -780,7 +758,8 @@ def _discovered_entry(norm: dict) -> dict:
     """Build a minimal but schema-valid events.json entry from a
     normalised Indico event newly discovered on the NetSec calendar.
 
-    Only EN copy is synthesised (from the Indico title + URL); the
+    Only EN copy is synthesised (from the Indico title + URL), apart
+    from displayDate, which is written in every locale; the
     renderers fall back to EN for FR/DE, and the `autoDiscovered` flag
     flags the entry for a maintainer to enrich by hand (richer
     description, FR/DE translations, working groups). The entry
@@ -810,7 +789,7 @@ def _discovered_entry(norm: dict) -> dict:
         "coHost": norm.get("coHost", "standalone"),
         "autoDiscovered": True,
         "featured": False,
-        "displayDate": {"en": _en_display_date(start, end)},
+        "displayDate": display_dates(start, end) if start else {"en": ""},
         "cardTitle": {"en": title},
         "cardDescription": {
             "en": f"{title}. Full details and registration are on Indico."
@@ -839,7 +818,8 @@ def _patch_events_json(netsec_by_id: dict) -> bool:
 
       1. For every entry that opts in via `indicoEventId`, overwrite the
          allow-listed fields in `EVENTS_JSON_SYNCED_FIELDS` (summary,
-         start, end) and refresh the derived `coHost` marker. Curated
+         start, end), rewrite `displayDate` in every locale when start
+         or end moved (#2133), and refresh the derived `coHost` marker. Curated
          fields (location, descriptions, working groups) are untouched.
       2. Append any NetSec-relevant Indico event not already present, as
          a minimal `autoDiscovered` entry, so a new standalone event on
@@ -900,6 +880,8 @@ def _patch_events_json(netsec_by_id: dict) -> bool:
                 )
                 entry[field] = new
                 changed = True
+                if field in ("start", "end"):
+                    entry["displayDate"] = display_dates(entry["start"], entry["end"])
 
         # Refresh the derived co-host marker (joint vs standalone) from
         # the live keyword/category signal, so toggling the NetSec
