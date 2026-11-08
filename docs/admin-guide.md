@@ -519,6 +519,12 @@ minor / major releases only):
 
    - A one- to three-sentence **lede** in voice (what is this
      release *about*?).
+   - An optional **`### For the team`** section after the lede: two
+     to four plain sentences on what changes for EISS staff, the
+     board and volunteers. The EISS dashboard's release card and the
+     release email show it, or the lede when it is missing.
+     `scripts/release.sh` asks for it on a minor or major release
+     that has none, and puts it after the lede.
    - Two to four **themed `### sub-sections`** carrying the actual
      narrative — prose intro per theme, with bullets inside only if
      the theme has multiple distinct pieces.
