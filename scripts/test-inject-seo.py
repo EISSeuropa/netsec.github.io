@@ -764,3 +764,89 @@ def test_meta_description_with_the_year_but_an_old_date_is_reported():
     seo.PROBLEMS.clear()
     seo.check_event_description(f"Held on {ev['displayDate']['en']}.", "en", seo._event_page(ev))
     assert not seo.PROBLEMS
+
+
+# ── Print header and prose dates (#2007) ─────────────────────────
+
+_FIXTURE_EVENTS = [
+    {"uid": "conf@x", "start": "2027-06-10T09:00", "end": "2027-06-11T18:00",
+     "url": "https://netsec-cost.eu/conf.html",
+     "displayDate": {"en": "10–11 June 2027", "fr": "10–11 juin 2027", "de": "10.–11. Juni 2027"}},
+    {"uid": "school@x", "start": "2027-06-08T09:00", "end": "2027-06-11T18:00",
+     "url": "https://netsec-cost.eu/school.html",
+     "displayDate": {"en": "8–11 June 2027", "fr": "8–11 juin 2027", "de": "8.–11. Juni 2027"}},
+]
+
+
+@pytest.fixture
+def fixture_events(monkeypatch):
+    monkeypatch.setattr(seo, "_EVENTS", {"tzid": "Europe/Stockholm", "events": _FIXTURE_EVENTS})
+    monkeypatch.setattr(seo, "_EVENTS_BY_UID", {e["uid"]: e for e in _FIXTURE_EVENTS})
+    seo.PROBLEMS.clear()
+    yield
+    seo.PROBLEMS.clear()
+
+
+def _prose(text, lang="en", page="conf"):
+    own = [e for e in _FIXTURE_EVENTS if seo._event_page(e) == page]
+    seo.check_prose_dates(text, lang, f"{page}.html", {2027}, own)
+    return list(seo.PROBLEMS)
+
+
+def test_print_header_date_is_written_from_events_json(fixture_events):
+    css = 'content: "Conference 2027 · 1–2 May 2027 · Belgrade"; /* data-event-date="conf@x" */'
+    out = seo.derive_print_header_dates(css, "de", "conf")
+    assert out == 'content: "Conference 2027 · 10.–11. Juni 2027 · Belgrade"; /* data-event-date="conf@x" */'
+    assert seo.derive_print_header_dates(out, "de", "conf") == out
+
+
+def test_print_header_without_the_marker_is_left_alone(fixture_events):
+    css = 'content: "Conference 2027 · 1–2 May 2027 · Belgrade";'
+    assert seo.derive_print_header_dates(css, "en", "conf") == css
+
+
+@pytest.mark.parametrize("lang,text", [
+    ("en", "the conference on 10 and 11 June 2027, and the Training School from 8 to 11 June."),
+    ("fr", "la conférence les 10 et 11 juin 2027, et l'école du 8 au 11 juin."),
+    ("de", "die Konferenz am 10. und 11. Juni 2027 und die Schule vom 8. bis 11. Juni."),
+    ("en", "the week of 8–11 June 2027"),
+])
+def test_prose_dates_that_match_an_event_pass(fixture_events, lang, text):
+    assert _prose(text, lang) == []
+
+
+@pytest.mark.parametrize("lang,text", [
+    ("en", "the conference on 17 and 18 June 2027"),
+    ("fr", "du 15 au 18 juin"),
+    ("de", "vom 15. bis 18. Juni 2027"),
+    ("en", "on 20 June"),  # a single day on the event's own page, outside every event
+])
+def test_prose_dates_that_match_no_event_are_reported(fixture_events, lang, text):
+    assert len(_prose(text, lang)) == 1
+
+
+def test_dates_in_a_month_with_no_event_are_left_alone(fixture_events):
+    assert _prose("Applications close on 7 December 2026. Results by 1–15 March 2027.") == []
+
+
+def test_a_single_day_off_the_events_own_page_is_left_alone(fixture_events):
+    assert _prose("Accessibility statement prepared on 2 June 2027.", page="accessibility") == []
+
+
+def test_report_carries_the_page_line(fixture_events):
+    assert _prose("first line\non 17 and 18 June 2027")[0].startswith("conf.html:2 (en)")
+
+
+def test_display_date_must_read_as_start_and_end(fixture_events, monkeypatch):
+    seo.check_display_dates()
+    assert seo.PROBLEMS == []
+    moved = [dict(_FIXTURE_EVENTS[0], start="2027-06-17T09:00", end="2027-06-18T18:00")]
+    monkeypatch.setattr(seo, "_EVENTS", {"events": moved})
+    seo.check_display_dates()
+    assert len(seo.PROBLEMS) == 3  # en, fr and de
+
+
+def test_find_event_dates_reads_cross_month_ranges():
+    assert [f[:5] for f in seo.find_event_dates("30 June – 2 July 2026", "en")] == [(30, 6, 2, 7, 2026)]
+    assert [f[:5] for f in seo.find_event_dates("1er mars 2026", "fr")] == [(1, 3, 0, 3, 2026)]
+    assert seo.find_event_dates("v1.6 of 18 June", "en")[0][:2] == (18, 6)

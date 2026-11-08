@@ -20,7 +20,11 @@ Walks every HTML page in the repo and:
   4. Writes each event's displayDate from data/events.json into every
      element marked data-event-date="<uid>", and checks that an event
      page's meta description carries the same date when it names the
-     event's year (#1769).
+     event's year (#1769). The print running header of an event page
+     takes the same date (#2007).
+  5. Checks every event date written as prose, on the pages and in
+     data/events.json, against each event's start and end, and checks
+     that each displayDate reads as its own event's dates (#2007).
 
 Idempotent: SEO blocks live between sentinel comments and are rewritten
 in place; asset stamps are recomputed from the files on disk, so a
@@ -399,6 +403,140 @@ def check_event_description(desc: str, lang: str, base: str) -> None:
                             f"but not {date!r}, the date data/events.json gives {ev['uid']}")
 
 
+# The print running header is a CSS string in an @page margin box, which
+# cannot read the document, so the declaration carries the event's uid in a
+# trailing comment and the date between its first and second "·" is
+# rewritten here (#2007):
+#   content: "Conference 2027 · 10–11 June 2027 · Venue"; /* data-event-date="<uid>" */
+_PRINT_HEADER_RE = re.compile(
+    r'(content:\s*"[^"·]*·\s*)([^"·]*?)(\s*·[^"]*";\s*/\*\s*data-event-date="(?P<uid>[^"]+)"\s*\*/)')
+
+
+def derive_print_header_dates(html: str, lang: str, base: str) -> str:
+    def fill(m: re.Match) -> str:
+        ev = _EVENTS_BY_UID.get(m["uid"])
+        date = ((ev or {}).get("displayDate") or {}).get(lang)
+        if not date:
+            PROBLEMS.append(f"{base}: print header data-event-date={m['uid']!r} has no {lang} displayDate")
+            return m.group(0)
+        return m.group(1) + date.replace('"', "") + m.group(3)
+    return _PRINT_HEADER_RE.sub(fill, html)
+
+
+# ── Event dates written as prose (#2007) ─────────────────────────
+# A sentence such as "on 10 and 11 June 2027" or "du 8 au 11 juin" cannot be
+# replaced by the bare displayDate without rewriting it, so it is checked
+# instead. Each day-and-month expression is read per locale. A range ("8–11",
+# "10 and 11", "du 8 au 11", "8. bis 11.") in a month that holds an event must
+# start on an event's first day and end on an event's last day, usually the
+# same event's, though "9–12 June" runs from one event into the next. Month
+# abbreviations ("11 Jun") are not read. A single day on an event's own page,
+# or in that event's own entry, must fall within an event. Deadlines and
+# other dates in months with no event are not dates of events and are left
+# alone. The displayDate strings themselves are held to the same reading, so
+# an Indico sync that moves start and end without touching them fails here.
+_MONTHS = {
+    "en": ["January", "February", "March", "April", "May", "June", "July",
+           "August", "September", "October", "November", "December"],
+    "fr": ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+           "août", "septembre", "octobre", "novembre", "décembre"],
+    "de": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
+           "August", "September", "Oktober", "November", "Dezember"],
+}
+_SP = r"(?:\s|&nbsp;)"
+
+
+def _date_re(lang: str) -> re.Pattern:
+    month = "(" + "|".join(_MONTHS[lang]) + ")"
+    joiner = {"en": "to|and", "fr": "au|et", "de": "bis|und"}[lang]
+    day = {"en": r"(\d{1,2})", "fr": r"(\d{1,2})(?:er)?", "de": r"(\d{1,2})\."}[lang]
+    gap = _SP + "*" if lang == "de" else _SP + "+"
+    return re.compile(
+        rf"(?<![\d.]){day}(?:{gap}{month})?"
+        rf"(?:{_SP}*(?:–|-|{joiner}){_SP}*{day})?"
+        rf"{gap}{month}\b(?:{_SP}+(\d{{4}})\b)?")
+
+
+_DATE_RES = {lang: _date_re(lang) for lang in _MONTHS}
+
+
+def _day(stamp: str) -> tuple[int, int, int]:
+    return int(stamp[:4]), int(stamp[5:7]), int(stamp[8:10])
+
+
+def find_event_dates(text: str, lang: str) -> list[tuple[int, int, int, int, int | None, int]]:
+    """Every day-and-month expression in text, as
+    (first day, its month, last day or 0, last month, year or None, offset)."""
+    found = []
+    months = _MONTHS[lang]
+    for m in _DATE_RES[lang].finditer(text):
+        d1, m1, d2, m2, year = m.groups()
+        m2n = months.index(m2) + 1
+        found.append((int(d1), months.index(m1) + 1 if m1 else m2n, int(d2 or 0), m2n,
+                      int(year) if year else None, m.start()))
+    return found
+
+
+def check_prose_dates(text: str, lang: str, where: str, years: set[int], own: list[dict]) -> None:
+    """Flag event dates in text that data/events.json no longer gives.
+
+    years: the years to read an expression without one against. own: the
+    events whose page or entry this is, where a single day is checked too."""
+    spans = [(_day(ev["start"]), _day(ev["end"])) for ev in _EVENTS["events"]]
+    for d1, m1, d2, m2, year, at in find_event_dates(text, lang):
+        line = f":{text.count(chr(10), 0, at) + 1}" if where.endswith(".html") else ""
+        cands = [s for s in spans if s[0][0] in ({year} if year else years)
+                 and (s[0][1] in (m1, m2) or s[1][1] in (m1, m2))]
+        if not cands:
+            continue
+        if d2:
+            if (any(a[1:] == (m1, d1) for a, _ in cands)
+                    and any(b[1:] == (m2, d2) for _, b in cands)):
+                continue
+            said = f"{d1}.{m1}–{d2}.{m2}"
+        else:
+            own_months = {(_day(ev["start"])[0], _day(ev["start"])[1]) for ev in own}
+            if not any((y, m1) in own_months for y in ({year} if year else years)):
+                continue
+            if any(a <= (a[0], m1, d1) <= b for a, b in cands):
+                continue
+            said = f"{d1}.{m1}"
+        PROBLEMS.append(f"{where}{line} ({lang}): {said}{f'.{year}' if year else ''} is not the start "
+                        f"and end of any event in data/events.json")
+
+
+def check_display_dates() -> None:
+    """Each displayDate must read as its event's own start and end."""
+    for ev in _EVENTS["events"]:
+        (y1, m1, d1), (y2, m2, d2) = _day(ev["start"]), _day(ev["end"])
+        want = (d1, m1, 0 if (m1, d1) == (m2, d2) else d2, m2, y2)
+        for lang, text in (ev.get("displayDate") or {}).items():
+            got = [f[:5] for f in find_event_dates(text, lang)] if lang in _MONTHS else []
+            if got != [want]:
+                PROBLEMS.append(f"data/events.json: {ev['uid']} displayDate.{lang} {text!r} "
+                                f"does not read as {ev['start'][:10]} to {ev['end'][:10]}")
+
+
+def _strings(node, lang: str = "en"):
+    """(lang, text) for every string under an events.json entry, taking the
+    locale from the nearest "fr" or "de" key."""
+    if isinstance(node, str):
+        yield lang, node
+    elif isinstance(node, dict):
+        for k, v in node.items():
+            yield from _strings(v, k if k in _MONTHS else lang)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _strings(v, lang)
+
+
+def check_events_json_prose() -> None:
+    for ev in _EVENTS["events"]:
+        for lang, text in _strings({k: v for k, v in ev.items() if k != "displayDate"}):
+            check_prose_dates(text, lang, f"data/events.json {ev['uid']}",
+                              {_day(ev["start"])[0]}, [ev])
+
+
 def _iso_with_offset(stamp: str, tzid: str) -> str:
     """'2026-09-13T09:00' in Europe/Istanbul -> '2026-09-13T09:00:00+03:00'."""
     return datetime.fromisoformat(stamp).replace(tzinfo=ZoneInfo(tzid)).isoformat()
@@ -615,11 +753,14 @@ def inject(html: str, base: str) -> tuple[str, bool]:
             changed = True
 
     # ── Event dates (#1769) ──────────────────────────────────────
-    new_after = derive_event_dates(new, lang, base)
+    new_after = derive_print_header_dates(derive_event_dates(new, lang, base), lang, base)
     if new_after != new:
         new = new_after
         changed = True
     check_event_description(desc, lang, base)
+    own = [ev for ev in _EVENTS["events"] if _event_page(ev) == base]
+    check_prose_dates(new, lang, f"{base}{'' if lang == 'en' else '.' + lang}.html",
+                      {_day(ev["start"])[0] for ev in (own or _EVENTS["events"])}, own)
 
     return new, changed
 
@@ -718,6 +859,9 @@ def main() -> int:
         print("  WARN: no assets/css or assets/js files found to version")
 
     any_changes = False
+    if do_seo:
+        check_display_dates()
+        check_events_json_prose()
     for path in pages:
         rel = path.relative_to(ROOT)
         original = path.read_text(encoding="utf-8")
@@ -742,7 +886,7 @@ def main() -> int:
     # A meta description that disagrees with data/events.json is fixed by
     # hand, so it fails --check (the PR gate) but not a write run: the Indico
     # sync writes and then opens its PR, and the gate holds that PR.
-    for problem in PROBLEMS:
+    for problem in dict.fromkeys(PROBLEMS):
         print(f"{'✗' if args.check else 'WARN:'} {problem}")
     if args.check and (any_changes or PROBLEMS):
         return 1

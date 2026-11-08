@@ -741,6 +741,21 @@ If you're adding a new event to the Events section:
    locale's `displayDate` into it, and its `--check`, which runs on
    every PR, fails when the page's meta description names the event's
    year without its current date. The description stays hand-written.
+   The print running header (the `@top-center` `content:` string in an
+   event page's inline `<style>`) carries the uid in a trailing
+   `/* data-event-date="<uid>" */` comment, and the same script rewrites
+   the date between its first and second `·` (#2007).
+   A date written as prose ("on 10 and 11 June 2027", "du 8 au 11 juin",
+   "vom 8. bis 11. Juni") stays hand-written and is checked: `--check`
+   reads every day-and-month expression on the managed pages and in
+   `events.json` itself, and fails when a range in an event's month is
+   not an event's start and end, or when a single day on an event's own
+   page falls outside every event. It also fails when a `displayDate`
+   does not read as its own event's `start` and `end`, which is what
+   catches an Indico sync that moves an event (it rewrites `start` and
+   `end`, never `displayDate`). Dates in a month with no event, such as
+   an application deadline, are left alone, and abbreviated months
+   ("11 Jun") are not read.
 4. TBA / undated events are deliberately **not** added to
    `data/events.json` until they have firm dates — calendar
    subscribers should not see placeholders. The TBA HTML card on
