@@ -50,7 +50,7 @@ START = "<!-- field-guide:start -->"
 END = "<!-- field-guide:end -->"
 
 # Per-locale chrome. The definitions themselves come from the JSON
-# (hand-translated, no machine translation — CLAUDE.md §1); these are the
+# (translated by hand or by machine, CLAUDE.md §1). These are the
 # section heading, the intro, and the small labels around the entries.
 LOCALES = {
     "en": {

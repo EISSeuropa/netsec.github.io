@@ -174,6 +174,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The ESSC 2027 page prints its running header with the right date and venue, 10–11 June 2027 at the University of Belgrade, in all three locales. It read 11–12 June 2027 at Stockholm University.
 - `/licensing.html` lists the third-party assets the site actually ships. Inter and Lexend are self-hosted, not loaded from Google Fonts. Feather icons (MIT), the flag-icons share-card flags (MIT) and Pagefind (MIT) are now credited. The FlagCDN thumbnails are recorded as public domain, as Flagpedia publishes them, not as MIT. The EISS logo joins the trademarks. Each licence text is linked from `assets/licences/`. EN, FR and DE.
 - `LICENSE-CONTENT` states its scope. Member and faculty photographs and biographies, event photographs and video, the COST, EU and EISS marks and the third-party fonts, icons and software sit outside CC BY 4.0, as `/licensing.html` already said.
 - The press kit labels the three posters "CC BY 4.0 except the photographs and logos", since the directory posters carry member headshots and every poster carries the COST logo and EU emblem. EN, FR and DE.

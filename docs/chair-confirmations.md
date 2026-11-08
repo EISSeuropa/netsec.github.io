@@ -52,7 +52,7 @@ Chair and WG4 lead". The final text should set out:
 - the joint conference and summer-school arrangements,
 - the boundary between the two endeavours (what is NetSec, what is EISS).
 
-- [ ] Final EISS paragraph supplied (EN). FR and DE then translated by hand.
+- [ ] Final EISS paragraph supplied (EN). FR and DE then translated.
 - [ ] Confirm the one claim already live: "NetSec emerged from work begun at EISS".
 
 ## 3. Event to Working-Group tags

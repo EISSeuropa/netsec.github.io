@@ -15,8 +15,8 @@ Prepend the item to `items` in `data/news.json`, bump `lastBuildDate`, then
 run `python3 scripts/build-news-rss.py` and commit both files in one PR. The
 `news-drift.yml` CI gate fails if `news.xml` does not match `news.json`.
 
-Write the English first. FR and DE are translated by hand (no machine
-translation, CLAUDE.md §1). An item with only `en` keys still renders on the
+Write the English first. FR and DE may be translated by hand or by machine,
+and merging the PR approves them (CLAUDE.md §1). An item with only `en` keys still renders on the
 FR and DE pages, which fall back to English until the translation lands.
 
 The home page's fallback cards, shown without JavaScript and indexed by the

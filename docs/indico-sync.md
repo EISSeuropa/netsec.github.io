@@ -137,8 +137,8 @@ index:
 2. A NetSec-relevant Indico event with no matching `events.json`
    entry is **appended** as a minimal `autoDiscovered: true` entry
    (EN copy synthesised from the Indico title + URL; the renderers
-   fall back to EN for FR/DE until a maintainer fills them in, no
-   machine translation, CLAUDE.md §1). It carries `indicoEventId`,
+   fall back to EN for FR/DE until a maintainer fills them in, by
+   hand or by machine, CLAUDE.md §1). It carries `indicoEventId`,
    so subsequent syncs keep its dates in step like any other linked
    entry. Hand-authored events with no `indicoEventId` (e.g. the
    ITC conference, hosted off-Indico) are never touched.
