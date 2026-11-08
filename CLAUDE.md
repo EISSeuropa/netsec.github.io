@@ -55,11 +55,11 @@ publishes data another repository uses.
   other tool. Merging the PR is the approval of the translation, and no
   separate native-speaker sign-off is needed before it ships. The PR
   body says which strings are machine translations, so the person
-  merging knows what they are approving. The beta ribbon still says
-  *"Traduction manuelle"* / *"Manuell übersetzt"* on every FR and DE
-  page. Reword it ([#2123](https://github.com/EISSeuropa/netsec.github.io/issues/2123))
-  before, or with, the first machine-translated page. The same rule
-  holds on the EISS site.
+  merging knows what they are approving. The beta ribbon on FR and DE
+  pages says only that the English version is authoritative
+  (*"La version anglaise fait foi."* / *"Die englische Fassung ist
+  verbindlich."*), never how the page was translated (#2123). The
+  same rule holds on the EISS site.
 
 ## 2. Pull-request workflow
 
