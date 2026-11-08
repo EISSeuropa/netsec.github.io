@@ -23,15 +23,15 @@
     "summer-school.html": {
       "fr": {
         "file": "summer-school.fr.html",
-        "source_sha1": "ee7f0f7b6103453b5662160acdc37796db91e8f8",
-        "translated_on": "2026-11-07",
+        "source_sha1": "9ed7aa9f5342e7906a9c46db9f4e4d46a22f9df4",
+        "translated_on": "2026-11-08",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "summer-school.de.html",
-        "source_sha1": "ee7f0f7b6103453b5662160acdc37796db91e8f8",
-        "translated_on": "2026-11-07",
+        "source_sha1": "9ed7aa9f5342e7906a9c46db9f4e4d46a22f9df4",
+        "translated_on": "2026-11-08",
         "status": "beta",
         "reviewed_by": null
       }
@@ -343,14 +343,14 @@
     "essc-2027.html": {
       "fr": {
         "file": "essc-2027.fr.html",
-        "source_sha1": "b3cb09b99af057604631ecc3f4ac7aa3429af636",
+        "source_sha1": "54008fd858a87a7408ff72727562b138a90fd73c",
         "translated_on": "2026-11-08",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "essc-2027.de.html",
-        "source_sha1": "b3cb09b99af057604631ecc3f4ac7aa3429af636",
+        "source_sha1": "54008fd858a87a7408ff72727562b138a90fd73c",
         "translated_on": "2026-11-08",
         "status": "beta",
         "reviewed_by": null

@@ -53,6 +53,7 @@ from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import _analytics  # noqa: E402
+from _event_dates import MONTHS as _MONTHS, display_dates, format_day  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -373,25 +374,31 @@ def _event_page(ev: dict) -> str:
 
 
 # ── Event dates in page copy (#1769) ─────────────────────────────
-# data/events.json holds each event's displayDate per locale, hand-written in
-# each language. An element marked data-event-date="<uid>" has its text
-# rewritten from it, so a moved date is edited once, in the JSON. The meta
+# data/events.json holds each event's displayDate per locale. An element marked
+# data-event-date="<uid>" has its text rewritten from it, so a moved date is
+# edited once, in the JSON. An element marked data-event-deadline="<uid>" takes
+# the event's applicationDeadline, written out in the page's locale. The meta
 # description is a hand-written sentence, so it is checked rather than
 # rewritten: when it names an event's year, it must carry that event's date.
 _EVENTS_BY_UID = {ev["uid"]: ev for ev in _EVENTS["events"]}
 _EVENT_DATE_RE = re.compile(
-    r'(<(?P<tag>[a-z0-9]+)\b[^>]*\bdata-event-date="(?P<uid>[^"]+)"[^>]*>)(?P<text>[^<]*)(</(?P=tag)>)')
+    r'(<(?P<tag>[a-z0-9]+)\b[^>]*\bdata-event-(?P<kind>date|deadline)="(?P<uid>[^"]+)"[^>]*>)(?P<text>[^<]*)(</(?P=tag)>)')
 PROBLEMS: list[str] = []
 
 
 def derive_event_dates(html: str, lang: str, base: str) -> str:
     def fill(m: re.Match) -> str:
-        ev = _EVENTS_BY_UID.get(m["uid"])
-        date = ((ev or {}).get("displayDate") or {}).get(lang)
+        ev = _EVENTS_BY_UID.get(m["uid"]) or {}
+        if m["kind"] == "deadline":
+            when = ev.get("applicationDeadline")
+            date = format_day(lang, datetime.fromisoformat(when).date()) if when and lang in _MONTHS else ""
+        else:
+            date = (ev.get("displayDate") or {}).get(lang)
         if not date:
-            PROBLEMS.append(f"{base}: data-event-date={m['uid']!r} has no {lang} displayDate in data/events.json")
+            field = "applicationDeadline" if m["kind"] == "deadline" else f"{lang} displayDate"
+            PROBLEMS.append(f"{base}: data-event-{m['kind']}={m['uid']!r} has no {field} in data/events.json")
             return m.group(0)
-        return m.group(1) + _attr_escape(date) + m.group(5)
+        return m.group(1) + _attr_escape(date) + m.group(6)
     return _EVENT_DATE_RE.sub(fill, html)
 
 
@@ -431,18 +438,11 @@ def derive_print_header_dates(html: str, lang: str, base: str) -> str:
 # start on an event's first day and end on an event's last day, usually the
 # same event's, though "9–12 June" runs from one event into the next. Month
 # abbreviations ("11 Jun") are not read. A single day on an event's own page,
-# or in that event's own entry, must fall within an event. Deadlines and
-# other dates in months with no event are not dates of events and are left
-# alone. The displayDate strings themselves are held to the same reading, so
-# an Indico sync that moves start and end without touching them fails here.
-_MONTHS = {
-    "en": ["January", "February", "March", "April", "May", "June", "July",
-           "August", "September", "October", "November", "December"],
-    "fr": ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
-           "août", "septembre", "octobre", "novembre", "décembre"],
-    "de": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
-           "August", "September", "Oktober", "November", "Dezember"],
-}
+# or in that event's own entry, must fall within an event or be its
+# applicationDeadline (#2133). Other dates in months with no event or deadline
+# are left alone. Each displayDate must be the form _event_dates.py writes for
+# its event's start and end, so a sync that moves an event without rewriting
+# it fails here.
 _SP = r"(?:\s|&nbsp;)"
 
 
@@ -477,12 +477,24 @@ def find_event_dates(text: str, lang: str) -> list[tuple[int, int, int, int, int
     return found
 
 
+def _spans(events: list[dict]) -> list[tuple[tuple, tuple]]:
+    """Each event's first and last day, and its application deadline as a
+    span of one day."""
+    out = []
+    for ev in events:
+        out.append((_day(ev["start"]), _day(ev["end"])))
+        if ev.get("applicationDeadline"):
+            out.append((_day(ev["applicationDeadline"]),) * 2)
+    return out
+
+
 def check_prose_dates(text: str, lang: str, where: str, years: set[int], own: list[dict]) -> None:
     """Flag event dates in text that data/events.json no longer gives.
 
     years: the years to read an expression without one against. own: the
     events whose page or entry this is, where a single day is checked too."""
-    spans = [(_day(ev["start"]), _day(ev["end"])) for ev in _EVENTS["events"]]
+    spans = _spans(_EVENTS["events"])
+    own_months = {a[:2] for a, _ in _spans(own)}
     for d1, m1, d2, m2, year, at in find_event_dates(text, lang):
         line = f":{text.count(chr(10), 0, at) + 1}" if where.endswith(".html") else ""
         cands = [s for s in spans if s[0][0] in ({year} if year else years)
@@ -495,26 +507,23 @@ def check_prose_dates(text: str, lang: str, where: str, years: set[int], own: li
                 continue
             said = f"{d1}.{m1}–{d2}.{m2}"
         else:
-            own_months = {(_day(ev["start"])[0], _day(ev["start"])[1]) for ev in own}
             if not any((y, m1) in own_months for y in ({year} if year else years)):
                 continue
             if any(a <= (a[0], m1, d1) <= b for a, b in cands):
                 continue
             said = f"{d1}.{m1}"
-        PROBLEMS.append(f"{where}{line} ({lang}): {said}{f'.{year}' if year else ''} is not the start "
-                        f"and end of any event in data/events.json")
+        PROBLEMS.append(f"{where}{line} ({lang}): {said}{f'.{year}' if year else ''} matches no event "
+                        f"or application deadline in data/events.json")
 
 
 def check_display_dates() -> None:
-    """Each displayDate must read as its event's own start and end."""
+    """Each displayDate must be the form written for its event's start and end."""
     for ev in _EVENTS["events"]:
-        (y1, m1, d1), (y2, m2, d2) = _day(ev["start"]), _day(ev["end"])
-        want = (d1, m1, 0 if (m1, d1) == (m2, d2) else d2, m2, y2)
+        want = display_dates(ev["start"], ev["end"])
         for lang, text in (ev.get("displayDate") or {}).items():
-            got = [f[:5] for f in find_event_dates(text, lang)] if lang in _MONTHS else []
-            if got != [want]:
-                PROBLEMS.append(f"data/events.json: {ev['uid']} displayDate.{lang} {text!r} "
-                                f"does not read as {ev['start'][:10]} to {ev['end'][:10]}")
+            if text != want.get(lang):
+                PROBLEMS.append(f"data/events.json: {ev['uid']} displayDate.{lang} is {text!r}, "
+                                f"and {ev['start'][:10]} to {ev['end'][:10]} is written {want.get(lang)!r}")
 
 
 def _strings(node, lang: str = "en"):
