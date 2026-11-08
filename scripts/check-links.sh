@@ -323,8 +323,11 @@ _ssl_warned = None  # forward declaration; first SSL failure flips it
 # A timeout or a reset says the host is slow or throttling the runner, not
 # that the link is dead. Three ESSC 2027 hotel sites failed PRs this way in a
 # week (#2026, #2030) while loading in a browser, so these are listed but do
-# not fail the run. An HTTP error or a name that no longer resolves still does.
-UNREACHABLE = re.compile(r"timed out|Connection reset|RemoteDisconnected")
+# not fail the run. A 502, 503 or 504 says a server or gateway failed, and
+# github.com answered 504 for half an hour on 8 November 2026 (#2127), so
+# those are listed the same way. Any other HTTP error, or a name that no
+# longer resolves, still fails the run.
+UNREACHABLE = re.compile(r"timed out|Connection reset|RemoteDisconnected|HTTP 50[234]\b")
 unreachable_external = []
 
 if not internal_only and external_links:
