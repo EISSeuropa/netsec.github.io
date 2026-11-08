@@ -39,6 +39,8 @@
 #       behind/ahead of origin/main.
 #   4.  Read the [Unreleased] body from CHANGELOG.md; refuse to run if
 #       it's empty or still the literal "_Nothing yet._" placeholder.
+#   4b. Minor / major without a "### For the team" section: ask for one
+#       and add it after the lede (an abort at step 5 takes it out again).
 #   5.  Print the [Unreleased] body AND the title, then prompt for
 #       explicit "y" confirmation before proceeding. This is the last
 #       point at which an abort leaves everything untouched. For
@@ -298,6 +300,68 @@ echo "  [Unreleased] body found, $(printf '%s' "$UNRELEASED_BODY" | wc -l) lines
 echo "  Promoting to [$VERSION] · $TODAY and resetting [Unreleased]."
 
 # ────────────────────────────────────────────────────────────────────
+# "For the team" note (minor / major)
+# ────────────────────────────────────────────────────────────────────
+# The release card on the EISS internal dashboard (EISSeuropa.github.io,
+# src/_data/latestReleases.js) and the release email (workspace-ops/
+# release-notes) show the "### For the team"
+# section, or the lede when there is none. A minor or major release without
+# one gets a prompt here. The note goes after the lede, so it is in the
+# preview below and in the published notes. A patch may carry one too, written
+# into [Unreleased] by hand, and then shows on the card and goes by email.
+PATCH_PART="${VERSION##*.}"
+if [[ "$PATCH_PART" == "0" ]] && ! printf '%s\n' "$UNRELEASED_BODY" | grep -q '^### For the team'; then
+  step "For the team"
+  if [[ "$DRY_RUN" == "--dry-run" ]]; then
+    echo "  [dry-run] [Unreleased] has no \"### For the team\" section. A real run asks for one."
+  else
+    printf '  [Unreleased] has no "### For the team" section. The dashboard card and the\n'
+    printf '  release email show it to staff, the board and volunteers: two to four plain\n'
+    printf '  sentences, on one line, on what changes in how people work.\n'
+    printf '  Press Enter to skip, and the lede is shown instead.\n\n  > '
+    read -r TEAM_NOTE
+    if [[ -n "$TEAM_NOTE" ]]; then
+      "$PY3" - "$CHANGELOG" "$TEAM_NOTE" <<'PY'
+import re
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+note = sys.argv[2].strip()
+src = path.read_text(encoding="utf-8")
+m = re.search(r"^## \[Unreleased\][^\n]*\n(.*?)(?=^## \[|\Z)", src, flags=re.M | re.S)
+if not m:
+    raise SystemExit("Could not find the [Unreleased] section.")
+body = m.group(1)
+lines = body.split("\n")
+# After the lede (the first run of "> " lines), else at the top of the section.
+at = 0
+i = 0
+while i < len(lines) and not lines[i].strip():
+    i += 1
+if i < len(lines) and lines[i].startswith(">"):
+    while i < len(lines) and lines[i].startswith(">"):
+        i += 1
+    at = i
+block = ["", "### For the team", "", note, ""] if at else ["", "### For the team", "", note]
+lines[at:at] = block
+new_body = re.sub(r"\n{3,}", "\n\n", "\n".join(lines))
+path.write_text(src[: m.start(1)] + new_body + src[m.end(1):], encoding="utf-8")
+PY
+      UNRELEASED_BODY="$(awk '
+        /^## \[Unreleased\]/ { inblock = 1; next }
+        /^## \[/            { inblock = 0 }
+        inblock             { print }
+      ' "$CHANGELOG")"
+      TEAM_ADDED=1
+      echo "  Added after the lede."
+    else
+      echo "  Skipped. The card and the email show the lede."
+    fi
+  fi
+fi
+
+# ────────────────────────────────────────────────────────────────────
 # Final-review confirmation. With "Enforce release immutability"
 # turned on at the repo level, the GitHub Release page is write-once
 # after publication. This prompt is the last moment to abort if a
@@ -366,6 +430,8 @@ if [[ "$DRY_RUN" != "--dry-run" ]]; then
     [yY]|[yY][eE][sS]) ;;
     *)
       printf '\n  Aborted. No commits, tags, or release were made.\n'
+      # The tree was clean at the start, so this only undoes the team note.
+      if [[ "${TEAM_ADDED:-0}" == "1" ]]; then git checkout -- CHANGELOG.md; fi
       printf '  CHANGELOG.md is unchanged. Edit [Unreleased] and re-run when ready.\n'
       exit 0
       ;;

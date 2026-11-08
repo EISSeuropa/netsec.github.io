@@ -27,6 +27,11 @@ happens; the index is the audit trail.
 > One- to three-sentence lede in voice. What is this release
 > *about*? Who's it for? Why ship it now?
 
+### For the team
+
+Two to four plain sentences for EISS staff, the board and volunteers:
+what changes in how people work. Optional, and only the heading is fixed.
+
 ### <First theme — name it for the thing that changed>
 
 Prose intro (~2-4 sentences). Inline links to docs / issues where
@@ -124,11 +129,13 @@ audit trail. Same content, terser.
    smaller polish after. Within the index, same ordering inside each
    `####` block.
 
-5. **The release script (`scripts/release.sh`) extracts the
+5. **`### For the team`** sits after the lede of a minor or major release (optional on a patch). The release card on the EISS internal dashboard and the release email to staff@, board@ and internship@ show it, or the lede when it is missing. `scripts/release.sh` asks for it when a minor or major has none. The heading text is read by `src/_data/latestReleases.js` in EISSeuropa.github.io and by `workspace-ops/release-notes`, so it stays exactly `### For the team`, in English.
+
+6. **The release script (`scripts/release.sh`) extracts the
    `[Unreleased]` body verbatim** into the GitHub Release notes.
    Eyeball the body before confirming the script's prompt.
 
-6. **No hard wraps in prose.** Each prose paragraph, blockquote lede,
+7. **No hard wraps in prose.** Each prose paragraph, blockquote lede,
    and multi-line bullet must be a single source line — do not break
    mid-sentence with a `\n`. GitHub Releases renders markdown with the
    *break-on-newline* GFM variant; every soft `\n` becomes a `<br>`
