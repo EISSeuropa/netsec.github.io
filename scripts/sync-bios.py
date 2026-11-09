@@ -46,6 +46,7 @@ import copy
 import csv
 import difflib
 import hashlib
+import hmac
 import io
 import json
 import os
@@ -106,6 +107,39 @@ LINK_REWRITES: list[dict] = []
 
 def norm_email(s: str) -> str:
     return (s or "").strip().lower()
+
+
+# The sheet this script reads is an export written by workspace-ops'
+# directory-export Apps Script: consenting rows only, public columns only,
+# and the submitter's account email replaced by an "Email key". The key is
+# the HMAC-SHA256, as lower-case hex, of norm_email(address) under a secret
+# that the Apps Script holds as EMAIL_HMAC_KEY and this script reads from
+# BIOS_EMAIL_HMAC_KEY. Matching a returning member then compares the key
+# with the same HMAC of each listed member's public email. Both sides check
+# the same test vector (scripts/test-sync-bios.py, directory-export/test.mjs).
+EMAIL_KEY_ENV = "BIOS_EMAIL_HMAC_KEY"
+EMAIL_KEY_RE = re.compile(r"[0-9a-f]{64}")
+# Headers Google Forms gives the account email column. A CSV carrying one
+# is a raw response sheet, and the sync refuses to read it.
+ACCOUNT_EMAIL_HEADERS = frozenset({"adresse e-mail", "email address"})
+
+
+def email_key(email: str, secret: str) -> str:
+    e = norm_email(email)
+    if not e:
+        return ""
+    return hmac.new(secret.encode("utf-8"), e.encode("utf-8"), hashlib.sha256).hexdigest()
+
+
+def check_export_header(fieldnames: list[str] | None) -> None:
+    """Stop the sync when the CSV has an account email column, so a raw
+    response sheet can never be wired back in by mistake."""
+    found = [h for h in (fieldnames or []) if (h or "").strip().lower() in ACCOUNT_EMAIL_HEADERS]
+    if found:
+        raise SystemExit(
+            "The sheet has an account email column. Point sheet.csv_url at the "
+            "directory export, never at the form's response sheet."
+        )
 
 
 def country_key(s: str) -> str:
@@ -1140,7 +1174,7 @@ def row_to_member(
     photo will always be re-encoded under the row's own slug.
     """
     name = build_name(row, cols)
-    consent = (row.get(cols["consent"], "") or "").strip().lower()
+    consent = (row.get(cols.get("consent", ""), "") or "").strip().lower()
     if not name:
         return None
     # A row whose name is only a title ("Mr", "Dr", …) with nothing after it
@@ -1158,7 +1192,12 @@ def row_to_member(
         return None
 
     slug = slugify(name)
-    email = norm_email(row.get(cols.get("email", ""), ""))
+    if "email_key" in cols:
+        email = (row.get(cols["email_key"], "") or "").strip()
+        if email and not EMAIL_KEY_RE.fullmatch(email):
+            raise SystemExit(f"Row for {name!r} has a malformed email key.")
+    else:
+        email = norm_email(row.get(cols.get("email", ""), ""))
     country = (row.get(cols.get("country", ""), "") or "").strip()
     photo_url = (row.get(cols.get("photo", ""), "") or "").strip()
     photo_path: str | None = None
@@ -1614,7 +1653,7 @@ _MERGE_EXCLUDED_FIELDS = frozenset({
 })
 
 
-def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
+def merge(prior: list[dict], form_entries: list[dict], key_of=norm_email) -> list[dict]:
     """Merge the prior directory state with the latest form submissions.
 
     - `prior` is the full member list from the existing data/bios.json,
@@ -1628,7 +1667,8 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
     - Form entries are matched to prior entries by three signals, tried
       in this order:
         1. The submitter's Google-account email (`_email_key`) matches
-           any prior entry's published `email` column.
+           any prior entry's published `email` column, both passed
+           through `key_of` (the email key when reading the export).
         2. The submitter's slug (derived from the form's "Full name"
            answer via slugify()) matches a prior entry's id.
         3. The submitter's (first-name, last-name, country) tuple
@@ -1648,7 +1688,7 @@ def merge(prior: list[dict], form_entries: list[dict]) -> list[dict]:
     """
     by_slug: dict[str, dict] = {s["id"]: dict(s) for s in prior}
     by_email: dict[str, str] = {
-        (s.get("email") or "").lower(): s["id"]
+        key_of(s["email"]): s["id"]
         for s in prior if s.get("email")
     }
     # Index of (first_name, last_name, country) → prior id, used by the
@@ -2438,6 +2478,12 @@ def main() -> None:
         return
 
     cols = config.get("columns", {})
+    key_of = norm_email
+    if "email_key" in cols:
+        secret = os.environ.get(EMAIL_KEY_ENV, "")
+        if not secret:
+            raise SystemExit(f"{EMAIL_KEY_ENV} is not set. It must match the export's EMAIL_HMAC_KEY.")
+        key_of = lambda e: email_key(e, secret)  # noqa: E731
     bios_data = json.loads(BIOS.read_text())
     old_members = bios_data.get("members", [])
     # We pass the full prior member list to merge(), not just
@@ -2457,7 +2503,7 @@ def main() -> None:
     # its canonical slug + stored hash before download (see
     # resolve_prior_entry).
     old_by_email = {
-        m["email"].lower(): m for m in old_members if m.get("email")
+        key_of(m["email"]): m for m in old_members if m.get("email")
     }
     old_by_namekey: dict[tuple[str, str, str], dict] = {}
     for m in old_members:
@@ -2471,6 +2517,7 @@ def main() -> None:
     r.raise_for_status()
     text = r.content.decode("utf-8-sig")
     reader = csv.DictReader(io.StringIO(text))
+    check_export_header(reader.fieldnames)
 
     form_entries: list[dict] = []
     for raw_row in reader:
@@ -2483,7 +2530,7 @@ def main() -> None:
         if entry:
             form_entries.append(entry)
 
-    merged = merge(old_members, form_entries)
+    merged = merge(old_members, form_entries, key_of)
     apply_overrides(merged)
     print(diff_summary(old_members, merged))
 
@@ -2552,14 +2599,15 @@ def main() -> None:
     # test_substance_check_catches_photo_only_change() in
     # scripts/test-sync-bios.py. If the sha propagation path is ever
     # refactored, that test will fail.
+    # The sheet address stays out of bios.json, which the site serves.
     new_source = {
         "type": "google_sheet",
-        "csv_url": csv_url,
         "form_url": (config.get("form_url") or "").strip(),
     }
     existing_source = bios_data.get("source") or {}
     existing_source_meta = {
         k: existing_source.get(k) for k in ("type", "csv_url", "form_url")
+        if k in existing_source or k in new_source
     }
 
     members_changed = merged != old_members

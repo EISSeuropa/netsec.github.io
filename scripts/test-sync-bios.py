@@ -14,6 +14,7 @@ in-memory fixtures, never fetches the live Google Sheet.
 """
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -1557,6 +1558,80 @@ def test_apply_overrides_list_field() -> None:
     expect("string fix still substitutes", members[2]["bio"], "the end")
 
 
+def test_email_key() -> None:
+    """The export's Email key. The vector is the one workspace-ops'
+    directory-export/test.mjs checks from JavaScript, so the two sides
+    cannot drift apart unnoticed. A change here changes both."""
+    print("\nemail_key():")
+    expect("HMAC-SHA256 of the trimmed, lower-cased address",
+           sync_bios.email_key(" Ada@Example.org ", "test-key"),
+           "8a40b982d4778cb5f8f7c7e1155398719f5db593d1f34139bb4291ee756a6252")
+    expect("no address, no key", sync_bios.email_key("", "test-key"), "")
+
+
+def test_check_export_header() -> None:
+    """A CSV with an account email column is a raw response sheet."""
+    print("\ncheck_export_header():")
+    for header in (["Horodateur", "Adresse e-mail"], ["Timestamp", " Email Address "]):
+        try:
+            sync_bios.check_export_header(header)
+        except SystemExit:
+            print(f"  ok  refuses {header[1].strip()!r}")
+        else:
+            expect(f"refuses {header[1].strip()!r}", "accepted", "SystemExit")
+    sync_bios.check_export_header(["Horodateur", "Full name", "Email key"])
+    print("  ok  accepts the export header")
+
+
+def test_row_to_member_reads_email_key() -> None:
+    print("\nrow_to_member() with the export's Email key:")
+    cols = {"name": "name", "email_key": "Email key"}
+    key = sync_bios.email_key("ada@example.org", "k")
+    entry = sync_bios.row_to_member({"name": "Ada Example", "Email key": key}, cols)
+    expect("key carried as the identity", entry["_email_key"], key)
+    expect("no consent column needed", entry is not None, True)
+    try:
+        sync_bios.row_to_member({"name": "Ada Example", "Email key": "ada@example.org"}, cols)
+    except SystemExit:
+        print("  ok  an address in the key column stops the sync")
+    else:
+        expect("an address in the key column stops the sync", "accepted", "SystemExit")
+
+
+def test_merge_matches_by_email_key() -> None:
+    """A returning member whose name and country both changed is found
+    only by the email signal. With the export, that signal is the key,
+    compared with the HMAC of the listed public email."""
+    print("\nmerge() with key_of:")
+    prior = [{"id": "ada-example", "name": "Dr Ada Example", "country": "Austria",
+              "email": "Ada@Example.org", "roles": ["WG1 Leader"], "wgs": [],
+              "wg_leadership": {}, "source": "seed"}]
+    entry = {"id": "ada-q-example", "name": "Prof Ada Q. Example", "country": "Belgium",
+             "country_code": "", "roles": [], "wgs": [], "wg_leadership": {},
+             "email": "ada@example.org", "source": "form",
+             "_email_key": sync_bios.email_key("ada@example.org", "k"),
+             "_timestamp": "2026-11-09 09:00:00"}
+    key_of = lambda e: sync_bios.email_key(e, "k")  # noqa: E731
+    merged = merge(prior, [dict(entry)], key_of)
+    expect("collapses onto the listed member", [m["id"] for m in merged], ["ada-example"])
+    expect("role kept", merged[0]["roles"], ["WG1 Leader"])
+    expect("without key_of the key matches nothing",
+           len(merge(prior, [dict(entry)])), 2)
+
+
+def test_published_files_hold_no_sheet_address() -> None:
+    """bios.json is served by the site. The config maps the export's
+    columns, never the account email or the consent answer."""
+    print("\nconfig and bios.json:")
+    root = Path(__file__).resolve().parent.parent
+    config = json.loads((root / "scripts" / "bios-source.json").read_text())
+    expect("config maps the Email key", config["columns"].get("email_key"), "Email key")
+    expect("config maps no account email or consent",
+           sorted({"email", "consent"} & set(config["columns"])), [])
+    bios = json.loads((root / "data" / "bios.json").read_text())
+    expect("bios.json source has no csv_url", "csv_url" in bios.get("source", {}), False)
+
+
 def main() -> None:
     test_name_key()
     test_normalise_keyword()
@@ -1598,6 +1673,11 @@ def main() -> None:
     test_pr_overview_review_flags()
     test_link_rewrites_captured()
     test_apply_overrides_list_field()
+    test_email_key()
+    test_check_export_header()
+    test_row_to_member_reads_email_key()
+    test_merge_matches_by_email_key()
+    test_published_files_hold_no_sheet_address()
     print("\nAll tests passed.")
 
 

@@ -5,11 +5,11 @@ This guide walks through creating the Google Form, linking it to a Sheet, and wi
 ## How the pipeline works
 
 ```
-Google Form ──► Google Sheet ──► sync-bios.yml (daily) ──► PR ──► merge ──► /people/
+Google Form ──► Google Sheet ──► directory export ──► sync-bios.yml (daily) ──► PR ──► merge ──► /people/
 ```
 
 - Anyone interested in NetSec — leadership, MC representatives, WG participants, or wider-community researchers and practitioners — fills the form once.
-- Every Monday at 05:15 UTC (and on manual dispatch), the workflow reads the Sheet as CSV, downloads any new headshots, regenerates `data/bios.json`, and opens a PR if anything changed.
+- Every day at 05:15 UTC (and on manual dispatch), the workflow reads the directory export as CSV, downloads any new headshots, regenerates `data/bios.json`, and opens a PR if anything changed.
 - You merge. The new bio appears on the **Directory** page (`/people.html`).
 - Members can update their entries by submitting again — the script dedupes by email, newest submission wins.
 
@@ -115,17 +115,13 @@ The flag drives the quiet "Founding contributor" badge on `/people.html` directo
 
 In the form's *Responses* tab, click the green Sheets icon → *Link to Sheets* → *Create a new spreadsheet*. Each response will land as a row in the linked Sheet, with the form questions as column headers.
 
-## Step 3 · Publish the Sheet as CSV
+## Step 3 · Set up the directory export
 
-The workflow reads the Sheet via its *publish to web* CSV URL — no authentication, just a long unguessable URL.
+The response Sheet is never published. The workflow reads a second spreadsheet instead, the NetSec Directory export, which the `directory-export` Apps Script in the private `EISSeuropa/workspace-ops` repository writes once a day as admin@. The export holds the consenting rows only and the public columns only. In place of the account email it has an `Email key`, the HMAC-SHA256 of the address under a secret, which lets the sync recognise a member who submits again.
 
-1. In the Sheet, *File → Share → Publish to web*.
-2. **Link** tab:
-   - Document picker → *Form Responses 1*.
-   - Format → **Comma-separated values (.csv)**.
-3. ☑ *Automatically republish when changes are made*.
-4. **Publish**, confirm.
-5. Copy the URL — it looks like `https://docs.google.com/spreadsheets/d/e/<id>/pub?gid=<gid>&single=true&output=csv`.
+`directory-export/README.md` in workspace-ops has the set-up steps. The secret lives in three places, and nowhere else: the password manager, the Apps Script property `EMAIL_HMAC_KEY`, and this repository's Actions secret `BIOS_EMAIL_HMAC_KEY`.
+
+Publish only the export's tab, as *Comma-separated values (.csv)*. The URL looks like `https://docs.google.com/spreadsheets/d/e/<id>/pub?gid=<gid>&single=true&output=csv`. The sync stops with an error if the CSV it reads has an account email column, so pointing it at the response Sheet by mistake fails the run without publishing anything.
 
 ## Step 4 · Wire the URLs into the repo
 
@@ -141,10 +137,10 @@ Open `scripts/bios-source.json` and fill in:
 }
 ```
 
-- `csv_url` — the URL from Step 3 (the script reads this).
-- `form_url` — the public form URL (top right of the form editor → *Send → 🔗 Link*). The "Add your bio" CTA on `/people.html` reads this; if it's empty the button is hidden.
+- `csv_url` is the export's URL from Step 3, which the script reads. It is not copied into `data/bios.json`.
+- `form_url` is the public form URL (top right of the form editor, *Send*, then the link icon). The "Add your bio" CTA on `/people.html` reads this. If it is empty the button is hidden.
 
-Commit. The next workflow run picks it up.
+Commit through a pull request. The next workflow run picks it up.
 
 ## Step 5 · Photo permissions — the one Google quirk
 
@@ -152,7 +148,7 @@ Files uploaded via Google Forms land in a private Drive folder. For the workflow
 
 In Google Drive, find the form's auto-created folder (under *My Drive → Join the NetSec network (File responses)*). Right-click → *Share* → set general access to **Anyone with the link → Viewer**. This inherits to every file uploaded later.
 
-Record the resulting share URL in `scripts/bios-source.json` under `photo_folder_url`. The sync doesn't read it, but a future maintainer (including future-you, six months from now) will save a few minutes when something needs spot-checking.
+The folder's address is not recorded in the repository. Keep it in the EISS DevOps handbook.
 
 (If you'd rather control sharing per-file, do the same right-click → *Share* dance on each upload as submissions arrive. More secure, more work.)
 
