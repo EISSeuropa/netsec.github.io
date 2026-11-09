@@ -181,6 +181,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The outlined application-form button on the 2026 policy workshop page takes the ink colour of outlined buttons elsewhere, in all three locales. The link colour of the glass cards had turned its label blue.
 - The 2027 Training School card on the home page and the events listing gives the application deadline of 7 December 2026 in all three locales. It still read "Call for applications to follow" after the call opened.
 - The ESSC 2027 page prints its running header with the right date and venue, 10–11 June 2027 at the University of Belgrade, in all three locales. It read 11–12 June 2027 at Stockholm University.
 - `/licensing.html` lists the third-party assets the site actually ships. Inter and Lexend are self-hosted, not loaded from Google Fonts. Feather icons (MIT), the flag-icons share-card flags (MIT) and Pagefind (MIT) are now credited. The FlagCDN thumbnails are recorded as public domain, as Flagpedia publishes them, not as MIT. The EISS logo joins the trademarks. Each licence text is linked from `assets/licences/`. EN, FR and DE.

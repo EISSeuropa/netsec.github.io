@@ -3254,7 +3254,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 }
 .ecs-card p{margin:0 0 .9rem;color:var(--ink-2);line-height:1.65}
 .ecs-card p:last-child{margin-bottom:0}
-.ecs-card a{color:var(--link)}
+.ecs-card a:not(.btn){color:var(--link)}
 /* ESSC 2027 practical information. The short cards sit in a grid (three
    across on desktop), on phones they become a swipeable row, and the
    places to stay always scroll sideways as a snap slider. Not CSS
