@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-11-04T12:59:38+00:00",
+  "generated_at": "2026-11-09T13:52:37+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 127,
+  "count": 128,
   "members": [
     {
       "name": "Mr Adam Hanzel",
@@ -960,6 +960,17 @@
       "role": null,
       "affiliation": "ETH Zürich, Center for Security Studies",
       "photo": "https://netsec-cost.eu/assets/images/people/meret-steybe.jpg"
+    },
+    {
+      "name": "Mr Mohamed El Yamine Atrouche",
+      "name_key": "mohamed atrouche",
+      "aliases": [],
+      "slug": "mohamed-el-yamine-atrouche",
+      "url": "https://netsec-cost.eu/people/mohamed-el-yamine-atrouche.html",
+      "orcid": null,
+      "role": null,
+      "affiliation": "The British American Security Information Council (BASIC) / The Comprehensive Nuclear-Test-Ban Treaty Organization (CTBTO)",
+      "photo": null
     },
     {
       "name": "Prof. Monika Sus",

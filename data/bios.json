@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-11-04T12:59:38+00:00",
+  "generated_at": "2026-11-09T13:52:37+00:00",
   "source": {
     "type": "google_sheet",
     "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnYCajbDrAgJmvTN0j4JS-cqSOA-pj9MjlCIVBC_4v_i_F1jbDocFXjRNh9PfBWfasoDeRcMpTv4Of/pub?gid=365674303&single=true&output=csv",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-11-04T12:59:38+00:00"
+    "last_synced": "2026-11-09T13:52:37+00:00"
   },
   "members": [
     {
@@ -6081,6 +6081,55 @@
         "Crisis management and critical systems resilience",
         "Cyber and emerging technology"
       ]
+    },
+    {
+      "id": "mohamed-el-yamine-atrouche",
+      "name": "Mr Mohamed El Yamine Atrouche",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "affiliation": "The British American Security Information Council (BASIC) / The Comprehensive Nuclear-Test-Ban Treaty Organization (CTBTO)",
+      "position": "Project Researcher / Research Fellow",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Global and cross-regional"
+      ],
+      "wg_leadership": {},
+      "bio": "Mohamed El Yamine Atrouche is a nuclear security, emerging and disruptive technologies researcher. He currently serves as a project researcher with the British American Security Information Council's Emerging Voices Network in the second iteration of the Assembling Peace through Dialogue Project and as a working group chair of the nuclear justice working group for Taking Stock of the First Five Years of the TPNW Policy Cycle. He is also a research fellow in the CTBTO Research Fellowship 2026.",
+      "keywords": [
+        "Nuclear Security",
+        "Nuclear Non-Proliferation",
+        "Emerging & Disruptive Technologies",
+        "AI Safety",
+        "Risk Reduction"
+      ],
+      "email": "mohamedelyamine.atrouche@gmail.com",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/mohamed-el-yamine-a-22075a295",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "joined": "2026-11-09",
+      "canonical_keywords": [
+        "AI safety",
+        "Emerging and disruptive technologies",
+        "Nuclear non-proliferation",
+        "Nuclear security",
+        "Risk reduction"
+      ],
+      "themes": [
+        "Climate, energy and environmental security",
+        "Crisis management and critical systems resilience",
+        "Cyber and emerging technology",
+        "Security and defence",
+        "Strategy and deterrence"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -6129,6 +6178,10 @@
       "count": 5
     },
     {
+      "keyword": "Emerging and disruptive technologies",
+      "count": 5
+    },
+    {
       "keyword": "Hybrid threats",
       "count": 5
     },
@@ -6150,10 +6203,6 @@
     },
     {
       "keyword": "Crisis management",
-      "count": 4
-    },
-    {
-      "keyword": "Emerging and disruptive technologies",
       "count": 4
     },
     {
@@ -6345,6 +6394,10 @@
       "count": 2
     },
     {
+      "keyword": "Nuclear security",
+      "count": 2
+    },
+    {
       "keyword": "Political psychology",
       "count": 2
     },
@@ -6394,6 +6447,10 @@
     },
     {
       "keyword": "AI regulation",
+      "count": 1
+    },
+    {
+      "keyword": "AI safety",
       "count": 1
     },
     {
@@ -6965,7 +7022,7 @@
       "count": 1
     },
     {
-      "keyword": "Nuclear security",
+      "keyword": "Nuclear non-proliferation",
       "count": 1
     },
     {
@@ -7114,6 +7171,10 @@
     },
     {
       "keyword": "Resilience",
+      "count": 1
+    },
+    {
+      "keyword": "Risk reduction",
       "count": 1
     },
     {
@@ -7292,7 +7353,7 @@
   "theme_aggregate": [
     {
       "theme": "Cyber and emerging technology",
-      "count": 40
+      "count": 41
     },
     {
       "theme": "Foreign policy and diplomacy",
@@ -7300,7 +7361,7 @@
     },
     {
       "theme": "Security and defence",
-      "count": 37
+      "count": 38
     },
     {
       "theme": "Disciplines, theory and methods",
@@ -7316,7 +7377,7 @@
     },
     {
       "theme": "Strategy and deterrence",
-      "count": 23
+      "count": 24
     },
     {
       "theme": "War, military history and armed conflict",
@@ -7328,7 +7389,7 @@
     },
     {
       "theme": "Crisis management and critical systems resilience",
-      "count": 12
+      "count": 13
     },
     {
       "theme": "EU, UN and other international organisations",
@@ -7352,7 +7413,7 @@
     },
     {
       "theme": "Climate, energy and environmental security",
-      "count": 6
+      "count": 7
     },
     {
       "theme": "Political psychology, public opinion and decision-making",
@@ -7364,6 +7425,7 @@
     "AI and disinformation": "Intelligence, information and influence",
     "AI governance": "Cyber and emerging technology",
     "AI regulation": "Cyber and emerging technology",
+    "AI safety": "Security and defence",
     "Adversarial robustness": "Cyber and emerging technology",
     "Agentic AI": "Cyber and emerging technology",
     "Algorithms and AI": "Cyber and emerging technology",
@@ -7562,6 +7624,7 @@
     "Non-state armed groups": "Transnational and human security",
     "Northern european security": "European and transatlantic security order",
     "Nuclear deterrence": "Strategy and deterrence",
+    "Nuclear non-proliferation": "Strategy and deterrence",
     "Nuclear politics": "Strategy and deterrence",
     "Nuclear security": "Climate, energy and environmental security",
     "Nuclear strategy": "Strategy and deterrence",
@@ -7604,6 +7667,7 @@
     "Research ethics": "Disciplines, theory and methods",
     "Research methods": "Disciplines, theory and methods",
     "Resilience": "Crisis management and critical systems resilience",
+    "Risk reduction": "Crisis management and critical systems resilience",
     "Role theory": "Disciplines, theory and methods",
     "Romanian foreign policy": "Foreign policy and diplomacy",
     "Russia-Ukraine war": "War, military history and armed conflict",
@@ -7669,7 +7733,7 @@
     },
     {
       "region": "Global and cross-regional",
-      "count": 62
+      "count": 63
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
