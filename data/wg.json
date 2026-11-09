@@ -1009,7 +1009,8 @@
         },
         {
           "name": "Dr Kenan Hodžić",
-          "country": "Bosnia & Herzegovina"
+          "country": "Bosnia & Herzegovina",
+          "slug": "kenan-hodzic"
         },
         {
           "name": "Dr Kire Babanoski",
@@ -1291,7 +1292,8 @@
         },
         {
           "name": "Dr Kenan Hodžić",
-          "country": "Bosnia & Herzegovina"
+          "country": "Bosnia & Herzegovina",
+          "slug": "kenan-hodzic"
         },
         {
           "name": "Dr Kire Babanoski",

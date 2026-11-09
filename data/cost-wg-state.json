@@ -596,6 +596,17 @@
         1
       ],
       "form_changed_on": "2026-11-02"
+    },
+    "kenan hodzic": {
+      "cost_first_seen": {
+        "3": "2026-11-09",
+        "4": "2026-11-09"
+      },
+      "form_wgs": [
+        3,
+        4
+      ],
+      "form_changed_on": "2026-11-09"
     }
   }
 }
