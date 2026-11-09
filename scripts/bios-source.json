@@ -1,17 +1,16 @@
 {
   "_documentation": "Configuration for scripts/sync-bios.py. `csv_url` is the published CSV of the NetSec Directory export, which workspace-ops' directory-export Apps Script writes: consenting rows and public columns only, with the account email replaced by an HMAC key. Never point it at the form's response sheet, and the sync refuses a sheet with an account email column. See docs/bios-setup.md. While `csv_url` is empty, the workflow runs but no-ops.",
   "sheet": {
-    "csv_url": ""
+    "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYQ9I4xAtZzRZWBtE51unlXLd4KTuwn1fW1TbCTXeQyjxw31hGJD_LKovwEGgqEB00aQZ7qXHDZ6Na/pub?gid=0&single=true&output=csv"
   },
   "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
   "_columns_doc": "Header names exactly as the export writes them, which are the form's question texts. The timestamp column is localised to the form owner's account language (here: French → Horodateur). `email_key` is the export's HMAC of the account email, and the export has no consent column because it holds consenting rows only. If you ever change a question's text in the form, mirror the change here so the sync script keeps matching. The Working-Group question was retired from the form (members were often unsure which WG they belonged to, and a guessed answer was union-merged and sticky): there is deliberately no `wgs` mapping here, so the sync no longer reads any self-declared WG. Working-Group chips are now sourced solely from cost.eu's authoritative Membership table via scripts/sync-cost.py. The CSV may still carry a historical WG column; leaving it unmapped means the sync ignores it.",
-  "_title_doc": "The honorific is its own dropdown question ('Title': Prof. / Dr / Ms / Mr / Mx / None please), kept separate from 'Full name' so submitters never type the title into the name field (which used to leak the title into the slug, e.g. 'Professor Mark Rhinard' -> professor-mark-rhinard). The sync prepends the chosen title to the name and normalises it to house style; 'None please' (or a blank) means no honorific. `name_legacy` is the old single-field header ('Full name (with title …)'); the sync falls back to it for responses captured before the split, so a renamed question never blanks an existing member.",
+  "_title_doc": "The honorific is its own dropdown question ('Title': Prof. / Dr / Ms / Mr / Mx / None please), kept separate from 'Full name' so submitters never type the title into the name field (which used to leak the title into the slug, e.g. 'Professor Mark Rhinard' -> professor-mark-rhinard). The sync prepends the chosen title to the name and normalises it to house style; 'None please' (or a blank) means no honorific. The old single-field header ('Full name (with title …)') is gone from the response sheet, so there is no `name_legacy` mapping. build_name() still falls back to it when one is configured.",
   "columns": {
     "timestamp": "Horodateur",
     "email_key": "Email key",
     "title": "Title",
     "name": "Full name",
-    "name_legacy": "Full name (with title — Dr / Prof / Mr / Ms / Mx)",
     "position": "Position or current role (e.g. PhD candidate, Associate Professor, Policy analyst)",
     "affiliation": "Institution or organisation",
     "country": "Country of your institution",
