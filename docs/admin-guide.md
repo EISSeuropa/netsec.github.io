@@ -72,8 +72,8 @@ For the rationale, see the PDF documentation pack, Section 07
 | Asset                              | Login                       | Notes                                                                                          |
 | ---------------------------------- | --------------------------- | ---------------------------------------------------------------------------------------------- |
 | Google Form "Join the NetSec network" | Google account that owns the form | URL: see `scripts/bios-source.json` → `form_url`. Set up per [`bios-setup.md`](./bios-setup.md). |
-| Linked Google Sheet                | Same Google account         | The form's *Responses → Link to Sheets* destination. Publish-to-web is enabled (CSV).          |
-| Published CSV URL                  | n/a (public)                | Stored in `scripts/bios-source.json` → `csv_url`. It's a public capability URL (anyone with it can read the Sheet as CSV), not a credential — the form's required-consent step is what gates what reaches it. |
+| Linked Google Sheet                | Same Google account         | The form's *Responses → Link to Sheets* destination. Never published. The workflow reads the export below. |
+| NetSec Directory export            | admin@ (Apps Script `directory-export` in workspace-ops) | Consenting rows and public columns only, with an HMAC `Email key` in place of the account email. Its published CSV URL is `sheet.csv_url` in `scripts/bios-source.json`. The HMAC secret is the Actions secret `BIOS_EMAIL_HMAC_KEY` and the script property `EMAIL_HMAC_KEY`, and is kept in the password manager. See [`bios-setup.md`](./bios-setup.md) Step 3. |
 | Country dropdown source            | Apps Script bound to the form | One-off script that bulk-loaded ~200 countries into question #4. See `bios-setup.md`.         |
 
 ### Contact form (Formspree)

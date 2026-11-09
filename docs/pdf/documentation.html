@@ -1884,12 +1884,12 @@ python3 scripts/inject-seo.py --check    # report-only mode (non-zero exit on dr
       <tr>
         <td>Linked Google Sheet</td>
         <td>Same Google account</td>
-        <td>Publish-to-web enabled (CSV). Required-consent step on the form gates what reaches it.</td>
+        <td>Never published. The workflow reads the export below.</td>
       </tr>
       <tr>
-        <td>Published CSV URL</td>
-        <td>n/a (public capability)</td>
-        <td>Stored in <code>scripts/bios-source.json</code> → <code>csv_url</code>. Anyone with the URL can read the Sheet — the form's required-consent step is what gates the content.</td>
+        <td>NetSec Directory export</td>
+        <td>admin@ (Apps Script <code>directory-export</code>)</td>
+        <td>Consenting rows and public columns only, with an HMAC key in place of the account email. Its CSV URL is <code>sheet.csv_url</code> in <code>scripts/bios-source.json</code>.</td>
       </tr>
       <tr>
         <td>Formspree project (id <code>meenwyrb</code>)</td>

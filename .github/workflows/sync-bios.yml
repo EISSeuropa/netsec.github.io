@@ -2,7 +2,9 @@
 #
 # What this does
 #   1. Every day at 05:15 UTC, and on manual dispatch, fetch the
-#      linked Google Sheet as CSV. The time of day is unchanged from
+#      NetSec Directory export as CSV. workspace-ops' directory-export
+#      Apps Script writes it from the form's responses: consenting rows,
+#      public columns, and an HMAC key in place of the account email. The time of day is unchanged from
 #      the original weekly cadence (15 min after the cost.eu sync, which
 #      stays weekly, so a same-day WG change on cost.eu is still picked
 #      up promptly).
@@ -23,6 +25,8 @@
 # Where to look
 #   - The sync logic lives in scripts/sync-bios.py.
 #   - The sheet URL + column mapping live in scripts/bios-source.json.
+#   - BIOS_EMAIL_HMAC_KEY is the export's EMAIL_HMAC_KEY. Without it the
+#     sync stops with an error once csv_url is set.
 #   - Set-up steps: docs/bios-setup.md.
 
 name: Sync member bios from Google Form
@@ -67,6 +71,7 @@ jobs:
           # the writes silently.
           SYNC_BIOS_PR_TITLE_PATH: /tmp/sync-bios-pr-title.txt
           SYNC_BIOS_PR_OVERVIEW_PATH: /tmp/sync-bios-pr-overview.md
+          BIOS_EMAIL_HMAC_KEY: ${{ secrets.BIOS_EMAIL_HMAC_KEY }}
         run: |
           set -o pipefail
           python3 scripts/sync-bios.py | tee /tmp/sync-bios.txt
