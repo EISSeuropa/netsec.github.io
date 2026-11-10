@@ -3,10 +3,15 @@
   "version": 1,
   "minEligible": 10,
   "active": true,
-  "current": "leonardo-pesci",
-  "featuredSince": "2026-11-03",
+  "current": "lukas-wahden",
+  "featuredSince": "2026-11-10",
   "pinned": null,
   "history": [
+    {
+      "id": "lukas-wahden",
+      "week": "2026-W46",
+      "date": "2026-11-10"
+    },
     {
       "id": "leonardo-pesci",
       "week": "2026-W45",
