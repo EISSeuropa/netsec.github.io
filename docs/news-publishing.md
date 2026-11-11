@@ -67,7 +67,8 @@ The `Publish news from issue` workflow
 runs [`scripts/news-from-issue.py`](../scripts/news-from-issue.py), which
 adds the item to the top of `data/news.json` and asks the Claude API for the
 French and German title, summary and body. The workflow then rebuilds
-`news.xml` and opens a PR with `Closes #<issue>`. It starts in two ways:
+`news.xml` and opens a PR with `Closes #<issue>`, which mentions the person
+who filed the issue so GitHub notifies them. It starts in two ways:
 
 - A publisher files the form. The run starts as soon as the issue is opened.
 - A publisher applies the **`news`** label to a form issue someone else filed.
