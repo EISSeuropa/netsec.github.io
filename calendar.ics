@@ -37,6 +37,24 @@ TZNAME:+03
 END:STANDARD
 END:VTIMEZONE
 BEGIN:VTIMEZONE
+TZID:Europe/Madrid
+X-LIC-LOCATION:Europe/Madrid
+BEGIN:STANDARD
+DTSTART:19701025T030000
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19700329T020000
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VTIMEZONE
 TZID:Europe/Belgrade
 X-LIC-LOCATION:Europe/Belgrade
 BEGIN:STANDARD
@@ -56,7 +74,7 @@ END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
 UID:summer-school-2026@netsec-cost.eu
-DTSTAMP:20261006T093326Z
+DTSTAMP:20261111T120000Z
 DTSTART;TZID=Europe/Stockholm:20260609T090000
 DTEND;TZID=Europe/Stockholm:20260611T180000
 SUMMARY:NetSec Early-Career Scholars Summer School
@@ -69,7 +87,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:european-security-conference-2026@netsec-cost.eu
-DTSTAMP:20261006T093326Z
+DTSTAMP:20261111T120000Z
 DTSTART;TZID=Europe/Stockholm:20260611T080000
 DTEND;TZID=Europe/Stockholm:20260612T200000
 SUMMARY:2026 European Security Studies Conference
@@ -81,7 +99,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:policy-workshop-2026-09@netsec-cost.eu
-DTSTAMP:20261006T093326Z
+DTSTAMP:20261111T120000Z
 DTSTART;TZID=Europe/Istanbul:20260913T090000
 DTEND;TZID=Europe/Istanbul:20260913T180000
 SUMMARY:NetSec Policy Workshop: Great Power Politics and the Future of Alliances
@@ -93,7 +111,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:mc-plenary-2026-09@netsec-cost.eu
-DTSTAMP:20261006T093326Z
+DTSTAMP:20261111T120000Z
 DTSTART;TZID=Europe/Stockholm:20260911T093000
 DTEND;TZID=Europe/Stockholm:20260911T110000
 SUMMARY:Inaugural NetSec Management Committee plenary
@@ -104,8 +122,20 @@ CATEGORIES:MC Plenary,NetSec
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
+UID:policy-workshop-2027-04@netsec-cost.eu
+DTSTAMP:20261111T120000Z
+DTSTART;TZID=Europe/Madrid:20270428T090000
+DTEND;TZID=Europe/Madrid:20270429T180000
+SUMMARY:NetSec Policy Workshop: Security Beyond the State
+DESCRIPTION:A two-day NetSec Working Group 2 policy workshop and policy brief\, Security Beyond the State: Managing and Countering Transnational Threats and Vulnerabilities\, with a focus on the Mediterranean. Three pillars: transnational actors and networks\, hybrid and technology-enabled security challenges\, and energy and supply chain security.\n\nApplications close on 18 December 2026. Send the application form and a CV to Pavlos Koktsidis (pkoktsid@act.edu) and Carmen Márquez Carrasco (cmarque@us.es).\n\nFull details: https://netsec-cost.eu/policy-workshop-2027.html
+LOCATION:Universidad de Sevilla\, Seville\, Spain
+URL;VALUE=URI:https://netsec-cost.eu/policy-workshop-2027.html
+CATEGORIES:Policy workshop,NetSec
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
 UID:summer-school-2027@netsec-cost.eu
-DTSTAMP:20261006T093326Z
+DTSTAMP:20261111T120000Z
 DTSTART;TZID=Europe/Belgrade:20270608T090000
 DTEND;TZID=Europe/Belgrade:20270611T180000
 SUMMARY:NetSec Training School
@@ -118,7 +148,7 @@ STATUS:TENTATIVE
 END:VEVENT
 BEGIN:VEVENT
 UID:european-security-conference-2027@netsec-cost.eu
-DTSTAMP:20261006T093326Z
+DTSTAMP:20261111T120000Z
 DTSTART;TZID=Europe/Belgrade:20270610T090000
 DTEND;TZID=Europe/Belgrade:20270611T180000
 SUMMARY:2027 European Security Studies Conference

@@ -63,6 +63,7 @@ TOP_LEVEL = [
     ("essc-2027",      "2026-10-06", "weekly",  "0.8"),
     ("summer-school",  "2026-06-08", "monthly", "0.8"),
     ("policy-workshop-2026", "2026-07-24", "weekly", "0.8"),
+    ("policy-workshop-2027", "2026-11-11", "weekly", "0.8"),
     ("network-map",    "2026-08-22", "weekly",  "0.7"),
     ("slides",         "2026-06-18", "yearly",  "0.4"),
     ("year-in-review", "2026-09-15", "yearly",  "0.5"),

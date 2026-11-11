@@ -52,6 +52,22 @@
         "reviewed_by": null
       }
     },
+    "policy-workshop-2027.html": {
+      "fr": {
+        "file": "policy-workshop-2027.fr.html",
+        "source_sha1": "27d2bf9462a13d0238d2a89a084f04ff38ff54b0",
+        "translated_on": "2026-11-11",
+        "status": "beta",
+        "reviewed_by": null
+      },
+      "de": {
+        "file": "policy-workshop-2027.de.html",
+        "source_sha1": "27d2bf9462a13d0238d2a89a084f04ff38ff54b0",
+        "translated_on": "2026-11-11",
+        "status": "beta",
+        "reviewed_by": null
+      }
+    },
     "accessibility.html": {
       "fr": {
         "file": "accessibility.fr.html",
@@ -71,15 +87,15 @@
     "sitemap.html": {
       "fr": {
         "file": "sitemap.fr.html",
-        "source_sha1": "995eb75b351ebd649618dbbf5de49a9acba5829c",
-        "translated_on": "2026-10-09",
+        "source_sha1": "dee541cbffdede7aad7909de7b4520a8eeed4a6c",
+        "translated_on": "2026-11-11",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "sitemap.de.html",
-        "source_sha1": "995eb75b351ebd649618dbbf5de49a9acba5829c",
-        "translated_on": "2026-10-09",
+        "source_sha1": "dee541cbffdede7aad7909de7b4520a8eeed4a6c",
+        "translated_on": "2026-11-11",
         "status": "beta",
         "reviewed_by": null
       }

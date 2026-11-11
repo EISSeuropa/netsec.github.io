@@ -4,8 +4,48 @@
   "channelDescription": "Announcements, calls, and milestones from the COST Action CA24154 (NetSec).",
   "channelLink": "https://netsec-cost.eu/#news",
   "channelLanguage": "en-GB",
-  "lastBuildDate": "2026-10-07T12:00:00+02:00",
+  "lastBuildDate": "2026-11-11T12:00:00+01:00",
   "items": [
+    {
+      "id": "wg2-policy-workshop-2027-call",
+      "homeUntil": "2026-12-18T23:59:00+01:00",
+      "type": "call",
+      "wg": 2,
+      "pubDate": "2026-11-11T12:00:00+01:00",
+      "displayDate": {
+        "en": "Apply by 18 December 2026",
+        "fr": "Candidatures jusqu'au 18 décembre 2026",
+        "de": "Bewerbung bis 18. Dezember 2026"
+      },
+      "title": {
+        "en": "WG2 Policy Workshop 2027 in Seville: call for applications",
+        "fr": "Atelier politique 2027 du GT2 à Séville : appel à candidatures",
+        "de": "GT2-Politik-Workshop 2027 in Sevilla: Aufruf zur Bewerbung"
+      },
+      "summary": {
+        "en": "Apply by 18 December 2026 to present at Working Group 2's policy workshop on transnational threats and vulnerabilities, at the Universidad de Sevilla on 28–29 April 2027.",
+        "fr": "Candidatez jusqu'au 18 décembre 2026 pour présenter à l'atelier politique du Groupe de travail 2 sur les menaces et vulnérabilités transnationales, à l'Université de Séville les 28–29 avril 2027.",
+        "de": "Bewerben Sie sich bis zum 18. Dezember 2026 für einen Vortrag beim Politik-Workshop der Arbeitsgruppe 2 zu transnationalen Bedrohungen und Verwundbarkeiten, an der Universität Sevilla am 28.–29. April 2027."
+      },
+      "body": {
+        "en": "Applications are open for Working Group 2's two-day policy workshop, Security Beyond the State: Managing and Countering Transnational Threats and Vulnerabilities, at the Universidad de Sevilla on 28–29 April 2027. The workshop and its policy brief focus on the Mediterranean and have three pillars: transnational actors and networks, hybrid and technology-enabled security challenges, and energy and supply chain security. Send the application form and a CV to Pavlos Koktsidis (pkoktsid@act.edu) and Carmen Márquez Carrasco (cmarque@us.es) by Friday 18 December 2026.",
+        "fr": "Les candidatures sont ouvertes pour l'atelier politique de deux jours du Groupe de travail 2, Security Beyond the State: Managing and Countering Transnational Threats and Vulnerabilities, à l'Université de Séville les 28–29 avril 2027. L'atelier et sa note de politique publique portent sur la Méditerranée et s'articulent autour de trois piliers : acteurs et réseaux transnationaux, défis de sécurité hybrides et technologiques, et sécurité énergétique et des chaînes d'approvisionnement. Envoyez le formulaire de candidature et un CV à Pavlos Koktsidis (pkoktsid@act.edu) et à Carmen Márquez Carrasco (cmarque@us.es) avant le vendredi 18 décembre 2026.",
+        "de": "Bewerbungen sind offen für den zweitägigen Politik-Workshop der Arbeitsgruppe 2, Security Beyond the State: Managing and Countering Transnational Threats and Vulnerabilities, an der Universität Sevilla am 28.–29. April 2027. Der Workshop und sein Policy Brief konzentrieren sich auf den Mittelmeerraum und haben drei Säulen: transnationale Akteure und Netzwerke, hybride und technologiegestützte Sicherheitsherausforderungen sowie Energie- und Lieferkettensicherheit. Senden Sie das Bewerbungsformular und einen Lebenslauf bis Freitag, den 18. Dezember 2026, an Pavlos Koktsidis (pkoktsid@act.edu) und Carmen Márquez Carrasco (cmarque@us.es)."
+      },
+      "cta": {
+        "href": {
+          "en": "policy-workshop-2027.html",
+          "fr": "policy-workshop-2027.fr.html",
+          "de": "policy-workshop-2027.de.html"
+        },
+        "external": false,
+        "i18n": {
+          "en": "Read the call and apply →",
+          "fr": "Lire l'appel et candidater →",
+          "de": "Aufruf lesen und bewerben →"
+        }
+      }
+    },
     {
       "id": "leadership-roles-october-2026",
       "type": "announcement",
