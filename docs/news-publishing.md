@@ -54,7 +54,7 @@ needed. The form applies no label, so filing it publishes nothing.
 | Body | `body.en` (blank: the summary) |
 | Type | `type` (default `announcement`) |
 | Working Group | `wg` |
-| Link | `cta`, with "Read more →" in each locale. A page on this site links its `.fr.html` and `.de.html` pages when both exist |
+| Link | `cta`: an existing page, never a new one, shown as "Read more →" in each locale and at the end of the social posts. A page on this site links its `.fr.html` and `.de.html` pages when both exist. Blank: no button, and the posts link to the home page news |
 | Publication date | `pubDate` at 12:00 Paris time, and `displayDate` in each locale (blank: the day the label is applied) |
 | On the home page until | `homeUntil` at 23:59 Paris time |
 | Collaborator page | `"collaborator": "eiss"` |

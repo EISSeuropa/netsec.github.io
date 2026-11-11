@@ -72,7 +72,14 @@ body:
     id: link
     attributes:
       label: Link
-      description: A full address (https://...) or a page on this site (essc-2027.html). The French and German pages are linked when they exist.
+      description: >-
+        Optional. The address of an existing page the item is about, such as
+        the event page. This does not create a page. The item on the site gets
+        a "Read more" link to it, and the LinkedIn and Bluesky posts end with it.
+        Use a full address (https://...) or a page on this site
+        (essc-2027.html), and the French and German pages are linked when they
+        exist. If left blank, the item has no "Read more" link and the posts
+        link to the news on the home page.
     validations:
       required: false
   - type: input
