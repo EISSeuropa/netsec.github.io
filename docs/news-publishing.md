@@ -35,32 +35,34 @@ needed. The form applies no label, so filing it publishes nothing.
 | Include in the newsletter | `"newsletter": true` |
 | Do not post to LinkedIn and Bluesky | `"social": "skip"` |
 
-A publisher reads the issue and applies the **`news`** label. The
-`Publish news from issue` workflow
+The `Publish news from issue` workflow
 ([`.github/workflows/news-publish.yml`](../.github/workflows/news-publish.yml))
 runs [`scripts/news-from-issue.py`](../scripts/news-from-issue.py), which
 adds the item to the top of `data/news.json` and asks the Claude API for the
 French and German title, summary and body. The workflow then rebuilds
-`news.xml` and opens an auto-merging PR with `Closes #<issue>`. Merging it
-approves the machine translations (CLAUDE.md §1) and starts the social posts.
+`news.xml` and opens a PR with `Closes #<issue>`. It starts in two ways:
 
-The PR does not merge on its own, and waits for a person, when:
+- A publisher files the form. The run starts as soon as the issue is opened.
+- A publisher applies the **`news`** label to a form issue someone else filed.
 
-- the translation did not run (no `ANTHROPIC_API_KEY` secret, or the call
-  failed). The PR body says so, and the FR and DE text can be added on its
-  branch.
-- the issue title starts with `[test]`. Read the PR, then close it and the
-  issue.
+The PR waits for the maintainer. Merging it approves the machine translations
+(CLAUDE.md §1), publishes the item, and starts the gated social posts. To
+change the item first, edit the entry on the PR's branch and rerun
+`python3 scripts/build-news-rss.py`. To drop it, close the PR and the issue.
+When the translation did not run (no `ANTHROPIC_API_KEY` secret, or the call
+failed), the PR body says so, and the FR and DE text can be added on its
+branch before merging.
 
-**Who can publish.** The GitHub accounts in the repository variable
-`NEWS_PUBLISHERS`, separated by commas or spaces, the same as on the EISS
-site. When anyone else applies the label, the workflow comments on the issue
-and publishes nothing. With the variable unset, nobody can publish.
+**Publishers.** The GitHub accounts in the repository variable
+`NEWS_PUBLISHERS`, separated by commas, semicolons or spaces, the same as on
+the EISS site. A form issue opened by anyone else waits, with no comment, until
+a publisher applies the label. A label applied by anyone else gets a comment
+saying nothing was published. With the variable unset, nobody can publish.
 
 **Set-up (once, by the maintainer).** Create the `news` label, set
 `NEWS_PUBLISHERS`, and add an `ANTHROPIC_API_KEY` repository secret for the
-translation. The workflow uses `AUTOPR_TOKEN` like the other auto-PR
-workflows, so the merge starts `social-bluesky.yml`.
+translation. The workflow opens its PR with `AUTOPR_TOKEN`, like the other
+auto-PR workflows, so the required checks run on it.
 
 **Tests.** `python3 -m pytest scripts/test-news-from-issue.py` runs without
 network. It also fails when the form lists `None` or `n/a` in a dropdown,
