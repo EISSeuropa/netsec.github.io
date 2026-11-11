@@ -1,22 +1,22 @@
 # Issue-driven news publishing, ported from the EISS repository
 # (EISSeuropa/EISSeuropa.github.io, news-publish.yml, #2058).
 #
-# Label a News item issue (.github/ISSUE_TEMPLATE/news.yml) `news` and this
-# workflow runs scripts/news-from-issue.py. The script adds the item to
-# data/news.json with French and German machine translations from the Claude
-# API, then build-news-rss.py rebuilds news.xml, and the run opens an
-# auto-merging PR. The PR body carries `Closes #<issue>`, so the merge closes
-# the issue. The news.xml change on main then starts the gated social posts
-# (social-bluesky.yml).
+# A News item issue (.github/ISSUE_TEMPLATE/news.yml) becomes a PR. The run
+# starts when a publisher files the form, or when a publisher applies the
+# `news` label to a form issue someone else filed. scripts/news-from-issue.py
+# adds the item to data/news.json with French and German machine translations
+# from the Claude API, build-news-rss.py rebuilds news.xml, and the run opens
+# a PR with `Closes #<issue>`.
 #
-# Only the accounts in the repository variable NEWS_PUBLISHERS (GitHub logins,
-# separated by commas or spaces) can publish. When anyone else applies the
-# label, the run comments on the issue and stops. With the variable unset,
-# nobody can publish.
+# The PR waits for the maintainer, who reads it and merges it. Merging
+# approves the machine translations (CLAUDE.md §1), publishes the item, and the
+# news.xml change on main starts the gated social posts (social-bluesky.yml).
 #
-# The PR is left for a person, without auto-merge, when the translation did
-# not run (ANTHROPIC_API_KEY missing, or the call failed) and when the issue
-# title starts with `[test]`.
+# Publishers are the accounts in the repository variable NEWS_PUBLISHERS
+# (GitHub logins, separated by commas, semicolons or spaces). An issue opened
+# by anyone else is left for a publisher to label, with no comment. A label
+# applied by anyone else gets a comment saying nothing was published. With the
+# variable unset, nobody can publish.
 #
 # Action pins mirror the other workflows (SHA-pinned, .github/CLAUDE.md).
 
@@ -24,7 +24,7 @@ name: Publish news from issue
 
 on:
   issues:
-    types: [labeled]
+    types: [opened, labeled]
 
 permissions:
   contents: write
@@ -37,8 +37,11 @@ concurrency:
 
 jobs:
   publish:
-    name: Add the news item and open an auto-PR
-    if: github.event.label.name == 'news'
+    name: Add the news item and open a PR
+    # A form issue starts with its Site field. Any other new issue is ignored.
+    if: >-
+      (github.event.action == 'labeled' && github.event.label.name == 'news')
+      || (github.event.action == 'opened' && startsWith(github.event.issue.body, '### Site'))
     runs-on: ubuntu-latest
     steps:
       - name: Check the publisher
@@ -48,7 +51,7 @@ jobs:
           SENDER: ${{ github.event.sender.login }}
         run: |
           allowed=false
-          for login in $(echo "$PUBLISHERS" | tr ',' ' '); do
+          for login in $(echo "$PUBLISHERS" | tr ',;' '  '); do
             if [ "${login,,}" = "${SENDER,,}" ]; then allowed=true; fi
           done
           echo "allowed=$allowed" >> "$GITHUB_OUTPUT"
@@ -57,7 +60,7 @@ jobs:
           fi
 
       - name: Tell the issue why nothing was published
-        if: steps.publisher.outputs.allowed != 'true'
+        if: steps.publisher.outputs.allowed != 'true' && github.event.action == 'labeled'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SENDER: ${{ github.event.sender.login }}
@@ -93,10 +96,10 @@ jobs:
           python3 scripts/news-from-issue.py | tee /tmp/news-add.txt
           python3 scripts/build-news-rss.py
           {
-            echo "Generated from issue #${ISSUE_NUMBER} (labelled \`news\`)."
+            echo "Generated from issue #${ISSUE_NUMBER}. Merging this PR publishes the item and queues the social posts for approval."
             echo ""
             if grep -q '^TRANSLATED=false' /tmp/news-add.txt; then
-              echo "The French and German text is missing, so this PR does not merge on its own. Add \`fr\` and \`de\` to the title, summary and body in \`data/news.json\` (by hand or by machine), then merge."
+              echo "The French and German text is missing, so the FR and DE pages would show English. Add \`fr\` and \`de\` to the title, summary and body in \`data/news.json\` (by hand or by machine), then merge."
             else
               echo "The French and German title, summary and body are machine translations (Claude API). Merging approves them (CLAUDE.md §1)."
             fi
@@ -117,9 +120,8 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)
         with:
-          # The AUTOPR_TOKEN makes the PR run the required checks, and its
-          # merge push start social-bluesky.yml. A GITHUB_TOKEN push starts
-          # neither.
+          # The AUTOPR_TOKEN makes the PR run the required checks. A
+          # GITHUB_TOKEN PR starts none of them.
           token: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
           branch: news/auto-${{ github.event.issue.number }}
           base: main
@@ -133,15 +135,3 @@ jobs:
           body-path: /tmp/news-pr-body.md
           labels: |
             automated
-
-      - name: Enable auto-merge on the PR
-        if: >-
-          steps.publisher.outputs.allowed == 'true'
-          && steps.cpr.outputs.pull-request-number
-          && steps.item.outputs.translated == 'true'
-          && !startsWith(github.event.issue.title, '[test]')
-        env:
-          GH_TOKEN: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
-        run: |
-          gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" \
-            --auto --squash --repo "${{ github.repository }}"

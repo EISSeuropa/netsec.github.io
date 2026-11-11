@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Write the item in English. A publisher reads it and applies the `news` label, which opens the pull request that adds it to the site with French and German machine translations. Only the headline (or the issue title) and the summary are required. Leave the rest blank if it does not apply.
+        Write the item in English. When a publisher files it, or applies the `news` label, a pull request opens that adds it to the site with French and German machine translations. The item is published when the maintainer merges that pull request. Only the headline (or the issue title) and the summary are required. Leave the rest blank if it does not apply.
   - type: dropdown
     id: site
     attributes:
