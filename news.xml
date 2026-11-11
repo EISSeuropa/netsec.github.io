@@ -5,9 +5,16 @@
     <link>https://netsec-cost.eu/#news</link>
     <description>Announcements, calls, and milestones from the COST Action CA24154 (NetSec).</description>
     <language>en-GB</language>
-    <lastBuildDate>Wed, 07 Oct 2026 12:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 11 Nov 2026 12:00:00 +0100</lastBuildDate>
     <generator>scripts/build-news-rss.py</generator>
     <atom:link href="https://netsec-cost.eu/news.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>WG2 Policy Workshop 2027 in Seville: call for applications</title>
+      <link>https://netsec-cost.eu/policy-workshop-2027.html</link>
+      <description><![CDATA[Applications are open for Working Group 2's two-day policy workshop, Security Beyond the State: Managing and Countering Transnational Threats and Vulnerabilities, at the Universidad de Sevilla on 28–29 April 2027. The workshop and its policy brief focus on the Mediterranean and have three pillars: transnational actors and networks, hybrid and technology-enabled security challenges, and energy and supply chain security. Send the application form and a CV to Pavlos Koktsidis (pkoktsid@act.edu) and Carmen Márquez Carrasco (cmarque@us.es) by Friday 18 December 2026.]]></description>
+      <pubDate>Wed, 11 Nov 2026 12:00:00 +0100</pubDate>
+      <guid isPermaLink="false">wg2-policy-workshop-2027-call</guid>
+    </item>
     <item>
       <title>New Working Group and Science Communication leads</title>
       <link>https://netsec-cost.eu/about.html#leadership</link>
