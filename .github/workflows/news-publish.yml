@@ -89,6 +89,7 @@ jobs:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           set -o pipefail
@@ -96,7 +97,7 @@ jobs:
           python3 scripts/news-from-issue.py | tee /tmp/news-add.txt
           python3 scripts/build-news-rss.py
           {
-            echo "Generated from issue #${ISSUE_NUMBER}. Merging this PR publishes the item and queues the social posts for approval."
+            echo "Generated from issue #${ISSUE_NUMBER}, filed by @${ISSUE_AUTHOR}. Merging this PR publishes the item and queues the social posts for approval."
             echo ""
             if grep -q '^TRANSLATED=false' /tmp/news-add.txt; then
               echo "The French and German text is missing, so the FR and DE pages would show English. Add \`fr\` and \`de\` to the title, summary and body in \`data/news.json\` (by hand or by machine), then merge."
