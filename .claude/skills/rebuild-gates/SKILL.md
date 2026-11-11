@@ -72,6 +72,7 @@ inside a day (#1803, #1804).
 | `social-bluesky.yml` | `data/social-posted.json` |
 | `roadmap-refresh.yml` | `data/roadmap-progress.json`, `docs/roadmap-2026.md` |
 | `linkedin-version-check.yml` | `data/linkedin-api-version.json` |
+| `news-publish.yml` | `data/news.json`, `news.xml` |
 
 `scripts/test-auto-pr-builders.py` holds the same table as `WRITES` and
 fails when a workflow runs fewer builders than its writes invalidate, so

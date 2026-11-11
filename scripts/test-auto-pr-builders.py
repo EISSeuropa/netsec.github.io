@@ -36,6 +36,7 @@ WRITES = {
     "social-bluesky.yml": {"data/social-posted.json"},
     "roadmap-refresh.yml": {"data/roadmap-progress.json", "docs/roadmap-2026.md"},
     "linkedin-version-check.yml": {"data/linkedin-api-version.json"},
+    "news-publish.yml": {"data/news.json", "news.xml"},
 }
 
 SKILL = ROOT / ".claude/skills/rebuild-gates/SKILL.md"

@@ -11,6 +11,63 @@ NetSec news lives in one place, `data/news.json`, and feeds three surfaces:
 
 ## Adding an item
 
+There are two ways: the issue form, or a PR that edits the JSON.
+
+### The News item form
+
+Open a new issue and pick **News item**
+([`.github/ISSUE_TEMPLATE/news.yml`](../.github/ISSUE_TEMPLATE/news.yml)).
+It is in English. Only the headline (or the issue title) and the summary are
+needed. The form applies no label, so filing it publishes nothing.
+
+| Field | Goes to |
+| --- | --- |
+| Site | NetSec: nothing extra. Joint: `"site": "joint"`. EISS: the run stops, file it in the EISS repository |
+| Headline | `title.en` (blank: the issue title, minus a leading `news:`) |
+| Summary | `summary.en`, cut to 300 characters |
+| Body | `body.en` (blank: the summary) |
+| Type | `type` (default `announcement`) |
+| Working Group | `wg` |
+| Link | `cta`, with "Read more →" in each locale. A page on this site links its `.fr.html` and `.de.html` pages when both exist |
+| Publication date | `pubDate` at 12:00 Paris time, and `displayDate` in each locale (blank: the day the label is applied) |
+| On the home page until | `homeUntil` at 23:59 Paris time |
+| Collaborator page | `"collaborator": "eiss"` |
+| Include in the newsletter | `"newsletter": true` |
+| Do not post to LinkedIn and Bluesky | `"social": "skip"` |
+
+A publisher reads the issue and applies the **`news`** label. The
+`Publish news from issue` workflow
+([`.github/workflows/news-publish.yml`](../.github/workflows/news-publish.yml))
+runs [`scripts/news-from-issue.py`](../scripts/news-from-issue.py), which
+adds the item to the top of `data/news.json` and asks the Claude API for the
+French and German title, summary and body. The workflow then rebuilds
+`news.xml` and opens an auto-merging PR with `Closes #<issue>`. Merging it
+approves the machine translations (CLAUDE.md §1) and starts the social posts.
+
+The PR does not merge on its own, and waits for a person, when:
+
+- the translation did not run (no `ANTHROPIC_API_KEY` secret, or the call
+  failed). The PR body says so, and the FR and DE text can be added on its
+  branch.
+- the issue title starts with `[test]`. Read the PR, then close it and the
+  issue.
+
+**Who can publish.** The GitHub accounts in the repository variable
+`NEWS_PUBLISHERS`, separated by commas or spaces, the same as on the EISS
+site. When anyone else applies the label, the workflow comments on the issue
+and publishes nothing. With the variable unset, nobody can publish.
+
+**Set-up (once, by the maintainer).** Create the `news` label, set
+`NEWS_PUBLISHERS`, and add an `ANTHROPIC_API_KEY` repository secret for the
+translation. The workflow uses `AUTOPR_TOKEN` like the other auto-PR
+workflows, so the merge starts `social-bluesky.yml`.
+
+**Tests.** `python3 -m pytest scripts/test-news-from-issue.py` runs without
+network. It also fails when the form lists `None` or `n/a` in a dropdown,
+which makes GitHub hide the form from the issue chooser.
+
+### Editing the JSON
+
 Prepend the item to `items` in `data/news.json`, bump `lastBuildDate`, then
 run `python3 scripts/build-news-rss.py` and commit both files in one PR. The
 `news-drift.yml` CI gate fails if `news.xml` does not match `news.json`.
@@ -42,3 +99,6 @@ describes the rest.
 | `homeUntil` | no | ISO datetime. After it the item leaves the home page but stays in the archive and the RSS feed. On a `call` it drives the countdown in the Open calls tile, and a call without it shows as a rolling call. |
 | `cta` | no | `{href, external, i18n:{en, fr?, de?}}`, a "Read more" link. `href` may be a string or a per-locale map. |
 | `social` | no | Bluesky and LinkedIn handling: omit it or set `"auto"` to offer the item for posting, `"skip"` to never post it, or `"thread:<slug>"` when a curated thread announces it instead. |
+| `site` | no | `"joint"` for an item shared with EISS. The site ignores it. |
+| `collaborator` | no | `"eiss"`: after a LinkedIn post, the posting run lists it for adding the EISS page as collaborator by hand. LinkedIn's API cannot do it. |
+| `newsletter` | no | `true` puts `<category>newsletter</category>` on the item in `news.xml`, which the monthly newsletter reads. |

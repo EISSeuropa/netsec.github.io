@@ -107,6 +107,11 @@ def render(data: dict) -> str:
         out.append(f"      <link>{escape(link)}</link>")
         out.append(f"      <description>{cdata(body)}</description>")
         out.append(f"      <pubDate>{pub}</pubDate>")
+        # The monthly newsletter takes the items flagged for it (the News
+        # item form's "Include in the newsletter" box). Same flag as the
+        # EISS Atom feed, read by the newsletter-draft skill there.
+        if it.get("newsletter") is True:
+            out.append("      <category>newsletter</category>")
         out.append(
             f'      <guid isPermaLink="false">{escape(guid)}</guid>'
         )

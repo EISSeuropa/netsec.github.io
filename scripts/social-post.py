@@ -100,6 +100,9 @@ class Post:
     # Bluesky text as an @-mention and resolved to a facet at publish time.
     # See read_spotlight.
     bsky_handle: str | None = None
+    # News only: the other organisation's LinkedIn page ("eiss"), added by
+    # hand as collaborator after the post goes out. LinkedIn's API cannot.
+    collaborator: str = ""
 
     def _bsky_mention(self) -> str:
         return f"\n\nOn Bluesky: @{self.bsky_handle}" if self.bsky_handle else ""
@@ -175,6 +178,27 @@ def news_directives() -> dict:
     return out
 
 
+def news_collaborators() -> dict:
+    """{news item id: collaborator page} from data/news.json's optional
+    `collaborator` field (the News item form's Collaborator page)."""
+    if not NEWS_JSON.exists():
+        return {}
+    try:
+        data = json.loads(NEWS_JSON.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return {it["id"]: str(it["collaborator"]).strip().lower()
+            for it in data.get("items", []) if it.get("id") and it.get("collaborator")}
+
+
+def _step_summary(lines: list[str]) -> None:
+    """Append to the GitHub Actions run summary when there is one."""
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if path:
+        with open(path, "a", encoding="utf-8") as fh:
+            fh.write("\n".join(lines) + "\n")
+
+
 def read_news_feed() -> list[Post]:
     """Parse news.xml into posts (stdlib regex; the feed is our own, small,
     and well-formed). One post per <item>, keyed on the item id (the <guid>),
@@ -184,6 +208,7 @@ def read_news_feed() -> list[Post]:
         return []
     xml = NEWS_XML.read_text(encoding="utf-8")
     directives = news_directives()
+    collaborators = news_collaborators()
     posts = []
     for block in re.findall(r"<item>(.*?)</item>", xml, re.S):
         def grab(tag, attrs=False):
@@ -210,6 +235,7 @@ def read_news_feed() -> list[Post]:
             link=link,
             image=SITE_OG if SITE_OG.exists() else None,
             image_alt="NetSec, COST Action CA24154",
+            collaborator=collaborators.get(guid, ""),
         ))
     return posts
 
@@ -974,6 +1000,8 @@ def main() -> int:
         for p in posts:
             print(f"• [{p.kind}] {p.title}  (key: {p.key})")
             ch.publish(p)
+            if p.collaborator:
+                print(f"    [then add the {p.collaborator.upper()} LinkedIn page as collaborator by hand]")
         print("Nothing was published. Re-run with --live (phase 2+) once secrets are set.")
         return 0
 
@@ -985,6 +1013,7 @@ def main() -> int:
         print("No channel is configured (missing secrets); nothing posted.", file=sys.stderr)
         return 1
     degraded = False
+    notes = []
     for p in posts:
         posted_any = False
         for c in active:
@@ -992,6 +1021,9 @@ def main() -> int:
                 url = c.publish(p)
                 print(f"posted [{p.kind}] to {c.name}: {url}")
                 posted_any = True
+                if c.name == "linkedin" and p.collaborator:
+                    notes.append(f"- {p.title}: {url} Add the {p.collaborator.upper()} "
+                                 "LinkedIn page as collaborator.")
             except SystemExit as e:
                 # --best-effort (the ungated weekly spotlight) must not let one
                 # channel's failure — an expired LinkedIn token, an API change —
@@ -1007,6 +1039,10 @@ def main() -> int:
         if posted_any:
             ledger.setdefault("posted", []).append(p.key)
     save_ledger(ledger)
+    if notes:
+        _step_summary(["### Collaborators to add by hand", ""] + notes)
+        for n in notes:
+            print(n)
     # Exit 2 when --best-effort swallowed a channel failure. Best-effort means
     # the run carries on, which until now also meant the LinkedIn access token
     # could expire with no trace beyond a ::warning:: on an otherwise green
