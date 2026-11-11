@@ -1,0 +1,147 @@
+# Issue-driven news publishing, ported from the EISS repository
+# (EISSeuropa/EISSeuropa.github.io, news-publish.yml, #2058).
+#
+# Label a News item issue (.github/ISSUE_TEMPLATE/news.yml) `news` and this
+# workflow runs scripts/news-from-issue.py. The script adds the item to
+# data/news.json with French and German machine translations from the Claude
+# API, then build-news-rss.py rebuilds news.xml, and the run opens an
+# auto-merging PR. The PR body carries `Closes #<issue>`, so the merge closes
+# the issue. The news.xml change on main then starts the gated social posts
+# (social-bluesky.yml).
+#
+# Only the accounts in the repository variable NEWS_PUBLISHERS (GitHub logins,
+# separated by commas or spaces) can publish. When anyone else applies the
+# label, the run comments on the issue and stops. With the variable unset,
+# nobody can publish.
+#
+# The PR is left for a person, without auto-merge, when the translation did
+# not run (ANTHROPIC_API_KEY missing, or the call failed) and when the issue
+# title starts with `[test]`.
+#
+# Action pins mirror the other workflows (SHA-pinned, .github/CLAUDE.md).
+
+name: Publish news from issue
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: news-publish-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    name: Add the news item and open an auto-PR
+    if: github.event.label.name == 'news'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the publisher
+        id: publisher
+        env:
+          PUBLISHERS: ${{ vars.NEWS_PUBLISHERS }}
+          SENDER: ${{ github.event.sender.login }}
+        run: |
+          allowed=false
+          for login in $(echo "$PUBLISHERS" | tr ',' ' '); do
+            if [ "${login,,}" = "${SENDER,,}" ]; then allowed=true; fi
+          done
+          echo "allowed=$allowed" >> "$GITHUB_OUTPUT"
+          if [ "$allowed" != true ]; then
+            echo "::notice::$SENDER is not in NEWS_PUBLISHERS. Nothing published."
+          fi
+
+      - name: Tell the issue why nothing was published
+        if: steps.publisher.outputs.allowed != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SENDER: ${{ github.event.sender.login }}
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" --repo "${{ github.repository }}" --body \
+            "@$SENDER applied \`news\`, but only the accounts in the NEWS_PUBLISHERS repository variable can publish. Nothing was published. A publisher can remove and re-apply the label."
+
+      - name: Check out repository
+        if: steps.publisher.outputs.allowed == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
+
+      - name: Set up Python
+        if: steps.publisher.outputs.allowed == 'true'
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+
+      - name: Install the Claude API client
+        if: steps.publisher.outputs.allowed == 'true'
+        run: python -m pip install --quiet anthropic==2.8.0
+
+      - name: Add the news item and rebuild the feed
+        if: steps.publisher.outputs.allowed == 'true'
+        id: item
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          set -o pipefail
+          export TODAY="$(TZ=Europe/Paris date +%F)"
+          python3 scripts/news-from-issue.py | tee /tmp/news-add.txt
+          python3 scripts/build-news-rss.py
+          {
+            echo "Generated from issue #${ISSUE_NUMBER} (labelled \`news\`)."
+            echo ""
+            if grep -q '^TRANSLATED=false' /tmp/news-add.txt; then
+              echo "The French and German text is missing, so this PR does not merge on its own. Add \`fr\` and \`de\` to the title, summary and body in \`data/news.json\` (by hand or by machine), then merge."
+            else
+              echo "The French and German title, summary and body are machine translations (Claude API). Merging approves them (CLAUDE.md §1)."
+            fi
+            echo ""
+            echo "Script output:"
+            echo ""
+            echo '```'
+            cat /tmp/news-add.txt
+            echo '```'
+            echo ""
+            echo "Edit the entry in \`data/news.json\` on this branch to change anything, then run \`python3 scripts/build-news-rss.py\`."
+            echo ""
+            echo "Closes #${ISSUE_NUMBER}"
+          } > /tmp/news-pr-body.md
+
+      - name: Open or update the news PR
+        if: steps.publisher.outputs.allowed == 'true'
+        id: cpr
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)
+        with:
+          # The AUTOPR_TOKEN makes the PR run the required checks, and its
+          # merge push start social-bluesky.yml. A GITHUB_TOKEN push starts
+          # neither.
+          token: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
+          branch: news/auto-${{ github.event.issue.number }}
+          base: main
+          delete-branch: true
+          title: 'content(news): ${{ github.event.issue.title }}'
+          commit-message: |
+            content(news): publish item from issue #${{ github.event.issue.number }}
+
+            Added to data/news.json by scripts/news-from-issue.py, with
+            news.xml rebuilt by scripts/build-news-rss.py.
+          body-path: /tmp/news-pr-body.md
+          labels: |
+            automated
+
+      - name: Enable auto-merge on the PR
+        if: >-
+          steps.publisher.outputs.allowed == 'true'
+          && steps.cpr.outputs.pull-request-number
+          && steps.item.outputs.translated == 'true'
+          && !startsWith(github.event.issue.title, '[test]')
+        env:
+          GH_TOKEN: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" \
+            --auto --squash --repo "${{ github.repository }}"

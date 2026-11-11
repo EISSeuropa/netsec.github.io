@@ -347,6 +347,15 @@ This is what stops a big announcement from going out twice (once as the plain
 auto-post, once as the thread). The dedup key is the news item **id** (its
 `<guid>`), not the link, so two items pointing at the same page never collide.
 
+## Joint items and the EISS page
+
+A joint item goes out from the NetSec accounts only. An item with
+`"collaborator": "eiss"` in `data/news.json` (the News item form's
+Collaborator page) is posted as usual. The run summary then lists its LinkedIn
+post under "Collaborators to add by hand", and someone adds the EISS page as
+collaborator in LinkedIn. LinkedIn's API cannot do it. The dry run prints the
+same reminder. The EISS pipeline does the same with `"collaborator": "netsec"`.
+
 ## Nothing-pending is skipped, not left waiting
 
 The `preview` job counts what would actually post and the `publish` job only

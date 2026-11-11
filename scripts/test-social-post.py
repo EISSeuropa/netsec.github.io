@@ -570,3 +570,41 @@ def test_best_effort_failure_line_matches_what_the_workflow_greps(monkeypatch, t
     err = capsys.readouterr().err
     assert re.search(r"^\s+! linkedin publish failed", err, re.M)
 
+
+
+def test_news_collaborator_reaches_the_post_and_the_run_summary(monkeypatch, tmp_path):
+    news = tmp_path / "news.json"
+    news.write_text(json.dumps({"items": [{"id": "joint-item", "collaborator": "eiss"}]}),
+                    encoding="utf-8")
+    xml = tmp_path / "news.xml"
+    xml.write_text(
+        "<rss><channel><item><title>Joint</title><link>https://netsec-cost.eu/</link>"
+        "<description><![CDATA[Body.]]></description>"
+        '<guid isPermaLink="false">joint-item</guid></item></channel></rss>',
+        encoding="utf-8")
+    monkeypatch.setattr(sp, "NEWS_JSON", news)
+    monkeypatch.setattr(sp, "NEWS_XML", xml)
+    (post,) = sp.read_news_feed()
+    assert post.collaborator == "eiss"
+
+    class _Fake(sp.Channel):
+        def __init__(self, name):
+            self.name = name
+
+        def configured(self):
+            return True
+
+        def publish(self, p):
+            return f"https://{self.name}.example/1"
+
+    summary = tmp_path / "summary.md"
+    monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary))
+    monkeypatch.setattr(sp, "CHANNELS", {"bluesky": _Fake, "linkedin": _Fake})
+    monkeypatch.setattr(sp, "pending", lambda kinds, ledger: [post])
+    monkeypatch.setattr(sp, "load_ledger", lambda: {"posted": []})
+    monkeypatch.setattr(sp, "LEDGER", tmp_path / "ledger.json")
+    monkeypatch.setattr(sys, "argv", ["social-post.py", "--live", "--kind", "news"])
+    assert sp.main() == 0
+    text = summary.read_text(encoding="utf-8")
+    assert "https://linkedin.example/1" in text and "EISS LinkedIn page" in text
+    assert "bluesky.example" not in text

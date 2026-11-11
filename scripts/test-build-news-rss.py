@@ -380,3 +380,11 @@ def test_real_news_json_renders_and_is_wellformed():
     pubs = re.findall(r"<pubDate>(.*?)</pubDate>", out)
     parsed = [datetime.strptime(p, "%a, %d %b %Y %H:%M:%S %z") for p in pubs[1:]]
     assert parsed == sorted(parsed, reverse=True)
+
+def test_render_newsletter_category_only_when_flagged():
+    flagged = _item("flagged", "2026-12-01T12:00:00+01:00")
+    flagged["newsletter"] = True
+    out = brss.render(_data([flagged, _item("plain", "2026-11-01T12:00:00+01:00")]))
+    blocks = re.findall(r"<item>(.*?)</item>", out, re.S)
+    assert "<category>newsletter</category>" in blocks[0]
+    assert "<category>" not in blocks[1]

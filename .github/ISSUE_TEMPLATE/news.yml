@@ -1,0 +1,117 @@
+name: 📰 News item
+description: A news item for the website (EN, FR, DE), the RSS feed, the LinkedIn and Bluesky posts and the newsletter.
+title: "news: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Write the item in English. A publisher reads it and applies the `news` label, which opens the pull request that adds it to the site with French and German machine translations. Only the headline (or the issue title) and the summary are required. Leave the rest blank if it does not apply.
+  - type: dropdown
+    id: site
+    attributes:
+      label: Site
+      description: An EISS-only item goes in the EISS repository (EISSeuropa/EISSeuropa.github.io) instead.
+      options:
+        - NetSec
+        - Joint (EISS and NetSec)
+        - EISS
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: headline
+    attributes:
+      label: Headline
+      description: Plain text. Leave blank to use the issue title.
+    validations:
+      required: false
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: >-
+        One or two sentences, up to 300 characters. Shown on the home page
+        card. Also the full text when the body is left blank.
+    validations:
+      required: true
+  - type: textarea
+    id: body
+    attributes:
+      label: Body
+      description: >-
+        Optional full text, shown in the news archive, the RSS feed and the
+        LinkedIn and Bluesky posts. Plain text.
+    validations:
+      required: false
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      options:
+        - announcement
+        - event
+        - publication
+        - call
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
+    id: wg
+    attributes:
+      label: Working Group
+      options:
+        - No Working Group
+        - WG1
+        - WG2
+        - WG3
+        - WG4
+      default: 0
+    validations:
+      required: false
+  - type: input
+    id: link
+    attributes:
+      label: Link
+      description: A full address (https://...) or a page on this site (essc-2027.html). The French and German pages are linked when they exist.
+    validations:
+      required: false
+  - type: input
+    id: date
+    attributes:
+      label: Publication date
+      description: YYYY-MM-DD. Leave blank for the day the label is applied.
+      placeholder: "2026-12-01"
+    validations:
+      required: false
+  - type: input
+    id: until
+    attributes:
+      label: On the home page until
+      description: >-
+        YYYY-MM-DD, optional. The item leaves the home page after this day and
+        stays in the archive. For a call, this is the closing date shown in the
+        Open calls tile.
+    validations:
+      required: false
+  - type: dropdown
+    id: collaborator
+    attributes:
+      label: Collaborator page
+      description: >-
+        The other organisation's LinkedIn page, added by hand as collaborator
+        after the post goes out.
+      options:
+        - No collaborator
+        - EISS
+      default: 0
+    validations:
+      required: false
+  - type: checkboxes
+    id: options
+    attributes:
+      label: Options
+      options:
+        - label: Include in the newsletter
+          required: false
+        - label: Do not post to LinkedIn and Bluesky
+          required: false
