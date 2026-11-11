@@ -1,0 +1,85 @@
+# Show the LinkedIn and Bluesky posts of a news PR before it merges.
+#
+# Every PR that changes data/news.json or news.xml gets one comment, updated on
+# each push, with the exact text scripts/social-post.py would post once the PR
+# merges and the run is approved in the `social` environment
+# (social-bluesky.yml). The maintainer reads the item and its posts in one place
+# before merging. This workflow posts nothing and holds no secrets.
+#
+# The comment is found by its first line, <!-- news-social-preview -->.
+# Same workflow as EISSeuropa/EISSeuropa.github.io's news-preview.yml.
+#
+# Action pins mirror the other workflows (SHA-pinned, .github/CLAUDE.md).
+
+name: Preview the social posts of a news PR
+
+on:
+  pull_request:
+    paths:
+      - 'data/news.json'
+      - 'news.xml'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: news-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    name: Comment the post preview
+    # A fork PR gets a read-only token, so it cannot comment.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+
+      - name: Fold in a ledger that has not reached main yet
+        run: |
+          # Same union as social-bluesky.yml: keys of posts that already went
+          # out can still sit on the open social/ledger PR.
+          git fetch --depth=1 origin social/ledger 2>/dev/null || exit 0
+          git show FETCH_HEAD:data/social-posted.json > branch-ledger.json || exit 0
+          python3 - <<'PY'
+          import json, pathlib
+          led = pathlib.Path("data/social-posted.json")
+          cur = json.loads(led.read_text(encoding="utf-8"))
+          extra = [k for k in json.loads(pathlib.Path("branch-ledger.json").read_text(encoding="utf-8")).get("posted", [])
+                   if k not in cur["posted"]]
+          if extra:
+              cur["posted"] += extra
+              led.write_text(json.dumps(cur, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+          PY
+          rm -f branch-ledger.json
+
+      - name: Write or update the preview comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          marker='<!-- news-social-preview -->'
+          {
+            echo "$marker"
+            echo "### LinkedIn and Bluesky preview"
+            echo ""
+            echo "After this PR merges, these posts wait for approval in the \`social\` environment, then go out as shown. Bluesky is cut to 300 characters."
+            echo ""
+            echo '```'
+            python3 scripts/social-post.py --dry-run --kind news
+            echo '```'
+          } > /tmp/news-preview.md
+          id=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+                 --jq ".[] | select(.body | startswith(\"$marker\")) | .id" | head -n 1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$id" -F body=@/tmp/news-preview.md > /dev/null
+            echo "Updated comment $id."
+          else
+            gh pr comment "$PR" --repo "$REPO" --body-file /tmp/news-preview.md
+          fi

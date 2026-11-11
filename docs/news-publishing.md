@@ -21,6 +21,7 @@ Ready:
   `social-bluesky.yml` and its approval gate, already in use for NetSec news
   and the spotlight.
 - `news.xml` tags items marked for the newsletter.
+- The PR preview comment and the `publish-news-item` skill.
 
 Not yet done (repository settings, by the maintainer):
 
@@ -78,6 +79,17 @@ change the item first, edit the entry on the PR's branch and rerun
 When the translation did not run (no `ANTHROPIC_API_KEY` secret, or the call
 failed), the PR body says so, and the FR and DE text can be added on its
 branch before merging.
+
+**Post preview.** Every PR that changes `data/news.json` or `news.xml`, from
+the form or by hand, gets a comment with the exact LinkedIn and Bluesky text
+(`.github/workflows/news-preview.yml`). The comment is updated on each push, so
+the item and its posts are read in one place before the merge.
+
+**Asking a Claude session.** A request such as "announce the call" goes through
+the `publish-news-item` skill (`.claude/skills/publish-news-item/SKILL.md`). It
+builds the item with `scripts/news-from-issue.py`, the same mapping as the form,
+adds the French and German, rebuilds `news.xml` and opens one PR, which then
+gets the same preview.
 
 **Publishers.** The GitHub accounts in the repository variable
 `NEWS_PUBLISHERS`, separated by commas, semicolons or spaces, the same as on
