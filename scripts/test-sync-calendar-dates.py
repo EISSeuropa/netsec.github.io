@@ -89,6 +89,14 @@ def test_an_event_on_indico_is_left_to_indico():
     assert changes == [] and "Indico" in warnings[0]
 
 
+def test_an_event_on_indico_still_takes_its_application_deadline():
+    doc = copy.deepcopy(_DOC)
+    changes, warnings = sync.apply_calendar_dates(doc, [{"date": "2027-01-26", "label": "Proposals due", "deadline": "conf@x"}])
+    assert doc["events"][1]["applicationDeadline"] == "2027-01-26"
+    assert doc["events"][1]["start"] == "2027-06-10T09:00"
+    assert len(changes) == 1 and warnings == []
+
+
 def test_two_dates_naming_one_event_are_both_ignored():
     ev, changes, warnings = _run([{"date": "2027-06-15", "label": "a", "uid": "school@x"},
                                   {"date": "2027-06-16", "label": "b", "uid": "school@x"}])

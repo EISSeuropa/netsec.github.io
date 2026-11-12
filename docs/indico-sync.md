@@ -91,6 +91,20 @@ Entries with no `indicoEventId` take their dates from the "EISS
 dates" Google Calendar instead. `scripts/sync-calendar-dates.py` runs
 in the same workflow, after this script, and puts its changes in the
 same pull request (`docs/architecture.md`, *Adding a new event*).
+Indico has no application deadline, so a calendar `deadline: <uid>`
+line still sets `applicationDeadline` on an entry that is on Indico.
+
+A hand-authored entry for an event that later appears on Indico needs
+its `indicoEventId` added the day the Indico event is published.
+Without it the sync sees no match and appends a second,
+`autoDiscovered` entry for the same event (ESSC 2027, #2157).
+
+`data/indico.json` may hold a conference whose `programme.days` is
+empty while its call is open and no timetable exists yet.
+`check-data-shape.py` accepts that until the conference's start date,
+measured against `syncedAt`. A fetch that returns an empty timetable
+for a year whose programme is already on disk keeps the one on disk
+(`keep_published_programme`).
 
 The allow-list is tight on purpose. Specifically, `location` is
 **not** auto-synced: events.json carries the full postal address

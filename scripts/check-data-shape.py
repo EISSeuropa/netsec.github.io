@@ -84,7 +84,15 @@ def check_indico(data) -> list:
         if not _req(conf, "programme", dict, errs, ctx):
             continue
         prog = conf["programme"]
-        if not _req(prog, "days", list, errs, f"{ctx}.programme", non_empty=True):
+        if not _req(prog, "days", list, errs, f"{ctx}.programme"):
+            continue
+        if not prog["days"]:
+            # No timetable yet is normal before a conference (the call is
+            # open, the programme not built). Measured against syncedAt, so
+            # the check gives the same answer whenever it runs.
+            start, synced = str(conf.get("startDateOnly") or ""), str(data.get("syncedAt") or "")[:10]
+            if not (start and synced and synced < start):
+                errs.append(f"{ctx}.programme: 'days' is empty")
             continue
         renderable = 0
         for i, day in enumerate(prog["days"]):
