@@ -167,6 +167,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The ESSC 2027 call shows its five key dates as a vertical timeline in all three locales. The Read the call button is gone, so Submit a proposal on Indico is the primary button, beside the PDF of the call. The call's participation notes sit under Format and funding, leaving Practical information as the one section of that name on the page.
 - The prose-date check in `inject-seo.py --check` leaves alone a day written inside `<time datetime="YYYY-MM-DD">` that reads as that same day, such as a paper deadline in the conference month. A tested case covers EN, FR and DE.
 - The beta ribbon on every French and German page says only that the English version is authoritative ("La version anglaise fait foi." / "Die englische Fassung ist verbindlich."). It no longer says the page was translated by hand.
 - The Training School page carries the 2027 call for applications in all three locales: the deadline of 7 December 2026 in the hero and the next-edition card, the four topics, who can apply, the documents to send and the travel reimbursement and allowance. The ESSC 2027 page, the events listing and the calendar entry give the deadline.
@@ -186,6 +187,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The ESSC 2027 call names the chair of closed panel 6 as Nicolas Blarel in all three locales.
 - The call for papers on the ESSC 2027 page has space above each of its five subheadings and between the closed panels, in all three locales. The headings sat flush against the list above them. The Organisers heading on the 2027 policy workshop page gets the same space.
 - The outlined application-form button on the 2026 policy workshop page takes the ink colour of outlined buttons elsewhere, in all three locales. The link colour of the glass cards had turned its label blue.
 - The 2027 Training School card on the home page and the events listing gives the application deadline of 7 December 2026 in all three locales. It still read "Call for applications to follow" after the call opened.
