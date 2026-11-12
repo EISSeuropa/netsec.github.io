@@ -262,6 +262,13 @@ programme" on `/essc-2026.html` is the canonical example.
 Mechanism descriptions belong in the maintainer docs and the
 decisions log.
 
+**Conference pages carry the same information on both sites.** The
+ESSC page on netsec-cost.eu and the `/YYYY` page on eiss-europa.com
+give the same call, panels, key dates, prize and practical
+information. A change to one goes to the other in the same session, as
+a PR in each repository. The EISS `cfp` data in `conferences.js` is
+the text both use.
+
 ## 7. Prose voice (em dashes and AI patterns)
 
 These apply to every piece of prose I author in this project:

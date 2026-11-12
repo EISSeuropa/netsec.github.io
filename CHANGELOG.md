@@ -152,6 +152,7 @@ maintainer-facing audience.
 
 #### Added
 
+- The ESSC 2027 page carries the full call for papers in all three locales, as on eiss-europa.com: the three submission types, the eight closed panels with their chairs and descriptions, the key dates, the practical information and the European Security Studies Prize.
 - The ESSC 2027 page announces the open call for papers in all three locales: proposals are due on 26 January 2027, with links to the full call on eiss-europa.com, to the call as a PDF and to the conference's Indico event. The event descriptions on the home, events and ESSC 2027 pages and in the calendar feed give the deadline instead of the expected publication date.
 - The home page's Meet the network section shows who joined in the last 30 days, in all three locales. Their faces lead the scrolling row in colour with an accent ring, among the greyscale rest, and a line above the Directory and Network Map links gives the count ("25 new members in the last 30 days") and links to the Directory.
 - The Directory names the members who joined in the last 30 days, in all three locales. A box above the search gives the count, and under it the eight newest roll through one at a time like end credits, newest first, each rising in with a ring that draws round the photo, holding, then drifting up and fading as the next arrives. Each line links to the member's profile and says how long ago they joined. Hovering, focusing a link or the pause button holds the roll, and tabbing to a link brings its line up. With reduced motion the four newest stay in view as a plain list. The design follows the Today box on the EISS internal dashboard. The box holds its place from the first paint, so the search box below it does not move when it fills.
@@ -166,6 +167,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The prose-date check in `inject-seo.py --check` leaves alone a day written inside `<time datetime="YYYY-MM-DD">` that reads as that same day, such as a paper deadline in the conference month. A tested case covers EN, FR and DE.
 - The beta ribbon on every French and German page says only that the English version is authoritative ("La version anglaise fait foi." / "Die englische Fassung ist verbindlich."). It no longer says the page was translated by hand.
 - The Training School page carries the 2027 call for applications in all three locales: the deadline of 7 December 2026 in the hero and the next-edition card, the four topics, who can apply, the documents to send and the travel reimbursement and allowance. The ESSC 2027 page, the events listing and the calendar entry give the deadline.
 - The Directory search box is 136 pixels tall on desktop, down from 279. The mentorship, STSM hosting, research theme and research region filters sit behind a More filters button beside the search, in all three locales, with a badge counting the active ones, and they open on their own when one of them is applied from a link or a theme pill on a card. Phones keep the Filters sheet.

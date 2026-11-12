@@ -442,8 +442,11 @@ def derive_print_header_dates(html: str, lang: str, base: str) -> str:
 # applicationDeadline (#2133). Other dates in months with no event or deadline
 # are left alone. Each displayDate must be the form _event_dates.py writes for
 # its event's start and end, so a sync that moves an event without rewriting
-# it fails here.
+# it fails here. A day written inside <time datetime="YYYY-MM-DD"> that reads
+# as that same day is a date in its own right (a paper deadline in the
+# conference month, say) and is not read as a claim about an event.
 _SP = r"(?:\s|&nbsp;)"
+_TIME_RE = re.compile(r'(<time\s+datetime="(\d{4})-(\d{2})-(\d{2})"\s*>)(.*?)(</time>)', re.S)
 
 
 def _date_re(lang: str) -> re.Pattern:
@@ -493,6 +496,13 @@ def check_prose_dates(text: str, lang: str, where: str, years: set[int], own: li
 
     years: the years to read an expression without one against. own: the
     events whose page or entry this is, where a single day is checked too."""
+    def own_date(m: re.Match) -> str:
+        y, mo, d, inner = int(m[2]), int(m[3]), int(m[4]), m[5]
+        found = find_event_dates(inner, lang)
+        if len(found) == 1 and found[0][:4] == (d, mo, 0, mo) and found[0][4] in (None, y):
+            inner = re.sub(r"[^\n]", " ", inner)
+        return m[1] + inner + m[6]
+    text = _TIME_RE.sub(own_date, text)
     spans = _spans(_EVENTS["events"])
     own_months = {a[:2] for a, _ in _spans(own)}
     for d1, m1, d2, m2, year, at in find_event_dates(text, lang):
