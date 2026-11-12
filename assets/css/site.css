@@ -3292,6 +3292,11 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .ecs-card dt{font-weight:600;color:var(--ink)}
 .ecs-card dd{margin:0 0 .6rem}
 .ecs-card dd:last-child{margin-bottom:0}
+/* A heading after text, a list or a button row opens a new block in the
+   card (the ESSC 2027 call's five parts), so it takes space above. A
+   heading under a chair's photo keeps the photo's own margin. */
+.ecs-card :is(p,ul,ol,dl,div) + h3{margin-top:1.6rem}
+.ecs-card dd + dt{margin-top:.9rem}
 .ecs-slider-nav{display:flex;justify-content:flex-end;gap:8px;margin:0 0 10px}
 .ecs-slider-nav[hidden]{display:none}
 .ecs-slider-btn{
