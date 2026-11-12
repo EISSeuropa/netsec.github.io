@@ -26,6 +26,7 @@ _absolutize_indico_url = sync_indico._absolutize_indico_url
 _looks_like_break = sync_indico._looks_like_break
 summarise_changes = sync_indico.summarise_changes
 should_carry_over = sync_indico.should_carry_over
+keep_published_programme = sync_indico.keep_published_programme
 normalise_event = sync_indico.normalise_event
 classify_netsec = sync_indico.classify_netsec
 _en_display_date = sync_indico._en_display_date
@@ -336,6 +337,21 @@ def test_should_carry_over() -> None:
            should_carry_over({}, {"annualConferences": {}}), False)
 
 
+def test_keep_published_programme() -> None:
+    """A year's programme on disk survives a fetch that returns it empty,
+    and a year with no programme yet stays empty (ESSC 2027 before its
+    timetable, #2157)."""
+    print("\nkeep_published_programme() — an empty fetch never erases a published programme:")
+    published = {"days": [{"date": "2027-06-10", "slots": [{"id": "s1"}]}]}
+    newer = {"days": [{"date": "2027-06-10", "slots": [{"id": "s2"}]}]}
+    expect("empty fetch + programme on disk -> keep the one on disk",
+           keep_published_programme({"days": []}, published), published)
+    expect("empty fetch + nothing on disk -> empty",
+           keep_published_programme({"days": []}, None), {"days": []})
+    expect("fetched programme -> written, whatever is on disk",
+           keep_published_programme(newer, published), newer)
+
+
 def test_classify_netsec() -> None:
     """NetSec-calendar classification: standalone (category #8), joint
     (NetSec keyword on an EISS category), or excluded (EISS-only)."""
@@ -495,6 +511,7 @@ def main() -> None:
     test_extract_programme_empty_timetable()
     test_summarise_changes()
     test_should_carry_over()
+    test_keep_published_programme()
     test_classify_netsec()
     test_en_display_date()
     test_event_type_for()

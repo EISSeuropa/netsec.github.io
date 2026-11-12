@@ -24,8 +24,8 @@ END:VTIMEZONE
 BEGIN:VEVENT
 UID:european-security-conference-2027@netsec-cost.eu
 DTSTAMP:20261111T120000Z
-DTSTART;TZID=Europe/Belgrade:20270610T090000
-DTEND;TZID=Europe/Belgrade:20270611T180000
+DTSTART;TZID=Europe/Belgrade:20270610T080000
+DTEND;TZID=Europe/Belgrade:20270611T200000
 SUMMARY:2027 European Security Studies Conference
 DESCRIPTION:The annual conference of the NetSec community and the European Initiative for Security Studies\, at the University of Belgrade\, Faculty of Political Science. The NetSec Training School runs alongside it\, from 8 to 11 June. The call for papers is open until 26 January 2027 on eiss-europa.com.\n\nDetails: https://netsec-cost.eu/essc-2027.html
 LOCATION:University of Belgrade\, Faculty of Political Science\, Belgrade\, Serbia

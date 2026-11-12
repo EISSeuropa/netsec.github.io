@@ -7,12 +7,13 @@ EISS status web app (workspace-ops/status) publishes it at ?view=dates as
 { dates: [{ date, end, label, site, indico, url, uid, deadline, ... }] }.
 
 Events on Indico take their dates from Indico through sync-indico.py. This
-script covers the rest, the events.json entries with no `indicoEventId`:
+script covers what Indico does not give:
 
   - a calendar date whose description has the line `uid: <uid>` sets that
-    entry's `start` and `end` days. The times of day stay as they are.
+    entry's `start` and `end` days, for entries with no `indicoEventId`.
+    The times of day stay as they are.
   - a calendar date whose description has the line `deadline: <uid>` sets
-    that entry's `applicationDeadline`.
+    that entry's `applicationDeadline`, whether or not it is on Indico.
 
 When `start` or `end` moves, `displayDate` is rewritten in every locale, and
 calendar.ics is rebuilt. An entry no calendar date names is left alone, so an
@@ -84,12 +85,11 @@ def apply_calendar_dates(doc: dict, dates: list[dict]) -> tuple[list[str], list[
 
     for ev in doc.get("events", []):
         uid = ev["uid"]
-        if ev.get("indicoEventId") is not None:
-            if uid in by_uid or uid in deadlines:
-                warnings.append(f"`{uid}` is on Indico, which sets its dates, so its calendar line is ignored")
-            continue
+        on_indico = ev.get("indicoEventId") is not None
+        if on_indico and uid in by_uid:
+            warnings.append(f"`{uid}` is on Indico, which sets its dates, so its calendar line is ignored")
 
-        cal = by_uid.get(uid)
+        cal = None if on_indico else by_uid.get(uid)
         if cal:
             first, last = cal.get("date"), cal.get("end") or cal.get("date")
             if not (_valid_day(first) and _valid_day(last)) or last < first:
