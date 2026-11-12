@@ -186,6 +186,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- ESSC 2027 appears once in the events list and the calendar feed, with Indico's times (10 June 08:00 to 11 June 20:00). The nightly Indico sync had added a second entry for it once the Indico event was published.
 - The call for papers on the ESSC 2027 page has space above each of its five subheadings and between the closed panels, in all three locales. The headings sat flush against the list above them. The Organisers heading on the 2027 policy workshop page gets the same space.
 - The outlined application-form button on the 2026 policy workshop page takes the ink colour of outlined buttons elsewhere, in all three locales. The link colour of the glass cards had turned its label blue.
 - The 2027 Training School card on the home page and the events listing gives the application deadline of 7 December 2026 in all three locales. It still read "Call for applications to follow" after the call opened.

@@ -96,6 +96,23 @@ def test_indico_missing_programme_days():
     assert any("'days' is empty" in e for e in mod.check_indico(data))
 
 
+def test_indico_empty_programme_before_the_conference_passes():
+    data = valid_indico()
+    conf = data["annualConferences"]["2026"]
+    conf["startDateOnly"] = "2026-06-11"
+    conf["programme"] = {"days": []}
+    assert mod.check_indico(data) == []  # synced 9 June, conference 11 June
+
+
+def test_indico_empty_programme_once_the_conference_starts_fails():
+    data = valid_indico()
+    data["syncedAt"] = "2026-06-11T01:00:00Z"
+    conf = data["annualConferences"]["2026"]
+    conf["startDateOnly"] = "2026-06-11"
+    conf["programme"] = {"days": []}
+    assert any("'days' is empty" in e for e in mod.check_indico(data))
+
+
 def test_indico_not_a_dict():
     assert mod.check_indico([]) == ["indico: top level must be an object"]
 

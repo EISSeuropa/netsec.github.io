@@ -133,6 +133,7 @@ LOOK_AHEAD_DAYS = 540  # ~18 months — long enough to capture ESSC N+1
 # conference is noticed rather than silently inheriting Paris.
 INSTANCE_DEFAULT_TZ = "Europe/Paris"
 VENUE_TZ: dict[str, str] = {
+    "25": "Europe/Belgrade",    # ESSC 2027, University of Belgrade
     "22": "Europe/Stockholm",   # ESSC 2026, Stockholm University
     "21": "Europe/Athens",      # EISS 2025, University of Macedonia, Thessaloniki
     "15": "Europe/Prague",      # EISS 2024, Charles University, Prague
@@ -1051,6 +1052,14 @@ def summarise_changes(old: dict | None, new: dict) -> list[str]:
     return lines
 
 
+def keep_published_programme(fetched: dict, on_disk: "dict | None") -> dict:
+    """The programme to write for one year: the fetched one, unless it has
+    no days while the one on disk has some, in which case the one on disk."""
+    if not (fetched or {}).get("days") and (on_disk or {}).get("days"):
+        return on_disk
+    return fetched
+
+
 def should_carry_over(annual_by_year: dict, existing_data: "dict | None") -> bool:
     """Decide whether to keep the snapshot on disk instead of writing the
     freshly-fetched data.
@@ -1105,6 +1114,22 @@ def main() -> None:
             f"{slot_count} slot(s) (sessions + contributions + breaks)",
             file=sys.stderr,
         )
+
+    # A timetable that comes back empty for a year whose programme is
+    # already on disk is a fetch gone wrong, not a programme withdrawn:
+    # keep the programme on disk for that year. A year with no programme
+    # yet (the call is open, the timetable not built) stays empty.
+    previous = {}
+    if OUT.exists():
+        try:
+            previous = json.loads(OUT.read_text(encoding="utf-8")).get("annualConferences", {}) or {}
+        except (json.JSONDecodeError, OSError):
+            previous = {}
+    for year, event in annual_by_year.items():
+        kept = keep_published_programme(event["programme"], (previous.get(year) or {}).get("programme"))
+        if kept is not event["programme"]:
+            print(f"  {year}: Indico returned no programme; keeping the one on disk", file=sys.stderr)
+            event["programme"] = kept
 
     # Build the payload twice-shaped: the data half (everything the
     # consumer reads) and the metadata half (timestamps, doc string).
