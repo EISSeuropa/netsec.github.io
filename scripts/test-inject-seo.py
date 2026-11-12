@@ -826,6 +826,24 @@ def test_prose_dates_that_match_no_event_are_reported(fixture_events, lang, text
     assert len(_prose(text, lang)) == 1
 
 
+@pytest.mark.parametrize("lang,text", [
+    ("en", '<dt><time datetime="2027-06-03">3 June 2027</time></dt>'),
+    ("fr", '<dt><time datetime="2027-06-03">3 juin 2027</time></dt>'),
+    ("de", '<dt><time datetime="2027-06-03">3. Juni 2027</time></dt>'),
+])
+def test_a_day_in_a_time_element_with_its_own_datetime_is_left_alone(fixture_events, lang, text):
+    assert _prose(text, lang) == []
+
+
+@pytest.mark.parametrize("text", [
+    '<time datetime="2027-06-04">3 June 2027</time>',  # the datetime disagrees with the text
+    '<time>3 June 2027</time>',                        # no datetime
+    '<time datetime="2027-06-03">3 June 2027</time> and on 20 June',  # the plain one still counts
+])
+def test_a_time_element_only_excuses_its_own_day(fixture_events, text):
+    assert len(_prose(text)) == 1
+
+
 def test_dates_in_a_month_with_no_event_are_left_alone(fixture_events):
     assert _prose("Applications close on 7 December 2026. Results by 1–15 March 2027.") == []
 
