@@ -3297,6 +3297,14 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
    heading under a chair's photo keeps the photo's own margin. */
 .ecs-card :is(p,ul,ol,dl,div) + h3{margin-top:1.6rem}
 .ecs-card dd + dt{margin-top:.9rem}
+/* Key dates on the ESSC 2027 call: a vertical rail with one dot per date. */
+.ecs-timeline{list-style:none;margin:0;padding:0 0 0 1.6rem;position:relative;color:var(--ink-2);line-height:1.5}
+.ecs-timeline::before{content:'';position:absolute;left:.4rem;top:.45rem;bottom:.45rem;width:2px;border-radius:1px;background:color-mix(in srgb,var(--accent-2) 30%,transparent)}
+.ecs-timeline > li{position:relative;display:flex;flex-direction:column}
+.ecs-timeline > li + li{margin-top:1rem}
+.ecs-timeline > li::before{content:'';position:absolute;left:calc(-1.6rem + .4rem - 5px);top:.3rem;width:12px;height:12px;border-radius:50%;background:var(--link);box-shadow:0 0 0 3px var(--glass-bg,#fff)}
+.ecs-timeline time{font-weight:600;color:var(--ink)}
+@media print{.ecs-timeline > li::before{box-shadow:none}}
 .ecs-slider-nav{display:flex;justify-content:flex-end;gap:8px;margin:0 0 10px}
 .ecs-slider-nav[hidden]{display:none}
 .ecs-slider-btn{
