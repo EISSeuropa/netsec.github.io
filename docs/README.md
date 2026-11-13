@@ -20,6 +20,7 @@ reference for maintainers, MC representatives, and admins.
 | [`force-map-lessons.md`](./force-map-lessons.md) | Change either force-directed map: the running list of user-experience bugs the Network Map and the EISS Anthology Atlas have each found independently, and the rule to read the other's list first. |
 | [`news-publishing.md`](./news-publishing.md)   | Add a news item: the `data/news.json` schema, the RSS rebuild, and how an item reaches the home page, the archive and the feed. |
 | [`social-publishing.md`](./social-publishing.md) | How news and the weekly spotlight become Bluesky and LinkedIn posts — the approval-gated path, the ungated auto-spotlight, curated threads, the dedup ledger, the one-time account set-up, and how the LinkedIn API version stays current. |
+| [`templates/`](./templates/) | Start an ESSC page in its call-for-papers or live-programme state: the two page templates in EN, FR and DE, used as *The three states of an ESSC page* in `admin-guide.md` describes. |
 | [`indico-sync.md`](./indico-sync.md) | How the daily sync mirrors the Indico programme into `data/indico.json` and the ESSC programme page. |
 | [`indico-integration.md`](./indico-integration.md) | The plan for connecting the EISS Indico instance to this site and its Actions, written after the June 2026 research pass. |
 | [`indico-patch.md`](./indico-patch.md) | Retired: why `scripts/indico_patch.py` was withdrawn and what replaced it. Kept as history. |

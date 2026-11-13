@@ -11,6 +11,11 @@
  * sync-indico) + data/bios.json (weekly) + data/essc-livestream.json
  * (hand-maintained), then renders the programme grid into
  * #programme-root. See docs/indico-sync.md for the pipeline.
+ *
+ * Kept between editions. It serves the live state and the archive
+ * state of every ESSC page (docs/admin-guide.md, "The three states of
+ * an ESSC page"), so nothing in it is edition-specific: the year, the
+ * data file and the Indico link all come from #programme-root.
  */
 (async function () {
   'use strict';
@@ -29,6 +34,10 @@
   const PROG_YEAR     = (root && root.dataset.year) || '2026';
   const PROG_SRC      = (root && root.dataset.src) || 'data/indico.json';
   const PROG_ARCHIVED = !!(root && root.dataset.archived);
+  // The edition's Indico event, for the error message. The error path
+  // runs exactly when the conference data is missing, so the URL cannot
+  // come from it. Falls back to the Indico home.
+  const PROG_INDICO   = (root && root.dataset.indico) || 'https://indico.eiss-europa.com/';
 
   // Chrome strings keyed by document.documentElement.lang. Content
   // from Indico (session titles, speaker names, abstracts) stays in
@@ -195,7 +204,7 @@
     root.innerHTML =
       '<p class="programme-error">' +
       t.errLoad + ' ' + msg + ' ' + t.readItOn + ' ' +
-      '<a href="https://indico.eiss-europa.com/event/22/" target="_blank" rel="noopener">Indico</a>.' +
+      '<a href="' + PROG_INDICO + '" target="_blank" rel="noopener">Indico</a>.' +
       '</p>';
     if (quickfacts) {
       quickfacts.dataset.state = 'error';
