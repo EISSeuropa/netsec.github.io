@@ -133,7 +133,7 @@
 
   Promise.all([
     fetch('data/publications.json').then(function (r) { return r.json(); }),
-    fetch('data/bios.json').then(function (r) { return r.json(); }).catch(function () { return null; }),
+    window.netsecBios().catch(function () { return null; }),
   ]).then(function (res) {
     var pubs = (res[0] && res[0].publications) || [];
     if (!pubs.length) return;   // static empty-state stays up

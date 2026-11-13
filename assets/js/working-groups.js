@@ -194,7 +194,7 @@
 
   Promise.all([
     fetch('data/wg.json').then(function (r) { return r.json(); }),
-    fetch('data/bios.json').then(function (r) { return r.json(); }),
+    window.netsecBios(),
     // Events are an optional enhancement: a failure here must not take
     // down the core leadership / member render, so swallow it to null.
     fetch('data/events.json').then(function (r) { return r.json(); })

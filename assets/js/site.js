@@ -6,6 +6,37 @@
 (function () {
   'use strict';
 
+  /* data/bios.json, fetched once per page after the first paint (#2171).
+     Every script that reads it calls this. Each used to fetch its own
+     copy: the Directory downloaded it twice before anything had painted, and
+     Lighthouse counts every byte requested before the largest paint
+     against that paint. Resolves to the parsed file and rejects on a
+     network or HTTP error. The wait is on the browser's own
+     first-contentful-paint entry: a requestAnimationFrame callback fires
+     while render-blocking CSS still holds the first paint back. The one
+     second timer covers a background tab and a browser without paint
+     timing. */
+  function afterFirstPaint() {
+    return new Promise((resolve) => {
+      setTimeout(resolve, 1000);
+      try {
+        if (performance.getEntriesByName('first-contentful-paint').length) return resolve();
+        new PerformanceObserver((list, obs) => {
+          if (list.getEntriesByName('first-contentful-paint').length) { obs.disconnect(); resolve(); }
+        }).observe({ type: 'paint', buffered: true });
+      } catch (e) { /* no paint timing: the timer resolves */ }
+    });
+  }
+  let biosPromise = null;
+  window.netsecBios = function () {
+    if (!biosPromise) {
+      biosPromise = afterFirstPaint()
+        .then(() => fetch('data/bios.json', { cache: 'no-cache' }))
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status))));
+    }
+    return biosPromise;
+  };
+
   /* String catalog + window.netsecT() helper — defined first so that
      every later block (theme toggle, mobile menu, member directory)
      can call it without ordering pitfalls. The catalog lives here as
@@ -1155,9 +1186,7 @@
   if (leaderCards.length) {
     (async () => {
       try {
-        const res = await fetch('data/bios.json', { cache: 'no-cache' });
-        if (!res.ok) return;
-        const data = await res.json();
+        const data = await window.netsecBios();
         const bySlug = Object.create(null);
         const byName = new Map();
         (data.members || []).forEach(m => {
@@ -2501,8 +2530,7 @@ window.netsecMemberCard = (function () {
   const card = window.netsecMemberCard;
   if (!card) return;
 
-  fetch('data/bios.json', { cache: 'no-cache' })
-    .then((r) => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+  window.netsecBios()
     .then((bios) => {
       const byId = new Map();
       for (const m of (bios && bios.members) || []) if (m && m.id) byId.set(m.id, m);
@@ -2632,8 +2660,7 @@ window.netsecMemberCard = (function () {
     }
   }
 
-  fetch('data/bios.json', { cache: 'no-cache' })
-    .then((r) => (r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status))))
+  window.netsecBios()
     .then((bios) => {
       const byKey = new Map();
       for (const m of (bios && bios.members) || []) {
@@ -2763,8 +2790,7 @@ window.netsecMemberCard = (function () {
   const peopleUrl = lang === 'fr' ? 'people.fr.html' : lang === 'de' ? 'people.de.html' : 'people.html';
   const T = (s) => (window.netsecT && window.netsecT(s)) || s;
 
-  fetch('data/bios.json', { cache: 'no-cache' })
-    .then((r) => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+  window.netsecBios()
     .then((bios) => {
       const byKey = new Map();
       const add = (rawName, m) => {
@@ -3205,8 +3231,8 @@ window.netsecMemberCard = (function () {
   var box = document.querySelector('[data-faces-marquee]');
   if (!box) return;
 
-  fetch('data/bios.json', { cache: 'no-cache' })
-    .then(function (r) { return r.ok ? r.json() : null; })
+  window.netsecBios()
+    .catch(function () { return null; })
     .then(function (data) {
       if (!data) { showJoined(0); return; }
       var members = Array.isArray(data.members) ? data.members : [];

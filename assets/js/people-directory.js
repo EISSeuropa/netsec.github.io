@@ -3409,9 +3409,7 @@
 
   // Load data
   try {
-    const res = await fetch('data/bios.json', { cache: 'no-cache' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
+    const data = await window.netsecBios();
     MEMBERS = data.members || [];
     // Folded once here rather than per keystroke: the search predicate runs
     // over every member on every render and again for every facet count, so
