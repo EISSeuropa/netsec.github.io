@@ -908,7 +908,9 @@
      the bar pinned under the floating header and marks the section on
      screen with aria-current. The links are plain anchors and the click
      scroll is the [data-jump-nav] handler above, so the bar works without
-     this. The closed panels are <details>, opened here for printing. */
+     this. The closed panels are <details>, opened here for printing.
+     Kept between editions with the .ecs-nav and .ecs-panel styles
+     (docs/admin-guide.md, "The call-for-papers state of an ESSC page"). */
   (function () {
     const bar = document.querySelector('[data-ecs-nav]');
     if (!bar) return;

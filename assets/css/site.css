@@ -3305,6 +3305,11 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
 .ecs-timeline > li::before{content:'';position:absolute;left:calc(-1.6rem + .4rem - 5px);top:.3rem;width:12px;height:12px;border-radius:50%;background:var(--link);box-shadow:0 0 0 3px var(--glass-bg,#fff)}
 .ecs-timeline time{font-weight:600;color:var(--ink)}
 @media print{.ecs-timeline > li::before{box-shadow:none}}
+/* The ESSC call-for-papers state (docs/admin-guide.md, "The
+   call-for-papers state of an ESSC page"): .ecs-timeline above, and
+   .ecs-panel and .ecs-nav below. Kept between editions. No page uses
+   them from the day a programme goes live until the next call opens,
+   and they are not dead code. */
 /* Closed panels on the ESSC 2027 call: one native <details> per panel,
    with the title as the summary and the description on demand. Eight
    open descriptions ran to ten phone screens. The chair sits outside the

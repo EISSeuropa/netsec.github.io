@@ -484,6 +484,34 @@ while keeping the configuration (see `docs/indico-patch.md`).
 After the edits, run `python3 scripts/check-i18n-drift.py` and
 `./scripts/check-links.sh --internal` before opening the PR.
 
+### The call-for-papers state of an ESSC page
+
+An ESSC page has two states. From the announcement until the programme is out it is in its call-for-papers state, as `essc-2027.html` was from November 2026. Once Indico holds the programme it takes the programme renderer, as `essc-2026.html` has. The call state was designed for the 2027 edition (#2167) and is reused every year, so it is saved as a template and none of its styles or script is deleted when a page moves on to its programme.
+
+**What it is made of**
+
+| Piece | Where | Role |
+| --- | --- | --- |
+| Page template | `docs/templates/essc-call-state.html.txt` (+ `.fr`, `.de`) | The whole page in its call state, saved from `essc-2027.html`. The `.txt` suffix keeps it out of the link checker, the search index and the published pages. |
+| Section bar | `<nav class="ecs-nav" data-ecs-nav data-jump-nav>` | Pinned under the header, one link per section. |
+| Closed panels | `.ecs-panels` > `.ecs-panel` > `<details>` | Title as the summary, chair in `.ecs-panel-chair` outside it, description inside. |
+| Key dates | `<ol class="ecs-timeline">` | Sits above the closed panels. |
+| Practical information | `.ecs-practical-cards`, `.ecs-stay-slider` | Venue, entry rules, transport, money and places to stay. |
+| Styles | `assets/css/site.css`, the `.ecs-*` block | Marked "Kept between editions". |
+| Script | `assets/js/site.js`, "ESSC section bar" block | Marks the section on screen and opens the panels for printing. |
+
+**Starting a new edition's call**
+
+1. Copy the three template files to `essc-<year>.html`, `.fr.html` and `.de.html` at the repository root.
+2. Replace what names 2027 or Belgrade: the `<head>` (title, description, canonical and alternate links, share card, JSON-LD), the print masthead, the hero and its quick facts, the two event uids in `data-event-date` and `data-event-deadline`, the Indico event id, the PDF link, the closed panels, the key dates, the chairs, the practical cards and the previous edition's section at the foot.
+3. Keep the ids `call-for-papers`, `key-dates`, `closed-panels`, `format`, `training-school`, `chairs` and `practical`. The section bar links to them.
+4. The call's text is the `cfp` data in the EISS repository's `conferences.js` (CLAUDE.md §6). The EISS page starts from its own template, `docs/templates/conference-page-call-state.njk` in `EISSeuropa.github.io`, in the same session.
+5. Register the page (`scripts/check-page-registration.py`), then follow the hand-edit table in *Rolling over to next year's ESSC edition* above.
+
+**When the programme goes live**
+
+Replace the call section with the programme renderer from the previous edition's page. Leave the template files, the `.ecs-nav`, `.ecs-panel` and `.ecs-timeline` styles and the section bar script in place. If the page keeps a section bar in its programme state, reuse `.ecs-nav` with that state's links. If the call-state markup changes while a page is using it, refresh the three template files from that page in the same PR.
+
 ### Pinning the member spotlight
 
 The home page can feature one member per week ([#341](https://github.com/EISSeuropa/netsec.github.io/issues/341)).
