@@ -188,6 +188,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The Directory loads with less main-thread work on phones and in the compact view, in all three locales. It checked every hidden bio for a Show more button before the first paint, which laid out the whole page. Lighthouse's performance score for the page rose from a median of 0.72 to 0.83.
 - When an ESSC page's programme cannot load, its message links to that edition's event on Indico. It linked to the ESSC 2026 event from every edition.
 - The Directory files every research keyword under a fitting research theme. A review of the 52 keywords the bios sync had placed on its own since October moved 23 of them and folded one into an existing keyword. Among the moves are Network security out of Climate, energy and environmental security, Trustworthy AI out of Democracy, governance and political change, and Critical IR out of Cyber and emerging technology. Five keywords read correctly: Digital transformation, Eastern Mediterranean geopolitics, Critical IR, Postcolonial IR and Northern European security. A member who answers "n/a" for a link or an affiliation gets no link and no affiliation, where the sync had made a dead link such as https://n/a.
 - The ESSC 2027 call names the chair of closed panel 6 as Nicolas Blarel in all three locales.
