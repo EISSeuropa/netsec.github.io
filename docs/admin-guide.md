@@ -440,6 +440,35 @@ Map's faces in #1480.
 photograph added without its derivative fails there rather than surfacing
 later as a Lighthouse warning nobody reads.
 
+### The three states of an ESSC page
+
+An ESSC page `essc-<year>.html` (+ `.fr`, `.de`) goes through three states in one cycle. Each state replaces the one before it on the same file, so the two earlier states exist only as templates under `docs/templates/`. Never rename or overwrite an earlier edition's page to start a new one: that page is the edition's archive, and the sitemap and other pages link to it.
+
+| State | From, to | Template | What marks it |
+| --- | --- | --- | --- |
+| Call for papers | Announcement, until the programme is on Indico | `docs/templates/essc-call-state.html.txt` (+ `.fr`, `.de`) | `.ecs-nav` section bar, `.ecs-panel` closed panels, `.ecs-timeline` key dates |
+| Live programme | Programme on Indico, until the conference ends | `docs/templates/essc-programme-state.html.txt` (+ `.fr`, `.de`) | `#programme-root` with `data-year` and `data-indico`, no `data-src`, the "Live programme" heading with its pulse |
+| Archive | After the conference, for good | `essc-2026.html` is the example | `#programme-root` with `data-src="data/essc-<year>-programme.json"` and `data-archived="1"`, the "has concluded" aside |
+
+`assets/js/essc-programme.js` renders the programme in the last two states and reads everything edition-specific from `#programme-root`: `data-year`, `data-src`, `data-archived` and `data-indico` (the event's Indico URL, used in the error message). It needs no edit between editions.
+
+The call state is described in *The call-for-papers state of an ESSC page* below.
+
+**Moving to the live programme**
+
+1. Copy the three `essc-programme-state` templates over `essc-<year>.*` and remove the `.txt` suffix.
+2. Follow the header comment in each file: set `data-year` and `data-indico`, remove the "has concluded" aside, replace what names 2026 or Stockholm, and drop the `?v=` tokens.
+3. Carry over from the call-state page what still applies: the chairs, the Training School section and the practical-information cards, which replace the template's "Plan your visit" section.
+4. Do the rows marked *live* in the hand-edit table below.
+5. Check the page at phone and desktop widths in both themes with the live `data/indico.json`.
+
+**Moving to the archive**
+
+1. Freeze the programme: copy the edition's entry from `data/indico.json` into `data/essc-<year>-programme.json`.
+2. On `#programme-root`, add `data-src` pointing at that file and `data-archived="1"`.
+3. Change the heading from "Live programme" to "Full programme" and drop the live pulse, take down the practical information and the registration links, and add the "has concluded" aside. `essc-2026.html` shows the result.
+4. Save next year's starting point under `docs/templates/` if the templates changed during the cycle. Do not park a next-year page at the repository root: the parked `essc-2027.*` was overwritten by the save-the-date in #1972, and with it the only copy of the live state.
+
 ### Rolling over to next year's ESSC edition
 
 Most of the site refreshes itself once `scripts/sync-indico.py` is
@@ -463,20 +492,21 @@ follow the new edition once it is the live one. The per-session and
 per-contribution Indico URLs inside `data/indico.json` regenerate too.
 
 **What to hand-edit.** Everything below carries `essc-2026`, the
-conference dates, or `event/22`:
+conference dates, or `event/22`. The *State* column names the page state
+(*The three states of an ESSC page* above) in which each row is done:
 
-| Where | What to change |
-| --- | --- |
-| `essc-2026.html` + `.fr` + `.de` | Rename to `essc-<year>.*`. Inside each: the masthead title and dates, the `@page` running-header date string, the print-footer URL, the JSON-LD dates and venue, the `event/22/` registration links, and the three `pdfFile` paths. |
-| `assets/programme/eiss-2026-programme.pdf` | Replace with the new official programme. Keep the filename to avoid touching the `pdfFile` references, or rename and update them in the three renderers and the FAQ. |
-| `faq.html` + `.fr` + `.de` (*At a NetSec conference* section) | `essc-edit-details` and `essc-chair` deep-links (`event/22/...`), `essc-programme-pdf` (the PDF link, the *ESSC 2026* label, the page link), and `essc-visa` (the dates and venue). Bump the FAQ footer stamp. |
-| `data/events.json` | `indicoEventId`, the `Registration:` URL in the description, the `url` block (`essc-<year>.*`), and the dates, location, and chairpersons. The co-located Summer School has its own `events.json` entry: update its dates and rebuild the feed with `python3 scripts/build-calendar.py`. |
-| `summer-school.html` + `.fr` + `.de` | The Summer School page is co-located with the conference but is **not** year-suffixed, so edit it in place rather than renaming: the edition dates, the *This edition* year and host, the application-status pill and deadline, and the faculty roster (names, affiliations, and which two are scientific coordinators). Faculty who are NetSec members resolve to their directory cards by name, so no `data-slug` editing is needed. |
-| `data/essc-livestream.json` | The conference livestream. Set `url` to the Zoom webinar link and `start`/`end` to the conference window (ISO with a `+02:00` CEST offset). Inside that window each plenary and roundtable "Livestream" pill on the programme becomes the link to the webinar, and the running session's pill gets a red "live" pulse. Blank `url` (or delete the file) to take it down after the conference. The daily Indico sync does not touch this file. |
-| `data/whats-new.json` | The `/essc-2026.html` links and the campaign reason, if the banner is run for the conference (it is off by default, see the whats-new-banner skill). |
-| `sitemap.xml` + `sitemap.html` (+ FR + DE) | The `essc-2026` URL entry. Re-run `scripts/inject-seo.py` to regenerate `sitemap.xml`. |
-| `scripts/indico_clean_duplicate.py` | The `PROTECTED_EVENTS` allow-list, so the rollover script refuses to touch the new live event. |
-| `docs/admin-guide.md` (*Canned replies* above) | The `event/22/...` and `essc-2026` URLs inside the four reply templates. |
+| Where | State | What to change |
+| --- | --- | --- |
+| `essc-<year>.html` + `.fr` + `.de` | call, live | Copy the state's template to `essc-<year>.*`, never rename `essc-2026.*`. Inside each: the masthead title and dates, the `@page` running-header date string, the print-footer URL, the JSON-LD dates and venue, the Indico event links, and `data-year` and `data-indico` on `#programme-root`. |
+| `assets/programme/eiss-2026-programme.pdf` | live | Replace with the new official programme. The renderer builds the path from `data-year`, so name it `eiss-<year>-programme.pdf`, and update the FAQ link. |
+| `faq.html` + `.fr` + `.de` (*At a NetSec conference* section) | live | `essc-edit-details` and `essc-chair` deep-links (`event/22/...`), `essc-programme-pdf` (the PDF link, the *ESSC 2026* label, the page link), and `essc-visa` (the dates and venue). Bump the FAQ footer stamp. |
+| `data/events.json` | call | `indicoEventId`, the `Registration:` URL in the description, the `url` block (`essc-<year>.*`), and the dates, location, and chairpersons. The co-located Summer School has its own `events.json` entry: update its dates and rebuild the feed with `python3 scripts/build-calendar.py`. |
+| `summer-school.html` + `.fr` + `.de` | call | The Summer School page is co-located with the conference but is **not** year-suffixed, so edit it in place rather than renaming: the edition dates, the *This edition* year and host, the application-status pill and deadline, and the faculty roster (names, affiliations, and which two are scientific coordinators). Faculty who are NetSec members resolve to their directory cards by name, so no `data-slug` editing is needed. |
+| `data/essc-livestream.json` | live | The conference livestream. Set `url` to the Zoom webinar link and `start`/`end` to the conference window (ISO with a `+02:00` CEST offset). Inside that window each plenary and roundtable "Livestream" pill on the programme becomes the link to the webinar, and the running session's pill gets a red "live" pulse. Blank `url` (or delete the file) to take it down after the conference. The daily Indico sync does not touch this file. |
+| `data/whats-new.json` | call, live | The `/essc-2026.html` links and the campaign reason, if the banner is run for the conference (it is off by default, see the whats-new-banner skill). |
+| `sitemap.xml` + `sitemap.html` (+ FR + DE) | call | The `essc-2026` URL entry. Re-run `scripts/inject-seo.py` to regenerate `sitemap.xml`. |
+| `scripts/indico_clean_duplicate.py` | call | The `PROTECTED_EVENTS` allow-list, so the rollover script refuses to touch the new live event. |
+| `docs/admin-guide.md` (*Canned replies* above) | live | The `event/22/...` and `essc-2026` URLs inside the four reply templates. |
 
 The stakeholder PDF pack (`docs/pdf/documentation.html`) also names
 ESSC 2026, but it refreshes on the release cadence (release-cross-check
@@ -496,7 +526,7 @@ After the edits, run `python3 scripts/check-i18n-drift.py` and
 
 ### The call-for-papers state of an ESSC page
 
-An ESSC page has two states. From the announcement until the programme is out it is in its call-for-papers state, as `essc-2027.html` was from November 2026. Once Indico holds the programme it takes the programme renderer, as `essc-2026.html` has. The call state was designed for the 2027 edition (#2167) and is reused every year, so it is saved as a template and none of its styles or script is deleted when a page moves on to its programme.
+This is the first of the three states (*The three states of an ESSC page* above). From the announcement until the programme is out an ESSC page is in its call-for-papers state, as `essc-2027.html` was from November 2026. Once Indico holds the programme it moves to the live-programme state. The call state was designed for the 2027 edition (#2167) and is reused every year, so it is saved as a template and none of its styles or script is deleted when a page moves on to its programme.
 
 **What it is made of**
 
@@ -520,7 +550,7 @@ An ESSC page has two states. From the announcement until the programme is out it
 
 **When the programme goes live**
 
-Replace the call section with the programme renderer from the previous edition's page. Leave the template files, the `.ecs-nav`, `.ecs-panel` and `.ecs-timeline` styles and the section bar script in place. If the page keeps a section bar in its programme state, reuse `.ecs-nav` with that state's links. If the call-state markup changes while a page is using it, refresh the three template files from that page in the same PR.
+Follow *Moving to the live programme* above. Leave the template files, the `.ecs-nav`, `.ecs-panel` and `.ecs-timeline` styles and the section bar script in place. If the page keeps a section bar in its programme state, reuse `.ecs-nav` with that state's links. If the call-state markup changes while a page is using it, refresh the three template files from that page in the same PR.
 
 ### Pinning the member spotlight
 
