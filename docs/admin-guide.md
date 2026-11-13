@@ -195,6 +195,16 @@ research claims; it's to catch:
 - anyone who didn't tick the consent checkbox (sync drops these
   automatically, but worth double-checking)
 
+**A second reviewer.** The `bios-sync/auto` PR requests a review from
+`APB-LDN` and is assigned to the accounts in the repository variable
+`PROFILE_APPROVERS` (GitHub logins separated by commas), so GitHub notifies
+each of them. The `protect-main` ruleset lets any collaborator squash-merge a
+PR whose checks pass, so one of those accounts can do the read above and merge
+from the merge box. With the variable unset, the PR reaches the maintainer
+only ([#2164](https://github.com/EISSeuropa/netsec.github.io/issues/2164)).
+The news PR works the same way through `NEWS_APPROVERS`
+([`news-publishing.md`](news-publishing.md)).
+
 **What a `cost-sync/auto` PR can carry.** Beyond the home-page
 `WG_MAP` and leadership roles, the cost.eu sync now also touches:
 `data/mc-members.json` (the regenerated MC roster), `data/wg.json`

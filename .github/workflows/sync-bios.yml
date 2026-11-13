@@ -216,6 +216,14 @@ jobs:
           # fails the job.
           bash scripts/prepend-data-shape-verdict.sh /tmp/bios-pr-body.md
 
+      - name: List the profile approvers
+        id: approvers
+        env:
+          APPROVERS: ${{ vars.PROFILE_APPROVERS }}
+        run: |
+          # Comma-separated, as `assignees` takes them (#2164).
+          echo "list=$(echo "$APPROVERS" | tr -s ';, ' ',' | sed 's/^,//; s/,$//')" >> "$GITHUB_OUTPUT"
+
       - name: Open or update PR if bios.json changed
         id: create-pr
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)
@@ -241,8 +249,12 @@ jobs:
           # country's flag is now auto-bundled by the --ensure-flags step
           # above, so it no longer blocks the PR from going green.)
           reviewers: APB-LDN
+          # The accounts in the repository variable PROFILE_APPROVERS are
+          # assigned, so GitHub notifies them too. A collaborator among them
+          # can do the read and the merge in the maintainer's place (#2164).
+          assignees: ${{ steps.approvers.outputs.list }}
 
-      # The auto-PR is NOT auto-merged. The maintainer merges it by hand
-      # once the checks are green (CodeQL + link-check + i18n-drift +
-      # Pagefind + pytest). Auto-merge was removed deliberately so a
-      # person always signs off on a member-data change.
+      # The auto-PR is NOT auto-merged. The maintainer or a profile approver
+      # merges it by hand once the checks are green (CodeQL + link-check +
+      # i18n-drift + Pagefind + pytest). Auto-merge was removed deliberately
+      # so a person always signs off on a member-data change.

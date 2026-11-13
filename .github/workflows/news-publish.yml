@@ -11,6 +11,11 @@
 # The PR waits for the maintainer, who reads it and merges it. Merging
 # approves the machine translations (CLAUDE.md §1), publishes the item, and the
 # news.xml change on main starts the gated social posts (social-bluesky.yml).
+# The PR is assigned to the accounts in the repository variable NEWS_APPROVERS,
+# so GitHub notifies them. A collaborator among them can merge it once its
+# checks pass (#2164).
+#
+# A run that fails says so on the issue, with a link to the run (#2163).
 #
 # Publishers are the accounts in the repository variable NEWS_PUBLISHERS
 # (GitHub logins, separated by commas, semicolons or spaces). An issue opened
@@ -48,8 +53,11 @@ jobs:
         id: publisher
         env:
           PUBLISHERS: ${{ vars.NEWS_PUBLISHERS }}
+          APPROVERS: ${{ vars.NEWS_APPROVERS }}
           SENDER: ${{ github.event.sender.login }}
         run: |
+          # Comma-separated, as the PR step's `assignees` takes them.
+          echo "approvers=$(echo "$APPROVERS" | tr -s ';, ' ',' | sed 's/^,//; s/,$//')" >> "$GITHUB_OUTPUT"
           allowed=false
           for login in $(echo "$PUBLISHERS" | tr ',;' '  '); do
             if [ "${login,,}" = "${SENDER,,}" ]; then allowed=true; fi
@@ -134,5 +142,16 @@ jobs:
             Added to data/news.json by scripts/news-from-issue.py, with
             news.xml rebuilt by scripts/build-news-rss.py.
           body-path: /tmp/news-pr-body.md
+          assignees: ${{ steps.publisher.outputs.approvers }}
           labels: |
             automated
+
+      - name: Tell the issue that the run failed
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SENDER: ${{ github.event.sender.login }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" --repo "${{ github.repository }}" --body \
+            "@$SENDER the run that turns this issue into a news PR failed, so nothing was published. The maintainer has been notified. The run: $RUN_URL"
