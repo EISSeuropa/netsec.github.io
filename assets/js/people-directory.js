@@ -1452,7 +1452,15 @@
       });
       bio.insertAdjacentElement('afterend', btn);
     }
-    grid.querySelectorAll('.member-bio').forEach(tryInsertBioToggle);
+    // Compact cards hide the bio, so none of them can overflow, and the
+    // check would only force a layout of the whole page inside this task
+    // (about a second under Lighthouse's throttling, #2171). The
+    // ResizeObserver below runs it after layout instead, including when
+    // a bio first gets a box on a switch to the detailed view.
+    const observesBios = typeof ResizeObserver === 'function';
+    if (!observesBios || !grid.classList.contains('is-compact')) {
+      grid.querySelectorAll('.member-bio').forEach(tryInsertBioToggle);
+    }
     // ResizeObserver belt-and-braces: handles the rare case where the
     // bio's clamped height isn't final at sync time (web-font swap,
     // user changes zoom, etc.). The observer fires once per bio after
