@@ -28,6 +28,9 @@ Not yet done (repository settings, by the maintainer):
 - Create the `news` label.
 - Set the repository variable `NEWS_PUBLISHERS`, and give each publisher
   Triage access or higher.
+- Optional: set the repository variable `NEWS_APPROVERS` to the accounts that
+  read and merge news PRs next to the maintainer
+  ([#2164](https://github.com/EISSeuropa/netsec.github.io/issues/2164)).
 - Add the `ANTHROPIC_API_KEY` repository secret. Without it, items arrive in
   English only and the PR body says the French and German text is missing.
 - File a first item through the form. The workflow has not run on GitHub yet.
@@ -73,13 +76,23 @@ who filed the issue so GitHub notifies them. It starts in two ways:
 - A publisher files the form. The run starts as soon as the issue is opened.
 - A publisher applies the **`news`** label to a form issue someone else filed.
 
-The PR waits for the maintainer. Merging it approves the machine translations
+The PR waits for the maintainer. It is also assigned to the accounts in the
+repository variable `NEWS_APPROVERS` (GitHub logins separated by commas), so
+GitHub notifies them, and a collaborator among them can merge it from the
+merge box once its checks pass. The `protect-main` ruleset allows that, so
+NetSec needs no `publish` label of the kind the EISS site uses. Merging the PR
+approves the machine translations
 (CLAUDE.md §1), publishes the item, and starts the gated social posts. To
 change the item first, edit the entry on the PR's branch and rerun
 `python3 scripts/build-news-rss.py`. To drop it, close the PR and the issue.
 When the translation did not run (no `ANTHROPIC_API_KEY` secret, or the call
 failed), the PR body says so, and the FR and DE text can be added on its
 branch before merging.
+
+When the run itself fails, it comments on the issue, names the person who
+started it and links the run, and nothing is published. The failure alarm
+also opens an issue for the maintainer
+([#2163](https://github.com/EISSeuropa/netsec.github.io/issues/2163)).
 
 **Post preview.** Every PR that changes `data/news.json` or `news.xml`, from
 the form or by hand, gets a comment with the exact LinkedIn and Bluesky text

@@ -10,7 +10,7 @@ Google Form ──► Google Sheet ──► directory export ──► sync-bio
 
 - Anyone interested in NetSec — leadership, MC representatives, WG participants, or wider-community researchers and practitioners — fills the form once.
 - Every day at 05:15 UTC (and on manual dispatch), the workflow reads the directory export as CSV, downloads any new headshots, regenerates `data/bios.json`, and opens a PR if anything changed.
-- You merge. The new bio appears on the **Directory** page (`/people.html`).
+- You merge. The new bio appears on the **Directory** page (`/people.html`). The PR is also assigned to the accounts in the repository variable `PROFILE_APPROVERS` (GitHub logins separated by commas), and a collaborator among them can read and merge it in your place (#2164).
 - Members can update their entries by submitting again — the script dedupes by email, newest submission wins.
 
 ## Step 1 · Create the form
