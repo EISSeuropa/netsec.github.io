@@ -49,6 +49,15 @@ jobs:
       || (github.event.action == 'opened' && startsWith(github.event.issue.body, '### Site'))
     runs-on: ubuntu-latest
     steps:
+      # The label this pipeline listens for, made here so nobody has to make
+      # it by hand and a deleted one comes back (#2169). An existing label
+      # makes `gh label create` fail, which is the expected case.
+      - name: Create the news label if missing
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: gh label create news --color 0e8a16 --description "Publishes a News item issue as a PR" 2>/dev/null || true
+
       - name: Check the publisher
         id: publisher
         env:
