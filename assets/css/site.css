@@ -3312,7 +3312,7 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
    summary swallows the tap. site.js opens the panels for print. */
 .ecs-panels{display:grid;gap:.6rem}
 .ecs-panel{border:1px solid var(--line);border-radius:12px;background:var(--glass-bg)}
-.ecs-panel summary{display:grid;grid-template-columns:1fr auto;column-gap:.8rem;align-items:center;padding:.8rem 1rem .2rem;font-weight:600;color:var(--ink);line-height:1.35;cursor:pointer;list-style:none;border-radius:12px}
+.ecs-panel summary{min-height:44px;box-sizing:border-box;display:grid;grid-template-columns:1fr auto;column-gap:.8rem;align-items:center;padding:.8rem 1rem .2rem;font-weight:600;color:var(--ink);line-height:1.35;cursor:pointer;list-style:none;border-radius:12px}
 .ecs-panel summary::-webkit-details-marker{display:none}
 .ecs-panel summary::after{content:'';width:.55rem;height:.55rem;border-right:2px solid var(--link);border-bottom:2px solid var(--link);transform:rotate(45deg);transition:transform .2s var(--ease)}
 .ecs-panel details[open] > summary::after{transform:rotate(-135deg)}
