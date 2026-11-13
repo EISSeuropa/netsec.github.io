@@ -1,8 +1,8 @@
 {
   "_documentation": "Public cross-site contract for linking NetSec Directory members. Match author names against members[].name_key (or your own key over members[].name), then link to members[].url. role, affiliation and photo are optional display fields (null when unset) so a consumer can render an informative chip rather than a bare link; orcid is for completeness, not a join key. See scripts/build-directory-index.py.",
-  "generated_at": "2026-11-09T13:52:37+00:00",
+  "generated_at": "2026-11-13T14:02:05+00:00",
   "source": "https://netsec-cost.eu/data/bios.json",
-  "count": 128,
+  "count": 134,
   "members": [
     {
       "name": "Mr Adam Hanzel",
@@ -91,6 +91,17 @@
       "role": null,
       "affiliation": "University of Bristol",
       "photo": null
+    },
+    {
+      "name": "Dr André Silva de Carvalho",
+      "name_key": "andre carvalho",
+      "aliases": [],
+      "slug": "andre-silva-de-carvalho",
+      "url": "https://netsec-cost.eu/people/andre-silva-de-carvalho.html",
+      "orcid": "0000-0001-7724-1097",
+      "role": null,
+      "affiliation": "Université Paris 1 Panthéon-Sorbonne",
+      "photo": "https://netsec-cost.eu/assets/images/people/andre-silva-de-carvalho.jpg"
     },
     {
       "name": "Dr Andriy Tyushka",
@@ -225,6 +236,17 @@
       "photo": null
     },
     {
+      "name": "Prof. Carmen Márquez Carrasco",
+      "name_key": "carmen carrasco",
+      "aliases": [],
+      "slug": "carmen-marquez-carrasco",
+      "url": "https://netsec-cost.eu/people/carmen-marquez-carrasco.html",
+      "orcid": "0000-0003-2016-1664",
+      "role": "Management Committee · Spain",
+      "affiliation": "Universidad de Sevilla",
+      "photo": "https://netsec-cost.eu/assets/images/people/carmen-marquez-carrasco.jpg"
+    },
+    {
       "name": "Dr Céline Rodrigues",
       "name_key": "celine rodrigues",
       "aliases": [],
@@ -256,6 +278,17 @@
       "role": "WG3 Leader · Management Committee · France",
       "affiliation": "Sciences Po, Center for International Studies (CERI)",
       "photo": "https://netsec-cost.eu/assets/images/people/chiara-ruffa.jpg"
+    },
+    {
+      "name": "Dr Christopher Spearin",
+      "name_key": "christopher spearin",
+      "aliases": [],
+      "slug": "christopher-spearin",
+      "url": "https://netsec-cost.eu/people/christopher-spearin.html",
+      "orcid": null,
+      "role": null,
+      "affiliation": "Canadian Forces College",
+      "photo": null
     },
     {
       "name": "Ms Clara Jammot",
@@ -962,6 +995,17 @@
       "photo": "https://netsec-cost.eu/assets/images/people/meret-steybe.jpg"
     },
     {
+      "name": "Dr Mir Hassan",
+      "name_key": "mir hassan",
+      "aliases": [],
+      "slug": "mir-hassan",
+      "url": "https://netsec-cost.eu/people/mir-hassan.html",
+      "orcid": null,
+      "role": null,
+      "affiliation": "Mykolas Romeris University",
+      "photo": null
+    },
+    {
       "name": "Mr Mohamed El Yamine Atrouche",
       "name_key": "mohamed atrouche",
       "aliases": [],
@@ -971,6 +1015,17 @@
       "role": null,
       "affiliation": "The British American Security Information Council (BASIC) / The Comprehensive Nuclear-Test-Ban Treaty Organization (CTBTO)",
       "photo": null
+    },
+    {
+      "name": "Prof. Monika Gabriela Bartoszewicz",
+      "name_key": "monika bartoszewicz",
+      "aliases": [],
+      "slug": "monika-gabriela-bartoszewicz",
+      "url": "https://netsec-cost.eu/people/monika-gabriela-bartoszewicz.html",
+      "orcid": "0000-0002-5372-8236",
+      "role": "Management Committee · Norway",
+      "affiliation": "UiT The Arctic University of Norway",
+      "photo": "https://netsec-cost.eu/assets/images/people/monika-gabriela-bartoszewicz.jpg"
     },
     {
       "name": "Prof. Monika Sus",
@@ -1268,6 +1323,17 @@
       "role": "WG3 Co-Leader",
       "affiliation": "James Madison University",
       "photo": "https://netsec-cost.eu/assets/images/people/silvia-damato.jpeg"
+    },
+    {
+      "name": "Ms Skender Jashari",
+      "name_key": "skender jashari",
+      "aliases": [],
+      "slug": "skender-jashari",
+      "url": "https://netsec-cost.eu/people/skender-jashari.html",
+      "orcid": "0009-0003-6943-7817",
+      "role": null,
+      "affiliation": null,
+      "photo": null
     },
     {
       "name": "Dr Sonja Stojanovic Gajic",
