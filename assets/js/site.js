@@ -904,6 +904,47 @@
     });
   })();
 
+  /* ESSC section bar ([data-ecs-nav], essc-2027.html and FR/DE). Keeps
+     the bar pinned under the floating header and marks the section on
+     screen with aria-current. The links are plain anchors and the click
+     scroll is the [data-jump-nav] handler above, so the bar works without
+     this. The closed panels are <details>, opened here for printing. */
+  (function () {
+    const bar = document.querySelector('[data-ecs-nav]');
+    if (!bar) return;
+    const list = bar.querySelector('ul');
+    const links = Array.from(bar.querySelectorAll('a[href^="#"]'));
+    const targets = links.map((a) => document.getElementById(a.hash.slice(1)));
+    let current = null;
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const top = nav ? Math.round(nav.getBoundingClientRect().bottom) + 8 : 84;
+      bar.style.setProperty('--ecs-nav-top', top + 'px');
+      // The reading line sits just under the bar.
+      const line = top + bar.offsetHeight + 24;
+      let active = null;
+      targets.forEach((t, i) => {
+        if (t && t.getBoundingClientRect().top <= line) active = links[i];
+      });
+      if (active === current) return;
+      if (current) current.removeAttribute('aria-current');
+      current = active;
+      if (!active) return;
+      active.setAttribute('aria-current', 'true');
+      // Keep the marked link visible in the scrolling row on a phone.
+      list.scrollLeft = active.offsetLeft - (list.clientWidth - active.offsetWidth) / 2;
+    };
+    const queue = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue, { passive: true });
+    window.addEventListener('load', update);
+    update();
+    window.addEventListener('beforeprint', () => {
+      document.querySelectorAll('.ecs-panel details').forEach((d) => { d.open = true; });
+    });
+  })();
+
   /* Theme toggle — flips .dark on <html>, persists choice.
      Initial state is set by the inline <head> script to avoid FOUC. */
   const themeBtn = document.querySelector('.theme-toggle');
