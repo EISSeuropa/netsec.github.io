@@ -1160,6 +1160,16 @@ def test_normalise_affiliation() -> None:
            "ETH Zurich, Center for Security Studies")
 
 
+def test_blank_placeholder() -> None:
+    """A form answer meaning "nothing" becomes empty, so it never reaches
+    the link normalisers as https://n/a."""
+    print("\nblank_placeholder():")
+    for raw in ["n/a", "N/A", "N/a", " na ", "None", "-", "n.a.", "Not applicable"]:
+        expect(f"{raw!r} is blank", sync_bios.blank_placeholder(raw), "")
+    for raw in ["nato.int", "Nadia", "https://n.a.example"]:
+        expect(f"{raw!r} kept", sync_bios.blank_placeholder(raw), raw)
+
+
 def test_normalise_url() -> None:
     """Website / profile fields become absolute URLs so the card's link
     icon never resolves to a broken relative path."""
@@ -1638,6 +1648,7 @@ def main() -> None:
     test_strip_bio_chrome()
     test_load_keyword_themes()
     test_normalise_affiliation()
+    test_blank_placeholder()
     test_normalise_url()
     test_normalise_bluesky()
     test_parse_mentorship()

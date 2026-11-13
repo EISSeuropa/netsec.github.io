@@ -187,6 +187,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The Directory files every research keyword under a fitting research theme. A review of the 52 keywords the bios sync had placed on its own since October moved 24 of them, among them Network security out of Climate, energy and environmental security, Trustworthy AI out of Democracy, governance and political change, and Critical IR out of Cyber and emerging technology. Five keywords read correctly: Digital transformation, Eastern Mediterranean geopolitics, Critical IR, Postcolonial IR and Northern European security. A member who answers "n/a" for a link or an affiliation gets no link and no affiliation, where the sync had made a dead link such as https://n/a.
 - The ESSC 2027 call names the chair of closed panel 6 as Nicolas Blarel in all three locales.
 - ESSC 2027 appears once in the events list and the calendar feed, with Indico's times (10 June 08:00 to 11 June 20:00). The nightly Indico sync had added a second entry for it once the Indico event was published.
 - The call for papers on the ESSC 2027 page has space above each of its five subheadings and between the closed panels, in all three locales. The headings sat flush against the list above them. The Organisers heading on the 2027 policy workshop page gets the same space.
