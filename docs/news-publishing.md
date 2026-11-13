@@ -22,10 +22,11 @@ Ready:
   and the spotlight.
 - `news.xml` tags items marked for the newsletter.
 - The PR preview comment and the `publish-news-item` skill.
+- The first run of `news-publish.yml` creates the `news` label when it is
+  missing ([#2169](https://github.com/EISSeuropa/netsec.github.io/issues/2169)).
 
 Not yet done (repository settings, by the maintainer):
 
-- Create the `news` label.
 - Set the repository variable `NEWS_PUBLISHERS`, and give each publisher
   Triage access or higher.
 - Optional: set the repository variable `NEWS_APPROVERS` to the accounts that
@@ -35,6 +36,20 @@ Not yet done (repository settings, by the maintainer):
   English only and the PR body says the French and German text is missing.
 - File a first item through the form. The workflow has not run on GitHub yet.
 - The newsletter does not read the tag yet. It is switched on separately.
+
+### Handing approval to someone else
+
+Three settings, all under Settings in the repository, let a second person run
+news without the maintainer (#2169). Each takes GitHub logins.
+
+| Setting | Where | What it lets them do |
+|---|---|---|
+| `NEWS_PUBLISHERS` | Secrets and variables > Actions > Variables | File a News item that opens a PR, or start one with the `news` label |
+| `NEWS_APPROVERS` | Secrets and variables > Actions > Variables | Be assigned to the PR, and merge it once its checks pass |
+| Required reviewers of `social` | Environments > `social` | Approve the LinkedIn and Bluesky posts after the merge |
+
+Merging also needs collaborator access. Leaving any one setting out stops the
+item at that step and leaves it for the maintainer.
 
 The step-by-step guide for publishers is "How to publish a news item" in EISS
 Team > Communications on the Drive.
