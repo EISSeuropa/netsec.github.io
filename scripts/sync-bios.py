@@ -829,6 +829,17 @@ def normalize_orcid(raw: str) -> str:
     return m.group(1) if m else ""
 
 
+# A form answer meaning "nothing to give" (n/a, none, -). The link fields
+# otherwise turned "n/a" into https://n/a and a dead icon on the card.
+PLACEHOLDER = re.compile(r"(?i)^(n\.?\s*/?\s*a\.?|none|nil|null|-+|tbd|not applicable)$")
+
+
+def blank_placeholder(raw: str) -> str:
+    """Return "" for a placeholder answer, otherwise the stripped value."""
+    s = (raw or "").strip()
+    return "" if PLACEHOLDER.match(s) else s
+
+
 def normalise_url(raw: str) -> str:
     """Return a clickable absolute URL given whatever a submitter typed
     into a website / profile field.
@@ -1220,7 +1231,7 @@ def row_to_member(
     # normaliser actually rewrote so the weekly sync PR body can surface
     # it for review (#796) instead of leaving it in the job's stderr.
     def _link(field: str, normaliser) -> str:
-        raw = (row.get(cols.get(field, ""), "") or "").strip()
+        raw = blank_placeholder(row.get(cols.get(field, ""), ""))
         norm = normaliser(raw)
         if raw and norm != raw:
             LINK_REWRITES.append(
@@ -1239,8 +1250,8 @@ def row_to_member(
         # with the raw Sheet value, and diff_summary (which runs before
         # the whole-list normalisation) reports a phantom "updated" every
         # sync even when nothing changed.
-        "affiliation": normalise_affiliation(row.get(cols.get("affiliation", ""), "") or ""),
-        "position": (row.get(cols.get("position", ""), "") or "").strip(),
+        "affiliation": normalise_affiliation(blank_placeholder(row.get(cols.get("affiliation", ""), ""))),
+        "position": blank_placeholder(row.get(cols.get("position", ""), "")),
         "roles": [],
         "wgs": parse_wgs(row.get(cols.get("wgs", ""), "")),
         "mentorship": parse_mentorship(row.get(cols.get("mentorship", ""), "")),

@@ -6,6 +6,9 @@
     { "id": "sophie-enos-attali", "field": "bio", "from": "bee working", "to": "been working" },
     { "id": "moritz-weiss", "field": "bio", "from": "; and also Principal Investigator", "to": ", and also Principal Investigator" },
     { "id": "felix-kosterke", "field": "position", "from": "PhD candidate; Research Fellow", "to": "PhD candidate and Research Fellow" },
-    { "id": "arthur-laudrain", "field": "keywords", "from": ["election interference", "disinformation", "subversion"], "to": ["election interference", "disinformation", "subversion", "cyber statecraft"] }
+    { "id": "arthur-laudrain", "field": "keywords", "from": ["election interference", "disinformation", "subversion"], "to": ["election interference", "disinformation", "subversion", "cyber statecraft"] },
+    { "id": "carmen-marquez-carrasco", "field": "name", "from": "CARMEN MÁRQUEZ CARRASCO", "to": "Carmen Márquez Carrasco" },
+    { "id": "carmen-marquez-carrasco", "field": "position", "from": "FULL PROFESSOR OF PUBLIC INTERNATIONAL LAW AND INTERNATIONAL RELATIONS", "to": "Full Professor of Public International Law and International Relations" },
+    { "id": "carmen-marquez-carrasco", "field": "affiliation", "from": "UNIVERSIDAD DE SEVILLA", "to": "Universidad de Sevilla" }
   ]
 }
