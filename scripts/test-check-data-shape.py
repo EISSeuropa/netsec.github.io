@@ -123,6 +123,16 @@ def test_bios_valid():
     assert mod.check_bios(valid_bios()) == []
 
 
+def test_bios_over_the_size_budget_fails(monkeypatch):
+    monkeypatch.setattr(mod, "BIOS_GZIP_LIMIT", 10)
+    assert any("Directory budget" in e for e in mod.check_bios(valid_bios(), themed=set()))
+
+
+def test_bios_committed_file_is_within_the_size_budget():
+    data = json.loads((mod.REPO / "data" / "bios.json").read_text(encoding="utf-8"))
+    assert not any("Directory budget" in e for e in mod.check_bios(data))
+
+
 def test_bios_empty_members():
     assert any("'members' is empty" in e for e in mod.check_bios({"members": []}))
 

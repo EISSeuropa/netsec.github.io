@@ -20,7 +20,9 @@ schema):
                          day and >= 1 renderable slot or row item.
   bios.json              non-empty members list, every member has a
                          non-empty id and name (the directory grid and
-                         every name-matched card resolves through these).
+                         every name-matched card resolves through these),
+                         and the file stays under BIOS_GZIP_LIMIT bytes
+                         gzipped.
   wg.json                non-empty groups list with number, name and a
                          members list per group.
   mc-members.json        non-empty members list with name + country.
@@ -43,12 +45,25 @@ Exit codes: 0 all valid, 1 any violation (or unparseable JSON).
 """
 from __future__ import annotations
 
+import gzip
 import json
 import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 ALIASES = REPO / "data" / "keyword-aliases.json"
+
+# Directory page budget (#2171). people.html downloads and renders all of
+# bios.json, so its Lighthouse performance score falls a little with every
+# member, and the score varies too much between runs to say which PR crossed
+# the 0.78 floor. This byte count gives the same answer on every run and
+# fails on the sync PR that crosses it. Measured on 13 November 2026: 134
+# members, 74,675 bytes gzipped, people.html median 0.82. Each member adds
+# about 560 bytes, so the limit leaves room for roughly 27 more members.
+# When it fails, cut what the Directory loads before raising the number:
+# the `bio` text is 43% of the file and could load per member, and the card
+# grid could render in batches.
+BIOS_GZIP_LIMIT = 90_000
 
 
 def _req(obj: dict, key: str, types, errs: list, ctx: str, non_empty: bool = False) -> bool:
@@ -178,6 +193,15 @@ def check_bios(data, themed: set | None = None) -> list:
         errs.append(
             f"bios: keyword {kw!r} ({', '.join(names)}) has no research theme. "
             "Place it under `themes` in data/keyword-aliases.json."
+        )
+    # Serialised the way sync-bios.py writes the file, so the count matches
+    # what the Directory downloads.
+    text = json.dumps(data, indent=2, ensure_ascii=False) + "\n"
+    size = len(gzip.compress(text.encode("utf-8"), mtime=0))
+    if size > BIOS_GZIP_LIMIT:
+        errs.append(
+            f"bios: {size:,} bytes gzipped, over the {BIOS_GZIP_LIMIT:,} byte "
+            "Directory budget. See BIOS_GZIP_LIMIT in scripts/check-data-shape.py."
         )
     return errs
 

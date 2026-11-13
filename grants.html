@@ -844,9 +844,9 @@
 
   let data;
   try {
-    const res = await fetch('data/bios.json', { cache: 'no-cache' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    data = await res.json();
+    // window.netsecBios is defined by the deferred site.js, which has run by DOMContentLoaded.
+    await new Promise((resolve) => document.addEventListener('DOMContentLoaded', resolve, { once: true }));
+    data = await window.netsecBios();
   } catch (err) {
     console.warn('Grant Managers refresh skipped:', err);
     return;  // keep the static fallback

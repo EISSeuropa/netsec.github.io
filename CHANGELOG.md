@@ -188,6 +188,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The Directory page scores a median 0.82 for Lighthouse performance, up from 0.74 to 0.75, against the 0.78 floor. Each page fetches `data/bios.json` once, after the first paint, where it had fetched it up to four times before anything was shown (twice on the Directory, four times on the home page). The COST logo in the footer of every page is a 480 pixel wide file of 9.7 KB, down from 2906 pixels and 79 KB, for a logo shown 120 pixels wide.
+- The data shape check fails a bios sync PR that takes `data/bios.json` over 90,000 bytes gzipped (74,675 today), the point where the Directory's performance score would next be at risk.
 - The Directory files every research keyword under a fitting research theme. A review of the 52 keywords the bios sync had placed on its own since October moved 23 of them and folded one into an existing keyword. Among the moves are Network security out of Climate, energy and environmental security, Trustworthy AI out of Democracy, governance and political change, and Critical IR out of Cyber and emerging technology. Five keywords read correctly: Digital transformation, Eastern Mediterranean geopolitics, Critical IR, Postcolonial IR and Northern European security. A member who answers "n/a" for a link or an affiliation gets no link and no affiliation, where the sync had made a dead link such as https://n/a.
 - The ESSC 2027 call names the chair of closed panel 6 as Nicolas Blarel in all three locales.
 - ESSC 2027 appears once in the events list and the calendar feed, with Indico's times (10 June 08:00 to 11 June 20:00). The nightly Indico sync had added a second entry for it once the Indico event was published.

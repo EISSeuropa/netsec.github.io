@@ -151,15 +151,15 @@
     "grants.html": {
       "fr": {
         "file": "grants.fr.html",
-        "source_sha1": "9d5ccbcf5c643ea25ec81c5fe83b7f9ccfdcc687",
-        "translated_on": "2026-10-08",
+        "source_sha1": "88cd136c49cfeafa2806f64af6af4d19f701498e",
+        "translated_on": "2026-11-13",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "grants.de.html",
-        "source_sha1": "9d5ccbcf5c643ea25ec81c5fe83b7f9ccfdcc687",
-        "translated_on": "2026-10-08",
+        "source_sha1": "88cd136c49cfeafa2806f64af6af4d19f701498e",
+        "translated_on": "2026-11-13",
         "status": "beta",
         "reviewed_by": null
       }
@@ -231,15 +231,15 @@
     "about.html": {
       "fr": {
         "file": "about.fr.html",
-        "source_sha1": "36b714b5fef75e8d5416136f5f304669ae68b845",
-        "translated_on": "2026-10-07",
+        "source_sha1": "662702a436a8e8ae187e28b8885fa9feff8e83d6",
+        "translated_on": "2026-11-13",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "about.de.html",
-        "source_sha1": "36b714b5fef75e8d5416136f5f304669ae68b845",
-        "translated_on": "2026-10-07",
+        "source_sha1": "662702a436a8e8ae187e28b8885fa9feff8e83d6",
+        "translated_on": "2026-11-13",
         "status": "beta",
         "reviewed_by": null
       }

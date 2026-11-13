@@ -90,7 +90,7 @@
     });
     let bios, wg, events, mc;
     try {
-      [bios, wg, events, mc] = await Promise.all([get('data/bios.json'), get('data/wg.json'), get('data/events.json'), get('data/mc-members.json')]);
+      [bios, wg, events, mc] = await Promise.all([window.netsecBios(), get('data/wg.json'), get('data/events.json'), get('data/mc-members.json')]);
     } catch (e) {
       // Additive section: a failed fetch leaves it hidden.
       console.debug('home-figures: fetch failed, strip stays hidden.', e);

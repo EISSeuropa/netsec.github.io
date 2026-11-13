@@ -133,7 +133,7 @@
 
   Promise.all([
     fetch('data/spotlight.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }),
-    fetch('data/bios.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
+    window.netsecBios().catch(function () { return null; })
   ]).then(function (res) {
     var state = res[0], bios = res[1];
     if (!state || !bios || !state.active || !state.current) return;   // dormant

@@ -358,8 +358,7 @@
   // programme still renders, just without name → /people.html links.
   let memberLookup = new Map();
   try {
-    const res = await fetch('data/bios.json', { cache: 'no-cache' });
-    if (res.ok) memberLookup = buildMemberLookup(await res.json());
+    memberLookup = buildMemberLookup(await window.netsecBios());
   } catch (err) {
     console.warn('bios.json fetch failed; speaker links disabled:', err);
   }
