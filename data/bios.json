@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generated_at": "2026-11-09T13:52:37+00:00",
+  "generated_at": "2026-11-13T14:02:05+00:00",
   "source": {
     "type": "google_sheet",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-11-09T13:52:37+00:00"
+    "last_synced": "2026-11-13T14:02:05+00:00"
   },
   "members": [
     {
@@ -6114,6 +6114,293 @@
         "Cyber and emerging technology",
         "Strategy and deterrence"
       ]
+    },
+    {
+      "id": "andre-silva-de-carvalho",
+      "name": "Dr André Silva de Carvalho",
+      "country": "France",
+      "country_code": "fr",
+      "affiliation": "Université Paris 1 Panthéon-Sorbonne",
+      "position": "Visiting Researcher, PRISM, École de Management de la Sorbonne",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "The Americas"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "André Silva de Carvalho is a visiting researcher at PRISM, École de Management de la Sorbonne, Université Paris 1 Panthéon-Sorbonne, and a senior researcher in the Cognitive Warfare research group at the Brazilian Naval War College. He trained in psychology and holds a PhD in Administration from ESPM in Brazil. His doctoral research examined how the structure of social networks affects the speed at which information spreads.\n\nHis current work combines social network analysis and natural language processing to study how shared interests shape the formation of online groups and how narratives travel between them. In European security studies, he is particularly interested in what public online evidence can tell us about coordinated influence and how institutions can assess that evidence while safeguarding legitimate political debate. At Sunbelt 2025 in Paris, he presented research on strategic narratives, networked influence and democratic resilience.",
+      "keywords": [
+        "Cognitive warfare",
+        "information diffusion",
+        "social network analysis",
+        "homophily",
+        "social influence"
+      ],
+      "email": "andre.silva-de-carvalho@univ-paris1.fr",
+      "website": "https://cv.hal.science/andre-silva-de-carvalho",
+      "orcid": "0000-0001-7724-1097",
+      "linkedin": "https://www.linkedin.com/in/andresilvadecarvalho",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/andre-silva-de-carvalho.jpg",
+      "source": "form",
+      "photo_source_sha256": "97feae0def0abc5f7fd824b2ba9bff5d1069d018c695d9ebbbfb986d95745f35",
+      "joined": "2026-11-13",
+      "canonical_keywords": [
+        "Cognitive warfare",
+        "Homophily",
+        "Information diffusion",
+        "Social influence",
+        "Social network analysis"
+      ],
+      "themes": [
+        "Disciplines, theory and methods",
+        "Intelligence, information and influence"
+      ]
+    },
+    {
+      "id": "christopher-spearin",
+      "name": "Dr Christopher Spearin",
+      "country": "Canada",
+      "country_code": "ca",
+      "affiliation": "Canadian Forces College",
+      "position": "Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor-full"
+      ],
+      "regions": [
+        "Africa",
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Global and cross-regional",
+        "Middle East and North Africa"
+      ],
+      "wg_leadership": {},
+      "bio": "Dr Christopher Spearin holds a BASc from McMaster University and an MA in International Affairs from Carleton University. He conducted his doctoral work in political science, with a speciality in security studies, at the University of British Columbia. He joined the College as an Assistant Professor in 2003, was promoted to the rank of Associate Professor in 2007 and to Professor in 2017. During his time at the College, Dr Spearin has held a variety of administrative and curriculum development posts and has taught in all of the College’s major on-site programmes.  Dr Spearin’s research concerns change in militaries, global security governance, non-state actors and conflict, mercenaries, the privatization of security, piracy, and Canadian foreign and defence policy. His work has been published in a number of edited books and in a variety of forums, including Canadian Foreign Policy, Canadian Military Journal, Civil Wars, Comparative Strategy, Contemporary Security Policy, Conflict, Security & Development, Defence Studies, Defense & Security Analysis, Human Security Bulletin, International Peacekeeping, International Journal, International Politics, Journal of Conflict Studies, Journal of Future Conflict, Journal of International Criminal Justice, Military Review, Naval War College Review, Oxford Analytica, Parameters, PRISM, RUSI Journal, Security Dialogue, Small Wars & Insurgencies, Special Operations Journal, and World Defence Systems. He wrote the book Private Military and Security Companies and States: Force Divided, published by Palgrave Macmillan.",
+      "keywords": [
+        "Security privatization",
+        "Private military and security companies",
+        "piracy"
+      ],
+      "email": "spearin@cfc.dnd.ca",
+      "website": "https://www.cfc.forces.gc.ca/136/297-eng.html",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "joined": "2026-11-13",
+      "canonical_keywords": [
+        "Piracy",
+        "Private military and security companies",
+        "Security privatisation"
+      ],
+      "themes": [
+        "Security and defence",
+        "Transnational and human security"
+      ]
+    },
+    {
+      "id": "mir-hassan",
+      "name": "Dr Mir Hassan",
+      "country": "Lithuania",
+      "country_code": "lt",
+      "affiliation": "Mykolas Romeris University",
+      "position": "Senior Researcher and Associate Professor",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Mir Hassan is an Associate Professor in Artificial Intelligence & Trustworthy AI and a Senior Researcher at Mykolas Romeris University, Lithuania. He also collaborates with researchers at the University of Trento, Italy. His research focuses on federated learning, distributed intelligence, and trustworthy AI, including communication-efficient learning and model evaluation across participants with heterogeneous data.\n\nHis work examines how institutions and devices can train machine learning models collaboratively while retaining their data locally. This technical background informs his interest in European security questions concerning sensitive data, technological dependence, and the reliability of AI systems. He is particularly interested in examining the practical capabilities and limitations of distributed AI through collaboration with security scholars and practitioners.\n\nWithin NetSec, he seeks to contribute to interdisciplinary knowledge exchange, accessible explanations of AI methods, and research training. He welcomes collaboration on evaluating AI systems, understanding the privacy limitations of collaborative learning, and developing reproducible research across disciplinary boundaries.",
+      "keywords": [
+        "Trustworthy artificial intelligence",
+        "federated learning",
+        "privacy-preserving machine learning",
+        "distributed intelligence",
+        "AI reliability"
+      ],
+      "email": "",
+      "website": "https://hassanmiir.github.io",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "joined": "2026-11-13",
+      "canonical_keywords": [
+        "AI reliability",
+        "Distributed intelligence",
+        "Federated learning",
+        "Privacy-preserving machine learning",
+        "Trustworthy AI"
+      ],
+      "themes": [
+        "Cyber and emerging technology"
+      ]
+    },
+    {
+      "id": "skender-jashari",
+      "name": "Ms Skender Jashari",
+      "country": "Kosovo",
+      "country_code": "xk",
+      "affiliation": "",
+      "position": "Master of Penal Law",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe - Western Balkans"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Skender is an aspiring legal-tech and security professional with a strong interest in artificial intelligence, law, intelligence studies, cybersecurity, OSINT (Open-Source Intelligence), counterterrorism, and emerging technologies. He is actively developing his expertise through international courses, professional training programs, and independent research focused on security, governance, digital transformation, and technological innovation.\n\nHis interests span a wide range of fields, including international security, hybrid threats, geopolitical analysis, intelligence and investigative methods, drone technologies, GIS and geospatial intelligence (GEOINT), and the application of AI to legal and public-sector challenges. He is particularly interested in leveraging technology to improve access to justice, legal analysis, and evidence management.\n\nSkender is also working on the concept of Skender Legal AI, an AI-assisted legal platform designed to support legal research, document analysis, evidence review, case chronology, and human rights litigation. His long-term goal is to combine expertise in law, security, and artificial intelligence to contribute to innovation in both the legal and security sectors.\n\nCommitted to lifelong learning, he regularly participates in international training courses, webinars, conferences, and professional development programs offered by leading academic institutions, international organizations, and policy think tanks. Through these activities, he continues to strengthen his analytical, technical, and interdisciplinary skills while building a global professional network.",
+      "keywords": [
+        "Artificial Intelligence Criminology Counterterrorism Hybrid Warfare Open-Source Intelligence (OSINT)"
+      ],
+      "email": "jashariskendergjergj@gmail.com",
+      "website": "",
+      "orcid": "0009-0003-6943-7817",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "joined": "2026-11-13",
+      "canonical_keywords": [
+        "AI",
+        "Counter-terrorism",
+        "Criminology",
+        "Hybrid warfare",
+        "OSINT"
+      ],
+      "themes": [
+        "Cyber and emerging technology",
+        "Disciplines, theory and methods",
+        "Intelligence, information and influence",
+        "Transnational and human security",
+        "War, military history and armed conflict"
+      ]
+    },
+    {
+      "id": "carmen-marquez-carrasco",
+      "name": "Prof. Carmen Márquez Carrasco",
+      "country": "Spain",
+      "country_code": "es",
+      "affiliation": "Universidad de Sevilla",
+      "position": "Full Professor of Public International Law and International Relations",
+      "roles": [
+        "Management Committee · Spain"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional",
+        "The Americas"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Carmen Márquez Carrasco is Professor of Public International Law and International Relations at the University of Seville. She is a member of the Management Committee of COST Action ‘NetSec’ and has led four national research projects, a research network and Work Package 10 of the EU FP7 FRAME project.\n\nHer research focuses on international human rights law, international peace and security, and the governance of sustainability. Her interests include hybrid threats, the relationship between climate change and security, restrictive measures and international sanctions, and contemporary forms of coercion under international law. She also has longstanding expertise in business and human rights, with particular attention to human rights due diligence, extraterritorial obligations, global supply chains and the ecological transition.\n\nShe previously participated in the COST Action ‘The Role of the EU in the UN Human Rights Reform’ and has collaborated with the Global Campus of Human Rights and its predecessor, EIUC, since 2006. She contributed to the development of Spain’s National Action Plan on Business and Human Rights and directs a legal clinic in this field.\n\nShe has undertaken research stays at institutions including Columbia University and the University of Oxford, and has been invited to serve on the European Research Council’s SH2 panel for the 2021, 2023 and 2025 Consolidator Grant calls.",
+      "keywords": [
+        "International peace and security",
+        "hybrid threats",
+        "climate change and security",
+        "international sanctions and coercion",
+        "business and human rights"
+      ],
+      "email": "cmarque@us.es",
+      "website": "https://www.departamento.us.es/dipri/index.php/organizacion",
+      "orcid": "0000-0003-2016-1664",
+      "linkedin": "https://www.linkedin.com/in/carmen-m%C3%A1rquez-carrasco-a1962335/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/carmen-marquez-carrasco.jpg",
+      "source": "form",
+      "photo_source_sha256": "9a6107dd361a8ce59909447e31aaf8fe5e15ebef79d78c6d311eb757b1158257",
+      "joined": "2026-11-13",
+      "canonical_keywords": [
+        "Business and human rights",
+        "Climate change and security",
+        "Hybrid threats",
+        "International peace and security",
+        "International sanctions and coercion"
+      ],
+      "themes": [
+        "Climate, energy and environmental security",
+        "Economic security and geoeconomics",
+        "Intelligence, information and influence",
+        "Security and defence",
+        "Transnational and human security"
+      ]
+    },
+    {
+      "id": "monika-gabriela-bartoszewicz",
+      "name": "Prof. Monika Gabriela Bartoszewicz",
+      "country": "Norway",
+      "country_code": "no",
+      "affiliation": "UiT The Arctic University of Norway",
+      "position": "Professor of Societal Security",
+      "roles": [
+        "Management Committee · Norway"
+      ],
+      "wgs": [],
+      "mentorship": [
+        "mentor"
+      ],
+      "regions": [
+        "Europe",
+        "Global and cross-regional"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Monika Gabriela Bartoszewicz is Professor of Societal Security at the Institute of Technology and Safety, UiT The Arctic University of Norway, and holds a PhD in International Relations from the University of St Andrews.\n\nHer research asks how political communities decide what threatens them, whom they are protecting when they act, and what those two decisions make permissible. The work is comparative by construction and qualitative by nature, across national security documents in Estonia and Czechia, NATO burden-sharing in four member states, immigration policy in Germany and Hungary, labour law reform in Kuwait and Qatar, and climate adaptation governance in Arctic Norway. Fieldwork has taken her to Taiwan, where she held a Taiwan Fellowship at the Institute for National Defense and Security Research, to southern Thailand, and across the Canadian Arctic and Alaska.\n\nShe wrote Terrorist Manifestos: From Words to Violence (Palgrave Macmillan, 2026), co-edits the Routledge Handbook of Catastrophic Imaginaries (2027), and is writing My Precious, in development with Central European University Press.\n\nShe leads directs Global Security project, a partnership with Stellenbosch University. Fourteen peer-reviewed publications have been written with her own students, which is the part of the record she values most.",
+      "keywords": [
+        "societal security",
+        "terrorism and political violence",
+        "geopolitics"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "0000-0002-5372-8236",
+      "linkedin": "https://www.linkedin.com/in/monika-gabriela-bartoszewicz-852673337/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/monika-gabriela-bartoszewicz.jpg",
+      "source": "form",
+      "photo_source_sha256": "0a3c7aff4bcc47d1128539ed3af6485ea86e6e625dd2f4e9945569b7de5aa2f1",
+      "joined": "2026-11-13",
+      "canonical_keywords": [
+        "Geopolitics",
+        "Societal security",
+        "Terrorism and political violence"
+      ],
+      "themes": [
+        "Foreign policy and diplomacy",
+        "Transnational and human security",
+        "War, military history and armed conflict"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -6127,7 +6414,11 @@
     },
     {
       "keyword": "AI",
-      "count": 9
+      "count": 10
+    },
+    {
+      "keyword": "Geopolitics",
+      "count": 7
     },
     {
       "keyword": "Strategy",
@@ -6138,7 +6429,7 @@
       "count": 6
     },
     {
-      "keyword": "Geopolitics",
+      "keyword": "Hybrid threats",
       "count": 6
     },
     {
@@ -6163,10 +6454,6 @@
     },
     {
       "keyword": "Emerging and disruptive technologies",
-      "count": 5
-    },
-    {
-      "keyword": "Hybrid threats",
       "count": 5
     },
     {
@@ -6212,6 +6499,10 @@
     {
       "keyword": "War",
       "count": 4
+    },
+    {
+      "keyword": "Cognitive warfare",
+      "count": 3
     },
     {
       "keyword": "CSDP",
@@ -6278,15 +6569,15 @@
       "count": 2
     },
     {
-      "keyword": "Cognitive warfare",
-      "count": 2
-    },
-    {
       "keyword": "Comparative politics",
       "count": 2
     },
     {
       "keyword": "Conflict studies",
+      "count": 2
+    },
+    {
+      "keyword": "Counter-terrorism",
       "count": 2
     },
     {
@@ -6414,6 +6705,10 @@
       "count": 2
     },
     {
+      "keyword": "Trustworthy AI",
+      "count": 2
+    },
+    {
       "keyword": "Adversarial robustness",
       "count": 1
     },
@@ -6431,6 +6726,10 @@
     },
     {
       "keyword": "AI regulation",
+      "count": 1
+    },
+    {
+      "keyword": "AI reliability",
       "count": 1
     },
     {
@@ -6482,6 +6781,10 @@
       "count": 1
     },
     {
+      "keyword": "Business and human rights",
+      "count": 1
+    },
+    {
       "keyword": "Capability planning",
       "count": 1
     },
@@ -6507,6 +6810,10 @@
     },
     {
       "keyword": "Climate change",
+      "count": 1
+    },
+    {
+      "keyword": "Climate change and security",
       "count": 1
     },
     {
@@ -6538,15 +6845,15 @@
       "count": 1
     },
     {
-      "keyword": "Counter-terrorism",
-      "count": 1
-    },
-    {
       "keyword": "Counter-UAV detection",
       "count": 1
     },
     {
       "keyword": "Covert action",
+      "count": 1
+    },
+    {
+      "keyword": "Criminology",
       "count": 1
     },
     {
@@ -6662,6 +6969,10 @@
       "count": 1
     },
     {
+      "keyword": "Distributed intelligence",
+      "count": 1
+    },
+    {
       "keyword": "Divided nation",
       "count": 1
     },
@@ -6742,6 +7053,10 @@
       "count": 1
     },
     {
+      "keyword": "Federated learning",
+      "count": 1
+    },
+    {
       "keyword": "Feminist studies",
       "count": 1
     },
@@ -6814,6 +7129,10 @@
       "count": 1
     },
     {
+      "keyword": "Homophily",
+      "count": 1
+    },
+    {
       "keyword": "Human rights",
       "count": 1
     },
@@ -6823,6 +7142,10 @@
     },
     {
       "keyword": "Humanitarian action",
+      "count": 1
+    },
+    {
+      "keyword": "Hybrid warfare",
       "count": 1
     },
     {
@@ -6839,6 +7162,10 @@
     },
     {
       "keyword": "Informality",
+      "count": 1
+    },
+    {
+      "keyword": "Information diffusion",
       "count": 1
     },
     {
@@ -6871,6 +7198,14 @@
     },
     {
       "keyword": "International organisations",
+      "count": 1
+    },
+    {
+      "keyword": "International peace and security",
+      "count": 1
+    },
+    {
+      "keyword": "International sanctions and coercion",
       "count": 1
     },
     {
@@ -7018,6 +7353,10 @@
       "count": 1
     },
     {
+      "keyword": "OSINT",
+      "count": 1
+    },
+    {
       "keyword": "Peace",
       "count": 1
     },
@@ -7035,6 +7374,10 @@
     },
     {
       "keyword": "Peacekeeping",
+      "count": 1
+    },
+    {
+      "keyword": "Piracy",
       "count": 1
     },
     {
@@ -7095,6 +7438,14 @@
     },
     {
       "keyword": "Pressure groups",
+      "count": 1
+    },
+    {
+      "keyword": "Privacy-preserving machine learning",
+      "count": 1
+    },
+    {
+      "keyword": "Private military and security companies",
       "count": 1
     },
     {
@@ -7194,6 +7545,10 @@
       "count": 1
     },
     {
+      "keyword": "Security privatisation",
+      "count": 1
+    },
+    {
       "keyword": "Security risk assessment",
       "count": 1
     },
@@ -7218,7 +7573,19 @@
       "count": 1
     },
     {
+      "keyword": "Social influence",
+      "count": 1
+    },
+    {
       "keyword": "Social media",
+      "count": 1
+    },
+    {
+      "keyword": "Social network analysis",
+      "count": 1
+    },
+    {
+      "keyword": "Societal security",
       "count": 1
     },
     {
@@ -7270,6 +7637,10 @@
       "count": 1
     },
     {
+      "keyword": "Terrorism and political violence",
+      "count": 1
+    },
+    {
       "keyword": "Text as data",
       "count": 1
     },
@@ -7295,10 +7666,6 @@
     },
     {
       "keyword": "Transnational criminal organisations (TCOs)",
-      "count": 1
-    },
-    {
-      "keyword": "Trustworthy AI",
       "count": 1
     },
     {
@@ -7332,24 +7699,24 @@
   ],
   "theme_aggregate": [
     {
-      "theme": "Foreign policy and diplomacy",
-      "count": 39
+      "theme": "Cyber and emerging technology",
+      "count": 40
     },
     {
-      "theme": "Cyber and emerging technology",
-      "count": 38
+      "theme": "Foreign policy and diplomacy",
+      "count": 40
     },
     {
       "theme": "Security and defence",
-      "count": 36
+      "count": 38
     },
     {
       "theme": "Disciplines, theory and methods",
-      "count": 34
+      "count": 36
     },
     {
       "theme": "Transnational and human security",
-      "count": 25
+      "count": 29
     },
     {
       "theme": "Strategy and deterrence",
@@ -7361,18 +7728,18 @@
     },
     {
       "theme": "War, military history and armed conflict",
-      "count": 20
+      "count": 22
     },
     {
       "theme": "Intelligence, information and influence",
-      "count": 14
-    },
-    {
-      "theme": "Crisis management and critical systems resilience",
-      "count": 12
+      "count": 17
     },
     {
       "theme": "Economic security and geoeconomics",
+      "count": 13
+    },
+    {
+      "theme": "Crisis management and critical systems resilience",
       "count": 12
     },
     {
@@ -7393,7 +7760,7 @@
     },
     {
       "theme": "Climate, energy and environmental security",
-      "count": 4
+      "count": 5
     },
     {
       "theme": "Political psychology, public opinion and decision-making",
@@ -7405,6 +7772,7 @@
     "AI and disinformation": "Intelligence, information and influence",
     "AI governance": "Cyber and emerging technology",
     "AI regulation": "Cyber and emerging technology",
+    "AI reliability": "Cyber and emerging technology",
     "AI safety": "Cyber and emerging technology",
     "Adversarial robustness": "Cyber and emerging technology",
     "Agentic AI": "Cyber and emerging technology",
@@ -7420,6 +7788,7 @@
     "Border and maritime security": "Transnational and human security",
     "Border security": "Transnational and human security",
     "British army": "War, military history and armed conflict",
+    "Business and human rights": "Transnational and human security",
     "CSDP": "EU, UN and other international organisations",
     "Capability planning": "Security and defence",
     "China–middle east": "Security and defence",
@@ -7430,6 +7799,7 @@
     "Civil wars": "War, military history and armed conflict",
     "Civil-military relations": "Security and defence",
     "Climate change": "Climate, energy and environmental security",
+    "Climate change and security": "Climate, energy and environmental security",
     "Cloud and edge systems": "Cyber and emerging technology",
     "Coercion": "Strategy and deterrence",
     "Cognitive warfare": "Intelligence, information and influence",
@@ -7444,6 +7814,7 @@
     "Counter-terrorism": "Transnational and human security",
     "Counterterrorism": "Transnational and human security",
     "Covert action": "Intelligence, information and influence",
+    "Criminology": "Disciplines, theory and methods",
     "Crisis": "Crisis management and critical systems resilience",
     "Crisis management": "Crisis management and critical systems resilience",
     "Crisis response": "Crisis management and critical systems resilience",
@@ -7484,6 +7855,7 @@
     "Diplomacy": "Foreign policy and diplomacy",
     "Discourse": "Identity, narratives and ideational security",
     "Disinformation": "Intelligence, information and influence",
+    "Distributed intelligence": "Cyber and emerging technology",
     "Divided nation": "Peace, mediation and reconciliation",
     "Domestic politics of foreign and security policy": "Foreign policy and diplomacy",
     "Drones": "Cyber and emerging technology",
@@ -7516,6 +7888,7 @@
     "European strategic autonomy": "European and transatlantic security order",
     "Extremism": "Transnational and human security",
     "FIMI": "Intelligence, information and influence",
+    "Federated learning": "Cyber and emerging technology",
     "Feminist studies": "Disciplines, theory and methods",
     "Foreign interference": "Intelligence, information and influence",
     "Foreign policy": "Foreign policy and diplomacy",
@@ -7539,16 +7912,19 @@
     "Gulf security": "Security and defence",
     "Heritage": "Identity, narratives and ideational security",
     "History": "Disciplines, theory and methods",
+    "Homophily": "Intelligence, information and influence",
     "Human rights": "Transnational and human security",
     "Human rights and technology": "Cyber and emerging technology",
     "Human security": "Transnational and human security",
     "Humanitarian action": "Transnational and human security",
     "Hybrid threats": "Intelligence, information and influence",
+    "Hybrid warfare": "War, military history and armed conflict",
     "Identity": "Identity, narratives and ideational security",
     "Indian foreign policy": "Foreign policy and diplomacy",
     "Industrial policy": "Economic security and geoeconomics",
     "Influence": "Intelligence, information and influence",
     "Informality": "EU, UN and other international organisations",
+    "Information diffusion": "Intelligence, information and influence",
     "Information integrity": "Intelligence, information and influence",
     "Information manipulation": "Intelligence, information and influence",
     "Information security": "Cyber and emerging technology",
@@ -7560,8 +7936,10 @@
     "International law": "Disciplines, theory and methods",
     "International order": "Disciplines, theory and methods",
     "International organisations": "EU, UN and other international organisations",
+    "International peace and security": "Security and defence",
     "International relations": "Disciplines, theory and methods",
     "International relations theory": "Disciplines, theory and methods",
+    "International sanctions and coercion": "Economic security and geoeconomics",
     "International security": "Security and defence",
     "Interventions": "War, military history and armed conflict",
     "IoT": "Cyber and emerging technology",
@@ -7608,6 +7986,7 @@
     "Nuclear security": "Strategy and deterrence",
     "Nuclear strategy": "Strategy and deterrence",
     "Nuclear weapons": "Strategy and deterrence",
+    "OSINT": "Intelligence, information and influence",
     "Ontological security": "Identity, narratives and ideational security",
     "Organisation studies": "Disciplines, theory and methods",
     "Peace": "Peace, mediation and reconciliation",
@@ -7615,6 +7994,7 @@
     "Peace vision": "Peace, mediation and reconciliation",
     "Peacebuilding": "Peace, mediation and reconciliation",
     "Peacekeeping": "Peace, mediation and reconciliation",
+    "Piracy": "Transnational and human security",
     "Plural peace": "Peace, mediation and reconciliation",
     "Policing": "Security and defence",
     "Policy and AI ethics": "Cyber and emerging technology",
@@ -7631,6 +8011,8 @@
     "Postcolonial IR": "Disciplines, theory and methods",
     "Power": "Security and defence",
     "Pressure groups": "Democracy, governance and political change",
+    "Privacy-preserving machine learning": "Cyber and emerging technology",
+    "Private military and security companies": "Security and defence",
     "Proxy warfare": "War, military history and armed conflict",
     "Public opinion": "Political psychology, public opinion and decision-making",
     "Public-private ecosystems": "Economic security and geoeconomics",
@@ -7660,6 +8042,7 @@
     "Security knowledge": "Disciplines, theory and methods",
     "Security politics": "Security and defence",
     "Security practices": "Disciplines, theory and methods",
+    "Security privatisation": "Security and defence",
     "Security risk assessment": "Crisis management and critical systems resilience",
     "Security sector governance": "Security and defence",
     "Security sector reforms": "Security and defence",
@@ -7669,7 +8052,10 @@
     "Settler-colonial studies": "Identity, narratives and ideational security",
     "Small states": "Foreign policy and diplomacy",
     "Small states' foreign and security policy": "Foreign policy and diplomacy",
+    "Social influence": "Intelligence, information and influence",
     "Social media": "Intelligence, information and influence",
+    "Social network analysis": "Disciplines, theory and methods",
+    "Societal security": "Transnational and human security",
     "Sociology of migration and security": "Transnational and human security",
     "Sociology of war": "War, military history and armed conflict",
     "Software engineering": "Cyber and emerging technology",
@@ -7685,6 +8071,7 @@
     "Surveillance": "Intelligence, information and influence",
     "Systems resilience": "Crisis management and critical systems resilience",
     "Technology spillovers": "Cyber and emerging technology",
+    "Terrorism and political violence": "War, military history and armed conflict",
     "Text as data": "Disciplines, theory and methods",
     "Theory": "Disciplines, theory and methods",
     "Thermal imaging": "Cyber and emerging technology",
@@ -7708,27 +8095,27 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 82
+      "count": 86
     },
     {
       "region": "Global and cross-regional",
-      "count": 63
+      "count": 66
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 29
+      "count": 30
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 29
-    },
-    {
-      "region": "Middle East and North Africa",
-      "count": 20
+      "count": 30
     },
     {
       "region": "The Americas",
-      "count": 20
+      "count": 22
+    },
+    {
+      "region": "Middle East and North Africa",
+      "count": 21
     },
     {
       "region": "Asia",
@@ -7736,7 +8123,7 @@
     },
     {
       "region": "Africa",
-      "count": 7
+      "count": 8
     }
   ]
 }
