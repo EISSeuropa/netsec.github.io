@@ -195,6 +195,18 @@ def test_mc_members_valid():
     assert mod.check_mc_members(data) == []
 
 
+def test_mc_members_slug_must_be_non_empty_string():
+    errs = mod.check_mc_members({"members": [{"name": "A B", "country": "Belgium", "slug": ""}]})
+    assert any("slug must be a non-empty string" in e for e in errs)
+    data = {"members": [{"name": "A B", "country": "Belgium", "slug": "a-b"}]}
+    assert mod.check_mc_members(data) == []
+
+
+def test_wg_member_slug_must_be_non_empty_string():
+    data = {"groups": [{"number": 1, "name": "WG1", "members": [{"name": "A", "slug": None}]}]}
+    assert any("slug must be a non-empty string" in e for e in mod.check_wg(data))
+
+
 def test_mc_members_empty():
     assert any("'members' is empty" in e for e in mod.check_mc_members({"members": []}))
 
