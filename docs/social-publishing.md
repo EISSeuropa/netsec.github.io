@@ -45,12 +45,14 @@ data/spotlight.json (wk) ─┘        composes text + image; records the ledger
   in turn.
 - **No duplicates.** `data/social-posted.json` records what has been posted
   (news by feed GUID; spotlight by member + ISO week), so re-runs post
-  nothing and a member is posted at most once per week. The ledger is read
-  from the checkout, and the rotation workflow checks out `main`, so the guard
-  only holds once the week's auto-PR has merged. Re-running **Rotate member
-  spotlight** while that PR is still open reads a ledger without the week's
-  key and posts the spotlight a second time. Wait for the merge, or use the
-  dry run.
+  nothing and a member is posted at most once per week. Both workflows check
+  out `main`, where the ledger only changes once a run's auto-PR has merged,
+  so each first unions in the keys on the branches whose PRs may still be
+  open: `social/ledger` for the news workflow, and `social/ledger` plus
+  `spotlight/auto` for the spotlight rotation. Re-running **Rotate member
+  spotlight** while the week's PR is open therefore posts nothing. The
+  rotation's own PR then carries only the keys that run added, so it cannot
+  conflict with the news ledger PR.
 - **Approval gate.** The publishing job runs inside a GitHub *environment*
   called `social` with a required reviewer. GitHub pauses the job and emails
   the reviewer; the run page shows the exact text and image; the post is sent
@@ -385,6 +387,13 @@ Two mechanisms now prevent a repeat:
   (which deliberately does not abort when one channel fails) now emits a
   GitHub `::warning::`, so a LinkedIn failure surfaces on the workflow run
   even though the job stays green.
+
+The refresh token behind the access token lasts 365 days from the full
+authorisation that issued it. The same monthly run reads its issue date from
+`refresh_token_issued` in `data/linkedin-api-version.json`
+(`scripts/check-linkedin-token-age.py`) and opens an issue at least 30 days
+before expiry. Set the date after every full re-authorisation, as
+`docs/admin-guide.md` describes.
 
 Because the spotlight's dedup key is written once any channel posts, fixing a
 sunset version does **not** back-fill a spotlight that already went out on

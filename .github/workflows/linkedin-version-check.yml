@@ -23,6 +23,11 @@
 #   - Logic + the active-window filter: scripts/check-linkedin-version.py.
 #   - The pin: data/linkedin-api-version.json (env LINKEDIN_API_VERSION overrides).
 #   - Setup: docs/social-publishing.md.
+#
+# The same monthly run also checks the LinkedIn refresh token's age
+# (scripts/check-linkedin-token-age.py, #2130). The token lasts 365 days
+# from the date in data/linkedin-api-version.json → refresh_token_issued,
+# and the run opens an issue at least 30 days before it expires.
 
 name: Check LinkedIn API version
 
@@ -35,6 +40,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write          # the refresh-token reminder opens a tracking issue
 
 concurrency:
   group: linkedin-version-check
@@ -92,3 +98,29 @@ jobs:
         run: |
           gh pr merge "${{ steps.create-pr.outputs.pull-request-number }}" \
             --squash --auto --repo "${{ github.repository }}"
+
+      - name: Check the refresh token's age
+        id: token-age
+        run: python3 scripts/check-linkedin-token-age.py
+
+      - name: Open a reminder when the refresh token is near expiry
+        if: steps.token-age.outputs.state == 'due' || steps.token-age.outputs.state == 'expired'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EXPIRES: ${{ steps.token-age.outputs.expires }}
+        run: |
+          set -uo pipefail
+          title="LinkedIn refresh token expires on ${EXPIRES}"
+          existing=$(gh issue list --search "${title} in:title" --state open --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            echo "Reminder already open: #${existing}"
+            exit 0
+          fi
+          {
+            echo "The LinkedIn refresh token recorded in \`data/linkedin-api-version.json\` expires on ${EXPIRES}. After that date the pipeline cannot renew the access token, and LinkedIn posts (news and the weekly spotlight) stop while Bluesky carries on."
+            echo ""
+            echo "Run the full re-authorisation in \`docs/admin-guide.md\` → *Renewing the LinkedIn access token*, update the LinkedIn secrets on both the \`social\` and \`social-auto\` environments, then set \`refresh_token_issued\` to today's date in a PR."
+            echo ""
+            echo "Opened by the linkedin-version-check workflow (#2130)."
+          } > /tmp/token-reminder.md
+          gh issue create --title "$title" --body-file /tmp/token-reminder.md --label bug

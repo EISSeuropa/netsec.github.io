@@ -93,6 +93,35 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Fold in ledgers that have not reached main yet
+        run: |
+          # The same step as in social-bluesky.yml, over two branches. A news
+          # post's ledger PR (social/ledger) or this workflow's own previous
+          # PR (spotlight/auto) can still be open, so main's ledger lacks keys
+          # for posts that already went out, and a re-run would post the
+          # week's spotlight again. A union only ever adds "already posted",
+          # so a stale branch cannot resurrect anything main has ruled out.
+          # The step before the PR puts main's file back, so the PR carries
+          # only the keys this run adds.
+          cp data/social-posted.json "${RUNNER_TEMP:-/tmp}/ledger-main.json"
+          for branch in social/ledger spotlight/auto; do
+            git fetch --depth=1 origin "$branch" 2>/dev/null || continue
+            git show FETCH_HEAD:data/social-posted.json > branch-ledger.json || continue
+            BRANCH="$branch" python3 - <<'PY'
+          import json, os, pathlib
+          led = pathlib.Path("data/social-posted.json")
+          cur = json.loads(led.read_text(encoding="utf-8"))
+          extra = [k for k in json.loads(pathlib.Path("branch-ledger.json").read_text(encoding="utf-8")).get("posted", [])
+                   if k not in cur["posted"]]
+          if extra:
+              cur["posted"] += extra
+              led.write_text(json.dumps(cur, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+          print(f"::notice::Folded {len(extra)} key(s) in from the unmerged {os.environ['BRANCH']} branch.")
+          PY
+          done
+          rm -f branch-ledger.json
+          cp data/social-posted.json "${RUNNER_TEMP:-/tmp}/ledger-folded.json"
+
       - name: Rotate the spotlight and capture the log
         env:
           SPOTLIGHT_PR_TITLE_PATH: /tmp/spotlight-pr-title.txt
@@ -177,6 +206,25 @@ jobs:
             grep -E '^[[:space:]]+! ' /tmp/social.txt | head -n 5 > /tmp/social-failures.txt || true
           fi
           exit 0
+
+      - name: Limit the ledger change to this run's keys
+        # The fold-in above borrowed keys from unmerged branches. Committing
+        # them would duplicate the other PR's append and conflict with it when
+        # either merges, so restore main's ledger and add only the keys the
+        # post step wrote.
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          tmp = os.environ.get("RUNNER_TEMP", "/tmp")
+          read = lambda p: json.loads(pathlib.Path(p).read_text(encoding="utf-8"))
+          led = pathlib.Path("data/social-posted.json")
+          borrowed = set(read(f"{tmp}/ledger-folded.json")["posted"])
+          new = [k for k in read(led)["posted"] if k not in borrowed]
+          main = read(f"{tmp}/ledger-main.json")
+          main["posted"] += [k for k in new if k not in main["posted"]]
+          led.write_text(json.dumps(main, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+          print(f"::notice::Ledger PR carries {len(new)} new key(s).")
+          PY
 
       - name: Compose PR title
         id: pr-title
