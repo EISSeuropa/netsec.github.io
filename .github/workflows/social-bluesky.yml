@@ -1,4 +1,6 @@
-# Publish NetSec news to Bluesky, approval-gated.
+# Publish NetSec news to Bluesky and LinkedIn, approval-gated. The file name
+# and the workflow name predate LinkedIn and are kept, so links to past runs
+# and the `social` environment's history stay where they are.
 # Phase 2 of the social pipeline (#1072).
 #
 # Flow:
@@ -6,7 +8,8 @@
 #      run summary, and counts how many would actually post. No secrets.
 #   2. `publish` runs only when that count is non-zero, and targets the `social`
 #      environment, so GitHub PAUSES it for a required reviewer. The reviewer
-#      reads the preview, approves, and only then does the post go to Bluesky.
+#      reads the preview, approves, and only then does the post go to Bluesky
+#      and the LinkedIn page (`--channel all`). A curated thread goes to Bluesky.
 #      The dedup ledger update rides back in an auto-merging PR.
 #
 # Both jobs first union in the keys on the `social/ledger` branch, because that
@@ -24,7 +27,10 @@
 # (data/social-threads/<slug>.json) by passing the `thread` slug input; the same
 # preview + approval gate applies.
 #
-# Secrets (Environment secrets on `social`): BSKY_HANDLE, BSKY_APP_PASSWORD.
+# Secrets (Environment secrets on `social`): BSKY_HANDLE, BSKY_APP_PASSWORD,
+# and LINKEDIN_ORG_ID, LINKEDIN_ACCESS_TOKEN, LINKEDIN_REFRESH_TOKEN,
+# LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET. An unset LinkedIn secret skips
+# that channel.
 # Setup: docs/social-publishing.md.
 
 name: Publish to Bluesky (approval-gated)

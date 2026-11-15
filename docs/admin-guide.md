@@ -788,6 +788,14 @@ other stale.
 | `LINKEDIN_CLIENT_SECRET` | only if the app changed, or if the value leaked |
 | `LINKEDIN_ORG_ID` | no, it is the page's numeric id |
 
+**After a full re-authorisation**, set `refresh_token_issued` in
+`data/linkedin-api-version.json` to that day's date (YYYY-MM-DD) in a PR,
+and move the expiry entry in the *EISS internal deadlines* calendar to 365
+days later. The refresh token lasts 365 days from that date, and a plain
+`refresh` does not extend it. The monthly **Check LinkedIn API version**
+run opens an issue titled *LinkedIn refresh token expires on <date>* at
+least 30 days before expiry, and warns in its log while the date is unset.
+
 You can confirm which secrets exist (names and timestamps, never values)
 without opening the browser:
 
