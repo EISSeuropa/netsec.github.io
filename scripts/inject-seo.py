@@ -53,6 +53,7 @@ from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import _analytics  # noqa: E402
+import _event_cards  # noqa: E402
 from _event_dates import MONTHS as _MONTHS, display_dates, format_day  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -255,6 +256,12 @@ def build_seo_block(base: str, lang: str, title: str, desc: str) -> str:
     alt_locales = [OG_LOCALES[k] for k in ("en", "fr", "de") if k != lang]
     og_image = OG_IMAGE_PEOPLE if base == "people" else OG_IMAGE
     og_image_alt = OG_IMAGE_PEOPLE_ALT if base == "people" else OG_IMAGE_ALT
+    # An event page unfurls as its own card, drawn at deploy by
+    # build-event-og.py (#2185). The alt text follows the page's locale.
+    card_event = _event_cards.card_events(_EVENTS["events"]).get(base)
+    if card_event:
+        og_image = _event_cards.card_url(base)
+        og_image_alt = _event_cards.card_alt(card_event, lang)
 
     lines = [
         SENTINEL_BEGIN,
@@ -605,6 +612,15 @@ def _event_location(ev: dict) -> dict:
     }
 
 
+def _event_image(ev: dict) -> str:
+    """The event's own card when its page shows this event, else the general
+    card (the 2026 Training School shares a page with the 2027 one)."""
+    page = _event_cards.page_of(ev)
+    if _event_cards.card_events(_EVENTS["events"]).get(page) is ev:
+        return _event_cards.card_url(page)
+    return OG_IMAGE
+
+
 def build_event_node(ev: dict, lang: str) -> dict:
     tzid = ev.get("tzid") or _EVENTS["tzid"]
     place = ev.get("location", "")
@@ -616,7 +632,7 @@ def build_event_node(ev: dict, lang: str) -> dict:
         "endDate": _iso_with_offset(ev["end"], tzid),
         "location": _event_location(ev),
         "url": ev.get("url", ""),
-        "image": OG_IMAGE,
+        "image": _event_image(ev),
         "description": ev.get("cardDescription", {}).get(lang, ""),
         "organizer": {
             "@type": "Organization",

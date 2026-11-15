@@ -12,8 +12,9 @@
 #   - reads:  the working tree on main (HTML, assets, scripts)
 #   - builds: ./pagefind/ via scripts/build-search.sh (which calls
 #             `npx pagefind@1.5.2`; no manual install step needed), the
-#             84 per-member Open Graph cards under assets/og/people/, and
-#             the 252 profile pages under people/
+#             84 per-member Open Graph cards under assets/og/people/, the
+#             event-page cards under assets/og/events/, and the 252
+#             profile pages under people/
 #   - deploys: the entire working tree (with freshly-built ./pagefind/)
 #             to the github-pages environment, custom domain
 #             netsec-cost.eu preserved via the repo-root CNAME file.
@@ -144,6 +145,24 @@ jobs:
             echo "::error::rendered $got cards for $want members; refusing to publish"
             exit 1
           }
+
+      - name: Render the event-page Open Graph cards
+        # One card per page an event in data/events.json names (#2185). The
+        # SEO block on those pages names the card URL without testing for the
+        # file, so a missing card would 404 on every crawler: count them
+        # against the pages that should have one, as the member cards do.
+        run: |
+          set -euo pipefail
+          python3 scripts/build-event-og.py
+          want=$(python3 -c "import sys; sys.path.insert(0, 'scripts'); import _event_cards as e; print(len(e.card_events()))")
+          got=$(find assets/og/events -name '*.png' | wc -l)
+          echo "event pages: $want, cards: $got"
+          [ "$want" -eq "$got" ] || {
+            echo "::error::rendered $got event cards for $want event pages; refusing to publish"
+            exit 1
+          }
+        env:
+          CHROME: /usr/bin/google-chrome
 
       - name: Build the member profile pages
         # 252 files, the largest generated set in the tree (#1716). They must

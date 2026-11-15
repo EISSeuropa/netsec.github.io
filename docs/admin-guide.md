@@ -127,6 +127,9 @@ paths, by what changes:
   `scripts/build-general-og.py` (general card, `og-image.png`) or
   `scripts/build-directory-og.py` (directory card, `og-image-people.png`),
   run it, and commit the PNG. Both are one-shot and run locally, not in CI.
+  The event-page cards (`scripts/build-event-og.py`) are different: the
+  deploy renders them from `data/events.json`, so a new event page or a
+  moved date needs no action. See [`docs/og-cards.md`](og-cards.md).
 
 The developer-facing index of which asset goes where is in
 [`docs/design-system.md`](design-system.md); the public-facing rules
