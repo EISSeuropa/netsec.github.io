@@ -99,7 +99,7 @@ You just need to:
 
 When you add a page:
 
-- [ ] Hand-author a unique `<title>` (≤ 60 chars) and `<meta name="description">` (≤ 160 chars). These are also what shows up in OG / Twitter / JSON-LD via the injector. `inject-seo.py --check` fails on a description over 160 characters, except on the pages listed in `DESC_CAP_PENDING` until #2184 shortens them.
+- [ ] Hand-author a unique `<title>` (≤ 60 chars) and `<meta name="description">` (≤ 160 chars). These are also what shows up in OG / Twitter / JSON-LD via the injector. `inject-seo.py --check` fails on a description over 160 characters.
 - [ ] Add `<link rel="alternate" hreflang="…">` block in `<head>` for EN/FR/DE/x-default.
 - [ ] Set `<html lang="…">` correctly.
 - [ ] Add the page to `PAGES` in `scripts/inject-seo.py`. Run it.

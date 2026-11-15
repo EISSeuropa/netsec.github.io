@@ -23,14 +23,14 @@
     "summer-school.html": {
       "fr": {
         "file": "summer-school.fr.html",
-        "source_sha1": "7c9682328ee770c9725135da4b025bef44d7c99a",
+        "source_sha1": "a58fac2eb3c1d056eb69dc191dc8628d1e7c9170",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "summer-school.de.html",
-        "source_sha1": "7c9682328ee770c9725135da4b025bef44d7c99a",
+        "source_sha1": "a58fac2eb3c1d056eb69dc191dc8628d1e7c9170",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
@@ -39,14 +39,14 @@
     "policy-workshop-2026.html": {
       "fr": {
         "file": "policy-workshop-2026.fr.html",
-        "source_sha1": "62aec45f954d5b4340018d4a6439d1c810314668",
+        "source_sha1": "fce1766f5e968687eb08b8b833036058c7266374",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "policy-workshop-2026.de.html",
-        "source_sha1": "62aec45f954d5b4340018d4a6439d1c810314668",
+        "source_sha1": "fce1766f5e968687eb08b8b833036058c7266374",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
@@ -55,14 +55,14 @@
     "policy-workshop-2027.html": {
       "fr": {
         "file": "policy-workshop-2027.fr.html",
-        "source_sha1": "83865a0901a2d615a1bafecf2f1970138ccbf3a4",
+        "source_sha1": "0784d10f3867071cb1fa81103b7812bd5d36cbb5",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "policy-workshop-2027.de.html",
-        "source_sha1": "83865a0901a2d615a1bafecf2f1970138ccbf3a4",
+        "source_sha1": "0784d10f3867071cb1fa81103b7812bd5d36cbb5",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
@@ -135,14 +135,14 @@
     "people.html": {
       "fr": {
         "file": "people.fr.html",
-        "source_sha1": "7c5d1a809304cb0e9cd7f644a4417b477606f1b6",
+        "source_sha1": "7d7ef2aa86de8d9cbd6b5cae357af79bf4cc0887",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "people.de.html",
-        "source_sha1": "7c5d1a809304cb0e9cd7f644a4417b477606f1b6",
+        "source_sha1": "7d7ef2aa86de8d9cbd6b5cae357af79bf4cc0887",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
@@ -151,14 +151,14 @@
     "grants.html": {
       "fr": {
         "file": "grants.fr.html",
-        "source_sha1": "79ee33da8c261fd908521cf3a6c9e985724ba023",
+        "source_sha1": "2428d5d1451708269eaa8e1aa7976be7259118ae",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "grants.de.html",
-        "source_sha1": "79ee33da8c261fd908521cf3a6c9e985724ba023",
+        "source_sha1": "2428d5d1451708269eaa8e1aa7976be7259118ae",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
@@ -199,14 +199,14 @@
     "faq.html": {
       "fr": {
         "file": "faq.fr.html",
-        "source_sha1": "8793a15eac440140d4b93b955cef953c961933d4",
+        "source_sha1": "7e60e6785caf9870dde4e42f1db663ef70b3e14a",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "faq.de.html",
-        "source_sha1": "8793a15eac440140d4b93b955cef953c961933d4",
+        "source_sha1": "7e60e6785caf9870dde4e42f1db663ef70b3e14a",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
@@ -327,14 +327,14 @@
     "network-map.html": {
       "fr": {
         "file": "network-map.fr.html",
-        "source_sha1": "f98229cada7dba09651ef296aeef84ae92a5f54c",
+        "source_sha1": "df44d4f194bb2e43f5a0b3467ae54fb472470f6b",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "network-map.de.html",
-        "source_sha1": "f98229cada7dba09651ef296aeef84ae92a5f54c",
+        "source_sha1": "df44d4f194bb2e43f5a0b3467ae54fb472470f6b",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
@@ -343,14 +343,14 @@
     "year-in-review.html": {
       "fr": {
         "file": "year-in-review.fr.html",
-        "source_sha1": "5e31dbcc1d1810479a485bfee545403477d9e8e6",
+        "source_sha1": "5094c33b121d8197c2d48c2bfc2b18430c0c61de",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "year-in-review.de.html",
-        "source_sha1": "5e31dbcc1d1810479a485bfee545403477d9e8e6",
+        "source_sha1": "5094c33b121d8197c2d48c2bfc2b18430c0c61de",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
@@ -359,14 +359,14 @@
     "essc-2027.html": {
       "fr": {
         "file": "essc-2027.fr.html",
-        "source_sha1": "a2c86c7563c2bdaba5de5d5a5f1d1fe42195d512",
+        "source_sha1": "eb641e6e916977e0998343ec8b42e634df180426",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "essc-2027.de.html",
-        "source_sha1": "a2c86c7563c2bdaba5de5d5a5f1d1fe42195d512",
+        "source_sha1": "eb641e6e916977e0998343ec8b42e634df180426",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
