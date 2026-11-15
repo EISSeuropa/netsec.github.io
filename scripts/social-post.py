@@ -199,6 +199,23 @@ def _step_summary(lines: list[str]) -> None:
             fh.write("\n".join(lines) + "\n")
 
 
+def _news_image(link: str) -> dict:
+    """The image for a news post: the event card when the item links to an
+    event page and the card has been rendered (#2185), else the general card.
+
+    The tree the social workflow checks out carries no event cards, so the
+    workflow renders them first. A Chrome failure there leaves the file
+    missing, and the post goes out on the general card."""
+    if str(ROOT / "scripts") not in sys.path:
+        sys.path.insert(0, str(ROOT / "scripts"))
+    import _event_cards
+    page = _event_cards.page_of({"url": link.split("#", 1)[0].split("?", 1)[0]})
+    ev = _event_cards.card_events().get(page)
+    if ev and _event_cards.card_path(page).exists():
+        return {"image": _event_cards.card_path(page), "image_alt": _event_cards.card_alt(ev, "en")}
+    return {"image": SITE_OG if SITE_OG.exists() else None, "image_alt": "NetSec, COST Action CA24154"}
+
+
 def read_news_feed() -> list[Post]:
     """Parse news.xml into posts (stdlib regex; the feed is our own, small,
     and well-formed). One post per <item>, keyed on the item id (the <guid>),
@@ -233,8 +250,7 @@ def read_news_feed() -> list[Post]:
             title=title,
             summary=summary,
             link=link,
-            image=SITE_OG if SITE_OG.exists() else None,
-            image_alt="NetSec, COST Action CA24154",
+            **_news_image(link),
             collaborator=collaborators.get(guid, ""),
         ))
     return posts

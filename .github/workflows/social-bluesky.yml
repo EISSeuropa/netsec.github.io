@@ -177,6 +177,17 @@ jobs:
           SLUG=$(python3 -c "import json; print(json.load(open('data/spotlight.json')).get('current', ''))")
           [ -n "$SLUG" ] && python3 scripts/build-og-cards.py --only "$SLUG"
 
+      - name: Render the event-page cards
+        # A news item that links to an event page posts with that page's card
+        # (#2185). The cards are built at deploy, so this checkout has none.
+        # Five cards take about ten seconds. As with the spotlight card above,
+        # a Chrome failure shows red here and the posts go out on the general
+        # card.
+        continue-on-error: true
+        env:
+          CHROME: /usr/bin/google-chrome
+        run: python3 scripts/build-event-og.py
+
       - name: Post to Bluesky + LinkedIn and update the ledger
         env:
           # A news.xml push posts NEWS only; the weekly spotlight is ungated

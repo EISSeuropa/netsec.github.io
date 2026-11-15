@@ -23,14 +23,14 @@
     "summer-school.html": {
       "fr": {
         "file": "summer-school.fr.html",
-        "source_sha1": "a58fac2eb3c1d056eb69dc191dc8628d1e7c9170",
+        "source_sha1": "04535d5d0a9f0dea979f808fefd455792f733cdb",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "summer-school.de.html",
-        "source_sha1": "a58fac2eb3c1d056eb69dc191dc8628d1e7c9170",
+        "source_sha1": "04535d5d0a9f0dea979f808fefd455792f733cdb",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
@@ -39,14 +39,14 @@
     "policy-workshop-2026.html": {
       "fr": {
         "file": "policy-workshop-2026.fr.html",
-        "source_sha1": "fce1766f5e968687eb08b8b833036058c7266374",
+        "source_sha1": "26bd35cd848e8eac114ea798d669570f5b8e488c",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "policy-workshop-2026.de.html",
-        "source_sha1": "fce1766f5e968687eb08b8b833036058c7266374",
+        "source_sha1": "26bd35cd848e8eac114ea798d669570f5b8e488c",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
@@ -55,14 +55,14 @@
     "policy-workshop-2027.html": {
       "fr": {
         "file": "policy-workshop-2027.fr.html",
-        "source_sha1": "0784d10f3867071cb1fa81103b7812bd5d36cbb5",
+        "source_sha1": "620f7c90ad2d65c522e0ace20bec14deadef6c39",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "policy-workshop-2027.de.html",
-        "source_sha1": "0784d10f3867071cb1fa81103b7812bd5d36cbb5",
+        "source_sha1": "620f7c90ad2d65c522e0ace20bec14deadef6c39",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
@@ -359,14 +359,14 @@
     "essc-2027.html": {
       "fr": {
         "file": "essc-2027.fr.html",
-        "source_sha1": "eb641e6e916977e0998343ec8b42e634df180426",
+        "source_sha1": "051b7ceb0da9b82d638cc1d07edf709eec0d40bf",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "essc-2027.de.html",
-        "source_sha1": "eb641e6e916977e0998343ec8b42e634df180426",
+        "source_sha1": "051b7ceb0da9b82d638cc1d07edf709eec0d40bf",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null

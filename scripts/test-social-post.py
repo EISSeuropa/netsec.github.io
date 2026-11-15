@@ -59,6 +59,22 @@ def test_news_feed_parses_real_xml():
         assert p.title and p.link.startswith("http")
 
 
+def test_news_image_uses_the_event_card_when_rendered(tmp_path, monkeypatch):
+    """#2185: a news item linking to an event page posts with that page's
+    card, and with the general card while the card is not rendered."""
+    import _event_cards
+    card = tmp_path / "essc-2027.png"
+    monkeypatch.setattr(_event_cards, "card_path", lambda page: card)
+    link = "https://netsec-cost.eu/essc-2027.html#call"
+    assert sp._news_image(link)["image"] == sp.SITE_OG
+    card.write_bytes(b"png")
+    got = sp._news_image(link)
+    assert got["image"] == card
+    assert got["image_alt"].startswith("Event card: European Security Studies Conference 2027")
+    # A link to a page without a card keeps the general card.
+    assert sp._news_image("https://netsec-cost.eu/about.html#leadership")["image"] == sp.SITE_OG
+
+
 def test_pending_respects_ledger():
     posts = sp.read_news_feed()
     assert posts

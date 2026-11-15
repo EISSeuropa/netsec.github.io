@@ -109,6 +109,42 @@ The separate **directory** card (`assets/images/og-image-people.png`, the
 (`assets/images/og-image.png`, every other page) is generated the same way by
 `scripts/build-general-og.py`.
 
+## Event-page cards
+
+Each page that an event in `data/events.json` names as its `url` has its own
+card at `assets/og/events/<page>.png` (#2185): today `essc-2026`, `essc-2027`,
+`policy-workshop-2026`, `policy-workshop-2027` and `summer-school`. The card
+shows the event type, the event's name, its English `displayDate` and its
+venue. A page with more than one event (the Training School page holds the
+2026 and 2027 editions) shows the latest. A policy workshop's name loses its
+"NetSec Policy Workshop:" prefix on the card, since the label above it says
+so already.
+
+`scripts/_event_cards.py` decides which pages have a card and what it says.
+Three scripts read it, so they cannot disagree:
+
+- `scripts/build-event-og.py` draws the cards, in the general card's style.
+- `inject-seo.py` points each event page's `og:image` and `twitter:image` at
+  its card, with alt text in the page's locale, and uses the card as the
+  `image` of that event's JSON-LD `Event` node.
+- `social-post.py` attaches the card to a news post that links to the page.
+
+The cards are not committed (`assets/og/events/*.png` is gitignored).
+`pages-deploy.yml` renders them on every deploy and refuses to publish if the
+count differs from the number of event pages. `social-bluesky.yml` renders
+them before posting, with `continue-on-error`, so a Chrome failure posts the
+general card. A new event page, or a date moved by the Indico sync, reaches
+the card on the next deploy with nothing to run by hand.
+
+The cards are in English only, like the general and directory cards, and carry
+no application deadline: a platform caches a preview for days, and a passed
+deadline would stay on it.
+
+```bash
+python3 scripts/build-event-og.py              # every event page
+python3 scripts/build-event-og.py --only essc-2027
+```
+
 See also: [bios-setup.md](bios-setup.md) (the member-data pipeline that feeds
 these cards) and [social-publishing.md](social-publishing.md) (where the cards
 are reused as the image on the weekly member-spotlight post).

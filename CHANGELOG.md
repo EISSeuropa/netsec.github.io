@@ -152,6 +152,7 @@ maintainer-facing audience.
 
 #### Added
 
+- Each event page has its own link preview card, in all three locales: ESSC 2026, ESSC 2027, both policy workshops and the Training School. The card gives the event type, the event, its date and its venue, and news posts about an event carry the same card on LinkedIn and Bluesky. The five pages used the general card until now (#2185).
 - The ESSC 2027 page carries the full call for papers in all three locales, as on eiss-europa.com: the three submission types, the eight closed panels with their chairs and descriptions, the key dates, the practical information and the European Security Studies Prize.
 - The ESSC 2027 page announces the open call for papers in all three locales: proposals are due on 26 January 2027, with links to the full call on eiss-europa.com, to the call as a PDF and to the conference's Indico event. The event descriptions on the home, events and ESSC 2027 pages and in the calendar feed give the deadline instead of the expected publication date.
 - The What's New banner announces the ESSC 2027 call for papers on every page in all three locales, with a link to the call on the ESSC 2027 page. It runs until mid-December 2026.
