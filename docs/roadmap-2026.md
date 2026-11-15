@@ -585,7 +585,7 @@ Every Year-1 milestone adds more content:
 - **News block** will gain Conference + Training School recaps in
   June, then monthly highlights, then post-plenary updates.
 - **Outputs** currently shows three *Forthcoming* placeholders;
-  D6 (policy briefs) makes it real in October and the section
+  D6 (policy briefs) makes it real in December and the section
   will keep accruing.
 - **Events** will collect past + upcoming entries; a year out
   we'll need a "Past events" treatment.
