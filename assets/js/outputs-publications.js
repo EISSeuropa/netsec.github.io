@@ -1,6 +1,6 @@
 /* Outputs page: publications list rendered from data/publications.json.
  *
- * Built ahead of the first D6 policy briefs (October 2026) so that
+ * Built ahead of the first D6 policy briefs (December 2026) so that
  * publishing an output is a data entry task, not a page rebuild
  * (issue #726). One shared file serves the EN/FR/DE outputs pages;
  * the locale comes from <html lang>.

@@ -119,9 +119,11 @@ spelling, diacritics, and titles want a human check.*
 placeholder on every WG card. Data in `data/publications.json`.*
 
 The Publications page and each WG placeholder state "first outputs
-expected October 2026" and assume the D6 policy briefs are first out.
+expected December 2026" and assume the D6 policy briefs are first out.
 
-- [ ] Confirm the October 2026 date and that D6 is genuinely the first output.
+- [x] Confirm the date. Planned for October 2026, now expected in
+  December 2026 (maintainer, 15 November 2026, #2186).
+- [ ] Confirm that D6 is genuinely the first output.
 - [ ] Name the person and channel that will supply approved outputs (title, authors, date, link, owning WG) as they land.
 
 ## 7. Manifesto, beyond the deliverable assignment
