@@ -87,3 +87,62 @@ def test_long_heading_takes_the_smaller_size():
                jsonld={"name": "NetSec Policy Workshop: Great Power Politics and the Future of Alliances"})
     assert '<h1 class="long">' in beo.card_markup("p", long, "")
     assert "<h1>" in beo.card_markup("p", _ev(jsonld={"name": "Short"}), "")
+
+
+# ── Long titles (#2193) ──
+
+def test_shorten_keeps_a_title_that_fits():
+    t = "Great Power Politics and the Future of Alliances"
+    assert ec.shorten(t) == t
+
+
+def test_shorten_cuts_at_the_first_natural_break():
+    t = "Security Beyond the State: Managing and Countering Transnational Threats and Vulnerabilities"
+    assert ec.shorten(t) == "Security Beyond the State"
+    t = "European Security in a Fragmenting Order – Alliances, Autonomy and Deterrence Revisited"
+    assert ec.shorten(t) == "European Security in a Fragmenting Order"
+    # The first break wins, not the longest prefix that fits.
+    t = "Deterrence Today: Theory – Practice and the Long Shadow of Nuclear Weapons in Europe"
+    assert ec.shorten(t) == "Deterrence Today"
+
+
+def test_shorten_skips_a_break_too_early_to_carry_the_sense():
+    # "WG2: " would leave three characters, so the word cut applies.
+    t = "WG2: " + "word " * 20
+    out = ec.shorten(t)
+    assert out.endswith("…") and len(out) <= ec.HEADING_MAX
+
+
+def test_shorten_falls_back_to_a_word_boundary_with_an_ellipsis():
+    t = "The Long and Winding Road of European Defence Integration Since the End of the Cold War"
+    out = ec.shorten(t)
+    assert out == "The Long and Winding Road of European Defence…"
+    assert len(out) <= ec.HEADING_MAX
+
+
+def test_heading_shortens_a_long_policy_workshop_title_after_the_prefix():
+    ws = _ev(eventType="policy-workshop", jsonld={
+        "name": "NetSec Policy Workshop: Security Beyond the State: Managing and Countering "
+                "Transnational Threats and Vulnerabilities"})
+    assert ec.heading(ws) == "Security Beyond the State"
+    # The alt text keeps the full name.
+    assert "Transnational Threats and Vulnerabilities" in ec.card_alt(ws, "en")
+
+
+def test_card_css_clamps_title_and_facts():
+    out = beo.card_markup("p", _ev(), "")
+    assert "-webkit-line-clamp:2" in out
+    assert "text-overflow:ellipsis" in out
+
+
+# ── Versioned card URL (#2193) ──
+
+def test_card_url_is_a_jpeg_with_a_version_that_follows_the_card_text():
+    a = ec.card_url("essc-2027", _ev())
+    assert a.startswith("https://netsec-cost.eu/assets/og/events/essc-2027.jpg?v=")
+    assert a == ec.card_url("essc-2027", _ev())
+    moved = _ev(displayDate={"en": "17–18 June 2027", "fr": "", "de": ""})
+    assert ec.card_url("essc-2027", moved) != a
+    # A change the card does not show leaves the URL alone.
+    assert ec.card_url("essc-2027", _ev(summary="Other summary")) == a
+    assert ec.card_path("essc-2027").suffix == ".jpg"

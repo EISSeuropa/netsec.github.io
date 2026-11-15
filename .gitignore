@@ -46,7 +46,7 @@ pagefind/
 # scripts/build-og-cards.py; the result is gitignored and won't be staged.
 assets/og/people/*.png
 assets/og/people/_manifest.json
-assets/og/events/*.png
+assets/og/events/*.jpg
 
 # The 252 member profile pages, built by the same deploy (#1716). Generated
 # from data/bios.json + data/orcid-works.json + the people.* shells, they were

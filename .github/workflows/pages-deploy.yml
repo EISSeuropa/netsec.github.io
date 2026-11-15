@@ -155,7 +155,7 @@ jobs:
           set -euo pipefail
           python3 scripts/build-event-og.py
           want=$(python3 -c "import sys; sys.path.insert(0, 'scripts'); import _event_cards as e; print(len(e.card_events()))")
-          got=$(find assets/og/events -name '*.png' | wc -l)
+          got=$(find assets/og/events -name '*.jpg' | wc -l)
           echo "event pages: $want, cards: $got"
           [ "$want" -eq "$got" ] || {
             echo "::error::rendered $got event cards for $want event pages; refusing to publish"

@@ -126,6 +126,19 @@ class TestSha1:
         b.write_text('assets/css/site.css?v=ffffffff', encoding="utf-8")
         assert mod.sha1(a) == mod.sha1(b)
 
+    def test_event_card_version_does_not_change_hash(self, tmp_path):
+        """#2193: the event card's ?v= stamp follows the card's text and is
+        rewritten in all three locales at once, so it is normalised out. The
+        card's path itself still counts."""
+        a = tmp_path / "a.html"
+        b = tmp_path / "b.html"
+        c = tmp_path / "c.html"
+        a.write_text('content="https://netsec-cost.eu/assets/og/events/essc-2027.jpg?v=0a0a0a0a"', encoding="utf-8")
+        b.write_text('content="https://netsec-cost.eu/assets/og/events/essc-2027.jpg?v=fbfbfbfb"', encoding="utf-8")
+        c.write_text('content="https://netsec-cost.eu/assets/og/events/essc-2026.jpg?v=fbfbfbfb"', encoding="utf-8")
+        assert mod.sha1(a) == mod.sha1(b)
+        assert mod.sha1(b) != mod.sha1(c)
+
     def test_both_css_and_js_assets_normalised(self, tmp_path):
         a = tmp_path / "a.html"
         b = tmp_path / "b.html"
