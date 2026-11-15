@@ -168,6 +168,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The descriptions that search results and link previews show are 160 characters or fewer on every page, in all three locales. 40 ran from 161 to 374 characters, and on the event pages the date and place now come first, with the open deadline where there is one. `inject-seo.py --check` fails on a description over 160 characters (#2184).
 - The ESSC 2027 page is 8,700 px tall on a phone, down from 14,000, in all three locales. Each closed panel shows its title and chair, and its description opens on a tap. The key dates sit above the panels. A bar pinned under the header links to the seven sections and marks the one on screen.
 - The ESSC 2027 call shows its five key dates as a vertical timeline in all three locales. The Read the call button is gone, so Submit a proposal on Indico is the primary button, beside the PDF of the call. The call's participation notes sit under Format and funding, leaving Practical information as the one section of that name on the page.
 - The prose-date check in `inject-seo.py --check` leaves alone a day written inside `<time datetime="YYYY-MM-DD">` that reads as that same day, such as a paper deadline in the conference month. A tested case covers EN, FR and DE.

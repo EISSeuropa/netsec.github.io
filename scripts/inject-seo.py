@@ -392,40 +392,17 @@ PROBLEMS: list[str] = []
 # A description is the snippet search results and link previews show. Google
 # cuts it at about 160 characters and LinkedIn and Facebook show less, so a
 # longer one loses its end, which on an event page is where the date sat
-# (#2183). Pages still over the cap are listed until #2184 rewrites them, and
-# a page leaves the list in the PR that shortens it.
+# (#2183, #2184).
 DESC_CAP = 160
-DESC_CAP_PENDING = {
-    ("essc-2026", "en"), ("essc-2026", "fr"), ("essc-2026", "de"),
-    ("essc-2027", "en"), ("essc-2027", "fr"), ("essc-2027", "de"),
-    ("events", "en"), ("events", "fr"), ("events", "de"),
-    ("faq", "en"), ("faq", "fr"), ("faq", "de"),
-    ("glossary", "fr"), ("glossary", "de"),
-    ("grants", "en"), ("grants", "fr"), ("grants", "de"),
-    ("index", "de"),
-    ("network-map", "en"), ("network-map", "fr"), ("network-map", "de"),
-    ("people", "en"), ("people", "fr"), ("people", "de"),
-    ("policy-workshop-2026", "en"), ("policy-workshop-2026", "fr"), ("policy-workshop-2026", "de"),
-    ("policy-workshop-2027", "en"), ("policy-workshop-2027", "fr"), ("policy-workshop-2027", "de"),
-    ("roadmap", "fr"), ("roadmap", "de"),
-    ("slides", "fr"), ("slides", "de"),
-    ("summer-school", "en"), ("summer-school", "fr"), ("summer-school", "de"),
-    ("year-in-review", "en"), ("year-in-review", "fr"), ("year-in-review", "de"),
-}
 
 
 def check_description_length(desc: str, lang: str, base: str) -> None:
-    """Report a meta description over DESC_CAP characters, and an exemption
-    in DESC_CAP_PENDING that is no longer needed."""
+    """Report a meta description over DESC_CAP characters."""
     import html as _html
     n = len(_html.unescape(desc))
-    pending = (base, lang) in DESC_CAP_PENDING
-    if n > DESC_CAP and not pending:
+    if n > DESC_CAP:
         PROBLEMS.append(f"{base} ({lang}): the meta description is {n} characters, "
                         f"over the {DESC_CAP} that previews and search results show")
-    elif n <= DESC_CAP and pending:
-        PROBLEMS.append(f"{base} ({lang}): the meta description is {n} characters, "
-                        f"so remove ({base!r}, {lang!r}) from DESC_CAP_PENDING")
 
 
 def derive_event_dates(html: str, lang: str, base: str) -> str:

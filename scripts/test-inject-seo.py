@@ -310,19 +310,12 @@ def test_seo_block_404_is_noindex_once():
     assert 'name="robots" content="index' in seo.build_seo_block("grants", "en", "T", "D")
 
 
-def test_description_length_cap(monkeypatch):
-    monkeypatch.setattr(seo, "DESC_CAP_PENDING", {("faq", "en")})
+def test_description_length_cap():
     seo.PROBLEMS.clear()
     seo.check_description_length("x" * seo.DESC_CAP, "en", "grants")
     assert not seo.PROBLEMS
     seo.check_description_length("x" * (seo.DESC_CAP + 1), "en", "grants")
     assert seo.PROBLEMS and "grants (en)" in seo.PROBLEMS[0]
-    seo.PROBLEMS.clear()
-    # An exempt page over the cap passes, and is reported once it fits.
-    seo.check_description_length("x" * 300, "en", "faq")
-    assert not seo.PROBLEMS
-    seo.check_description_length("short", "en", "faq")
-    assert seo.PROBLEMS and "DESC_CAP_PENDING" in seo.PROBLEMS[0]
     seo.PROBLEMS.clear()
     # Entities count as one character.
     seo.check_description_length("&amp;" * seo.DESC_CAP, "en", "grants")
@@ -466,8 +459,6 @@ def test_main_writes_and_is_then_idempotent(tmp_path, monkeypatch):
         '<link rel="stylesheet" href="assets/css/site.css">'
         '</head><body></body></html>'
     )
-    # privacy, not people: people is still in DESC_CAP_PENDING, and a short
-    # description on a pending page is reported as a stale exemption.
     _write_page(tmp_path, "privacy.html", page)
     monkeypatch.setattr(seo, "ROOT", tmp_path)
     seo.PROBLEMS.clear()
