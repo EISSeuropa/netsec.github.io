@@ -1,26 +1,26 @@
 {
   "_documentation": "What's New banner — the rare site-wide announcement, used sparingly per CLAUDE.md §14. When this file has `active: true`, every page on the site renders a small dismissible banner under the beta-translation ribbon (if any) and above the page nav, until the visitor dismisses it or until the maintainer flips active back to false. Visitors who dismiss don't see it again unless `version` changes. Used for things a returning visitor would want to know about without having to read the changelog: a new section (founding contributors landed, members directory rebooted), a major new feature visible without scrolling (live ESSC programme, brand launch), or a content milestone (D1 ships, D6 ships). NOT used for: quality patches, structural refactors that don't change what visitors see, release-infrastructure changes, copy edits. The maintainer flips active true → false at most 3-4 times a year. The on-state should run no longer than 4-6 weeks before it goes back off so the banner doesn't decay into furniture.",
-  "active": false,
-  "version": "v1.6.0",
-  "_active_since": "2026-05-28",
-  "_active_until": "2026-06-13",
-  "_active_reason": "Pointing visitors at the live ESSC 2026 programme on /essc-2026.html in the run-up to Stockholm (9-12 June). Natural off-switch the day after the conference closes. First activation of the banner mechanism shipped in v1.9.0 / PR #281.",
+  "active": true,
+  "version": "essc-2027-cfp",
+  "_active_since": "2026-11-15",
+  "_active_until": "2026-12-15",
+  "_active_reason": "Pointing visitors at the ESSC 2027 call for papers on /essc-2027.html while it is open (closes 26 January 2027). Switch off by mid-December 2026, before the notification round (#1562).",
   "headline": {
-    "en": "The full ESSC 2026 programme is live.",
-    "fr": "Le programme complet de l'ESSC 2026 est en ligne.",
-    "de": "Das vollständige ESSC-2026-Programm ist online."
+    "en": "ESSC 2027 call is open",
+    "fr": "Appel de l'ESSC 2027 ouvert",
+    "de": "ESSC 2027: Call for Papers offen"
   },
   "cta": {
     "href": {
-      "en": "/essc-2026.html",
-      "fr": "/essc-2026.fr.html",
-      "de": "/essc-2026.de.html"
+      "en": "/essc-2027.html#call-for-papers",
+      "fr": "/essc-2027.fr.html#call-for-papers",
+      "de": "/essc-2027.de.html#call-for-papers"
     },
     "external": false,
     "i18n": {
-      "en": "View the programme →",
-      "fr": "Voir le programme →",
-      "de": "Zum Programm →"
+      "en": "See the call →",
+      "fr": "Lire l'appel →",
+      "de": "Zum Call →"
     }
   },
   "_example_active_state": {
