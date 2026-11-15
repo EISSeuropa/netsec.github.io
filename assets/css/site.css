@@ -956,6 +956,15 @@ a.wg-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .events-list .event-wg-pill,
 .events-list .event-link,
 .events-list .event-atc-item{text-decoration:none}
+/* /events.html fills #events-list after first paint, so until then the
+   no-script fallback is all it holds and the footer sits inside the
+   viewport, to be pushed down once the cards arrive (CLS 0.13 to 0.21,
+   #2107). Hold a viewport of height while the fallback is the only child.
+   The rendered list is taller than this at every width, and with
+   scripting off the fallback keeps its natural height. */
+@media (scripting:enabled){
+  .events-list:has(> .empty-state:only-child){min-height:100vh}
+}
 .events-seeall{margin:22px 0 0;text-align:right}
 .events-seeall a{font-weight:600}
 .event-loc{font-size:.85rem;color:var(--ink-2);display:flex;align-items:center;gap:6px}

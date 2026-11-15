@@ -17,6 +17,10 @@ name: Lighthouse (budgets)
 # sustained canvas work, and it was previously unmeasured even though this
 # workflow already triggered on the files that build it. Its assertions
 # differ in one respect only, documented in lighthouserc.json.
+#
+# events.html joined in November 2026 (#2107), after a footer layout shift
+# of 0.17 to 0.21 there went unseen because no audited page renders a list
+# from data after first paint.
 
 on:
   pull_request:
@@ -76,6 +80,7 @@ jobs:
             http://localhost:8080/essc-2026.html
             http://localhost:8080/press-kit.html
             http://localhost:8080/network-map.html
+            http://localhost:8080/events.html
           runs: 3
           configPath: './lighthouserc.json'
           uploadArtifacts: true

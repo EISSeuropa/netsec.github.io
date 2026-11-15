@@ -195,6 +195,8 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The About page's Management Committee grid lists 30 countries, matching its own count, in all three locales. The Ukraine card is removed, as cost.eu has not listed a Ukrainian representative since 19 October (#2045).
+- The Events page footer no longer jumps down when the event cards load at tablet and desktop widths. The layout shift measured 0.13 to 0.21 and is now 0 from the footer (#2107).
 - The Publications page and the Working Group cards give December 2026 for the first outputs, in all three locales. They gave October 2026, which the Publications page's own introduction already contradicted (#2186).
 - Link previews of the French and German news pages are in French and German, and the French and German About and Publications pages no longer carry the English description. The Publications description no longer names October 2026 as the date of the first outputs (#2183).
 - Shared directory profiles preview with a French or German title on the French and German pages, declare their language, and carry alt text for the card image. Every page's card now has alt text for X as well (#2183).
