@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Render the social card of each event page (assets/og/events/<page>.jpg).
 
-One 1200x630 card per page that an event in data/events.json names as its
+One 1200x630 card per locale (essc-2027.jpg, essc-2027.fr.jpg,
+essc-2027.de.jpg) for each page that an event in data/events.json names as its
 url: the ESSC pages, the policy workshop pages and the Training School
 (#2185). The card names the event type, the event, its date and its venue, in
 the visual style of the general card (build-general-og.py). Which event a page
@@ -48,7 +49,7 @@ PIN_ICON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
             '<circle cx="12" cy="10" r="2.5"/></svg>')
 
 CARD_HTML = string.Template("""<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8">
+<html lang="${lang}"><head><meta charset="UTF-8">
 <style>
   @font-face { font-family:'Lexend'; src:url('/assets/fonts/lexend-latin.woff2') format('woff2'); font-weight:600 700; font-display:block; }
   @font-face { font-family:'Inter'; src:url('/assets/fonts/inter-latin.woff2') format('woff2'); font-weight:400 600; font-display:block; }
@@ -73,11 +74,15 @@ CARD_HTML = string.Template("""<!DOCTYPE html>
     letter-spacing:-.03em; max-width:1064px; }
   h1.long { font-size:68px; }
   /* Fail-safe behind _event_cards.shorten: whatever the text, the title
-     stops at two lines and each fact at one, so nothing reaches the footer. */
+     stops at two lines, the date at one and the venue at two, so nothing
+     reaches the footer. The venue wraps rather than cuts, since the French
+     and German institution names run longer than the English. */
   h1 { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
-  .fact > span, .fact > b { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+  .fact > b { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+  .fact > span { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; min-width:0; }
+  .fact .place { white-space:nowrap; }
   .facts { margin-top:34px; display:flex; flex-direction:column; gap:14px; }
-  .fact { display:flex; align-items:center; gap:16px; font-size:29px; line-height:1.3; color:#2b3850; }
+  .fact { display:flex; align-items:flex-start; gap:16px; font-size:29px; line-height:1.3; color:#2b3850; }
   .fact b { font-weight:600; color:#0b1220; }
   .fact svg { flex:none; width:34px; height:34px; color:#003399; }
   .foot { margin-top:auto; display:flex; align-items:flex-end; justify-content:space-between; }
@@ -99,31 +104,43 @@ CARD_HTML = string.Template("""<!DOCTYPE html>
       <div class="fact">${pin}<span><b>${institution}</b>${place}</span></div>
     </div>
     <div class="foot">
-      <div class="action">COST Action CA24154</div>
-      <div class="eu">${eu_flag}<div>Funded by<br>the European Union</div></div>
+      <div class="action">${action}</div>
+      <div class="eu">${eu_flag}<div>${funded}</div></div>
     </div>
   </div>
 </body></html>
 """)
 
+# The card's fixed text per locale, as the site writes it. The funding line
+# is the EU's own wording of its emblem statement in each language.
+ACTION = {"en": "COST Action CA24154", "fr": "Action COST CA24154", "de": "COST-Aktion CA24154"}
+FUNDED = {
+    "en": "Funded by<br>the European Union",
+    "fr": "Financé par<br>l'Union européenne",
+    "de": "Finanziert von<br>der Europäischen Union",
+}
+
 # A heading longer than this sets in the smaller size, so it stays on two lines.
 LONG_HEADING = 34
 
 
-def card_markup(page: str, ev: dict, eu_flag: str) -> str:
-    institution, place = ec.venue(ev)
-    title = ec.heading(ev)
+def card_markup(page: str, ev: dict, eu_flag: str, lang: str = "en") -> str:
+    institution, place = ec.venue(ev, lang)
+    title = ec.heading(ev, lang)
     return CARD_HTML.substitute(
+        lang=lang,
         url=html.escape(f"netsec-cost.eu/{page}"),
-        eyebrow=html.escape(ec.eyebrow(ev)),
+        eyebrow=html.escape(ec.eyebrow(ev, lang)),
         h1_class=' class="long"' if len(title) > LONG_HEADING else "",
         heading=html.escape(title),
         calendar=CALENDAR_ICON,
-        date=html.escape(ev["displayDate"]["en"]),
+        date=html.escape(ec._t(ev.get("displayDate"), lang)),
         pin=PIN_ICON,
         institution=html.escape(institution),
-        place=html.escape(f" · {place}") if place else "",
+        place=f' <span class="place">· {html.escape(place)}</span>' if place else "",
         eu_flag=eu_flag,
+        action=ACTION[lang],
+        funded=FUNDED[lang],
     )
 
 
@@ -149,9 +166,11 @@ def main() -> int:
     try:
         jobs = []
         for page, ev in sorted(cards.items()):
-            (tmp / f"{page}.html").write_text(card_markup(page, ev, eu_flag), encoding="utf-8")
-            url = f"http://127.0.0.1:{port}/{tmp.relative_to(ROOT).as_posix()}/{page}.html"
-            jobs.append((url, ec.card_path(page)))
+            for lang in ec.LANGS:
+                name = f"{page}.{lang}.html"
+                (tmp / name).write_text(card_markup(page, ev, eu_flag, lang), encoding="utf-8")
+                url = f"http://127.0.0.1:{port}/{tmp.relative_to(ROOT).as_posix()}/{name}"
+                jobs.append((url, ec.card_path(page, lang)))
         boc._capture_cards(chrome, jobs)
         for _, out in jobs:
             print(f"✓ wrote {out.relative_to(ROOT)}")

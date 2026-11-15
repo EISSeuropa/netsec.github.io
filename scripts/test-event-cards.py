@@ -146,3 +146,83 @@ def test_card_url_is_a_jpeg_with_a_version_that_follows_the_card_text():
     # A change the card does not show leaves the URL alone.
     assert ec.card_url("essc-2027", _ev(summary="Other summary")) == a
     assert ec.card_path("essc-2027").suffix == ".jpg"
+
+
+# ── Translated cards ──
+
+def _belgrade(**kw) -> dict:
+    return _ev(
+        eventType="training-school", start="2027-06-08T09:00",
+        cardTitle={"en": "NetSec Training School", "fr": "École de formation NetSec",
+                   "de": "NetSec-Ausbildungsschule"},
+        cardLocation={"en": "Belgrade, Serbia", "fr": "Belgrade, Serbie", "de": "Belgrad, Serbien"},
+        meta=[{"icon": "calendar", "i18n": {"en": "x"}}, {"icon": "pin", "i18n": {
+            "en": "<strong>University of Belgrade</strong> · Faculty of Political Science, Belgrade, Serbia",
+            "fr": "<strong>Université de Belgrade</strong> · Faculté des sciences politiques, Belgrade, Serbie",
+            "de": "<strong>Universität Belgrad</strong> · Fakultät für Politikwissenschaften, Belgrad, Serbien"}}],
+        **kw)
+
+
+def test_venue_is_read_from_the_pin_line_and_card_location_per_locale():
+    ev = _belgrade()
+    assert ec.venue(ev, "en") == ("University of Belgrade, Faculty of Political Science", "Belgrade, Serbia")
+    assert ec.venue(ev, "fr") == ("Université de Belgrade, Faculté des sciences politiques", "Belgrade, Serbie")
+    assert ec.venue(ev, "de") == ("Universität Belgrad, Fakultät für Politikwissenschaften", "Belgrad, Serbien")
+
+
+def test_venue_without_a_faculty_keeps_the_institution_alone():
+    ev = _ev(meta=[{"icon": "pin", "i18n": {"fr": "<strong>Université Bilkent</strong> · Ankara, Türkiye"}}],
+             cardLocation={"fr": "Ankara, Türkiye"})
+    assert ec.venue(ev, "fr") == ("Université Bilkent", "Ankara, Türkiye")
+
+
+def test_venue_falls_back_to_the_english_postal_line():
+    assert ec.venue(_ev(), "de") == ("University of Belgrade, Faculty of Political Science", "Belgrade, Serbia")
+
+
+def test_heading_and_eyebrow_are_translated():
+    ev = _belgrade()
+    assert ec.heading(ev, "fr") == "École de formation NetSec"
+    assert ec.eyebrow(ev, "fr") == "École de formation · 2027"
+    assert ec.eyebrow(ev, "de") == "Ausbildungsschule · 2027"
+
+
+def test_policy_workshop_heading_takes_the_subtitle_in_each_locale():
+    ws = _ev(eventType="policy-workshop", start="2026-09-13T09:00",
+             cardTitle={"en": "NetSec Policy Workshop", "fr": "Atelier politique NetSec"},
+             cardSubtitle={"en": "Great Power Politics and the Future of Alliances",
+                           "fr": "Les grandes puissances et l'avenir des alliances"})
+    assert ec.heading(ws, "fr") == "Les grandes puissances et l'avenir des alliances"
+    assert ec.eyebrow(ws, "fr") == "Atelier politique · 2026"
+    assert ec.card_alt(ws, "fr").startswith(
+        "Carte de l'événement: Atelier politique NetSec: Les grandes puissances et l'avenir des alliances, ")
+
+
+def test_each_locale_has_its_own_card_file_and_version():
+    ev = _belgrade()
+    assert ec.card_path("summer-school", "en").name == "summer-school.jpg"
+    assert ec.card_path("summer-school", "fr").name == "summer-school.fr.jpg"
+    fr = ec.card_url("summer-school", ev, "fr")
+    assert "/summer-school.fr.jpg?v=" in fr
+    assert fr.split("?v=")[1] != ec.card_url("summer-school", ev, "de").split("?v=")[1]
+
+
+def test_card_markup_is_translated_throughout():
+    out = beo.card_markup("summer-school", _belgrade(), "<svg/>", "de")
+    assert '<html lang="de">' in out
+    assert "NetSec-Ausbildungsschule" in out and "Ausbildungsschule · 2027" in out
+    assert "COST-Aktion CA24154" in out and "Finanziert von<br>der Europäischen Union" in out
+    assert "Universität Belgrad, Fakultät für Politikwissenschaften" in out
+    assert '<span class="place">· Belgrad, Serbien</span>' in out
+
+
+def test_every_live_event_page_has_a_card_in_every_locale_with_real_names():
+    for page, ev in ec.card_events().items():
+        for lang in ec.LANGS:
+            institution, place = ec.venue(ev, lang)
+            assert institution and place, (page, lang)
+            assert ec.heading(ev, lang), (page, lang)
+            if lang != "en":
+                # No English place name left on a translated card, except the
+                # names the pages keep in their own language.
+                assert "Serbia" not in place and "Sweden" not in place and "Spain" not in place

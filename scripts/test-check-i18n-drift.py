@@ -139,6 +139,15 @@ class TestSha1:
         assert mod.sha1(a) == mod.sha1(b)
         assert mod.sha1(b) != mod.sha1(c)
 
+    def test_event_card_locale_suffix_is_normalised(self, tmp_path):
+        """Each locale names its own card, so essc-2027.fr.jpg on the FR page
+        hashes like essc-2027.jpg on the EN page."""
+        en = tmp_path / "en.html"
+        fr = tmp_path / "fr.html"
+        en.write_text('assets/og/events/essc-2027.jpg?v=0a0a0a0a', encoding="utf-8")
+        fr.write_text('assets/og/events/essc-2027.fr.jpg?v=1b1b1b1b', encoding="utf-8")
+        assert mod.sha1(en) == mod.sha1(fr)
+
     def test_both_css_and_js_assets_normalised(self, tmp_path):
         a = tmp_path / "a.html"
         b = tmp_path / "b.html"

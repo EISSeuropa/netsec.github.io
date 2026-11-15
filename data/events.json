@@ -140,9 +140,9 @@
         "de": "Das jährliche Flaggschiff-Treffen der NetSec-Community: eine interdisziplinäre Konferenz zu europäischer Verteidigung und Sicherheit, offen für Wissenschaft, Politik und Praxis. Findet im Anschluss an die Summer School statt, damit Nachwuchsforschende am breiteren Austausch teilnehmen können."
       },
       "cardTitle": {
-        "en": "European Security Conference",
-        "fr": "European Security Conference",
-        "de": "European Security Conference"
+        "en": "European Security Studies Conference",
+        "fr": "European Security Studies Conference",
+        "de": "European Security Studies Conference"
       },
       "cardLocation": {
         "en": "Stockholm, Sweden",
@@ -439,7 +439,7 @@
           "icon": "pin",
           "i18n": {
             "en": "<strong>University of Belgrade</strong> · Faculty of Political Science, Belgrade, Serbia",
-            "fr": "<strong>Université de Belgrade</strong> · Faculté de sciences politiques, Belgrade, Serbie",
+            "fr": "<strong>Université de Belgrade</strong> · Faculté des sciences politiques, Belgrade, Serbie",
             "de": "<strong>Universität Belgrad</strong> · Fakultät für Politikwissenschaften, Belgrad, Serbien"
           }
         },
@@ -535,7 +535,7 @@
           "icon": "pin",
           "i18n": {
             "en": "<strong>University of Belgrade</strong> · Faculty of Political Science, Belgrade, Serbia",
-            "fr": "<strong>Université de Belgrade</strong> · Faculté de sciences politiques, Belgrade, Serbie",
+            "fr": "<strong>Université de Belgrade</strong> · Faculté des sciences politiques, Belgrade, Serbie",
             "de": "<strong>Universität Belgrad</strong> · Fakultät für Politikwissenschaften, Belgrad, Serbien"
           }
         },

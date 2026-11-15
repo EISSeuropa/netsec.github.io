@@ -23,7 +23,7 @@
       "year": 2027,
       "status": "call-open",
       "city": { "en": "Belgrade", "fr": "Belgrade", "de": "Belgrad" },
-      "host": { "en": "University of Belgrade, Faculty of Political Science", "fr": "Université de Belgrade, Faculté de sciences politiques", "de": "Universität Belgrad, Fakultät für Politikwissenschaften" },
+      "host": { "en": "University of Belgrade, Faculty of Political Science", "fr": "Université de Belgrade, Faculté des sciences politiques", "de": "Universität Belgrad, Fakultät für Politikwissenschaften" },
       "dates": { "en": "8 to 11 June 2027", "fr": "du 8 au 11 juin 2027", "de": "8. bis 11. Juni 2027" },
       "start": "2027-06-08",
       "ics": "summer-school-2027",
