@@ -91,6 +91,20 @@ T_MENTORS = "Mentors on similar topics"
 T_SEE_MENTORS = "See these mentors in the directory"
 T_ANTHOLOGY = "In the EISS Anthology"
 
+# Link-preview strings per locale (#2183). The card itself is
+# locale-independent, so only the words around it change.
+PREVIEW = {
+    "en": {"og_locale": "en_GB", "directory": "NetSec directory",
+           "tail": "NetSec directory profile, COST Action CA24154.",
+           "alt": "Profile card for {name} in the NetSec directory"},
+    "fr": {"og_locale": "fr_FR", "directory": "annuaire NetSec",
+           "tail": "Profil dans l'annuaire NetSec, Action COST CA24154.",
+           "alt": "Carte de profil de {name} dans l'annuaire NetSec"},
+    "de": {"og_locale": "de_DE", "directory": "NetSec-Verzeichnis",
+           "tail": "Profil im NetSec-Verzeichnis, COST-Aktion CA24154.",
+           "alt": "Profilkarte von {name} im NetSec-Verzeichnis"},
+}
+
 WG_NAMES = {"1": "WG1", "2": "WG2", "3": "WG3", "4": "WG4"}
 
 # Warm contact-intro scaffolds (#1171 part 1). Baked into the mailto: hrefs at
@@ -731,8 +745,14 @@ def build_page(m: dict, works: list, similar: list, mentors: list, loc_key: str,
     canonical = f"{SITE}/{rel}"
     name = m.get("name") or slug
     desc_bits = [x for x in (m.get("position"), m.get("affiliation"), m.get("country")) if x]
-    desc = f"{name} — " + " · ".join(desc_bits) if desc_bits else name
-    desc += ". NetSec directory profile, COST Action CA24154."
+    pv = PREVIEW[loc["lang"]]
+    desc = f"{name}: " + " · ".join(desc_bits) if desc_bits else name
+    desc += f". {pv['tail']}"
+    og_title = f"{name} · {pv['directory']}"
+    og_alt = pv["alt"].format(name=name)
+    og_locale_alts = "\n".join(
+        f'<meta property="og:locale:alternate" content="{PREVIEW[k]["og_locale"]}">'
+        for k in ("en", "fr", "de") if k != loc["lang"])
     hreflang = "\n".join(
         f'<link rel="alternate" hreflang="{hl}" href="{SITE}/people/{slug}{LOCALES[k]["suffix"]}.html">'
         for hl, k in (("en", "en"), ("fr", "fr"), ("de", "de"), ("x-default", "en")))
@@ -754,16 +774,20 @@ def build_page(m: dict, works: list, similar: list, mentors: list, loc_key: str,
     seo = f"""<link rel="canonical" href="{canonical}">
 <meta property="og:type" content="profile">
 <meta property="og:site_name" content="NetSec, COST Action CA24154">
-<meta property="og:title" content="{esc(name)} · NetSec directory">
+<meta property="og:locale" content="{pv['og_locale']}">
+{og_locale_alts}
+<meta property="og:title" content="{esc(og_title)}">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{canonical}">
 <meta property="og:image" content="{og_image}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{esc(og_alt)}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{esc(name)} · NetSec directory">
+<meta name="twitter:title" content="{esc(og_title)}">
 <meta name="twitter:description" content="{esc(desc)}">
 <meta name="twitter:image" content="{og_image}">
+<meta name="twitter:image:alt" content="{esc(og_alt)}">
 <meta name="robots" content="index, follow, max-image-preview:large">{_counter}
 <script type="application/ld+json">
 {person_jsonld(m, canonical)}

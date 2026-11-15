@@ -189,6 +189,9 @@ maintainer-facing audience.
 
 #### Fixed
 
+- Link previews of the French and German news pages are in French and German, and the French and German About and Publications pages no longer carry the English description. The Publications description no longer names October 2026 as the date of the first outputs (#2183).
+- Shared directory profiles preview with a French or German title on the French and German pages, declare their language, and carry alt text for the card image. Every page's card now has alt text for X as well (#2183).
+- The 404 page carries one robots directive, `noindex`. It also carried `index, follow` (#2183).
 - The Directory page scores a median 0.82 for Lighthouse performance, up from 0.74 to 0.75, against the 0.78 floor. Each page fetches `data/bios.json` once, after the first paint, where it had fetched it up to four times before anything was shown (twice on the Directory, four times on the home page). The COST logo in the footer of every page is a 480 pixel wide file of 9.7 KB, down from 2906 pixels and 79 KB, for a logo shown 120 pixels wide.
 - The data shape check fails a bios sync PR that takes `data/bios.json` over 90,000 bytes gzipped (74,675 today), the point where the Directory's performance score would next be at risk.
 - The Directory loads with less main-thread work on phones and in the compact view, in all three locales. It checked every hidden bio for a Show more button before the first paint, which laid out the whole page. Lighthouse's performance score for the page rose from a median of 0.72 to 0.83.

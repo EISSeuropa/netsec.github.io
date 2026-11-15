@@ -281,12 +281,16 @@ def build_seo_block(base: str, lang: str, title: str, desc: str) -> str:
         f'<meta name="twitter:title" content="{_attr_escape(title)}">',
         f'<meta name="twitter:description" content="{_attr_escape(desc)}">',
         f'<meta name="twitter:image" content="{og_image}">',
+        f'<meta name="twitter:image:alt" content="{_attr_escape(og_image_alt)}">',
         '',
         '<!-- General SEO + UA hints -->',
         f'<meta name="author" content="{AUTHOR}">',
         f'<meta name="theme-color" content="{THEME_COLOR}">',
         '<meta name="format-detection" content="telephone=no">',
-        '<meta name="robots" content="index, follow, max-image-preview:large">',
+        # The 404 page stays out of search results. One robots tag per page,
+        # so the page itself carries none (#2183).
+        '<meta name="robots" content="noindex">' if base == "404"
+        else '<meta name="robots" content="index, follow, max-image-preview:large">',
     ]
     # Empty until a GoatCounter account is set, see scripts/_analytics.py.
     lines += _analytics.lines(not_found=base == "404")
@@ -384,6 +388,44 @@ _EVENTS_BY_UID = {ev["uid"]: ev for ev in _EVENTS["events"]}
 _EVENT_DATE_RE = re.compile(
     r'(<(?P<tag>[a-z0-9]+)\b[^>]*\bdata-event-(?P<kind>date|deadline)="(?P<uid>[^"]+)"[^>]*>)(?P<text>[^<]*)(</(?P=tag)>)')
 PROBLEMS: list[str] = []
+
+# A description is the snippet search results and link previews show. Google
+# cuts it at about 160 characters and LinkedIn and Facebook show less, so a
+# longer one loses its end, which on an event page is where the date sat
+# (#2183). Pages still over the cap are listed until #2184 rewrites them, and
+# a page leaves the list in the PR that shortens it.
+DESC_CAP = 160
+DESC_CAP_PENDING = {
+    ("essc-2026", "en"), ("essc-2026", "fr"), ("essc-2026", "de"),
+    ("essc-2027", "en"), ("essc-2027", "fr"), ("essc-2027", "de"),
+    ("events", "en"), ("events", "fr"), ("events", "de"),
+    ("faq", "en"), ("faq", "fr"), ("faq", "de"),
+    ("glossary", "fr"), ("glossary", "de"),
+    ("grants", "en"), ("grants", "fr"), ("grants", "de"),
+    ("index", "de"),
+    ("network-map", "en"), ("network-map", "fr"), ("network-map", "de"),
+    ("people", "en"), ("people", "fr"), ("people", "de"),
+    ("policy-workshop-2026", "en"), ("policy-workshop-2026", "fr"), ("policy-workshop-2026", "de"),
+    ("policy-workshop-2027", "en"), ("policy-workshop-2027", "fr"), ("policy-workshop-2027", "de"),
+    ("roadmap", "fr"), ("roadmap", "de"),
+    ("slides", "fr"), ("slides", "de"),
+    ("summer-school", "en"), ("summer-school", "fr"), ("summer-school", "de"),
+    ("year-in-review", "en"), ("year-in-review", "fr"), ("year-in-review", "de"),
+}
+
+
+def check_description_length(desc: str, lang: str, base: str) -> None:
+    """Report a meta description over DESC_CAP characters, and an exemption
+    in DESC_CAP_PENDING that is no longer needed."""
+    import html as _html
+    n = len(_html.unescape(desc))
+    pending = (base, lang) in DESC_CAP_PENDING
+    if n > DESC_CAP and not pending:
+        PROBLEMS.append(f"{base} ({lang}): the meta description is {n} characters, "
+                        f"over the {DESC_CAP} that previews and search results show")
+    elif n <= DESC_CAP and pending:
+        PROBLEMS.append(f"{base} ({lang}): the meta description is {n} characters, "
+                        f"so remove ({base!r}, {lang!r}) from DESC_CAP_PENDING")
 
 
 def derive_event_dates(html: str, lang: str, base: str) -> str:
@@ -777,6 +819,7 @@ def inject(html: str, base: str) -> tuple[str, bool]:
         new = new_after
         changed = True
     check_event_description(desc, lang, base)
+    check_description_length(desc, lang, base)
     own = [ev for ev in _EVENTS["events"] if _event_page(ev) == base]
     check_prose_dates(new, lang, f"{base}{'' if lang == 'en' else '.' + lang}.html",
                       {_day(ev["start"])[0] for ev in (own or _EVENTS["events"])}, own)
