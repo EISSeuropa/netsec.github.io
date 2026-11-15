@@ -1714,3 +1714,16 @@ def test_overview_lists_field_changes_under_member():
     new = [{"id": "x", "name": "Dr X", "position": "Professor"}]
     out = render_pr_body_overview(classify_diff(old, new, []))
     assert "- **Dr X**: position\n  - position: `Researcher` → `Professor`" in out
+
+
+def test_missing_bio_warnings_flags_empty_form_bios_only():
+    members = [
+        {"id": "a", "name": "Ms A", "source": "form", "bio": "", "keywords": []},
+        {"id": "b", "name": "Dr B", "source": "form", "bio": "  ", "keywords": ["X"]},
+        {"id": "c", "name": "Dr C", "source": "form", "bio": "Writes on alliances.", "keywords": []},
+        {"id": "d", "name": "Dr D", "source": "seed", "bio": ""},
+    ]
+    out = sync_bios.missing_bio_warnings(members)
+    assert len(out) == 2
+    assert out[0].startswith("::warning::Ms A (a) submitted the form with an empty bio, and no keywords.")
+    assert out[1].startswith("::warning::Dr B (b) submitted the form with an empty bio. Ask")

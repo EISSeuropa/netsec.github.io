@@ -52,7 +52,6 @@ import json
 import os
 import re
 import sys
-import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
@@ -2282,6 +2281,25 @@ def render_pr_body_overview(
 # ──────────────────────────── main ────────────────────────────
 
 
+def missing_bio_warnings(members: list[dict]) -> list[str]:
+    """One GitHub `::warning::` line per form submission with an empty bio
+    (#1832). `Short bio` is optional on the Google Form, so a row can arrive
+    without one, and the card then renders with a name and an affiliation
+    only. Seed entries are skipped: they have not submitted yet. Printed on
+    every run until the member resubmits, so the log and the run's
+    annotations carry the list."""
+    out = []
+    for m in members:
+        if m.get("source") == "form" and not (m.get("bio") or "").strip():
+            no_kw = "" if m.get("keywords") else ", and no keywords"
+            out.append(
+                f"::warning::{m.get('name') or m.get('id')} ({m.get('id')}) "
+                f"submitted the form with an empty bio{no_kw}. Ask them to "
+                "resubmit with the missing text."
+            )
+    return out
+
+
 def apply_overrides(members: list[dict]) -> None:
     """Apply the hand corrections in data/bios-overrides.json (#1219).
 
@@ -2544,6 +2562,8 @@ def main() -> None:
     merged = merge(old_members, form_entries, key_of)
     apply_overrides(merged)
     print(diff_summary(old_members, merged))
+    for line in missing_bio_warnings(merged):
+        print(line)
 
     # Make sure every headshot has a .webp sibling for the directory's
     # <picture> serving (#269). Idempotent; only writes missing/stale ones.
