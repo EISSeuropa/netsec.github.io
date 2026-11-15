@@ -627,6 +627,29 @@ def test_build_mc_json_reports_and_idempotent() -> None:
             sync_cost.MC_JSON = old_mc_json
 
 
+def test_build_mc_json_carries_bio_slug() -> None:
+    print("\nbuild_mc_json() — directory slug on matched representatives:")
+    mc = [
+        {"name": "Dr Edlira Titini", "country": "Albania", "country_code": "al"},
+        {"name": "Dr No Profile", "country": "Albania", "country_code": "al"},
+    ]
+    with tempfile.TemporaryDirectory() as td:
+        saved = sync_cost.MC_JSON, sync_cost.BIOS
+        sync_cost.MC_JSON = Path(td) / "mc-members.json"
+        sync_cost.BIOS = Path(td) / "bios.json"
+        try:
+            sync_cost.BIOS.write_text(json.dumps({"members": [
+                {"id": "edlira-titini-old", "name": "Dr. Edlira Titini"},
+            ]}), encoding="utf-8")
+            sync_cost.build_mc_json(mc)
+            out = json.loads(sync_cost.MC_JSON.read_text(encoding="utf-8"))["members"]
+            expect("matched rep carries the bio id", out[0].get("slug"), "edlira-titini-old")
+            expect("unmatched rep has no slug", "slug" in out[1], False)
+            expect("input list not mutated", "slug" in mc[0], False)
+        finally:
+            sync_cost.MC_JSON, sync_cost.BIOS = saved
+
+
 def test_apply_stats_rewrites_markers() -> None:
     print("\napply_stats() — data-cost-stat literal rewrite:")
     mc = sync_cost.fetch_mc(MC_FIXTURE)   # 3 reps, 2 countries
@@ -673,6 +696,7 @@ def main() -> None:
     test_build_wg_json_resolves_leaders_and_members()
     test_fetch_mc_parses_malformed_table()
     test_build_mc_json_reports_and_idempotent()
+    test_build_mc_json_carries_bio_slug()
     test_apply_mc_roles_tags_matching_bios()
     test_apply_mc_roles_idempotent()
     test_apply_stats_rewrites_markers()

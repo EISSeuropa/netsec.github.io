@@ -25,7 +25,8 @@ schema):
                          gzipped.
   wg.json                non-empty groups list with number, name and a
                          members list per group.
-  mc-members.json        non-empty members list with name + country.
+  mc-members.json        non-empty members list with name + country,
+                         and an optional non-empty `slug`.
   events.json            tzid present, non-empty events list, every
                          event has start/end/status/eventType/cardTitle
                          (the home banner and calendar builder read all
@@ -219,8 +220,18 @@ def check_wg(data) -> list:
             continue
         _req(g, "number", int, errs, ctx)
         _req(g, "name", str, errs, ctx, non_empty=True)
-        _req(g, "members", list, errs, ctx)
+        if _req(g, "members", list, errs, ctx):
+            for j, m in enumerate(g["members"]):
+                _check_person_slug(m, f"{ctx}.members[{j}]", errs)
     return errs
+
+
+def _check_person_slug(m, ctx: str, errs: list) -> None:
+    """An MC or WG member's optional `slug` is the id of their entry in
+    data/bios.json: a non-empty string when present."""
+    if isinstance(m, dict) and "slug" in m and not (
+            isinstance(m["slug"], str) and m["slug"]):
+        errs.append(f"{ctx}: slug must be a non-empty string when present")
 
 
 def check_mc_members(data) -> list:
@@ -236,6 +247,7 @@ def check_mc_members(data) -> list:
             continue
         _req(m, "name", str, errs, ctx, non_empty=True)
         _req(m, "country", str, errs, ctx, non_empty=True)
+        _check_person_slug(m, ctx, errs)
     return errs
 
 
