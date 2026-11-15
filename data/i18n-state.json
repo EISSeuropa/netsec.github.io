@@ -55,14 +55,14 @@
     "policy-workshop-2027.html": {
       "fr": {
         "file": "policy-workshop-2027.fr.html",
-        "source_sha1": "8a615f53615c9efee903ad69e708c23066b1270d",
+        "source_sha1": "c30a42f854c0dcb2568015440055dd40de3c26ee",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "policy-workshop-2027.de.html",
-        "source_sha1": "8a615f53615c9efee903ad69e708c23066b1270d",
+        "source_sha1": "c30a42f854c0dcb2568015440055dd40de3c26ee",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
@@ -359,14 +359,14 @@
     "essc-2027.html": {
       "fr": {
         "file": "essc-2027.fr.html",
-        "source_sha1": "83e999cb2560827b47d2634d3155d7f427257bbf",
+        "source_sha1": "9af325541d46ddc6cdd70a9ee26be2aae35b469b",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "essc-2027.de.html",
-        "source_sha1": "83e999cb2560827b47d2634d3155d7f427257bbf",
+        "source_sha1": "9af325541d46ddc6cdd70a9ee26be2aae35b469b",
         "translated_on": "2026-11-15",
         "status": "beta",
         "reviewed_by": null

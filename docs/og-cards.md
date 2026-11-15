@@ -112,13 +112,28 @@ The separate **directory** card (`assets/images/og-image-people.png`, the
 ## Event-page cards
 
 Each page that an event in `data/events.json` names as its `url` has its own
-card at `assets/og/events/<page>.jpg` (#2185): today `essc-2026`, `essc-2027`,
-`policy-workshop-2026`, `policy-workshop-2027` and `summer-school`. The card
-shows the event type, the event's name, its English `displayDate` and its
-venue. A page with more than one event (the Training School page holds the
-2026 and 2027 editions) shows the latest. A policy workshop's name loses its
-"NetSec Policy Workshop:" prefix on the card, since the label above it says
-so already.
+card in each locale, at `assets/og/events/<page>.jpg`, `<page>.fr.jpg` and
+`<page>.de.jpg` (#2185): today `essc-2026`, `essc-2027`,
+`policy-workshop-2026`, `policy-workshop-2027` and `summer-school`, so fifteen
+cards. A page with more than one event (the Training School page holds the
+2026 and 2027 editions) shows the latest.
+
+Every word on a card comes from what the event listings already show in that
+locale:
+
+- the title from `cardTitle`, or for a policy workshop from `cardSubtitle`
+  (its `cardTitle` is only "NetSec Policy Workshop", which the label above
+  the title already says);
+- the date from `displayDate`;
+- the institution from the bold part of the event's map-pin line (`meta`,
+  icon `pin`), plus a faculty named right after it;
+- the city and country from `cardLocation`.
+
+The event-type label, "COST Action CA24154" and the EU funding line are fixed
+strings in `_event_cards.TYPE_LABEL` and `build-event-og.py`. The funding line
+is the EU's own wording of its emblem statement in each language. An event
+with no pin line or `cardLocation` falls back to its English postal
+`location`.
 
 `scripts/_event_cards.py` decides which pages have a card and what it says.
 Three scripts read it, so they cannot disagree:
@@ -131,27 +146,30 @@ Three scripts read it, so they cannot disagree:
 
 The cards are not committed (`assets/og/events/*.jpg` is gitignored).
 `pages-deploy.yml` renders them on every deploy and refuses to publish if the
-count differs from the number of event pages. `social-bluesky.yml` renders
+count differs from three per event page. `social-bluesky.yml` renders
 them before posting, with `continue-on-error`, so a Chrome failure posts the
 general card. A new event page, or a date moved by the Indico sync, reaches
 the card on the next deploy with nothing to run by hand.
 
-The cards are in English only, like the general and directory cards, and carry
-no application deadline: a platform caches a preview for days, and a passed
-deadline would stay on it.
+The cards carry no application deadline: a platform caches a preview for days,
+and a passed deadline would stay on it. News posts are in English and take
+the English card.
 
 A title longer than 56 characters (`HEADING_MAX`) is cut at its first natural
 break, a colon or a spaced dash, provided at least 12 characters stay: "Security
 Beyond the State: Managing and Countering ..." becomes "Security Beyond the
 State". With no break in reach, it is cut at the last whole word that fits and
 ends with an ellipsis. The alt text keeps the full name. Behind that, the
-card's CSS stops the title at two lines and each fact line at one, so no text
-reaches the footer whatever the data holds.
+card's CSS stops the title at two lines, the date at one and the venue at two,
+so no text reaches the footer whatever the data holds. The venue wraps rather
+than cuts, since the French and German institution names run longer, and the
+city and country move to the second line together.
 
 The cards are JPEGs at quality 88, about 70 KB each against 280 KB as PNG.
 WhatsApp is widely reported to drop preview images over 300 KB.
 
-The page names the card as `<page>.jpg?v=<hash>`. The hash covers what the
+Each page names its own locale's card as `<page>.jpg?v=<hash>` (or
+`.fr.jpg`, `.de.jpg`). The hash covers what the
 card shows and the builder's own source, so a moved date or a template change
 gives the card a new URL and platforms fetch it again instead of serving their
 cached copy for days. `inject-seo.py` writes the stamp, so an edit to

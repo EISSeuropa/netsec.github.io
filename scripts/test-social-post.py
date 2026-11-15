@@ -70,7 +70,7 @@ def test_news_image_uses_the_event_card_when_rendered(tmp_path, monkeypatch):
     card.write_bytes(b"png")
     got = sp._news_image(link)
     assert got["image"] == card
-    assert got["image_alt"].startswith("Event card: European Security Studies Conference 2027")
+    assert got["image_alt"].startswith("Event card: European Security Studies Conference, 10–11 June 2027")
     # A link to a page without a card keeps the general card.
     assert sp._news_image("https://netsec-cost.eu/about.html#leadership")["image"] == sp.SITE_OG
 

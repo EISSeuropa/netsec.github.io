@@ -52,10 +52,11 @@ _CACHE_BUST_RE = re.compile(
 
 # The event cards' ?v= stamp (assets/og/events/<page>.jpg?v=ab12cd34) is a
 # hash of what the card shows, written by inject-seo.py into all three locales
-# at once. A date moved by the Indico sync changes it, and without this the
+# at once. Each locale names its own card (<page>.fr.jpg, <page>.de.jpg), so
+# the locale suffix is normalised out too, leaving <page>.jpg on every page. A date moved by the Indico sync changes it, and without this the
 # sync's own PR would flag every FR/DE event page as stale with nothing to
 # translate, the shape of the cache-bust queries above.
-_EVENT_CARD_RE = re.compile(r'(assets/og/events/[a-z0-9-]+\.jpg)\?v=[0-9a-f]+')
+_EVENT_CARD_RE = re.compile(r'(assets/og/events/[a-z0-9-]+)(?:\.(?:fr|de))?(\.jpg)\?v=[0-9a-f]+')
 
 # Field-guide facepiles (#801) are rows of directory member headshots baked
 # into the Glossary's concept entries by scripts/build-field-guide.py. They
@@ -118,7 +119,7 @@ def sha1(path: Path) -> str:
     writes rather than translatable prose."""
     text = path.read_text(encoding="utf-8")
     text = _CACHE_BUST_RE.sub(r"\1", text)
-    text = _EVENT_CARD_RE.sub(r"\1", text)
+    text = _EVENT_CARD_RE.sub(r"\1\2", text)
     block = _analytics_block()
     if block:
         text = text.replace(block, "")

@@ -147,14 +147,15 @@ jobs:
           }
 
       - name: Render the event-page Open Graph cards
-        # One card per page an event in data/events.json names (#2185). The
-        # SEO block on those pages names the card URL without testing for the
-        # file, so a missing card would 404 on every crawler: count them
-        # against the pages that should have one, as the member cards do.
+        # One card per locale for each page an event in data/events.json
+        # names (#2185). The SEO block on those pages names the card URL
+        # without testing for the file, so a missing card would 404 on every
+        # crawler: count them against the pages that should have one, as the
+        # member cards do.
         run: |
           set -euo pipefail
           python3 scripts/build-event-og.py
-          want=$(python3 -c "import sys; sys.path.insert(0, 'scripts'); import _event_cards as e; print(len(e.card_events()))")
+          want=$(python3 -c "import sys; sys.path.insert(0, 'scripts'); import _event_cards as e; print(len(e.card_events()) * len(e.LANGS))")
           got=$(find assets/og/events -name '*.jpg' | wc -l)
           echo "event pages: $want, cards: $got"
           [ "$want" -eq "$got" ] || {

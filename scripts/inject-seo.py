@@ -260,7 +260,7 @@ def build_seo_block(base: str, lang: str, title: str, desc: str) -> str:
     # build-event-og.py (#2185). The alt text follows the page's locale.
     card_event = _event_cards.card_events(_EVENTS["events"]).get(base)
     if card_event:
-        og_image = _event_cards.card_url(base, card_event)
+        og_image = _event_cards.card_url(base, card_event, lang)
         og_image_alt = _event_cards.card_alt(card_event, lang)
 
     lines = [
@@ -612,12 +612,12 @@ def _event_location(ev: dict) -> dict:
     }
 
 
-def _event_image(ev: dict) -> str:
+def _event_image(ev: dict, lang: str = "en") -> str:
     """The event's own card when its page shows this event, else the general
     card (the 2026 Training School shares a page with the 2027 one)."""
     page = _event_cards.page_of(ev)
     if _event_cards.card_events(_EVENTS["events"]).get(page) is ev:
-        return _event_cards.card_url(page, ev)
+        return _event_cards.card_url(page, ev, lang)
     return OG_IMAGE
 
 
@@ -632,7 +632,7 @@ def build_event_node(ev: dict, lang: str) -> dict:
         "endDate": _iso_with_offset(ev["end"], tzid),
         "location": _event_location(ev),
         "url": ev.get("url", ""),
-        "image": _event_image(ev),
+        "image": _event_image(ev, lang),
         "description": ev.get("cardDescription", {}).get(lang, ""),
         "organizer": {
             "@type": "Organization",

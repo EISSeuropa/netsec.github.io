@@ -327,9 +327,11 @@ def test_seo_block_event_page_uses_its_card():
     """#2185: an event page unfurls as its own card, with alt text in the
     page's locale. Other pages keep the general card."""
     block = seo.build_seo_block("essc-2027", "de", "T", "D")
-    assert re.search(r'og:image" content="https://netsec-cost\.eu/assets/og/events/essc-2027\.jpg\?v=[0-9a-f]{8}"', block)
-    assert re.search(r'twitter:image" content="https://netsec-cost\.eu/assets/og/events/essc-2027\.jpg\?v=[0-9a-f]{8}"', block)
-    assert 'og:image:alt" content="Karte zur Veranstaltung: European Security Studies Conference 2027' in block
+    assert re.search(r'og:image" content="https://netsec-cost\.eu/assets/og/events/essc-2027\.de\.jpg\?v=[0-9a-f]{8}"', block)
+    assert re.search(r'twitter:image" content="https://netsec-cost\.eu/assets/og/events/essc-2027\.de\.jpg\?v=[0-9a-f]{8}"', block)
+    en = seo.build_seo_block("essc-2027", "en", "T", "D")
+    assert re.search(r'og:image" content="https://netsec-cost\.eu/assets/og/events/essc-2027\.jpg\?v=[0-9a-f]{8}"', en)
+    assert 'og:image:alt" content="Karte zur Veranstaltung: European Security Studies Conference, 10.–11. Juni 2027, Universität Belgrad' in block
     assert 'twitter:image:alt" content="Karte zur Veranstaltung: ' in block
     assert f'og:image" content="{seo.OG_IMAGE}"' in seo.build_seo_block("grants", "en", "T", "D")
 

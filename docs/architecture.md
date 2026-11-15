@@ -505,7 +505,7 @@ sweep (rule §11).
 │   ├── images/cost-logo.jpg         # COST logotype
 │   ├── licences/                    # Licence texts of bundled third-party assets (see licensing.html §3)
 │   ├── images/og-image.png          # Open Graph card (1200 × 630)
-│   ├── og/events/*.jpg              # Event-page Open Graph cards, rendered at deploy by build-event-og.py (gitignored, #2185)
+│   ├── og/events/*.jpg              # Event-page Open Graph cards, one per locale, rendered at deploy by build-event-og.py (gitignored, #2185)
 │   └── images/logo.png              # Favicon / NS mark
 │
 ├── data/

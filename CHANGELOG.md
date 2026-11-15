@@ -169,6 +169,9 @@ maintainer-facing audience.
 
 #### Changed
 
+- The event-page link preview cards are in French on the French pages and in German on the German pages: the event type, title, date, institution, city, country and EU funding line. A venue too long for one line wraps to a second.
+- The French pages and data name the Belgrade faculty "Faculté des sciences politiques". They had "Faculté de sciences politiques".
+- The 2026 conference's card title in the event listings reads "European Security Studies Conference", as on its own page. It read "European Security Conference".
 - The event-page link preview cards are JPEGs of about 70 KB, down from 280 KB. A title over 56 characters is cut at its first colon or dash, or else at a whole word with an ellipsis, and the card's layout stops the title at two lines and the venue at one. The card's address carries a version that changes with its text, so a moved date reaches previews that platforms had cached (#2193).
 - The descriptions that search results and link previews show are 160 characters or fewer on every page, in all three locales. 40 ran from 161 to 374 characters, and on the event pages the date and place now come first, with the open deadline where there is one. `inject-seo.py --check` fails on a description over 160 characters (#2184).
 - The ESSC 2027 page is 8,700 px tall on a phone, down from 14,000, in all three locales. Each closed panel shows its title and chair, and its description opens on a tap. The key dates sit above the panels. A bar pinned under the header links to the seven sections and marks the one on screen.
