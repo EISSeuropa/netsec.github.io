@@ -295,6 +295,40 @@ def test_seo_block_og_type_article_for_prose_page():
     assert 'og:type" content="article"' in block
 
 
+def test_seo_block_twitter_image_alt_matches_og():
+    block = seo.build_seo_block("grants", "en", "T", "D")
+    assert f'og:image:alt" content="{seo.OG_IMAGE_ALT}"' in block
+    assert f'twitter:image:alt" content="{seo.OG_IMAGE_ALT}"' in block
+    people = seo.build_seo_block("people", "en", "T", "D")
+    assert 'twitter:image:alt" content="The NetSec directory' in people
+
+
+def test_seo_block_404_is_noindex_once():
+    block = seo.build_seo_block("404", "en", "T", "D")
+    assert block.count('name="robots"') == 1
+    assert '<meta name="robots" content="noindex">' in block
+    assert 'name="robots" content="index' in seo.build_seo_block("grants", "en", "T", "D")
+
+
+def test_description_length_cap(monkeypatch):
+    monkeypatch.setattr(seo, "DESC_CAP_PENDING", {("faq", "en")})
+    seo.PROBLEMS.clear()
+    seo.check_description_length("x" * seo.DESC_CAP, "en", "grants")
+    assert not seo.PROBLEMS
+    seo.check_description_length("x" * (seo.DESC_CAP + 1), "en", "grants")
+    assert seo.PROBLEMS and "grants (en)" in seo.PROBLEMS[0]
+    seo.PROBLEMS.clear()
+    # An exempt page over the cap passes, and is reported once it fits.
+    seo.check_description_length("x" * 300, "en", "faq")
+    assert not seo.PROBLEMS
+    seo.check_description_length("short", "en", "faq")
+    assert seo.PROBLEMS and "DESC_CAP_PENDING" in seo.PROBLEMS[0]
+    seo.PROBLEMS.clear()
+    # Entities count as one character.
+    seo.check_description_length("&amp;" * seo.DESC_CAP, "en", "grants")
+    assert not seo.PROBLEMS
+
+
 def test_seo_block_og_type_defaults_website():
     block = seo.build_seo_block("people", "en", "T", "D")
     assert 'og:type" content="website"' in block
@@ -432,12 +466,15 @@ def test_main_writes_and_is_then_idempotent(tmp_path, monkeypatch):
         '<link rel="stylesheet" href="assets/css/site.css">'
         '</head><body></body></html>'
     )
-    _write_page(tmp_path, "people.html", page)
+    # privacy, not people: people is still in DESC_CAP_PENDING, and a short
+    # description on a pending page is reported as a stale exemption.
+    _write_page(tmp_path, "privacy.html", page)
     monkeypatch.setattr(seo, "ROOT", tmp_path)
+    seo.PROBLEMS.clear()
 
     monkeypatch.setattr(seo.sys, "argv", ["inject-seo.py"])
     assert seo.main() == 0
-    written = (tmp_path / "people.html").read_text()
+    written = (tmp_path / "privacy.html").read_text()
     assert seo.SENTINEL_BEGIN in written
     assert "assets/css/site.css?v=" in written
 

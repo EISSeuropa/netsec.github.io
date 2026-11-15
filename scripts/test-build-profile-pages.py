@@ -179,6 +179,23 @@ def test_generate_produces_three_locales_per_member():
     assert "profile-aside" in sample and "profile-hero" in sample
 
 
+
+def test_link_preview_tags_are_localised_per_page_locale():
+    """#2183: locale tags, image alt text and a localised title on every
+    profile page, and no em dash in the description."""
+    pages = bpp.generate()
+    for suffix, locale, word in (("", "en_GB", "NetSec directory"),
+                                 (".fr", "fr_FR", "annuaire NetSec"),
+                                 (".de", "de_DE", "NetSec-Verzeichnis")):
+        page = next(v for k, v in pages.items() if k.endswith(f"moritz-weiss{suffix}.html"))
+        assert f'og:locale" content="{locale}"' in page
+        assert page.count('og:locale:alternate') == 2
+        title = page.split('og:title" content="', 1)[1].split('"', 1)[0]
+        assert title.endswith(f" · {word}")
+        assert 'og:image:alt" content="' in page and 'twitter:image:alt" content="' in page
+        desc = page.split('og:description" content="', 1)[1].split('"', 1)[0]
+        assert "—" not in desc
+
 # ── Warm contact intro (#1171 part 1) ──
 
 _INTRO_MEMBER = {
