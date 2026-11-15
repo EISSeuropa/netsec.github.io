@@ -63,7 +63,7 @@ def test_news_image_uses_the_event_card_when_rendered(tmp_path, monkeypatch):
     """#2185: a news item linking to an event page posts with that page's
     card, and with the general card while the card is not rendered."""
     import _event_cards
-    card = tmp_path / "essc-2027.png"
+    card = tmp_path / "essc-2027.jpg"
     monkeypatch.setattr(_event_cards, "card_path", lambda page: card)
     link = "https://netsec-cost.eu/essc-2027.html#call"
     assert sp._news_image(link)["image"] == sp.SITE_OG

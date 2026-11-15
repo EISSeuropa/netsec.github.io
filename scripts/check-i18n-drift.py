@@ -50,6 +50,13 @@ _CACHE_BUST_RE = re.compile(
     r'(assets/(?:css|js)/[A-Za-z0-9._-]+\.(?:css|js))\?v=[0-9a-f]+'
 )
 
+# The event cards' ?v= stamp (assets/og/events/<page>.jpg?v=ab12cd34) is a
+# hash of what the card shows, written by inject-seo.py into all three locales
+# at once. A date moved by the Indico sync changes it, and without this the
+# sync's own PR would flag every FR/DE event page as stale with nothing to
+# translate, the shape of the cache-bust queries above.
+_EVENT_CARD_RE = re.compile(r'(assets/og/events/[a-z0-9-]+\.jpg)\?v=[0-9a-f]+')
+
 # Field-guide facepiles (#801) are rows of directory member headshots baked
 # into the Glossary's concept entries by scripts/build-field-guide.py. They
 # are data-driven and language-agnostic (the same faces in all three
@@ -102,15 +109,16 @@ def _analytics_block() -> str:
 
 
 def sha1(path: Path) -> str:
-    """SHA-1 of a file's content, with asset cache-bust queries, the
-    visitor counter's tag, data-driven field-guide facepiles, the Network
-    Map's generated list region and the cost.eu stat digits normalised
-    out. We hash the markup (not a parsed DOM) because we want any meaningful edit, markup or
-    attribute changes included, flagged for review. The five exceptions
-    are deliberate, and all five are language-agnostic markup a generator
+    """SHA-1 of a file's content, with asset cache-bust queries, the event
+    cards' version stamps, the visitor counter's tag, data-driven
+    field-guide facepiles, the Network Map's generated list region and the
+    cost.eu stat digits normalised out. We hash the markup (not a parsed DOM) because we want any meaningful edit, markup or
+    attribute changes included, flagged for review. The six exceptions
+    are deliberate, and all six are language-agnostic markup a generator
     writes rather than translatable prose."""
     text = path.read_text(encoding="utf-8")
     text = _CACHE_BUST_RE.sub(r"\1", text)
+    text = _EVENT_CARD_RE.sub(r"\1", text)
     block = _analytics_block()
     if block:
         text = text.replace(block, "")

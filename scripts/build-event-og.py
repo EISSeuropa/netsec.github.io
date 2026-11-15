@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the social card of each event page (assets/og/events/<page>.png).
+"""Render the social card of each event page (assets/og/events/<page>.jpg).
 
 One 1200x630 card per page that an event in data/events.json names as its
 url: the ESSC pages, the policy workshop pages and the Training School
@@ -72,6 +72,10 @@ CARD_HTML = string.Template("""<!DOCTYPE html>
   h1 { margin-top:24px; font-family:'Lexend', sans-serif; font-weight:700; font-size:80px; line-height:1.06;
     letter-spacing:-.03em; max-width:1064px; }
   h1.long { font-size:68px; }
+  /* Fail-safe behind _event_cards.shorten: whatever the text, the title
+     stops at two lines and each fact at one, so nothing reaches the footer. */
+  h1 { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
+  .fact > span, .fact > b { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
   .facts { margin-top:34px; display:flex; flex-direction:column; gap:14px; }
   .fact { display:flex; align-items:center; gap:16px; font-size:29px; line-height:1.3; color:#2b3850; }
   .fact b { font-weight:600; color:#0b1220; }

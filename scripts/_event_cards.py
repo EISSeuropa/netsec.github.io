@@ -12,6 +12,7 @@ and the 2027 Training School), the card shows the latest one.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -59,25 +60,61 @@ def card_events(events: list[dict] | None = None) -> dict[str, dict]:
 
 
 def card_path(page: str) -> Path:
-    return ROOT / CARD_DIR / f"{page}.png"
+    return ROOT / CARD_DIR / f"{page}.jpg"
 
 
-def card_url(page: str) -> str:
-    return f"{SITE}/{CARD_DIR}/{page}.png"
+def card_version(page: str, ev: dict) -> str:
+    """A short hash of everything the card shows, and of the builder that
+    draws it. Platforms cache a preview image by URL for days, so a card
+    redrawn for a moved date or a new template needs a new URL to be fetched
+    again."""
+    institution, place = venue(ev)
+    template = (ROOT / "scripts" / "build-event-og.py").read_bytes()
+    text = json.dumps([page, eyebrow(ev), heading(ev), (ev.get("displayDate") or {}).get("en", ""),
+                       institution, place], ensure_ascii=False)
+    return hashlib.sha256(text.encode("utf-8") + template).hexdigest()[:8]
+
+
+def card_url(page: str, ev: dict) -> str:
+    return f"{SITE}/{CARD_DIR}/{page}.jpg?v={card_version(page, ev)}"
 
 
 def full_name(ev: dict) -> str:
     return (ev.get("jsonld") or {}).get("name") or ev.get("summary", "")
 
 
+# The longest title the card sets on two lines at its smaller size. The
+# longest today is "Great Power Politics and the Future of Alliances" (48).
+HEADING_MAX = 56
+# Where a long title can be cut without losing its sense, in the order they
+# are tried. A cut leaving fewer than HEADING_MIN characters is not taken.
+NATURAL_BREAKS = (":", " – ", " — ", " | ", " (")
+HEADING_MIN = 12
+
+
+def shorten(title: str, limit: int = HEADING_MAX) -> str:
+    """A title that fits the card. Over the limit, it is cut at its first
+    natural break ("Security Beyond the State: Managing ..." keeps "Security
+    Beyond the State"). With no break in reach, it is cut at the last word
+    that fits and ends with an ellipsis. The full name stays in the alt text."""
+    if len(title) <= limit:
+        return title
+    cuts = [title.find(b) for b in NATURAL_BREAKS]
+    cuts = [c for c in cuts if HEADING_MIN <= c <= limit]
+    if cuts:
+        return title[:min(cuts)].rstrip()
+    return title[:limit - 1].rsplit(" ", 1)[0].rstrip(",;:-–—") + "…"
+
+
 def heading(ev: dict) -> str:
     """The card's title. A policy workshop is named "NetSec Policy Workshop:
     <title>", and the eyebrow already says Policy Workshop, so the card keeps
-    the part after the colon."""
+    the part after the first colon. A title too long for two lines is
+    shortened."""
     name = full_name(ev)
     if ev.get("eventType") == "policy-workshop" and ":" in name:
-        return name.split(":", 1)[1].strip()
-    return name
+        name = name.split(":", 1)[1].strip()
+    return shorten(name)
 
 
 def eyebrow(ev: dict) -> str:

@@ -13,6 +13,7 @@ inject() idempotency path are also covered.
 import hashlib
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -326,8 +327,8 @@ def test_seo_block_event_page_uses_its_card():
     """#2185: an event page unfurls as its own card, with alt text in the
     page's locale. Other pages keep the general card."""
     block = seo.build_seo_block("essc-2027", "de", "T", "D")
-    assert 'og:image" content="https://netsec-cost.eu/assets/og/events/essc-2027.png"' in block
-    assert 'twitter:image" content="https://netsec-cost.eu/assets/og/events/essc-2027.png"' in block
+    assert re.search(r'og:image" content="https://netsec-cost\.eu/assets/og/events/essc-2027\.jpg\?v=[0-9a-f]{8}"', block)
+    assert re.search(r'twitter:image" content="https://netsec-cost\.eu/assets/og/events/essc-2027\.jpg\?v=[0-9a-f]{8}"', block)
     assert 'og:image:alt" content="Karte zur Veranstaltung: European Security Studies Conference 2027' in block
     assert 'twitter:image:alt" content="Karte zur Veranstaltung: ' in block
     assert f'og:image" content="{seo.OG_IMAGE}"' in seo.build_seo_block("grants", "en", "T", "D")
@@ -335,7 +336,7 @@ def test_seo_block_event_page_uses_its_card():
 
 def test_event_node_image_is_the_card_only_for_the_event_the_page_shows():
     by_uid = {ev["uid"]: ev for ev in seo._EVENTS["events"]}
-    assert seo._event_image(by_uid["summer-school-2027@netsec-cost.eu"]).endswith("/assets/og/events/summer-school.png")
+    assert seo._event_image(by_uid["summer-school-2027@netsec-cost.eu"]).split("?")[0].endswith("/assets/og/events/summer-school.jpg")
     assert seo._event_image(by_uid["summer-school-2026@netsec-cost.eu"]) == seo.OG_IMAGE
 
 

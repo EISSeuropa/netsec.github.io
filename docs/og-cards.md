@@ -112,7 +112,7 @@ The separate **directory** card (`assets/images/og-image-people.png`, the
 ## Event-page cards
 
 Each page that an event in `data/events.json` names as its `url` has its own
-card at `assets/og/events/<page>.png` (#2185): today `essc-2026`, `essc-2027`,
+card at `assets/og/events/<page>.jpg` (#2185): today `essc-2026`, `essc-2027`,
 `policy-workshop-2026`, `policy-workshop-2027` and `summer-school`. The card
 shows the event type, the event's name, its English `displayDate` and its
 venue. A page with more than one event (the Training School page holds the
@@ -129,7 +129,7 @@ Three scripts read it, so they cannot disagree:
   `image` of that event's JSON-LD `Event` node.
 - `social-post.py` attaches the card to a news post that links to the page.
 
-The cards are not committed (`assets/og/events/*.png` is gitignored).
+The cards are not committed (`assets/og/events/*.jpg` is gitignored).
 `pages-deploy.yml` renders them on every deploy and refuses to publish if the
 count differs from the number of event pages. `social-bluesky.yml` renders
 them before posting, with `continue-on-error`, so a Chrome failure posts the
@@ -139,6 +139,26 @@ the card on the next deploy with nothing to run by hand.
 The cards are in English only, like the general and directory cards, and carry
 no application deadline: a platform caches a preview for days, and a passed
 deadline would stay on it.
+
+A title longer than 56 characters (`HEADING_MAX`) is cut at its first natural
+break, a colon or a spaced dash, provided at least 12 characters stay: "Security
+Beyond the State: Managing and Countering ..." becomes "Security Beyond the
+State". With no break in reach, it is cut at the last whole word that fits and
+ends with an ellipsis. The alt text keeps the full name. Behind that, the
+card's CSS stops the title at two lines and each fact line at one, so no text
+reaches the footer whatever the data holds.
+
+The cards are JPEGs at quality 88, about 70 KB each against 280 KB as PNG.
+WhatsApp is widely reported to drop preview images over 300 KB.
+
+The page names the card as `<page>.jpg?v=<hash>`. The hash covers what the
+card shows and the builder's own source, so a moved date or a template change
+gives the card a new URL and platforms fetch it again instead of serving their
+cached copy for days. `inject-seo.py` writes the stamp, so an edit to
+`build-event-og.py` needs `python3 scripts/inject-seo.py --seo-only`
+afterwards, and the SEO check fails until it is run. The Indico sync already
+runs it. `check-i18n-drift.py` ignores the stamp, since it changes in all
+three locales at once.
 
 ```bash
 python3 scripts/build-event-og.py              # every event page

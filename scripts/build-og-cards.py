@@ -343,6 +343,7 @@ def card_markup(inputs: dict) -> str:
 # precisely that, identically on macOS and the Linux CI runner.
 # --------------------------------------------------------------------------
 WIDTH, HEIGHT = 1200, 630
+JPEG_QUALITY = 88
 
 
 def _recvn(sock, n: int) -> bytes:
@@ -536,8 +537,12 @@ def _capture_cards(chrome: str, jobs: list[tuple[str, Path]]) -> None:
                     {"expression": _READY_JS, "awaitPromise": True, "returnByValue": True},
                     session=sid)
             time.sleep(0.1)  # let an SVG flag settle its first paint
+            # A .jpg target is captured as JPEG: the event cards (#2185) are
+            # a third of their PNG size, under WhatsApp's reported 300 KB
+            # preview limit. The member cards stay PNG.
+            fmt = {"format": "jpeg", "quality": JPEG_QUALITY} if out.suffix == ".jpg" else {"format": "png"}
             shot = cdp.cmd("Page.captureScreenshot", {
-                "format": "png",
+                **fmt,
                 "clip": {"x": 0, "y": 0, "width": WIDTH, "height": HEIGHT, "scale": 1},
                 "captureBeyondViewport": True}, session=sid)
             out.write_bytes(base64.b64decode(shot["data"]))

@@ -260,7 +260,7 @@ def build_seo_block(base: str, lang: str, title: str, desc: str) -> str:
     # build-event-og.py (#2185). The alt text follows the page's locale.
     card_event = _event_cards.card_events(_EVENTS["events"]).get(base)
     if card_event:
-        og_image = _event_cards.card_url(base)
+        og_image = _event_cards.card_url(base, card_event)
         og_image_alt = _event_cards.card_alt(card_event, lang)
 
     lines = [
@@ -617,7 +617,7 @@ def _event_image(ev: dict) -> str:
     card (the 2026 Training School shares a page with the 2027 one)."""
     page = _event_cards.page_of(ev)
     if _event_cards.card_events(_EVENTS["events"]).get(page) is ev:
-        return _event_cards.card_url(page)
+        return _event_cards.card_url(page, ev)
     return OG_IMAGE
 
 
