@@ -1,0 +1,222 @@
+# Domains the link checker skips, each with all its subdomains.
+#
+# Read by scripts/check-links.sh into SKIP_DOMAIN_SUFFIXES. One domain per
+# line, lower case, no scheme or path. A `#` starts a comment. At most 200
+# entries: the checker stops with an error on more, on a duplicate, or on
+# a line that is not a bare domain.
+#
+# These are well-known sites that refuse automated requests: bot
+# management (Cloudflare, Akamai, DataDome), a login wall, or a
+# consent or paywall redirect. They open in a browser and answer 403,
+# 999 or a redirect loop to the checker. The list is limited to sites an
+# EISS page is likely to cite: security studies publishers and
+# repositories, think tanks, international-affairs media, EU and
+# international institutions, and the travel and meeting sites used on
+# conference pages. The same list is kept in the EISS site repository
+# (EISSeuropa/EISSeuropa.github.io#2168), so a change to one goes to the
+# other.
+#
+# Curated on 16 November 2026. Entries were not each probed
+# from a GitHub runner. A link to a domain here is never checked, so a
+# dead link on it goes unnoticed. To check a domain again, delete its
+# line. Hosts and domains skipped for a reason seen in this repository's
+# own CI, with their evidence, stay in SKIP_HOSTS and SKIP_DOMAIN_SUFFIXES
+# in scripts/check-links.sh.
+
+# Social and video platforms
+linkedin.com
+x.com
+twitter.com
+facebook.com
+instagram.com
+threads.net
+tiktok.com
+reddit.com
+medium.com
+
+# Academic publishers and journal platforms
+sciencedirect.com
+elsevier.com
+springer.com
+springernature.com
+nature.com
+wiley.com
+sagepub.com
+cambridge.org
+oup.com
+jstor.org
+muse.jhu.edu
+tandfonline.com
+taylorfrancis.com
+routledge.com
+emerald.com
+degruyter.com
+degruyterbrill.com
+brill.com
+bloomsbury.com
+bloomsburycollections.com
+e-elgar.com
+elgaronline.com
+bristoluniversitypress.co.uk
+manchesterhive.com
+manchesteruniversitypress.co.uk
+igi-global.com
+worldscientific.com
+ingentaconnect.com
+annualreviews.org
+journals.uchicago.edu
+direct.mit.edu
+ieeexplore.ieee.org
+dl.acm.org
+mdpi.com
+cairn.info
+cairn-int.info
+
+# Scholarly indexes and repositories
+researchgate.net
+academia.edu
+ssrn.com
+scholar.google.com
+scopus.com
+webofscience.com
+proquest.com
+ebsco.com
+ebscohost.com
+worldcat.org
+
+# Think tanks and policy institutes
+chathamhouse.org
+iiss.org
+rusi.org
+sipri.org
+ecfr.eu
+carnegieendowment.org
+carnegieeurope.eu
+brookings.edu
+rand.org
+csis.org
+cfr.org
+atlanticcouncil.org
+crisisgroup.org
+belfercenter.org
+cnas.org
+stimson.org
+hudson.org
+heritage.org
+gmfus.org
+wilsoncenter.org
+usip.org
+swp-berlin.org
+dgap.org
+ifri.org
+frstrategie.org
+clingendael.org
+egmontinstitute.be
+prio.org
+nupi.no
+fiia.fi
+iai.it
+ispionline.it
+ceps.eu
+bruegel.org
+epc.eu
+friendsofeurope.org
+globsec.org
+icct.nl
+lowyinstitute.org
+aspi.org.au
+cigionline.org
+
+# International-affairs and defence media
+foreignaffairs.com
+foreignpolicy.com
+warontherocks.com
+lawfaremedia.org
+lawfareblog.com
+justsecurity.org
+thediplomat.com
+nationalinterest.org
+project-syndicate.org
+defensenews.com
+defenseone.com
+breakingdefense.com
+janes.com
+
+# News
+reuters.com
+bloomberg.com
+ft.com
+economist.com
+wsj.com
+nytimes.com
+washingtonpost.com
+theatlantic.com
+newyorker.com
+politico.eu
+politico.com
+euractiv.com
+euobserver.com
+lemonde.fr
+lefigaro.fr
+lesechos.fr
+liberation.fr
+faz.net
+sueddeutsche.de
+zeit.de
+spiegel.de
+handelsblatt.com
+nzz.ch
+elpais.com
+corriere.it
+repubblica.it
+
+# EU and international organisations
+europarl.europa.eu
+consilium.europa.eu
+eeas.europa.eu
+eda.europa.eu
+curia.europa.eu
+op.europa.eu
+cordis.europa.eu
+nato.int
+osce.org
+un.org
+coe.int
+oecd.org
+imf.org
+worldbank.org
+
+# National governments
+legifrance.gouv.fr
+state.gov
+defense.gov
+whitehouse.gov
+congress.gov
+
+# Travel and venues (conference practical information)
+bahn.de
+sncf-connect.com
+ryanair.com
+lufthansa.com
+airfrance.fr
+booking.com
+airbnb.com
+expedia.com
+skyscanner.net
+tripadvisor.com
+
+# Events, meetings and forms
+eventbrite.com
+eventbrite.co.uk
+meetup.com
+zoom.us
+teams.microsoft.com
+forms.office.com
+forms.gle
+
+# Online shops linked for books
+amazon.com
+amazon.co.uk
+amazon.de
+amazon.fr
+goodreads.com

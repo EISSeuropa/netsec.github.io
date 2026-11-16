@@ -10,8 +10,10 @@
 #   - manual dispatch from the Actions tab
 #
 # The script is a portable Python-only check that exits non-zero on
-# any broken link. See the script header for the host-skip list
-# (auth-gated URLs are skipped, not failed).
+# any broken link. See the script header for the host-skip lists
+# (auth-gated URLs are skipped, not failed), and
+# scripts/link-check-skip-domains.txt for the well-known sites that
+# refuse automated requests.
 #
 # This workflow's first run was at the launch-QA pass in May 2026
 # (see docs/launch-qa-2026.md).
@@ -22,6 +24,7 @@ on:
     paths:
       - '*.html'
       - 'scripts/check-links.sh'
+      - 'scripts/link-check-skip-domains.txt'
       - '.github/workflows/launch-qa-link-check.yml'
   schedule:
     # Weekly on Mondays at 06:00 UTC — picks up external link rot

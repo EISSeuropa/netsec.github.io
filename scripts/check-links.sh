@@ -124,6 +124,20 @@ SKIP_DOMAIN_SUFFIXES = {
                                 # About pages; confirmed reachable 2026-10-07.
 }
 
+# Plus the curated list of well-known sites that refuse automated requests,
+# shared with the EISS site (EISSeuropa/EISSeuropa.github.io#2168).
+def load_skip_domains(path="scripts/link-check-skip-domains.txt"):
+    with open(path, encoding="utf-8") as fh:
+        lines = [line.split("#", 1)[0].strip() for line in fh]
+    lines = [line for line in lines if line]
+    bad = [d for d in lines if not re.fullmatch(r"[a-z0-9-]+(\.[a-z0-9-]+)+", d)]
+    if bad or len(lines) != len(set(lines)) or len(lines) > 200:
+        sys.exit(f"error: {path} needs at most 200 unique bare lower-case "
+                 f"domains (bad: {bad}, total: {len(lines)})")
+    return set(lines)
+
+SKIP_DOMAIN_SUFFIXES |= load_skip_domains()
+
 def host_skipped(hostname):
     """True when a hostname is on the exact skip list or under a skipped
     domain (so su.se covers www.su.se and every department subdomain)."""
