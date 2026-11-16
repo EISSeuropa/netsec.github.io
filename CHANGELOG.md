@@ -195,6 +195,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The Directory's Working Group filter and the Network Map's Working Group hubs list the same members with a profile. Two members who joined on 13 November were on the map's WG hubs and missing from the Directory's WG filter, and the Directory's Map button now gives the count for a Working Group filter (#2074).
 - The About page's Management Committee grid lists 30 countries, matching its own count, in all three locales. The Ukraine card is removed, as cost.eu has not listed a Ukrainian representative since 19 October (#2045).
 - The Events page footer no longer jumps down when the event cards load at tablet and desktop widths. The layout shift measured 0.13 to 0.21 and is now 0 from the footer (#2107).
 - The Publications page and the Working Group cards give December 2026 for the first outputs, in all three locales. They gave October 2026, which the Publications page's own introduction already contradicted (#2186).

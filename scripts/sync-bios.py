@@ -2059,31 +2059,66 @@ def render_pr_title(diff: dict) -> str:
     return "data: " + " + ".join(parts)
 
 
+# suggest_theme() thresholds (#2090). A word votes for a theme only when at
+# least THEME_WORD_MIN_USES of that theme's keywords contain it, it appears in
+# no more than THEME_WORD_MAX_THEMES themes, and at least THEME_WORD_MIN_SHARE
+# of the keywords that contain it sit in that theme. Measured leave-one-out on
+# the 332 mapped keywords in November 2026: 94 placed right, 20 wrong, 218
+# left for a human, against 155 right and 168 wrong for the string-ratio rule
+# it replaced.
+THEME_WORD_MIN_USES = 2
+THEME_WORD_MAX_THEMES = 3
+THEME_WORD_MIN_SHARE = 0.75
+THEME_WORD = re.compile(r"[a-z]{4,}")  # skip short words like "of"
+
+
 def suggest_theme(keyword: str, theme_of: dict[str, str]) -> tuple[str, str] | None:
     """Best-guess research theme for an unthemed keyword.
 
-    Compares the keyword against every keyword already mapped to a theme and
-    returns ``(theme, nearest_keyword)`` for the closest match, or ``None``
-    when nothing is close. A shared significant word ("cyber", "maritime")
-    counts for a lot; otherwise it falls back to overall string similarity.
+    Returns ``(theme, nearest_keyword)`` or ``None``. Only shared words count,
+    and only words that recur within one theme: "cyber" in five Cyber keywords
+    is evidence, "security" spread over a dozen themes is not, and neither is
+    "power" in a single keyword. Each qualifying word votes for its theme with
+    the number of that theme's keywords using it. A tie, no qualifying word, or
+    a keyword the long/parenthetical warning would flag returns ``None``, which
+    leaves the keyword unthemed so check-data-shape.py holds the PR for a
+    human. String similarity is not used: "Formal verification" resembles
+    "unification" and has nothing to do with peace mediation.
 
     place_unthemed_keywords() writes this pick into ``keyword-aliases.json``
     and the PR body lists every placement, so a wrong guess is visible to the
     maintainer who merges the auto-PR by hand."""
     kw = (keyword or "").lower().strip()
-    if not kw or not theme_of:
+    if not kw or not theme_of or len(kw) > 40 or "(" in kw or ")" in kw:
         return None
-    kw_tokens = set(re.findall(r"[a-z]{4,}", kw))  # skip short words like "of"
-    best_score = 0.0
-    best: tuple[str, str] | None = None
+    uses: dict[str, dict[str, int]] = {}
     for themed, theme in theme_of.items():
-        score = difflib.SequenceMatcher(None, kw, themed).ratio()
-        shared = kw_tokens & set(re.findall(r"[a-z]{4,}", themed))
-        if shared:
-            score = max(score, 0.55 + 0.12 * len(shared))
-        if score > best_score:
-            best_score, best = score, (theme, themed)
-    return best if best_score >= 0.5 else None
+        for word in set(THEME_WORD.findall(themed)):
+            per_theme = uses.setdefault(word, {})
+            per_theme[theme] = per_theme.get(theme, 0) + 1
+    votes: dict[str, int] = {}
+    voters: dict[str, set[str]] = {}
+    for word in set(THEME_WORD.findall(kw)):
+        per_theme = uses.get(word)
+        if not per_theme or len(per_theme) > THEME_WORD_MAX_THEMES:
+            continue
+        theme, count = max(per_theme.items(), key=lambda item: (item[1], item[0]))
+        if count < THEME_WORD_MIN_USES or count / sum(per_theme.values()) < THEME_WORD_MIN_SHARE:
+            continue
+        votes[theme] = votes.get(theme, 0) + count
+        voters.setdefault(theme, set()).add(word)
+    if not votes:
+        return None
+    ranked = sorted(votes.items(), key=lambda item: -item[1])
+    if len(ranked) > 1 and ranked[0][1] == ranked[1][1]:
+        return None
+    theme = ranked[0][0]
+    words = voters[theme]
+    nearest = max(
+        (themed for themed, t in theme_of.items() if t == theme),
+        key=lambda themed: (len(words & set(THEME_WORD.findall(themed))), -len(themed), themed),
+    )
+    return theme, nearest
 
 
 def place_unthemed_keywords(uncategorised) -> dict[str, tuple[str, str]]:
@@ -2252,7 +2287,8 @@ def render_pr_body_overview(
             lines.append("")
             lines.append(
                 "The sync added these to `themes` in `data/keyword-aliases.json`, "
-                "each under the theme of its nearest mapped keyword. Confirm each "
+                "each under the theme whose keywords most often share a word with it. "
+                "Confirm each "
                 "placement or move the keyword before merging."
             )
             lines.append("")

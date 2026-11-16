@@ -856,14 +856,15 @@ from the directory entirely.
 
 ### When a keyword reaches no research theme
 
-`sync-bios.py` places a new unthemed keyword itself: `suggest_theme` finds
-the nearest keyword already in the taxonomy, and the sync appends the new one
-to that theme's array in `data/keyword-aliases.json`. The sync PR lists each
-placement under *Review flags → Keywords placed in a theme by the sync*, and
-moving a wrong one is a one-line edit on the PR branch before merging. The
-guess leans on shared words, so "Quantum key distribution policy" lands in
-Foreign policy and diplomacy through "policy". A keyword with nothing close
-stays unthemed, and `scripts/check-data-shape.py` fails the *data shape*
+`sync-bios.py` places a new unthemed keyword itself when it can:
+`suggest_theme` looks for a word the keyword shares with at least two keywords
+of one theme, and the sync appends the new one to that theme's array in
+`data/keyword-aliases.json`. A word spread across themes ("security",
+"policy") or found in a single keyword does not count, and neither does
+spelling alone (#2090). The sync PR lists each placement under *Review flags →
+Keywords placed in a theme by the sync*, and moving a wrong one is a one-line
+edit on the PR branch before merging. A keyword with no such word, or one long
+or parenthetical enough to draw the sync's warning, stays unthemed, and `scripts/check-data-shape.py` fails the *data shape*
 check on any PR while one remains (#1955), so that sync PR cannot merge
 until someone places it. The sync runs that check itself before opening the PR
 (`scripts/prepend-data-shape-verdict.sh`), so a failure opens the PR body
