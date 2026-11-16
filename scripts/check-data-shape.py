@@ -143,7 +143,31 @@ def _themed_keywords() -> set:
     }
 
 
-def check_bios(data, themed: set | None = None) -> list:
+def unthemed_keywords(data, themed: set | None = None) -> dict:
+    """``{keyword: [member names]}`` for every canonical keyword with no
+    research theme. Such a keyword leaves its member out of that interest's
+    theme filter. Until #1955 sync-bios.py only flagged it in the run that
+    added it, so it went quiet after one day. It was then an error that held
+    the bios sync PR, and with it every new member's profile, until someone
+    placed it. It is now a warning: the monthly keyword-themes workflow opens
+    one issue listing them all (scripts/report-unthemed-keywords.py). Checked
+    against the curated taxonomy rather than bios.json's derived
+    keyword_theme_map, so placing the keyword clears it at once."""
+    if themed is None:
+        themed = _themed_keywords()
+    found: dict = {}
+    if not isinstance(data, dict):
+        return found
+    for m in data.get("members") or []:
+        if not isinstance(m, dict):
+            continue
+        for kw in m.get("canonical_keywords") or []:
+            if isinstance(kw, str) and kw.strip().lower() not in themed:
+                found.setdefault(kw, []).append(m.get("name", "?"))
+    return dict(sorted(found.items(), key=lambda e: e[0].lower()))
+
+
+def check_bios(data) -> list:
     errs: list = []
     if not isinstance(data, dict):
         return ["bios: top level must be an object"]
@@ -176,25 +200,6 @@ def check_bios(data, themed: set | None = None) -> list:
             errs.append(
                 f"{ctx}: 'stsm_hosting' must be 'yes' or 'ask' (or absent), got {sh!r}"
             )
-    # A canonical keyword with no research theme leaves its member out of
-    # that interest's theme filter. sync-bios.py only flags it in the run
-    # that adds it, so it went quiet after one day (#1955). Checked against
-    # the curated taxonomy rather than bios.json's derived keyword_theme_map,
-    # so placing the keyword passes at once and the next sync derives the rest.
-    if themed is None:
-        themed = _themed_keywords()
-    unthemed: dict = {}
-    for m in data["members"]:
-        if not isinstance(m, dict):
-            continue
-        for kw in m.get("canonical_keywords") or []:
-            if isinstance(kw, str) and kw.strip().lower() not in themed:
-                unthemed.setdefault(kw, []).append(m.get("name", "?"))
-    for kw, names in sorted(unthemed.items(), key=lambda e: e[0].lower()):
-        errs.append(
-            f"bios: keyword {kw!r} ({', '.join(names)}) has no research theme. "
-            "Place it under `themes` in data/keyword-aliases.json."
-        )
     # Serialised the way sync-bios.py writes the file, so the count matches
     # what the Directory downloads.
     text = json.dumps(data, indent=2, ensure_ascii=False) + "\n"
@@ -522,6 +527,10 @@ def main(argv: list) -> int:
                 print(f"    {e}")
         else:
             print(f"✓ {rel}")
+        if rel == "data/bios.json":
+            for kw, names in unthemed_keywords(data).items():
+                print(f"⚠ bios: keyword {kw!r} ({', '.join(names)}) has no research "
+                      "theme yet. Not a failure: the monthly keyword-themes issue lists it.")
     return 1 if failed else 0
 
 

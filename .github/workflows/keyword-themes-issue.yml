@@ -1,0 +1,70 @@
+name: Keyword themes issue
+
+# A member keyword with no research theme leaves that member out of the
+# theme's filter in the Directory. sync-bios.py places a new keyword only
+# when the evidence is strong (#2090), and the data-shape check warns about
+# the rest without holding the bios sync PR. On the first of each month this
+# job lists every unplaced keyword in one `help wanted` issue, with the
+# members using it and suggested themes, for a volunteer to place in one PR.
+#
+# One issue at a time: an open one is refreshed in place (title and body)
+# with a comment, so its assignee is notified. It is closed once no keyword
+# is left. The milestone is the open one with the earliest due date
+# (CLAUDE.md §10), set again on each refresh.
+
+on:
+  schedule:
+    - cron: '17 8 1 * *'     # the 1st of each month, 08:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: keyword-themes-issue
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+
+      - name: Open, refresh or close the issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          marker="research keywords to place in themes"
+          count=$(python3 scripts/report-unthemed-keywords.py body.md)
+          existing=$(gh issue list --repo "$REPO" --state open --label "help wanted" \
+            --search "\"${marker}\" in:title" --json number --jq '.[0].number // empty')
+
+          if [ "$count" -eq 0 ]; then
+            if [ -n "$existing" ]; then
+              gh issue close "$existing" --repo "$REPO" --reason completed \
+                --comment "Every member keyword now has a research theme."
+            fi
+            echo "No unplaced keywords."
+            exit 0
+          fi
+
+          title="${count} ${marker} ($(date -u +'%B %Y'))"
+          milestone=$(gh api "repos/${REPO}/milestones?state=open&sort=due_on&direction=asc&per_page=100" \
+            --jq '[.[] | select(.due_on != null)][0].title // empty')
+          ms_args=()
+          if [ -n "$milestone" ]; then ms_args=(--milestone "$milestone"); fi
+
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" --repo "$REPO" --title "$title" --body-file body.md "${ms_args[@]}"
+            gh issue comment "$existing" --repo "$REPO" \
+              --body "Refreshed for $(date -u +'%B %Y'): ${count} keyword(s) left to place."
+          else
+            gh issue create --repo "$REPO" --title "$title" --body-file body.md \
+              --label "help wanted" "${ms_args[@]}"
+          fi
