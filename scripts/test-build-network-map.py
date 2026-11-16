@@ -75,6 +75,40 @@ def test_slug_promotion_when_later_row_carries_the_bio():
     assert {e["source"] for e in graph["edges"]} == {"ada-lovelace"}
 
 
+def _wg_targets(graph, person_id):
+    return sorted(e["target"] for e in graph["edges"]
+                  if e["source"] == person_id and e["target"].startswith("wg-"))
+
+
+def test_bio_decides_the_wg_hubs_of_a_profile_member():
+    # #2074: a roster row the bio does not list draws no edge, so the map's
+    # WG hubs match the Directory's WG filter for everyone with a profile.
+    roster = _wg(
+        {"number": 1, "name": "One", "members": [{"name": "Dr Ada Lovelace"}]},
+        {"number": 2, "name": "Two", "members": [{"name": "Dr Ada Lovelace"},
+                                                 {"name": "Dr Alan Turing"}]},
+    )
+    bios = {"members": [{"id": "ada-lovelace", "name": "Dr Ada Lovelace", "wgs": [2]}]}
+    graph = build(roster, bios)
+    assert _wg_targets(graph, "ada-lovelace") == ["wg-2"]
+    # A roster member with no bio keeps every roster edge.
+    assert _wg_targets(graph, "p-alan-turing") == ["wg-2"]
+
+
+def test_new_member_with_no_wgs_sits_on_no_hub():
+    roster = _wg({"number": 1, "name": "One", "members": [{"name": "Dr Ada Lovelace"}]})
+    bios = {"members": [{"id": "ada-lovelace", "name": "Prof. Ada Lovelace", "wgs": []}]}
+    assert _wg_targets(build(roster, bios), "ada-lovelace") == []
+
+
+def test_leader_off_the_roster_keeps_the_hub_they_lead():
+    roster = _wg({"number": 1, "name": "One", "members": []},
+                 {"number": 2, "name": "Two", "members": [{"name": "Dr Ada Lovelace"}]})
+    bios = {"members": [{"id": "ada-lovelace", "name": "Dr Ada Lovelace", "wgs": [2],
+                         "wg_leadership": {"lead": [1]}}]}
+    assert _wg_targets(build(roster, bios), "ada-lovelace") == ["wg-1", "wg-2"]
+
+
 def test_deterministic_and_sorted():
     wg = _wg(
         {"number": 2, "name": "Two", "members": [{"name": "Dr Zed Zephyr"}]},

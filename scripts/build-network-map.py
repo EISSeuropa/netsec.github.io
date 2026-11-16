@@ -318,12 +318,14 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
     theme_edge_pairs: set = set()
     if bios is not None:
         by_slug = {p["slug"]: p for p in people.values() if p.get("slug")}
+        key_of = {id(p): k for k, p in people.items()}
         theme_counts: dict[str, int] = {}
         theme_names: dict[str, str] = {}
         for m in bios.get("members", []):
             nm = m.get("name", "")
             key = name_key(nm) or ("", slugify(nm))
             person = by_slug.get(m.get("id")) or people.get(key)
+            pkey = key_of.get(id(person), key)
             if person is None:
                 person = {
                     "id": m.get("id") or f"p-{slugify(nm)}",
@@ -349,13 +351,20 @@ def build(wg: dict, bios: dict | None = None, programme: dict | None = None,
                 person["photo"] = prefer_webp(m["photo"])
             if m.get("mentorship"):
                 person["mentorship"] = sorted(m["mentorship"])
-            # A WG leader or co-leader is not always on the cost.eu roster of
-            # the group they lead, and the Directory lists them under it all
-            # the same, so the bio's groups draw edges too.
+            # A person with a bio sits on exactly the WG hubs the Directory
+            # lists them under: wgs plus any group they lead or co-lead. Their
+            # roster edges are dropped first. sync-cost.py already folds the
+            # cost.eu roster into `wgs`, holding back only a WG the member's
+            # newer form answer removed, so the bio is the reconciled set. A
+            # member who joined since the last cost.eu sync has no `wgs` yet,
+            # and the map used to put them on hubs the Directory's WG filter
+            # left them out of (#2074). A leader missing from the roster of
+            # the group they lead keeps that hub through wg_leadership.
             lead = m.get("wg_leadership") or {}
+            edge_pairs -= {pair for pair in edge_pairs if pair[0] == pkey}
             for number in set(m.get("wgs") or []) | set(lead.get("lead") or []) | set(lead.get("co_lead") or []):
                 if f"wg-{number}" in {n["id"] for n in wg_nodes}:
-                    edge_pairs.add((key, f"wg-{number}"))
+                    edge_pairs.add((pkey, f"wg-{number}"))
             for theme in m.get("themes") or []:
                 t_slug = slugify(theme)
                 theme_names[t_slug] = theme

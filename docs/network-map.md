@@ -141,9 +141,9 @@ photo, mentorship flags, and country when a bio exists, which is what
 lets the renderer draw headshots, mentorship rings, and profile links
 without any further data.
 
-**Edges** are bipartite person-to-hub memberships (person-to-WG from the
-rosters and from each bio's `wgs` and `wg_leadership`, person-to-theme from
-the bio themes) plus person-to-person
+**Edges** are bipartite person-to-hub memberships (person-to-WG from each
+bio's `wgs` and `wg_leadership` for a person with a bio, and from the rosters
+for everyone else, person-to-theme from the bio themes) plus person-to-person
 ESSC co-panel ties matched by `name_key` against the conference
 programmes. The hub form is chosen over pairwise co-membership on
 purpose: pairwise would be a roughly nine-thousand-edge hairball, while
@@ -542,6 +542,13 @@ and four of them (the WG3 leader among them) had no edge to their own hub
 until the builder also read the bio's groups. A search for a person the
 lens does not draw says so and names the lens that does, where it used to
 blame the filters.
+
+For a person with a bio, the bio alone decides their WG hubs, so the map
+with *Only members with a profile* on draws the same people as the
+Directory's WG filter, and the Directory's Map button gives the count for a
+WG filter too (#2074). `sync-cost.py` folds the cost.eu roster into each
+bio's `wgs` every Monday, so a member who joined since the last run sits on
+no hub until then, in both views.
 
 A tile now reports it, and follows the lens (#1651). It counts membership
 of the lens rather than of the current filter, since that is the gap the

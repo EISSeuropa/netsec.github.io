@@ -1538,9 +1538,10 @@
   // Toolbar link to the Network Map, carrying over every filter the map's URL
   // can express (network-map.js applyUrlState). The count only shows when all
   // of them carry over, because only then does the map draw the same people.
-  // The mentorship overlay rings people without narrowing the map, and a WG
-  // hub also draws data/wg.json roster members whose bio lacks that WG (#2074), so
-  // both carry over without a count. The map's theme hub ids strip
+  // The mentorship overlay rings people without narrowing the map, so it
+  // carries over without a count. A WG hub draws a member with a profile
+  // exactly when this filter lists them (build-network-map.py, #2074), so it
+  // keeps the count. The MC role has no hub on the map. The map's theme hub ids strip
   // diacritics and keywordSlug() keeps them, so only an ASCII slug is known
   // to match.
   const mapLinkEl = document.querySelector('[data-directory-map-link]');
@@ -1549,10 +1550,10 @@
     if (!mapLinkEl) return;
     mapLinkEl.hidden = n === 0;
     const q = new URLSearchParams();
-    let exact = !search.value.trim() && activeCountry === 'all' && !activeStsm
-      && !activeRegions.size && !activeMentorship.size && activeWG === 'all';
-    const themes = [...activeKeywords];
     const wgHub = activeWG !== 'all' && activeWG !== 'mc';
+    let exact = !search.value.trim() && activeCountry === 'all' && !activeStsm
+      && !activeRegions.size && !activeMentorship.size && activeWG !== 'mc';
+    const themes = [...activeKeywords];
     if (wgHub) q.set('hubs', activeWG);
     if (themes.length) {
       if (!wgHub && themes.every(t => /^[a-z0-9-]+$/.test(t))) {
