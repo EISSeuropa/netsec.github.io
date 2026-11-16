@@ -18,6 +18,7 @@ BODY.md when it is 0. Stdlib only.
 from __future__ import annotations
 
 import importlib.util
+import json
 import re
 import sys
 from datetime import date
@@ -25,7 +26,6 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
-sys.path.insert(0, str(HERE))
 
 
 def _load(name: str, file: str):
@@ -36,9 +36,22 @@ def _load(name: str, file: str):
 
 
 shape = _load("check_data_shape", "check-data-shape.py")
-sync_bios = _load("sync_bios", "sync-bios.py")
 
 WORD = re.compile(r"[a-z]{4,}")
+
+
+def load_keyword_themes() -> dict[str, str]:
+    """Lower-cased keyword -> theme from the `themes` section of
+    data/keyword-aliases.json, keyed the way sync-bios.py's
+    load_keyword_themes() keys it. Read here rather than imported, since
+    sync-bios.py needs `requests` and this job installs nothing."""
+    doc = json.loads(shape.ALIASES.read_text(encoding="utf-8"))
+    return {
+        kw.strip().lower(): theme
+        for theme, kws in (doc.get("themes") or {}).items()
+        for kw in kws or []
+        if isinstance(kw, str) and kw.strip()
+    }
 
 
 def candidate_themes(keyword: str, theme_of: dict[str, str], limit: int = 2) -> list[tuple[str, str]]:
@@ -106,12 +119,11 @@ def main(argv: list[str]) -> int:
     if len(argv) != 1:
         print(__doc__, file=sys.stderr)
         return 2
-    import json
     data = json.loads((REPO / "data" / "bios.json").read_text(encoding="utf-8"))
     unthemed = shape.unthemed_keywords(data)
     print(len(unthemed))
     if unthemed:
-        body = render_body(unthemed, sync_bios.load_keyword_themes(), date.today())
+        body = render_body(unthemed, load_keyword_themes(), date.today())
         Path(argv[0]).write_text(body, encoding="utf-8")
     return 0
 
