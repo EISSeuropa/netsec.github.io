@@ -4,7 +4,7 @@
     "working_groups": 4,
     "people": 241,
     "people_with_bios": 134,
-    "edges": 710,
+    "edges": 715,
     "themes": 17,
     "panels_matched": 14,
     "panel_edges": 58,
@@ -2320,6 +2320,14 @@
       "target": "wg-2"
     },
     {
+      "source": "carmen-marquez-carrasco",
+      "target": "wg-2"
+    },
+    {
+      "source": "carmen-marquez-carrasco",
+      "target": "wg-3"
+    },
+    {
       "source": "chiara-libiseller",
       "target": "wg-3"
     },
@@ -2586,6 +2594,18 @@
     {
       "source": "mehmet-babacan",
       "target": "wg-2"
+    },
+    {
+      "source": "monika-gabriela-bartoszewicz",
+      "target": "wg-1"
+    },
+    {
+      "source": "monika-gabriela-bartoszewicz",
+      "target": "wg-2"
+    },
+    {
+      "source": "monika-gabriela-bartoszewicz",
+      "target": "wg-3"
     },
     {
       "source": "moritz-weiss",

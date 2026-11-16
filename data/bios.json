@@ -2654,7 +2654,9 @@
       "country_code": "cz",
       "affiliation": "VSB, Technical University of Ostrava",
       "position": "PhD candidate",
-      "roles": [],
+      "roles": [
+        "Management Committee · Czechia"
+      ],
       "wgs": [
         1,
         3
@@ -6309,7 +6311,10 @@
       "roles": [
         "Management Committee · Spain"
       ],
-      "wgs": [],
+      "wgs": [
+        2,
+        3
+      ],
       "mentorship": [
         "mentor"
       ],
@@ -6364,7 +6369,11 @@
       "roles": [
         "Management Committee · Norway"
       ],
-      "wgs": [],
+      "wgs": [
+        1,
+        2,
+        3
+      ],
       "mentorship": [
         "mentor"
       ],
