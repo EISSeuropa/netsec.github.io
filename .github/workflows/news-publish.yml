@@ -136,7 +136,7 @@ jobs:
       - name: Open or update the news PR
         if: steps.publisher.outputs.allowed == 'true'
         id: cpr
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v7 (sha-pinned)
+        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1  # v7 (sha-pinned)
         with:
           # The AUTOPR_TOKEN makes the PR run the required checks. A
           # GITHUB_TOKEN PR starts none of them.
