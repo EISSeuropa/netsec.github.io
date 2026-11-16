@@ -169,6 +169,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- New members appear in the Directory without waiting for their research keywords to be sorted into themes. A keyword the bios sync cannot place no longer holds the sync PR, and a monthly `help wanted` issue lists every such keyword with its members and suggested themes. The sync places a keyword itself only on a word shared with at least two keywords of one theme (#2090).
 - The event-page link preview cards are in French on the French pages and in German on the German pages: the event type, title, date, institution, city, country and EU funding line. A venue too long for one line wraps to a second.
 - The French pages and data name the Belgrade faculty "Faculté des sciences politiques". They had "Faculté de sciences politiques".
 - The 2026 conference's card title in the event listings reads "European Security Studies Conference", as on its own page. It read "European Security Conference".

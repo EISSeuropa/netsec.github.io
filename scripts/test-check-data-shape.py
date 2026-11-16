@@ -125,7 +125,7 @@ def test_bios_valid():
 
 def test_bios_over_the_size_budget_fails(monkeypatch):
     monkeypatch.setattr(mod, "BIOS_GZIP_LIMIT", 10)
-    assert any("Directory budget" in e for e in mod.check_bios(valid_bios(), themed=set()))
+    assert any("Directory budget" in e for e in mod.check_bios(valid_bios()))
 
 
 def test_bios_committed_file_is_within_the_size_budget():
@@ -137,15 +137,16 @@ def test_bios_empty_members():
     assert any("'members' is empty" in e for e in mod.check_bios({"members": []}))
 
 
-def test_bios_unthemed_keyword_flagged():
-    data = {"members": [{"id": "x", "name": "X", "canonical_keywords": ["Deterrence", "Populism"]}]}
-    errs = mod.check_bios(data, themed={"deterrence"})
-    assert len(errs) == 1 and "'Populism' (X) has no research theme" in errs[0]
+def test_bios_unthemed_keyword_is_listed_not_failed():
+    data = {"members": [{"id": "x", "name": "X", "canonical_keywords": ["Deterrence", "Populism"]},
+                        {"id": "y", "name": "Y", "canonical_keywords": ["populism"]}]}
+    assert mod.check_bios(data) == []
+    assert mod.unthemed_keywords(data, themed={"deterrence"}) == {"Populism": ["X"], "populism": ["Y"]}
 
 
 def test_bios_themed_keyword_matches_case_insensitively():
     data = {"members": [{"id": "x", "name": "X", "canonical_keywords": ["deterrence"]}]}
-    assert mod.check_bios(data, themed={"deterrence"}) == []
+    assert mod.unthemed_keywords(data, themed={"deterrence"}) == {}
 
 
 def test_bios_member_missing_name():

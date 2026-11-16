@@ -864,11 +864,22 @@ of one theme, and the sync appends the new one to that theme's array in
 spelling alone (#2090). The sync PR lists each placement under *Review flags →
 Keywords placed in a theme by the sync*, and moving a wrong one is a one-line
 edit on the PR branch before merging. A keyword with no such word, or one long
-or parenthetical enough to draw the sync's warning, stays unthemed, and `scripts/check-data-shape.py` fails the *data shape*
-check on any PR while one remains (#1955), so that sync PR cannot merge
-until someone places it. The sync runs that check itself before opening the PR
-(`scripts/prepend-data-shape-verdict.sh`), so a failure opens the PR body
-as a warning naming the keyword. Such a keyword does not cluster, its card pill renders
+or parenthetical enough to draw the sync's warning, stays unthemed.
+`scripts/check-data-shape.py` names it in a warning and passes, so the sync
+PR merges and the new member appears at once. From #1955 until November 2026
+the check failed instead and held the PR, with every new profile in it, until
+someone placed the keyword.
+
+On the first of each month `.github/workflows/keyword-themes-issue.yml` runs
+`scripts/report-unthemed-keywords.py` and opens one `help wanted` issue
+titled *N research keywords to place in themes*, under the open milestone
+with the earliest due date. It lists each unplaced keyword, its members and
+up to two themes whose keywords share a word with it, with instructions.
+Assign it to a volunteer, who places them in one PR that edits only
+`data/keyword-aliases.json`. That PR needs no builder run, and the next
+nightly bios sync updates the Directory. Next month's run refreshes the same
+issue if keywords remain and closes it when none do. To run it early, start
+the workflow by hand from the Actions tab. Such a keyword does not cluster, its card pill renders
 display-only, and its holder is missing from that filter and from the
 Network Map's themes lens. The August 2026 review (#1701) took the count
 from 29 to zero, and the four mechanisms it used are the ones to reach for

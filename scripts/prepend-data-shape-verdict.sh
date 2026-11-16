@@ -6,7 +6,7 @@
 #
 # The same check runs as a gate once the PR opens, but there it shows only as
 # a red check after the review email has gone out. Running it here puts the
-# reason (an unthemed keyword with no close match, a malformed field) in the
+# reason (a malformed field, a missing required value) in the
 # email itself. Always exits 0: the PR still opens, and the gate on it still
 # blocks the merge. Prints nothing and leaves the body alone when the check
 # passes.

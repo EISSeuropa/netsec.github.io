@@ -2081,9 +2081,10 @@ def suggest_theme(keyword: str, theme_of: dict[str, str]) -> tuple[str, str] | N
     "power" in a single keyword. Each qualifying word votes for its theme with
     the number of that theme's keywords using it. A tie, no qualifying word, or
     a keyword the long/parenthetical warning would flag returns ``None``, which
-    leaves the keyword unthemed so check-data-shape.py holds the PR for a
-    human. String similarity is not used: "Formal verification" resembles
-    "unification" and has nothing to do with peace mediation.
+    leaves the keyword unthemed for the monthly keyword-themes issue
+    (scripts/report-unthemed-keywords.py). String similarity is not used:
+    "Formal verification" resembles "unification" and has nothing to do with
+    peace mediation.
 
     place_unthemed_keywords() writes this pick into ``keyword-aliases.json``
     and the PR body lists every placement, so a wrong guess is visible to the
@@ -2128,8 +2129,8 @@ def place_unthemed_keywords(uncategorised) -> dict[str, tuple[str, str]]:
     (#2006) until someone placed it by hand. The sync now appends the keyword
     to its theme's array in ``keyword-aliases.json`` and returns
     ``{keyword: (theme, nearest)}`` for the PR body to list. A keyword with
-    no close theme stays unthemed, so the gate still holds that PR for a
-    human. Edits the one array line rather than re-dumping the file, which
+    no close theme stays unthemed, the data-shape check warns about it, and
+    the monthly keyword-themes issue lists it for a human. Edits the one array line rather than re-dumping the file, which
     would reflow the hand-kept layout."""
     if not uncategorised or not ALIAS_FILE.exists():
         return {}
@@ -2265,10 +2266,11 @@ def render_pr_body_overview(
             lines.append("")
             lines.append(
                 "These canonical keywords map to no research theme, so the members "
-                "carrying them fall out of the theme filter chips on the directory. "
-                "Add each under `themes` in `data/keyword-aliases.json` to fix it. "
-                "A suggested theme (the closest already-mapped keyword) is shown "
-                "where one is near enough; confirm or override it."
+                "carrying them fall out of the theme filter chips on the directory "
+                "until each is added under `themes` in `data/keyword-aliases.json`. "
+                "This PR can merge with them unplaced: the monthly keyword-themes "
+                "issue lists every unplaced keyword with suggested themes. Placing "
+                "one here instead is also fine."
             )
             lines.append("")
             theme_of_now = load_keyword_themes()
