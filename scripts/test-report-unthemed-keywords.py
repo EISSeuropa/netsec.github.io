@@ -48,3 +48,16 @@ def test_main_writes_a_body_only_when_a_keyword_is_unplaced(tmp_path):
     expected = len(mod.shape.unthemed_keywords(data))
     assert mod.main([str(out)]) == 0
     assert out.exists() == (expected > 0)
+
+
+def test_runs_without_third_party_modules(tmp_path, monkeypatch):
+    # The workflow installs nothing, so the script must load on the standard
+    # library alone (its first run failed importing sync-bios.py).
+    import runpy, sys
+    for name in ("requests", "bs4", "PIL"):
+        monkeypatch.setitem(sys.modules, name, None)
+    monkeypatch.setattr(sys, "argv", ["report", str(tmp_path / "body.md")])
+    try:
+        runpy.run_path(str(HERE / "report-unthemed-keywords.py"), run_name="__main__")
+    except SystemExit as exc:
+        assert exc.code == 0
