@@ -672,8 +672,10 @@ minor / major releases only):
      example).
    - **Members' Wiki** — <https://github.com/EISSeuropa/netsec.github.io/wiki>.
      Public FAQ / Glossary are source-of-truth (the Wiki holds
-     stubs); decisions log should record any structural rewrite
-     or convention change; *Templates & press kit* should match
+     stubs); a structural rewrite or convention change gets a row in
+     the *Decisions log* sheet in the EISS Team shared drive (the
+     Wiki *Decisions* page is the archive up to November 2026);
+     *Templates & press kit* should match
      `/press-kit.html`.
 
    The full version of this checklist, with the cadence reasoning,

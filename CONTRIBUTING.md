@@ -18,7 +18,8 @@ covers most of them.
 If you're a Management Committee representative or a Working Group
 participant, the members' Wiki at
 <https://github.com/EISSeuropa/netsec.github.io/wiki> has the
-internal context (decisions log, meetings index, onboarding).
+internal context (decisions up to November 2026, meetings index,
+onboarding).
 
 ## I want to suggest a new feature or improvement
 
@@ -123,6 +124,6 @@ This file is the front door. Once you're in, the navigation is:
 | [`docs/admin-guide.md`](docs/admin-guide.md) | Day-to-day maintainer procedures |
 | [`docs/roadmap-2026.md`](docs/roadmap-2026.md) | Planning context |
 | [`/roadmap.html`](https://netsec-cost.eu/roadmap.html) | Public roadmap (rendered view of the above) |
-| Wiki | Members' internal context (decisions, meetings, onboarding) |
+| Wiki | Members' internal context (decisions up to November 2026, meetings, onboarding) |
 
 Thanks for being here.
