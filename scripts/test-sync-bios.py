@@ -153,16 +153,38 @@ def test_parse_keywords() -> None:
 
 
 def test_suggest_theme() -> None:
-    """Suggests the theme of the nearest already-mapped keyword, or None."""
+    """Places a keyword only on a word that recurs within one theme, else None.
+    The fixtures are the misplacements reported in #2090."""
     print("\nsuggest_theme():")
+    cyber = "Cyber and emerging technology"
     theme_of = {
-        "cyber security": "Cyber and emerging technology",
-        "maritime security": "Transnational and human security",
+        "cyber security": cyber,
+        "cyber defence": cyber,
+        "cyber diplomacy": cyber,
+        "artificial intelligence": cyber,
+        "emerging technology": cyber,
+        "space security": "Security and defence",
         "national security": "Security and defence",
+        "security studies": "Disciplines, theory and methods",
+        "environmental security": "Climate, energy and environmental security",
+        "unification": "Peace, mediation and reconciliation",
+        "conflict resolution": "Peace, mediation and reconciliation",
+        "resilience": "Crisis management and critical systems resilience",
+        "intelligence studies": "Intelligence, information and influence",
+        "open source intelligence": "Intelligence, information and influence",
+        "human rights and technology": cyber,
+        "human security": "Transnational and human security",
     }
     st = sync_bios.suggest_theme
-    expect("shared word -> theme", (st("Cyber resilience", theme_of) or [None])[0],
-           "Cyber and emerging technology")
+    expect("shared recurring word -> theme", (st("Cyber resilience", theme_of) or [None])[0], cyber)
+    expect("nearest names a keyword with the word", (st("Cyber resilience", theme_of) or [None, None])[1][:5], "cyber")
+    expect("ratio-only match -> None", st("Formal verification", theme_of), None)
+    expect("ratio-only match -> None (2)", st("Biocultural evolution", theme_of), None)
+    expect("word spread over themes -> None", st("Software security", theme_of), None)
+    expect("word in two themes evenly -> None", st("Distributed intelligence", theme_of), None)
+    expect("word in one keyword only -> None", st("Business and human rights", theme_of), None)
+    expect("long or parenthetical -> None",
+           st("Artificial intelligence criminology and open source intelligence (osint)", theme_of), None)
     expect("nothing close -> None", st("Banana bread", theme_of), None)
     expect("empty -> None", st("", theme_of), None)
 
@@ -174,7 +196,7 @@ def test_place_unthemed_keywords() -> None:
     import json, tempfile
     original = (
         '{\n  "acronyms": ["EU"],\n  "themes": {\n'
-        '    "Cyber and emerging technology": ["Cyber security"],\n'
+        '    "Cyber and emerging technology": ["Cyber security", "Cyber defence"],\n'
         '    "Security and defence": ["National security"]\n  },\n'
         '  "regions": ["Europe"]\n}\n'
     )
@@ -192,7 +214,8 @@ def test_place_unthemed_keywords() -> None:
            "Cyber and emerging technology")
     expect("far keyword left alone", "Banana bread" in placed, False)
     expect("written into the theme",
-           doc["themes"]["Cyber and emerging technology"], ["Cyber security", "Cyber resilience"])
+           doc["themes"]["Cyber and emerging technology"],
+           ["Cyber security", "Cyber defence", "Cyber resilience"])
     expect("other theme untouched", doc["themes"]["Security and defence"], ["National security"])
     expect("layout kept", text.count("\n"), original.count("\n"))
     expect("nothing to place -> {}", sync_bios.place_unthemed_keywords(set()), {})
