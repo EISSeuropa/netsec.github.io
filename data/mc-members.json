@@ -52,6 +52,12 @@
       "country_code": "cy"
     },
     {
+      "name": "Mr Martin Haváček",
+      "country": "Czechia",
+      "country_code": "cz",
+      "slug": "martin-havacek"
+    },
+    {
       "name": "Prof Olivier Schmitt",
       "country": "Denmark",
       "country_code": "dk",
