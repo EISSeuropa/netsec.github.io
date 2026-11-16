@@ -109,7 +109,7 @@ Revisit this stance if either of these happens:
 
 At that point, weigh a small shared repo (a git submodule or a published
 package) against the coordination cost, and record the decision in the
-Wiki decisions log.
+*Decisions log* sheet in the EISS Team shared drive.
 
 ## Indico sync alignment
 

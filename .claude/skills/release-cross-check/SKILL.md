@@ -125,14 +125,16 @@ issue (rule §3) and reference it from the surface itself.
 
 - The Wiki at <https://github.com/EISSeuropa/netsec.github.io/wiki>
   holds glossary, FAQ stubs, onboarding for new MC reps, meeting
-  notes, decisions log, templates & press-kit page.
+  notes, the decisions archive (up to November 2026), templates &
+  press-kit page.
 - The public FAQ at `/faq.html` and Glossary at `/glossary.html`
   are the source of truth; the Wiki pages of the same name are
   short stubs pointing at them. **Don't drift the stubs** — if
   the public pages change, leave the stubs alone (they only
   link).
-- *Decisions log* — did anything in this release warrant a brief
-  decision-log entry? (Format choices, structural rewrites,
+- *Decisions log* — did anything in this release warrant a row in
+  the *Decisions log* sheet in the EISS Team shared drive (CLAUDE.md
+  §11)? (Format choices, structural rewrites,
   branch-protection changes are typical examples.)
 - *Templates & press kit* — does the public press kit `/press-kit.html`
   match the Wiki copy-paste boilerplate?

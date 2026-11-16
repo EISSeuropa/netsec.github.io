@@ -272,8 +272,8 @@ the text both use.
 ## 7. Prose voice (em dashes and AI patterns)
 
 These apply to every piece of prose I author in this project:
-the public site, the CHANGELOG, PR descriptions, the Wiki
-decisions log, the documentation pack body text, multi-paragraph
+the public site, the CHANGELOG, PR descriptions, the decisions
+log, the documentation pack body text, multi-paragraph
 code comments. (One-line `# label` code comments stay flexible.)
 
 **No em dashes.** Use commas, parentheses, full stops, or
@@ -361,7 +361,7 @@ question rather than a verdict, since some are real cause
 ones defending a choice no reader challenged. Narrower scope than
 the rest of §7: this one covers user-facing copy (site pages, UI
 text, error messages, the documentation pack body) and leaves
-commit messages, PR bodies, the CHANGELOG, the Wiki decisions log,
+commit messages, PR bodies, the CHANGELOG, the decisions log,
 and code comments alone, because in those the reasoning is the
 point.
 
@@ -425,13 +425,19 @@ different cadence for staying current.
    `bios-setup.md` for bios-form changes, the Wiki *How-tos*
    page when the matching public surface changes.
 
-2. **Wiki *Decisions* log when a structural decision lands.**
+2. **Decisions log when a structural decision lands.**
    "Structural" here means: chose A over a credible B, future
-   maintainer might re-litigate. Format and criteria are
-   already at the top of the Wiki *Decisions* page. Cadence:
-   within a week of the decision (ideally the same PR), single
-   entry per decision. Roughly 1-3 entries per release at the
-   current cadence.
+   maintainer might re-litigate. Since November 2026 the log is
+   the *Decisions log* sheet in the EISS Team shared drive, one
+   row per decision with its columns Date, Decision, Why,
+   Decided by, Status, Who acts on it and Source (the PR or
+   issue). The Wiki *Decisions* page is the archive of entries
+   up to then and takes no new ones. Never put the sheet's URL
+   in this public repository. Cadence: within a week of the
+   decision (ideally the same PR). Roughly 1-3 entries per
+   release at the current cadence. When the session cannot
+   edit the sheet, put the row in the PR body for the
+   maintainer to paste.
 
 3. **Catch-up sweep at every release** (patch, minor, major).
    Walk the repo `.md` index + the Wiki page list, spot-check
