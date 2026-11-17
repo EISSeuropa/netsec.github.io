@@ -17,14 +17,15 @@
 #   ./build.sh --shots     # also refresh the three site screenshots
 #
 # Requires:
-#   - macOS with Google Chrome.app installed
+#   - macOS with Google Chrome.app installed, or CHROME set to another
+#     Chrome or Chromium binary (for example in a Linux container)
 #   - python3 on PATH (only used for the local server)
 
 set -euo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$HERE/../.." && pwd)"
-CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+CHROME="${CHROME:-/Applications/Google Chrome.app/Contents/MacOS/Google Chrome}"
 PORT=8765
 
 if [[ ! -x "$CHROME" ]]; then

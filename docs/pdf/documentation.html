@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>NetSec — Website & Directory · Documentation Pack v1.13.3</title>
+<title>NetSec — Website & Directory · Documentation Pack v1.14.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -652,7 +652,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
       </div>
       <div class="item">
         <div class="label">Version &amp; Date</div>
-        <div class="value">v1.13.3 · October 2026</div>
+        <div class="value">v1.14.0 · November 2026</div>
       </div>
       <div class="item">
         <div class="label">Author</div>
@@ -841,7 +841,7 @@ pre code{background:transparent;color:inherit;padding:0;font-size:inherit}
     <div>
       <strong style="color:#fff">netsec-cost.eu</strong> · COST Action CA24154 · MoU 063/25
     </div>
-    <span class="url">v1.13.3 · October 2026</span>
+    <span class="url">v1.14.0 · November 2026</span>
   </footer>
 
 </section>
@@ -1046,111 +1046,62 @@ flowchart LR
 
   <h2>What the deploy builds</h2>
   <p>Until v1.14.0 the repository held every file the site serves, including the ones a script had written. That meant 582 machine-written files out of 1,193 tracked, each needing a CI check to prove it was current, and a two-line change to the stylesheet rewriting 315 pages it had not touched. Those files are now built by the Pages deploy workflow and are absent from the repository.</p>
-  <p>The deploy runs four steps in a fixed order, and the order is load-bearing:</p>
+  <p>The deploy runs seven steps in a fixed order, and the order is load-bearing:</p>
   <ol>
-    <li><code>scripts/build-og-cards.py</code> draws the 84 per-member Open Graph cards. About 35 seconds on the runner, because Chrome starts once and the cards are screenshotted in sequence.</li>
-    <li><code>scripts/build-profile-pages.py</code> writes the 252 profile pages. It runs after the cards, because a card is a page's <code>og:image</code>.</li>
-    <li><code>scripts/build-search.sh</code> builds the Pagefind index.</li>
-    <li><code>scripts/inject-seo.py --stamp-only</code> applies the <code>?v=</code> cache-bust tokens across the top-level pages and the 252 under <code>people/</code>. It runs last, because it stamps what the steps above wrote.</li>
+    <li><code>scripts/build-og-cards.py</code> draws the 134 per-member Open Graph cards. Chrome starts once and the cards are screenshotted in sequence.</li>
+    <li><code>scripts/build-event-og.py</code> draws one Open Graph card per locale for each page an event in <code>data/events.json</code> names: 15 cards for five event pages.</li>
+    <li><code>scripts/build-profile-pages.py</code> writes the 402 profile pages. It runs after the member cards, because a card is a page's <code>og:image</code>.</li>
+    <li><code>scripts/render-event-fallback.py</code> writes the home page's event cards for readers without JavaScript, from <code>data/events.json</code>.</li>
+    <li><code>scripts/render-news-fallback.py</code> rewrites the home page's news cards for readers without JavaScript, from <code>data/news.json</code>.</li>
+    <li><code>scripts/build-search.sh</code> builds the Pagefind index. It runs after the two fallback steps, so the index never holds a concluded event or an expired news card.</li>
+    <li><code>scripts/inject-seo.py --stamp-only</code> applies the <code>?v=</code> cache-bust tokens across the top-level pages and the 402 under <code>people/</code>. It runs last, because it stamps what the steps above wrote.</li>
   </ol>
-  <p>After each of the first two steps the workflow counts what was produced against the members in <code>data/bios.json</code> and refuses to publish if the two disagree. That check is not decorative: the profile pages name their card's URL without testing whether the file exists, so a silent under-render would publish 252 pages whose share image returns 404, with a green run behind it.</p>
+  <p>The two fallback steps run at deploy, not as commit-time drift gates, because the right set of cards depends on the date as well as the data: a home page correct when it merged would be wrong three weeks later. The deploy runs on every push to <code>main</code> and every six hours, and the six-hour run is the refresh.</p>
+  <p>After each card step and the profile-page step the workflow counts what was produced and refuses to publish if the count is short: the member cards and profile pages against the members in <code>data/bios.json</code>, the event cards against the event pages times three locales. That check is not decorative: the profile pages name their card's URL without testing whether the file exists, so a silent under-render would publish 402 pages whose share image returns 404, with a green run behind it.</p>
   <p>The drift gates that used to guard these artefacts are retired, since a gate exists to prove a committed file is current and there is no committed file. Two things stand in their place: the count assertions above, and a test asserting that the two builders agree on which members get a page and a card. A whole class of failure went with them, where a pull request touching nothing relevant went red because a generated file elsewhere was stale.</p>
   <p>Member photographs stay committed. Their derived <code>.webp</code> variants were measured at 144 blobs and 1.9 MB across the entire history, one write per file, so moving them would have bought nothing and made Pillow a dependency of the publish path.</p>
 
   <h2>Site structure</h2>
 
-  <p>Twenty-two public pages in total (each with FR and DE beta siblings, plus a locale-detecting <code>404.html</code>). One of the twenty-two, <code>essc-2027.html</code>, is parked and not yet linked from anywhere, so it does not appear in the graph below. The home page is the hub: it hosts most of the static content as anchored sections and signposts the discovery and reference pages and the members' Wiki through two dedicated home-page sections. Phase 1 of the v1.4.0 IA pass split the home page's denser blocks out into standalone pages (<code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code>); v1.6.0 added the live ESSC 2026 programme page (<code>essc-2026.html</code>); v1.10.0 added the dedicated Working Groups page (<code>working-groups.html</code>); v1.12.0 added the NetSec Summer School page (<code>summer-school.html</code>), run jointly with EISS and co-located with the conference, then grew a dedicated Events page (<code>events.html</code>) gathering every NetSec event in one place. v1.13.0 added a public slide-templates gallery (<code>slides.html</code>) linked from the footer resource row on every page. v1.14.0 added the NetSec Network Map (<code>network-map.html</code>), signposted from the Directory and the Working Groups page rather than from the top nav, and a page for the Working Group 2 policy workshop in Ankara (<code>policy-workshop-2026.html</code>), reached from the home-page events block. The directory also fans out into a generated profile page per member at <code>people/&lt;slug&gt;.html</code> (177 pages at the time of writing, three locales each), built by <code>scripts/build-profile-pages.py</code> and counted separately from the twenty-two hand-authored pages. Three full-page applications, four reference pages branched off Home, the live conference programme, the Summer School and the Events page, and four statutory pages branch off the hub.</p>
+  <p>Twenty-four public pages in total (each with FR and DE beta siblings, plus a locale-detecting <code>404.html</code>). The home page is the hub. It has five sections (the hero with the network in figures, Meet the network, Four Working Groups, Events and news, and Contact), and the top navigation on every page links to News, About, Working Groups, Directory, Events, Grants and Publications. The footer resource row on every page carries the FAQ, Glossary, Press kit, Roadmap, slide templates, the site map and the three statutory pages. Phase 1 of the v1.4.0 IA pass split the home page's denser blocks out into standalone pages (<code>about.html</code>, <code>news.html</code>, <code>roadmap.html</code>, <code>outputs.html</code>). v1.6.0 added the live ESSC 2026 programme page (<code>essc-2026.html</code>), now a past-conference archive. v1.10.0 added the dedicated Working Groups page (<code>working-groups.html</code>). v1.12.0 added the NetSec Summer School page (<code>summer-school.html</code>), run jointly with EISS and co-located with the conference, and the Events page (<code>events.html</code>), which gathers every NetSec event in one place. v1.13.0 added a public slide-templates gallery (<code>slides.html</code>). v1.14.0 added the NetSec Network Map (<code>network-map.html</code>), signposted from the home page, the Directory and the Working Groups page, and a page for the Working Group 2 policy workshop in Ankara (<code>policy-workshop-2026.html</code>). v1.15.0 added the ESSC 2027 page (<code>essc-2027.html</code>), which now carries the open call for papers, and the Year in Review page (<code>year-in-review.html</code>), which is reached from the site map only. v1.16.0 adds a page for the Working Group 2 Policy Workshop 2027 in Seville (<code>policy-workshop-2027.html</code>). The directory also fans out into a generated profile page per member at <code>people/&lt;slug&gt;.html</code> (402 pages from 134 members at the time of writing, three locales each), built by the Pages deploy and counted separately from the twenty-four hand-authored pages.</p>
 
   <div class="diagram">
     <div class="mermaid">
-flowchart TB
-    H["<b>index.html · Home</b><br/><span style='font-size:11px;color:#5a6679'>anchored sections:</span><br/><span style='font-size:11px'>news · about (incl. Find out more)</span><br/><span style='font-size:11px'>working-groups · committee · events</span><br/><span style='font-size:11px'>for-members · contact</span>"]
+flowchart LR
+    H["<b>index.html · Home</b><br/><span style='font-size:13px'>hero · meet the network<br/>working groups<br/>events and news · contact</span>"]
 
-    P["<b>people.html</b><br/>The Directory"]
-    G["<b>grants.html</b><br/>Grants &amp; Calls"]
-    E["<b>essc-2026.html</b><br/>ESSC 2026 programme"]
-    SS["<b>summer-school.html</b><br/>Summer School (ECS³)"]
-    EV["<b>events.html</b><br/>Events"]
-    WG["<b>working-groups.html</b><br/>Working Groups"]
-    AB["<b>about.html</b><br/>About"]
-    N["<b>news.html</b><br/>News"]
-    RM["<b>roadmap.html</b><br/>Roadmap"]
-    O["<b>outputs.html</b><br/>Outputs"]
-    F["<b>faq.html</b><br/>FAQ"]
-    X["<b>glossary.html</b><br/>Glossary"]
-    K["<b>press-kit.html</b><br/>Press kit"]
-    S["<b>sitemap.html</b><br/>Site map"]
-    A["<b>accessibility.html</b>"]
-    R["<b>privacy.html</b>"]
-    L["<b>licensing.html</b>"]
+    NAV["<b>Top navigation, every page</b><br/><span style='font-size:13px'>news.html · about.html<br/>working-groups.html · people.html<br/>events.html · grants.html · outputs.html</span>"]
+    EVB["<b>Home events block</b><br/><span style='font-size:13px'>essc-2027.html · summer-school.html<br/>policy-workshop-2026.html<br/>policy-workshop-2027.html</span>"]
     NM["<b>network-map.html</b><br/>Network Map"]
-    PW["<b>policy-workshop-2026.html</b><br/>WG2 policy workshop"]
-    SL["<b>slides.html</b><br/>Slide templates"]
+    FT["<b>Footer resource row, every page</b><br/><span style='font-size:13px'>faq.html · glossary.html · press-kit.html<br/>roadmap.html · slides.html · sitemap.html<br/>accessibility.html · privacy.html · licensing.html</span>"]
+    E26["<b>essc-2026.html</b><br/>ESSC 2026 archive"]
+    YR["<b>year-in-review.html</b><br/>Year in Review"]
 
-    H ==> |"top nav"| P
-    H ==> G
-    H ==> AB
-    H -.-> |"events block"| E
-    H -.-> |"top nav or About &gt; Find out more"| N
-    H -.-> |"About &gt; Find out more"| RM
-    H -.-> O
-    H -.-> F
-    H -.-> X
-    H -.-> K
-    H -.-> |"footer only"| A
-    H -.-> R
-    H -.-> L
-    H -.-> S
-
-    P -.-> |"cross-link"| G
-    G -.-> P
-    H ==> WG
-    H -.-> |"events block"| SS
-    H -.-> |"events block"| EV
-    P -.-> |"signpost card"| NM
-    WG -.-> |"signpost card"| NM
-    H -.-> |"events block"| PW
-    H -.-> |"footer resource row"| SL
+    H ==> |"top nav"| NAV
+    H -.-> |"event cards"| EVB
+    H -.-> |"meet the network"| NM
+    NAV -.-> |"Directory and Working Groups signposts"| NM
+    NAV -.-> |"Events page cards"| E26
+    H -.-> |"footer"| FT
+    FT -.-> |"site map only"| YR
 
     style H fill:#0a84ff,stroke:#0a84ff,color:#fff
-    style P fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style G fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style E fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style SS fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style EV fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style WG fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style AB fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style N fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style RM fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style O fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style F fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style X fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style K fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style S fill:#ffffff,stroke:#5a6679,color:#0b1220
-    style A fill:#ffffff,stroke:#5a6679,color:#0b1220
-    style R fill:#ffffff,stroke:#5a6679,color:#0b1220
-    style L fill:#ffffff,stroke:#5a6679,color:#0b1220
-    style NM fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style PW fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
-    style SL fill:#ffffff,stroke:#5a6679,color:#0b1220
-    linkStyle 0,1,2 stroke:#003399,stroke-width:2.2px
-    linkStyle 3,4,5,6,7,8,9 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
-    linkStyle 10,11,12,13 stroke:#5a6679,stroke-dasharray:3 3,stroke-width:1.4px
-    linkStyle 14,15 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.4px
-    linkStyle 16 stroke:#003399,stroke-width:2.2px
-    linkStyle 17 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
-    linkStyle 18 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
-    linkStyle 19,20,21 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
-    linkStyle 22 stroke:#5a6679,stroke-dasharray:3 3,stroke-width:1.4px
+    classDef primary fill:#ffffff,stroke:#0a84ff,stroke-width:2px,color:#0b1220
+    classDef footer fill:#ffffff,stroke:#5a6679,color:#0b1220
+    class NAV,EVB,NM,E26 primary
+    class FT,YR footer
+    linkStyle 0 stroke:#003399,stroke-width:2.2px
+    linkStyle 1,2,3,4 stroke:#0a84ff,stroke-dasharray:3 3,stroke-width:1.6px
+    linkStyle 5,6 stroke:#5a6679,stroke-dasharray:3 3,stroke-width:1.4px
     </div>
-    <div class="diagram-caption">Figure 4 · Page graph. <strong>Solid blue arrows</strong> are primary navigation (the top nav links to Network, Working Groups, Grants and About from every page). <strong>Dashed blue arrows from Home</strong> reach the v1.4.0 IA-split pages (News, Roadmap, Outputs), the v1.6.0 ESSC 2026 programme page, the v1.12.0 Summer School and Events pages, the v1.14.0 policy-workshop page, and the four-card <em>Find out more</em> discovery grid at the end of the About section (FAQ, Glossary, Press kit). The Directory node also fans out into a generated profile page per member at <code>people/&lt;slug&gt;.html</code>, omitted here for legibility. <strong>The Network Map</strong> is reached from signpost cards on the Directory and the Working Groups page rather than from the top nav, which is why two arrows converge on it. <strong>The slide-templates gallery</strong> sits in the footer resource row, so it is drawn grey like the statutory pages. <strong>Dashed grey arrows</strong> are footer-only links (Accessibility, Privacy, Licensing, Site map appear in every page's footer). <strong>Dashed blue arrows between people and grants</strong> are in-page cross-links between the Network and Grants pages.</div>
+    <div class="diagram-caption">Figure 4 · Page graph, with pages grouped by how a reader reaches them. <strong>The solid blue arrow</strong> is the top navigation, which links to the same seven pages from every page. <strong>Dashed blue arrows</strong> are in-page links: the home page's events block reaches the four current event pages, the Events page's cards also reach the ESSC 2026 archive, and the Network Map is signposted from the home page, the Directory and the Working Groups page. The Directory and the Grants page also cross-link each other. The Directory fans out into a generated profile page per member at <code>people/&lt;slug&gt;.html</code>, omitted here for legibility. <strong>Dashed grey arrows</strong> are the footer resource row on every page. The Year in Review page is linked from the site map only.</div>
   </div>
 
   <h3>Page inventory</h3>
   <table>
     <thead><tr><th>Page</th><th>Purpose</th><th>Reads at runtime</th></tr></thead>
     <tbody>
-      <tr><td><code>index.html</code></td><td>Overview, news lede, WGs, MC, events banner, <em>Find out more</em> discovery grid, <em>For NetSec members</em> Wiki signposting strip, contact. Trimmed by ~25% in v1.4.0 when the standalone About / News / Roadmap / Outputs pages took over the denser blocks.</td><td><code>data/events.json</code> (events banner; added v1.6.0)</td></tr>
+      <tr><td><code>index.html</code></td><td>Five sections: the hero with the network in four figures and a row of tiles for the event in progress or next, the open calls and the latest news, then Meet the network with the member spotlight, Four Working Groups, Events and news, and Contact. Trimmed by ~25% in v1.4.0 when the standalone About / News / Roadmap / Outputs pages took over the denser blocks, and cut from twelve sections to five in v1.16.0. Its fallback event and news cards for readers without JavaScript are rewritten at every deploy.</td><td><code>data/events.json</code>, <code>data/news.json</code>, <code>data/spotlight.json</code>, <code>data/bios.json</code></td></tr>
       <tr><td><code>people.html</code></td><td>Open community directory with WG / MC / country filters; Join-the-network CTA. <em>Directory research-interest keyword filter added v1.7.0; research-theme and mentorship filters and a native mobile filter sheet added v1.11.0; a quiet "Founding contributor" badge for the founding cohort added v1.12.0.</em></td><td><code>data/bios.json</code> (all), <code>data/keyword-aliases.json</code> (inline fallback normaliser; added v1.7.0)</td></tr>
       <tr><td><code>people/&lt;slug&gt;.html</code></td><td>One shareable profile page per directory member, generated by <code>scripts/build-profile-pages.py</code> with its own <code>Person</code> structured data, an ORCID-fed recent-publications list, research-theme and region chips, and "works on similar topics" facepiles that cross-link related members and mentors. Built by the Pages deploy since v1.14.0 and no longer committed. <em>Added post-conference in the v1.12.0 cycle.</em></td><td><code>data/authors-index.json</code> (Anthology slot); otherwise static, derived at build time from <code>data/bios.json</code> and <code>data/orcid-works.json</code></td></tr>
       <tr><td><code>grants.html</code></td><td>Five grant schemes, the e-COST timeline, resources, grant-manager contact cards.</td><td><code>data/bios.json</code> (Grant Awarding Coordinator only)</td></tr>
@@ -1162,6 +1113,12 @@ flowchart TB
       <tr><td><code>essc-2026.html</code></td><td>Live ESSC 2026 programme: day chips, plenary and parallel session cards, contributions, chairs, abstracts, room badges, livestream pills, member-aware speaker popovers. <em>Added v1.6.0; speaker popover deduped onto the shared <code>window.netsecMemberCard</code> component v1.12.0.</em></td><td><code>data/indico.json</code>, <code>data/bios.json</code> (for member-aware speaker links)</td></tr>
       <tr><td><code>summer-school.html</code></td><td>NetSec Early-Career Scholars Summer School (ECS³), run jointly with EISS. Card-based page with a faculty roster whose member headshots resolve live from the directory by name, an EISS partner block with an inline logo, an application contact, and a heritage note placing it as the successor to Euro-SWAMOS. <em>Added v1.12.0.</em></td><td><code>data/bios.json</code> (faculty headshots, matched by name)</td></tr>
       <tr><td><code>events.html</code></td><td>Every NetSec event in one place: upcoming and past, each card carrying dates, venue, format, and a link to its programme or registration. The conference pages settled into a fixed archive once Stockholm closed, and this page became the living index over them. <em>Added post-conference in the v1.12.0 cycle.</em></td><td><code>data/events.json</code></td></tr>
+      <tr><td><code>essc-2027.html</code></td><td>European Security Studies Conference 2027, 10 and 11 June 2027 at the University of Belgrade, Faculty of Political Science, with the NetSec Training School alongside. Carries the open call for papers (proposals due 26 January 2027, submitted on Indico event 25), the closed panels, the conference chairs and practical information for Belgrade. <em>Added v1.15.0; call for papers added v1.16.0.</em></td><td>Static. Dates and deadlines marked <code>data-event-date</code> and <code>data-event-deadline</code> are written from <code>data/events.json</code> by <code>scripts/inject-seo.py</code>.</td></tr>
+      <tr><td><code>policy-workshop-2026.html</code></td><td>The Working Group 2 policy workshop in Ankara, 13 September 2026. <em>Added v1.14.0.</em></td><td>—</td></tr>
+      <tr><td><code>policy-workshop-2027.html</code></td><td>The Working Group 2 Policy Workshop 2027, <em>Security Beyond the State</em>, at the Universidad de Sevilla on 28 and 29 April 2027: themes, format and funding, and how to apply (applications close 18 December 2026). <em>Added v1.16.0.</em></td><td>Static, with its dates and deadline written from <code>data/events.json</code> as on the ESSC 2027 page.</td></tr>
+      <tr><td><code>network-map.html</code></td><td>The NetSec Network Map (Beta): members drawn by shared Working Groups, research themes and keywords, with search, zoom, hub panels, a keyboard path and a table of everyone it draws. <em>Added v1.14.0.</em></td><td><code>data/network-map.json</code> (built by <code>scripts/build-network-map.py</code>), <code>data/keyword-aliases.json</code></td></tr>
+      <tr><td><code>year-in-review.html</code></td><td>One edition per Action year, assembled from the events held, the news published, the outputs released and the growth of the directory. The first edition covers 10 October 2025 to 9 October 2026. Linked from the site map only. <em>Added v1.15.0.</em></td><td><code>data/year-review.json</code> (built by <code>scripts/build-year-review.py</code>)</td></tr>
+      <tr><td><code>slides.html</code></td><td>Public gallery of NetSec slide templates, linked from the footer resource row. <em>Added v1.13.0.</em></td><td>—</td></tr>
       <tr><td><code>faq.html</code></td><td>21 Q&amp;As across six themed sections; jump-to TOC; per-question deep-link anchors. <em>Added v1.3.0; migrated from the members' Wiki.</em></td><td>—</td></tr>
       <tr><td><code>glossary.html</code></td><td>~35 COST and NetSec terms across five sections; per-term deep-link anchors. <em>Added v1.3.0; migrated from the members' Wiki.</em></td><td>—</td></tr>
       <tr><td><code>press-kit.html</code></td><td>Logos with pairing rules, palette, typography, funding acknowledgements, attribution wording, do / don't rules. <em>Added v1.2.0.</em></td><td>—</td></tr>
@@ -1432,7 +1389,13 @@ sequenceDiagram
 ├── news.html                        # News index (v1.4.0)
 ├── roadmap.html                     # Public roadmap (v1.4.0)
 ├── outputs.html                     # Outputs placeholder (v1.4.0)
-├── essc-2026.html                   # ESSC 2026 live programme (v1.6.0)
+├── essc-2026.html                   # ESSC 2026 programme, archived after the conference (v1.6.0)
+├── essc-2027.html                   # ESSC 2027 and its call for papers (v1.15.0)
+├── policy-workshop-2026.html        # WG2 policy workshop, Ankara (v1.14.0)
+├── policy-workshop-2027.html        # WG2 Policy Workshop 2027, Seville (v1.16.0)
+├── network-map.html                 # NetSec Network Map, Beta (v1.14.0)
+├── year-in-review.html              # Year in Review, one edition per Action year (v1.15.0)
+├── slides.html                      # Slide-templates gallery (v1.13.0)
 ├── working-groups.html              # The four Working Groups (v1.10.0)
 ├── summer-school.html               # Summer School ECS³ (v1.12.0)
 ├── events.html                      # Events index (v1.12.0)
@@ -1468,6 +1431,8 @@ sequenceDiagram
 │   ├── roadmap-progress.json        # GitHub milestone progress for the roadmap (v1.10.0)
 │   ├── keyword-aliases.json         # Curated acronyms + alias map for directory keywords (v1.7.0)
 │   ├── orcid-works.json             # ORCID publications cache feeding cards + profile pages (v1.12.0)
+│   ├── network-map.json             # Nodes and edges for the Network Map (v1.14.0)
+│   ├── year-review.json             # Year in Review editions (v1.15.0)
 │   └── i18n-state.json              # SHA-1 stamps for drift checker
 │
 ├── scripts/
@@ -1482,6 +1447,13 @@ sequenceDiagram
 │   ├── test-sync-indico.py          # Pipeline tests
 │   ├── inject-seo.py                # Canonical + OG + JSON-LD generator
 │   ├── build-profile-pages.py       # Renders people/&lt;slug&gt;.html from bios + ORCID works (v1.12.0); run by the Pages deploy, output gitignored (v1.14.0)
+│   ├── build-og-cards.py            # Per-member Open Graph cards; run by the Pages deploy
+│   ├── build-event-og.py            # Per-event-page Open Graph cards, three locales; run by the Pages deploy (v1.16.0)
+│   ├── render-event-fallback.py     # Home-page event cards without JavaScript; run by the Pages deploy (v1.16.0)
+│   ├── render-news-fallback.py      # Home-page news cards without JavaScript; run by the Pages deploy (v1.15.0)
+│   ├── build-search.sh              # Pagefind index; run by the Pages deploy
+│   ├── build-network-map.py         # data/network-map.json + the map's table region (v1.14.0)
+│   ├── build-year-review.py         # data/year-review.json from news, events, outputs and bios history (v1.15.0)
 │   ├── check-i18n-drift.py          # Reports stale translations
 │   ├── check-css-class-collisions.py # Lints accidental class-name reuse (v1.6.0)
 │   ├── check-a11y.sh                # axe-core scan wrapper
@@ -1501,7 +1473,7 @@ sequenceDiagram
 │   ├── failure-alarm.yml            # Files an assigned issue when a scheduled run fails
 │   ├── launch-qa-link-check.yml     # Link check on HTML PRs + weekly
 │   ├── i18n-drift.yml               # Runs drift checker on HTML PRs
-│   └── …                            # 20 further lints, gates and housekeeping jobs
+│   └── …                            # 23 further lints, gates and housekeeping jobs
 │
 ├── docs/                            # Internal documentation
 │   ├── architecture.md  design-system.md  admin-guide.md
@@ -2458,7 +2430,12 @@ scripts/release.sh 1.1.0 --dry-run # preview, change nothing</code></pre>
 
   <div class="changelog-entries">
 
-  <h2 class="current">v1.13.3 · October 2026 · Cover bump for website v1.15.0</h2>
+  <h2 class="current">v1.14.0 · November 2026 · Section-level catch-up to website v1.16.0</h2>
+  <p class="cl-summary">Closes the catch-up v1.13.3 deferred (<a href="https://github.com/EISSeuropa/netsec.github.io/issues/1992">#1992</a>). Section 02 counts twenty-four public pages, up from twenty-two. The page graph (Figure 4) is redrawn with pages grouped by how a reader reaches them: the top navigation (seven pages), the home events block, and the footer resource row, which now carries the FAQ, Glossary, Press kit and Roadmap with the slide templates and the statutory pages. One node per page had made the figure 23 boxes wide and unreadable at print size. The graph gains the ESSC 2027 page, now live with its call for papers, the Year in Review page, reached from the site map only, and the Working Group 2 Policy Workshop 2027 page.</p>
+  <p class="cl-summary">The page inventory gains six rows. Three are the pages above. The other three (<code>network-map.html</code>, <code>policy-workshop-2026.html</code>, <code>slides.html</code>) were recorded as added by v1.13.0 but only reached Figure 4, so the table gains them now. The home-page row describes the five sections and the fallback cards.</p>
+  <p class="cl-summary">Section 04's <em>What the deploy builds</em> describes seven steps, up from four: the per-event-page Open Graph cards and the two home-page fallback renderers (<code>render-event-fallback.py</code>, <code>render-news-fallback.py</code>) join the member cards, profile pages, Pagefind and the cache-bust stamp, with the counts at 134 member cards, 15 event cards and 402 profile pages. The repository layout gains the six pages, two data files and seven scripts it was missing. The six site screenshots were re-captured, and <code>build.sh</code> takes a <code>CHROME</code> path from the environment, so the pack can be built outside macOS.</p>
+
+  <h2>v1.13.3 · October 2026 · Cover bump for website v1.15.0</h2>
   <p class="cl-summary">Cover bump matching website <a href="https://github.com/EISSeuropa/netsec.github.io/releases/tag/v1.15.0">v1.15.0</a>. The home page opens on a row of three tiles (the event in progress or next, the open calls, the latest news) and a strip of four figures, the European Security Studies Conference 2027 has its page at <code>essc-2027.html</code>, and a Year in Review page assembles the Action's first year. The September accessibility assessment's 155 contrast corrections are in, and the site counts page views with GoatCounter, which sets no cookie.</p>
   <p class="cl-summary">Section-level catch-up is deferred to the next pack revision. Section 02's page graph and inventory do not yet carry <code>essc-2027.html</code> or <code>year-in-review.html</code>, and the home-page figure is the August capture, before the Now row and the new section order. Tracked in <a href="https://github.com/EISSeuropa/netsec.github.io/issues/1992">#1992</a>.</p>
 
