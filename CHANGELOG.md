@@ -155,6 +155,7 @@ maintainer-facing audience.
 - The v1.16.0 roadmap card links to its release notes, reads as shipped on the French page, and has a French and German title and summary.
 - `promote-roadmap.py` adds the release-notes link to a card with feature chips, flips a French card labelled "Prévu", and moves a card with chips to its quarter whole.
 - Every shipped release on the French roadmap reads "Livrée" and on the German roadmap "Veröffentlicht", as does the French status legend. Seven French pills read "Livré" and four German ones "Ausgeliefert" or "Geliefert". Past events keep "Terminé" and "Stattgefunden".
+- Every planned item on the French roadmap reads "Prévu", as does the status legend. The legend and the Year 1 anniversary card read "Planifié".
 
 ## [1.16.0] · 2026-11-17 — ESSC 2027 CfP and a smoother home page
 

@@ -96,8 +96,8 @@ LOCALES = {
     },
     "fr": {
         "filename": "roadmap.fr.html",
-        "pill_planned": "Planifié",
-        # roadmap.fr.html labels most planned cards "Prévu".
+        "pill_planned": "Prévu",
+        # roadmap.fr.html uses "Prévu"; "Planifié" is the older label.
         "pill_planned_aliases": ("Planifié", "Prévu"),
         "pill_shipped": "Livrée",
         "notes_link_text": "Notes de version",
