@@ -120,13 +120,46 @@ def test_joint_item(monkeypatch, tmp_path):
 
 
 def test_eiss_item_stops(monkeypatch, tmp_path):
-    with pytest.raises(SystemExit, match="belongs in EISSeuropa/EISSeuropa.github.io"):
+    with pytest.raises(SystemExit, match="The Site is EISS"):
         run(monkeypatch, tmp_path, form(Site="EISS"))
 
 
 def test_free_text_is_refused(monkeypatch, tmp_path):
     with pytest.raises(SystemExit, match="does not use the News item form"):
         run(monkeypatch, tmp_path, "Just some text.")
+
+
+def test_headline_and_summary_limits(monkeypatch, tmp_path):
+    # At the limit the text passes whole.
+    _, data = run(monkeypatch, tmp_path, form(Headline="h" * 100, Summary="s" * 300))
+    it = data["items"][0]
+    assert it["title"]["en"] == "h" * 100 and it["summary"]["en"] == "s" * 300
+    # Over it the run stops and says by how much, from the field or the title.
+    with pytest.raises(SystemExit, match="Headline is 101 characters long, and the limit is 100"):
+        run(monkeypatch, tmp_path, form(Headline="h" * 101))
+    with pytest.raises(SystemExit, match="Headline is 101 characters"):
+        run(monkeypatch, tmp_path, form(Headline="_No response_"), title="news: " + "h" * 101)
+    with pytest.raises(SystemExit, match="Summary is 382 characters long.*at least 82 characters"):
+        run(monkeypatch, tmp_path, form(Summary="s" * 382))
+
+
+def test_empty_headline_and_default_title_stop(monkeypatch, tmp_path):
+    # EISSeuropa/EISSeuropa.github.io#2189: no headline and the form's "news: " title.
+    with pytest.raises(SystemExit, match="The Headline is empty"):
+        run(monkeypatch, tmp_path, form(Headline="_No response_"), title="news: ")
+    with pytest.raises(SystemExit, match="The Summary is empty"):
+        run(monkeypatch, tmp_path, form(Summary="_No response_"))
+
+
+def test_form_requires_the_headline_and_describes_every_field():
+    text = (HERE.parent / ".github" / "ISSUE_TEMPLATE" / "news.yml").read_text(encoding="utf-8")
+    blocks = re.split(r"^  - type: ", text, flags=re.M)[1:]
+    fields = {re.search(r"^    id: (\S+)", b, re.M).group(1): b
+              for b in blocks if not b.startswith("markdown")}
+    assert len(fields) == 11, sorted(fields)
+    for fid, b in fields.items():
+        assert re.search(r"^      description: \S", b, re.M), f"{fid} has no description"
+    assert "required: true" in fields["headline"]
 
 
 def test_failed_translation_keeps_english(monkeypatch, tmp_path, capsys):

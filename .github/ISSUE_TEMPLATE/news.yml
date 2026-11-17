@@ -5,12 +5,21 @@ body:
   - type: markdown
     attributes:
       value: |
-        Write the item in English. When a publisher files it, or applies the `news` label, a pull request opens that adds it to the site with French and German machine translations. The item is published when the maintainer merges that pull request. Only the headline (or the issue title) and the summary are required. Leave the rest blank if it does not apply.
+        Fill in this form to announce something on netsec-cost.eu, LinkedIn and Bluesky. Write in English: French and German translations are added for you.
+
+        After you submit it, a robot turns the form into a draft. Nothing is public until the maintainer approves that draft. If something goes wrong, the robot leaves a comment on this issue saying what to change.
+
+        Headline and Summary are required. Leave any other field blank if it does not apply. Write plain text everywhere: no links, no bold, no hashtags copied from LinkedIn. The web address goes in the Link field.
+
+        You can leave the issue title as it is.
   - type: dropdown
     id: site
     attributes:
       label: Site
-      description: An EISS-only item goes in the EISS repository (EISSeuropa/EISSeuropa.github.io) instead.
+      description: >-
+        Who the news is from. Pick "NetSec" for NetSec news, or "Joint (EISS and
+        NetSec)" for something NetSec organises with EISS. For news from EISS
+        alone, do not use this form: ask the maintainer.
       options:
         - NetSec
         - Joint (EISS and NetSec)
@@ -22,16 +31,21 @@ body:
     id: headline
     attributes:
       label: Headline
-      description: Plain text. Leave blank to use the issue title.
+      description: >-
+        The title of the item, up to 100 characters. It opens the LinkedIn and
+        Bluesky posts. Example: "ESSC 2027: the call for papers is open".
+      placeholder: "ESSC 2027: the call for papers is open"
     validations:
-      required: false
+      required: true
   - type: textarea
     id: summary
     attributes:
       label: Summary
       description: >-
-        One or two sentences, up to 300 characters. Shown on the home page
-        card. Also the full text when the body is left blank.
+        One or two sentences, up to 300 characters including spaces. It appears
+        on the home page. A longer summary stops the robot, which then asks you
+        to shorten it. If you leave Body blank, the summary is also the full
+        text of the item and of the posts.
     validations:
       required: true
   - type: textarea
@@ -39,14 +53,20 @@ body:
     attributes:
       label: Body
       description: >-
-        Optional full text, shown in the news archive, the RSS feed and the
-        LinkedIn and Bluesky posts. Plain text.
+        Optional. The full text of the item. It appears in the news archive and
+        the RSS feed, and it is the text of the LinkedIn and Bluesky posts.
+        Plain text only.
     validations:
       required: false
   - type: dropdown
     id: type
     attributes:
       label: Type
+      description: >-
+        The label shown next to the item on the website. "event" is for a
+        conference, workshop or meeting, "publication" for a paper or report,
+        "call" for an open call with a deadline, and "announcement" for
+        anything else.
       options:
         - announcement
         - event
@@ -59,6 +79,9 @@ body:
     id: wg
     attributes:
       label: Working Group
+      description: >-
+        If the item comes from one NetSec Working Group, pick it. The item is
+        then tagged with that group. Otherwise keep "No Working Group".
       options:
         - No Working Group
         - WG1
@@ -73,20 +96,20 @@ body:
     attributes:
       label: Link
       description: >-
-        Optional. The address of an existing page the item is about, such as
-        the event page. This does not create a page. The item on the site gets
-        a "Read more" link to it, and the LinkedIn and Bluesky posts end with it.
-        Use a full address (https://...) or a page on this site
-        (essc-2027.html), and the French and German pages are linked when they
-        exist. If left blank, the item has no "Read more" link and the posts
-        link to the news on the home page.
+        Optional. The web address of a page that already exists, such as the
+        event page. The item on the website gets a "Read more" link to it, and
+        the LinkedIn and Bluesky posts end with it. Copy the full address from
+        your browser, starting with https://. Leave it blank if there is no
+        page: the posts then link to the news on the home page.
     validations:
       required: false
   - type: input
     id: date
     attributes:
       label: Publication date
-      description: YYYY-MM-DD. Leave blank for the day the label is applied.
+      description: >-
+        Optional. The date shown on the item, written year-month-day with
+        dashes, for example 2026-12-01. Leave it blank to use today's date.
       placeholder: "2026-12-01"
     validations:
       required: false
@@ -95,9 +118,11 @@ body:
     attributes:
       label: On the home page until
       description: >-
-        YYYY-MM-DD, optional. The item leaves the home page after this day and
-        stays in the archive. For a call, this is the closing date shown in the
-        Open calls tile.
+        Optional. The last day the item shows on the home page, written
+        year-month-day with dashes, for example 2027-01-26. After that day it
+        stays in the news archive only. For a call, use the closing date. Leave
+        it blank to keep the item on the home page until newer items replace
+        it.
     validations:
       required: false
   - type: dropdown
@@ -105,8 +130,9 @@ body:
     attributes:
       label: Collaborator page
       description: >-
-        The other organisation's LinkedIn page, added by hand as collaborator
-        after the post goes out.
+        Pick "EISS" if EISS's LinkedIn page should be added to the LinkedIn post
+        as a collaborator. The maintainer adds it by hand after the post goes
+        out. Otherwise keep "No collaborator".
       options:
         - No collaborator
         - EISS
@@ -117,6 +143,10 @@ body:
     id: options
     attributes:
       label: Options
+      description: >-
+        Tick "Include in the newsletter" to also put the item in the next
+        monthly newsletter. Tick "Do not post to LinkedIn and Bluesky" for an
+        item that should appear on the website only.
       options:
         - label: Include in the newsletter
           required: false

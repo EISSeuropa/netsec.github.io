@@ -19,8 +19,8 @@ are required. Write in English. The French and German come in step 3.
 | Form field | What it takes |
 |---|---|
 | Site | `NetSec`, or `Joint (EISS and NetSec)` for an item organised by NetSec with EISS. An EISS-only item goes in `EISSeuropa/EISSeuropa.github.io`, with that repository's own skill. |
-| Headline | Plain text |
-| Summary | Up to 300 characters, the home page card |
+| Headline | Plain text, up to 100 characters |
+| Summary | Up to 300 characters, the home page card. The script stops on a longer one, or on a headline over 100 |
 | Body | Full text for the archive, the feed and the social posts. Blank: the summary |
 | Type | `announcement`, `event`, `publication` or `call` |
 | Working Group | `WG1` to `WG4`, or `No Working Group` |

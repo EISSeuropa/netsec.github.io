@@ -150,6 +150,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+#### Changed
+
+- The News item form needs a headline, of up to 100 characters, and the summary is limited to 300 characters. Every field explains in plain words what it is for and where it appears. A run that stops on the form's content says why on the issue (an empty or too long headline, a summary too long by a given number of characters) and how to edit the issue and try again. A summary over 300 characters was cut, sometimes inside a link. The same change shipped on the EISS site (EISSeuropa/EISSeuropa.github.io#2191).
+
 #### Fixed
 
 - The v1.16.0 roadmap card links to its release notes, reads as shipped on the French page, and has a French and German title and summary.

@@ -15,7 +15,10 @@
 # so GitHub notifies them. A collaborator among them can merge it once its
 # checks pass (#2164).
 #
-# A run that fails says so on the issue, with a link to the run (#2163).
+# A run that fails says so on the issue, with a link to the run (#2163). When
+# the script stopped on the form's content (an empty or too long headline or
+# summary, Site set to EISS), the comment quotes its reason and says how to try
+# again (EISSeuropa/EISSeuropa.github.io#2191).
 #
 # Publishers are the accounts in the repository variable NEWS_PUBLISHERS
 # (GitHub logins, separated by commas, semicolons or spaces). An issue opened
@@ -111,7 +114,12 @@ jobs:
         run: |
           set -o pipefail
           export TODAY="$(TZ=Europe/Paris date +%F)"
-          python3 scripts/news-from-issue.py | tee /tmp/news-add.txt
+          # stderr holds the reason a run stops, written for the person who
+          # filed the form. Only when the script fails does it go to
+          # /tmp/news-error.txt, which the failure step posts on the issue.
+          python3 scripts/news-from-issue.py 2>/tmp/news-stderr.txt | tee /tmp/news-add.txt \
+            || { cp /tmp/news-stderr.txt /tmp/news-error.txt; cat /tmp/news-stderr.txt >&2; exit 1; }
+          cat /tmp/news-stderr.txt >&2
           python3 scripts/build-news-rss.py
           {
             echo "Generated from issue #${ISSUE_NUMBER}, filed by @${ISSUE_AUTHOR}. Merging this PR publishes the item and queues the social posts for approval."
@@ -162,5 +170,13 @@ jobs:
           SENDER: ${{ github.event.sender.login }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          gh issue comment "${{ github.event.issue.number }}" --repo "${{ github.repository }}" --body \
-            "@$SENDER the run that turns this issue into a news PR failed, so nothing was published. The maintainer has been notified. The run: $RUN_URL"
+          # A crash (a traceback) or a fault in the repository (a message
+          # prefixed "news-from-issue:") gets the generic message instead.
+          if [ -s /tmp/news-error.txt ] && ! grep -q -e Traceback -e '^news-from-issue:' /tmp/news-error.txt; then
+            body="@$SENDER nothing was published. $(cat /tmp/news-error.txt)
+
+          To edit the issue, open the ··· menu at the top right of its first message and choose Edit. Then a publisher removes the \`news\` label and applies it again, which starts a new run. The run: $RUN_URL"
+          else
+            body="@$SENDER the run that turns this issue into a news PR failed, so nothing was published. The maintainer has been notified. The run: $RUN_URL"
+          fi
+          gh issue comment "${{ github.event.issue.number }}" --repo "${{ github.repository }}" --body "$body"
