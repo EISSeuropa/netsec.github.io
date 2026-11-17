@@ -150,6 +150,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.16.0] · 2026-11-17 — ESSC 2027 CfP and a smoother home page
+
 > The call for papers for the European Security Studies Conference 2027 is open on the conference page until 26 January 2027, and the 2027 Training School and a Working Group 2 policy workshop in Seville have their calls on the site too. The home page has been simplified for readability. The Directory now shows the members who joined recently. The Network Map UI has been improved for readability.
 
 ### For the team
@@ -1409,7 +1413,8 @@ Open Graph, Twitter Card, JSON-LD (Organization + WebSite + WebPage), canonical 
 - Members' Wiki seeded with glossary, FAQ, onboarding, meeting-notes convention, decisions log.
 - Dual licensing — MIT for code, CC BY 4.0 for content + docs.
 
-[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.15.0...HEAD
+[Unreleased]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.16.0...HEAD
+[1.16.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.14.0...v1.15.0
 [1.14.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.13.0...v1.14.0
 [1.13.0]: https://github.com/EISSeuropa/netsec.github.io/compare/v1.12.0...v1.13.0
