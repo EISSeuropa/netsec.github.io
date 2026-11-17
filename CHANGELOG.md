@@ -150,91 +150,124 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+> The call for papers for the European Security Studies Conference 2027 is open on the conference page until 26 January 2027, and the 2027 Training School and a Working Group 2 policy workshop in Seville have their calls on the site too. The home page has been simplified for readability. The Directory now shows the members who joined recently. The Network Map UI has been improved for readability.
+
+### For the team
+
+News items can be filed through the News item issue form, and once the maintainer merges the pull request it opens, the item reaches the site in English, French and German, the RSS feed, LinkedIn and Bluesky. A new member appears in the Directory at the next bios sync, and research keywords still without a theme are listed each month in a `help wanted` issue for volunteers. The beta ribbon on French and German pages now says only that the English version is authoritative.
+
+### ESSC 2027 and the 2027 calls
+
+The ESSC 2027 page carries the full call for papers in English, French and German, as on eiss-europa.com, with proposals due on 26 January 2027 on the conference's Indico event. It shows the five dates of the call as a timeline, the eight closed panels with their chairs, the two Conference Chairs and practical information for Belgrade. On a phone the page is 8,700 px tall, down from 14,000. A What's New banner on every page announces the call until mid-December.
+
+The Training School page carries the 2027 call for applications, due 7 December 2026. A new page covers the Working Group 2 Policy Workshop 2027, *Security Beyond the State*, at the Universidad de Sevilla on 28 and 29 April 2027, with applications due 18 December 2026. Each of the five event pages has its own link preview card in the page's language, and news posts about an event carry the same card on LinkedIn and Bluesky.
+
+### The home page in five sections
+
+The home page has five sections: the hero, Meet the network, Four Working Groups, Events and news, and Contact. The audience cards moved to the Find your way in tab on every page, and the Now row, the 2026 conference photographs and the Wiki strip are gone. The member figure counts each Working Group member, Management Committee representative and leadership-role holder on cost.eu once, 181 people in 39 countries, where it had counted the 107 with a Directory bio.
+
+Meet the network puts the members who joined in the last 30 days at the head of its row, in colour, with a count above the link to the Directory. Without JavaScript the home page lists the current events and news, rendered from the data at every deploy.
+
+### The Directory and the Network Map
+
+A box above the Directory search names the members who joined in the last 30 days, the eight newest rolling through one at a time, with a pause button and a plain list under reduced motion. The search box is 136 px tall on desktop, down from 279, and four filters sit behind a More filters button. A Map button beside the search opens the Network Map with the Working Group, research-theme and mentorship filters carried over, and each Directory card links to its member on the map. The map draws four Working Group leaders and co-leaders who are not on their group's cost.eu roster.
+
+New members appear without waiting for their research keywords to be placed in a theme. A review moved 23 of the 52 keywords the bios sync had placed on its own. The Directory's median Lighthouse performance score is 0.83, above the 0.78 floor. Each page fetches `data/bios.json` once, after the first paint, and the Directory no longer lays out every hidden bio before it draws.
+
+### Smaller screens, previews and the roadmap
+
+On 320 px screens no page is wider than the screen and the header logo shows at full size. French and German pages no longer shift 42 px as they load, and the Events page footer stays put when its cards load. Every page's search and link-preview description is 160 characters or fewer, and `inject-seo.py --check` fails a longer one. The roadmap lists the newest entries first and has a quarter navigator, and `/licensing.html` lists the third-party assets the site ships.
+
+### Index of changes
+
+The index below is the audit trail for the sections above. Each change applies to the English, French and German pages unless the entry says otherwise.
+
 #### Added
 
-- Each event page has its own link preview card, in all three locales: ESSC 2026, ESSC 2027, both policy workshops and the Training School. The card gives the event type, the event, its date and its venue, and news posts about an event carry the same card on LinkedIn and Bluesky. The five pages used the general card until now (#2185).
-- The ESSC 2027 page carries the full call for papers in all three locales, as on eiss-europa.com: the three submission types, the eight closed panels with their chairs and descriptions, the key dates, the practical information and the European Security Studies Prize.
-- The ESSC 2027 page announces the open call for papers in all three locales: proposals are due on 26 January 2027, with links to the full call on eiss-europa.com, to the call as a PDF and to the conference's Indico event. The event descriptions on the home, events and ESSC 2027 pages and in the calendar feed give the deadline instead of the expected publication date.
-- The What's New banner announces the ESSC 2027 call for papers on every page in all three locales, with a link to the call on the ESSC 2027 page. It runs until mid-December 2026.
-- The home page's Meet the network section shows who joined in the last 30 days, in all three locales. Their faces lead the scrolling row in colour with an accent ring, among the greyscale rest, and a line above the Directory and Network Map links gives the count ("25 new members in the last 30 days") and links to the Directory.
-- The Directory names the members who joined in the last 30 days, in all three locales. A box above the search gives the count, and under it the eight newest roll through one at a time like end credits, newest first, each rising in with a ring that draws round the photo, holding, then drifting up and fading as the next arrives. Each line links to the member's profile and says how long ago they joined. Hovering, focusing a link or the pause button holds the roll, and tabbing to a link brings its line up. With reduced motion the four newest stay in view as a plain list. The design follows the Today box on the EISS internal dashboard. The box holds its place from the first paint, so the search box below it does not move when it fills.
-- Each Directory card links to the member on the Network Map, in the same locale, from the detailed card and from the preview panel.
-- The Directory links to the Network Map from the top of the page in all three locales. A Map button beside the search, outlined in the accent colour, opens the map with the Working Group, research-theme and mentorship filters carried over, and names the number of people ("These 36 on the map") when the map draws exactly the people listed. The Network Map panel that sat below the member cards is gone.
-- The roadmap has a quarter navigator in all three locales, a rail beside the timeline on wide screens and a bar of chips under the header on smaller ones. It jumps to any quarter or to Under watch, marks the quarter on screen and tags the current quarter as Now. Each quarter can be linked directly, for example `roadmap.html#q4-2026`.
-- The ESSC 2027 page has a Conference Chairs section in all three locales, with the Directory headshot, affiliation and roles of Prof. Filip Ejdus and Dr Arthur Laudrain.
-- The ESSC 2027 page carries practical information for Belgrade in all three locales: the venue, visas and entry, the routes from the airport, local transport, fourteen places to stay with their area and price range, money and emergency numbers. Each card carries an icon, the places to stay scroll sideways as a slider with previous and next arrows, and on phones the other cards swipe sideways too, each at its own height, which cuts the section from 4,237 to 1,965 pixels at 375 wide. The Training School page and the hero's Venue fact link to it.
-- The member spotlight card on the home page lists the member's place in the Action on its right: each Working Group with their role in it, in the group's colour, then any coordinator or Management Committee role, in all three locales. The WG pill under the name is gone, since the panel carries it.
-- News items can be filed through a News item issue form in English. When a publisher files it, a pull request opens, and once the maintainer merges it the item reaches the site in all three locales, with machine-translated French and German, the RSS feed, and the LinkedIn and Bluesky posts. The form also sets the Working Group, the closing date of a call, the newsletter flag, which the RSS feed now carries as `<category>newsletter</category>`, and EISS as the LinkedIn collaborator for a joint item, which the posting run lists for adding by hand.
-- A page for the Working Group 2 Policy Workshop 2027, Security Beyond the State: Managing and Countering Transnational Threats and Vulnerabilities, at the Universidad de Sevilla on 28–29 April 2027, in all three locales. It carries the call for applications (deadline 18 December 2026), the three pillars with their topics and connecting questions, the organisers and the application form. The workshop is in the events listing, the calendar feed and the home page's Open calls tile, and the call is in the news feed.
+- Each event page has its own link preview card, also used for news posts about the event on LinkedIn and Bluesky: ESSC 2026, ESSC 2027, both policy workshops and the Training School (#2185).
+- The ESSC 2027 page carries the full call for papers, as on eiss-europa.com.
+- The ESSC 2027 page announces the open call, with proposals due on 26 January 2027 on Indico.
+- A What's New banner on every page announces the ESSC 2027 call until mid-December 2026.
+- The home page's Meet the network row leads with the members who joined in the last 30 days, in colour, with their count.
+- A box above the Directory search names the members who joined in the last 30 days. The eight newest roll through one at a time with a link to each profile, a pause button holds the roll, and under reduced motion the four newest stay as a plain list.
+- Each Directory card links to its member on the Network Map.
+- A Map button beside the Directory search opens the Network Map with the Working Group, research-theme and mentorship filters carried over. It replaces the Network Map panel below the cards.
+- The roadmap has a quarter navigator, and each quarter has its own link, such as `roadmap.html#q4-2026`.
+- The ESSC 2027 page has a Conference Chairs section.
+- The ESSC 2027 page carries practical information for Belgrade, in sliders that take the section from 4,237 to 1,965 px on a phone.
+- The home-page member spotlight lists the member's Working Group, coordinator and Management Committee roles.
+- A News item issue form opens a pull request. Once the maintainer merges it, the item reaches the site in three languages, the RSS feed, LinkedIn and Bluesky, and the RSS feed tags newsletter items `<category>newsletter</category>`.
+- A page for the Working Group 2 Policy Workshop 2027, *Security Beyond the State*, at the Universidad de Sevilla on 28–29 April 2027 carries its call for applications, due 18 December 2026.
 
 #### Changed
 
-- New members appear in the Directory without waiting for their research keywords to be sorted into themes. A keyword the bios sync cannot place no longer holds the sync PR, and a monthly `help wanted` issue lists every such keyword with its members and suggested themes. The sync places a keyword itself only on a word shared with at least two keywords of one theme (#2090).
-- The event-page link preview cards are in French on the French pages and in German on the German pages: the event type, title, date, institution, city, country and EU funding line. A venue too long for one line wraps to a second.
-- The French pages and data name the Belgrade faculty "Faculté des sciences politiques". They had "Faculté de sciences politiques".
-- The 2026 conference's card title in the event listings reads "European Security Studies Conference", as on its own page. It read "European Security Conference".
-- The event-page link preview cards are JPEGs of about 70 KB, down from 280 KB. A title over 56 characters is cut at its first colon or dash, or else at a whole word with an ellipsis, and the card's layout stops the title at two lines and the venue at one. The card's address carries a version that changes with its text, so a moved date reaches previews that platforms had cached (#2193).
-- The descriptions that search results and link previews show are 160 characters or fewer on every page, in all three locales. 40 ran from 161 to 374 characters, and on the event pages the date and place now come first, with the open deadline where there is one. `inject-seo.py --check` fails on a description over 160 characters (#2184).
-- The ESSC 2027 page is 8,700 px tall on a phone, down from 14,000, in all three locales. Each closed panel shows its title and chair, and its description opens on a tap. The key dates sit above the panels. A bar pinned under the header links to the seven sections and marks the one on screen.
-- The ESSC 2027 call shows its five key dates as a vertical timeline in all three locales. The Read the call button is gone, so Submit a proposal on Indico is the primary button, beside the PDF of the call. The call's participation notes sit under Format and funding, leaving Practical information as the one section of that name on the page.
-- The prose-date check in `inject-seo.py --check` leaves alone a day written inside `<time datetime="YYYY-MM-DD">` that reads as that same day, such as a paper deadline in the conference month. A tested case covers EN, FR and DE.
-- The beta ribbon on every French and German page says only that the English version is authoritative ("La version anglaise fait foi." / "Die englische Fassung ist verbindlich."). It no longer says the page was translated by hand.
-- The Training School page carries the 2027 call for applications in all three locales: the deadline of 7 December 2026 in the hero and the next-edition card, the four topics, who can apply, the documents to send and the travel reimbursement and allowance. The ESSC 2027 page, the events listing and the calendar entry give the deadline.
-- The Directory search box is 136 pixels tall on desktop, down from 279. The mentorship, STSM hosting, research theme and research region filters sit behind a More filters button beside the search, in all three locales, with a badge counting the active ones, and they open on their own when one of them is applied from a link or a theme pill on a card. Phones keep the Filters sheet.
-- The Directory STSM filter chip reads "Can or may host STSM visitors" in all three locales. Its count of 77 covers the 34 members who can host and the 43 who are open to hosting.
-- The Directory welcome panel for first-time visitors is one line, with its guidance behind a "How the directory works" disclosure, and the Network Map signpost sits below the member grid. On a 375px phone the search box starts 554px down the page. It had started at 1,390px.
-- The A3 promotional poster sets "Net" and "Sec" in its title in the logo gradient, matching the home page, and its print PNG, small PNG and WebP previews are re-rendered.
-- The home page figures sit without the blue rule before each one. The member spotlight card aligns the photo with the name, shows the research keywords as tinted chips like the Directory, caps the bio at 68 characters a line, and uses an outlined button in place of the solid black one.
-- The roadmap places the Year 1 anniversary in December 2026, and the roadmap and Outputs page expect the first policy briefs (D6) in December rather than October 2026, in all three locales.
-- The roadmap lists the newest entries first, in all three locales. The quarters run from Q2 2027 down to Q2 2026, and within each quarter the latest date sits at the top.
-- The member figure on the home page counts the Action's roster from cost.eu, every Working Group member, Management Committee representative and holder of a leadership role, each once: 181 members in 39 countries, where it had counted the 107 people with a Directory bio. The countries figure counts the same people.
-- The press kit typography sample sets "Net" and "Sec" in the full name in the logo gradient, in all three locales, and describes the treatment.
-- The social card shown when a page is shared sets "Net" and "Sec" in the title in the logo-star gradient, matching the home page. It is now rendered from an HTML template and weighs 292 KB, down from 848 KB.
-- The home page title sets "Net" in Networking and "Sec" in Security in the blue gradient of the logo star, in all three locales, so the title spells out NetSec.
-- The home page has five sections where it had twelve: the hero, Meet the network, Four Working Groups, Events and news, and Contact. The member counts sit at the foot of the hero, and the Working Groups section opens with the short introduction to the Action. The Now row, the audience cards, the ESSC 2026 photos and the members' Wiki strip are gone from the page, and the audience cards stay available from the Find your way in tab on every page, where the member card now links to the Wiki and the e-COST portal.
-- The roadmap cards for v1.11.0 to v1.15.0 read in French and German. They had shown the English release summary with a translation marker since June.
+- New members appear in the Directory before their research keywords are placed in themes, and a monthly `help wanted` issue lists the unplaced keywords (#2090).
+- Event-page link preview cards are in French and German on the French and German pages.
+- The French pages name the Belgrade faculty "Faculté des sciences politiques".
+- The 2026 conference's card title in the event listings reads "European Security Studies Conference".
+- Event-page link preview cards are JPEGs of about 70 KB, down from 280 KB, and their address changes with their text (#2193).
+- Every page's description is 160 characters or fewer, and `inject-seo.py --check` fails a longer one (#2184).
+- The ESSC 2027 page is 8,700 px tall on a phone, down from 14,000.
+- The ESSC 2027 call shows its five dates as a vertical timeline, with Submit a proposal on Indico as the primary button.
+- The prose-date check in `inject-seo.py --check` accepts a date written inside a matching `<time datetime>`.
+- The beta ribbon on French and German pages says only that the English version is authoritative.
+- The Training School page carries the 2027 call for applications, due 7 December 2026.
+- The Directory search box is 136 px tall on desktop, down from 279, with four filters behind a More filters button.
+- The Directory STSM filter chip reads "Can or may host STSM visitors" and counts 77 members.
+- The Directory welcome panel is one line, so on a 375 px phone the search box starts 554 px down the page, previously 1,390 px.
+- The A3 promotional poster sets "Net" and "Sec" in the logo gradient.
+- The home page figures have no blue rule before each one, and the spotlight card shows keywords as tinted chips.
+- The roadmap and Outputs page place the Year 1 anniversary and the first policy briefs (D6) in December 2026.
+- The roadmap lists the newest entries first.
+- The home-page member figure counts the cost.eu roster once per person, 181 people in 39 countries, where it counted the 107 Directory bios.
+- The press kit typography sample sets "Net" and "Sec" in the logo gradient.
+- The social share card sets "Net" and "Sec" in the logo gradient and weighs 292 KB, down from 848 KB.
+- The home page title sets "Net" and "Sec" in the logo gradient.
+- The home page has five sections where it had twelve.
+- The roadmap cards for v1.11.0 to v1.15.0 are translated into French and German.
 
 #### Fixed
 
-- The Directory's Working Group filter and the Network Map's Working Group hubs list the same members with a profile. Two members who joined on 13 November were on the map's WG hubs and missing from the Directory's WG filter, and the Directory's Map button now gives the count for a Working Group filter (#2074).
-- The About page's Management Committee grid gives five members the title their cost.eu or Directory entry gives, in all three locales: Prof Kenan Hodžić, Prof David Matsaberidze and Prof Anna Danielsson, who were listed as Dr, and Dr Daniela Mechkaroska and Dr Henrique Garbino, who were listed as Prof and Mr (#2196).
-- The About page's Management Committee grid lists 30 countries, matching its own count, in all three locales. The Ukraine card is removed, as cost.eu has not listed a Ukrainian representative since 19 October (#2045).
-- The Events page footer no longer jumps down when the event cards load at tablet and desktop widths. The layout shift measured 0.13 to 0.21 and is now 0 from the footer (#2107).
-- The Publications page and the Working Group cards give December 2026 for the first outputs, in all three locales. They gave October 2026, which the Publications page's own introduction already contradicted (#2186).
-- Link previews of the French and German news pages are in French and German, and the French and German About and Publications pages no longer carry the English description. The Publications description no longer names October 2026 as the date of the first outputs (#2183).
-- Shared directory profiles preview with a French or German title on the French and German pages, declare their language, and carry alt text for the card image. Every page's card now has alt text for X as well (#2183).
-- The 404 page carries one robots directive, `noindex`. It also carried `index, follow` (#2183).
-- The Directory page scores a median 0.82 for Lighthouse performance, up from 0.74 to 0.75, against the 0.78 floor. Each page fetches `data/bios.json` once, after the first paint, where it had fetched it up to four times before anything was shown (twice on the Directory, four times on the home page). The COST logo in the footer of every page is a 480 pixel wide file of 9.7 KB, down from 2906 pixels and 79 KB, for a logo shown 120 pixels wide.
-- The data shape check fails a bios sync PR that takes `data/bios.json` over 90,000 bytes gzipped (74,675 today), the point where the Directory's performance score would next be at risk.
-- The Directory loads with less main-thread work on phones and in the compact view, in all three locales. It checked every hidden bio for a Show more button before the first paint, which laid out the whole page. Lighthouse's performance score for the page rose from a median of 0.72 to 0.83.
-- When an ESSC page's programme cannot load, its message links to that edition's event on Indico. It linked to the ESSC 2026 event from every edition.
-- The Directory files every research keyword under a fitting research theme. A review of the 52 keywords the bios sync had placed on its own since October moved 23 of them and folded one into an existing keyword. Among the moves are Network security out of Climate, energy and environmental security, Trustworthy AI out of Democracy, governance and political change, and Critical IR out of Cyber and emerging technology. Five keywords read correctly: Digital transformation, Eastern Mediterranean geopolitics, Critical IR, Postcolonial IR and Northern European security. A member who answers "n/a" for a link or an affiliation gets no link and no affiliation, where the sync had made a dead link such as https://n/a.
-- The ESSC 2027 call names the chair of closed panel 6 as Nicolas Blarel in all three locales.
-- ESSC 2027 appears once in the events list and the calendar feed, with Indico's times (10 June 08:00 to 11 June 20:00). The nightly Indico sync had added a second entry for it once the Indico event was published.
-- The call for papers on the ESSC 2027 page has space above each of its five subheadings and between the closed panels, in all three locales. The headings sat flush against the list above them. The Organisers heading on the 2027 policy workshop page gets the same space.
-- The outlined application-form button on the 2026 policy workshop page takes the ink colour of outlined buttons elsewhere, in all three locales. The link colour of the glass cards had turned its label blue.
-- The 2027 Training School card on the home page and the events listing gives the application deadline of 7 December 2026 in all three locales. It still read "Call for applications to follow" after the call opened.
-- The ESSC 2027 page prints its running header with the right date and venue, 10–11 June 2027 at the University of Belgrade, in all three locales. It read 11–12 June 2027 at Stockholm University.
-- `/licensing.html` lists the third-party assets the site actually ships. Inter and Lexend are self-hosted, not loaded from Google Fonts. Feather icons (MIT), the flag-icons share-card flags (MIT) and Pagefind (MIT) are now credited. The FlagCDN thumbnails are recorded as public domain, as Flagpedia publishes them, not as MIT. The EISS logo joins the trademarks. Each licence text is linked from `assets/licences/`. EN, FR and DE.
-- `LICENSE-CONTENT` states its scope. Member and faculty photographs and biographies, event photographs and video, the COST, EU and EISS marks and the third-party fonts, icons and software sit outside CC BY 4.0, as `/licensing.html` already said.
-- The press kit labels the three posters "CC BY 4.0 except the photographs and logos", since the directory posters carry member headshots and every poster carries the COST logo and EU emblem. EN, FR and DE.
-- The unused Socicon icon font, the leftover Mobirise project file and a rendered directory wallpaper with 33 member headshots are no longer published.
-- French and German pages no longer jump 42 pixels on phones as they load. The translation notice at the top reserves its height before the page draws (#2105).
-- The Directory country flags have a Country caption like the other filter rows and wrap onto a second line. At 1024px the last flag had been cut off. A shortened affiliation on a card shows the full text on hover.
-- At 1024px the Find your way in tab and the Directory tools no longer cover the right-hand column of Directory cards. Beside the grid the tools stand in an upright pill, and the grid keeps a margin clear for it.
-- The Network Map draws four Working Group leaders and co-leaders on the hub of the group they lead. Chiara Ruffa (WG3), Silvia D'Amato (WG3), Eliza Gheorghe (WG2) and Nikolaos Tzifakis (WG1) were missing from it because they are not on that group's cost.eu roster, and Ruffa was not drawn at all. The Working Groups lens now draws 168 of 225 people, up from 164.
-- Searching the Network Map for someone the current lens does not draw names the lens that does, or says that no Working Group or research theme is on file. It used to say the person was hidden by the filters even with every filter on.
-- The Network Map shows six figure tiles in one row on a desktop. The seventh, the count of directory profiles, repeated the line beneath it and wrapped alone onto a second row.
-- The Network Map introduction links the Working Groups page and the Directory without describing how the map is generated, in all three locales.
-- On phones the roadmap quarter bar floats 10px below the header as its own rounded panel, and the home page member spotlight card has 26px of side padding instead of 20px, with 16px between its heading and the card.
-- The v1.17.0 roadmap card shows its Visa letters and Early-career prize chips again, in all three locales. They had been left under the v1.16.0 card as two loose items when the card moved to Q1 2027.
-- Without JavaScript, the home page lists the two 2027 events again. Its fallback event cards are rendered from the events data at every deploy, where they had been hand-written and showed "No upcoming events" once the 2026 events ended.
-- The Training School page describes the 2027 school in Belgrade to search engines and link previews, in English, French and German. Its description still gave the 2026 dates in Stockholm, in English on all three pages.
-- Event dates on the event pages are written from the events data, so a moved date is changed in one place.
-- Three members missing from a research-theme filter in the Directory now appear under it, after five of their keywords were placed in the taxonomy. A keyword with no theme now blocks the weekly bios update until it is placed.
-- On 320px screens the header logo shows at full size on every page. It had been squeezed to an 8px sliver beside the language switcher and menu button.
-- On 320px screens no page is wider than the screen any more. Long German words in headings hyphenate, file paths and table cells wrap, and grids, cards and buttons on twelve pages shrink to fit. Content had been cut off at the right edge.
-- The roadmap shows the inaugural Management Committee plenary as held on 11 September 2026, adds the 13 September policy workshop in Ankara, and gives ESSC 2027 its dates and venue, 10 and 11 June 2027 in Belgrade. v1.17.0 moves to 10 January 2027 to match its milestone, the v1.16.0 card describes the call for papers and the five-section home page, and the v1.13.0 to v1.15.0 cards link to their release notes.
+- The Directory's Working Group filter and the Network Map's Working Group hubs list the same members (#2074).
+- The About page's Management Committee grid gives five members the title from cost.eu or their Directory entry (#2196).
+- The About page's Management Committee grid drops the Ukraine card and lists 30 countries (#2045).
+- The Events page footer no longer moves when the event cards load (#2107).
+- The Publications page and the Working Group cards give December 2026 for the first outputs (#2186).
+- The French and German News, About and Publications pages have link previews in their own language (#2183).
+- Shared directory profiles preview in French or German on those pages, and every page's card has alt text (#2183).
+- The 404 page carries a single robots directive, `noindex` (#2183).
+- Each page fetches `data/bios.json` once, after the first paint, and the footer COST logo is 9.7 KB, down from 79 KB.
+- The data shape check fails a bios sync PR that takes `data/bios.json` over 90,000 bytes gzipped.
+- The Directory no longer lays out every hidden bio before the first paint, and its median Lighthouse performance score is 0.83, up from 0.72.
+- An ESSC page whose programme cannot load links to its own edition's Indico event.
+- A review of the 52 keywords the bios sync placed on its own moved 23 to another theme, and an "n/a" link or affiliation is now left empty.
+- The ESSC 2027 call names Nicolas Blarel as chair of closed panel 6.
+- ESSC 2027 appears once in the events list and the calendar feed.
+- The ESSC 2027 call for papers has space above its subheadings and between its closed panels.
+- The 2026 policy workshop's outlined application button takes the ink colour.
+- The 2027 Training School card gives its deadline of 7 December 2026.
+- The ESSC 2027 page prints its running header with 10–11 June 2027 at the University of Belgrade.
+- `/licensing.html` lists the third-party assets the site ships, with each licence text in `assets/licences/`.
+- `LICENSE-CONTENT` lists the content outside CC BY 4.0.
+- The press kit labels the three posters "CC BY 4.0 except the photographs and logos".
+- The unused Socicon font, the Mobirise project file and a directory wallpaper with 33 headshots are no longer published.
+- French and German pages no longer shift 42 px on phones as they load (#2105).
+- The Directory country flags have a Country caption and wrap onto a second line at 1024 px.
+- At 1024 px the Find your way in tab and the Directory tools no longer cover the Directory cards.
+- The Network Map draws four Working Group leaders and co-leaders who are not on their group's cost.eu roster.
+- A Network Map search for someone the current lens does not draw names the lens that does.
+- The Network Map shows six figure tiles in one row on desktop.
+- The Network Map introduction links the Working Groups page and the Directory.
+- On phones the roadmap quarter bar floats below the header, and the spotlight card has 26 px side padding.
+- The v1.17.0 roadmap card shows its Visa letters and Early-career prize chips again.
+- Without JavaScript the home page lists the two 2027 events, rendered from the events data at every deploy.
+- The Training School page's search and preview description gives the 2027 school in Belgrade.
+- Event dates on the event pages are written from the events data.
+- Three members missing from a research-theme filter now appear under it.
+- On 320 px screens the header logo shows at full size.
+- On 320 px screens no page is wider than the screen.
+- The roadmap records the 11 September Management Committee plenary and the 13 September Ankara workshop, and gives ESSC 2027 its dates and venue.
+- The roadmap's Deliverable status chip moves to the v1.17.0 card, and the v1.15.0 card's Usage analytics chip is translated into French and German.
 
 ## [1.15.0] · 2026-10-07 — Preparing for the Year in Review
 
