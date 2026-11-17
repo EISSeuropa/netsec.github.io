@@ -13,8 +13,10 @@ link label and the type are set without translation.
 
 Form field         news.json
   Site             "site": "joint" for a joint item. EISS stops the run.
-  Headline         title.en (blank: the issue title, minus a leading "news:")
-  Summary          summary.en, cut to 300 characters
+  Headline         title.en, up to HEADLINE_MAX characters (blank: the issue
+                   title minus a leading "news:", for issues filed before the
+                   form required it)
+  Summary          summary.en, up to SUMMARY_MAX characters
   Body             body.en (blank: the summary)
   Type             type (default announcement)
   Working Group    wg
@@ -23,6 +25,12 @@ Form field         news.json
   On the home page until   homeUntil at 23:59 Paris time
   Collaborator page        "collaborator": "eiss"
   Options          "newsletter": true, "social": "skip"
+
+A headline or summary over its limit, an empty one, or Site set to EISS
+stops the run. Those messages are written for the person who filed the form:
+the workflow posts them on the issue. A message prefixed "news-from-issue:"
+is a fault in the repository and gets the workflow's generic comment
+(EISSeuropa/EISSeuropa.github.io#2191).
 
 Environment: ISSUE_TITLE, ISSUE_BODY, TODAY (YYYY-MM-DD), and
 ANTHROPIC_API_KEY for the translation. Without the key the item is written in
@@ -50,6 +58,7 @@ NEWS = ROOT / "data" / "news.json"
 
 PARIS = ZoneInfo("Europe/Paris")
 TYPES = ("announcement", "event", "publication", "call")
+HEADLINE_MAX = 100
 SUMMARY_MAX = 300
 ID_MAX = 60
 NO_RESPONSE = "_No response_"
@@ -129,12 +138,10 @@ def one_line(text: str) -> str:
     return " ".join((text or "").split())
 
 
-def cap(text: str, limit: int) -> str:
-    text = one_line(text)
+def check_length(field: str, text: str, limit: int) -> None:
     if len(text) > limit:
-        print(f"news-from-issue: summary is {len(text)} characters, cut to {limit}.")
-        text = text[: limit - 1].rstrip() + "…"
-    return text
+        sys.exit(f"The {field} is {len(text)} characters long, and the limit is {limit}. "
+                 f"Edit the issue and shorten the {field} by at least {len(text) - limit} characters.")
 
 
 def slugify(text: str) -> str:
@@ -188,15 +195,17 @@ def parse_form(title: str, f: dict[str, str], today: str, root: Path = ROOT) -> 
     """The item in English, with the dates in all three languages."""
     site = f.get("site", "").strip().lower()
     if site.startswith("eiss"):
-        sys.exit("news-from-issue: an EISS item belongs in EISSeuropa/EISSeuropa.github.io. "
-                 "Nothing was added here.")
+        sys.exit("The Site is EISS, and this form publishes on the NetSec website only. "
+                 "Edit the issue and pick NetSec or Joint, or ask the maintainer to post an EISS-only item.")
 
     headline = one_line(f.get("headline", "")) or clean_title(title)
     if not headline:
-        sys.exit("news-from-issue: no headline and an empty issue title.")
-    summary = cap(f.get("summary", ""), SUMMARY_MAX)
+        sys.exit("The Headline is empty. Edit the issue and write a headline.")
+    check_length("Headline", headline, HEADLINE_MAX)
+    summary = one_line(f.get("summary", ""))
     if not summary:
-        sys.exit("news-from-issue: the summary is empty.")
+        sys.exit("The Summary is empty. Edit the issue and write a summary.")
+    check_length("Summary", summary, SUMMARY_MAX)
     body = one_line(f.get("body", "")) or summary
 
     pub = parse_date(f.get("publication date", "")) or date.fromisoformat(today)
@@ -315,7 +324,8 @@ def main(translator=translate, news_path: Path = NEWS, root: Path = ROOT) -> int
 
     fields = form_sections(body)
     if not fields:
-        sys.exit("news-from-issue: the issue does not use the News item form. Nothing was added.")
+        sys.exit("This issue does not use the News item form. Open a new issue, "
+                 "pick News item, and fill in the form.")
     item = parse_form(title, fields, today, root)
 
     text = news_path.read_text(encoding="utf-8")

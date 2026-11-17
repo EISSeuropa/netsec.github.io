@@ -68,8 +68,8 @@ needed. The form applies no label, so filing it publishes nothing.
 | Field | Goes to |
 | --- | --- |
 | Site | NetSec: nothing extra. Joint: `"site": "joint"`. EISS: the run stops, file it in the EISS repository |
-| Headline | `title.en` (blank: the issue title, minus a leading `news:`) |
-| Summary | `summary.en`, cut to 300 characters |
+| Headline | `title.en`. Required, up to 100 characters. A longer one stops the run |
+| Summary | `summary.en`. Up to 300 characters. A longer one stops the run, so a cut never lands inside a link (EISSeuropa/EISSeuropa.github.io#2189) |
 | Body | `body.en` (blank: the summary) |
 | Type | `type` (default `announcement`) |
 | Working Group | `wg` |
@@ -105,7 +105,12 @@ failed), the PR body says so, and the FR and DE text can be added on its
 branch before merging.
 
 When the run itself fails, it comments on the issue, names the person who
-started it and links the run, and nothing is published. The failure alarm
+started it and links the run, and nothing is published. When the script
+stopped on the form's content (an empty or too long headline or summary, Site
+set to EISS), the comment quotes the reason, how to edit the issue, and that a
+publisher re-applies `news` to try again. Those messages are the plain ones in
+`scripts/news-from-issue.py`. A message prefixed `news-from-issue:` is a fault
+in the repository and gets the generic comment. The failure alarm
 also opens an issue for the maintainer
 ([#2163](https://github.com/EISSeuropa/netsec.github.io/issues/2163)).
 
