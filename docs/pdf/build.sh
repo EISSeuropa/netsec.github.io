@@ -70,9 +70,13 @@ if [[ "${1-}" == "--shots" ]]; then
     # arrived at 2560x6400: sixteen megapixels each, embedded whole into a
     # print document that caps them at 170mm. That is what took the PDF to
     # 24.6 MB, of which 22.1 MB was these images (#1727).
+    # force-prefers-reduced-motion so motion-gated content shows its end
+    # state: the home-page figures count up from zero over 900 ms, and a
+    # capture without it caught them mid-count (#2208).
     "$CHROME" --headless --no-sandbox --disable-gpu \
       --window-size=1280,3200 --hide-scrollbars \
       --force-device-scale-factor=1 \
+      --force-prefers-reduced-motion \
       --virtual-time-budget=12000 \
       --screenshot="$HERE/snap-$label.png" \
       "http://127.0.0.1:$PORT/$path" 2>/dev/null
