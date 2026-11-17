@@ -231,15 +231,15 @@
     "about.html": {
       "fr": {
         "file": "about.fr.html",
-        "source_sha1": "347d1ce11bafefbd2a819ddda1cf09072dcaacfd",
-        "translated_on": "2026-11-15",
+        "source_sha1": "857ccf2ddafdc13ca00dfb1c1a3fb23e271b7930",
+        "translated_on": "2026-11-17",
         "status": "beta",
         "reviewed_by": null
       },
       "de": {
         "file": "about.de.html",
-        "source_sha1": "347d1ce11bafefbd2a819ddda1cf09072dcaacfd",
-        "translated_on": "2026-11-15",
+        "source_sha1": "857ccf2ddafdc13ca00dfb1c1a3fb23e271b7930",
+        "translated_on": "2026-11-17",
         "status": "beta",
         "reviewed_by": null
       }
