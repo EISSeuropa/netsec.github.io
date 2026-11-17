@@ -150,7 +150,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
-_Nothing yet._
+#### Fixed
+
+- The v1.16.0 roadmap card links to its release notes, reads as shipped on the French page, and has a French and German title and summary.
+- `promote-roadmap.py` adds the release-notes link to a card with feature chips, flips a French card labelled "Prévu", and moves a card with chips to its quarter whole.
 
 ## [1.16.0] · 2026-11-17 — ESSC 2027 CfP and a smoother home page
 
