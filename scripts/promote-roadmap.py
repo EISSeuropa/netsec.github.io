@@ -97,6 +97,8 @@ LOCALES = {
     "fr": {
         "filename": "roadmap.fr.html",
         "pill_planned": "Planifié",
+        # roadmap.fr.html labels most planned cards "Prévu".
+        "pill_planned_aliases": ("Planifié", "Prévu"),
         "pill_shipped": "Livrée",
         "notes_link_text": "Notes de version",
         "quarter_prefix": "T",
@@ -346,7 +348,7 @@ def relocate_card_to_quarter(
     # and trailing newline) whose when-span carries v<version>.
     card_m = None
     for m in re.finditer(
-        r'[ \t]*<li class="rm-entry shipped(?: [^"]*)?">.*?</li>\n',
+        r'[ \t]*<li class="rm-entry shipped(?: [^"]*)?">.*?</article>\s*</li>\n',
         html, flags=re.DOTALL,
     ):
         if re.search(
@@ -413,7 +415,10 @@ def promote_planned_card(
     #      - <span class="when">...v<version>...</span> appears
     #        somewhere inside the <li>
     li_pattern = re.compile(
-        r'(<li class="rm-entry planned(?: [^"]*)?">.*?</li>\n?)',
+        # End at the card's own </article></li>: a card's feature chips
+        # are <li> elements too, and stopping at the first </li> left the
+        # block short of </article>, so no notes-link was ever inserted.
+        r'(<li class="rm-entry planned(?: [^"]*)?">.*?</article>\s*</li>\n?)',
         flags=re.DOTALL,
     )
 
@@ -455,7 +460,14 @@ def promote_planned_card(
         pill_re = re.compile(
             r'<span class="rm-pill planned">'
             r'<span class="dot" aria-hidden="true"></span>'
-            + re.escape(locale["pill_planned"])
+            + "(?:"
+            + "|".join(
+                re.escape(label)
+                for label in locale.get(
+                    "pill_planned_aliases", (locale["pill_planned"],)
+                )
+            )
+            + ")"
             + r'</span>'
         )
         pill_new = (

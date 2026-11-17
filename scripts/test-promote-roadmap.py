@@ -425,6 +425,12 @@ def test_feature_chips_survive_promotion() -> None:
            "Planned lede the script should overwrite" not in out, True)
     # The whole chip block survives byte-for-byte.
     expect("rm-features block preserved verbatim", chips in out, True)
+    # The card match must reach </article>, not stop at the first chip's
+    # </li>, or the notes-link has nowhere to go (v1.16.0 shipped without one).
+    expect("notes-link inserted after the chip block",
+           ('releases/tag/v1.12.0' in out
+            and out.index('</ul>') < out.index('class="notes-link"')
+            < out.index('</article>')), True)
     expect("all three chip labels survive",
            ("Conference recap" in out and "Outputs cards (D6)" in out
             and "IA audit, Phase 2" in out), True)
@@ -564,6 +570,51 @@ def test_needs_translation_marker_count() -> None:
                out.count(marker), 1)
 
 
+def test_fr_prevu_pill_flips() -> None:
+    print("\npromote_planned_card() — FR planned pill reading 'Prévu':")
+    locale = LOCALES["fr"]
+    html = _fixture(
+        "fr", "Prévu",
+        "Late 2026 &middot; v1.7.0",
+        "9–12 June 2026 &middot; Stockholm",
+        "<p class=\"roadmap-updated\">x</p>",
+    )
+    out, _ = promote_planned_card(html, "1.7.0", "2026-09-08", locale)
+    expect("pill flipped to shipped",
+           '<span class="rm-pill shipped"><span class="dot" aria-hidden="true"></span>Livrée</span>' in out,
+           True)
+    expect("exactly one 'Prévu' pill flipped (the milestone keeps its own)",
+           out.count("Prévu</span>"), html.count("Prévu</span>") - 1)
+
+
+def test_relocate_card_with_chips() -> None:
+    print("\nrelocate_card_to_quarter() — card with feature chips moves whole:")
+    locale = LOCALES["en"]
+    chips = (
+        '          <ul class="rm-features" role="list">\n'
+        '            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-document"/></svg>Chip A</li>\n'
+        '            <li><svg class="rmi" aria-hidden="true"><use href="#rmi-people"/></svg>Chip B</li>\n'
+        '          </ul>\n'
+    )
+    html = _multi_quarter_fixture("Q").replace(
+        "<p>Body.</p>\n", "<p>Body.</p>\n" + chips, 1,
+    ).replace(
+        "<p>Shipped already.</p>\n", "<p>Shipped already.</p>\n" + chips, 1,
+    )
+    out, moved = relocate_card_to_quarter(html, "1.7.0", "2026-05-15", locale)
+    expect("moved flag is True", moved, True)
+    nested = re.search(
+        r'<ul class="rm-features"[^>]*>(?:(?!</ul>).)*<li class="rm-entry',
+        out, flags=re.DOTALL,
+    )
+    expect("no card lands inside a chip list", nested is None, True)
+    expect("article count unchanged",
+           out.count("</article>"), html.count("</article>"))
+    expect("v1.7.0 chips travel with it, before v1.0.0",
+           out.index("v1.7.0") < out.index("Chip A") < out.index("v1.0.0"),
+           True)
+
+
 def main() -> None:
     test_promote_en()
     test_promote_fr()
@@ -584,6 +635,8 @@ def main() -> None:
     test_relocate_same_quarter_noop()
     test_relocate_fr_quarter_prefix()
     test_needs_translation_marker_count()
+    test_fr_prevu_pill_flips()
+    test_relocate_card_with_chips()
     print("\nAll tests passed.")
 
 
