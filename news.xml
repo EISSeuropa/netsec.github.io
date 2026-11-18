@@ -5,9 +5,16 @@
     <link>https://netsec-cost.eu/#news</link>
     <description>Announcements, calls, and milestones from the COST Action CA24154 (NetSec).</description>
     <language>en-GB</language>
-    <lastBuildDate>Wed, 11 Nov 2026 12:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 18 Nov 2026 12:00:00 +0100</lastBuildDate>
     <generator>scripts/build-news-rss.py</generator>
     <atom:link href="https://netsec-cost.eu/news.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>ESSC 2027: the call for panels and papers is open</title>
+      <link>https://netsec-cost.eu/essc-2027.html</link>
+      <description><![CDATA[The call for panels, papers and posters for the European Security Studies Conference 2027 is published. The conference takes place on 10 and 11 June 2027 at the University of Belgrade, Faculty of Political Science, and is jointly organised by the COST Action NetSec, the European Initiative for Security Studies (EISS) and the University of Belgrade. There are three submission types: papers for the eight closed panels, open panels with a chair and four speakers, and posters for PhD and Master's students presenting early work. NetSec offers a limited number of travel grants to active participants, who say in their proposal if they would like to be considered. Proposals are due on Indico by 26 January 2027.]]></description>
+      <pubDate>Wed, 18 Nov 2026 12:00:00 +0100</pubDate>
+      <guid isPermaLink="false">essc-2027-the-call-for-panels-and-papers-is-open-2026-11</guid>
+    </item>
     <item>
       <title>WG2 Policy Workshop 2027 in Seville: call for applications</title>
       <link>https://netsec-cost.eu/policy-workshop-2027.html</link>
