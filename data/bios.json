@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generated_at": "2026-11-13T14:02:05+00:00",
+  "generated_at": "2026-11-18T13:59:14+00:00",
   "source": {
     "type": "google_sheet",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-11-13T14:02:05+00:00"
+    "last_synced": "2026-11-18T13:59:14+00:00"
   },
   "members": [
     {
@@ -6410,6 +6410,59 @@
         "Transnational and human security",
         "War, military history and armed conflict"
       ]
+    },
+    {
+      "id": "daskalakis-emmanouil",
+      "name": "Mr Daskalakis Emmanouil",
+      "country": "Greece",
+      "country_code": "gr",
+      "affiliation": "Greek Fireservice",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Africa",
+        "Asia",
+        "Europe",
+        "Europe - Eastern neighbours / Russia",
+        "Europe - Western Balkans",
+        "Global and cross-regional",
+        "Middle East and North Africa",
+        "The Americas"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Manolis Daskalakis is a Fire Officer in the Hellenic Fire Service, Greece, with professional experience in operational response, crisis management, civil protection and security. He holds a BSc in Geology from Aristotle University of Thessaloniki, an MBA in Oil, Gas and Energy Management from the University of Nicosia, and an MSc in Environmental and Disaster and Crisis Management from the National and Kapodistrian University of Athens. He has also completed vocational training in Security Management of Persons and Infrastructure at the 2nd Public Vocational Training Institute of Heraklion.\n\nHe is currently a PhD candidate at the Hellenic Army Academy, conducting research on information flow and interagency coordination for achieving security against asymmetric threats. In parallel, he is a postgraduate student in the MSc programme in Energy Systems at the Hellenic Mediterranean University.\n\nHis professional background includes operational and staff positions within the Hellenic Fire Service, teaching and training activities at the Hellenic Fire Academy, and previous experience in the private security sector. He has also worked as a security analyst and journalist, contributing articles on national and international security, energy, geopolitics and emergency management to various media outlets.\n\nHis research and professional interests focus on national and European security, hybrid threats, civil protection, disaster risk reduction, critical infrastructure protection, energy security and interagency cooperation. He is particularly interested in strengthening societal resilience and developing integrated approaches to security through cooperation between emergency response services, armed forces, law enforcement agencies and critical infrastructure operators.",
+      "keywords": [
+        "National Security",
+        "Hybrid Threats",
+        "Critical Infrastructure Protection",
+        "Disaster Risk Reduction",
+        "Crisis Management"
+      ],
+      "email": "",
+      "website": "",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/manolis-daskalakis?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+      "twitter": "https://x.com/emdaskalakis?s=11",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "joined": "2026-11-18",
+      "canonical_keywords": [
+        "Crisis management",
+        "Critical infrastructure protection",
+        "Disaster risk reduction",
+        "Hybrid threats",
+        "National security"
+      ],
+      "themes": [
+        "Crisis management and critical systems resilience",
+        "Intelligence, information and influence",
+        "Security and defence"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -6430,6 +6483,10 @@
       "count": 7
     },
     {
+      "keyword": "Hybrid threats",
+      "count": 7
+    },
+    {
       "keyword": "Strategy",
       "count": 7
     },
@@ -6438,15 +6495,19 @@
       "count": 6
     },
     {
-      "keyword": "Hybrid threats",
-      "count": 6
-    },
-    {
       "keyword": "International security",
       "count": 6
     },
     {
       "keyword": "Alliance politics",
+      "count": 5
+    },
+    {
+      "keyword": "Crisis management",
+      "count": 5
+    },
+    {
+      "keyword": "Critical infrastructure protection",
       "count": 5
     },
     {
@@ -6482,14 +6543,6 @@
       "count": 5
     },
     {
-      "keyword": "Crisis management",
-      "count": 4
-    },
-    {
-      "keyword": "Critical infrastructure protection",
-      "count": 4
-    },
-    {
       "keyword": "EU foreign policy",
       "count": 4
     },
@@ -6499,6 +6552,10 @@
     },
     {
       "keyword": "Identity",
+      "count": 4
+    },
+    {
+      "keyword": "National security",
       "count": 4
     },
     {
@@ -6539,10 +6596,6 @@
     },
     {
       "keyword": "Intelligence studies",
-      "count": 3
-    },
-    {
-      "keyword": "National security",
       "count": 3
     },
     {
@@ -6971,6 +7024,10 @@
     },
     {
       "keyword": "Digital transformation",
+      "count": 1
+    },
+    {
+      "keyword": "Disaster risk reduction",
       "count": 1
     },
     {
@@ -7717,7 +7774,7 @@
     },
     {
       "theme": "Security and defence",
-      "count": 38
+      "count": 39
     },
     {
       "theme": "Disciplines, theory and methods",
@@ -7741,15 +7798,15 @@
     },
     {
       "theme": "Intelligence, information and influence",
-      "count": 17
+      "count": 18
+    },
+    {
+      "theme": "Crisis management and critical systems resilience",
+      "count": 13
     },
     {
       "theme": "Economic security and geoeconomics",
       "count": 13
-    },
-    {
-      "theme": "Crisis management and critical systems resilience",
-      "count": 12
     },
     {
       "theme": "EU, UN and other international organisations",
@@ -7862,6 +7919,7 @@
     "Digital sovereignty": "Cyber and emerging technology",
     "Digital transformation": "Cyber and emerging technology",
     "Diplomacy": "Foreign policy and diplomacy",
+    "Disaster risk reduction": "Crisis management and critical systems resilience",
     "Discourse": "Identity, narratives and ideational security",
     "Disinformation": "Intelligence, information and influence",
     "Distributed intelligence": "Cyber and emerging technology",
@@ -8104,35 +8162,35 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 86
+      "count": 87
     },
     {
       "region": "Global and cross-regional",
-      "count": 66
+      "count": 67
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 30
+      "count": 31
     },
     {
       "region": "Europe - Western Balkans",
-      "count": 30
+      "count": 31
     },
     {
       "region": "The Americas",
-      "count": 22
+      "count": 23
     },
     {
       "region": "Middle East and North Africa",
-      "count": 21
+      "count": 22
     },
     {
       "region": "Asia",
-      "count": 15
+      "count": 16
     },
     {
       "region": "Africa",
-      "count": 8
+      "count": 9
     }
   ]
 }
