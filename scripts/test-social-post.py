@@ -1001,8 +1001,12 @@ def test_welcome_go_live_date_in_the_repository_is_a_date():
     assert since is None or sp.dt.date.fromisoformat(since)
 
 
+def _photo() -> str:
+    return next((sp.ROOT / "assets" / "images" / "people").glob("*.jpg")).relative_to(sp.ROOT).as_posix()
+
+
 def test_welcome_uses_its_card_when_rendered_for_these_members(monkeypatch, tmp_path):
-    members = [_member(1), _member(2)]
+    members = [_member(1, photo=_photo()), _member(2, photo=_photo())]
     _bios(monkeypatch, tmp_path, members, since="2026-11-01")
     monkeypatch.setattr(sp, "WELCOME_CARDS", tmp_path / "welcome")
     post = sp.read_welcome(set(), today=TODAY)
@@ -1026,9 +1030,10 @@ def test_welcome_ignores_a_card_rendered_for_other_members(monkeypatch, tmp_path
 
 
 def test_welcome_card_alt_counts_the_members_not_pictured():
-    members = [_member(i) for i in range(16)]
+    members = [_member(i, photo=_photo()) for i in range(16)]
     assert len(sp.welcome_card_faces(members)) == 6
     alt = sp.welcome_card_alt(members)
     assert alt.startswith("Welcome to the NetSec Directory: photos of six of the 16 new members, ")
     assert alt.endswith(", and a tile for ten more")
     assert len(sp.welcome_card_faces(members[:7])) == 7
+    assert sp.welcome_card_faces(members[:7] + [_member(20)]) == members[:6]

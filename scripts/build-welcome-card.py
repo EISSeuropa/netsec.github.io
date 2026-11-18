@@ -3,9 +3,10 @@
 
 The welcome post (scripts/social-post.py, kind "welcome", #2236) names the
 members who joined the NetSec Directory. This renders one 1200x630 PNG with
-their headshots: up to seven faces with their names (from eight members, six
-faces and a "+N" tile), the count and the NetSec branding. A member with no headshot gets the initials
-tile of the per-member cards.
+their headshots and names, the count and the NetSec branding. Only members
+with a headshot are pictured, and the rest are counted in a "+N" tile (see
+welcome_card_faces() in social-post.py). When nobody has a headshot, the card
+uses the initials tiles of the per-member cards.
 
 The members come from social-post.py's welcome_pending(), with the same ledger
 and the same `since` rule, so the card shows exactly the people the post names.
