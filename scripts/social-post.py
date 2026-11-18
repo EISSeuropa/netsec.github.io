@@ -191,6 +191,33 @@ def news_collaborators() -> dict:
             for it in data.get("items", []) if it.get("id") and it.get("collaborator")}
 
 
+def news_images() -> dict:
+    """{news item id: {"image", "image_alt"}} from data/news.json's optional
+    `image` (a file under the site root, such as the News item form's photo
+    in assets/images/news/) and `imageAlt` (the form's Image description,
+    else the English title). A missing file, or one outside the site, is
+    left out, and the post falls back to _news_image()."""
+    if not NEWS_JSON.exists():
+        return {}
+    try:
+        data = json.loads(NEWS_JSON.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    root = ROOT.resolve()
+    out = {}
+    for it in data.get("items", []):
+        rel = str(it.get("image") or "").strip().lstrip("/")
+        if not (it.get("id") and rel):
+            continue
+        path = (root / rel).resolve()
+        if not (path.is_file() and root in path.parents):
+            continue
+        title = it.get("title")
+        title = title.get("en", "") if isinstance(title, dict) else str(title or "")
+        out[it["id"]] = {"image": path, "image_alt": str(it.get("imageAlt") or title).strip()}
+    return out
+
+
 def _step_summary(lines: list[str]) -> None:
     """Append to the GitHub Actions run summary when there is one."""
     path = os.environ.get("GITHUB_STEP_SUMMARY")
@@ -226,6 +253,7 @@ def read_news_feed() -> list[Post]:
     xml = NEWS_XML.read_text(encoding="utf-8")
     directives = news_directives()
     collaborators = news_collaborators()
+    images = news_images()
     posts = []
     for block in re.findall(r"<item>(.*?)</item>", xml, re.S):
         def grab(tag, attrs=False):
@@ -250,7 +278,7 @@ def read_news_feed() -> list[Post]:
             title=title,
             summary=summary,
             link=link,
-            **_news_image(link),
+            **(images.get(guid) or _news_image(link)),
             collaborator=collaborators.get(guid, ""),
         ))
     return posts

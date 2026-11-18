@@ -9,7 +9,7 @@ body:
 
         After you submit it, a robot turns the form into a draft. Nothing is public until the maintainer approves that draft. If something goes wrong, the robot leaves a comment on this issue saying what to change.
 
-        Headline and Summary are required. Leave any other field blank if it does not apply. Write plain text everywhere: no links, no bold, no hashtags copied from LinkedIn. The web address goes in the Link field.
+        Headline and Summary are required. Leave any other field blank if it does not apply. Write plain text everywhere: no links, no bold, no hashtags copied from LinkedIn. The web address goes in the Link field, and a photo in the Image field.
 
         You can leave the issue title as it is.
   - type: dropdown
@@ -101,6 +101,32 @@ body:
         the LinkedIn and Bluesky posts end with it. Copy the full address from
         your browser, starting with https://. Leave it blank if there is no
         page: the posts then link to the news on the home page.
+    validations:
+      required: false
+  - type: textarea
+    id: image
+    attributes:
+      label: Image
+      description: >-
+        Optional. A photo for the LinkedIn and Bluesky posts. Drag the photo
+        from your computer into this box, or tap the box and paste it on a
+        phone, then wait until a line starting with "<img" or "![" appears.
+        Use a JPEG or PNG. A large photo is made smaller for you. Use only a
+        photo NetSec may publish, and ask the people who can be recognised in
+        it first. Leave the box empty to use the event's card, when Link points
+        to an event page, or the standard NetSec picture. The website does not
+        show the photo.
+    validations:
+      required: false
+  - type: input
+    id: image-description
+    attributes:
+      label: Image description
+      description: >-
+        Needed when you add a photo. One sentence in English saying what the
+        photo shows, up to 300 characters. Screen readers read it aloud to
+        people who cannot see the photo. Example: "Four speakers seated at a
+        panel table in front of a projected slide."
     validations:
       required: false
   - type: input

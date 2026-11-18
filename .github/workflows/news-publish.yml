@@ -98,9 +98,11 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install the Claude API client
+      # The Claude API client for the translations, and Pillow
+      # (scripts/requirements.txt) to shrink the item's photo.
+      - name: Install the Claude API client and the script requirements
         if: steps.publisher.outputs.allowed == 'true'
-        run: python -m pip install --quiet anthropic==2.8.0
+        run: python -m pip install --quiet anthropic==2.8.0 -r scripts/requirements.txt
 
       - name: Add the news item and rebuild the feed
         if: steps.publisher.outputs.allowed == 'true'
@@ -130,6 +132,10 @@ jobs:
               echo "The French and German title, summary and body are machine translations (Claude API). Merging approves them (CLAUDE.md §1)."
             fi
             echo ""
+            if grep -q 'photo saved as' /tmp/news-add.txt; then
+              echo "The photo is in the Files changed tab. The post preview gives its description, read aloud to people who cannot see it."
+              echo ""
+            fi
             echo "Script output:"
             echo ""
             echo '```'

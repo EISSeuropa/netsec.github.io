@@ -79,6 +79,8 @@ needed. The form applies no label, so filing it publishes nothing.
 | Link | `cta`: an existing page, never a new one, shown as "Read more →" in each locale and at the end of the social posts. A page on this site links its `.fr.html` and `.de.html` pages when both exist. Blank: no button, and the posts link to the home page news |
 | Publication date | `pubDate` at 12:00 Paris time, and `displayDate` in each locale (blank: the day the label is applied) |
 | On the home page until | `homeUntil` at 23:59 Paris time |
+| Image | A photo dragged into the field: saved as `assets/images/news/<id>.jpg`, and `image` is that path, the picture of the social posts. A site image (`assets/...`) is used as it is |
+| Image description | `imageAlt`. Required with a photo, up to 300 characters, in English |
 | Collaborator page | `"collaborator": "eiss"` |
 | Do not post to LinkedIn and Bluesky | `"social": "skip"` |
 
@@ -105,6 +107,20 @@ change the item first, edit the entry on the PR's branch and rerun
 When the translation did not run (no `ANTHROPIC_API_KEY` secret, or the call
 failed), the PR body says so, and the FR and DE text can be added on its
 branch before merging.
+
+**Photos.** GitHub stores a photo dragged into the Image field and writes its
+address there (`<img ... src="https://github.com/user-attachments/assets/...">`
+or `![...](...)`). `news-from-issue.py` downloads it after the duplicate check,
+turns it upright from its EXIF orientation, and saves it as a JPEG of at most
+950,000 bytes and 2,000 pixels a side (Bluesky refuses an image over 1 MB). It
+shrinks the quality to 70, then the size, until it fits. The EXIF data, with
+the place the photo was taken, is not copied. The file is
+`assets/images/news/<id>.jpg` and goes in the news PR. `social-post.py` posts
+an item's own image first, then the event card when the link is an event page
+(#2185), then the NetSec card. A photo that cannot be downloaded or read, or
+one without a description, stops the run with a comment saying what to change.
+The website does not show the photo. Ported from EISS
+(EISSeuropa/EISSeuropa.github.io#2193).
 
 When the run itself fails, it comments on the issue, names the person who
 started it and links the run, and nothing is published. When the script
@@ -175,6 +191,8 @@ describes the rest.
 | `homeUntil` | no | ISO datetime. After it the item leaves the home page but stays in the archive and the RSS feed. On a `call` it drives the countdown in the Open calls tile, and a call without it shows as a rolling call. |
 | `cta` | no | `{href, external, i18n:{en, fr?, de?}}`, a "Read more" link. `href` may be a string or a per-locale map. |
 | `social` | no | Bluesky and LinkedIn handling: omit it or set `"auto"` to offer the item for posting, `"skip"` to never post it, or `"thread:<slug>"` when a curated thread announces it instead. |
+| `image` | no | A file under the site root, such as the form's photo in `assets/images/news/`. The picture of the LinkedIn and Bluesky posts, before the event card. The site ignores it. |
+| `imageAlt` | no | The image's alt text on both networks (the form's Image description). Blank: the English title. |
 | `site` | no | `"joint"` for an item shared with EISS. The site ignores it. |
 | `collaborator` | no | `"eiss"`: after a LinkedIn post, the posting run lists it for adding the EISS page as collaborator by hand. LinkedIn's API cannot do it. |
 | `newsletter` | no | `true` puts `<category>newsletter</category>` on the item in `news.xml`, which the monthly newsletter reads. |

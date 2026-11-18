@@ -624,3 +624,33 @@ def test_news_collaborator_reaches_the_post_and_the_run_summary(monkeypatch, tmp
     text = summary.read_text(encoding="utf-8")
     assert "https://linkedin.example/1" in text and "EISS LinkedIn page" in text
     assert "bluesky.example" not in text
+
+
+def test_news_photo_from_the_form_comes_before_the_cards(monkeypatch, tmp_path):
+    (tmp_path / "assets" / "images" / "news").mkdir(parents=True)
+    (tmp_path / "assets" / "images" / "news" / "with-photo.jpg").write_bytes(b"\xff\xd8\xff" + b"0" * 32)
+    news = tmp_path / "data" / "news.json"
+    news.parent.mkdir()
+    news.write_text(json.dumps({"items": [
+        {"id": "with-photo", "title": {"en": "With photo"},
+         "image": "assets/images/news/with-photo.jpg", "imageAlt": "Four people at a table."},
+        {"id": "no-alt", "title": {"en": "No alt"}, "image": "assets/images/news/with-photo.jpg"},
+        {"id": "missing", "title": {"en": "Missing"}, "image": "assets/images/news/gone.jpg"},
+        {"id": "outside", "title": {"en": "Outside"}, "image": "../../etc/passwd"},
+    ]}), encoding="utf-8")
+    items = "".join(
+        f"<item><title>{t}</title><link>https://netsec-cost.eu/</link>"
+        f'<description><![CDATA[x]]></description><guid isPermaLink="false">{g}</guid></item>'
+        for g, t in (("with-photo", "With photo"), ("no-alt", "No alt"), ("missing", "Missing"), ("outside", "Outside")))
+    xml = tmp_path / "news.xml"
+    xml.write_text(f"<rss><channel>{items}</channel></rss>", encoding="utf-8")
+    monkeypatch.setattr(sp, "ROOT", tmp_path)
+    monkeypatch.setattr(sp, "NEWS_JSON", news)
+    monkeypatch.setattr(sp, "NEWS_XML", xml)
+    posts = {p.key: p for p in sp.read_news_feed()}
+    photo = (tmp_path / "assets" / "images" / "news" / "with-photo.jpg").resolve()
+    assert posts["news::with-photo"].image == photo
+    assert posts["news::with-photo"].image_alt == "Four people at a table."
+    assert posts["news::no-alt"].image_alt == "No alt"
+    for key in ("news::missing", "news::outside"):
+        assert posts[key].image == sp.SITE_OG

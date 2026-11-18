@@ -25,6 +25,8 @@ are required. Write in English. The French and German come in step 3.
 | Type | `announcement`, `event`, `publication` or `call` |
 | Working Group | `WG1` to `WG4`, or `No Working Group` |
 | Link | The address of an existing page the item is about, or a page added in the same PR |
+| Image | Optional. The picture of the LinkedIn and Bluesky posts: an `https://` address of a photo the person sent (the script downloads it, shrinks it under 1 MB and saves it as `assets/images/news/<id>.jpg`), or an image on the site (`assets/...`) |
+| Image description | Required with an image. One English sentence saying what it shows, up to 300 characters: the alt text |
 | Publication date | `YYYY-MM-DD`, blank for today |
 | On the home page until | `YYYY-MM-DD`, for a call its closing date |
 | Collaborator page | `EISS` for a joint item, otherwise `No collaborator` |
@@ -64,6 +66,14 @@ No Working Group
 ### Link
 
 essc-2027.html
+
+### Image
+
+_No response_
+
+### Image description
+
+_No response_
 
 ### Publication date
 
