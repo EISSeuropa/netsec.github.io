@@ -16,8 +16,14 @@ Form field         news.json
   Headline         title.en, up to HEADLINE_MAX characters (blank: the issue
                    title minus a leading "news:", for issues filed before the
                    form required it)
-  Summary          summary.en, up to SUMMARY_MAX characters
-  Body             body.en (blank: the summary)
+  Website summary  summary.en, one line, up to SUMMARY_MAX characters
+                   ("Summary" on issues filed before it was split)
+  Body             body.en, up to BODY_MAX characters (blank: the summary)
+  LinkedIn post    posts.linkedin, verbatim with its line breaks, up to
+                   LINKEDIN_LIMIT characters with the link added
+  Bluesky post     posts.bluesky, the same, up to BLUESKY_LIMIT characters
+                   with the link and each tag written as its handle
+                   (@Key tags come from data/social-accounts.json)
   Type             type (default announcement)
   Working Group    wg
   Link             cta, with the FR and DE pages when they exist
@@ -78,6 +84,8 @@ IMAGE_MAX_BYTES = 950_000
 IMAGE_MAX_SIDE = 2000
 DOWNLOAD_MAX_BYTES = 25_000_000
 SUMMARY_MAX = 300
+BODY_MAX = 2000
+POST_BOXES = (("linkedin", "LinkedIn post", "linkedin post"), ("bluesky", "Bluesky post", "bluesky post"))
 ID_MAX = 60
 NO_RESPONSE = "_No response_"
 FORM_HEADING_RE = re.compile(r"^###\s+(.+?)\s*$")
@@ -154,6 +162,63 @@ def form_sections(body: str) -> dict[str, str]:
 
 def one_line(text: str) -> str:
     return " ".join((text or "").split())
+
+
+_MODULES: dict = {}
+
+
+def _module(name: str):
+    """A sibling script loaded as a module (social-post.py for the post
+    helpers, build-news-rss.py for the link a post ends with). Loaded once."""
+    if name not in _MODULES:
+        import importlib.util
+        mod_name = name.replace("-", "_").removesuffix(".py")
+        spec = importlib.util.spec_from_file_location(mod_name, Path(__file__).with_name(name))
+        mod = importlib.util.module_from_spec(spec)
+        sys.modules[mod_name] = mod
+        spec.loader.exec_module(mod)
+        _MODULES[name] = mod
+    return _MODULES[name]
+
+
+def post_text(text: str) -> str:
+    """A post as written, with its paragraphs: line ends trimmed, at most one
+    blank line between paragraphs."""
+    lines = [ln.rstrip() for ln in (text or "").replace("\r\n", "\n").split("\n")]
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+
+def check_post(network: str, label: str, text: str, item: dict) -> None:
+    """Stops the run when a post box tags an unknown account or is over the
+    network's limit once the link is added and the tags are written out."""
+    sp = _module("social-post.py")
+    accounts = sp.load_accounts()
+    unknown = sp.unknown_tags(text, accounts)
+    if unknown:
+        known = ", ".join("@" + k for k in sorted(
+            (json.loads(sp.ACCOUNTS_JSON.read_text(encoding="utf-8")).get("accounts") or {})))
+        sys.exit(f"The {label} tags {', '.join(unknown)}, which is not in the list of accounts. "
+                 f"Edit the issue and use {known}, or write the name without @.")
+    link = _module("build-news-rss.py").item_link(item)
+    shown, _ = sp.tagged(sp.with_link(text, link), network, accounts)
+    limit = sp.LINKEDIN_LIMIT if network == "linkedin" else sp.BLUESKY_LIMIT
+    if len(shown) > limit:
+        extra = " with the link and the tags as Bluesky shows them" if network == "bluesky" else " with the link"
+        sys.exit(f"The {label} is {len(shown)} characters long{extra}, and the limit is {limit}. "
+                 f"Edit the issue and shorten the {label} by at least {len(shown) - limit} characters.")
+
+
+def check_date(label: str, val: str) -> date | None:
+    """The date in a date box, None when it is empty. Any other text stops
+    the run: before, it was dropped without a word."""
+    val = (val or "").strip()
+    if not val:
+        return None
+    d = parse_date(val)
+    if d is None:
+        sys.exit(f"The {label} \"{val}\" is not a date the site can read. Edit the issue and write it "
+                 "as year-month-day with dashes, for example 2026-12-01, or leave it empty.")
+    return d
 
 
 def check_length(field: str, text: str, limit: int) -> None:
@@ -302,13 +367,16 @@ def parse_form(title: str, f: dict[str, str], today: str, root: Path = ROOT) -> 
     if not headline:
         sys.exit("The Headline is empty. Edit the issue and write a headline.")
     check_length("Headline", headline, HEADLINE_MAX)
-    summary = one_line(f.get("summary", ""))
+    label = "Website summary" if "website summary" in f else "Summary"
+    summary = one_line(f.get("website summary", f.get("summary", "")))
     if not summary:
-        sys.exit("The Summary is empty. Edit the issue and write a summary.")
-    check_length("Summary", summary, SUMMARY_MAX)
-    body = one_line(f.get("body", "")) or summary
+        sys.exit(f"The {label} is empty. Edit the issue and write one or two sentences for the website.")
+    check_length(label, summary, SUMMARY_MAX)
+    body = one_line(f.get("body", ""))
+    check_length("Body", body, BODY_MAX)
+    body = body or summary
 
-    pub = parse_date(f.get("publication date", "")) or date.fromisoformat(today)
+    pub = check_date("Publication date", f.get("publication date", "")) or date.fromisoformat(today)
     t = f.get("type", "").strip().lower()
 
     item: dict = {
@@ -323,10 +391,14 @@ def parse_form(title: str, f: dict[str, str], today: str, root: Path = ROOT) -> 
     wg = re.fullmatch(r"WG([1-4])", f.get("working group", "").strip())
     if wg:
         item["wg"] = int(wg.group(1))
-    until = parse_date(f.get("on the home page until", ""))
+    until = check_date("On the home page until date", f.get("on the home page until", ""))
     if until:
         item["homeUntil"] = paris_iso(until, time(23, 59))
-    cta = make_cta(f.get("link", ""), root)
+    raw_link = f.get("link", "").strip()
+    cta = make_cta(raw_link, root)
+    if raw_link and (cta is None or any(c.isspace() for c in raw_link)):
+        sys.exit("The Link is not a web address. Edit the issue and paste the full address, starting "
+                 "with https://, or a page on this site such as essc-2027.html, or leave it empty.")
     if cta:
         item["cta"] = cta
     if site.startswith("joint"):
@@ -350,6 +422,14 @@ def parse_form(title: str, f: dict[str, str], today: str, root: Path = ROOT) -> 
         else:
             item["image"] = image
         item["imageAlt"] = alt
+    posts = {}
+    for network, box_label, key in POST_BOXES:
+        text = post_text(f.get(key, ""))
+        if text:
+            check_post(network, box_label, text, item)
+            posts[network] = text
+    if posts:
+        item["posts"] = posts
     return item
 
 

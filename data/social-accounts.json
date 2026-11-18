@@ -1,0 +1,20 @@
+{
+  "_documentation": "Accounts a news item may tag in its LinkedIn and Bluesky posts, written @Key in the post text (the key, any case). linkedin: the page's name as LinkedIn shows it and its organisation URN (urn:li:organization:<number>, from the page admin's URL). bluesky: the handle, without @. A null value posts the tag as the plain name on that network. scripts/social-post.py turns each tag into a LinkedIn mention and a Bluesky mention, and news-from-issue.py refuses a tag that is not listed here. The EISS repository keeps the same file.",
+  "accounts": {
+    "EISS": {
+      "name": "European Initiative for Security Studies (EISS)",
+      "linkedin": null,
+      "bluesky": "eissnetwork.bsky.social"
+    },
+    "NetSec": {
+      "name": "Networking European Security Knowledge (NetSec)",
+      "linkedin": null,
+      "bluesky": "netsec-cost.eu"
+    },
+    "COST": {
+      "name": "COST Association - European Cooperation in Science and Technology",
+      "linkedin": null,
+      "bluesky": null
+    }
+  }
+}

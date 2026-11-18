@@ -156,7 +156,7 @@ def test_form_requires_the_headline_and_describes_every_field():
     blocks = re.split(r"^  - type: ", text, flags=re.M)[1:]
     fields = {re.search(r"^    id: (\S+)", b, re.M).group(1): b
               for b in blocks if not b.startswith("markdown")}
-    assert len(fields) == 13, sorted(fields)
+    assert len(fields) == 15, sorted(fields)
     for fid, b in fields.items():
         assert re.search(r"^      description: \S", b, re.M), f"{fid} has no description"
     assert "required: true" in fields["headline"]
@@ -205,7 +205,8 @@ def test_form_headings_match_the_script():
     text = (HERE.parent / ".github" / "ISSUE_TEMPLATE" / "news.yml").read_text(encoding="utf-8")
     labels = {m.lower() for m in re.findall(r"^\s+label: (.+?)\s*$", text, re.M)
               if not m.startswith(("Include", "Do not"))}
-    read = {"site", "headline", "summary", "body", "type", "working group", "link",
+    read = {"site", "headline", "website summary", "body", "linkedin post", "bluesky post",
+            "type", "working group", "link",
             "image", "image description", "publication date", "on the home page until", "collaborator page", "options"}
     assert labels == read
 
@@ -321,3 +322,58 @@ def test_photo_end_to_end(monkeypatch, tmp_path):
     assert "_image_url" not in it
     assert list(it).index("image") < list(it).index("imageAlt")
     assert (tmp_path / it["image"]).stat().st_size <= nfi.IMAGE_MAX_BYTES
+
+
+# One box per surface (EISSeuropa/EISSeuropa.github.io#2195).
+def boxes(**over) -> str:
+    fields = {"Website summary": "Applications are open for the NetSec Training School in Belgrade.",
+              "LinkedIn post": "📣 Applications are open!   \n\nWith @EISS and @cost.\n\n\n\n#NetSec",
+              "Bluesky post": "Applications are open, with @EISS. #NetSec"}
+    fields.update(over)
+    return form(Summary=None, **fields)
+
+
+def test_boxes_map_with_paragraphs():
+    item = nfi.parse_form("news: x", nfi.form_sections(boxes()), TODAY)
+    assert item["summary"]["en"] == "Applications are open for the NetSec Training School in Belgrade."
+    assert item["posts"] == {"linkedin": "📣 Applications are open!\n\nWith @EISS and @cost.\n\n#NetSec",
+                             "bluesky": "Applications are open, with @EISS. #NetSec"}
+    item = nfi.parse_form("news: x", nfi.form_sections(boxes(**{"Bluesky post": "_No response_"})), TODAY)
+    assert set(item["posts"]) == {"linkedin"}
+
+
+@pytest.mark.parametrize("over, message", [
+    ({"Website summary": "_No response_"}, "Website summary is empty"),
+    ({"Website summary": "w" * 301}, "Website summary is 301 characters"),
+    ({"Body": "b" * 2001}, "Body is 2001 characters"),
+    ({"LinkedIn post": "With @Nope"}, "LinkedIn post tags @Nope"),
+    ({"Bluesky post": "With @Nobody"}, "Bluesky post tags @Nobody"),
+    ({"Link": "the event page"}, "The Link is not a web address"),
+    ({"Publication date": "next week"}, 'Publication date "next week"'),
+    ({"On the home page until": "end of January"}, "On the home page until date"),
+])
+def test_every_box_is_checked(over, message):
+    with pytest.raises(SystemExit, match=re.escape(message)):
+        nfi.parse_form("news: x", nfi.form_sections(boxes(**over)), TODAY)
+
+
+def test_post_limits_count_the_link_and_the_handles():
+    sp = nfi._module("social-post.py")
+    link = nfi._module("build-news-rss.py").item_link(
+        nfi.parse_form("news: x", nfi.form_sections(boxes()), TODAY))
+    room = 300 - len("\n\n" + link) - len(" @eissnetwork.bsky.social")
+    item = nfi.parse_form("news: x", nfi.form_sections(boxes(**{"Bluesky post": "b" * room + " @EISS"})), TODAY)
+    shown, _ = sp.tagged(sp.with_link(item["posts"]["bluesky"], link), "bluesky", sp.load_accounts())
+    assert len(shown) == 300
+    with pytest.raises(SystemExit, match="Bluesky post is 301 characters long with the link"):
+        nfi.parse_form("news: x", nfi.form_sections(boxes(**{"Bluesky post": "b" * (room + 1) + " @EISS"})), TODAY)
+    room = 3000 - len("\n\n" + link)
+    nfi.parse_form("news: x", nfi.form_sections(boxes(**{"LinkedIn post": "l" * room})), TODAY)
+    with pytest.raises(SystemExit, match="LinkedIn post is 3001 characters long"):
+        nfi.parse_form("news: x", nfi.form_sections(boxes(**{"LinkedIn post": "l" * (room + 1)})), TODAY)
+
+
+def test_emails_and_urls_are_not_tags():
+    item = nfi.parse_form("news: x", nfi.form_sections(boxes(**{
+        "LinkedIn post": "Write to info@netsec-cost.eu or see https://x.com/@a, with @NetSec"})), TODAY)
+    assert "info@netsec-cost.eu" in item["posts"]["linkedin"]

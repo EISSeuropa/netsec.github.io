@@ -72,8 +72,10 @@ needed. The form applies no label, so filing it publishes nothing.
 | --- | --- |
 | Site | NetSec: nothing extra. Joint: `"site": "joint"`. EISS: the run stops, file it in the EISS repository |
 | Headline | `title.en`. Required, up to 100 characters. A longer one stops the run |
-| Summary | `summary.en`. Up to 300 characters. A longer one stops the run, so a cut never lands inside a link (EISSeuropa/EISSeuropa.github.io#2189) |
-| Body | `body.en` (blank: the summary) |
+| Website summary | `summary.en`, one line. Required, up to 300 characters |
+| Body | `body.en`, up to 2,000 characters (blank: the summary). Also the post text for a network whose box is empty |
+| LinkedIn post | `posts.linkedin`, as written with its line breaks, English only. Up to 3,000 characters, counted with the link added at the end (unless the text holds it) and the tags as LinkedIn shows them |
+| Bluesky post | `posts.bluesky`, the same. Up to 300 characters, counted with the link and each tag written as its Bluesky handle |
 | Type | `type` (default `announcement`) |
 | Working Group | `wg` |
 | Link | `cta`: an existing page, never a new one, shown as "Read more →" in each locale and at the end of the social posts. A page on this site links its `.fr.html` and `.de.html` pages when both exist. Blank: no button, and the posts link to the home page news |
@@ -107,6 +109,25 @@ change the item first, edit the entry on the PR's branch and rerun
 When the translation did not run (no `ANTHROPIC_API_KEY` secret, or the call
 failed), the PR body says so, and the FR and DE text can be added on its
 branch before merging.
+
+**Every box is checked.** Issue forms cannot limit length as you type, so the
+run checks each box: the Headline (100), the Website summary (300), the Body
+(2,000), the posts and the Image description (300) against their limits, the
+Link as an address and both date boxes as `YYYY-MM-DD`. A box that fails stops
+the run with a comment naming it.
+
+**Tags.** A post box may tag an account as `@Key`, any case, where the key is
+in `data/social-accounts.json` (NetSec, EISS and COST for now).
+`social-post.py` writes a LinkedIn mention, `@[Name](urn:li:organization:N)`,
+and on Bluesky the handle, which `_rich_facets()` resolves to a mention. An
+account without a URN or a handle goes out as its plain name on that network,
+and the dry run says so. `#Name` hashtags get Bluesky tag facets.
+`news-from-issue.py` stops on a tag that is not in the file. An email address
+or an `@` inside a URL is not a tag. The EISS repository keeps the same file.
+
+**Re-runs.** A publisher who edits an open form issue starts the run again,
+and the news PR is rebuilt from the edited form. Anyone else's edit starts
+nothing, and so does an edit to a closed issue, whose item has merged.
 
 **Photos.** GitHub stores a photo dragged into the Image field and writes its
 address there (`<img ... src="https://github.com/user-attachments/assets/...">`
@@ -193,6 +214,7 @@ describes the rest.
 | `social` | no | Bluesky and LinkedIn handling: omit it or set `"auto"` to offer the item for posting, `"skip"` to never post it, or `"thread:<slug>"` when a curated thread announces it instead. |
 | `image` | no | A file under the site root, such as the form's photo in `assets/images/news/`. The picture of the LinkedIn and Bluesky posts, before the event card. The site ignores it. |
 | `imageAlt` | no | The image's alt text on both networks (the form's Image description). Blank: the English title. |
+| `posts` | no | `{linkedin?, bluesky?}`, the posts written for each network (the form's LinkedIn post and Bluesky post), English, kept with their line breaks and `@Key` tags. A network without one gets the 📣 headline, the body and the link. The site ignores it. |
 | `site` | no | `"joint"` for an item shared with EISS. The site ignores it. |
 | `collaborator` | no | `"eiss"`: after a LinkedIn post, the posting run lists it for adding the EISS page as collaborator by hand. LinkedIn's API cannot do it. |
 | `newsletter` | no | `true` puts `<category>newsletter</category>` on the item in `news.xml`, which the monthly newsletter reads. |

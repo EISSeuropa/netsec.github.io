@@ -20,8 +20,10 @@ are required. Write in English. The French and German come in step 3.
 |---|---|
 | Site | `NetSec`, or `Joint (EISS and NetSec)` for an item organised by NetSec with EISS. An EISS-only item goes in `EISSeuropa/EISSeuropa.github.io`, with that repository's own skill. |
 | Headline | Plain text, up to 100 characters |
-| Summary | Up to 300 characters, the home page card. The script stops on a longer one, or on a headline over 100 |
-| Body | Full text for the archive, the feed and the social posts. Blank: the summary |
+| Website summary | Required, up to 300 characters, plain: the home page card |
+| Body | Optional, up to 2,000 characters: the archive and the feed, and the posts whose box is empty. Blank: the summary |
+| LinkedIn post | Optional, English, up to 3,000 characters with the link: the post as written, line breaks kept. `@NetSec`, `@EISS`, `@COST` tag pages (`data/social-accounts.json`) |
+| Bluesky post | Optional, English, up to 300 characters with the link and the tags as handles |
 | Type | `announcement`, `event`, `publication` or `call` |
 | Working Group | `WG1` to `WG4`, or `No Working Group` |
 | Link | The address of an existing page the item is about, or a page added in the same PR |
@@ -47,11 +49,19 @@ NetSec
 
 <headline>
 
-### Summary
+### Website summary
 
 <summary>
 
 ### Body
+
+_No response_
+
+### LinkedIn post
+
+_No response_
+
+### Bluesky post
 
 _No response_
 
