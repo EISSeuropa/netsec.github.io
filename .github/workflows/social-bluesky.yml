@@ -188,7 +188,12 @@ jobs:
           CHROME: /usr/bin/google-chrome
         run: python3 scripts/build-event-og.py
 
+      # A channel that fails does not stop the other. social-post.py records
+      # what posted, sets failed=true and exits 0, so the ledger steps below
+      # still run, and the last step fails the job
+      # (EISSeuropa/EISSeuropa.github.io#2203).
       - name: Post to Bluesky + LinkedIn and update the ledger
+        id: post
         env:
           # A news.xml push posts NEWS only; the weekly spotlight is ungated
           # (spotlight-rotate.yml) and must not be swept into this approval gate.
@@ -289,3 +294,9 @@ jobs:
         run: |
           gh pr merge "${{ steps.create-pr.outputs.pull-request-number || steps.create-pr-retry.outputs.pull-request-number }}" \
             --squash --auto --repo "${{ github.repository }}"
+
+      - name: Fail when a channel did not post
+        if: steps.post.outputs.failed == 'true'
+        run: |
+          echo "::error::A channel did not post. The run summary names it, and the next run tries it again."
+          exit 1

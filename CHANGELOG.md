@@ -163,6 +163,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- A failure on one network no longer stops a news post on the other: when Bluesky or LinkedIn fails, the other still posts, and the next approved run retries only the one that failed. Before, the first failure ended the run.
 - The LinkedIn post and Bluesky post boxes of the News item form show as code blocks in the issue, so a tag such as `@EISS` no longer notifies a GitHub user of that name. The robot reads the text inside the block.
 - The v1.16.0 roadmap card links to its release notes, reads as shipped on the French page, and has a French and German title and summary.
 - `promote-roadmap.py` adds the release-notes link to a card with feature chips, flips a French card labelled "Prévu", and moves a card with chips to its quarter whole.
