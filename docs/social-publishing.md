@@ -377,6 +377,25 @@ fixed secret catches the post up. The weekly spotlight keeps its own rule
 (`--best-effort`): it is recorded once any channel posted, and the run exits 2.
 Ported from EISSeuropa/EISSeuropa.github.io#2203.
 
+## Checking the credentials
+
+When a post fails at sign-in, run "Check the LinkedIn and Bluesky
+credentials" from the Actions tab (`.github/workflows/check-social-credentials.yml`)
+and pick `social` or `social-auto`. It posts nothing and shows no secret, and
+`social` waits for the same approval as a post. The run summary marks each
+value ✅ or ❌:
+
+- a value stored with quotes, a space or a line break;
+- a Bluesky handle written with `@` or as an address, a handle Bluesky does not
+  know, an account password where an app password belongs, and the sign-in;
+- a `LINKEDIN_ORG_ID` that is not a plain number;
+- LinkedIn's token introspection for the access and refresh tokens: active or
+  not, issued to the app in `LINKEDIN_CLIENT_ID` or another, the
+  `w_organization_social` scope, and the expiry.
+
+Replace the ❌ values, run the check again, then start the post. The EISS
+repository has the same check (EISSeuropa/EISSeuropa.github.io).
+
 ## Keeping the LinkedIn API version current
 
 LinkedIn's posting API is versioned by month (`YYYYMM`) and each version is
