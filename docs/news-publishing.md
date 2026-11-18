@@ -71,6 +71,12 @@ only. The form applies no label, so filing it publishes nothing. The run
 renames the issue `news: <Headline>` and titles the news PR after the
 headline.
 
+If the form shows for a second and then turns into a blank issue, the browser
+holds saved GitHub data that replaces it (seen on 18 November 2026 from the EISS
+dashboard's News Composer tile on a desktop). Discarding the blank issue does
+not help. Open the link in a private window, or clear the stored data for
+github.com in the browser's settings, which signs you out of GitHub.
+
 | Field | Goes to |
 | --- | --- |
 | Site | NetSec: nothing extra. Joint: `"site": "joint"`, and with LinkedIn ticked the run stops unless Collaborator page is EISS. EISS, an option until 18 November 2026, stops the run |
