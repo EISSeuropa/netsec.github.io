@@ -10,12 +10,17 @@
 # Two modes, chosen by the gate job:
 #   - preview: before the go-live date, or on a manual run given a `since`
 #     date. The post for that window (default: the last seven days) goes to
-#     the run summary. Nothing is posted, no secrets are read and the ledger
-#     is untouched. --since is refused with --live.
+#     the run summary, and its image card to the run's artifacts. Nothing is
+#     posted, no secrets are read and the ledger is untouched. --since is
+#     refused with --live.
 #   - live: from the go-live date. The post goes to Bluesky and the LinkedIn
 #     page with no approval step, on the `social-auto` environment the weekly
 #     spotlight uses. The ledger change rides back in an auto-merging PR on
 #     `welcome/auto`. A channel that fails opens or refreshes a tracking issue.
+#
+# Both modes render the card with the members' photos first
+# (scripts/build-welcome-card.py, #2237). A Chrome failure shows red on that
+# step and the post goes out on the Directory card.
 #
 # Friday sits three days after the Tuesday spotlight (spotlight-rotate.yml).
 # Cron can't follow DST, so two UTC triggers (08:00 + 09:00) fire and the gate
@@ -108,6 +113,15 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Render the welcome card
+        # continue-on-error: without the card the post uses the Directory
+        # card, and the step shows red, which is the signal.
+        continue-on-error: true
+        env:
+          CHROME: /usr/bin/google-chrome
+          SINCE: ${{ needs.gate.outputs.since }}
+        run: python3 scripts/build-welcome-card.py --since "$SINCE"
+
       - name: Compose (dry-run) into the run summary
         env:
           SINCE: ${{ needs.gate.outputs.since }}
@@ -125,6 +139,14 @@ jobs:
           else
             echo "::notice::Dry run: the welcome post is in the run summary. Nothing was posted."
           fi
+
+      - name: Attach the card to the run
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2 (sha-pinned)
+        with:
+          name: welcome-card
+          path: assets/og/welcome/*.png
+          if-no-files-found: ignore
+          retention-days: 14
 
   publish:
     name: Post the weekly welcome
@@ -172,6 +194,15 @@ jobs:
           fi
           rm -f branch-ledger.json
           cp data/social-posted.json "${RUNNER_TEMP:-/tmp}/ledger-folded.json"
+
+      - name: Render the welcome card
+        # After the fold-in, so the card shows the members this run names.
+        # continue-on-error as in the preview: the post falls back to the
+        # Directory card.
+        continue-on-error: true
+        env:
+          CHROME: /usr/bin/google-chrome
+        run: python3 scripts/build-welcome-card.py
 
       - name: Post the welcome to Bluesky + LinkedIn (ungated, idempotent)
         # Exit 2 is social-post.py's "best-effort swallowed a channel failure"

@@ -342,7 +342,8 @@ publish step then fails safely and posts nothing).
   members' Bluesky handles as mentions, and the link. Over 300 characters the
   names come off first, then the countries, then the mentions. Over LinkedIn's
   3,000 characters the roles come off, then the tail of the list. The image is
-  the Directory card, `assets/images/og-image-people.png`.
+  the welcome card with the members' photos (below), or the Directory card,
+  `assets/images/og-image-people.png`, when the card could not be rendered.
 
 Posts are **English only**. Edit the templates in `scripts/social-post.py`
 (the `Post.render` method and the `read_spotlight` and `read_welcome`
@@ -384,6 +385,28 @@ reaches back before that date.
 Only welcome keys matter to the welcome, so the workflow folds in its own
 `welcome/auto` branch alone. The news and spotlight workflows do not read
 `welcome/auto`, since the welcome keys never change what they post.
+
+### The welcome card
+
+`scripts/build-welcome-card.py` renders a 1200x630 PNG for each post (#2237):
+"Welcome to the NetSec Directory", the number of new members, and a tile per
+member with their headshot, or their initials when they have none, and their
+name without its title. Up to seven members are all pictured. From eight, six
+are pictured and the seventh tile reads "+N more members". The alt text names
+everyone pictured.
+
+The builder takes its members from `welcome_pending()` in `social-post.py`,
+with the same ledger and `since`, and names the file after a hash of their ids
+(`assets/og/welcome/<hash>.png`, gitignored). `social-post.py` attaches the
+card only when that file exists for exactly the members the post names, so a
+card from another week is never used. Both workflow modes render the card
+before composing. A preview run attaches it to the run as the `welcome-card`
+artifact, kept for 14 days. A Chrome failure shows red on the render step,
+and the post goes out on the Directory card.
+
+```bash
+python3 scripts/build-welcome-card.py --since 2026-11-13   # render a preview card
+```
 
 To pause the welcome, set `since` back to `null`. To check a credential fix
 without posting twice, run the workflow by hand with one `channel`.
