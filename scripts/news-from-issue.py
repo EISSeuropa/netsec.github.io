@@ -24,7 +24,8 @@ Form field         news.json
   Publication date pubDate at 12:00 Paris time, and displayDate
   On the home page until   homeUntil at 23:59 Paris time
   Collaborator page        "collaborator": "eiss"
-  Options          "newsletter": true, "social": "skip"
+  Options          "social": "skip". "newsletter": true from the newsletter box,
+                   off the form for now and still read for older issues
 
 A headline or summary over its limit, an empty one, or Site set to EISS
 stops the run. Those messages are written for the person who filed the form:

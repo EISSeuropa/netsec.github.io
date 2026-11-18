@@ -35,7 +35,10 @@ Not yet done (repository settings, by the maintainer):
 - Add the `ANTHROPIC_API_KEY` repository secret. Without it, items arrive in
   English only and the PR body says the French and German text is missing.
 - File a first item through the form. The workflow has not run on GitHub yet.
-- The newsletter does not read the tag yet. It is switched on separately.
+- The newsletter does not read the tag yet. It is switched on separately. The
+  form has no newsletter box for now. The script still reads it, so an older
+  issue that has it still works, and a `"newsletter": true` added by hand
+  still tags the item.
 
 ### Handing approval to someone else
 
@@ -77,7 +80,6 @@ needed. The form applies no label, so filing it publishes nothing.
 | Publication date | `pubDate` at 12:00 Paris time, and `displayDate` in each locale (blank: the day the label is applied) |
 | On the home page until | `homeUntil` at 23:59 Paris time |
 | Collaborator page | `"collaborator": "eiss"` |
-| Include in the newsletter | `"newsletter": true` |
 | Do not post to LinkedIn and Bluesky | `"social": "skip"` |
 
 The `Publish news from issue` workflow

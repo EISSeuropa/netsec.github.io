@@ -1,5 +1,5 @@
 name: 📰 News item
-description: A news item for the website (EN, FR, DE), the RSS feed, the LinkedIn and Bluesky posts and the newsletter.
+description: A news item for the website (EN, FR, DE), the RSS feed and the LinkedIn and Bluesky posts.
 title: "news: "
 body:
   - type: markdown
@@ -144,11 +144,8 @@ body:
     attributes:
       label: Options
       description: >-
-        Tick "Include in the newsletter" to also put the item in the next
-        monthly newsletter. Tick "Do not post to LinkedIn and Bluesky" for an
-        item that should appear on the website only.
+        Tick the box for an item that should appear on the website only, for
+        example one already announced on LinkedIn and Bluesky.
       options:
-        - label: Include in the newsletter
-          required: false
         - label: Do not post to LinkedIn and Bluesky
           required: false

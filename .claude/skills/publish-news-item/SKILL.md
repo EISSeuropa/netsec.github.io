@@ -28,7 +28,7 @@ are required. Write in English. The French and German come in step 3.
 | Publication date | `YYYY-MM-DD`, blank for today |
 | On the home page until | `YYYY-MM-DD`, for a call its closing date |
 | Collaborator page | `EISS` for a joint item, otherwise `No collaborator` |
-| Options | Tick "Include in the newsletter" only when asked. Tick "Do not post to LinkedIn and Bluesky" for an item already announced |
+| Options | Tick "Do not post to LinkedIn and Bluesky" for an item already announced |
 
 ## 2. Build the item with the form's script
 
@@ -79,7 +79,6 @@ No collaborator
 
 ### Options
 
-- [ ] Include in the newsletter
 - [ ] Do not post to LinkedIn and Bluesky
 EOF
 )" python3 scripts/news-from-issue.py
