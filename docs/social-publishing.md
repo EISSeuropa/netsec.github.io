@@ -390,10 +390,12 @@ Only welcome keys matter to the welcome, so the workflow folds in its own
 
 `scripts/build-welcome-card.py` renders a 1200x630 PNG for each post (#2237):
 "Welcome to the NetSec Directory", the number of new members, and a tile per
-member with their headshot, or their initials when they have none, and their
-name without its title. Up to seven members are all pictured. From eight, six
-are pictured and the seventh tile reads "+N more members". The alt text names
-everyone pictured.
+pictured member with their headshot and their name without its title. Only
+members with a headshot are pictured, in the post's order, and everyone else
+is counted in a last tile reading "+N more members". Up to seven members, all
+with a headshot, are all pictured. Otherwise the card pictures up to six and
+adds the "+N" tile. When nobody has a headshot, the card shows initials tiles
+instead. The alt text names everyone pictured.
 
 The builder takes its members from `welcome_pending()` in `social-post.py`,
 with the same ledger and `since`, and names the file after a hash of their ids

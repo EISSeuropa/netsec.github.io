@@ -775,14 +775,26 @@ def welcome_pending(posted: set[str], since: str | None = None,
     return welcome_members(posted, since)
 
 
-# Tiles on the welcome card. Up to this many members, each has a tile.
-# Beyond it, the last tile reads "+N" for everyone not pictured.
+# Tiles on the welcome card. When everyone pictured fits, each has a tile.
+# Otherwise the last tile reads "+N" for everyone not pictured.
 WELCOME_CARD_TILES = 7
 
 
+def has_photo(m: dict) -> bool:
+    """True when the member's headshot is in the repository."""
+    photo = (m.get("photo") or "").strip()
+    return bool(photo) and (ROOT / photo).is_file()
+
+
 def welcome_card_faces(members: list[dict]) -> list[dict]:
-    """The members pictured on the welcome card."""
-    return members if len(members) <= WELCOME_CARD_TILES else members[:WELCOME_CARD_TILES - 1]
+    """The members pictured on the welcome card, in the post's order. Only
+    members with a headshot are pictured, and the rest are counted in the
+    "+N" tile. When nobody has a headshot, the card falls back to initials
+    tiles for the first members."""
+    pool = [m for m in members if has_photo(m)] or members
+    if len(pool) == len(members) and len(members) <= WELCOME_CARD_TILES:
+        return list(members)
+    return pool[:WELCOME_CARD_TILES - 1]
 
 
 def welcome_card_path(members: list[dict]) -> Path:
@@ -794,12 +806,15 @@ def welcome_card_path(members: list[dict]) -> Path:
 
 def welcome_card_alt(members: list[dict]) -> str:
     """Alt text for the welcome card, naming everyone pictured."""
-    shown = [m["name"].strip() for m in welcome_card_faces(members)]
+    faces = welcome_card_faces(members)
+    shown = [m["name"].strip() for m in faces]
+    # The initials fallback pictures nobody, so it names the tiles instead.
+    what = "photos of " if any(has_photo(m) for m in faces) else "tiles for "
     n = len(members)
     if len(shown) == n:
-        return (f"Welcome to the NetSec Directory: photos of the "
+        return (f"Welcome to the NetSec Directory: {what}the "
                 f"{_count_words(n, 'new member')}, {_join_and(shown)}")
-    return (f"Welcome to the NetSec Directory: photos of {_number_word(len(shown))} "
+    return (f"Welcome to the NetSec Directory: {what}{_number_word(len(shown))} "
             f"of the {n} new members, {_join_and(shown)}, and a tile for {_number_word(n - len(shown))} more")
 
 

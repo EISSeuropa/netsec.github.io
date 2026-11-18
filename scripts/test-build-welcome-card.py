@@ -93,3 +93,43 @@ if __name__ == "__main__":
         if name.startswith("test_") and callable(fn):
             fn()
             print(f"ok {name}")
+
+
+def _photo() -> str:
+    return next((bwc.ROOT / "assets" / "images" / "people").glob("*.jpg")).relative_to(bwc.ROOT).as_posix()
+
+
+def test_members_with_a_photo_are_pictured_first():
+    members = [_member(1), _member(2, photo=_photo()), _member(3), _member(4, photo=_photo())]
+    faces = sp.welcome_card_faces(members)
+    assert [m["id"] for m in faces] == ["member-02", "member-04"]
+    html = bwc.card_markup(members)
+    assert _tiles(html) == 3 and '<div class="more">+2</div>' in html
+    assert '<div class="initials">' not in html
+
+
+def test_seven_with_photos_and_one_without_shows_six_and_plus_two():
+    members = [_member(i, photo=_photo()) for i in range(7)] + [_member(7)]
+    faces = sp.welcome_card_faces(members)
+    assert len(faces) == 6 and all(sp.has_photo(m) for m in faces)
+    assert '<div class="more">+2</div>' in bwc.card_markup(members)
+
+
+def test_everyone_with_a_photo_up_to_seven_is_pictured():
+    members = [_member(i, photo=_photo()) for i in range(7)]
+    assert sp.welcome_card_faces(members) == members
+
+
+def test_nobody_with_a_photo_falls_back_to_initials():
+    members = [_member(1), _member(2)]
+    assert sp.welcome_card_faces(members) == members
+    assert bwc.card_markup(members).count('<div class="initials">') == 2
+    assert sp.welcome_card_alt(members).startswith("Welcome to the NetSec Directory: tiles for the two new members")
+
+
+def test_one_photo_among_many_without():
+    members = [_member(1)] + [_member(2, photo=_photo())] + [_member(i) for i in range(3, 12)]
+    html = bwc.card_markup(members)
+    assert _tiles(html) == 2 and '<div class="more">+10</div>' in html
+    assert sp.welcome_card_alt(members) == ("Welcome to the NetSec Directory: photos of one of the 11 new "
+                                            "members, Dr Example Person02, and a tile for ten more")
