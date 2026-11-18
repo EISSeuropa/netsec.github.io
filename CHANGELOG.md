@@ -163,6 +163,7 @@ maintainer-facing audience.
 
 #### Fixed
 
+- The LinkedIn post and Bluesky post boxes of the News item form show as code blocks in the issue, so a tag such as `@EISS` no longer notifies a GitHub user of that name. The robot reads the text inside the block.
 - The v1.16.0 roadmap card links to its release notes, reads as shipped on the French page, and has a French and German title and summary.
 - `promote-roadmap.py` adds the release-notes link to a card with feature chips, flips a French card labelled "Prévu", and moves a card with chips to its quarter whole.
 - Every shipped release on the French roadmap reads "Livrée" and on the German roadmap "Veröffentlicht", as does the French status legend. Seven French pills read "Livré" and four German ones "Ausgeliefert" or "Geliefert". Past events keep "Terminé" and "Stattgefunden".

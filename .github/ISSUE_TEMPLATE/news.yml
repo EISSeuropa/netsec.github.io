@@ -71,6 +71,7 @@ body:
         news. To tag a page, write @NetSec, @EISS or @COST. The Link is added
         at the end unless the post already holds it. Leave it empty to post
         the headline, the body and the link.
+      render: text
     validations:
       required: false
   - type: textarea
@@ -84,6 +85,7 @@ body:
         account's Bluesky name (@EISS becomes @eissnetwork.bsky.social), so
         leave room for both. Tags are written @NetSec, @EISS or @COST. Leave it
         empty to post the headline, the body and the link, shortened to fit.
+      render: text
     validations:
       required: false
   - type: dropdown
