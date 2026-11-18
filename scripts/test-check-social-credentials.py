@@ -26,27 +26,40 @@ GOOD = {
 }
 
 
-def fake_http(token_status=None, signin=200, issued_to="86app"):
+def fake_http(token_status=None, signin=200, issued_to="86app", renew_ok=True, refresh_expires=1819152000):
+    """token_status maps a token to True (active), False (revoked) or a status
+    string ("expired", "revoked")."""
     token_status = token_status or {"AQVaccess": True, "AQXrefresh": True}
+    calls = []
 
     def _http(url, data=None, headers=None):
+        calls.append(url)
         if "resolveHandle" in url:
             return 200, {"did": "did:plc:x"}
         if "createSession" in url:
             return (200, {"accessJwt": "j"}) if signin == 200 else (401, {"message": "Invalid identifier or password"})
         if "introspectToken" in url:
             form = dict(p.split("=", 1) for p in data.decode().split("&"))
-            active = token_status.get(form["token"], False)
-            return 200, {"active": active, "status": "active" if active else "revoked", "client_id": issued_to,
-                         "scope": "w_organization_social,r_organization_social", "expires_at": 1798761600,
-                         "created_at": 1762819200}
+            st = token_status.get(form["token"], False)
+            active = st is True
+            status = "active" if active else (st if isinstance(st, str) else "revoked")
+            expires = refresh_expires if form["token"] == "AQXrefresh" else 1798761600
+            return 200, {"active": active, "status": status, "client_id": issued_to,
+                         "scope": "w_organization_social", "expires_at": expires, "created_at": 1756080000}
+        if "oauth/v2/accessToken" in url:
+            return (200, {"access_token": "fresh", "expires_in": 5184000}) if renew_ok else \
+                (400, {"error": "invalid_grant", "error_description": "The provided authorization grant or refresh token is invalid, expired or revoked."})
         raise AssertionError(url)
+    _http.calls = calls
     return _http
+
+
+NOW = __import__("datetime").datetime(2026, 11, 18, tzinfo=__import__("datetime").timezone.utc)
 
 
 def run(env, **kw):
     cc._http = fake_http(**kw)
-    bs, li = cc.check_bluesky(env), cc.check_linkedin(env)
+    bs, li = cc.check_bluesky(env), cc.check_linkedin(env, now=NOW)
     return bs, li
 
 
@@ -100,7 +113,7 @@ def test_account_password_instead_of_app_password():
 def test_revoked_refresh_token_and_wrong_app():
     _, li = run(GOOD, token_status={"AQVaccess": False, "AQXrefresh": False}, issued_to="other")
     msgs = " | ".join(fails(li))
-    assert "The access token is not active (LinkedIn status: revoked)" in msgs
+    assert "The access token was revoked" in msgs
     assert "The refresh token is not active" in msgs
     assert "issued to another LinkedIn app" in msgs
 
@@ -123,6 +136,54 @@ def test_introspection_hint_names_the_token_or_the_app():
     msgs = fails(cc.check_linkedin(GOOD))
     assert any("does not recognise the refresh token" in m for m in msgs), msgs
     assert not any("LINKEDIN_CLIENT_SECRET belong" in m for m in msgs), msgs
+
+
+def levels(results, level):
+    return [m for lvl, m in results if lvl == level]
+
+
+def test_expired_access_token_renewed_is_not_a_failure():
+    # NetSec on 18 November 2026: the access token from 25 August had expired,
+    # the refresh token (to 25 August 2027) renews it, and LinkedIn posting worked.
+    fake = fake_http(token_status={"AQVaccess": "expired", "AQXrefresh": True})
+    cc._http = fake
+    li = cc.check_linkedin(GOOD, now=NOW)
+    assert not fails(li), fails(li)
+    assert any("has expired, which is expected" in m for m in levels(li, cc.NOTE))
+    assert any("a new access token was issued just now" in m for m in levels(li, cc.OK))
+    assert any("oauth/v2/accessToken" in u for u in fake.calls)
+    assert not levels(li, cc.WARN)
+
+
+def test_expired_access_token_that_will_not_renew_fails():
+    _, li = run(GOOD, token_status={"AQVaccess": "expired", "AQXrefresh": True}, renew_ok=False)
+    assert any("LinkedIn refused to renew it (HTTP 400" in m for m in fails(li)), fails(li)
+
+
+def test_expired_access_token_with_inactive_refresh_token_fails_without_renewing():
+    fake = fake_http(token_status={"AQVaccess": "expired", "AQXrefresh": "expired"})
+    cc._http = fake
+    li = cc.check_linkedin(GOOD, now=NOW)
+    msgs = " | ".join(fails(li))
+    assert "The refresh token is not active (LinkedIn status: expired)" in msgs
+    assert "the refresh token cannot renew it" in msgs
+    assert not any("oauth/v2/accessToken" in u for u in fake.calls)
+
+
+def test_active_access_token_with_dead_refresh_token_says_when_posting_stops():
+    _, li = run(GOOD, token_status={"AQVaccess": True, "AQXrefresh": "revoked"})
+    assert any("Posts work until the access token expires on 2027-01-01, then stop" in m for m in fails(li)), fails(li)
+
+
+def test_refresh_token_close_to_expiry_warns_without_failing():
+    import datetime as dt
+    soon = int((NOW + dt.timedelta(days=30)).timestamp())
+    cc._http = fake_http(refresh_expires=soon)
+    li = cc.check_linkedin(GOOD, now=NOW)
+    assert not fails(li)
+    assert any("expires in 30 days" in m for m in levels(li, cc.WARN)), li
+    cc._http = fake_http(refresh_expires=soon)
+    assert cc.main(dict(GOOD)) == 0
 
 
 def test_org_id_must_be_a_number():
