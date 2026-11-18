@@ -3,12 +3,12 @@
   "accounts": {
     "EISS": {
       "name": "European Initiative for Security Studies (EISS)",
-      "linkedin": null,
+      "linkedin": "urn:li:organization:78412359",
       "bluesky": "eissnetwork.bsky.social"
     },
     "NetSec": {
       "name": "Networking European Security Knowledge (NetSec)",
-      "linkedin": null,
+      "linkedin": "urn:li:organization:120343970",
       "bluesky": "netsec-cost.eu"
     },
     "COST": {
