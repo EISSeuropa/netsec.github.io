@@ -156,7 +156,7 @@ def test_form_requires_the_headline_and_describes_every_field():
     blocks = re.split(r"^  - type: ", text, flags=re.M)[1:]
     fields = {re.search(r"^    id: (\S+)", b, re.M).group(1): b
               for b in blocks if not b.startswith("markdown")}
-    assert len(fields) == 11, sorted(fields)
+    assert len(fields) == 13, sorted(fields)
     for fid, b in fields.items():
         assert re.search(r"^      description: \S", b, re.M), f"{fid} has no description"
     assert "required: true" in fields["headline"]
@@ -206,5 +206,118 @@ def test_form_headings_match_the_script():
     labels = {m.lower() for m in re.findall(r"^\s+label: (.+?)\s*$", text, re.M)
               if not m.startswith(("Include", "Do not"))}
     read = {"site", "headline", "summary", "body", "type", "working group", "link",
-            "publication date", "on the home page until", "collaborator page", "options"}
+            "image", "image description", "publication date", "on the home page until", "collaborator page", "options"}
     assert labels == read
+
+
+# The photo (EISSeuropa/EISSeuropa.github.io#2193). Pillow is in
+# requirements.txt, which python-tests.yml installs.
+UUID = "https://github.com/user-attachments/assets/0b1c2d3e-0000-4000-8000-000000000000"
+
+
+def _photo(w, h, fmt="JPEG", mode="RGB", exif=None, noise=True) -> bytes:
+    """Random noise compresses badly, like a detailed phone photo."""
+    import io
+    import random
+    from PIL import Image
+    random.seed(1)
+    if noise:
+        img = Image.frombytes("RGB", (w, h), random.randbytes(w * h * 3))
+    else:
+        img = Image.new("RGB", (w, h), (40, 90, 160))
+    if mode == "RGBA":
+        img = img.convert("RGBA")
+        img.putalpha(0)
+    buf = io.BytesIO()
+    kw = {"quality": 95} if fmt == "JPEG" else {}
+    if exif is not None:
+        kw["exif"] = exif
+    img.save(buf, format=fmt, **kw)
+    return buf.getvalue()
+
+
+@pytest.mark.parametrize("text", [
+    f'<img width="1024" height="768" alt="IMG_1234" src="{UUID}" />',
+    f"![IMG_1234]({UUID})",
+    UUID,
+    f"  {UUID}  ",
+])
+def test_image_source_reads_what_github_writes(text):
+    assert nfi.image_source(text) == UUID
+
+
+def test_image_source_site_path_and_upload_in_progress():
+    assert nfi.image_source("") == ""
+    assert nfi.image_source("/assets/images/x.jpg") == "assets/images/x.jpg"
+    with pytest.raises(SystemExit, match="no photo in it"):
+        nfi.image_source("Uploading IMG_1234.jpg…")
+
+
+def test_photo_needs_a_description_up_to_300():
+    f = nfi.form_sections(form(Image=f"![p]({UUID})", **{"Image description": "_No response_"}))
+    with pytest.raises(SystemExit, match="Image description is empty"):
+        nfi.parse_form("news: x", f, TODAY)
+    f = nfi.form_sections(form(Image=f"![p]({UUID})", **{"Image description": "d" * 301}))
+    with pytest.raises(SystemExit, match="Image description is 301 characters"):
+        nfi.parse_form("news: x", f, TODAY)
+    f = nfi.form_sections(form(Image="_No response_", **{"Image description": "Ignored."}))
+    item = nfi.parse_form("news: x", f, TODAY)
+    assert "image" not in item and "imageAlt" not in item
+
+
+def test_shrink_fits_bluesky_and_keeps_small_photos():
+    import io
+    from PIL import Image
+    big = _photo(4032, 3024)
+    assert len(big) > 5_000_000
+    out = nfi.shrink(big)
+    img = Image.open(io.BytesIO(out))
+    assert img.format == "JPEG" and len(out) <= nfi.IMAGE_MAX_BYTES
+    assert max(img.size) <= nfi.IMAGE_MAX_SIDE and img.size[0] > img.size[1]
+    assert Image.open(io.BytesIO(nfi.shrink(_photo(800, 600, noise=False)))).size == (800, 600)
+
+
+def test_shrink_turns_upright_and_drops_the_camera_data():
+    import io
+    from PIL import Image
+    exif = Image.Exif()
+    exif[0x0112] = 6  # rotate 90° clockwise to display
+    exif[0x8825] = {1: "N", 2: (48.0, 51.0, 24.0)}  # GPS
+    img = Image.open(io.BytesIO(nfi.shrink(_photo(1200, 900, exif=exif, noise=False))))
+    assert img.size == (900, 1200)
+    assert not img.getexif() and "exif" not in img.info
+
+
+def test_shrink_flattens_transparency_and_refuses_non_images():
+    import io
+    from PIL import Image
+    img = Image.open(io.BytesIO(nfi.shrink(_photo(600, 400, fmt="PNG", mode="RGBA", noise=False))))
+    assert img.mode == "RGB" and img.getpixel((10, 10)) == (255, 255, 255)
+    with pytest.raises(SystemExit, match="not a photo that can be read"):
+        nfi.shrink(b"<html>Not found</html>")
+
+
+def test_photo_end_to_end(monkeypatch, tmp_path):
+    body = form(Image=f'<img alt="IMG_1" src="{UUID}" />',
+                **{"Image description": "The Faculty of Political Science building in Belgrade."})
+    monkeypatch.setenv("ISSUE_TITLE", "news: x")
+    monkeypatch.setenv("ISSUE_BODY", body)
+    monkeypatch.setenv("TODAY", TODAY)
+    monkeypatch.delenv("GITHUB_OUTPUT", raising=False)
+    path = news_file(tmp_path)
+    fetched = []
+    big = _photo(3000, 2000)
+
+    def fetcher(url):
+        fetched.append(url)
+        return big
+
+    for _ in range(2):  # the re-run finds the item and fetches nothing
+        nfi.main(translator=stub, news_path=path, root=tmp_path, fetcher=fetcher)
+    assert fetched == [UUID]
+    it = json.loads(path.read_text(encoding="utf-8"))["items"][0]
+    assert it["image"] == f"assets/images/news/{it['id']}.jpg"
+    assert it["imageAlt"] == "The Faculty of Political Science building in Belgrade."
+    assert "_image_url" not in it
+    assert list(it).index("image") < list(it).index("imageAlt")
+    assert (tmp_path / it["image"]).stat().st_size <= nfi.IMAGE_MAX_BYTES

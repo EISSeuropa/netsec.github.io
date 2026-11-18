@@ -150,6 +150,10 @@ maintainer-facing audience.
 
 ## [Unreleased]
 
+#### Added
+
+- The News item form takes a photo for the LinkedIn and Bluesky posts. The photo is dragged into the Image field, and a required Image description becomes its alt text. The publishing run downloads the photo, turns it upright, removes its camera data (including the place it was taken) and shrinks a large one to fit Bluesky's 1 MB limit, then adds it to the news PR. The photo comes before the event card on the posts. A photo that cannot be read, or one without a description, stops the run with a comment saying what to change. The same feature shipped on the EISS site (EISSeuropa/EISSeuropa.github.io#2193).
+
 #### Changed
 
 - The News item form no longer has the "Include in the newsletter" box, as the newsletter does not use the form yet. The same change is proposed on the EISS site (EISSeuropa/EISSeuropa.github.io#2192).

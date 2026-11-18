@@ -24,6 +24,13 @@ Form field         news.json
   Publication date pubDate at 12:00 Paris time, and displayDate
   On the home page until   homeUntil at 23:59 Paris time
   Collaborator page        "collaborator": "eiss"
+  Image            a photo dragged into the field (an https address),
+                   downloaded, shrunk to IMAGE_MAX_BYTES as a JPEG without
+                   its camera data, and saved as assets/images/news/<id>.jpg.
+                   Or a site image (assets/...). "image" is its path: the
+                   picture of the social posts, before the event card
+  Image description        "imageAlt", the photo's alt text. Required with
+                   a photo, up to IMAGE_ALT_MAX characters
   Options          "social": "skip". "newsletter": true from the newsletter box,
                    off the form for now and still read for older issues
 
@@ -45,11 +52,14 @@ Usage (local test):
 """
 from __future__ import annotations
 
+import io
 import json
 import os
 import re
 import sys
 import unicodedata
+import urllib.error
+import urllib.request
 from datetime import date, datetime, time
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -60,6 +70,13 @@ NEWS = ROOT / "data" / "news.json"
 PARIS = ZoneInfo("Europe/Paris")
 TYPES = ("announcement", "event", "publication", "call")
 HEADLINE_MAX = 100
+IMAGE_ALT_MAX = 300
+IMAGE_DIR = "assets/images/news"
+# Bluesky refuses an image over 1,000,000 bytes. LinkedIn takes more, so the
+# smaller limit sets the size of the saved photo.
+IMAGE_MAX_BYTES = 950_000
+IMAGE_MAX_SIDE = 2000
+DOWNLOAD_MAX_BYTES = 25_000_000
 SUMMARY_MAX = 300
 ID_MAX = 60
 NO_RESPONSE = "_No response_"
@@ -192,6 +209,88 @@ def make_cta(link: str, root: Path = ROOT) -> dict | None:
     return {"href": href, "external": False, "i18n": dict(CTA_LABEL)}
 
 
+def image_source(text: str) -> str:
+    """The photo in the Image field: an https address, or a site image path
+    (assets/...). GitHub writes a dragged photo as <img ... src="..."> or
+    ![name](...), and either is read. An empty field gives ""."""
+    text = (text or "").strip()
+    if not text:
+        return ""
+    for pattern in (r'src="(https://[^"\s]+)"', r"\]\((https://[^)\s]+)\)", r"(https://\S+)"):
+        m = re.search(pattern, text)
+        if m:
+            return m.group(1)
+    if re.fullmatch(r"/?assets/\S+", text):
+        return text.lstrip("/")
+    sys.exit("The Image field has no photo in it. Edit the issue and drag a photo into the Image "
+             "field, then wait until the upload finishes. Or empty the field to post without a photo.")
+
+
+def fetch(url: str) -> bytes:
+    """The photo's bytes. Any failure is the person's to retry, so the
+    message is theirs."""
+    req = urllib.request.Request(url, headers={"User-Agent": "netsec-news-publisher"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            data = resp.read(DOWNLOAD_MAX_BYTES + 1)
+    except (urllib.error.URLError, TimeoutError, ValueError) as e:
+        print(f"news-from-issue: download of {url} failed: {e}")
+        sys.exit("The photo in the Image field could not be downloaded. Edit the issue, delete the "
+                 "photo, drag it in again and wait until the upload finishes. Or empty the Image "
+                 "field to post without a photo.")
+    if len(data) > DOWNLOAD_MAX_BYTES:
+        sys.exit(f"The photo is larger than {DOWNLOAD_MAX_BYTES // 1_000_000} MB. Edit the issue and use a smaller photo.")
+    return data
+
+
+def shrink(data: bytes) -> bytes:
+    """The photo as a JPEG of at most IMAGE_MAX_BYTES and IMAGE_MAX_SIDE
+    pixels on its longer side, turned the way the camera held it. The
+    camera data (EXIF, with the place it was taken) is not copied."""
+    try:
+        from PIL import Image, ImageOps
+    except ImportError:
+        sys.exit("news-from-issue: Pillow is missing. Run pip install -r requirements.txt.")
+    try:
+        img = Image.open(io.BytesIO(data))
+        img.load()
+        img = ImageOps.exif_transpose(img)
+    except Exception:
+        sys.exit("The file in the Image field is not a photo that can be read. "
+                 "Edit the issue and use a JPEG or PNG photo.")
+    if img.mode in ("RGBA", "LA", "P"):
+        rgba = img.convert("RGBA")
+        flat = Image.new("RGB", rgba.size, "white")
+        flat.paste(rgba, mask=rgba.getchannel("A"))
+        img = flat
+    elif img.mode != "RGB":
+        img = img.convert("RGB")
+    img.thumbnail((IMAGE_MAX_SIDE, IMAGE_MAX_SIDE), Image.LANCZOS)
+    quality = 85
+    while True:
+        buf = io.BytesIO()
+        img.save(buf, format="JPEG", quality=quality, optimize=True, progressive=True)
+        out = buf.getvalue()
+        if len(out) <= IMAGE_MAX_BYTES:
+            return out
+        if quality > 70:
+            quality -= 5
+        else:
+            img = img.resize((max(1, img.width * 4 // 5), max(1, img.height * 4 // 5)), Image.LANCZOS)
+
+
+def save_photo(item: dict, data: bytes, root: Path = ROOT) -> str:
+    """Writes the shrunk photo as <IMAGE_DIR>/<item id>.jpg and returns that
+    path, relative to the site root like the other paths in news.json."""
+    out = shrink(data)
+    rel = f"{IMAGE_DIR}/{item['id']}.jpg"
+    dest = root / rel
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(out)
+    print(f"news-from-issue: photo saved as {rel} ({len(out) // 1000} kB).")
+    return rel
+
+
 def parse_form(title: str, f: dict[str, str], today: str, root: Path = ROOT) -> dict:
     """The item in English, with the dates in all three languages."""
     site = f.get("site", "").strip().lower()
@@ -239,6 +338,18 @@ def parse_form(title: str, f: dict[str, str], today: str, root: Path = ROOT) -> 
         item["newsletter"] = True
     if "do not post to linkedin and bluesky" in ticked:
         item["social"] = "skip"
+    image = image_source(f.get("image", ""))
+    if image:
+        alt = one_line(f.get("image description", ""))
+        if not alt:
+            sys.exit("The item has a photo but the Image description is empty. Edit the issue and "
+                     "write one sentence saying what the photo shows, for people who cannot see it.")
+        check_length("Image description", alt, IMAGE_ALT_MAX)
+        if image.startswith("https://"):
+            item["_image_url"] = image  # downloaded by main(), after the duplicate check
+        else:
+            item["image"] = image
+        item["imageAlt"] = alt
     return item
 
 
@@ -318,7 +429,7 @@ def write_outputs(**values: str) -> None:
                 fh.write(f"{k}={v}\n")
 
 
-def main(translator=translate, news_path: Path = NEWS, root: Path = ROOT) -> int:
+def main(translator=translate, news_path: Path = NEWS, root: Path = ROOT, fetcher=None) -> int:
     title = os.environ.get("ISSUE_TITLE", "")
     body = os.environ.get("ISSUE_BODY", "")
     today = os.environ.get("TODAY") or date.today().isoformat()
@@ -336,6 +447,11 @@ def main(translator=translate, news_path: Path = NEWS, root: Path = ROOT) -> int
         write_outputs(translated="true", id=item["id"])
         return 0
 
+    url = item.pop("_image_url", "")
+    if url:
+        alt = item.pop("imageAlt")
+        item["image"] = save_photo(item, (fetcher or fetch)(url), root)
+        item["imageAlt"] = alt
     translated = add_translations(item, translator)
     text = insert(text, item)
     json.loads(text)  # the splice must leave valid JSON
