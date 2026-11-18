@@ -109,6 +109,13 @@ The separate **directory** card (`assets/images/og-image-people.png`, the
 (`assets/images/og-image.png`, every other page) is generated the same way by
 `scripts/build-general-og.py`.
 
+## The weekly welcome card
+
+The weekly welcome post (#2236) carries its own card, with the photos of the
+members it names, rendered per post by `scripts/build-welcome-card.py` in the
+`directory-welcome.yml` workflow (#2237). It reuses this builder's Chrome
+capture and initials tile. See `docs/social-publishing.md`, *The welcome card*.
+
 ## Event-page cards
 
 Each page that an event in `data/events.json` names as its `url` has its own

@@ -999,3 +999,36 @@ def test_welcome_go_live_date_in_the_repository_is_a_date():
     since = json.loads((Path(__file__).resolve().parent.parent / "data" / "welcome.json")
                        .read_text(encoding="utf-8"))["since"]
     assert since is None or sp.dt.date.fromisoformat(since)
+
+
+def test_welcome_uses_its_card_when_rendered_for_these_members(monkeypatch, tmp_path):
+    members = [_member(1), _member(2)]
+    _bios(monkeypatch, tmp_path, members, since="2026-11-01")
+    monkeypatch.setattr(sp, "WELCOME_CARDS", tmp_path / "welcome")
+    post = sp.read_welcome(set(), today=TODAY)
+    assert post.image == sp.DIRECTORY_OG and post.image_alt == "The NetSec Directory card"
+    card = sp.welcome_card_path(members)
+    card.parent.mkdir()
+    card.write_bytes(b"png")
+    post = sp.read_welcome(set(), today=TODAY)
+    assert post.image == card
+    assert post.image_alt == ("Welcome to the NetSec Directory: photos of the two new members, "
+                              "Dr Example Person01 and Dr Example Person02")
+
+
+def test_welcome_ignores_a_card_rendered_for_other_members(monkeypatch, tmp_path):
+    _bios(monkeypatch, tmp_path, [_member(1), _member(2)], since="2026-11-01")
+    monkeypatch.setattr(sp, "WELCOME_CARDS", tmp_path / "welcome")
+    stale = sp.welcome_card_path([_member(1)])
+    stale.parent.mkdir()
+    stale.write_bytes(b"png")
+    assert sp.read_welcome(set(), today=TODAY).image == sp.DIRECTORY_OG
+
+
+def test_welcome_card_alt_counts_the_members_not_pictured():
+    members = [_member(i) for i in range(16)]
+    assert len(sp.welcome_card_faces(members)) == 6
+    alt = sp.welcome_card_alt(members)
+    assert alt.startswith("Welcome to the NetSec Directory: photos of six of the 16 new members, ")
+    assert alt.endswith(", and a tile for ten more")
+    assert len(sp.welcome_card_faces(members[:7])) == 7

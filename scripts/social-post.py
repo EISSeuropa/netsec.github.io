@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import html
 import json
 import os
@@ -58,6 +59,8 @@ LINKEDIN_VERSION_FILE = ROOT / "data" / "linkedin-api-version.json"
 SITE = "https://netsec-cost.eu"
 SITE_OG = ROOT / "assets" / "images" / "og-image.png"
 DIRECTORY_OG = ROOT / "assets" / "images" / "og-image-people.png"
+# The welcome card, rendered per post by scripts/build-welcome-card.py (gitignored).
+WELCOME_CARDS = ROOT / "assets" / "og" / "welcome"
 
 # Bluesky posts are capped at 300 graphemes; we trim to a safe budget.
 BLUESKY_LIMIT = 300
@@ -757,30 +760,70 @@ def welcome_bluesky(members: list[dict], today: dt.date) -> str:
     return build(0, False, False)
 
 
-def read_welcome(posted: set[str], since: str | None = None,
-                 today: dt.date | None = None) -> Post | None:
-    """The weekly welcome post, or None when the welcome is off (no `since`,
-    or a go-live date still to come) or nobody is waiting to be welcomed.
-    `since` overrides data/welcome.json for previews, and is the only way to
-    compose a welcome before the go-live date."""
+def welcome_pending(posted: set[str], since: str | None = None,
+                    today: dt.date | None = None) -> list[dict]:
+    """The members the next welcome names. Empty when the welcome is off (no
+    `since`, or a go-live date still to come) or nobody is waiting. `since`
+    overrides data/welcome.json for previews, and is the only way to compose
+    a welcome before the go-live date. scripts/build-welcome-card.py calls
+    this too, so the card and the post name the same people."""
     today = today or dt.datetime.now(dt.timezone.utc).date()
     if not since:
         since = welcome_since()
         if not since or today.isoformat() < since:
-            return None
-    members = welcome_members(posted, since)
+            return []
+    return welcome_members(posted, since)
+
+
+# Tiles on the welcome card. Up to this many members, each has a tile.
+# Beyond it, the last tile reads "+N" for everyone not pictured.
+WELCOME_CARD_TILES = 7
+
+
+def welcome_card_faces(members: list[dict]) -> list[dict]:
+    """The members pictured on the welcome card."""
+    return members if len(members) <= WELCOME_CARD_TILES else members[:WELCOME_CARD_TILES - 1]
+
+
+def welcome_card_path(members: list[dict]) -> Path:
+    """The welcome card for exactly these members. The name hashes their ids,
+    so a card left over from another week is never attached to this post."""
+    digest = hashlib.sha256(",".join(m["id"] for m in members).encode("utf-8")).hexdigest()[:12]
+    return WELCOME_CARDS / f"{digest}.png"
+
+
+def welcome_card_alt(members: list[dict]) -> str:
+    """Alt text for the welcome card, naming everyone pictured."""
+    shown = [m["name"].strip() for m in welcome_card_faces(members)]
+    n = len(members)
+    if len(shown) == n:
+        return (f"Welcome to the NetSec Directory: photos of the "
+                f"{_count_words(n, 'new member')}, {_join_and(shown)}")
+    return (f"Welcome to the NetSec Directory: photos of {_number_word(len(shown))} "
+            f"of the {n} new members, {_join_and(shown)}, and a tile for {_number_word(n - len(shown))} more")
+
+
+def read_welcome(posted: set[str], since: str | None = None,
+                 today: dt.date | None = None) -> Post | None:
+    """The weekly welcome post, or None when nobody is to be welcomed (see
+    welcome_pending). The image is the welcome card when it has been rendered
+    for these members, else the Directory card."""
+    today = today or dt.datetime.now(dt.timezone.utc).date()
+    members = welcome_pending(posted, since, today)
     if not members:
         return None
     y, w, _ = today.isocalendar()
     names = _join_and([m["name"].strip() for m in members])
+    card = welcome_card_path(members)
     return Post(
         kind="welcome",
         key=f"welcome::{y}-W{w:02d}",
         title=WELCOME_TITLE,
         summary=f"{_count_words(len(members), 'new member').capitalize()}: {names}",
         link=DIRECTORY_LINK,
-        image=DIRECTORY_OG if DIRECTORY_OG.exists() else (SITE_OG if SITE_OG.exists() else None),
-        image_alt="The NetSec Directory card",
+        image=card if card.exists() else (DIRECTORY_OG if DIRECTORY_OG.exists() else
+                                          (SITE_OG if SITE_OG.exists() else None)),
+        image_alt=welcome_card_alt(members) if card.exists() else "The NetSec Directory card",
         texts={"bluesky": welcome_bluesky(members, today),
                "linkedin": welcome_linkedin(members, today)},
         member_keys=tuple(f"welcome::{m['id']}" for m in members),
