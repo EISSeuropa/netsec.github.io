@@ -393,6 +393,13 @@ value ✅ or ❌:
   not, issued to the app in `LINKEDIN_CLIENT_ID` or another, the
   `w_organization_social` scope, and the expiry.
 
+An expired access token is not a failure while the refresh token works:
+`social-post.py` renews it at each post without storing the new one, so the
+stored token expires about 60 days after it was made, and the check renews it
+the same way (#2228). A revoked access token, a refused renewal or an inactive
+refresh token is ❌, and a refresh token with fewer than 60 days left is ⚠️,
+which does not fail the job.
+
 Replace the ❌ values, run the check again, then start the post. The EISS
 repository has the same check (EISSeuropa/EISSeuropa.github.io).
 
