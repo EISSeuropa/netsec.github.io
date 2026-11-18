@@ -124,6 +124,9 @@ account without a URN or a handle goes out as its plain name on that network,
 and the dry run says so. `#Name` hashtags get Bluesky tag facets.
 `news-from-issue.py` stops on a tag that is not in the file. An email address
 or an `@` inside a URL is not a tag. The EISS repository keeps the same file.
+The two post boxes have `render: text`, so the issue shows them as code blocks
+and GitHub notifies no user called EISS or COST for a tag. `post_text()` drops
+the code-block fence.
 
 **Re-runs.** A publisher who edits an open form issue starts the run again,
 and the news PR is rebuilt from the edited form. Anyone else's edit starts

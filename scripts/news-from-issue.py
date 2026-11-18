@@ -183,8 +183,14 @@ def _module(name: str):
 
 def post_text(text: str) -> str:
     """A post as written, with its paragraphs: line ends trimmed, at most one
-    blank line between paragraphs."""
-    lines = [ln.rstrip() for ln in (text or "").replace("\r\n", "\n").split("\n")]
+    blank line between paragraphs. The form shows the post boxes as code
+    blocks (`render: text`), so GitHub does not notify a user for an @tag
+    such as @EISS. The ``` lines around the text are dropped here."""
+    text = (text or "").replace("\r\n", "\n").strip()
+    m = re.fullmatch(r"```[\w-]*\n(.*?)\n?```", text, re.S)
+    if m:
+        text = m.group(1)
+    lines = [ln.rstrip() for ln in text.split("\n")]
     return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
 
 

@@ -377,3 +377,17 @@ def test_emails_and_urls_are_not_tags():
     item = nfi.parse_form("news: x", nfi.form_sections(boxes(**{
         "LinkedIn post": "Write to info@netsec-cost.eu or see https://x.com/@a, with @NetSec"})), TODAY)
     assert "info@netsec-cost.eu" in item["posts"]["linkedin"]
+
+
+def test_post_boxes_render_as_code_blocks():
+    # The issue shows the post boxes as code blocks, so an @tag notifies no
+    # GitHub user. The fence is dropped, the text kept.
+    item = nfi.parse_form("news: x", nfi.form_sections(boxes(**{
+        "Bluesky post": "```text\nApplications are open, with @EISS. #NetSec\n```"})), TODAY)
+    assert item["posts"]["bluesky"] == "Applications are open, with @EISS. #NetSec"
+    assert nfi.post_text("```text\nA\n\n\n\nB\n```") == "A\n\nB"
+    assert nfi.post_text("```\nA\n```") == "A" and nfi.post_text("Use ``` here") == "Use ``` here"
+    text = (HERE.parent / ".github" / "ISSUE_TEMPLATE" / "news.yml").read_text(encoding="utf-8")
+    for fid in ("linkedin-post", "bluesky-post"):
+        block = text.split(f"    id: {fid}\n", 1)[1].split("  - type:", 1)[0]
+        assert "render: text" in block, fid
