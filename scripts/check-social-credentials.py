@@ -132,15 +132,27 @@ def _date(epoch) -> str:
         return "unknown"
 
 
+def _introspect_hint(label: str, code: int, body: dict) -> str:
+    """What a refused introspection points to. A refused app is a 401 or an
+    error naming the client. A token LinkedIn cannot parse is the token itself.
+    Anything else gets no guess."""
+    text = " ".join(str(body.get(k) or "") for k in ("error", "error_description", "message")).lower()
+    if code == 401 or "client" in text:
+        return (" LinkedIn refused the app credentials: check that LINKEDIN_CLIENT_ID and "
+                "LINKEDIN_CLIENT_SECRET belong to the same app")
+    if "parse" in text or "token" in text:
+        return (f" LinkedIn does not recognise the {label}: create new tokens with "
+                "scripts/linkedin-token.py and replace both token secrets")
+    return ""
+
+
 def introspect(label: str, token: str, client_id: str, client_secret: str) -> list[tuple[str, str]]:
     data = urllib.parse.urlencode({"client_id": client_id, "client_secret": client_secret,
                                    "token": token}).encode()
     code, body = _http(LI_INTROSPECT, data=data, headers={"Content-Type": "application/x-www-form-urlencoded"})
     if code != 200:
         msg = body.get("error_description") or body.get("message") or body.get("error")
-        hint = (" LinkedIn refused the app credentials: check that LINKEDIN_CLIENT_ID and "
-                "LINKEDIN_CLIENT_SECRET belong to the same app" if code in (400, 401) else "")
-        return [(FAIL, f"LinkedIn could not inspect the {label} (HTTP {code}: {msg}).{hint}")]
+        return [(FAIL, f"LinkedIn could not inspect the {label} (HTTP {code}: {msg}).{_introspect_hint(label, code, body)}")]
     out = []
     active = body.get("active") is True
     status = body.get("status") or ("active" if active else "inactive")

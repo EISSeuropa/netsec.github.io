@@ -105,6 +105,26 @@ def test_revoked_refresh_token_and_wrong_app():
     assert "issued to another LinkedIn app" in msgs
 
 
+def test_introspection_hint_names_the_token_or_the_app():
+    # The EISS run on 18 November: LinkedIn answered 400 "Unable to parse
+    # access token" for both tokens. That is the token, not the app.
+    hint = cc._introspect_hint("access token", 400, {"message": "Unable to parse access token"})
+    assert "does not recognise the access token" in hint and "LINKEDIN_CLIENT_ID" not in hint
+    for code, body in ((401, {"error": "invalid_client"}),
+                       (400, {"error": "invalid_client", "error_description": "Client authentication failed"})):
+        assert "LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET" in cc._introspect_hint("access token", code, body)
+    assert cc._introspect_hint("access token", 500, {"message": "Internal error"}) == ""
+
+    def unparsable(url, data=None, headers=None):
+        if "introspectToken" in url:
+            return 400, {"message": "Unable to parse access token", "serviceErrorCode": 0, "status": 400}
+        return fake_http()(url, data, headers)
+    cc._http = unparsable
+    msgs = fails(cc.check_linkedin(GOOD))
+    assert any("does not recognise the refresh token" in m for m in msgs), msgs
+    assert not any("LINKEDIN_CLIENT_SECRET belong" in m for m in msgs), msgs
+
+
 def test_org_id_must_be_a_number():
     _, li = run(dict(GOOD, LINKEDIN_ORG_ID="urn:li:organization:78412359"))
     assert any("not a plain number" in m for m in fails(li))
