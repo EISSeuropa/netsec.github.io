@@ -65,14 +65,18 @@ There are two ways: the issue form, or a PR that edits the JSON.
 
 Open a new issue and pick **News item**
 ([`.github/ISSUE_TEMPLATE/news.yml`](../.github/ISSUE_TEMPLATE/news.yml)).
-It is in English. Only the headline (or the issue title) and the summary are
-needed. The form applies no label, so filing it publishes nothing.
+It is in English. The headline (or the issue title), the summary and a Post on
+box are needed, or "Do not post" under Options for an item on the website
+only. The form applies no label, so filing it publishes nothing. The run
+renames the issue `news: <Headline>` and titles the news PR after the
+headline.
 
 | Field | Goes to |
 | --- | --- |
-| Site | NetSec: nothing extra. Joint: `"site": "joint"`. EISS: the run stops, file it in the EISS repository |
+| Site | NetSec: nothing extra. Joint: `"site": "joint"`, and with LinkedIn ticked the run stops unless Collaborator page is EISS. EISS, an option until 18 November 2026, stops the run |
 | Headline | `title.en`. Required, up to 100 characters. A longer one stops the run |
 | Website summary | `summary.en`, one line. Required, up to 300 characters |
+| Post on | LinkedIn and Bluesky checkboxes. None ticked: the run stops, unless "Do not post" is ticked under Options (both ticked stops it too). One ticked: `networks` lists it, and the other network's post box is ignored. Issues filed before the boxes post on both |
 | Body | `body.en`, up to 2,000 characters (blank: the summary). Also the post text for a network whose box is empty |
 | LinkedIn post | `posts.linkedin`, as written with its line breaks, English only. Up to 3,000 characters, counted with the link added at the end (unless the text holds it) and the tags as LinkedIn shows them |
 | Bluesky post | `posts.bluesky`, the same. Up to 300 characters, counted with the link and each tag written as its Bluesky handle |
@@ -83,8 +87,15 @@ needed. The form applies no label, so filing it publishes nothing.
 | On the home page until | `homeUntil` at 23:59 Paris time |
 | Image | A photo dragged into the field: saved as `assets/images/news/<id>.jpg`, and `image` is that path, the picture of the social posts. A site image (`assets/...`) is used as it is |
 | Image description | `imageAlt`. Required with a photo, up to 300 characters, in English |
-| Collaborator page | `"collaborator": "eiss"` |
+| Collaborator page | `"collaborator": "eiss"`, kept when LinkedIn is ticked |
 | Do not post to LinkedIn and Bluesky | `"social": "skip"` |
+
+A post pasted from LinkedIn keeps each page, person and hashtag as a
+`[Name](https://www.linkedin.com/...)` link. `untangle_linkedin()` in
+`news-from-issue.py` turns a link to a page listed in
+`data/social-accounts.json` (by its `linkedin_url` or its organisation number)
+into the page's `@Key`, and any other LinkedIn link into its plain text. The
+Website summary and the Body get the plain text only.
 
 The `Publish news from issue` workflow
 ([`.github/workflows/news-publish.yml`](../.github/workflows/news-publish.yml))
@@ -159,7 +170,10 @@ also opens an issue for the maintainer
 **Post preview.** Every PR that changes `data/news.json` or `news.xml`, from
 the form or by hand, gets a comment with the exact LinkedIn and Bluesky text
 (`.github/workflows/news-preview.yml`). The comment is updated on each push, so
-the item and its posts are read in one place before the merge.
+the item and its posts are read in one place before the merge. An item without
+its own photo shows `NO PHOTO: the posts use <card>` at the top of its entry,
+and the news PR body says the same with how to add one. A network the item is
+not for reads `not posted to <network>`.
 
 **Asking a Claude session.** A request such as "announce the call" goes through
 the `publish-news-item` skill (`.claude/skills/publish-news-item/SKILL.md`). It
@@ -220,4 +234,5 @@ describes the rest.
 | `posts` | no | `{linkedin?, bluesky?}`, the posts written for each network (the form's LinkedIn post and Bluesky post), English, kept with their line breaks and `@Key` tags. A network without one gets the 📣 headline, the body and the link. The site ignores it. |
 | `site` | no | `"joint"` for an item shared with EISS. The site ignores it. |
 | `collaborator` | no | `"eiss"`: after a LinkedIn post, the posting run lists it for adding the EISS page as collaborator by hand. LinkedIn's API cannot do it. |
+| `networks` | no | `["linkedin"]` or `["bluesky"]`: the only network the item is posted to (the form's Post on boxes, one ticked). Absent: both. The site ignores it. |
 | `newsletter` | no | `true` puts `<category>newsletter</category>` on the item in `news.xml`, which the monthly newsletter reads. |

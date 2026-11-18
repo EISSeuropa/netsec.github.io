@@ -12,7 +12,13 @@ the French and German title, summary and body (translate()). Dates, the
 link label and the type are set without translation.
 
 Form field         news.json
-  Site             "site": "joint" for a joint item. EISS stops the run.
+  Site             "site": "joint" for a joint item, and with LinkedIn
+                   ticked it needs EISS as Collaborator page. EISS, an option
+                   on issues filed before 18 November 2026, stops the run.
+  Post on          LinkedIn and Bluesky checkboxes, at least one ticked
+                   unless Options says not to post. One ticked: "networks"
+                   lists it, and the other network's box is ignored. Issues
+                   filed before the boxes post on both.
   Headline         title.en, up to HEADLINE_MAX characters (blank: the issue
                    title minus a leading "news:", for issues filed before the
                    form required it)
@@ -23,13 +29,18 @@ Form field         news.json
                    LINKEDIN_LIMIT characters with the link added
   Bluesky post     posts.bluesky, the same, up to BLUESKY_LIMIT characters
                    with the link and each tag written as its handle
-                   (@Key tags come from data/social-accounts.json)
+                   (@Key tags come from data/social-accounts.json). A post
+                   pasted from LinkedIn keeps its links as
+                   [Name](https://www.linkedin.com/...): a page in the
+                   accounts file becomes its @Key, any other link its plain
+                   text (untangle_linkedin)
   Type             type (default announcement)
   Working Group    wg
   Link             cta, with the FR and DE pages when they exist
   Publication date pubDate at 12:00 Paris time, and displayDate
   On the home page until   homeUntil at 23:59 Paris time
-  Collaborator page        "collaborator": "eiss"
+  Collaborator page        "collaborator": "eiss", kept when LinkedIn is
+                   ticked
   Image            a photo dragged into the field (an https address),
                    downloaded, shrunk to IMAGE_MAX_BYTES as a JPEG without
                    its camera data, and saved as assets/images/news/<id>.jpg.
@@ -49,8 +60,9 @@ is a fault in the repository and gets the workflow's generic comment
 Environment: ISSUE_TITLE, ISSUE_BODY, TODAY (YYYY-MM-DD), and
 ANTHROPIC_API_KEY for the translation. Without the key the item is written in
 English only, and the script prints TRANSLATED=false so the workflow leaves the
-PR for a person. With GITHUB_OUTPUT set it also writes translated=true|false
-and id=<item id> there.
+PR for a person. With GITHUB_OUTPUT set it also writes translated=true|false,
+id=<item id> and headline=<the English headline> there, so the workflow names
+the issue and the PR after the headline.
 
 Usage (local test):
     ISSUE_TITLE="news: x" ISSUE_BODY="$(cat body.md)" TODAY=2026-12-01 \\
@@ -91,6 +103,9 @@ NO_RESPONSE = "_No response_"
 FORM_HEADING_RE = re.compile(r"^###\s+(.+?)\s*$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 CHECKED_RE = re.compile(r"^\s*-\s*\[[xX]\]\s*(.+?)\s*$", re.M)
+NETWORK_LABELS = {"linkedin": "LinkedIn", "bluesky": "Bluesky"}
+LI_LINK_RE = re.compile(r"\[([^\]\n]+)\]\((https?://(?:[\w-]+\.)?linkedin\.com/[^)\s]*)\)", re.I)
+LI_PAGE_RE = re.compile(r"(?:(?:company|school|showcase)/([^/?#)\s]+)|organization:(\d+))", re.I)
 
 MODEL = "claude-opus-5-5"
 LOCALES = ("fr", "de")
@@ -192,6 +207,36 @@ def post_text(text: str) -> str:
         text = m.group(1)
     lines = [ln.rstrip() for ln in text.split("\n")]
     return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+
+def linkedin_pages() -> dict[str, str]:
+    """{page name or number in a LinkedIn address: @Key}, from the accounts
+    file's linkedin_url and linkedin (the urn:li:organization number)."""
+    sp = _module("social-post.py")
+    try:
+        accounts = json.loads(sp.ACCOUNTS_JSON.read_text(encoding="utf-8")).get("accounts") or {}
+    except (OSError, json.JSONDecodeError):
+        return {}
+    pages = {}
+    for key, acc in accounts.items():
+        for ref in (acc.get("linkedin_url"), acc.get("linkedin")) if isinstance(acc, dict) else ():
+            m = LI_PAGE_RE.search(ref or "")
+            if m:
+                pages[(m.group(1) or m.group(2)).lower()] = key
+    return pages
+
+
+def untangle_linkedin(text: str, tags: bool = True) -> str:
+    """Text copied from LinkedIn writes each page, person and hashtag as a
+    [Name](https://www.linkedin.com/...) link. A page in the accounts file
+    becomes its @Key (when tags is true), and any other link its plain text."""
+    pages = linkedin_pages() if tags else {}
+
+    def sub(m: re.Match) -> str:
+        page = LI_PAGE_RE.search(m.group(2))
+        key = pages.get((page.group(1) or page.group(2)).lower()) if page else None
+        return "@" + key if key else m.group(1)
+    return LI_LINK_RE.sub(sub, text or "")
 
 
 def check_post(network: str, label: str, text: str, item: dict) -> None:
@@ -374,11 +419,11 @@ def parse_form(title: str, f: dict[str, str], today: str, root: Path = ROOT) -> 
         sys.exit("The Headline is empty. Edit the issue and write a headline.")
     check_length("Headline", headline, HEADLINE_MAX)
     label = "Website summary" if "website summary" in f else "Summary"
-    summary = one_line(f.get("website summary", f.get("summary", "")))
+    summary = one_line(untangle_linkedin(f.get("website summary", f.get("summary", "")), tags=False))
     if not summary:
         sys.exit(f"The {label} is empty. Edit the issue and write one or two sentences for the website.")
     check_length(label, summary, SUMMARY_MAX)
-    body = one_line(f.get("body", ""))
+    body = one_line(untangle_linkedin(f.get("body", ""), tags=False))
     check_length("Body", body, BODY_MAX)
     body = body or summary
 
@@ -409,13 +454,31 @@ def parse_form(title: str, f: dict[str, str], today: str, root: Path = ROOT) -> 
         item["cta"] = cta
     if site.startswith("joint"):
         item["site"] = "joint"
-    if f.get("collaborator page", "").strip().lower() == "eiss":
-        item["collaborator"] = "eiss"
     ticked = {m.lower() for m in CHECKED_RE.findall(f.get("options", ""))}
     if "include in the newsletter" in ticked:
         item["newsletter"] = True
-    if "do not post to linkedin and bluesky" in ticked:
+    no_post = "do not post to linkedin and bluesky" in ticked
+    if no_post:
         item["social"] = "skip"
+    networks = [] if no_post else list(NETWORK_LABELS)
+    if "post on" in f:
+        chosen = {m.lower() for m in CHECKED_RE.findall(f["post on"])}
+        picked = [n for n, label in NETWORK_LABELS.items() if label.lower() in chosen]
+        if no_post and picked:
+            sys.exit("Post on has a box ticked, and Options says not to post. Edit the issue and "
+                     "untick one of them.")
+        if not no_post and not picked:
+            sys.exit("No box is ticked under Post on. Edit the issue and tick LinkedIn, Bluesky or both, "
+                     "or tick \"Do not post to LinkedIn and Bluesky\" under Options for the website only.")
+        networks = networks and picked
+    collaborator = f.get("collaborator page", "").strip().lower() == "eiss"
+    if item.get("site") == "joint" and "linkedin" in networks and not collaborator:
+        sys.exit("The Site is Joint and the news goes to LinkedIn, so EISS's page is added as collaborator. "
+                 "Edit the issue and pick EISS under Collaborator page.")
+    if collaborator and "linkedin" in networks:
+        item["collaborator"] = "eiss"
+    if networks and len(networks) < len(NETWORK_LABELS):
+        item["networks"] = networks
     image = image_source(f.get("image", ""))
     if image:
         alt = one_line(f.get("image description", ""))
@@ -430,7 +493,9 @@ def parse_form(title: str, f: dict[str, str], today: str, root: Path = ROOT) -> 
         item["imageAlt"] = alt
     posts = {}
     for network, box_label, key in POST_BOXES:
-        text = post_text(f.get(key, ""))
+        if network not in networks:
+            continue
+        text = untangle_linkedin(post_text(f.get(key, "")))
         if text:
             check_post(network, box_label, text, item)
             posts[network] = text
@@ -525,6 +590,7 @@ def main(translator=translate, news_path: Path = NEWS, root: Path = ROOT, fetche
         sys.exit("This issue does not use the News item form. Open a new issue, "
                  "pick News item, and fill in the form.")
     item = parse_form(title, fields, today, root)
+    write_outputs(headline=item["title"]["en"])
 
     text = news_path.read_text(encoding="utf-8")
     data = json.loads(text)

@@ -119,6 +119,24 @@ def test_joint_item(monkeypatch, tmp_path):
     assert data["items"][0]["site"] == "joint"
 
 
+def test_joint_item_for_linkedin_needs_eiss_as_collaborator():
+    with pytest.raises(SystemExit, match="pick EISS under Collaborator page"):
+        nfi.parse_form("news: x", nfi.form_sections(
+            form(Site="Joint (EISS and NetSec)", **{"Collaborator page": "No collaborator"})), TODAY)
+    item = nfi.parse_form("news: x", nfi.form_sections(form(**{
+        "Site": "Joint (EISS and NetSec)", "Collaborator page": "No collaborator",
+        "Post on": "- [ ] LinkedIn\n- [X] Bluesky"})), TODAY)
+    assert item["site"] == "joint" and item["networks"] == ["bluesky"] and "collaborator" not in item
+
+
+def test_form_offers_post_on_and_no_eiss_site():
+    text = (HERE.parent / ".github" / "ISSUE_TEMPLATE" / "news.yml").read_text(encoding="utf-8")
+    site = text.split("    id: site\n", 1)[1].split("  - type:", 1)[0]
+    assert "- EISS" not in site
+    nets = text.split("    id: networks\n", 1)[1].split("  - type:", 1)[0]
+    assert "label: Post on" in nets and "- label: LinkedIn" in nets and "- label: Bluesky" in nets
+
+
 def test_eiss_item_stops(monkeypatch, tmp_path):
     with pytest.raises(SystemExit, match="The Site is EISS"):
         run(monkeypatch, tmp_path, form(Site="EISS"))
@@ -156,7 +174,7 @@ def test_form_requires_the_headline_and_describes_every_field():
     blocks = re.split(r"^  - type: ", text, flags=re.M)[1:]
     fields = {re.search(r"^    id: (\S+)", b, re.M).group(1): b
               for b in blocks if not b.startswith("markdown")}
-    assert len(fields) == 15, sorted(fields)
+    assert len(fields) == 16, sorted(fields)
     for fid, b in fields.items():
         assert re.search(r"^      description: \S", b, re.M), f"{fid} has no description"
     assert "required: true" in fields["headline"]
@@ -204,8 +222,8 @@ def test_form_has_no_reserved_dropdown_option():
 def test_form_headings_match_the_script():
     text = (HERE.parent / ".github" / "ISSUE_TEMPLATE" / "news.yml").read_text(encoding="utf-8")
     labels = {m.lower() for m in re.findall(r"^\s+label: (.+?)\s*$", text, re.M)
-              if not m.startswith(("Include", "Do not"))}
-    read = {"site", "headline", "website summary", "body", "linkedin post", "bluesky post",
+              if not m.startswith(("Include", "Do not")) and m not in ("LinkedIn", "Bluesky")}
+    read = {"site", "headline", "website summary", "post on", "body", "linkedin post", "bluesky post",
             "type", "working group", "link",
             "image", "image description", "publication date", "on the home page until", "collaborator page", "options"}
     assert labels == read
@@ -391,3 +409,64 @@ def test_post_boxes_render_as_code_blocks():
     for fid in ("linkedin-post", "bluesky-post"):
         block = text.split(f"    id: {fid}\n", 1)[1].split("  - type:", 1)[0]
         assert "render: text" in block, fid
+
+
+def post_on(linkedin, bluesky, **over):
+    box = lambda on: "X" if on else " "
+    return nfi.form_sections(boxes(**{"Post on": f"- [{box(linkedin)}] LinkedIn\n- [{box(bluesky)}] Bluesky", **over}))
+
+
+def test_post_on_picks_the_networks():
+    item = nfi.parse_form("news: x", post_on(True, True), TODAY)
+    assert "networks" not in item and set(item["posts"]) == {"linkedin", "bluesky"}
+    item = nfi.parse_form("news: x", post_on(True, False), TODAY)
+    assert item["networks"] == ["linkedin"] and set(item["posts"]) == {"linkedin"}
+    assert item["collaborator"] == "eiss"
+    # The unticked network's box is ignored, even when it would stop the run.
+    item = nfi.parse_form("news: x", post_on(False, True, **{"LinkedIn post": "With @Nope"}), TODAY)
+    assert item["networks"] == ["bluesky"] and set(item["posts"]) == {"bluesky"}
+    assert "collaborator" not in item
+    with pytest.raises(SystemExit, match="No box is ticked under Post on"):
+        nfi.parse_form("news: x", post_on(False, False), TODAY)
+
+
+def test_post_on_and_do_not_post():
+    skip = "- [ ] Include in the newsletter\n- [X] Do not post to LinkedIn and Bluesky"
+    item = nfi.parse_form("news: x", post_on(False, False, Options=skip), TODAY)
+    assert item["social"] == "skip" and "posts" not in item and "networks" not in item
+    assert "collaborator" not in item
+    with pytest.raises(SystemExit, match="untick one of them"):
+        nfi.parse_form("news: x", post_on(True, False, Options=skip), TODAY)
+
+
+PASTE = ("[#ESSC2027](https://www.linkedin.com/search/results/all/?keywords=%23essc2027) with "
+         "[Networking European Security Knowledge (NetSec)](https://www.linkedin.com/company/costnetsec/), "
+         "[EISS](https://www.linkedin.com/company/eiss-europa/), "
+         "[COST Association](https://www.linkedin.com/company/cost-office/), "
+         "[FPN](https://www.linkedin.com/school/fakultet-politickih-nauka-univerzitet-u-beogradu/) "
+         "and [Jane Doe](https://www.linkedin.com/in/jane-doe-123/). See https://netsec-cost.eu/")
+
+
+def test_pasted_linkedin_text():
+    assert nfi.untangle_linkedin(PASTE) == ("#ESSC2027 with @NetSec, @EISS, @COST, FPN and Jane Doe. "
+                                            "See https://netsec-cost.eu/")
+    assert nfi.untangle_linkedin(PASTE, tags=False).startswith(
+        "#ESSC2027 with Networking European Security Knowledge (NetSec), EISS, COST Association, FPN")
+    assert nfi.untangle_linkedin("[a](https://example.org/)") == "[a](https://example.org/)"
+    # The organisation number in the page's address works too.
+    assert nfi.untangle_linkedin("[x](https://www.linkedin.com/company/120343970/)") == "@NetSec"
+    item = nfi.parse_form("news: x", nfi.form_sections(boxes(**{"LinkedIn post": PASTE})), TODAY)
+    assert "with @NetSec, @EISS, @COST, FPN" in item["posts"]["linkedin"]
+    item = nfi.parse_form("news: x", nfi.form_sections(boxes(**{
+        "Website summary": "Open, with [EISS](https://www.linkedin.com/company/eiss-europa/)."})), TODAY)
+    assert item["summary"]["en"] == "Open, with EISS."
+
+
+def test_github_output_names_the_headline(monkeypatch, tmp_path):
+    out = tmp_path / "out.txt"
+    monkeypatch.setenv("GITHUB_OUTPUT", str(out))
+    monkeypatch.setenv("ISSUE_TITLE", "news:")
+    monkeypatch.setenv("ISSUE_BODY", form())
+    monkeypatch.setenv("TODAY", TODAY)
+    nfi.main(translator=stub, news_path=news_file(tmp_path), root=HERE.parent)
+    assert "headline=Training School 2027: call open\n" in out.read_text()
