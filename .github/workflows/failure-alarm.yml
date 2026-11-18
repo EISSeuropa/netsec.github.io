@@ -44,6 +44,7 @@ on:
       - Sync WG membership from cost.eu
       - Sync events from Indico
       - Rotate member spotlight
+      - Welcome new Directory members
       - Refresh roadmap surfaces
       - AUTOPR token health
       - Deploy to GitHub Pages

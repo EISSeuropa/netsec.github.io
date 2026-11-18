@@ -1,0 +1,95 @@
+# Weekly welcome to new NetSec Directory members (#2236). DRY RUN.
+#
+# Every Friday at 10:00 Central European time, scripts/social-post.py
+# composes one post that names the members who joined the Directory, and
+# writes the LinkedIn and Bluesky text to the run summary. Nothing is posted
+# and the ledger is not touched. The workflow needs no secrets.
+#
+# The preview covers the last seven days (--since). That option is refused
+# with --live: the live welcome is not retroactive, and lists only members
+# who joined on or after data/welcome.json `since`, the go-live date.
+#
+# Friday sits three days after the Tuesday spotlight (spotlight-rotate.yml).
+# Cron can't follow DST, so two UTC triggers (08:00 + 09:00) fire and the gate
+# job lets through the one that lands at 10:00 Europe/Paris, as in
+# spotlight-rotate.yml.
+#
+# Going live is its own PR: set `since` in data/welcome.json to the go-live
+# date, drop --since, post with --live --best-effort on the `social-auto`
+# environment, and persist the ledger on `welcome/auto` the way
+# spotlight-rotate.yml does (docs/social-publishing.md, Welcome).
+
+name: Welcome new Directory members
+
+on:
+  schedule:
+    - cron: '0 8 * * 5'
+    - cron: '0 9 * * 5'
+  workflow_dispatch:
+    inputs:
+      since:
+        description: 'Preview members who joined on or after this date (YYYY-MM-DD). Empty: the last seven days.'
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: directory-welcome
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    name: Proceed only at 10:00 Europe/Paris
+    runs-on: ubuntu-latest
+    outputs:
+      go: ${{ steps.check.outputs.go }}
+    steps:
+      - id: check
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          offset=$(TZ='Europe/Paris' date +%z)   # +0200 in summer (CEST), +0100 in winter (CET)
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "go=true" >> "$GITHUB_OUTPUT"
+          elif { [ "$offset" = "+0200" ] && [[ "$SCHEDULE" == "0 8 "* ]]; } \
+            || { [ "$offset" = "+0100" ] && [[ "$SCHEDULE" == "0 9 "* ]]; }; then
+            echo "go=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Cron '${SCHEDULE}' is not the 10:00 Europe/Paris trigger for offset ${offset}; skipped."
+          fi
+
+  preview:
+    name: Preview the weekly welcome
+    needs: gate
+    if: needs.gate.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+
+      - name: Compose (dry-run) into the run summary
+        env:
+          SINCE_INPUT: ${{ github.event.inputs.since || '' }}
+        run: |
+          SINCE="${SINCE_INPUT:-$(date -u -d '6 days ago' +%F)}"
+          {
+            echo "### Weekly welcome, members who joined since ${SINCE} (dry run)"
+            echo ""
+            echo '```'
+            python3 scripts/social-post.py --dry-run --kind welcome --since "$SINCE"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          N=$(python3 scripts/social-post.py --count --kind welcome --since "$SINCE")
+          if [ "$N" = "0" ]; then
+            echo "::notice::Nobody joined since ${SINCE}, so a live run would post nothing."
+          else
+            echo "::notice::Dry run: the welcome post is in the run summary. Nothing was posted."
+          fi

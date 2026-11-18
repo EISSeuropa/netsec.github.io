@@ -10,12 +10,15 @@ adapters are wired in later phases behind a GitHub `social` environment
 (an approval gate), once the maintainer has registered the apps and added
 the secrets (see docs/social-publishing.md).
 
-Two post sources, both read from already-published surfaces so this script
+Three post sources, all read from already-published surfaces so this script
 stays a pure consumer:
   - News:     parsed from the RSS feed news.xml (one post per new entry,
               deduped on the entry's stable key).
   - Spotlight: the member in data/spotlight.json `current`, with the
               per-member OG card (assets/og/people/<slug>.png) as the image.
+  - Welcome:  the members in data/bios.json whose `joined` date is on or
+              after data/welcome.json `since` and who have no welcome::<id>
+              key in the ledger, in one post (#2236).
 
 A ledger (data/social-posted.json) records what has been posted so re-runs
 publish nothing. The spotlight key includes the ISO week, so the same
@@ -24,6 +27,7 @@ member is posted at most once per week.
 Usage:
     python3 scripts/social-post.py --dry-run                  # preview everything pending
     python3 scripts/social-post.py --dry-run --kind spotlight # just the spotlight
+    python3 scripts/social-post.py --dry-run --kind welcome --since 2026-11-13
     python3 scripts/social-post.py --live --channel bluesky    # phase 2+, needs secrets
 
 Stdlib only; runs under /usr/bin/python3.
@@ -46,12 +50,14 @@ NEWS_XML = ROOT / "news.xml"
 NEWS_JSON = ROOT / "data" / "news.json"
 ACCOUNTS_JSON = ROOT / "data" / "social-accounts.json"
 SPOTLIGHT = ROOT / "data" / "spotlight.json"
+WELCOME = ROOT / "data" / "welcome.json"
 BIOS = ROOT / "data" / "bios.json"
 LEDGER = ROOT / "data" / "social-posted.json"
 THREADS_DIR = ROOT / "data" / "social-threads"
 LINKEDIN_VERSION_FILE = ROOT / "data" / "linkedin-api-version.json"
 SITE = "https://netsec-cost.eu"
 SITE_OG = ROOT / "assets" / "images" / "og-image.png"
+DIRECTORY_OG = ROOT / "assets" / "images" / "og-image-people.png"
 
 # Bluesky posts are capped at 300 graphemes; we trim to a safe budget.
 BLUESKY_LIMIT = 300
@@ -91,7 +97,7 @@ def _gha_warning(msg: str) -> None:
 # --------------------------------------------------------------------------
 @dataclass
 class Post:
-    kind: str            # "news" | "spotlight"
+    kind: str            # "news" | "spotlight" | "welcome"
     key: str             # dedup key recorded in the ledger
     title: str
     summary: str
@@ -117,6 +123,11 @@ class Post:
     # News only: False when the item has no photo of its own and the posts
     # use the event card or the general card.
     own_image: bool = True
+    # Welcome only: the finished text for each channel, keyed "bluesky" and
+    # "linkedin", and the welcome::<id> key of every member it names, recorded
+    # in the ledger with `key` once the post goes out.
+    texts: dict = field(default_factory=dict)
+    member_keys: tuple[str, ...] = ()
 
     def wants(self, channel: str) -> bool:
         return not self.networks or channel in self.networks
@@ -134,6 +145,8 @@ class Post:
         handle, which _rich_facets() then resolves). Otherwise Bluesky is
         trimmed to its limit; the link is always kept whole (it is what the
         post is for)."""
+        if self.texts:
+            return self.texts.get(channel, "")
         own = self.custom(channel)
         if own:
             text, _ = tagged(with_link(own, self.link), channel, load_accounts())
@@ -526,6 +539,17 @@ def bluesky_handle(url: str | None) -> str | None:
     return s.lstrip("@") if "." in s and "/" not in s else None
 
 
+def member_role(m: dict) -> str:
+    """"Position at Affiliation", or whichever of the two is set. Some
+    submitted positions already spell out the affiliation ("guest lecturer at
+    X University"), so appending "at X University" again reads as a stutter."""
+    pos = (m.get("position") or "").strip()
+    aff = (m.get("affiliation") or "").strip()
+    if aff and aff.lower() in pos.lower():
+        return pos
+    return f"{pos} at {aff}" if pos and aff else (pos or aff)
+
+
 def read_spotlight() -> Post | None:
     """The current weekly spotlight member as a post, or None when the
     spotlight is dormant or the member is missing."""
@@ -539,12 +563,7 @@ def read_spotlight() -> Post | None:
     m = members.get(slug)
     if not m:
         return None
-    pos = (m.get("position") or "").strip()
-    aff = (m.get("affiliation") or "").strip()
-    # Some submitted positions already spell out the affiliation ("guest
-    # lecturer at X University"), so appending "at X University" again reads
-    # as a stutter.
-    role = pos if aff and aff.lower() in pos.lower() else (f"{pos} at {aff}" if pos and aff else (pos or aff))
+    role = member_role(m)
     themes = [titlecase_theme(t) for t in (m.get("canonical_keywords") or [])][:3]
     intro = f"Meet {m.get('name', slug)} in the NetSec Directory"
     lead = f"{intro}, {role}." if role else f"{intro}."
@@ -599,6 +618,170 @@ def read_spotlight() -> Post | None:
         image=card if card.exists() else (SITE_OG if SITE_OG.exists() else None),
         image_alt=f"Profile card for {m.get('name', slug)} in the NetSec Directory",
         bsky_handle=bsky,
+    )
+
+
+# --------------------------------------------------------------------------
+# Weekly welcome to new Directory members (#2236)
+# --------------------------------------------------------------------------
+WELCOME_TITLE = "Welcome to the NetSec Directory"
+DIRECTORY_LINK = f"{SITE}/people.html"
+_NUMBER_WORDS = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
+
+
+def _number_word(n: int) -> str:
+    """"one" to "ten" in words, larger numbers in figures (British style)."""
+    return _NUMBER_WORDS[n] if 0 <= n < len(_NUMBER_WORDS) else str(n)
+
+
+def _count_words(n: int, noun: str) -> str:
+    """"one member", "seven members", "16 members"."""
+    return f"{_number_word(n)} {noun}" if n == 1 else f"{_number_word(n)} {noun}s"
+
+
+def welcome_since() -> str | None:
+    """data/welcome.json `since` (YYYY-MM-DD), or None when the welcome is
+    switched off (no file, or `since` null or malformed)."""
+    try:
+        since = json.loads(WELCOME.read_text(encoding="utf-8")).get("since")
+        return dt.date.fromisoformat(str(since)).isoformat() if since else None
+    except (OSError, ValueError, AttributeError):
+        return None
+
+
+def welcome_members(posted: set[str], since: str) -> list[dict]:
+    """Members of data/bios.json who joined on or after `since` and have not
+    been welcomed, oldest first. A member whose welcome failed or was skipped
+    stays here until a post names them."""
+    if not BIOS.exists():
+        return []
+    members = json.loads(BIOS.read_text(encoding="utf-8")).get("members", [])
+    out = [m for m in members
+           if m.get("id") and (m.get("name") or "").strip()
+           and (m.get("joined") or "") >= since
+           and f"welcome::{m['id']}" not in posted]
+    return sorted(out, key=lambda m: (m.get("joined") or "", m.get("name", "").lower()))
+
+
+def _welcome_when(members: list[dict], today: dt.date) -> str:
+    """"this week" when everyone joined in the last seven days, else
+    "recently" (members carried over from a week that did not post)."""
+    week_ago = (today - dt.timedelta(days=6)).isoformat()
+    return "this week" if all((m.get("joined") or "") >= week_ago for m in members) else "recently"
+
+
+# Country names that take "the" in running text ("from the Netherlands").
+_COUNTRIES_WITH_THE = {"Netherlands", "United Kingdom", "United States"}
+
+
+def _countries(members: list[dict]) -> list[str]:
+    """The members' countries, sorted, each written as it reads after "from"."""
+    names = sorted({(m.get("country") or "").strip() for m in members} - {""})
+    return [f"the {c}" if c in _COUNTRIES_WITH_THE else c for c in names]
+
+
+def welcome_linkedin(members: list[dict], today: dt.date) -> str:
+    """One line per member: name, role and country. When the list would pass
+    LinkedIn's limit, the roles go first, then the tail of the list."""
+    when = _welcome_when(members, today)
+
+    def line(m: dict, with_role: bool) -> str:
+        parts = [m["name"].strip()]
+        role = member_role(m) if with_role else ""
+        if role:
+            parts.append(role)
+        text = ", ".join(parts)
+        country = (m.get("country") or "").strip()
+        # "Policy analyst at Bangladesh (Bangladesh)": no country twice.
+        if country and country.lower() not in text.lower():
+            text += f" ({country})"
+        return f"- {text}"
+
+    def build(shown: int, with_role: bool) -> str:
+        lines = [line(m, with_role) for m in members[:shown]]
+        if shown < len(members):
+            lines.append(f"- and {_count_words(len(members) - shown, 'other member')}")
+        head = _count_words(len(members), "member").capitalize()
+        return "\n".join([WELCOME_TITLE, "",
+                          f"{head} joined the Directory {when}:", "",
+                          *lines, "",
+                          f"Find them and every other member at {DIRECTORY_LINK}",
+                          "", HASHTAGS])
+
+    # Measured as sent: li_little_text() escapes brackets with a backslash.
+    attempts = [(len(members), True)] + [(k, False) for k in range(len(members), 0, -1)]
+    for shown, with_role in attempts:
+        text = build(shown, with_role)
+        if len(li_little_text(text)) <= LINKEDIN_LIMIT:
+            return text
+    return build(0, False)
+
+
+def welcome_bluesky(members: list[dict], today: dt.date) -> str:
+    """The count, the countries, as many names as fit and "and N more", the
+    members' Bluesky handles as mentions, and the link, within 300 graphemes.
+    Over the limit, names go first, then countries, then mentions. The link
+    is always kept."""
+    when = _welcome_when(members, today)
+    n = len(members)
+    names = [m["name"].strip() for m in members]
+    countries = _countries(members)
+    handles = [h for h in (bluesky_handle(m.get("bluesky")) for m in members) if h]
+
+    def build(shown: int, with_countries: bool, with_mentions: bool) -> str:
+        if n == 1:
+            where = f" from {countries[0]}" if with_countries and countries else ""
+            lead = f"Welcome to {names[0]}, who joined the NetSec Directory {when}{where}."
+        else:
+            where = f", from {_join_and(countries)}" if with_countries and countries else ""
+            lead = f"Welcome to the {_count_words(n, 'member')} who joined the NetSec Directory {when}{where}"
+            if shown:
+                listed = names[:shown] + ([f"{_number_word(n - shown)} more"] if shown < n else [])
+                lead += ": " + _join_and(listed) + "."
+            else:
+                lead += "."
+        parts = [lead]
+        if with_mentions and handles:
+            parts.append("On Bluesky: " + " ".join(f"@{h}" for h in handles))
+        parts.append(DIRECTORY_LINK)
+        return "\n\n".join(parts)
+
+    attempts = [(k, True, True) for k in range(n, -1, -1)]
+    attempts += [(0, False, True), (0, False, False)]
+    if n == 1:
+        attempts = [(1, True, True), (1, False, True), (1, False, False)]
+    for shown, with_countries, with_mentions in attempts:
+        text = build(shown, with_countries, with_mentions)
+        if graphemes(text) <= BLUESKY_LIMIT:
+            return text
+    return build(0, False, False)
+
+
+def read_welcome(posted: set[str], since: str | None = None,
+                 today: dt.date | None = None) -> Post | None:
+    """The weekly welcome post, or None when the welcome is off (no `since`)
+    or nobody is waiting to be welcomed. `since` overrides data/welcome.json,
+    which the dry-run workflow uses to preview one week at a time."""
+    since = since or welcome_since()
+    if not since:
+        return None
+    members = welcome_members(posted, since)
+    if not members:
+        return None
+    today = today or dt.datetime.now(dt.timezone.utc).date()
+    y, w, _ = today.isocalendar()
+    names = _join_and([m["name"].strip() for m in members])
+    return Post(
+        kind="welcome",
+        key=f"welcome::{y}-W{w:02d}",
+        title=WELCOME_TITLE,
+        summary=f"{_count_words(len(members), 'new member').capitalize()}: {names}",
+        link=DIRECTORY_LINK,
+        image=DIRECTORY_OG if DIRECTORY_OG.exists() else (SITE_OG if SITE_OG.exists() else None),
+        image_alt="The NetSec Directory card",
+        texts={"bluesky": welcome_bluesky(members, today),
+               "linkedin": welcome_linkedin(members, today)},
+        member_keys=tuple(f"welcome::{m['id']}" for m in members),
     )
 
 
@@ -708,7 +891,8 @@ def save_ledger(data: dict) -> None:
     LEDGER.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def pending(kinds: set[str], ledger: dict) -> list[Post]:
+def pending(kinds: set[str], ledger: dict, since: str | None = None) -> list[Post]:
+    """The posts still to go out. `since` applies to the welcome only."""
     posted = set(ledger.get("posted", []))
     out = []
     if "news" in kinds:
@@ -717,6 +901,10 @@ def pending(kinds: set[str], ledger: dict) -> list[Post]:
         sp = read_spotlight()
         if sp and sp.key not in posted:
             out.append(sp)
+    if "welcome" in kinds:
+        wp = read_welcome(posted, since)
+        if wp:
+            out.append(wp)
     return out
 
 
@@ -1162,7 +1350,12 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Compose/publish NetSec social posts (#1072).")
     ap.add_argument("--dry-run", action="store_true", help="print posts; publish nothing (default)")
     ap.add_argument("--live", action="store_true", help="actually publish (phase 2+; needs secrets)")
-    ap.add_argument("--kind", choices=["news", "spotlight", "all"], default="all")
+    # `all` stays news and spotlight, so the news workflow never sweeps up a
+    # welcome. The welcome has its own workflow (directory-welcome.yml).
+    ap.add_argument("--kind", choices=["news", "spotlight", "welcome", "all"], default="all")
+    ap.add_argument("--since", metavar="YYYY-MM-DD",
+                    help="welcome previews only: list members who joined on or after this "
+                         "date, in place of data/welcome.json `since`. Refused with --live")
     ap.add_argument("--channel", choices=["bluesky", "linkedin", "all"], default="all")
     ap.add_argument("--thread", metavar="FILE", help="post a curated thread spec (data/social-threads/*.json)")
     ap.add_argument("--count", action="store_true",
@@ -1170,6 +1363,16 @@ def main() -> int:
     ap.add_argument("--best-effort", action="store_true",
                     help="don't abort if one channel fails to publish (for the ungated spotlight)")
     args = ap.parse_args()
+    # The welcome is not retroactive: a live post welcomes only members who
+    # joined on or after data/welcome.json `since`, the go-live date. --since
+    # is for dry-run previews and is refused with --live.
+    if args.since and args.live:
+        ap.error("--since is for dry-run previews. A live welcome uses data/welcome.json `since`")
+    if args.since:
+        try:
+            dt.date.fromisoformat(args.since)
+        except ValueError:
+            ap.error(f"--since must be a date as YYYY-MM-DD, not {args.since!r}")
 
     ledger = load_ledger()
     posted = set(ledger.get("posted", []))
@@ -1181,14 +1384,14 @@ def main() -> int:
             print(0 if (thread.key in posted or over) else 1)
         else:
             kinds = {"news", "spotlight"} if args.kind == "all" else {args.kind}
-            print(len(pending(kinds, ledger)))
+            print(len(pending(kinds, ledger, since=args.since)))
         return 0
 
     if args.thread:
         return run_thread(Path(args.thread), live=args.live and not args.dry_run, ledger=ledger)
 
     kinds = {"news", "spotlight"} if args.kind == "all" else {args.kind}
-    posts = pending(kinds, ledger)
+    posts = pending(kinds, ledger, since=args.since)
 
     if not posts:
         print("Nothing pending.")
@@ -1255,6 +1458,7 @@ def main() -> int:
                              "LinkedIn page as collaborator.")
         if not failed or (args.best_effort and done):
             ledger.setdefault("posted", []).append(p.key)
+            ledger["posted"].extend(k for k in p.member_keys if k not in ledger["posted"])
         elif not args.best_effort:
             ledger.setdefault("posted", []).extend(
                 f"{p.key}#{n}" for n in done if f"{p.key}#{n}" not in posted)

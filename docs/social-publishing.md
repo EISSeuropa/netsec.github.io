@@ -33,6 +33,10 @@ data/spotlight.json (wk) ─┘        composes text + image; records the ledger
   Cron can't follow DST, so `spotlight-rotate.yml` fires at both 08:00 and
   09:00 UTC on Tuesdays and a gate job lets through only the one that lands at
   10:00 Europe/Paris.
+- Every Friday at 10:00 Central European time, `directory-welcome.yml`
+  composes one post naming the members who joined the Directory. It runs as a
+  dry run for now, and the post is in the run summary only. See *Weekly
+  welcome to new Directory members* below.
 - **Tagging the member.** When a member has supplied a Bluesky profile
   (`bluesky` in `data/bios.json`), the handle is woven into the Bluesky post as
   an @-mention and resolved to a richtext facet, so the person is notified. It
@@ -63,6 +67,7 @@ data/spotlight.json (wk) ─┘        composes text + image; records the ledger
 ```bash
 python3 scripts/social-post.py --dry-run            # everything pending
 python3 scripts/social-post.py --dry-run --kind spotlight
+python3 scripts/social-post.py --dry-run --kind welcome --since 2026-11-13
 ```
 
 This prints the Bluesky version (trimmed to 300 characters) and the LinkedIn
@@ -330,9 +335,58 @@ publish step then fails safely and posts nothing).
   because the link is what the post is for and the mentorship line is what a
   reader can act on.
 
+- Welcome: on LinkedIn, "Welcome to the NetSec Directory", the number of
+  members who joined, one line per member (name, role, country), the link to
+  `/people.html` and the hashtags. On Bluesky, one sentence with the number of
+  members, their countries and as many names as fit, then "and N more", the
+  members' Bluesky handles as mentions, and the link. Over 300 characters the
+  names come off first, then the countries, then the mentions. Over LinkedIn's
+  3,000 characters the roles come off, then the tail of the list. The image is
+  the Directory card, `assets/images/og-image-people.png`.
+
 Posts are **English only**. Edit the templates in `scripts/social-post.py`
-(the `Post.render` method and the `read_spotlight` composer) to adjust tone,
-emoji, or hashtags.
+(the `Post.render` method and the `read_spotlight` and `read_welcome`
+composers) to adjust tone, emoji, or hashtags.
+
+## Weekly welcome to new Directory members
+
+Issue #2236. `scripts/sync-bios.py` stamps `joined` in `data/bios.json` with
+the UTC date a member first lands there. Every Friday at 10:00 Central
+European time, `.github/workflows/directory-welcome.yml` composes one post
+naming the members who are waiting to be welcomed. A week with nobody new
+posts nothing.
+
+The welcome is not retroactive. It lists only members whose `joined` date is
+on or after `since` in `data/welcome.json`, and `since` is the go-live date.
+While `since` is `null` the welcome is off. Each member is recorded in the
+ledger as `welcome::<id>` once a post names them, so a week that fails carries
+its members into the next post.
+
+### Dry run (now)
+
+The workflow runs `social-post.py --dry-run --kind welcome --since <seven days
+ago>` and writes the LinkedIn and Bluesky text to the run summary. It needs no
+secrets, posts nothing and does not touch the ledger. A manual run takes a
+`since` date to preview another window. `--since` is refused with `--live`, so
+a live post can only use the date in `data/welcome.json`.
+
+### Going live
+
+One PR, after the dry runs have been read and the consent wording is settled
+(#2236, step 5):
+
+1. Set `since` in `data/welcome.json` to the go-live date.
+2. In `directory-welcome.yml`, drop `--since`, post with `--live --best-effort`
+   on the `social-auto` environment, and persist the ledger on `welcome/auto`
+   with the fold-in and auto-merge steps of `spotlight-rotate.yml`.
+3. Add `welcome/auto` to the ledger fold-in in `spotlight-rotate.yml` and
+   `social-bluesky.yml`, the workflow to `autopr-token-health.yml`'s list,
+   and its paths to
+   `scripts/test-auto-pr-builders.py`.
+4. Add a bullet under `CHANGELOG.md` `[Unreleased]`.
+
+A member who leaves the Directory after being welcomed stays in the post.
+Delete or edit the post by hand on LinkedIn and Bluesky if they ask.
 
 ## Opting a news item out of the auto-post
 

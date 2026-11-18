@@ -573,6 +573,18 @@ or `history`; let the script manage them. Gender is not part of the
 rotation score by design, so the pin is also how you correct any
 visible imbalance.
 
+### The weekly welcome to new members
+
+Every Friday at 10:00 Central European time, the `directory-welcome.yml`
+workflow composes one LinkedIn and Bluesky post naming the members who
+joined the Directory ([#2236](https://github.com/EISSeuropa/netsec.github.io/issues/2236)).
+It is a dry run for now: open the run in the Actions tab and read the
+post in its summary. To preview another window, run the workflow by hand
+with a `since` date. The welcome is not retroactive. Once live, it names
+only members who joined on or after `since` in `data/welcome.json`, the
+go-live date. The go-live steps are in `docs/social-publishing.md`,
+*Weekly welcome to new Directory members*.
+
 ### Cutting a release
 
 The release script handles the SemVer bump, the CHANGELOG promotion,
