@@ -57,7 +57,7 @@ Four traps sit outside the path-to-builder mapping.
 
 ## What each auto-PR workflow commits
 
-Eight workflows open their own PRs, and each one has to rerun every
+Nine workflows open their own PRs, and each one has to rerun every
 gated builder that reads what it writes. Four times it did not, and the
 PR opened already red: the bio search stubs (#1428), the network map
 (#764), then the directory index and the sitemap on the same workflow
@@ -70,6 +70,7 @@ inside a day (#1803, #1804).
 | `sync-indico.yml` | `data/events.json`, `data/indico.json` |
 | `spotlight-rotate.yml` | `data/social-posted.json`, `data/spotlight.json` |
 | `social-bluesky.yml` | `data/social-posted.json` |
+| `directory-welcome.yml` | `data/social-posted.json` |
 | `roadmap-refresh.yml` | `data/roadmap-progress.json`, `docs/roadmap-2026.md` |
 | `linkedin-version-check.yml` | `data/linkedin-api-version.json` |
 | `news-publish.yml` | `data/news.json`, `news.xml` |

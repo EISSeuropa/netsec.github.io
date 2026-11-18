@@ -34,9 +34,9 @@ data/spotlight.json (wk) ─┘        composes text + image; records the ledger
   09:00 UTC on Tuesdays and a gate job lets through only the one that lands at
   10:00 Europe/Paris.
 - Every Friday at 10:00 Central European time, `directory-welcome.yml`
-  composes one post naming the members who joined the Directory. It runs as a
-  dry run for now, and the post is in the run summary only. See *Weekly
-  welcome to new Directory members* below.
+  composes one post naming the members who joined the Directory since the
+  go-live date, 21 November 2026. See *Weekly welcome to new Directory
+  members* below.
 - **Tagging the member.** When a member has supplied a Bluesky profile
   (`bluesky` in `data/bios.json`), the handle is woven into the Bluesky post as
   an @-mention and resolved to a richtext facet, so the person is notified. It
@@ -357,33 +357,36 @@ naming the members who are waiting to be welcomed. A week with nobody new
 posts nothing.
 
 The welcome is not retroactive. It lists only members whose `joined` date is
-on or after `since` in `data/welcome.json`, and `since` is the go-live date.
-While `since` is `null` the welcome is off. Each member is recorded in the
-ledger as `welcome::<id>` once a post names them, so a week that fails carries
-its members into the next post.
+on or after `since` in `data/welcome.json`, the go-live date, 21 November
+2026. While `since` is `null` the welcome is off. Each member is recorded in
+the ledger as `welcome::<id>` once a post names them, so a week that fails
+carries its members into the next post. Consent to be named in the Action's
+social media posts is given on the sign-up form.
 
-### Dry run (now)
+### Preview and live
 
-The workflow runs `social-post.py --dry-run --kind welcome --since <seven days
-ago>` and writes the LinkedIn and Bluesky text to the run summary. It needs no
-secrets, posts nothing and does not touch the ledger. A manual run takes a
-`since` date to preview another window. `--since` is refused with `--live`, so
-a live post can only use the date in `data/welcome.json`.
+The gate job picks the mode.
 
-### Going live
+- Before the go-live date, and on a manual run given a `since` date, the run
+  is a preview. It writes the LinkedIn and Bluesky text for that window (by
+  default the last seven days) to the run summary, reads no secrets, posts
+  nothing and does not touch the ledger.
+- From the go-live date, the run posts to Bluesky and the LinkedIn page on
+  the `social-auto` environment, with no approval step, as the spotlight
+  does. The post is also in the run summary. The ledger change rides back in
+  an auto-merging PR on `welcome/auto`. A channel that fails opens or
+  refreshes the issue *Weekly welcome did not reach every social channel*.
 
-One PR, after the dry runs have been read and the consent wording is settled
-(#2236, step 5):
+`social-post.py` composes no welcome before the go-live date unless it is
+given `--since`, and refuses `--since` with `--live`, so a live post never
+reaches back before that date.
 
-1. Set `since` in `data/welcome.json` to the go-live date.
-2. In `directory-welcome.yml`, drop `--since`, post with `--live --best-effort`
-   on the `social-auto` environment, and persist the ledger on `welcome/auto`
-   with the fold-in and auto-merge steps of `spotlight-rotate.yml`.
-3. Add `welcome/auto` to the ledger fold-in in `spotlight-rotate.yml` and
-   `social-bluesky.yml`, the workflow to `autopr-token-health.yml`'s list,
-   and its paths to
-   `scripts/test-auto-pr-builders.py`.
-4. Add a bullet under `CHANGELOG.md` `[Unreleased]`.
+Only welcome keys matter to the welcome, so the workflow folds in its own
+`welcome/auto` branch alone. The news and spotlight workflows do not read
+`welcome/auto`, since the welcome keys never change what they post.
+
+To pause the welcome, set `since` back to `null`. To check a credential fix
+without posting twice, run the workflow by hand with one `channel`.
 
 A member who leaves the Directory after being welcomed stays in the post.
 Delete or edit the post by hand on LinkedIn and Bluesky if they ask.

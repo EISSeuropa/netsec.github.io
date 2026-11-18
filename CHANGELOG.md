@@ -156,6 +156,8 @@ maintainer-facing audience.
 
 - The News item form takes a photo for the LinkedIn and Bluesky posts. The photo is dragged into the Image field, and a required Image description becomes its alt text. The publishing run downloads the photo, turns it upright, removes its camera data (including the place it was taken) and shrinks a large one to fit Bluesky's 1 MB limit, then adds it to the news PR. The photo comes before the event card on the posts. A photo that cannot be read, or one without a description, stops the run with a comment saying what to change. The same feature shipped on the EISS site (EISSeuropa/EISSeuropa.github.io#2193).
 
+- A weekly welcome to new Directory members goes out on LinkedIn and Bluesky every Friday at 10:00 Central European time (#2236). The LinkedIn post lists each member who joined, with their role and country. The Bluesky post gives the number of members, their countries and as many names as fit in 300 characters, and mentions the members who gave a Bluesky handle. Both link to the Directory and carry the Directory card. The welcome names only members who joined from 21 November 2026, and a week with nobody new posts nothing. Before that date the workflow writes the post to its run summary and publishes nothing.
+
 #### Changed
 
 - `@COST` in a LinkedIn post mentions the COST Association page (`urn:li:organization:1050548` in `data/social-accounts.json`). Until now it went out as the plain name. On Bluesky it stays the plain name, as COST has no account there.

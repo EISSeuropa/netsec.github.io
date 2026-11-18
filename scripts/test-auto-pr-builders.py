@@ -33,6 +33,7 @@ WRITES = {
                       "data/cost-wg-state.json"},
     "sync-indico.yml": {"data/indico.json", "data/events.json"},
     "spotlight-rotate.yml": {"data/spotlight.json", "data/social-posted.json"},
+    "directory-welcome.yml": {"data/social-posted.json"},
     "social-bluesky.yml": {"data/social-posted.json"},
     "roadmap-refresh.yml": {"data/roadmap-progress.json", "docs/roadmap-2026.md"},
     "linkedin-version-check.yml": {"data/linkedin-api-version.json"},
