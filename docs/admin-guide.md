@@ -785,6 +785,14 @@ Environments*, on **both** `social` and `social-auto`. The two environments
 hold separate copies of the same five secrets, so updating one leaves the
 other stale.
 
+The EISS site posts through this app with the same two tokens, authorised on
+11 November 2026 by a person who is an admin of both pages
+([EISSeuropa.github.io#2207](https://github.com/EISSeuropa/EISSeuropa.github.io/issues/2207)).
+After a full re-authorisation, put the new `LINKEDIN_ACCESS_TOKEN` and
+`LINKEDIN_REFRESH_TOKEN` in the EISS repository's `social` environment as well,
+and authorise as someone who administers both pages. Its client ID and secret
+are this app's, so they stay as they are.
+
 | Secret | Renew it? |
 | --- | --- |
 | `LINKEDIN_ACCESS_TOKEN` | yes, every time |
