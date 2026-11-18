@@ -95,6 +95,23 @@ def test_stored_with_quotes_spaces_or_line_breaks():
     assert "BSKY_APP_PASSWORD has a space or a line break inside it" in msgs
 
 
+def test_value_stored_with_its_name_prefix():
+    # EISS on 11 November 2026: the whole "LINKEDIN_ACCESS_TOKEN=AQ..." line from
+    # linkedin-token.py went into the secret (372 and 373 characters, not 350).
+    env = dict(GOOD, LINKEDIN_ACCESS_TOKEN="LINKEDIN_ACCESS_TOKEN=AQVaccess",
+               LINKEDIN_REFRESH_TOKEN="LINKEDIN_REFRESH_TOKEN=AQXrefresh",
+               BSKY_APP_PASSWORD="BSKY_PASSWORD=abcd-efgh-ijkl-mnop")
+    bs, li = run(env)
+    msgs = " | ".join(fails(bs) + fails(li))
+    assert "LINKEDIN_ACCESS_TOKEN starts with its own name and =" in msgs
+    assert "LINKEDIN_REFRESH_TOKEN starts with its own name and =" in msgs
+    assert "BSKY_APP_PASSWORD starts with BSKY_PASSWORD and =" in msgs
+    # Never for a real value: tokens, secrets and passwords are not CAPS_NAME=.
+    for name, val in GOOD.items():
+        assert not any("and =" in m for _, m in cc.shape(name, val)), name
+    assert not any("and =" in m for _, m in cc.shape("LINKEDIN_CLIENT_SECRET", "WPL_AP1.abc=="))
+
+
 def test_handle_shapes():
     for raw, needle in (("@eissnetwork.bsky.social", "starts with @"),
                         ("https://bsky.app/profile/eissnetwork.bsky.social", "is an address"),

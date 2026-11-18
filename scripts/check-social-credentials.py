@@ -64,6 +64,15 @@ def shape(name: str, raw: str | None) -> list[tuple[str, str]]:
     if raw is None or raw == "":
         return [(FAIL, f"{name} is not set")]
     out = []
+    # scripts/linkedin-token.py prints each token as NAME=value. EISS stored the
+    # whole line on 11 November 2026, 22 and 23 characters too long, and
+    # LinkedIn answered "Unable to parse access token".
+    m = re.match(r"\s*([A-Z][A-Z0-9_]{2,})\s*=", raw)
+    if m:
+        what = "its own name" if m.group(1) == name else m.group(1)
+        out.append((FAIL, f"{name} starts with {what} and =, copied from a NAME=value line: "
+                          f"store only the part after the ="))
+        return out
     if raw != raw.strip():
         out.append((FAIL, f"{name} starts or ends with a space or a line break"))
     if any(c.isspace() for c in raw.strip()):
