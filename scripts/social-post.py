@@ -111,6 +111,15 @@ class Post:
     # and summary.
     linkedin_text: str = ""
     bluesky_text: str = ""
+    # News only: the networks the item is for (news.json `networks`, from the
+    # form's Post on boxes). Empty: all of them.
+    networks: tuple[str, ...] = ()
+    # News only: False when the item has no photo of its own and the posts
+    # use the event card or the general card.
+    own_image: bool = True
+
+    def wants(self, channel: str) -> bool:
+        return not self.networks or channel in self.networks
 
     def custom(self, channel: str) -> str:
         return self.linkedin_text if channel == "linkedin" else self.bluesky_text
@@ -300,6 +309,19 @@ def news_collaborators() -> dict:
             for it in data.get("items", []) if it.get("id") and it.get("collaborator")}
 
 
+def news_networks() -> dict:
+    """{news item id: ("linkedin",) or ("bluesky",)} from data/news.json's
+    optional `networks` (the News item form's Post on boxes, one ticked)."""
+    if not NEWS_JSON.exists():
+        return {}
+    try:
+        data = json.loads(NEWS_JSON.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return {it["id"]: tuple(n for n in it["networks"] if n in ("linkedin", "bluesky"))
+            for it in data.get("items", []) if it.get("id") and isinstance(it.get("networks"), list)}
+
+
 def news_images() -> dict:
     """{news item id: {"image", "image_alt"}} from data/news.json's optional
     `image` (a file under the site root, such as the News item form's photo
@@ -377,6 +399,7 @@ def read_news_feed() -> list[Post]:
     collaborators = news_collaborators()
     images = news_images()
     texts = news_posts()
+    networks = news_networks()
     posts = []
     for block in re.findall(r"<item>(.*?)</item>", xml, re.S):
         def grab(tag, attrs=False):
@@ -405,6 +428,8 @@ def read_news_feed() -> list[Post]:
             collaborator=collaborators.get(guid, ""),
             linkedin_text=str(texts.get(guid, {}).get("linkedin") or "").strip(),
             bluesky_text=str(texts.get(guid, {}).get("bluesky") or "").strip(),
+            networks=networks.get(guid, ()),
+            own_image=guid in images,
         ))
     return posts
 
@@ -717,6 +742,9 @@ class DryRunChannel(Channel):
 
     def publish(self, post: Post) -> str:
         for ch in ("bluesky", "linkedin"):
+            if not post.wants(ch):
+                print(f"  ── not posted to {ch}: the item is for {' and '.join(post.networks)} only ──\n")
+                continue
             print(f"  ── would post to {ch} ──")
             for line in post.render(ch).splitlines():
                 print(f"    {line}")
@@ -1172,8 +1200,11 @@ def main() -> int:
         ch = DryRunChannel("dry-run")
         for p in posts:
             print(f"• [{p.kind}] {p.title}  (key: {p.key})")
+            if not p.own_image:
+                card = p.image.relative_to(ROOT) if p.image else "no picture"
+                print(f"  NO PHOTO: the posts use {card}.\n")
             ch.publish(p)
-            if p.collaborator:
+            if p.collaborator and p.wants("linkedin"):
                 print(f"    [then add the {p.collaborator.upper()} LinkedIn page as collaborator by hand]")
         print("Nothing was published. Re-run with --live (phase 2+) once secrets are set.")
         return 0
@@ -1198,9 +1229,10 @@ def main() -> int:
     notes, failures = [], []
     for p in posts:
         posted = set(ledger.get("posted", []))
-        done = [c.name for c in active if f"{p.key}#{c.name}" in posted]
+        chans = [c for c in active if p.wants(c.name)]
+        done = [c.name for c in chans if f"{p.key}#{c.name}" in posted]
         failed = []
-        for c in active:
+        for c in chans:
             if c.name in done:
                 continue
             try:

@@ -158,6 +158,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The News item form has Post on boxes for LinkedIn and Bluesky, and at least one must be ticked unless the item is for the website only. An item ticked for one network is posted there only, and the other network's post box is ignored (`networks` in `news.json`). The Site no longer offers EISS, and a joint item that goes to LinkedIn needs EISS as Collaborator page. A post copied from LinkedIn can be pasted as it is: a link to the NetSec, EISS or COST page becomes its tag, and any other LinkedIn link its plain name. The run renames the issue and the news PR after the headline. An item without its own photo says so at the top of the post preview and in the news PR, which explains how to add one. The same change is proposed on the EISS site (EISSeuropa/EISSeuropa.github.io#2213).
 - The News item form no longer has the "Include in the newsletter" box, as the newsletter does not use the form yet. The same change is proposed on the EISS site (EISSeuropa/EISSeuropa.github.io#2192).
 - The News item form needs a headline, of up to 100 characters, and the summary is limited to 300 characters. Every field explains in plain words what it is for and where it appears. A run that stops on the form's content says why on the issue (an empty or too long headline, a summary too long by a given number of characters) and how to edit the issue and try again. A summary over 300 characters was cut, sometimes inside a link. The same change shipped on the EISS site (EISSeuropa/EISSeuropa.github.io#2191).
 

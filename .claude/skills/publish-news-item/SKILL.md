@@ -31,7 +31,8 @@ are required. Write in English. The French and German come in step 3.
 | Image description | Required with an image. One English sentence saying what it shows, up to 300 characters: the alt text |
 | Publication date | `YYYY-MM-DD`, blank for today |
 | On the home page until | `YYYY-MM-DD`, for a call its closing date |
-| Collaborator page | `EISS` for a joint item, otherwise `No collaborator` |
+| Post on | `LinkedIn`, `Bluesky` or both, ticked. At least one, unless Options says not to post. The other network's box is ignored |
+| Collaborator page | `EISS` for a joint item that goes to LinkedIn (the run stops without it), otherwise `No collaborator` |
 | Options | Tick "Do not post to LinkedIn and Bluesky" for an item already announced |
 
 ## 2. Build the item with the form's script
@@ -52,6 +53,11 @@ NetSec
 ### Website summary
 
 <summary>
+
+### Post on
+
+- [X] LinkedIn
+- [X] Bluesky
 
 ### Body
 

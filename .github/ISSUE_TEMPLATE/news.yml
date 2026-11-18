@@ -9,23 +9,23 @@ body:
 
         After you submit it, a robot turns the form into a draft. Nothing is public until the maintainer approves that draft. If something goes wrong, the robot leaves a comment on this issue saying what to change.
 
-        Headline and Website summary are required. Leave any other field blank if it does not apply. The website, LinkedIn and Bluesky each get their own text: write the website summary and the body plainly, and the posts the way you would write them on each network. The web address goes in the Link field, and a photo in the Image field.
+        Headline, Website summary and Post on are required. Leave any other field blank if it does not apply. The website, LinkedIn and Bluesky each get their own text: write the website summary and the body plainly, and the posts the way you would write them on each network. The web address goes in the Link field, and a photo in the Image field.
 
         Every box has a length limit, given in its description. GitHub does not count the characters as you type, so the robot checks them after you submit and tells you which box to shorten.
 
-        The "Add a title" box at the top only names this request on GitHub, so the team can find it in the list of issues. It does not appear on the website or in the posts, and you can leave it as "news:". The Headline field below is the title readers see.
+        The "Add a title" box at the top only names this request on GitHub. You can leave it as "news:": the robot renames the issue after your headline. The Headline field below is the title readers see.
   - type: dropdown
     id: site
     attributes:
       label: Site
       description: >-
         Who the news is from. Pick "NetSec" for NetSec news, or "Joint (EISS and
-        NetSec)" for something NetSec organises with EISS. For news from EISS
-        alone, do not use this form: ask the maintainer.
+        NetSec)" for something NetSec organises with EISS. A joint item that
+        goes to LinkedIn needs EISS as Collaborator page, below. News from EISS
+        alone goes in the EISS repository's form.
       options:
         - NetSec
         - Joint (EISS and NetSec)
-        - EISS
       default: 0
     validations:
       required: true
@@ -60,6 +60,18 @@ body:
         LinkedIn or Bluesky post whose box below is left empty.
     validations:
       required: false
+  - type: checkboxes
+    id: networks
+    attributes:
+      label: Post on
+      description: >-
+        Tick where the news is posted. Tick at least one, unless the item is
+        for the website only (Options, at the end): with none ticked, the
+        robot stops and asks you to tick one. The box of a network left
+        unticked is ignored.
+      options:
+        - label: LinkedIn
+        - label: Bluesky
   - type: textarea
     id: linkedin-post
     attributes:
@@ -68,9 +80,11 @@ body:
         Optional. The post exactly as it should appear on LinkedIn, in English,
         up to 3,000 characters. Line breaks, emojis and hashtags are kept. Only
         the first two or three lines show before "see more", so start with the
-        news. To tag a page, write @NetSec, @EISS or @COST. The Link is added
-        at the end unless the post already holds it. Leave it empty to post
-        the headline, the body and the link.
+        news. To tag a page, write @NetSec, @EISS or @COST. A post copied from
+        LinkedIn can be pasted as it is: a link to one of those pages becomes
+        its tag, and any other link its plain name. The Link is added at the
+        end unless the post already holds it. Leave it empty to post the
+        headline, the body and the link.
       render: text
     validations:
       required: false
@@ -189,8 +203,9 @@ body:
       label: Collaborator page
       description: >-
         Pick "EISS" if EISS's LinkedIn page should be added to the LinkedIn post
-        as a collaborator. The maintainer adds it by hand after the post goes
-        out. Otherwise keep "No collaborator".
+        as a collaborator. Required when the Site is Joint and LinkedIn is
+        ticked. The maintainer adds it by hand after the post goes out.
+        Otherwise keep "No collaborator".
       options:
         - No collaborator
         - EISS
@@ -203,7 +218,8 @@ body:
       label: Options
       description: >-
         Tick the box for an item that should appear on the website only, for
-        example one already announced on LinkedIn and Bluesky.
+        example one already announced on LinkedIn and Bluesky. Leave Post on
+        unticked then.
       options:
         - label: Do not post to LinkedIn and Bluesky
           required: false

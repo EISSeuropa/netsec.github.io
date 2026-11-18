@@ -760,3 +760,65 @@ def test_gated_both_failing_records_nothing(monkeypatch, tmp_path):
     assert sp.main() == 0
     assert json.loads(led.read_text())["posted"] == []
     assert out.read_text() == "failed=true\n"
+
+
+def _feed(monkeypatch, tmp_path, items):
+    news = tmp_path / "news.json"
+    news.write_text(json.dumps({"items": items}), encoding="utf-8")
+    xml = tmp_path / "news.xml"
+    xml.write_text("<rss><channel>" + "".join(
+        f"<item><title>{it['id']}</title><link>https://netsec-cost.eu/</link>"
+        f'<description><![CDATA[x]]></description><guid isPermaLink="false">{it["id"]}</guid></item>'
+        for it in items) + "</channel></rss>", encoding="utf-8")
+    monkeypatch.setattr(sp, "NEWS_JSON", news)
+    monkeypatch.setattr(sp, "NEWS_XML", xml)
+    return {p.key: p for p in sp.read_news_feed()}
+
+
+def test_news_networks_limit_the_post(monkeypatch, tmp_path):
+    # The form's Post on boxes: an item for LinkedIn only never reaches
+    # Bluesky, and is recorded by its key once LinkedIn has posted.
+    posts = _feed(monkeypatch, tmp_path, [
+        {"id": "li-only", "networks": ["linkedin", "x"], "collaborator": "eiss"},
+        {"id": "both"},
+    ])
+    post = posts["news::li-only"]
+    assert post.networks == ("linkedin",) and not post.wants("bluesky")
+    assert posts["news::both"].networks == () and posts["news::both"].wants("bluesky")
+    assert not post.own_image
+    tried = []
+
+    class _Fake(sp.Channel):
+        def __init__(self, name):
+            self.name = name
+
+        def configured(self):
+            return True
+
+        def publish(self, p):
+            tried.append(self.name)
+            return f"https://{self.name}.example/1"
+
+    saved = {}
+    monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(tmp_path / "summary.md"))
+    monkeypatch.setattr(sp, "CHANNELS", {"bluesky": _Fake, "linkedin": _Fake})
+    monkeypatch.setattr(sp, "pending", lambda kinds, ledger: [post])
+    monkeypatch.setattr(sp, "load_ledger", lambda: {"posted": []})
+    monkeypatch.setattr(sp, "save_ledger", lambda ledger: saved.update(ledger))
+    monkeypatch.setattr(sys, "argv", ["social-post.py", "--live", "--kind", "news"])
+    assert sp.main() == 0
+    assert tried == ["linkedin"] and saved["posted"] == ["news::li-only"]
+    assert "EISS LinkedIn page" in (tmp_path / "summary.md").read_text(encoding="utf-8")
+
+
+def test_dry_run_names_the_skipped_network_and_a_missing_photo(monkeypatch, tmp_path, capsys):
+    posts = _feed(monkeypatch, tmp_path, [{"id": "bsky-only", "networks": ["bluesky"], "collaborator": "eiss"}])
+    post = posts["news::bsky-only"]
+    monkeypatch.setattr(sp, "pending", lambda kinds, ledger: [post])
+    monkeypatch.setattr(sp, "load_ledger", lambda: {"posted": []})
+    monkeypatch.setattr(sys, "argv", ["social-post.py", "--dry-run", "--kind", "news"])
+    sp.main()
+    out = capsys.readouterr().out
+    assert "NO PHOTO: the posts use" in out
+    assert "not posted to linkedin: the item is for bluesky only" in out
+    assert "would post to bluesky" in out and "as collaborator" not in out
