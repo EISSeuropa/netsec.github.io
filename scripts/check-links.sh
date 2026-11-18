@@ -326,6 +326,11 @@ def check_external(url):
                 )
             try:
                 return (url, _fetch(_make_ssl_ctx(verify=False)))
+            except urllib.error.HTTPError as e2:
+                # Same shape as the verified path, so a 502/503/504 here
+                # reaches UNREACHABLE below. As a raw error string it read
+                # "HTTP Error 503" and failed the run (EISSeuropa.github.io#2220).
+                return (url, f"HTTP {e2.code}")
             except Exception as e2:
                 return (url, f"err: {e2.__class__.__name__}: {e2}")
         return (url, f"err: {e.__class__.__name__}: {e}")
