@@ -44,6 +44,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 NEWS_XML = ROOT / "news.xml"
 NEWS_JSON = ROOT / "data" / "news.json"
+ACCOUNTS_JSON = ROOT / "data" / "social-accounts.json"
 SPOTLIGHT = ROOT / "data" / "spotlight.json"
 BIOS = ROOT / "data" / "bios.json"
 LEDGER = ROOT / "data" / "social-posted.json"
@@ -54,6 +55,8 @@ SITE_OG = ROOT / "assets" / "images" / "og-image.png"
 
 # Bluesky posts are capped at 300 graphemes; we trim to a safe budget.
 BLUESKY_LIMIT = 300
+# LinkedIn's limit for a post's commentary.
+LINKEDIN_LIMIT = 3000
 HASHTAGS = "#EuropeanSecurity #COSTAction"
 
 # Last-resort LinkedIn version if the pin file is unreadable. Kept in sync
@@ -103,13 +106,29 @@ class Post:
     # News only: the other organisation's LinkedIn page ("eiss"), added by
     # hand as collaborator after the post goes out. LinkedIn's API cannot.
     collaborator: str = ""
+    # News only: the form's LinkedIn post and Bluesky post, verbatim with
+    # their line breaks and @tags. Blank: the post is built from the title
+    # and summary.
+    linkedin_text: str = ""
+    bluesky_text: str = ""
+
+    def custom(self, channel: str) -> str:
+        return self.linkedin_text if channel == "linkedin" else self.bluesky_text
 
     def _bsky_mention(self) -> str:
         return f"\n\nOn Bluesky: @{self.bsky_handle}" if self.bsky_handle else ""
 
     def render(self, channel: str) -> str:
-        """Channel-appropriate text. Bluesky is trimmed to its limit; the
-        link is always kept whole (it is what the post is for)."""
+        """Channel-appropriate text. A post written for the channel is used
+        as it is, with the link added at the end when the text does not hold
+        it, and its @tags shown as the network shows them (on Bluesky the
+        handle, which _rich_facets() then resolves). Otherwise Bluesky is
+        trimmed to its limit; the link is always kept whole (it is what the
+        post is for)."""
+        own = self.custom(channel)
+        if own:
+            text, _ = tagged(with_link(own, self.link), channel, load_accounts())
+            return text[:BLUESKY_LIMIT] if channel == "bluesky" else text
         head = f"📣 {self.title}" if self.kind == "news" else f"⭐ {self.title}"
         tail = f"\n\n{self.link}"
         if channel == "bluesky":
@@ -143,6 +162,96 @@ def li_little_text(text: str) -> str:
         last = m.end()
     out.append(_LI_RESERVED.sub(r"\\\1", text[last:]))
     return "".join(out)
+
+
+# A tag is @Key from data/social-accounts.json. Not after a word character,
+# @, dot, slash or colon, so an email address or a URL is never read as one.
+TAG_RE = re.compile(r"(?<![\w@./:])@([A-Za-z][A-Za-z0-9_-]*)")
+HASHTAG_RE = re.compile(r"(?<!\S)#(\w+)")
+
+
+def load_accounts(path: Path | None = None) -> dict:
+    """{lower-cased key: {name, linkedin, bluesky}} from social-accounts.json."""
+    try:
+        data = json.loads((path or ACCOUNTS_JSON).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return {k.lower(): v for k, v in (data.get("accounts") or {}).items() if isinstance(v, dict)}
+
+
+def unknown_tags(text: str, accounts: dict) -> list[str]:
+    return sorted({"@" + m.group(1) for m in TAG_RE.finditer(text or "") if m.group(1).lower() not in accounts})
+
+
+def with_link(text: str, link: str) -> str:
+    """The post text, with the link added after a blank line unless the text
+    already holds it."""
+    text = (text or "").rstrip()
+    return text if (not link or link in text) else f"{text}\n\n{link}"
+
+
+def tagged(text: str, channel: str, accounts: dict) -> tuple[str, list]:
+    """The text with each known @Key written as the channel shows it (the
+    Bluesky handle, else the account's name), and [(start, end, account)]
+    for each, as character offsets in the returned text."""
+    out, spans, last, pos = [], [], 0, 0
+    for m in TAG_RE.finditer(text):
+        acc = accounts.get(m.group(1).lower())
+        if not acc:
+            continue
+        out.append(text[last:m.start()])
+        pos += m.start() - last
+        if channel == "bluesky" and acc.get("bluesky"):
+            shown = "@" + str(acc["bluesky"]).lstrip("@")
+        else:
+            shown = str(acc.get("name") or m.group(1))
+        out.append(shown)
+        spans.append((pos, pos + len(shown), acc))
+        pos += len(shown)
+        last = m.end()
+    out.append(text[last:])
+    return "".join(out), spans
+
+
+def li_commentary(text: str, accounts: dict) -> str:
+    """LinkedIn little text for a post written for LinkedIn: each tag with a
+    URN becomes a mention, @[Name](urn), and the rest is escaped."""
+    out, last = [], 0
+    for m in TAG_RE.finditer(text):
+        acc = accounts.get(m.group(1).lower())
+        if not acc:
+            continue
+        out.append(li_little_text(text[last:m.start()]))
+        name = str(acc.get("name") or m.group(1))
+        urn = acc.get("linkedin")
+        if urn:
+            out.append("@[" + _LI_RESERVED.sub(r"\\\1", name) + "](" + urn + ")")
+        else:
+            out.append(li_little_text(name))
+        last = m.end()
+    out.append(li_little_text(text[last:]))
+    return "".join(out)
+
+
+def hashtag_facets(text: str) -> list:
+    """Bluesky tag facets, so #Name is a clickable hashtag."""
+    return [{"index": {"byteStart": len(text[:m.start()].encode("utf-8")),
+                       "byteEnd": len(text[:m.end()].encode("utf-8"))},
+             "features": [{"$type": "app.bsky.richtext.facet#tag", "tag": m.group(1)}]}
+            for m in HASHTAG_RE.finditer(text)]
+
+
+def untagged_notes(post: "Post") -> list[str]:
+    """For the preview: each tag that goes out as a plain name, because its
+    account has no LinkedIn URN or Bluesky handle in social-accounts.json."""
+    accounts, notes = load_accounts(), []
+    for channel, label in (("linkedin", "LinkedIn"), ("bluesky", "Bluesky")):
+        for m in TAG_RE.finditer(post.custom(channel)):
+            acc = accounts.get(m.group(1).lower())
+            if acc and not acc.get(channel):
+                notes.append(f"@{m.group(1)} is plain text on {label}: no {label} account for it "
+                             f"in data/social-accounts.json")
+    return notes
 
 
 def _truncate(text: str, limit: int) -> str:
@@ -218,6 +327,19 @@ def news_images() -> dict:
     return out
 
 
+def news_posts() -> dict:
+    """{news item id: {"linkedin", "bluesky"}} from data/news.json's optional
+    `posts` (the News item form's LinkedIn post and Bluesky post)."""
+    if not NEWS_JSON.exists():
+        return {}
+    try:
+        data = json.loads(NEWS_JSON.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return {it["id"]: it["posts"] for it in data.get("items", [])
+            if it.get("id") and isinstance(it.get("posts"), dict)}
+
+
 def _step_summary(lines: list[str]) -> None:
     """Append to the GitHub Actions run summary when there is one."""
     path = os.environ.get("GITHUB_STEP_SUMMARY")
@@ -254,6 +376,7 @@ def read_news_feed() -> list[Post]:
     directives = news_directives()
     collaborators = news_collaborators()
     images = news_images()
+    texts = news_posts()
     posts = []
     for block in re.findall(r"<item>(.*?)</item>", xml, re.S):
         def grab(tag, attrs=False):
@@ -280,6 +403,8 @@ def read_news_feed() -> list[Post]:
             link=link,
             **(images.get(guid) or _news_image(link)),
             collaborator=collaborators.get(guid, ""),
+            linkedin_text=str(texts.get(guid, {}).get("linkedin") or "").strip(),
+            bluesky_text=str(texts.get(guid, {}).get("bluesky") or "").strip(),
         ))
     return posts
 
@@ -599,6 +724,9 @@ class DryRunChannel(Channel):
                 print(f"    [mention → resolves live: @{post.bsky_handle}]")
             if post.image:
                 print(f"    [image: {post.image.relative_to(ROOT)} | alt: {post.image_alt}]")
+            for note in untagged_notes(post):
+                if note.endswith("json") and (" on LinkedIn:" in note) == (ch == "linkedin"):
+                    print(f"    [{note}]")
             print()
         return "dry-run"
 
@@ -746,7 +874,7 @@ class BlueskyChannel(Channel):
         # _rich_facets covers the link (find_links catches post.link in the
         # tail) plus any @-mention the spotlight wove in; news posts carry no
         # mention, so this stays equivalent to the old link-only path there.
-        facets = self._rich_facets(text)
+        facets = self._rich_facets(text) + hashtag_facets(text)
         if facets:
             record["facets"] = facets
         if post.image and post.image.exists():
@@ -901,7 +1029,8 @@ class LinkedInChannel(Channel):
     def _do_publish(self, post: Post) -> str:
         body = {
             "author": f"urn:li:organization:{self._org()}",
-            "commentary": li_little_text(post.render("linkedin")),
+            "commentary": (li_commentary(with_link(post.linkedin_text, post.link), load_accounts())
+                           if post.linkedin_text else li_little_text(post.render("linkedin"))),
             "visibility": "PUBLIC",
             "distribution": {
                 "feedDistribution": "MAIN_FEED",

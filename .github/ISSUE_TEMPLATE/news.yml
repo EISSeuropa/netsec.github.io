@@ -9,9 +9,11 @@ body:
 
         After you submit it, a robot turns the form into a draft. Nothing is public until the maintainer approves that draft. If something goes wrong, the robot leaves a comment on this issue saying what to change.
 
-        Headline and Summary are required. Leave any other field blank if it does not apply. Write plain text everywhere: no links, no bold, no hashtags copied from LinkedIn. The web address goes in the Link field, and a photo in the Image field.
+        Headline and Website summary are required. Leave any other field blank if it does not apply. The website, LinkedIn and Bluesky each get their own text: write the website summary and the body plainly, and the posts the way you would write them on each network. The web address goes in the Link field, and a photo in the Image field.
 
-        You can leave the issue title as it is.
+        Every box has a length limit, given in its description. GitHub does not count the characters as you type, so the robot checks them after you submit and tells you which box to shorten.
+
+        The "Add a title" box at the top only names this request on GitHub, so the team can find it in the list of issues. It does not appear on the website or in the posts, and you can leave it as "news:". The Headline field below is the title readers see.
   - type: dropdown
     id: site
     attributes:
@@ -38,14 +40,14 @@ body:
     validations:
       required: true
   - type: textarea
-    id: summary
+    id: website-summary
     attributes:
-      label: Summary
+      label: Website summary
       description: >-
-        One or two sentences, up to 300 characters including spaces. It appears
-        on the home page. A longer summary stops the robot, which then asks you
-        to shorten it. If you leave Body blank, the summary is also the full
-        text of the item and of the posts.
+        One or two plain sentences for the home page, up to 300 characters
+        including spaces. No emojis, tags or links: the web address goes in
+        the Link field. If you leave Body empty, the summary is also the full
+        text of the item.
     validations:
       required: true
   - type: textarea
@@ -53,9 +55,35 @@ body:
     attributes:
       label: Body
       description: >-
-        Optional. The full text of the item. It appears in the news archive and
-        the RSS feed, and it is the text of the LinkedIn and Bluesky posts.
-        Plain text only.
+        Optional. The full text of the item, up to 2,000 characters, in plain
+        text. It appears in the news archive and the RSS feed, and in a
+        LinkedIn or Bluesky post whose box below is left empty.
+    validations:
+      required: false
+  - type: textarea
+    id: linkedin-post
+    attributes:
+      label: LinkedIn post
+      description: >-
+        Optional. The post exactly as it should appear on LinkedIn, in English,
+        up to 3,000 characters. Line breaks, emojis and hashtags are kept. Only
+        the first two or three lines show before "see more", so start with the
+        news. To tag a page, write @NetSec, @EISS or @COST. The Link is added
+        at the end unless the post already holds it. Leave it empty to post
+        the headline, the body and the link.
+    validations:
+      required: false
+  - type: textarea
+    id: bluesky-post
+    attributes:
+      label: Bluesky post
+      description: >-
+        Optional. The post exactly as it should appear on Bluesky, in English,
+        up to 300 characters, and the link counts. The Link is added at the end
+        unless the post already holds it, and a tag is written out as the
+        account's Bluesky name (@EISS becomes @eissnetwork.bsky.social), so
+        leave room for both. Tags are written @NetSec, @EISS or @COST. Leave it
+        empty to post the headline, the body and the link, shortened to fit.
     validations:
       required: false
   - type: dropdown
@@ -99,8 +127,9 @@ body:
         Optional. The web address of a page that already exists, such as the
         event page. The item on the website gets a "Read more" link to it, and
         the LinkedIn and Bluesky posts end with it. Copy the full address from
-        your browser, starting with https://. Leave it blank if there is no
-        page: the posts then link to the news on the home page.
+        your browser, starting with https://. Anything else stops the robot.
+        Leave it blank if there is no page: the posts then link to the news on
+        the home page.
     validations:
       required: false
   - type: textarea
@@ -135,7 +164,8 @@ body:
       label: Publication date
       description: >-
         Optional. The date shown on the item, written year-month-day with
-        dashes, for example 2026-12-01. Leave it blank to use today's date.
+        dashes, for example 2026-12-01. Another format stops the robot. Leave
+        it blank to use today's date.
       placeholder: "2026-12-01"
     validations:
       required: false
@@ -146,9 +176,9 @@ body:
       description: >-
         Optional. The last day the item shows on the home page, written
         year-month-day with dashes, for example 2027-01-26. After that day it
-        stays in the news archive only. For a call, use the closing date. Leave
-        it blank to keep the item on the home page until newer items replace
-        it.
+        stays in the news archive only. For a call, use the closing date.
+        Another format stops the robot. Leave it blank to keep the item on the
+        home page until newer items replace it.
     validations:
       required: false
   - type: dropdown

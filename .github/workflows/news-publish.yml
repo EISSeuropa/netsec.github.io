@@ -3,7 +3,9 @@
 #
 # A News item issue (.github/ISSUE_TEMPLATE/news.yml) becomes a PR. The run
 # starts when a publisher files the form, or when a publisher applies the
-# `news` label to a form issue someone else filed. scripts/news-from-issue.py
+# `news` label to a form issue someone else filed. A publisher's edit to an
+# open form issue starts it again and rebuilds the PR (anyone else's edit,
+# or an edit to a closed issue whose item has merged, starts nothing). scripts/news-from-issue.py
 # adds the item to data/news.json with French and German machine translations
 # from the Claude API, build-news-rss.py rebuilds news.xml, and the run opens
 # a PR with `Closes #<issue>`.
@@ -32,7 +34,7 @@ name: Publish news from issue
 
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened, labeled, edited]
 
 permissions:
   contents: write
@@ -50,6 +52,8 @@ jobs:
     if: >-
       (github.event.action == 'labeled' && github.event.label.name == 'news')
       || (github.event.action == 'opened' && startsWith(github.event.issue.body, '### Site'))
+      || (github.event.action == 'edited' && github.event.issue.state == 'open'
+          && startsWith(github.event.issue.body, '### Site'))
     runs-on: ubuntu-latest
     steps:
       # The label this pipeline listens for, made here so nobody has to make
@@ -181,7 +185,7 @@ jobs:
           if [ -s /tmp/news-error.txt ] && ! grep -q -e Traceback -e '^news-from-issue:' /tmp/news-error.txt; then
             body="@$SENDER nothing was published. $(cat /tmp/news-error.txt)
 
-          To edit the issue, open the ··· menu at the top right of its first message and choose Edit. Then a publisher removes the \`news\` label and applies it again, which starts a new run. The run: $RUN_URL"
+          To edit the issue, open the ··· menu at the top right of its first message and choose Edit. Saving the edit starts a new run when a publisher makes it. Otherwise a publisher removes the \`news\` label and applies it again. The run: $RUN_URL"
           else
             body="@$SENDER the run that turns this issue into a news PR failed, so nothing was published. The maintainer has been notified. The run: $RUN_URL"
           fi

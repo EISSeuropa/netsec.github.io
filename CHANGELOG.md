@@ -152,6 +152,8 @@ maintainer-facing audience.
 
 #### Added
 
+- The News item form has a box for each surface: a Website summary (up to 300 characters, the home page card), a LinkedIn post (up to 3,000 characters) and a Bluesky post (up to 300 characters, the link included), next to the Body (now up to 2,000 characters). The posts keep their line breaks, emojis and hashtags, and an empty post box falls back to the headline, the body and the link. `@NetSec`, `@EISS` and `@COST` tag the account on LinkedIn and Bluesky (`data/social-accounts.json`), and hashtags are clickable on Bluesky. Every box is checked against its limit, and an unknown tag, a Link that is not an address or a date in another format stops the run with a comment saying what to change. A publisher who edits the issue starts the run again. The same change is proposed on the EISS site (EISSeuropa/EISSeuropa.github.io#2195).
+
 - The News item form takes a photo for the LinkedIn and Bluesky posts. The photo is dragged into the Image field, and a required Image description becomes its alt text. The publishing run downloads the photo, turns it upright, removes its camera data (including the place it was taken) and shrinks a large one to fit Bluesky's 1 MB limit, then adds it to the news PR. The photo comes before the event card on the posts. A photo that cannot be read, or one without a description, stops the run with a comment saying what to change. The same feature shipped on the EISS site (EISSeuropa/EISSeuropa.github.io#2193).
 
 #### Changed

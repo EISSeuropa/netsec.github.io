@@ -654,3 +654,47 @@ def test_news_photo_from_the_form_comes_before_the_cards(monkeypatch, tmp_path):
     assert posts["news::no-alt"].image_alt == "No alt"
     for key in ("news::missing", "news::outside"):
         assert posts[key].image == sp.SITE_OG
+
+
+ACCOUNTS = {"eiss": {"name": "European Initiative for Security Studies (EISS)",
+                     "linkedin": "urn:li:organization:123", "bluesky": "eissnetwork.bsky.social"},
+            "cost": {"name": "COST Association", "linkedin": None, "bluesky": None}}
+
+
+def test_news_posts_written_per_network(monkeypatch, tmp_path):
+    news = tmp_path / "news.json"
+    news.write_text(json.dumps({"items": [{"id": "school", "posts": {
+        "linkedin": "📣 Applications are open!\n\nWith @EISS and @COST. #NetSec",
+        "bluesky": "Applications are open, with @EISS https://netsec-cost.eu/school.html"}}]}), encoding="utf-8")
+    xml = tmp_path / "news.xml"
+    xml.write_text(
+        "<rss><channel><item><title>School</title><link>https://netsec-cost.eu/school.html</link>"
+        "<description><![CDATA[Body.]]></description>"
+        '<guid isPermaLink="false">school</guid></item></channel></rss>', encoding="utf-8")
+    monkeypatch.setattr(sp, "NEWS_JSON", news)
+    monkeypatch.setattr(sp, "NEWS_XML", xml)
+    monkeypatch.setattr(sp, "load_accounts", lambda path=None: ACCOUNTS)
+    (post,) = sp.read_news_feed()
+    # The text as written, paragraphs kept, the link added once, and no
+    # 📣 headline or standard hashtags added to it.
+    assert post.render("linkedin") == (
+        "📣 Applications are open!\n\nWith European Initiative for Security Studies (EISS) and COST Association."
+        " #NetSec\n\nhttps://netsec-cost.eu/school.html")
+    assert post.render("bluesky") == "Applications are open, with @eissnetwork.bsky.social https://netsec-cost.eu/school.html"
+    c = sp.li_commentary(sp.with_link(post.linkedin_text, post.link), ACCOUNTS)
+    assert "@[European Initiative for Security Studies \\(EISS\\)](urn:li:organization:123)" in c
+    assert "COST Association." in c and "{hashtag|\\#|NetSec}" in c
+    # The handle is a mention once _rich_facets resolves it, and #NetSec a tag.
+    text = "Hi @eissnetwork.bsky.social #NetSec"
+    assert [h for h, _, _ in sp.find_mentions(text)] == ["eissnetwork.bsky.social"]
+    (tag,) = sp.hashtag_facets(text)
+    assert text.encode()[tag["index"]["byteStart"]:tag["index"]["byteEnd"]] == b"#NetSec"
+
+
+def test_untagged_notes_name_the_missing_accounts(monkeypatch):
+    monkeypatch.setattr(sp, "load_accounts", lambda path=None: ACCOUNTS)
+    post = sp.Post(kind="news", key="k", title="T", summary="", link="https://x",
+                   linkedin_text="@COST @EISS", bluesky_text="@COST")
+    notes = sp.untagged_notes(post)
+    assert notes == ["@COST is plain text on LinkedIn: no LinkedIn account for it in data/social-accounts.json",
+                     "@COST is plain text on Bluesky: no Bluesky account for it in data/social-accounts.json"]
