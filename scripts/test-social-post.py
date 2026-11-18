@@ -550,7 +550,7 @@ def _stub_channels(monkeypatch, tmp_path, *, linkedin_fails):
     post = sp.Post(kind="spotlight", key="spotlight-2026-W35",
                    title="T", summary="S", link="https://netsec-cost.eu/")
     monkeypatch.setattr(sp, "CHANNELS", {"bluesky": _Fake, "linkedin": _Fake})
-    monkeypatch.setattr(sp, "pending", lambda kinds, ledger: [post])
+    monkeypatch.setattr(sp, "pending", lambda kinds, ledger, **_: [post])
     monkeypatch.setattr(sp, "load_ledger", lambda: {"posted": []})
     monkeypatch.setattr(sp, "LEDGER", tmp_path / "ledger.json")
     monkeypatch.setattr(sys, "argv", [
@@ -616,7 +616,7 @@ def test_news_collaborator_reaches_the_post_and_the_run_summary(monkeypatch, tmp
     summary = tmp_path / "summary.md"
     monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary))
     monkeypatch.setattr(sp, "CHANNELS", {"bluesky": _Fake, "linkedin": _Fake})
-    monkeypatch.setattr(sp, "pending", lambda kinds, ledger: [post])
+    monkeypatch.setattr(sp, "pending", lambda kinds, ledger, **_: [post])
     monkeypatch.setattr(sp, "load_ledger", lambda: {"posted": []})
     monkeypatch.setattr(sp, "LEDGER", tmp_path / "ledger.json")
     monkeypatch.setattr(sys, "argv", ["social-post.py", "--live", "--kind", "news"])
@@ -722,7 +722,7 @@ def _gated(monkeypatch, tmp_path, fail=(), ledger=None, exc=SystemExit):
     led = tmp_path / "ledger.json"
     led.write_text(json.dumps({"posted": list(ledger or [])}), encoding="utf-8")
     monkeypatch.setattr(sp, "CHANNELS", {"bluesky": _Fake, "linkedin": _Fake})
-    monkeypatch.setattr(sp, "pending", lambda kinds, ledger: [post])
+    monkeypatch.setattr(sp, "pending", lambda kinds, ledger, **_: [post])
     monkeypatch.setattr(sp, "LEDGER", led)
     monkeypatch.setattr(sp, "load_ledger", lambda: json.loads(led.read_text(encoding="utf-8")))
     monkeypatch.setattr(sys, "argv", ["social-post.py", "--live", "--channel", "all", "--kind", "news"])
@@ -802,7 +802,7 @@ def test_news_networks_limit_the_post(monkeypatch, tmp_path):
     saved = {}
     monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(tmp_path / "summary.md"))
     monkeypatch.setattr(sp, "CHANNELS", {"bluesky": _Fake, "linkedin": _Fake})
-    monkeypatch.setattr(sp, "pending", lambda kinds, ledger: [post])
+    monkeypatch.setattr(sp, "pending", lambda kinds, ledger, **_: [post])
     monkeypatch.setattr(sp, "load_ledger", lambda: {"posted": []})
     monkeypatch.setattr(sp, "save_ledger", lambda ledger: saved.update(ledger))
     monkeypatch.setattr(sys, "argv", ["social-post.py", "--live", "--kind", "news"])
@@ -814,7 +814,7 @@ def test_news_networks_limit_the_post(monkeypatch, tmp_path):
 def test_dry_run_names_the_skipped_network_and_a_missing_photo(monkeypatch, tmp_path, capsys):
     posts = _feed(monkeypatch, tmp_path, [{"id": "bsky-only", "networks": ["bluesky"], "collaborator": "eiss"}])
     post = posts["news::bsky-only"]
-    monkeypatch.setattr(sp, "pending", lambda kinds, ledger: [post])
+    monkeypatch.setattr(sp, "pending", lambda kinds, ledger, **_: [post])
     monkeypatch.setattr(sp, "load_ledger", lambda: {"posted": []})
     monkeypatch.setattr(sys, "argv", ["social-post.py", "--dry-run", "--kind", "news"])
     sp.main()
@@ -822,3 +822,167 @@ def test_dry_run_names_the_skipped_network_and_a_missing_photo(monkeypatch, tmp_
     assert "NO PHOTO: the posts use" in out
     assert "not posted to linkedin: the item is for bluesky only" in out
     assert "would post to bluesky" in out and "as collaborator" not in out
+
+
+# --------------------------------------------------------------------------
+# Weekly welcome (#2236)
+# --------------------------------------------------------------------------
+TODAY = sp.dt.date(2026, 11, 20)  # a Friday
+
+
+def _member(i: int, joined: str = "2026-11-17", **kw) -> dict:
+    m = {"id": f"member-{i:02d}", "name": f"Dr Example Person{i:02d}",
+         "position": "Lecturer", "affiliation": f"University {i:02d}",
+         "country": ["Germany", "Italy", "Netherlands", "Serbia"][i % 4], "joined": joined}
+    m.update(kw)
+    return m
+
+
+def _bios(monkeypatch, tmp_path, members, since=None):
+    bios = tmp_path / "bios.json"
+    bios.write_text(json.dumps({"members": members}), encoding="utf-8")
+    monkeypatch.setattr(sp, "BIOS", bios)
+    welcome = tmp_path / "welcome.json"
+    welcome.write_text(json.dumps({"since": since}), encoding="utf-8")
+    monkeypatch.setattr(sp, "WELCOME", welcome)
+
+
+def test_welcome_is_off_without_since(monkeypatch, tmp_path):
+    _bios(monkeypatch, tmp_path, [_member(1)])
+    assert sp.read_welcome(set(), today=TODAY) is None
+    assert sp.pending({"welcome"}, {"posted": []}) == []
+
+
+def test_welcome_nobody_pending_posts_nothing(monkeypatch, tmp_path):
+    _bios(monkeypatch, tmp_path, [_member(1, joined="2026-10-01")], since="2026-11-01")
+    assert sp.read_welcome(set(), today=TODAY) is None
+
+
+def test_welcome_skips_members_before_since_and_already_welcomed(monkeypatch, tmp_path):
+    members = [_member(1, joined="2026-10-30"), _member(2), _member(3)]
+    _bios(monkeypatch, tmp_path, members, since="2026-11-01")
+    post = sp.read_welcome({"welcome::member-02"}, today=TODAY)
+    assert post.member_keys == ("welcome::member-03",)
+    assert "Person01" not in post.render("linkedin") and "Person02" not in post.render("linkedin")
+
+
+def test_welcome_since_argument_overrides_the_file(monkeypatch, tmp_path):
+    _bios(monkeypatch, tmp_path, [_member(1, joined="2026-11-10")], since="2026-11-15")
+    assert sp.read_welcome(set(), today=TODAY) is None
+    assert sp.read_welcome(set(), since="2026-11-09", today=TODAY).member_keys == ("welcome::member-01",)
+
+
+def test_welcome_one_member(monkeypatch, tmp_path):
+    _bios(monkeypatch, tmp_path, [_member(1)], since="2026-11-01")
+    post = sp.read_welcome(set(), today=TODAY)
+    assert post.kind == "welcome" and post.key == "welcome::2026-W47"
+    bsky = post.render("bluesky")
+    assert bsky.startswith("Welcome to Dr Example Person01, who joined the NetSec Directory this week from Italy.")
+    assert bsky.endswith(sp.DIRECTORY_LINK)
+    li = post.render("linkedin")
+    assert "One member joined the Directory this week:" in li
+    assert "- Dr Example Person01, Lecturer at University 01 (Italy)" in li
+    assert li.rstrip().endswith(sp.HASHTAGS)
+
+
+def test_welcome_sixteen_members_fit_bluesky(monkeypatch, tmp_path):
+    _bios(monkeypatch, tmp_path, [_member(i) for i in range(16)], since="2026-11-01")
+    post = sp.read_welcome(set(), today=TODAY)
+    bsky = post.render("bluesky")
+    assert sp.graphemes(bsky) <= sp.BLUESKY_LIMIT
+    assert "Welcome to the 16 members who joined" in bsky
+    assert re.search(r"and (one|two|three|four|five|six|seven|eight|nine|ten|\d+) more\.", bsky)
+    assert "from Germany, Italy, the Netherlands and Serbia" in bsky
+    assert bsky.endswith(sp.DIRECTORY_LINK)
+    li = post.render("linkedin")
+    assert "16 members joined the Directory this week:" in li
+    assert all(f"Person{i:02d}" in li for i in range(16))
+    assert len(post.member_keys) == 16
+
+
+def test_welcome_names_carried_over_say_recently(monkeypatch, tmp_path):
+    _bios(monkeypatch, tmp_path, [_member(1, joined="2026-11-05"), _member(2)], since="2026-11-01")
+    post = sp.read_welcome(set(), today=TODAY)
+    assert "Directory recently" in post.render("bluesky")
+    assert "Two members joined the Directory recently:" in post.render("linkedin")
+
+
+def test_welcome_mentions_bluesky_handles(monkeypatch, tmp_path):
+    members = [_member(1, bluesky="https://bsky.app/profile/person01.bsky.social"), _member(2)]
+    _bios(monkeypatch, tmp_path, members, since="2026-11-01")
+    bsky = sp.read_welcome(set(), today=TODAY).render("bluesky")
+    assert "On Bluesky: @person01.bsky.social" in bsky
+    assert [h for h, _, _ in sp.find_mentions(bsky)] == ["person01.bsky.social"]
+
+
+def test_welcome_linkedin_brackets_are_escaped_and_country_not_doubled(monkeypatch, tmp_path):
+    members = [_member(1, affiliation="Zurich University of Applied Sciences (ZHAW)", country="Switzerland"),
+               _member(2, position="Policy analyst", affiliation="Bangladesh", country="Bangladesh")]
+    _bios(monkeypatch, tmp_path, members, since="2026-11-01")
+    li = sp.read_welcome(set(), today=TODAY).render("linkedin")
+    assert "(ZHAW) (Switzerland)" in li
+    assert "- Dr Example Person02, Policy analyst at Bangladesh\n" in li
+    assert "\\(ZHAW\\)" in sp.li_little_text(li)
+
+
+def test_welcome_linkedin_drops_roles_then_names_to_fit(monkeypatch, tmp_path):
+    members = [_member(i, position="Professor of " + "Very Long Subject " * 12) for i in range(40)]
+    _bios(monkeypatch, tmp_path, members, since="2026-11-01")
+    li = sp.read_welcome(set(), today=TODAY).render("linkedin")
+    assert len(sp.li_little_text(li)) <= sp.LINKEDIN_LIMIT
+    assert "Very Long Subject" not in li
+    assert "Person39" in li  # 40 short lines fit once the roles are gone
+
+
+def test_welcome_live_run_records_every_member_key(monkeypatch, tmp_path):
+    _bios(monkeypatch, tmp_path, [_member(1), _member(2)], since="2026-11-01")
+    post = sp.read_welcome(set(), today=TODAY)
+
+    class _Fake(sp.Channel):
+        def configured(self):
+            return True
+
+        def publish(self, p):
+            return f"https://{self.name}.example/1"
+
+    saved = {}
+    monkeypatch.setattr(sp, "CHANNELS", {"bluesky": _Fake, "linkedin": _Fake})
+    monkeypatch.setattr(sp, "pending", lambda kinds, ledger, **_: [post])
+    monkeypatch.setattr(sp, "load_ledger", lambda: {"posted": []})
+    monkeypatch.setattr(sp, "save_ledger", lambda ledger: saved.update(ledger))
+    monkeypatch.setattr(sys, "argv", ["social-post.py", "--live", "--kind", "welcome", "--best-effort"])
+    assert sp.main() == 0
+    assert saved["posted"] == ["welcome::2026-W47", "welcome::member-01", "welcome::member-02"]
+
+
+def test_kind_all_leaves_the_welcome_out(monkeypatch, tmp_path):
+    _bios(monkeypatch, tmp_path, [_member(1)], since="2026-11-01")
+    monkeypatch.setattr(sp, "read_news_feed", lambda: [])
+    monkeypatch.setattr(sp, "read_spotlight", lambda: None)
+    monkeypatch.setattr(sys, "argv", ["social-post.py", "--count", "--kind", "all"])
+    monkeypatch.setattr(sp, "load_ledger", lambda: {"posted": []})
+    import io, contextlib
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        sp.main()
+    assert buf.getvalue().strip() == "0"
+
+
+def test_since_must_be_a_date(monkeypatch):
+    monkeypatch.setattr(sys, "argv", ["social-post.py", "--dry-run", "--kind", "welcome", "--since", "last week"])
+    try:
+        sp.main()
+    except SystemExit as e:
+        assert e.code == 2
+    else:
+        raise AssertionError("--since accepted a non-date")
+
+
+def test_since_is_refused_on_a_live_run(monkeypatch):
+    monkeypatch.setattr(sys, "argv", ["social-post.py", "--live", "--kind", "welcome", "--since", "2026-01-01"])
+    try:
+        sp.main()
+    except SystemExit as e:
+        assert e.code == 2
+    else:
+        raise AssertionError("--since was accepted with --live")
