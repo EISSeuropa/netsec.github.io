@@ -366,6 +366,17 @@ workflow but adds nothing new) no longer leaves a no-op approval sitting in the
 queue — the run finishes with a `Nothing pending` notice. When there *is*
 something to post, the notice says so and the required reviewer is emailed.
 
+## One channel failing does not block the other
+
+A news post is tried on Bluesky and LinkedIn separately. When one fails (a
+wrong app password, an expired token, an API error), the other still posts.
+The ledger records the channel that posted as `<key>#<channel>`, the run
+summary lists the failure under "Posts that failed", and the job fails after
+the ledger PR. The next approved run tries only the channel that failed, so a
+fixed secret catches the post up. The weekly spotlight keeps its own rule
+(`--best-effort`): it is recorded once any channel posted, and the run exits 2.
+Ported from EISSeuropa/EISSeuropa.github.io#2203.
+
 ## Keeping the LinkedIn API version current
 
 LinkedIn's posting API is versioned by month (`YYYYMM`) and each version is

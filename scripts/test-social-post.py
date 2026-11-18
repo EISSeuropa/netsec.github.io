@@ -698,3 +698,65 @@ def test_untagged_notes_name_the_missing_accounts(monkeypatch):
     notes = sp.untagged_notes(post)
     assert notes == ["@COST is plain text on LinkedIn: no LinkedIn account for it in data/social-accounts.json",
                      "@COST is plain text on Bluesky: no Bluesky account for it in data/social-accounts.json"]
+
+
+# The gated (news) path: one channel failing does not block the other
+# (EISSeuropa/EISSeuropa.github.io#2203).
+def _gated(monkeypatch, tmp_path, fail=(), ledger=None, exc=SystemExit):
+    tried = []
+
+    class _Fake(sp.Channel):
+        def __init__(self, name):
+            self.name = name
+
+        def configured(self):
+            return True
+
+        def publish(self, post):
+            tried.append(self.name)
+            if self.name in fail:
+                raise exc(f"{self.name} down")
+            return f"https://{self.name}.example/1"
+
+    post = sp.Post(kind="news", key="news::cfp", title="CfP", summary="S", link="https://netsec-cost.eu/")
+    led = tmp_path / "ledger.json"
+    led.write_text(json.dumps({"posted": list(ledger or [])}), encoding="utf-8")
+    monkeypatch.setattr(sp, "CHANNELS", {"bluesky": _Fake, "linkedin": _Fake})
+    monkeypatch.setattr(sp, "pending", lambda kinds, ledger: [post])
+    monkeypatch.setattr(sp, "LEDGER", led)
+    monkeypatch.setattr(sp, "load_ledger", lambda: json.loads(led.read_text(encoding="utf-8")))
+    monkeypatch.setattr(sys, "argv", ["social-post.py", "--live", "--channel", "all", "--kind", "news"])
+    out = tmp_path / "out"
+    monkeypatch.setenv("GITHUB_OUTPUT", str(out))
+    monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(tmp_path / "summary.md"))
+    return tried, led, out
+
+
+def test_gated_failure_on_one_channel_still_posts_the_other(monkeypatch, tmp_path):
+    tried, led, out = _gated(monkeypatch, tmp_path, fail={"bluesky"})
+    assert sp.main() == 0
+    assert tried == ["bluesky", "linkedin"]
+    assert json.loads(led.read_text())["posted"] == ["news::cfp#linkedin"]
+    assert out.read_text() == "failed=true\n"
+    assert "bluesky failed (bluesky down). The next run tries bluesky again." in (tmp_path / "summary.md").read_text()
+
+
+def test_gated_next_run_retries_only_the_failed_channel(monkeypatch, tmp_path):
+    tried, led, out = _gated(monkeypatch, tmp_path, ledger=["news::cfp#linkedin"])
+    assert sp.main() == 0
+    assert tried == ["bluesky"]
+    assert json.loads(led.read_text())["posted"] == ["news::cfp#linkedin", "news::cfp"]
+    assert not out.exists()
+
+
+def test_gated_any_error_stays_on_its_channel(monkeypatch, tmp_path):
+    tried, led, _ = _gated(monkeypatch, tmp_path, fail={"linkedin"}, exc=OSError)
+    assert sp.main() == 0
+    assert json.loads(led.read_text())["posted"] == ["news::cfp#bluesky"]
+
+
+def test_gated_both_failing_records_nothing(monkeypatch, tmp_path):
+    tried, led, out = _gated(monkeypatch, tmp_path, fail={"bluesky", "linkedin"})
+    assert sp.main() == 0
+    assert json.loads(led.read_text())["posted"] == []
+    assert out.read_text() == "failed=true\n"

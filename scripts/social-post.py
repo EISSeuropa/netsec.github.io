@@ -1185,37 +1185,59 @@ def main() -> int:
     if not active:
         print("No channel is configured (missing secrets); nothing posted.", file=sys.stderr)
         return 1
+    # Each channel is tried on its own: one that fails (a wrong password, an
+    # expired token, an API error) never stops the other. On the gated path
+    # (news, approved in the `social` environment) the ledger records the
+    # channel that posted as "<key>#<channel>", so the next run retries only
+    # the one that failed. The run reports it through GITHUB_OUTPUT
+    # (failed=true) and returns 0, so the workflow still persists the ledger
+    # and fails the job afterwards (EISSeuropa/EISSeuropa.github.io#2203).
+    # --best-effort (the ungated weekly spotlight) keeps its rule: the item is
+    # recorded once any channel posted, and the run exits 2.
     degraded = False
-    notes = []
+    notes, failures = [], []
     for p in posts:
-        posted_any = False
+        posted = set(ledger.get("posted", []))
+        done = [c.name for c in active if f"{p.key}#{c.name}" in posted]
+        failed = []
         for c in active:
+            if c.name in done:
+                continue
             try:
                 url = c.publish(p)
-                print(f"posted [{p.kind}] to {c.name}: {url}")
-                posted_any = True
-                if c.name == "linkedin" and p.collaborator:
-                    notes.append(f"- {p.title}: {url} Add the {p.collaborator.upper()} "
-                                 "LinkedIn page as collaborator.")
-            except SystemExit as e:
-                # --best-effort (the ungated weekly spotlight) must not let one
-                # channel's failure — an expired LinkedIn token, an API change —
-                # break the others or the rotation. The gated path re-raises so
-                # a reviewer sees the failure and re-runs.
-                if not args.best_effort:
-                    raise
+            except (SystemExit, Exception) as e:  # noqa: BLE001 (any failure stays on its channel)
                 degraded = True
-                print(f"  ! {c.name} publish failed, skipping (best-effort): {e}", file=sys.stderr)
-                _gha_warning(f"{c.name} publish failed for [{p.kind}] {p.title}: {e}")
-        # Record the dedup key once any channel posted, so a partial failure
-        # doesn't double-post the channel that succeeded on the next run.
-        if posted_any:
+                failed.append(c.name)
+                if args.best_effort:
+                    print(f"  ! {c.name} publish failed, skipping (best-effort): {e}", file=sys.stderr)
+                    _gha_warning(f"{c.name} publish failed for [{p.kind}] {p.title}: {e}")
+                else:
+                    print(f"  ! {c.name} publish failed: {e}", file=sys.stderr)
+                    print(f"::error title=Social post::{c.name} did not post [{p.kind}] {p.title}: {e}")
+                    failures.append(f"- {p.title}: {c.name} failed ({e}). The next run tries {c.name} again.")
+                continue
+            print(f"posted [{p.kind}] to {c.name}: {url}")
+            done.append(c.name)
+            if c.name == "linkedin" and p.collaborator:
+                notes.append(f"- {p.title}: {url} Add the {p.collaborator.upper()} "
+                             "LinkedIn page as collaborator.")
+        if not failed or (args.best_effort and done):
             ledger.setdefault("posted", []).append(p.key)
+        elif not args.best_effort:
+            ledger.setdefault("posted", []).extend(
+                f"{p.key}#{n}" for n in done if f"{p.key}#{n}" not in posted)
     save_ledger(ledger)
     if notes:
         _step_summary(["### Collaborators to add by hand", ""] + notes)
         for n in notes:
             print(n)
+    if failures:
+        _step_summary(["### Posts that failed", ""] + failures)
+        out = os.environ.get("GITHUB_OUTPUT")
+        if out:
+            with open(out, "a", encoding="utf-8") as fh:
+                fh.write("failed=true\n")
+        return 0
     # Exit 2 when --best-effort swallowed a channel failure. Best-effort means
     # the run carries on, which until now also meant the LinkedIn access token
     # could expire with no trace beyond a ::warning:: on an otherwise green
