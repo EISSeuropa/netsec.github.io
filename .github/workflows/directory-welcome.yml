@@ -1,23 +1,27 @@
-# Weekly welcome to new NetSec Directory members (#2236). DRY RUN.
+# Weekly welcome to new NetSec Directory members (#2236).
 #
 # Every Friday at 10:00 Central European time, scripts/social-post.py
-# composes one post that names the members who joined the Directory, and
-# writes the LinkedIn and Bluesky text to the run summary. Nothing is posted
-# and the ledger is not touched. The workflow needs no secrets.
+# composes one post that names the members who joined the Directory.
 #
-# The preview covers the last seven days (--since). That option is refused
-# with --live: the live welcome is not retroactive, and lists only members
-# who joined on or after data/welcome.json `since`, the go-live date.
+# The welcome is not retroactive. It names only members whose `joined` date
+# is on or after `since` in data/welcome.json, the go-live date, and each
+# member is recorded in the ledger as welcome::<id> once a post names them.
+#
+# Two modes, chosen by the gate job:
+#   - preview: before the go-live date, or on a manual run given a `since`
+#     date. The post for that window (default: the last seven days) goes to
+#     the run summary. Nothing is posted, no secrets are read and the ledger
+#     is untouched. --since is refused with --live.
+#   - live: from the go-live date. The post goes to Bluesky and the LinkedIn
+#     page with no approval step, on the `social-auto` environment the weekly
+#     spotlight uses. The ledger change rides back in an auto-merging PR on
+#     `welcome/auto`. A channel that fails opens or refreshes a tracking issue.
 #
 # Friday sits three days after the Tuesday spotlight (spotlight-rotate.yml).
 # Cron can't follow DST, so two UTC triggers (08:00 + 09:00) fire and the gate
-# job lets through the one that lands at 10:00 Europe/Paris, as in
-# spotlight-rotate.yml.
-#
-# Going live is its own PR: set `since` in data/welcome.json to the go-live
-# date, drop --since, post with --live --best-effort on the `social-auto`
-# environment, and persist the ledger on `welcome/auto` the way
-# spotlight-rotate.yml does (docs/social-publishing.md, Welcome).
+# lets through the one that lands at 10:00 Europe/Paris, as in
+# spotlight-rotate.yml. Setup and go-live: docs/social-publishing.md, Weekly
+# welcome to new Directory members.
 
 name: Welcome new Directory members
 
@@ -28,23 +32,30 @@ on:
   workflow_dispatch:
     inputs:
       since:
-        description: 'Preview members who joined on or after this date (YYYY-MM-DD). Empty: the last seven days.'
+        description: 'Preview only: members who joined on or after this date (YYYY-MM-DD). Empty: post as scheduled.'
         type: string
         default: ''
+      channel:
+        description: 'Live runs: publish through one channel only (for verifying a credential fix)'
+        type: choice
+        options: [all, bluesky, linkedin]
+        default: all
 
 permissions:
   contents: read
 
 concurrency:
   group: directory-welcome
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   gate:
-    name: Proceed only at 10:00 Europe/Paris
+    name: Proceed only at 10:00 Europe/Paris, and pick the mode
     runs-on: ubuntu-latest
     outputs:
       go: ${{ steps.check.outputs.go }}
+      mode: ${{ steps.mode.outputs.mode }}
+      since: ${{ steps.mode.outputs.since }}
     steps:
       - id: check
         env:
@@ -61,10 +72,32 @@ jobs:
             echo "::notice::Cron '${SCHEDULE}' is not the 10:00 Europe/Paris trigger for offset ${offset}; skipped."
           fi
 
+      - name: Check out repository
+        if: steps.check.outputs.go == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
+
+      - id: mode
+        if: steps.check.outputs.go == 'true'
+        env:
+          SINCE_INPUT: ${{ github.event.inputs.since || '' }}
+        run: |
+          today=$(date -u +%F)
+          live_since=$(python3 -c "import json; print(json.load(open('data/welcome.json')).get('since') or '')")
+          if [ -n "$SINCE_INPUT" ]; then
+            mode=preview; since="$SINCE_INPUT"
+          elif [ -n "$live_since" ] && ! [[ "$today" < "$live_since" ]]; then
+            mode=live; since="$live_since"
+          else
+            mode=preview; since=$(date -u -d '6 days ago' +%F)
+          fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "since=$since" >> "$GITHUB_OUTPUT"
+          echo "::notice::Mode ${mode}, members who joined on or after ${since} (go-live date: ${live_since:-not set})."
+
   preview:
     name: Preview the weekly welcome
     needs: gate
-    if: needs.gate.outputs.go == 'true'
+    if: needs.gate.outputs.go == 'true' && needs.gate.outputs.mode == 'preview'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -77,9 +110,8 @@ jobs:
 
       - name: Compose (dry-run) into the run summary
         env:
-          SINCE_INPUT: ${{ github.event.inputs.since || '' }}
+          SINCE: ${{ needs.gate.outputs.since }}
         run: |
-          SINCE="${SINCE_INPUT:-$(date -u -d '6 days ago' +%F)}"
           {
             echo "### Weekly welcome, members who joined since ${SINCE} (dry run)"
             echo ""
@@ -92,4 +124,157 @@ jobs:
             echo "::notice::Nobody joined since ${SINCE}, so a live run would post nothing."
           else
             echo "::notice::Dry run: the welcome post is in the run summary. Nothing was posted."
+          fi
+
+  publish:
+    name: Post the weekly welcome
+    needs: gate
+    if: needs.gate.outputs.go == 'true' && needs.gate.outputs.mode == 'live'
+    runs-on: ubuntu-latest
+    # Ungated, as the weekly spotlight: the text is built from Directory
+    # fields that are already public.
+    environment: social-auto
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write          # the alert step opens or refreshes a tracking issue
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v5 (sha-pinned)
+        with:
+          python-version: '3.12'
+
+      - name: Fold in a ledger that has not reached main yet
+        run: |
+          # This workflow's previous PR (welcome/auto) can still be open, so
+          # main's ledger lacks the welcome::<id> keys of members already
+          # named, and this run would name them again. Only welcome keys
+          # matter to the welcome, so the news and spotlight branches are not
+          # read. A union only ever adds "already posted". The step before the
+          # PR puts main's file back, so the PR carries only this run's keys.
+          cp data/social-posted.json "${RUNNER_TEMP:-/tmp}/ledger-main.json"
+          if git fetch --depth=1 origin welcome/auto 2>/dev/null \
+             && git show FETCH_HEAD:data/social-posted.json > branch-ledger.json; then
+            python3 - <<'PY'
+          import json, pathlib
+          led = pathlib.Path("data/social-posted.json")
+          cur = json.loads(led.read_text(encoding="utf-8"))
+          extra = [k for k in json.loads(pathlib.Path("branch-ledger.json").read_text(encoding="utf-8")).get("posted", [])
+                   if k not in cur["posted"]]
+          if extra:
+              cur["posted"] += extra
+              led.write_text(json.dumps(cur, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+          print(f"::notice::Folded {len(extra)} key(s) in from the unmerged welcome/auto branch.")
+          PY
+          fi
+          rm -f branch-ledger.json
+          cp data/social-posted.json "${RUNNER_TEMP:-/tmp}/ledger-folded.json"
+
+      - name: Post the welcome to Bluesky + LinkedIn (ungated, idempotent)
+        # Exit 2 is social-post.py's "best-effort swallowed a channel failure"
+        # code, recorded as an output so the ledger PR still lands and the
+        # last step raises the alarm, as in spotlight-rotate.yml.
+        id: social
+        continue-on-error: true
+        env:
+          CHANNEL: ${{ inputs.channel }}
+          BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
+          BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+          LINKEDIN_ORG_ID: ${{ secrets.LINKEDIN_ORG_ID }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_REFRESH_TOKEN: ${{ secrets.LINKEDIN_REFRESH_TOKEN }}
+          LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID }}
+          LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET }}
+        run: |
+          if [ -z "$BSKY_HANDLE" ] || [ -z "$BSKY_APP_PASSWORD" ]; then
+            echo "::warning::Bluesky secrets not set on the social-auto environment; skipping the welcome post."
+            exit 0
+          fi
+          {
+            echo "### Weekly welcome"
+            echo ""
+            echo '```'
+            python3 scripts/social-post.py --dry-run --kind welcome
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          python3 scripts/social-post.py --live --channel "${CHANNEL:-all}" --best-effort --kind welcome 2>&1 | tee /tmp/social.txt
+          rc=${PIPESTATUS[0]}
+          if [ "$rc" -eq 2 ]; then
+            echo "degraded=true" >> "$GITHUB_OUTPUT"
+            grep -E '^[[:space:]]+! ' /tmp/social.txt | head -n 5 > /tmp/social-failures.txt || true
+          fi
+          exit 0
+
+      - name: Limit the ledger change to this run's keys
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          tmp = os.environ.get("RUNNER_TEMP", "/tmp")
+          read = lambda p: json.loads(pathlib.Path(p).read_text(encoding="utf-8"))
+          led = pathlib.Path("data/social-posted.json")
+          borrowed = set(read(f"{tmp}/ledger-folded.json")["posted"])
+          new = [k for k in read(led)["posted"] if k not in borrowed]
+          main = read(f"{tmp}/ledger-main.json")
+          main["posted"] += [k for k in new if k not in main["posted"]]
+          led.write_text(json.dumps(main, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+          print(f"::notice::Ledger PR carries {len(new)} new key(s).")
+          PY
+
+      - name: Open or update the ledger PR
+        id: create-pr
+        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1  # v7 (sha-pinned)
+        with:
+          token: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
+          branch: welcome/auto
+          base: main
+          delete-branch: true
+          add-paths: data/social-posted.json
+          title: 'chore(social): record the weekly welcome'
+          commit-message: |
+            chore(social): record the weekly welcome
+
+            Records the members named in this week's welcome post (#2236).
+          body: |
+            Records the `welcome::<id>` keys of the members named in this week's welcome post, so they are not welcomed again. Auto-generated by the **Welcome new Directory members** workflow, run `${{ github.run_id }}`.
+          labels: automated
+
+      - name: Arm auto-merge on the ledger PR
+        if: steps.create-pr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge "${{ steps.create-pr.outputs.pull-request-number }}" \
+            --squash --auto --repo "${{ github.repository }}"
+
+      - name: Alert when a channel failed to publish
+        if: steps.social.outputs.degraded == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -uo pipefail
+          {
+            echo "The weekly welcome published to some channels but not all. The members it named are recorded, so the next post does not repeat them on the channel that worked."
+            echo ""
+            echo '```'
+            if [ -s /tmp/social-failures.txt ]; then
+              cat /tmp/social-failures.txt
+            else
+              echo "(no failure line captured; read the run log)"
+            fi
+            echo '```'
+            echo ""
+            echo "Run: ${RUN_URL}"
+            echo ""
+            echo "The most likely cause is an expired LinkedIn access token. Setup and the refresh command are in docs/social-publishing.md, section B.4."
+          } > /tmp/social-alert.md
+          title="Weekly welcome did not reach every social channel"
+          existing=$(gh issue list --search "${title} in:title" --state open --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file /tmp/social-alert.md
+          else
+            gh issue create --title "$title" --body-file /tmp/social-alert.md --label bug
           fi

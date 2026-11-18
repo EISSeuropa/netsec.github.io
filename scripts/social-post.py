@@ -759,16 +759,18 @@ def welcome_bluesky(members: list[dict], today: dt.date) -> str:
 
 def read_welcome(posted: set[str], since: str | None = None,
                  today: dt.date | None = None) -> Post | None:
-    """The weekly welcome post, or None when the welcome is off (no `since`)
-    or nobody is waiting to be welcomed. `since` overrides data/welcome.json,
-    which the dry-run workflow uses to preview one week at a time."""
-    since = since or welcome_since()
+    """The weekly welcome post, or None when the welcome is off (no `since`,
+    or a go-live date still to come) or nobody is waiting to be welcomed.
+    `since` overrides data/welcome.json for previews, and is the only way to
+    compose a welcome before the go-live date."""
+    today = today or dt.datetime.now(dt.timezone.utc).date()
     if not since:
-        return None
+        since = welcome_since()
+        if not since or today.isoformat() < since:
+            return None
     members = welcome_members(posted, since)
     if not members:
         return None
-    today = today or dt.datetime.now(dt.timezone.utc).date()
     y, w, _ = today.isocalendar()
     names = _join_and([m["name"].strip() for m in members])
     return Post(

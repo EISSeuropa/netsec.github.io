@@ -986,3 +986,16 @@ def test_since_is_refused_on_a_live_run(monkeypatch):
         assert e.code == 2
     else:
         raise AssertionError("--since was accepted with --live")
+
+
+def test_welcome_waits_for_the_go_live_date(monkeypatch, tmp_path):
+    _bios(monkeypatch, tmp_path, [_member(1, joined="2026-11-22")], since="2026-11-21")
+    assert sp.read_welcome(set(), today=sp.dt.date(2026, 11, 20)) is None
+    post = sp.read_welcome(set(), today=sp.dt.date(2026, 11, 27))
+    assert post.member_keys == ("welcome::member-01",)
+
+
+def test_welcome_go_live_date_in_the_repository_is_a_date():
+    since = json.loads((Path(__file__).resolve().parent.parent / "data" / "welcome.json")
+                       .read_text(encoding="utf-8"))["since"]
+    assert since is None or sp.dt.date.fromisoformat(since)
