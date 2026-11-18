@@ -2,5 +2,5 @@
   "_comment": "LinkedIn Marketing API version (YYYYMM) sent as the LinkedIn-Version header by scripts/social-post.py. LinkedIn supports each version for ~12 months then sunsets it (a sunset version returns HTTP 426 and the post fails). This pin is kept current automatically by .github/workflows/linkedin-version-check.yml, which reads LinkedIn's published active-version list and opens an auto-merging PR to bump this file before the pin nears sunset. Override at runtime with the LINKEDIN_API_VERSION env var. See docs/social-publishing.md.",
   "version": "202607",
   "_refresh_token_comment": "Date (YYYY-MM-DD) of the full LinkedIn authorisation that issued the current refresh token, which lasts 365 days and is not extended by refreshing the access token. Update it whenever scripts/linkedin-token.py exchange prints a new refresh token. .github/workflows/linkedin-version-check.yml opens an issue at least 30 days before expiry (scripts/check-linkedin-token-age.py). null means unknown, and the monthly run warns.",
-  "refresh_token_issued": "2026-11-13"
+  "refresh_token_issued": "2026-11-11"
 }
