@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generated_at": "2026-11-18T13:59:14+00:00",
+  "generated_at": "2026-11-19T14:28:07+00:00",
   "source": {
     "type": "google_sheet",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-11-18T13:59:14+00:00"
+    "last_synced": "2026-11-19T14:28:07+00:00"
   },
   "members": [
     {
@@ -2986,7 +2986,7 @@
       "mastodon": "",
       "photo": "assets/images/people/pavlosioannis-koktsidis.jpg",
       "source": "form",
-      "photo_source_sha256": "ef52da905f6e0389dd0b55bdc4aaac44682948c7577e3e736f52ca0b38d14deb",
+      "photo_source_sha256": "9e2d1f3f94522dced5ae07fd54622d33de41449eadd27d31e789977da294a72a",
       "canonical_keywords": [
         "Conflict studies",
         "Diplomacy",
@@ -6463,6 +6463,48 @@
         "Intelligence, information and influence",
         "Security and defence"
       ]
+    },
+    {
+      "id": "edoardo-corradi",
+      "name": "Dr Edoardo Corradi",
+      "country": "Italy",
+      "country_code": "it",
+      "affiliation": "University of Bologna",
+      "position": "Postdoctoral Research Fellow",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [],
+      "regions": [
+        "Europe"
+      ],
+      "stsm_hosting": "ask",
+      "wg_leadership": {},
+      "bio": "I am currently a Postdoctoral Research Fellow at the University of Bologna and an Adjunct Professor at the University of Genoa. I have mainly worked on the dynamics of cooperation and conflict in civil wars, focusing on Syria. I am currenly working on a research project on civil preparedness for armed conflict.",
+      "keywords": [
+        "euroepan security",
+        "civil preparedness",
+        "armed conflict",
+        "civil protection"
+      ],
+      "email": "",
+      "website": "https://www.edoardocorradi.com/",
+      "orcid": "0000-0002-3488-8605",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "",
+      "source": "form",
+      "joined": "2026-11-19",
+      "canonical_keywords": [
+        "Armed conflict",
+        "Civil preparedness",
+        "Civil protection",
+        "Euroepan security"
+      ],
+      "themes": [
+        "Crisis management and critical systems resilience"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -6621,6 +6663,10 @@
     {
       "keyword": "Transitional justice",
       "count": 3
+    },
+    {
+      "keyword": "Civil protection",
+      "count": 2
     },
     {
       "keyword": "Civil wars",
@@ -6811,6 +6857,10 @@
       "count": 1
     },
     {
+      "keyword": "Armed conflict",
+      "count": 1
+    },
+    {
       "keyword": "Arms control",
       "count": 1
     },
@@ -6867,7 +6917,7 @@
       "count": 1
     },
     {
-      "keyword": "Civil protection",
+      "keyword": "Civil preparedness",
       "count": 1
     },
     {
@@ -7100,6 +7150,10 @@
     },
     {
       "keyword": "Euro-Atlantic foreign policy",
+      "count": 1
+    },
+    {
+      "keyword": "Euroepan security",
       "count": 1
     },
     {
@@ -7802,7 +7856,7 @@
     },
     {
       "theme": "Crisis management and critical systems resilience",
-      "count": 13
+      "count": 14
     },
     {
       "theme": "Economic security and geoeconomics",
@@ -8162,7 +8216,7 @@
   "region_aggregate": [
     {
       "region": "Europe",
-      "count": 87
+      "count": 88
     },
     {
       "region": "Global and cross-regional",
