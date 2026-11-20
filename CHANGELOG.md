@@ -160,6 +160,7 @@ maintainer-facing audience.
 
 #### Changed
 
+- The ESSC 2027 call for papers no longer states the prize amount. It still names the European Security Studies Prize, who is eligible and the mentoring that comes with it.
 - `@COST` in a LinkedIn post mentions the COST Association page (`urn:li:organization:1050548` in `data/social-accounts.json`). Until now it went out as the plain name. On Bluesky it stays the plain name, as COST has no account there.
 - The News item form has Post on boxes for LinkedIn and Bluesky, and at least one must be ticked unless the item is for the website only. An item ticked for one network is posted there only, and the other network's post box is ignored (`networks` in `news.json`). The Site no longer offers EISS, and a joint item that goes to LinkedIn needs EISS as Collaborator page. A post copied from LinkedIn can be pasted as it is: a link to the NetSec, EISS or COST page becomes its tag, and any other LinkedIn link its plain name. The run renames the issue and the news PR after the headline. An item without its own photo says so at the top of the post preview and in the news PR, which explains how to add one. The same change is proposed on the EISS site (EISSeuropa/EISSeuropa.github.io#2213).
 - The News item form no longer has the "Include in the newsletter" box, as the newsletter does not use the form yet. The same change is proposed on the EISS site (EISSeuropa/EISSeuropa.github.io#2192).

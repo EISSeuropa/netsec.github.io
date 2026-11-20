@@ -380,7 +380,7 @@
           <li>The programme includes a keynote lecture and thematic roundtables, announced with the final programme.</li>
         </ul>
         <h3>European Security Studies Prize</h3>
-        <p>Papers by PhD students and early-career scholars (up to three years after the PhD) are considered for the <a href="https://eiss-europa.com/prizes.html" target="_blank" rel="noopener">European Security Studies Prize</a>, awarded with the <i>Journal of Strategic Studies</i>: €1,000 and a senior scholar's mentoring towards submission to the journal. To be considered, send the paper to the panel chair by the prize deadline above. The <a href="#training-school">NetSec Training School</a> runs alongside the conference.</p>
+        <p>Papers by PhD students and early-career scholars (up to three years after the PhD) are considered for the <a href="https://eiss-europa.com/prizes.html" target="_blank" rel="noopener">European Security Studies Prize</a>, awarded with the <i>Journal of Strategic Studies</i>, with a senior scholar's mentoring towards submission to the journal. To be considered, send the paper to the panel chair by the prize deadline above. The <a href="#training-school">NetSec Training School</a> runs alongside the conference.</p>
       </div>
     </article>
   </div>

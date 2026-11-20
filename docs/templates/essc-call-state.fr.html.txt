@@ -376,7 +376,7 @@
           <li>Le programme comprend une conférence plénière et des tables rondes thématiques, annoncées avec le programme définitif.</li>
         </ul>
         <h3>European Security Studies Prize</h3>
-        <p>Les communications des doctorants et des chercheurs en début de carrière (jusqu'à trois ans après le doctorat) concourent pour le <a href="https://eiss-europa.com/prizes.fr.html" target="_blank" rel="noopener">European Security Studies Prize</a>, décerné avec le <i>Journal of Strategic Studies</i> : 1 000 € et l'accompagnement d'un chercheur confirmé pour soumettre l'article à la revue. Pour concourir, envoyez la communication à la présidence du panel avant la date limite du prix indiquée ci-dessus. L'<a href="#training-school">École de formation NetSec</a> se tient en parallèle de la conférence.</p>
+        <p>Les communications des doctorants et des chercheurs en début de carrière (jusqu'à trois ans après le doctorat) concourent pour le <a href="https://eiss-europa.com/prizes.fr.html" target="_blank" rel="noopener">European Security Studies Prize</a>, décerné avec le <i>Journal of Strategic Studies</i>, avec l'accompagnement d'un chercheur confirmé pour soumettre l'article à la revue. Pour concourir, envoyez la communication à la présidence du panel avant la date limite du prix indiquée ci-dessus. L'<a href="#training-school">École de formation NetSec</a> se tient en parallèle de la conférence.</p>
       </div>
     </article>
   </div>
