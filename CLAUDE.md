@@ -82,17 +82,17 @@ publishes data another repository uses.
   the tools differ. `gh` works for search only. Work on the
   `claude/...` branch the session names, created from freshly fetched
   `origin/main` before the first edit. Open the PR with the GitHub
-  connector's `create_pull_request`, set its milestone with
+  connector's `create_pull_request`, set its milestone and labels with
   `issue_write` (method `update`, the PR number, the milestone
-  number), arm auto-merge with `enable_pr_auto_merge` (`SQUASH`), and
+  number, `labels`), arm auto-merge with `enable_pr_auto_merge` (`SQUASH`), and
   watch it with `subscribe_pr_activity`. Issues go through
   `issue_write` with `milestone`. Search with
   `gh api -X GET search/issues` or `search/code`. `add_repo` attaches
   another repository. `gh stack` is not available, so dependent work
   goes in ordinary PRs, one after another. The full table is in the
   EISS repository's `docs/repositories-and-workflow.md`.
-- **Milestone on every PR.** Set it as the PR is opened, per rule
-  §10, and ask the maintainer when the right one is unclear.
+- **Milestone and labels on every PR.** Set them as the PR is opened,
+  per rule §10, and ask the maintainer when the milestone is unclear.
 - **Concurrent PRs collide only on page-builder output.** The `?v=`
   cache-bust tokens are stamped at deploy and never committed, so two
   `site.css` PRs can be open at once. `build-field-guide.py` and
@@ -403,6 +403,13 @@ milestone exists, or two look equally plausible, stop and ask the
 maintainer rather than guessing or leaving it blank. Without the
 milestone the backlog drifts and "queued for v1.7.0" becomes a string
 floating in prose rather than a queryable commitment.
+
+A PR also carries labels as an issue does, set as it is opened: the
+labels of the issue it closes or follows, or else the one that fits the
+change (`enhancement`, `bug`, `documentation`, `data-sync`, `news`,
+`a11y`). A label the linked issue carries that this repository lacks is
+created here with the same name. Process labels (`help wanted`,
+`duplicate`, `needs-info`, `contributor A`/`B`/`C`) stay on the issue.
 
 The milestone set itself, the due dates that track the roadmap, the
 two pre-versioning milestones to leave alone, and the pre-release
