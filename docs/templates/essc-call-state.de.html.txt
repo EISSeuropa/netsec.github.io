@@ -376,7 +376,7 @@
           <li>Das Programm umfasst einen Keynote-Vortrag und thematische Roundtables, die mit dem endgültigen Programm bekanntgegeben werden.</li>
         </ul>
         <h3>European Security Studies Prize</h3>
-        <p>Papers von Promovierenden und Forschenden am Anfang ihrer Laufbahn (bis drei Jahre nach der Promotion) werden für den <a href="https://eiss-europa.com/prizes.de.html" target="_blank" rel="noopener">European Security Studies Prize</a> berücksichtigt, der gemeinsam mit dem <i>Journal of Strategic Studies</i> vergeben wird: 1.000 € und die Begleitung durch eine erfahrene Forscherin oder einen erfahrenen Forscher bei der Einreichung bei der Zeitschrift. Senden Sie das Paper dazu bis zur oben genannten Frist für den Prize an den Panel-Vorsitz. Die <a href="#training-school">NetSec-Ausbildungsschule</a> findet parallel zur Konferenz statt.</p>
+        <p>Papers von Promovierenden und Forschenden am Anfang ihrer Laufbahn (bis drei Jahre nach der Promotion) werden für den <a href="https://eiss-europa.com/prizes.de.html" target="_blank" rel="noopener">European Security Studies Prize</a> berücksichtigt, der gemeinsam mit dem <i>Journal of Strategic Studies</i> vergeben wird. Dazu gehört die Begleitung durch eine erfahrene Forscherin oder einen erfahrenen Forscher bei der Einreichung bei der Zeitschrift. Senden Sie das Paper dazu bis zur oben genannten Frist für den Prize an den Panel-Vorsitz. Die <a href="#training-school">NetSec-Ausbildungsschule</a> findet parallel zur Konferenz statt.</p>
       </div>
     </article>
   </div>
