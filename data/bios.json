@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generated_at": "2026-11-19T14:28:07+00:00",
+  "generated_at": "2026-11-22T13:22:46+00:00",
   "source": {
     "type": "google_sheet",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-11-19T14:28:07+00:00"
+    "last_synced": "2026-11-22T13:22:46+00:00"
   },
   "members": [
     {
@@ -2986,7 +2986,7 @@
       "mastodon": "",
       "photo": "assets/images/people/pavlosioannis-koktsidis.jpg",
       "source": "form",
-      "photo_source_sha256": "9e2d1f3f94522dced5ae07fd54622d33de41449eadd27d31e789977da294a72a",
+      "photo_source_sha256": "ef52da905f6e0389dd0b55bdc4aaac44682948c7577e3e736f52ca0b38d14deb",
       "canonical_keywords": [
         "Conflict studies",
         "Diplomacy",
