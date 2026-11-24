@@ -1,6 +1,6 @@
 # Dependabot configuration.
 #
-# Watches two surfaces for upstream updates:
+# Watches three surfaces for upstream updates:
 #
 #   1. GitHub Actions used in any .github/workflows/*.yml. We SHA-pin
 #      every third-party action per .github/CLAUDE.md (release-infrastructure
@@ -13,10 +13,11 @@
 #      browser code, but they DO run with `contents: write` in the
 #      sync workflows, so a compromised package on the chain matters.
 #
-#   3. The npm devDependency in /package.json (puppeteer-core), used by
+#   3. The npm devDependencies in /package.json. puppeteer-core runs
 #      the headless-Chrome checks in scripts/measure.mjs and
-#      scripts/test-directory-interactions.mjs. Nothing here ships to a
-#      visitor. The watch exists so a transitive advisory we have
+#      scripts/test-directory-interactions.mjs. pagefind builds the search
+#      index in scripts/build-search.sh (#2267). Nothing here ships to a
+#      visitor except the index Pagefind writes. The watch exists so a transitive advisory we have
 #      assessed as unreachable still gets bumped when upstream moves:
 #      extract-zip 2.0.1 carries two unpatched symlink-traversal
 #      advisories and reaches us only through @puppeteer/browsers'
@@ -26,9 +27,6 @@
 # Weekly cadence keeps the PR volume manageable. Each PR is auto-mergeable
 # once CI is green (link-check + CodeQL + drift checkers cover the surface
 # Dependabot bumps could break).
-#
-# Pagefind is invoked via npx at deploy time and is not watched here, since
-# it has no manifest entry to bump.
 
 version: 2
 updates:
@@ -85,3 +83,10 @@ updates:
     commit-message:
       prefix: "deps(npm)"
     open-pull-requests-limit: 5
+    groups:
+      # Patch and minor bumps of puppeteer-core, pagefind and their trees
+      # arrive as one PR, as on the EISS site. A major stays its own PR.
+      development-tools:
+        update-types:
+          - "minor"
+          - "patch"
