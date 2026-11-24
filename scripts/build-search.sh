@@ -20,7 +20,7 @@
 #   - The script is also what CI calls in pages-deploy.yml and in
 #     search-drift.yml (build sanity check on PRs).
 #
-# Pinned to Pagefind 1.5.2 so re-builds across machines / CI runs
+# Pinned to Pagefind 1.6.0 so re-builds across machines / CI runs
 # produce the same per-language page counts.
 set -euo pipefail
 
@@ -28,7 +28,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$HERE/.." && pwd)"
 cd "$REPO_ROOT"
 
-PAGEFIND_VERSION="1.5.2"
+PAGEFIND_VERSION="1.6.0"
 
 # npm/npx, depending on Node version, sometimes drops a
 # node-compile-cache directory inside the output path. It's a

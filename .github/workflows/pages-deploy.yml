@@ -11,7 +11,7 @@
 # Inputs / outputs:
 #   - reads:  the working tree on main (HTML, assets, scripts)
 #   - builds: ./pagefind/ via scripts/build-search.sh (which calls
-#             `npx pagefind@1.5.2`; no manual install step needed), the
+#             `npx pagefind@1.6.0`; no manual install step needed), the
 #             84 per-member Open Graph cards under assets/og/people/, the
 #             event-page cards under assets/og/events/, and the 252
 #             profile pages under people/
