@@ -20,15 +20,18 @@
 #   - The script is also what CI calls in pages-deploy.yml and in
 #     search-drift.yml (build sanity check on PRs).
 #
-# Pinned to Pagefind 1.6.0 so re-builds across machines / CI runs
-# produce the same per-language page counts.
+# Pagefind is a devDependency: package-lock.json pins the exact version,
+# so re-builds across machines and CI runs produce the same per-language
+# page counts, and Dependabot's npm block proposes its updates (#2267).
+# The script installs it with `npm ci` when node_modules lacks a working
+# binary.
 set -euo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$HERE/.." && pwd)"
 cd "$REPO_ROOT"
 
-PAGEFIND_VERSION="1.6.0"
+PAGEFIND="$REPO_ROOT/node_modules/.bin/pagefind"
 
 # npm/npx, depending on Node version, sometimes drops a
 # node-compile-cache directory inside the output path. It's a
@@ -54,19 +57,22 @@ python3 "$REPO_ROOT/scripts/build-bio-search-stubs.py"
 
 echo "→ Rebuilding search index to ./pagefind/"
 rm -rf "$REPO_ROOT/pagefind"
-# Three attempts. On 2026-10-15 npm dropped the linux-x64 binary package
-# without an error, and three workflows on two PRs went red until a rerun.
-# npx keeps the broken install in its cache and would reuse it, so the cache
-# is cleared between attempts.
-for attempt in 1 2 3; do
-  npx -y "pagefind@$PAGEFIND_VERSION" --site . --output-path "$REPO_ROOT/pagefind" && break
+# Up to three installs for a working binary. On 2026-10-15 npm dropped the
+# linux-x64 binary package without an error, and three workflows on two PRs
+# went red until a rerun. The platform binary is an optional dependency of
+# the pagefind package, so a dropped one leaves an install that succeeds and
+# a binary that fails. `pagefind --version` catches that, and `npm ci`
+# reinstalls from scratch.
+for attempt in 0 1 2 3; do
+  "$PAGEFIND" --version >/dev/null 2>&1 && break
   if [[ $attempt == 3 ]]; then
-    echo "✗ Pagefind failed three times." >&2
+    echo "✗ No working Pagefind binary after three installs." >&2
     exit 1
   fi
-  echo "  · Pagefind attempt $attempt failed, clearing the npx cache and retrying" >&2
-  rm -rf "$(npm config get cache)/_npx"
-  sleep 10
+  [[ $attempt == 0 ]] || sleep 10
+  echo "  · Installing Pagefind from package-lock.json (npm ci, install $((attempt + 1)) of 3)" >&2
+  npm ci --no-audit --no-fund >&2 || true
 done
+"$PAGEFIND" --site . --output-path "$REPO_ROOT/pagefind"
 strip_cache "$REPO_ROOT/pagefind"
 echo "✓ Done."
