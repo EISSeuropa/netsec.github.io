@@ -731,7 +731,7 @@ the token every Monday and opens (or refreshes) a tracking issue when it
 is missing, rejected, or within 10 days of expiry, so a rotation never
 depends on spotting GitHub's own expiry email. When that issue appears:
 
-1. Create a fresh fine-grained PAT (same account) at
+1. Regenerate the fine-grained PAT named `AUTOPR_TOKEN` (same account) at
    <https://github.com/settings/personal-access-tokens>, scoped to this
    repo with `Contents: read+write`, `Pull requests: read+write` and
    `Workflows: read+write`. The roadmap-refresh workflow's `action-pins`
