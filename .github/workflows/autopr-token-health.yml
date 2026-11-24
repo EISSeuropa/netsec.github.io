@@ -80,7 +80,7 @@ jobs:
           body=$(printf '%s\n\n%s\n\n%s\n' \
             "The weekly AUTOPR_TOKEN health check reports: **${DETAIL}**" \
             "While this stands, the auto-PR sync workflows (roadmap-sync, roadmap-progress, sync-bios, sync-cost, sync-indico, spotlight-rotate, directory-welcome) fall back to GITHUB_TOKEN, so the PRs they open do not trigger the required checks and each needs a manual admin-merge (background in #486)." \
-            "Fix: regenerate the eisseuropa-mac-cli fine-grained PAT and paste the new value into the AUTOPR_TOKEN repository secret, under Settings then Secrets and variables then Actions. No workflow edit is needed.")
+            "Fix: regenerate the fine-grained PAT named AUTOPR_TOKEN (Contents, Pull requests and Workflows: read and write) and paste the new value into the AUTOPR_TOKEN repository secret, under Settings then Secrets and variables then Actions. No workflow edit is needed.")
           existing=$(gh issue list --search "AUTOPR_TOKEN needs attention in:title" --state open --json number --jq '.[0].number // empty')
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --body "$body"
