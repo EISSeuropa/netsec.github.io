@@ -3,6 +3,7 @@
   "private": true,
   "description": "Dev dependencies for the directory interaction smoke tests (scripts/test-directory-interactions.mjs). The site itself is static and has no build.",
   "devDependencies": {
+    "pagefind": "^1.6.0",
     "puppeteer-core": "^25.18.1"
   }
 }

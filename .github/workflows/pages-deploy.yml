@@ -10,8 +10,8 @@
 #
 # Inputs / outputs:
 #   - reads:  the working tree on main (HTML, assets, scripts)
-#   - builds: ./pagefind/ via scripts/build-search.sh (which calls
-#             `npx pagefind@1.6.0`; no manual install step needed), the
+#   - builds: ./pagefind/ via scripts/build-search.sh (which installs
+#             Pagefind from package-lock.json with `npm ci`), the
 #             84 per-member Open Graph cards under assets/og/people/, the
 #             event-page cards under assets/og/events/, and the 252
 #             profile pages under people/
@@ -245,6 +245,12 @@ jobs:
             exit 1
           }
           echo "cache-bust tokens present on the sampled pages"
+
+      - name: Remove node_modules before the upload
+        # scripts/build-search.sh installs Pagefind into ./node_modules/
+        # (#2267), and the upload below takes the whole working tree. Without
+        # this step about 46 MB of build tooling would ship to netsec-cost.eu.
+        run: rm -rf node_modules
 
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6 (sha-pinned)
