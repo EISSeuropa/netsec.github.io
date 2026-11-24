@@ -57,7 +57,7 @@ jobs:
         run: python3 scripts/check-page-registration.py
 
       - name: Install Pillow for the photograph check
-        run: python3 -m pip install --quiet 'Pillow>=12.3.0,<13'
+        run: python3 -m pip install --quiet -r scripts/requirements.txt
 
       - name: Editorial photographs have a current .webp (#1615)
         # The gallery on /essc-2026.html served four 1400px JPEGs into a grid
