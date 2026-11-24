@@ -46,7 +46,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Archive + delete stale unmerged branches
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v7 (sha-pinned)
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9 (sha-pinned)
         with:
           script: |
             const STALE_AFTER_DAYS = 14;

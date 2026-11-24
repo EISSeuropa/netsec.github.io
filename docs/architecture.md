@@ -247,7 +247,7 @@ sequenceDiagram
     P->>P: Download + resize photos<br/>via Pillow, write .webp siblings
     P->>R: git diff data/bios.json<br/>+ assets/images/people/*.{jpg,webp}
     alt Diff non-empty
-        P->>R: peter-evans/create-pull-request@v7
+        P->>R: peter-evans/create-pull-request@v8
         Note over R,A: PR opens against main<br/>with a human-readable diff
         A->>R: Review + merge
         R-->>F: Live on /people.html next page-load
@@ -274,7 +274,7 @@ sequenceDiagram
     P->>P: Rebuild data/wg.json from the<br/>reconciled WGs + leadership
     P->>R: git diff index.html (WG_MAP), bios.json,<br/>mc-members.json, wg.json, about/press-kit stats,<br/>cost-wg-state.json
     alt Diff non-empty
-        P->>R: peter-evans/create-pull-request@v7
+        P->>R: peter-evans/create-pull-request@v8
         A->>R: Review + merge
     else No diff
         P-->>P: Exit 0
