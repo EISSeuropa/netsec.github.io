@@ -1,0 +1,30 @@
+# SHA-pin comment check (#2260).
+#
+# Runs scripts/check-action-pins.py on every PR that touches a workflow or
+# the script. It fails when a `# vN (sha-pinned)` comment names a different
+# major from the tags at its SHA, or when a third-party `uses:` is not
+# pinned to a SHA (.github/CLAUDE.md).
+#
+# Dependabot bumps the SHA and leaves the comment, so on its PRs the drift
+# is reported as a warning and the PR can still auto-merge. The daily
+# roadmap-refresh workflow corrects the comment afterwards, in a PR on
+# `action-pins/auto`.
+#
+# Zero cost: `git ls-remote` reads the tags with no token.
+name: SHA-pin comment check
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'scripts/check-action-pins.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  action-pins:
+    uses: ./.github/workflows/_pycheck.yml
+    with:
+      command: python3 scripts/check-action-pins.py ${{ github.actor == 'dependabot[bot]' && '--warn' || '' }}

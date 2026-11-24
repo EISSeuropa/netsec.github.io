@@ -733,7 +733,11 @@ depends on spotting GitHub's own expiry email. When that issue appears:
 
 1. Create a fresh fine-grained PAT (same account) at
    <https://github.com/settings/personal-access-tokens>, scoped to this
-   repo with `Contents: read+write` and `Pull requests: read+write`.
+   repo with `Contents: read+write`, `Pull requests: read+write` and
+   `Workflows: read+write`. The roadmap-refresh workflow's `action-pins`
+   job edits the `# vN (sha-pinned)` comments under `.github/workflows/`,
+   and GitHub refuses that push from a token without the Workflows
+   permission (#2260).
 2. Update the `AUTOPR_TOKEN` secret under
    *Settings → Secrets and variables → Actions*.
 3. Trigger any sync manually (see *Manually triggering a sync*) and
