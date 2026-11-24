@@ -184,6 +184,15 @@ python3 scripts/sync-indico.py    # data/indico.json + calendar.ics ← Indico
 > branch and review the diff before committing. CI does this for you
 > automatically — see below.
 
+The search index and the headless-Chrome checks use the dev
+dependencies in `package.json` (pagefind and puppeteer-core),
+installed with `npm ci` at the repository root.
+`scripts/build-search.sh` runs `npm ci` itself when Pagefind is
+missing. Dependabot checks both every Monday
+(`.github/dependabot.yml`). Their minor and patch updates arrive
+together in one PR, the `development-tools` group, and a major
+arrives in a PR of its own.
+
 ## Automated pipelines
 
 Twelve workflows under `.github/workflows/`. The data-sync trio
