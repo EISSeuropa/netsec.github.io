@@ -470,14 +470,14 @@ for new MC reps joining around the **inaugural MC plenary**
 
 #### Infrastructure
 
-- **Dependabot for GitHub Actions**: weekly checks on the
-  pinned action SHAs (`actions/checkout@v4`, `actions/setup-
-  node@v4`, `peter-evans/create-pull-request@v7`,
-  `pagefind@1.5.2`). Auto-PR when a security update is
-  available. *Drive-by from the GitHub App installation token
-  format watch — having Dependabot on `actions` gives us the
-  fix automatically if `peter-evans/create-pull-request` ships
-  one.*
+- **Dependabot**: weekly checks on the SHA-pinned GitHub
+  Actions in `.github/workflows/`, the Python packages in
+  `scripts/requirements.txt` and the npm packages in
+  `package.json` (`.github/dependabot.yml`). Auto-PR when an
+  update or a security fix is available. *Drive-by from the
+  GitHub App installation token format watch. With Dependabot
+  on `actions`, a fix shipped in
+  `peter-evans/create-pull-request` arrives as a PR.*
 
 ### Q4 — October / November / December 2026
 
