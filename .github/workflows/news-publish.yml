@@ -106,7 +106,7 @@ jobs:
       # (scripts/requirements.txt) to shrink the item's photo.
       - name: Install the Claude API client and the script requirements
         if: steps.publisher.outputs.allowed == 'true'
-        run: python -m pip install --quiet anthropic==2.8.0 -r scripts/requirements.txt
+        run: python -m pip install --quiet -r scripts/requirements.txt
 
       - name: Add the news item and rebuild the feed
         if: steps.publisher.outputs.allowed == 'true'

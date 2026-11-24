@@ -1,10 +1,13 @@
 # Python dependencies for the sync scripts (scripts/sync-cost.py,
-# scripts/sync-bios.py). Pinned by major version so security patches
-# still apply automatically and the GitHub Actions cache key stays
-# stable.
+# scripts/sync-bios.py) and the news publishing run (news-publish.yml).
+# Pinned by major version so security patches still apply automatically
+# and the GitHub Actions cache key stays stable.
 requests>=2.34.2,<3
 beautifulsoup4>=4.15.0,<5
 # Pillow is used by sync-bios.py to downscale + re-encode headshots
 # uploaded via the Google Form. Optional at runtime — sync-bios.py
 # falls back to copying the raw bytes if Pillow is unavailable.
 Pillow>=13.0.0,<14
+# anthropic is the Claude API client that scripts/news-from-issue.py uses
+# for the FR and DE translations of a news item.
+anthropic>=2.13.0,<3
