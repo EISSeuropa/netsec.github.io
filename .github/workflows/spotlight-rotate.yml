@@ -86,10 +86,10 @@ jobs:
     environment: social-auto
     steps:
       - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7 (sha-pinned)
 
       - name: Set up Python
-        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v5 (sha-pinned)
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7 (sha-pinned)
         with:
           python-version: '3.12'
 
@@ -239,7 +239,7 @@ jobs:
 
       - name: Open or update PR if the spotlight changed
         id: create-pr
-        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1  # v7 (sha-pinned)
+        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1  # v8 (sha-pinned)
         with:
           token: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
           branch: spotlight/auto

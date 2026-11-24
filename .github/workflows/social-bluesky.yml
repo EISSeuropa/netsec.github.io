@@ -67,8 +67,8 @@ jobs:
     outputs:
       count: ${{ steps.compose.outputs.count }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
-      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v5 (sha-pinned)
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7 (sha-pinned)
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7 (sha-pinned)
         with:
           python-version: '3.12'
       - name: Fold in a ledger that has not reached main yet
@@ -130,8 +130,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: social          # required-reviewer gate; holds the job until approved
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
-      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v5 (sha-pinned)
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7 (sha-pinned)
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7 (sha-pinned)
         with:
           python-version: '3.12'
 
@@ -250,7 +250,7 @@ jobs:
         # files an issue.
         continue-on-error: true
         if: ${{ hashFiles('data/social-posted.json') != '' }}
-        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1  # v7 (sha-pinned)
+        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1  # v8 (sha-pinned)
         with:
           token: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
           branch: social/ledger
@@ -270,7 +270,7 @@ jobs:
       - name: Retry the ledger PR once
         id: create-pr-retry
         if: steps.create-pr.outcome == 'failure'
-        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1  # v7 (sha-pinned)
+        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1  # v8 (sha-pinned)
         with:
           token: ${{ secrets.AUTOPR_TOKEN || secrets.GITHUB_TOKEN }}
           branch: social/ledger

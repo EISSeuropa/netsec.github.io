@@ -94,11 +94,11 @@ jobs:
 
       - name: Check out repository
         if: steps.publisher.outputs.allowed == 'true'
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7 (sha-pinned)
 
       - name: Set up Python
         if: steps.publisher.outputs.allowed == 'true'
-        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v5 (sha-pinned)
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7 (sha-pinned)
         with:
           python-version: '3.12'
 
@@ -171,7 +171,7 @@ jobs:
       - name: Open or update the news PR
         if: steps.publisher.outputs.allowed == 'true'
         id: cpr
-        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1  # v7 (sha-pinned)
+        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1  # v8 (sha-pinned)
         with:
           # The AUTOPR_TOKEN makes the PR run the required checks. A
           # GITHUB_TOKEN PR starts none of them.

@@ -34,8 +34,8 @@ jobs:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v4 (sha-pinned)
-      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v5 (sha-pinned)
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7 (sha-pinned)
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7 (sha-pinned)
         with:
           python-version: '3.12'
 
