@@ -27,6 +27,13 @@ a fresh SHA with:
 gh api repos/<owner>/<repo>/commits/<tag> --jq '.sha'
 ```
 
+Dependabot bumps the SHA and leaves the comment.
+`scripts/check-action-pins.py` compares each comment with the major
+version of the tags at its SHA: `action-pins-check.yml` runs it on
+every PR that touches a workflow (a warning on Dependabot's), and the
+`action-pins` job in `roadmap-refresh.yml` runs `--fix` daily and opens
+a PR on `action-pins/auto` when a comment has drifted (#2260).
+
 Don't paste a tag without a SHA. The CI bypass exists exactly to
 keep workflows running under the permissions we already granted,
 so a tag-based supply-chain compromise inherits those permissions
