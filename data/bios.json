@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generated_at": "2026-11-22T13:22:46+00:00",
+  "generated_at": "2026-11-25T15:38:01+00:00",
   "source": {
     "type": "google_sheet",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-11-22T13:22:46+00:00"
+    "last_synced": "2026-11-25T15:38:01+00:00"
   },
   "members": [
     {
@@ -6505,6 +6505,47 @@
       "themes": [
         "Crisis management and critical systems resilience"
       ]
+    },
+    {
+      "id": "adan-bustamante",
+      "name": "Mr Adán Bustamante",
+      "country": "Spain",
+      "country_code": "es",
+      "affiliation": "Tech Universidad",
+      "position": "International Alliance Manager",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentor",
+        "mentee"
+      ],
+      "regions": [
+        "The Americas"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "International security and strategic affairs professional with experience in national security, government affairs, and strategic intelligence. My research interests focus on urban security, organized violence, territorial control, geopolitical risk, and geospatial intelligence.\n\nMy analytical approach examines the interaction between territory, strategic actors, infrastructure, and socioeconomic dynamics to understand emerging threats, anticipate complex security scenarios, and support evidence-based decision-making.",
+      "keywords": [
+        "Insurgency",
+        "Counterinsurgency",
+        "Terrorism"
+      ],
+      "email": "abustamante@techtitute.com",
+      "website": "https://strategikos.com.mx/",
+      "orcid": "",
+      "linkedin": "https://www.linkedin.com/in/adanbustamante/",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/adan-bustamante.jpg",
+      "source": "form",
+      "photo_source_sha256": "089f0c2d9f8a6d59e314839bf6187ec1105cfc6b0b395f3512e9c01f67ae40cb",
+      "joined": "2026-11-25",
+      "canonical_keywords": [
+        "Counterinsurgency",
+        "Insurgency",
+        "Terrorism"
+      ]
     }
   ],
   "keyword_aggregate": [
@@ -6961,6 +7002,10 @@
       "count": 1
     },
     {
+      "keyword": "Counterinsurgency",
+      "count": 1
+    },
+    {
       "keyword": "Covert action",
       "count": 1
     },
@@ -7302,6 +7347,10 @@
     },
     {
       "keyword": "Infrastructure",
+      "count": 1
+    },
+    {
+      "keyword": "Insurgency",
       "count": 1
     },
     {
@@ -7754,6 +7803,10 @@
     },
     {
       "keyword": "Technology spillovers",
+      "count": 1
+    },
+    {
+      "keyword": "Terrorism",
       "count": 1
     },
     {
@@ -8232,7 +8285,7 @@
     },
     {
       "region": "The Americas",
-      "count": 23
+      "count": 24
     },
     {
       "region": "Middle East and North Africa",
