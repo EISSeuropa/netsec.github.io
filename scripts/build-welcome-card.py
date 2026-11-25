@@ -65,9 +65,16 @@ CARD_HTML = """<!DOCTYPE html>
   .main {{ flex:1; min-height:0; display:flex; flex-direction:column; justify-content:center; gap:34px; }}
   .headline {{ font-family:'Lexend', sans-serif; font-weight:700; font-size:58px; line-height:1.05;
     letter-spacing:-.02em; color:#f4f8ff; }}
-  .count {{ margin-top:12px; font-size:28px; color:#ffcc00; font-weight:600; }}
+  .count {{ margin-top:12px; display:flex; align-items:center; gap:22px; }}
+  .count .n {{ font-size:28px; color:#ffcc00; font-weight:600; white-space:nowrap; flex:0 0 auto; }}
+  .flags {{ display:flex; flex-wrap:wrap; gap:10px; }}
+  .flags img {{ width:42px; height:28px; border-radius:5px; object-fit:cover; display:block;
+    box-shadow:0 0 0 1px rgba(255,255,255,.18); }}
   .faces {{ display:flex; gap:20px; }}
   .face {{ width:132px; flex:0 0 132px; display:flex; flex-direction:column; gap:12px; }}
+  .tile {{ position:relative; width:132px; height:132px; }}
+  .tile .flag {{ position:absolute; right:-8px; bottom:-8px; width:42px; height:28px; border-radius:5px;
+    object-fit:cover; display:block; border:2px solid #0b1220; }}
   .shot {{ width:132px; height:132px; border-radius:22px; overflow:hidden;
     background:#152138; border:1px solid rgba(255,255,255,.14); }}
   .shot img {{ width:100%; height:100%; object-fit:cover; display:block; }}
@@ -90,7 +97,7 @@ CARD_HTML = """<!DOCTYPE html>
     <div class="main">
       <div>
         <div class="headline">Welcome to the NetSec Directory</div>
-        <div class="count">{count}</div>
+        <div class="count"><span class="n">{count}</span>{flags}</div>
       </div>
       <div class="faces">{faces}</div>
     </div>
@@ -109,19 +116,44 @@ def display_name(name: str) -> str:
     return " ".join(words)
 
 
+def flag_src(m: dict) -> str:
+    """The bundled SVG flag for the member's country, or "" when there is
+    none. The OG cards render the same files (build-og-cards.py)."""
+    cc = (m.get("country_code") or "").strip().lower()
+    if cc and re.fullmatch(r"[a-z]{2}", cc) and (boc.FLAGS_DIR / f"{cc}.svg").is_file():
+        return f"/assets/og/flags/{cc}.svg"
+    return ""
+
+
+def flags_html(members: list[dict]) -> str:
+    """One flag per country among all the new members, the ones counted in
+    the "+N" tile included, in the post's order."""
+    seen: list[str] = []
+    for m in members:
+        src = flag_src(m)
+        if src and src not in seen:
+            seen.append(src)
+    if not seen:
+        return ""
+    return '<div class="flags">' + "".join(f'<img src="{s}" alt="">' for s in seen) + "</div>"
+
+
 def face_html(m: dict) -> str:
     photo = (m.get("photo") or "").strip()
     if photo and (ROOT / photo).exists():
         shot = f'<img src="/{html.escape(photo)}" alt="">'
     else:
         shot = f'<div class="initials">{html.escape(boc.initials(m.get("name", "")))}</div>'
+    src = flag_src(m)
+    flag = f'<img class="flag" src="{src}" alt="">' if src else ""
     who = html.escape(display_name(m.get("name", "")))
-    return f'<div class="face"><div class="shot">{shot}</div><div class="who">{who}</div></div>'
+    return (f'<div class="face"><div class="tile"><div class="shot">{shot}</div>{flag}</div>'
+            f'<div class="who">{who}</div></div>')
 
 
 def more_html(n: int) -> str:
     label = "more member" if n == 1 else "more members"
-    return (f'<div class="face"><div class="shot"><div class="more">+{n}</div></div>'
+    return (f'<div class="face"><div class="tile"><div class="shot"><div class="more">+{n}</div></div></div>'
             f'<div class="who">{label}</div></div>')
 
 
@@ -133,6 +165,7 @@ def card_markup(members: list[dict]) -> str:
     return CARD_HTML.format(
         count=html.escape(sp._count_words(len(members), "new member").capitalize()),
         faces="".join(faces),
+        flags=flags_html(members),
     )
 
 

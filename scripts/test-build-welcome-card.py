@@ -88,6 +88,28 @@ def test_card_directory_is_gitignored():
     assert "assets/og/welcome/" in (bwc.ROOT / ".gitignore").read_text(encoding="utf-8")
 
 
+def test_flags_in_the_count_line_cover_every_country_once():
+    ms = [_member(0, country_code="fr"), _member(1, country_code="es"),
+          _member(2, country_code="FR"), _member(3), _member(4, country_code="zz")]
+    strip = bwc.flags_html(ms)
+    assert strip.count("<img") == 2
+    assert strip.index("/fr.svg") < strip.index("/es.svg")  # the post's order
+
+
+def test_flags_strip_is_empty_without_country_codes():
+    assert bwc.flags_html([_member(0), _member(1)]) == ""
+    assert '<div class="flags">' not in bwc.card_markup([_member(0)])
+
+
+def test_each_pictured_member_carries_their_flag():
+    html = bwc.card_markup([_member(0, country_code="it")])
+    assert '<img class="flag" src="/assets/og/flags/it.svg" alt="">' in html
+
+
+def test_flag_src_rejects_a_code_that_is_not_two_letters():
+    assert bwc.flag_src(_member(0, country_code="../x")) == ""
+
+
 if __name__ == "__main__":
     for name, fn in list(globals().items()):
         if name.startswith("test_") and callable(fn):

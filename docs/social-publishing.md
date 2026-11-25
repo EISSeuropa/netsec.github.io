@@ -35,7 +35,7 @@ data/spotlight.json (wk) ─┘        composes text + image; records the ledger
   10:00 Europe/Paris.
 - Every Friday at 10:00 Central European time, `directory-welcome.yml`
   composes one post naming the members who joined the Directory since the
-  go-live date, 21 November 2026. See *Weekly welcome to new Directory
+  go-live date, 13 November 2026. See *Weekly welcome to new Directory
   members* below.
 - **Tagging the member.** When a member has supplied a Bluesky profile
   (`bluesky` in `data/bios.json`), the handle is woven into the Bluesky post as
@@ -358,7 +358,7 @@ naming the members who are waiting to be welcomed. A week with nobody new
 posts nothing.
 
 The welcome is not retroactive. It lists only members whose `joined` date is
-on or after `since` in `data/welcome.json`, the go-live date, 21 November
+on or after `since` in `data/welcome.json`, the go-live date, 13 November
 2026. While `since` is `null` the welcome is off. Each member is recorded in
 the ledger as `welcome::<id>` once a post names them, so a week that fails
 carries its members into the next post. Consent to be named in the Action's
@@ -390,7 +390,11 @@ Only welcome keys matter to the welcome, so the workflow folds in its own
 
 `scripts/build-welcome-card.py` renders a 1200x630 PNG for each post (#2237):
 "Welcome to the NetSec Directory", the number of new members, and a tile per
-pictured member with their headshot and their name without its title. Only
+pictured member with their headshot and their name without its title. The
+count line carries one flag per country among all the new members, and each
+pictured member has their country's flag on the corner of their tile. The
+flags are the bundled SVGs the OG cards use (`assets/og/flags/<code>.svg`),
+and a member whose `country_code` has no flag there gets none. Only
 members with a headshot are pictured, in the post's order, and everyone else
 is counted in a last tile reading "+N more members". Up to seven members, all
 with a headshot, are all pictured. Otherwise the card pictures up to six and
