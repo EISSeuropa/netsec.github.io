@@ -581,7 +581,7 @@ Every Friday at 10:00 Central European time, the `directory-welcome.yml`
 workflow composes one LinkedIn and Bluesky post naming the members who
 joined the Directory ([#2236](https://github.com/EISSeuropa/netsec.github.io/issues/2236)).
 The welcome is not retroactive. It names only members who joined on or
-after `since` in `data/welcome.json`, the go-live date, 21 November 2026.
+after `since` in `data/welcome.json`, the go-live date, 13 November 2026.
 Before that date each run is a preview: open it in the Actions tab and
 read the post in its summary. To preview another window, run the
 workflow by hand with a `since` date. To pause the welcome, set `since`
