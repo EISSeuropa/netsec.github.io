@@ -3072,6 +3072,18 @@ a.essc-quickfact.is-jump:hover .essc-quickfact-arrow{
    sound, so signal the bare reel is still interactive. */
 .essc-recap-video.is-ambient{cursor:pointer}
 .essc-recap-media figcaption{margin-top:.6rem;font-size:.85rem}
+/* Link to the closing-session recording on YouTube. The thumbnail is
+   self-hosted, so the page makes no request to YouTube until the link is
+   followed. */
+.essc-recap-closing{display:flex;align-items:center;gap:16px;max-width:42rem;margin-top:1.25rem;padding:10px;border:1px solid var(--line);border-radius:var(--radius-sm);color:inherit;text-decoration:none}
+.essc-recap-closing picture{flex:none}
+.essc-recap-closing img{display:block;width:160px;height:auto;border-radius:8px}
+.essc-recap-closing span{color:var(--link);text-decoration:underline;text-underline-offset:3px}
+.essc-recap-closing:hover span{text-decoration-thickness:2px}
+@media (max-width:480px){
+  .essc-recap-closing{flex-direction:column;align-items:flex-start}
+  .essc-recap-closing picture,.essc-recap-closing img{width:100%}
+}
 @media (max-width:720px){
   .essc-recap-media{flex-basis:100%;max-width:340px;margin:0 auto}
 }
