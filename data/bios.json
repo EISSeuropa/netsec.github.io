@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generated_at": "2026-11-25T15:38:01+00:00",
+  "generated_at": "2026-11-26T15:14:33+00:00",
   "source": {
     "type": "google_sheet",
     "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScMRlOJkjGUttyITKD2uQJdngNU1CJtBo1UAV8Ay66TU3Utmg/viewform",
-    "last_synced": "2026-11-25T15:38:01+00:00"
+    "last_synced": "2026-11-26T15:14:33+00:00"
   },
   "members": [
     {
@@ -6546,12 +6546,102 @@
         "Insurgency",
         "Terrorism"
       ]
+    },
+    {
+      "id": "laurentiu-plesca",
+      "name": "Dr Laurențiu Pleşca",
+      "country": "Romania",
+      "country_code": "ro",
+      "affiliation": "Romanian Centre for Russian Studies",
+      "position": "Researcher",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Europe - Eastern neighbours / Russia"
+      ],
+      "wg_leadership": {},
+      "bio": "Laurențiu Pleșca holds a PhD in Political Science and is a Program Officer at the German Marshall Fund's Black Sea Trust for Regional Cooperation. He is also a researcher at the Romanian Center for Russian Studies. His research covers Moldova's European integration, the Transnistrian conflict, Russian hybrid warfare and disinformation, EU enlargement, and security in the Black Sea region.",
+      "keywords": [
+        "EU enlargement",
+        "European Security",
+        "Russia’s geopolitics in the Black Sea region",
+        "Moldova",
+        "Transnistria"
+      ],
+      "email": "plesca.laurentiu@fspub.unibuc.ro",
+      "website": "https://scholar.google.com/citations?user=VxUBrtEAAAAJ&hl=ro",
+      "orcid": "",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/laurentiu-plesca.jpg",
+      "source": "form",
+      "photo_source_sha256": "22adbca5e6e199b28b97799832ce7ebe3a2d789b615ec80d4c18a56e771f972b",
+      "joined": "2026-11-26",
+      "canonical_keywords": [
+        "EU enlargement",
+        "European security",
+        "Moldova",
+        "Russia’s geopolitics in the black sea region",
+        "Transnistria"
+      ],
+      "themes": [
+        "EU, UN and other international organisations",
+        "European and transatlantic security order"
+      ]
+    },
+    {
+      "id": "ido-gadi-raz",
+      "name": "Mr Ido Gadi Raz",
+      "country": "Israel",
+      "country_code": "il",
+      "affiliation": "Hebrew University of Jerusalem",
+      "position": "PhD candidate",
+      "roles": [],
+      "wgs": [],
+      "mentorship": [
+        "mentee"
+      ],
+      "regions": [
+        "Asia",
+        "Middle East and North Africa"
+      ],
+      "stsm_hosting": "yes",
+      "wg_leadership": {},
+      "bio": "Researcher of security, conflict, and terrorism in the Afghanistan-Pakistan region and its connection to the Middle East. Holds a BA in Arabic & Middle Eastern Studies and a Master's in International Relations. Interested in rebel governance, diplomacy, sponsor-proxy dynamics, and propaganda.",
+      "keywords": [
+        "Terrorism",
+        "South Asia",
+        "rebels",
+        "insurgents"
+      ],
+      "email": "idoraz96@gmail.com",
+      "website": "",
+      "orcid": "0009-0002-2560-5164",
+      "linkedin": "",
+      "twitter": "",
+      "bluesky": "",
+      "mastodon": "",
+      "photo": "assets/images/people/ido-gadi-raz.jpg",
+      "source": "form",
+      "photo_source_sha256": "21e46a6d277b17d40c092e9adfd8c75f12463a47a6091e2feebfb8a0d0d09d09",
+      "joined": "2026-11-26",
+      "canonical_keywords": [
+        "Insurgents",
+        "Rebels",
+        "South Asia",
+        "Terrorism"
+      ]
     }
   ],
   "keyword_aggregate": [
     {
       "keyword": "European security",
-      "count": 13
+      "count": 14
     },
     {
       "keyword": "Cybersecurity",
@@ -6762,6 +6852,10 @@
       "count": 2
     },
     {
+      "keyword": "EU enlargement",
+      "count": 2
+    },
+    {
       "keyword": "European integration",
       "count": 2
     },
@@ -6843,6 +6937,10 @@
     },
     {
       "keyword": "Strategic competition",
+      "count": 2
+    },
+    {
+      "keyword": "Terrorism",
       "count": 2
     },
     {
@@ -7182,10 +7280,6 @@
       "count": 1
     },
     {
-      "keyword": "EU enlargement",
-      "count": 1
-    },
-    {
       "keyword": "EU external action",
       "count": 1
     },
@@ -7354,6 +7448,10 @@
       "count": 1
     },
     {
+      "keyword": "Insurgents",
+      "count": 1
+    },
+    {
       "keyword": "International human rights law",
       "count": 1
     },
@@ -7475,6 +7573,10 @@
     },
     {
       "keyword": "ML",
+      "count": 1
+    },
+    {
+      "keyword": "Moldova",
       "count": 1
     },
     {
@@ -7638,6 +7740,10 @@
       "count": 1
     },
     {
+      "keyword": "Rebels",
+      "count": 1
+    },
+    {
       "keyword": "Regional cooperation",
       "count": 1
     },
@@ -7687,6 +7793,10 @@
     },
     {
       "keyword": "Russia-Ukraine war",
+      "count": 1
+    },
+    {
+      "keyword": "Russia’s geopolitics in the black sea region",
       "count": 1
     },
     {
@@ -7774,6 +7884,10 @@
       "count": 1
     },
     {
+      "keyword": "South Asia",
+      "count": 1
+    },
+    {
       "keyword": "Space security",
       "count": 1
     },
@@ -7806,10 +7920,6 @@
       "count": 1
     },
     {
-      "keyword": "Terrorism",
-      "count": 1
-    },
-    {
       "keyword": "Terrorism and political violence",
       "count": 1
     },
@@ -7839,6 +7949,10 @@
     },
     {
       "keyword": "Transnational criminal organisations (TCOs)",
+      "count": 1
+    },
+    {
+      "keyword": "Transnistria",
       "count": 1
     },
     {
@@ -7892,12 +8006,12 @@
       "count": 29
     },
     {
-      "theme": "Strategy and deterrence",
+      "theme": "European and transatlantic security order",
       "count": 24
     },
     {
-      "theme": "European and transatlantic security order",
-      "count": 23
+      "theme": "Strategy and deterrence",
+      "count": 24
     },
     {
       "theme": "War, military history and armed conflict",
@@ -7917,7 +8031,7 @@
     },
     {
       "theme": "EU, UN and other international organisations",
-      "count": 12
+      "count": 13
     },
     {
       "theme": "Identity, narratives and ideational security",
@@ -8277,7 +8391,7 @@
     },
     {
       "region": "Europe - Eastern neighbours / Russia",
-      "count": 31
+      "count": 32
     },
     {
       "region": "Europe - Western Balkans",
@@ -8289,11 +8403,11 @@
     },
     {
       "region": "Middle East and North Africa",
-      "count": 22
+      "count": 23
     },
     {
       "region": "Asia",
-      "count": 16
+      "count": 17
     },
     {
       "region": "Africa",
