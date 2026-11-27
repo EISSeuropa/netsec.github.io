@@ -27,13 +27,13 @@ data/spotlight.json (wk) ─┘        composes text + image; records the ledger
 - **News.** Each new entry in the RSS feed (`/news.xml`) becomes one post:
   the headline, a trimmed summary, and the link. The feed is the trigger, so
   this works the same on the sister EISS site.
-- **Spotlight.** Every **Tuesday at 10:00 Central European time**, the member
+- **Spotlight.** Every **Wednesday at 10:00 Central European time**, the member
   in `data/spotlight.json` (the same one shown on the home page) becomes a
   post, with their **OG card** (`assets/og/people/<slug>.png`) as the image.
   Cron can't follow DST, so `spotlight-rotate.yml` fires at both 08:00 and
-  09:00 UTC on Tuesdays and a gate job lets through only the one that lands at
+  09:00 UTC on Wednesdays and a gate job lets through only the one that lands at
   10:00 Europe/Paris.
-- Every Friday at 10:00 Central European time, `directory-welcome.yml`
+- Every Tuesday at 10:00 Central European time, `directory-welcome.yml`
   composes one post naming the members who joined the Directory since the
   go-live date, 13 November 2026. See *Weekly welcome to new Directory
   members* below.
@@ -352,7 +352,7 @@ composers) to adjust tone, emoji, or hashtags.
 ## Weekly welcome to new Directory members
 
 Issue #2236. `scripts/sync-bios.py` stamps `joined` in `data/bios.json` with
-the UTC date a member first lands there. Every Friday at 10:00 Central
+the UTC date a member first lands there. Every Tuesday at 10:00 Central
 European time, `.github/workflows/directory-welcome.yml` composes one post
 naming the members who are waiting to be welcomed. A week with nobody new
 posts nothing.
