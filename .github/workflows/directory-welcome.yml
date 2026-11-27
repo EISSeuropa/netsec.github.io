@@ -1,6 +1,6 @@
 # Weekly welcome to new NetSec Directory members (#2236).
 #
-# Every Friday at 10:00 Central European time, scripts/social-post.py
+# Every Tuesday at 10:00 Central European time, scripts/social-post.py
 # composes one post that names the members who joined the Directory.
 #
 # The welcome is not retroactive. It names only members whose `joined` date
@@ -22,7 +22,7 @@
 # (scripts/build-welcome-card.py, #2237). A Chrome failure shows red on that
 # step and the post goes out on the Directory card.
 #
-# Friday sits three days after the Tuesday spotlight (spotlight-rotate.yml).
+# Tuesday sits the day before the Wednesday spotlight (spotlight-rotate.yml).
 # Cron can't follow DST, so two UTC triggers (08:00 + 09:00) fire and the gate
 # lets through the one that lands at 10:00 Europe/Paris, as in
 # spotlight-rotate.yml. Setup and go-live: docs/social-publishing.md, Weekly
@@ -32,8 +32,8 @@ name: Welcome new Directory members
 
 on:
   schedule:
-    - cron: '0 8 * * 5'
-    - cron: '0 9 * * 5'
+    - cron: '0 8 * * 2'
+    - cron: '0 9 * * 2'
   workflow_dispatch:
     inputs:
       since:

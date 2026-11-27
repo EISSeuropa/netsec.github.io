@@ -577,7 +577,7 @@ visible imbalance.
 
 ### The weekly welcome to new members
 
-Every Friday at 10:00 Central European time, the `directory-welcome.yml`
+Every Tuesday at 10:00 Central European time, the `directory-welcome.yml`
 workflow composes one LinkedIn and Bluesky post naming the members who
 joined the Directory ([#2236](https://github.com/EISSeuropa/netsec.github.io/issues/2236)).
 The welcome is not retroactive. It names only members who joined on or
@@ -847,7 +847,7 @@ gh workflow run spotlight-rotate.yml -f channel=linkedin
 ```
 
 A successful run writes the key back through the usual auto-PR. If it fails
-the key stays absent, which costs nothing, since the next Tuesday's rotation
+the key stays absent, which costs nothing, since the next Wednesday's rotation
 picks a different member under a new week key.
 
 Setup from scratch, including creating the developer app, is in

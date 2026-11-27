@@ -1,7 +1,7 @@
 # Weekly rotation of the home-page member spotlight (issue #341).
 #
 # What this does
-#   1. Every Tuesday at 10:00 Central European time (after Monday's bios
+#   1. Every Wednesday at 10:00 Central European time (after Monday's bios
 #      sync so it sees any new eligible members), and on manual dispatch,
 #      run scripts/rotate-spotlight.py. Cron can't follow DST, so two UTC
 #      triggers (08:00 + 09:00) fire and a gate job lets exactly one
@@ -24,11 +24,11 @@ name: Rotate member spotlight
 
 on:
   schedule:
-    # Tuesday 10:00 Europe/Paris year-round. 08:00 UTC == 10:00 CEST (summer),
+    # Wednesday 10:00 Europe/Paris year-round. 08:00 UTC == 10:00 CEST (summer),
     # 09:00 UTC == 10:00 CET (winter); the gate job below lets through the one
-    # matching the current DST offset, so the spotlight posts once every Tuesday.
-    - cron: '0 8 * * 2'
-    - cron: '0 9 * * 2'
+    # matching the current DST offset, so the spotlight posts once every Wednesday.
+    - cron: '0 8 * * 3'
+    - cron: '0 9 * * 3'
   workflow_dispatch:       # Manual run from the Actions tab
     inputs:
       channel:
@@ -276,7 +276,7 @@ jobs:
       # post step is best-effort and continue-on-error, so a dead LinkedIn
       # token leaves a green run and an absent post. Mirrors the alert shape
       # in autopr-token-health.yml: one open issue, refreshed by comment on
-      # each recurrence, rather than a new issue every Tuesday. Runs last so
+      # each recurrence, rather than a new issue every Wednesday. Runs last so
       # a failure here cannot hold up the rotation PR above.
       - name: Alert when a channel failed to publish
         if: steps.social.outputs.degraded == 'true'
