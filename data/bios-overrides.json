@@ -9,6 +9,8 @@
     { "id": "arthur-laudrain", "field": "keywords", "from": ["election interference", "disinformation", "subversion"], "to": ["election interference", "disinformation", "subversion", "cyber statecraft"] },
     { "id": "carmen-marquez-carrasco", "field": "name", "from": "CARMEN MÁRQUEZ CARRASCO", "to": "Carmen Márquez Carrasco" },
     { "id": "carmen-marquez-carrasco", "field": "position", "from": "FULL PROFESSOR OF PUBLIC INTERNATIONAL LAW AND INTERNATIONAL RELATIONS", "to": "Full Professor of Public International Law and International Relations" },
-    { "id": "carmen-marquez-carrasco", "field": "affiliation", "from": "UNIVERSIDAD DE SEVILLA", "to": "Universidad de Sevilla" }
+    { "id": "carmen-marquez-carrasco", "field": "affiliation", "from": "UNIVERSIDAD DE SEVILLA", "to": "Universidad de Sevilla" },
+    { "id": "daskalakis-emmanouil", "field": "name", "from": "Daskalakis Emmanouil", "to": "Emmanouil Daskalakis" },
+    { "id": "daskalakis-emmanouil", "field": "affiliation", "from": "Greek Fireservice", "to": "Hellenic Fire Service" }
   ]
 }
