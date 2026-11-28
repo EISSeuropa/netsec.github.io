@@ -36,6 +36,11 @@ publishes data another repository uses.
   with a milestone. Team work with an owner and a date is a task in the
   Tasks tab of the project's Google Chat space. Never both. Volunteers
   pick up `help wanted` issues.
+- Before adding commits to an existing pull request, check that it is
+  still open (`gh api repos/EISSeuropa/<repo>/pulls/<n> --jq .state`).
+  A merged or closed pull request takes no more commits and no edits.
+  Start a new branch from the freshly fetched default branch and open a
+  new pull request.
 - How a system works goes in its repository. How EISS operates it and
   who holds access go in the EISS DevOps handbook (EISS Restricted >
   DevOps). Secrets go only in the password manager.
